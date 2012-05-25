@@ -1,0 +1,21 @@
+<p class="links"><%= link_to 'New user', new_admin_admin_user_path %></p>
+
+<table class="admin_index">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Role</th>
+    <th>Disabled</th>
+    <th></th>
+  </tr>
+  <%- @users.each do |user| -%>
+    <tr>
+      <td><%= link_to user.name, edit_admin_admin_user_path(user) %></td>
+      <td><%= mail_to user.email %></td>
+      <td><%= user.role %></td>
+      <td><%= user.account_disabled ? 'Yes' : '' %></td>
+      <td><%= cms_delete_link user, :url => admin_admin_user_path(user) %></td>
+    </tr>
+  <%- end -%>
+  <%= will_paginate(@users) if @users.any? %>
+</table>

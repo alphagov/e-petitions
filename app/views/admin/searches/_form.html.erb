@@ -1,0 +1,6 @@
+<%= form_for :search, :url => result_admin_search_path,
+    :html => { :id => 'signatures_by_email', :method => :get } do |form| %>
+  <%= form.label :query, "Search" %>
+  <%= form.text_field :query, :value => query %>
+  <%= form.submit 'Search' %>
+<% end %>

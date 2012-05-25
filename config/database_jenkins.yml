@@ -1,0 +1,9 @@
+test: &TEST
+  adapter: mysql
+  encoding: utf8
+  username: jenkins
+  password:
+  database: jenkins_epets
+
+cucumber:
+  <<: *TEST

@@ -1,0 +1,34 @@
+<%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
+  <%= label_tag :state, "Filter by status:" %>
+  <%= select_tag :state, options_for_select(Petition::SELECTABLE_STATES, params[:state]), :include_blank => "-- all moderated petitions --" %>
+  <%= label_tag :per_page, "Results per page:" %>
+  <%= select_tag :per_page, options_for_select(%w(20 50 100), params[:per_page]) %>
+  <%= submit_tag "Go" %>
+<% end -%>
+<table class="admin_index">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th>Title</th>
+      <th>Creator</th>
+      <th>State</th>
+      <th>Count</th>
+      <th>Closing date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @petitions.each do |petition| -%>
+      <tr>
+        <td class='petition_id'><%= petition.id %></td>
+        <td><%= link_to petition.title, edit_internal_response_admin_petition_path(petition) %></td>
+        <td><%= petition.creator_signature.name %><br/>
+        <%= mail_to petition.creator_signature.email %></td>
+        <td><%= petition.state_label %></td>
+        <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
+        <td><%= date_format_admin(petition.closed_at) %></td>
+      </tr>
+    <% end -%>
+  </tbody>
+
+  <%= will_paginate(@petitions) if @petitions.any? %>
+</table>

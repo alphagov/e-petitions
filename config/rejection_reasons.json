@@ -1,0 +1,32 @@
+{
+  "no-action": {
+    "published":true,
+    "title":"Does not include a request for action",
+    "description":"<p>It did not have a clear statement explaining what action you want the government to take.</p>"
+  },
+  "duplicate": {
+    "published":true,
+    "title":"Duplicate of an existing e-petition",
+    "description":"<p>There is already an e-petition about this issue.</p>"
+  },
+  "libellous": {
+    "published":false,
+    "title":"Confidential, libellous, false or defamatory statements",
+    "description":"<p>E-petitions will not be accepted if they:</p>\n<ul>\n<li>contain information which may be protected by an injunction or court order</li>\n<li>contain material that is potentially confidential, commercially sensitive or which may cause personal distress or loss</li>\n<li>include the names of individuals if they have been accused of a crime or information that may identify them</li>\n<li>include the names of individual officials who work for public bodies, unless they are part of the senior management of those organisations</li>\n<li>include the names of family members of elected representatives, eg MPs, or officials who work for public bodies</li>\n</ul>"
+  },
+  "offensive": {
+    "published":false,
+    "title":"Offensive, joke or nonsense e-petitions",
+    "description":"<p>E-petitions will not be accepted if they:</p>\n<ul>\n<li>contain offensive, joke or nonsense content</li>\n<li>use language which may cause offence, is provocative or extreme in its views</li>\n<li>use wording that is impossible to understand</li>\n<li>include statements that amount to advertisements</li>\n</ul>"
+  },
+  "irrelevant": {
+    "published":true,
+    "title":"Matters which are not the responsibility of HM Government",
+    "description":"E-petitions cannot be used to request action on issues that are outside the responsibility of the government. This includes:</p>\n<ul>\n<li>party political material</li>\n<li>commercial endorsements including the promotion of any product, service or publication</li>\n<li>issues that are dealt with by devolved bodies, eg The Scottish Parliament</li>\n<li>correspondence on personal issues</li>\n</ul>\n\n<p>E-petitions cannot be used for freedom of information requests.</p>"
+  },
+  "honours": {
+    "published":true,
+    "title":"Matters relating to honours or appointments",
+    "description":"<p>E-petitions cannot include information about honours or appointments.</p>\n\n<p>Find information about nominations for honours at: <a href='http://www.direct.gov.uk/honours'>http://www.direct.gov.uk/honours</a></p>"
+  }
+}

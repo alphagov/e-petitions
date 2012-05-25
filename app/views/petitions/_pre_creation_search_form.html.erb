@@ -1,0 +1,7 @@
+<div class="cta_block" id="search_pet_cta_block">
+  <form method="get" action="/petitions/check_results" id="pre_creation_search">
+    <label for="search">Before creating a new e-petition please search existing ones to make sure you're not duplicating one that someone has already created.</label>
+    <input type='text' name="search" id="search" value='<%= @petition_search.try(:search_term) %>' />
+    <input type='submit' value='Search' class="button" id="home_search_button"/>
+  </form>
+</div>

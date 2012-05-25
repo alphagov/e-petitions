@@ -1,0 +1,99 @@
+<% content_for(:page_title) { "Send feedback - e-petitions" } %>
+<% # set tab index to start at 5
+ increment(5) %>
+
+<div class="title_block">
+  <h2>Feedback</h2>
+</div>
+<p class="flash_notice">If you have a question about e-petitions, please check the <%= link_to 'FAQs', '/faq', :class => 'flash_notice_link' %> first to see if it's answered there.</p>
+<%= form_for @feedback, :url => feedback_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
+  <fieldset>
+    <p class='form_header'>We'd love to hear from you with any feedback on the e-petitions site that you have.  Please fill in the details using the form below.  If your comment or question relates to a specific e-petition, please ensure you include the exact e-petition title - or a link to it.
+    <br/><br/>
+    Unfortunately, we can’t pass these comments on to the people who’ve started the petition, or respond to questions about ideas raised in specific e-petitions.
+    </p>
+
+    <%= form_row :for => [@feedback, :name] do %>
+      <%= f.label :name %>
+      <%= f.text_field :name, :tabindex => increment  %>
+      <%= error_messages_for_field @feedback, :name %>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Give your full name, not the name of a company or organisation.</p>
+      </div>
+
+    <% end %>
+
+    <%= form_row :for => [@feedback, :email] do %>
+      <%= f.label :email %>
+      <%= f.text_field :email, :type => 'email', :tabindex => increment %>
+      <%= error_messages_for_field @feedback, :email %>
+    <% end %>
+
+    <%= form_row :for => [@feedback, :email_confirmation] do %>
+      <%= f.label :email_confirmation %>
+      <%= f.text_field :email_confirmation, :type => 'email', :tabindex => increment,
+                                            :onpaste => 'return false', :autocomplete => 'off' %>
+      <%= error_messages_for_field @feedback, :email_confirmation %>
+    <% end %>
+
+    <%= form_row :for => [@feedback, :petition_link_or_title] do %>
+      <%= f.label :petition_link_or_title, "e-petition title/link (optional)" %>
+      <%= f.text_field :petition_link_or_title, :tabindex => increment  %>
+      <%= error_messages_for_field @feedback, :petition_link_or_title %>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Give the link to or title of an e-petition if appropriate.</p>
+      </div>
+    <% end %>
+
+    <%= form_row :for => [@feedback, :comment] do %>
+      <%= f.label :comment, 'Comment' %>
+      <%= f.text_area :comment, :tabindex => increment %>
+      <%= error_messages_for_field @feedback, :comment %>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Please enter your comment or query.</p>
+      </div>
+    <% end %>
+
+    <%= form_row :class => 'checkbox_row', :for => [@feedback, :response_required] do %>
+      <%= f.check_box :response_required, :tabindex => increment  %>
+      <%= f.label :response_required, "Response required" %>
+      <%= error_messages_for_field @feedback, :response_required %>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Check this box if you require a response.</p>
+      </div>
+    <% end %>
+
+    <div class="row button_row">
+      <%= submit_tag "Send feedback", :class => 'button', :tabindex => increment %>
+    </div>
+  </fieldset>
+<% end -%>
+<% content_for :js do %>
+<script type="text/javascript">
+//<![CDATA[
+$().ready(function() {
+  window.feedback_form = new E_PETS.FormController($('#new_feedback'));
+  feedback_form.validates('feedback[name]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Name must be completed."
+  });
+  feedback_form.validates('feedback[email]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Email must be completed."
+  });
+  feedback_form.validates('feedback[email]', {
+    method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.email],
+    message: "Email not recognised."
+  });
+  feedback_form.validates('feedback[comment]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Comment must be completed."
+  });
+});
+//]]>
+</script>
+<% end %>

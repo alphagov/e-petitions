@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>e-Petitions</title>
+  <%= stylesheet_link_tag 'admin' %>
+  <%= javascript_include_tag "vendor/jquery.js", "rails", "edit_response_controller" %>
+  <%= csrf_meta_tag %>
+  <%= yield :js %>
+</head>
+<body>
+  <div id="outer_page_wrapper">
+    <div id="inner_page_wrapper">
+      <div id="header">
+        <%= image_tag 'logos/hm_gov.gif', :alt => 'HM Government', :class => 'logo' %>
+      </div>
+      
+      <%= render :partial => '/admin/shared/admin_nav' %>
+      
+      <div id="content">
+        <div class="left_col">&nbsp;
+          <%= yield :left_col %>
+        </div>
+        
+        <div class="center_col_full">
+          <%= render :partial => '/admin/shared/messages' %>
+          <%= yield %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

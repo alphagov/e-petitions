@@ -1,0 +1,97 @@
+<% content_for(:page_title) { "#{@petition.title} - e-petitions" } %>
+<% content_for :title do %>
+<div class="title_block">
+  <h2>e-petition</h2>
+</div>
+<% end %>
+
+<%= content_tag :p, :class => 'flash_notice' do -%>
+  This e-petition is now closed
+<% end if @petition.closed? %>
+
+<div class="petition_view">
+  <div class="content">
+    <h1><%= @petition.title %></h1>
+    <% if @petition.department %>
+      <p class='department'>Responsible department: <%= @petition.department.name %></p>
+    <% end %>
+    <p class='description'><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></p>
+
+    <% if @petition.rejected? -%>
+      <div class="petition_rejected">
+        <h2>This e-petition has been rejected with the following reason given:</h2>
+        <p class="reason"><%= @petition.rejection_description.html_safe %></p>
+        <% if @petition.rejection_text -%>
+          <p>The following explanatory notes have been added:</p>
+          <p><%= raw auto_link(h(@petition.rejection_text), :html => { :target => '_blank' }) -%></p>
+        <% end -%>
+      </div>
+    <% end -%>
+
+    <% if @petition.response.present? -%>
+      <div class="petition_response">
+        <h2>This e-petition has received the following response:</h2>
+        <%= raw auto_link(simple_format(h(@petition.response), :class => 'response'), :html => { :target => '_blank' }) %>
+      </div>
+    <% end -%>
+
+    <div class='button_row'>
+      <% if @petition.can_be_signed? -%>
+        <%= link_to "Sign this petition", new_petition_signature_path(@petition, :secure => true), :class => 'link_button', :tabindex => increment(5) %>
+      <% end -%>
+    </div>
+
+    <br />
+    <%= link_to "Not received your confirmation email?", '#', :id => 'resend_confirmation_email_link' %>
+    <div id="resend_confirmation_email_box">
+      <%= form_tag [:resend_confirmation_email, @petition] do %>
+        <%= label_tag :confirmation_email, "If you have already signed this petition, but didn't receive an email to confirm your signature, you can request a confirmation to be resent by providing your email address below." %>
+        <br />
+        <%= text_field_tag :confirmation_email %>
+        <%= submit_tag 'Resend', :class => 'button' %>
+      <% end %>
+    </div>
+  </div>
+
+  <dl class="data">
+    <dt class="signature_count">Number of signatures:</dt>
+    <dd class="signature_count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+
+    <dt class="created_by">Created by:</dt>
+    <dd class="created_by"><%= @petition.creator_signature.name %></dd>
+
+    <% if @petition.closed_at.present? -%>
+      <dt class="closing_date">Closing:</dt>
+      <dd class="closing_date"><%= local_date_time_format @petition.closed_at %></dd>
+    <% end -%>
+
+    <% if @petition.can_be_signed? -%>
+      <% title = @petition.title + " - e-petitions" -%>
+      <dt class="share_links">Share:</dt>
+      <dd class="share_links clearfix">
+        <div class='share'>
+          <%= link_to image_tag("icons/twitter.png"), "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(@petition))}", :class => "text_link_plain" %>
+        </div>
+        <div class='share'>
+          <%= link_to image_tag("icons/linkedin.png"), "http://www.linkedin.com/shareArticle?mini=true&url=#{URI.escape(petition_url(@petition))}&title=#{URI.escape(title)}&source=HM+Government+e-petitions", :class => "text_link_plain" %>
+        </div>
+        <div class='share'>
+          <%= link_to image_tag("icons/facebook.png"), "http://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(@petition))}", :class => "text_link_plain" %>
+        </div>
+      </dd>
+    <% end -%>
+
+  </dl>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+  $().ready(function(){
+    $('#resend_confirmation_email_link').show();
+    $('#resend_confirmation_email_box').hide();
+    $('#resend_confirmation_email_link').click(function(){
+      $('#resend_confirmation_email_box').show();
+    });
+  });
+//]]>
+</script>

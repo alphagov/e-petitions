@@ -1,0 +1,74 @@
+<h1>e-petition statistics</h1>
+<br />
+<h2>Trending Petitions</h2>
+
+<%= form_tag admin_reports_path, :method => :get, :class => "filter" do -%>
+  <%= label_tag :number_of_days_to_trend, "View trends for:" %>
+  <%= select_tag :number_of_days_to_trend,
+    options_for_select([['24 hours', 1], ['7 days', 7]], @number_of_days_to_trend), :include_blank => false %>
+  <%= submit_tag "Go" %>
+<% end -%>
+
+<% if @trending_petitions.present? %>
+  <table class="trending_petitions">
+    <thead>
+      <tr>
+        <th>Petition ID</th>
+        <th>Title</th>
+        <th>Signatures in last <%= @number_of_days_to_trend == 1 ? "24 hours" : "7 days" %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @trending_petitions.each do |petition| %>
+        <tr class="trending_petition">
+          <td><%= petition.id %></td>
+          <td class="title"><%= link_to petition.title, [:edit_internal_response, :admin, petition] %></td>
+          <td class="count"><%= petition.signatures.in_days(@number_of_days_to_trend).count %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No petitions in the chosen period.</p>
+  <br />
+<% end %>
+
+
+<div id="num_petitions_per_department_report">
+  <h2>Number of petitions per department</h2>
+
+  <table class="admin_report">
+    <tr>
+      <th></th>
+      <th>Pending</th>
+      <th>Validated</th>
+      <th>Open</th>
+      <th>Closed</th>
+      <th>Rejected</th>
+      <th>Total</th>
+    </tr>
+
+    <tr class="heavy_bottom_border">
+      <td>All Departments</td>
+      <td class="count"><%= number_with_delimiter(@counts[:pending]) %></td>
+      <td class="count"><%= number_with_delimiter(@counts[:validated]) %></td>
+      <td class="count"><%= number_with_delimiter(@counts[:open]) %></td>
+      <td class="count"><%= number_with_delimiter(@counts[:closed]) %></td>
+      <td class="count"><%= number_with_delimiter(@counts[:rejected] + @counts[:hidden]) %></td>
+      <td class="count"><%= number_with_delimiter(@counts.values.sum) %></td>
+    </tr>
+
+    <% @departments.each do |department| %>
+      <tr>
+        <td><%= department.name %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.for_state(State::PENDING_STATE).count) %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.for_state(State::VALIDATED_STATE).count) %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.for_state(State::OPEN_STATE).count) %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.for_state(State::CLOSED_STATE).count) %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.for_state(State::REJECTED_STATE).count + department.petitions.for_state(State::HIDDEN_STATE).count) %></td>
+        <td class="count"><%= number_with_delimiter(department.petitions.count) %></td>
+      </tr>
+    <% end %>
+
+  </table>
+</div>

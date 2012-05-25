@@ -1,0 +1,11 @@
+<%= form_for [:admin, current_user], :url => admin_profile_path(current_user), :builder => AdminFormBuilder do |f| -%>
+  <%= f.error_messages(:header_message => nil) %>
+  
+  <p class="form_field"><label for="current_password">Current password</label><br/>
+    <%= password_field_tag :current_password, params[:current_password], :size => 30 ,:autocomplete => 'off', :autofocus => 'autofocus' %>
+  </p>
+  <%= f.password_field :password, :label => 'New password', :autocomplete => 'off' %>
+  <%= f.password_field :password_confirmation, :autocomplete => 'off' %>
+  
+  <%= save_button(f.object) %>
+<% end -%>

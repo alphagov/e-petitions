@@ -1,0 +1,113 @@
+<% content_for(:page_title) { "How e-petitions works - e-petitions" } %>
+<div class="title_block">
+  <h1>How e-petitions work</h1>
+</div>
+
+<div class="cut_in_block">
+  <div class="wrapper">
+    <p>Click the "<span class="info_link">info</span>" icon to find out more about each step.</p>
+  </div>
+</div>
+
+<div class="how_it_works">
+  <ul>
+    <li class="text_1">
+      Search existing <span class="nowrap">e-petitions</span> before creating a new one
+      <%= link_to 'info', "#search", :class => 'info_link lightbox_link' %>
+      <div class="connector"></div>
+    </li>
+    <li class="text_2">
+      Create your <span class="nowrap">e-petition</span>
+      <%= link_to 'info', "#start", :class => 'info_link lightbox_link' %>
+      <div class="connector"></div>
+    </li>
+    <li class="text_3">
+      It will be checked by a government department
+      <%= link_to 'info', "#checked", :class => 'info_link lightbox_link' %>
+      <div class="connector"></div>
+    </li>
+    <li class="text_4">
+      An <span class="nowrap">e-petition</span><br/>can be open for up to 1 year
+      <%= link_to 'info', "#duration", :class => 'info_link lightbox_link' %>
+      <div class="connector"></div>
+    </li>
+    <li class="text_5">
+      The public can sign it
+      <%= link_to 'info', "#sign", :class => 'info_link lightbox_link' %>
+      <div class="connector"></div>
+    </li>
+    <li class="text_6">
+      <span class="pre_text">If you collect</span>
+      <span class="text_replace">100,000</span>
+      <span class="post_text">signatures, your <span class="nowrap">e-petition</span> could be debated in the House of Commons</span>
+      <%= link_to 'info', "#commons", :class => 'info_link lightbox_link' %>
+    </li>
+  </ul>
+
+  <%= link_to 'Return to home page', home_path, :class => "link_button large_link_button get_started_button" %>
+</div>
+
+<div class="generic_block  how_it_works_block">
+  <div id="search" class="how_it_works_explanation">
+    <h2>Search existing e-petitions before creating a new one</h2>
+    <p>
+      Before you create a new e-petition, search the site to make sure there isn’t one that covers your issue. If a new <span class="nowrap">e-petition</span> is the same as one that’s already on the site, it will be rejected.</p>
+    <p>
+      Search will look for every word you type. For example if you search for ‘the government’, you will see results for every <span class="nowrap">e-petition</span> that includes the words ‘the’ or ‘government’.</p>
+    <p>Use key words that are specific to the issue to get more relevant results. For example ‘road tax’ will give better results than ‘government action on reducing road tax’.</p>
+  </div>
+
+  <div id="start" class="how_it_works_explanation">
+    <h2>Create your <span class="nowrap">e-petition</span></h2>
+    <p>
+      Your e-petition must be a request for the government to do something.</p>
+    <p>
+      You need to choose which government department looks after your issue. For example road issues should be sent to the Department for Transport. There’s a list of government departments to help you choose.</p>
+    <p>You will need to provide your name, address and email before you can submit your <span class="nowrap">e-petition</span>.</p>
+    <p>Once you’ve submitted your <span class="nowrap">e-petition</span>, you will receive an email with a link to confirm your email address is correct. Your <span class="nowrap">e-petition</span> cannot be processed until you click on the link.</p>
+  </div>
+
+  <div id="checked" class="how_it_works_explanation">
+    <h2>It will be checked by a government department</h2>
+    <p>
+      Your <span class="nowrap">e-petition</span> will be checked by the government department that looks after your issue. This is to make sure it complies with the <%= link_to 'Terms & Conditions', terms_and_conditions_path %> for creating an <span class="nowrap">e-petition</span>.</p>
+    <p class="list">
+      The main reasons why your <span class="nowrap">e-petition</span> could be rejected are</p>
+    <ul>
+      <li>there’s already an <span class="nowrap">e-petition</span> on the same issue</li>
+      <li>it contains confidential, libellous, false or defamatory statements</li>
+      <li>it contains offensive, joke or nonsense content</li>
+      <li>the issue is not the responsibility of the government</li>
+      <li>it’s about honours or appointments</li>
+      <li>it does not include a request for action</li>
+    </ul>
+    <p>It can take up to 7 days to check your <span class="nowrap">e-petition</span>. You will receive an email that tells you if your <span class="nowrap">e-petition</span> has been accepted or not.</p>
+  </div>
+
+  <div id="duration" class="how_it_works_explanation">
+    <h2>An <span class="nowrap">e-petition</span> can be open for up to 1 year</h2>
+    <p>Usually an <span class="nowrap">e-petition</span> stays open for 12 months. You can choose if you want your <span class="nowrap">e-petition</span> to close sooner than this.</p>
+    <p>If you set a shorter period, you still need to get 100,000 signatures for your issue to be eligible for debate in the House of Commons.</p>
+    <p>At the end of the set period, the <span class="nowrap">e-petition</span> closes. No further signatures can be added to it.</p>
+  </div>
+
+  <div id="sign" class="how_it_works_explanation">
+    <h2>The public can sign it</h2>
+    <p>If your <span class="nowrap">e-petition</span> is published, you will be sent a link (URL) to your <span class="nowrap">e-petition</span> page. You can share this with anyone you want to sign your <span class="nowrap">e-petition</span>.</p>
+    <p>Every <span class="nowrap">e-petition</span> page also has links so you can easily publish it on social networking sites.</p>
+    <p class="list">
+	  Anyone signing your <span class="nowrap">e-petition</span>:</p>
+	<ul>
+	  <li>will need to provide their name, address and email</li>
+	  <li>can choose to receive email updates from the government about the <span class="nowrap">e-petition</span></li>
+	</ul>
+  </div>
+
+  <div id="commons" class="how_it_works_explanation">
+    <h2>If you collect 100,000 signatures, your <span class="nowrap">e-petition</span> is eligible to be debated in the House of Commons</h2>
+    <p>The <span class="nowrap">e-petitions</span> House of Commons Backbench Business Committee receives notification from the Leader of the House once an e-petition has 100,000 signatures. The Backbench Business Committee meets weekly when the House of Commons is sitting to hear representations from MPs for debates in backbench time. The Committee can consider any subject for debate, including those raised in e-petitions or national campaigns but an MP must make the case for their consideration.</p>
+    <p> More information can be found on the <%= new_window_link_to "Backbench Business Committee website", "http://www.parliament.uk/bbcom" %>. </p>
+  </div>
+</div>
+
+<%= content_for :js, javascript_include_tag('lightbox') %>

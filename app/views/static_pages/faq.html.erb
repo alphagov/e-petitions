@@ -1,0 +1,116 @@
+<% content_for(:page_title) { "Frequently asked questions - e-petitions" } %>
+<div class="title_block">
+  <h1>Frequently asked questions</h1>
+</div>
+
+<div class="cut_in_block">
+  <div class="wrapper">
+    <p>A list of the more frequently asked questions is shown below. Select from the list of questions below for the answers.</p>
+  </div>
+</div>
+
+<div class="faq_list_block generic_block">
+  <ul class='faq'>
+    <li>
+      <%= link_to "Why haven't I received an email asking me to validate my email address?", '#question0', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Why do I need to choose a government department when I create a new e-petition?', '#question1', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'What if more than one government department is responsible for my e-petition?', '#question2', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to "Why can't I change my e-petition or correct spelling errors?", '#question3', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Is there a list of signatories for each e-petition?', '#question4', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Why do you say my e-petition ‘could’ be debated in the House of Commons?', '#question5', :class => 'lightbox_link' %>
+    </li>
+	<li>
+	  <%= link_to 'Can I merge my e-petition with another one?', '#question6', :class => 'lightbox_link' %>
+	</li>
+    <li>
+      <%= link_to 'Can I delete my e-petition?', '#question7', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Why hasn’t my signature been added to the total on the petition?', '#question8', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Why can’t I vote against a petition?', '#question9', :class => 'lightbox_link' %>
+    </li>
+    <li>
+      <%= link_to 'Can I send you a paper petition?', '#question10', :class => 'lightbox_link' %>
+    </li>
+  </ul>
+
+  <%= link_to 'Return to home page', home_path, :class => "link_button large_link_button get_started_button" %>
+</div>
+
+<div class="generic_block faq_block">
+  <div id="question0" class="faq_answer">
+    <h2>Why haven't I received an email asking me to validate my email address?</h2>
+    <p>You should check your spam or junk mail folder as the email may have ended up in there.  It is also possible during times when the e-petitions site is really busy that the email may take up to 4 hours to be sent. If you haven’t received your confirmation e-mail, you can ask for it to be resent using the link on the relevant petition page.</p>
+  </div>
+  <div id="question1" class="faq_answer">
+    <h2>Why do I need to choose a government department when I create a new e-petition?</h2>
+    <p>Each e-petition needs to be checked to make sure it complies with the terms and conditions of the service.  By choosing the government department responsible, your e-petition can be checked quickly by the most appropriate person.</p>
+
+    <p>It also means the right department will see how many signatures your e-petition has and start the arrangements for a debate in the House of Commons, if appropriate.</p>
+  </div>
+
+  <div id="question2" class="faq_answer">
+    <h2>What if more than one government department is responsible for my e-petition?</h2>
+    <p>If the subject of your e-petition is covered by more than one department, choose the one you think is ‘most’ appropriate.  Don’t worry if you’re not certain; if the department you choose isn’t responsible, they will send it to the one that is.</p>
+  </div>
+
+  <div id="question3" class="faq_answer">
+    <h2>Why can't I change my e-petition or correct spelling errors?</h2>
+    <p>People sign your e-petition based on what it says at the time they sign. If you change the e-petition later, even to change small things such as spelling mistakes, the context may have changed and the people that have already signed it may no longer want their signature associated with the e-petition.</p>
+  </div>
+
+  <div id="question4" class="faq_answer">
+    <h2>Is there a list of signatories for each e-petition?</h2>
+    <p>We keep a record of who has signed each e-petition and show the total number of signatures. We also show the name of the person who created the e-petition, but we don’t show the names or other details of any of the signatories.</p>
+  </div>
+
+  <div id="question5" class="faq_answer">
+    <h2>Why do you say my e-petition ‘could’ be debated in the House of Commons?</h2>
+    <p>
+    If your e-petition reaches the 100,000 signatures, it is eligible for a debate in the House of Commons. However a debate may not be possible:</p>
+    <ul>
+      <li>if the subject of the e-petition is currently going through legal proceedings, it may be inappropriate for a debate to be held;</li>
+      <li>if there has just been, or is about to be, a debate in the House of Commons on the same topic as your e-petition.</li>
+    </ul>
+  </div>
+
+  <div id="question6" class="faq_answer">
+	<h2>Can I merge my e-petition with another one?</h2>
+	<p>People sign your e-petition based on what it says at the time they sign. It wouldn’t be possible to merge similar e-petitions without people having their signature associated with a petition they may not have seen or agreed to, so we do not allow this.</p>
+  </div>
+
+  <div id="question7" class="faq_answer">
+	<h2>Can I delete my e-petition?</h2>
+	<p>If your e-petition has fewer than 100 signatures, we can remove it from the site. To do this, please contact us using the form on the  <%= link_to 'Feedback', feedback_path %> page.</p>
+  </div>
+
+  <div id="question8" class="faq_answer">
+	<h2>Why hasn’t my signature been added to the total on the petition?</h2>
+	<p>Once an e-petition has been signed, the updating of the number of signatures does not take place straight away. Instead, the signature total which appears on the site refreshes at regular intervals, rather than at the moment the signature is added.</p>
+  </div>
+
+  <div id="question9" class="faq_answer">
+	<h2>Why can’t I vote against a petition?</h2>
+	<p>The petitions system as it currently works allows individuals to raise issues which they feel are important for discussion, and does not mean that Parliament or Government will necessary agree with or support the issues raised; a combination of 'for' and 'against' signatures would still suggest that people would find an issue important and wish it to be discussed.</p>
+  </div>
+
+  <div id="question10" class="faq_answer">
+	<h2>Can I send you a paper petition?</h2>
+	<p>It is not possible to include a paper petition as part of reaching the threshold of 100 000 signatures to make a petition eligible for debate in the House of Commons.  This is because paper petitions do not allow the Government to verify signatures to the same degree as with e-petitions.</p>
+    <p>The e-petitions system is not intended to replace the current paper based system of public petitions in the House of Commons. For more information about the paper based Parliamentary Petitions, you can visit the UK Parliament website. The Backbench Business Committee, who are responsible for the scheduling of any debates on e-petitions, have made clear that they will continue to consider paper petitions when choosing subjects for debates.</p>
+  </div>
+</div>
+
+<%= content_for :js, javascript_include_tag('lightbox') %>

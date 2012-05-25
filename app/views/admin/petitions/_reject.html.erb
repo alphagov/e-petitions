@@ -1,0 +1,28 @@
+<div>
+  <%= javascript_tag do %>
+    var rejection_reasons = <%= IO.read(RejectionReason::FILE).html_safe %>;
+
+    $().ready(function() {
+      // Ensure that we get the onchange event when the users uses the keyboard
+      // Details: http://bit.ly/iZx9nh
+      $('#petition_rejection_code').keyup(function() {
+        this.blur();
+        this.focus();
+      });
+
+      $('#petition_rejection_code').change(function() {
+        $('#rejection_preview').show();
+        $('#rejection_preview .content').html(rejection_reasons[$(this).val()].description);
+      });
+    });
+  <% end -%>
+  <%= f.label :rejection_code, 'Rejection reason' %><br />
+  <%= f.select :rejection_code, RejectionReason.options_for_select, {:include_blank => "-- Select a rejection code --" } %>
+  <%= error_messages_for_field @petition, :rejection_code %>
+  <div id='rejection_preview' class='flash_notice' style='display:none'>
+    <h3>Preview of the standard text that will be sent to the petition creator:</h3>
+    <div class='content'></div>
+  </div>
+  <%= f.text_area :rejection_text, :rows => 8, :cols => 70 %>
+  <%= submit_tag button_label || 'Reject' %>
+</div>

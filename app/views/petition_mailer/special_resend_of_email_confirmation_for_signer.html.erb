@@ -1,0 +1,16 @@
+<p>Dear <%= @signature.name %>,</p>
+
+<p>We notice that you signed the "<%= @signature.petition.title %>" e-petition recently, but haven't yet validated your email address.</p>
+
+<p>In order to add your signature to this e-petition, we need to confirm your email address by clicking on the link below.</p>
+
+<%=
+  url = verify_signature_url(@signature, @signature.perishable_token, :secure => true)
+  link_to url, url
+%>
+
+<p>If you no longer want to sign this e-petition or believe this message was received in error, please ignore this email.</p>
+
+<p>Thanks,</p>
+
+<p>HM Government e-petitions <%= link_to home_url, home_url %></p>

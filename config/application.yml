@@ -1,0 +1,17 @@
+defaults: &defaults
+  email_from: "xxxxx@example.com"
+  memcached_servers:
+    - "localhost:11211"
+  memcached_namespace_base: "e_petitions"
+
+development:
+  <<: *defaults
+  host_for_email: "localhost:3000"
+  
+development_with_caching:
+  <<: *defaults
+  host_for_email: "localhost:3000"
+  
+test:
+  <<: *defaults
+  host_for_email: "www.example.com"

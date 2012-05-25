@@ -1,0 +1,2 @@
+
+DEFAULT_CACHE_EXPIRY = 2.minutes

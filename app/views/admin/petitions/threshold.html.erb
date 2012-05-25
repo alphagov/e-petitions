@@ -1,0 +1,13 @@
+<%= render 'admin/shared/results_per_page', :path => threshold_admin_petitions_path %>
+<table class="admin_index">
+  <tr>
+    <th>Id</th>
+    <th>Title</th>
+    <th>Creator</th>
+    <th>Count</th>
+    <th>Closing date</th>
+    <th>Response</th>
+  </tr>
+  <%= render @petitions -%>
+  <%= will_paginate(@petitions) if @petitions.any? %>
+</table>

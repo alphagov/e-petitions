@@ -1,0 +1,28 @@
+<% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
+<% content_for :title do %>
+<div class="title_block">
+  <h1>Create a new e-petition</h1>
+</div>
+<% end %>
+
+
+<%= render "pre_creation_search_form" %>
+
+<div class="petition_index_view">
+  <%= render 'search/result_tabs' %>
+  <div class="petition_list">
+    <% if @petition_search.petitions.present? -%>
+      <div class="title_pagination_row"></div>
+      <%= render 'search/results_table', :petition_search => @petition_search %>
+      <% creation_prefix = "If there are no existing e-petitions on the same subject, click the 'Create e-petition' button to continue." -%>
+    <% else -%>
+      <p class="no_petitions_warning">We didn't find any existing e-petitions that match your subject, click the 'Create e-petition' button to continue.</p>
+    <% end -%>
+  </div>
+</div>
+
+<div class="cta_block reduced_padding_block" id="create_pet_cta_block">
+  <p><%= creation_prefix %></p>
+  <%= link_to "Create e-petition", new_petition_path(:secure => true, :title => @petition_search.search_term),
+        :class => 'link_button large_link_button' %>
+</div>

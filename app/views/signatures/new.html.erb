@@ -1,0 +1,109 @@
+<%= link_to 'lightbox', "#make_sure_your_signature_counts", :class => 'lightbox_link', :id => 'make_sure_your_signature_counts_link' %>
+
+<% content_for(:page_title) { "#{@petition.title} - Sign this e-petition - e-petitions" } %>
+<% # set tab index to start at 5
+ increment(5) %>
+<div class="title_block">
+  <h2>Sign this e-petition</h2>
+  <h1 class="petition_title"><%= @petition.title %></h1>
+</div>
+
+<%= form_for @signature, :url => sign_petition_signature_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
+  <fieldset>
+    <%= render :partial => 'signatures/form', :locals => { :f => f, :signature => @signature } %>
+
+    <%= form_row :for => [@signature, :humanity], :class => 'captcha_row' do %>
+      <%= render :partial => 'shared/captcha_widget', :locals => { :f => f, :signature => @signature } %>
+    <% end -%>
+
+    <%= render :partial => 'notify_by_email', :locals => { :f => f, :signature => @signature } %>
+    <%= render :partial => 'terms_and_conditions', :locals => { :f => f, :signature => @signature } %>
+
+    <div class="row button_row">
+
+      <%= link_to "Back", petition_path(@petition), :class => "backwards_action link_button", :tabindex => increment(2) %>
+      <%= f.submit "Sign this e-petition", :class => 'button', :tabindex => increment(-1) %>
+      <% increment(2) -%>
+    </div>
+  </fieldset>
+<% end -%>
+
+<div class="generic_block faq_block">
+<div id="make_sure_your_signature_counts" class="faq_answer">
+  <h2>Make your signature count</h2>
+  <p>
+    You'll need a current email address to sign this e-petition.
+  </p>
+
+  <p>
+    We'll send you an email with a link - your signature <strong>won't</strong> be added to the e-petition until you've clicked on that link.
+  </p>
+</div>
+</div>
+
+
+<%= content_for :js, javascript_include_tag('lightbox') %>
+<% content_for :js do %>
+<script type="text/javascript">
+//<![CDATA[
+$().ready(function() {
+
+  <% # do not display popup if we have validation errors -%>
+  <%- if @signature.errors.empty? -%>
+  (function(){
+    $('.lightbox .link_button').removeClass('cancel_action').text('Continue');
+    $('#make_sure_your_signature_counts_link').click();
+  })();
+  <%- end -%>
+
+  window.signature_form = new E_PETS.FormController($('#new_signature'));
+  signature_form.validates('signature[name]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Name must be completed."
+  });
+  signature_form.validates('signature[email]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Email must be completed."
+  });
+  signature_form.validates('signature[email]', {
+    method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.email],
+    message: "Email not recognised."
+  });
+  signature_form.validates('signature[email_confirmation]', {
+    method: [E_PETS.FormController.validation_methods.validate_confirmation, 'signature[email]'],
+    message: "Email must match confirmation."
+  });
+  signature_form.validates('signature[uk_citizenship]', {
+    method: [E_PETS.FormController.validation_methods.validate_radio_group_value, '1'],
+    message: "You must be a British citizen or normally live in the UK to create or sign e-petitions."
+  });
+  signature_form.validates('signature[address]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Address must be completed."
+  });
+  signature_form.validates('signature[town]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Town must be completed."
+  });
+  signature_form.validates('signature[postcode]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Postcode must be completed.",
+    when: function() {
+      return $("select[name*=country]").val() == "United Kingdom";
+    }
+  });
+  signature_form.validates('signature[postcode]', {
+    method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.postcode],
+    message: "Postcode not recognised.",
+    when: function() {
+      return $("select[name*=country]").val() == "United Kingdom";
+    }
+  });
+  signature_form.validates('signature[terms_and_conditions]', {
+    method: E_PETS.FormController.validation_methods.validate_checked,
+    message: "You need to accept the terms and conditions."
+  });
+});
+//]]>
+</script>
+<% end %>

@@ -1,0 +1,19 @@
+defaults : &defaults
+  adapter: mysql
+  encoding: utf8
+  username: epets
+  password:
+
+development: &DEV
+  <<: *defaults
+  database: epets_development
+
+development_with_caching:
+  <<: *DEV
+
+test: &TEST
+  <<: *defaults
+  database: epets_test
+
+cucumber:
+  <<: *TEST

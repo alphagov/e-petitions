@@ -1,0 +1,61 @@
+<div class="cta_block" id="search_pet_cta_block">
+  <h1>e-petitions – create and sign petitions online</h1>
+
+  <form method="get" action="/search">
+    <label for="search">Search for an e-petition to sign</label>
+    <input type='text' name="q" id="search" />
+    <input type='submit' value='Search' class="button" id="home_search_button"/>
+  </form>
+
+  <%= link_to 'View all e-petitions', petitions_path, :class => 'large_link view_all_epetitions' %>
+  <%= link_to 'View e-petitions by government department', departments_path, :class => 'large_link department_search' %>
+</div>
+
+<% if @trending_petitions.present? %>
+  <div class="cta_block clearfix" id="trending_cta_block">
+    <h1>Trending e-petitions</h1>
+    <p class='explanatory_text'>
+      Most active e-petitions in the last hour.
+      Page last updated <%= last_updated_at_time Time.zone.now %>.
+    </p>
+    <ul>
+      <% @trending_petitions.each do |trending_petition| %>
+        <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
+      <% end -%>
+    </ul>
+
+    <% if @additional_petitions.present? %>
+      <%= link_to 'See more trending e-petitions', '#', :id => 'see_more_trending_petitions' %>
+
+      <div id="additional_trending_petitions_block">
+        <ul>
+          <% @additional_petitions.each do |trending_petition| %>
+            <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
+          <% end -%>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="cta_block" id="create_pet_cta_block">
+  <h2>What are e-petitions?</h2>
+  <p>e-petitions <span class="nowrap">are</span> an easy, personal way for you to influence government and Parliament in the UK. You can create an e-petition about anything that the government is responsible for and if it gets at least 100,000 signatures, it will be considered for debate in the House of Commons.  You can find more information about how the House of Commons deals with e-petitions on the <%= new_window_link_to "Backbench Business Committee website", "http://www.parliament.uk/bbcom" %>.</p>
+  <%= link_to 'How e-petitions work', how_it_works_path, :class => 'large_link' %>
+  <%= link_to "Create a new e-petition", check_petitions_path, :class => 'link_button large_link_button' %>
+</div>
+
+<% content_for :js do %>
+  <script type="text/javascript">
+  //<![CDATA[
+    $().ready(function(){
+      $('#see_more_trending_petitions').show();
+      $('#see_more_trending_petitions').click(function(){
+        $(this).hide();
+        $('#additional_trending_petitions_block').show();
+        return false;
+      });
+    });
+  //]]>
+  </script>
+<% end %>

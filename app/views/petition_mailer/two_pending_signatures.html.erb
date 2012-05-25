@@ -1,0 +1,13 @@
+<p>Dear <%= @signature_one.name %> and <%= @signature_two.name %>,<p>
+
+<p>Before your signatures can be added to the e-petition "<%= @signature_one.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
+
+<p><%= @signature_one.name %>: <%= linkify(verify_signature_url(@signature_one, @signature_one.perishable_token, :secure => true)) %></p>
+
+<p><%= @signature_two.name %>: <%= linkify(verify_signature_url(@signature_two, @signature_two.perishable_token, :secure => true)) %></p>
+
+<p>If you don't want to sign this e-petition or believe this message was sent in error, please ignore this email.</p>
+
+<p>Thanks,</p>
+
+<p>HM Government e-petitions <%= home_url %></p>

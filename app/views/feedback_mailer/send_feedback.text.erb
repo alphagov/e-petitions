@@ -1,0 +1,12 @@
+We have received the following feedback from the e-petitions site:
+
+Name: <%= @feedback.name %>
+Email: <%= @feedback.email %>
+Link: <%= @feedback.petition_link_or_title %>
+Response required: <%= @feedback.response_required ? "YES" : "NO" %>
+
+Comment:
+
+<%= @feedback.comment %>
+
+Thank you.

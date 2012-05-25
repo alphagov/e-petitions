@@ -1,0 +1,13 @@
+Dear <%= @signature.name %>,
+
+The e-petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.
+
+<%= @petition.response %>
+
+View the response to the e-petition here:
+
+<%= petition_url(@signature.petition) %>
+
+Thanks,
+
+HM Government e-petitions <%= home_url %>

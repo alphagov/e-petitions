@@ -1,0 +1,6 @@
+<%= form_row :class => 'checkbox_row', :for => [signature, :notify_by_email] do %>
+  <%= f.check_box :notify_by_email, :tabindex => increment  %>
+  <%= f.label :notify_by_email, "Email me updates about this <span class='nowrap'>e-petition</span>".html_safe %>
+  <%= error_messages_for_field signature, :notify_by_email %>
+  (We will not share your email address with anyone or use it for any other purpose)
+<% end %>

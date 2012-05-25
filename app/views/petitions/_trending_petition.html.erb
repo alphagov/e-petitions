@@ -1,0 +1,15 @@
+<li class='petition'>
+  <div class='signature_count'>
+    <span class='count'>
+      <%= number_with_delimiter(trending_petition.signatures_in_last_hour) %>
+    </span>
+    <br/>
+    signed in the last hour
+  </div>
+  <div class='name'>
+    <%= link_to truncate(trending_petition.petition.title, :length => 100), petition_path(trending_petition.petition) %>
+  </div>
+  <div class='total_signatures'>
+    <%= number_with_delimiter(trending_petition.petition.signature_count) %> total signatures
+  </div>
+</li>

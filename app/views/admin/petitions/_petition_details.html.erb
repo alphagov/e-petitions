@@ -1,0 +1,33 @@
+<div class="row">
+  <label>Petition Id:</label>
+  <p class="text_block"><%=  @petition.id %></p>
+</div>
+
+<div class="row">
+  <label>Petition title:</label>
+  <p class="text_block"><%=  @petition.title %></p>
+</div>
+
+<div class="row">
+  <label>Creator:</label><%=  @petition.creator_signature.name %> - <%= @petition.creator_signature.email %>
+</div>
+
+<div class="row">
+  <label>Created date:</label><%= date_time_format(@petition.created_at) %>
+</div>
+
+<div class="row">
+  <label>Department:</label>
+  <% if params[:action] == 'edit' or params[:action] == 'update' -%>
+    <%= f.select :department_id, options_from_collection_for_select(@departments, :id, :name, @petition.department_id.to_s) %>
+    <%= submit_tag 'Re-assign' %>
+  <% else -%>
+    <%= @petition.department.name %>
+  <% end -%>
+</div>
+
+<div class="row">
+  <label>Petition description:</label>
+  <p class="text_block"><%= raw auto_link(h(@petition.description), :html => { :target => '_blank' }) %></p>
+</div>
+

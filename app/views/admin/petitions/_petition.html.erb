@@ -1,0 +1,11 @@
+<tr>
+  <td class='petition_id'><%= petition.id %></td>
+  <td><%= link_to petition.title, edit_response_admin_petition_path(petition) %></td>
+  <td>
+    <%= petition.creator_signature.name %><br/>
+    <%= mail_to petition.creator_signature.email %>
+  </td>
+  <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
+  <td><%= date_format_admin(petition.closed_at) %></td>
+  <td class="center"><%= petition.response.present? ? image_tag('admin/tick.gif') : '' %></td>
+</tr>

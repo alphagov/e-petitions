@@ -1,0 +1,62 @@
+<%= form_row :for => [signature, :name] do %>
+  <%= f.label :name %>
+  <%= f.text_field :name, :tabindex => increment  %>
+  <%= error_messages_for_field signature, :name %>
+  <div class="tip">
+    <div class="arrow"></div>
+    <p>Give your full name, not the name of a company or organisation.</p>
+  </div>
+
+<% end %>
+
+<%= form_row :for => [signature, :email] do %>
+  <%= f.label :email %>
+  <%= f.text_field :email, :type => 'email', :tabindex => increment %>
+  <%= error_messages_for_field signature, :email %>
+<% end %>
+
+<%= form_row :for => [signature, :email_confirmation] do %>
+  <%= f.label :email_confirmation %>
+  <%= f.text_field :email_confirmation, :type => 'email', :tabindex => increment,
+                   :onpaste => "return false", :autocomplete => 'off' %>
+<% end %>
+
+<%= form_row :class => 'is_uk_citizen_row', :for => [signature, :uk_citizenship] do %>
+  <p class="label">British citizen or UK resident?</p>
+  <ul class="radio_button_list">
+    <li>
+    <%= f.radio_button :uk_citizenship, 1, :title => "Yes, I am a British citizen or UK resident", :tabindex => increment %>
+      <%= f.label :uk_citizenship_1, "yes" %>
+    </li>
+    <li>
+    <%= f.radio_button :uk_citizenship, 0, :title => "No, I am not a British citizen or UK resident", :tabindex => increment %>
+      <%= f.label :uk_citizenship_0, "no" %>
+    </li>
+  </ul>
+
+  <%= error_messages_for_field signature, :uk_citizenship %>
+<% end %>
+
+<%= form_row :class => 'address_row', :for => [signature, :address] do %>
+  <%= f.label :address %>
+  <%= f.text_area :address, :class => 'address', :tabindex => increment %>
+  <%= error_messages_for_field signature, :address %>
+<% end %>
+
+<%= form_row :for => [signature, :town] do %>
+  <%= f.label :town %>
+  <%= f.text_field :town, :tabindex => increment %>
+  <%= error_messages_for_field signature, :town %>
+<% end %>
+
+<%= form_row :for => [signature, :postcode] do %>
+  <%= f.label :postcode %>
+  <%= f.text_field :postcode, :class => 'postcode', :tabindex => increment %>
+  <%= error_messages_for_field signature, :postcode %>
+<% end %>
+
+<%= form_row :for => [signature, :country] do %>
+  <%= f.label :country %>
+  <%= f.select :country, countries_for_select, {}, :tabindex => increment %>
+  <%= error_messages_for_field signature, :country %>
+<% end %>

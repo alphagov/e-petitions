@@ -1,0 +1,10 @@
+ePets
+
+For setting up a sysadmin user, run 'rake epets:add_sysadmin_user'
+
+To start a solr instance, run 'rake sunspot:solr:start'
+To index the models, run 'rake sunspot:reindex'
+
+To get the selenium tests running, make sure you're running firefox 7 as your firefox browser or alternatively, have firefox 7 in one of the following locations:
+/Applications/Firefox7.app/Contents/MacOS/firefox-bin or
+/Applications/Firefox 7.app/Contents/MacOS/firefox-bin 

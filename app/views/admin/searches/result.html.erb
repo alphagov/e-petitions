@@ -1,0 +1,31 @@
+
+<%= render 'form', :query => @query %>
+
+<br />
+<p>Search Results</p>
+<br />
+
+<% if @signatures.present? %>
+
+  <%= will_paginate @signatures %>
+  <table class="admin_index">
+    <thead>
+      <tr>
+        <th>Petition Id</th>
+        <th>Petition Title</th>
+        <th>Signature Status</th>
+        <th>Signature Last Updated</th>
+        <th>Petition Creator?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @signatures -%>
+    </tbody>
+  </table>
+
+<% else %>
+  <p>
+    No Signatures found for email address
+    <%= mail_to @query %>
+  </p>
+<% end %>

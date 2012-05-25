@@ -1,0 +1,6 @@
+<% content_for(:page_title) { "#{@department.name} - e-petitions" } %>
+<div class="title_block">
+  <h1>e-petitions <span class="search_terms">in <%= @department.name %></span></h1>
+</div>
+
+<%= render '/search/results' %>

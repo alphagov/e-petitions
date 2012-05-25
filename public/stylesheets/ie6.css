@@ -1,0 +1,91 @@
+body {
+  height: 100%;
+}
+form .row .errors {
+  left: 375px;
+}
+form .row .tip {
+  left: 365px;
+}
+
+form.new_petition_form .form_pagination {
+  zoom:1;
+}
+form.new_petition_form .form_pagination ul {
+  height: 131px;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+}
+.lightbox {
+  position: absolute;
+}
+.lightbox .window_close_btn {
+  background-image: none;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/icons/close.png', sizingMethod='crop');
+}
+#header #header_content {
+  margin-right: 30px;
+}
+#header #header_content .search_by_departments_link {
+  display: inline-block;
+}
+
+#header #header_content form label {
+  clear: both;
+}
+
+/* Fix for column headers not being clickable */
+a.search_normal, a.active_search_normal, a.active_search_inverse {
+  position: relative;
+}
+
+#footer {
+  margin-top: 30px;
+  clear: both;
+  zoom: 1;
+}
+#footer #footer_nav {
+  display: block;
+}
+
+#sole_links li a {
+  background-image: none;
+  padding: 0;
+  margin: 0 100px;
+}
+
+#sole_links li a img {
+  visibility: hidden;
+}
+#sole_links li a.direct_gov_link {
+  zoom: 1;
+  width: 149px;
+  height: 32px;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/logos/direct_gov.png', sizingMethod='crop');
+}
+#sole_links li a.parliament_link {
+  zoom: 1;
+  width: 237px;
+  height: 50px;
+  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/logos/parliament.png', sizingMethod='crop');
+}
+
+.how_it_works div {
+  margin-left: -40px;
+}
+
+#create_pet_cta_block {
+  zoom: 1;
+}
+
+.petition_index_view .petition_list .title_pagination_row {
+  zoom: 1;
+}
+.how_it_works ul {
+  position: absolute;
+  top: 0px;
+  left: -30px;
+}

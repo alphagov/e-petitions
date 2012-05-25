@@ -1,0 +1,13 @@
+<p>Dear Sir/Madam,</p>
+
+<p>A request has been made to re-send a confirmation email to this address to complete the signing process for the e-petition '<%= @petition.title %>'.</p>
+
+<p>This email address has not been used to sign this e-petition. If you want to sign the petition you can do so at the following address:</p>
+
+<p><%= linkify(petition_url(@petition)) %></p>
+
+<p>If you don't want to sign this e-petition or believe this message was sent in error, please ignore this email.</p>
+
+<p>Thanks,</p>
+
+<p>HM Government e-petitions <%= home_url %></p>

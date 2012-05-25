@@ -1,0 +1,15 @@
+<h2>Log in to your existing account</h2>
+ 
+<%= form_for @user_session do |f| %>
+  <dl class="form">
+    <dt><%= f.label :email, "Email" %></dt>
+    <dd>
+      <%= f.text_field :email, :class => 'text', :type => 'email', :autofocus => 'autofocus' %>
+    </dd> 
+    <dt><%= f.label :password, "Password" %></dt>
+    <dd>
+      <%= f.password_field :password, :class => 'text' %>
+    </dd>
+    <dd class="submit"><%= f.submit 'Log in', :class => 'button' %></dd>
+  </dl>
+<% end %>

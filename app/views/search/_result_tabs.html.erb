@@ -1,0 +1,18 @@
+<%= render_tabnav :id => "petition_state_tabs", :class => "tab_menu" do |n|
+  n.add_tab do |t|
+    t.named "Open #{search_count_for('open')}".html_safe
+    t.links_to url_for(params.merge(:state => Petition::OPEN_STATE, :page => nil, :order => nil, :sort => nil))
+    t.highlights_on :state => Petition::OPEN_STATE
+    t.highlights_on :state => nil
+  end
+  n.add_tab do |t|
+    t.named "Closed #{search_count_for('closed')}".html_safe
+    t.links_to url_for(params.merge(:state => Petition::CLOSED_STATE, :page => nil, :order => nil, :sort => nil))
+    t.highlights_on :state => Petition::CLOSED_STATE
+  end
+  n.add_tab do |t|
+    t.named "Rejected #{search_count_for('rejected')}".html_safe
+    t.links_to url_for(params.merge(:state => Petition::REJECTED_STATE, :page => nil, :order => nil, :sort => nil))
+    t.highlights_on :state => Petition::REJECTED_STATE
+  end
+end %>

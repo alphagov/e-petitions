@@ -1,0 +1,34 @@
+<% content_for(:page_title) { "Departments information - e-petitions" } %>
+<div class="title_block">
+  <h1>Departments information</h1>
+</div>
+
+<div class="cut_in_block">
+  <div class="wrapper">
+    <p>Click the "<span class="info_link">info</span>" icon to find out more about each department.</p>
+  </div>
+</div>
+
+<div class="generic_block department_list_block">
+  <ul class="department_list">
+  <% @departments.each do |department| -%>
+    <li>
+      <%= department.name %>
+      <%= info_link_to "#department_#{department.id}", :class => 'lightbox_link' %>
+    </li>
+  <% end -%>
+  </ul>
+  
+  <% @departments.each do |department| -%>
+    <div class="department_info" id="department_<%= department.id %>">
+      <h2><%= department.name %></h2>
+      <%= new_window_link_to department.website_url, department.website_url, :class => 'website_link' %>
+      <div class="description">
+        <%= raw(department.description) %>
+      </div>
+    </div>
+  <% end -%>
+  
+</div>
+
+<%= content_for :js, javascript_include_tag('lightbox') %>
