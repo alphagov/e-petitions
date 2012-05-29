@@ -1,6 +1,12 @@
 e-petitions
 
-This repository is the code base for the UK Government's e-petitions service (http://epetitions.direct.gov.uk).  We have open sourced the code 
+This repository is the code base for the UK Government's e-petitions service (http://epetitions.direct.gov.uk).  
+We have open sourced the code for you to use under the terms of licence contained in this repository.
+
+We hope you enjoy it!
+
+A few things to know:
+
 You will need ruby 1.8.7
 
 You will need to set up the database.yml
