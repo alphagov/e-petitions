@@ -51,28 +51,6 @@ a.search_normal, a.active_search_normal, a.active_search_inverse {
   display: block;
 }
 
-#sole_links li a {
-  background-image: none;
-  padding: 0;
-  margin: 0 100px;
-}
-
-#sole_links li a img {
-  visibility: hidden;
-}
-#sole_links li a.direct_gov_link {
-  zoom: 1;
-  width: 149px;
-  height: 32px;
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/logos/direct_gov.png', sizingMethod='crop');
-}
-#sole_links li a.parliament_link {
-  zoom: 1;
-  width: 237px;
-  height: 50px;
-  filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/logos/parliament.png', sizingMethod='crop');
-}
-
 .how_it_works div {
   margin-left: -40px;
 }
