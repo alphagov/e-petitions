@@ -201,24 +201,6 @@ dl dd {
   text-decoration: underline;
 }
 
-#sole_links {
-  text-align: center;
-  padding: 20px 0 60px;
-}
-
-#sole_links .direct_gov_link img {
-  margin-bottom: 10px;
-}
-
-#sole_links li {
-  display: inline;
-}
-#sole_links li a {
-  background-image: none;
-  padding: 0;
-  margin: 0 61px 0 80px;
-}
-
 /* block styling */
 
 .generic_block {
