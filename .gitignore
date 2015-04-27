@@ -8,6 +8,7 @@ config/database.yml
 public/cucumber
 public/index.html
 public/javascripts/all.js
+public/api/**
 solr/data
 vendor/bundle
 vendor/ruby

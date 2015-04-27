@@ -25,10 +25,11 @@ class Captcha
     bytes.map { |byte| ALPHABET[byte.hex % ALPHABET.size].chr }.to_s
   end
 
-  private
   def self.skip_captcha_verification?
     AppConfig.has_setting?(:skip_recaptcha_verify) && AppConfig.skip_recaptcha_verify > 0
   end
+
+  private
 
   def self.bad_character_count?
     CHARACTER_COUNT < 1 || CHARACTER_COUNT > 16

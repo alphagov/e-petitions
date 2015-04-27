@@ -2,26 +2,27 @@
 #
 # Table name: petitions
 #
-#  id                   :integer(4)      not null, primary key
-#  title                :string(255)     not null
-#  description          :text
-#  response             :text
-#  state                :string(10)      default("pending"), not null
-#  open_at              :datetime
-#  department_id        :integer(4)      not null
-#  creator_signature_id :integer(4)      not null
-#  created_at           :datetime
-#  updated_at           :datetime
-#  creator_id           :integer(4)
-#  rejection_text       :text
-#  closed_at            :datetime
-#  signature_count      :integer(4)      default(0)
-#  response_required    :boolean(1)      default(FALSE)
-#  internal_response    :text
-#  rejection_code       :string(50)
-#  notified_by_email    :boolean(1)      default(FALSE)
-#  duration             :string(2)       default("12")
-#  email_requested_at   :datetime
+#  id                      :integer(4)      not null, primary key
+#  title                   :string(255)     not null
+#  description             :text
+#  response                :text
+#  state                   :string(10)      default("pending"), not null
+#  open_at                 :datetime
+#  department_id           :integer(4)      not null
+#  creator_signature_id    :integer(4)      not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  creator_id              :integer(4)
+#  rejection_text          :text
+#  closed_at               :datetime
+#  signature_count         :integer(4)      default(0)
+#  response_required       :boolean(1)      default(FALSE)
+#  internal_response       :text
+#  rejection_code          :string(50)
+#  notified_by_email       :boolean(1)      default(FALSE)
+#  duration                :string(2)       default("12")
+#  email_requested_at      :datetime
+#  get_an_mp_email_sent_at :datetime
 #
 
 require 'spec_helper'
@@ -340,6 +341,42 @@ describe Petition do
     it "ignores special signatures" do
       Factory(:pending_signature, :petition => @petition, :postcode => "BFPO 1234")
       subject[""].should == 0
+    end
+  end
+
+  describe "email_all_who_passed_finding_mp_threshold" do
+    let(:deliverer) { double(:deliver => true) }
+    let(:petition) { Factory(:open_petition) }
+
+    before do
+      Factory(:system_setting, :key => SystemSetting::GET_AN_MP_SIGNATURE_COUNT, :value => "10")
+      PetitionMailer.stub(:ask_creator_to_find_an_mp => deliverer)
+    end
+
+    it "emails those who have passed the threshold" do
+      PetitionMailer.should_receive(:ask_creator_to_find_an_mp).with(petition).and_return(deliverer)
+      petition.update_attribute(:signature_count, 10)
+      Petition.email_all_who_passed_finding_mp_threshold
+    end
+
+    it "does not send the email if you are below the threshold" do
+      PetitionMailer.should_not_receive(:ask_creator_to_find_an_mp)
+      petition.update_attribute(:signature_count, 2)
+      Petition.email_all_who_passed_finding_mp_threshold
+    end
+
+    it "does not send if the petition is not open" do
+      PetitionMailer.should_not_receive(:ask_creator_to_find_an_mp)
+      petition.update_attribute(:signature_count, 10)
+      petition.update_attribute(:state, Petition::CLOSED_STATE)
+      Petition.email_all_who_passed_finding_mp_threshold
+    end
+
+    it "does not send the email again after sending once" do
+      PetitionMailer.should_receive(:ask_creator_to_find_an_mp).once.and_return(deliverer)
+      petition.update_attribute(:signature_count, 10);
+      Petition.email_all_who_passed_finding_mp_threshold
+      Petition.email_all_who_passed_finding_mp_threshold
     end
   end
 

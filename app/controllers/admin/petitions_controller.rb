@@ -1,6 +1,6 @@
 class Admin::PetitionsController < Admin::AdminController
   before_filter :assign_departments, :only => [:edit, :update]
-  
+
   respond_to :html
 
   def index
@@ -17,11 +17,11 @@ class Admin::PetitionsController < Admin::AdminController
   def show
     @petition = Petition.find(params[:id])
   end
-  
+
   def edit
     @petition = Petition.for_state(Petition::VALIDATED_STATE).find(params[:id])
   end
-  
+
   def update
     @petition = Petition.for_state(Petition::VALIDATED_STATE).find(params[:id])
     user_action = params['commit']
@@ -38,15 +38,15 @@ class Admin::PetitionsController < Admin::AdminController
 
     respond_with @petition, :location => admin_root_path
   end
-  
+
   def threshold
     @petitions = Petition.threshold.order(:signature_count).paginate(:page => params[:page], :per_page => params[:per_page] || 20)
   end
-  
+
   def edit_response
     @petition = Petition.find(params[:id])
   end
-  
+
   def update_response
     @petition = Petition.find(params[:id])
     @petition.internal_response = params[:petition][:internal_response]
@@ -61,7 +61,7 @@ class Admin::PetitionsController < Admin::AdminController
         @petition.update_attribute(:email_requested_at, requested_at)
         Delayed::Job.enqueue EmailThresholdResponseJob.new(@petition.id, requested_at, Petition, PetitionMailer), :run_at => 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
       end
-      
+
       redirect_to threshold_admin_petitions_path
     else
       render :edit_response
@@ -73,11 +73,11 @@ class Admin::PetitionsController < Admin::AdminController
     reject
     respond_with @petition, :location => admin_petitions_path
   end
-  
+
   def edit_internal_response
     @petition = Petition.find(params[:id])
   end
-  
+
   def update_internal_response
     @petition = Petition.find(params[:id])
     @petition.internal_response = params[:petition][:internal_response]
@@ -112,8 +112,8 @@ class Admin::PetitionsController < Admin::AdminController
     else
       @petition.state = Petition::REJECTED_STATE
     end
-    
-    # send rejection email 
+
+    # send rejection email
     if @petition.save
       PetitionMailer.notify_creator_that_petition_is_rejected(@petition.creator_signature).deliver
     end

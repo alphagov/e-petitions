@@ -88,7 +88,7 @@ describe PetitionsController do
 
         it "should send verification email to petition's creator" do
           email = ActionMailer::Base.deliveries.last
-          email.from.should == ["xxxxx@example.com"]
+          email.from.should == ["no-reply@example.gov"]
           email.to.should == ["john@example.com"]
           email.subject.should match(/Email address confirmation/)
         end

@@ -30,6 +30,11 @@ Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, coun
   end
 end
 
+Given /^I have created an e-petition$/ do
+  @petition = Factory(:open_petition)
+  reset_mailer
+end
+
 Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |title, no_validated|
   petition = Petition.find_by_title(title)
   (no_validated - 1).times { petition.signatures << Factory(:validated_signature) }
@@ -126,4 +131,10 @@ end
 
 Then /^I can click on a link to return to the petition$/ do
   page.should have_css("a[href*='/petitions/#{@petition.id}']")
+end
+
+Then /^I should receive an email telling me how to get an MP on board$/ do
+  unread_emails_for(@petition.creator_signature.email).size.should == 1
+  open_email(@petition.creator_signature.email)
+  current_email.default_part_body.to_s.should include("MP")
 end

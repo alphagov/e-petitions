@@ -3,7 +3,6 @@ def strip_onpaste_element_used_to_disable_pasting_emails(body)
 end
 
 Then /^the markup should be valid$/ do
-  pending "Add your own validator to run these tests again"
   # If we could uniqueify each page that would speed up this test considerably. To do so we
   # need to make ids consistent and strip out the code after '?' on linked files
   body = page.source.dup
@@ -12,16 +11,14 @@ Then /^the markup should be valid$/ do
   body.gsub!(/(src=".*?)\?\d+/, '\1')
   strip_onpaste_element_used_to_disable_pasting_emails(body)
 
-  body.should be_valid_xhtml
+  body.should be_valid_markup
 end
 
 Then /^the feed should be valid$/ do
-  pending "Add your own validator to run these tests again"
   page.body.should be_valid_feed
 end
 
 Then /^the css files should be valid$/ do
-  pending "Add your own validator to run these tests again"
   stylesheets = page.all("//head/link[@type='text/css']").map { |c| c[:href] }
 
   # Not validating the external stylesheet files

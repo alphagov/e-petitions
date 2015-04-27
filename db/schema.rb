@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120327093020) do
+ActiveRecord::Schema.define(:version => 20120621155427) do
 
   create_table "admin_users", :force => true do |t|
     t.string   "email",                                                :null => false
@@ -77,25 +77,26 @@ ActiveRecord::Schema.define(:version => 20120327093020) do
   add_index "departments", ["name"], :name => "index_departments_on_name", :unique => true
 
   create_table "petitions", :force => true do |t|
-    t.string   "title",                                                     :null => false
+    t.string   "title",                                                        :null => false
     t.text     "description"
     t.text     "response"
-    t.string   "state",                :limit => 10, :default => "pending", :null => false
+    t.string   "state",                   :limit => 10, :default => "pending", :null => false
     t.datetime "open_at"
-    t.integer  "department_id",                                             :null => false
-    t.integer  "creator_signature_id",                                      :null => false
+    t.integer  "department_id",                                                :null => false
+    t.integer  "creator_signature_id",                                         :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "creator_id"
     t.text     "rejection_text"
     t.datetime "closed_at"
-    t.boolean  "response_required",                  :default => false
+    t.integer  "signature_count",                       :default => 0
+    t.boolean  "response_required",                     :default => false
     t.text     "internal_response"
-    t.string   "rejection_code",       :limit => 50
-    t.boolean  "notified_by_email",                  :default => false
-    t.string   "duration",             :limit => 2,  :default => "12"
-    t.integer  "signature_count",                    :default => 0
+    t.string   "rejection_code",          :limit => 50
+    t.boolean  "notified_by_email",                     :default => false
+    t.string   "duration",                :limit => 2,  :default => "12"
     t.datetime "email_requested_at"
+    t.datetime "get_an_mp_email_sent_at"
   end
 
   add_index "petitions", ["creator_signature_id"], :name => "index_petitions_on_creator_signature_id", :unique => true
@@ -104,11 +105,34 @@ ActiveRecord::Schema.define(:version => 20120327093020) do
   add_index "petitions", ["department_id", "state", "created_at"], :name => "index_petitions_on_department_id_and_state_and_created_at"
   add_index "petitions", ["department_id", "state", "signature_count"], :name => "petitions_by_sig_count"
   add_index "petitions", ["department_id", "state", "title"], :name => "petitions_by_title"
+  add_index "petitions", ["get_an_mp_email_sent_at"], :name => "index_petitions_on_get_an_mp_email_sent_at"
   add_index "petitions", ["response_required", "signature_count"], :name => "index_petitions_on_response_required_and_signature_count"
   add_index "petitions", ["state", "created_at"], :name => "index_petitions_on_state_and_created_at"
   add_index "petitions", ["state", "signature_count"], :name => "index_petitions_on_state_and_signature_count"
 
   create_table "signatures", :force => true do |t|
+    t.string   "name",                                                  :null => false
+    t.string   "state",            :limit => 10, :default => "pending", :null => false
+    t.string   "perishable_token"
+    t.string   "postcode"
+    t.string   "country"
+    t.string   "ip_address",       :limit => 20
+    t.integer  "petition_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "notify_by_email",                :default => false
+    t.datetime "last_emailed_at"
+    t.string   "encrypted_email"
+  end
+
+  add_index "signatures", ["encrypted_email", "petition_id", "name"], :name => "index_signatures_on_encrypted_email_and_petition_id_and_name", :unique => true
+  add_index "signatures", ["petition_id", "state", "name"], :name => "index_signatures_on_petition_id_and_state_and_name"
+  add_index "signatures", ["petition_id", "state"], :name => "index_signatures_on_petition_id_and_state"
+  add_index "signatures", ["petition_id"], :name => "index_signatures_on_petition_id_and_email"
+  add_index "signatures", ["state"], :name => "index_signatures_on_state"
+  add_index "signatures", ["updated_at"], :name => "index_signatures_on_updated_at"
+
+  create_table "signatures_pre_encryption", :force => true do |t|
     t.string   "name",                                                  :null => false
     t.string   "email",                                                 :null => false
     t.string   "state",            :limit => 10, :default => "pending", :null => false
@@ -123,12 +147,12 @@ ActiveRecord::Schema.define(:version => 20120327093020) do
     t.datetime "last_emailed_at"
   end
 
-  add_index "signatures", ["email", "petition_id", "name"], :name => "index_signatures_on_email_and_petition_id_and_name", :unique => true
-  add_index "signatures", ["petition_id", "email"], :name => "index_signatures_on_petition_id_and_email"
-  add_index "signatures", ["petition_id", "state", "name"], :name => "index_signatures_on_petition_id_and_state_and_name"
-  add_index "signatures", ["petition_id", "state"], :name => "index_signatures_on_petition_id_and_state"
-  add_index "signatures", ["state"], :name => "index_signatures_on_state"
-  add_index "signatures", ["updated_at"], :name => "index_signatures_on_updated_at"
+  add_index "signatures_pre_encryption", ["email", "petition_id", "name"], :name => "index_signatures_on_email_and_petition_id_and_name", :unique => true
+  add_index "signatures_pre_encryption", ["petition_id", "email"], :name => "index_signatures_on_petition_id_and_email"
+  add_index "signatures_pre_encryption", ["petition_id", "state", "name"], :name => "index_signatures_on_petition_id_and_state_and_name"
+  add_index "signatures_pre_encryption", ["petition_id", "state"], :name => "index_signatures_on_petition_id_and_state"
+  add_index "signatures_pre_encryption", ["state"], :name => "index_signatures_on_state"
+  add_index "signatures_pre_encryption", ["updated_at"], :name => "index_signatures_on_updated_at"
 
   create_table "system_settings", :force => true do |t|
     t.string   "key",         :limit => 64, :null => false

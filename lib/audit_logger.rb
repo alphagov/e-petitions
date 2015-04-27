@@ -11,16 +11,14 @@ class AuditLogger < Logger
     "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n"
   end
 
-  def error(msg, backtrace = nil)
-    hoptoad_params = {
-      :error_class => @error_class,
-      :error_message => msg.dup
+  def error(msg, exception = nil)
+    airbrake_params = {
+      :error_message => msg.dup,
+      :environment_name => Rails.env
     }
-    if backtrace
-      hoptoad_params[:backtrace] = backtrace
-      msg = "#{msg}\n" + backtrace.join("\n")
-    end
-    HoptoadNotifier.notify(hoptoad_params)
+    airbrake_params[:error_class] = exception.nil? ? @error_class : exception.class.name
+    airbrake_params[:backtrace] = exception.backtrace if ! exception.nil?
+    Airbrake.notify(airbrake_params)
 
     add(ERROR, nil, msg)
   end

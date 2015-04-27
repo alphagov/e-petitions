@@ -18,6 +18,14 @@ Scenario: Charlie has to search for a petition before creating one
   Then I should be on the new petition page
   And I should see my search query already filled in as the title of the petition
 
+@search
+Scenario: Charlie cannot craft an xss attack when searching for petitions
+  Given I am on the home page
+  When I follow "Create a new e-petition"
+  Then I fill in "search" with "'onmouseover='alert(1)'"
+  When I press "Search"
+  Then the markup should be valid
+
 Scenario: Charlie creates our petition
   Given I am on the new petition page
   Then I should see "Create a new e-petition - e-petitions" in the browser page title
@@ -32,12 +40,13 @@ Scenario: Charlie creates our petition
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending", duration: "3"
-  And a signature should exist with email: "womboid@wimbledon.com", name: "Womboid Wibbledon", state: "pending", notify_by_email: true
+  And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
+  And "Womboid Wibbledon" wants to be notified about the petition's progress
   And "womboid@wimbledon.com" should receive 1 email
 
   When I confirm my email address
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
-  And a signature should exist with email: "womboid@wimbledon.com", name: "Womboid Wibbledon", state: "validated"
+  And there should be a "validated" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
 
 Scenario: Charlie tries to submit an invalid petition without javascript.
   Given I am on the new petition page
@@ -142,16 +151,16 @@ Scenario: Charlie tries to submit an invalid petition with javascript.
   And I press "Back" within "//fieldset[3]"
   And I fill in "Name" with "Mr. Wibbledon" within "//fieldset[2]"
   And I press "Next" within "//fieldset[2]"
-  
+
   And I fill in an invalid captcha
   And I press "Submit"
   And I should see "The captcha was not filled in correctly."
-  
+
   And I fill in a valid captcha
   And I press "Submit"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
-  And a signature should exist with email: "womboid@wimbledon.com", name: "Mr. Wibbledon", state: "pending"
+  Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"
 
 
 Scenario: Charlie looks up information about departments
@@ -164,5 +173,3 @@ Scenario: Charlie looks up information about departments
   And I should see "A large portion of the UK population cannot intonate their words properly. This department is responsible for developing this."
 
 #The JS version for this scenario can't be run since Selenium doesn't seem to understand pages in new tabs.
-
-

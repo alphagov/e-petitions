@@ -1,0 +1,12 @@
+Dear <%= @petition.creator_signature.name %>
+
+Looks like your e-petition "<%= @petition.title %>" is gaining momentum. If you do get to 100,000 signatures you will need an MP to support a debate.  You can find your local MP at http://findmymp.parliament.uk/.
+
+You can find more information about how the House of Commons deals with e-petitions on the Backbench Business Committee website at http://www.parliament.uk/bbcom.  If you need any more information, you can contact us at petitions@commonsleader.x.gsi.gov.uk.
+
+To see your e-petition, paste the following link into your browser: <%= petition_url(@petition) %>
+
+Thanks,
+
+HM Government e-petitions <%= home_url %>
+

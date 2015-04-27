@@ -18,7 +18,7 @@ class EmailReminder
       end
     end
   rescue Exception => e
-    logger.error("#{e.class.name} while processing admin_email_reminders: #{e.message}", e.backtrace)
+    logger.error("#{e.class.name} while processing admin_email_reminders: #{e.message}", e)
   end
   
   # email out a list of all petitions that have reached the threshold or that have been marked for a response
@@ -38,7 +38,7 @@ class EmailReminder
       end
     end
   rescue Exception => e
-    logger.error("#{e.class.name} while processing threshold_email_reminders: #{e.message}", e.backtrace)
+    logger.error("#{e.class.name} while processing threshold_email_reminders: #{e.message}", e)
   end
 
   def self.special_resend_of_signature_email_validation(date = '2011-08-14')

@@ -4,7 +4,6 @@
 #
 #  id               :integer(4)      not null, primary key
 #  name             :string(255)     not null
-#  email            :string(255)     not null
 #  state            :string(10)      default("pending"), not null
 #  perishable_token :string(255)
 #  postcode         :string(255)
@@ -15,6 +14,7 @@
 #  updated_at       :datetime
 #  notify_by_email  :boolean(1)      default(FALSE)
 #  last_emailed_at  :datetime
+#  encrypted_email  :string(255)
 #
 
 require 'spec_helper'
@@ -46,6 +46,21 @@ describe Signature do
     end
   end
 
+  context "encryption of email" do
+    let(:signature) { Factory.create(:signature, :email => "foo@example.net") }
+    it "transparently alters the email" do
+      Signature.find(signature.id).email.should == "foo@example.net"
+    end
+
+    it "take no notice of the case" do
+      Factory.build(:signature, :email => "FOO@exAmplE.net").encrypted_email.should == signature.encrypted_email
+    end
+
+    it "for_email takes into account the encrypted email" do
+      Signature.for_email("foo@example.net").should == [signature]
+    end
+  end
+
 
   RSpec::Matchers.define :have_valid do |field|
     match do |actual|
@@ -59,6 +74,7 @@ describe Signature do
     it { should validate_presence_of(:address).with_message(/must be completed/) }
     it { should validate_presence_of(:town).with_message(/must be completed/) }
     it { should validate_presence_of(:country).with_message(/must be completed/) }
+    it { should ensure_length_of(:name).is_at_most(255) }
 
     it "should validate format of email" do
       s = Factory.build(:signature, :email => 'joe@example.com')
@@ -209,6 +225,11 @@ describe Signature do
 
       it "handles the lack of spaces" do
         Signature.new(:postcode => "SO222PL").postal_district.should == "SO22"
+      end
+
+      it "handles lack of spaces for shorter codes" do
+        Signature.new(:postcode => "wn88en").postal_district.should == "WN8"
+        Signature.new(:postcode => "hd58tf").postal_district.should == "HD5"
       end
 
       it "handles case correctly" do

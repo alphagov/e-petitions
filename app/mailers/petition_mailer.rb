@@ -3,6 +3,8 @@ class PetitionMailer < ActionMailer::Base
 
   default :from => AppConfig.email_from
   include ActionView::Helpers::NumberHelper
+  add_template_helper(DateTimeHelper)
+
   layout 'default_mail'
 
   def email_confirmation_for_creator(signature)
@@ -18,6 +20,11 @@ class PetitionMailer < ActionMailer::Base
   def special_resend_of_email_confirmation_for_signer(signature)
     @signature = signature
     mail(:subject => "HM Government e-petitions: Email address confirmation", :to => @signature.email)
+  end
+
+  def ask_creator_to_find_an_mp(petition)
+    @petition = petition
+    mail(:subject => "HM Government e-petitions: Your e-petition is gaining momentum: time to find an MP", :to => @petition.creator_signature.email)
   end
 
   def notify_creator_that_petition_is_published(signature)
@@ -68,4 +75,11 @@ class PetitionMailer < ActionMailer::Base
     mail  :subject => "HM Government e-petitions: Signatures already confirmed",
           :to      => @signature_one.email
   end
+
+  def notify_creator_of_closing_date_change(signature)
+    @signature = signature
+    mail :subject => "HM Government e-petitions: change to your e-petition closing date",
+         :to      => @signature.email
+  end
+
 end

@@ -33,6 +33,6 @@ end
 Given /^the admin user is logged in$/ do
   visit admin_login_path
   fill_in("Email", :with => @user.email)
-  fill_in("Password", :with => "SheBang22!")
+  fill_in("Password", :with => "Letmein1!")
   click_button("Log in")
 end

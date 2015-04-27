@@ -1,6 +1,6 @@
 <%= form_row :for => [signature, :name] do %>
   <%= f.label :name %>
-  <%= f.text_field :name, :tabindex => increment  %>
+  <%= f.text_field :name, :tabindex => increment, :maxlength => 255  %>
   <%= error_messages_for_field signature, :name %>
   <div class="tip">
     <div class="arrow"></div>

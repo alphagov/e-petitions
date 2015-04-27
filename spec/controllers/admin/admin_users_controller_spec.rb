@@ -110,7 +110,7 @@ describe Admin::AdminUsersController do
           def do_create(options = {})
             post :create, {:admin_user => {
                 :first_name => 'John', :last_name => 'Kennedy', :role => 'admin',
-                :email => 'admin@example.com', :password => 'Shebang22!', :password_confirmation => 'Shebang22!'
+                :email => 'admin@example.com', :password => 'Letmein1!', :password_confirmation => 'Letmein1!'
               }, :department_ids => {}}.merge(options)
           end
 

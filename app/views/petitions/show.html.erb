@@ -57,8 +57,10 @@
     <dt class="signature_count">Number of signatures:</dt>
     <dd class="signature_count"><%= number_with_delimiter(@petition.signature_count) %></dd>
 
-    <dt class="created_by">Created by:</dt>
-    <dd class="created_by"><%= @petition.creator_signature.name %></dd>
+    <% if !@petition.rejected? && !@petition.closed? -%>
+      <dt class="created_by">Created by:</dt>
+      <dd class="created_by"><%= @petition.creator_signature.name %></dd>
+    <% end -%>
 
     <% if @petition.closed_at.present? -%>
       <dt class="closing_date">Closing:</dt>
