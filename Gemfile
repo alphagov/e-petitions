@@ -8,6 +8,7 @@ gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finder
 gem 'actionpack-action_caching'
 gem 'actionpack-page_caching'
 gem 'responders'
+gem 'rails_autolink'
 
 gem 'rake'
 gem 'mysql2'
