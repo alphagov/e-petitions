@@ -1,3 +1,5 @@
+require 'app_config'
+
 namespace :epets do
 
   desc 'Add sysadmin user'

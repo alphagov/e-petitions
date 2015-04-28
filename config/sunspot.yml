@@ -3,6 +3,7 @@ development: &DEV
     hostname: localhost
     port: 8982
     log_level: INFO
+    path: /solr/development
 
 development_with_caching:
   <<: *DEV
@@ -12,20 +13,18 @@ test: &TEST
     hostname: localhost
     port: 8987
     log_level: WARNING
-    
+    path: /solr/test
+
 cucumber:
   <<: *TEST
 
-staging:
+production: &PROD
   solr:
     hostname: localhost
     port: 8983
     log_level: WARNING
+    path: /solr/production
   auto_commit_after_request: false
 
-production:
-  solr:
-    hostname: localhost
-    port: 8983
-    log_level: WARNING
-  auto_commit_after_request: false
+staging:
+  <<: *PROD

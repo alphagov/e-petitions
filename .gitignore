@@ -10,6 +10,7 @@ public/index.html
 public/javascripts/all.js
 public/api/**
 solr/data
+solr/pids
 vendor/bundle
 vendor/ruby
 vendor/plugins/query_reviewer
