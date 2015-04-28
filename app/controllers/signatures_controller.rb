@@ -1,7 +1,5 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  ssl_required :new, :create
-  ssl_allowed :thank_you, :verify
   include ActionView::Helpers::NumberHelper
 
   respond_to :html

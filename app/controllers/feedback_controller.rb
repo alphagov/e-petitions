@@ -1,7 +1,6 @@
 class FeedbackController < ApplicationController
-  ssl_required :index, :create, :thanks
-
   respond_to :html
+
   def index
     respond_with @feedback = Feedback.new
   end

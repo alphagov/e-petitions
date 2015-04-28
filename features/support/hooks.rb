@@ -5,12 +5,7 @@ Before("@departments") do
 end
 
 Before('@javascript') do
-  SslRequirement.disable_ssl_check = true
   Capybara.current_driver = Capybara.javascript_driver
-end
-
-After('@javascript') do
-  SslRequirement.disable_ssl_check = false
 end
 
 # for search testing
@@ -31,7 +26,7 @@ Before("@search") do
     end
     # shut down the Solr server
     at_exit { Process.kill('TERM', pid) }
-    
+
     # wait for solr to start
     require 'lib/sunspot_server_util'
     SunspotServerUtil.wait_for_sunspot_to_start($sunspot.port)

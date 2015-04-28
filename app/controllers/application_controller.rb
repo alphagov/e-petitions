@@ -1,7 +1,5 @@
 class ApplicationController < ActionController::Base
-  include ::SslRequirement
-  protect_from_forgery
-  helper :all
+  protect_from_forgery with: :exception
 
   protected
 

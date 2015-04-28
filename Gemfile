@@ -2,11 +2,19 @@ source 'https://rubygems.org'
 
 gem 'rails', '4.2.1'
 
+# Legacy Rails feature gems - will no longer be supported in Rails 5.0
+gem 'protected_attributes'
+gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
+gem 'actionpack-action_caching'
+gem 'actionpack-page_caching'
+gem 'responders'
+
 gem 'rake'
 gem 'mysql2'
 gem 'authlogic'
 gem 'will_paginate'
 gem 'sunspot_rails'
+gem 'sunspot_solr'
 gem 'tabnav'
 gem 'json'
 gem 'memcache-client'
@@ -16,6 +24,7 @@ gem 'newrelic_rpm'
 gem 'airbrake'
 gem 'rabl'
 gem 'attr_encrypted'
+gem 'dynamic_form'
 
 group :development, :test do
   gem 'rspec-rails'

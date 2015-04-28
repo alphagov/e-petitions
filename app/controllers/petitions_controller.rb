@@ -5,9 +5,6 @@ class PetitionsController < ApplicationController
 
   caches_page :show
 
-  ssl_required :new, :create
-  ssl_allowed :thank_you
-
   respond_to :html
 
   include SearchResultsSetup
