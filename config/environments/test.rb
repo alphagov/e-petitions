@@ -23,6 +23,9 @@ Rails.application.configure do
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 
+  # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
+  config.force_ssl = true
+
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
