@@ -32,7 +32,7 @@ describe TrendingPetition do
       TrendingPetition.create!(:petition_id => 12345, :signatures_in_last_hour => 500)
 
       TrendingPetition.update_homepage_trends
-      expect(TrendingPetition.all.size).to eq(1)
+      expect(TrendingPetition.count).to eq(1)
       expect(TrendingPetition.first.petition_id).to eq(666)
       expect(TrendingPetition.first.signatures_in_last_hour).to eq(100)
     end

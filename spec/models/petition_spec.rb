@@ -143,8 +143,8 @@ describe Petition do
       end
 
       it "returns the signature count for the last hour as an additional attribute" do
-        expect(Petition.last_hour_trending.first.signatures_in_last_hour).to eq("11")
-        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to  eq("1")
+        expect(Petition.last_hour_trending.first.signatures_in_last_hour).to eq(11)
+        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to eq(1)
       end
 
       it "limits the result to 12 petitions" do
@@ -154,7 +154,7 @@ describe Petition do
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        expect(Petition.last_hour_trending.all.size).to eq(12)
+        expect(Petition.last_hour_trending.to_a.size).to eq(12)
       end
     end
 
@@ -175,19 +175,19 @@ describe Petition do
         end
 
         it "orders the petitions by the highest signature count" do
-          trending_petitions = Petition.trending(1).all
+          trending_petitions = Petition.trending(1)
           expect(trending_petitions.first.title).to eq("petition #15")
           expect(trending_petitions.last.title).to  eq("petition #6")
         end
 
         it "ignores petitions with signatures that are outside a rolling 24 hour period" do
-          expect(Petition.trending(1).all.map(&:title).include?(@petition_with_old_signatures.title)).to be_falsey
+          expect(Petition.trending(1).map(&:title).include?(@petition_with_old_signatures.title)).to be_falsey
         end
       end
 
       context "finding trending petitions for the last 7 days" do
         it "includes the petition with older signatures" do
-          expect(Petition.trending(7).all.map(&:title).include?(@petition_with_old_signatures.title)).to be_truthy
+          expect(Petition.trending(7).map(&:title).include?(@petition_with_old_signatures.title)).to be_truthy
         end
       end
     end

@@ -101,7 +101,7 @@ describe Signature do
       it "require email and email confirmation to be the same" do
         s = FactoryGirl.build(:signature, :email => 'john@hotmail.com', :email_confirmation => 'john2@hotmail.com')
         s.valid?
-        expect(s.errors_on(:email)).not_to be_blank
+        expect(s.errors_on(:email_confirmation)).not_to be_blank
       end
     end
 
