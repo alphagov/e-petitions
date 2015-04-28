@@ -68,6 +68,7 @@ GEM
     childprocess (0.5.6)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
+    coderay (1.1.0)
     coffee-script (2.4.1)
       coffee-script-source
       execjs
@@ -125,6 +126,7 @@ GEM
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
     memcache-client (1.8.5)
+    method_source (0.8.2)
     mime-types (2.5)
     mini_portile (0.6.2)
     minitest (5.6.1)
@@ -140,6 +142,10 @@ GEM
     pr_geohash (1.0.0)
     protected_attributes (1.0.9)
       activemodel (>= 4.0.1, < 5.0)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rabl (0.11.6)
       activesupport (>= 2.3.14)
     rack (1.6.0)
@@ -220,6 +226,7 @@ GEM
       rack (~> 1.4)
       rack-protection (~> 1.4)
       tilt (>= 1.3, < 3)
+    slop (3.6.0)
     sprockets (3.0.3)
       rack (~> 1.0)
     sprockets-rails (2.2.4)
@@ -282,6 +289,7 @@ DEPENDENCIES
   nokogiri
   pickle
   protected_attributes
+  pry
   rabl
   rails (= 4.2.1)
   rake
