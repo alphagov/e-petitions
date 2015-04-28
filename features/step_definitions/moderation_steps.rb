@@ -1,10 +1,10 @@
 When /^I look at the next petition on my list$/ do
-  @petition = Factory(:validated_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
+  @petition = FactoryGirl.create(:validated_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
   visit edit_admin_petition_path(@petition)
 end
 
 When /^I re\-assign it to a different department$/ do
-  Factory(:department, :name => "Another department")
+  FactoryGirl.create(:department, :name => "Another department")
   visit edit_admin_petition_path(@petition)
   select "Another department"
   click_button "Re-assign"

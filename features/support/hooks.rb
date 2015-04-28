@@ -1,6 +1,6 @@
 Before("@departments") do
   ['Cabinet Office', 'Treasury'].each do |department_name|
-    Factory(:department, :name => department_name)
+    FactoryGirl.create(:department, :name => department_name)
   end
 end
 

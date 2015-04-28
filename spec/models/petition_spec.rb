@@ -130,11 +130,11 @@ describe Petition do
     describe "last_hour_trending" do
       before(:each) do
         11.times do |count|
-          petition = Factory(:open_petition, :title => "petition ##{count+1}")
-          count.times { Factory(:validated_signature, :petition => petition) }
+          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        @petition_with_old_signatures = Factory(:open_petition, :title => "petition out of range")
+        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :title => "petition out of range")
         @petition_with_old_signatures.signatures.first.update_attribute(:updated_at, 2.hours.ago)
       end
 
@@ -150,8 +150,8 @@ describe Petition do
       it "limits the result to 12 petitions" do
         # 13 petitions signed in the last hour
         2.times do |count|
-          petition = Factory(:open_petition, :title => "petition ##{count+1}")
-          count.times { Factory(:validated_signature, :petition => petition) }
+          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
         Petition.last_hour_trending.all.size.should == 12
@@ -161,12 +161,12 @@ describe Petition do
     describe "trending" do
       before(:each) do
         15.times do |count|
-          petition = Factory(:open_petition, :title => "petition ##{count+1}")
-          count.times { Factory(:validated_signature, :petition => petition) }
+          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        @petition_with_old_signatures = Factory(:open_petition, :title => "petition out of range")
-        10.times { Factory(:validated_signature, :petition => @petition_with_old_signatures, :updated_at => 2.days.ago) }
+        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :title => "petition out of range")
+        10.times { FactoryGirl.create(:validated_signature, :petition => @petition_with_old_signatures, :updated_at => 2.days.ago) }
       end
 
       context "finding trending petitions for the last 24 hours" do
@@ -194,17 +194,17 @@ describe Petition do
 
     context "threshold" do
       before :each do
-        @p1 = Factory(:open_petition)
+        @p1 = FactoryGirl.create(:open_petition)
         @p1.update_attribute(:signature_count, 100000)
-        @p2 = Factory(:open_petition)
+        @p2 = FactoryGirl.create(:open_petition)
         @p2.update_attribute(:signature_count, 100001)
-        @p3 = Factory(:open_petition)
+        @p3 = FactoryGirl.create(:open_petition)
         @p3.update_attribute(:signature_count, 99999)
-        @p4 = Factory(:open_petition)
+        @p4 = FactoryGirl.create(:open_petition)
         @p4.update_attribute(:signature_count, 200000)
-        Factory(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "100000")
-        @p5 = Factory(:open_petition, :response_required => true)
-        @p6 = Factory(:open_petition, :response_required => false)
+        FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "100000")
+        @p5 = FactoryGirl.create(:open_petition, :response_required => true)
+        @p6 = FactoryGirl.create(:open_petition, :response_required => false)
       end
 
       it "should return 4 petitions over the threshold or marked as requiring a response" do
@@ -216,12 +216,12 @@ describe Petition do
 
     context "for_state" do
       before :each do
-        @p1 = Factory(:petition, :state => Petition::PENDING_STATE)
-        @p2 = Factory(:petition, :state => Petition::VALIDATED_STATE)
-        @p3 = Factory(:petition, :state => Petition::PENDING_STATE)
-        @p4 = Factory(:open_petition, :closed_at => 1.day.from_now)
-        @p5 = Factory(:petition, :state => Petition::HIDDEN_STATE)
-        @p6 = Factory(:open_petition, :closed_at => 1.day.ago)
+        @p1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
+        @p2 = FactoryGirl.create(:petition, :state => Petition::VALIDATED_STATE)
+        @p3 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
+        @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
+        @p5 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
+        @p6 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
       end
 
       it "should return 2 pending petitions" do
@@ -242,12 +242,12 @@ describe Petition do
 
     context "visible" do
       before :each do
-        @hidden_petition_1 = Factory(:petition, :state => Petition::PENDING_STATE)
-        @hidden_petition_2 = Factory(:petition, :state => Petition::VALIDATED_STATE)
-        @hidden_petition_3 = Factory(:petition, :state => Petition::HIDDEN_STATE)
-        @visible_petition_1 = Factory(:open_petition)
-        @visible_petition_2 = Factory(:rejected_petition)
-        @visible_petition_3 = Factory(:open_petition, :closed_at => 1.day.ago)
+        @hidden_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
+        @hidden_petition_2 = FactoryGirl.create(:petition, :state => Petition::VALIDATED_STATE)
+        @hidden_petition_3 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
+        @visible_petition_1 = FactoryGirl.create(:open_petition)
+        @visible_petition_2 = FactoryGirl.create(:rejected_petition)
+        @visible_petition_3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
       end
 
       it "returns only visible petitions" do
@@ -258,12 +258,12 @@ describe Petition do
 
     context "for_departments" do
       before :each do
-        @d1 = Factory(:department)
-        @d2 = Factory(:department)
-        @d3 = Factory(:department)
-        @p1 = Factory(:petition, :department => @d1)
-        @p2 = Factory(:petition, :department => @d1)
-        @p3 = Factory(:petition, :department => @d3)
+        @d1 = FactoryGirl.create(:department)
+        @d2 = FactoryGirl.create(:department)
+        @d3 = FactoryGirl.create(:department)
+        @p1 = FactoryGirl.create(:petition, :department => @d1)
+        @p2 = FactoryGirl.create(:petition, :department => @d1)
+        @p3 = FactoryGirl.create(:petition, :department => @d3)
       end
 
       it "should return all petitiions for d1" do
@@ -293,7 +293,7 @@ describe Petition do
 
   describe "signature count" do
     before :each do
-      @petition = Factory(:open_petition)
+      @petition = FactoryGirl.create(:open_petition)
       @petition.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE)
       Petition.update_all_signature_counts
     end
@@ -304,13 +304,13 @@ describe Petition do
     end
 
     it "still returns 1 with a new signature" do
-      Factory(:signature, :petition => @petition)
+      FactoryGirl.create(:signature, :petition => @petition)
       @petition.reload
       @petition.signature_count.should == 1
     end
 
     it "returns 2 when signature is validated" do
-      s = Factory(:signature, :petition => @petition)
+      s = FactoryGirl.create(:signature, :petition => @petition)
       s.update_attribute(:state, Signature::VALIDATED_STATE)
       Petition.update_all_signature_counts
       @petition.reload
@@ -319,13 +319,13 @@ describe Petition do
   end
 
   describe "signature counts by postal code" do
-    let(:petition) { Factory(:open_petition) }
+    let(:petition) { FactoryGirl.create(:open_petition) }
     subject { petition.signature_counts_by_postal_district }
 
     before do
-      5.times { Factory(:signature, :petition => petition, :postcode => "SO23 0AA") }
-      2.times { Factory(:signature, :petition => petition, :postcode => "so231BB") }
-      1.times { Factory(:signature, :petition => petition, :postcode => "b171wi") }
+      5.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "SO23 0AA") }
+      2.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "so231BB") }
+      1.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "b171wi") }
     end
 
     it "returns a hash of counts" do
@@ -334,22 +334,22 @@ describe Petition do
     end
 
     it "only returns validated signatures" do
-      Factory(:pending_signature, :petition => @petition, :postcode => "b17 1SS")
+      FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "b17 1SS")
       subject["B17"].should == 1
     end
 
     it "ignores special signatures" do
-      Factory(:pending_signature, :petition => @petition, :postcode => "BFPO 1234")
+      FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "BFPO 1234")
       subject[""].should == 0
     end
   end
 
   describe "email_all_who_passed_finding_mp_threshold" do
     let(:deliverer) { double(:deliver => true) }
-    let(:petition) { Factory(:open_petition) }
+    let(:petition) { FactoryGirl.create(:open_petition) }
 
     before do
-      Factory(:system_setting, :key => SystemSetting::GET_AN_MP_SIGNATURE_COUNT, :value => "10")
+      FactoryGirl.create(:system_setting, :key => SystemSetting::GET_AN_MP_SIGNATURE_COUNT, :value => "10")
       PetitionMailer.stub(:ask_creator_to_find_an_mp => deliverer)
     end
 
@@ -382,15 +382,15 @@ describe Petition do
 
   describe "can_be_signed?" do
     def petition(state = Petition::OPEN_STATE)
-      @petition ||= Factory(:petition, :state => state)
+      @petition ||= FactoryGirl.create(:petition, :state => state)
     end
 
     it "is true if and only if the petition is OPEN and the closed_at date is in the future" do
-      Factory(:open_petition, :closed_at => 1.year.from_now).can_be_signed?.should be_true
+      FactoryGirl.create(:open_petition, :closed_at => 1.year.from_now).can_be_signed?.should be_true
     end
 
     it "is false if the petition is OPEN and the closed_at date is in the past" do
-      Factory(:open_petition, :closed_at => 2.minutes.ago).can_be_signed?.should be_false
+      FactoryGirl.create(:open_petition, :closed_at => 2.minutes.ago).can_be_signed?.should be_false
     end
 
     it "is false otherwise" do
@@ -480,7 +480,7 @@ describe Petition do
   end
 
   describe "signatures that need emailing" do
-    let(:petition) { Factory(:petition) }
+    let(:petition) { FactoryGirl.create(:petition) }
     it "returns validated signatures" do
       petition.need_emailing.should == [petition.creator_signature]
     end
@@ -531,12 +531,12 @@ describe Petition do
 
   describe ".counts_by_state" do
     it "returns a hash containing counts of petition states" do
-      1.times { Factory(:pending_petition) }
-      2.times { Factory(:validated_petition) }
-      3.times { Factory(:open_petition) }
-      4.times { Factory(:closed_petition) }
-      5.times { Factory(:rejected_petition) }
-      6.times { Factory(:hidden_petition) }
+      1.times { FactoryGirl.create(:pending_petition) }
+      2.times { FactoryGirl.create(:validated_petition) }
+      3.times { FactoryGirl.create(:open_petition) }
+      4.times { FactoryGirl.create(:closed_petition) }
+      5.times { FactoryGirl.create(:rejected_petition) }
+      6.times { FactoryGirl.create(:hidden_petition) }
 
       # Petition.counts_by_state.class.should == Hash
 
@@ -550,8 +550,8 @@ describe Petition do
   end
 
   describe "#reassign!" do
-    let(:petition){ Factory(:petition) }
-    let(:department){ Factory(:department) }
+    let(:petition){ FactoryGirl.create(:petition) }
+    let(:department){ FactoryGirl.create(:department) }
 
     it "takes a department id and saves the petition" do
       petition.reassign!(department)

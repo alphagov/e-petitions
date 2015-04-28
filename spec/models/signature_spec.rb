@@ -94,7 +94,7 @@ describe Signature do
       end
 
       it "not require email confirmation on update" do
-        s = Factory(:signature)
+        s = FactoryGirl.create(:signature)
         s.update_attributes(:email => 'john@hotmail.com', :email_confirmation => nil).should be_true
       end
 
@@ -291,7 +291,7 @@ describe Signature do
   context "scopes" do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
-    let!(:petition) { Factory(:petition) }
+    let!(:petition) { FactoryGirl.create(:petition) }
     let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => nil) }
     let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :last_emailed_at => two_days_ago) }
     let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => week_ago) }
@@ -315,7 +315,7 @@ describe Signature do
     end
 
     describe "for_email" do
-      let!(:other_petition) { Factory(:petition) }
+      let!(:other_petition) { FactoryGirl.create(:petition) }
       let!(:other_signature) do
         FactoryGirl.create(:signature, :email => "person3@example.com",
         :petition => other_petition, :state => Signature::PENDING_STATE,
@@ -333,13 +333,13 @@ describe Signature do
     end
 
     describe "checking whether the signature is the creator" do
-      let!(:petition) { Factory(:petition) }
+      let!(:petition) { FactoryGirl.create(:petition) }
       it "is the creator if the signature is listed as the creator signature" do
         petition.creator_signature.should be_creator
       end
 
       it "is not the creator if the signature is not listed as the creator" do
-        signature = Factory(:signature, :petition => petition)
+        signature = FactoryGirl.create(:signature, :petition => petition)
         signature.should_not be_creator
       end
     end

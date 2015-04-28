@@ -2,8 +2,8 @@ require 'rails_helper'
 
 describe Admin::PetitionsController do
   before :each do
-    creator_signature = Factory(:signature, :email => 'john@example.com')
-    @petition = Factory(:validated_petition, :creator_signature => creator_signature, :duration => "3")
+    creator_signature = FactoryGirl.create(:signature, :email => 'john@example.com')
+    @petition = FactoryGirl.create(:validated_petition, :creator_signature => creator_signature, :duration => "3")
   end
 
   describe "not logged in" do
@@ -56,12 +56,12 @@ describe Admin::PetitionsController do
   context "logged in as admin" do
     before :each do
       @user = FactoryGirl.create(:admin_user)
-      @treasury = Factory(:department, :name => 'Treasury')
+      @treasury = FactoryGirl.create(:department, :name => 'Treasury')
       @user.departments << @treasury
       login_as(@user)
-      @p1 = Factory(:open_petition, :department => @treasury)
-      @p2 = Factory(:open_petition)
-      @p3 = Factory(:closed_petition)
+      @p1 = FactoryGirl.create(:open_petition, :department => @treasury)
+      @p2 = FactoryGirl.create(:open_petition)
+      @p3 = FactoryGirl.create(:closed_petition)
     end
 
     with_ssl do
@@ -90,15 +90,15 @@ describe Admin::PetitionsController do
       @user = FactoryGirl.create(:threshold_user)
       login_as(@user)
 
-      @p1 = Factory(:open_petition)
+      @p1 = FactoryGirl.create(:open_petition)
       @p1.update_attribute(:signature_count, 11)
-      @p2 = Factory(:open_petition)
+      @p2 = FactoryGirl.create(:open_petition)
       @p2.update_attribute(:signature_count, 10)
-      @p3 = Factory(:open_petition)
+      @p3 = FactoryGirl.create(:open_petition)
       @p3.update_attribute(:signature_count, 9)
-      @p4 = Factory(:closed_petition)
+      @p4 = FactoryGirl.create(:closed_petition)
       @p4.update_attribute(:signature_count, 20)
-      Factory(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
+      FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
     end
 
     with_ssl do
@@ -143,15 +143,15 @@ describe Admin::PetitionsController do
 
         context "email out threshold update response" do
           before :each do
-            signature = Factory(:signature, :name => 'Jason', :email => 'jason@example.com', :state => Petition::VALIDATED_STATE, :notify_by_email => true)
-            @petition = Factory(:open_petition, :title => 'Make me the PM', :creator_signature => signature)
-            6.times { |i| Factory(:signature, :name => "Jason #{i}", :email => "jason_valid_notify_#{i}@example.com",
+            signature = FactoryGirl.create(:signature, :name => 'Jason', :email => 'jason@example.com', :state => Petition::VALIDATED_STATE, :notify_by_email => true)
+            @petition = FactoryGirl.create(:open_petition, :title => 'Make me the PM', :creator_signature => signature)
+            6.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_notify_#{i}@example.com",
                                   :state => Petition::VALIDATED_STATE, :notify_by_email => true, :petition => @petition) }
-            3.times { |i| Factory(:signature, :name => "Jason #{i}", :email => "jason_valid_#{i}@example.com",
+            3.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_#{i}@example.com",
                                   :state => Petition::VALIDATED_STATE, :notify_by_email => false, :petition => @petition) }
             @petition.reload
             @petition.signatures.last.save! # needed in order to get the signature count updated
-            2.times { |i| Factory(:signature, :name => "Jason #{i}", :email => "jason_invalid_#{i}@example.com",
+            2.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_invalid_#{i}@example.com",
                                   :state => Petition::PENDING_STATE, :notify_by_email => true, :petition => @petition) }
             Petition.update_all_signature_counts
           end
@@ -240,7 +240,7 @@ describe Admin::PetitionsController do
         end
 
         it "should be unsuccessful for a petition that is not validated" do
-          petition = Factory(:open_petition)
+          petition = FactoryGirl.create(:open_petition)
           lambda {
             get :edit, :id => petition.id
           }.should raise_error(ActiveRecord::RecordNotFound)
@@ -260,7 +260,7 @@ describe Admin::PetitionsController do
         end
 
         it "should be unsuccessful for a petition that is not validated" do
-          petition = Factory(:open_petition)
+          petition = FactoryGirl.create(:open_petition)
           lambda {
             do_post(:id => petition.id)
           }.should raise_error(ActiveRecord::RecordNotFound)
@@ -308,7 +308,7 @@ describe Admin::PetitionsController do
         end
 
         it "re-assign successfully" do
-          @department = Factory(:department)
+          @department = FactoryGirl.create(:department)
           do_post :commit => 'Re-assign', :petition => {:department_id => @department.id}
           @petition.reload
           @petition.department.should == @department

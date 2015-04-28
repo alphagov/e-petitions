@@ -4,20 +4,20 @@ describe EmailReminder do
   describe "admin_email_reminders" do
     def set_up(date)
       Time.zone.stub(:now).and_return(date)
-      @d1 = Factory(:department)
-      @d2 = Factory(:department)
-      @d3 = Factory(:department)
-      @user1 = Factory(:admin_user, :email => 'peter@directgov.uk')
+      @d1 = FactoryGirl.create(:department)
+      @d2 = FactoryGirl.create(:department)
+      @d3 = FactoryGirl.create(:department)
+      @user1 = FactoryGirl.create(:admin_user, :email => 'peter@directgov.uk')
       @user1.departments << @d1 << @d3
-      @user2 = Factory(:sysadmin_user)
-      @user3 = Factory(:admin_user)
+      @user2 = FactoryGirl.create(:sysadmin_user)
+      @user3 = FactoryGirl.create(:admin_user)
       @user3.departments << @d2
       Petition.record_timestamps = false
-      @p1 = Factory(:validated_petition, :title => 'King or Queen', :department => @d1, :created_at => 2.days.ago, :updated_at => 25.hours.ago)
-      @p2 = Factory(:validated_petition, :title => 'Let us become a republic', :department => @d3, :created_at => 1.day.ago, :updated_at => 5.minutes.ago)
-      @p3 = Factory(:pending_petition, :department => @d3)
-      @p4 = Factory(:open_petition, :department => @d3)
-      @p5 = Factory(:validated_petition)
+      @p1 = FactoryGirl.create(:validated_petition, :title => 'King or Queen', :department => @d1, :created_at => 2.days.ago, :updated_at => 25.hours.ago)
+      @p2 = FactoryGirl.create(:validated_petition, :title => 'Let us become a republic', :department => @d3, :created_at => 1.day.ago, :updated_at => 5.minutes.ago)
+      @p3 = FactoryGirl.create(:pending_petition, :department => @d3)
+      @p4 = FactoryGirl.create(:open_petition, :department => @d3)
+      @p5 = FactoryGirl.create(:validated_petition)
       Petition.record_timestamps = true
     end
 
@@ -48,17 +48,17 @@ describe EmailReminder do
 
   describe "threshold_email_reminders" do
     before :each do
-      @user1 = Factory(:threshold_user, :email => 'peter@directgov.uk')
-      @user2 = Factory(:threshold_user, :email => 'richard@directgov.uk')
-      @p1 = Factory(:open_petition)
+      @user1 = FactoryGirl.create(:threshold_user, :email => 'peter@directgov.uk')
+      @user2 = FactoryGirl.create(:threshold_user, :email => 'richard@directgov.uk')
+      @p1 = FactoryGirl.create(:open_petition)
       @p1.update_attribute(:signature_count, 11)
-      @p2 = Factory(:closed_petition)
+      @p2 = FactoryGirl.create(:closed_petition)
       @p2.update_attribute(:signature_count, 10)
-      @p3 = Factory(:open_petition)
+      @p3 = FactoryGirl.create(:open_petition)
       @p3.update_attribute(:signature_count, 9)
-      @p4 = Factory(:open_petition, :response_required => true)
-      @p5 = Factory(:open_petition, :response_required => true, :notified_by_email => true)
-      Factory(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
+      @p4 = FactoryGirl.create(:open_petition, :response_required => true)
+      @p5 = FactoryGirl.create(:open_petition, :response_required => true, :notified_by_email => true)
+      FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
     end
 
     it "should email out an alert to threshold users for petitions that have reached their threshold or have been marked as requiring a response" do
@@ -85,14 +85,14 @@ describe EmailReminder do
   describe "special_resend_of_signature_email_validation" do
 
     let(:beginning_of_september) { Time.parse("2011-09-01 00:00") }
-    let(:petition) { Factory(:petition) }
-    let!(:validated_signature) { Factory(:signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september) }
-    let!(:recent_signature) { Factory(:pending_signature, :petition => petition) }
+    let(:petition) { FactoryGirl.create(:petition) }
+    let!(:validated_signature) { FactoryGirl.create(:signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september) }
+    let!(:recent_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
 
     before do
       @signatures = []
       3.times do
-        @signatures << Factory(:pending_signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september)
+        @signatures << FactoryGirl.create(:pending_signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september)
       end
     end
 

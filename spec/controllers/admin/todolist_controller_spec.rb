@@ -30,14 +30,14 @@ describe Admin::TodolistController do
   
   describe "logged in" do
     before :each do
-      @treasury = Factory(:department)
-      @dfid = Factory(:department)
-      @home_office = Factory(:department)
-      @p1 = Factory(:petition, :department => @treasury, :created_at => 3.days.ago, :state => Petition::VALIDATED_STATE)
-      @p2 = Factory(:petition, :department => @treasury, :created_at => 12.days.ago, :state => Petition::VALIDATED_STATE)
-      @p3 = Factory(:petition, :department => @home_office, :created_at => 7.days.ago, :state => Petition::VALIDATED_STATE)
-      @p4 = Factory(:petition, :department => @home_office, :state => Petition::PENDING_STATE)
-      @p5 = Factory(:open_petition, :department => @dfid)
+      @treasury = FactoryGirl.create(:department)
+      @dfid = FactoryGirl.create(:department)
+      @home_office = FactoryGirl.create(:department)
+      @p1 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 3.days.ago, :state => Petition::VALIDATED_STATE)
+      @p2 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 12.days.ago, :state => Petition::VALIDATED_STATE)
+      @p3 = FactoryGirl.create(:petition, :department => @home_office, :created_at => 7.days.ago, :state => Petition::VALIDATED_STATE)
+      @p4 = FactoryGirl.create(:petition, :department => @home_office, :state => Petition::PENDING_STATE)
+      @p5 = FactoryGirl.create(:open_petition, :department => @dfid)
     end
     
     describe "logged in as sysadmin user" do

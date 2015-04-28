@@ -51,7 +51,7 @@ describe PetitionsController do
 
   describe "create" do
     before :each do
-      @department = Factory(:department)
+      @department = FactoryGirl.create(:department)
       @creator_signature_attributes = {:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
                                       :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL', :country => 'UK', :uk_citizenship => '1', :terms_and_conditions => '1'}
       Captcha.stub!(:verify => true)
@@ -260,7 +260,7 @@ describe PetitionsController do
   end
 
   describe "POST #resend_confirmation_email" do
-    let!(:petition){ Factory(:open_petition) }
+    let!(:petition){ FactoryGirl.create(:open_petition) }
     let!(:email) { 'suzie@example.com' }
 
     before(:each) do

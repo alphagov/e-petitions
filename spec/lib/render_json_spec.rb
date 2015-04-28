@@ -17,13 +17,13 @@ describe JsonRenderer do
   end
 
   it "renders out the individual petitions" do
-    under_threshold = Factory(:open_petition)
+    under_threshold = FactoryGirl.create(:open_petition)
     under_threshold.update_attribute(:signature_count, 999)
 
-    over_threshold = Factory(:open_petition)
+    over_threshold = FactoryGirl.create(:open_petition)
     over_threshold.update_attribute(:signature_count, 1000)
 
-    over_threshold_but_hidden = Factory(:hidden_petition)
+    over_threshold_but_hidden = FactoryGirl.create(:hidden_petition)
     over_threshold_but_hidden.update_attribute(:signature_count, 1000)
 
     File.should_receive(:open).with(%r(/public/api/petitions/#{over_threshold.id}.json), "w").once

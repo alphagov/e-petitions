@@ -32,7 +32,7 @@ end
 
 When /^the e\-petition recieves enough signatures to achieve 'critical mass'$/ do
   SystemSetting.create!(:key => 'get_an_mp_signature_count', :value => '3')
-  4.times { @petition.signatures << Factory(:validated_signature) }
+  4.times { @petition.signatures << FactoryGirl.create(:validated_signature) }
   Petition.update_all_signature_counts
   Petition.email_all_who_passed_finding_mp_threshold
 end
@@ -74,16 +74,16 @@ When /^I fill in my details with email "([^"]*)" and confirmation "([^"]*)"$/ do
 end
 
 And "I have already signed the petition with an uppercase email" do
-  Factory(:signature, :petition => @petition, :email => "WOMBOID@WIMBLEDON.COM")
+  FactoryGirl.create(:signature, :petition => @petition, :email => "WOMBOID@WIMBLEDON.COM")
 end
 
 Given /^Suzie has already signed the petition$/ do
-  Factory(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
 end
 
 Given /^I have signed the petition with a second name$/ do
-  Factory(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Sam Wibbledon")
 end
 
@@ -142,7 +142,7 @@ end
 
 Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_title|
   petition = Petition.find_by_title(petition_title)
-  Factory(:pending_signature, :email => 'suzie@example.com', :petition => petition)
+  FactoryGirl.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
 end
 
 When /^I fill in "([^"]*)" with my email address$/ do |field_name|

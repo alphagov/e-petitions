@@ -4,7 +4,7 @@ describe SignaturesController do
   describe "verify" do
     context "signature of user who is not the petition's creator" do
       before :each do
-        petition = Factory(:petition)
+        petition = FactoryGirl.create(:petition)
         @signature = FactoryGirl.create(:signature, :petition => petition)
       end
 
@@ -40,7 +40,7 @@ describe SignaturesController do
 
       it "should raise exception if token not found" do
         lambda do
-          petition = Factory(:petition)
+          petition = FactoryGirl.create(:petition)
           @signature = FactoryGirl.create(:signature, :petition => petition, :state => Signature::PENDING_STATE)
           get :verify, :id => @signature.id, :token => "#{@signature.perishable_token}a"
         end.should raise_error(ActiveRecord::RecordNotFound)
@@ -49,7 +49,7 @@ describe SignaturesController do
 
     context "signature to be verified is petition creator's" do
       before :each do
-        @petition = Factory(:petition)
+        @petition = FactoryGirl.create(:petition)
         @signature = @petition.creator_signature
       end
 
@@ -120,7 +120,7 @@ describe SignaturesController do
   end
 
   describe "create" do
-    let!(:petition) { Factory(:open_petition) }
+    let!(:petition) { FactoryGirl.create(:open_petition) }
 
     let(:signature_params) {{:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
       :uk_citizenship => "1", :terms_and_conditions => "1", :humanity => true,

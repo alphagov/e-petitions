@@ -1,7 +1,7 @@
 Given /^there is a petition "([^"]*)" that has been assigned between two departments several times$/ do |petition_title|
   cabinet_office = Department.find_by_name('Cabinet Office')
   treasury       = Department.find_by_name('Treasury')
-  petition = Factory(:validated_petition, :title => petition_title, :department => treasury)
+  petition = FactoryGirl.create(:validated_petition, :title => petition_title, :department => treasury)
 
   DepartmentAssignment.create :petition    => petition,
                               :department  => cabinet_office,

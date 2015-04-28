@@ -1,6 +1,6 @@
 Given /^(\d+) petitions signed by "([^"]*)"$/ do |petition_count, email|
   petition_count.times do
-    Factory(:signature, :petition => Factory(:open_petition), :email => email)
+    FactoryGirl.create(:signature, :petition => FactoryGirl.create(:open_petition), :email => email)
   end
 end
 

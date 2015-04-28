@@ -75,10 +75,10 @@ describe Admin::AdminUsersController do
     with_ssl do
       describe "GET 'index'" do
         before :each do
-          @user1 = Factory(:admin_user, :first_name => 'John', :last_name => 'Kennedy')
-          @user2 = Factory(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
-          @user3 = Factory(:admin_user, :first_name => 'Ronald', :last_name => 'Reagan')
-          @user4 = Factory(:admin_user, :first_name => 'Bill', :last_name => 'Clinton')
+          @user1 = FactoryGirl.create(:admin_user, :first_name => 'John', :last_name => 'Kennedy')
+          @user2 = FactoryGirl.create(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
+          @user3 = FactoryGirl.create(:admin_user, :first_name => 'Ronald', :last_name => 'Reagan')
+          @user4 = FactoryGirl.create(:admin_user, :first_name => 'Bill', :last_name => 'Clinton')
         end
 
         it "should be successful" do
@@ -126,8 +126,8 @@ describe Admin::AdminUsersController do
           end
 
           it "create a new user with associated departments" do
-            department1 = Factory(:department)
-            department2 = Factory(:department)
+            department1 = FactoryGirl.create(:department)
+            department2 = FactoryGirl.create(:department)
             do_create(:department_ids => { "0" => department1.id.to_s, "1" => department2.id.to_s})
             user = AdminUser.find_by_email('admin@example.com')
             user.departments.size.should == 2
@@ -177,8 +177,8 @@ describe Admin::AdminUsersController do
 
       describe "PUT 'update'" do
         before :each do
-          @department1 = Factory(:department)
-          @department2 = Factory(:department)
+          @department1 = FactoryGirl.create(:department)
+          @department2 = FactoryGirl.create(:department)
           @user = FactoryGirl.create(:admin_user, :email => "admin@example.com", :departments => [@department1, @department2], :failed_login_count => 5)
         end
 
@@ -203,7 +203,7 @@ describe Admin::AdminUsersController do
           end
 
           it "update a user with associated departments" do
-            department3 = Factory(:department)
+            department3 = FactoryGirl.create(:department)
             do_update(:department_ids => {'0' => @department2.id.to_s, '1' => department3.id.to_s})
             @user.reload
             @user.departments.size.should == 2
@@ -229,7 +229,7 @@ describe Admin::AdminUsersController do
 
       describe "DELETE 'destroy'" do
         it "successful delete" do
-          @other_user = Factory(:admin_user, :email => 'admin@example.com')
+          @other_user = FactoryGirl.create(:admin_user, :email => 'admin@example.com')
           lambda do
             delete :destroy, :id => @other_user.id
           end.should change(AdminUser, :count).by(-1)

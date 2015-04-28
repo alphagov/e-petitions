@@ -5,7 +5,7 @@ describe Admin::ReportsController do
   describe "GET #index" do
     context "logged in" do
       before(:each) do
-        login_as Factory(:admin_user)
+        login_as FactoryGirl.create(:admin_user)
       end
 
       with_ssl do

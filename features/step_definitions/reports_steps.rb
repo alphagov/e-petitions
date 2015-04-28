@@ -1,15 +1,15 @@
 Given /^the "([^"]*)" department has (\d+) pending, (\d+) validated, (\d+) open, (\d+) closed and (\d+) rejected petitions$/ do |department_name, pending, validated, open, closed, rejected|
-  department = Factory(:department, :name => department_name)
-  pending.times{ Factory(:pending_petition, :department => department) }
-  validated.times{ Factory(:validated_petition, :department => department) }
-  open.times{ Factory(:open_petition, :department => department) }
-  closed.times{ Factory(:closed_petition, :department => department) }
+  department = FactoryGirl.create(:department, :name => department_name)
+  pending.times{ FactoryGirl.create(:pending_petition, :department => department) }
+  validated.times{ FactoryGirl.create(:validated_petition, :department => department) }
+  open.times{ FactoryGirl.create(:open_petition, :department => department) }
+  closed.times{ FactoryGirl.create(:closed_petition, :department => department) }
 
   if rejected > 1
-    Factory(:hidden_petition, :department => department)
+    FactoryGirl.create(:hidden_petition, :department => department)
     rejected -= 1
   end
-  rejected.times{ Factory(:rejected_petition, :department => department) }
+  rejected.times{ FactoryGirl.create(:rejected_petition, :department => department) }
 end
 
 Then /^I see the following reports table:$/ do |values_table|
@@ -19,7 +19,7 @@ end
 
 Given /^I am logged in as a moderator for the "([^"]*)" department$/ do |department_name|
   step "I am logged in as an admin"
-  department = Factory(:department, :name => department_name)
+  department = FactoryGirl.create(:department, :name => department_name)
   @user.departments << department
 end
 
@@ -35,9 +35,9 @@ end
 Given /^there has been activity on a number of petitions in the last (\d+) (hours|days)$/ do |number_of_days, hours_or_days|
   Department.all.each do |department|
     (1..15).each do |count|
-      petition = Factory(:open_petition, :department => department, :title => "#{department.name} Petition ##{count}")
+      petition = FactoryGirl.create(:open_petition, :department => department, :title => "#{department.name} Petition ##{count}")
       timestamp = (number_of_days - 1).send(hours_or_days).ago
-      count.times { Factory(:validated_signature, :petition => petition, :updated_at => timestamp) }
+      count.times { FactoryGirl.create(:validated_signature, :petition => petition, :updated_at => timestamp) }
     end
   end
 end

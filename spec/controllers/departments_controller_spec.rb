@@ -17,7 +17,7 @@ describe DepartmentsController do
 
   describe "GET 'show'" do
     it "should assign department" do
-      department = Factory(:department)
+      department = FactoryGirl.create(:department)
       get 'show', :id => department.id.to_s
       assigns(:department).should == department
     end

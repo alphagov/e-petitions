@@ -1,10 +1,10 @@
-require "spec_helper"
+require "rails_helper"
 
 describe PetitionMailer do
 
-  let(:petition) { Factory(:open_petition) }
-  let(:pending_signature) { Factory(:pending_signature, :petition => petition) }
-  let(:validated_signature) { Factory(:validated_signature, :petition => petition) }
+  let(:petition) { FactoryGirl.create(:open_petition) }
+  let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+  let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
 
   describe "When no signature for an email address exists on a petition" do
     let(:mail) { PetitionMailer.no_signature_for_petition(petition, 'wibble@example.com') }
@@ -20,7 +20,7 @@ describe PetitionMailer do
   end
 
   describe "Signature for an email address has already been confirmed" do
-    let(:signature) { Factory(:pending_signature, :petition => petition) }
+    let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
     let(:mail) { PetitionMailer.email_already_confirmed_for_signature(signature) }
 
     it "has an appropriate header for the email" do
@@ -33,8 +33,8 @@ describe PetitionMailer do
   end
 
   describe "double pending signatures mail" do
-    let(:signature_one) { Factory(:pending_signature, :petition => petition) }
-    let(:signature_two) { Factory(:pending_signature, :petition => petition) }
+    let(:signature_one) { FactoryGirl.create(:pending_signature, :petition => petition) }
+    let(:signature_two) { FactoryGirl.create(:pending_signature, :petition => petition) }
     let(:mail) { PetitionMailer.two_pending_signatures(signature_one, signature_two) }
 
     it "has an appropriate header for the email" do
@@ -52,8 +52,8 @@ describe PetitionMailer do
   end
 
   describe "one pending and one validated signature mail" do
-    let(:pending_signature) { Factory(:pending_signature, :petition => petition) }
-    let(:validated_signature) { Factory(:validated_signature, :petition => petition) }
+    let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+    let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
     let(:mail) { PetitionMailer.one_pending_one_validated_signature(pending_signature, validated_signature) }
 
     it "has an appropriate header for the email" do
@@ -74,8 +74,8 @@ describe PetitionMailer do
   end
 
   describe "both signatures are validated" do
-    let(:signature_one) { Factory(:validated_signature, :petition => petition) }
-    let(:signature_two) { Factory(:validated_signature, :petition => petition) }
+    let(:signature_one) { FactoryGirl.create(:validated_signature, :petition => petition) }
+    let(:signature_two) { FactoryGirl.create(:validated_signature, :petition => petition) }
     let(:mail) { PetitionMailer.double_signature_confirmation([signature_one, signature_two]) }
 
     it "has an appropriate header for the email" do
@@ -92,7 +92,7 @@ describe PetitionMailer do
   end
 
   describe "notifying creator of closing date change" do
-    let(:signature) { Factory(:validated_signature, :petition => petition) }
+    let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
 
     it 'has an appropriate subject heading' do

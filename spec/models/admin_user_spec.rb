@@ -89,10 +89,10 @@ describe AdminUser do
   
   context "scopes" do
     before :each do
-      @user1 = Factory(:admin_user, :first_name => 'John', :last_name => 'Kennedy')
-      @user2 = Factory(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
-      @user3 = Factory(:sysadmin_user, :first_name => 'Ronald', :last_name => 'Reagan')
-      @user4 = Factory(:threshold_user, :first_name => 'Bill', :last_name => 'Clinton')
+      @user1 = FactoryGirl.create(:admin_user, :first_name => 'John', :last_name => 'Kennedy')
+      @user2 = FactoryGirl.create(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
+      @user3 = FactoryGirl.create(:sysadmin_user, :first_name => 'Ronald', :last_name => 'Reagan')
+      @user4 = FactoryGirl.create(:threshold_user, :first_name => 'Bill', :last_name => 'Clinton')
     end
     
     context "by_name" do
@@ -115,93 +115,93 @@ describe AdminUser do
   
   context "methods" do
     it "should return a user's name" do
-      Factory(:admin_user, :first_name => 'Jo', :last_name => 'Public').name.should == 'Public, Jo'
+      FactoryGirl.create(:admin_user, :first_name => 'Jo', :last_name => 'Public').name.should == 'Public, Jo'
     end
     
     context "is_a_sysadmin?" do
       it "should return true when user is a sysadmin" do
-        Factory(:admin_user, :role => 'sysadmin').is_a_sysadmin?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'sysadmin').is_a_sysadmin?.should be_true
       end
     
       it "should return false when user is a admin" do
-        Factory(:admin_user, :role => 'admin').is_a_sysadmin?.should be_false
+        FactoryGirl.create(:admin_user, :role => 'admin').is_a_sysadmin?.should be_false
       end
     end
 
     context "is_a_threshold?" do
       it "should return true when user is a threshold user" do
-        Factory(:admin_user, :role => 'threshold').is_a_threshold?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'threshold').is_a_threshold?.should be_true
       end
     
       it "should return false when user is a admin" do
-        Factory(:admin_user, :role => 'admin').is_a_threshold?.should be_false
+        FactoryGirl.create(:admin_user, :role => 'admin').is_a_threshold?.should be_false
       end
     end
     
     context "has_to_change_password?" do
       it "should be true when force_reset_password is true" do
-        Factory(:admin_user, :force_password_reset => true).has_to_change_password?.should be_true
+        FactoryGirl.create(:admin_user, :force_password_reset => true).has_to_change_password?.should be_true
       end
       
       it "should be false when force_reset_password is false" do
-        Factory(:admin_user, :force_password_reset => false).has_to_change_password?.should be_false
+        FactoryGirl.create(:admin_user, :force_password_reset => false).has_to_change_password?.should be_false
       end
 
       it "should be true when password was last changed over 9 months ago" do
-        user = Factory(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago - 1.minute)
+        user = FactoryGirl.create(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago - 1.minute)
         user.has_to_change_password?.should be_true
       end
       
       it "should be false when password was last changed less than 9 months ago" do
-        user = Factory(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago + 1.minute)
+        user = FactoryGirl.create(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago + 1.minute)
         user.has_to_change_password?.should be_false
       end
     end
 
     context "can_take_petitions_down?" do
       it "should be false normally" do
-        Factory(:admin_user, :role => 'admin').can_take_petitions_down?.should be_false
+        FactoryGirl.create(:admin_user, :role => 'admin').can_take_petitions_down?.should be_false
       end
 
       it "is true if the user is a sysadmin" do
-        Factory(:admin_user, :role => 'sysadmin').can_take_petitions_down?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'sysadmin').can_take_petitions_down?.should be_true
       end
 
       it "is true if the user is a threshold user" do
-        Factory(:admin_user, :role => 'threshold').can_take_petitions_down?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'threshold').can_take_petitions_down?.should be_true
       end
     end
 
     context "can_see_all_trending_petitions?" do
       it "is normally false" do
-        Factory(:admin_user, :role => 'admin').can_see_all_trending_petitions?.should be_false
+        FactoryGirl.create(:admin_user, :role => 'admin').can_see_all_trending_petitions?.should be_false
       end
 
       it "is true when the user is a system admin" do
-        Factory(:admin_user, :role => 'sysadmin').can_see_all_trending_petitions?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'sysadmin').can_see_all_trending_petitions?.should be_true
       end
 
       it "is true if the user is a threshold user" do
-        Factory(:admin_user, :role => 'threshold').can_see_all_trending_petitions?.should be_true
+        FactoryGirl.create(:admin_user, :role => 'threshold').can_see_all_trending_petitions?.should be_true
       end
 
     end
 
     context "account_disabled" do
       it "should return true when user has tried to login 5 times unsuccessfully" do
-        user = Factory(:admin_user)
+        user = FactoryGirl.create(:admin_user)
         user.failed_login_count = 5
         user.account_disabled.should be_true
       end
       
       it "should return true when user has tried to login 6 times unsuccessfully" do
-        user = Factory(:admin_user)
+        user = FactoryGirl.create(:admin_user)
         user.failed_login_count = 6
         user.account_disabled.should be_true
       end
     
       it "should return false when user has tried to login 4 times unsuccessfully" do
-        user = Factory(:admin_user)
+        user = FactoryGirl.create(:admin_user)
         user.failed_login_count = 4
         user.account_disabled.should be_false
       end
@@ -209,13 +209,13 @@ describe AdminUser do
     
     context "account_disabled=" do
       it "should set the failed login count to 5 when true" do
-        u = Factory(:admin_user)
+        u = FactoryGirl.create(:admin_user)
         u.account_disabled = true
         u.failed_login_count.should == 5
       end
       
       it "should set the failed login count to 0 when false" do
-        u = Factory(:admin_user)
+        u = FactoryGirl.create(:admin_user)
         u.failed_login_count = 5
         u.account_disabled = false
         u.failed_login_count.should == 0

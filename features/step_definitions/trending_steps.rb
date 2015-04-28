@@ -1,8 +1,8 @@
 Given /^there has been activity on a number of petitions in the last hour$/ do
   Department.all.each do |department|
     (1..10).each do |count|
-      petition = Factory(:open_petition, :department => department, :title => "#{department.name} Petition ##{count}")
-      count.times { Factory(:validated_signature, :petition => petition) }
+      petition = FactoryGirl.create(:open_petition, :department => department, :title => "#{department.name} Petition ##{count}")
+      count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
     end
   end
 end
