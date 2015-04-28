@@ -9,7 +9,7 @@ class SignatureConfirmer
 
   def confirm!
     return unless @email.match(@regex)
-    signatures = @petition.signatures.find_all_by_email(@email)
+    signatures = @petition.signatures.for_email(@email)
     case signatures.size
     when 0
       send_no_signature_for_petition_email

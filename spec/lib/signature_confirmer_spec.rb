@@ -13,7 +13,7 @@ describe SignatureConfirmer do
   subject { SignatureConfirmer.new(petition, email, mailer, regex) }
 
   before do
-    allow(petition).to receive_message_chain(:signatures, :find_all_by_email).and_return(signatures)
+    allow(petition).to receive_message_chain(:signatures, :for_email).and_return(signatures)
     allow(email).to receive_messages(:match => true)
   end
 
