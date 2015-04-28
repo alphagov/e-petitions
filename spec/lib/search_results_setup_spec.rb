@@ -1,10 +1,14 @@
 require 'rails_helper'
 
 describe SearchResultsSetup do
+  class SearchResulter
+    include SearchResultsSetup
+    def params; end
+  end
   describe "results_for" do
     let (:scope) { double.as_null_object }
     let (:params) { {} }
-    subject { Object.extend(SearchResultsSetup) }
+    subject { SearchResulter.new }
 
     before do
       allow(subject).to receive_messages(:params => params)
