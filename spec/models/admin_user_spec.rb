@@ -48,8 +48,7 @@ describe AdminUser do
 
     it "should validate uniqueness of email" do
       FactoryGirl.create(:admin_user, :role => 'sysadmin')
-      is_expected.to validate_uniqueness_of(:email)
-      is_expected.not_to validate_uniqueness_of(:email).case_insensitive
+      is_expected.to validate_uniqueness_of(:email).case_insensitive
     end
 
     it "should only allow passwords with a digit, lower and upper case alpha and a special char" do
