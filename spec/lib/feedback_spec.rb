@@ -39,10 +39,10 @@ describe Feedback do
     end
 
     it "is not valid when a required attribute is missing" do
-      expect(Feedback.new(valid_attributes.delete(:name))).not_to be_valid
-      expect(Feedback.new(valid_attributes.delete(:email))).not_to be_valid
-      expect(Feedback.new(valid_attributes.delete(:email_confirmation))).not_to be_valid
-      expect(Feedback.new(valid_attributes.delete(:comment))).not_to be_valid
+      expect(Feedback.new(valid_attributes.except(:name))).not_to be_valid
+      expect(Feedback.new(valid_attributes.except(:email))).not_to be_valid
+      expect(Feedback.new(valid_attributes.except(:email_confirmation))).not_to be_valid
+      expect(Feedback.new(valid_attributes.except(:comment))).not_to be_valid
     end
 
     it "requires an email confirmation" do

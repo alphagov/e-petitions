@@ -23,7 +23,8 @@ describe CaptchaHelper do
     let(:markup){ helper.captcha_audio('wibble') }
 
     it "generates a link tag for audio.captchas.net" do
-      expect(markup.include?("<a href=\"https://audio.captchas.net/?client=xxxxx&amp;random=wibble")).to be_truthy
+      expect(markup.include?("<a")).to be_truthy
+      expect(markup.include?("href=\"https://audio.captchas.net/?client=xxxxx&amp;random=wibble")).to be_truthy
     end
 
     it "has captcha_audio id" do

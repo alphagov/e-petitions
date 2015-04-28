@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'rails_helper'
 
 describe EmailReminder do
   describe "admin_email_reminders" do
@@ -105,7 +105,7 @@ describe EmailReminder do
     it "updates the time so they aren't sent again" do
       Timecop.freeze do
         EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-        expect(petition.signatures.last.updated_at).to eq(Time.zone.now)
+        expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.zone.now.change(usec: 0))
       end
     end
 
@@ -132,7 +132,7 @@ describe EmailReminder do
       it "still updates the timestamp" do
         Timecop.freeze do
           EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-          expect(petition.signatures.last.updated_at).to eq(Time.zone.now)
+          expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.zone.now.change(usec: 0))
         end
       end
     end
