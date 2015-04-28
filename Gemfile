@@ -46,6 +46,7 @@ group :test do
   gem 'chronic'
   gem 'timecop'
   gem 'launchy'
+  gem 'rspec-collection_matchers'
 end
 
 group :production do
