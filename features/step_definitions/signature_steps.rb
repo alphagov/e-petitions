@@ -30,6 +30,13 @@ When /^I confirm my email address$/ do
   )
 end
 
+When /^the e\-petition recieves enough signatures to achieve 'critical mass'$/ do
+  SystemSetting.create!(:key => 'get_an_mp_signature_count', :value => '3')
+  4.times { @petition.signatures << Factory(:validated_signature) }
+  Petition.update_all_signature_counts
+  Petition.email_all_who_passed_finding_mp_threshold
+end
+
 def should_be_signature_count_of(count)
   Petition.update_all_signature_counts
   visit petition_path(@petition)
@@ -123,6 +130,14 @@ Then /^I should have signed the petition after confirming my email address$/ do
     And all petitions have had their signatures counted
   )
   should_be_signature_count_of(3)
+end
+
+Then /^there should be a "([^"]*)" signature with email "([^"]*)" and name "([^"]*)"$/ do |state, email, name|
+  Signature.find_by_email_and_name_and_state(email, name, state).should_not be_nil
+end
+
+Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
+  Signature.find_by_name(name).notify_by_email?.should be_true
 end
 
 Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_title|

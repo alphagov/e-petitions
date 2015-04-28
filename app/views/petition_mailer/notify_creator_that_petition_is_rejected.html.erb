@@ -5,7 +5,7 @@
 <%= @signature.petition.rejection_description.html_safe %>
 
 <% if @signature.petition.rejection_text.present? %>
-<p><%= auto_link(@signature.petition.rejection_text).html_safe %></p>
+<p><%= raw auto_link(h(@signature.petition.rejection_text)) %></p>
 <% end %>
 
 <% if @signature.petition.state != Petition::HIDDEN_STATE -%>

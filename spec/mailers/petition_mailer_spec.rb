@@ -91,4 +91,21 @@ describe PetitionMailer do
     end
   end
 
+  describe "notifying creator of closing date change" do
+    let(:signature) { Factory(:validated_signature, :petition => petition) }
+    let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
+
+    it 'has an appropriate subject heading' do
+      mail.subject.should eq("HM Government e-petitions: change to your e-petition closing date")
+    end
+
+    it 'is addressed to the creator' do
+      mail.body.encoded.should match("Dear #{signature.name}")
+    end
+
+    it "informs the creator of the change" do
+      mail.body.encoded.should match("Unfortunately we've had to bring forward the closing date")
+    end
+  end
+
 end

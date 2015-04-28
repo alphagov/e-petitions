@@ -63,8 +63,8 @@ Feature: Admin users index and crud
     And I fill in "Last name" with "Jacobi"
     And I fill in "Email" with "derek@example.com"
     And I select "sysadmin" from "Role"
-    And I fill in "Password" with "Shebang22!"
-    And I fill in "Password confirmation" with "Shebang22!"
+    And I fill in "Password" with "Letmein1!"
+    And I fill in "Password confirmation" with "Letmein1!"
     And I select "Treasury" from "department_ids_0"
     And I press "Save"
     Then I should be on the admin users index page

@@ -29,8 +29,6 @@
   <fieldset>
     <legend>Petition Details</legend>
 
-    <p class='please_search_first'>Before creating a new e-petition, you should search existing ones to see if the same topic has already been raised.  If it has, then your e-petition is likely to be rejected.  You can search using the box at the top of the page.</p>
-
     <%= form_row :for => [@petition, :title] do %>
       <%= f.label :title, 'e-petition title' %>
       <%= f.text_field :title, :tabindex => increment(5), :maxlength => 150 %>
@@ -97,7 +95,7 @@
 
     <%= form_row :class => 'captcha_row', :for => [@petition.creator_signature, :humanity] do %>
       <%= render :partial => 'shared/captcha_widget', :locals => { :f => f, :signature => @petition.creator_signature } %>
-    <% end %>
+    <% end unless Captcha.skip_captcha_verification? %>
 
     <%= f.fields_for :creator_signature do |csf| %>
       <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => @petition.creator_signature } %>

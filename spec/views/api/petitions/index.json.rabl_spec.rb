@@ -33,10 +33,6 @@ describe "api/petitions/index.json.rabl" do
     example { subject['signature_count'].should == 101 }
     example { subject['state'].should == "open" }
     example { subject['response'].should == "hello, yes" }
-
-    it "only renders the first half of the postcode" do
-      subject['creator_postal_district'].should == "SO12"
-    end
   end
 
   context "no closing date" do

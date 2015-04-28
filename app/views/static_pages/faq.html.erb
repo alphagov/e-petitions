@@ -44,6 +44,9 @@
     <li>
       <%= link_to 'Can I send you a paper petition?', '#question10', :class => 'lightbox_link' %>
     </li>
+    <li>
+      <%= link_to 'Is there an API to access the e-petitions data?', '#question11', :class => 'lightbox_link' %>
+    </li>
   </ul>
 
   <%= link_to 'Return to home page', home_path, :class => "link_button large_link_button get_started_button" %>
@@ -110,6 +113,17 @@
 	<h2>Can I send you a paper petition?</h2>
 	<p>It is not possible to include a paper petition as part of reaching the threshold of 100 000 signatures to make a petition eligible for debate in the House of Commons.  This is because paper petitions do not allow the Government to verify signatures to the same degree as with e-petitions.</p>
     <p>The e-petitions system is not intended to replace the current paper based system of public petitions in the House of Commons. For more information about the paper based Parliamentary Petitions, you can visit the UK Parliament website. The Backbench Business Committee, who are responsible for the scheduling of any debates on e-petitions, have made clear that they will continue to consider paper petitions when choosing subjects for debates.</p>
+  </div>
+
+  <div id="question11" class="faq_answer">
+	<h2>Is there an API to access the e-petitions data?</h2>
+  <p>Every night we generate a series of JSON documents with much of the e-petitions data.  We don't provide all the data that we hold (some of it contains personal information), however we are opening up as much as we can.</p>
+
+  <p>There is one master document (petitions.json) that contains all the key information for all e-petitions on the site (including open, closed and rejected).  This document can be found at http://epetitions.direct.gov.uk/api/petitions.json (Please note that this file more than 20Mb in size).</p>
+
+  <p>In addition to the master document, there are separate documents for every e-petition that has 1,000 or more signatures.  Each of these documents contains counts of signatures by postal district (the first half of the postcode).  The total signature counts in each of these individual petition documents may not exactly match the master document as any overseas addresses are not included.    These documents can be found at http://epetitions.direct.gov.uk/api/petitions/nnnn.json (where 'nnnn' is the e-petition 'id' as found in the master document).</p>
+
+  <p>We'd love to see any interesting representations of this data that you come up with, please share them with us using the 'Feedback' link.</p>
   </div>
 </div>
 

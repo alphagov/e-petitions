@@ -28,7 +28,7 @@ describe EmailReminder do
       email_no_new = ActionMailer::Base.deliveries.size
       (email_no_new - email_no).should == 1
       email = ActionMailer::Base.deliveries.last
-      email.from.should == ["xxxxx@example.com"]
+      email.from.should == ["no-reply@example.gov"]
       email.to.should == ["peter@directgov.uk"]
       email.subject.should == 'e-Petitions alert'
     end
@@ -67,7 +67,7 @@ describe EmailReminder do
       email_no_new = ActionMailer::Base.deliveries.size
       (email_no_new - email_no).should == 1
       email = ActionMailer::Base.deliveries.last
-      email.from.should == ["xxxxx@example.com"]
+      email.from.should == ["no-reply@example.gov"]
       email.to.should == ["peter@directgov.uk", "richard@directgov.uk"]
       email.subject.should == 'e-Petitions alert'
     end

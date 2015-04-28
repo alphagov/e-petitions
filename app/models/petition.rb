@@ -2,26 +2,27 @@
 #
 # Table name: petitions
 #
-#  id                   :integer(4)      not null, primary key
-#  title                :string(255)     not null
-#  description          :text
-#  response             :text
-#  state                :string(10)      default("pending"), not null
-#  open_at              :datetime
-#  department_id        :integer(4)      not null
-#  creator_signature_id :integer(4)      not null
-#  created_at           :datetime
-#  updated_at           :datetime
-#  creator_id           :integer(4)
-#  rejection_text       :text
-#  closed_at            :datetime
-#  signature_count      :integer(4)      default(0)
-#  response_required    :boolean(1)      default(FALSE)
-#  internal_response    :text
-#  rejection_code       :string(50)
-#  notified_by_email    :boolean(1)      default(FALSE)
-#  duration             :string(2)       default("12")
-#  email_requested_at   :datetime
+#  id                      :integer(4)      not null, primary key
+#  title                   :string(255)     not null
+#  description             :text
+#  response                :text
+#  state                   :string(10)      default("pending"), not null
+#  open_at                 :datetime
+#  department_id           :integer(4)      not null
+#  creator_signature_id    :integer(4)      not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  creator_id              :integer(4)
+#  rejection_text          :text
+#  closed_at               :datetime
+#  signature_count         :integer(4)      default(0)
+#  response_required       :boolean(1)      default(FALSE)
+#  internal_response       :text
+#  rejection_code          :string(50)
+#  notified_by_email       :boolean(1)      default(FALSE)
+#  duration                :string(2)       default("12")
+#  email_requested_at      :datetime
+#  get_an_mp_email_sent_at :datetime
 #
 
 class Petition < ActiveRecord::Base
@@ -95,9 +96,18 @@ class Petition < ActiveRecord::Base
                              select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
                              where("signatures.state" => "validated").
                              where("signatures.updated_at > ?", 1.hour.ago).
+                             where("petitions.id <> ?", 41492).
                              order("signatures_in_last_hour DESC").
                              group('petitions.id').
                              limit(12)
+
+  scope :eligible_for_get_an_mp_email, lambda {
+    where('state = ? and closed_at >= ?', OPEN_STATE, Time.zone.now).
+    where(:get_an_mp_email_sent_at => nil).
+    where("signature_count >= ?",
+          SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
+  }
+
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
@@ -106,6 +116,26 @@ class Petition < ActiveRecord::Base
         petition.update_attribute(:signature_count, petition_current_count)
       end
     end
+  end
+
+  def self.email_all_who_passed_finding_mp_threshold
+    logger_for_mp_threshold.info('Started')
+    Petition.eligible_for_get_an_mp_email.each do |petition|
+      logger_for_mp_threshold.info("Email sent: #{petition.creator_signature.email} for #{petition.title}")
+      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver
+      petition.update_attribute(:get_an_mp_email_sent_at, Time.zone.now)
+    end
+    logger_for_mp_threshold.info('Finished')
+  rescue Exception => e
+    logger_for_mp_threshold.error("#{e.class.name} while processing email_all_who_passed_finding_mp_threshold: #{e.message}", e)
+  end
+
+  def self.logger_for_mp_threshold
+    unless @logger_for_mp_threshold
+      logfilename = "email_all_who_passed_finding_mp_threshold.log"
+      @logger_for_mp_threshold = AuditLogger.new(Rails.root.join('log', logfilename), 'email_all_who_passed_finding_mp_threshold')
+    end
+    @logger_for_mp_threshold
   end
 
   def self.counts_by_state

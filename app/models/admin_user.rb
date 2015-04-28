@@ -31,6 +31,7 @@ class AdminUser < ActiveRecord::Base
   acts_as_authentic do |config|
     config.merge_validates_length_of_password_field_options :minimum => 8
     config.ignore_blank_passwords = true
+    config.merge_validates_uniqueness_of_email_field_options :case_sensitive => true
 
     # Add conditions to the default validations to tidy up output.
     config.merge_validates_format_of_email_field_options :unless => Proc.new { |user| user.email.blank? }

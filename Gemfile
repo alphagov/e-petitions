@@ -1,6 +1,6 @@
-source :rubygems
+source 'https://rubygems.org'
 
-gem 'rails', '3.0.12'
+gem 'rails', '3.0.20'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -10,13 +10,16 @@ gem 'mysql', '2.8.1'
 gem 'authlogic', '3.0.3'
 gem "will_paginate", "~> 3.0.pre2"
 gem 'sunspot_rails', '~> 1.2.1'
-gem 'tabnav', :git => 'git://github.com/unboxed/tabnav.git'
+gem 'tabnav'
 gem 'bartt-ssl_requirement', :require => 'ssl_requirement'
 gem 'json'
 gem 'memcache-client'
 gem 'delayed_job', '2.1.4'
 gem 'whenever'
+gem "newrelic_rpm"
+gem "airbrake"
 gem "rabl"
+gem "attr_encrypted"
 
 group :development, :test do
   gem 'rspec-rails'
@@ -43,7 +46,7 @@ group :test do
   gem 'capybara', '~> 1.1.2'
   gem 'selenium-webdriver', '~> 2.5.0'
   gem 'factory_girl_rails'
-  gem 'be_valid_asset', :git => 'git://github.com/unboxed/be_valid_asset.git'
+  gem 'be_valid_asset'
   gem 'email_spec', :git => 'git://github.com/bmabey/email-spec.git'
   gem 'chronic', :git => "git://github.com/mojombo/chronic.git"
   gem 'timecop'

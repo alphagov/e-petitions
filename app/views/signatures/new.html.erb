@@ -1,5 +1,3 @@
-<%= link_to 'lightbox', "#make_sure_your_signature_counts", :class => 'lightbox_link', :id => 'make_sure_your_signature_counts_link' %>
-
 <% content_for(:page_title) { "#{@petition.title} - Sign this e-petition - e-petitions" } %>
 <% # set tab index to start at 5
  increment(5) %>
@@ -14,7 +12,7 @@
 
     <%= form_row :for => [@signature, :humanity], :class => 'captcha_row' do %>
       <%= render :partial => 'shared/captcha_widget', :locals => { :f => f, :signature => @signature } %>
-    <% end -%>
+    <% end unless Captcha.skip_captcha_verification? -%>
 
     <%= render :partial => 'notify_by_email', :locals => { :f => f, :signature => @signature } %>
     <%= render :partial => 'terms_and_conditions', :locals => { :f => f, :signature => @signature } %>
@@ -27,20 +25,6 @@
     </div>
   </fieldset>
 <% end -%>
-
-<div class="generic_block faq_block">
-<div id="make_sure_your_signature_counts" class="faq_answer">
-  <h2>Make your signature count</h2>
-  <p>
-    You'll need a current email address to sign this e-petition.
-  </p>
-
-  <p>
-    We'll send you an email with a link - your signature <strong>won't</strong> be added to the e-petition until you've clicked on that link.
-  </p>
-</div>
-</div>
-
 
 <%= content_for :js, javascript_include_tag('lightbox') %>
 <% content_for :js do %>

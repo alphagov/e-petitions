@@ -10,7 +10,7 @@ development_with_caching:
 test: &TEST
   solr:
     hostname: localhost
-    port: 8981
+    port: 8987
     log_level: WARNING
     
 cucumber:

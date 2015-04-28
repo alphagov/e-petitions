@@ -1,17 +1,19 @@
 defaults: &defaults
-  email_from: "xxxxx@example.com"
+  email_from: "no-reply@example.gov"
   memcached_servers:
     - "localhost:11211"
   memcached_namespace_base: "e_petitions"
+  email_encryption_key: 'notasecret'
 
 development:
   <<: *defaults
   host_for_email: "localhost:3000"
-  
+  skip_recaptcha_verify: 1
+
 development_with_caching:
   <<: *defaults
   host_for_email: "localhost:3000"
-  
+
 test:
   <<: *defaults
   host_for_email: "www.example.com"

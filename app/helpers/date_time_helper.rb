@@ -1,5 +1,9 @@
 module DateTimeHelper
 
+  def short_date_format(date_time)
+    date_time.strftime("%e %B %Y") if date_time
+  end
+
   def date_time_format(date_time)
     date_time.strftime("%d-%m-%Y %H:%M") if date_time
   end

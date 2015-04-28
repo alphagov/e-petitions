@@ -1,0 +1,13 @@
+Dear <%= @signature.name %>,
+
+Unfortunately we've had to bring forward the closing date of your petition "<%= @signature.petition.title %>" (available at <%= petition_url(@signature.petition) %>) from  <%= short_date_format @signature.petition.closed_at %> to 31 March 2015
+
+The dissolution of this Parliament has now been scheduled for 30 March 2015, and it’s not possible for petitions to remain open once Parliament has been dissolved.
+
+I'm sorry you won't have as long to collect signatures as you expected. If you have any questions about this change, please contact us at https://submissions.epetitions.direct.gov.uk/feedback
+
+(Please don't reply to this message as it's not an email address we monitor)
+
+Thanks,
+
+HM Government e-petitions <%= home_url %>

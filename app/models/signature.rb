@@ -4,7 +4,6 @@
 #
 #  id               :integer(4)      not null, primary key
 #  name             :string(255)     not null
-#  email            :string(255)     not null
 #  state            :string(10)      default("pending"), not null
 #  perishable_token :string(255)
 #  postcode         :string(255)
@@ -15,6 +14,7 @@
 #  updated_at       :datetime
 #  notify_by_email  :boolean(1)      default(FALSE)
 #  last_emailed_at  :datetime
+#  encrypted_email  :string(255)
 #
 
 class Signature < ActiveRecord::Base
@@ -25,6 +25,17 @@ class Signature < ActiveRecord::Base
   attr_accessible :name, :email, :email_confirmation, :address, :town, :postcode, :country, :humanity, :uk_citizenship, :terms_and_conditions, :notify_by_email
   before_create :set_perishable_token
 
+  class EmailDowncaser
+    def self.dump(value)
+      value.downcase
+    end
+    def self.load(value)
+      value
+    end
+  end
+
+  attr_encrypted :email, :key => AppConfig.email_encryption_key, :attribute => "encrypted_email", :marshal => true, :marshaler => EmailDowncaser
+
   # = Relationships =
   belongs_to :petition
 
@@ -34,7 +45,7 @@ class Signature < ActiveRecord::Base
   validates_confirmation_of :email, :message => "Email should match confirmation", :on => :create
 
   validate do |signature|
-    matcher = Signature.where(:email => signature.email, :petition_id => signature.petition_id)
+    matcher = Signature.where(:encrypted_email => signature.encrypted_email, :petition_id => signature.petition_id)
     matcher = matcher.where("signatures.id != ?", signature.id) unless signature.new_record?
     existing_email_address_count = matcher.count
     break if existing_email_address_count == 0
@@ -55,6 +66,7 @@ class Signature < ActiveRecord::Base
 
   end
   validates_presence_of :name, :email, :country, :message => "%{attribute} must be completed"
+  validates_length_of :name, :maximum => 255
   validates_presence_of :postcode, :message => "%{attribute} must be completed", :if => "country == 'United Kingdom'"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
 
@@ -69,7 +81,7 @@ class Signature < ActiveRecord::Base
   scope :need_emailing, lambda { |job_datetime|
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
-  scope :for_email, lambda { |email| where(:email => email) }
+  scope :for_email, lambda { |email| where(:encrypted_email => Signature.encrypt_email(email)) }
   scope :in_days, lambda {|number_of_days| validated.where("updated_at > ?", number_of_days.day.ago) }
 
   # = Methods =
@@ -92,7 +104,7 @@ class Signature < ActiveRecord::Base
   end
 
   def postal_district
-    postcode.upcase.match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
+    postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
 
   private
