@@ -1,3 +1,5 @@
+require 'be_valid_asset'
+
 include BeValidAsset
 
 BeValidAsset::Configuration.markup_validator_host = 'validator.unboxedconsulting.com'

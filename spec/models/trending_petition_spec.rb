@@ -9,7 +9,7 @@
 #  updated_at              :datetime
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe TrendingPetition do
   describe "signatures in last hour" do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::AdminUsersController do
 
@@ -42,7 +42,7 @@ describe Admin::AdminUsersController do
         @user = FactoryGirl.create(:sysadmin_user, :force_password_reset => true)
         login_as(@user)
       end
-  
+
       it "should redirect to edit profile page" do
         @user.has_to_change_password?.should be_true
         get :index
@@ -56,7 +56,7 @@ describe Admin::AdminUsersController do
       @user = FactoryGirl.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin')
       login_as(@user)
     end
-    
+
     without_ssl do
       describe "GET 'index'" do
         it "should redirect to ssl" do
@@ -71,7 +71,7 @@ describe Admin::AdminUsersController do
         end
       end
     end
-    
+
     with_ssl do
       describe "GET 'index'" do
         before :each do
@@ -79,13 +79,13 @@ describe Admin::AdminUsersController do
           @user2 = Factory(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
           @user3 = Factory(:admin_user, :first_name => 'Ronald', :last_name => 'Reagan')
           @user4 = Factory(:admin_user, :first_name => 'Bill', :last_name => 'Clinton')
-        end  
-      
+        end
+
         it "should be successful" do
           get :index
           response.should be_success
         end
-    
+
         it "should display a list of users" do
           get :index
           assigns[:users].should == [@user, @user4, @user2, @user1, @user3]
@@ -124,7 +124,7 @@ describe Admin::AdminUsersController do
             do_create
             response.should redirect_to(:action => :index)
           end
-      
+
           it "create a new user with associated departments" do
             department1 = Factory(:department)
             department2 = Factory(:department)
@@ -174,7 +174,7 @@ describe Admin::AdminUsersController do
           assigns[:user].should == @user
         end
       end
-  
+
       describe "PUT 'update'" do
         before :each do
           @department1 = Factory(:department)
@@ -195,13 +195,13 @@ describe Admin::AdminUsersController do
             @user.email.should == "another_admin@example.com"
             response.should redirect_to(:action => :index)
           end
-          
+
           it "should reset the failed login count to 0" do
             do_update
             @user.reload
             @user.failed_login_count.should == 0
           end
-      
+
           it "update a user with associated departments" do
             department3 = Factory(:department)
             do_update(:department_ids => {'0' => @department2.id.to_s, '1' => department3.id.to_s})
@@ -226,18 +226,18 @@ describe Admin::AdminUsersController do
           end
         end
       end
-  
+
       describe "DELETE 'destroy'" do
         it "successful delete" do
           @other_user = Factory(:admin_user, :email => 'admin@example.com')
-          lambda do   
+          lambda do
             delete :destroy, :id => @other_user.id
           end.should change(AdminUser, :count).by(-1)
           response.should redirect_to(:action => :index)
         end
-    
+
         it "unsuccessful delete" do
-          lambda do        
+          lambda do
             delete :destroy, :id => @user.id
           end.should_not change(AdminUser, :count)
           response.should redirect_to(:action => :index)

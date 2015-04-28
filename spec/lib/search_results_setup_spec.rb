@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SearchResultsSetup do
   describe "results_for" do

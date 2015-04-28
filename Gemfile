@@ -41,7 +41,7 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'factory_girl_rails'
-  gem 'be_valid_asset'
+  gem 'be_valid_asset', :require => false
   gem 'email_spec'
   gem 'chronic'
   gem 'timecop'

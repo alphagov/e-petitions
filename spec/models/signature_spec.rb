@@ -17,7 +17,7 @@
 #  encrypted_email  :string(255)
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Signature do
   it "should have a valid factory" do

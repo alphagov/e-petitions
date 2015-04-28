@@ -1,4 +1,3 @@
-require 'app/jobs/email_threshold_response_job'
 require 'net/smtp'
 
 describe EmailThresholdResponseJob do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SearchHelper do
   it "shows HTML for a state count" do

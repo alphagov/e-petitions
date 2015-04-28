@@ -1,4 +1,4 @@
-require 'app/helpers/application_helper'
+require 'rails_helper'
 
 describe ApplicationHelper do
   include ApplicationHelper

@@ -25,7 +25,7 @@
 #  get_an_mp_email_sent_at :datetime
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Petition do
   context "defaults" do

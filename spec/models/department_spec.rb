@@ -10,7 +10,7 @@
 #  website_url :string(255)
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Department do
 

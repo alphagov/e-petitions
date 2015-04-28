@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "api/petitions/show.json.rabl" do
   let(:fields) {{
