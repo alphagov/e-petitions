@@ -12,13 +12,13 @@ describe Admin::TodolistController do
       end
     end
   end
-  
+
   context "logged in as admin user but need to reset password" do
     before :each do
       @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
       login_as(@user)
     end
-    
+
     with_ssl do
       it "should redirect to edit profile page" do
         expect(@user.has_to_change_password?).to be_truthy
@@ -27,7 +27,7 @@ describe Admin::TodolistController do
       end
     end
   end
-  
+
   describe "logged in" do
     before :each do
       @treasury = FactoryGirl.create(:department)
@@ -39,29 +39,20 @@ describe Admin::TodolistController do
       @p4 = FactoryGirl.create(:petition, :department => @home_office, :state => Petition::PENDING_STATE)
       @p5 = FactoryGirl.create(:open_petition, :department => @dfid)
     end
-    
+
     describe "logged in as sysadmin user" do
       before :each do
         @user = FactoryGirl.create(:sysadmin_user)
         login_as(@user)
       end
-      
-      without_ssl do
-        describe "GET 'index'" do
-          it "should redirect to ssl" do
-            get :index
-            expect(response).to redirect_to(admin_root_url(:protocol => 'https'))
-          end
-        end
-      end
-      
+
       with_ssl do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
             expect(response).to be_success
           end
-        
+
           it "should return all validated petitions ordered by created_at" do
             get :index
             expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
@@ -69,20 +60,20 @@ describe Admin::TodolistController do
         end
       end
     end
-    
+
     describe "logged in as threshold user" do
       before :each do
         @user = FactoryGirl.create(:threshold_user)
         login_as(@user)
       end
-      
+
       with_ssl do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
             expect(response).to be_success
           end
-        
+
           it "should return all validated petitions ordered by created_at" do
             get :index
             expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
@@ -97,14 +88,14 @@ describe Admin::TodolistController do
         @user.departments << @treasury << @dfid
         login_as(@user)
       end
-      
+
       with_ssl do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
             expect(response).to be_success
           end
-        
+
           it "should return validated petitions for the user's department(s)" do
             get :index
             expect(assigns[:petitions]).to eq([@p2, @p1])

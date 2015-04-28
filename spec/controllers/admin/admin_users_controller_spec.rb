@@ -57,21 +57,6 @@ describe Admin::AdminUsersController do
       login_as(@user)
     end
 
-    without_ssl do
-      describe "GET 'index'" do
-        it "should redirect to ssl" do
-          get :index
-          expect(response).to redirect_to(admin_admin_users_url(:protocol => 'https'))
-        end
-      end
-      describe "GET 'new'" do
-        it "should be successful" do
-          get :new
-          expect(response).to redirect_to(new_admin_admin_user_url(:protocol => 'https'))
-        end
-      end
-    end
-
     with_ssl do
       describe "GET 'index'" do
         before :each do

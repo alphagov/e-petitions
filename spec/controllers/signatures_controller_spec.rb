@@ -83,13 +83,6 @@ describe SignaturesController do
       allow(Signature).to receive_messages(:new => signature)
     end
 
-    without_ssl do
-      it "should redirect to ssl" do
-        get :new, :petition_id => 1
-        expect(response).to redirect_to(new_petition_signature_url(@petition, :protocol => 'https'))
-      end
-    end
-
     with_ssl do
       it "assigns a new signature with the given petition" do
         expect(Signature).to receive(:new).with(hash_including(:petition => petition)).and_return(signature)

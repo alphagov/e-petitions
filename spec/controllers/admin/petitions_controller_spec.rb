@@ -204,15 +204,6 @@ describe Admin::PetitionsController do
       login_as(@user)
     end
 
-    without_ssl do
-      context "edit" do
-        it "should redirect to ssl" do
-          get :edit, :id => @petition.id
-          expect(response).to redirect_to(edit_admin_petition_url(@petition, :protocol => 'https'))
-        end
-      end
-    end
-
     with_ssl do
       context "index" do
         let(:petitions) { double.as_null_object }

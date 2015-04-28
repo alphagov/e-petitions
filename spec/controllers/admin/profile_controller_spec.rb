@@ -36,15 +36,6 @@ describe Admin::ProfileController do
       login_as(@user)
     end
 
-    without_ssl do
-      describe "GET 'edit'" do
-        it "should redirect to ssl" do
-          get :edit, :id => 50000 # id does not matter
-          expect(response).to redirect_to(edit_admin_profile_url(:protocol => 'https'))
-        end
-      end
-    end
-
     with_ssl do
       describe "GET 'edit'" do
         it "should render successfully" do

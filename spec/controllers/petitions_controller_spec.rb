@@ -3,13 +3,6 @@ require 'rails_helper'
 describe PetitionsController do
   describe "new" do
 
-    without_ssl do
-      it "should redirect to ssl" do
-        get :new
-        expect(response).to redirect_to(new_petition_url(:protocol => 'https'))
-      end
-    end
-
     with_ssl do
       it "should respond to /petitions/new" do
         expect({:get => "/petitions/new"}).to route_to({:controller => "petitions", :action => "new"})
