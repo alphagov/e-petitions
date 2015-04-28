@@ -16,20 +16,20 @@ describe DepartmentAssignment do
   describe "validations" do
     it "requires a petition" do
       department_assignment = DepartmentAssignment.new(:petition => nil)
-      department_assignment.valid?.should_not be_true
-      department_assignment.should have(1).errors_on(:petition)
+      expect(department_assignment.valid?).not_to be_truthy
+      expect(department_assignment.errors_on(:petition).size).to eq(1)
     end
 
     it "requires a department" do
       department_assignment = DepartmentAssignment.new(:department => nil)
-      department_assignment.valid?.should_not be_true
-      department_assignment.should have(1).errors_on(:department)
+      expect(department_assignment.valid?).not_to be_truthy
+      expect(department_assignment.errors_on(:department).size).to eq(1)
     end
 
     it "requires an assigned_on timestamp" do
       department_assignment = DepartmentAssignment.new(:assigned_on => nil)
-      department_assignment.valid?.should_not be_true
-      department_assignment.should have(1).errors_on(:assigned_on)
+      expect(department_assignment.valid?).not_to be_truthy
+      expect(department_assignment.errors_on(:assigned_on).size).to eq(1)
     end
   end
 end

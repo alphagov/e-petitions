@@ -3,7 +3,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 describe EmailReminder do
   describe "admin_email_reminders" do
     def set_up(date)
-      Time.zone.stub(:now).and_return(date)
+      allow(Time.zone).to receive(:now).and_return(date)
       @d1 = FactoryGirl.create(:department)
       @d2 = FactoryGirl.create(:department)
       @d3 = FactoryGirl.create(:department)
@@ -26,22 +26,22 @@ describe EmailReminder do
       email_no = ActionMailer::Base.deliveries.size
       EmailReminder.admin_email_reminder
       email_no_new = ActionMailer::Base.deliveries.size
-      (email_no_new - email_no).should == 1
+      expect(email_no_new - email_no).to eq(1)
       email = ActionMailer::Base.deliveries.last
-      email.from.should == ["no-reply@example.gov"]
-      email.to.should == ["peter@directgov.uk"]
-      email.subject.should == 'e-Petitions alert'
+      expect(email.from).to eq(["no-reply@example.gov"])
+      expect(email.to).to eq(["peter@directgov.uk"])
+      expect(email.subject).to eq('e-Petitions alert')
     end
 
     it "should email out details of 1 new petition and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("5 July 2011")) # tuesday
-      AdminMailer.should_receive(:admin_email_reminder).with(@user1, [@p2, @p1], 1).and_return(mock('email', :deliver => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 1).and_return(double('email', :deliver => nil))
       EmailReminder.admin_email_reminder
     end
 
     it "should email out details of 2 new petitions and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("4 July 2011")) # monday
-      AdminMailer.should_receive(:admin_email_reminder).with(@user1, [@p2, @p1], 2).and_return(mock('email', :deliver => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 2).and_return(double('email', :deliver => nil))
       EmailReminder.admin_email_reminder
     end
   end
@@ -65,19 +65,19 @@ describe EmailReminder do
       email_no = ActionMailer::Base.deliveries.size
       EmailReminder.threshold_email_reminder
       email_no_new = ActionMailer::Base.deliveries.size
-      (email_no_new - email_no).should == 1
+      expect(email_no_new - email_no).to eq(1)
       email = ActionMailer::Base.deliveries.last
-      email.from.should == ["no-reply@example.gov"]
-      email.to.should == ["peter@directgov.uk", "richard@directgov.uk"]
-      email.subject.should == 'e-Petitions alert'
+      expect(email.from).to eq(["no-reply@example.gov"])
+      expect(email.to).to eq(["peter@directgov.uk", "richard@directgov.uk"])
+      expect(email.subject).to eq('e-Petitions alert')
     end
 
     it "should email out details of three petitions and set the notified_by_email flag to true" do
-      AdminMailer.should_receive(:threshold_email_reminder).with([@user1, @user2], [@p4, @p2, @p1]).and_return(mock('email', :deliver => nil))
+      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p4, @p2, @p1]).and_return(double('email', :deliver => nil))
       EmailReminder.threshold_email_reminder
       [@p4, @p2, @p1].each do |petition|
         petition.reload
-        petition.notified_by_email.should be_true
+        expect(petition.notified_by_email).to be_truthy
       end
     end
   end
@@ -99,28 +99,28 @@ describe EmailReminder do
     it "sends emails to pending signatures last updated before 14th August 2011" do
       email_count = ActionMailer::Base.deliveries.length
       EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-      (ActionMailer::Base.deliveries.length - email_count).should == 3
+      expect(ActionMailer::Base.deliveries.length - email_count).to eq(3)
     end
 
     it "updates the time so they aren't sent again" do
       Timecop.freeze do
         EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-        petition.signatures.last.updated_at.should == Time.zone.now
+        expect(petition.signatures.last.updated_at).to eq(Time.zone.now)
       end
     end
 
     it "allows customisation of the last updated time" do
       email_count = ActionMailer::Base.deliveries.length
       EmailReminder.special_resend_of_signature_email_validation('2011-03-20')
-      (ActionMailer::Base.deliveries.length - email_count).should == 0
+      expect(ActionMailer::Base.deliveries.length - email_count).to eq(0)
     end
 
 
     context "syntax error in email" do
       let(:mail) { double }
       before do
-        PetitionMailer.stub(:special_resend_of_email_confirmation_for_signer => mail)
-        mail.stub(:deliver).and_raise Net::SMTPSyntaxError
+        allow(PetitionMailer).to receive_messages(:special_resend_of_email_confirmation_for_signer => mail)
+        allow(mail).to receive(:deliver).and_raise Net::SMTPSyntaxError
       end
 
       it "continues" do
@@ -132,7 +132,7 @@ describe EmailReminder do
       it "still updates the timestamp" do
         Timecop.freeze do
           EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-          petition.signatures.last.updated_at.should == Time.zone.now
+          expect(petition.signatures.last.updated_at).to eq(Time.zone.now)
         end
       end
     end

@@ -7,7 +7,7 @@ describe Admin::TodolistController do
       describe "GET 'index'" do
         it "should redirect to the login page" do
           get 'index'
-          response.should redirect_to(admin_login_path)
+          expect(response).to redirect_to(admin_login_path)
         end
       end
     end
@@ -21,9 +21,9 @@ describe Admin::TodolistController do
     
     with_ssl do
       it "should redirect to edit profile page" do
-        @user.has_to_change_password?.should be_true
+        expect(@user.has_to_change_password?).to be_truthy
         get :index
-        response.should redirect_to(edit_admin_profile_path(@user))
+        expect(response).to redirect_to(edit_admin_profile_path(@user))
       end
     end
   end
@@ -50,7 +50,7 @@ describe Admin::TodolistController do
         describe "GET 'index'" do
           it "should redirect to ssl" do
             get :index
-            response.should redirect_to(admin_root_url(:protocol => 'https'))
+            expect(response).to redirect_to(admin_root_url(:protocol => 'https'))
           end
         end
       end
@@ -59,12 +59,12 @@ describe Admin::TodolistController do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
-            response.should be_success
+            expect(response).to be_success
           end
         
           it "should return all validated petitions ordered by created_at" do
             get :index
-            assigns[:petitions].should == [@p2, @p3, @p1]
+            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
           end
         end
       end
@@ -80,12 +80,12 @@ describe Admin::TodolistController do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
-            response.should be_success
+            expect(response).to be_success
           end
         
           it "should return all validated petitions ordered by created_at" do
             get :index
-            assigns[:petitions].should == [@p2, @p3, @p1]
+            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
           end
         end
       end
@@ -102,12 +102,12 @@ describe Admin::TodolistController do
         describe "GET 'index'" do
           it "should be successful" do
             get :index
-            response.should be_success
+            expect(response).to be_success
           end
         
           it "should return validated petitions for the user's department(s)" do
             get :index
-            assigns[:petitions].should == [@p2, @p1]
+            expect(assigns[:petitions]).to eq([@p2, @p1])
           end
         end
       end

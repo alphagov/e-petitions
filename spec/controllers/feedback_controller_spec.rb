@@ -5,39 +5,39 @@ describe FeedbackController do
     describe "GET 'index'" do
       it "should be successful" do
         get 'index'
-        response.should be_success
+        expect(response).to be_success
       end
     end
 
     describe "GET 'create'" do
       let(:feedback) { double.as_null_object }
-      before(:each) { Feedback.stub(:new => feedback) }
+      before(:each) { allow(Feedback).to receive_messages(:new => feedback) }
 
       context "valid input" do
-        before(:each) { feedback.stub(:valid? => true) }
+        before(:each) { allow(feedback).to receive_messages(:valid? => true) }
 
         it "is successful" do
           post 'create', :feedback => {}
-          response.should redirect_to(thanks_feedback_path)
+          expect(response).to redirect_to(thanks_feedback_path)
         end
 
         it "sends an email" do
-          FeedbackMailer.should_receive(:send_feedback).with(feedback).and_return(double.as_null_object)
+          expect(FeedbackMailer).to receive(:send_feedback).with(feedback).and_return(double.as_null_object)
           post 'create', :feedback => {}
         end
       end
 
       context "invalid input" do
-        before(:each) { feedback.stub(:valid? => false) }
+        before(:each) { allow(feedback).to receive_messages(:valid? => false) }
 
         it "does not send an email" do
-          FeedbackMailer.should_not_receive(:send_feedback)
+          expect(FeedbackMailer).not_to receive(:send_feedback)
           post 'create', :feedback => {}
         end
 
         it "returns the user to the form" do
           post 'create', :feedback => {}
-          response.should render_template("feedback/index")
+          expect(response).to render_template("feedback/index")
         end
       end
     end
@@ -45,7 +45,7 @@ describe FeedbackController do
     describe "GET 'thanks'" do
       it "should be successful" do
         get 'thanks'
-        response.should be_success
+        expect(response).to be_success
       end
     end
 

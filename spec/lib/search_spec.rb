@@ -15,72 +15,72 @@ describe Search do
   subject { Search.new(options) }
 
   before do
-    sunspot.stub(:search).and_yield.and_return(results)
-    subject.stub(:fulltext)
-    subject.stub(:order_by)
-    subject.stub(:adjust_solr_params).and_yield(params)
-    subject.stub(:facet)
-    subject.stub(:paginate)
-    subject.stub(:with).and_return(criteria)
-    SearchOrder.stub(:sort_order).and_return(sort_order)
+    allow(sunspot).to receive(:search).and_yield.and_return(results)
+    allow(subject).to receive(:fulltext)
+    allow(subject).to receive(:order_by)
+    allow(subject).to receive(:adjust_solr_params).and_yield(params)
+    allow(subject).to receive(:facet)
+    allow(subject).to receive(:paginate)
+    allow(subject).to receive(:with).and_return(criteria)
+    allow(SearchOrder).to receive(:sort_order).and_return(sort_order)
   end
 
   context "counting states" do
     it "asks sunspot for the state facets" do
-      subject.should_receive(:facet).with(:state)
+      expect(subject).to receive(:facet).with(:state)
       subject.state_counts_for("apples")
     end
 
     it "does not limit the query by state" do
-      subject.should_receive(:fulltext).with("apples")
-      subject.should_not_receive(:with).with(:state)
+      expect(subject).to receive(:fulltext).with("apples")
+      expect(subject).not_to receive(:with).with(:state)
       subject.state_counts_for("apples")
     end
 
     it "returns nil if the state isn't found" do
-      subject.state_counts_for("apples")['open'].should == 0
+      expect(subject.state_counts_for("apples")['open']).to eq(0)
     end
   end
 
   context "searching" do
     it "performs a Sunspot search" do
-      sunspot.should_receive(:search).with(petition).and_yield
+      expect(sunspot).to receive(:search).with(petition).and_yield
       subject.execute("apples")
     end
 
     it "turns off the 'qf' and 'defType' parameters" do
       subject.execute("apples")
-      params[:qf].should == ""
-      params[:defType].should == ""
+      expect(params[:qf]).to eq("")
+      expect(params[:defType]).to eq("")
     end
 
     it "works with a single keyword" do
-      subject.should_receive(:fulltext).with("apples")
-      criteria.should_receive(:equal_to).with("rejected")
-      subject.should_receive(:with).and_return(criteria)
+      expect(subject).to receive(:fulltext).with("apples")
+      expect(criteria).to receive(:equal_to).with("rejected")
+      expect(subject).to receive(:with).and_return(criteria)
       subject.execute("apples")
     end
 
     it "works with multiple keywords" do
-      subject.should_receive(:fulltext).with("apples eggs")
+      expect(subject).to receive(:fulltext).with("apples eggs")
       subject.execute("apples eggs")
     end
 
     it "only searches the first 10 words" do
-      subject.should_receive(:fulltext).with("1 2 3 4 5 6 7 8 9 10")
+      expect(subject).to receive(:fulltext).with("1 2 3 4 5 6 7 8 9 10")
       subject.execute("1 2 3 4 5 6 7 8 9 10 eleven")
     end
 
     context "a state of" do
       before do
-        Time.stub_chain(:zone, :now, :utc => "now")
+        allow(Time).to receive_message_chain(:zone, :now, :utc => "now")
       end
       context "closed" do
         let(:state) { State::CLOSED_STATE }
         it "works" do
-          criteria.should_receive(:equal_to).with("open")
-          criteria.should_receive(:less_than).with("now")
-          subject.should_receive(:with).with(:closed_at).and_return(criteria)
+          expect(criteria).to receive(:equal_to).with("open")
+          expect(criteria).to receive(:less_than).with("now")
+          expect(subject).to receive(:with).with(:closed_at).and_return(criteria)
           subject.execute("apples")
         end
       end
@@ -88,9 +88,9 @@ describe Search do
         let(:state) { State::OPEN_STATE }
 
         it "works" do
-          criteria.should_receive(:equal_to).with("open")
-          criteria.should_receive(:greater_than).with("now")
-          subject.should_receive(:with).with(:closed_at).and_return(criteria)
+          expect(criteria).to receive(:equal_to).with("open")
+          expect(criteria).to receive(:greater_than).with("now")
+          expect(subject).to receive(:with).with(:closed_at).and_return(criteria)
           subject.execute("apples")
         end
       end
@@ -99,7 +99,7 @@ describe Search do
         let(:state) { State::HIDDEN_STATE }
 
         it "shows no results" do
-          subject.should_not_receive(:fulltext)
+          expect(subject).not_to receive(:fulltext)
           subject.execute("apples")
         end
       end
@@ -107,7 +107,7 @@ describe Search do
       context "faked non-existent state" do
         let(:state) { "trying to hack <script>alert('hello')</script>" }
         it "shows no results" do
-          subject.should_not_receive(:fulltext)
+          expect(subject).not_to receive(:fulltext)
           subject.execute("apples")
         end
       end
@@ -115,36 +115,36 @@ describe Search do
       context "default state" do
         let(:state) { "" }
         it "shows no results" do
-          subject.should_not_receive(:fulltext)
+          expect(subject).not_to receive(:fulltext)
           subject.execute("apples")
         end
       end
     end
 
     it "translates '*' into spaces" do
-      subject.should_receive(:fulltext).with("apples eggs")
+      expect(subject).to receive(:fulltext).with("apples eggs")
       subject.execute("apples*eggs")
     end
 
     it "rejects a single '*'" do
-      sunspot.should_not_receive(:search)
+      expect(sunspot).not_to receive(:search)
       subject.execute("*")
     end
 
     it "orders by the order param" do
-      subject.should_receive(:order_by).with(sort_order)
+      expect(subject).to receive(:order_by).with(sort_order)
       subject.execute("apples")
     end
 
     it "paginates by the page param" do
-      subject.should_receive(:paginate).with(:page => page, :per_page => 20)
+      expect(subject).to receive(:paginate).with(:page => page, :per_page => 20)
       subject.execute("apples")
     end
 
     context "configured to return less results" do
       subject { Search.new(options.merge(:per_page => 5)) }
       it "does indeed return less results" do
-        subject.should_receive(:paginate).with(:page => page, :per_page => 5)
+        expect(subject).to receive(:paginate).with(:page => page, :per_page => 5)
         subject.execute("apples")
       end
     end

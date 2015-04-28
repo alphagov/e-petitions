@@ -16,11 +16,11 @@ describe Department do
 
   context "validations" do
 
-    it { should validate_presence_of(:name) }
+    it { is_expected.to validate_presence_of(:name) }
 
     it "should validate uniqueness of name" do
       FactoryGirl.create(:department)
-      should validate_uniqueness_of(:name).case_insensitive
+      is_expected.to validate_uniqueness_of(:name).case_insensitive
     end
   end
 
@@ -34,7 +34,7 @@ describe Department do
 
     context "by_name" do
       it "should return by name" do
-       Department.by_name.should == [@d2, @d4, @d3, @d1]
+       expect(Department.by_name).to eq([@d2, @d4, @d3, @d1])
       end
     end
 
@@ -43,7 +43,7 @@ describe Department do
         5.times { FactoryGirl.create(:open_petition, :department => @d4)}
         2.times { FactoryGirl.create(:closed_petition, :department => @d3)}
         3.times { FactoryGirl.create(:pending_petition, :department => @d1)}
-        Department.by_petition_count.should == [@d4, @d1, @d3]
+        expect(Department.by_petition_count).to eq([@d4, @d1, @d3])
       end
     end
   end

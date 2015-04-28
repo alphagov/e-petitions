@@ -15,12 +15,12 @@ describe "api/petitions/show.json.rabl" do
     subject { JSON.parse(rendered).values.first }
 
     it "renders the id" do
-      subject['id'].should == "1"
+      expect(subject['id']).to eq("1")
     end
 
     it "renders the signature counts by post town" do
-      subject['postal_districts']['SO22'].should == 2
-      subject['postal_districts']['SO21'].should == 1
+      expect(subject['postal_districts']['SO22']).to eq(2)
+      expect(subject['postal_districts']['SO21']).to eq(1)
     end
   end
 end

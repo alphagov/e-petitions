@@ -4,28 +4,28 @@ require 'feedback'
 
 describe Feedback do
   it "can be constructed without params" do
-    Feedback.new.name.should be_nil
+    expect(Feedback.new.name).to be_nil
   end
 
   it "has a name" do
-    Feedback.new(:name => 'foo').name.should == 'foo'
+    expect(Feedback.new(:name => 'foo').name).to eq('foo')
   end
 
   it "has an email" do
-    Feedback.new(:email => 'foo').email.should == 'foo'
+    expect(Feedback.new(:email => 'foo').email).to eq('foo')
   end
 
   it "has an e-petition link or title" do
-    Feedback.new(:petition_link_or_title => 'foo').petition_link_or_title.should == 'foo'
+    expect(Feedback.new(:petition_link_or_title => 'foo').petition_link_or_title).to eq('foo')
   end
 
   it "has a flag which determines whether a response is required" do
-    Feedback.new(:response_required => '1').response_required.should be_true
-    Feedback.new(:response_required => '0').response_required.should be_false
+    expect(Feedback.new(:response_required => '1').response_required).to be_truthy
+    expect(Feedback.new(:response_required => '0').response_required).to be_falsey
   end
 
   it "has a comment" do
-    Feedback.new(:comment => 'foo').comment.should == 'foo'
+    expect(Feedback.new(:comment => 'foo').comment).to eq('foo')
   end
 
   def valid_attributes
@@ -35,23 +35,23 @@ describe Feedback do
 
   describe "valid?" do
     it "is valid when all attributes are in place" do
-      Feedback.new(valid_attributes).should be_valid
+      expect(Feedback.new(valid_attributes)).to be_valid
     end
 
     it "is not valid when a required attribute is missing" do
-      Feedback.new(valid_attributes.delete(:name)).should_not be_valid
-      Feedback.new(valid_attributes.delete(:email)).should_not be_valid
-      Feedback.new(valid_attributes.delete(:email_confirmation)).should_not be_valid
-      Feedback.new(valid_attributes.delete(:comment)).should_not be_valid
+      expect(Feedback.new(valid_attributes.delete(:name))).not_to be_valid
+      expect(Feedback.new(valid_attributes.delete(:email))).not_to be_valid
+      expect(Feedback.new(valid_attributes.delete(:email_confirmation))).not_to be_valid
+      expect(Feedback.new(valid_attributes.delete(:comment))).not_to be_valid
     end
 
     it "requires an email confirmation" do
       feedback = Feedback.new(valid_attributes.merge({:email_confirmation => 'invalid'}))
-      feedback.should_not be_valid
+      expect(feedback).not_to be_valid
     end
 
     it "is not valid when the email format is wrong" do
-      Feedback.new(valid_attributes.merge(:email => 'foo', :email_confirmation => 'foo')).should_not be_valid
+      expect(Feedback.new(valid_attributes.merge(:email => 'foo', :email_confirmation => 'foo'))).not_to be_valid
     end
   end
 

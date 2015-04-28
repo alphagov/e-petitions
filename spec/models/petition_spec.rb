@@ -31,49 +31,49 @@ describe Petition do
   context "defaults" do
     it "state should default to pending" do
       p = Petition.new
-      p.state.should == "pending"
+      expect(p.state).to eq("pending")
     end
 
     it "email signees should default to false" do
       p = Petition.new
-      p.email_signees.should be_false
+      expect(p.email_signees).to be_falsey
     end
 
     it "duration should default to 12" do
       p = Petition.new
-      p.duration.should == "12"
+      expect(p.duration).to eq("12")
     end
   end
 
   context "validations" do
-    it { should validate_presence_of(:title).with_message(/must be completed/) }
-    it { should validate_presence_of(:description).with_message(/must be completed/) }
-    it { should validate_presence_of(:duration).with_message(/must be completed/) }
-    it { should validate_presence_of(:department).with_message(/must be completed/) }
-    it { should validate_presence_of(:creator_signature).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:duration).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:department).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     it "should validate the length of :title to within 150 characters" do
-      FactoryGirl.build(:petition, :title => 'x' * 150).should be_valid
-      FactoryGirl.build(:petition, :title => 'x' * 151).should_not be_valid
+      expect(FactoryGirl.build(:petition, :title => 'x' * 150)).to be_valid
+      expect(FactoryGirl.build(:petition, :title => 'x' * 151)).not_to be_valid
     end
 
     it "should validate the length of :description to within 1000 characters" do
-      FactoryGirl.build(:petition, :description => 'x' * 1000).should be_valid
-      FactoryGirl.build(:petition, :description => 'x' * 1001).should_not be_valid
+      expect(FactoryGirl.build(:petition, :description => 'x' * 1000)).to be_valid
+      expect(FactoryGirl.build(:petition, :description => 'x' * 1001)).not_to be_valid
     end
 
     it "should not allow blank or unknown state" do
       p = FactoryGirl.build(:petition, :state => '')
-      p.errors_on(:state).should_not be_blank
+      expect(p.errors_on(:state)).not_to be_blank
       p.state = 'unknown'
-      p.errors_on(:state).should_not be_blank
+      expect(p.errors_on(:state)).not_to be_blank
     end
 
     it "should allow known states" do
       p = FactoryGirl.build(:petition)
       %w(pending validated open rejected hidden).each do |state|
         p.state = state
-        p.errors_on(:state).should be_blank
+        expect(p.errors_on(:state)).to be_blank
       end
     end
 
@@ -81,19 +81,19 @@ describe Petition do
       let(:petition) { FactoryGirl.build(:open_petition, :open_at => nil, :closed_at => nil) }
 
       it "should check petition is invalid if no open_at date" do
-        petition.should_not be_valid
-        petition.errors_on(:open_at).should_not be_blank
+        expect(petition).not_to be_valid
+        expect(petition.errors_on(:open_at)).not_to be_blank
       end
 
       it "should check petition is invalid if no closed_at date" do
-        petition.should_not be_valid
-        petition.errors_on(:closed_at).should_not be_blank
+        expect(petition).not_to be_valid
+        expect(petition.errors_on(:closed_at)).not_to be_blank
       end
 
       it "should check petition is valid if there is a open_at and closed_at date" do
         petition.open_at = Time.zone.now
         petition.closed_at = Time.zone.now
-        petition.should be_valid
+        expect(petition).to be_valid
       end
     end
 
@@ -101,13 +101,13 @@ describe Petition do
       let(:petition) { FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE) }
 
       it "should check petition is invalid if no rejection code" do
-        petition.should_not be_valid
-        petition.errors_on(:rejection_code).should_not be_blank
+        expect(petition).not_to be_valid
+        expect(petition.errors_on(:rejection_code)).not_to be_blank
       end
 
       it "should check there is a rejection code" do
         petition.rejection_code = 'libellous'
-        petition.should be_valid
+        expect(petition).to be_valid
       end
     end
 
@@ -115,13 +115,13 @@ describe Petition do
       let(:petition) { FactoryGirl.build(:petition, :response => 'Hello', :email_signees => false) }
 
       it "should check petition is valid if there is a response when email_signees is true" do
-        petition.should be_valid
+        expect(petition).to be_valid
       end
 
       it "should check petition is invalid if there is no response when email_signees is true" do
         petition.response = nil
         petition.email_signees = true
-        petition.errors_on(:response).should_not be_blank
+        expect(petition.errors_on(:response)).not_to be_blank
       end
     end
   end
@@ -139,12 +139,12 @@ describe Petition do
       end
 
       it "returns petitions trending for the last hour" do
-        Petition.last_hour_trending.map(&:id).include?(@petition_with_old_signatures.id).should be_false
+        expect(Petition.last_hour_trending.map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
       end
 
       it "returns the signature count for the last hour as an additional attribute" do
-        Petition.last_hour_trending.first.signatures_in_last_hour.should == "11"
-        Petition.last_hour_trending.last.signatures_in_last_hour.should  == "1"
+        expect(Petition.last_hour_trending.first.signatures_in_last_hour).to eq("11")
+        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to  eq("1")
       end
 
       it "limits the result to 12 petitions" do
@@ -154,7 +154,7 @@ describe Petition do
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        Petition.last_hour_trending.all.size.should == 12
+        expect(Petition.last_hour_trending.all.size).to eq(12)
       end
     end
 
@@ -171,23 +171,23 @@ describe Petition do
 
       context "finding trending petitions for the last 24 hours" do
         it "only returns 10 petitions" do
-          Petition.trending(1).to_a.size.should == 10
+          expect(Petition.trending(1).to_a.size).to eq(10)
         end
 
         it "orders the petitions by the highest signature count" do
           trending_petitions = Petition.trending(1).all
-          trending_petitions.first.title.should == "petition #15"
-          trending_petitions.last.title.should  == "petition #6"
+          expect(trending_petitions.first.title).to eq("petition #15")
+          expect(trending_petitions.last.title).to  eq("petition #6")
         end
 
         it "ignores petitions with signatures that are outside a rolling 24 hour period" do
-          Petition.trending(1).all.map(&:title).include?(@petition_with_old_signatures.title).should be_false
+          expect(Petition.trending(1).all.map(&:title).include?(@petition_with_old_signatures.title)).to be_falsey
         end
       end
 
       context "finding trending petitions for the last 7 days" do
         it "includes the petition with older signatures" do
-          Petition.trending(7).all.map(&:title).include?(@petition_with_old_signatures.title).should be_true
+          expect(Petition.trending(7).all.map(&:title).include?(@petition_with_old_signatures.title)).to be_truthy
         end
       end
     end
@@ -209,8 +209,8 @@ describe Petition do
 
       it "should return 4 petitions over the threshold or marked as requiring a response" do
         petitions = Petition.threshold
-        petitions.size.should == 4
-        petitions.should include(@p1, @p2, @p4, @p5)
+        expect(petitions.size).to eq(4)
+        expect(petitions).to include(@p1, @p2, @p4, @p5)
       end
     end
 
@@ -226,16 +226,16 @@ describe Petition do
 
       it "should return 2 pending petitions" do
         petitions = Petition.for_state(Petition::PENDING_STATE)
-        petitions.size.should == 2
-        petitions.should include(@p1, @p3)
+        expect(petitions.size).to eq(2)
+        expect(petitions).to include(@p1, @p3)
       end
 
       it "should return 1 validated, open, closed and hidden petitions" do
         [[Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE, @p4],
          [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6]].each do |state_and_petition|
           petitions = Petition.for_state(state_and_petition[0])
-          petitions.size.should == 1
-          petitions.should == [state_and_petition[1]]
+          expect(petitions.size).to eq(1)
+          expect(petitions).to eq([state_and_petition[1]])
         end
       end
     end
@@ -251,8 +251,8 @@ describe Petition do
       end
 
       it "returns only visible petitions" do
-        Petition.visible.size.should == 3
-        Petition.visible.should include(@visible_petition_1, @visible_petition_2, @visible_petition_3)
+        expect(Petition.visible.size).to eq(3)
+        expect(Petition.visible).to include(@visible_petition_1, @visible_petition_2, @visible_petition_3)
       end
     end
 
@@ -267,26 +267,26 @@ describe Petition do
       end
 
       it "should return all petitiions for d1" do
-        Petition.for_departments([@d1]).size.should == 2
-        Petition.for_departments([@d1]).should include(@p1, @p2)
+        expect(Petition.for_departments([@d1]).size).to eq(2)
+        expect(Petition.for_departments([@d1])).to include(@p1, @p2)
       end
 
       it "should return 0 petitions for d2" do
-        Petition.for_departments([@d2]).size.should == 0
+        expect(Petition.for_departments([@d2]).size).to eq(0)
       end
 
       it "should return 1 petition for d3" do
-        Petition.for_departments([@d3]).size.should == 1
-        Petition.for_departments([@d3]).should == [@p3]
+        expect(Petition.for_departments([@d3]).size).to eq(1)
+        expect(Petition.for_departments([@d3])).to eq([@p3])
       end
 
       it "should return all petitions for d1, d2 and d3" do
-        Petition.for_departments([@d1, @d2, @d3]).size.should == 3
-        Petition.for_departments([@d1, @d2, @d3]).should include(@p1, @p2, @p3)
+        expect(Petition.for_departments([@d1, @d2, @d3]).size).to eq(3)
+        expect(Petition.for_departments([@d1, @d2, @d3])).to include(@p1, @p2, @p3)
       end
 
       it "should return 0 for no departments" do
-        Petition.for_departments([]).size.should == 0
+        expect(Petition.for_departments([]).size).to eq(0)
       end
     end
   end
@@ -300,13 +300,13 @@ describe Petition do
 
     it "returns 1 (the creator) for a new petition" do
       @petition.reload
-      @petition.signature_count.should == 1
+      expect(@petition.signature_count).to eq(1)
     end
 
     it "still returns 1 with a new signature" do
       FactoryGirl.create(:signature, :petition => @petition)
       @petition.reload
-      @petition.signature_count.should == 1
+      expect(@petition.signature_count).to eq(1)
     end
 
     it "returns 2 when signature is validated" do
@@ -314,7 +314,7 @@ describe Petition do
       s.update_attribute(:state, Signature::VALIDATED_STATE)
       Petition.update_all_signature_counts
       @petition.reload
-      @petition.signature_count.should == 2
+      expect(@petition.signature_count).to eq(2)
     end
   end
 
@@ -329,18 +329,18 @@ describe Petition do
     end
 
     it "returns a hash of counts" do
-      subject["SO23"].should == 7
-      subject["B17"].should == 1
+      expect(subject["SO23"]).to eq(7)
+      expect(subject["B17"]).to eq(1)
     end
 
     it "only returns validated signatures" do
       FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "b17 1SS")
-      subject["B17"].should == 1
+      expect(subject["B17"]).to eq(1)
     end
 
     it "ignores special signatures" do
       FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "BFPO 1234")
-      subject[""].should == 0
+      expect(subject[""]).to eq(0)
     end
   end
 
@@ -350,30 +350,30 @@ describe Petition do
 
     before do
       FactoryGirl.create(:system_setting, :key => SystemSetting::GET_AN_MP_SIGNATURE_COUNT, :value => "10")
-      PetitionMailer.stub(:ask_creator_to_find_an_mp => deliverer)
+      allow(PetitionMailer).to receive_messages(:ask_creator_to_find_an_mp => deliverer)
     end
 
     it "emails those who have passed the threshold" do
-      PetitionMailer.should_receive(:ask_creator_to_find_an_mp).with(petition).and_return(deliverer)
+      expect(PetitionMailer).to receive(:ask_creator_to_find_an_mp).with(petition).and_return(deliverer)
       petition.update_attribute(:signature_count, 10)
       Petition.email_all_who_passed_finding_mp_threshold
     end
 
     it "does not send the email if you are below the threshold" do
-      PetitionMailer.should_not_receive(:ask_creator_to_find_an_mp)
+      expect(PetitionMailer).not_to receive(:ask_creator_to_find_an_mp)
       petition.update_attribute(:signature_count, 2)
       Petition.email_all_who_passed_finding_mp_threshold
     end
 
     it "does not send if the petition is not open" do
-      PetitionMailer.should_not_receive(:ask_creator_to_find_an_mp)
+      expect(PetitionMailer).not_to receive(:ask_creator_to_find_an_mp)
       petition.update_attribute(:signature_count, 10)
       petition.update_attribute(:state, Petition::CLOSED_STATE)
       Petition.email_all_who_passed_finding_mp_threshold
     end
 
     it "does not send the email again after sending once" do
-      PetitionMailer.should_receive(:ask_creator_to_find_an_mp).once.and_return(deliverer)
+      expect(PetitionMailer).to receive(:ask_creator_to_find_an_mp).once.and_return(deliverer)
       petition.update_attribute(:signature_count, 10);
       Petition.email_all_who_passed_finding_mp_threshold
       Petition.email_all_who_passed_finding_mp_threshold
@@ -386,53 +386,55 @@ describe Petition do
     end
 
     it "is true if and only if the petition is OPEN and the closed_at date is in the future" do
-      FactoryGirl.create(:open_petition, :closed_at => 1.year.from_now).can_be_signed?.should be_true
+      petition = FactoryGirl.create(:open_petition, :closed_at => 1.year.from_now)
+      expect(petition.can_be_signed?).to be_truthy
     end
 
     it "is false if the petition is OPEN and the closed_at date is in the past" do
-      FactoryGirl.create(:open_petition, :closed_at => 2.minutes.ago).can_be_signed?.should be_false
+      petition = FactoryGirl.create(:open_petition, :closed_at => 2.minutes.ago)
+      expect(petition.can_be_signed?).to be_falsey
     end
 
     it "is false otherwise" do
-      petition(Petition::PENDING_STATE).can_be_signed?.should be_false
-      petition(Petition::HIDDEN_STATE).can_be_signed?.should be_false
-      petition(Petition::REJECTED_STATE).can_be_signed?.should be_false
-      petition(Petition::VALIDATED_STATE).can_be_signed?.should be_false
+      expect(petition(Petition::PENDING_STATE).can_be_signed?).to be_falsey
+      expect(petition(Petition::HIDDEN_STATE).can_be_signed?).to be_falsey
+      expect(petition(Petition::REJECTED_STATE).can_be_signed?).to be_falsey
+      expect(petition(Petition::VALIDATED_STATE).can_be_signed?).to be_falsey
     end
   end
 
   describe "open?" do
     it "should be open when state is open" do
-      FactoryGirl.build(:petition, :state => Petition::OPEN_STATE).open?.should  be_true
+      expect(FactoryGirl.build(:petition, :state => Petition::OPEN_STATE).open?).to  be_truthy
     end
 
     it "should be not be open when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
-        FactoryGirl.build(:petition, :state => state).open?.should be_false
+        expect(FactoryGirl.build(:petition, :state => state).open?).to be_falsey
       end
     end
   end
 
   describe "rejected?" do
     it "should be rejected when state is rejected" do
-      FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE).rejected?.should be_true
+      expect(FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE).rejected?).to be_truthy
     end
 
     it "should be not be rejected when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
-        FactoryGirl.build(:petition, :state => state).rejected?.should be_false
+        expect(FactoryGirl.build(:petition, :state => state).rejected?).to be_falsey
       end
     end
   end
 
   describe "hidden?" do
     it "should be hidden when state is hidden" do
-      FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?.should be_true
+      expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
     end
 
     it "should be not be hidden when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
-        FactoryGirl.build(:petition, :state => state).hidden?.should be_false
+        expect(FactoryGirl.build(:petition, :state => state).hidden?).to be_falsey
       end
     end
   end
@@ -440,32 +442,32 @@ describe Petition do
   describe "rejection_reason" do
     it "should give rejection reason from json file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      petition.rejection_reason.should == 'Duplicate of an existing e-petition'
+      expect(petition.rejection_reason).to eq('Duplicate of an existing e-petition')
     end
   end
 
   describe "rejection_description" do
     it "should give rejection description from json file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      petition.rejection_description.should == '<p>There is already an e-petition about this issue.</p>'
+      expect(petition.rejection_description).to eq('<p>There is already an e-petition about this issue.</p>')
     end
   end
 
   describe "updating signature counts" do
     let(:petition) { double }
     before do
-      Petition.stub(:visible => [petition])
+      allow(Petition).to receive_messages(:visible => [petition])
     end
     it "calls update signature counts for each petition" do
-      petition.stub(:count_validated_signatures).and_return(123)
-      petition.stub(:signature_count).and_return(122)
-      petition.should_receive(:update_attribute).with(:signature_count, 123)
+      allow(petition).to receive(:count_validated_signatures).and_return(123)
+      allow(petition).to receive(:signature_count).and_return(122)
+      expect(petition).to receive(:update_attribute).with(:signature_count, 123)
       Petition.update_all_signature_counts
     end
     it "doesn't change signature counts when not changed" do
-      petition.stub(:count_validated_signatures).and_return(122)
-      petition.stub(:signature_count).and_return(122)
-      petition.should_not_receive(:update_attribute).with(:signature_count, 122)
+      allow(petition).to receive(:count_validated_signatures).and_return(122)
+      allow(petition).to receive(:signature_count).and_return(122)
+      expect(petition).not_to receive(:update_attribute).with(:signature_count, 122)
       Petition.update_all_signature_counts
     end
   end
@@ -474,20 +476,20 @@ describe Petition do
     let(:petition) { FactoryGirl.build(:petition) }
 
     it "should only count validated signtatures" do
-      petition.signatures.should_receive(:validated).and_return(double(:valid_signatures, :count => 123))
-      petition.count_validated_signatures.should == 123
+      expect(petition.signatures).to receive(:validated).and_return(double(:valid_signatures, :count => 123))
+      expect(petition.count_validated_signatures).to eq(123)
     end
   end
 
   describe "signatures that need emailing" do
     let(:petition) { FactoryGirl.create(:petition) }
     it "returns validated signatures" do
-      petition.need_emailing.should == [petition.creator_signature]
+      expect(petition.need_emailing).to eq([petition.creator_signature])
     end
 
     it "only returns those yet to be emailed" do
       petition.creator_signature.update_attribute(:last_emailed_at, Time.now)
-      petition.need_emailing.should == []
+      expect(petition.need_emailing).to eq([])
     end
   end
 
@@ -496,36 +498,36 @@ describe Petition do
     let(:user) { double(:is_a_threshold? => false, :is_a_sysadmin? => false) }
 
     it "is editable by moderators in the same department" do
-      user.stub(:departments => [petition.department])
-      petition.editable_by?(user).should be_true
+      allow(user).to receive_messages(:departments => [petition.department])
+      expect(petition.editable_by?(user)).to be_truthy
     end
 
     it "is not editable by a moderator in another department" do
-      user.stub(:departments => [])
-      petition.editable_by?(user).should be_false
+      allow(user).to receive_messages(:departments => [])
+      expect(petition.editable_by?(user)).to be_falsey
     end
     it "is editable by a threshold user" do
-      user.stub(:is_a_threshold? => true)
-      petition.editable_by?(user).should be_true
+      allow(user).to receive_messages(:is_a_threshold? => true)
+      expect(petition.editable_by?(user)).to be_truthy
     end
 
     it "is editable by a sys admin" do
-      user.stub(:is_a_sysadmin? => true)
-      petition.editable_by?(user).should be_true
+      allow(user).to receive_messages(:is_a_sysadmin? => true)
+      expect(petition.editable_by?(user)).to be_truthy
     end
 
     it "doesn't allow editing of response generally" do
-      petition.response_editable_by?(user).should be_false
+      expect(petition.response_editable_by?(user)).to be_falsey
     end
 
     it "allows editing of the response by threshold users" do
-      user.stub(:is_a_threshold? => true)
-      petition.response_editable_by?(user).should be_true
+      allow(user).to receive_messages(:is_a_threshold? => true)
+      expect(petition.response_editable_by?(user)).to be_truthy
     end
 
     it "allows editing of the response by sysadmins" do
-      user.stub(:is_a_sysadmin? => true)
-      petition.response_editable_by?(user).should be_true
+      allow(user).to receive_messages(:is_a_sysadmin? => true)
+      expect(petition.response_editable_by?(user)).to be_truthy
     end
   end
 
@@ -540,12 +542,12 @@ describe Petition do
 
       # Petition.counts_by_state.class.should == Hash
 
-      Petition.counts_by_state[:pending].should   == 1
-      Petition.counts_by_state[:validated].should == 2
-      Petition.counts_by_state[:open].should      == 3
-      Petition.counts_by_state[:closed].should    == 4
-      Petition.counts_by_state[:rejected].should  == 5
-      Petition.counts_by_state[:hidden].should    == 6
+      expect(Petition.counts_by_state[:pending]).to   eq(1)
+      expect(Petition.counts_by_state[:validated]).to eq(2)
+      expect(Petition.counts_by_state[:open]).to      eq(3)
+      expect(Petition.counts_by_state[:closed]).to    eq(4)
+      expect(Petition.counts_by_state[:rejected]).to  eq(5)
+      expect(Petition.counts_by_state[:hidden]).to    eq(6)
     end
   end
 
@@ -556,18 +558,18 @@ describe Petition do
     it "takes a department id and saves the petition" do
       petition.reassign!(department)
       petition.reload
-      petition.department_id.should == department.id
+      expect(petition.department_id).to eq(department.id)
     end
 
     it "creates a record of the assignment and timestamps it" do
       frozen_time = Time.now
-      Time.stub!(:now).and_return(frozen_time)
+      allow(Time).to receive(:now).and_return(frozen_time)
       petition.reassign!(department)
       department_assignment = DepartmentAssignment.first
 
-      department_assignment.petition.should         == petition
-      department_assignment.department.should       == department
-      department_assignment.assigned_on.to_i.should == frozen_time.to_i
+      expect(department_assignment.petition).to         eq(petition)
+      expect(department_assignment.department).to       eq(department)
+      expect(department_assignment.assigned_on.to_i).to eq(frozen_time.to_i)
     end
 
     it "blows up if it can't ressign" do

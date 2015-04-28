@@ -7,14 +7,14 @@ describe Admin::AdminUsersController do
       describe "GET 'index'" do
         it "should redirect to the login page" do
           get 'index'
-          response.should redirect_to(admin_login_path)
+          expect(response).to redirect_to(admin_login_path)
         end
       end
 
       describe "GET 'new'" do
         it "should redirect to the login page" do
           get :new
-          response.should redirect_to(admin_login_path)
+          expect(response).to redirect_to(admin_login_path)
         end
       end
     end
@@ -30,7 +30,7 @@ describe Admin::AdminUsersController do
       describe "GET 'index'" do
         it "should be unsuccessful" do
           get :index
-          response.should redirect_to(admin_login_path)
+          expect(response).to redirect_to(admin_login_path)
         end
       end
     end
@@ -44,9 +44,9 @@ describe Admin::AdminUsersController do
       end
 
       it "should redirect to edit profile page" do
-        @user.has_to_change_password?.should be_true
+        expect(@user.has_to_change_password?).to be_truthy
         get :index
-        response.should redirect_to(edit_admin_profile_path(@user))
+        expect(response).to redirect_to(edit_admin_profile_path(@user))
       end
     end
   end
@@ -61,13 +61,13 @@ describe Admin::AdminUsersController do
       describe "GET 'index'" do
         it "should redirect to ssl" do
           get :index
-          response.should redirect_to(admin_admin_users_url(:protocol => 'https'))
+          expect(response).to redirect_to(admin_admin_users_url(:protocol => 'https'))
         end
       end
       describe "GET 'new'" do
         it "should be successful" do
           get :new
-          response.should redirect_to(new_admin_admin_user_url(:protocol => 'https'))
+          expect(response).to redirect_to(new_admin_admin_user_url(:protocol => 'https'))
         end
       end
     end
@@ -83,25 +83,25 @@ describe Admin::AdminUsersController do
 
         it "should be successful" do
           get :index
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "should display a list of users" do
           get :index
-          assigns[:users].should == [@user, @user4, @user2, @user1, @user3]
+          expect(assigns[:users]).to eq([@user, @user4, @user2, @user1, @user3])
         end
       end
 
       describe "GET 'new'" do
         it "should be successful" do
           get :new
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "should assign a new user" do
           get :new
-          assigns[:user].should be_a(AdminUser)
-          assigns[:user].should be_new_record
+          expect(assigns[:user]).to be_a(AdminUser)
+          expect(assigns[:user]).to be_new_record
         end
       end
 
@@ -115,14 +115,14 @@ describe Admin::AdminUsersController do
           end
 
           it "should create a new user" do
-            lambda do
+            expect do
               do_create
-            end.should change(AdminUser, :count).by(1)
+            end.to change(AdminUser, :count).by(1)
           end
 
           it "should redirect to the index" do
             do_create
-            response.should redirect_to(:action => :index)
+            expect(response).to redirect_to(:action => :index)
           end
 
           it "create a new user with associated departments" do
@@ -130,8 +130,8 @@ describe Admin::AdminUsersController do
             department2 = FactoryGirl.create(:department)
             do_create(:department_ids => { "0" => department1.id.to_s, "1" => department2.id.to_s})
             user = AdminUser.find_by_email('admin@example.com')
-            user.departments.size.should == 2
-            user.departments.should include(department1, department2)
+            expect(user.departments.size).to eq(2)
+            expect(user.departments).to include(department1, department2)
           end
         end
 
@@ -143,14 +143,14 @@ describe Admin::AdminUsersController do
           end
 
           it "should not create a new user" do
-            lambda do
+            expect {
               do_create
-            end.should_not change(AdminUser, :count)
+            }.not_to change(AdminUser, :count)
           end
 
           it "should re-render the new template" do
             do_create
-            response.should render_template('new')
+            expect(response).to render_template('new')
           end
         end
       end
@@ -165,13 +165,13 @@ describe Admin::AdminUsersController do
 
         it "should be successful" do
           do_get
-          response.should be_success
+          expect(response).to be_success
         end
 
         it "should assign the user" do
           do_get
-          assigns[:user].should be_a(AdminUser)
-          assigns[:user].should == @user
+          expect(assigns[:user]).to be_a(AdminUser)
+          expect(assigns[:user]).to eq @user
         end
       end
 
@@ -192,22 +192,22 @@ describe Admin::AdminUsersController do
           it "should update the user and redirect to the index" do
             do_update
             @user.reload
-            @user.email.should == "another_admin@example.com"
-            response.should redirect_to(:action => :index)
+            expect(@user.email).to eq("another_admin@example.com")
+            expect(response).to redirect_to(:action => :index)
           end
 
           it "should reset the failed login count to 0" do
             do_update
             @user.reload
-            @user.failed_login_count.should == 0
+            expect(@user.failed_login_count).to eq(0)
           end
 
           it "update a user with associated departments" do
             department3 = FactoryGirl.create(:department)
             do_update(:department_ids => {'0' => @department2.id.to_s, '1' => department3.id.to_s})
             @user.reload
-            @user.departments.size.should == 2
-            @user.departments.should include(@department2, department3)
+            expect(@user.departments.size).to eq(2)
+            expect(@user.departments).to include(@department2, department3)
           end
         end
 
@@ -221,8 +221,8 @@ describe Admin::AdminUsersController do
           it "should not update the user" do
             do_update
             @user.reload
-            @user.email.should == "admin@example.com"
-            response.should render_template('edit')
+            expect(@user.email).to eq("admin@example.com")
+            expect(response).to render_template('edit')
           end
         end
       end
@@ -230,18 +230,18 @@ describe Admin::AdminUsersController do
       describe "DELETE 'destroy'" do
         it "successful delete" do
           @other_user = FactoryGirl.create(:admin_user, :email => 'admin@example.com')
-          lambda do
+          expect do
             delete :destroy, :id => @other_user.id
-          end.should change(AdminUser, :count).by(-1)
-          response.should redirect_to(:action => :index)
+          end.to change(AdminUser, :count).by(-1)
+          expect(response).to redirect_to(:action => :index)
         end
 
         it "unsuccessful delete" do
-          lambda do
+          expect {
             delete :destroy, :id => @user.id
-          end.should_not change(AdminUser, :count)
-          response.should redirect_to(:action => :index)
-          flash[:error].should == "You are not allowed to delete yourself!"
+          }.not_to change(AdminUser, :count)
+          expect(response).to redirect_to(:action => :index)
+          expect(flash[:error]).to eq "You are not allowed to delete yourself!"
         end
       end
     end

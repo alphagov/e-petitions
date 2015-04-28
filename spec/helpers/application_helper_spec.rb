@@ -7,11 +7,11 @@ describe ApplicationHelper do
 
   describe "http prefix" do
     it "defaults to http:// if no ssl" do
-      http_prefix.should == 'http://'
+      expect(http_prefix).to eq('http://')
     end
     it "switches to https:// if ssl is on" do
-      request.stub(:ssl? => true)
-      http_prefix.should == 'https://'
+      allow(request).to receive_messages(:ssl? => true)
+      expect(http_prefix).to eq('https://')
     end
   end
 end
