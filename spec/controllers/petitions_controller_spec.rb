@@ -66,7 +66,7 @@ describe PetitionsController do
           do_post
           petition = Petition.find_by_title!('Save the planet')
           expect(petition.creator_signature).not_to be_nil
-          expect(response).to redirect_to(thank_you_petition_path(petition))
+          expect(response).to redirect_to(thank_you_petition_path(petition, secure: true))
         end
 
         it "should successfully create a new petition and a signature even when email has white space either end" do
@@ -236,7 +236,7 @@ describe PetitionsController do
 
     it "sorting by name sorts alphabetically" do
       expect(SearchOrder).to receive(:sort_order).with(hash_including(:sort => 'title'), anything).and_return(['foo', 'asc'])
-      expect(visible).to recieve(:order).with("foo asc")
+      expect(visible).to receive(:order).with("foo asc")
       get :index, :order => 'asc', :sort => 'title'
     end
   end
@@ -261,7 +261,7 @@ describe PetitionsController do
     end
 
     it "finds the petition" do
-      expect(Petition.visible).to receive(:find).with(petition.id)
+      expect(Petition.visible).to receive(:find).with(petition.id.to_s)
       post :resend_confirmation_email, :id => petition.id, :confirmation_email => email
     end
 

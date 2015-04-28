@@ -112,7 +112,7 @@ describe Admin::ProfileController do
 
           it "should have password as invalid when confirmation is different" do
             do_put('Letmein1!', 'aB1!efgh', 'aB1defgh')
-            expect(assigns[:current_user].errors[:password]).not_to be_blank
+            expect(assigns[:current_user].errors[:password_confirmation]).not_to be_blank
             @user.reload
             expect(@user.valid_password?('Letmein1!')).to be_truthy
           end

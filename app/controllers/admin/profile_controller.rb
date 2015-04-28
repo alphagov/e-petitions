@@ -1,13 +1,13 @@
 class Admin::ProfileController < Admin::AdminController
   skip_before_filter :require_admin_and_check_for_password_change
   before_filter :require_admin
-  
+
   def edit
 
   end
-  
+
   def update
-    # reset attributes that could be forcing a user to change their password 
+    # reset attributes that could be forcing a user to change their password
     current_user.password_changed_at = Time.zone.now
     current_user.force_password_reset = false
 

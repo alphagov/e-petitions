@@ -42,6 +42,7 @@ describe Admin::ReportsController do
 
           before do
             allow(Petition).to receive(:for_departments).with(departments).and_return(all_petitions)
+            allow(Department).to receive(:by_petition_count).and_return []
           end
 
           context "viewing as a department moderator" do
@@ -58,7 +59,7 @@ describe Admin::ReportsController do
           context "viewing as someone who can see all trending petitions" do
             before(:each) do
               allow(controller.current_user).to receive_messages(:can_see_all_trending_petitions? => true)
-              allow(Department).to receive_messages(:all => departments)
+              allow(Department).to receive(:all).and_return departments
             end
 
             it "assigns number_of_days_to_trend to the view" do

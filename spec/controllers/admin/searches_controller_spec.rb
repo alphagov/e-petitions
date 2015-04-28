@@ -59,26 +59,28 @@ describe Admin::SearchesController do
           end
 
           context "where the petition is editable by us" do
-            let(:options) { { :editable_by? => true } }
+            before do
+              allow(petition).to receive(:editable_by?).and_return true
+            end
+
             it "redirects to the edit page" do
-              allow(petition).to receive(options.merge(:awaiting_moderation? => true))
+              allow(petition).to receive(:awaiting_moderation?).and_return true
               get :result, :search => { :query => '123' }
               expect(response).to redirect_to(edit_admin_petition_path(petition))
             end
 
             context "and is open" do
               before do
-                options.merge!(:awaiting_moderation? => false)
+                allow(petition).to receive(:awaiting_moderation?).and_return false
               end
 
               it "redirects to the internal response page if we can't edit responses" do
-                allow(petition).to receive(options)
                 get :result, :search => { :query => '123' }
                 expect(response).to redirect_to(edit_internal_response_admin_petition_path(petition))
               end
 
               it "redirects to the edit response page if we can edit responses" do
-                allow(petition).to receive(options.merge(:response_editable_by? => true))
+                allow(petition).to receive(:response_editable_by?).and_return true
                 get :result, :search => { :query => '123' }
                 expect(response).to redirect_to(edit_response_admin_petition_path(petition))
               end

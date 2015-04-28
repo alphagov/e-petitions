@@ -9,8 +9,8 @@ describe SignaturesController do
       end
 
       it "should respond to /signatures/:id/verify/:token" do
-        expect({:verify => "/petitions/#{@signature.id}/verify/#{@signature.perishable_token}"}).to
-               route_to({:controller => "signatures", :action => "verify"})
+        expect({:get => "/signatures/#{@signature.id}/verify/#{@signature.perishable_token}"}).
+          to route_to({:controller => "signatures", :action => "verify", :id => @signature.id.to_s, :token => @signature.perishable_token})
         expect(verify_signature_path(@signature, @signature.perishable_token)).to eq("/signatures/#{@signature.id}/verify/#{@signature.perishable_token}")
       end
 
@@ -79,7 +79,7 @@ describe SignaturesController do
 
     before do
       allow(Petition).to receive_messages(:visible => Petition)
-      allow(Petition).to receive(:find).with(1).and_return(petition)
+      allow(Petition).to receive(:find).with('1').and_return(petition)
       allow(Signature).to receive_messages(:new => signature)
     end
 

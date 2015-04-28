@@ -40,6 +40,10 @@ class AdminUser < ActiveRecord::Base
     config.merge_validates_confirmation_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
   end
 
+  attr_accessible :password, :password_confirmation, :first_name,
+                  :last_name, :role, :email, :force_password_reset,
+                  :account_disabled
+
   # = Relationships =
   has_and_belongs_to_many :departments
 
