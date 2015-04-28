@@ -20,8 +20,8 @@ class Department < ActiveRecord::Base
   validates_uniqueness_of :name, :case_sensitive => false
 
   # = Finders =
-  scope :by_name, lambda {{ :order => 'name' }}
-  scope :by_petition_count, lambda { joins(:petitions).order("count('petitions.id') DESC").group('departments.id') }
+  scope :by_name, -> { order(:name) }
+  scope :by_petition_count, -> { joins(:petitions).order("count('petitions.id') DESC").group('departments.id') }
 
   # = Methods =
   def count_petitions_for_state(state)

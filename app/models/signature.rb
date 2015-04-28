@@ -76,13 +76,13 @@ class Signature < ActiveRecord::Base
   validates_presence_of :address, :town, :if => :new_record?, :message => "%{attribute} must be completed"
 
   # = Finders =
-  scope :validated, lambda {{ :conditions => ['state = ?', VALIDATED_STATE] }}
-  scope :notify_by_email, lambda {{ :conditions => ['notify_by_email = ?', true] }}
-  scope :need_emailing, lambda { |job_datetime|
+  scope :validated, -> { where(state: VALIDATED_STATE) }
+  scope :notify_by_email, -> { where(notify_by_email: true) }
+  scope :need_emailing, ->(job_datetime) {
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
-  scope :for_email, lambda { |email| where(:encrypted_email => Signature.encrypt_email(email)) }
-  scope :in_days, lambda {|number_of_days| validated.where("updated_at > ?", number_of_days.day.ago) }
+  scope :for_email, ->(email) { where(encrypted_email: Signature.encrypt_email(email)) }
+  scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
 
   # = Methods =
   attr_accessor :humanity
