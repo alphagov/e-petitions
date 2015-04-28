@@ -119,7 +119,7 @@ class Petition < ActiveRecord::Base
     logger_for_mp_threshold.info('Started')
     Petition.eligible_for_get_an_mp_email.each do |petition|
       logger_for_mp_threshold.info("Email sent: #{petition.creator_signature.email} for #{petition.title}")
-      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver
+      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver_now
       petition.update_attribute(:get_an_mp_email_sent_at, Time.zone.now)
     end
     logger_for_mp_threshold.info('Finished')

@@ -82,6 +82,6 @@ class PetitionsController < ApplicationController
   protected
 
   def send_email_to_verify_petition_creator(petition)
-    PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver
+    PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
   end
 end

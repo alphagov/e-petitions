@@ -13,7 +13,7 @@ class EmailThresholdResponseJob < Struct.new(:petition_id, :email_requested_at, 
     i = 1
     petition.need_emailing.find_each do |signature|
       begin
-        mailer.notify_signer_of_threshold_response(petition, signature).deliver
+        mailer.notify_signer_of_threshold_response(petition, signature).deliver_now
         logger(petition_id).info("Email #{i} to #{signature.email} sent")
         signature.update_attribute(:last_emailed_at, petition.email_requested_at)
       rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, Net::SMTPError => e
