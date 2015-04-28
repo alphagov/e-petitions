@@ -1,0 +1,11 @@
+language: ruby
+cache: bundler
+rvm:
+  - 2.2.2
+before_install:
+  - gem install bundler
+before_script:
+  - bundle install
+  - cp config/database.yml.travis config/database.yml
+  - mysql -e 'create database epets_test;'
+script: bundle exec rake

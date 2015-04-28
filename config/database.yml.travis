@@ -1,0 +1,9 @@
+test: &TEST
+  adapter: mysql2
+  database: epets_test
+  encoding: utf8
+  username: root
+  password:
+
+cucumber:
+  <<: *TEST
