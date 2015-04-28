@@ -74,7 +74,7 @@ describe Signature do
     it { is_expected.to validate_presence_of(:address).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:town).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:country).with_message(/must be completed/) }
-    it { is_expected.to ensure_length_of(:name).is_at_most(255) }
+    it { is_expected.to validate_length_of(:name).is_at_most(255) }
 
     it "should validate format of email" do
       s = FactoryGirl.build(:signature, :email => 'joe@example.com')
