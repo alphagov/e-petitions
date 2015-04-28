@@ -40,7 +40,7 @@ group :test do
   gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
   gem 'capybara'
-  gem 'selenium-webdriver'
+  gem 'poltergeist'
   gem 'factory_girl_rails'
   gem 'be_valid_asset', :require => false
   gem 'email_spec'
