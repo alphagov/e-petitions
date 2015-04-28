@@ -88,6 +88,9 @@ GEM
     database_cleaner (1.4.1)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
+    delayed_job_active_record (4.0.3)
+      activerecord (>= 3.0, < 5.0)
+      delayed_job (>= 3.0, < 4.1)
     diff-lcs (1.2.5)
     dynamic_form (1.1.4)
     email_spec (1.6.0)
@@ -276,7 +279,7 @@ DEPENDENCIES
   chronic
   cucumber-rails
   database_cleaner
-  delayed_job
+  delayed_job_active_record
   dynamic_form
   email_spec
   evergreen

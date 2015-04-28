@@ -34,7 +34,7 @@ describe SignatureConfirmer do
   end
 
   context "will send email" do
-    before(:each) { expect(deliverer).to receive(:deliver) }
+    before(:each) { expect(deliverer).to receive(:deliver_now) }
 
     context "email has never signed" do
       it "sends 'no signature for petition'" do

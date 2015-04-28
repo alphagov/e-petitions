@@ -345,7 +345,7 @@ describe Petition do
   end
 
   describe "email_all_who_passed_finding_mp_threshold" do
-    let(:deliverer) { double(:deliver => true) }
+    let(:deliverer) { double(:deliver_now => true) }
     let(:petition) { FactoryGirl.create(:open_petition) }
 
     before do

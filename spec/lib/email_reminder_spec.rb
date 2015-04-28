@@ -35,13 +35,13 @@ describe EmailReminder do
 
     it "should email out details of 1 new petition and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("5 July 2011")) # tuesday
-      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 1).and_return(double('email', :deliver => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 1).and_return(double('email', :deliver_now => nil))
       EmailReminder.admin_email_reminder
     end
 
     it "should email out details of 2 new petitions and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("4 July 2011")) # monday
-      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 2).and_return(double('email', :deliver => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 2).and_return(double('email', :deliver_now => nil))
       EmailReminder.admin_email_reminder
     end
   end
@@ -73,7 +73,7 @@ describe EmailReminder do
     end
 
     it "should email out details of three petitions and set the notified_by_email flag to true" do
-      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p4, @p2, @p1]).and_return(double('email', :deliver => nil))
+      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p4, @p2, @p1]).and_return(double('email', :deliver_now => nil))
       EmailReminder.threshold_email_reminder
       [@p4, @p2, @p1].each do |petition|
         petition.reload
@@ -120,7 +120,7 @@ describe EmailReminder do
       let(:mail) { double }
       before do
         allow(PetitionMailer).to receive_messages(:special_resend_of_email_confirmation_for_signer => mail)
-        allow(mail).to receive(:deliver).and_raise Net::SMTPSyntaxError
+        allow(mail).to receive(:deliver_now).and_raise Net::SMTPSyntaxError
       end
 
       it "continues" do
