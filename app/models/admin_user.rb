@@ -55,7 +55,7 @@ class AdminUser < ActiveRecord::Base
   validates_inclusion_of :role, :in => ROLES, :message => "'%{value}' is invalid"
 
   # = Finders =
-  scope :by_name, :order => 'last_name, first_name'
+  scope :by_name, lambda {{ :order => 'last_name, first_name' }}
   scope :by_role, lambda { |role| { :conditions => ['role = ?', role] }}
 
   # = Methods =

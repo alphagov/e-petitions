@@ -20,7 +20,7 @@ class SystemSetting < ActiveRecord::Base
   validates_format_of :key, :with => /\A[a-z0-9_]+\z/i
 
   # = Finders =
-  scope :by_key, :order => '`key`'
+  scope :by_key, lambda {{ :order => '`key`' }}
 
   # = Methods =
   def to_param

@@ -81,9 +81,9 @@ class Petition < ActiveRecord::Base
       {:conditions => ['state = ?', state]}
     end
   }
-  scope :for_departments, lambda {|departments| {:conditions => ['department_id in (?)', departments.map(&:id)]}}
-  scope :visible, :conditions => ['state in (?)', VISIBLE_STATES]
-  scope :moderated, :conditions => ['state in (?)', MODERATED_STATES]
+  scope :for_departments, lambda { |departments| { :conditions => ['department_id in (?)', departments.map(&:id)] }}
+  scope :visible, lambda {{ :conditions => ['state in (?)', VISIBLE_STATES] }}
+  scope :moderated, lambda {{ :conditions => ['state in (?)', MODERATED_STATES] }}
   scope :trending, lambda { |number_of_days|
                     joins(:signatures).
                     where("signatures.state" => "validated").
@@ -92,14 +92,14 @@ class Petition < ActiveRecord::Base
                     group('petitions.id').
                     limit(10)
                   }
-  scope :last_hour_trending, joins(:signatures).
+  scope :last_hour_trending, lambda { joins(:signatures).
                              select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
                              where("signatures.state" => "validated").
                              where("signatures.updated_at > ?", 1.hour.ago).
                              where("petitions.id <> ?", 41492).
                              order("signatures_in_last_hour DESC").
                              group('petitions.id').
-                             limit(12)
+                             limit(12) }
 
   scope :eligible_for_get_an_mp_email, lambda {
     where('state = ? and closed_at >= ?', OPEN_STATE, Time.zone.now).

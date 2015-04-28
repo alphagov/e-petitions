@@ -76,8 +76,8 @@ class Signature < ActiveRecord::Base
   validates_presence_of :address, :town, :if => :new_record?, :message => "%{attribute} must be completed"
 
   # = Finders =
-  scope :validated, :conditions => ['state = ?', VALIDATED_STATE]
-  scope :notify_by_email, :conditions => ['notify_by_email = ?', true]
+  scope :validated, lambda {{ :conditions => ['state = ?', VALIDATED_STATE] }}
+  scope :notify_by_email, lambda {{ :conditions => ['notify_by_email = ?', true] }}
   scope :need_emailing, lambda { |job_datetime|
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
