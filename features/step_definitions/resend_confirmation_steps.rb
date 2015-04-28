@@ -37,7 +37,7 @@ Given /^Sam has signed the petition "([^"]*)"$/ do |petition_title|
 end
 
 Then /^I should receive an email with two confirmation links$/ do
-  signatures = Signature.find_all_by_email("suzie@example.com")
+  signatures = Signature.for_email("suzie@example.com")
   expect(signatures.count).to eq 2
   open_email("suzie@example.com")
   expect(current_email.default_part_body.to_s).to match(signatures.first.perishable_token)
@@ -45,7 +45,7 @@ Then /^I should receive an email with two confirmation links$/ do
 end
 
 Then /^I should receive an email telling me one has signed, with the second confirmation link$/ do
-  signatures = Signature.find_all_by_email("suzie@example.com")
+  signatures = Signature.for_email("suzie@example.com")
   expect(signatures.count).to eq 2
   open_email("suzie@example.com", :with_text => 'already been confirmed')
   expect(current_email.default_part_body.to_s).to match(signatures.second.perishable_token)
