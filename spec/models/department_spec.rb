@@ -19,7 +19,7 @@ describe Department do
     it { should validate_presence_of(:name) }
 
     it "should validate uniqueness of name" do
-      Factory.create(:department)
+      FactoryGirl.create(:department)
       should validate_uniqueness_of(:name).case_insensitive
     end
   end

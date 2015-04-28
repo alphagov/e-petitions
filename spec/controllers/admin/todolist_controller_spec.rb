@@ -15,7 +15,7 @@ describe Admin::TodolistController do
   
   context "logged in as admin user but need to reset password" do
     before :each do
-      @user = Factory.create(:admin_user, :force_password_reset => true)
+      @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
       login_as(@user)
     end
     
@@ -42,7 +42,7 @@ describe Admin::TodolistController do
     
     describe "logged in as sysadmin user" do
       before :each do
-        @user = Factory.create(:sysadmin_user)
+        @user = FactoryGirl.create(:sysadmin_user)
         login_as(@user)
       end
       
@@ -72,7 +72,7 @@ describe Admin::TodolistController do
     
     describe "logged in as threshold user" do
       before :each do
-        @user = Factory.create(:threshold_user)
+        @user = FactoryGirl.create(:threshold_user)
         login_as(@user)
       end
       
@@ -93,7 +93,7 @@ describe Admin::TodolistController do
 
     describe "logged in as admin user" do
       before :each do
-        @user = Factory.create(:admin_user)
+        @user = FactoryGirl.create(:admin_user)
         @user.departments << @treasury << @dfid
         login_as(@user)
       end

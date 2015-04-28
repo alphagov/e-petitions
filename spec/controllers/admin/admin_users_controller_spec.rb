@@ -23,7 +23,7 @@ describe Admin::AdminUsersController do
   describe "logged in as admin user" do
     with_ssl do
       before :each do
-        @user = Factory.create(:admin_user)
+        @user = FactoryGirl.create(:admin_user)
         login_as(@user)
       end
 
@@ -39,7 +39,7 @@ describe Admin::AdminUsersController do
   context "logged in as sysadmin but need to reset password" do
     with_ssl do
       before :each do
-        @user = Factory.create(:sysadmin_user, :force_password_reset => true)
+        @user = FactoryGirl.create(:sysadmin_user, :force_password_reset => true)
         login_as(@user)
       end
   
@@ -53,7 +53,7 @@ describe Admin::AdminUsersController do
 
   describe "logged in as sysadmin user" do
     before :each do
-      @user = Factory.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin')
+      @user = FactoryGirl.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin')
       login_as(@user)
     end
     
@@ -157,7 +157,7 @@ describe Admin::AdminUsersController do
 
       describe "GET 'edit'" do
         before :each do
-          @user = Factory.create(:admin_user)
+          @user = FactoryGirl.create(:admin_user)
         end
         def do_get
           get :edit, :id => @user.id
@@ -179,7 +179,7 @@ describe Admin::AdminUsersController do
         before :each do
           @department1 = Factory(:department)
           @department2 = Factory(:department)
-          @user = Factory.create(:admin_user, :email => "admin@example.com", :departments => [@department1, @department2], :failed_login_count => 5)
+          @user = FactoryGirl.create(:admin_user, :email => "admin@example.com", :departments => [@department1, @department2], :failed_login_count => 5)
         end
 
         describe "with valid params" do

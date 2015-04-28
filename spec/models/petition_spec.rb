@@ -53,24 +53,24 @@ describe Petition do
     it { should validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     it "should validate the length of :title to within 150 characters" do
-      Factory.build(:petition, :title => 'x' * 150).should be_valid
-      Factory.build(:petition, :title => 'x' * 151).should_not be_valid
+      FactoryGirl.build(:petition, :title => 'x' * 150).should be_valid
+      FactoryGirl.build(:petition, :title => 'x' * 151).should_not be_valid
     end
 
     it "should validate the length of :description to within 1000 characters" do
-      Factory.build(:petition, :description => 'x' * 1000).should be_valid
-      Factory.build(:petition, :description => 'x' * 1001).should_not be_valid
+      FactoryGirl.build(:petition, :description => 'x' * 1000).should be_valid
+      FactoryGirl.build(:petition, :description => 'x' * 1001).should_not be_valid
     end
 
     it "should not allow blank or unknown state" do
-      p = Factory.build(:petition, :state => '')
+      p = FactoryGirl.build(:petition, :state => '')
       p.errors_on(:state).should_not be_blank
       p.state = 'unknown'
       p.errors_on(:state).should_not be_blank
     end
 
     it "should allow known states" do
-      p = Factory.build(:petition)
+      p = FactoryGirl.build(:petition)
       %w(pending validated open rejected hidden).each do |state|
         p.state = state
         p.errors_on(:state).should be_blank
@@ -78,7 +78,7 @@ describe Petition do
     end
 
     context "when state is open" do
-      let(:petition) { Factory.build(:open_petition, :open_at => nil, :closed_at => nil) }
+      let(:petition) { FactoryGirl.build(:open_petition, :open_at => nil, :closed_at => nil) }
 
       it "should check petition is invalid if no open_at date" do
         petition.should_not be_valid
@@ -98,7 +98,7 @@ describe Petition do
     end
 
     context "when state is rejected" do
-      let(:petition) { Factory.build(:petition, :state => Petition::REJECTED_STATE) }
+      let(:petition) { FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE) }
 
       it "should check petition is invalid if no rejection code" do
         petition.should_not be_valid
@@ -112,7 +112,7 @@ describe Petition do
     end
 
     context "response" do
-      let(:petition) { Factory.build(:petition, :response => 'Hello', :email_signees => false) }
+      let(:petition) { FactoryGirl.build(:petition, :response => 'Hello', :email_signees => false) }
 
       it "should check petition is valid if there is a response when email_signees is true" do
         petition.should be_valid
@@ -403,50 +403,50 @@ describe Petition do
 
   describe "open?" do
     it "should be open when state is open" do
-      Factory.build(:petition, :state => Petition::OPEN_STATE).open?.should  be_true
+      FactoryGirl.build(:petition, :state => Petition::OPEN_STATE).open?.should  be_true
     end
 
     it "should be not be open when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
-        Factory.build(:petition, :state => state).open?.should be_false
+        FactoryGirl.build(:petition, :state => state).open?.should be_false
       end
     end
   end
 
   describe "rejected?" do
     it "should be rejected when state is rejected" do
-      Factory.build(:petition, :state => Petition::REJECTED_STATE).rejected?.should be_true
+      FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE).rejected?.should be_true
     end
 
     it "should be not be rejected when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
-        Factory.build(:petition, :state => state).rejected?.should be_false
+        FactoryGirl.build(:petition, :state => state).rejected?.should be_false
       end
     end
   end
 
   describe "hidden?" do
     it "should be hidden when state is hidden" do
-      Factory.build(:petition, :state => Petition::HIDDEN_STATE).hidden?.should be_true
+      FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?.should be_true
     end
 
     it "should be not be hidden when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
-        Factory.build(:petition, :state => state).hidden?.should be_false
+        FactoryGirl.build(:petition, :state => state).hidden?.should be_false
       end
     end
   end
 
   describe "rejection_reason" do
     it "should give rejection reason from json file" do
-      petition = Factory.build(:rejected_petition, :rejection_code => 'duplicate')
+      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       petition.rejection_reason.should == 'Duplicate of an existing e-petition'
     end
   end
 
   describe "rejection_description" do
     it "should give rejection description from json file" do
-      petition = Factory.build(:rejected_petition, :rejection_code => 'duplicate')
+      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       petition.rejection_description.should == '<p>There is already an e-petition about this issue.</p>'
     end
   end
@@ -471,7 +471,7 @@ describe Petition do
   end
 
   describe "counting validated signatures" do
-    let(:petition) { Factory.build(:petition) }
+    let(:petition) { FactoryGirl.build(:petition) }
 
     it "should only count validated signtatures" do
       petition.signatures.should_receive(:validated).and_return(double(:valid_signatures, :count => 123))
@@ -492,7 +492,7 @@ describe Petition do
   end
 
   describe "permissions" do
-    let(:petition) { Factory.build(:petition) }
+    let(:petition) { FactoryGirl.build(:petition) }
     let(:user) { double(:is_a_threshold? => false, :is_a_sysadmin? => false) }
 
     it "is editable by moderators in the same department" do

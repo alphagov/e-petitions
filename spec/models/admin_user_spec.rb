@@ -47,42 +47,42 @@ describe AdminUser do
     it { should_not allow_value("jimbo").for(:email) }    
     
     it "should validate uniqueness of email" do
-      Factory.create(:admin_user, :role => 'sysadmin')
+      FactoryGirl.create(:admin_user, :role => 'sysadmin')
       should validate_uniqueness_of(:email)
       should_not validate_uniqueness_of(:email).case_insensitive
     end
     
     it "should only allow passwords with a digit, lower and upper case alpha and a special char" do
       ['Letmein1!', 'Letmein1_', '1Ab*aaaa'].each do |email|
-        u = Factory.build(:admin_user, :password => email, :password_confirmation => email)
+        u = FactoryGirl.build(:admin_user, :password => email, :password_confirmation => email)
         u.should be_valid
       end
     end
     
     it "should not allow passwords without a digit, lower and upper case alpha and a special char" do
       ['Letmein1', 'hell$0123', '^%ttttFFFFF', 'KJDL_3444'].each do |email|
-        u = Factory.build(:admin_user, :password => email, :password_confirmation => email)
+        u = FactoryGirl.build(:admin_user, :password => email, :password_confirmation => email)
         u.should_not be_valid
       end
     end
     
     it "should allow sysadmin role" do
-      u = Factory.build(:admin_user, :role => 'sysadmin')
+      u = FactoryGirl.build(:admin_user, :role => 'sysadmin')
       u.should be_valid
     end
     
     it "should allow threshold role" do
-      u = Factory.build(:admin_user, :role => 'threshold')
+      u = FactoryGirl.build(:admin_user, :role => 'threshold')
       u.should be_valid
     end
 
     it "should allow admin role" do
-      u = Factory.build(:admin_user, :role => 'admin')
+      u = FactoryGirl.build(:admin_user, :role => 'admin')
       u.should be_valid
     end
     
     it "should disallow other roles" do
-      u = Factory.build(:admin_user, :role => 'unheard_of')
+      u = FactoryGirl.build(:admin_user, :role => 'unheard_of')
       u.should_not be_valid
     end
   end

@@ -15,7 +15,7 @@ require 'spec_helper'
 describe SystemSetting do
   describe "validations" do
     before :each do
-      @s = Factory.build(:system_setting)
+      @s = FactoryGirl.build(:system_setting)
     end
 
     it "should be valid" do
@@ -41,7 +41,7 @@ describe SystemSetting do
       end
 
       it "must be unique" do
-        s2 = Factory.create(:system_setting, {:key => 'testkey'})
+        s2 = FactoryGirl.create(:system_setting, {:key => 'testkey'})
         @s.key = 'testkey'
         @s.should_not be_valid
         @s.errors[:key].should_not be_blank
@@ -78,15 +78,15 @@ describe SystemSetting do
 
   describe "named_scopes" do
     it "by_key should order by key" do
-      s1 = Factory.create(:system_setting, :key => 'b_key')
-      s2 = Factory.create(:system_setting, :key => 'a_key')
-      s3 = Factory.create(:system_setting, :key => 'c_key')
+      s1 = FactoryGirl.create(:system_setting, :key => 'b_key')
+      s2 = FactoryGirl.create(:system_setting, :key => 'a_key')
+      s3 = FactoryGirl.create(:system_setting, :key => 'c_key')
       SystemSetting.by_key.should == [s2, s1, s3]
     end
   end
 
   it "should return the key for to_param" do
-    s = Factory.create(:system_setting, :key => 'test_key')
+    s = FactoryGirl.create(:system_setting, :key => 'test_key')
     s.to_param.should == 'test_key'
   end
 
@@ -124,19 +124,19 @@ describe SystemSetting do
 
     context "when a system setting with the specified key already exists" do
       it "does not change the value of the existing one" do
-        Factory.create(:system_setting, :key => "existing_key", :value => "the existing value")
+        FactoryGirl.create(:system_setting, :key => "existing_key", :value => "the existing value")
         SystemSetting.seed("existing_key", :initial_value => "the new value")
         SystemSetting.find_by_key("existing_key").value.should == "the existing value"
       end
 
       it "changes the description of the existing one" do
-        Factory.create(:system_setting, :key => "existing_key", :description => "the existing description")
+        FactoryGirl.create(:system_setting, :key => "existing_key", :description => "the existing description")
         SystemSetting.seed("existing_key", :description => "the new description")
         SystemSetting.find_by_key("existing_key").description.should == "the new description"
       end
 
       it "does not blank the description of the existing one if a new one is not specified" do
-        Factory.create(:system_setting, :key => "existing_key", :description => "the existing description")
+        FactoryGirl.create(:system_setting, :key => "existing_key", :description => "the existing description")
         SystemSetting.seed("existing_key")
         SystemSetting.find_by_key("existing_key").description.should == "the existing description"
       end
@@ -165,7 +165,7 @@ describe SystemSetting do
     end
 
     it "is the value of the system setting with that key" do
-      Factory.create(:system_setting, :key => "the_key", :value => "the value")
+      FactoryGirl.create(:system_setting, :key => "the_key", :value => "the value")
       SystemSetting.value_of_key("the_key").should == "the value"
     end
   end

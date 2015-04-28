@@ -40,7 +40,7 @@ describe Admin::PetitionsController do
 
   context "logged in as admin user but need to reset password" do
     before :each do
-      @user = Factory.create(:admin_user, :force_password_reset => true)
+      @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
       login_as(@user)
     end
 
@@ -55,7 +55,7 @@ describe Admin::PetitionsController do
 
   context "logged in as admin" do
     before :each do
-      @user = Factory.create(:admin_user)
+      @user = FactoryGirl.create(:admin_user)
       @treasury = Factory(:department, :name => 'Treasury')
       @user.departments << @treasury
       login_as(@user)
@@ -87,7 +87,7 @@ describe Admin::PetitionsController do
 
   describe "logged in as threshold user" do
     before :each do
-      @user = Factory.create(:threshold_user)
+      @user = FactoryGirl.create(:threshold_user)
       login_as(@user)
 
       @p1 = Factory(:open_petition)
@@ -199,8 +199,8 @@ describe Admin::PetitionsController do
 
   describe "logged in as sysadmin" do
     before :each do
-      @department = Factory.create(:department)
-      @user = Factory.create(:sysadmin_user)
+      @department = FactoryGirl.create(:department)
+      @user = FactoryGirl.create(:sysadmin_user)
       login_as(@user)
     end
 

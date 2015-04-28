@@ -30,8 +30,8 @@ describe DepartmentsController do
     end
 
     it "should assign @departments" do
-      d1 = Factory.create(:department)
-      d2 = Factory.create(:department)
+      d1 = FactoryGirl.create(:department)
+      d2 = FactoryGirl.create(:department)
       get :info
       assigns[:departments].should == [d1, d2]
     end

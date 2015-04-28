@@ -23,8 +23,8 @@ describe PetitionsController do
       end
 
       it "should assign departments" do
-        department1 = Factory.create(:department, :name => 'DFID')
-        department2 = Factory.create(:department, :name => 'Treasury')
+        department1 = FactoryGirl.create(:department, :name => 'DFID')
+        department2 = FactoryGirl.create(:department, :name => 'Treasury')
 
         get :new
 

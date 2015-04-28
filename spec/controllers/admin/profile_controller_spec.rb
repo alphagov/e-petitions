@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Admin::ProfileController do
   before :each do
-    @user = Factory.create(:sysadmin_user, :password => 'Letmein1!', 
+    @user = FactoryGirl.create(:sysadmin_user, :password => 'Letmein1!', 
                            :password_confirmation => 'Letmein1!', :force_password_reset => true)
   end
 

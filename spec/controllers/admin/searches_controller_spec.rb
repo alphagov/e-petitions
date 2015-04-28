@@ -16,7 +16,7 @@ describe Admin::SearchesController do
   describe "logged in as admin user" do
     with_ssl do
       before :each do
-        @user = Factory.create(:admin_user)
+        @user = FactoryGirl.create(:admin_user)
         login_as(@user)
       end
 
