@@ -1,7 +1,7 @@
 <div id="captcha_widget">
   <p>Please type in the letters and numbers you see in the picture below.</p>
 
-  <% random_string = ActiveSupport::SecureRandom.hex(10) %>
+  <% random_string = SecureRandom.hex(10) %>
 
   <%= captcha_image random_string %>
   <br />
