@@ -1,6 +1,6 @@
 Then /^I should see a recaptcha challenge$/ do
   xpath = "//script[contains(@src, 'https://image.captchas.net/')]"
-  page.should have_xpath(xpath)
+  expect(page).to have_xpath(xpath)
 end
 
 When /^I fill in a valid captcha$/ do

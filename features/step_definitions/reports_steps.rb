@@ -26,8 +26,8 @@ end
 Then /^I should see trending petitions for all my departments for the last (\d+) (hours|days)$/ do |time_period, hours_or_days|
   @user.departments.each do |department|
     (11..15).each do |petition_number|
-      page.should have_css("tr.trending_petition td.title", :text => "#{department.name} Petition ##{petition_number}")
-      page.should have_css("tr.trending_petition td.count", :text => "#{petition_number+1}")
+      expect(page).to have_css("tr.trending_petition td.title", :text => "#{department.name} Petition ##{petition_number}")
+      expect(page).to have_css("tr.trending_petition td.count", :text => "#{petition_number+1}")
     end
   end
 end
@@ -48,5 +48,5 @@ Then /^I choose to view (\d+) days of trends$/ do |arg1|
 end
 
 Then /^I should not see trending petitions for any other department$/ do
-  page.should_not have_content('DFID')
+  expect(page).not_to have_content('DFID')
 end

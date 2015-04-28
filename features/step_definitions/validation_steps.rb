@@ -11,11 +11,11 @@ Then /^the markup should be valid$/ do
   body.gsub!(/(src=".*?)\?\d+/, '\1')
   strip_onpaste_element_used_to_disable_pasting_emails(body)
 
-  body.should be_valid_markup
+  expect(body).to be_valid_markup
 end
 
 Then /^the feed should be valid$/ do
-  page.body.should be_valid_feed
+  expect(page.body).to be_valid_feed
 end
 
 Then /^the css files should be valid$/ do
@@ -28,6 +28,6 @@ Then /^the css files should be valid$/ do
 
   stylesheets.each do |stylesheet|
     css = File.read(File.join(Rails.root, 'public', /^[^\?]*/.match(stylesheet)[0]))
-    css.should be_valid_css
+    expect(css).to be_valid_css
   end
 end

@@ -1,5 +1,5 @@
 Then /^I cannot sign the petition$/ do
-  page.should_not have_css("a", :text => "Sign")
+  expect(page).not_to have_css("a", :text => "Sign")
 end
 
 When /^I decide to sign the petition$/ do
@@ -12,9 +12,9 @@ When /^I try to sign$/ do
 end
 
 Then /^I have not yet signed the petition$/ do
-  page.should have_content("Thank you")
+  expect(page).to have_content("Thank you")
   click_link("view")
-  page.should have_css("dd.signature_count", :text => "1")
+  expect(page).to have_css("dd.signature_count", :text => "1")
 end
 
 When /^I accept the terms and conditions$/ do
@@ -40,7 +40,7 @@ end
 def should_be_signature_count_of(count)
   Petition.update_all_signature_counts
   visit petition_path(@petition)
-  page.should have_css("dd.signature_count", :text => count.to_s)
+  expect(page).to have_css("dd.signature_count", :text => count.to_s)
 end
 
 Then /^I should have signed the petition$/ do
@@ -133,11 +133,11 @@ Then /^I should have signed the petition after confirming my email address$/ do
 end
 
 Then /^there should be a "([^"]*)" signature with email "([^"]*)" and name "([^"]*)"$/ do |state, email, name|
-  Signature.find_by_email_and_name_and_state(email, name, state).should_not be_nil
+  expect(Signature.find_by_email_and_name_and_state(email, name, state)).not_to be_nil
 end
 
 Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
-  Signature.find_by_name(name).notify_by_email?.should be_true
+  expect(Signature.find_by_name(name).notify_by_email?).to be_truthy
 end
 
 Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_title|

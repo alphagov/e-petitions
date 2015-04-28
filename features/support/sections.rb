@@ -11,7 +11,7 @@ module SectionHelpers
       "#{prefix}title"
 
     when /^single h1$/
-      page.should have_xpath("//h1", :count => 1)
+      expect(page).to have_xpath("//h1", :count => 1)
       "#{prefix}h1"
 
     when 'search results table'

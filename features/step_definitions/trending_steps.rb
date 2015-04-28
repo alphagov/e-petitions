@@ -12,20 +12,20 @@ Given /^the trending petitions cache has been updated$/ do
 end
 
 Then /^I should see the most popular petitions listed on the front page$/ do
-  page.should have_css("#trending_cta_block .petition", :count => 12)
-  page.should have_content("Cabinet Office Petition #10")
-  page.should have_content("Cabinet Office Petition #9")
-  page.should have_content("Cabinet Office Petition #8")
-  page.should have_content("Treasury Petition #10")
-  page.should have_content("Treasury Petition #9")
-  page.should have_content("Treasury Petition #8")
+  expect(page).to have_css("#trending_cta_block .petition", :count => 12)
+  expect(page).to have_content("Cabinet Office Petition #10")
+  expect(page).to have_content("Cabinet Office Petition #9")
+  expect(page).to have_content("Cabinet Office Petition #8")
+  expect(page).to have_content("Treasury Petition #10")
+  expect(page).to have_content("Treasury Petition #9")
+  expect(page).to have_content("Treasury Petition #8")
 end
 
 Then /^I should not see the trending petitions section$/ do
-  page.should_not have_css('#trending_cta_block')
+  expect(page).to_not have_css('#trending_cta_block')
 end
 
 Then /^there should be addition petitions hidden and a link to display them$/ do
-  page.should have_css('#see_more_trending_petitions')
-  page.should have_css('#additional_trending_petitions_block .petition', :count => 6)
+  expect(page).to have_css('#see_more_trending_petitions')
+  expect(page).to have_css('#additional_trending_petitions_block .petition', :count => 6)
 end

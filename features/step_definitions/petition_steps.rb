@@ -5,7 +5,7 @@ Given /^a set of petitions for the "([^"]*)"$/ do |department_name|
 end
 
 Then /^I am taken to a landing page$/ do
-  page.should have_content("Thank you")
+  expect(page).to have_content("Thank you")
 end
 
 
@@ -88,25 +88,25 @@ When /^I change the number viewed per page to (\d+)$/ do |per_page|
 end
 
 Then /^I should see petitions for all departments$/ do
-  page.should have_content("All e-petitions")
-  page.should have_css("tbody tr", :count => 6)
+  expect(page).to have_content("All e-petitions")
+  expect(page).to have_css("tbody tr", :count => 6)
 end
 
 Then /^I should see the petition details$/ do
-  page.should have_content(@petition.title)
-  page.should have_content(@petition.description)
+  expect(page).to have_content(@petition.title)
+  expect(page).to have_content(@petition.description)
 end
 
 Then /^I should see the vote count, closed and open dates$/ do
   @petition.reload
-  page.should have_css("dd.signature_count", :text => @petition.signature_count.to_s)
-  page.should have_css("dd.created_by", :text => @petition.creator_signature.name)
-  page.should have_css("dd.closing_date", :text => @petition.closed_at.to_s(:dotted_short_date))
+  expect(page).to have_css("dd.signature_count", :text => @petition.signature_count.to_s)
+  expect(page).to have_css("dd.created_by", :text => @petition.creator_signature.name)
+  expect(page).to have_css("dd.closing_date", :text => @petition.closed_at.to_s(:dotted_short_date))
 end
 
 Then /^I should see the reason for rejection$/ do
   @petition.reload
-  page.should have_content(@petition.rejection_text)
+  expect(page).to have_content(@petition.rejection_text)
 end
 
 And /^all petitions have had their signatures counted$/ do
@@ -114,27 +114,27 @@ And /^all petitions have had their signatures counted$/ do
 end
 
 Then /^I should be asked to search for a new petition$/ do
-  page.should have_css("form#pre_creation_search input#search")
+  expect(page).to have_css("form#pre_creation_search input#search")
 end
 
 Then /^I should see a list of existing petitions I can sign$/ do
-  page.should have_content(@petition.title)
+  expect(page).to have_content(@petition.title)
 end
 
 Then /^I should see a list of (\d+) petitions$/ do |petition_count|
-  page.should have_css("tbody tr", :count => petition_count)
+  expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
 Then /^I should see my search query already filled in as the title of the petition$/ do
-  page.should have_css("input[value='#{@petition.title}']")
+  expect(page).to have_css("input[value='#{@petition.title}']")
 end
 
 Then /^I can click on a link to return to the petition$/ do
-  page.should have_css("a[href*='/petitions/#{@petition.id}']")
+  expect(page).to have_css("a[href*='/petitions/#{@petition.id}']")
 end
 
 Then /^I should receive an email telling me how to get an MP on board$/ do
-  unread_emails_for(@petition.creator_signature.email).size.should == 1
+  expect(unread_emails_for(@petition.creator_signature.email).size).to eq 1
   open_email(@petition.creator_signature.email)
-  current_email.default_part_body.to_s.should include("MP")
+  expect(current_email.default_part_body.to_s).to include("MP")
 end

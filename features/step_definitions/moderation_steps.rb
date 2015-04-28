@@ -11,7 +11,7 @@ When /^I re\-assign it to a different department$/ do
 end
 
 Then /^the petition should be assigned to that department$/ do
-  @petition.reload.department.name.should == "Another department"
+  expect(@petition.reload.department.name).to eq "Another department"
 end
 
 When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
@@ -32,7 +32,7 @@ end
 
 Then /^the petition is not available for signing$/ do
   visit petition_path(@petition)
-  page.should_not have_css("a", :text => "Sign")
+  expect(page).not_to have_css("a", :text => "Sign")
 end
 
 When /^I publish the petition$/ do
@@ -65,7 +65,7 @@ end
 
 Then /^the petition should be visible on the site for signing$/ do
   visit petition_path(@petition)
-  page.should have_css("a", :text => "Sign")
+  expect(page).to have_css("a", :text => "Sign")
 end
 
 Then /^the creator should recieve a notification email$/ do
@@ -101,12 +101,12 @@ When /^I filter the list to show "([^"]*)" petitions$/ do |option|
 end
 
 Then /^I should not see any "([^"]*)" petitions$/ do |state|
-  page.should have_no_css("td.state", :text => state)
+  expect(page).to have_no_css("td.state", :text => state)
 end
 
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
   reason = RejectionReason.find_by_code("duplicate")
-  page.should have_content "already an e-petition"
+  expect(page).to have_content "already an e-petition"
   reason = RejectionReason.find_by_code("libellous")
-  page.should have_content "injunction or court order"
+  expect(page).to have_content "injunction or court order"
 end

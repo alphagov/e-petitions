@@ -1,5 +1,5 @@
 Then /^the response status should be (\d+)$/ do |code|
-  page.driver.response.status.to_i.should == code
+  expect(page.driver.response.status.to_i).to eq code
 end
 
 Then /^dump response body$/ do
@@ -7,7 +7,7 @@ Then /^dump response body$/ do
 end
 
 Then /^it should(| not) be an SSL page$/ do |should_or_not|
-  page.driver.request.scheme.should == ( should_or_not.blank? ? 'https' : 'http' )
+  expect(page.driver.request.scheme).to eq ( should_or_not.blank? ? 'https' : 'http' )
 end
 
 Then /^debugger$/ do

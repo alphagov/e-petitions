@@ -6,7 +6,7 @@ When /^I ask for my confirmation email to be resent$/ do
 end
 
 Then /^I should see an ambiguous message telling me I'll receive an email$/ do
-  page.should have_content("If you signed")
+  expect(page).to have_content("If you signed")
 end
 
 Then /^I should receive an email telling me that I've not signed this petition$/ do
@@ -38,17 +38,17 @@ end
 
 Then /^I should receive an email with two confirmation links$/ do
   signatures = Signature.find_all_by_email("suzie@example.com")
-  signatures.count.should == 2
+  expect(signatures.count).to eq 2
   open_email("suzie@example.com")
-  current_email.default_part_body.to_s.should match(signatures.first.perishable_token)
-  current_email.default_part_body.to_s.should match(signatures.second.perishable_token)
+  expect(current_email.default_part_body.to_s).to match(signatures.first.perishable_token)
+  expect(current_email.default_part_body.to_s).to match(signatures.second.perishable_token)
 end
 
 Then /^I should receive an email telling me one has signed, with the second confirmation link$/ do
   signatures = Signature.find_all_by_email("suzie@example.com")
-  signatures.count.should == 2
+  expect(signatures.count).to eq 2
   open_email("suzie@example.com", :with_text => 'already been confirmed')
-  current_email.default_part_body.to_s.should match(signatures.second.perishable_token)
+  expect(current_email.default_part_body.to_s).to match(signatures.second.perishable_token)
 end
 
 When /^I ask for my confirmation email to be resent with an invalid address$/ do
@@ -59,5 +59,5 @@ When /^I ask for my confirmation email to be resent with an invalid address$/ do
 end
 
 Then /^we don't send the resend email as the address is invalid$/ do
-  all_emails.count.should == 0
+  expect(all_emails.count).to eq 0
 end
