@@ -4,10 +4,6 @@ Before("@departments") do
   end
 end
 
-Before('@javascript') do
-  Capybara.current_driver = Capybara.javascript_driver
-end
-
 # for search testing
 # see http://opensoul.org/blog/archives/2010/04/07/cucumber-and-sunspot/
 $original_sunspot_session = Sunspot.session

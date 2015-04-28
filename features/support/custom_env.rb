@@ -1,4 +1,14 @@
-Dir["#{Rails.root}/spec/shared_support/**/*.rb"].each {|f| require f}
-
-require "email_spec"
 require 'email_spec/cucumber'
+require 'rspec/core/pending'
+require 'be_valid_asset'
+
+Capybara.javascript_driver = :selenium
+
+World(BeValidAsset)
+
+BeValidAsset::Configuration.markup_validator_host = 'validator.unboxedconsulting.com'
+BeValidAsset::Configuration.css_validator_host = 'validator.unboxedconsulting.com'
+BeValidAsset::Configuration.feed_validator_host = 'validator.unboxedconsulting.com'
+BeValidAsset::Configuration.enable_caching = true
+BeValidAsset::Configuration.cache_path = File.join(Rails.root.to_s, %w(tmp be_valid_asset_cache))
+BeValidAsset::Configuration.display_invalid_lines = true
