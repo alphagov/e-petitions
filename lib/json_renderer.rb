@@ -10,7 +10,7 @@ class JsonRenderer
 
   def render_individual_over_threshold_petitions
     FileUtils.mkdir_p(dir)
-    Petition.visible.find(:all, :conditions => "signature_count > 999").each do |petition|
+    Petition.visible.where('signature_count > ?', 999).find_each do |petition|
       File.open("#{dir}/#{petition.id}.json", "w") do |file|
         file.write(Rabl::Renderer.json(petition, 'api/petitions/show', :view_path => 'app/views'))
       end

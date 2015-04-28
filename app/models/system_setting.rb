@@ -34,7 +34,7 @@ class SystemSetting < ActiveRecord::Base
   def self.seed(key, options = {})
     initial_value = options.delete(:initial_value)
 
-    system_setting = find_or_initialize_by_key(key)
+    system_setting = find_or_initialize_by(key: key)
     if system_setting.new_record?
       system_setting.value =  initial_value || ""
     end
