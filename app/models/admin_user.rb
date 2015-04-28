@@ -48,7 +48,7 @@ class AdminUser < ActiveRecord::Base
   validates_presence_of :email, :first_name, :last_name
   # password must have at least one digit, one alphabetical lower and upcase case character and one special character
   # see http://www.zorched.net/2009/05/08/password-strength-validation-with-regular-expressions/
-  validates_format_of :password, :with => /^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/,
+  validates_format_of :password, :with => /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/,
                       :message => 'must contain at least one digit, a lower and upper case letter and a special character',
                       :allow_blank => true
   ROLES = [ADMIN_ROLE, SYSADMIN_ROLE, THRESHOLD_ROLE]
