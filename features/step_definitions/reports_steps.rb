@@ -13,7 +13,7 @@ Given /^the "([^"]*)" department has (\d+) pending, (\d+) validated, (\d+) open,
 end
 
 Then /^I see the following reports table:$/ do |values_table|
-  actual_table = tableish(xpath_of_section('admin report table') + '//tr', 'th,td')
+  actual_table = find('table').all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
   values_table.diff!(actual_table)
 end
 
