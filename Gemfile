@@ -36,7 +36,7 @@ group :test do
   gem 'nokogiri'
   gem 'shoulda'
   gem 'pickle'
-  gem 'cucumber-rails'
+  gem 'cucumber-rails', :require => false
   gem 'database_cleaner'
   gem 'capybara'
   gem 'selenium-webdriver'
