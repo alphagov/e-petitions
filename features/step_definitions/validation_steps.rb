@@ -1,5 +1,5 @@
 def strip_onpaste_element_used_to_disable_pasting_emails(body)
-  body.gsub!(/(onpaste=\".*\")/, '')
+  body.gsub!(/(onpaste=\".*?\")/, '')
 end
 
 Then /^the markup should be valid$/ do
