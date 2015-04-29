@@ -21,7 +21,7 @@ Then /^the site owners should be notified$/ do
     Then they should see "#{@feedback.name}" in the email body
     Then they should see "#{@feedback.email}" in the email body
     Then they should see "#{@feedback.petition_link_or_title}" in the email body
-    Then they should see "#{ERB::Util.html_escape(@feedback.comment)}" in the email body
+    Then they should see "#{@feedback.comment}" in the email body
     Then they should see /Response required.* YES/ in the email body
   )
 end
