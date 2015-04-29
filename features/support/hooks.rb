@@ -24,11 +24,9 @@ Before("@search") do
     at_exit { Process.kill('TERM', pid) }
 
     # wait for solr to start
-    require 'lib/sunspot_server_util'
+    require 'sunspot_server_util'
     SunspotServerUtil.wait_for_sunspot_to_start($sunspot.port)
   end
   Sunspot.session = $original_sunspot_session
   Sunspot.remove_all!
 end
-
-
