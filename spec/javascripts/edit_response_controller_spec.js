@@ -29,14 +29,14 @@ describe('validation methods', function() {
 
   // For some reason the following tests crash envjs so can't be added to the build. They work well within the browser though. Uncomment to change the controller under test.
 
-  //it('allows submit to pass without incident if the checkbox is not checked', function() {
-    //form.submit();
-    //expect(controller.confirm_box).not.toHaveBeenCalled();
-  //});
+  it('allows submit to pass without incident if the checkbox is not checked', function() {
+    form.submit();
+    expect(controller.confirm_box).not.toHaveBeenCalled();
+  });
 
-  //it('calls confirm if the checkbox is checked', function() {
-    //form.find("input").attr('checked', 'checked');
-    //form.submit();
-    //expect(controller.confirm_box).toHaveBeenCalled();
-  //});
+  it('calls confirm if the checkbox is checked', function() {
+    form.find("input").attr('checked', 'checked');
+    form.submit();
+    expect(controller.confirm_box).toHaveBeenCalled();
+  });
 });
