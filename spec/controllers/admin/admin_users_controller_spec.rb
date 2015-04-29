@@ -169,8 +169,8 @@ describe Admin::AdminUsersController do
 
         describe "with valid params" do
           def do_update(options = {})
-            put :update, {:id => @user.id, :admin_user => {
-                :email => "another_admin@example.com", :account_disabled => '0'
+            patch :update, {:id => @user.id, :admin_user => {
+                  :email => "another_admin@example.com", :account_disabled => '0'
             }, :department_ids => {}}.merge(options)
           end
 
@@ -198,8 +198,8 @@ describe Admin::AdminUsersController do
 
         describe "with invalid params" do
           def do_update
-            put :update, :id => @user.id, :admin_user => {
-                :email => "bademailaddress"
+            patch :update, :id => @user.id, :admin_user => {
+                  :email => "bademailaddress"
               }, :department_ids => {}
           end
 

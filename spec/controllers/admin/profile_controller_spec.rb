@@ -50,68 +50,68 @@ describe Admin::ProfileController do
           allow(Time.zone).to receive(:now).and_return(@time)
         end
 
-        def do_put(current_password, new_password, password_confirmation)
-          put :update, :id => 50000, :current_password => current_password,
-              :admin_user => {:password => new_password, :password_confirmation => password_confirmation}
+        def do_patch(current_password, new_password, password_confirmation)
+          patch :update, :id => 50000, :current_password => current_password,
+                :admin_user => {:password => new_password, :password_confirmation => password_confirmation}
         end
 
         context "successful password change" do
           it "should update password" do
-            do_put('Letmein1!', 'Letmeout1!', 'Letmeout1!')
+            do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
             @user.reload
             expect(@user.valid_password?('Letmeout1!')).to be_truthy
           end
 
           it "should update password_changed_at to current time" do
-            do_put('Letmein1!', 'Letmeout1!', 'Letmeout1!')
+            do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
             @user.reload
             expect(@user.password_changed_at).to eq(@time)
           end
 
           it "should set force_password_reset to false" do
             expect(@user.force_password_reset).to be_truthy
-            do_put('Letmein1!', 'Letmeout1!', 'Letmeout1!')
+            do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
             @user.reload
             expect(@user.force_password_reset).to be_falsey
           end
 
           it "should redirect" do
-            do_put('Letmein1!', 'Letmeout1!', 'Letmeout1!')
+            do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
             expect(response).to redirect_to(admin_root_path)
           end
         end
 
         context "unsuccessful password change" do
           it "should have current password incorrect" do
-            do_put('Letmeout1!', 'Letmein1!', 'Letmein1!')
+            do_patch('Letmeout1!', 'Letmein1!', 'Letmein1!')
             expect(@user.valid_password?('Letmeout1!')).to be_falsey
             expect(@user.valid_password?('Letmein1!')).to be_truthy
             expect(assigns[:current_user].errors[:current_password]).not_to be_blank
           end
 
           it "should not update password_changed_at" do
-            do_put('Letmeout1!', 'Letmein1!', 'Letmein1!')
+            do_patch('Letmeout1!', 'Letmein1!', 'Letmein1!')
             @user.reload
             expect(@user.password_changed_at).not_to eq(@time)
             expect(@user.valid_password?('Letmein1!')).to be_truthy
           end
 
           it "should have current password and new password are the same" do
-            do_put('Letmein1!', 'Letmein1!', 'Letmein1!')
+            do_patch('Letmein1!', 'Letmein1!', 'Letmein1!')
             expect(assigns[:current_user].errors[:password]).not_to be_blank
             @user.reload
             expect(@user.valid_password?('Letmein1!')).to be_truthy
           end
 
           it "should have new password as invalid" do
-            do_put('Letmein1!', 'aB1defgh', 'aB1defgh')
+            do_patch('Letmein1!', 'aB1defgh', 'aB1defgh')
             expect(assigns[:current_user].errors[:password]).not_to be_blank
             @user.reload
             expect(@user.valid_password?('Letmein1!')).to be_truthy
           end
 
           it "should have password as invalid when confirmation is different" do
-            do_put('Letmein1!', 'aB1!efgh', 'aB1defgh')
+            do_patch('Letmein1!', 'aB1!efgh', 'aB1defgh')
             expect(assigns[:current_user].errors[:password_confirmation]).not_to be_blank
             @user.reload
             expect(@user.valid_password?('Letmein1!')).to be_truthy

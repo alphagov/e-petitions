@@ -72,12 +72,12 @@ describe Admin::PetitionsController do
       end
 
       it "should redirect to all petitions on update of internal response" do
-        put :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
+        patch :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
         expect(response).to redirect_to(admin_petitions_path)
       end
 
       it "should update internal response and response required flag" do
-        put :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
+        patch :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
         @p1.reload
         expect(@p1.internal_response).to eq('This is popular')
         expect(@p1.response_required).to be_truthy
@@ -113,12 +113,12 @@ describe Admin::PetitionsController do
       end
 
       context "update_response" do
-        def do_put(options = {})
-          put :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :email_signees => '1'}.merge(options)
+        def do_patch(options = {})
+          patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :email_signees => '1'}.merge(options)
         end
         it "should update response and email signees flag with true" do
           expect(Delayed::Job).to receive(:enqueue)
-          do_put
+          do_patch
           expect(response).to redirect_to(threshold_admin_petitions_path)
           @p1.reload
           expect(@p1.response).to eq('Doh!')
@@ -127,7 +127,7 @@ describe Admin::PetitionsController do
 
         it "should update response and email signees flag with false" do
           expect(Delayed::Job).not_to receive(:enqueue)
-          do_put(:email_signees => '0')
+          do_patch(:email_signees => '0')
           @p1.reload
           expect(@p1.response).to eq('Doh!')
           expect(@p1.email_requested_at).to be_nil
@@ -135,7 +135,7 @@ describe Admin::PetitionsController do
 
         it "should fail to update response and email signees flag due to validation error" do
           expect(Delayed::Job).not_to receive(:enqueue)
-          do_put(:response => '', :email_signees => '1')
+          do_patch(:response => '', :email_signees => '1')
           expect(response).to be_success
           @p1.reload
           expect(@p1.email_requested_at).to be_nil
@@ -158,12 +158,12 @@ describe Admin::PetitionsController do
 
           it "should setup a delayed job" do
             expect do
-              put :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+              patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
             end.to change(Delayed::Job, :count).by(1)
           end
 
           it "should set the email signees flag to false when the job runs" do
-            put :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
             @petition.reload
             expect(@petition.email_requested_at).not_to be_nil
             Delayed::Job.all[0].payload_object.perform
@@ -175,7 +175,7 @@ describe Admin::PetitionsController do
 
           it "should email out to the validated signees who have opted in when the delayed job runs" do
             no_emails = ActionMailer::Base.deliveries.length
-            put :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
             Delayed::Job.all[0].payload_object.perform
             expect(ActionMailer::Base.deliveries.length - no_emails).to eq(7)
             expect(ActionMailer::Base.deliveries[no_emails].to).to eq(["jason@example.com"])
@@ -185,7 +185,7 @@ describe Admin::PetitionsController do
 
           it "should not email out to the validated signees if emails have already gone out" do
             no_emails = ActionMailer::Base.deliveries.length
-            put :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
             @petition.reload
             Petition.find(@petition.id).update_attribute(:email_signees, false)
             Signature.update_all(:last_emailed_at => @petition.email_requested_at)
@@ -247,7 +247,7 @@ describe Admin::PetitionsController do
 
       context "update" do
         def do_post(options ={})
-          put :update, {:id => @petition.id}.merge(options)
+          patch :update, {:id => @petition.id}.merge(options)
         end
 
         it "should be unsuccessful for a petition that is not validated" do

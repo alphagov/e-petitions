@@ -55,11 +55,11 @@ Rails.application.routes.draw do
         get :threshold
       end
       member do
-        get :edit_response
-        put :update_response
-        get :edit_internal_response
-        put :update_internal_response
-        put :take_down
+        get   :edit_response
+        patch :update_response
+        get   :edit_internal_response
+        patch :update_internal_response
+        patch :take_down
       end
     end
     resources :profile, :only => [:edit, :update]
