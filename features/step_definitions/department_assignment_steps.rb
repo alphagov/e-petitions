@@ -3,15 +3,10 @@ Given /^there is a petition "([^"]*)" that has been assigned between two departm
   treasury       = Department.find_by_name('Treasury')
   petition = FactoryGirl.create(:validated_petition, :title => petition_title, :department => treasury)
 
-  DepartmentAssignment.create :petition    => petition,
-                              :department  => cabinet_office,
-                              :assigned_on => Time.parse("Fri Mar 10 10:15:00 +0000 2012")
-  DepartmentAssignment.create :petition    => petition,
-                              :department  => treasury,
-                              :assigned_on => Time.parse("Fri Mar 14 11:30:00 +0000 2012")
-  DepartmentAssignment.create :petition    => petition,
-                              :department  => cabinet_office,
-                              :assigned_on => Time.parse("Fri Mar 17 12:45:00 +0000 2012")
+  assignments = petition.department_assignments
+  assignments.create! :department => cabinet_office, :assigned_on => "2012-03-10T10:15:00+00:00"
+  assignments.create! :department => treasury,       :assigned_on => "2012-03-14T11:30:00+00:00"
+  assignments.create! :department => cabinet_office, :assigned_on => "2012-03-17T12:45:00+00:00"
 end
 
 When /^I view the "([^"]*)" admin edit page$/ do |petition_title|
