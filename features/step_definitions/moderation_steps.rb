@@ -15,18 +15,18 @@ Then /^the petition should be assigned to that department$/ do
 end
 
 When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
+  select reason_code, :from => :petition_rejection_code
   click_button "Reject"
 end
 
 When /^I change the rejection status of the petition with a reason code "([^"]*)"$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
+  select reason_code, :from => :petition_rejection_code
   click_button "Change rejection status"
 end
 
 When /^I reject the petition with a reason code "([^"]*)" and some explanatory text$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
-  fill_in :rejection_text, :with => "See guidelines at http://direct.gov.uk"
+  select reason_code, :from => :petition_rejection_code
+  fill_in :petition_rejection_text, :with => "See guidelines at http://direct.gov.uk"
   click_button "Reject"
 end
 
@@ -105,8 +105,8 @@ Then /^I should not see any "([^"]*)" petitions$/ do |state|
 end
 
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
-  reason = RejectionReason.find_by_code("duplicate")
+  select "Duplicate of an existing e-petition", :from => :petition_rejection_code
   expect(page).to have_content "already an e-petition"
-  reason = RejectionReason.find_by_code("libellous")
+  select "Confidential, libellous, false or defamatory statements", :from => :petition_rejection_code
   expect(page).to have_content "injunction or court order"
 end

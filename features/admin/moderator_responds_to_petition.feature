@@ -29,7 +29,7 @@ Feature: Moderator respond to petition
     And I reject the petition with a reason code "Matters which are not the responsibility of HM Government"
     Then the petition is not available for signing
     But the petition is still available for searching or viewing
-  
+
   @javascript
   Scenario: Moderator previews reason description
     Given I am logged in as an admin
@@ -50,12 +50,12 @@ Feature: Moderator respond to petition
     And the creator should recieve a libel/profanity rejection notification email
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
-    
+
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as an admin
     And a validated petition exists with title: "Rupert Murdoch is on the run"
     When I go to the Admin moderate petitions page for "Rupert Murdoch is on the run"
-    And I reject the petition with a reason code ""
+    And I reject the petition with a reason code "-- Select a rejection code --"
     Then a petition should exist with title: "Rupert Murdoch is on the run", state: "validated"
     And I should see "can't be blank"
 
