@@ -13,7 +13,7 @@ Given /^the "([^"]*)" department has (\d+) pending, (\d+) validated, (\d+) open,
 end
 
 Then /^I see the following reports table:$/ do |values_table|
-  actual_table = find(:css, 'table').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
+  actual_table = find(:css, 'table.admin_report').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
   values_table.diff!(actual_table)
 end
 
