@@ -11,6 +11,6 @@ Then /^it should(| not) be an SSL page$/ do |should_or_not|
 end
 
 Then /^debugger$/ do
-  debugger
+  binding.pry
   :debugger
 end
