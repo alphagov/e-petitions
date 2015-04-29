@@ -138,3 +138,10 @@ Then /^I should receive an email telling me how to get an MP on board$/ do
   open_email(@petition.creator_signature.email)
   expect(current_email.default_part_body.to_s).to include("MP")
 end
+
+When(/^I am allowed to make the petition title too long$/) do
+  # NOTE: we do this to remove the maxlength attribtue on the petition
+  # title input because any modern browser/driver will not let us enter
+  # values longer than maxlength and so we can't test our JS validation
+  page.execute_script "$('#petition_title').attr('maxlength', '');"
+end

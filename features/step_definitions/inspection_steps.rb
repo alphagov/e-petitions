@@ -1,3 +1,7 @@
+Then(/^I should see the fieldset called "(.*?)" is (\d+)(?:st|nd|rd|th)$/) do |legend, position|
+  expect(page).to have_xpath("//fieldset[#{position}]/legend[contains(., '#{legend}')]", visible: false)
+end
+
 Then /^I should (not |)see "([^\"]*)" in the ((?!email\b).*)$/ do |see_or_not, text, section_name|
   if section_name == 'browser page title'
     if see_or_not.blank?
@@ -53,7 +57,7 @@ Then /^the "([^\"]*)" radio button should be selected$/ do |label|
 end
 
 Then /^the "([^"]*)" row should display as invalid$/ do |field_label|
-  row_node = page.find("//label[contains(., '#{field_label}')]/ancestor::*[contains(@class, 'row')] | //*[contains(@class, 'label')][contains(., '#{field_label}')]/ancestor::*[contains(@class, 'row')]")
+  row_node = page.find("//label[.='#{field_label}']/ancestor::*[contains(@class, 'row')] | //*[contains(@class, 'label')][.='#{field_label}']/ancestor::*[contains(@class, 'row')]")
   expect(row_node["class"]).to include("invalid_row")
 end
 
