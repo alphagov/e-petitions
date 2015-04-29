@@ -12,7 +12,7 @@ When /^I try to sign$/ do
 end
 
 Then /^I have not yet signed the petition$/ do
-  expect(page).to have_content("Thank you")
+  expect(page).to have_title("Thank you")
   click_link("view")
   expect(page).to have_css("dd.signature_count", :text => "1")
 end
