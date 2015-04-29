@@ -135,9 +135,9 @@ Feature: Suzy Singer searches by free text
     Given 21 open petitions exist with title: "International development spending"
     When I go to the search page
     And I search for "open" petitions with "spending"
-    And I follow "Next"
+    And I follow "Next" within ".//*[contains(@class, 'title_pagination_row')]"
     Then I should see 1 petition
-    And I follow "Previous"
+    And I follow "Previous" within ".//*[contains(@class, 'title_pagination_row')]"
     Then I should see 20 petitions
 
   Scenario: Searching for a rubbish search term
