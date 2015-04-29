@@ -1,9 +1,17 @@
 Then /^I should (not |)see "([^\"]*)" in the ((?!email\b).*)$/ do |see_or_not, text, section_name|
-  within_section(section_name) do
+  if section_name == 'browser page title'
     if see_or_not.blank?
-      expect(page).to have_content(text.to_s)
+      expect(page).to have_title(text.to_s)
     else
-      expect(page).to have_no_content(text.to_s)
+      expect(page).to have_no_title(text.to_s)
+    end
+  else
+    within_section(section_name) do
+      if see_or_not.blank?
+        expect(page).to have_content(text.to_s)
+      else
+        expect(page).to have_no_content(text.to_s)
+      end
     end
   end
 end
