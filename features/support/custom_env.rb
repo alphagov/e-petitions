@@ -8,6 +8,7 @@ Capybara.default_wait_time = 5
 Capybara.server_port = 3443
 Capybara.app_host = "https://localhost:3443"
 Capybara.default_host = "https://localhost"
+Capybara.default_selector = :xpath
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app,

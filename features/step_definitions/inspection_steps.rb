@@ -52,7 +52,7 @@ end
 ### Tables...
 
 Then /^I should see the following admin index table:$/ do |values_table|
-  actual_table = find('table').all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
+  actual_table = find(:css, 'table').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
   values_table.diff!(actual_table)
 end
 
