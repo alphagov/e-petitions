@@ -420,9 +420,31 @@
     -->
   <requestHandler name="/select" class="solr.SearchHandler">
     <lst name="defaults">
+      <str name="echoParams">explicit</str>
+      <str name="defType">dismax</str>
+      <int name="mm">2</int>
+      <float name="tie">0.2</float>
+      <str name="qf">
+        title_eptexten^10 description_eptexten^8 creator_name_eptext^4
+        department_name_eptext^2
+        title_eptextmp description_eptextmp creator_name_eptextmp
+        department_name_eptextmp
+      </str>
+      <str name="pf">
+        title_eptexten^10 description_eptexten^8 creator_name_eptext^4
+        department_name_eptext^2
+        title_eptextmp description_eptextmp creator_name_eptextmp
+        department_name_eptextmp
+      </str>
+      <int name="ps">2</int>
+      <str name="fl">*</str>
+      <bool name="spellcheck">true</bool>
       <str name="spellcheck.dictionary">default</str>
-      <str name="spellcheck.extendedResults">true</str>
-      <str name="spellcheck.collate">true</str>
+      <float name="spellcheck.accuracy">0.7</float>
+      <bool name="spellcheck.onlyMorePopular">true</bool>
+      <bool name="spellcheck.extendedResults">true</bool>
+      <int name="spellcheck.count">200</int>
+      <bool name="spellcheck.collate">true</bool>
     </lst>
     <arr name="last-components">
       <str>spellcheck</str>
