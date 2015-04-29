@@ -4,7 +4,7 @@ Then /^I should see a recaptcha challenge$/ do
 end
 
 When /^I fill in a valid captcha$/ do
-  captcha_string = find(:css, "#captcha_string").value
+  captcha_string = find(:css, "#captcha_string", visible: false).value
   user_input = Captcha.get_captcha_text captcha_string
   fill_in "captcha_response_field", :with => user_input
 end
