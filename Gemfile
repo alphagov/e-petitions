@@ -24,7 +24,7 @@ gem 'whenever'
 gem 'newrelic_rpm'
 gem 'airbrake'
 gem 'rabl'
-gem 'attr_encrypted'
+gem 'attr_encrypted', :require => false
 gem 'dynamic_form'
 
 group :development, :test do
