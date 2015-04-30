@@ -14,8 +14,6 @@ class SystemSetting < ActiveRecord::Base
   THRESHOLD_SIGNATURE_COUNT = "threshold_signature_count"
   GET_AN_MP_SIGNATURE_COUNT = "get_an_mp_signature_count"
 
-  # attr_accessible :key, :value, :description
-
   # = Validations =
   validates_length_of :key, :maximum => 64
   validates_uniqueness_of :key
