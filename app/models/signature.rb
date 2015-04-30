@@ -22,7 +22,6 @@ class Signature < ActiveRecord::Base
   VALIDATED_STATE = 'validated'
   STATES = [PENDING_STATE, VALIDATED_STATE]
 
-  # attr_accessible :name, :email, :email_confirmation, :address, :town, :postcode, :country, :humanity, :uk_citizenship, :terms_and_conditions, :notify_by_email
   before_create :set_perishable_token
 
   class EmailDowncaser
