@@ -94,7 +94,6 @@ class Petition < ActiveRecord::Base
                               select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
                               where("signatures.state" => "validated").
                               where("signatures.updated_at > ?", 1.hour.ago).
-                              where("petitions.id <> ?", 41492).
                               order("signatures_in_last_hour DESC").
                               group('petitions.id').
                               limit(12)
