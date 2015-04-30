@@ -17,7 +17,7 @@ When /^I view the (open|closed|rejected) petitions for the "([^"]*)"$/ do |petit
 end
 
 Then /^I (should|should not) see the petitions belonging to the "([^"]*)"$/ do |should_or_not, department_name|
-  department = Department.find_by_name(department_name)
+  department = Department.find_by(name: department_name)
   department.petitions.each do |petition|
     petition_link = "a[href*='#{petition_path(petition.id)}']"
     if (should_or_not == "should")

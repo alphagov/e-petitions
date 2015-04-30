@@ -4,7 +4,6 @@ gem 'rails', '4.2.1'
 
 # Legacy Rails feature gems - will no longer be supported in Rails 5.0
 gem 'protected_attributes'
-gem 'activerecord-deprecated_finders', require: 'active_record/deprecated_finders'
 gem 'actionpack-action_caching'
 gem 'actionpack-page_caching'
 gem 'responders'

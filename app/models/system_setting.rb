@@ -46,7 +46,7 @@ class SystemSetting < ActiveRecord::Base
   end
 
   def self.value_of_key(key)
-    ss = SystemSetting.find_by_key(key)
+    ss = SystemSetting.find_by(key: key)
     ss && ss.value
   end
 end

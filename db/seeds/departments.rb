@@ -102,7 +102,7 @@ departments = [
 ]
 
 departments.each do |department|
-  d = Department.find_or_initialize_by_name(department[:name])
+  d = Department.find_or_initialize_by(name: department[:name])
   if d.new_record?
     d.update_attributes!(department)
   end

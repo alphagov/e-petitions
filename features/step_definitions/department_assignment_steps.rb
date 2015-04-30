@@ -1,6 +1,6 @@
 Given /^there is a petition "([^"]*)" that has been assigned between two departments several times$/ do |petition_title|
-  cabinet_office = Department.find_by_name('Cabinet Office')
-  treasury       = Department.find_by_name('Treasury')
+  cabinet_office = Department.find_by(name: 'Cabinet Office')
+  treasury       = Department.find_by(name: 'Treasury')
   petition = FactoryGirl.create(:validated_petition, :title => petition_title, :department => treasury)
 
   assignments = petition.department_assignments
@@ -10,6 +10,6 @@ Given /^there is a petition "([^"]*)" that has been assigned between two departm
 end
 
 When /^I view the "([^"]*)" admin edit page$/ do |petition_title|
-  petition = Petition.find_by_title(petition_title)
+  petition = Petition.find_by(title: petition_title)
   visit edit_admin_petition_path(petition)
 end

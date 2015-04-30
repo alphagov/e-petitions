@@ -1,6 +1,6 @@
 Given /^a set of petitions for the "([^"]*)"$/ do |department_name|
   3.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description", :department => Department.find_by_name(department_name))
+    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description", :department => Department.find_by(name: department_name))
   end
 end
 
@@ -12,13 +12,13 @@ end
 Given /^a(n)? ?(pending|validated|open)? petition "([^"]*)" belonging to the "([^"]*)"$/ do |a_or_an, state, petition_title, department_name|
   @petition = FactoryGirl.create(:open_petition,
     :title => petition_title,
-    :department => Department.find_by_name(department_name),
+    :department => Department.find_by(name: department_name),
     :closed_at => 1.day.from_now,
     :state => state || "open")
 end
 
 Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |title, no_validated, no_pending|
-  petition = Petition.find_by_title(title)
+  petition = Petition.find_by(title: title)
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
   no_pending.times { petition.signatures << FactoryGirl.create(:pending_signature) }
 end
@@ -36,18 +36,18 @@ Given /^I have created an e-petition$/ do
 end
 
 Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |title, no_validated|
-  petition = Petition.find_by_title(title)
+  petition = Petition.find_by(title: title)
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
 end
 
 Given /^a petition "([^"]*)" belonging to the "([^"]*)" has been closed$/ do |petition_title, department_name|
-  @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago, :department => Department.find_by_name(department_name))
+  @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago, :department => Department.find_by(name: department_name))
 end
 
 Given /^a libelous petition "([^"]*)" has been rejected by the "([^"]*)"$/ do |petition_title, department_name|
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_by_name(department_name),
+    :department => Department.find_by(name: department_name),
     :state => Petition::HIDDEN_STATE,
     :rejection_code => "libellous",
     :rejection_text => "You can't say that!")
@@ -57,7 +57,7 @@ Given /^a petition "([^"]*)" has been rejected by the "([^"]*)"( with the reason
   reason_text = reason.nil? ? "We are the #{department_name}, not television executives" : reason
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_by_name(department_name),
+    :department => Department.find_by(name: department_name),
     :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
     :rejection_text => reason_text)

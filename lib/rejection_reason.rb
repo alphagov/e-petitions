@@ -5,7 +5,7 @@ class RejectionReason < OpenStruct
   FILE = Rails.root.join(*%w(config rejection_reasons.json))
 
   class << self
-    def find_by_code(code)
+    def for_code(code)
       reasons[code]
     end
 

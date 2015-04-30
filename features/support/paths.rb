@@ -36,10 +36,10 @@ module NavigationHelpers
       new_petition_path
 
     when /^the petition page for "([^\"]*)"$/
-      petition_path(Petition.find_by_title($1))
+      petition_path(Petition.find_by(title: $1))
 
     when /^the new signature page for "([^\"]*)"$/
-      new_petition_signature_path(Petition.find_by_title($1))
+      new_petition_signature_path(Petition.find_by(title: $1))
 
     when /^the search results page$/
       search_path
@@ -77,7 +77,7 @@ module NavigationHelpers
       admin_root_path
 
     when /^moderate petitions page for "([^\"]*)"$/
-      edit_admin_petition_path(Petition.find_by_title($1))
+      edit_admin_petition_path(Petition.find_by(title: $1))
 
     when /^threshold page$/
       threshold_admin_petitions_path
@@ -95,7 +95,7 @@ module NavigationHelpers
       edit_admin_profile_path(@user)
 
     when /^edit profile page for "([^\"]*)"$/
-      edit_admin_profile_path(AdminUser.find_by_email($1))
+      edit_admin_profile_path(AdminUser.find_by(email: $1))
 
     when /^reports page$/
       admin_reports_path
