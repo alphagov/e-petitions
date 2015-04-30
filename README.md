@@ -8,7 +8,7 @@ We hope you enjoy it!
 
 A few things to know:
 
-You will need `ruby 1.8.7`
+You will need `ruby 2.2.2`
 
 You will need to set up the `database.yml`
 You will need to run `seeds.rb` to seed the 'department' data required for moderation of petitions
@@ -17,9 +17,3 @@ For setting up a sysadmin user, run `rake epets:add_sysadmin_user` - the passwor
 
 To start a solr instance, run `rake sunspot:solr:start`
 To index the models, run `rake sunspot:reindex`
-
-To get the selenium tests running, make sure you're running firefox 7 as your firefox browser or alternatively, have firefox 7 in one of the following locations:
-
-`/Applications/Firefox7.app/Contents/MacOS/firefox-bin`
- or
-`/Applications/Firefox 7.app/Contents/MacOS/firefox-bin`
