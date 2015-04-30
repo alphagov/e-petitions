@@ -24,19 +24,11 @@ class Signature < ActiveRecord::Base
 
   before_create :set_perishable_token
 
-  class EmailDowncaser
-    def self.dump(value)
-      value.downcase
-    end
-    def self.load(value)
-      value
-    end
-  end
-
   attr_encrypted :email, :key => AppConfig.email_encryption_key, :attribute => "encrypted_email", :marshal => true, :marshaler => EmailDowncaser
 
   # = Relationships =
   belongs_to :petition
+  has_one :sponsor
 
   # = Validations =
   validates_format_of :email, :with => Authlogic::Regex.email, :unless => 'email.blank?', :message => "Email not recognised."

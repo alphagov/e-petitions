@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428141550) do
+ActiveRecord::Schema.define(version: 20150430103606) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -154,6 +154,15 @@ ActiveRecord::Schema.define(version: 20150428141550) do
   add_index "signatures_pre_encryption", ["petition_id", "state"], name: "index_signatures_on_petition_id_and_state", using: :btree
   add_index "signatures_pre_encryption", ["state"], name: "index_signatures_on_state", using: :btree
   add_index "signatures_pre_encryption", ["updated_at"], name: "index_signatures_on_updated_at", using: :btree
+
+  create_table "sponsors", force: :cascade do |t|
+    t.string   "encrypted_email",  limit: 255
+    t.string   "perishable_token", limit: 255
+    t.integer  "petition_id",      limit: 4
+    t.integer  "signature_id",     limit: 4
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "system_settings", force: :cascade do |t|
     t.string   "key",         limit: 64,    null: false

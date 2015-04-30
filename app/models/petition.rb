@@ -52,6 +52,7 @@ class Petition < ActiveRecord::Base
   accepts_nested_attributes_for :creator_signature
   has_many :signatures
   has_many :department_assignments
+  has_many :sponsors
 
   # = Validations =
   validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
