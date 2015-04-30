@@ -91,6 +91,22 @@ class Signature < ActiveRecord::Base
   attr_accessor :address
   attr_accessor :town
 
+  # NOTE: These methods for the encrypted_email attribute are
+  #       defined here to prevent attr_encrypted from defining
+  #       it's own attribute accessors using `attr_accessor`
+  # TODO: Remove these methods when attr_encrypted is fixed
+  def encrypted_email
+    super
+  end
+
+  def encrypted_email=(value)
+    super
+  end
+
+  def encrypted_email?
+    super
+  end
+
   def creator?
     petition.creator_signature == self
   end
