@@ -10,16 +10,16 @@ describe RejectionReason do
     end
   end
 
-  describe "#find_by_code" do
+  describe "#for_code" do
     it "should return a hash of the code's attributes" do
-      reason = RejectionReason.find_by_code("duplicate")
+      reason = RejectionReason.for_code("duplicate")
       expect(reason.published).to eq(true)
       expect(reason.title).to eq("Duplicate of an existing e-petition")
       expect(reason.description).to eq("<p>There is already an e-petition about this issue.</p>")
     end
-    
+
     it "should return nil if code is not found" do
-      reason = RejectionReason.find_by_code("will_not_be_found")
+      reason = RejectionReason.for_code("will_not_be_found")
       expect(reason).to be_nil
     end
   end

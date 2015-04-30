@@ -106,7 +106,7 @@ class Admin::PetitionsController < Admin::AdminController
     @petition.rejection_text = params[:petition][:rejection_text]
 
     # if a petition is rejected for a reason that means it should be hidden, then set the state accordingly
-    reason = RejectionReason.find_by_code(@petition.rejection_code)
+    reason = RejectionReason.for_code(@petition.rejection_code)
     if reason and ! reason.published
       @petition.state = Petition::HIDDEN_STATE
     else

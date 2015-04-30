@@ -190,11 +190,11 @@ class Petition < ActiveRecord::Base
   end
 
   def rejection_reason
-    RejectionReason.find_by_code(self.rejection_code).title
+    RejectionReason.for_code(self.rejection_code).title
   end
 
   def rejection_description
-    RejectionReason.find_by_code(self.rejection_code).description
+    RejectionReason.for_code(self.rejection_code).description
   end
 
   def editable_by?(user)

@@ -61,7 +61,7 @@ class Admin::AdminUsersController < Admin::AdminController
     user.departments.reverse.each do |department|
       user.departments.delete(department) unless department_ids.include?(department.id.to_s)
     end
-    department_ids.map { |department_id| Department.find_by_id(department_id) }.compact.each do |department|
+    department_ids.map { |department_id| Department.find_by(id: department_id) }.compact.each do |department|
       user.departments << department unless user.departments.include?(department)
     end
   end

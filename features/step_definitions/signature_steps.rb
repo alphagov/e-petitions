@@ -133,15 +133,15 @@ Then /^I should have signed the petition after confirming my email address$/ do
 end
 
 Then /^there should be a "([^"]*)" signature with email "([^"]*)" and name "([^"]*)"$/ do |state, email, name|
-  expect(Signature.find_by_email_and_name_and_state(email, name, state)).not_to be_nil
+  expect(Signature.for_email(email).find_by(name: name, state: state)).not_to be_nil
 end
 
 Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
-  expect(Signature.find_by_name(name).notify_by_email?).to be_truthy
+  expect(Signature.find_by(name: name).notify_by_email?).to be_truthy
 end
 
 Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_title|
-  petition = Petition.find_by_title(petition_title)
+  petition = Petition.find_by(title: petition_title)
   FactoryGirl.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
 end
 
