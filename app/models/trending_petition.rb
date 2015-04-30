@@ -12,7 +12,7 @@
 class TrendingPetition < ActiveRecord::Base
   belongs_to :petition
 
-  attr_accessible :petition_id, :signatures_in_last_hour
+  # attr_accessible :petition_id, :signatures_in_last_hour
 
   def self.update_homepage_trends
     petitions = Petition.last_hour_trending
