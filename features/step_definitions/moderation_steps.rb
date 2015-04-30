@@ -1,38 +1,38 @@
 When /^I look at the next petition on my list$/ do
-  @petition = Factory(:validated_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
+  @petition = FactoryGirl.create(:validated_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
   visit edit_admin_petition_path(@petition)
 end
 
 When /^I re\-assign it to a different department$/ do
-  Factory(:department, :name => "Another department")
+  FactoryGirl.create(:department, :name => "Another department")
   visit edit_admin_petition_path(@petition)
   select "Another department"
   click_button "Re-assign"
 end
 
 Then /^the petition should be assigned to that department$/ do
-  @petition.reload.department.name.should == "Another department"
+  expect(@petition.reload.department.name).to eq "Another department"
 end
 
 When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
+  select reason_code, :from => :petition_rejection_code
   click_button "Reject"
 end
 
 When /^I change the rejection status of the petition with a reason code "([^"]*)"$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
+  select reason_code, :from => :petition_rejection_code
   click_button "Change rejection status"
 end
 
 When /^I reject the petition with a reason code "([^"]*)" and some explanatory text$/ do |reason_code|
-  select reason_code, :from => :petition_rejection_reason
-  fill_in :rejection_text, :with => "See guidelines at http://direct.gov.uk"
+  select reason_code, :from => :petition_rejection_code
+  fill_in :petition_rejection_text, :with => "See guidelines at http://direct.gov.uk"
   click_button "Reject"
 end
 
 Then /^the petition is not available for signing$/ do
   visit petition_path(@petition)
-  page.should_not have_css("a", :text => "Sign")
+  expect(page).not_to have_css("a", :text => "Sign")
 end
 
 When /^I publish the petition$/ do
@@ -65,7 +65,7 @@ end
 
 Then /^the petition should be visible on the site for signing$/ do
   visit petition_path(@petition)
-  page.should have_css("a", :text => "Sign")
+  expect(page).to have_css("a", :text => "Sign")
 end
 
 Then /^the creator should recieve a notification email$/ do
@@ -101,12 +101,12 @@ When /^I filter the list to show "([^"]*)" petitions$/ do |option|
 end
 
 Then /^I should not see any "([^"]*)" petitions$/ do |state|
-  page.should have_no_css("td.state", :text => state)
+  expect(page).to have_no_css("td.state", :text => state)
 end
 
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
-  reason = RejectionReason.find_by_code("duplicate")
-  page.should have_content "already an e-petition"
-  reason = RejectionReason.find_by_code("libellous")
-  page.should have_content "injunction or court order"
+  select "Duplicate of an existing e-petition", :from => :petition_rejection_code
+  expect(page).to have_content "already an e-petition"
+  select "Confidential, libellous, false or defamatory statements", :from => :petition_rejection_code
+  expect(page).to have_content "injunction or court order"
 end

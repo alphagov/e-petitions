@@ -11,7 +11,7 @@ Feature: User views static pages
 
   Scenario: I navigate to How e-petitions works
     When I go to the home page
-    And I follow "How e-petitions work"
+    And I follow "How e-petitions work" within "//*[@id='page_content']"
     Then I should be on the how e-Petitions works page
     And I should see "How e-petitions works - e-petitions" in the browser page title
     And the markup should be valid

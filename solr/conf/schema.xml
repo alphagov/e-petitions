@@ -15,10 +15,10 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<!--  
+<!--
  This is the Solr schema file. This file should be named "schema.xml" and
  should be in the conf directory under the solr home
- (i.e. ./solr/conf/schema.xml by default) 
+ (i.e. ./solr/conf/schema.xml by default)
  or located where the classloader for the Solr webapp can find it.
 
  This example schema is the recommended starting point for users.
@@ -64,9 +64,7 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.EdgeNGramFilterFactory"
-          minGramSize="3"
-          maxGramSize="30"/>
+        <filter class="solr.PorterStemFilterFactory"/>
       </analyzer>
     </fieldType>
     <!-- *** This fieldType is used by Sunspot! *** -->
@@ -86,10 +84,25 @@
     <!-- *** This fieldType is used by Sunspot! *** -->
     <fieldType name="tfloat" class="solr.TrieFloatField" omitNorms="true"/>
     <!-- *** This fieldType is used by Sunspot! *** -->
-    <fieldType name="tdate" class="solr.TrieDateField" omitNorms="true"/>
+    <fieldType name="tdate" class="solr.TrieDateField"
+               omitNorms="true"/>
 
-    <!-- custom field types for epet -->
-    
+    <!-- Special field type for spell correction. Be careful about
+         adding filters here, as they apply *before* your values go in
+         the spellcheck. For example, the lowercase filter here means
+         all spelling suggestions will be lower case (without it,
+         though, you'd have duplicate suggestions for lower and proper
+         cased words). -->
+    <fieldType name="textSpell" class="solr.TextField" positionIncrementGap="100" omitNorms="true">
+      <analyzer>
+        <tokenizer class="solr.StandardTokenizerFactory"/>
+        <filter class="solr.StandardFilterFactory"/>
+        <filter class="solr.LowerCaseFilterFactory"/>
+      </analyzer>
+    </fieldType>
+    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
+    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
+
     <!-- basic text -->
     <fieldType name="eptext" class="solr.TextField" omitNorms="false">
       <analyzer>
@@ -117,16 +130,15 @@
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PhoneticFilterFactory" encoder="DoubleMetaphone" inject="false"/>    
+        <filter class="solr.PhoneticFilterFactory" encoder="DoubleMetaphone" inject="false"/>
       </analyzer>
     </fieldType>
-
 
   </types>
   <fields>
     <!-- Valid attributes for fields:
      name: mandatory - the name for the field
-     type: mandatory - the name of a previously defined type from the 
+     type: mandatory - the name of a previously defined type from the
        <types> section
      indexed: true if this field should be indexed (searchable or sortable)
      stored: true if this field should be retrievable
@@ -142,9 +154,9 @@
        given field.
        When using MoreLikeThis, fields used for similarity should be
        stored for best performance.
-     termPositions: Store position information with the term vector.  
+     termPositions: Store position information with the term vector.
        This will increase storage costs.
-     termOffsets: Store offset information with the term vector. This 
+     termOffsets: Store offset information with the term vector. This
        will increase storage costs.
      default: a value that should be used if no value is specified
        when adding a document.
@@ -166,7 +178,7 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="_local*" stored="false" type="tdouble" multiValued="false" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
-    <dynamicField name="*_text" stored="true" type="text" multiValued="true" indexed="true"/>
+    <dynamicField name="*_text" stored="false" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_texts" stored="true" type="text" multiValued="true" indexed="true"/>
     <!-- *** This dynamicField is used by Sunspot! *** -->
@@ -262,6 +274,18 @@
     <!-- *** This dynamicField is used by Sunspot! *** -->
     <dynamicField name="*_etms" stored="true" termVectors="true" type="tdouble" multiValued="true" indexed="true"/>
 
+    <!-- Type used to index the lat and lon components for the "location" FieldType -->
+    <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false" multiValued="false"/>
+    <dynamicField name="*_p" type="location" indexed="true" stored="true" multiValued="false"/>
+
+    <dynamicField name="*_ll" stored="false" type="location" multiValued="false" indexed="true"/>
+    <dynamicField name="*_llm" stored="false" type="location" multiValued="true" indexed="true"/>
+    <dynamicField name="*_lls" stored="true" type="location" multiValued="false" indexed="true"/>
+    <dynamicField name="*_llms" stored="true" type="location" multiValued="true" indexed="true"/>
+    <field name="textSpell" stored="false" type="textSpell" multiValued="true" indexed="true"/>
+    <!-- required by Solr 4 -->
+    <field name="_version_" type="string" indexed="true" stored="true" multiValued="false" />
+
     <!-- custom indexing by copying fields -->
     <dynamicField name="*_eptext" stored="false" type="eptext" multiValued="true" indexed="true"/>
     <dynamicField name="*_eptexten" stored="false" type="eptexten" multiValued="true" indexed="true"/>
@@ -277,7 +301,8 @@
     <copyField source="department_name_text" dest="department_name_eptextmp"/>
 
   </fields>
-  <!-- Field to use to determine and enforce document uniqueness. 
+
+  <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
    -->
   <uniqueKey>id</uniqueKey>
@@ -287,5 +312,11 @@
   <solrQueryParser defaultOperator="AND"/>
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
-        or to add multiple fields to the same field for easier/faster searching.  -->
+        or to add multiple fields to the same field for easier/faster
+        searching.  -->
+
+  <!-- Use copyField to copy the fields you want to run spell checking
+       on into one field. For example: -->
+  <copyField source="*_text"  dest="textSpell" />
+  <copyField source="*_s"  dest="textSpell" />
 </schema>

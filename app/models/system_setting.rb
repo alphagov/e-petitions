@@ -14,13 +14,15 @@ class SystemSetting < ActiveRecord::Base
   THRESHOLD_SIGNATURE_COUNT = "threshold_signature_count"
   GET_AN_MP_SIGNATURE_COUNT = "get_an_mp_signature_count"
 
+  attr_accessible :key, :value, :description
+
   # = Validations =
   validates_length_of :key, :maximum => 64
   validates_uniqueness_of :key
   validates_format_of :key, :with => /\A[a-z0-9_]+\z/i
 
   # = Finders =
-  scope :by_key, :order => '`key`'
+  scope :by_key, -> { order(:key) }
 
   # = Methods =
   def to_param
@@ -34,7 +36,7 @@ class SystemSetting < ActiveRecord::Base
   def self.seed(key, options = {})
     initial_value = options.delete(:initial_value)
 
-    system_setting = find_or_initialize_by_key(key)
+    system_setting = find_or_initialize_by(key: key)
     if system_setting.new_record?
       system_setting.value =  initial_value || ""
     end

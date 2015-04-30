@@ -31,7 +31,7 @@ class AdminUser < ActiveRecord::Base
   acts_as_authentic do |config|
     config.merge_validates_length_of_password_field_options :minimum => 8
     config.ignore_blank_passwords = true
-    config.merge_validates_uniqueness_of_email_field_options :case_sensitive => true
+    config.merge_validates_uniqueness_of_email_field_options :case_sensitive => false
 
     # Add conditions to the default validations to tidy up output.
     config.merge_validates_format_of_email_field_options :unless => Proc.new { |user| user.email.blank? }
@@ -39,6 +39,10 @@ class AdminUser < ActiveRecord::Base
     config.merge_validates_length_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
     config.merge_validates_confirmation_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
   end
+
+  attr_accessible :password, :password_confirmation, :first_name,
+                  :last_name, :role, :email, :force_password_reset,
+                  :account_disabled
 
   # = Relationships =
   has_and_belongs_to_many :departments
@@ -48,15 +52,15 @@ class AdminUser < ActiveRecord::Base
   validates_presence_of :email, :first_name, :last_name
   # password must have at least one digit, one alphabetical lower and upcase case character and one special character
   # see http://www.zorched.net/2009/05/08/password-strength-validation-with-regular-expressions/
-  validates_format_of :password, :with => /^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/,
+  validates_format_of :password, :with => /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/,
                       :message => 'must contain at least one digit, a lower and upper case letter and a special character',
                       :allow_blank => true
   ROLES = [ADMIN_ROLE, SYSADMIN_ROLE, THRESHOLD_ROLE]
   validates_inclusion_of :role, :in => ROLES, :message => "'%{value}' is invalid"
 
   # = Finders =
-  scope :by_name, :order => 'last_name, first_name'
-  scope :by_role, lambda { |role| { :conditions => ['role = ?', role] }}
+  scope :by_name, -> { order(:last_name, :first_name) }
+  scope :by_role, ->(role) { where(role: role) }
 
   # = Methods =
 

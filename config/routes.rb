@@ -1,15 +1,15 @@
-Epets::Application.routes.draw do
-  match '/' => 'static_pages#home', :as => :home
-  match 'accessibility' => 'static_pages#accessibility', :as => 'accessibility'
-  match 'how-it-works' => 'static_pages#how_it_works', :as => 'how_it_works'
-  match 'terms-and-conditions' => 'static_pages#terms_and_conditions', :as => 'terms_and_conditions'
-  match 'privacy-policy' => 'static_pages#privacy_policy', :as => 'privacy_policy'
-  match 'crown-copyright' => 'static_pages#crown_copyright', :as => 'crown_copyright'
-  match 'faq' => 'static_pages#faq', :as => 'faq'
+Rails.application.routes.draw do
+  get '/' => 'static_pages#home', :as => :home
+  get 'accessibility' => 'static_pages#accessibility', :as => 'accessibility'
+  get 'how-it-works' => 'static_pages#how_it_works', :as => 'how_it_works'
+  get 'terms-and-conditions' => 'static_pages#terms_and_conditions', :as => 'terms_and_conditions'
+  get 'privacy-policy' => 'static_pages#privacy_policy', :as => 'privacy_policy'
+  get 'crown-copyright' => 'static_pages#crown_copyright', :as => 'crown_copyright'
+  get 'faq' => 'static_pages#faq', :as => 'faq'
 
   get 'feedback' => 'feedback#index', :as => 'feedback'
   get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
-  post 'feedback' => 'feedback#create', :as => 'feedback'
+  post 'feedback' => 'feedback#create', :as => nil
 
   resources :departments, :only => [:index, :show] do
     get 'info', :action => :info, :on => :collection, :as => :info
@@ -55,18 +55,18 @@ Epets::Application.routes.draw do
         get :threshold
       end
       member do
-        get :edit_response
-        put :update_response
-        get :edit_internal_response
-        put :update_internal_response
-        put :take_down
+        get   :edit_response
+        patch :update_response
+        get   :edit_internal_response
+        patch :update_internal_response
+        patch :take_down
       end
     end
     resources :profile, :only => [:edit, :update]
     resources :reports,  :only => [:index]
     resources :user_sessions, :only => [:create]
-    match 'logout' => 'user_sessions#destroy', :as => :logout
-    match 'login' => 'user_sessions#new', :as => :login
+    get 'logout' => 'user_sessions#destroy', :as => :logout
+    get 'login' => 'user_sessions#new', :as => :login
   end
 
   namespace :api do

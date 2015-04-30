@@ -7,11 +7,8 @@ module SectionHelpers
       "#{prefix}fieldset[contains(@class, '#{$1.downcase.gsub(/\s/, '_')}')]"
 
     # Sitewide
-    when 'browser page title'
-      "#{prefix}title"
-
     when /^single h1$/
-      page.should have_xpath("//h1", :count => 1)
+      expect(page).to have_xpath("//h1", :count => 1)
       "#{prefix}h1"
 
     when 'search results table'

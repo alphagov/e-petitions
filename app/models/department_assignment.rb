@@ -14,5 +14,7 @@ class DepartmentAssignment < ActiveRecord::Base
   belongs_to :petition
   belongs_to :department
 
+  attr_accessible :department, :assigned_on
+
   validates_presence_of :assigned_on, :department, :petition
 end

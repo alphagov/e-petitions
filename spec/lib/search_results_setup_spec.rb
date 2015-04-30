@@ -1,35 +1,39 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SearchResultsSetup do
+  class SearchResulter
+    include SearchResultsSetup
+    def params; end
+  end
   describe "results_for" do
     let (:scope) { double.as_null_object }
     let (:params) { {} }
-    subject { Object.extend(SearchResultsSetup) }
+    subject { SearchResulter.new }
 
     before do
-      subject.stub(:params => params)
+      allow(subject).to receive_messages(:params => params)
     end
 
     it "orders the results by 'signature_count desc' by default" do
-      scope.should_receive(:order).with("signature_count desc").and_return(scope)
+      expect(scope).to receive(:order).with("signature_count desc").and_return(scope)
       subject.results_for(scope)
     end
 
     it "sets the params to the default of signature_count, desc" do
       subject.results_for(scope)
-      params[:order].should == 'desc'
-      params[:sort].should == 'count'
+      expect(params[:order]).to eq('desc')
+      expect(params[:sort]).to eq('count')
     end
 
     it "orders by closed_at for 'closing'" do
       params[:sort] = 'closing'
-      scope.should_receive(:order).with("closed_at asc").and_return(scope)
+      expect(scope).to receive(:order).with("closed_at asc").and_return(scope)
       subject.results_for(scope)
     end
 
     it "orders by created_at for 'created'" do
       params[:sort] = 'created'
-      scope.should_receive(:order).with("created_at asc").and_return(scope)
+      expect(scope).to receive(:order).with("created_at asc").and_return(scope)
       subject.results_for(scope)
     end
 
@@ -37,7 +41,7 @@ describe SearchResultsSetup do
       %w{closing created}.each do |order|
         params[:sort] = order
         subject.results_for(scope)
-        params[:sort].should == order
+        expect(params[:sort]).to eq(order)
       end
     end
   end

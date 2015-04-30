@@ -11,7 +11,7 @@ Then /^I should be able to submit feedback$/ do
   fill_in "feedback[comment]", :with => @feedback.comment
 
   click_button("Send feedback")
-  page.should have_content("Thank")
+  expect(page).to have_content("Thank")
 end
 
 Then /^the site owners should be notified$/ do
@@ -21,13 +21,13 @@ Then /^the site owners should be notified$/ do
     Then they should see "#{@feedback.name}" in the email body
     Then they should see "#{@feedback.email}" in the email body
     Then they should see "#{@feedback.petition_link_or_title}" in the email body
-    Then they should see "#{ERB::Util.html_escape(@feedback.comment)}" in the email body
+    Then they should see "#{@feedback.comment}" in the email body
     Then they should see /Response required.* YES/ in the email body
   )
 end
 
 Then /^I cannot submit feedback without filling in the required fields$/ do
   click_button("Send feedback")
-  page.should have_content("must be completed")
+  expect(page).to have_content("must be completed")
   step %{"#{FeedbackMailer::TO}" should have no emails}
 end

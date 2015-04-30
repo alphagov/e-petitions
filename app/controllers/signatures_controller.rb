@@ -1,7 +1,5 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  ssl_required :new, :create
-  ssl_allowed :thank_you, :verify
   include ActionView::Helpers::NumberHelper
 
   respond_to :html
@@ -56,6 +54,6 @@ class SignaturesController < ApplicationController
   end
 
   def send_email_to_petition_signer(signature)
-    PetitionMailer.email_confirmation_for_signer(signature).deliver
+    PetitionMailer.email_confirmation_for_signer(signature).deliver_now
   end
 end

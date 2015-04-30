@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe FeedbackMailer do
   describe "send_feedback" do
@@ -6,15 +6,15 @@ describe FeedbackMailer do
     let(:mail) { FeedbackMailer.send_feedback(feedback) }
 
     it "renders the headers" do
-      mail.subject.should eq("e-petitions: Feedback received")
+      expect(mail.subject).to eq("e-petitions: Feedback received")
     end
 
     it "renders the body" do
-      mail.body.encoded.should match(feedback.comment)
+      expect(mail.body.encoded).to match(feedback.comment)
     end
 
     it "sets the reply-to to be the email address" do
-      mail.reply_to.should == [feedback.email]
+      expect(mail.reply_to).to eq([feedback.email])
     end
   end
 

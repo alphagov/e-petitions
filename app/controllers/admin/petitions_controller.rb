@@ -93,7 +93,7 @@ class Admin::PetitionsController < Admin::AdminController
     @petition.open_at = Time.zone.now
     @petition.closed_at = @petition.duration.to_i.months.from_now
     @petition.save!
-    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver
+    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_now
   end
 
   def reassign
@@ -115,7 +115,7 @@ class Admin::PetitionsController < Admin::AdminController
 
     # send rejection email
     if @petition.save
-      PetitionMailer.notify_creator_that_petition_is_rejected(@petition.creator_signature).deliver
+      PetitionMailer.notify_creator_that_petition_is_rejected(@petition.creator_signature).deliver_now
     end
   end
 end

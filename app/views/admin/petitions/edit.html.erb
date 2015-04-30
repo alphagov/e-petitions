@@ -8,7 +8,7 @@
   </div>
 
   <div>
-    <%= submit_tag 'Publish this petition', :confirm => "Are you sure you want to publish this petition?" %>
+    <%= submit_tag 'Publish this petition', :data => { :confirm => "Are you sure you want to publish this petition?" } %>
   </div>
 
   <%= render :partial => 'reject', :locals => { :f => f, :button_label => "Reject" } %>

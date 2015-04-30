@@ -17,273 +17,273 @@
 #  encrypted_email  :string(255)
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe Signature do
   it "should have a valid factory" do
-    Factory.build(:signature).should be_valid
+    expect(FactoryGirl.build(:signature)).to be_valid
   end
 
   context "defaults" do
     it "state should default to pending" do
       s = Signature.new
-      s.state.should == "pending"
+      expect(s.state).to eq("pending")
     end
 
     it "perishable token should be populated by a call to friendly_token" do
-      Authlogic::Random.should_receive(:friendly_token)
-      Factory.create(:signature)
+      expect(Authlogic::Random).to receive(:friendly_token)
+      FactoryGirl.create(:signature)
     end
 
     it "perishable token should not be nil" do
-      s = Factory.create(:signature, :perishable_token => nil)
-      s.perishable_token.should_not be_nil
+      s = FactoryGirl.create(:signature, :perishable_token => nil)
+      expect(s.perishable_token).not_to be_nil
     end
 
     it "should set notify_by_email to false" do
       s = Signature.new
-      s.notify_by_email.should be_false
+      expect(s.notify_by_email).to be_falsey
     end
   end
 
   context "encryption of email" do
-    let(:signature) { Factory.create(:signature, :email => "foo@example.net") }
+    let(:signature) { FactoryGirl.create(:signature, :email => "foo@example.net") }
     it "transparently alters the email" do
-      Signature.find(signature.id).email.should == "foo@example.net"
+      expect(Signature.find(signature.id).email).to eq("foo@example.net")
     end
 
     it "take no notice of the case" do
-      Factory.build(:signature, :email => "FOO@exAmplE.net").encrypted_email.should == signature.encrypted_email
+      expect(FactoryGirl.build(:signature, :email => "FOO@exAmplE.net").encrypted_email).to eq(signature.encrypted_email)
     end
 
     it "for_email takes into account the encrypted email" do
-      Signature.for_email("foo@example.net").should == [signature]
+      expect(Signature.for_email("foo@example.net")).to eq([signature])
     end
   end
 
 
   RSpec::Matchers.define :have_valid do |field|
     match do |actual|
-      actual.errors_on(field).should be_blank
+      expect(actual.errors_on(field)).to be_blank
     end
   end
 
   context "validations" do
-    it { should validate_presence_of(:name).with_message(/must be completed/) }
-    it { should validate_presence_of(:email).with_message(/must be completed/) }
-    it { should validate_presence_of(:address).with_message(/must be completed/) }
-    it { should validate_presence_of(:town).with_message(/must be completed/) }
-    it { should validate_presence_of(:country).with_message(/must be completed/) }
-    it { should ensure_length_of(:name).is_at_most(255) }
+    it { is_expected.to validate_presence_of(:name).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:address).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:town).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:country).with_message(/must be completed/) }
+    it { is_expected.to validate_length_of(:name).is_at_most(255) }
 
     it "should validate format of email" do
-      s = Factory.build(:signature, :email => 'joe@example.com')
-      s.should have_valid(:email)
+      s = FactoryGirl.build(:signature, :email => 'joe@example.com')
+      expect(s).to have_valid(:email)
     end
 
     it "should not allow invalid email" do
-      s = Factory.build(:signature, :email => 'not an email')
-      s.should_not have_valid(:email)
+      s = FactoryGirl.build(:signature, :email => 'not an email')
+      expect(s).not_to have_valid(:email)
     end
 
     describe "email confirmation" do
       it "require email confirmation on create" do
-        s = Factory.build(:signature, :email => 'joe@example.com', :email_confirmation => nil)
+        s = FactoryGirl.build(:signature, :email => 'joe@example.com', :email_confirmation => nil)
         s.valid?
-        s.errors_on(:email_confirmation).should_not be_blank
+        expect(s.errors_on(:email_confirmation)).not_to be_blank
       end
 
       it "not require email confirmation on update" do
-        s = Factory(:signature)
-        s.update_attributes(:email => 'john@hotmail.com', :email_confirmation => nil).should be_true
+        s = FactoryGirl.create(:signature)
+        expect(s.update_attributes(:email => 'john@hotmail.com', :email_confirmation => nil)).to be_truthy
       end
 
       it "require email and email confirmation to be the same" do
-        s = Factory.build(:signature, :email => 'john@hotmail.com', :email_confirmation => 'john2@hotmail.com')
+        s = FactoryGirl.build(:signature, :email => 'john@hotmail.com', :email_confirmation => 'john2@hotmail.com')
         s.valid?
-        s.errors_on(:email).should_not be_blank
+        expect(s.errors_on(:email_confirmation)).not_to be_blank
       end
     end
 
     describe "uniqueness of email" do
       before do
-        Factory.create(:signature, :name => "Suzy Signer",
+        FactoryGirl.create(:signature, :name => "Suzy Signer",
                        :petition_id => 1, :postcode => "sw1a 1aa",
                        :email => 'foo@example.com')
       end
 
       it "allows a second email to be used" do
-        s = Factory.build(:signature, :name => "Sam Signer",
+        s = FactoryGirl.build(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s.should have_valid(:email)
+        expect(s).to have_valid(:email)
       end
 
       it "does not allow a third email to be used" do
-        Factory.create(:signature, :name => "Sam Signer",
+        FactoryGirl.create(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s = Factory.build(:signature, :name => "Sarah Signer",
+        s = FactoryGirl.build(:signature, :name => "Sarah Signer",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "does not allow the second email if the name is the same" do
-        s = Factory.build(:signature, :name => "Suzy Signer",
+        s = FactoryGirl.build(:signature, :name => "Suzy Signer",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "ignores extra whitespace on name" do
-        s = Factory.build(:signature, :name => "Suzy Signer ",
+        s = FactoryGirl.build(:signature, :name => "Suzy Signer ",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
-        s = Factory.build(:signature, :name => " Suzy Signer",
+        expect(s).not_to have_valid(:email)
+        s = FactoryGirl.build(:signature, :name => " Suzy Signer",
                           :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "only allows the second email if the postcode is the same" do
-        s = Factory.build(:signature, :name => "Sam Signer",
+        s = FactoryGirl.build(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a 1ab',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "ignores the space on the postcode check" do
-        s = Factory.build(:signature, :name => "Sam Signer",
+        s = FactoryGirl.build(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a1aa',
                           :email => 'foo@example.com')
-        s.should have_valid(:email)
-        s = Factory.build(:signature, :name => "Sam Signer",
+        expect(s).to have_valid(:email)
+        s = FactoryGirl.build(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a1ab',
                           :email => 'foo@example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "does a case insensitive postcode check" do
-        s = Factory.build(:signature, :name => "Sam Signer",
+        s = FactoryGirl.build(:signature, :name => "Sam Signer",
                           :petition_id => 1, :postcode => 'sw1a 1Aa',
                           :email => 'foo@example.com')
-        s.should have_valid(:email)
+        expect(s).to have_valid(:email)
       end
 
       it "is case insensitive about the subsequent validations" do
-        s = Factory.create(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
+        s = FactoryGirl.create(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
                       :email => 'fOo@Example.com')
-        s.should have_valid(:email)
-        s = Factory.build(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
+        expect(s).to have_valid(:email)
+        s = FactoryGirl.build(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
                           :email => 'FOO@Example.com')
-        s.should_not have_valid(:email)
+        expect(s).not_to have_valid(:email)
       end
 
       it "is scoped to petition" do
-        s = Factory.build(:signature, :petition_id => 2, :email => 'foo@example.com')
-        s.should have_valid(:email)
+        s = FactoryGirl.build(:signature, :petition_id => 2, :email => 'foo@example.com')
+        expect(s).to have_valid(:email)
       end
     end
 
     it "should not allow blank or unknown state" do
-      s = Factory.build(:signature, :state => '')
-      s.should_not have_valid(:state)
+      s = FactoryGirl.build(:signature, :state => '')
+      expect(s).not_to have_valid(:state)
       s.state = 'unknown'
-      s.should_not have_valid(:state)
+      expect(s).not_to have_valid(:state)
     end
 
     it "should allow known states" do
-      s = Factory.build(:signature)
+      s = FactoryGirl.build(:signature)
       %w(pending validated ).each do |state|
         s.state = state
-        s.should have_valid(:state)
+        expect(s).to have_valid(:state)
       end
     end
 
     describe "postcode" do
       it "requires a postcode for a UK address" do
-        Factory.build(:signature, :postcode => 'SW1A 1AA').should be_valid
-        Factory.build(:signature, :postcode => '').should_not be_valid
+        expect(FactoryGirl.build(:signature, :postcode => 'SW1A 1AA')).to be_valid
+        expect(FactoryGirl.build(:signature, :postcode => '')).not_to be_valid
       end
 
       it "does not require a postcode for non-UK addresses" do
-        Factory.build(:signature, :country => "United Kingdom", :postcode => '').should_not be_valid
-        Factory.build(:signature, :country => "United States", :postcode => '').should be_valid
+        expect(FactoryGirl.build(:signature, :country => "United Kingdom", :postcode => '')).not_to be_valid
+        expect(FactoryGirl.build(:signature, :country => "United States", :postcode => '')).to be_valid
       end
     end
 
     describe "post district" do
       it "is the first half of the postcode" do
-        Signature.new(:postcode => "SW1A 1AA").postal_district.should == "SW1A"
-        Signature.new(:postcode => "E5C 2PL").postal_district.should == "E5C"
-        Signature.new(:postcode => "E5 2PL").postal_district.should == "E5"
-        Signature.new(:postcode => "E52 2PL").postal_district.should == "E52"
-        Signature.new(:postcode => "SO22 2PL").postal_district.should == "SO22"
+        expect(Signature.new(:postcode => "SW1A 1AA").postal_district).to eq("SW1A")
+        expect(Signature.new(:postcode => "E5C 2PL").postal_district).to eq("E5C")
+        expect(Signature.new(:postcode => "E5 2PL").postal_district).to eq("E5")
+        expect(Signature.new(:postcode => "E52 2PL").postal_district).to eq("E52")
+        expect(Signature.new(:postcode => "SO22 2PL").postal_district).to eq("SO22")
       end
 
       it "handles the lack of spaces" do
-        Signature.new(:postcode => "SO222PL").postal_district.should == "SO22"
+        expect(Signature.new(:postcode => "SO222PL").postal_district).to eq("SO22")
       end
 
       it "handles lack of spaces for shorter codes" do
-        Signature.new(:postcode => "wn88en").postal_district.should == "WN8"
-        Signature.new(:postcode => "hd58tf").postal_district.should == "HD5"
+        expect(Signature.new(:postcode => "wn88en").postal_district).to eq("WN8")
+        expect(Signature.new(:postcode => "hd58tf").postal_district).to eq("HD5")
       end
 
       it "handles case correctly" do
-        Signature.new(:postcode => "So222pL").postal_district.should == "SO22"
+        expect(Signature.new(:postcode => "So222pL").postal_district).to eq("SO22")
       end
 
       it "is blank for non-standard postcodes" do
-        Signature.new(:postcode => "").postal_district.should == ""
-        Signature.new(:postcode => "BFPO 1234").postal_district.should == ""
+        expect(Signature.new(:postcode => "").postal_district).to eq("")
+        expect(Signature.new(:postcode => "BFPO 1234").postal_district).to eq("")
       end
     end
 
     describe "uk_citizenship" do
       it "should require acceptance of uk_citizenship for a new record" do
-        Factory.build(:signature, :uk_citizenship => '1').should be_valid
-        Factory.build(:signature, :uk_citizenship => '0').should_not be_valid
-        Factory.build(:signature, :uk_citizenship => nil).should_not be_valid
+        expect(FactoryGirl.build(:signature, :uk_citizenship => '1')).to be_valid
+        expect(FactoryGirl.build(:signature, :uk_citizenship => '0')).not_to be_valid
+        expect(FactoryGirl.build(:signature, :uk_citizenship => nil)).not_to be_valid
       end
 
       it "should not require acceptance of uk_citizenship for old records" do
-        sig = Factory.create(:signature)
+        sig = FactoryGirl.create(:signature)
         sig.reload
         sig.uk_citizenship = '0'
-        sig.should be_valid
+        expect(sig).to be_valid
       end
     end
 
     describe "humanity" do
       it "should require acceptance of humanity for a new record" do
-        Factory.build(:signature, :humanity => true).should be_valid
-        Factory.build(:signature, :humanity => false).should_not be_valid
-        Factory.build(:signature, :humanity => nil).should_not be_valid
+        expect(FactoryGirl.build(:signature, :humanity => true)).to be_valid
+        expect(FactoryGirl.build(:signature, :humanity => false)).not_to be_valid
+        expect(FactoryGirl.build(:signature, :humanity => nil)).not_to be_valid
       end
 
       it "should not require acceptance of humanity for old records" do
-        sig = Factory.create(:signature)
+        sig = FactoryGirl.create(:signature)
         sig.reload
         sig.humanity = false
-        sig.should be_valid
+        expect(sig).to be_valid
       end
     end
 
     describe "Terms and Conditions" do
       it "should require acceptance of terms_and_conditions for a new record" do
-        Factory.build(:signature, :terms_and_conditions => '1').should be_valid
-        Factory.build(:signature, :terms_and_conditions => '0').should_not be_valid
-        Factory.build(:signature, :terms_and_conditions => nil).should_not be_valid
+        expect(FactoryGirl.build(:signature, :terms_and_conditions => '1')).to be_valid
+        expect(FactoryGirl.build(:signature, :terms_and_conditions => '0')).not_to be_valid
+        expect(FactoryGirl.build(:signature, :terms_and_conditions => nil)).not_to be_valid
       end
 
       it "should not require acceptance of terms_and_conditions for old records" do
-        sig = Factory.create(:signature)
+        sig = FactoryGirl.create(:signature)
         sig.reload
         sig.terms_and_conditions = '0'
-        sig.should be_valid
+        expect(sig).to be_valid
       end
     end
   end
@@ -291,69 +291,70 @@ describe Signature do
   context "scopes" do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
-    let!(:petition) { Factory(:petition) }
-    let!(:signature1) { Factory.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => nil) }
-    let!(:signature2) { Factory.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature3) { Factory.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => week_ago) }
-    let!(:signature4) { Factory.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature5) { Factory.create(:signature, :email => "person5@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false, :last_emailed_at => two_days_ago) }
+    let!(:petition) { FactoryGirl.create(:petition) }
+    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => nil) }
+    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :last_emailed_at => two_days_ago) }
+    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => week_ago) }
+    let!(:signature4) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => two_days_ago) }
+    let!(:signature5) { FactoryGirl.create(:signature, :email => "person5@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false, :last_emailed_at => two_days_ago) }
 
     context "validated" do
       it "should return only validated signatures" do
         signatures = Signature.validated
-        signatures.size.should == 5
-        signatures.should include(signature1, signature3, signature4, signature5, petition.creator_signature)
+        expect(signatures.size).to eq(5)
+        expect(signatures).to include(signature1, signature3, signature4, signature5, petition.creator_signature)
       end
     end
 
     context "need emailing" do
       it "should return only validated signatures who have opted in to receiving email updates" do
-        Signature.need_emailing(Time.now).should include(signature1, signature3, signature4, petition.creator_signature)
-        Signature.need_emailing(two_days_ago).should include(signature1, signature3, petition.creator_signature)
-        Signature.need_emailing(week_ago).should include(signature1, petition.creator_signature)
+        expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
+        expect(Signature.need_emailing(two_days_ago)).to include(signature1, signature3, petition.creator_signature)
+        expect(Signature.need_emailing(week_ago)).to include(signature1, petition.creator_signature)
       end
     end
 
     describe "for_email" do
-      let!(:other_petition) { Factory(:petition) }
+      let!(:other_petition) { FactoryGirl.create(:petition) }
       let!(:other_signature) do
-        Factory.create(:signature, :email => "person3@example.com",
+        FactoryGirl.create(:signature, :email => "person3@example.com",
         :petition => other_petition, :state => Signature::PENDING_STATE,
         :last_emailed_at => two_days_ago)
       end
 
       it "returns an empty set if the email is not found" do
-        Signature.for_email("notfound@example.com").should == []
+        expect(Signature.for_email("notfound@example.com")).to eq([])
       end
 
       it "returns only signatures for the given email address" do
-        Signature.for_email("person3@example.com").should ==
+        expect(Signature.for_email("person3@example.com")).to eq(
           [signature3, other_signature]
+        )
       end
     end
 
     describe "checking whether the signature is the creator" do
-      let!(:petition) { Factory(:petition) }
+      let!(:petition) { FactoryGirl.create(:petition) }
       it "is the creator if the signature is listed as the creator signature" do
-        petition.creator_signature.should be_creator
+        expect(petition.creator_signature).to be_creator
       end
 
       it "is not the creator if the signature is not listed as the creator" do
-        signature = Factory(:signature, :petition => petition)
-        signature.should_not be_creator
+        signature = FactoryGirl.create(:signature, :petition => petition)
+        expect(signature).not_to be_creator
       end
     end
   end
 
   describe "#pending?" do
     it "returns true if the signature has a pending state" do
-      signature = Factory.build(:pending_signature)
-      signature.pending?.should be_true
+      signature = FactoryGirl.build(:pending_signature)
+      expect(signature.pending?).to be_truthy
     end
 
     it "returns false if the signature is validated state" do
-      signature = Factory.build(:validated_signature)
-      signature.pending?.should be_false
+      signature = FactoryGirl.build(:validated_signature)
+      expect(signature.pending?).to be_falsey
     end
   end
 end

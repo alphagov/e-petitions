@@ -1,3 +1,7 @@
+require 'capybara/poltergeist'
 
-# Use firefox 7 if possible
-require "#{Rails.root}/features/support/selenium_browser.rb"
+Evergreen.configure do |config|
+  config.driver = :poltergeist
+  config.application = Evergreen::Application
+  config.mounted_at = ''
+end

@@ -5,8 +5,8 @@ end
 
 Then /^I should see a list of all the departments$/ do
   Department.all.each do |department|
-    page.should have_css("a[href*='#{department_path(department.id)}']")
-    page.should have_content(department.name)
+    expect(page).to have_css("a[href*='#{department_path(department.id)}']")
+    expect(page).to have_content(department.name)
   end
 end
 
@@ -21,19 +21,19 @@ Then /^I (should|should not) see the petitions belonging to the "([^"]*)"$/ do |
   department.petitions.each do |petition|
     petition_link = "a[href*='#{petition_path(petition.id)}']"
     if (should_or_not == "should")
-      page.should have_css(petition_link)
+      expect(page).to have_css(petition_link)
     else
-      page.should_not have_css(petition_link)
+      expect(page).not_to have_css(petition_link)
     end
   end
 end
 
 Then /^I should see the petition "([^"]*)"$/ do |petition_title|
-  page.should have_content(petition_title)
+  expect(page).to have_content(petition_title)
 end
 
 Then /^I should not see the petition "([^"]*)"$/ do |petition_title|
-  page.should_not have_content(petition_title)
+  expect(page).not_to have_content(petition_title)
 end
 
 When /^I press the info button next to the department "([^"]*)"$/ do |department_name|

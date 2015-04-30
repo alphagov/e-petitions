@@ -69,45 +69,42 @@ class Petition < ActiveRecord::Base
   attr_accessor :email_signees
 
   # = Finders =
-  scope :threshold, lambda {{
-        :conditions => ['signature_count >= ? or response_required = ?',
-                        SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true] }}
-  scope :for_state, lambda { |state|
+  scope :threshold, -> { where('signature_count >= ? OR response_required = ?', SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true) }
+  scope :for_state, ->(state) {
     if CLOSED_STATE.casecmp(state) == 0
-      {:conditions => ['state = ? and closed_at < ?', OPEN_STATE, Time.zone.now]}
+      where('state = ? AND closed_at < ?', OPEN_STATE, Time.current)
     elsif OPEN_STATE.casecmp(state) == 0
-      {:conditions => ['state = ? and closed_at >= ?', OPEN_STATE, Time.zone.now]}
+      where('state = ? AND closed_at >= ?', OPEN_STATE, Time.current)
     else
-      {:conditions => ['state = ?', state]}
+      where(state: state)
     end
   }
-  scope :for_departments, lambda {|departments| {:conditions => ['department_id in (?)', departments.map(&:id)]}}
-  scope :visible, :conditions => ['state in (?)', VISIBLE_STATES]
-  scope :moderated, :conditions => ['state in (?)', MODERATED_STATES]
-  scope :trending, lambda { |number_of_days|
-                    joins(:signatures).
-                    where("signatures.state" => "validated").
-                    where("signatures.updated_at > ?", number_of_days.day.ago).
-                    order("count('signatures.id') DESC").
-                    group('petitions.id').
-                    limit(10)
-                  }
-  scope :last_hour_trending, joins(:signatures).
-                             select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
-                             where("signatures.state" => "validated").
-                             where("signatures.updated_at > ?", 1.hour.ago).
-                             where("petitions.id <> ?", 41492).
-                             order("signatures_in_last_hour DESC").
-                             group('petitions.id').
-                             limit(12)
+  scope :for_departments, ->(departments) { where(department_id: departments.map(&:id)) }
+  scope :visible, -> { where(state: VISIBLE_STATES) }
+  scope :moderated, -> { where(state: MODERATED_STATES) }
+  scope :trending, ->(number_of_days) {
+                      joins(:signatures).
+                      where("signatures.state" => "validated").
+                      where("signatures.updated_at > ?", number_of_days.day.ago).
+                      order("count('signatures.id') DESC").
+                      group('petitions.id').limit(10)
+                    }
+  scope :last_hour_trending, -> {
+                              joins(:signatures).
+                              select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
+                              where("signatures.state" => "validated").
+                              where("signatures.updated_at > ?", 1.hour.ago).
+                              where("petitions.id <> ?", 41492).
+                              order("signatures_in_last_hour DESC").
+                              group('petitions.id').
+                              limit(12)
+                            }
 
-  scope :eligible_for_get_an_mp_email, lambda {
-    where('state = ? and closed_at >= ?', OPEN_STATE, Time.zone.now).
-    where(:get_an_mp_email_sent_at => nil).
-    where("signature_count >= ?",
-          SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
+  scope :eligible_for_get_an_mp_email, -> {
+    where('state = ? and closed_at >= ?', OPEN_STATE, Time.current).
+    where(get_an_mp_email_sent_at: nil).
+    where("signature_count >= ?", SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
   }
-
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
@@ -122,7 +119,7 @@ class Petition < ActiveRecord::Base
     logger_for_mp_threshold.info('Started')
     Petition.eligible_for_get_an_mp_email.each do |petition|
       logger_for_mp_threshold.info("Email sent: #{petition.creator_signature.email} for #{petition.title}")
-      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver
+      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver_now
       petition.update_attribute(:get_an_mp_email_sent_at, Time.zone.now)
     end
     logger_for_mp_threshold.info('Finished')

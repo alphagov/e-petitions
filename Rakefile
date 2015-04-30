@@ -4,7 +4,7 @@
 require File.expand_path('../config/application', __FILE__)
 require 'rake'
 
-Epets::Application.load_tasks
+Rails.application.load_tasks
 
 task(:default).clear_prerequisites
-task :default => [:spec_no_rails, :spec, :'spec:javascripts', :'cucumber']
+task :default => [:spec, :'spec:javascripts', :'cucumber']

@@ -22,7 +22,7 @@ class Captcha
     end
 
     bytes = Digest::MD5.hexdigest(input).slice(0..(2*CHARACTER_COUNT - 1)).scan(/../)
-    bytes.map { |byte| ALPHABET[byte.hex % ALPHABET.size].chr }.to_s
+    bytes.map { |byte| ALPHABET[byte.hex % ALPHABET.size].chr }.join
   end
 
   def self.skip_captcha_verification?

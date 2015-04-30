@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "api/petitions/index.json.rabl" do
   let(:fields) {{
@@ -23,16 +23,16 @@ describe "api/petitions/index.json.rabl" do
 
     subject { JSON.parse(rendered).first.values.first }
 
-    example { subject['title'].should == "foo" }
-    example { subject['description'].should == "description" }
-    example { subject['creator_name'].should == "Tod Ham" }
-    example { subject['department_name'].should == "Treasury" }
-    example { subject['created_datetime'].should == "2012-02-02T02:02:02Z" }
-    example { subject['closing_datetime'].should == "2013-02-02T02:02:02Z" }
-    example { subject['last_update_datetime'].should == "2012-03-02T02:02:02Z" }
-    example { subject['signature_count'].should == 101 }
-    example { subject['state'].should == "open" }
-    example { subject['response'].should == "hello, yes" }
+    example { expect(subject['title']).to eq("foo") }
+    example { expect(subject['description']).to eq("description") }
+    example { expect(subject['creator_name']).to eq("Tod Ham") }
+    example { expect(subject['department_name']).to eq("Treasury") }
+    example { expect(subject['created_datetime']).to eq("2012-02-02T02:02:02Z") }
+    example { expect(subject['closing_datetime']).to eq("2013-02-02T02:02:02Z") }
+    example { expect(subject['last_update_datetime']).to eq("2012-03-02T02:02:02Z") }
+    example { expect(subject['signature_count']).to eq(101) }
+    example { expect(subject['state']).to eq("open") }
+    example { expect(subject['response']).to eq("hello, yes") }
   end
 
   context "no closing date" do
@@ -40,6 +40,6 @@ describe "api/petitions/index.json.rabl" do
       assign(:petitions, [double(fields.merge(:closed_at => nil))])
       render
     end
-    example { subject['closing_datetime'].should == nil }
+    example { expect(subject['closing_datetime']).to eq(nil) }
   end
 end

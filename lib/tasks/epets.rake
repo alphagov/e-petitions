@@ -1,3 +1,5 @@
+require 'app_config'
+
 namespace :epets do
 
   desc 'Add sysadmin user'
@@ -86,17 +88,18 @@ namespace :epets do
     puts "Ended #{Time.now}"
   end
 
-  class EncryptedSignature < ActiveRecord::Base
-    class EmailDowncaser
-      def self.dump(value); value.downcase; end
-      def self.load(value); value; end
-    end
-    attr_encrypted :email, :key => AppConfig.email_encryption_key, :attribute => "encrypted_email", :marshal => true, :marshaler => EmailDowncaser
-  end
-
   desc "Add encrypt emails to new email"
   task :encrypt_email => :environment do
+    class EncryptedSignature < ActiveRecord::Base
+      class EmailDowncaser
+        def self.dump(value); value.downcase; end
+        def self.load(value); value; end
+      end
+      attr_encrypted :email, :key => AppConfig.email_encryption_key, :attribute => "encrypted_email", :marshal => true, :marshaler => EmailDowncaser
+    end
+
     puts "Encrypting..."
+
     EncryptedSignature.record_timestamps = false
     each_signature(EncryptedSignature.where("encrypted_email IS NULL")) do |encrypted_signature|
       encrypted_signature.update_attribute(:email, Signature.find(encrypted_signature.id).email);
