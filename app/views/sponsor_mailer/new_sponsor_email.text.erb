@@ -1,0 +1,15 @@
+Hi,
+
+<%= @sponsor.petition.creator_signature.name %> is petitioning the UK Parliament and has nominated you as one of the
+5 supporters they need to start a petition.
+
+If you're happy to support this petition, please follow the link below to
+provide a few details additional details.
+
+<%=
+  url = sponsor_petition_url(@sponsor.petition, @sponsor.perishable_token, :secure => true)
+%>
+
+<%= @sponsor.petition.title  %>
+
+<%= @sponsor.petition.description  %>

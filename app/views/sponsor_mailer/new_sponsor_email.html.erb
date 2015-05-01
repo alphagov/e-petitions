@@ -1,0 +1,13 @@
+<p>Hi,</p>
+<p><%= @sponsor.petition.creator_signature.name %> is petitioning the UK Parliament and has nominated you as one of the
+5 supporters they need to start a petition.</p>
+<p>
+If you're happy to support this petition, please follow the link below to
+provide a few details additional details.
+</p>
+<%=
+  url = sponsor_petition_url(@sponsor.petition, @sponsor.perishable_token, :secure => true)
+  link_to url, url
+%>
+<p><%= @sponsor.petition.title  %></p>
+<p><%= @sponsor.petition.description  %></p>
