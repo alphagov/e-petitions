@@ -26,7 +26,7 @@ class PetitionsController < ApplicationController
 
   def create
     create_params = petition_params_for_create
-    create_params[:creator_signature_attributes][:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
+    create_params[:creator_signature_attributes][:humanity] = '1'
 
     @petition = Petition.new(create_params)
     @petition.creator_signature.email.strip!

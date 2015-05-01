@@ -10,7 +10,7 @@ class SignaturesController < ApplicationController
 
   def create
     create_params = signature_params_for_create
-    create_params[:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
+    create_params[:humanity] = '1'
     @signature = Signature.new(create_params)
     @signature.email.strip!
     @signature.petition = @petition

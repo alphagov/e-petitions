@@ -8,7 +8,6 @@ defaults: &defaults
 development:
   <<: *defaults
   host_for_email: "localhost:3000"
-  skip_recaptcha_verify: 1
 
 development_with_caching:
   <<: *defaults

@@ -47,7 +47,6 @@ describe PetitionsController do
       @department = FactoryGirl.create(:department)
       @creator_signature_attributes = {:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
                                       :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL', :country => 'UK', :uk_citizenship => '1', :terms_and_conditions => '1'}
-      allow(Captcha).to receive_messages(:verify => true)
     end
 
     def do_post(options = {})
@@ -147,13 +146,6 @@ describe PetitionsController do
           expect(assigns[:departments]).to eq([@department])
         end
 
-        it "should add an error to @petition if the recaptcha is not valid" do
-          allow(Captcha).to receive_messages(:verify => false)
-          do_post
-          expect(Petition.find_by_title('Save the planet')).to be_nil
-          expect(assigns[:petition].creator_signature.errors[:humanity]).to eq(["The captcha was not filled in correctly."])
-        end
-
         it "should assign start_on_section to 0 if there are errors on title, department or description" do
           do_post :title => ''
           expect(assigns[:start_on_section]).to eq(0)
@@ -177,11 +169,6 @@ describe PetitionsController do
           expect(assigns[:start_on_section]).to eq(1)
           do_post :creator_signature_attributes => @creator_signature_attributes.merge(:country => '')
           expect(assigns[:start_on_section]).to eq(1)
-        end
-        it "should assign start_on_section to 2 if there are errors on recaptcha" do
-          allow(Captcha).to receive_messages(:verify => false)
-          do_post
-          expect(assigns[:start_on_section]).to eq(2)
         end
       end
     end

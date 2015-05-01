@@ -14,7 +14,6 @@ Feature: Suzie signs a petition
     And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details
-    And I fill in a valid captcha
     And I accept the terms and conditions
     And I try to sign
     Then I have not yet signed the petition
@@ -28,7 +27,6 @@ Feature: Suzie signs a petition
   Scenario: Suzie signs a petition after validating her email (javascript run-through)
     When I decide to sign the petition
     And I fill in my details
-    And I fill in a valid captcha
     And I accept the terms and conditions
     And I try to sign
     Then I have not yet signed the petition
@@ -55,14 +53,6 @@ Feature: Suzie signs a petition
   Scenario: Suzie cannot sign if she does not accept the terms
     When I decide to sign the petition
     And I fill in my details
-    And I try to sign
-    Then I should see an error
-    
-  Scenario: Suzie cannot sign if she does not fill in the captcha correctly
-    When I decide to sign the petition
-    And I fill in my details
-    And I accept the terms and conditions
-    And I fill in an invalid captcha
     And I try to sign
     Then I should see an error
 

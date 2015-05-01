@@ -35,7 +35,6 @@ Scenario: Charlie creates our petition
   And I fill in "e-petition details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I select "3 months" from "Time to collect signatures"
   And I fill in my details
-  And I fill in a valid captcha
   And I check "I agree to the Terms & Conditions"
   Then the markup should be valid
   When I press "Submit"
@@ -71,7 +70,6 @@ Scenario: Charlie tries to submit an invalid petition without javascript.
   And the "Postcode" row should display as invalid
   And I should see "You must accept the terms and conditions."
   And the "I agree to the Terms & Conditions This link opens in a new window" row should display as invalid
-  And I should see "The captcha was not filled in correctly."
 
   When I fill in "e-petition title" with "012345678911234567892123456789312345678941234567895123456789Blah"
   And I select "Department for International Development" from "Department"
@@ -152,11 +150,6 @@ Scenario: Charlie tries to submit an invalid petition with javascript.
   And I fill in "Name" with "Mr. Wibbledon" within "//fieldset[2]"
   And I press "Next" within "//fieldset[2]"
 
-  And I fill in an invalid captcha
-  And I press "Submit"
-  And I should see "The captcha was not filled in correctly."
-
-  And I fill in a valid captcha
   And I press "Submit"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"

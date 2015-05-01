@@ -260,9 +260,7 @@ E_PETS.FormController = function FormController(form, start_on_section) {
       var inputs = $('input, textarea, select', fieldset);
       var input_groups = E_PETS.UTILS.group_collection_by(inputs, 'name');
       for (var field_name in input_groups) {
-        if (field_name.indexOf('captcha') == -1) {
-          fields_for_section.push(field_name);
-        }
+        fields_for_section.push(field_name);
       }
       return fields_for_section;
     }

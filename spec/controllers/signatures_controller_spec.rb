@@ -120,10 +120,6 @@ describe SignaturesController do
       :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL',
       :country => 'UK'}}
 
-    before(:each) do
-      allow(Captcha).to receive_messages(:verify => true)
-    end
-
     def do_post(options = {})
       post :create, :signature => signature_params.merge(options), :petition_id => petition.id
     end
