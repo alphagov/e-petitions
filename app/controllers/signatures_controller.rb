@@ -9,9 +9,7 @@ class SignaturesController < ApplicationController
   end
 
   def create
-    create_params = signature_params_for_create
-    create_params[:humanity] = '1'
-    @signature = Signature.new(create_params)
+    @signature = Signature.new(signature_params_for_create)
     @signature.email.strip!
     @signature.petition = @petition
     if (@signature.save)
