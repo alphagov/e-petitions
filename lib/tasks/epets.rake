@@ -76,28 +76,5 @@ namespace :epets do
     renderer.render_all_petitions
     renderer.render_individual_over_threshold_petitions
   end
-
-  desc "Update all Petitions due to finish after dissolution of Parliament to the fixed closing date"
-  task :update_petition_closing_dates => :environment do
-    puts 'Finding affected petitions'
-    affected_petitions = Petition.where("closed_at > ? AND state = ?", Petition::FIXED_CLOSING_DATE, 'open')
-    puts 'Updating closing dates'
-    affected_petitions.each do |petition|
-      petition.closed_at = Petition::FIXED_CLOSING_DATE
-      petition.save!
-    end
-    puts 'Done'
-  end
-
-  desc "Send notification email to all creators of petitions that are effected by changes"
-  task :send_closing_date_notification_emails => :environment do
-    puts 'Finding affected petitions'
-    affected_petitions = Petition.where("closed_at > ? AND state = ?", Petition::FIXED_CLOSING_DATE, 'open')
-    puts 'Sending emails'
-    affected_petitions.each do |petition|
-      PetitionMailer.notify_creator_of_closing_date_change(petition.creator_signature).deliver
-    end
-    puts 'Done'
-  end
 end
 
