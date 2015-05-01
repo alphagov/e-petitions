@@ -25,9 +25,10 @@ class PetitionsController < ApplicationController
   end
 
   def create
-    params[:petition][:creator_signature_attributes][:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
+    create_params = petition_params_for_create
+    create_params[:creator_signature_attributes][:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
 
-    @petition = Petition.new(params[:petition])
+    @petition = Petition.new(create_params)
     @petition.creator_signature.email.strip!
     if @petition.creator_signature
       @petition.creator_signature.ip_address = request.remote_ip
@@ -83,5 +84,16 @@ class PetitionsController < ApplicationController
 
   def send_email_to_verify_petition_creator(petition)
     PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
+  end
+
+  def petition_params_for_create
+    params.
+      require(:petition).
+      permit(:title, :description, :duration, :department_id,
+             creator_signature_attributes: [
+               :name, :email, :email_confirmation, :address, :town,
+               :postcode, :country, :uk_citizenship,
+               :terms_and_conditions, :notify_by_email
+             ])
   end
 end

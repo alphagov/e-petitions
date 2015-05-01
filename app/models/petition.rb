@@ -28,7 +28,6 @@
 class Petition < ActiveRecord::Base
   include State
 
-  attr_accessible :title, :description, :duration, :department_id, :creator_signature_attributes
   after_create :set_petition_on_creator_signature
 
   searchable do

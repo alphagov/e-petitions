@@ -9,9 +9,9 @@ class SignaturesController < ApplicationController
   end
 
   def create
-    params[:signature][:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
-
-    @signature = Signature.new(params[:signature])
+    create_params = signature_params_for_create
+    create_params[:humanity] = Captcha.verify(params[:captcha_response_field], params[:captcha_string])
+    @signature = Signature.new(create_params)
     @signature.email.strip!
     @signature.petition = @petition
     if (@signature.save)
@@ -55,5 +55,13 @@ class SignaturesController < ApplicationController
 
   def send_email_to_petition_signer(signature)
     PetitionMailer.email_confirmation_for_signer(signature).deliver_now
+  end
+
+  def signature_params_for_create
+    params.
+      require(:signature).
+      permit(:name, :email, :email_confirmation, :address, :town,
+             :postcode, :country, :uk_citizenship,
+             :terms_and_conditions, :notify_by_email)
   end
 end
