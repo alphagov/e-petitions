@@ -84,6 +84,11 @@ FactoryGirl.define do
     state      Signature::VALIDATED_STATE
   end
 
+  factory :sponsor do
+    sequence(:email) {|n| "jo#{n}@public.com" }
+    association :petition
+  end
+
   factory :system_setting do
     sequence(:key)  {|n| "key#{n}"}
   end
