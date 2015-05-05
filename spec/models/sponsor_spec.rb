@@ -42,7 +42,7 @@ describe Sponsor do
   end
 
   context "validations" do
-    it { is_expected.to validate_presence_of(:email) }
+    it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:petition).with_message(/Needs a petition/) }
     it { is_expected.to allow_value('joe@example.com').for(:email) }
     it { is_expected.not_to allow_value('not an email').for(:email) }
