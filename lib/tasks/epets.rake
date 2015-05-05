@@ -1,5 +1,3 @@
-require 'app_config'
-
 namespace :epets do
 
   desc 'Add sysadmin user'
@@ -72,6 +70,7 @@ namespace :epets do
 
   desc "Writes out the json data"
   task :write_json_data => :environment do
+    require 'json_renderer'
     renderer = JsonRenderer.new
     renderer.render_all_petitions
     renderer.render_individual_over_threshold_petitions
