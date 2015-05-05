@@ -93,10 +93,6 @@
       <p id="description_summary_field"></p>
     </div>
 
-    <%= form_row :class => 'captcha_row', :for => [@petition.creator_signature, :humanity] do %>
-      <%= render :partial => 'shared/captcha_widget', :locals => { :f => f, :signature => @petition.creator_signature } %>
-    <% end unless Captcha.skip_captcha_verification? %>
-
     <%= f.fields_for :creator_signature do |csf| %>
       <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => @petition.creator_signature } %>
     <% end %>

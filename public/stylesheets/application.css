@@ -676,23 +676,6 @@ form .button_row input,
 form .button_row button {
   width: auto;
 }
-form .captcha_row {
-  margin: 30px 20px 30px 140px;
-}
-form .captcha_row p {
-  margin: 0 0 20px 0;
-}
-
-form .captcha_row .errors {
-  left: 410px;
-  width: 210px;
-}
-
-form .captcha_row noscript textarea {
-  width: 300px;
-  height: 50px;
-}
-
 form .errorExplanation {
   margin: 34px 63px;
   background-color: #F8F8F8;
@@ -1038,30 +1021,12 @@ form fieldset#petition_submit_section #petition_summary_block #description_summa
 form fieldset#petition_submit_section .row {
   margin-left: 62px;
 }
-form fieldset#petition_submit_section .captcha_row {
-  margin-top: 35px;
-  margin-bottom: 44px;
-}
-form fieldset#petition_submit_section .captcha_row p {
-  margin-left: 0px;
-  margin-bottom: 30px;
-  width: 300px;
-}
-form fieldset#petition_submit_section .captcha_row .errors {
-  left: 330px;
-  top: 70px;
-  width: 300px;
-}
 form fieldset#petition_submit_section .checkbox_row {
   margin-left: 62px;
 }
 form fieldset#petition_submit_section .button_row {
   padding-left: 0px;
   margin-top: 43px;
-}
-
-form .captcha_row input{
-  margin-bottom: 5px;
 }
 
 /* New Signature */
@@ -1561,36 +1526,6 @@ html[xmlns] .clearfix {
   width: 250px;
 }
 
-
-/*
-  recaptcha styles
-*/
-#captcha_image{
-  margin-bottom: 5px;
-}
-
-#captcha_audio{
-  background: transparent url(/images/icons/audio.jpg) no-repeat left center;
-  padding-left: 20px;
-}
-
-.refresh_link {
-  margin: 5px 0;
-  padding: 0;
-  height: 16px;
-  background: transparent url(/images/icons/refresh.jpg) no-repeat left center;
-  display: inline-block;
-  overflow: hidden;
-  padding-left: 20px;
-  vertical-align: top;
-}
-
-#captcha_response_field{
-  clear: both;
-  width: 230px;
-  display: block;
-}
-
 /*
   CSS Media Queries for Mobile devices
 */
@@ -1750,10 +1685,6 @@ html[xmlns] .clearfix {
     right: 0px;
   }
 
-  form fieldset#petition_submit_section .captcha_row p{
-    width: 100%;
-  }
-
   form fieldset#petition_submit_section .row{
     margin-left: 0;
   }
@@ -1780,11 +1711,6 @@ html[xmlns] .clearfix {
     float: none;
     width: auto;
     margin-top: 10px;
-  }
-
-  form .captcha_row p{
-    padding: 10px 0;
-    color: #414042;
   }
 
   form.new_petition_form fieldset{
@@ -1969,10 +1895,6 @@ html[xmlns] .clearfix {
 
   .thank_you_block .return_to_homepage_button{
     font-size: 15px;
-  }
-
-  #petition_submit_section #recaptcha_widget{
-    width: auto;
   }
 
   .petition_view .button_row{

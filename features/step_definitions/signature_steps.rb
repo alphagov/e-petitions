@@ -90,7 +90,6 @@ end
 When /^I try to sign the petition with the same email address and a different name$/ do
   step "I decide to sign the petition"
   step "I fill in my details"
-  step "I fill in a valid captcha"
   step %{I fill in "Name" with "Sam Wibbledon"}
   step "I accept the terms and conditions"
   step "I try to sign"
@@ -99,7 +98,6 @@ end
 When /^I try to sign the petition with the same email address and the same name$/ do
   step "I decide to sign the petition"
   step "I fill in my details"
-  step "I fill in a valid captcha"
   step "I accept the terms and conditions"
   step "I try to sign"
 end
@@ -107,7 +105,6 @@ end
 When /^I try to sign the petition with the same email address, a different name, and a different postcode$/ do
   step "I decide to sign the petition"
   step "I fill in my details"
-  step "I fill in a valid captcha"
   step %{I fill in "Name" with "Sam Wibbledon"}
   step %{I fill in "Postcode" with "W1A 1AA"}
   step "I accept the terms and conditions"
@@ -117,7 +114,6 @@ end
 When /^I try to sign the petition with the same email address and a third name$/ do
   step "I decide to sign the petition"
   step "I fill in my details"
-  step "I fill in a valid captcha"
   step %{I fill in "Name" with "Sarah Wibbledon"}
   step "I accept the terms and conditions"
   step "I try to sign"

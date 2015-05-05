@@ -10,10 +10,6 @@
   <fieldset>
     <%= render :partial => 'signatures/form', :locals => { :f => f, :signature => @signature } %>
 
-    <%= form_row :for => [@signature, :humanity], :class => 'captcha_row' do %>
-      <%= render :partial => 'shared/captcha_widget', :locals => { :f => f, :signature => @signature } %>
-    <% end unless Captcha.skip_captcha_verification? -%>
-
     <%= render :partial => 'notify_by_email', :locals => { :f => f, :signature => @signature } %>
     <%= render :partial => 'terms_and_conditions', :locals => { :f => f, :signature => @signature } %>
 

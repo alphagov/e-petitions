@@ -61,7 +61,6 @@ class Signature < ActiveRecord::Base
   validates_presence_of :postcode, :message => "%{attribute} must be completed", :if => "country == 'United Kingdom'"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
 
-  validates_acceptance_of :humanity, :accept => true, :message => "The captcha was not filled in correctly.", :if => :new_record?, :allow_nil => false
   validates_acceptance_of :uk_citizenship, :message => "You must be a British citizen or normally live in the UK to create or sign petitions.", :if => :new_record?, :allow_nil => false
   validates_acceptance_of :terms_and_conditions, :message => "You must accept the terms and conditions.", :if => :new_record?, :allow_nil => false
   validates_presence_of :address, :town, :if => :new_record?, :message => "%{attribute} must be completed"
@@ -76,7 +75,6 @@ class Signature < ActiveRecord::Base
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
 
   # = Methods =
-  attr_accessor :humanity
   attr_accessor :uk_citizenship
   attr_accessor :terms_and_conditions
   attr_accessor :address

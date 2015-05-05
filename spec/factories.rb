@@ -69,7 +69,6 @@ FactoryGirl.define do
     town                "London"
     postcode            "SW1A 2"
     country             "United Kingdom"
-    humanity             true
     uk_citizenship       '1'
     notify_by_email      '1'
     terms_and_conditions '1'
