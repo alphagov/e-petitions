@@ -126,6 +126,7 @@ describe Petition do
     end
   end
 
+
   context "scopes" do
     describe "last_hour_trending" do
       before(:each) do
@@ -578,4 +579,23 @@ describe Petition do
       }.to raise_error
     end
   end
+
+  describe "sponsor creation" do
+
+    #petition with no sponsor emails should NOT create petition
+    #petition with less than SPONSOR_COUNT_MIN should NOT create petition
+
+    #5 legit sponsor emails should create 5 sponsors
+
+    #4 legit sponsor emails should NOT create petition
+    #6 legit sponsor emails should create petition
+
+    #5 sponsor emails (with 2 the same) should NOT create petition
+    #6 sponsor emails (with 2 the same) should NOT create petition
+
+    #5 sponsor emails (with one having incorrect format) should NOT create petition
+    #6 sponsor emails (with one having incorrect format) should NOT create petition
+  end
+
+  
 end

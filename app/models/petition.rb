@@ -67,7 +67,15 @@ class Petition < ActiveRecord::Base
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
 
   attr_accessor :email_signees
+  attr_reader :sponsor_emails
 
+  def sponsor_emails=(emails_string)
+    write_attribute(:sponsor_emails, emails_string.split( /\r?\n/ ))
+  end
+
+  validates_with PetitionSponsorValidator
+  
+  
   # = Finders =
   scope :threshold, -> { where('signature_count >= ? OR response_required = ?', SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true) }
   scope :for_state, ->(state) {
