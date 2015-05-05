@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20150430103606) do
     t.string   "first_name",           limit: 255
     t.string   "last_name",            limit: 255
     t.string   "role",                 limit: 10,                 null: false
-    t.boolean  "force_password_reset", limit: 1,   default: true
+    t.boolean  "force_password_reset",             default: true
     t.datetime "password_changed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -91,10 +91,10 @@ ActiveRecord::Schema.define(version: 20150430103606) do
     t.text     "rejection_text",          limit: 65535
     t.datetime "closed_at"
     t.integer  "signature_count",         limit: 4,     default: 0
-    t.boolean  "response_required",       limit: 1,     default: false
+    t.boolean  "response_required",                     default: false
     t.text     "internal_response",       limit: 65535
     t.string   "rejection_code",          limit: 50
-    t.boolean  "notified_by_email",       limit: 1,     default: false
+    t.boolean  "notified_by_email",                     default: false
     t.string   "duration",                limit: 2,     default: "12"
     t.datetime "email_requested_at"
     t.datetime "get_an_mp_email_sent_at"
@@ -121,7 +121,7 @@ ActiveRecord::Schema.define(version: 20150430103606) do
     t.integer  "petition_id",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "notify_by_email",  limit: 1,   default: false
+    t.boolean  "notify_by_email",              default: false
     t.datetime "last_emailed_at"
     t.string   "encrypted_email",  limit: 255
   end
@@ -144,16 +144,16 @@ ActiveRecord::Schema.define(version: 20150430103606) do
     t.integer  "petition_id",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "notify_by_email",  limit: 1,   default: false
+    t.boolean  "notify_by_email",              default: false
     t.datetime "last_emailed_at"
   end
 
-  add_index "signatures_pre_encryption", ["email", "petition_id", "name"], name: "index_signatures_on_email_and_petition_id_and_name", unique: true, using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "email"], name: "index_signatures_on_petition_id_and_email", using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "state", "name"], name: "index_signatures_on_petition_id_and_state_and_name", using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "state"], name: "index_signatures_on_petition_id_and_state", using: :btree
-  add_index "signatures_pre_encryption", ["state"], name: "index_signatures_on_state", using: :btree
-  add_index "signatures_pre_encryption", ["updated_at"], name: "index_signatures_on_updated_at", using: :btree
+  add_index "signatures_pre_encryption", ["email", "petition_id", "name"], name: "index_signatures_pre_enc_on_email_and_petition_id_and_name", unique: true, using: :btree
+  add_index "signatures_pre_encryption", ["petition_id", "email"], name: "index_signatures_pre_enc_on_petition_id_and_email", using: :btree
+  add_index "signatures_pre_encryption", ["petition_id", "state", "name"], name: "index_signatures_pre_enc_on_petition_id_and_state_and_name", using: :btree
+  add_index "signatures_pre_encryption", ["petition_id", "state"], name: "index_signatures_pre_enc_on_petition_id_and_state", using: :btree
+  add_index "signatures_pre_encryption", ["state"], name: "index_signatures_pre_enc_on_state", using: :btree
+  add_index "signatures_pre_encryption", ["updated_at"], name: "index_signatures_pre_enc_on_updated_at", using: :btree
 
   create_table "sponsors", force: :cascade do |t|
     t.string   "encrypted_email",  limit: 255

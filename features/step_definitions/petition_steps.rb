@@ -145,3 +145,13 @@ When(/^I am allowed to make the petition title too long$/) do
   # values longer than maxlength and so we can't test our JS validation
   page.execute_script "$('#petition_title').attr('maxlength', '');"
 end
+
+Then(/^the petition with title: "(.*?)" should have requested an email after "(.*?)"$/) do |title, timestamp|
+  petition = Petition.find_by!(title: title)
+  expect(petition.email_requested_at).to be >= timestamp.in_time_zone
+end
+
+Then(/^the petition with title: "(.*?)" should not have requested an email$/) do |title|
+  petition = Petition.find_by!(title: title)
+  expect(petition.email_requested_at).to be_nil
+end
