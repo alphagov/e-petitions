@@ -2,7 +2,7 @@ Feature: Threshold list
   In order to see and action petitions that require a response
   As a threshold or sysadmin user I can see a list of petitions that have exceeded the signature threshold count
   Or have been marked as requiring a response
-  
+
   Background:
     Given I am logged in as a threshold user
     And the date is the "21 April 2011 12:00"
@@ -39,7 +39,7 @@ Feature: Threshold list
     Then I should see 4 rows in the admin index table
     And I follow "Previous"
     And I should see 20 rows in the admin index table
-    
+
   Scenario: A threshold user can view the details of a petition and form fields
     When I go to the admin threshold page
     And I follow "Petition 1"
@@ -58,7 +58,7 @@ Feature: Threshold list
     And I press "Save"
     Then I should be on the admin threshold page
     And a petition should exist with title: "Petition 1", internal_response: "Parliament here it comes", response_required: true
-    
+
   Scenario: A threshold user updates the public response to a petition
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
@@ -67,7 +67,7 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should be on the admin threshold page
-    And a petition should exist with title: "Petition 1", response: "Parliament here it comes", email_requested_at: "2010-12-03 01:00:00"
+    And the petition with title: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
     And the response to "Petition 1" should be publicly viewable on the petition page
 
   Scenario: A threshold user unsuccessfully tries to update the public response to a petition
@@ -77,4 +77,4 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should see "must be completed when email signees is checked"
-    And a petition should not exist with title: "Petition 1", email_requested_at: "2010-12-03 01:00:00"
+    And the petition with title: "Petition 1" should not have requested an email
