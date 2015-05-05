@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430103606) do
+ActiveRecord::Schema.define(version: 20150501155244) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -132,28 +132,6 @@ ActiveRecord::Schema.define(version: 20150430103606) do
   add_index "signatures", ["petition_id"], name: "index_signatures_on_petition_id_and_email", using: :btree
   add_index "signatures", ["state"], name: "index_signatures_on_state", using: :btree
   add_index "signatures", ["updated_at"], name: "index_signatures_on_updated_at", using: :btree
-
-  create_table "signatures_pre_encryption", force: :cascade do |t|
-    t.string   "name",             limit: 255,                     null: false
-    t.string   "email",            limit: 255,                     null: false
-    t.string   "state",            limit: 10,  default: "pending", null: false
-    t.string   "perishable_token", limit: 255
-    t.string   "postcode",         limit: 255
-    t.string   "country",          limit: 255
-    t.string   "ip_address",       limit: 20
-    t.integer  "petition_id",      limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.boolean  "notify_by_email",              default: false
-    t.datetime "last_emailed_at"
-  end
-
-  add_index "signatures_pre_encryption", ["email", "petition_id", "name"], name: "index_signatures_pre_enc_on_email_and_petition_id_and_name", unique: true, using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "email"], name: "index_signatures_pre_enc_on_petition_id_and_email", using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "state", "name"], name: "index_signatures_pre_enc_on_petition_id_and_state_and_name", using: :btree
-  add_index "signatures_pre_encryption", ["petition_id", "state"], name: "index_signatures_pre_enc_on_petition_id_and_state", using: :btree
-  add_index "signatures_pre_encryption", ["state"], name: "index_signatures_pre_enc_on_state", using: :btree
-  add_index "signatures_pre_encryption", ["updated_at"], name: "index_signatures_pre_enc_on_updated_at", using: :btree
 
   create_table "sponsors", force: :cascade do |t|
     t.string   "encrypted_email",  limit: 255
