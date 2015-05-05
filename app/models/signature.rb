@@ -62,6 +62,7 @@ class Signature < ActiveRecord::Base
   validates_presence_of :name, :country, :message => "%{attribute} must be completed"
   validates_length_of :name, :maximum => 255
   validates_presence_of :postcode, :message => "%{attribute} must be completed", :if => "country == 'United Kingdom'"
+  validates_format_of :postcode, :with => /\A(([A-Z]{1,2}[0-9][0-9A-Z]? ?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO? ?(C\/O)? ?[0-9]{1,4})|(GIR 0AA))\Z/i, :message => 'Postcode not recognised.', :if => "country == 'United Kingdom'"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
 
   validates_acceptance_of :uk_citizenship, :message => "You must be a British citizen or normally live in the UK to create or sign petitions.", :if => :new_record?, :allow_nil => false

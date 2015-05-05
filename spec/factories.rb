@@ -84,7 +84,7 @@ FactoryGirl.define do
     email_confirmation  {|sig| sig.email }
     address             "10 Downing St"
     town                "London"
-    postcode            "SW1A 2"
+    postcode            "SW1A 1AA"
     country             "United Kingdom"
     uk_citizenship       '1'
     notify_by_email      '1'
