@@ -1,5 +1,5 @@
 defaults : &defaults
-  adapter: mysql2
+  adapter: postgresql
   encoding: utf8
   username: epets
   password:

@@ -7,5 +7,5 @@ before_install:
 before_script:
   - bundle install
   - cp config/database.yml.travis config/database.yml
-  - mysql -e 'create database epets_test;'
+  - psql -c 'create database epets_test;' -U postgres
 script: bundle exec rake

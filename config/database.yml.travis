@@ -1,8 +1,8 @@
 test: &TEST
-  adapter: mysql2
+  adapter: postgresql
   database: epets_test
   encoding: utf8
-  username: root
+  username: postgres
   password:
 
 cucumber:

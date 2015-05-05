@@ -9,7 +9,7 @@ gem 'responders'
 gem 'rails_autolink'
 
 gem 'rake'
-gem 'mysql2'
+gem 'pg'
 gem 'authlogic'
 gem 'will_paginate'
 gem 'sunspot_rails'
