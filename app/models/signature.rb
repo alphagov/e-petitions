@@ -18,22 +18,25 @@
 #
 
 class Signature < ActiveRecord::Base
+
+  include EmailEncrypter
+  include PerishableTokenGenerator
+  
   PENDING_STATE = 'pending'
   VALIDATED_STATE = 'validated'
   STATES = [PENDING_STATE, VALIDATED_STATE]
-
-  before_create :set_perishable_token
-
-  attr_encrypted :email, :key => AppConfig.email_encryption_key, :attribute => "encrypted_email", :marshal => true, :marshaler => EmailDowncaser
 
   # = Relationships =
   belongs_to :petition
   has_one :sponsor
 
   # = Validations =
-  validates_format_of :email, :with => Authlogic::Regex.email, :unless => 'email.blank?', :message => "Email not recognised."
-  validates_presence_of :email_confirmation, :on => :create, :message => "%{attribute} must be completed"
-  validates_confirmation_of :email, :message => "Email should match confirmation", :on => :create
+  validates_presence_of :email_confirmation,
+                        :on => :create,
+                        :message => "%{attribute} must be completed"
+  validates_confirmation_of :email,
+                            :message => "Email should match confirmation",
+                            :on => :create
 
   validate do |signature|
     matcher = Signature.where(:encrypted_email => signature.encrypted_email, :petition_id => signature.petition_id)
@@ -56,7 +59,7 @@ class Signature < ActiveRecord::Base
     end
 
   end
-  validates_presence_of :name, :email, :country, :message => "%{attribute} must be completed"
+  validates_presence_of :name, :country, :message => "%{attribute} must be completed"
   validates_length_of :name, :maximum => 255
   validates_presence_of :postcode, :message => "%{attribute} must be completed", :if => "country == 'United Kingdom'"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
@@ -71,7 +74,6 @@ class Signature < ActiveRecord::Base
   scope :need_emailing, ->(job_datetime) {
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
-  scope :for_email, ->(email) { where(encrypted_email: Signature.encrypt_email(email)) }
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
 
   # = Methods =
@@ -79,22 +81,6 @@ class Signature < ActiveRecord::Base
   attr_accessor :terms_and_conditions
   attr_accessor :address
   attr_accessor :town
-
-  # NOTE: These methods for the encrypted_email attribute are
-  #       defined here to prevent attr_encrypted from defining
-  #       it's own attribute accessors using `attr_accessor`
-  # TODO: Remove these methods when attr_encrypted is fixed
-  def encrypted_email
-    super
-  end
-
-  def encrypted_email=(value)
-    super
-  end
-
-  def encrypted_email?
-    super
-  end
 
   def creator?
     petition.creator_signature == self
@@ -112,8 +98,4 @@ class Signature < ActiveRecord::Base
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
 
-  private
-  def set_perishable_token
-    self.perishable_token = Authlogic::Random.friendly_token
-  end
 end
