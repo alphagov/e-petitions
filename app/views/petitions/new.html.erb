@@ -10,7 +10,8 @@
     <ul>
       <li class="step_1 pagination_tab"><span class="step_no">1</span>e-petition<br/>details</li>
       <li class="step_2 pagination_tab"><span class="step_no">2</span>Your details</li>
-      <li class="step_3 pagination_tab"><span class="step_no">3</span>Submit<br/>e-petition</li>
+      <li class="step_3 pagination_tab"><span class="step_no">3</span>Sponsor emails</li>
+      <li class="step_4 pagination_tab"><span class="step_no">4</span>Submit<br/>e-petition</li>
     </ul>
   </div>
 
@@ -75,6 +76,15 @@
     <%= f.fields_for :creator_signature do |csf| %>
       <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => @petition.creator_signature } %>
     <% end %>
+  </fieldset>
+
+  <fieldset>
+    <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
+    <legend>Sponsor email adresses</legend>
+    <div class="strap_block">
+      <p>Please add between 5 and 20 email adresses (one email address per line)</p>
+    </div>
+
 
   </fieldset>
 
