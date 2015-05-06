@@ -7,6 +7,22 @@ module PetitionHelper
   end
 
   def render_petition_form(petition, form)
+    capture do
+      concat render_hidden_details(petition, form)
+      concat render_ui(petition, form)
+    end
+  end
+
+  def render_hidden_details(petition, form)
+    capture do
+      concat render('/petitions/create/petition_details_hidden', petition: petition, f: form) unless petition.stage == 'petition'
+      concat render('/petitions/create/your_details_hidden', petition: petition, f: form) unless petition.stage == 'creator'
+      concat render('/petitions/create/sponsor_details_hidden', petition: petition, f: form) unless petition.stage == 'sponsors'
+      concat render('/petitions/create/submit_hidden', petition: petition, f: form) unless petition.stage == 'submit'
+    end
+  end
+
+  def render_ui(petition, form)
     case petition.stage
     when 'petition'
       render('/petitions/create/petition_details_ui', petition: petition, f: form)
