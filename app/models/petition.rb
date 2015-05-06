@@ -29,6 +29,7 @@ class Petition < ActiveRecord::Base
   include State
 
   after_create :set_petition_on_creator_signature
+  after_create :persist_sponsors
 
   searchable do
     text :title
@@ -65,17 +66,10 @@ class Petition < ActiveRecord::Base
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
   validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
+  validate :validate_number_of_sponsor_emails, on: :create
 
   attr_accessor :email_signees
-  attr_reader :sponsor_emails
 
-  def sponsor_emails=(emails_string)
-    write_attribute(:sponsor_emails, emails_string.split( /\r?\n/ ))
-  end
-
-  validates_with PetitionSponsorValidator
-  
-  
   # = Finders =
   scope :threshold, -> { where('signature_count >= ? OR response_required = ?', SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true) }
   scope :for_state, ->(state) {
@@ -112,6 +106,23 @@ class Petition < ActiveRecord::Base
     where(get_an_mp_email_sent_at: nil).
     where("signature_count >= ?", SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
   }
+
+  def sponsor_emails
+    @sponsor_emails || []
+  end
+
+  def sponsor_emails=(emails)
+    if emails.respond_to?(:each)
+      @sponsor_emails = emails
+    else
+      @sponsor_emails = parse_emails(emails)
+    end
+    @sponsor_emails = @sponsor_emails.select{ |e| Authlogic::Regex.email =~ e }.uniq.first(AppConfig.sponsor_count_max)
+  end
+
+  def parse_emails(emails)
+    emails.strip.split(/\r?\n/).map { |e| e.strip }
+  end
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
@@ -232,4 +243,15 @@ class Petition < ActiveRecord::Base
       end
     end
   end
+
+  def validate_number_of_sponsor_emails
+    if sponsor_emails.count < AppConfig.sponsor_count_min
+      errors.add(:sponsor_emails, "Petition has to have at least #{AppConfig.sponsor_count_min} sponsors")
+    end
+  end
+
+  def persist_sponsors
+    self.sponsors << sponsor_emails.map { |email| Sponsor.create(email: email) }
+  end
+
 end

@@ -35,7 +35,6 @@ class PetitionsController < ApplicationController
     @petition.title.strip!
     if @petition.save
       send_email_to_verify_petition_creator(@petition)
-      create_sponsors(params.permit(:sponsor_emails), @petition)
       redirect_to thank_you_petition_path(@petition, :secure => true)
     else
       if @petition.errors[:title].any? ||
@@ -86,19 +85,12 @@ class PetitionsController < ApplicationController
     params.
       require(:petition).
       permit(:title, :description, :duration, :department_id,
+             :sponsor_emails,
              creator_signature_attributes: [
                :name, :email, :email_confirmation, :address, :town,
                :postcode, :country, :uk_citizenship,
                :terms_and_conditions, :notify_by_email
              ])
   end
-
-  
-  def create_sponsors(emails_string, petition)
-    emails = emails_string["sponsor_emails"].split( /\r?\n/ )
-    emails.each do |email|
-      sponsor = Sponsor.new(email: email, petition: petition)
-      sponsor.save
-    end
-  end
 end
+

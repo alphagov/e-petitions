@@ -45,13 +45,14 @@ describe PetitionsController do
   describe "create" do
     before :each do
       @department = FactoryGirl.create(:department)
+      @sponsor_emails = (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n")
       @creator_signature_attributes = {:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
                                       :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL', :country => 'UK', :uk_citizenship => '1', :terms_and_conditions => '1'}
     end
 
     def do_post(options = {})
       post :create, :petition => {:title => 'Save the planet', :description => 'Global warming is upon us', :duration => "12",
-        :department_id => @department.id, :creator_signature_attributes => @creator_signature_attributes}.merge(options)
+        :department_id => @department.id, :sponsor_emails => @sponsor_emails, :creator_signature_attributes => @creator_signature_attributes}.merge(options)
     end
 
     with_ssl do
