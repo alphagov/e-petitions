@@ -82,9 +82,16 @@
     <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
     <legend>Sponsor email adresses</legend>
     <div class="strap_block">
-      <p>Please add between 5 and 20 email adresses (one email address per line)</p>
-
-      <%= text_area_tag 'sponsor_emails' %>
+     <%= form_row :for => [@petition, :sponsor_emails] do %>
+      <%= f.label :sponsor_emails, 'Sponsor emails' %>
+      <%= f.text_area :sponsor_emails, :tabindex => increment, :value => @petition.sponsor_emails.join("\n") %>
+      <%= error_messages_for_field @petition, :sponsor_emails %>
+      <p>Enter 5-20 sponsor emails, one email per row</p>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Enter 5-20 sponsor emails, one email per row</p>
+      </div>
+    <% end %>
       
     </div>
 
