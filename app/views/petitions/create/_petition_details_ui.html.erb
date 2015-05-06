@@ -49,4 +49,8 @@
     <%= f.select :duration, options_for_select(petition_durations, :selected => (petition.duration.nil?) ? nil : petition.duration), {}, :tabindex => increment  %>
     <%= error_messages_for_field petition, :duration %>
   <% end %>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Next', :class => 'button forward_action', :tabindex => increment(0) %>
+  <% end %>
 </fieldset>

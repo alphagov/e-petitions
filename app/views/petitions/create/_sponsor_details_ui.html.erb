@@ -9,4 +9,9 @@
       <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
     <% end %>
   </div>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'stage', :value => 'creator', :class => 'button backwards_action', :tabindex => increment(0) %>
+    <%= f.button 'Next', :class => 'button forward_action', :tabindex => increment(0) %>
+  <% end %>
 </fieldset>

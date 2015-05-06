@@ -5,4 +5,17 @@ module PetitionHelper
     error_messages << petition.errors[:sponsor_emails]
     content_tag(:div, error_messages.join("</br>\n").html_safe, class: 'errors')
   end
+
+  def render_petition_form(petition, form)
+    case petition.stage
+    when 'petition'
+      render('/petitions/create/petition_details_ui', petition: petition, f: form)
+    when 'creator'
+      render('/petitions/create/your_details_ui', petition: petition, f: form)
+    when 'sponsors'
+      render('/petitions/create/sponsor_details_ui', petition: petition, f: form)
+    when 'submit'
+      render('/petitions/create/submit_ui', petition: petition, f: form)
+    end
+  end
 end

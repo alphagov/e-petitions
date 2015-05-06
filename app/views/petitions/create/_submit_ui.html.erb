@@ -14,11 +14,12 @@
     <p id="description_summary_field"></p>
   </div>
 
-  <%= f.fields_for :creator_signature do |csf| %>
-    <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => petition.creator_signature } %>
+  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+    <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => csf.object } %>
   <% end %>
 
   <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'stage', :value => 'sponsors', :class => 'button backwards_action', :tabindex => increment(0) %>
     <%= f.button 'Submit', :class => 'button forward_action', :tabindex => increment(0) %>
   <% end %>
 </fieldset>
