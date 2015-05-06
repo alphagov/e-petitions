@@ -25,9 +25,8 @@ class PetitionsController < ApplicationController
 
   def create
     @petition = StagedPetitionCreator.new(params, request)
-    @petition.sanitize!
 
-    if @petition.save
+    if @petition.create
       send_email_to_verify_petition_creator(@petition)
       redirect_to thank_you_petition_path(@petition, :secure => true)
     else

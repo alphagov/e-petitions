@@ -23,16 +23,7 @@ class StagedPetitionCreator
     @stage ||= calculate_stage
   end
 
-  def sanitize!
-    if creator_signature
-      creator_signature.email.strip! unless creator_signature.email.blank?
-      creator_signature.ip_address = @request.remote_ip
-      creator_signature.notify_by_email = true
-    end
-    title.strip!
-  end
-
-  delegate :id, :to_param, :errors, :save, :model_name, :to_key,
+  delegate :id, :to_param, :errors, :model_name, :to_key,
            :title, :action, :department, :department_id, :description,
            :duration, :sponsors, :sponsor_emails, :errors, :creator_signature,
            to: :petition
@@ -48,7 +39,26 @@ class StagedPetitionCreator
     errors.to_hash.slice(errors_for_stage(stage))
   end
 
+  def create
+    sanitize!
+    if stage == 'done'
+      petition.save
+    else
+      petition.valid?
+      false
+    end
+  end
+
   private
+
+  def sanitize!
+    if creator_signature
+      creator_signature.email.strip! unless creator_signature.email.blank?
+      creator_signature.ip_address = @request.remote_ip
+      creator_signature.notify_by_email = true
+    end
+    title.strip! unless title.blank?
+  end
 
   def calculate_stage
     if @params[:stage]

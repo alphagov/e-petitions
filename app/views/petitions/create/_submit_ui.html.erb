@@ -20,6 +20,6 @@
 
   <%= form_row :class => 'button_row' do %>
     <%= f.button 'Back', :name => 'stage', :value => 'sponsors', :class => 'button backwards_action', :tabindex => increment(0) %>
-    <%= f.button 'Submit', :class => 'button forward_action', :tabindex => increment(0) %>
+    <%= f.button 'Submit', :name => 'stage', :value => 'done', :class => 'button forward_action', :tabindex => increment(0) %>
   <% end %>
 </fieldset>
