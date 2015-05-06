@@ -155,3 +155,8 @@ Then(/^the petition with title: "(.*?)" should not have requested an email$/) do
   petition = Petition.find_by!(title: title)
   expect(petition.email_requested_at).to be_nil
 end
+
+When /^I fill in sponsor emails$/ do
+  fill_in "Sponsor emails", :with => "test1@test.com\ntest2@test.com\ntest3@test.com\ntest4@test.com\ntest5@test.com"
+end
+

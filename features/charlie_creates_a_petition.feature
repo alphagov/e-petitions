@@ -35,6 +35,7 @@ Scenario: Charlie creates our petition
   And I fill in "e-petition details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I select "3 months" from "Time to collect signatures"
   And I fill in my details
+  And I fill in sponsor emails
   And I check "I agree to the Terms & Conditions"
   Then the markup should be valid
   When I press "Submit"
@@ -136,7 +137,12 @@ Scenario: Charlie tries to submit an invalid petition with javascript.
   When I fill in my details
 
   And I press "Next" within "//fieldset[2]"
-  Then I should see the fieldset called "Submit Petition" is 3rd
+
+  And I fill in sponsor emails
+
+  And I press "Next" within "//fieldset[3]"
+
+  Then I should see the fieldset called "Submit Petition" is 4rd
 
   #Seems there's an envjs bug here
   # And I should see "The wombats of wimbledon rock."
@@ -146,9 +152,11 @@ Scenario: Charlie tries to submit an invalid petition with javascript.
   And I press "Submit"
   Then I should see "You need to accept the terms and conditions."
   When I check "I agree to the Terms & Conditions"
+  And I press "Back" within "//fieldset[4]"
   And I press "Back" within "//fieldset[3]"
   And I fill in "Name" with "Mr. Wibbledon" within "//fieldset[2]"
   And I press "Next" within "//fieldset[2]"
+  And I press "Next" within "//fieldset[3]"
 
   And I press "Submit"
 
