@@ -9,10 +9,10 @@ describe PetitionsController do
         expect(new_petition_path).to eq '/petitions/new'
       end
 
-      it "should assign a new petition and creator signature" do
+      it "should assign a new petition without a creator_signature" do
         get :new
         expect(assigns[:petition]).not_to be_nil
-        expect(assigns[:petition].creator_signature).not_to be_nil
+        expect(assigns[:petition].creator_signature).to be_nil
       end
 
       it "should assign departments" do
@@ -22,11 +22,6 @@ describe PetitionsController do
         get :new
 
         expect(assigns[:departments]).to eq [department1, department2]
-      end
-
-      it "creator signature should default the country to UK" do
-        get :new
-        expect(assigns[:petition].creator_signature.country).to eq 'United Kingdom'
       end
 
       it "is on stage 'petition'" do
@@ -110,7 +105,7 @@ describe PetitionsController do
           expect(petition.creator_signature.state).to eq(Signature::PENDING_STATE)
         end
 
-        it "should not set notify_by_email to true on the creator signature" do
+        it "should set notify_by_email to true on the creator signature" do
           do_post
           expect(Petition.find_by_title!('Save the planet').creator_signature.notify_by_email).to be_truthy
         end

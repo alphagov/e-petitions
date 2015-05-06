@@ -1,10 +1,11 @@
 class StagedPetitionCreator
   ERRORS_PER_STAGE = {
     'petition' => [:title, :department, :action, :description],
-    'creator' =>  [:'creator_signature.name', :'creator_signature.email',
-      :'creator_signature.email_confirmation', :'creator_signature.uk_citizenship',
-      :'creator_signature.address', :'creator_signature.town',
-      :'creator_signature.postcode', :'creator_signature.country'],
+    'creator' => [:creator_signature, :'creator_signature.name',
+      :'creator_signature.email', :'creator_signature.email_confirmation',
+      :'creator_signature.uk_citizenship', :'creator_signature.address',
+      :'creator_signature.town', :'creator_signature.postcode',
+      :'creator_signature.country'],
     'sponsors' => [:sponsors, :sponsor_emails],
     'submit' => [:'creator_signature.terms_and_conditions']
   }
@@ -35,6 +36,13 @@ class StagedPetitionCreator
            :title, :action, :department, :department_id, :description,
            :duration, :sponsors, :sponsor_emails, :errors, :creator_signature,
            to: :petition
+
+  def creator_signature!
+    if creator_signature.nil?
+      petition.build_creator_signature(country: 'United Kingdom')
+    end
+    creator_signature
+  end
 
   def stage_errors
     errors.to_hash.slice(errors_for_stage(stage))
@@ -86,9 +94,7 @@ class StagedPetitionCreator
   end
 
   def build_petition
-    Petition.new(sanitized_params).tap do |p|
-      p.build_creator_signature(:country => 'United Kingdom') if p.creator_signature.nil?
-    end
+    Petition.new(sanitized_params)
   end
 
   def parse_emails(emails)

@@ -1,6 +1,6 @@
 <fieldset>
   <legend>Your Details</legend>
-  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+  <%= f.fields_for :creator_signature, petition.creator_signature! do |csf| %>
     <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
   <% end %>
 

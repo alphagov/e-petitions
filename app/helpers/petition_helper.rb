@@ -16,9 +16,11 @@ module PetitionHelper
   def render_hidden_details(petition, form)
     capture do
       concat render('/petitions/create/petition_details_hidden', petition: petition, f: form) unless petition.stage == 'petition'
-      concat render('/petitions/create/your_details_hidden', petition: petition, f: form) unless petition.stage == 'creator'
       concat render('/petitions/create/sponsor_details_hidden', petition: petition, f: form) unless petition.stage == 'sponsors'
-      concat render('/petitions/create/submit_hidden', petition: petition, f: form) unless petition.stage == 'submit'
+      if petition.creator_signature.present?
+        concat render('/petitions/create/your_details_hidden', petition: petition, f: form) unless petition.stage == 'creator'
+        concat render('/petitions/create/submit_hidden', petition: petition, f: form) unless petition.stage == 'submit'
+      end
     end
   end
 
