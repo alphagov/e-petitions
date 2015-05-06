@@ -16,11 +16,19 @@ class StagedPetitionCreator
   end
 
   def petition
-    @petition ||= build_petition
+    @_petition ||= build_petition
   end
 
+  # This is the stage we came from - the UI elements we showed the user
+  # that generated these params
+  def previous_stage
+    @_previous_stage ||= @params.fetch('stage', 'petition')
+  end
+
+  # This is the stage we are going to - the UI elements we will show the
+  # user depending on their input.
   def stage
-    @stage ||= calculate_stage
+    @_stage ||= calculate_stage
   end
 
   delegate :id, :to_param, :errors, :model_name, :to_key,
@@ -35,18 +43,26 @@ class StagedPetitionCreator
     creator_signature
   end
 
-  def stage_errors
-    errors.to_hash.slice(errors_for_stage(stage))
+  def previous_stage_errors
+    errors.to_hash.slice(errors_for_stage(previous_stage))
   end
 
   def create
     sanitize!
+    validate!
     if stage == 'done'
       petition.save
     else
-      petition.valid?
       false
     end
+  end
+
+  def moving_backwards?
+    move == 'back'
+  end
+
+  def moving_forwards?
+    move == 'next'
   end
 
   private
@@ -60,10 +76,43 @@ class StagedPetitionCreator
     title.strip! unless title.blank?
   end
 
+  def validate!
+    petition.valid?
+  end
+
+  def move
+    @_move ||= @params['move']
+  end
+
+  STAGES = {
+    'petition' => { 'next' => 'creator', 'back' => 'petition' },
+    'creator' => { 'next' => 'sponsors', 'back' => 'petition' },
+    'sponsors' => { 'next' => 'submit', 'back' => 'creator' },
+    'submit' => { 'next' => 'done', 'back' => 'creator' }
+  }
+
+  # In order:
+  # 1. the user wants to go back - let them
+  # 2. the user entered invalid data - show them the same UI again
+  # 3. the user somehow entered invalid data for some other step - show them that UI
+  # 4. the user wants to go forward - show them the next UI
+  # 5. the user somehow hasn't indicated what they want to do - show them the same UI again
   def calculate_stage
-    if @params[:stage]
-      @params[:stage]
-    elsif errors.any? { |field, _| errors_for_stage('petition').include? field }
+    if moving_backwards?
+      STAGES[previous_stage]['back']
+    elsif previous_stage_errors.any?
+      previous_stage
+    elsif errors.any?
+      earliest_error_stage
+    elsif moving_forwards?
+      STAGES[previous_stage]['next']
+    else
+      previous_stage
+    end
+  end
+
+  def earliest_error_stage
+    if errors.any? { |field, _| errors_for_stage('petition').include? field }
       'petition'
     elsif errors.any? { |field, _| errors_for_stage('creator').include? field }
       'creator'
@@ -71,8 +120,6 @@ class StagedPetitionCreator
       'sponsors'
     elsif errors.any? { |field, _| errors_for_stage('submit').include? field }
       'submit'
-    else
-      'petition'
     end
   end
 

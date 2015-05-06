@@ -15,12 +15,12 @@
     </ul>
   </div>
 
-  <% if @petition.stage_errors.any? -%>
+  <% if @petition.previous_stage_errors.any? -%>
     <div id='errorExplanation' class='errorExplanation'>
       <h2>We couldn't create this petition</h2>
       <p>Please fix the following errors:</p>
       <ul>
-        <% @petition.stage_errors.each do |key, error| -%>
+        <% @petition.previous_stage_errors.each do |key, error| -%>
           <li><%= error %></li>
         <% end -%>
       </ul>

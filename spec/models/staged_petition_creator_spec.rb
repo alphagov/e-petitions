@@ -102,5 +102,270 @@ describe StagedPetitionCreator do
       end
     end
   end
+
+  describe 'stages' do
+    describe '#moving_backwards?' do
+      it 'is true when params[:move] is "back"' do
+        params[:move] = 'back'
+        expect(subject.moving_backwards?).to be_truthy
+      end
+      it 'is false when params[:move] is not "back"' do
+        params[:move] = 'next'
+        expect(subject.moving_backwards?).to be_falsey
+      end
+      it 'is false when params[:move] is not present' do
+        params.delete(:move)
+        expect(subject.moving_backwards?).to be_falsey
+      end
+    end
+
+    describe '#moving_forwards?' do
+      it 'is true when params[:move] is "next"' do
+        params[:move] = 'next'
+        expect(subject.moving_forwards?).to be_truthy
+      end
+      it 'is false when params[:move] is not "next"' do
+        params[:move] = 'back'
+        expect(subject.moving_forwards?).to be_falsey
+      end
+      it 'is false when params[:move] is not present' do
+        params.delete(:move)
+        expect(subject.moving_forwards?).to be_falsey
+      end
+    end
+
+    describe '#previous_stage' do
+      it 'is the value of params[:stage]' do
+        params[:stage] = 'submit'
+        expect(subject.previous_stage).to eq 'submit'
+      end
+      it 'is "petition" if there is no param[:stage]' do
+        params.delete(:stage)
+        expect(subject.previous_stage).to eq 'petition'
+      end
+    end
+
+    describe '#stage' do
+      context 'when there are no errors on the petition' do
+        context 'and the previous_stage was "petition"' do
+          before { params[:stage] = 'petition' }
+          it 'is "creator" when we are moving forwards' do
+            params[:move] = 'next'
+            expect(subject.stage).to eq 'creator'
+          end
+          it 'is "petition" when we are moving backwards' do
+            params[:move] = 'back'
+            expect(subject.stage).to eq 'petition'
+          end
+          it 'is "petition" when we are not moving' do
+            params.delete(:move)
+            expect(subject.stage).to eq 'petition'
+          end
+        end
+
+        context 'and the previous_stage was "creator"' do
+          before { params[:stage] = 'creator' }
+          it 'is "submit" when we are moving forwards' do
+            params[:move] = 'next'
+            expect(subject.stage).to eq 'submit'
+          end
+          it 'is "petition" when we are moving backwards' do
+            params[:move] = 'back'
+            expect(subject.stage).to eq 'petition'
+          end
+          it 'is "creator" when we are not moving' do
+            params.delete(:move)
+            expect(subject.stage).to eq 'creator'
+          end
+        end
+
+        context 'and the previous_stage was "submit"' do
+          before { params[:stage] = 'submit' }
+          it 'is "done" when we are moving forwards' do
+            params[:move] = 'next'
+            expect(subject.stage).to eq 'done'
+          end
+          it 'is "creator" when we are moving backwards' do
+            params[:move] = 'back'
+            expect(subject.stage).to eq 'creator'
+          end
+          it 'is "submit" when we are not moving' do
+            params.delete(:move)
+            expect(subject.stage).to eq 'submit'
+          end
+        end
+      end
+
+      context 'when there are errors on the petition' do
+        let(:errors_hash) { {} }
+        before { allow(subject.petition).to receive(:errors).and_return errors_hash }
+
+        context 'around the "petition" UI' do
+          before { errors_hash[:title] = 'must be present' }
+
+          context 'and the previous_stage was "petition"' do
+            before { params[:stage] = 'petition' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "petition" when we are moving forwards' do
+              params[:move] = 'next'
+              subject.stage
+            end
+            it 'is "petition" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'petition'
+            end
+          end
+
+          context 'and the previous_stage was "creator"' do
+            before { params[:stage] = 'creator' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "petition" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "petition" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'petition'
+            end
+          end
+
+          context 'and the previous_stage was "submit"' do
+            before { params[:stage] = 'submit' }
+
+            it 'is "creator" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "petition" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "petition" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'petition'
+            end
+          end
+        end
+
+        context 'around the "creator" UI' do
+          before { errors_hash[:'creator_signature.email'] = 'must be present' }
+
+          context 'and the previous_stage was "petition"' do
+            before { params[:stage] = 'petition' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "creator" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "creator" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'creator'
+            end
+          end
+
+          context 'and the previous_stage was "creator"' do
+            before { params[:stage] = 'creator' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "creator" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "creator" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'creator'
+            end
+          end
+
+          context 'and the previous_stage was "submit"' do
+            before { params[:stage] = 'submit' }
+
+            it 'is "creator" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "creator" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "creator" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'creator'
+            end
+          end
+        end
+
+        context 'around the "terms" UI' do
+          before { errors_hash[:'creator_signature.terms_and_conditions'] = 'must be accepted' }
+
+          context 'and the previous_stage was "petition"' do
+            before { params[:stage] = 'petition' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "submit" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'submit'
+            end
+            it 'is "submit" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'submit'
+            end
+          end
+
+          context 'and the previous_stage was "creator"' do
+            before { params[:stage] = 'creator' }
+
+            it 'is "petition" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'petition'
+            end
+            it 'is "submit" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'submit'
+            end
+            it 'is "submit" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'submit'
+            end
+          end
+
+          context 'and the previous_stage was "submit"' do
+            before { params[:stage] = 'submit' }
+
+            it 'is "creator" when we are moving backwards' do
+              params[:move] = 'back'
+              expect(subject.stage).to eq 'creator'
+            end
+            it 'is "submit" when we are moving forwards' do
+              params[:move] = 'next'
+              expect(subject.stage).to eq 'submit'
+            end
+            it 'is "submit" when we are not moving' do
+              params.delete(:move)
+              expect(subject.stage).to eq 'submit'
+            end
+          end
+        end
+      end
+    end
+
   end
 end

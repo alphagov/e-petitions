@@ -51,6 +51,6 @@
   <% end %>
 
   <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Next', :class => 'button forward_action', :tabindex => increment(0) %>
+    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment(0) %>
   <% end %>
 </fieldset>

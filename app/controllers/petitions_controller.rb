@@ -19,11 +19,14 @@ class PetitionsController < ApplicationController
 
   def new
     assign_title
+    assign_stage
     @petition = StagedPetitionCreator.new(params, request)
     respond_with @petition
   end
 
   def create
+    assign_move
+    assign_stage
     @petition = StagedPetitionCreator.new(params, request)
 
     if @petition.create
@@ -60,6 +63,15 @@ class PetitionsController < ApplicationController
     title = params.delete(:title)
     params[:petition] ||= {}
     params[:petition][:title] = title
+  end
+
+  def assign_move
+    return if ['next', 'back'].include? params[:move]
+    params[:move] = 'next'
+  end
+
+  def assign_stage
+    params[:stage] ||= 'petition'
   end
 
   def send_email_to_verify_petition_creator(petition)

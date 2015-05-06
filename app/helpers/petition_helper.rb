@@ -15,6 +15,7 @@ module PetitionHelper
 
   def render_hidden_details(petition, form)
     capture do
+      concat hidden_field_tag(:stage, petition.stage)
       concat render('/petitions/create/petition_details_hidden', petition: petition, f: form) unless petition.stage == 'petition'
       concat render('/petitions/create/sponsor_details_hidden', petition: petition, f: form) unless petition.stage == 'sponsors'
       if petition.creator_signature.present?

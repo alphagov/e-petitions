@@ -38,16 +38,31 @@ describe PetitionsController do
   end
 
   describe "create" do
-    before :each do
-      @department = FactoryGirl.create(:department)
-      @sponsor_emails = (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n")
-      @creator_signature_attributes = {:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
-                                       :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL', :country => 'United Kingdom', :uk_citizenship => '1', :terms_and_conditions => '1'}
+    let(:department) { FactoryGirl.create(:department) }
+    let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n") }
+    let(:creator_signature_attributes) do
+      {
+        :name => 'John Mcenroe', :email => 'john@example.com',
+        :email_confirmation => 'john@example.com',
+        :address => 'Rose Cottage', :town => 'London',
+        :postcode => 'SE3 4LL', :country => 'United Kingdom',
+        :uk_citizenship => '1', :terms_and_conditions => '1'
+      }
+    end
+    let(:petition_attributes) do
+      {
+        :title => 'Save the planet',
+        :action => 'Limit temperature rise at two degrees',
+        :description => 'Global warming is upon us',
+        :duration => "12",
+        :department_id => department.id,
+        :sponsor_emails => sponsor_emails,
+        :creator_signature => creator_signature_attributes
+      }
     end
 
     def do_post(options = {})
-      post :create, :petition => {:title => 'Save the planet', :action => 'Limit temperature rise at two degrees', :description => 'Global warming is upon us', :duration => "12",
-        :department_id => @department.id, :sponsor_emails => @sponsor_emails, :creator_signature => @creator_signature_attributes}.merge(options)
+      post :create, {:stage => 'submit', :move => 'next', :petition => petition_attributes}.merge(options)
     end
 
     with_ssl do
@@ -65,16 +80,19 @@ describe PetitionsController do
         end
 
         it "should successfully create a new petition and a signature even when email has white space either end" do
-          do_post(:creator_signature => @creator_signature_attributes.merge(:email => ' john@example.com '))
+          creator_signature_attributes[:email] = ' john@example.com '
+          do_post
           petition = Petition.find_by_title!('Save the planet')
         end
 
         it "should strip a petition title on petition creation" do
-          do_post(:title => ' Save the planet')
+          petition_attributes[:title] = ' Save the planet'
+          do_post
           petition = Petition.find_by_title!('Save the planet')
         end
 
         it "should send verification email to petition's creator" do
+          do_post
           email = ActionMailer::Base.deliveries.last
           expect(email.from).to eq(["no-reply@example.gov"])
           expect(email.to).to eq(["john@example.com"])
@@ -94,13 +112,15 @@ describe PetitionsController do
         end
 
         it "should not be able to set the state of a new petition" do
-          do_post :state => Petition::VALIDATED_STATE
+          petition_attributes[:state] = Petition::VALIDATED_STATE
+          do_post
           petition = Petition.find_by_title!('Save the planet')
           expect(petition.state).to eq(Petition::PENDING_STATE)
         end
 
         it "should not be able to set the state of a new signature" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)
+          creator_signature_attributes[:state] = Signature::VALIDATED_STATE
+          do_post
           petition = Petition.find_by_title!('Save the planet')
           expect(petition.creator_signature.state).to eq(Signature::PENDING_STATE)
         end
@@ -113,70 +133,77 @@ describe PetitionsController do
 
       context "invalid post" do
         it "should not create a new petition if no title is given" do
-          do_post :title => ''
+          petition_attributes[:title] = ''
+          do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
           expect(assigns[:petition].errors[:title]).not_to be_blank
           expect(response).to be_success
         end
 
         it "should not create a new petition if email is invalid" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:email => 'not much of an email')
+          creator_signature_attributes[:email] = 'not much of an email'
+          do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
           expect(response).to be_success
         end
 
         it "should not create a new petition if address is blank" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:address => '')
+          creator_signature_attributes[:address] = ''
+          do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
           expect(response).to be_success
         end
 
         it "should not create a new petition if UK citizenship is not confirmed" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:uk_citizenship => '0')
+          creator_signature_attributes[:uk_citizenship] = '0'
+          do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
           expect(response).to be_success
         end
 
         it "should assign departments if submission fails" do
-          do_post :title => ''
-          expect(assigns[:departments]).to eq([@department])
+          petition_attributes[:title] = ''
+          do_post
+          expect(assigns[:departments]).to eq([department])
         end
 
         it "has stage of 'petition' if there are errors on title, department or description" do
-          do_post :title => ''
+          do_post :petition => petition_attributes.merge(:title => '')
           expect(assigns[:petition].stage).to eq 'petition'
-          do_post :department_id => nil
+          do_post :petition => petition_attributes.merge(:department_id => nil)
           expect(assigns[:petition].stage).to eq 'petition'
-          do_post :description => ''
+          do_post :petition => petition_attributes.merge(:description => '')
           expect(assigns[:petition].stage).to eq 'petition'
         end
 
         it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, address, town, postcode or country" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:name => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:email => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:email => 'dave@example.com', :email_confirmation => 'laura@example.com')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => 'dave@example.com', :l_confirmation => 'laura@example.com'))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:uk_citizenship => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:address => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:address => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:town => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:town => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:postcode => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:postcode => ''))
           expect(assigns[:petition].stage).to eq 'creator'
-          do_post :creator_signature => @creator_signature_attributes.merge(:country => '')
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:country => ''))
           expect(assigns[:petition].stage).to eq 'creator'
         end
 
         it "has stage of 'sponsors' if there are errors on sponsor_emails" do
-          do_post :sponsor_emails => 'blah@'
+          petition_attributes[:sponsor_emails] = 'blah@'
+          do_post
           expect(assigns[:petition].stage).to eq 'sponsors'
         end
 
         it "has stage of 'submit' if there are errors on terms_and_conditions" do
-          do_post :creator_signature => @creator_signature_attributes.merge(:terms_and_conditions => '0')
+          creator_signature_attributes[:terms_and_conditions] = '0'
+          do_post
           expect(assigns[:petition].stage).to eq 'submit'
         end
       end
