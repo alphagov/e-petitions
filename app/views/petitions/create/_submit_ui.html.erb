@@ -8,10 +8,10 @@
     If you want to make changes, press 'back'.</p>
   </div>
   <div class="generic_block" id="petition_summary_block">
-    <h2 id="title_summary_field"></h2>
-    <p id="department_summary_field"></p>
-    <p id="action_summary_field"></p>
-    <p id="description_summary_field"></p>
+    <h2 id="title_summary_field"><%= @petition.title %></h2>
+    <p id="department_summary_field">Responsible department: <%= @petition.department.name %></p>
+    <div id="action_summary_field"><%= raw auto_link(simple_format(h(@petition.action)), :html => { :target => '_blank' }) %></div>
+    <div id="description_summary_field"><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></div>
   </div>
 
   <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
