@@ -9,17 +9,19 @@
 
 <% end %>
 
-<%= form_row :for => [signature, :email] do %>
-  <%= f.label :email %>
-  <%= f.text_field :email, :type => 'email', :tabindex => increment %>
-  <%= error_messages_for_field signature, :email %>
-  <%= error_messages_for_field signature, :email_confirmation %>
-<% end %>
+<% if local_assigns.fetch(:with_email, true) %>
+  <%= form_row :for => [signature, :email] do %>
+    <%= f.label :email %>
+    <%= f.text_field :email, :type => 'email', :tabindex => increment %>
+    <%= error_messages_for_field signature, :email %>
+    <%= error_messages_for_field signature, :email_confirmation %>
+  <% end %>
 
-<%= form_row :for => [signature, :email_confirmation] do %>
-  <%= f.label :email_confirmation %>
-  <%= f.text_field :email_confirmation, :type => 'email', :tabindex => increment,
-                   :onpaste => "return false", :autocomplete => 'off' %>
+  <%= form_row :for => [signature, :email_confirmation] do %>
+    <%= f.label :email_confirmation %>
+    <%= f.text_field :email_confirmation, :type => 'email', :tabindex => increment,
+                     :onpaste => "return false", :autocomplete => 'off' %>
+  <% end %>
 <% end %>
 
 <%= form_row :class => 'is_uk_citizen_row', :for => [signature, :uk_citizenship] do %>
