@@ -82,20 +82,17 @@
     <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
     <legend>Sponsor email adresses</legend>
     <div class="strap_block">
-     <%= form_row :for => [@petition, :sponsor_emails] do %>
-      <%= f.label :sponsor_emails, 'Sponsor emails' %>
-      <%= f.text_area :sponsor_emails, :tabindex => increment, :value => @petition.sponsor_emails.join("\n") %>
-      <%= error_messages_for_field @petition, :sponsor_emails %>
-      <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
-      <div class="tip">
-        <div class="arrow"></div>
+      <%= form_row :for => [@petition, :sponsor_emails] do %>
+        <%= f.label :sponsor_emails, 'Sponsor emails' %>
+        <%= f.text_area :sponsor_emails, :tabindex => increment, :value => @petition.sponsor_emails.join("\n") %>
+        <%= error_messages_for_field @petition, :sponsor_emails %>
         <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
-      </div>
-    <% end %>
-      
+        <div class="tip">
+          <div class="arrow"></div>
+          <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
+        </div>
+      <% end %>
     </div>
-
-
   </fieldset>
 
   <fieldset id="petition_submit_section">
