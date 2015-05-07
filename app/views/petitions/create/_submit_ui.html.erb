@@ -1,5 +1,4 @@
 <fieldset id="petition_submit_section">
-  <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
   <legend>Submit Petition</legend>
 
   <div class="strap_block">
@@ -19,7 +18,7 @@
   <% end %>
 
   <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment(0) %>
-    <%= f.button 'Submit', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment(0) %>
+    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= f.button 'Submit', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
   <% end %>
 </fieldset>

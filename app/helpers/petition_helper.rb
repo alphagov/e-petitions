@@ -26,6 +26,8 @@ module PetitionHelper
   end
 
   def render_ui(petition, form)
+    # NOTE: make sure we skip past the existing tabindex-ed elements on the page, no matter which ui we render
+    increment(4)
     case petition.stage
     when 'petition'
       render('/petitions/create/petition_details_ui', petition: petition, f: form)

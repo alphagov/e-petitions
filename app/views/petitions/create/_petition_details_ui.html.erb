@@ -3,7 +3,8 @@
 
   <%= form_row :for => [petition, :title] do %>
     <%= f.label :title %>
-    <%= f.text_field :title, :tabindex => increment(5), :maxlength => 150 %>
+    <%= f.text_field :title, :tabindex => increment, :maxlength => 150 %>
+    <%= error_messages_for_field petition, :title %>
     <div class="tip">
       <div class="arrow"></div>
       <p>Keep your title short and include key words that describe your petition, eg. Reduce the rate of fuel duty.</p>
@@ -51,6 +52,6 @@
   <% end %>
 
   <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment(0) %>
+    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
   <% end %>
 </fieldset>
