@@ -128,6 +128,24 @@ describe SponsorsController do
           redirect_path = thank_you_petition_sponsor_path(petition, token: sponsor.perishable_token, secure: true)
           expect(response).to redirect_to redirect_path
         end
+
+        it "overrides the email of the signature, no matter what has been passed in" do
+          signature_params[:email] = 'not-the-sponsors-email-address@example.com'
+          do_patch
+          expect(sponsor.signature.email).to eq sponsor.email
+        end
+
+        it "overrides the petition of the signature, no matter what has been passed in" do
+          signature_params[:petition_id] = (sponsor.petition.id + 1000).to_s
+          do_patch
+          expect(sponsor.signature.petition).to eq sponsor.petition
+        end
+
+        it "ignores attempts to set the state of signature" do
+          signature_params[:state] = 'not-a-state'
+          do_patch
+          expect(sponsor.signature.state).to eq Signature::VALIDATED_STATE
+        end
       end
 
       context 'with invalid signature params' do
