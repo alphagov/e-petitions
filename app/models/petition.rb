@@ -67,10 +67,7 @@ class Petition < ActiveRecord::Base
   validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
 
-  validates :sponsors,
-    length: { minimum: AppConfig.sponsor_count_min, maximum: AppConfig.sponsor_count_max,
-              message: "Specify #{AppConfig.sponsor_count_min}-#{AppConfig.sponsor_count_max} valid sponsor emails for the petition"},
-    on: :create
+  validate :validate_number_of_sponsors, on: :create
 
   attr_accessor :email_signees
 
@@ -229,6 +226,12 @@ class Petition < ActiveRecord::Base
 
   def notify_sponsors
     sponsors.each { |s| SponsorMailer.delay.new_sponsor_email(s) }
+  end
+
+  def validate_number_of_sponsors
+    unless sponsor_emails.uniq.count.between?(AppConfig.sponsor_count_min, AppConfig.sponsor_count_max)
+      errors.add(:sponsor_emails, "Specify #{AppConfig.sponsor_count_min}-#{AppConfig.sponsor_count_max} unique sponsor emails for the petition")
+    end
   end
 
   def signature_counts_by_postal_district

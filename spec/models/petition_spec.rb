@@ -76,7 +76,7 @@ describe Petition do
 
       it 'is not valid with duplicate sponsor emails' do
         sponsor_emails = ['test1@test.com', 'test1@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
       end
 
     end
