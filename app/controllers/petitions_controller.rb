@@ -25,7 +25,7 @@ class PetitionsController < ApplicationController
   end
 
   def create
-    @petition = Petition.new(petition_attributes_create)
+    @petition = Petition.new(petition_attributes_for_create)
     @petition.creator_signature.email.strip!
     if @petition.creator_signature
       @petition.creator_signature.ip_address = request.remote_ip
@@ -85,7 +85,7 @@ class PetitionsController < ApplicationController
     PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
   end
 
-  def petition_attributes_create
+  def petition_attributes_for_create
    attributes = petition_params_for_create
    attributes[:sponsor_emails] = parse_emails(attributes[:sponsor_emails])
    attributes
