@@ -25,7 +25,7 @@ describe Sponsor do
       expect(s.perishable_token).not_to be_nil
     end
   end
-  
+
   context "encryption of email" do
     let(:sponsor) { FactoryGirl.create(:sponsor,
                                        email: "foo@example.net") }
@@ -46,5 +46,48 @@ describe Sponsor do
     it { is_expected.to validate_presence_of(:petition).with_message(/Needs a petition/) }
     it { is_expected.to allow_value('joe@example.com').for(:email) }
     it { is_expected.not_to allow_value('not an email').for(:email) }
+  end
+
+  context 'signature association' do
+    let(:sponsor) { FactoryGirl.build(:sponsor) }
+    let(:attributes) { {} }
+
+    shared_examples_for 'constructing a signature from a sponsor' do
+      it 'is has the same petition as the sponsor' do
+        expect(subject.petition).to eq sponsor.petition
+      end
+
+      it 'is has the same email address as the sponsor' do
+        expect(subject.email).to eq sponsor.email
+      end
+
+      it 'is has confirmation of the email address using the same one as the sponsor' do
+        expect(subject.email_confirmation).to eq sponsor.email
+      end
+
+      it 'does not allow overriding the defaults' do
+        attributes[:email] = 'a-brand-new-email@example.com'
+        expect(subject.email).not_to eq 'a-brand-new-email@example.com'
+      end
+    end
+
+    context '#build_signature' do
+      subject { sponsor.build_signature(attributes) }
+      it_behaves_like 'constructing a signature from a sponsor'
+    end
+
+    context '#create_signature' do
+      subject { sponsor.create_signature(attributes) }
+
+      it_behaves_like 'constructing a signature from a sponsor'
+    end
+
+    context '#create_signature' do
+      let(:attributes) { FactoryGirl.attributes_for(:signature) }
+      before { sponsor.save! }
+      subject { sponsor.create_signature!(attributes) }
+
+      it_behaves_like 'constructing a signature from a sponsor'
+    end
   end
 end
