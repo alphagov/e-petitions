@@ -52,15 +52,20 @@ describe Petition do
     it { is_expected.to validate_presence_of(:department).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
-    context "sponsor email validations" do
+    context "sponsor validations" do
 
       it 'is valid with 5 sponsor emails' do
         sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).to be_valid
+        expect(FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)).to be_valid
       end
 
       it 'is not valid with less than 5 sponsor emails' do
         sponsor_emails = ['test1@test.com', 'test2@test.com']
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      end
+
+      it 'is not valid with more than 20 sponsor emails' do
+        sponsor_emails = (1..25).map { |i| "sponsor#{i}@example.com" }
         expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
       end
 
@@ -71,7 +76,7 @@ describe Petition do
 
       it 'is not valid with duplicate sponsor emails' do
         sponsor_emails = ['test1@test.com', 'test1@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+        expect(FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
       end
 
     end
@@ -601,29 +606,6 @@ describe Petition do
       expect {
         petition.ressign!(nil)
       }.to raise_error
-    end
-  end
-
-  describe "sponsor_emails=" do
-    let(:petition) { FactoryGirl.build(:petition) }
-
-    it 'parses sponsors emails from a string' do
-      emails = %q(
-        test1@example.com
-        test2@example.com
-      )
-      petition.sponsor_emails = emails
-      expect(petition.sponsor_emails).to eq ['test1@example.com', 'test2@example.com']
-    end
-
-    it 'accepts an array of sponsor emails' do
-      petition.sponsor_emails = ['test1@example.com', 'test2@example.com']
-      expect(petition.sponsor_emails).to eq ['test1@example.com', 'test2@example.com']
-    end
-
-    it 'limits number of sponsor emails to defined maximum' do
-      petition.sponsor_emails = (1..25).map { |i| "test#{i}@example.com" }
-      expect(petition.sponsor_emails.count).to eq 20
     end
   end
 

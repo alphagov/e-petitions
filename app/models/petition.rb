@@ -29,7 +29,7 @@ class Petition < ActiveRecord::Base
   include State
 
   after_create :set_petition_on_creator_signature
-  after_create :persist_sponsors
+  before_validation :build_sponsors, on: :create
 
   searchable do
     text :title
@@ -66,7 +66,11 @@ class Petition < ActiveRecord::Base
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
   validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
-  validate :validate_number_of_sponsor_emails, on: :create
+
+  validates :sponsors,
+    length: { minimum: AppConfig.sponsor_count_min, maximum: AppConfig.sponsor_count_max,
+              message: "Specify #{AppConfig.sponsor_count_min}-#{AppConfig.sponsor_count_max} valid sponsor emails for the petition"},
+    on: :create
 
   attr_accessor :email_signees
 
@@ -112,16 +116,7 @@ class Petition < ActiveRecord::Base
   end
 
   def sponsor_emails=(emails)
-    if emails.respond_to?(:each)
-      @sponsor_emails = emails
-    else
-      @sponsor_emails = parse_emails(emails)
-    end
-    @sponsor_emails = @sponsor_emails.select{ |e| Authlogic::Regex.email =~ e }.uniq.first(AppConfig.sponsor_count_max)
-  end
-
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
+    @sponsor_emails = emails
   end
 
   def self.update_all_signature_counts
@@ -244,14 +239,9 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def validate_number_of_sponsor_emails
-    if sponsor_emails.count < AppConfig.sponsor_count_min
-      errors.add(:sponsor_emails, "Petition has to have at least #{AppConfig.sponsor_count_min} sponsors")
-    end
-  end
-
-  def persist_sponsors
-    self.sponsors << sponsor_emails.map { |email| Sponsor.create(email: email) }
+  def build_sponsors
+    self.sponsors << sponsor_emails.map { |email| Sponsor.new(email: email) }
   end
 
 end
+

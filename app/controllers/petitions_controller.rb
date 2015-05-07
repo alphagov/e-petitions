@@ -25,7 +25,7 @@ class PetitionsController < ApplicationController
   end
 
   def create
-    @petition = Petition.new(petition_params_for_create)
+    @petition = Petition.new(petition_attributes_create)
     @petition.creator_signature.email.strip!
     if @petition.creator_signature
       @petition.creator_signature.ip_address = request.remote_ip
@@ -77,8 +77,18 @@ class PetitionsController < ApplicationController
 
   protected
 
+  def parse_emails(emails)
+    emails.strip.split(/\r?\n/).map { |e| e.strip }
+  end
+
   def send_email_to_verify_petition_creator(petition)
     PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
+  end
+
+  def petition_attributes_create
+   attributes = petition_params_for_create
+   attributes[:sponsor_emails] = parse_emails(attributes[:sponsor_emails])
+   attributes
   end
 
   def petition_params_for_create
