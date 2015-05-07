@@ -25,7 +25,9 @@ Rails.application.routes.draw do
       post 'resend_confirmation_email'
       get  'thank-you', :action => :thank_you, :as => :thank_you
     end
-    resources :sponsors, only: [:show, :update], param: :token
+    resources :sponsors, only: [:show, :update], param: :token do
+      get 'thank-you', on: :member
+    end
 
     resource :signature, :only => [:new] do
       post 'new' => 'signatures#create', :as => :sign

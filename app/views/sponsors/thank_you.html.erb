@@ -1,0 +1,16 @@
+<% content_for(:page_title) { "#{@petition.title} - Thank you for supporting this petition - e-petitions" } %>
+<% content_for :title do %>
+<div class="title_block">
+  <h2>Thank you.</h1>
+  <h1 class="petition_title"><%= @petition.title %></h1>
+  <h2>By <%= @petition.creator_signature.name %></h2>
+</div>
+<% end %>
+
+<div class="cta_block thank_you_block">
+  <p>Your signature has now been added to this e-petition.</p>
+
+  <p>This e-petition is waiting for more sponsors before being checked to make sure it complies with the terms &amp; conditions for creating an e-petition.</p>
+
+  <%= link_to "Return to home page", home_path, :class => 'link_button large_link_button return_to_homepage_button' %>
+</div>
