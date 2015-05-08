@@ -35,3 +35,9 @@ Then(/^I should have signed the petition as a sponsor$/) do
   expect(sponsor.signature).to be_present
   expect(sponsor.signature.petition).to eq @sponsor_petition
 end
+
+Then(/^I should not have signed the petition as a sponsor$/) do
+  sponsor = @sponsor_petition.sponsors.for_email('laura.the.sponsor@example.com').first
+  expect(sponsor).to be_present
+  expect(sponsor.signature).not_to be_present
+end

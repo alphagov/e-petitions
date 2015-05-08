@@ -14,3 +14,9 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I try to sign
     Then I should have signed the petition as a sponsor
 
+  Scenario: Laura makes mistakes signing the petition she is a sponsor of
+    When I follow the link to the petition in my sponsor email
+    When I fill in my details as a sponsor
+    And I try to sign
+    Then I should not have signed the petition as a sponsor
+    And I should see an error
