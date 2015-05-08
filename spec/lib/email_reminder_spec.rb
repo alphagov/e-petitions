@@ -68,7 +68,7 @@ describe EmailReminder do
       expect(email_no_new - email_no).to eq(1)
       email = ActionMailer::Base.deliveries.last
       expect(email.from).to eq(["no-reply@example.gov"])
-      expect(email.to).to eq(["peter@directgov.uk", "richard@directgov.uk"])
+      expect(email.to).to match_array(["peter@directgov.uk", "richard@directgov.uk"])
       expect(email.subject).to eq('e-Petitions alert')
     end
 
