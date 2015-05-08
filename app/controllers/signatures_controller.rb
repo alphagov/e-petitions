@@ -29,6 +29,7 @@ class SignaturesController < ApplicationController
       # if signature is that of the petition's creator, mark the petition as validated
       if @signature.petition.creator_signature == @signature
         @signature.petition.state = Petition::VALIDATED_STATE
+        @signature.petition.notify_sponsors
         @signature.petition.save!
 
     # else signature is from an ordinary signee so let's redirect to petition's page

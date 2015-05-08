@@ -70,6 +70,21 @@ describe SignaturesController do
         expect(signature.state).to eq(Signature::VALIDATED_STATE)
         expect(signature.perishable_token).to be_nil
       end
+
+      it "sends emails to petition sponsors after verification" do
+        @petition.sponsors.clear
+        @petition.sponsors.create(email: "test@test.com")
+
+        get :verify, :id => @signature.id, :token => @signature.perishable_token
+
+        Delayed::Job.last.payload_object.perform
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq(["test@test.com"])
+        expect(email.cc).to eq([@petition.creator_signature.email])
+        expect(email.subject).to eq("Parliament petitions - #{@petition.creator_signature.name} would like your support")
+      end
     end
   end
 
