@@ -29,6 +29,7 @@ class Petition < ActiveRecord::Base
   include State
 
   after_create :set_petition_on_creator_signature
+  before_validation :build_sponsors, on: :create
 
   searchable do
     text :title
@@ -65,6 +66,8 @@ class Petition < ActiveRecord::Base
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
   validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
+
+  validate :validate_number_of_sponsors, on: :create
 
   attr_accessor :email_signees
 
@@ -104,6 +107,14 @@ class Petition < ActiveRecord::Base
     where(get_an_mp_email_sent_at: nil).
     where("signature_count >= ?", SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
   }
+
+  def sponsor_emails
+    @sponsor_emails || []
+  end
+
+  def sponsor_emails=(emails)
+    @sponsor_emails = emails
+  end
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
@@ -217,6 +228,12 @@ class Petition < ActiveRecord::Base
     sponsors.each { |s| SponsorMailer.delay.new_sponsor_email(s) }
   end
 
+  def validate_number_of_sponsors
+    unless sponsor_emails.uniq.count.between?(AppConfig.sponsor_count_min, AppConfig.sponsor_count_max)
+      errors.add(:sponsor_emails, "Specify #{AppConfig.sponsor_count_min}-#{AppConfig.sponsor_count_max} unique sponsor emails for the petition")
+    end
+  end
+
   def signature_counts_by_postal_district
     Hash.new(0).tap do |counts|
       signatures.validated.find_each do |signature|
@@ -224,4 +241,10 @@ class Petition < ActiveRecord::Base
       end
     end
   end
+
+  def build_sponsors
+    self.sponsors << sponsor_emails.map { |email| Sponsor.new(email: email) }
+  end
+
 end
+

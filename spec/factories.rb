@@ -28,6 +28,7 @@ FactoryGirl.define do
     sequence(:title) {|n| "Petition #{n}" }
     description "Petition description"
     association :department
+    sponsor_emails { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
     creator_signature  { |cs| cs.association(:signature, :state => Signature::VALIDATED_STATE) }
   end
 

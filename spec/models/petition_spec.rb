@@ -52,6 +52,35 @@ describe Petition do
     it { is_expected.to validate_presence_of(:department).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
+    context "sponsor validations" do
+
+      it 'is valid with 5 sponsor emails' do
+        sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
+        expect(FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)).to be_valid
+      end
+
+      it 'is not valid with less than 5 sponsor emails' do
+        sponsor_emails = ['test1@test.com', 'test2@test.com']
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      end
+
+      it 'is not valid with more than 20 sponsor emails' do
+        sponsor_emails = (1..25).map { |i| "sponsor#{i}@example.com" }
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      end
+
+      it 'is not valid with invalid sponsor emails' do
+        sponsor_emails = ['test1test', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      end
+
+      it 'is not valid with duplicate sponsor emails' do
+        sponsor_emails = ['test1@test.com', 'test1@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
+        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      end
+
+    end
+
     it "should validate the length of :title to within 150 characters" do
       expect(FactoryGirl.build(:petition, :title => 'x' * 150)).to be_valid
       expect(FactoryGirl.build(:petition, :title => 'x' * 151)).not_to be_valid
@@ -125,6 +154,7 @@ describe Petition do
       end
     end
   end
+
 
   context "scopes" do
     describe "last_hour_trending" do
@@ -578,4 +608,14 @@ describe Petition do
       }.to raise_error
     end
   end
+
+  describe "creating sponsors from sponsor emails in after create callback" do
+    it 'persists sponsors to match the emails' do
+      sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
+      petition = FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)
+      expect(petition.sponsors.map(&:email)).to include(*sponsor_emails)
+    end
+  end
+
 end
+

@@ -16,7 +16,7 @@ module EmailEncrypter
     validates_format_of :email,
                         with: Authlogic::Regex.email,
                         unless: 'email.blank?',
-                        message: "Email not recognised."
+                        message: "Email '%{value}' not recognised."
     
     # = Finders =
     scope :for_email, ->(email) { where(encrypted_email: encrypt_email(email)) }
