@@ -6,6 +6,7 @@ defaults: &defaults
   email_encryption_key: 'notasecret'
   sponsor_count_min: 5
   sponsor_count_max: 20
+  sponsor_moderation_threshold: 5
 
 development:
   <<: *defaults
@@ -20,4 +21,4 @@ test:
   host_for_email: "www.example.com"
   sponsor_count_min: 5
   sponsor_count_max: 20
-
+  sponsor_moderation_threshold: 5
