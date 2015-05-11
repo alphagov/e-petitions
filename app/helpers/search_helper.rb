@@ -1,9 +1,4 @@
 module SearchHelper
-  def search_count_for(state)
-    count = @petition_search.state_counts[state]
-    "<span class='count'>(#{number_with_delimiter(count)})</span>"
-  end
-
   def sort_link_tag link_text, field_name, options={}
     default_order = options[:default_order] || 'asc'
 

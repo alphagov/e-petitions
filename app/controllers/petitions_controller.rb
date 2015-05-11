@@ -1,16 +1,15 @@
 class PetitionsController < ApplicationController
   before_filter :assign_departments, :only => [:new, :create]
   before_filter :sanitise_page_param
+  before_filter :sanitise_state_param
   caches_action_with_params :index
 
   caches_page :show
 
   respond_to :html
 
-  include SearchResultsSetup
-
   def index
-    results_for(Petition)
+    @petitions = PetitionSearch.new(params)
   end
 
   def show
@@ -40,14 +39,10 @@ class PetitionsController < ApplicationController
   end
 
   def check_results
-    @petition_search = PetitionResults.new(
-      :search_term    => params[:search],
-      :state => params[:state],
-      :per_page       => 10,
-      :page_number    => params[:page],
-      :sort           => params[:sort],
-      :order          => params[:order]
-    )
+    search_params = params
+    search_params[:q] = search_params[:search]
+    search_params[:per_page] = 10
+    @petitions = PetitionSearch.new(search_params)
   end
 
   def resend_confirmation_email
@@ -57,11 +52,16 @@ class PetitionsController < ApplicationController
 
   protected
 
-  def assign_title
-    return if params[:title].blank?
-    title = params.delete(:title)
-    params[:petition] ||= {}
-    params[:petition][:title] = title
+  def sanitise_state_param
+    params[:state] = State::SEARCHABLE_STATES.include?(params[:state]) ? params[:state] : 'open'
+  end
+
+  def parse_emails(emails)
+    emails.strip.split(/\r?\n/).map { |e| e.strip }
+  end
+
+  def send_email_to_verify_petition_creator(petition)
+    PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
   end
 
   def petition_params_for_new
@@ -86,6 +86,13 @@ class PetitionsController < ApplicationController
                  sanitized['sponsor_emails'] = parse_emails(sanitized['sponsor_emails'])
                end
              end
+  end
+
+  def assign_title
+    return if params[:title].blank?
+    title = params.delete(:title)
+    params[:petition] ||= {}
+    params[:petition][:title] = title
   end
 
   def assign_move

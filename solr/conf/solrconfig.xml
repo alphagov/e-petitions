@@ -420,31 +420,7 @@
     -->
   <requestHandler name="/select" class="solr.SearchHandler">
     <lst name="defaults">
-      <str name="echoParams">explicit</str>
-      <str name="defType">dismax</str>
-      <int name="mm">2</int>
-      <float name="tie">0.2</float>
-      <str name="qf">
-        title_eptexten^10 description_eptexten^8 creator_name_eptext^4
-        department_name_eptext^2
-        title_eptextmp description_eptextmp creator_name_eptextmp
-        department_name_eptextmp
-      </str>
-      <str name="pf">
-        title_eptexten^10 description_eptexten^8 creator_name_eptext^4
-        department_name_eptext^2
-        title_eptextmp description_eptextmp creator_name_eptextmp
-        department_name_eptextmp
-      </str>
-      <int name="ps">2</int>
-      <str name="fl">*</str>
-      <bool name="spellcheck">true</bool>
       <str name="spellcheck.dictionary">default</str>
-      <float name="spellcheck.accuracy">0.7</float>
-      <bool name="spellcheck.onlyMorePopular">true</bool>
-      <bool name="spellcheck.extendedResults">true</bool>
-      <int name="spellcheck.count">200</int>
-      <bool name="spellcheck.collate">true</bool>
     </lst>
     <arr name="last-components">
       <str>spellcheck</str>
@@ -561,11 +537,6 @@
       <int name="maxEdits">2</int>
       <!-- the minimum shared prefix when enumerating terms -->
       <int name="minPrefix">1</int>
-      <!-- maximum number of inspections per result. -->
-      <int name="maxInspections">5</int>
-      <!-- minimum length of a query term to be considered for correction -->
-      <int name="minQueryLength">4</int>
-      <!-- maximum threshold of documents a query term can appear to be considered for correction -->
       <float name="maxQueryFrequency">0.01</float>
       <!-- uncomment this to require suggestions to occur in 1% of the documents
       	   <float name="thresholdTokenFrequency">.01</float>

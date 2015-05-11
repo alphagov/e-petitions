@@ -102,38 +102,6 @@
     </fieldType>
     <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
     <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
-
-    <!-- basic text -->
-    <fieldType name="eptext" class="solr.TextField" omitNorms="false">
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.StandardFilterFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <!-- text with English stemming and query-time stopwords -->
-    <fieldType name="eptexten" class="solr.TextField" positionIncrementGap="100">
-      <analyzer type="index">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-      <analyzer type="query">
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.SynonymFilterFactory" synonyms="synonyms.txt" ignoreCase="true" expand="true"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-      </analyzer>
-    </fieldType>
-
-    <!-- soundalikes as a substitute for fuzzy/misspellings? -->
-    <fieldType name="eptextmp" class="solr.TextField" positionIncrementGap="100">
-      <analyzer>
-        <tokenizer class="solr.StandardTokenizerFactory"/>
-        <filter class="solr.LowerCaseFilterFactory"/>
-        <filter class="solr.PhoneticFilterFactory" encoder="DoubleMetaphone" inject="false"/>
-      </analyzer>
-    </fieldType>
-
   </types>
   <fields>
     <!-- Valid attributes for fields:
@@ -285,21 +253,6 @@
     <field name="textSpell" stored="false" type="textSpell" multiValued="true" indexed="true"/>
     <!-- required by Solr 4 -->
     <field name="_version_" type="string" indexed="true" stored="true" multiValued="false" />
-
-    <!-- custom indexing by copying fields -->
-    <dynamicField name="*_eptext" stored="false" type="eptext" multiValued="true" indexed="true"/>
-    <dynamicField name="*_eptexten" stored="false" type="eptexten" multiValued="true" indexed="true"/>
-    <dynamicField name="*_eptextmp" stored="false" type="eptextmp" multiValued="true" indexed="true"/>
-
-    <copyField source="title_text" dest="title_eptexten"/>
-    <copyField source="description_text" dest="description_eptexten"/>
-    <copyField source="creator_name_text" dest="creator_name_eptext"/>
-    <copyField source="department_name_text" dest="department_name_eptext"/>
-    <copyField source="title_text" dest="title_eptextmp"/>
-    <copyField source="description_text" dest="description_eptextmp"/>
-    <copyField source="creator_name_text" dest="creator_name_eptextmp"/>
-    <copyField source="department_name_text" dest="department_name_eptextmp"/>
-
   </fields>
 
   <!-- Field to use to determine and enforce document uniqueness.

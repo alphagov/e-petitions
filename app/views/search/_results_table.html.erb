@@ -1,10 +1,10 @@
 <%
-  if petition_search.search_term.present?
-    results_table_summary = "#{petition_search.state.capitalize} e-petitions which match \"#{petition_search.search_term}\""
+  if petitions.search_term.present?
+    results_table_summary = "#{petitions.state.capitalize} e-petitions which match \"#{petitions.search_term}\""
   elsif @department
-    results_table_summary = "#{petition_search.state.capitalize} e-petitions owned by the #{@department.name}"
+    results_table_summary = "#{petitions.state.capitalize} e-petitions owned by the #{@department.name}"
   else
-    results_table_summary = "#{petition_search.state.capitalize} e-petitions"
+    results_table_summary = "#{petitions.state.capitalize} e-petitions"
   end
 %>
 
@@ -13,7 +13,7 @@
   <thead>
     <tr>
       <th class="name"><%= sort_link_tag raw('e-petition name <span class="link_description">sort by e-petition name</span>'), :title, :title => 'sort by e-petition name' %></th>
-      <% if petition_search.state != Petition::REJECTED_STATE -%>
+      <% if petitions.state != Petition::REJECTED_STATE -%>
         <th class="sig_count"><%= sort_link_tag raw('Signatures <span class="link_description">sort by number of signatures</span>'), :count, :default_order => 'desc', :title => 'sort by number of signatures' %></th>
         <th class="closing_date last"><%= sort_link_tag raw('Closing <span class="link_description">sort by closing date</span>'), :closing, :title => 'sort by closing date' %></th>
       <% else -%>
@@ -22,7 +22,7 @@
     </tr>
   </thead>
   <tbody>
-    <% petition_search.petitions.each do |petition| %>
+    <% petitions.each do |petition| %>
     <tr>
       <td class="name">
         <% if petition.response.present? -%>
@@ -31,7 +31,7 @@
         <%= link_to petition.title, petition_path(petition), :class => 'text_link' %>
         <%= link_to "View", petition_path(petition), :class => 'link_prompt text_link' %>
       </td>
-      <% if petition_search.state != Petition::REJECTED_STATE -%>
+      <% if petitions.state != Petition::REJECTED_STATE -%>
         <td class="sig_count"><%= number_with_delimiter(petition.signature_count) %></td>
         <td class="closing_date last"><%= date_format(petition.closed_at) %></td>
       <% else -%>
