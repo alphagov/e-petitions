@@ -1,11 +1,8 @@
-class PetitionMailer < ActionMailer::Base
+class PetitionMailer < ApplicationMailer
   helper :link
 
-  default :from => AppConfig.email_from
   include ActionView::Helpers::NumberHelper
   add_template_helper(DateTimeHelper)
-
-  layout 'default_mail'
 
   def email_confirmation_for_creator(signature)
     @signature = signature
