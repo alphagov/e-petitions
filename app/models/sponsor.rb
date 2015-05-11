@@ -32,6 +32,13 @@ class Sponsor < ActiveRecord::Base
     if: :petition
   }
 
+  def self.supporting_the_petition
+    where.not(signature_id: nil)
+  end
+  def supports_the_petition?
+    signature.present?
+  end
+
   def build_signature(new_attributes = {})
     super(new_attributes.merge(default_signature_attribtues))
   end
