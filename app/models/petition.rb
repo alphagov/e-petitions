@@ -249,5 +249,8 @@ class Petition < ActiveRecord::Base
     self.sponsors << sponsor_emails.map { |email| Sponsor.new(email: email) }
   end
 
+  def supporting_sponsors_count
+    sponsors.supporting_the_petition.count
+  end
 end
 
