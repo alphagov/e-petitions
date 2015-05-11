@@ -37,7 +37,7 @@ end
 
 Given(/^I only need one more sponsor to support my e\-petition$/) do
   before_threshold = AppConfig.sponsor_moderation_threshold - 1
-  while (@petition.where.not(signature_id: nil) < before_threshold) do
+  while (@petition.supporting_sponsors_count < before_threshold) do
     steps %Q{
       And a sponsor supports my e-petition
     }
@@ -48,7 +48,7 @@ Given(/^I only need one more sponsor to support my e\-petition$/) do
 end
 
 Given(/^I have enough support from sponsors for my e\-petition$/) do
-  while (@petition.where.not(signature_id: nil) < AppConfig.sponsor_moderation_threshold) do
+  while (@petition.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold) do
     steps %Q{
       And a sponsor supports my e-petition
     }
