@@ -1,0 +1,19 @@
+<% content_for(:page_title) { "#{@petition.title} - Support this e-petition - e-petitions" } %>
+<div class="title_block">
+  <h2>Support this e-petition</h2>
+  <h1 class="petition_title"><%= @petition.title %></h1>
+  <h2>By <%= @petition.creator_signature.name %></h2>
+</div>
+
+<%= form_for @signature, url: petition_sponsor_path(@petition, @sponsor.perishable_token), html: {method: 'patch', class: 'wizard_form new_petition_form'} do |f| %>
+  <fieldset>
+    <%= render 'signatures/form', f: f, signature: @signature, with_email: false %>
+
+    <%= render 'signatures/notify_by_email', f: f, signature: @signature %>
+    <%= render 'signatures/terms_and_conditions', f: f, signature: @signature %>
+
+    <div class="row button_row">
+      <%= f.submit "Sign this e-petition", class: 'button', tabindex: increment %>
+    </div>
+  </fieldset>
+<% end -%>

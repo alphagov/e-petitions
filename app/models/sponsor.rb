@@ -15,7 +15,7 @@ class Sponsor < ActiveRecord::Base
 
   include EmailEncrypter
   include PerishableTokenGenerator
-  
+
   # = Relationships =
   belongs_to :petition
   belongs_to :signature
@@ -26,4 +26,20 @@ class Sponsor < ActiveRecord::Base
                           message: "Sponsor Emails for Petition should be unique" }
   validates_presence_of :petition, message: "Needs a petition"
 
+  def build_signature(new_attributes = {})
+    super(new_attributes.merge(default_signature_attribtues))
+  end
+
+  def create_signature(new_attributes = {})
+    super(new_attributes.merge(default_signature_attribtues))
+  end
+
+  def create_signature!(new_attributes = {})
+    super(new_attributes.merge(default_signature_attribtues))
+  end
+
+  private
+  def default_signature_attribtues
+    {petition: petition, email: email, email_confirmation: email}
+  end
 end
