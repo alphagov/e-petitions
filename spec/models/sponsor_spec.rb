@@ -96,4 +96,28 @@ describe Sponsor do
       it_behaves_like 'constructing a signature from a sponsor'
     end
   end
+
+  context 'supporting the petition' do
+    let(:sponsor) { FactoryGirl.create(:sponsor) }
+
+    context 'when the sponsor has no signature' do
+      it 'does not support the petition' do
+        expect(sponsor.supports_the_petition?).to be_falsey
+      end
+      it 'is not included in the supporting_the_petition scope' do
+        expect(Sponsor.supporting_the_petition).not_to include(sponsor)
+      end
+    end
+
+    context 'when the sponsor has a signature' do
+      before { sponsor.create_signature!(FactoryGirl.attributes_for(:signature)) }
+
+      it 'supports the petition' do
+        expect(sponsor.supports_the_petition?).to be_truthy
+      end
+      it 'is included in the supporting_the_petition scope' do
+        expect(Sponsor.supporting_the_petition).to include(sponsor)
+      end
+    end
+  end
 end
