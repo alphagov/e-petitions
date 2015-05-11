@@ -623,5 +623,68 @@ describe Petition do
     end
   end
 
+  describe "#notify_creator_about_sponsor_support", immediate_delayed_job_work_off: true do
+    let(:sponsor_emails) { (1..AppConfig.sponsor_moderation_threshold).map { |n| "sponsor-#{n}@example.com" } }
+    subject { FactoryGirl.create(:petition, sponsor_emails: sponsor_emails) }
+    before { ActionMailer::Base.deliveries.clear }
+
+    it 'breaks if the provided sponsor does not belong to the petition' do
+      expect {
+        subject.notify_creator_about_sponsor_support(FactoryGirl.create(:sponsor))
+      }.to raise_error(ArgumentError)
+    end
+
+    it 'breaks if the provided sponsor does belong to the petition, but is not a supporting sponsor' do
+      expect {
+        subject.notify_creator_about_sponsor_support(subject.sponsors.first)
+      }.to raise_error(ArgumentError)
+    end
+
+    context 'when the petition is below the sponsor moderation threshold' do
+      let(:sponsor) { subject.sponsors.first }
+      before { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
+
+      it 'sends an email to the petition creator telling them about the sponsor' do
+        subject.notify_creator_about_sponsor_support(sponsor)
+        email = ActionMailer::Base.deliveries.last
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq([subject.creator_signature.email])
+        expect(email.subject).to match(/has received support from a sponsor/)
+      end
+    end
+
+    context 'when the petition is on the sponsor moderation threshold' do
+      let(:sponsor) { subject.sponsors.first }
+      before do
+        while subject.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
+          subject.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+        sponsor.reload
+      end
+
+      it 'sends an email to the petition creator telling them about the sponsor' do
+        subject.notify_creator_about_sponsor_support(sponsor)
+        email = ActionMailer::Base.deliveries.last
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq([subject.creator_signature.email])
+        expect(email.subject).to match(/has received support from a sponsor/)
+      end
+    end
+
+    context 'when the petition is above the sponsor moderation threshold' do
+      let(:sponsor) { FactoryGirl.create(:sponsor, :with_signature, petition: subject) }
+      before do
+        while subject.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
+          subject.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+      end
+
+      it 'does not send an email to the petition creator telling them about the sponsor' do
+        subject.notify_creator_about_sponsor_support(sponsor)
+        email = ActionMailer::Base.deliveries.last
+        expect(email).to be_nil
+      end
+    end
+  end
 end
 
