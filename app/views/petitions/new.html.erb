@@ -150,7 +150,7 @@ $().ready(function() {
     message: "Action must be completed."
   });
   petition_form.validates('petition[action]', {
-    method: [E_PETS.FormController.validation_methods.validate_length, null, 1000],
+    method: [E_PETS.FormController.validation_methods.validate_length, null, 200],
     message: "Action is too long."
   });
   petition_form.validates('petition[description]', {
