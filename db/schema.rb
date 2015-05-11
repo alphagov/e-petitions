@@ -11,15 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501155244) do
+ActiveRecord::Schema.define(version: 20150511123210) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
     t.string   "persistence_token",    limit: 255
     t.string   "crypted_password",     limit: 255
     t.string   "password_salt",        limit: 255
-    t.integer  "login_count",          limit: 4,   default: 0
-    t.integer  "failed_login_count",   limit: 4,   default: 0
+    t.integer  "login_count",                      default: 0
+    t.integer  "failed_login_count",               default: 0
     t.datetime "current_login_at"
     t.datetime "last_login_at"
     t.string   "current_login_ip",     limit: 255
@@ -37,18 +40,18 @@ ActiveRecord::Schema.define(version: 20150501155244) do
   add_index "admin_users", ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name", using: :btree
 
   create_table "admin_users_departments", id: false, force: :cascade do |t|
-    t.integer "admin_user_id", limit: 4, null: false
-    t.integer "department_id", limit: 4, null: false
+    t.integer "admin_user_id", null: false
+    t.integer "department_id", null: false
   end
 
   add_index "admin_users_departments", ["admin_user_id", "department_id"], name: "index_admin_users_departments_on_fks", unique: true, using: :btree
   add_index "admin_users_departments", ["department_id"], name: "index_admin_users_departments_on_department_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer  "priority",   limit: 4,     default: 0
-    t.integer  "attempts",   limit: 4,     default: 0
-    t.text     "handler",    limit: 65535
-    t.text     "last_error", limit: 65535
+    t.integer  "priority",               default: 0
+    t.integer  "attempts",               default: 0
+    t.text     "handler"
+    t.text     "last_error"
     t.datetime "run_at"
     t.datetime "locked_at"
     t.datetime "failed_at"
@@ -61,16 +64,16 @@ ActiveRecord::Schema.define(version: 20150501155244) do
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "department_assignments", force: :cascade do |t|
-    t.integer  "petition_id",   limit: 4
-    t.integer  "department_id", limit: 4
+    t.integer  "petition_id"
+    t.integer  "department_id"
     t.datetime "assigned_on"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "departments", force: :cascade do |t|
-    t.string   "name",        limit: 255,   null: false
-    t.text     "description", limit: 65535
+    t.string   "name",        limit: 255, null: false
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "website_url", limit: 255
@@ -79,25 +82,26 @@ ActiveRecord::Schema.define(version: 20150501155244) do
   add_index "departments", ["name"], name: "index_departments_on_name", unique: true, using: :btree
 
   create_table "petitions", force: :cascade do |t|
-    t.string   "title",                   limit: 255,                       null: false
-    t.text     "description",             limit: 65535
-    t.text     "response",                limit: 65535
-    t.string   "state",                   limit: 10,    default: "pending", null: false
+    t.string   "title",                   limit: 255,                     null: false
+    t.text     "description"
+    t.text     "response"
+    t.string   "state",                   limit: 10,  default: "pending", null: false
     t.datetime "open_at"
-    t.integer  "department_id",           limit: 4,                         null: false
-    t.integer  "creator_signature_id",    limit: 4,                         null: false
+    t.integer  "department_id",                                           null: false
+    t.integer  "creator_signature_id",                                    null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "rejection_text",          limit: 65535
+    t.text     "rejection_text"
     t.datetime "closed_at"
-    t.integer  "signature_count",         limit: 4,     default: 0
-    t.boolean  "response_required",                     default: false
-    t.text     "internal_response",       limit: 65535
+    t.integer  "signature_count",                     default: 0
+    t.boolean  "response_required",                   default: false
+    t.text     "internal_response"
     t.string   "rejection_code",          limit: 50
-    t.boolean  "notified_by_email",                     default: false
-    t.string   "duration",                limit: 2,     default: "12"
+    t.boolean  "notified_by_email",                   default: false
+    t.string   "duration",                limit: 2,   default: "12"
     t.datetime "email_requested_at"
     t.datetime "get_an_mp_email_sent_at"
+    t.string   "action",                  limit: 200
   end
 
   add_index "petitions", ["creator_signature_id"], name: "index_petitions_on_creator_signature_id", unique: true, using: :btree
@@ -118,7 +122,7 @@ ActiveRecord::Schema.define(version: 20150501155244) do
     t.string   "postcode",         limit: 255
     t.string   "country",          limit: 255
     t.string   "ip_address",       limit: 20
-    t.integer  "petition_id",      limit: 4
+    t.integer  "petition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "notify_by_email",              default: false
@@ -136,16 +140,16 @@ ActiveRecord::Schema.define(version: 20150501155244) do
   create_table "sponsors", force: :cascade do |t|
     t.string   "encrypted_email",  limit: 255
     t.string   "perishable_token", limit: 255
-    t.integer  "petition_id",      limit: 4
-    t.integer  "signature_id",     limit: 4
+    t.integer  "petition_id"
+    t.integer  "signature_id"
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
   end
 
   create_table "system_settings", force: :cascade do |t|
-    t.string   "key",         limit: 64,    null: false
-    t.text     "value",       limit: 65535
-    t.text     "description", limit: 65535
+    t.string   "key",         limit: 64, null: false
+    t.text     "value"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -153,8 +157,8 @@ ActiveRecord::Schema.define(version: 20150501155244) do
   add_index "system_settings", ["key"], name: "index_system_settings_on_key", unique: true, using: :btree
 
   create_table "trending_petitions", force: :cascade do |t|
-    t.integer  "petition_id",             limit: 4
-    t.integer  "signatures_in_last_hour", limit: 4, default: 0
+    t.integer  "petition_id"
+    t.integer  "signatures_in_last_hour", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
   end
