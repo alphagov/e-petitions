@@ -25,17 +25,20 @@ FactoryGirl.define do
   end
 
   factory :petition do
+    transient do
+      creator_signature_attributes { {} }
+    end
     sequence(:title) {|n| "Petition #{n}" }
     action "Petition action"
     description "Petition description"
     association :department
     sponsor_emails { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
-    creator_signature  { |cs| cs.association(:signature, :state => Signature::VALIDATED_STATE) }
+    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)) }
   end
 
   factory :pending_petition, :parent => :petition do
     state  Petition::PENDING_STATE
-    creator_signature  { |cs| cs.association(:signature, :state => Signature::PENDING_STATE) }
+    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::PENDING_STATE)) }
   end
 
   factory :validated_petition, :parent => :petition do
