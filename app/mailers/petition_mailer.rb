@@ -1,6 +1,4 @@
 class PetitionMailer < ApplicationMailer
-  helper :link
-
   include ActionView::Helpers::NumberHelper
   add_template_helper(DateTimeHelper)
 

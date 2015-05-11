@@ -1,0 +1,9 @@
+<p>Hi <%= @petition.creator_signature.name %>,</p>
+
+<p>One of the sponsors you nominated for your petition "<%= @petition.title %>", <%= @sponsor.signature.name %>, has signed it to show their support.</p>
+
+<p>You have support from <%= @supporting_sponsors_count %> of your nominated sponsors; you still need <%= @moderation_threshold - @supporting_sponsors_count %> more before you have enough support to pass the petition to parliament for moderation review.</p>
+
+<p>Thanks,</p>
+
+<p>Parliament e-petitions <%= linkify home_url %></p>
