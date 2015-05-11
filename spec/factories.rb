@@ -26,6 +26,7 @@ FactoryGirl.define do
 
   factory :petition do
     sequence(:title) {|n| "Petition #{n}" }
+    action "Petition action"
     description "Petition description"
     association :department
     sponsor_emails { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
