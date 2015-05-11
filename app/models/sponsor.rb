@@ -26,6 +26,12 @@ class Sponsor < ActiveRecord::Base
                           message: "Sponsor Emails for Petition should be unique" }
   validates_presence_of :petition, message: "Needs a petition"
 
+  validates :email, exclusion: {
+    in: -> (sponsor) { Array(sponsor.petition.creator_signature.email) },
+    message: 'Petition creator cannot sponsor the petition',
+    if: :petition
+  }
+
   def build_signature(new_attributes = {})
     super(new_attributes.merge(default_signature_attribtues))
   end

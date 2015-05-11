@@ -86,7 +86,7 @@ FactoryGirl.define do
   end
 
   factory :sponsor do
-    sequence(:email) {|n| "jo#{n}@public.com" }
+    sequence(:email) {|n| "sponsor#{n}@public.com" }
     association :petition
   end
 
