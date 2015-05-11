@@ -1,7 +1,5 @@
-class FeedbackMailer < ActionMailer::Base
+class FeedbackMailer < ApplicationMailer
   TO = "petitions@example.com"
-  default :from => AppConfig.email_from
-  layout 'default_mail'
 
   def send_feedback(feedback)
     @feedback = feedback
