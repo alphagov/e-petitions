@@ -146,6 +146,12 @@ describe SponsorsController do
           do_patch
           expect(sponsor.signature.state).to eq Signature::VALIDATED_STATE
         end
+
+        it 'sends email notification to the petition creator' do
+          allow(Petition).to receive(:find).with(petition.to_param).and_return petition
+          expect(petition).to receive(:notify_creator_about_sponsor_support).with(sponsor)
+          do_patch
+        end
       end
 
       context 'with invalid signature params' do
