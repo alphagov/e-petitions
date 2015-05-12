@@ -263,5 +263,14 @@ class Petition < ActiveRecord::Base
       SponsorMailer.sponsor_signed_email_on_threshold(self, sponsor).deliver_later
     end
   end
+
+  def on_sponsor_moderation_threshold?
+    support_count = supporting_sponsors_count
+    support_count == AppConfig.sponsor_moderation_threshold ? true : false
+  end
+
+  def update_sponsored_state
+    self.state = SPONSORED_STATE if self.on_sponsor_moderation_threshold?
+  end
 end
 

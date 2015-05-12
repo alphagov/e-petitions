@@ -674,6 +674,7 @@ describe Petition do
         expect(email.to).to eq([subject.creator_signature.email])
         expect(email.subject).to match(/has received support from a sponsor/)
       end
+
     end
 
     context 'when the petition is above the sponsor moderation threshold' do
