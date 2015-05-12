@@ -14,7 +14,9 @@ When /^I search for "([^"]*)"$/ do |query|
 end
 
 When /^sunspot is re\-indexed$/ do
-  Petition.all.each {|p| p.index! }
+  if Petition.respond_to?(:reindex)
+    Petition.reindex
+  end
 end
 
 Then /^I should not be able to search via free text$/ do

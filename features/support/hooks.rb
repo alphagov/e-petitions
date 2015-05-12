@@ -4,29 +4,8 @@ Before("@departments") do
   end
 end
 
-# for search testing
-# see http://opensoul.org/blog/archives/2010/04/07/cucumber-and-sunspot/
-$original_sunspot_session = Sunspot.session
-
-Before("~@search") do
-  Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
-end
-
-Before("@search") do
-  unless $sunspot
-    $sunspot = Sunspot::Rails::Server.new
-    pid = fork do
-      STDERR.reopen('/dev/null')
-      STDOUT.reopen('/dev/null')
-      $sunspot.run
-    end
-    # shut down the Solr server
-    at_exit { Process.kill('TERM', pid) }
-
-    # wait for solr to start
-    require 'sunspot_server_util'
-    SunspotServerUtil.wait_for_sunspot_to_start($sunspot.port)
+Before do
+  if Petition.respond_to?(:remove_all_from_index!)
+    Petition.remove_all_from_index!
   end
-  Sunspot.session = $original_sunspot_session
-  Sunspot.remove_all!
 end
