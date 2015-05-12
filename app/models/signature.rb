@@ -21,7 +21,7 @@ class Signature < ActiveRecord::Base
 
   include EmailEncrypter
   include PerishableTokenGenerator
-  
+
   PENDING_STATE = 'pending'
   VALIDATED_STATE = 'validated'
   STATES = [PENDING_STATE, VALIDATED_STATE]
@@ -31,12 +31,8 @@ class Signature < ActiveRecord::Base
   has_one :sponsor
 
   # = Validations =
-  validates_presence_of :email_confirmation,
-                        :on => :create,
-                        :message => "%{attribute} must be completed"
-  validates_confirmation_of :email,
-                            :message => "Email should match confirmation",
-                            :on => :create
+  include Staged::Validations::SignerDetails
+  include Staged::Validations::Terms
 
   validate do |signature|
     matcher = Signature.where(:encrypted_email => signature.encrypted_email, :petition_id => signature.petition_id)
@@ -59,15 +55,7 @@ class Signature < ActiveRecord::Base
     end
 
   end
-  validates_presence_of :name, :country, :message => "%{attribute} must be completed"
-  validates_length_of :name, :maximum => 255
-  validates_presence_of :postcode, :message => "%{attribute} must be completed", :if => "country == 'United Kingdom'"
-  validates_format_of :postcode, :with => /\A(([A-Z]{1,2}[0-9][0-9A-Z]? ?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO? ?(C\/O)? ?[0-9]{1,4})|(GIR 0AA))\Z/i, :message => 'Postcode not recognised.', :if => "country == 'United Kingdom'"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
-
-  validates_acceptance_of :uk_citizenship, :message => "You must be a British citizen or normally live in the UK to create or sign petitions.", :if => :new_record?, :allow_nil => false
-  validates_acceptance_of :terms_and_conditions, :message => "You must accept the terms and conditions.", :if => :new_record?, :allow_nil => false
-  validates_presence_of :address, :town, :if => :new_record?, :message => "%{attribute} must be completed"
 
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
