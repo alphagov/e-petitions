@@ -1,5 +1,5 @@
 When /^I look at the next petition on my list$/ do
-  @petition = FactoryGirl.create(:validated_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
+  @petition = FactoryGirl.create(:sponsored_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
   visit edit_admin_petition_path(@petition)
 end
 

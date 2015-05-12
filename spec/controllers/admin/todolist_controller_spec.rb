@@ -33,9 +33,9 @@ describe Admin::TodolistController do
       @treasury = FactoryGirl.create(:department)
       @dfid = FactoryGirl.create(:department)
       @home_office = FactoryGirl.create(:department)
-      @p1 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 3.days.ago, :state => Petition::VALIDATED_STATE)
-      @p2 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 12.days.ago, :state => Petition::VALIDATED_STATE)
-      @p3 = FactoryGirl.create(:petition, :department => @home_office, :created_at => 7.days.ago, :state => Petition::VALIDATED_STATE)
+      @p1 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 3.days.ago, :state => Petition::SPONSORED_STATE)
+      @p2 = FactoryGirl.create(:petition, :department => @treasury, :created_at => 12.days.ago, :state => Petition::SPONSORED_STATE)
+      @p3 = FactoryGirl.create(:petition, :department => @home_office, :created_at => 7.days.ago, :state => Petition::SPONSORED_STATE)
       @p4 = FactoryGirl.create(:petition, :department => @home_office, :state => Petition::PENDING_STATE)
       @p5 = FactoryGirl.create(:open_petition, :department => @dfid)
     end
