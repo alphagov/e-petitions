@@ -9,7 +9,7 @@ module Staged
         validate :validate_number_of_sponsors, on: :create
 
         def build_sponsors
-          self.sponsors << sponsor_emails.map { |email| Sponsor.new(email: email) }
+          sponsor_emails.each { |email| self.sponsors << Sponsor.new(email: email) }
         end
 
         def validate_number_of_sponsors
