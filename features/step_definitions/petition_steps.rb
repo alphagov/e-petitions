@@ -9,7 +9,7 @@ Then /^I am taken to a landing page$/ do
 end
 
 
-Given /^a(n)? ?(pending|validated|open)? petition "([^"]*)" belonging to the "([^"]*)"$/ do |a_or_an, state, petition_title, department_name|
+Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" belonging to the "([^"]*)"$/ do |a_or_an, state, petition_title, department_name|
   @petition = FactoryGirl.create(:open_petition,
     :title => petition_title,
     :department => Department.find_by(name: department_name),
