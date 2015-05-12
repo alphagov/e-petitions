@@ -8,4 +8,7 @@ before_script:
   - bundle install
   - cp config/database.yml.travis config/database.yml
   - psql -c 'create database epets_test;' -U postgres
+  - RAILS_ENV=test bundle exec rake sunspot:solr:start
 script: bundle exec rake
+after_script:
+  - RAILS_ENV=test bundle exec rake sunspot:solr:stop
