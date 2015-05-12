@@ -51,7 +51,7 @@ describe PetitionsController do
     end
 
     def do_post(options = {})
-      post :create, :petition => {:title => 'Save the planet', :description => 'Global warming is upon us', :duration => "12",
+      post :create, :petition => {:title => 'Save the planet', :action => 'Limit temperature rise at two degrees', :description => 'Global warming is upon us', :duration => "12",
         :department_id => @department.id, :sponsor_emails => @sponsor_emails, :creator_signature_attributes => @creator_signature_attributes}.merge(options)
     end
 

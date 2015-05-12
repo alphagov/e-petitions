@@ -33,6 +33,7 @@ class Petition < ActiveRecord::Base
 
   searchable do
     text :title
+    text :action
     text :description
     text :creator_name do
       creator_signature.name
@@ -62,10 +63,12 @@ class Petition < ActiveRecord::Base
   # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
   # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
   validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
-  validates_presence_of :title, :description, :duration, :department, :message => "%{attribute} must be completed"
+  validates_presence_of :title, :action, :description, :duration, :department, :message => "%{attribute} must be completed"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
   validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
+  validates_length_of :action, :maximum => 200, :unless => 'action.blank?', :message => 'Action is too long.'
   validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
+
 
   validate :validate_number_of_sponsors, on: :create
 

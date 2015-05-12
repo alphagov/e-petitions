@@ -47,6 +47,7 @@ describe Petition do
 
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:duration).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:department).with_message(/must be completed/) }
@@ -84,6 +85,11 @@ describe Petition do
     it "should validate the length of :title to within 150 characters" do
       expect(FactoryGirl.build(:petition, :title => 'x' * 150)).to be_valid
       expect(FactoryGirl.build(:petition, :title => 'x' * 151)).not_to be_valid
+    end
+
+    it "should validate the length of :action to within 200 characters" do
+      expect(FactoryGirl.build(:petition, :action => 'x' * 200)).to be_valid
+      expect(FactoryGirl.build(:petition, :action => 'x' * 201)).not_to be_valid
     end
 
     it "should validate the length of :description to within 1000 characters" do

@@ -50,6 +50,17 @@
       <div class="expandable_content" id="department_info">
         <p>You must choose the government department that you believe owns the issue you are raising in your <span class="nowrap">e-petition</span>. This will help us to get it to the right person as quickly as possible.</p>
       </div>
+      <% end %>
+
+    <%= form_row :for => [@petition, :action] do %>
+      <%= f.label :action, 'e-petition action' %>
+      <%= f.text_area :action, :tabindex => increment %>
+      <%= error_messages_for_field @petition, :action %>
+      <p>Maximum 200 Characters</p>
+      <div class="tip">
+        <div class="arrow"></div>
+        <p>Keep your action details short and to the point. </p>
+      </div>
     <% end %>
 
     <%= form_row :for => [@petition, :description] do %>
@@ -103,6 +114,7 @@
     <div class="generic_block" id="petition_summary_block">
       <h2 id="title_summary_field"></h2>
       <p id="department_summary_field"></p>
+      <p id="action_summary_field"></p>
       <p id="description_summary_field"></p>
     </div>
 
@@ -132,6 +144,14 @@ $().ready(function() {
   petition_form.validates('petition[department_id]', {
     method: E_PETS.FormController.validation_methods.validate_presence,
     message: "Department must be completed."
+  });
+  petition_form.validates('petition[action]', {
+    method: E_PETS.FormController.validation_methods.validate_presence,
+    message: "Action must be completed."
+  });
+  petition_form.validates('petition[action]', {
+    method: [E_PETS.FormController.validation_methods.validate_length, null, 200],
+    message: "Action is too long."
   });
   petition_form.validates('petition[description]', {
     method: E_PETS.FormController.validation_methods.validate_presence,
@@ -202,6 +222,10 @@ $().ready(function() {
   petition_form.observe_field('petition[description]', function(){
     $('#description_summary_field').text(this.value);
     $('#description_summary_field').html(E_PETS.UTILS.simple_format($('#description_summary_field').html()));
+  });
+  petition_form.observe_field('petition[action]', function(){
+    $('#action_summary_field').text(this.value);
+    $('#action_summary_field').html(E_PETS.UTILS.simple_format($('#action_summary_field').html()));
   });
 
   document.getElementById('petition_summary_block').style.display = 'block';

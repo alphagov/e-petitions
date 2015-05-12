@@ -39,6 +39,7 @@ class PetitionsController < ApplicationController
     else
       if @petition.errors[:title].any? ||
         @petition.errors[:department].any? ||
+        @petition.errors[:action].any? ||
         @petition.errors[:description].any?
         @start_on_section = 0
       elsif @petition.creator_signature.errors[:name].any? ||
@@ -94,7 +95,7 @@ class PetitionsController < ApplicationController
   def petition_params_for_create
     params.
       require(:petition).
-      permit(:title, :description, :duration, :department_id,
+      permit(:title, :action, :description, :duration, :department_id,
              :sponsor_emails,
              creator_signature_attributes: [
                :name, :email, :email_confirmation, :address, :town,

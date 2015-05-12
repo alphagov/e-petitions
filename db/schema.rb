@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501155244) do
+ActiveRecord::Schema.define(version: 20150511123210) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -98,6 +98,7 @@ ActiveRecord::Schema.define(version: 20150501155244) do
     t.string   "duration",                limit: 2,     default: "12"
     t.datetime "email_requested_at"
     t.datetime "get_an_mp_email_sent_at"
+    t.string   "action",                  limit: 200
   end
 
   add_index "petitions", ["creator_signature_id"], name: "index_petitions_on_creator_signature_id", unique: true, using: :btree
