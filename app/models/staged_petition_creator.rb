@@ -1,15 +1,4 @@
 class StagedPetitionCreator
-  ERRORS_PER_STAGE = {
-    'petition' => [:title, :department, :action, :description],
-    'creator' => [:creator_signature, :'creator_signature.name',
-      :'creator_signature.email', :'creator_signature.email_confirmation',
-      :'creator_signature.uk_citizenship', :'creator_signature.address',
-      :'creator_signature.town', :'creator_signature.postcode',
-      :'creator_signature.country'],
-    'sponsors' => [:sponsors, :sponsor_emails],
-    'submit' => [:'creator_signature.terms_and_conditions']
-  }
-
   def initialize(params, request, stage, move)
     @params = params
     @request = request
@@ -144,22 +133,6 @@ class StagedPetitionCreator
     else
       previous_stage
     end
-  end
-
-  def earliest_error_stage
-    if errors.any? { |field, _| errors_for_stage('petition').include? field }
-      'petition'
-    elsif errors.any? { |field, _| errors_for_stage('creator').include? field }
-      'creator'
-    elsif errors.any? { |field, _| errors_for_stage('sponsors').include? field }
-      'sponsors'
-    elsif errors.any? { |field, _| errors_for_stage('submit').include? field }
-      'submit'
-    end
-  end
-
-  def errors_for_stage(stage)
-    self.class::ERRORS_PER_STAGE.fetch(stage, [])
   end
 
   def build_petition
