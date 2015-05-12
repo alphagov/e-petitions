@@ -24,6 +24,7 @@ class SponsorsController < ApplicationController
         @signature.state = Signature::VALIDATED_STATE
         @signature.save(:validate => false)
         send_sponsor_support_notificaiton_email_to_petition_owner(@petition, @sponsor)
+        @petition.update_sponsored_state
         redirect_to thank_you_petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
       else
         render :show
