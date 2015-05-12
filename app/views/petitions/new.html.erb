@@ -5,28 +5,28 @@
 </div>
 <% end %>
 
-<%= form_for @petition, :url => create_petition_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
+<%= form_for @stage_manager.stage_object, :url => create_petition_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <div class="form_pagination">
     <ul>
-      <li class="step_1 pagination_tab<%= ' active' if @petition.stage == 'petition' %>"><span class="step_no">1</span>e-petition<br/>details</li>
-      <li class="step_2 pagination_tab<%= ' active' if @petition.stage == 'creator' %>"><span class="step_no">2</span>Your details</li>
-      <li class="step_3 pagination_tab<%= ' active' if @petition.stage == 'sponsors' %>"><span class="step_no">3</span>Sponsor emails</li>
-      <li class="step_4 pagination_tab<%= ' active' if @petition.stage == 'submit' %>"><span class="step_no">4</span>Submit<br/>e-petition</li>
+      <li class="step_1 pagination_tab<%= ' active' if @stage_manager.stage == 'petition' %>"><span class="step_no">1</span>e-petition<br/>details</li>
+      <li class="step_2 pagination_tab<%= ' active' if @stage_manager.stage == 'creator' %>"><span class="step_no">2</span>Your details</li>
+      <li class="step_3 pagination_tab<%= ' active' if @stage_manager.stage == 'sponsors' %>"><span class="step_no">3</span>Sponsor emails</li>
+      <li class="step_4 pagination_tab<%= ' active' if @stage_manager.stage == 'submit' %>"><span class="step_no">4</span>Submit<br/>e-petition</li>
     </ul>
   </div>
 
-  <% if @petition.previous_stage_errors.any? -%>
+  <% if f.object.errors.any? -%>
     <div id='errorExplanation' class='errorExplanation'>
       <h2>We couldn't create this petition</h2>
       <p>Please fix the following errors:</p>
       <ul>
-        <% @petition.previous_stage_errors.each do |key, error| -%>
+        <% f.object.errors.each do |key, error| -%>
           <li><%= error %></li>
         <% end -%>
       </ul>
     </div>
   <% end -%>
 
-  <%= render_petition_form @petition, f %>
+  <%= render_petition_form @stage_manager, f %>
 
 <% end %>

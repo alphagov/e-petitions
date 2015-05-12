@@ -13,7 +13,7 @@
     <div id="description_summary_field"><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></div>
   </div>
 
-  <%= f.fields_for :creator_signature, petition.creator_signature! do |csf| %>
+  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
     <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => csf.object } %>
   <% end %>
 
