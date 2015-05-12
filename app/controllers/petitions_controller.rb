@@ -20,14 +20,14 @@ class PetitionsController < ApplicationController
   def new
     assign_title
     assign_stage
-    @stage_manager = StagedPetitionCreator.new(params, request)
+    @stage_manager = StagedPetitionCreator.new(petition_params_for_new, request, params[:stage], params[:move])
     respond_with @stage_manager.stage_object
   end
 
   def create
     assign_move
     assign_stage
-    @stage_manager = StagedPetitionCreator.new(params, request)
+    @stage_manager = StagedPetitionCreator.new(petition_params_for_create, request, params[:stage], params[:move])
     if @stage_manager.create_petition
       send_email_to_verify_petition_creator(@stage_manager.petition)
       redirect_to thank_you_petition_path(@stage_manager.petition, :secure => true)
@@ -64,6 +64,31 @@ class PetitionsController < ApplicationController
     params[:petition][:title] = title
   end
 
+  def petition_params_for_new
+    params.
+      fetch('petition', {}).
+      permit(:title)
+  end
+
+  def petition_params_for_create
+    params.
+      require(:petition).
+      permit(:title, :action, :description, :duration, :department_id,
+             :sponsor_emails,
+             creator_signature: [
+               :name, :email, :email_confirmation, :address, :town,
+               :postcode, :country, :uk_citizenship,
+               :terms_and_conditions, :notify_by_email
+             ]).tap do |sanitized|
+               if sanitized['creator_signature'].present?
+                 sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')
+               end
+               if sanitized['sponsor_emails']
+                 sanitized['sponsor_emails'] = parse_emails(sanitized['sponsor_emails'])
+               end
+             end
+  end
+
   def assign_move
     return if ['next', 'back'].include? params[:move]
     params[:move] = 'next'
@@ -75,6 +100,10 @@ class PetitionsController < ApplicationController
 
   def send_email_to_verify_petition_creator(petition)
     PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
+  end
+
+  def parse_emails(emails)
+    emails.strip.split(/\r?\n/).map { |e| e.strip }
   end
 end
 

@@ -10,19 +10,20 @@ class StagedPetitionCreator
     'submit' => [:'creator_signature.terms_and_conditions']
   }
 
-  def initialize(params, request)
+  def initialize(params, request, stage, move)
     @params = params
     @request = request
-  end
-
-  def petition
-    @_petition ||= build_petition
+    @previous_stage = stage || 'petition'
+    @move = move
   end
 
   # This is the stage we came from - the UI elements we showed the user
   # that generated these params
-  def previous_stage
-    @_previous_stage ||= @params.fetch('stage', 'petition')
+  attr_reader :previous_stage
+  attr_reader :move
+
+  def petition
+    @_petition ||= build_petition
   end
 
   # This is the stage we are going to - the UI elements we will show the
@@ -123,10 +124,6 @@ class StagedPetitionCreator
     previous_stage_object.valid?
   end
 
-  def move
-    @_move ||= @params['move']
-  end
-
   STAGES = {
     'petition' => { 'next' => 'creator', 'back' => 'petition' },
     'creator' => { 'next' => 'sponsors', 'back' => 'petition' },
@@ -165,34 +162,7 @@ class StagedPetitionCreator
     self.class::ERRORS_PER_STAGE.fetch(stage, [])
   end
 
-  def sanitized_params
-    @_sanitized_params ||= sanitize_params
-  end
-
-  def sanitize_params
-    @params.
-      fetch('petition', {}).
-      permit(:title, :action, :description, :duration, :department_id,
-             :sponsor_emails,
-             creator_signature: [
-               :name, :email, :email_confirmation, :address, :town,
-               :postcode, :country, :uk_citizenship,
-               :terms_and_conditions, :notify_by_email
-             ]).tap do |sanitized|
-               if sanitized['creator_signature'].present?
-                 sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')
-               end
-               if sanitized['sponsor_emails']
-                 sanitized['sponsor_emails'] = parse_emails(sanitized['sponsor_emails'])
-               end
-             end
-  end
-
   def build_petition
-    Petition.new(sanitized_params)
-  end
-
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
+    Petition.new(@params)
   end
 end
