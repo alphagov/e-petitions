@@ -45,6 +45,10 @@ FactoryGirl.define do
     state  Petition::VALIDATED_STATE
   end
 
+  factory :sponsored_petition, :parent => :petition do
+    state  Petition::SPONSORED_STATE
+  end
+
   factory :open_petition, :parent => :petition do
     state      Petition::OPEN_STATE
     open_at    Time.zone.now

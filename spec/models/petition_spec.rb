@@ -258,6 +258,7 @@ describe Petition do
         @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
         @p5 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
         @p6 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
+        @p7 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
       end
 
       it "should return 2 pending petitions" do
@@ -266,9 +267,9 @@ describe Petition do
         expect(petitions).to include(@p1, @p3)
       end
 
-      it "should return 1 validated, open, closed and hidden petitions" do
+      it "should return 1 validated, sponsored, open, closed and hidden petitions" do
         [[Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE, @p4],
-         [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6]].each do |state_and_petition|
+         [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6], [Petition::SPONSORED_STATE, @p7]].each do |state_and_petition|
           petitions = Petition.for_state(state_and_petition[0])
           expect(petitions.size).to eq(1)
           expect(petitions).to eq([state_and_petition[1]])
@@ -281,6 +282,7 @@ describe Petition do
         @hidden_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
         @hidden_petition_2 = FactoryGirl.create(:petition, :state => Petition::VALIDATED_STATE)
         @hidden_petition_3 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
+        @hidden_petition_4 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
         @visible_petition_1 = FactoryGirl.create(:open_petition)
         @visible_petition_2 = FactoryGirl.create(:rejected_petition)
         @visible_petition_3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
@@ -436,6 +438,7 @@ describe Petition do
       expect(petition(Petition::HIDDEN_STATE).can_be_signed?).to be_falsey
       expect(petition(Petition::REJECTED_STATE).can_be_signed?).to be_falsey
       expect(petition(Petition::VALIDATED_STATE).can_be_signed?).to be_falsey
+      expect(petition(Petition::SPONSORED_STATE).can_be_signed?).to be_falsey
     end
   end
 
@@ -445,7 +448,7 @@ describe Petition do
     end
 
     it "should be not be open when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
+      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).open?).to be_falsey
       end
     end
@@ -457,7 +460,7 @@ describe Petition do
     end
 
     it "should be not be rejected when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
+      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).rejected?).to be_falsey
       end
     end
@@ -469,7 +472,7 @@ describe Petition do
     end
 
     it "should be not be hidden when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
+      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).hidden?).to be_falsey
       end
     end
@@ -571,19 +574,21 @@ describe Petition do
     it "returns a hash containing counts of petition states" do
       1.times { FactoryGirl.create(:pending_petition) }
       2.times { FactoryGirl.create(:validated_petition) }
-      3.times { FactoryGirl.create(:open_petition) }
-      4.times { FactoryGirl.create(:closed_petition) }
-      5.times { FactoryGirl.create(:rejected_petition) }
-      6.times { FactoryGirl.create(:hidden_petition) }
+      3.times { FactoryGirl.create(:sponsored_petition) }
+      4.times { FactoryGirl.create(:open_petition) }
+      5.times { FactoryGirl.create(:closed_petition) }
+      6.times { FactoryGirl.create(:rejected_petition) }
+      7.times { FactoryGirl.create(:hidden_petition) }
 
       # Petition.counts_by_state.class.should == Hash
 
       expect(Petition.counts_by_state[:pending]).to   eq(1)
       expect(Petition.counts_by_state[:validated]).to eq(2)
-      expect(Petition.counts_by_state[:open]).to      eq(3)
-      expect(Petition.counts_by_state[:closed]).to    eq(4)
-      expect(Petition.counts_by_state[:rejected]).to  eq(5)
-      expect(Petition.counts_by_state[:hidden]).to    eq(6)
+      expect(Petition.counts_by_state[:sponsored]).to eq(3)
+      expect(Petition.counts_by_state[:open]).to      eq(4)
+      expect(Petition.counts_by_state[:closed]).to    eq(5)
+      expect(Petition.counts_by_state[:rejected]).to  eq(6)
+      expect(Petition.counts_by_state[:hidden]).to    eq(7)
     end
   end
 
