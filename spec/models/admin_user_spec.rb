@@ -181,23 +181,6 @@ describe AdminUser do
       end
     end
 
-    context "can_see_all_trending_petitions?" do
-      it "is normally false" do
-        user = FactoryGirl.create(:admin_user, :role => 'admin')
-        expect(user.can_see_all_trending_petitions?).to be_falsey
-      end
-
-      it "is true when the user is a system admin" do
-        user = FactoryGirl.create(:admin_user, :role => 'sysadmin')
-        expect(user.can_see_all_trending_petitions?).to be_truthy
-      end
-
-      it "is true if the user is a threshold user" do
-        user = FactoryGirl.create(:admin_user, :role => 'threshold')
-        expect(user.can_see_all_trending_petitions?).to be_truthy
-      end
-    end
-
     context "account_disabled" do
       it "should return true when user has tried to login 5 times unsuccessfully" do
         user = FactoryGirl.create(:admin_user)

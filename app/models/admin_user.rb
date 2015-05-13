@@ -81,10 +81,6 @@ class AdminUser < ActiveRecord::Base
     is_a_sysadmin? || is_a_threshold?
   end
 
-  def can_see_all_trending_petitions?
-    is_a_sysadmin? || is_a_threshold?
-  end
-
   def account_disabled
     self.failed_login_count >= DISABLED_LOGIN_COUNT
   end
