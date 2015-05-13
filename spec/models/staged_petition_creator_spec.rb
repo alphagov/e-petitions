@@ -1,371 +1,216 @@
 require 'rails_helper'
 
 describe StagedPetitionCreator do
-  let(:params) { ActionController::Parameters.new({}) }
+  let(:petition_params) { {} }
+  let(:move) { '' }
+  let(:stage) { '' }
   let(:request) { double(remote_ip: '192.168.0.1') }
-  subject { described_class.new(params, request) }
+  subject { described_class.new(petition_params, request, stage, move) }
+  let(:petition) { subject.petition }
 
-  describe '#creator_signature!' do
-    it 'builds a new creator signature for the petition' do
-      expect(subject.creator_signature).to be_nil
-      subject.creator_signature!
-      expect(subject.creator_signature).to be_present
-    end
-
-    it 'returns the newly built creator signature' do
-      newly_built = subject.creator_signature!
-      expect(subject.creator_signature).to eq newly_built
-    end
-
-    it 'sets the country of the built signature to "United Kingdom"' do
-      expect(subject.creator_signature!.country).to eq 'United Kingdom'
-    end
-
-    it 'does not create a new instance if the petition already has a creator signature' do
-      existing = Signature.new
-      subject.petition.creator_signature = existing
-      subject.creator_signature!
-      expect(subject.creator_signature).to eq existing
-    end
-
-    it 'does not change the country if the petition already has a creator signature' do
-      existing = Signature.new(country: 'France')
-      subject.petition.creator_signature = existing
-      subject.creator_signature!
-      expect(subject.creator_signature.country).to eq 'France'
-    end
-  end
-
-  describe '#create' do
+  describe '#create_petition' do
     it 'strips trailing whitespace from the petition title' do
-      params[:petition] = { title: ' woo ' }
-      subject.create
-      expect(subject.title).to eq 'woo'
+      petition_params[:title] = ' woo '
+      subject.create_petition
+      expect(petition.title).to eq 'woo'
     end
 
     context 'when creator_signature attributes are present' do
       it 'strips trailing whitespace from the creator signature email' do
-        params[:petition] = { creator_signature: { email: ' woo@example.com ' } }
-        subject.create
-        expect(subject.creator_signature.email).to eq 'woo@example.com'
+        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        subject.create_petition
+        expect(petition.creator_signature.email).to eq 'woo@example.com'
       end
 
       it 'assigns the remote_ip of the request to the ip_address of the creator signature' do
-        params[:petition] = { creator_signature: { email: ' woo@example.com ' } }
-        subject.create
-        expect(subject.creator_signature.ip_address).to eq '192.168.0.1'
+        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        subject.create_petition
+        expect(petition.creator_signature.ip_address).to eq '192.168.0.1'
       end
 
       it 'assumes that the creator wants notify_by_email to be true' do
-        params[:petition] = { creator_signature: { email: ' woo@example.com ' } }
-        subject.create
-        expect(subject.creator_signature.notify_by_email).to eq true
+        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        subject.create_petition
+        expect(petition.creator_signature.notify_by_email).to eq true
       end
     end
 
     context 'when creator_signature attributes are present' do
       it 'does not cause a creator_signature to appear' do
-        subject.create
-        expect(subject.creator_signature).to be_nil
+        subject.create_petition
+        expect(petition.creator_signature).to be_nil
       end
     end
 
     describe 'when the stage is "done"' do
-      before { allow(subject).to receive(:stage).and_return 'done' }
+      let(:stage) { 'done' }
 
-      it 'returns the result of trying to save the petition object' do
-        expect(subject.petition).to receive(:save)
-        subject.create
+      it 'tries to save the petition object' do
+        expect(petition).to receive(:save)
+        subject.create_petition
       end
 
-      it 'returns the result of trying to save the petition object' do
-        allow(subject.petition).to receive(:save).and_return :a_save_result
-        expect(subject.create).to eq :a_save_result
+      it 'returns true if the petition object can be saved' do
+        allow(petition).to receive(:save).and_return true
+        expect(subject.create_petition).to eq true
+      end
+
+      it 'returns true if the petition object can not be saved' do
+        allow(petition).to receive(:save).and_return false
+        expect(subject.create_petition).to eq false
       end
     end
 
     describe 'when the stage is not "done"' do
-      before { allow(subject).to receive(:stage).and_return 'not-done' }
+      let(:stage) { 'submit' }
 
       it 'returns false' do
-        expect(subject.create).to eq false
+        expect(subject.create_petition).to eq false
       end
 
       it 'does not try to save the petition' do
         expect(subject.petition).not_to receive(:save)
-        subject.create
-      end
-
-      it 'validates the petition' do
-        expect(subject.petition).to receive(:valid?)
-        subject.create
+        subject.create_petition
       end
     end
   end
 
   describe 'stages' do
-    describe '#moving_backwards?' do
-      it 'is true when params[:move] is "back"' do
-        params[:move] = 'back'
-        expect(subject.moving_backwards?).to be_truthy
-      end
-      it 'is false when params[:move] is not "back"' do
-        params[:move] = 'next'
-        expect(subject.moving_backwards?).to be_falsey
-      end
-      it 'is false when params[:move] is not present' do
-        params.delete(:move)
-        expect(subject.moving_backwards?).to be_falsey
-      end
-    end
-
-    describe '#moving_forwards?' do
-      it 'is true when params[:move] is "next"' do
-        params[:move] = 'next'
-        expect(subject.moving_forwards?).to be_truthy
-      end
-      it 'is false when params[:move] is not "next"' do
-        params[:move] = 'back'
-        expect(subject.moving_forwards?).to be_falsey
-      end
-      it 'is false when params[:move] is not present' do
-        params.delete(:move)
-        expect(subject.moving_forwards?).to be_falsey
+    def self.for_stage(name, next_is:, back_is:, not_moving_is:)
+      context "and the previous_stage was \"#{name}\"" do
+        let(:stage) { name }
+        context 'and we are moving forwards' do
+          let(:move) { 'next' }
+          it "is \"#{next_is}\"" do
+            expect(subject.stage).to eq next_is
+          end
+        end
+        context 'and we are moving backwards' do
+          let(:move) { 'back' }
+          it "is \"#{back_is}\"" do
+            expect(subject.stage).to eq back_is
+          end
+        end
+        context 'and we are not moving' do
+          let(:move) { nil }
+          it "is \"#{not_moving_is}\"" do
+            expect(subject.stage).to eq not_moving_is
+          end
+        end
       end
     end
 
-    describe '#previous_stage' do
-      it 'is the value of params[:stage]' do
-        params[:stage] = 'submit'
-        expect(subject.previous_stage).to eq 'submit'
-      end
-      it 'is "petition" if there is no param[:stage]' do
-        params.delete(:stage)
-        expect(subject.previous_stage).to eq 'petition'
-      end
+    let(:department) { FactoryGirl.create(:department) }
+    let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
+    let(:creator_signature_params) do
+      {
+        :name => 'John Mcenroe', :email => 'john@example.com',
+        :email_confirmation => 'john@example.com',
+        :address => 'Rose Cottage', :town => 'London',
+        :postcode => 'SE3 4LL', :country => 'United Kingdom',
+        :uk_citizenship => '1', :terms_and_conditions => '1'
+      }
+    end
+    let(:petition_params) do
+      {
+        :title => 'Save the planet',
+        :action => 'Limit temperature rise at two degrees',
+        :description => 'Global warming is upon us',
+        :duration => "12",
+        :department_id => department.id,
+        :sponsor_emails => sponsor_emails,
+        :creator_signature_attributes => creator_signature_params
+      }
     end
 
     describe '#stage' do
-      context 'when there are no errors on the petition' do
-        context 'and the previous_stage was "petition"' do
-          before { params[:stage] = 'petition' }
-          it 'is "creator" when we are moving forwards' do
-            params[:move] = 'next'
-            expect(subject.stage).to eq 'creator'
-          end
-          it 'is "petition" when we are moving backwards' do
-            params[:move] = 'back'
-            expect(subject.stage).to eq 'petition'
-          end
-          it 'is "petition" when we are not moving' do
-            params.delete(:move)
-            expect(subject.stage).to eq 'petition'
-          end
-        end
-
-        context 'and the previous_stage was "creator"' do
-          before { params[:stage] = 'creator' }
-          it 'is "submit" when we are moving forwards' do
-            params[:move] = 'next'
-            expect(subject.stage).to eq 'submit'
-          end
-          it 'is "petition" when we are moving backwards' do
-            params[:move] = 'back'
-            expect(subject.stage).to eq 'petition'
-          end
-          it 'is "creator" when we are not moving' do
-            params.delete(:move)
-            expect(subject.stage).to eq 'creator'
-          end
-        end
-
-        context 'and the previous_stage was "submit"' do
-          before { params[:stage] = 'submit' }
-          it 'is "done" when we are moving forwards' do
-            params[:move] = 'next'
-            expect(subject.stage).to eq 'done'
-          end
-          it 'is "creator" when we are moving backwards' do
-            params[:move] = 'back'
-            expect(subject.stage).to eq 'creator'
-          end
-          it 'is "submit" when we are not moving' do
-            params.delete(:move)
-            expect(subject.stage).to eq 'submit'
-          end
-        end
-      end
-
       context 'when there are errors on the petition' do
-        let(:errors_hash) { {} }
-        before { allow(subject.petition).to receive(:errors).and_return errors_hash }
-
         context 'around the "petition" UI' do
-          before { errors_hash[:title] = 'must be present' }
+          before { petition_params.delete(:title) }
 
-          context 'and the previous_stage was "petition"' do
-            before { params[:stage] = 'petition' }
-
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "petition" when we are moving forwards' do
-              params[:move] = 'next'
-              subject.stage
-            end
-            it 'is "petition" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'petition'
-            end
+          context 'before attempting to create the petition' do
+            for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
-          context 'and the previous_stage was "creator"' do
-            before { params[:stage] = 'creator' }
+          context 'after attempting to create the petition' do
+            before { subject.create_petition }
 
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "petition" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "petition" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'petition'
-            end
-          end
-
-          context 'and the previous_stage was "submit"' do
-            before { params[:stage] = 'submit' }
-
-            it 'is "creator" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "petition" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "petition" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'petition'
-            end
+            for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'petition', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
           end
         end
 
         context 'around the "creator" UI' do
-          before { errors_hash[:'creator_signature.email'] = 'must be present' }
+          before { creator_signature_params.delete(:email_confirmation) }
 
-          context 'and the previous_stage was "petition"' do
-            before { params[:stage] = 'petition' }
-
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "creator" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "creator" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'creator'
-            end
+          context 'before attempting to create the petition' do
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
-          context 'and the previous_stage was "creator"' do
-            before { params[:stage] = 'creator' }
+          context 'after attempting to create the petition' do
+            before { subject.create_petition }
 
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "creator" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "creator" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'creator'
-            end
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'creator', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'creator', back_is: 'creator', not_moving_is: 'creator'
+          end
+        end
+
+        context 'around the "sponsors" UI' do
+          before { petition_params[:sponsor_emails] = ['dave@'] }
+
+          context 'before attempting to create the petition' do
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'sponsors', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
-          context 'and the previous_stage was "submit"' do
-            before { params[:stage] = 'submit' }
-
-            it 'is "creator" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "creator" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "creator" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'creator'
-            end
+          context 'after attempting to create the petition' do
+            before { subject.create_petition }
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'sponsors', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'sponsors'
           end
         end
 
         context 'around the "terms" UI' do
-          before { errors_hash[:'creator_signature.terms_and_conditions'] = 'must be accepted' }
+          before { creator_signature_params.delete(:terms_and_conditions) }
 
-          context 'and the previous_stage was "petition"' do
-            before { params[:stage] = 'petition' }
-
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "submit" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'submit'
-            end
-            it 'is "submit" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'submit'
-            end
+          context 'before attempting to create the petition' do
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'submit', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
-          context 'and the previous_stage was "creator"' do
-            before { params[:stage] = 'creator' }
-
-            it 'is "petition" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'petition'
-            end
-            it 'is "submit" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'submit'
-            end
-            it 'is "submit" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'submit'
-            end
-          end
-
-          context 'and the previous_stage was "submit"' do
-            before { params[:stage] = 'submit' }
-
-            it 'is "creator" when we are moving backwards' do
-              params[:move] = 'back'
-              expect(subject.stage).to eq 'creator'
-            end
-            it 'is "submit" when we are moving forwards' do
-              params[:move] = 'next'
-              expect(subject.stage).to eq 'submit'
-            end
-            it 'is "submit" when we are not moving' do
-              params.delete(:move)
-              expect(subject.stage).to eq 'submit'
-            end
+          context 'after attempting to create the petition' do
+            before { subject.create_petition }
+            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
+            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'submit', next_is: 'submit', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'done', next_is: 'submit', back_is: 'submit', not_moving_is: 'submit'
           end
         end
       end
     end
-
   end
 end

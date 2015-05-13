@@ -9,10 +9,10 @@ describe PetitionsController do
         expect(new_petition_path).to eq '/petitions/new'
       end
 
-      it "should assign a new petition without a creator_signature" do
+      it "should assign a new stage_manager with a petition" do
         get :new
-        expect(assigns[:petition]).not_to be_nil
-        expect(assigns[:petition].creator_signature).to be_nil
+        expect(assigns[:stage_manager]).not_to be_nil
+        expect(assigns[:stage_manager].petition).not_to be_nil
       end
 
       it "should assign departments" do
@@ -26,13 +26,13 @@ describe PetitionsController do
 
       it "is on stage 'petition'" do
         get :new
-        expect(assigns[:petition].stage).to eq 'petition';
+        expect(assigns[:stage_manager].stage).to eq 'petition';
       end
 
       it "fills in the title if given" do
         title = "my fancy new title"
         get :new, :title => title
-        expect(assigns[:petition].title).to eq title
+        expect(assigns[:stage_manager].petition.title).to eq title
       end
     end
   end
@@ -136,7 +136,7 @@ describe PetitionsController do
           petition_attributes[:title] = ''
           do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
-          expect(assigns[:petition].errors[:title]).not_to be_blank
+          expect(assigns[:stage_manager].petition.errors[:title]).not_to be_blank
           expect(response).to be_success
         end
 
@@ -169,42 +169,42 @@ describe PetitionsController do
 
         it "has stage of 'petition' if there are errors on title, department or description" do
           do_post :petition => petition_attributes.merge(:title => '')
-          expect(assigns[:petition].stage).to eq 'petition'
+          expect(assigns[:stage_manager].stage).to eq 'petition'
           do_post :petition => petition_attributes.merge(:department_id => nil)
-          expect(assigns[:petition].stage).to eq 'petition'
+          expect(assigns[:stage_manager].stage).to eq 'petition'
           do_post :petition => petition_attributes.merge(:description => '')
-          expect(assigns[:petition].stage).to eq 'petition'
+          expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 
         it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, address, town, postcode or country" do
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => 'dave@example.com', :l_confirmation => 'laura@example.com'))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:address => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:town => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:postcode => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:country => ''))
-          expect(assigns[:petition].stage).to eq 'creator'
+          expect(assigns[:stage_manager].stage).to eq 'creator'
         end
 
         it "has stage of 'sponsors' if there are errors on sponsor_emails" do
           petition_attributes[:sponsor_emails] = 'blah@'
           do_post
-          expect(assigns[:petition].stage).to eq 'sponsors'
+          expect(assigns[:stage_manager].stage).to eq 'sponsors'
         end
 
         it "has stage of 'submit' if there are errors on terms_and_conditions" do
           creator_signature_attributes[:terms_and_conditions] = '0'
           do_post
-          expect(assigns[:petition].stage).to eq 'submit'
+          expect(assigns[:stage_manager].stage).to eq 'submit'
         end
       end
     end
