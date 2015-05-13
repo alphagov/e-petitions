@@ -16,11 +16,4 @@ module AdminHelper
                         :method => :delete
                       }
   end
-
-  def setup_admin_user(admin_user)
-    4.times do
-      admin_user.departments.build
-    end
-    admin_user
-  end
 end
