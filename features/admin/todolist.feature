@@ -30,7 +30,8 @@ Feature: Dashboard todo list
     When I go to the admin todolist page
     Then I should see the following admin index table:
       | Title      | Date       |
-      | Petition 4 | 01-01-2010 |
+      | Petition 1 | 10-02-2009 |
+      | Petition 4 | 01-01-2010 |	
       | Petition 3 | 11-11-2010 |
 
   Scenario: Pending petitions are paginated

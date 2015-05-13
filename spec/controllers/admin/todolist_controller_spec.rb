@@ -96,9 +96,9 @@ describe Admin::TodolistController do
             expect(response).to be_success
           end
 
-          it "should return validated petitions for the user's department(s)" do
+          it "should return all validated petitions ordered by created_at" do
             get :index
-            expect(assigns[:petitions]).to eq([@p2, @p1])
+            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
           end
         end
       end
