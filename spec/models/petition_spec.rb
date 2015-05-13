@@ -620,20 +620,10 @@ describe Petition do
     end
   end
 
-
-
-  #TODO: ADD TESTS FOR on_sponsor_moderation_threshold etc?
-  
   describe "#update_sponsored_state" do
-
-    let(:petition){ FactoryGirl.create(:validated_petition) }
-
     context "with sufficient sponsor count" do
-      before do
-        while petition.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
-          petition.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
-        end
-      end
+      let(:petition){ FactoryGirl.create(:validated_petition, sponsors_signed: true) }
+      
       it "sets state to sponsored" do
         expect{petition.update_sponsored_state}.to change{petition.state}
                                                     .from(Petition::VALIDATED_STATE)
@@ -642,11 +632,8 @@ describe Petition do
     end
 
     context "with insufficient sponsor count" do
-      before do
-        while petition.supporting_sponsors_count + 1 < AppConfig.sponsor_moderation_threshold do
-          petition.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
-        end
-      end
+      let(:petition){ FactoryGirl.create(:validated_petition) }
+
       it "leaves state unchanged" do
         expect{petition.update_sponsored_state}.to_not change{petition.state}
       end
@@ -694,12 +681,7 @@ describe Petition do
 
     context 'when the petition is on the sponsor moderation threshold' do
       let(:sponsor) { subject.sponsors.first }
-      before do
-        while subject.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
-          subject.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
-        end
-        sponsor.reload
-      end
+      subject { FactoryGirl.create(:validated_petition, sponsors_signed: true) }
 
       it 'sends an email to the petition creator telling them about the sponsor' do
         subject.notify_creator_about_sponsor_support(sponsor)
@@ -712,12 +694,8 @@ describe Petition do
     end
 
     context 'when the petition is above the sponsor moderation threshold' do
-      let(:sponsor) { FactoryGirl.create(:sponsor, :with_signature, petition: subject) }
-      before do
-        while subject.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
-          subject.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
-        end
-      end
+      subject { FactoryGirl.create(:validated_petition, sponsor_count: 6, sponsors_signed: true) }
+      let(:sponsor) { subject.sponsors.last }
 
       it 'does not send an email to the petition creator telling them about the sponsor' do
         subject.notify_creator_about_sponsor_support(sponsor)
