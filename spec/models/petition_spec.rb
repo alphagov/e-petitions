@@ -620,6 +620,40 @@ describe Petition do
     end
   end
 
+
+
+  #TODO: ADD TESTS FOR on_sponsor_moderation_threshold etc?
+  
+  describe "#update_sponsored_state" do
+
+    let(:petition){ FactoryGirl.create(:validated_petition) }
+
+    context "with sufficient sponsor count" do
+      before do
+        while petition.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold do
+          petition.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+      end
+      it "sets state to sponsored" do
+        expect{petition.update_sponsored_state}.to change{petition.state}
+                                                    .from(Petition::VALIDATED_STATE)
+                                                    .to(Petition::SPONSORED_STATE)
+      end
+    end
+
+    context "with insufficient sponsor count" do
+      before do
+        while petition.supporting_sponsors_count + 1 < AppConfig.sponsor_moderation_threshold do
+          petition.sponsors.where(signature_id: nil).first.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+      end
+      it "leaves state unchanged" do
+        expect{petition.update_sponsored_state}.to_not change{petition.state}
+      end
+    end
+  end
+  
+
   describe "creating sponsors from sponsor emails in after create callback" do
     it 'persists sponsors to match the emails' do
       sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']

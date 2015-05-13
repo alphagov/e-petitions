@@ -256,21 +256,23 @@ class Petition < ActiveRecord::Base
   def notify_creator_about_sponsor_support(sponsor)
     raise ArgumentError, 'Not my sponsor' unless sponsors.exists?(sponsor.id)
     raise ArgumentError, 'Not a supporting sponsor' unless sponsor.supports_the_petition?
-    support_count = supporting_sponsors_count
-    if support_count < AppConfig.sponsor_moderation_threshold
+    if below_sponsor_moderation_threshold?
       SponsorMailer.sponsor_signed_email_below_threshold(self, sponsor).deliver_later
-    elsif support_count == AppConfig.sponsor_moderation_threshold
+    elsif on_sponsor_moderation_threshold?
       SponsorMailer.sponsor_signed_email_on_threshold(self, sponsor).deliver_later
     end
   end
 
   def on_sponsor_moderation_threshold?
-    support_count = supporting_sponsors_count
-    support_count == AppConfig.sponsor_moderation_threshold ? true : false
+    supporting_sponsors_count == AppConfig.sponsor_moderation_threshold
+  end
+
+  def below_sponsor_moderation_threshold?
+    supporting_sponsors_count < AppConfig.sponsor_moderation_threshold
   end
 
   def update_sponsored_state
-    self.state = SPONSORED_STATE if self.on_sponsor_moderation_threshold?
+    update_attribute(:state, SPONSORED_STATE) if self.on_sponsor_moderation_threshold?
   end
 end
 
