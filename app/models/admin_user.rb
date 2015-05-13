@@ -40,9 +40,6 @@ class AdminUser < ActiveRecord::Base
     config.merge_validates_confirmation_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
   end
 
-  # = Relationships =
-  has_and_belongs_to_many :departments
-
   # = Validations =
   validates_presence_of :password, :on => :create
   validates_presence_of :email, :first_name, :last_name

@@ -36,14 +36,6 @@ ActiveRecord::Schema.define(version: 20150515100520) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name", using: :btree
 
-  create_table "admin_users_departments", id: false, force: :cascade do |t|
-    t.integer "admin_user_id", limit: 4, null: false
-    t.integer "department_id", limit: 4, null: false
-  end
-
-  add_index "admin_users_departments", ["admin_user_id", "department_id"], name: "index_admin_users_departments_on_fks", unique: true, using: :btree
-  add_index "admin_users_departments", ["department_id"], name: "index_admin_users_departments_on_department_id", using: :btree
-
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   limit: 4,     default: 0
     t.integer  "attempts",   limit: 4,     default: 0
