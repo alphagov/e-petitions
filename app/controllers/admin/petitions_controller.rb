@@ -4,12 +4,7 @@ class Admin::PetitionsController < Admin::AdminController
   respond_to :html
 
   def index
-    if current_user.is_a_sysadmin? or current_user.is_a_threshold?
-      @petitions = Petition
-    else
-      @petitions = Petition.for_departments(current_user.departments)
-    end
-    @petitions = @petitions.moderated.order(:signature_count)
+    @petitions = Petition.moderated.order(:signature_count)
     @petitions = @petitions.for_state(params[:state]) unless params[:state].blank?
     @petitions = @petitions.paginate(:page => params[:page], :per_page => params[:per_page] || 20)
   end
@@ -85,9 +80,9 @@ class Admin::PetitionsController < Admin::AdminController
     @petition.save!
     redirect_to admin_petitions_path
   end
-  
+
   protected
-  
+
   def publish
     @petition.state = Petition::OPEN_STATE
     @petition.open_at = Time.zone.now
