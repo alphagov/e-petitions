@@ -46,6 +46,12 @@ describe Sponsor do
     it { is_expected.to validate_presence_of(:petition).with_message(/Needs a petition/) }
     it { is_expected.to allow_value('joe@example.com').for(:email) }
     it { is_expected.not_to allow_value('not an email').for(:email) }
+
+    it 'does not accept petition creator email as a sponsor email ' do
+      petition = FactoryGirl.create(:petition)
+      sponsor = FactoryGirl.build(:sponsor, petition: petition, email: petition.creator_signature.email)
+      expect(sponsor).not_to be_valid
+    end
   end
 
   context 'signature association' do
