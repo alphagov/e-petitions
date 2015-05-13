@@ -17,12 +17,6 @@ Feature: Moderator respond to petition
     Then the petition should be visible on the site for signing
     And the creator should recieve a notification email
 
-  Scenario: Moderator re-assigns petition to a different department
-    Given I am logged in as an admin
-    When I look at the next petition on my list
-    And I re-assign it to a different department
-    Then the petition should be assigned to that department
-
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as an admin
     When I look at the next petition on my list

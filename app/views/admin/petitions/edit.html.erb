@@ -13,25 +13,3 @@
 
   <%= render :partial => 'reject', :locals => { :f => f, :button_label => "Reject" } %>
 <% end -%>
-
-<br />
-
-<h2>Department Assignment History</h2>
-
-<% if @petition.department_assignments.present? %>
-  <table class="admin_index">
-    <tr>
-      <th>Department</th>
-      <th>Assigned On</th>
-    </tr>
-
-    <% @petition.department_assignments.each do |department_assignment| %>
-      <tr>
-        <td><%= department_assignment.department.name %></td>
-        <td><%= date_time_format department_assignment.assigned_on %></td>
-      </tr>
-    <% end %>
-  </table>
-<% else %>
-  <p>No department assignment history</p>
-<% end %>

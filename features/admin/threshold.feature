@@ -43,7 +43,6 @@ Feature: Threshold list
   Scenario: A threshold user can view the details of a petition and form fields
     When I go to the admin threshold page
     And I follow "Petition 1"
-    Then I should see "Treasury"
     And I should see "01-01-2012"
     And I should see a "Internal response" textarea field
     And I should see a "Public response required" checkbox field
