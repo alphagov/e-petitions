@@ -14,16 +14,14 @@ describe Admin::TodolistController do
   end
 
   context "logged in as admin user but need to reset password" do
-    before :each do
-      @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
-      login_as(@user)
-    end
+    let(:user) { FactoryGirl.create(:admin_user, :force_password_reset => true) }
+    before { login_as(user) }
 
     with_ssl do
       it "should redirect to edit profile page" do
-        expect(@user.has_to_change_password?).to be_truthy
+        expect(user.has_to_change_password?).to be_truthy
         get :index
-        expect(response).to redirect_to(edit_admin_profile_path(@user))
+        expect(response).to redirect_to(edit_admin_profile_path(user))
       end
     end
   end
@@ -41,10 +39,8 @@ describe Admin::TodolistController do
     end
 
     describe "logged in as sysadmin user" do
-      before :each do
-        @user = FactoryGirl.create(:sysadmin_user)
-        login_as(@user)
-      end
+      let(:user) { FactoryGirl.create(:sysadmin_user) }
+      before { login_as(user) }
 
       with_ssl do
         describe "GET 'index'" do
@@ -62,10 +58,8 @@ describe Admin::TodolistController do
     end
 
     describe "logged in as threshold user" do
-      before :each do
-        @user = FactoryGirl.create(:threshold_user)
-        login_as(@user)
-      end
+      let(:user) { FactoryGirl.create(:threshold_user) }
+      before { login_as(user) }
 
       with_ssl do
         describe "GET 'index'" do
@@ -83,11 +77,8 @@ describe Admin::TodolistController do
     end
 
     describe "logged in as admin user" do
-      before :each do
-        @user = FactoryGirl.create(:admin_user)
-        @user.departments << @treasury << @dfid
-        login_as(@user)
-      end
+      let(:user) { FactoryGirl.create(:admin_user) }
+      before { login_as(user) }
 
       with_ssl do
         describe "GET 'index'" do
