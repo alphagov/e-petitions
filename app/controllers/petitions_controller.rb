@@ -95,7 +95,8 @@ class PetitionsController < ApplicationController
   end
 
   def assign_stage
-    params[:stage] ||= 'petition'
+    return if StagedPetitionCreator.stages.include? params[:stage]
+    params[:stage] = 'petition'
   end
 
   def send_email_to_verify_petition_creator(petition)

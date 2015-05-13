@@ -2,7 +2,7 @@ class StagedPetitionCreator
   def initialize(params, request, stage, move)
     @params = params
     @request = request
-    @previous_stage = stage || 'petition'
+    @previous_stage = stage
     @move = move
   end
 
@@ -49,7 +49,15 @@ class StagedPetitionCreator
     end
   end
 
+  def self.stages
+    Stages.names
+  end
+
   module Stages
+    def self.names
+      ['petition', 'creator', 'sponsors', 'submit','done']
+    end
+
     def self.for_name(name)
       case name
       when 'petition'
