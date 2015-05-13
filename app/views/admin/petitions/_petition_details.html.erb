@@ -17,16 +17,6 @@
 </div>
 
 <div class="row">
-  <label>Department:</label>
-  <% if params[:action] == 'edit' or params[:action] == 'update' -%>
-    <%= f.select :department_id, options_from_collection_for_select(@departments, :id, :name, @petition.department_id.to_s) %>
-    <%= submit_tag 'Re-assign' %>
-  <% else -%>
-    <%= @petition.department.name %>
-  <% end -%>
-</div>
-
-<div class="row">
   <label>Petition description:</label>
   <p class="text_block"><%= raw auto_link(h(@petition.description), :html => { :target => '_blank' }) %></p>
 </div>
