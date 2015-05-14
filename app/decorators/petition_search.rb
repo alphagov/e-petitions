@@ -30,6 +30,10 @@ class PetitionSearch
 
   private
 
+  def search_term_sanitised
+    @search_term_sanitised ||= construct_search_string(search_term)
+  end
+
   def petitions
     @petitions ||= execute_search_query
   end
@@ -40,7 +44,7 @@ class PetitionSearch
 
   def execute_search_query
     Petition.search do |query|
-      query.fulltext search_term
+      query.fulltext search_term_sanitised
       query.facet :state
       query.paginate page: @params[:page], per_page: 20
       case state
@@ -59,7 +63,7 @@ class PetitionSearch
 
   def execute_result_counts_query
     Petition.search do |query|
-      query.fulltext search_term
+      query.fulltext search_term_sanitised
       query.facet(:state) do
         row(:open) do
           with(:state).equal_to("open")
@@ -74,5 +78,33 @@ class PetitionSearch
         end
       end
     end
+  end
+
+  def construct_search_string(keywords)
+    remove_star_and_backslashes(keywords).split.first(10).collect do |word|
+      keyword_string(word)
+    end.join(" ")
+  end
+
+  def remove_star_and_backslashes(keywords)
+    keywords.gsub('*', ' ').gsub('\\', ' ')
+  end
+
+  def keyword_string(word)
+    escape_special_characters(word)
+    word
+  end
+
+  LUCENE_SPECIAL_CHARS = %w(- && || ! ( ) { } [ ] ^ " ~ ? :)
+
+  # see Escaping Special Characters
+  # http://lucene.apache.org/java/2_9_1/queryparsersyntax.html#Escaping+Special+Characters
+  def escape_special_characters(word)
+    LUCENE_SPECIAL_CHARS.each do |c|
+      word.gsub!(c, "\\#{c}")
+    end
+
+    # need to use a block since doing gsub without a block with a '+' doesn't work
+    word.gsub!('+') {|m| '\+'}
   end
 end
