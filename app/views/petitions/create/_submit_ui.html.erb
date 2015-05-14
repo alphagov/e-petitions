@@ -8,7 +8,6 @@
   </div>
   <div class="generic_block" id="petition_summary_block">
     <h2 id="title_summary_field"><%= petition.title %></h2>
-    <p id="department_summary_field">Responsible department: <%= petition.department.name %></p>
     <div id="action_summary_field"><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></div>
     <div id="description_summary_field"><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></div>
   </div>

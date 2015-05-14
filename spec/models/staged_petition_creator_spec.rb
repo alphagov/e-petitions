@@ -116,7 +116,6 @@ describe StagedPetitionCreator do
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
         :duration => "12",
-        :department_id => department.id,
         :sponsor_emails => sponsor_emails,
         :creator_signature_attributes => creator_signature_params
       }

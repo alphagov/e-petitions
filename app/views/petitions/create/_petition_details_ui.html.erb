@@ -12,17 +12,6 @@
     <p>Maximum 150 Characters</p>
   <% end %>
 
-  <%= form_row :class => 'department_row', :for => [petition, :department] do %>
-    <%= f.label :department_id, raw("Department that looks after your issue#{info_link_to "#department_info", :class => "expandable_link", :tabindex => increment}") %>
-    <%= f.select :department_id, options_from_collection_for_select(@departments, :id, :name, :selected => (petition.department.nil?) ? nil : petition.department.id), { :include_blank => 'Please select...' }, :tabindex => increment  %>
-    <%= error_messages_for_field petition, :department %>
-    <%= new_window_link_to 'Which department does what?', info_departments_path, :tabindex => increment, :target => '_blank' %>
-
-    <div class="expandable_content" id="department_info">
-      <p>You must choose the government department that you believe owns the issue you are raising in your <span class="nowrap">e-petition</span>. This will help us to get it to the right person as quickly as possible.</p>
-    </div>
-  <% end %>
-
   <%= form_row :for => [petition, :action] do %>
     <%= f.label :action %>
     <%= f.text_area :action, :tabindex => increment %>

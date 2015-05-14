@@ -33,7 +33,6 @@ FactoryGirl.define do
     sequence(:title) {|n| "Petition #{n}" }
     action "Petition action"
     description "Petition description"
-    association :department
     sponsor_emails { (1..sponsor_count).map { |i| "sponsor#{i}@example.com" } }
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)) }
   end
