@@ -29,7 +29,6 @@ class Petition < ActiveRecord::Base
   include State
 
   after_create :set_petition_on_creator_signature
-  before_validation :build_sponsors, on: :create
 
   searchable do
     text :title
@@ -57,20 +56,15 @@ class Petition < ActiveRecord::Base
   has_many :sponsors
 
   # = Validations =
+  include Staged::Validations::PetitionDetails
+  include Staged::Validations::SponsorDetails
   validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
   # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
   # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
   validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
-  validates_presence_of :title, :action, :description, :duration, :department, :message => "%{attribute} must be completed"
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
-  validates_length_of :title, :maximum => 150, :unless => 'title.blank?', :message => 'Title is too long.'
-  validates_length_of :action, :maximum => 200, :unless => 'action.blank?', :message => 'Action is too long.'
-  validates_length_of :description, :maximum => 1000, :unless => 'description.blank?', :message => 'Description is too long.'
-
-
-  validate :validate_number_of_sponsors, on: :create
 
   attr_accessor :email_signees
 
@@ -231,22 +225,12 @@ class Petition < ActiveRecord::Base
     sponsors.each { |s| SponsorMailer.delay.new_sponsor_email(s) }
   end
 
-  def validate_number_of_sponsors
-    unless sponsor_emails.uniq.count.between?(AppConfig.sponsor_count_min, AppConfig.sponsor_count_max)
-      errors.add(:sponsor_emails, "Specify #{AppConfig.sponsor_count_min}-#{AppConfig.sponsor_count_max} unique sponsor emails for the petition")
-    end
-  end
-
   def signature_counts_by_postal_district
     Hash.new(0).tap do |counts|
       signatures.validated.find_each do |signature|
         counts[signature.postal_district] += 1 if signature.postal_district.present?
       end
     end
-  end
-
-  def build_sponsors
-    self.sponsors << sponsor_emails.map { |email| Sponsor.new(email: email) }
   end
 
   def supporting_sponsors_count

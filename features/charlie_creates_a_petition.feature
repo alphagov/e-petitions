@@ -31,12 +31,15 @@ Scenario: Charlie creates our petition
   Then I should see "Create a new e-petition - e-petitions" in the browser page title
   And I should be connected to the server via an ssl connection
   When I fill in "Title" with "The wombats of wimbledon rock."
-  And I fill in "Action" with "Give half of Wimbledon rock to wombats!"	
+  And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
   And I select "Department for International Development" from "Department"
   And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I select "3 months" from "Time to collect signatures"
+  And I press "Next"
   And I fill in my details
+  And I press "Next"
   And I fill in sponsor emails
+  And I press "Next"
   And I check "I agree to the Terms & Conditions"
   Then the markup should be valid
   When I press "Submit"
@@ -49,110 +52,57 @@ Scenario: Charlie creates our petition
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
   And there should be a "validated" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
 
-Scenario: Charlie tries to submit an invalid petition without javascript.
-  Given I am on the new petition page
-
-  When I press "Submit"
-  Then I should be on the new petition page
-  And I should see "Title must be completed"
-  And the "Title" row should display as invalid
-  And I should see "Action must be completed"
-  And the "Action" row should display as invalid
-  And I should see "Description must be completed"
-  And the "Description" row should display as invalid
-  And I should see "Name must be completed"
-  And the "Name" row should display as invalid
-  And I should see "Email must be completed"
-  And the "Email" row should display as invalid
-  And I should see "You must be a British citizen"
-  And the "British citizen or UK resident?" row should display as invalid
-  And I should see "Address must be completed"
-  And the "Address" row should display as invalid
-  And I should see "Town must be completed"
-  And the "Town" row should display as invalid
-  And I should see "Postcode must be completed"
-  And the "Postcode" row should display as invalid
-  And I should see "You must accept the terms and conditions."
-  And the "I agree to the Terms & Conditions This link opens in a new window" row should display as invalid
-
-  When I fill in "Title" with "012345678911234567892123456789312345678941234567895123456789Blah"
-  And I select "Department for International Development" from "Department"
-  And I fill in "Action" with "This text is longer than 200 characters. 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"		
-  And I fill in "Description" with "This text is longer than 1000 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
-  And I fill in "Name" with "Womboid Wibbledon"
-  And I fill in "Email" with "invalid.email.com"
-  And choose "no"
-  And I fill in "Address" with "The old oak, 5 leafy grove, Wimbledon common"
-  And I fill in "Town" with "London"
-  And I fill in "Postcode" with "BAD PCD"
-  And I select "United Kingdom" from "Country"
-  And I press "Submit"
-  Then I should be on the new petition page
-  And I should see "Action is too long."	
-  And I should see "Description is too long."
-  And I should see "Email 'invalid.email.com' not recognised."
-  And the "Title" field should contain "012345678911234567892123456789312345678941234567895123456789Blah"
-  And the "Department" select field should have "Department for International Development" selected
-  And the "Action" field should contain "This text is longer than 200 characters. 01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
-  And the "Description" field should contain "This text is longer than 1000 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
-  And the "Name" field should contain "Womboid Wibbledon"
-  And the "Email" field should contain "invalid.email.com"
-  And the "no" radio button should be selected
-  And the "Address" field should contain "The old oak, 5 leafy grove, Wimbledon common"
-  And the "Town" field should contain "London"
-  And the "Postcode" field should contain "BAD PCD"
-  And the "Country" select field should have "United Kingdom" selected
-
-
 @javascript
-Scenario: Charlie tries to submit an invalid petition with javascript.
+Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page
 
-  Then I should see the fieldset called "Petition Details" is 1st
+  Then I should see a fieldset called "Petition Details"
 
   When I press "Next"
   Then I should see "Title must be completed"
-  And I should see "Action must be completed"	
+  And I should see "Action must be completed"
+  And I should see "Department must be completed"
   And I should see "Description must be completed"
 
   When I am allowed to make the petition title too long
   When I fill in "Title" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
   And I fill in "Action" with "This text is longer than 200 characters. 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
   And I fill in "Description" with "This text is longer than 1000 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
-  And I press "Next" within "//fieldset[1]"
+  And I press "Next"
+
   Then I should see "Title is too long."
   And I should see "Description is too long."
-  And I should see "Action is too long."	
+  And I should see "Action is too long."
 
-  When I fill in "Title" with "The wombats of wimbledon rock." within "//fieldset[1]"
-  And I select "Department for International Development" from "Department" within "//fieldset[1]"
-  And I fill in "Action" with "Give half of Wimbledon rock to wombats!" within "//fieldset[1]"
-  And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state." within "//fieldset[1]"
-  And I press "Next" within "//fieldset[1]"
+  When I fill in "Title" with "The wombats of wimbledon rock."
+  And I select "Department for International Development" from "Department"
+  And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
+  And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I press "Next"
 
-  Then I should see the fieldset called "Your Details" is 2nd
+  Then I should see a fieldset called "Your Details"
 
-  When I press "Next" within "//fieldset[2]"
-  Then I should see "Name must be completed" within "//fieldset[2]"
-  And I should see "Email must be completed" within "//fieldset[2]"
-  And I should see "You must be a British citizen" within "//fieldset[2]"
-  And I should see "Address must be completed" within "//fieldset[2]"
-  And I should see "Town must be completed" within "//fieldset[2]"
-  And I should see "Postcode must be completed" within "//fieldset[2]"
+  When I press "Next"
+  Then I should see "Name must be completed"
+  And I should see "Email must be completed"
+  And I should see "You must be a British citizen"
+  And I should see "Address must be completed"
+  And I should see "Town must be completed"
+  And I should see "Postcode must be completed"
 
   When I fill in my details with email "wimbledon@womble.com" and confirmation "uncleb@wimbledon.com"
-  And I press "Next" within "//fieldset[2]"
-  And I should see "Email must match confirmation" within "//fieldset[2]"
+  And I press "Next"
+  And I should see "Email should match confirmation"
 
   When I fill in my details
 
-  And I press "Next" within "//fieldset[2]"
+  And I press "Next"
+  Then I should see a fieldset called "Sponsor email addresses"
 
   And I fill in sponsor emails
 
-  And I press "Next" within "//fieldset[3]"
-
-  Then I should see the fieldset called "Submit Petition" is 4rd
+  And I press "Next"
+  Then I should see a fieldset called "Submit Petition"
 
   #Seems there's an envjs bug here
   # And I should see "The wombats of wimbledon rock."
@@ -160,13 +110,13 @@ Scenario: Charlie tries to submit an invalid petition with javascript.
   # And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Submit"
-  Then I should see "You need to accept the terms and conditions."
+  Then I should see "You must accept the terms and conditions."
   When I check "I agree to the Terms & Conditions"
-  And I press "Back" within "//fieldset[4]"
-  And I press "Back" within "//fieldset[3]"
-  And I fill in "Name" with "Mr. Wibbledon" within "//fieldset[2]"
-  And I press "Next" within "//fieldset[2]"
-  And I press "Next" within "//fieldset[3]"
+  And I press "Back"
+  And I press "Back"
+  And I fill in "Name" with "Mr. Wibbledon"
+  And I press "Next"
+  And I press "Next"
 
   And I press "Submit"
 

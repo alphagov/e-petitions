@@ -212,6 +212,29 @@ describe Signature do
         expect(FactoryGirl.build(:signature, :country => "United Kingdom", :postcode => '')).not_to be_valid
         expect(FactoryGirl.build(:signature, :country => "United States", :postcode => '')).to be_valid
       end
+
+      it "checks the format of postcode" do
+        s = FactoryGirl.build(:signature, :postcode => 'SW1A 1AA')
+        expect(s).to have_valid(:postcode)
+      end
+      it "ignores lack of spaces in postcode" do
+        s = FactoryGirl.build(:signature, :postcode => 'SW1A1AA')
+        expect(s).to have_valid(:postcode)
+      end
+      it "does not require upper case letters in postcode" do
+        s = FactoryGirl.build(:signature, :postcode => 'sw1a 1aa')
+        expect(s).to have_valid(:postcode)
+      end
+      it "recognises special postcodes" do
+        expect(FactoryGirl.build(:signature, :postcode => 'BFPO 1234')).to have_valid(:postcode)
+        expect(FactoryGirl.build(:signature, :postcode => 'XM4 5HQ')).to have_valid(:postcode)
+        expect(FactoryGirl.build(:signature, :postcode => 'GIR 0AA')).to have_valid(:postcode)
+      end
+
+      it "does not allow unrecognised postcodes" do
+        s = FactoryGirl.build(:signature, :postcode => '90210')
+        expect(s).not_to have_valid(:postcode)
+      end
     end
 
     describe "post district" do

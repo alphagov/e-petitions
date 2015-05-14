@@ -363,7 +363,7 @@ describe Petition do
     before do
       5.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "SO23 0AA") }
       2.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "so231BB") }
-      1.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "b171wi") }
+      1.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "b178jl") }
     end
 
     it "returns a hash of counts" do

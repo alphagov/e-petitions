@@ -1,0 +1,16 @@
+<fieldset>
+  <legend>Sponsor email addresses</legend>
+  <div class="strap_block">
+    <%= form_row :for => [petition, :sponsor_emails] do %>
+      <%= f.label :sponsor_emails, 'Sponsor emails' %>
+      <%= f.text_area :sponsor_emails, :tabindex => increment, :value => petition.sponsor_emails.join("\n") %>
+      <%= sponsor_email_error_messages(petition) %>
+      <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
+    <% end %>
+  </div>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
+  <% end %>
+</fieldset>

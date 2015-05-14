@@ -919,7 +919,6 @@ p.department {
 
 /*New Petition*/
 form.new_petition_form .form_pagination {
-  display: none;
   border-bottom: solid 1px #CCCCCC;
   overflow-y: auto;
   background: transparent url(/images/shadows/white_top.gif) no-repeat top center;
@@ -1000,7 +999,6 @@ form fieldset#petition_submit_section {
 }
 form fieldset#petition_submit_section #petition_summary_block {
   padding-top: 47px;
-  display: none;
   width: 696px;
 }
 form fieldset#petition_submit_section #petition_summary_block p,

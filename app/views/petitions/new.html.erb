@@ -5,231 +5,28 @@
 </div>
 <% end %>
 
-<%= form_for @petition, :url => create_petition_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
+<%= form_for @stage_manager.stage_object, :url => create_petition_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <div class="form_pagination">
     <ul>
-      <li class="step_1 pagination_tab"><span class="step_no">1</span>e-petition<br/>details</li>
-      <li class="step_2 pagination_tab"><span class="step_no">2</span>Your details</li>
-      <li class="step_3 pagination_tab"><span class="step_no">3</span>Sponsor emails</li>
-      <li class="step_4 pagination_tab"><span class="step_no">4</span>Submit<br/>e-petition</li>
+      <li class="step_1 pagination_tab<%= ' active' if @stage_manager.stage == 'petition' %>"><span class="step_no">1</span>e-petition<br/>details</li>
+      <li class="step_2 pagination_tab<%= ' active' if @stage_manager.stage == 'creator' %>"><span class="step_no">2</span>Your details</li>
+      <li class="step_3 pagination_tab<%= ' active' if @stage_manager.stage == 'sponsors' %>"><span class="step_no">3</span>Sponsor emails</li>
+      <li class="step_4 pagination_tab<%= ' active' if @stage_manager.stage == 'submit' %>"><span class="step_no">4</span>Submit<br/>e-petition</li>
     </ul>
   </div>
 
-  <% if @petition.errors.any? -%>
+  <% if f.object.errors.any? -%>
     <div id='errorExplanation' class='errorExplanation'>
       <h2>We couldn't create this petition</h2>
       <p>Please fix the following errors:</p>
       <ul>
-        <% @petition.errors.each do |key, error| -%>
+        <% f.object.errors.each do |key, error| -%>
           <li><%= error %></li>
         <% end -%>
       </ul>
     </div>
   <% end -%>
 
-  <fieldset>
-    <legend>Petition Details</legend>
+  <%= render_petition_form @stage_manager, f %>
 
-    <%= form_row :for => [@petition, :title] do %>
-      <%= f.label :title, 'Title' %>
-      <%= f.text_field :title, :tabindex => increment(5), :maxlength => 150 %>
-      <%= error_messages_for_field @petition, :title %>
-      <div class="tip">
-        <div class="arrow"></div>
-        <p>Keep your title short and include key words that describe your petition, eg. Reduce the rate of fuel duty.</p>
-      </div>
-      <p>Maximum 150 Characters</p>
-    <% end %>
-
-    <%= form_row :class => 'department_row', :for => [@petition, :department] do %>
-      <%= f.label :department_id, raw("Department that looks after your issue#{info_link_to "#department_info", :class => "expandable_link", :tabindex => increment}") %>
-      <%= f.select :department_id, options_from_collection_for_select(@departments, :id, :name, :selected => (@petition.department.nil?) ? nil : @petition.department.id), { :include_blank => 'Please select...' }, :tabindex => increment  %>
-      <%= error_messages_for_field @petition, :department %>
-      <%= new_window_link_to 'Which department does what?', info_departments_path, :tabindex => increment, :target => '_blank' %>
-
-      <div class="expandable_content" id="department_info">
-        <p>You must choose the government department that you believe owns the issue you are raising in your <span class="nowrap">e-petition</span>. This will help us to get it to the right person as quickly as possible.</p>
-      </div>
-      <% end %>
-
-    <%= form_row :for => [@petition, :action] do %>
-      <%= f.label :action, 'Action' %>
-      <%= f.text_area :action, :tabindex => increment %>
-      <%= error_messages_for_field @petition, :action %>
-      <p>Maximum 200 Characters</p>
-      <div class="tip">
-        <div class="arrow"></div>
-        <p>Keep your action details short and to the point. </p>
-      </div>
-    <% end %>
-
-    <%= form_row :for => [@petition, :description] do %>
-      <%= f.label :description, 'Description' %>
-      <%= f.text_area :description, :tabindex => increment %>
-      <%= error_messages_for_field @petition, :description %>
-      <p>Maximum 1000 Characters</p>
-      <div class="tip">
-        <div class="arrow"></div>
-        <p>Keep your petition details short and to the point. You must say what action you want the government to take.</p>
-      </div>
-    <% end %>
-
-    <%= form_row :class => 'department_row', :for => [@petition, :duration] do %>
-      <%= f.label :duration, 'Time to collect signatures' %>
-      <%= f.select :duration, options_for_select(petition_durations, :selected => (@petition.duration.nil?) ? nil : @petition.duration), {}, :tabindex => increment  %>
-      <%= error_messages_for_field @petition, :duration %>
-    <% end %>
-  </fieldset>
-
-  <fieldset>
-    <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
-    <legend>Your Details</legend>
-    <%= f.fields_for :creator_signature do |csf| %>
-      <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => @petition.creator_signature } %>
-    <% end %>
-  </fieldset>
-
-  <fieldset>
-    <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
-    <legend>Sponsor email adresses</legend>
-    <div class="strap_block">
-      <%= form_row :for => [@petition, :sponsor_emails] do %>
-        <%= f.label :sponsor_emails, 'Sponsor emails' %>
-        <%= f.text_area :sponsor_emails, :tabindex => increment, :value => @petition.sponsor_emails.join("\n") %>
-        <%= sponsor_email_error_messages(@petition) %>
-        <p>Enter <%= AppConfig.sponsor_count_min %>-<%= AppConfig.sponsor_count_max %> sponsor emails, one email per row</p>
-      <% end %>
-    </div>
-  </fieldset>
-
-  <fieldset id="petition_submit_section">
-    <% increment(2) # Skip 2 tabindexes for next/back buttons -%>
-    <legend>Submit Petition</legend>
-
-    <div class="strap_block">
-      <p>Here's your chance to review your e-petition. Once you press 'submit', you can't go back.
-      This is how it will appear on the website. If you like what you see, press 'submit'.
-      If you want to make changes, press 'back'.</p>
-    </div>
-    <div class="generic_block" id="petition_summary_block">
-      <h2 id="title_summary_field"></h2>
-      <p id="department_summary_field"></p>
-      <p id="action_summary_field"></p>
-      <p id="description_summary_field"></p>
-    </div>
-
-    <%= f.fields_for :creator_signature do |csf| %>
-      <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => @petition.creator_signature } %>
-    <% end %>
-
-    <%= form_row :class => 'button_row' do %>
-      <%= f.submit "Submit", :class => 'button', :tabindex => increment(0) %>
-    <% end %>
-  </fieldset>
-<% end %>
-
-<% content_for :js do %>
-<script type="text/javascript">
-//<![CDATA[
-$().ready(function() {
-  window.petition_form = new E_PETS.FormController($('#new_petition'), <%= @start_on_section %>);
-  petition_form.validates('petition[title]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Title must be completed."
-  });
-  petition_form.validates('petition[title]', {
-    method: [E_PETS.FormController.validation_methods.validate_length, null, 150],
-    message: "Title is too long."
-  });
-  petition_form.validates('petition[department_id]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Department must be completed."
-  });
-  petition_form.validates('petition[action]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Action must be completed."
-  });
-  petition_form.validates('petition[action]', {
-    method: [E_PETS.FormController.validation_methods.validate_length, null, 200],
-    message: "Action is too long."
-  });
-  petition_form.validates('petition[description]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Description must be completed."
-  });
-  petition_form.validates('petition[description]', {
-    method: [E_PETS.FormController.validation_methods.validate_length, null, 1000],
-    message: "Description is too long."
-  });
-  petition_form.validates('petition[creator_signature_attributes][name]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Name must be completed."
-  });
-  petition_form.validates('petition[creator_signature_attributes][email]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Email must be completed."
-  });
-  petition_form.validates('petition[creator_signature_attributes][email]', {
-    method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.email],
-    message: "Email not recognised."
-  });
-  petition_form.validates('petition[creator_signature_attributes][email_confirmation]', {
-    method: [E_PETS.FormController.validation_methods.validate_confirmation, 'petition[creator_signature_attributes][email]'],
-    message: "Email must match confirmation."
-  });
-  petition_form.validates('petition[creator_signature_attributes][uk_citizenship]', {
-    method: [E_PETS.FormController.validation_methods.validate_radio_group_value, '1'],
-    message: "You must be a British citizen or normally live in the UK to create or sign petitions."
-  });
-  petition_form.validates('petition[creator_signature_attributes][address]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Address must be completed."
-  });
-  petition_form.validates('petition[creator_signature_attributes][town]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Town must be completed."
-  });
-  petition_form.validates('petition[creator_signature_attributes][postcode]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Postcode must be completed.",
-    when: function() {
-      return $("select[name*=country]").val() == "United Kingdom";
-    }
-  });
-  petition_form.validates('petition[creator_signature_attributes][postcode]', {
-    method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.postcode],
-    message: "Postcode not recognised.",
-    when: function() {
-      return $("select[name*=country]").val() == "United Kingdom";
-    }
-  });
-  petition_form.validates('petition[creator_signature_attributes][terms_and_conditions]', {
-    method: E_PETS.FormController.validation_methods.validate_checked,
-    message: "You need to accept the terms and conditions."
-  });
-
-  petition_form.observe_field('petition[title]', function(){
-    $('#title_summary_field').text(this.value);
-  });
-  petition_form.observe_field('petition[department_id]', function(){
-    var options = $('option', this);
-    for (var i=0; i<options.length; i++) {
-      if (options[i].selected) {
-        $('#department_summary_field').text(options[i].innerHTML);
-      }
-    }
-  });
-  petition_form.observe_field('petition[description]', function(){
-    $('#description_summary_field').text(this.value);
-    $('#description_summary_field').html(E_PETS.UTILS.simple_format($('#description_summary_field').html()));
-  });
-  petition_form.observe_field('petition[action]', function(){
-    $('#action_summary_field').text(this.value);
-    $('#action_summary_field').html(E_PETS.UTILS.simple_format($('#action_summary_field').html()));
-  });
-
-  document.getElementById('petition_summary_block').style.display = 'block';
-});
-//]]>
-</script>
 <% end %>

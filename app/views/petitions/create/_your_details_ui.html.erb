@@ -1,0 +1,11 @@
+<fieldset>
+  <legend>Your Details</legend>
+  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+    <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
+  <% end %>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
+  <% end %>
+</fieldset>

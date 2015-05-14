@@ -1,0 +1,24 @@
+<fieldset id="petition_submit_section">
+  <legend>Submit Petition</legend>
+
+  <div class="strap_block">
+    <p>Here's your chance to review your e-petition. Once you press 'submit', you can't go back.
+    This is how it will appear on the website. If you like what you see, press 'submit'.
+    If you want to make changes, press 'back'.</p>
+  </div>
+  <div class="generic_block" id="petition_summary_block">
+    <h2 id="title_summary_field"><%= petition.title %></h2>
+    <p id="department_summary_field">Responsible department: <%= petition.department.name %></p>
+    <div id="action_summary_field"><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></div>
+    <div id="description_summary_field"><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></div>
+  </div>
+
+  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+    <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => csf.object } %>
+  <% end %>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= f.button 'Submit', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
+  <% end %>
+</fieldset>

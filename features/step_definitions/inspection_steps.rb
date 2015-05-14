@@ -1,5 +1,5 @@
-Then(/^I should see the fieldset called "(.*?)" is (\d+)(?:st|nd|rd|th)$/) do |legend, position|
-  expect(page).to have_xpath("//fieldset[#{position}]/legend[contains(., '#{legend}')]", visible: false)
+Then(/^I should see a fieldset called "(.*?)"$/) do |legend|
+  expect(page).to have_xpath("//fieldset/legend[contains(., '#{legend}')]", visible: false)
 end
 
 Then /^I should (not |)see "([^\"]*)" in the ((?!email\b).*)$/ do |see_or_not, text, section_name|
