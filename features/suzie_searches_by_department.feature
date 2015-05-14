@@ -4,20 +4,6 @@ Feature: Suzy Signer searches petitions by department
   As Suzy the signer
   I want to look through the petitions for each department
 
-  Scenario:
-    Given a set of petitions for the "Treasury"
-    When I browse petitions by department
-    Then I should see a list of all the departments
-    And the markup should be valid
-    And I should see "Search by department - e-petitions" in the browser page title
-    When I view the open petitions for the "Treasury"
-    And I should see "Treasury - e-petitions" in the browser page title
-    And I should see the petitions belonging to the "Treasury"
-    And the search results table should have the caption "Open e-petitions owned by the Treasury"
-    And I should see an "open" petition count of 3
-    And I should see a "closed" petition count of 0
-    And I should see a "rejected" petition count of 0
-
   Scenario: Suzie sees closed petitions
     Given a petition "Spend more money on Defence" belonging to the "Treasury" has been closed
     When I view the closed petitions for the "Treasury"
@@ -43,30 +29,6 @@ Feature: Suzy Signer searches petitions by department
     When I view the open petitions for the "DFID"
     Then I should see the following search results table:
       | Spend more money on Defence View        | 1,020 |
-
-  Scenario: Suzie doesn't know about the departments and browses the department info without javascript
-    Given a department "Area 51" exists with name: "Area 51", description: "Department for the regulation of alien traffic."
-    Given a department "Area 101" exists with name: "Area 101", description: "Things disappear here."
-    When I go to the departments page
-    Then I should see "Department for the regulation of alien traffic."
-    And I should see "Things disappear here."
-
-
-  @javascript
-  Scenario: Suzie doesn't know about the departments and browses the department info with javascript
-    Given a department "Area 51" exists with name: "Area 51", description: "Department for the regulation of alien traffic.", website_url: "http://www.example.com"
-    Given a department "Area 101" exists with name: "Area 101", description: "Things disappear here."
-    When I go to the departments page
-    Then I should not see "Department for the regulation of alien traffic."
-    And I should not see "Things disappear here."
-    When I press the info button next to the department "Area 51"
-    Then I should see "http://www.example.com"
-    And I should see "Department for the regulation of alien traffic."
-    # Capybara/envjs error stops this test going further.
-    # When I press "Close" within "//*[class='lightbox']"
-    # Then I should not see "Department for the regulation of alien traffic."
-    # When I press the info button next to the department "Area 101"
-    # Then I should see "Things disappear here."
 
   @search
   Scenario: Suzie searches by department free-text
