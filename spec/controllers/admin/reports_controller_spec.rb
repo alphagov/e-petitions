@@ -43,7 +43,6 @@ describe Admin::ReportsController do
             allow(Department).to receive(:by_petition_count).and_return []
           end
 
-
           it "assigns number_of_days_to_trend to the view" do
             get :index
             expect(assigns(:number_of_days_to_trend)).to eq(1)

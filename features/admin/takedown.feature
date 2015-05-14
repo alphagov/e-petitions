@@ -13,7 +13,3 @@ Feature: Terry (or Sheila) takes down a petition
     And I take down the petition with a reason code "Duplicate of an existing e-petition"
     Then the petition is not available for signing
     And I should not be able to take down the petition
-
-  Scenario: Normal admins cannot take down petitions
-    Given I am logged in as an admin
-    Then I should not be able to take down the petition

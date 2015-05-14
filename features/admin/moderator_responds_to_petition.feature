@@ -53,7 +53,6 @@ Feature: Moderator respond to petition
     Then a petition should exist with title: "Rupert Murdoch is on the run", state: "sponsored"
     And I should see "can't be blank"
 
-  @departments
   Scenario: Moderator rejects and hides previously rejected (and public) petition
     And a petition "actually libellous" has been rejected by the "Treasury" with the reason "duplicate"
     And I am logged in as an admin

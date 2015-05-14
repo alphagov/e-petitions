@@ -20,8 +20,8 @@ Feature: Admin users index and crud
       | Name            | Email             | Role      | Disabled |
       | Admin, Sys      | muddy@fox.com     | sysadmin  |          |
       | Campbell, Naomi | naomi@example.com | threshold |          |
-      | Hunt, Helen     | helen@example.com | admin     | Yes      |
-      | Jacobi, Derek   | derek@example.com | admin     |          |
+      | Hunt, Helen     | helen@example.com | threshold | Yes      |
+      | Jacobi, Derek   | derek@example.com | threshold |          |
     And the markup should be valid
 
   Scenario: Pagination of the users index
@@ -41,7 +41,6 @@ Feature: Admin users index and crud
     And I should see a "Last name" text field
     And I should see a "Email" text field
     And I should see a "Role" select field with the following options:
-      | admin     |
       | sysadmin  |
       | threshold |
     And I should see a "Force password reset" checkbox field

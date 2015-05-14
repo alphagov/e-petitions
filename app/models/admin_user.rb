@@ -24,7 +24,6 @@
 
 class AdminUser < ActiveRecord::Base
   DISABLED_LOGIN_COUNT = 5
-  ADMIN_ROLE = 'admin'
   SYSADMIN_ROLE = 'sysadmin'
   THRESHOLD_ROLE = 'threshold'
 
@@ -48,7 +47,7 @@ class AdminUser < ActiveRecord::Base
   validates_format_of :password, :with => /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/,
                       :message => 'must contain at least one digit, a lower and upper case letter and a special character',
                       :allow_blank => true
-  ROLES = [ADMIN_ROLE, SYSADMIN_ROLE, THRESHOLD_ROLE]
+  ROLES = [SYSADMIN_ROLE, THRESHOLD_ROLE]
   validates_inclusion_of :role, :in => ROLES, :message => "'%{value}' is invalid"
 
   # = Finders =
