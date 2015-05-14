@@ -742,7 +742,6 @@ form .errorExplanation ul li {
 }
 
 #search_pet_cta_block a.view_all_epetitions {
-  float: left;
   display: block;
   margin: 13px 0;
 }
