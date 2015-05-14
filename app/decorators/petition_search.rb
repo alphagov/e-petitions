@@ -1,5 +1,11 @@
 class PetitionSearch
 
+  class NullFacet
+    def count
+     0
+    end
+  end
+
   delegate :previous_page, :next_page, :to => :petitions
   delegate :current_page, :per_page, :to => :petition_results
   delegate :total_entries, :total_pages, :to => :petition_results
@@ -21,8 +27,8 @@ class PetitionSearch
   def result_count_for_state(state)
     @petition_search_counts ||= execute_result_counts_query
     @facets ||= @petition_search_counts.facet(:state).rows
-    default = -> { OpenStruct.new(count: 0) }
-    count = @facets.find(default) { |f| f.value.to_s == state }.count
+    default = -> { NullFacet.new }
+    @facets.find(default) { |f| f.value.to_s == state }.count
   end
 
   private
