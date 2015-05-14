@@ -55,7 +55,6 @@ describe PetitionsController do
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
         :duration => "12",
-        :department_id => department.id,
         :sponsor_emails => sponsor_emails,
         :creator_signature => creator_signature_attributes
       }
@@ -167,10 +166,10 @@ describe PetitionsController do
           expect(assigns[:departments]).to eq([department])
         end
 
-        it "has stage of 'petition' if there are errors on title, department or description" do
+        it "has stage of 'petition' if there are errors on title, action, or description" do
           do_post :petition => petition_attributes.merge(:title => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'
-          do_post :petition => petition_attributes.merge(:department_id => nil)
+          do_post :petition => petition_attributes.merge(:action => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'
           do_post :petition => petition_attributes.merge(:description => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'

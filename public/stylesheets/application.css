@@ -1008,10 +1008,6 @@ form fieldset#petition_submit_section #petition_summary_block #title_summary_fie
   font-size: 1.3em;
   margin-bottom: 25px;
 }
-form fieldset#petition_submit_section #petition_summary_block #department_summary_field {
-  margin-bottom: 25px;
-}
-
 form fieldset#petition_submit_section #petition_summary_block #description_summary_field {
   font-size: 1.0em;
 }

@@ -32,7 +32,6 @@ Scenario: Charlie creates our petition
   And I should be connected to the server via an ssl connection
   When I fill in "Title" with "The wombats of wimbledon rock."
   And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
-  And I select "Department for International Development" from "Department"
   And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I select "3 months" from "Time to collect signatures"
   And I press "Next"
@@ -61,7 +60,6 @@ Scenario: Charlie tries to submit an invalid petition
   When I press "Next"
   Then I should see "Title must be completed"
   And I should see "Action must be completed"
-  And I should see "Department must be completed"
   And I should see "Description must be completed"
 
   When I am allowed to make the petition title too long
@@ -75,7 +73,6 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Action is too long."
 
   When I fill in "Title" with "The wombats of wimbledon rock."
-  And I select "Department for International Development" from "Department"
   And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Next"
@@ -125,12 +122,8 @@ Scenario: Charlie tries to submit an invalid petition
 
 
 Scenario: Charlie looks up information about departments
-  Given I am on the new petition page
-  When I follow "Which department does what?"
-  Then I should be on the department information page
+  Given I am on the department information page
   And I should see "Cabinet Office"
   And I should see "Where cabinets do their paperwork"
   And I should see "Department for International Development"
   And I should see "A large portion of the UK population cannot intonate their words properly. This department is responsible for developing this."
-
-#The JS version for this scenario can't be run since Selenium doesn't seem to understand pages in new tabs.
