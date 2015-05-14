@@ -10,7 +10,7 @@ class DepartmentsController < ApplicationController
 
   def show
     @department = Department.find(params[:id])
-    @petitions = DepartmentPetitionSearch.new(params)
+    @petition_search = DepartmentPetitionSearch.new(params)
     respond_with @department
   end
 

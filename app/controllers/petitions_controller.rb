@@ -9,7 +9,7 @@ class PetitionsController < ApplicationController
   respond_to :html
 
   def index
-    @petitions = PetitionSearch.new(params)
+    @petition_search = PetitionSearch.new(params)
   end
 
   def show
@@ -42,7 +42,7 @@ class PetitionsController < ApplicationController
     search_params = params
     search_params[:q] = search_params[:search]
     search_params[:per_page] = 10
-    @petitions = PetitionSearch.new(search_params)
+    @petition_search = PetitionSearch.new(search_params)
   end
 
   def resend_confirmation_email

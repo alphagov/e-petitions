@@ -2,6 +2,6 @@ class SearchController < ApplicationController
   respond_to :html
 
   def search
-    @petitions = PetitionSearch.new(params)
+    @petition_search = PetitionSearch.new(params)
   end
 end

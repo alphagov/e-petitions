@@ -34,7 +34,7 @@
             <% if params[:action] != 'home' and Petition.visible.count > 0 %>
               <% focus = (params[:action] == 'search' or params[:action] == 'show') ? "autofocus=\"autofocus\"".html_safe : '' %>
               <form method="get" action="/search" class="search_form">
-                <input type='text' name="q" id="search_header" value="<%= @petitions.try(:search_term) %>" size="30" tabindex="4" <%= focus %>/>
+                <input type='text' name="q" id="search_header" value="<%= @petition_search.try(:search_term) %>" size="30" tabindex="4" <%= focus %>/>
                 <input type='submit' value='Search' class="button" id="search_button_header"/>
                 <label for='search_header'>Search published e-petitions</label>
               </form>

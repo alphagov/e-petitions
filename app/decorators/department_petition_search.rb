@@ -2,7 +2,7 @@ class DepartmentPetitionSearch < PetitionSearch
 
   private
 
-  def execute
+  def execute_search_query
     Petition.search do |query|
       query.fulltext search_term
       query.facet :state

@@ -6,12 +6,6 @@ class PetitionSearch
     end
   end
 
-  delegate :previous_page, :next_page, :to => :petitions
-  delegate :current_page, :per_page, :to => :petition_results
-  delegate :total_entries, :total_pages, :to => :petition_results
-  delegate :each, :empty?, :offset, :size, :to => :petition_results
-  delegate :first, :length, :to_a, :to_ary, :to => :petition_results
-
   def initialize(params)
     @params = params
   end
@@ -24,9 +18,12 @@ class PetitionSearch
    @params[:q] || ''
   end
 
+  def results
+    @results ||= petitions.results
+  end
+
   def result_count_for_state(state)
-    @petition_search_counts ||= execute_result_counts_query
-    @facets ||= @petition_search_counts.facet(:state).rows
+    @facets ||= petition_result_counts.facet(:state).rows
     default = -> { NullFacet.new }
     @facets.find(default) { |f| f.value.to_s == state }.count
   end
@@ -34,14 +31,14 @@ class PetitionSearch
   private
 
   def petitions
-    @petitions ||= execute
+    @petitions ||= execute_search_query
   end
 
-  def petition_results
-    @petition_results ||= petitions.results
+  def petition_result_counts
+    @petition_result_counts ||= execute_result_counts_query
   end
 
-  def execute
+  def execute_search_query
     Petition.search do |query|
       query.fulltext search_term
       query.facet :state
