@@ -23,6 +23,8 @@ class SponsorsController < ApplicationController
         @signature.perishable_token = nil
         @signature.state = Signature::VALIDATED_STATE
         @signature.save(:validate => false)
+        send_sponsor_support_notificaiton_email_to_petition_owner(@petition, @sponsor)
+        @petition.update_sponsored_state
         redirect_to thank_you_petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
       else
         render :show
@@ -54,5 +56,9 @@ class SponsorsController < ApplicationController
       permit(:name, :address, :town,
              :postcode, :country, :uk_citizenship,
              :terms_and_conditions, :notify_by_email)
+  end
+
+  def send_sponsor_support_notificaiton_email_to_petition_owner(petition, sponsor)
+    petition.notify_creator_about_sponsor_support(sponsor)
   end
 end

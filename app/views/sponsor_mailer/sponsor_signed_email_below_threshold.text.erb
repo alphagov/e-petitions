@@ -1,0 +1,9 @@
+Hi <%= @petition.creator_signature.name %>,
+
+One of the sponsors you nominated for your petition "<%= @petition.title %>", <%= @sponsor.signature.name %>, has signed it to show their support.
+
+You have support from <%= @supporting_sponsors_count %> of your nominated sponsors; you still need <%= @moderation_threshold - @supporting_sponsors_count %> more before you have enough support to pass the petition to parliament for moderation review.
+
+Thanks,
+
+Parliament e-petitions <%= home_url %>

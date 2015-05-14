@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Admin::PetitionsController do
   before :each do
     creator_signature = FactoryGirl.create(:signature, :email => 'john@example.com')
-    @petition = FactoryGirl.create(:validated_petition, :creator_signature => creator_signature, :duration => "3")
+    @petition = FactoryGirl.create(:sponsored_petition, :creator_signature => creator_signature, :duration => "3")
   end
 
   describe "not logged in" do
@@ -337,7 +337,7 @@ describe Admin::PetitionsController do
           it "reject fails when no reason code given" do
             do_post :commit => 'Reject', :petition => {:rejection_code => nil}
             @petition.reload
-            expect(@petition.state).to eq(Petition::VALIDATED_STATE)
+            expect(@petition.state).to eq(Petition::SPONSORED_STATE)
           end
         end
 

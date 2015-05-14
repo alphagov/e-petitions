@@ -4,7 +4,7 @@ Feature: Moderator respond to petition
   I want to respond to a petition for my department, accepting, rejecting or re-assigning it
 
   Scenario: Accesing the petitions page
-    Given a validated petition exists with title: "More money for charities"
+    Given a sponsored petition exists with title: "More money for charities"
     And I am logged in as a sysadmin
     When I go to the admin moderate petitions page for "More money for charities"
     Then I should be connected to the server via an ssl connection
@@ -47,10 +47,10 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as an admin
-    And a validated petition exists with title: "Rupert Murdoch is on the run"
+    And a sponsored petition exists with title: "Rupert Murdoch is on the run"
     When I go to the Admin moderate petitions page for "Rupert Murdoch is on the run"
     And I reject the petition with a reason code "-- Select a rejection code --"
-    Then a petition should exist with title: "Rupert Murdoch is on the run", state: "validated"
+    Then a petition should exist with title: "Rupert Murdoch is on the run", state: "sponsored"
     And I should see "can't be blank"
 
   @departments

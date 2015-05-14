@@ -11,7 +11,7 @@ Feature: Maggie searches for a petition by id
     Then I should see the petition for viewing only
 
   Scenario: A user from the same department sees the edit page if the petition needs moderation
-    Given a validated petition "Loose benefits!" belonging to the "Treasury"
+    Given a sponsored petition "Loose benefits!" belonging to the "Treasury"
     And I am logged in as a moderator for the "Treasury"
     When I search for a petition by id
     Then I should see the petition for editing
@@ -23,7 +23,7 @@ Feature: Maggie searches for a petition by id
     Then I should see the petition for editing the internal reponse and changing the status
 
   Scenario: A threshold user sees the edit page if the petition needs moderation
-    Given a validated petition "Loose benefits!" belonging to the "Treasury"
+    Given a sponsored petition "Loose benefits!" belonging to the "Treasury"
     And I am logged in as a threshold user
     When I search for a petition by id
     Then I should see the petition for editing
