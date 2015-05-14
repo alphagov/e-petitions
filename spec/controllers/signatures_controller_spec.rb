@@ -132,7 +132,7 @@ describe SignaturesController do
 
     let(:signature_params) {{:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
       :uk_citizenship => "1", :terms_and_conditions => "1",
-      :address => 'Rose Cottage', :town => 'London', :postcode => 'SE3 4LL',
+      :postcode => 'SE3 4LL',
       :country => 'UK'}}
 
     def do_post(options = {})

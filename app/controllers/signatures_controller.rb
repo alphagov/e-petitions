@@ -59,7 +59,7 @@ class SignaturesController < ApplicationController
   def signature_params_for_create
     params.
       require(:signature).
-      permit(:name, :email, :email_confirmation, :address, :town,
+      permit(:name, :email, :email_confirmation,
              :postcode, :country, :uk_citizenship,
              :terms_and_conditions, :notify_by_email)
   end

@@ -76,7 +76,7 @@ class PetitionsController < ApplicationController
       permit(:title, :action, :description, :duration, :department_id,
              :sponsor_emails,
              creator_signature: [
-               :name, :email, :email_confirmation, :address, :town,
+               :name, :email, :email_confirmation,
                :postcode, :country, :uk_citizenship,
                :terms_and_conditions, :notify_by_email
              ]).tap do |sanitized|

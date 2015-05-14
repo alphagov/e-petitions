@@ -57,14 +57,6 @@ $().ready(function() {
     method: [E_PETS.FormController.validation_methods.validate_radio_group_value, '1'],
     message: "You must be a British citizen or normally live in the UK to create or sign e-petitions."
   });
-  signature_form.validates('signature[address]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Address must be completed."
-  });
-  signature_form.validates('signature[town]', {
-    method: E_PETS.FormController.validation_methods.validate_presence,
-    message: "Town must be completed."
-  });
   signature_form.validates('signature[postcode]', {
     method: E_PETS.FormController.validation_methods.validate_presence,
     message: "Postcode must be completed.",

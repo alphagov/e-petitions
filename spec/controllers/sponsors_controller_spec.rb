@@ -68,8 +68,6 @@ describe SponsorsController do
     let(:signature_params) {
       {
         name: 'S. Ponsor',
-        address: '1 Sponsor St.',
-        town: 'Sponsorsville',
         postcode: 'SP1 1NR',
         country: 'United Kingdom',
         uk_citizenship: '1',

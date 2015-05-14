@@ -29,8 +29,6 @@ module Staged
         with_options unless: :persisted? do |creator|
           creator.validates :uk_citizenship,
             acceptance: { allow_nil: false, message: 'You must be a British citizen or normally live in the UK to create or sign petitions.' }
-          creator.validates :address, presence:  { message: 'Address must be completed.' }
-          creator.validates :town, presence: { message: 'Town must be completed.' }
         end
       end
     end

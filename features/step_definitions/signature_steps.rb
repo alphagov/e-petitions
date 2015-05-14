@@ -58,8 +58,6 @@ When /^I fill in my details$/ do
     And I fill in "Email" with "womboid@wimbledon.com"
     And I fill in "Email confirmation" with "womboid@wimbledon.com"
     And I choose "yes"
-    And I fill in "Address" with "The old oak, 5 leafy grove, Wimbledon common"
-    And I fill in "Town" with "London"
     And I fill in "Postcode" with "SW14 9RQ"
     And I select "United Kingdom" from "Country"
   )
