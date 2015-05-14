@@ -21,13 +21,7 @@ end
 
 Given /^I am logged in as an admin$/ do
   @user = FactoryGirl.create(:admin_user)
-  @user.departments <<  FactoryGirl.create(:department)
   step "the admin user is logged in"
-end
-
-Given /^I am logged in as a moderator for the "([^"]*)"$/ do |department_name|
-  step "I am logged in as an admin"
-  @user.departments << Department.find_by(name: department_name)
 end
 
 Given /^the admin user is logged in$/ do

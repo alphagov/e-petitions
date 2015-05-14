@@ -7,7 +7,6 @@ Feature: An admin user views all petitions
     Given I am logged in as an admin
     And a department "Treasury" exists with name: "Treasury"
     And a department "Cabinet Office" exists with name: "Cabinet Office"
-    And I am associated with the department "Treasury"
 
   Scenario: Viewing all petitions
     Given a set of petitions for the "Treasury"
@@ -51,7 +50,7 @@ Feature: An admin user views all petitions
     When I change the number viewed per page to 50
     And I press "Go"
     Then I should see a list of 25 petitions
-    
+
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin
     And an open petition exists with title: "Simply the best"
@@ -63,4 +62,4 @@ Feature: An admin user views all petitions
     And an open petition exists with title: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"
-    
+

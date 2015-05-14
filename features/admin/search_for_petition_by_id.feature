@@ -4,26 +4,20 @@ Feature: Maggie searches for a petition by id
   As Maggie
   I want to enter an id and be taken to the petition for that id, or shown an error if it doesn't exist
 
-  Scenario:
-    Given a set of petitions for the "Treasury"
-    And I am logged in as a moderator for the "Cabinet Office"
-    When I search for a petition by id
-    Then I should see the petition for viewing only
-
-  Scenario: A user from the same department sees the edit page if the petition needs moderation
-    Given a sponsored petition "Loose benefits!" belonging to the "Treasury"
-    And I am logged in as a moderator for the "Treasury"
+  Scenario: A user sees the edit page if the petition needs moderation
+    Given a sponsored petition "Loose benefits!"
+    And I am logged in as an admin
     When I search for a petition by id
     Then I should see the petition for editing
 
-  Scenario: A user from the same department sees the edit internal page if the petition is visible
+  Scenario: A user sees the edit internal page if the petition is visible
     Given a petition "Duplicate" has been rejected by the "Treasury"
-    And I am logged in as a moderator for the "Treasury"
+    And I am logged in as an admin
     When I search for a petition by id
     Then I should see the petition for editing the internal reponse and changing the status
 
   Scenario: A threshold user sees the edit page if the petition needs moderation
-    Given a sponsored petition "Loose benefits!" belonging to the "Treasury"
+    Given a sponsored petition "Loose benefits!"
     And I am logged in as a threshold user
     When I search for a petition by id
     Then I should see the petition for editing
@@ -34,7 +28,7 @@ Feature: Maggie searches for a petition by id
     When I search for a petition by id
     Then I should see the petition for editing the reponses
 
-  Scenario:
+  Scenario: A user doing a search for a petition id that doesn't exist gets an error
     Given I am logged in as a threshold user
     When I search for a petition by id
     Then I should be taken back to the id search form with an error

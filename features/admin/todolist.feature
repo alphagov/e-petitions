@@ -1,7 +1,7 @@
 Feature: Dashboard todo list
   In order to see priority items
   I can see a list of validated petitions on my todo list that need moderation
-  
+
   Background:
     Given a department "DFID" exists with name: "DFID"
     And a department "Treasury" exists with name: "Treasury"
@@ -24,15 +24,13 @@ Feature: Dashboard todo list
   And I should be connected to the server via an ssl connection
   And the markup should be valid
 
-  Scenario: An admin sees pending petitions for their department
+  Scenario: An admin sees pending petitions
     Given I am logged in as an admin
-    And I am associated with the department "Treasury"
-    And I am associated with the department "Home Office"
     When I go to the admin todolist page
     Then I should see the following admin index table:
       | Title      | Date       |
       | Petition 1 | 10-02-2009 |
-      | Petition 4 | 01-01-2010 |	
+      | Petition 4 | 01-01-2010 |
       | Petition 3 | 11-11-2010 |
 
   Scenario: Pending petitions are paginated

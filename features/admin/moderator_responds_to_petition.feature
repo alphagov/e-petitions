@@ -56,7 +56,7 @@ Feature: Moderator respond to petition
   @departments
   Scenario: Moderator rejects and hides previously rejected (and public) petition
     And a petition "actually libellous" has been rejected by the "Treasury" with the reason "duplicate"
-    And I am logged in as a moderator for the "Treasury"
+    And I am logged in as an admin
     When I view the petition through the admin interface
     And I change the rejection status of the petition with a reason code "Confidential, libellous, false or defamatory statements (will be hidden)"
     And the petition is not available for searching or viewing

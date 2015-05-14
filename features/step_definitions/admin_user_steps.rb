@@ -1,8 +1,3 @@
-Given /^I am associated with the #{capture_model}$/ do |model_name|
-  department = model!(model_name)
-  AdminUser.last.departments << department
-end
-
 Given /^I try the password "([^"]*)" (\d+) times in a row$/ do |password, number|
   number.times do
     steps %Q(

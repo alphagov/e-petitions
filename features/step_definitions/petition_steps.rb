@@ -9,12 +9,16 @@ Then /^I am taken to a landing page$/ do
 end
 
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" belonging to the "([^"]*)"$/ do |a_or_an, state, petition_title, department_name|
-  @petition = FactoryGirl.create(:open_petition,
+Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"(?: belonging to the "([^"]*)")?$/ do |a_or_an, state, petition_title, department_name|
+  petition_args = {
     :title => petition_title,
-    :department => Department.find_by(name: department_name),
     :closed_at => 1.day.from_now,
-    :state => state || "open")
+    :state => state || "open"
+  }
+  if department_name.present?
+    petition_args[:department] = Department.find_or_create_by(name: department_name)
+  end
+  @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
 Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |title, no_validated, no_pending|
@@ -47,7 +51,7 @@ end
 Given /^a libelous petition "([^"]*)" has been rejected by the "([^"]*)"$/ do |petition_title, department_name|
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_by(name: department_name),
+    :department => Department.find_or_create_by(name: department_name),
     :state => Petition::HIDDEN_STATE,
     :rejection_code => "libellous",
     :rejection_text => "You can't say that!")
@@ -57,7 +61,7 @@ Given /^a petition "([^"]*)" has been rejected by the "([^"]*)"( with the reason
   reason_text = reason.nil? ? "We are the #{department_name}, not television executives" : reason
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_by(name: department_name),
+    :department => Department.find_or_create_by(name: department_name),
     :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
     :rejection_text => reason_text)
