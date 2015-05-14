@@ -40,18 +40,6 @@
   <%= error_messages_for_field signature, :uk_citizenship %>
 <% end %>
 
-<%= form_row :class => 'address_row', :for => [signature, :address] do %>
-  <%= f.label :address %>
-  <%= f.text_area :address, :class => 'address', :tabindex => increment %>
-  <%= error_messages_for_field signature, :address %>
-<% end %>
-
-<%= form_row :for => [signature, :town] do %>
-  <%= f.label :town %>
-  <%= f.text_field :town, :tabindex => increment %>
-  <%= error_messages_for_field signature, :town %>
-<% end %>
-
 <%= form_row :for => [signature, :postcode] do %>
   <%= f.label :postcode %>
   <%= f.text_field :postcode, :class => 'postcode', :tabindex => increment %>

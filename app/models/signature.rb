@@ -68,8 +68,6 @@ class Signature < ActiveRecord::Base
   # = Methods =
   attr_accessor :uk_citizenship
   attr_accessor :terms_and_conditions
-  attr_accessor :address
-  attr_accessor :town
 
   def creator?
     petition.creator_signature == self

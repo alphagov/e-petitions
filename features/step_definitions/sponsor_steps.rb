@@ -25,8 +25,6 @@ When(/^a sponsor supports my e\-petition$/) do
     And they click the first link in the email
     And I fill in "Name" with "Anonymous Sponsor"
     And I choose "yes"
-    And I fill in "Address" with "Sponsor House, Sponsor Street"
-    And I fill in "Town" with "Sponsorton-upon-Spon"
     And I fill in "Postcode" with "SW1A 1AA"
     And I select "United Kingdom" from "Country"
     And I accept the terms and conditions
@@ -73,8 +71,6 @@ When(/^I fill in my details as a sponsor$/) do
   steps %Q(
     When I fill in "Name" with "Laura The Sponsor"
     And I choose "yes"
-    And I fill in "Address" with "A House, On Street"
-    And I fill in "Town" with "Townsville"
     And I fill in "Postcode" with "AB10 1AA"
     And I select "United Kingdom" from "Country"
   )

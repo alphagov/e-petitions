@@ -106,7 +106,6 @@ describe StagedPetitionCreator do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
         :email_confirmation => 'john@example.com',
-        :address => 'Rose Cottage', :town => 'London',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
         :uk_citizenship => '1', :terms_and_conditions => '1'
       }

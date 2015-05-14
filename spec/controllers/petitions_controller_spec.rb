@@ -44,7 +44,6 @@ describe PetitionsController do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
         :email_confirmation => 'john@example.com',
-        :address => 'Rose Cottage', :town => 'London',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
         :uk_citizenship => '1', :terms_and_conditions => '1'
       }
@@ -147,13 +146,6 @@ describe PetitionsController do
           expect(response).to be_success
         end
 
-        it "should not create a new petition if address is blank" do
-          creator_signature_attributes[:address] = ''
-          do_post
-          expect(Petition.find_by_title('Save the planet')).to be_nil
-          expect(response).to be_success
-        end
-
         it "should not create a new petition if UK citizenship is not confirmed" do
           creator_signature_attributes[:uk_citizenship] = '0'
           do_post
@@ -176,7 +168,7 @@ describe PetitionsController do
           expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 
-        it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, address, town, postcode or country" do
+        it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, postcode or country" do
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => ''))
@@ -184,10 +176,6 @@ describe PetitionsController do
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => 'dave@example.com', :l_confirmation => 'laura@example.com'))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:address => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:town => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:postcode => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'

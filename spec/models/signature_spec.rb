@@ -71,8 +71,6 @@ describe Signature do
   context "validations" do
     it { is_expected.to validate_presence_of(:name).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:address).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:town).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:country).with_message(/must be completed/) }
     it { is_expected.to validate_length_of(:name).is_at_most(255) }
 

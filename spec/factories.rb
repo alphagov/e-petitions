@@ -82,8 +82,6 @@ FactoryGirl.define do
     sequence(:name) {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
     email_confirmation  {|sig| sig.email }
-    address             "10 Downing St"
-    town                "London"
     postcode            "SW1A 1AA"
     country             "United Kingdom"
     uk_citizenship       '1'

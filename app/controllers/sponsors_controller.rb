@@ -53,7 +53,7 @@ class SponsorsController < ApplicationController
   def signature_params_for_create
     params.
       require(:signature).
-      permit(:name, :address, :town,
+      permit(:name,
              :postcode, :country, :uk_citizenship,
              :terms_and_conditions, :notify_by_email)
   end
