@@ -12,9 +12,6 @@
 <div class="petition_view">
   <div class="content">
     <h1><%= @petition.title %></h1>
-    <% if @petition.department %>
-      <p class='department'>Responsible department: <%= @petition.department.name %></p>
-    <% end %>
     <p class='description'><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></p>
 
     <% if @petition.rejected? -%>
