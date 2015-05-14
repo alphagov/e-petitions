@@ -8,7 +8,7 @@
 #  response                :text
 #  state                   :string(10)      default("pending"), not null
 #  open_at                 :datetime
-#  department_id           :integer(4)      not null
+#  department_id           :integer(4)
 #  creator_signature_id    :integer(4)      not null
 #  created_at              :datetime
 #  updated_at              :datetime
@@ -50,7 +50,6 @@ describe Petition do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:duration).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:department).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     context "sponsor validations" do
@@ -623,7 +622,7 @@ describe Petition do
   describe "#update_sponsored_state" do
     context "with sufficient sponsor count" do
       let(:petition){ FactoryGirl.create(:validated_petition, sponsors_signed: true) }
-      
+
       it "sets state to sponsored" do
         expect{petition.update_sponsored_state}.to change{petition.state}
                                                     .from(Petition::VALIDATED_STATE)
@@ -639,7 +638,7 @@ describe Petition do
       end
     end
   end
-  
+
 
   describe "creating sponsors from sponsor emails in after create callback" do
     it 'persists sponsors to match the emails' do

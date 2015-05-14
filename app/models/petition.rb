@@ -8,7 +8,7 @@
 #  response                :text
 #  state                   :string(10)      default("pending"), not null
 #  open_at                 :datetime
-#  department_id           :integer(4)      not null
+#  department_id           :integer(4)
 #  creator_signature_id    :integer(4)      not null
 #  created_at              :datetime
 #  updated_at              :datetime
@@ -38,7 +38,11 @@ class Petition < ActiveRecord::Base
       creator_signature.name
     end
     text :department_name do
-      department.name
+      if department.present?
+        department.name
+      else
+        ''
+      end
     end
     string :title
     integer :signature_count
