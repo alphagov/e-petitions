@@ -339,12 +339,7 @@ describe Admin::PetitionsController do
 
         describe "take down" do
           context "an open petition" do
-            before do
-              @petition.state = Petition::OPEN_STATE
-              @petition.open_at = Time.zone.now
-              @petition.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
-              @petition.save!
-            end
+            before { @petition.publish! }
             it "succeeds" do
               @petition.save
               post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }

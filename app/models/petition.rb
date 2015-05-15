@@ -155,6 +155,13 @@ class Petition < ActiveRecord::Base
     counts_by_state
   end
 
+  def publish!
+    self.state = Petition::OPEN_STATE
+    self.open_at = Time.zone.now
+    self.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
+    save!
+  end
+
   def reassign!(new_department)
     self.department = new_department
     save!

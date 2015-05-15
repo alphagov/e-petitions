@@ -169,7 +169,6 @@ describe Petition do
     end
   end
 
-
   context "scopes" do
     describe "last_hour_trending" do
       before(:each) do
@@ -596,6 +595,27 @@ describe Petition do
       expect(Petition.counts_by_state[:closed]).to    eq(5)
       expect(Petition.counts_by_state[:rejected]).to  eq(6)
       expect(Petition.counts_by_state[:hidden]).to    eq(7)
+    end
+  end
+
+  describe '#publish!' do
+    subject { FactoryGirl.create(:petition) }
+    let(:now) { Chronic.parse("1 Jan 2011") }
+    before { allow(Time.zone).to receive(:now).and_return(now) }
+
+    it "sets the state to OPEN" do
+      subject.publish!
+      expect(subject.state).to eq(Petition::OPEN_STATE)
+    end
+
+    it "sets the open date to now" do
+      subject.publish!
+      expect(subject.open_at.change(usec: 0)).to eq(now.change(usec: 0))
+    end
+
+    it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
+      subject.publish!
+      expect(subject.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
     end
   end
 
