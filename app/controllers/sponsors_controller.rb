@@ -55,7 +55,7 @@ class SponsorsController < ApplicationController
       require(:signature).
       permit(:name,
              :postcode, :country, :uk_citizenship,
-             :terms_and_conditions, :notify_by_email)
+             :terms_and_conditions)
   end
 
   def send_sponsor_support_notificaiton_email_to_petition_owner(petition, sponsor)

@@ -166,7 +166,6 @@ class StagedPetitionCreator
     if petition.creator_signature
       petition.creator_signature.email.strip! unless petition.creator_signature.email.blank?
       petition.creator_signature.ip_address = @request.remote_ip
-      petition.creator_signature.notify_by_email = true
     end
     petition.title.strip! unless petition.title.blank?
   end

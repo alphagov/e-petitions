@@ -77,7 +77,7 @@ class PetitionsController < ApplicationController
              creator_signature: [
                :name, :email, :email_confirmation,
                :postcode, :country, :uk_citizenship,
-               :terms_and_conditions, :notify_by_email
+               :terms_and_conditions
              ]).tap do |sanitized|
                if sanitized['creator_signature'].present?
                  sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')

@@ -40,9 +40,9 @@ describe Signature do
       expect(s.perishable_token).not_to be_nil
     end
 
-    it "should set notify_by_email to false" do
+    it "should set notify_by_email to truthy" do
       s = Signature.new
-      expect(s.notify_by_email).to be_falsey
+      expect(s.notify_by_email).to be_truthy
     end
   end
 

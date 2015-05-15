@@ -61,6 +61,6 @@ class SignaturesController < ApplicationController
       require(:signature).
       permit(:name, :email, :email_confirmation,
              :postcode, :country, :uk_citizenship,
-             :terms_and_conditions, :notify_by_email)
+             :terms_and_conditions)
   end
 end
