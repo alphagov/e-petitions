@@ -33,7 +33,6 @@ Scenario: Charlie creates our petition
   When I fill in "Title" with "The wombats of wimbledon rock."
   And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
-  And I select "3 months" from "Time to collect signatures"
   And I press "Next"
   And I fill in my details
   And I press "Next"
@@ -42,7 +41,7 @@ Scenario: Charlie creates our petition
   And I check "I agree to the Terms & Conditions"
   Then the markup should be valid
   When I press "Submit"
-  Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending", duration: "3"
+  Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
   And "womboid@wimbledon.com" should receive 1 email

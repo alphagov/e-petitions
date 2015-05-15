@@ -5,11 +5,7 @@ module FormHelper
     css_classes.push 'invalid_row' if opts[:for] && opts[:for][0].errors[opts[:for][1]].any?
     content_tag :div, capture(&block), :class => css_classes.join(' ')
   end
-  
-  def petition_durations
-    [["3 months", "3"], ["6 months", "6"], ["9 months", "9"], ["12 months", "12"]]
-  end
-  
+
   def countries_for_select
     [
       'Afghanistan',
@@ -238,7 +234,7 @@ module FormHelper
       'Zimbabwe'
     ]
   end
-  
+
   def error_messages_for_field(object, field_name, opts={})
     unless object.errors[field_name].empty?
       return_string = "<div class=\"errors#{' server_only_validation' if opts[:server_only_validation]}\">"
