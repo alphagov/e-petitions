@@ -160,6 +160,11 @@ describe SignaturesController do
           expect(assigns(:signature).petition).to eq(petition)
         end
 
+        it "has not changed the default TRUE value for notify_by_email" do
+          do_post
+          expect(assigns(:signature).notify_by_email).to eq(true)
+        end
+
         it "redirects to a thank you page" do
           do_post
           expect(response).to redirect_to(thank_you_petition_signature_path(petition))

@@ -106,7 +106,7 @@ describe SponsorsController do
           expect(sponsor.signature.name).to eq signature_params[:name]
           expect(sponsor.signature.postcode).to eq signature_params[:postcode]
           expect(sponsor.signature.country).to eq signature_params[:country]
-          expect(sponsor.signature.notify_by_email).to eq false
+          expect(sponsor.signature.notify_by_email).to eq true
         end
 
         it 'creates the signature in the validated state' do

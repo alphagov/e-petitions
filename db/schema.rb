@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514140022) do
+ActiveRecord::Schema.define(version: 20150515100520) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20150514140022) do
     t.integer  "petition_id",      limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "notify_by_email",              default: false
+    t.boolean  "notify_by_email",              default: true
     t.datetime "last_emailed_at"
     t.string   "encrypted_email",  limit: 255
   end

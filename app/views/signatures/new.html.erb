@@ -9,8 +9,6 @@
 <%= form_for @signature, :url => sign_petition_signature_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <fieldset>
     <%= render :partial => 'signatures/form', :locals => { :f => f, :signature => @signature } %>
-
-    <%= render :partial => 'notify_by_email', :locals => { :f => f, :signature => @signature } %>
     <%= render :partial => 'terms_and_conditions', :locals => { :f => f, :signature => @signature } %>
 
     <div class="row button_row">

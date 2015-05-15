@@ -12,7 +12,7 @@
 #  petition_id      :integer(4)
 #  created_at       :datetime
 #  updated_at       :datetime
-#  notify_by_email  :boolean(1)      default(FALSE)
+#  notify_by_email  :boolean(1)      default(TRUE)
 #  last_emailed_at  :datetime
 #  encrypted_email  :string(255)
 #
