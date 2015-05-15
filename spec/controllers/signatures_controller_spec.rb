@@ -131,9 +131,7 @@ describe SignaturesController do
     let!(:petition) { FactoryGirl.create(:open_petition) }
 
     let(:signature_params) {{:name => 'John Mcenroe', :email => 'john@example.com', :email_confirmation => 'john@example.com',
-      :uk_citizenship => "1", :terms_and_conditions => "1",
-      :postcode => 'SE3 4LL',
-      :country => 'UK'}}
+      :uk_citizenship => "1", :postcode => 'SE3 4LL', :country => 'UK'}}
 
     def do_post(options = {})
       post :create, :signature => signature_params.merge(options), :petition_id => petition.id

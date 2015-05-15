@@ -53,9 +53,7 @@ class SponsorsController < ApplicationController
   def signature_params_for_create
     params.
       require(:signature).
-      permit(:name,
-             :postcode, :country, :uk_citizenship,
-             :terms_and_conditions)
+      permit(:name, :postcode, :country, :uk_citizenship)
   end
 
   def send_sponsor_support_notificaiton_email_to_petition_owner(petition, sponsor)
