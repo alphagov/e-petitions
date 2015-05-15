@@ -24,7 +24,7 @@ When(/^a sponsor supports my e\-petition$/) do
     When "#{sponsor.email}" opens the email with subject "Parliament petitions - #{@petition.creator_signature.name} would like your support"
     And they click the first link in the email
     And I fill in "Name" with "Anonymous Sponsor"
-    And I choose "yes"
+    And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW1A 1AA"
     And I select "United Kingdom" from "Country"
     And I accept the terms and conditions
@@ -70,7 +70,7 @@ When(/^I fill in my details as a sponsor$/) do
   expect(page).to have_no_field 'signature[email_confirmation]'
   steps %Q(
     When I fill in "Name" with "Laura The Sponsor"
-    And I choose "yes"
+    And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "AB10 1AA"
     And I select "United Kingdom" from "Country"
   )

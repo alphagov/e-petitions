@@ -24,19 +24,11 @@
   <% end %>
 <% end %>
 
-<%= form_row :class => 'is_uk_citizen_row', :for => [signature, :uk_citizenship] do %>
-  <p class="label">British citizen or UK resident?</p>
-  <ul class="radio_button_list">
-    <li>
-    <%= f.radio_button :uk_citizenship, 1, :title => "Yes, I am a British citizen or UK resident", :tabindex => increment %>
-      <%= f.label :uk_citizenship_1, "yes" %>
-    </li>
-    <li>
-    <%= f.radio_button :uk_citizenship, 0, :title => "No, I am not a British citizen or UK resident", :tabindex => increment %>
-      <%= f.label :uk_citizenship_0, "no" %>
-    </li>
-  </ul>
-
+<%= form_row :class => 'checkbox_row', :for => [signature, :uk_citizenship] do %>
+  <%= f.check_box :uk_citizenship, :tabindex => increment %>
+  <%= f.label :uk_citizenship,
+      "Yes, I am a British citizen or UK resident"
+      %>
   <%= error_messages_for_field signature, :uk_citizenship %>
 <% end %>
 

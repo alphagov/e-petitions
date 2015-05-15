@@ -49,7 +49,7 @@ end
 
 When /^I fill in my non\-UK details$/ do
   step "I fill in my details"
-  choose "no"
+  uncheck "Yes, I am a British citizen or UK resident"
 end
 
 When /^I fill in my details$/ do
@@ -57,7 +57,7 @@ When /^I fill in my details$/ do
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
     And I fill in "Email confirmation" with "womboid@wimbledon.com"
-    And I choose "yes"
+    And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW14 9RQ"
     And I select "United Kingdom" from "Country"
   )
