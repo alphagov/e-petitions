@@ -4,14 +4,14 @@ class EmailReminder
   def self.admin_email_reminder
     admin_users = AdminUser.by_role(AdminUser::ADMIN_ROLE)
     admin_users.each do |user|
-      petitions = Petition.for_departments(user.departments).for_state(Petition::VALIDATED_STATE).order('created_at desc')
+      petitions = Petition.for_state(Petition::VALIDATED_STATE).order('created_at desc')
       # only email if there are one or more petitions
       if petitions.any?
 
         # how many new petitions?
         # look back 3 days if today is Monday since emails only get sent on a week day
         since_when = Time.zone.now.strftime('%u') == '1' ? 3.days.ago : 1.day.ago
-        new_petitions_count = Petition.for_departments(user.departments).for_state(Petition::VALIDATED_STATE).where('updated_at > ?', since_when).count
+        new_petitions_count = Petition.for_state(Petition::VALIDATED_STATE).where('updated_at > ?', since_when).count
 
         logger.info(user.email)
         AdminMailer.admin_email_reminder(user, petitions, new_petitions_count).deliver_now

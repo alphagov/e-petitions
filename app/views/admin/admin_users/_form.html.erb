@@ -1,27 +1,19 @@
-<%= form_for [:admin, setup_admin_user(@user)], :builder => AdminFormBuilder do |f| -%>
+<%= form_for [:admin, @user], :builder => AdminFormBuilder do |f| -%>
   <%= f.error_messages(:header_message => nil) %>
   <%= f.text_field :first_name, :is_mandatory => true, :autofocus => 'autofocus' %>
   <%= f.text_field :last_name, :is_mandatory => true %>
   <%= f.text_field :email, :type => 'email', :is_mandatory => true %>
-  
+
   <%= f.label :role %><br />
   <%= f.select('role', AdminUser::ROLES) %>
-  
+
   <%= f.check_box :force_password_reset, :class => 'checkbox' %>
-  
+
   <%= f.check_box :account_disabled, :class => 'checkbox' %>
-  
+
   <%= "Note, no password needs to be entered unless you want to change it" unless @user.new_record? %>
   <%= f.password_field :password, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
   <%= f.password_field :password_confirmation, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
-  
-  <%= field_set_tag "Departments (only applies to admin users)", :class => 'departments' do %>
-    <% @user.departments.each_with_index do |department, i| -%>
-      <div class="form_field">
-        <%= select_tag "department_ids[#{i}]", options_from_collection_for_select(@departments, :id, :name, department.id.to_s), :include_blank => true %>
-      </div>
-    <% end -%>
-  <% end %>
-  
+
   <%= save_button(f.object) %>
 <% end -%>

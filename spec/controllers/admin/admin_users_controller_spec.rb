@@ -22,9 +22,9 @@ describe Admin::AdminUsersController do
 
   describe "logged in as admin user" do
     with_ssl do
+      let(:user) { FactoryGirl.create(:admin_user) }
       before :each do
-        @user = FactoryGirl.create(:admin_user)
-        login_as(@user)
+        login_as(user)
       end
 
       describe "GET 'index'" do
@@ -38,23 +38,23 @@ describe Admin::AdminUsersController do
 
   context "logged in as sysadmin but need to reset password" do
     with_ssl do
+      let(:user) { FactoryGirl.create(:sysadmin_user, :force_password_reset => true) }
       before :each do
-        @user = FactoryGirl.create(:sysadmin_user, :force_password_reset => true)
-        login_as(@user)
+        login_as(user)
       end
 
       it "should redirect to edit profile page" do
-        expect(@user.has_to_change_password?).to be_truthy
+        expect(user.has_to_change_password?).to be_truthy
         get :index
-        expect(response).to redirect_to(edit_admin_profile_path(@user))
+        expect(response).to redirect_to(edit_admin_profile_path(user))
       end
     end
   end
 
   describe "logged in as sysadmin user" do
+    let(:user) { FactoryGirl.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin') }
     before :each do
-      @user = FactoryGirl.create(:sysadmin_user, :first_name => 'Sys', :last_name => 'Admin')
-      login_as(@user)
+      login_as(user)
     end
 
     with_ssl do
@@ -71,9 +71,9 @@ describe Admin::AdminUsersController do
           expect(response).to be_success
         end
 
-        it "should display a list of users" do
+        it "should display a list of users (sorted by name)" do
           get :index
-          expect(assigns[:users]).to eq([@user, @user4, @user2, @user1, @user3])
+          expect(assigns[:users]).to eq([user, @user4, @user2, @user1, @user3])
         end
       end
 
@@ -91,12 +91,20 @@ describe Admin::AdminUsersController do
       end
 
       describe "POST 'create'" do
+        def do_create
+          post :create, :admin_user => admin_user_attributes
+        end
+
         describe "with valid params" do
-          def do_create(options = {})
-            post :create, {:admin_user => {
-                :first_name => 'John', :last_name => 'Kennedy', :role => 'admin',
-                :email => 'admin@example.com', :password => 'Letmein1!', :password_confirmation => 'Letmein1!'
-              }, :department_ids => {}}.merge(options)
+          let(:admin_user_attributes) do
+            {
+              :first_name => 'John',
+              :last_name => 'Kennedy',
+              :role => 'admin',
+              :email => 'admin@example.com',
+              :password => 'Letmein1!',
+              :password_confirmation => 'Letmein1!'
+            }
           end
 
           it "should create a new user" do
@@ -109,22 +117,13 @@ describe Admin::AdminUsersController do
             do_create
             expect(response).to redirect_to(:action => :index)
           end
-
-          it "create a new user with associated departments" do
-            department1 = FactoryGirl.create(:department)
-            department2 = FactoryGirl.create(:department)
-            do_create(:department_ids => { "0" => department1.id.to_s, "1" => department2.id.to_s})
-            user = AdminUser.find_by_email('admin@example.com')
-            expect(user.departments.size).to eq(2)
-            expect(user.departments).to include(department1, department2)
-          end
         end
 
         describe "with invalid params" do
-          def do_create
-            post :create, :admin_user => {
-                :email => 'admin@example.com'
-              }, :department_ids => {}
+          let(:admin_user_attributes) do
+            {
+              :email => 'admin@example.com'
+            }
           end
 
           it "should not create a new user" do
@@ -141,11 +140,10 @@ describe Admin::AdminUsersController do
       end
 
       describe "GET 'edit'" do
-        before :each do
-          @user = FactoryGirl.create(:admin_user)
-        end
+        let(:edit_user) { FactoryGirl.create(:admin_user) }
+
         def do_get
-          get :edit, :id => @user.id
+          get :edit, :id => edit_user.to_param
         end
 
         it "should be successful" do
@@ -156,75 +154,69 @@ describe Admin::AdminUsersController do
         it "should assign the user" do
           do_get
           expect(assigns[:user]).to be_a(AdminUser)
-          expect(assigns[:user]).to eq @user
+          expect(assigns[:user]).to eq edit_user
         end
       end
 
       describe "PUT 'update'" do
-        before :each do
-          @department1 = FactoryGirl.create(:department)
-          @department2 = FactoryGirl.create(:department)
-          @user = FactoryGirl.create(:admin_user, :email => "admin@example.com", :departments => [@department1, @department2], :failed_login_count => 5)
+        let(:edit_user) { FactoryGirl.create(:admin_user, :email => "admin@example.com", :failed_login_count => 5) }
+
+        def do_update
+          patch :update,
+            :id => edit_user.to_param,
+            :admin_user => admin_user_attributes
         end
 
         describe "with valid params" do
-          def do_update(options = {})
-            patch :update, {:id => @user.id, :admin_user => {
-                  :email => "another_admin@example.com", :account_disabled => '0'
-            }, :department_ids => {}}.merge(options)
+          let(:admin_user_attributes) do
+            {
+              :email => "another_admin@example.com",
+              :account_disabled => '0'
+            }
           end
 
           it "should update the user and redirect to the index" do
             do_update
-            @user.reload
-            expect(@user.email).to eq("another_admin@example.com")
+            edit_user.reload
+            expect(edit_user.email).to eq("another_admin@example.com")
             expect(response).to redirect_to(:action => :index)
           end
 
           it "should reset the failed login count to 0" do
             do_update
-            @user.reload
-            expect(@user.failed_login_count).to eq(0)
-          end
-
-          it "update a user with associated departments" do
-            department3 = FactoryGirl.create(:department)
-            do_update(:department_ids => {'0' => @department2.id.to_s, '1' => department3.id.to_s})
-            @user.reload
-            expect(@user.departments.size).to eq(2)
-            expect(@user.departments).to include(@department2, department3)
+            edit_user.reload
+            expect(edit_user.failed_login_count).to eq(0)
           end
         end
 
         describe "with invalid params" do
-          def do_update
-            patch :update, :id => @user.id, :admin_user => {
-                  :email => "bademailaddress"
-              }, :department_ids => {}
+          let(:admin_user_attributes) do
+            {
+              :email => "bademailaddress"
+            }
           end
 
           it "should not update the user" do
             do_update
-            @user.reload
-            expect(@user.email).to eq("admin@example.com")
+            edit_user.reload
+            expect(edit_user.email).to eq("admin@example.com")
             expect(response).to render_template('edit')
           end
         end
       end
 
       describe "DELETE 'destroy'" do
-        it "successful delete" do
-          @other_user = FactoryGirl.create(:admin_user, :email => 'admin@example.com')
-          expect do
-            delete :destroy, :id => @other_user.id
-          end.to change(AdminUser, :count).by(-1)
+        let(:delete_user) { FactoryGirl.create(:admin_user, :email => 'admin@example.com') }
+
+        it "deletes the requested user" do
+          delete :destroy, :id => delete_user.to_param
+          expect(AdminUser.exists?(delete_user.id)).to be_falsey
           expect(response).to redirect_to(:action => :index)
         end
 
-        it "unsuccessful delete" do
-          expect {
-            delete :destroy, :id => @user.id
-          }.not_to change(AdminUser, :count)
+        it "will not let you delete yourself" do
+          delete :destroy, :id => user.to_param
+          expect(AdminUser.exists?(user.id)).to be_truthy
           expect(response).to redirect_to(:action => :index)
           expect(flash[:error]).to eq "You are not allowed to delete yourself!"
         end

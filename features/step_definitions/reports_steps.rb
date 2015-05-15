@@ -17,14 +17,8 @@ Then /^I see the following reports table:$/ do |values_table|
   values_table.diff!(actual_table)
 end
 
-Given /^I am logged in as a moderator for the "([^"]*)" department$/ do |department_name|
-  step "I am logged in as an admin"
-  department = FactoryGirl.create(:department, :name => department_name)
-  @user.departments << department
-end
-
-Then /^I should see trending petitions for all my departments for the last (\d+) (hours|days)$/ do |time_period, hours_or_days|
-  @user.departments.each do |department|
+Then /^I should see trending petitions for the last (\d+) (hours|days)$/ do |time_period, hours_or_days|
+  Department.all.each do |department|
     (11..15).each do |petition_number|
       expect(page).to have_css("tr.trending_petition td.title", :text => "#{department.name} Petition ##{petition_number}")
       expect(page).to have_css("tr.trending_petition td.count", :text => "#{petition_number+1}")

@@ -533,17 +533,8 @@ describe Petition do
 
   describe "permissions" do
     let(:petition) { FactoryGirl.build(:petition) }
-    let(:user) { double(:is_a_threshold? => false, :is_a_sysadmin? => false) }
+    let(:user) { AdminUser.new }
 
-    it "is editable by moderators in the same department" do
-      allow(user).to receive_messages(:departments => [petition.department])
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it "is not editable by a moderator in another department" do
-      allow(user).to receive_messages(:departments => [])
-      expect(petition.editable_by?(user)).to be_falsey
-    end
     it "is editable by a threshold user" do
       allow(user).to receive_messages(:is_a_threshold? => true)
       expect(petition.editable_by?(user)).to be_truthy
@@ -552,6 +543,14 @@ describe Petition do
     it "is editable by a sys admin" do
       allow(user).to receive_messages(:is_a_sysadmin? => true)
       expect(petition.editable_by?(user)).to be_truthy
+    end
+
+    it 'is editable by a normal admin user' do
+      expect(petition.editable_by?(user)).to be_truthy
+    end
+
+    it 'is not editable by non admin users' do
+      expect(petition.editable_by?(double)).to be_falsey
     end
 
     it "doesn't allow editing of response generally" do

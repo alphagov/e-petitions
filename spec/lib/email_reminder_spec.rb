@@ -8,10 +8,8 @@ describe EmailReminder do
       @d2 = FactoryGirl.create(:department)
       @d3 = FactoryGirl.create(:department)
       @user1 = FactoryGirl.create(:admin_user, :email => 'peter@directgov.uk')
-      @user1.departments << @d1 << @d3
       @user2 = FactoryGirl.create(:sysadmin_user)
       @user3 = FactoryGirl.create(:admin_user)
-      @user3.departments << @d2
       Petition.record_timestamps = false
       @p1 = FactoryGirl.create(:validated_petition, :title => 'King or Queen', :department => @d1, :created_at => 2.days.ago, :updated_at => 25.hours.ago)
       @p2 = FactoryGirl.create(:validated_petition, :title => 'Let us become a republic', :department => @d3, :created_at => 1.day.ago, :updated_at => 5.minutes.ago)
@@ -21,27 +19,35 @@ describe EmailReminder do
       Petition.record_timestamps = true
     end
 
-    it "should email out an alert to admin users who belong to departments that have one or more validated petitions" do
+    it "should email out an alert to admin users about validated petitions" do
       set_up(Chronic.parse("5 July 2011")) # tuesday
-      email_no = ActionMailer::Base.deliveries.size
+      ActionMailer::Base.deliveries.clear
       EmailReminder.admin_email_reminder
-      email_no_new = ActionMailer::Base.deliveries.size
-      expect(email_no_new - email_no).to eq(1)
-      email = ActionMailer::Base.deliveries.last
+      emails_sent = ActionMailer::Base.deliveries.size
+      expect(emails_sent).to eq(2)
+
+      email = ActionMailer::Base.deliveries.detect { |e| e.to == [@user1.email] }
+      expect(email).to be_present
       expect(email.from).to eq(["no-reply@example.gov"])
-      expect(email.to).to eq(["peter@directgov.uk"])
+      expect(email.subject).to eq('e-Petitions alert')
+
+      email = ActionMailer::Base.deliveries.detect { |e| e.to == [@user3.email] }
+      expect(email).to be_present
+      expect(email.from).to eq(["no-reply@example.gov"])
       expect(email.subject).to eq('e-Petitions alert')
     end
 
     it "should email out details of 1 new petition and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("5 July 2011")) # tuesday
-      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 1).and_return(double('email', :deliver_now => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p5, @p2, @p1], 1).and_return(double('email', :deliver_now => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user3, [@p5, @p2, @p1], 1).and_return(double('email', :deliver_now => nil))
       EmailReminder.admin_email_reminder
     end
 
     it "should email out details of 2 new petitions and two validated petitions on a Tuesday" do
       set_up(Chronic.parse("4 July 2011")) # monday
-      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p2, @p1], 2).and_return(double('email', :deliver_now => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user1, [@p5, @p2, @p1], 2).and_return(double('email', :deliver_now => nil))
+      expect(AdminMailer).to receive(:admin_email_reminder).with(@user3, [@p5, @p2, @p1], 2).and_return(double('email', :deliver_now => nil))
       EmailReminder.admin_email_reminder
     end
   end

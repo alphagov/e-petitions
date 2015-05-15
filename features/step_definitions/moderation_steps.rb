@@ -1,5 +1,5 @@
 When /^I look at the next petition on my list$/ do
-  @petition = FactoryGirl.create(:sponsored_petition, :title => "Petition 1", :description => "description", :department => AdminUser.first.departments.first)
+  @petition = FactoryGirl.create(:sponsored_petition, :title => "Petition 1", :description => "description")
   visit edit_admin_petition_path(@petition)
 end
 
@@ -57,8 +57,6 @@ Then /^the petition is not available for searching or viewing$/ do
 end
 
 Then /^the petition will still show up in the back\-end reporting$/ do
-  # ensure we are in the right department to see the petition
-  #AdminUser.first.departments << @petition.department
   visit admin_petitions_path
   step %{I should see the petition "#{@petition.title}"}
 end

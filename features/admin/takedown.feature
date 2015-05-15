@@ -4,8 +4,7 @@ Feature: Terry (or Sheila) takes down a petition
   I want to reject a petition after it has been published, which sends the standard rejection email out to the creator and removes the petition from the site
 
   Background:
-    Given a department "Treasury" exists with name: "Treasury"
-    And a petition "Mistakenly published petition" belonging to the "Treasury"
+    Given a petition "Mistakenly published petition"
 
   Scenario:
     Given I am logged in as a sysadmin
@@ -17,5 +16,4 @@ Feature: Terry (or Sheila) takes down a petition
 
   Scenario: Normal admins cannot take down petitions
     Given I am logged in as an admin
-    And I am associated with the department "Treasury"
     Then I should not be able to take down the petition

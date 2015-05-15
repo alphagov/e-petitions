@@ -211,8 +211,9 @@ class Petition < ActiveRecord::Base
   end
 
   def editable_by?(user)
-    return true if user.is_a_threshold? || user.is_a_sysadmin?
-    return true if user.departments.include?(department)
+    # NOTE: we can probably just return true here? or refactor this method
+    # out of existence
+    return true if user.is_a? AdminUser
     return false
   end
 

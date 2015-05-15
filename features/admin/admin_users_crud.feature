@@ -5,9 +5,7 @@ Feature: Admin users index and crud
   Background:
     Given I am logged in as a sysadmin with the email "muddy@fox.com", first_name "Sys", last_name "Admin"
     And a threshold user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
-    And a department exists with name: "Treasury"
-    And a department exists with name: "DFID"
-    
+
   Scenario: Accessing the admin users index
     When I go to the admin home page
     And I follow "Users" in the admin nav
@@ -25,7 +23,7 @@ Feature: Admin users index and crud
       | Hunt, Helen     | helen@example.com | admin     | Yes      |
       | Jacobi, Derek   | derek@example.com | admin     |          |
     And the markup should be valid
-    
+
   Scenario: Pagination of the users index
     Given 20 admin users exist
     When I go to the admin users index page
@@ -50,11 +48,6 @@ Feature: Admin users index and crud
     And I should see a "Account disabled" checkbox field
     And I should see a "Password" password field
     And I should see a "Password confirmation" password field
-    And I should see 4 dropdowns in the "departments" fieldset
-    And I should see a "department_ids_0" select field with the following options:
-      |          |
-      | DFID     |
-      | Treasury |
 
   Scenario: Creating a new user
     When I go to the admin users index page
@@ -65,14 +58,12 @@ Feature: Admin users index and crud
     And I select "sysadmin" from "Role"
     And I fill in "Password" with "Letmein1!"
     And I fill in "Password confirmation" with "Letmein1!"
-    And I select "Treasury" from "department_ids_0"
     And I press "Save"
     Then I should be on the admin users index page
     And I should see "derek@example.com"
     When I follow "Jacobi, Derek"
     Then the "Role" select field should have "sysadmin" selected
     And the "Account disabled" checkbox should not be checked
-    And the "department_ids_0" select field should have "Treasury" selected
 
   Scenario: Updating a user
     When I go to the admin users index page

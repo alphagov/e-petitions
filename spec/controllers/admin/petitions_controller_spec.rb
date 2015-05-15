@@ -57,18 +57,20 @@ describe Admin::PetitionsController do
     before :each do
       @user = FactoryGirl.create(:admin_user)
       @treasury = FactoryGirl.create(:department, :name => 'Treasury')
-      @user.departments << @treasury
       login_as(@user)
       @p1 = FactoryGirl.create(:open_petition, :department => @treasury)
+      @p1.update_attribute(:signature_count, 11)
       @p2 = FactoryGirl.create(:open_petition)
+      @p2.update_attribute(:signature_count, 10)
       @p3 = FactoryGirl.create(:closed_petition)
+      @p2.update_attribute(:signature_count, 20)
     end
 
     with_ssl do
-      it "should show moderated petitions assigned to the treasury" do
+      it "should show moderated petitions" do
         get :index
         expect(response).to be_success
-        expect(assigns[:petitions]).to eq([@p1])
+        expect(assigns[:petitions]).to eq([@p3, @p1, @p2])
       end
 
       it "should redirect to all petitions on update of internal response" do
@@ -212,12 +214,12 @@ describe Admin::PetitionsController do
           allow(Petition).to receive(:moderated).and_return(petitions)
         end
 
-        it "shows all moderated petitions for the current user's department" do
+        it "shows all moderated petitions" do
           expect(Petition).to receive(:moderated).and_return(petitions)
           get :index
         end
 
-      it "optionally filters by state" do
+        it "optionally filters by state" do
           expect(petitions).to receive(:for_state).with('open').and_return(petitions)
           get :index, :state => 'open'
         end
