@@ -11,6 +11,9 @@
     <div id="action_summary_field"><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></div>
     <div id="description_summary_field"><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></div>
   </div>
+  <div class="generic_block">
+    <p>Your petition will be open for <%= AppConfig.petition_duration %> months after it is reviewed by Parliament.</p>
+  </div>
 
   <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
     <%= render :partial => 'signatures/terms_and_conditions', :locals => { :f => csf, :signature => csf.object } %>
