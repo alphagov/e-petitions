@@ -74,11 +74,27 @@ describe Petition do
         expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
       end
 
-      it 'is not valid with duplicate sponsor emails' do
-        sponsor_emails = ['test1@test.com', 'test1@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
+      it 'constructs sponsor objects from the sponsor emails as part of validation' do
+        sponsor_emails = ['test1@test.com', 'test2@test.com']
+        petition = FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)
+        expect(petition.sponsors.map &:email).to eq []
+        petition.valid?
+        expect(petition.sponsors.map &:email).to eq ['test1@test.com', 'test2@test.com']
       end
 
+      it 'removes duplicate sponsor emails as part of validation' do
+        sponsor_emails = ['test1@test.com', 'test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test3@test.com']
+        petition = FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)
+        petition.valid?
+        expect(petition.sponsors.map &:email).to eq ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com']
+      end
+
+      it 'resets any existing sponsors from the emails as part of validation' do
+        petition = FactoryGirl.build(:petition, sponsor_emails: ['should-be-the-only-one@example.com'])
+        petition.sponsors.build(email: 'should-be-removed@example.com')
+        petition.valid?
+        expect(petition.sponsors.map &:email).to eq ['should-be-the-only-one@example.com']
+      end
     end
 
     it "should validate the length of :title to within 150 characters" do

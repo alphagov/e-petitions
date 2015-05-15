@@ -2,9 +2,7 @@ module Staged
   class Sponsors < Staged::Base::Petition
     include Staged::Validations::SponsorDetails
 
-    def sponsors
-      @_sponsors ||= []
-    end
+    delegate :sponsors, to: :petition
 
     def validation_context
       :create
@@ -17,10 +15,8 @@ module Staged
     private
 
     def sponsors_valid?
-      # Ask them all to validate...
-      sponsors.each { |sponsor| sponsor.valid? }
-      # ...return if any have an error
-      sponsors.any? { |sponsor| sponsor.errors.any? }
+      # Make sure we ask all sponsors to validate before returning
+      sponsors.map(&:valid?).all?
     end
   end
 end
