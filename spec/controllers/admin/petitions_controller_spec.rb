@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Admin::PetitionsController do
   before :each do
     creator_signature = FactoryGirl.create(:signature, :email => 'john@example.com')
-    @petition = FactoryGirl.create(:sponsored_petition, :creator_signature => creator_signature, :duration => "3")
+    @petition = FactoryGirl.create(:sponsored_petition, :creator_signature => creator_signature)
   end
 
   describe "not logged in" do
@@ -274,18 +274,12 @@ describe Admin::PetitionsController do
 
           it "sets the open date to now" do
             set_up
-            expect(@petition.open_at).to eq(now)
+            expect(@petition.open_at.change(usec: 0)).to eq(now.change(usec: 0))
           end
 
-          it "sets the closed date to 3 months from now" do
+          it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
             set_up
-            expect(@petition.closed_at).to eq(now + 3.months)
-          end
-
-          it "sets the closed date to 12 months from now" do
-            @petition.update_attribute(:duration, "12")
-            set_up
-            expect(@petition.closed_at).to eq(now + 12.months)
+            expect(@petition.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
           end
 
           it "redirects to the main admin page" do
@@ -348,7 +342,7 @@ describe Admin::PetitionsController do
             before do
               @petition.state = Petition::OPEN_STATE
               @petition.open_at = Time.zone.now
-              @petition.closed_at = @petition.duration.to_i.months.from_now
+              @petition.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
               @petition.save!
             end
             it "succeeds" do

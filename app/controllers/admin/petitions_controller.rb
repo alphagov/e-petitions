@@ -86,7 +86,7 @@ class Admin::PetitionsController < Admin::AdminController
   def publish
     @petition.state = Petition::OPEN_STATE
     @petition.open_at = Time.zone.now
-    @petition.closed_at = @petition.duration.to_i.months.from_now
+    @petition.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
     @petition.save!
     PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_now
   end

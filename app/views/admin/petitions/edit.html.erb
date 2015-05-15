@@ -2,11 +2,6 @@
 
   <%= render :partial => 'petition_details', :locals => { :f => f } %>
 
-  <div class="row">
-    <label>Duration:</label>
-    <p class="text_block"><%= @petition.duration %> months</p>
-  </div>
-
   <div>
     <%= submit_tag 'Publish this petition', :data => { :confirm => "Are you sure you want to publish this petition?" } %>
   </div>
