@@ -13,7 +13,6 @@ module Staged
         validates :description,
           presence: { message: 'Description must be completed.' },
           length: { maximum: 1000, unless: ->(pd) { pd.description.blank? }, message: 'Description is too long.' }
-        validates :duration, presence: { message: 'Duration must be completed.' }
       end
     end
   end

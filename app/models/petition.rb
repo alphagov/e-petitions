@@ -20,7 +20,6 @@
 #  internal_response       :text
 #  rejection_code          :string(50)
 #  notified_by_email       :boolean(1)      default(FALSE)
-#  duration                :string(2)       default("12")
 #  email_requested_at      :datetime
 #  get_an_mp_email_sent_at :datetime
 #

@@ -20,7 +20,6 @@
 #  internal_response       :text
 #  rejection_code          :string(50)
 #  notified_by_email       :boolean(1)      default(FALSE)
-#  duration                :string(2)       default("12")
 #  email_requested_at      :datetime
 #  get_an_mp_email_sent_at :datetime
 #
@@ -38,18 +37,12 @@ describe Petition do
       p = Petition.new
       expect(p.email_signees).to be_falsey
     end
-
-    it "duration should default to 12" do
-      p = Petition.new
-      expect(p.duration).to eq("12")
-    end
   end
 
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:duration).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     context "sponsor validations" do
