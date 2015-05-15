@@ -2,9 +2,7 @@ module Staged
   class Sponsors < Staged::Base::Petition
     include Staged::Validations::SponsorDetails
 
-    def sponsors
-      @_sponsors ||= []
-    end
+    delegate :sponsors, to: :petition
 
     def validation_context
       :create

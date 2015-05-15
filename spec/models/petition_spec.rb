@@ -88,6 +88,13 @@ describe Petition do
         petition.valid?
         expect(petition.sponsors.map &:email).to eq ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com']
       end
+
+      it 'resets any existing sponsors from the emails as part of validation' do
+        petition = FactoryGirl.build(:petition, sponsor_emails: ['should-be-the-only-one@example.com'])
+        petition.sponsors.build(email: 'should-be-removed@example.com')
+        petition.valid?
+        expect(petition.sponsors.map &:email).to eq ['should-be-the-only-one@example.com']
+      end
     end
 
     it "should validate the length of :title to within 150 characters" do
