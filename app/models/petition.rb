@@ -44,6 +44,7 @@ class Petition < ActiveRecord::Base
         ''
       end
     end
+    integer :department_id
     string :title
     integer :signature_count
     time :closed_at, :trie => true

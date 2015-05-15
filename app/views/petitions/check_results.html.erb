@@ -11,7 +11,7 @@
 <div class="petition_index_view">
   <%= render 'search/result_tabs' %>
   <div class="petition_list">
-    <% if @petition_search.petitions.present? -%>
+    <% if @petition_search.present? -%>
       <div class="title_pagination_row"></div>
       <%= render 'search/results_table', :petition_search => @petition_search %>
       <% creation_prefix = "If there are no existing e-petitions on the same subject, click the 'Create e-petition' button to continue." -%>

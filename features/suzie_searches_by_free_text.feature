@@ -140,11 +140,6 @@ Feature: Suzy Singer searches by free text
     And I follow "Previous" within ".//*[contains(@class, 'title_pagination_row')]"
     Then I should see 20 petitions
 
-  Scenario: Searching for a rubbish search term
-    When I go to the search page
-    And I search for "open" petitions with ""
-    Then I should see "No petitions could be found matching your search terms."
-
   Scenario: Searching for a profane search term
     When I go to the search page
     And I search for "hidden" petitions with "profane"

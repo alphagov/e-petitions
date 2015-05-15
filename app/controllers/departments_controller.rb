@@ -4,15 +4,14 @@ class DepartmentsController < ApplicationController
 
   respond_to :html
 
-  include SearchResultsSetup
-
   def index
     respond_with @departments = Department.all
   end
 
   def show
     @department = Department.find(params[:id])
-    results_for(@department.petitions)
+    @petition_search = DepartmentPetitionSearch.new(params)
+    respond_with @department
   end
 
   def info

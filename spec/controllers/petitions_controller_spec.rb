@@ -213,41 +213,10 @@ describe PetitionsController do
     end
   end
 
-  describe "index" do
-    let(:page) { "1" }
-    let(:visible) { double.as_null_object }
-    before(:each) do
-      allow(Petition).to receive_messages(:visible => visible)
-    end
-
-    it "Assigns a paginated petition list of the visible petitions" do
-      expect(visible).to receive(:paginate).with(:page => page.to_i, :per_page => 20)
-      get :index, :page => page
-    end
-
-    it "Sanitises the page param" do
-      expect(visible).to receive(:paginate).with(:page => 400, :per_page => 20)
-      get :index, :page => '400.'
-    end
-
-
-    it "Sets the petition state to 'open'" do
+  describe "GET #index" do
+    it "is successful" do
       get :index
-      expect(assigns(:petition_search).state).to eq 'open'
-    end
-
-    it "Sets state counts to the petition visible state counts" do
-      allow(Petition).to receive(:for_state).with('open').and_return(double(:count, :count => 1))
-      allow(Petition).to receive(:for_state).with('closed').and_return(double(:count, :count => 2))
-      allow(Petition).to receive(:for_state).with('rejected').and_return(double(:count, :count => 4))
-      get :index
-      expect(assigns(:petition_search).state_counts).to eq({ 'open' => 1, 'closed' => 2, 'rejected' => 4 })
-    end
-
-    it "sorting by name sorts alphabetically" do
-      expect(SearchOrder).to receive(:sort_order).with(hash_including(:sort => 'title'), anything).and_return(['foo', 'asc'])
-      expect(visible).to receive(:order).with("foo asc")
-      get :index, :order => 'asc', :sort => 'title'
+      expect(response).to be_success
     end
   end
 
@@ -256,10 +225,6 @@ describe PetitionsController do
       get :check
       expect(response).to be_success
     end
-  end
-
-  describe "GET #check_results" do
-    it_should_behave_like "it searches petitions", :check_results, :search, 10
   end
 
   describe "POST #resend_confirmation_email" do
