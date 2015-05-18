@@ -8,11 +8,6 @@ module Staged
           presence: { message: 'Name must be completed.' },
           length: { maximum: 255 }
 
-        with_options on: :create do |creator|
-          creator.validates :email,
-            presence: { message: 'Email must be completed.' }
-        end
-
         validates :country, presence: { message: 'Country must be completed.' }
 
         validates :postcode,
