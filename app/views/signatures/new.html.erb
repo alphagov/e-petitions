@@ -52,7 +52,7 @@ $().ready(function() {
     message: "Email must match confirmation."
   });
   signature_form.validates('signature[uk_citizenship]', {
-    method: [E_PETS.FormController.validation_methods.validate_radio_group_value, '1'],
+    method: E_PETS.FormController.validation_methods.validate_checked,
     message: "You must be a British citizen or normally live in the UK to create or sign e-petitions."
   });
   signature_form.validates('signature[postcode]', {
