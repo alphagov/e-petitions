@@ -131,7 +131,7 @@ class Petition < ActiveRecord::Base
     Petition.eligible_for_get_an_mp_email.each do |petition|
       logger_for_mp_threshold.info("Email sent: #{petition.creator_signature.email} for #{petition.title}")
       PetitionMailer.ask_creator_to_find_an_mp(petition).deliver_now
-      petition.update_attribute(:get_an_mp_email_sent_at, Time.zone.now)
+      petition.update_attribute(:get_an_mp_email_sent_at, Time.current)
     end
     logger_for_mp_threshold.info('Finished')
   rescue Exception => e
@@ -157,7 +157,7 @@ class Petition < ActiveRecord::Base
 
   def publish!
     self.state = Petition::OPEN_STATE
-    self.open_at = Time.zone.now
+    self.open_at = Time.current
     self.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
     save!
   end
@@ -185,7 +185,7 @@ class Petition < ActiveRecord::Base
   end
 
   def can_be_signed?
-    self.state == OPEN_STATE and self.closed_at > Time.zone.now
+    self.state == OPEN_STATE and self.closed_at > Time.current
   end
 
   def rejected?
@@ -197,7 +197,7 @@ class Petition < ActiveRecord::Base
   end
 
   def closed?
-    self.state == OPEN_STATE && self.closed_at <= Time.zone.now
+    self.state == OPEN_STATE && self.closed_at <= Time.current
   end
 
   def state_label

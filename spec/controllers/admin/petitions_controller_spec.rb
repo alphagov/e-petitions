@@ -262,7 +262,7 @@ describe Admin::PetitionsController do
         context "publishing" do
           let(:now) { Chronic.parse("1 Jan 2011") }
           def set_up
-            allow(Time.zone).to receive(:now).and_return(now)
+            allow(Time).to receive(:current).and_return(now)
             do_post :commit => 'Publish this petition'
             @petition.reload
           end

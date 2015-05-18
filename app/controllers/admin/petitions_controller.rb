@@ -52,7 +52,7 @@ class Admin::PetitionsController < Admin::AdminController
       # if email signees has been selected then set up a delayed job to email out to all signees who opted in
       if @petition.email_signees
         # run the job at some random point beween midnight and 4 am
-        requested_at = Time.zone.now
+        requested_at = Time.current
         @petition.update_attribute(:email_requested_at, requested_at)
         Delayed::Job.enqueue EmailThresholdResponseJob.new(@petition.id, requested_at, Petition, PetitionMailer), :run_at => 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
       end

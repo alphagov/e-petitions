@@ -47,7 +47,7 @@ describe Admin::ProfileController do
       describe "GET 'update'" do
         before :each do
           @time = Chronic.parse('4 August 2010 13:41')
-          allow(Time.zone).to receive(:now).and_return(@time)
+          allow(Time).to receive(:current).and_return(@time)
         end
 
         def do_patch(current_password, new_password, password_confirmation)

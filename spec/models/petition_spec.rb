@@ -134,8 +134,8 @@ describe Petition do
       end
 
       it "should check petition is valid if there is a open_at and closed_at date" do
-        petition.open_at = Time.zone.now
-        petition.closed_at = Time.zone.now
+        petition.open_at = Time.current
+        petition.closed_at = Time.current
         expect(petition).to be_valid
       end
     end
@@ -601,7 +601,7 @@ describe Petition do
   describe '#publish!' do
     subject { FactoryGirl.create(:petition) }
     let(:now) { Chronic.parse("1 Jan 2011") }
-    before { allow(Time.zone).to receive(:now).and_return(now) }
+    before { allow(Time).to receive(:current).and_return(now) }
 
     it "sets the state to OPEN" do
       subject.publish!

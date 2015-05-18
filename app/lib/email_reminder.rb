@@ -10,7 +10,7 @@ class EmailReminder
 
         # how many new petitions?
         # look back 3 days if today is Monday since emails only get sent on a week day
-        since_when = Time.zone.now.strftime('%u') == '1' ? 3.days.ago : 1.day.ago
+        since_when = Time.current.strftime('%u') == '1' ? 3.days.ago : 1.day.ago
         new_petitions_count = Petition.for_state(Petition::VALIDATED_STATE).where('updated_at > ?', since_when).count
 
         logger.info(user.email)
@@ -53,7 +53,7 @@ class EmailReminder
         logger.warn("cannot send email to #{signature.email}")
         # ignore a syntax error
       end
-      signature.update_attribute(:updated_at, Time.zone.now)
+      signature.update_attribute(:updated_at, Time.current)
       logger.info("Special resend sent to #{signature.email}")
     end
   end
