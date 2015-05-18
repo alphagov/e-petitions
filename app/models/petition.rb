@@ -126,26 +126,6 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def self.email_all_who_passed_finding_mp_threshold
-    logger_for_mp_threshold.info('Started')
-    Petition.eligible_for_get_an_mp_email.each do |petition|
-      logger_for_mp_threshold.info("Email sent: #{petition.creator_signature.email} for #{petition.title}")
-      PetitionMailer.ask_creator_to_find_an_mp(petition).deliver_now
-      petition.update_attribute(:get_an_mp_email_sent_at, Time.current)
-    end
-    logger_for_mp_threshold.info('Finished')
-  rescue Exception => e
-    logger_for_mp_threshold.error("#{e.class.name} while processing email_all_who_passed_finding_mp_threshold: #{e.message}", e)
-  end
-
-  def self.logger_for_mp_threshold
-    unless @logger_for_mp_threshold
-      logfilename = "email_all_who_passed_finding_mp_threshold.log"
-      @logger_for_mp_threshold = AuditLogger.new(Rails.root.join('log', logfilename), 'email_all_who_passed_finding_mp_threshold')
-    end
-    @logger_for_mp_threshold
-  end
-
   def self.counts_by_state
     counts_by_state = {}
     states = State::STATES + [CLOSED_STATE]

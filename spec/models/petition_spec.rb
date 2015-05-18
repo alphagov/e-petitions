@@ -389,42 +389,6 @@ describe Petition do
     end
   end
 
-  describe "email_all_who_passed_finding_mp_threshold" do
-    let(:deliverer) { double(:deliver_now => true) }
-    let(:petition) { FactoryGirl.create(:open_petition) }
-
-    before do
-      FactoryGirl.create(:system_setting, :key => SystemSetting::GET_AN_MP_SIGNATURE_COUNT, :value => "10")
-      allow(PetitionMailer).to receive_messages(:ask_creator_to_find_an_mp => deliverer)
-    end
-
-    it "emails those who have passed the threshold" do
-      expect(PetitionMailer).to receive(:ask_creator_to_find_an_mp).with(petition).and_return(deliverer)
-      petition.update_attribute(:signature_count, 10)
-      Petition.email_all_who_passed_finding_mp_threshold
-    end
-
-    it "does not send the email if you are below the threshold" do
-      expect(PetitionMailer).not_to receive(:ask_creator_to_find_an_mp)
-      petition.update_attribute(:signature_count, 2)
-      Petition.email_all_who_passed_finding_mp_threshold
-    end
-
-    it "does not send if the petition is not open" do
-      expect(PetitionMailer).not_to receive(:ask_creator_to_find_an_mp)
-      petition.update_attribute(:signature_count, 10)
-      petition.update_attribute(:state, Petition::CLOSED_STATE)
-      Petition.email_all_who_passed_finding_mp_threshold
-    end
-
-    it "does not send the email again after sending once" do
-      expect(PetitionMailer).to receive(:ask_creator_to_find_an_mp).once.and_return(deliverer)
-      petition.update_attribute(:signature_count, 10);
-      Petition.email_all_who_passed_finding_mp_threshold
-      Petition.email_all_who_passed_finding_mp_threshold
-    end
-  end
-
   describe "can_be_signed?" do
     def petition(state = Petition::OPEN_STATE)
       @petition ||= FactoryGirl.create(:petition, :state => state)
