@@ -27,7 +27,6 @@ When(/^a sponsor supports my e\-petition$/) do
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW1A 1AA"
     And I select "United Kingdom" from "Country"
-    And I accept the terms and conditions
     And I try to sign
   }
   expect(sponsor.reload.signature).to be_present
@@ -73,6 +72,14 @@ When(/^I fill in my details as a sponsor$/) do
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "AB10 1AA"
     And I select "United Kingdom" from "Country"
+  )
+end
+
+When(/^I don't fill in my details correctly as a sponsor$/) do
+  expect(page).to have_no_field 'signature[email]'
+  expect(page).to have_no_field 'signature[email_confirmation]'
+  steps %Q(
+    When I fill in "Name" with ""
   )
 end
 

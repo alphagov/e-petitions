@@ -14,7 +14,6 @@ Feature: Suzie signs a petition
     And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details
-    And I accept the terms and conditions
     And I try to sign
     Then I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email
@@ -27,7 +26,6 @@ Feature: Suzie signs a petition
   Scenario: Suzie signs a petition after validating her email (javascript run-through)
     When I decide to sign the petition
     And I fill in my details
-    And I accept the terms and conditions
     And I try to sign
     Then I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email
@@ -38,7 +36,6 @@ Feature: Suzie signs a petition
   Scenario: Suzie cannot sign if she is not a UK citizen
     When I decide to sign the petition
     And I fill in my non-UK details
-    And I accept the terms and conditions
     And I try to sign
     Then I should see an error
 
@@ -46,13 +43,6 @@ Feature: Suzie signs a petition
     When I decide to sign the petition
     And I fill in my details
     And I fill in "Email confirmation" with "something@different.com"
-    And I accept the terms and conditions
-    And I try to sign
-    Then I should see an error
-
-  Scenario: Suzie cannot sign if she does not accept the terms
-    When I decide to sign the petition
-    And I fill in my details
     And I try to sign
     Then I should see an error
 
@@ -60,12 +50,10 @@ Feature: Suzie signs a petition
     And I have already signed the petition with an uppercase email
     When I decide to sign the petition
     And I fill in my details
-    And I accept the terms and conditions
     And I try to sign
     Then I should see an error
 
   Scenario: Suzie cannot sign if she does not provide her details
     When I decide to sign the petition
-    And I accept the terms and conditions
     And I try to sign
     Then I should see an error
