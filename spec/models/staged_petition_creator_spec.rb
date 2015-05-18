@@ -62,7 +62,7 @@ describe StagedPetitionCreator do
     end
 
     describe 'when the stage is not "done"' do
-      let(:stage) { 'submit' }
+      let(:stage) { 'replay-petition' }
 
       it 'returns false' do
         expect(subject.create_petition).to eq false
@@ -127,8 +127,8 @@ describe StagedPetitionCreator do
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'sponsors', next_is: 'replay-petition', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'replay-petition', next_is: 'done', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
@@ -137,8 +137,8 @@ describe StagedPetitionCreator do
 
             for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'petition', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'sponsors', next_is: 'replay-petition', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'replay-petition', next_is: 'petition', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
           end
         end
@@ -149,8 +149,8 @@ describe StagedPetitionCreator do
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'sponsors', next_is: 'replay-petition', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'replay-petition', next_is: 'done', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
@@ -159,8 +159,8 @@ describe StagedPetitionCreator do
 
             for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'creator', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'sponsors', next_is: 'replay-petition', back_is: 'creator', not_moving_is: 'sponsors'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'creator', back_is: 'creator', not_moving_is: 'creator'
           end
         end
@@ -172,7 +172,7 @@ describe StagedPetitionCreator do
             for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
             for_stage 'sponsors', next_is: 'sponsors', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'done', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'replay-petition', next_is: 'done', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
@@ -181,7 +181,7 @@ describe StagedPetitionCreator do
             for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
             for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
             for_stage 'sponsors', next_is: 'sponsors', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'submit'
+            for_stage 'replay-petition', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'replay-petition'
             for_stage 'done', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'sponsors'
           end
         end

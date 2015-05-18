@@ -58,7 +58,7 @@ describe PetitionsController do
     end
 
     def do_post(options = {})
-      post :create, {:stage => 'submit', :move => 'next', :petition => petition_attributes}.merge(options)
+      post :create, {:stage => 'replay-petition', :move => 'next', :petition => petition_attributes}.merge(options)
     end
 
     with_ssl do

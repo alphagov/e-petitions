@@ -91,12 +91,10 @@ Scenario: Charlie tries to submit an invalid petition
   And I fill in sponsor emails
 
   And I press "Next"
-  Then I should see a fieldset called "Submit Petition"
+  Then I should see a fieldset called "Review Petition"
 
-  #Seems there's an envjs bug here
-  # And I should see "The wombats of wimbledon rock."
-  # And I should see "Department for International Development"
-  # And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I should see "The wombats of wimbledon rock."
+  And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Back"
   And I press "Back"

@@ -34,8 +34,8 @@ module PetitionHelper
       render('/petitions/create/your_details_ui', petition: stage_manager.stage_object, f: form)
     when 'sponsors'
       render('/petitions/create/sponsor_details_ui', petition: stage_manager.stage_object, f: form)
-    when 'submit'
-      render('/petitions/create/submit_ui', petition: stage_manager.stage_object, f: form)
+    when 'replay-petition'
+      render('/petitions/create/replay_petition_ui', petition: stage_manager.stage_object, f: form)
     end
   end
 end
