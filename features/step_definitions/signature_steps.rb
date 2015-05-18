@@ -45,18 +45,9 @@ When /^I fill in my details$/ do
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
-    And I fill in "Email confirmation" with "womboid@wimbledon.com"
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW14 9RQ"
     And I select "United Kingdom" from "Country"
-  )
-end
-
-When /^I fill in my details with email "([^"]*)" and confirmation "([^"]*)"$/ do |email, email_confirmation|
-  step "I fill in my details"
-  steps %Q(
-    And I fill in "Email" with "#{email}"
-    And I fill in "Email confirmation" with "#{email_confirmation}"
   )
 end
 

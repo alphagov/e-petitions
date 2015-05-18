@@ -53,6 +53,6 @@ class Sponsor < ActiveRecord::Base
 
   private
   def default_signature_attribtues
-    {petition: petition, email: email, email_confirmation: email}
+    {petition: petition, email: email}
   end
 end

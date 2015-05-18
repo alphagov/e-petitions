@@ -84,25 +84,6 @@ describe Signature do
       expect(s).not_to have_valid(:email)
     end
 
-    describe "email confirmation" do
-      it "require email confirmation on create" do
-        s = FactoryGirl.build(:signature, :email => 'joe@example.com', :email_confirmation => nil)
-        s.valid?
-        expect(s.errors_on(:email_confirmation)).not_to be_blank
-      end
-
-      it "not require email confirmation on update" do
-        s = FactoryGirl.create(:signature)
-        expect(s.update_attributes(:email => 'john@hotmail.com', :email_confirmation => nil)).to be_truthy
-      end
-
-      it "require email and email confirmation to be the same" do
-        s = FactoryGirl.build(:signature, :email => 'john@hotmail.com', :email_confirmation => 'john2@hotmail.com')
-        s.valid?
-        expect(s.errors_on(:email_confirmation)).not_to be_blank
-      end
-    end
-
     describe "uniqueness of email" do
       before do
         FactoryGirl.create(:signature, :name => "Suzy Signer",

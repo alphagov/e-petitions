@@ -83,10 +83,6 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "You must be a British citizen"
   And I should see "Postcode must be completed"
 
-  When I fill in my details with email "wimbledon@womble.com" and confirmation "uncleb@wimbledon.com"
-  And I press "Next"
-  And I should see "Email should match confirmation"
-
   When I fill in my details
 
   And I press "Next"

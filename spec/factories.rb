@@ -80,7 +80,6 @@ FactoryGirl.define do
   factory :signature do
     sequence(:name) {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
-    email_confirmation  {|sig| sig.email }
     postcode            "SW1A 1AA"
     country             "United Kingdom"
     uk_citizenship       '1'

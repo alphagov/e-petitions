@@ -105,7 +105,6 @@ describe StagedPetitionCreator do
     let(:creator_signature_params) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
-        :email_confirmation => 'john@example.com',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
         :uk_citizenship => '1'
       }
@@ -145,7 +144,7 @@ describe StagedPetitionCreator do
         end
 
         context 'around the "creator" UI' do
-          before { creator_signature_params.delete(:email_confirmation) }
+          before { creator_signature_params.delete(:email) }
 
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'

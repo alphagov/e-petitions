@@ -43,7 +43,6 @@ describe PetitionsController do
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
-        :email_confirmation => 'john@example.com',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
         :uk_citizenship => '1'
       }
@@ -166,12 +165,10 @@ describe PetitionsController do
           expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 
-        it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, postcode or country" do
+        it "has stage of 'creator' if there are errors on name, email, uk_citizenship, postcode or country" do
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => 'dave@example.com', :l_confirmation => 'laura@example.com'))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'

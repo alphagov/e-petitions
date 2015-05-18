@@ -67,10 +67,6 @@ describe Sponsor do
         expect(subject.email).to eq sponsor.email
       end
 
-      it 'is has confirmation of the email address using the same one as the sponsor' do
-        expect(subject.email_confirmation).to eq sponsor.email
-      end
-
       it 'does not allow overriding the defaults' do
         attributes[:email] = 'a-brand-new-email@example.com'
         expect(subject.email).not_to eq 'a-brand-new-email@example.com'

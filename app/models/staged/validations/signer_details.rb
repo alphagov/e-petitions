@@ -10,10 +10,7 @@ module Staged
 
         with_options on: :create do |creator|
           creator.validates :email,
-            presence: { message: 'Email must be completed.' },
-            confirmation: { message: 'Email should match confirmation.' }
-
-          creator.validates :email_confirmation, presence: { message: 'Email confirmation must be completed.' }
+            presence: { message: 'Email must be completed.' }
         end
 
         validates :country, presence: { message: 'Country must be completed.' }

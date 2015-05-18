@@ -66,7 +66,6 @@ end
 
 When(/^I fill in my details as a sponsor$/) do
   expect(page).to have_no_field 'signature[email]'
-  expect(page).to have_no_field 'signature[email_confirmation]'
   steps %Q(
     When I fill in "Name" with "Laura The Sponsor"
     And I check "Yes, I am a British citizen or UK resident"
