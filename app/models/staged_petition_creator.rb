@@ -55,7 +55,7 @@ class StagedPetitionCreator
 
   module Stages
     def self.names
-      ['petition', 'creator', 'sponsors', 'replay-petition', 'done']
+      ['petition', 'creator', 'sponsors', 'replay-petition', 'replay-email', 'done']
     end
 
     def self.for_name(name)
@@ -68,6 +68,8 @@ class StagedPetitionCreator
         Stages::Sponsors
       when 'replay-petition'
         Stages::ReplayPetition
+      when 'replay-email'
+        Stages::ReplayEmail
       when 'done'
         Stages::Done
       else
@@ -145,6 +147,16 @@ class StagedPetitionCreator
 
       def name; 'replay-petition'; end
       def go_back; Stages.for_name('sponsors').new(petition); end
+      def go_next; Stages.for_name('replay-email').new(petition); end
+    end
+
+    class ReplayEmail < Stages::Stage
+      def stage_object
+        @_stage_object ||= Staged::ReplayEmail.new(petition)
+      end
+
+      def name; 'replay-email'; end
+      def go_back; Stages.for_name('replay-petition').new(petition); end
       def go_next; Stages.for_name('done').new(petition); end
     end
 
