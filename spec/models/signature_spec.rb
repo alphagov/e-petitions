@@ -277,21 +277,6 @@ describe Signature do
         expect(sig).to be_valid
       end
     end
-
-    describe "Terms and Conditions" do
-      it "should require acceptance of terms_and_conditions for a new record" do
-        expect(FactoryGirl.build(:signature, :terms_and_conditions => '1')).to be_valid
-        expect(FactoryGirl.build(:signature, :terms_and_conditions => '0')).not_to be_valid
-        expect(FactoryGirl.build(:signature, :terms_and_conditions => nil)).not_to be_valid
-      end
-
-      it "should not require acceptance of terms_and_conditions for old records" do
-        sig = FactoryGirl.create(:signature)
-        sig.reload
-        sig.terms_and_conditions = '0'
-        expect(sig).to be_valid
-      end
-    end
   end
 
   context "scopes" do
