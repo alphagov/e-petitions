@@ -9,7 +9,10 @@
 <%= form_for @signature, :url => sign_petition_signature_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <fieldset>
     <%= render :partial => 'signatures/form', :locals => { :f => f, :signature => @signature } %>
-    <%= render :partial => 'terms_and_conditions', :locals => { :f => f, :signature => @signature } %>
+
+    <div class="row">
+      <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', terms_and_conditions_path %></p>
+    </div>
 
     <div class="row button_row">
 
@@ -68,10 +71,6 @@ $().ready(function() {
     when: function() {
       return $("select[name*=country]").val() == "United Kingdom";
     }
-  });
-  signature_form.validates('signature[terms_and_conditions]', {
-    method: E_PETS.FormController.validation_methods.validate_checked,
-    message: "You need to accept the terms and conditions."
   });
 });
 //]]>

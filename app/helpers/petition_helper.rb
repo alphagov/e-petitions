@@ -20,7 +20,6 @@ module PetitionHelper
       concat render('/petitions/create/sponsor_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'sponsors'
       if stage_manager.stage_object.creator_signature.present?
         concat render('/petitions/create/your_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'creator'
-        concat render('/petitions/create/submit_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'submit'
       end
     end
   end
