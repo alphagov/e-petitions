@@ -29,11 +29,11 @@ Then /^I (should|should not) see the petitions belonging to the "([^"]*)"$/ do |
 end
 
 Then /^I should see the petition "([^"]*)"$/ do |petition_title|
-  expect(page).to have_content(petition_title)
+  expect(page).to have_link(petition_title)
 end
 
 Then /^I should not see the petition "([^"]*)"$/ do |petition_title|
-  expect(page).not_to have_content(petition_title)
+  expect(page).not_to have_link(petition_title)
 end
 
 When /^I press the info button next to the department "([^"]*)"$/ do |department_name|
