@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515100520) do
+ActiveRecord::Schema.define(version: 20150515102858) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -87,7 +87,6 @@ ActiveRecord::Schema.define(version: 20150515100520) do
     t.text     "internal_response",       limit: 65535
     t.string   "rejection_code",          limit: 50
     t.boolean  "notified_by_email",                     default: false
-    t.string   "duration",                limit: 2,     default: "12"
     t.datetime "email_requested_at"
     t.datetime "get_an_mp_email_sent_at"
     t.string   "action",                  limit: 200

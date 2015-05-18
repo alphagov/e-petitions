@@ -8,7 +8,7 @@ class Admin::ProfileController < Admin::AdminController
 
   def update
     # reset attributes that could be forcing a user to change their password
-    current_user.password_changed_at = Time.zone.now
+    current_user.password_changed_at = Time.current
     current_user.force_password_reset = false
 
     update_params = admin_user_params_for_update

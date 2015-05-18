@@ -7,6 +7,7 @@ defaults: &defaults
   sponsor_count_min: 5
   sponsor_count_max: 20
   sponsor_moderation_threshold: 5
+  petition_duration: 6
 
 development:
   <<: *defaults

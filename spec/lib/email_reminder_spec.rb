@@ -3,7 +3,7 @@ require 'rails_helper'
 describe EmailReminder do
   describe "admin_email_reminders" do
     def set_up(date)
-      allow(Time.zone).to receive(:now).and_return(date)
+      allow(Time).to receive(:current).and_return(date)
       @d1 = FactoryGirl.create(:department)
       @d2 = FactoryGirl.create(:department)
       @d3 = FactoryGirl.create(:department)
@@ -111,7 +111,7 @@ describe EmailReminder do
     it "updates the time so they aren't sent again" do
       Timecop.freeze do
         EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-        expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.zone.now.change(usec: 0))
+        expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.current.change(usec: 0))
       end
     end
 
@@ -138,7 +138,7 @@ describe EmailReminder do
       it "still updates the timestamp" do
         Timecop.freeze do
           EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-          expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.zone.now.change(usec: 0))
+          expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.current.change(usec: 0))
         end
       end
     end

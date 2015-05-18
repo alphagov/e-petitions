@@ -15,7 +15,7 @@
     <h1>Trending e-petitions</h1>
     <p class='explanatory_text'>
       Most active e-petitions in the last hour.
-      Page last updated <%= last_updated_at_time Time.zone.now %>.
+      Page last updated <%= last_updated_at_time Time.current %>.
     </p>
     <ul>
       <% @trending_petitions.each do |trending_petition| %>

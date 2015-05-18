@@ -53,7 +53,6 @@ describe PetitionsController do
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
-        :duration => "12",
         :sponsor_emails => sponsor_emails,
         :creator_signature => creator_signature_attributes
       }

@@ -40,7 +40,7 @@ When /^I publish the petition$/ do
 end
 
 Then /^the petition is still available for searching or viewing$/ do
-  step %{I view the rejected petitions for the "#{@petition.department.name}"}
+  step %{I search for "rejected" petitions with "#{@petition.title}"}
   step %{I should see the petition "#{@petition.title}"}
   step %{I view the petition}
   step %{I should see the petition details}
@@ -52,7 +52,7 @@ Then /^the explanation is displayed on the petition for viewing by the public$/ 
 end
 
 Then /^the petition is not available for searching or viewing$/ do
-  step %{I view the rejected petitions for the "#{@petition.department.name}"}
+  step %{I search for "rejected" petitions with "#{@petition.title}"}
   step %{I should not see the petition "#{@petition.title}"}
 end
 

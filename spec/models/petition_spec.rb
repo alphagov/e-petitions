@@ -20,7 +20,6 @@
 #  internal_response       :text
 #  rejection_code          :string(50)
 #  notified_by_email       :boolean(1)      default(FALSE)
-#  duration                :string(2)       default("12")
 #  email_requested_at      :datetime
 #  get_an_mp_email_sent_at :datetime
 #
@@ -38,18 +37,12 @@ describe Petition do
       p = Petition.new
       expect(p.email_signees).to be_falsey
     end
-
-    it "duration should default to 12" do
-      p = Petition.new
-      expect(p.duration).to eq("12")
-    end
   end
 
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:duration).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     context "sponsor validations" do
@@ -141,8 +134,8 @@ describe Petition do
       end
 
       it "should check petition is valid if there is a open_at and closed_at date" do
-        petition.open_at = Time.zone.now
-        petition.closed_at = Time.zone.now
+        petition.open_at = Time.current
+        petition.closed_at = Time.current
         expect(petition).to be_valid
       end
     end
@@ -175,7 +168,6 @@ describe Petition do
       end
     end
   end
-
 
   context "scopes" do
     describe "last_hour_trending" do
@@ -603,6 +595,27 @@ describe Petition do
       expect(Petition.counts_by_state[:closed]).to    eq(5)
       expect(Petition.counts_by_state[:rejected]).to  eq(6)
       expect(Petition.counts_by_state[:hidden]).to    eq(7)
+    end
+  end
+
+  describe '#publish!' do
+    subject { FactoryGirl.create(:petition) }
+    let(:now) { Chronic.parse("1 Jan 2011") }
+    before { allow(Time).to receive(:current).and_return(now) }
+
+    it "sets the state to OPEN" do
+      subject.publish!
+      expect(subject.state).to eq(Petition::OPEN_STATE)
+    end
+
+    it "sets the open date to now" do
+      subject.publish!
+      expect(subject.open_at.change(usec: 0)).to eq(now.change(usec: 0))
+    end
+
+    it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
+      subject.publish!
+      expect(subject.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
     end
   end
 

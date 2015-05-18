@@ -29,7 +29,7 @@ Transform /^date in long words for (\d+) (second|minute|hour|day|week|fortnight|
 end
 
 Transform /^today in words$/ do |nothing|
-  Time.zone.now.to_date.strftime("%A %-d %B")
+  Time.current.to_date.strftime("%A %-d %B")
 end
 
 Transform /^week day for (\d+) (second|minute|hour|day|week|fortnight|month|year)s? (from[_ ]now|ago)$/ do |number, unit, time_arrow|
@@ -41,5 +41,5 @@ Transform /^month day for (\d+) (second|minute|hour|day|week|fortnight|month|yea
 end
 
 Transform /^today at (-?\d+)\.(-?\d+)$/ do |hours_str, minutes_str|
-  Time.zone.parse((Time.zone.now.at_midnight + hours_str.to_i.hours + minutes_str.to_i.minutes).to_s)
+  Time.zone.parse((Time.current.at_midnight + hours_str.to_i.hours + minutes_str.to_i.minutes).to_s)
 end
