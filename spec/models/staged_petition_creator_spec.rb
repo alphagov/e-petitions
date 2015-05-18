@@ -35,7 +35,7 @@ describe StagedPetitionCreator do
       end
     end
 
-    context 'when creator_signature attributes are present' do
+    context 'when creator_signature attributes are not present' do
       it 'does not cause a creator_signature to appear' do
         subject.create_petition
         expect(petition.creator_signature).to be_nil
