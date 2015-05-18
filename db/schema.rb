@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515102858) do
+ActiveRecord::Schema.define(version: 20150518160218) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -88,7 +88,6 @@ ActiveRecord::Schema.define(version: 20150515102858) do
     t.string   "rejection_code",          limit: 50
     t.boolean  "notified_by_email",                     default: false
     t.datetime "email_requested_at"
-    t.datetime "get_an_mp_email_sent_at"
     t.string   "action",                  limit: 200
   end
 
@@ -98,7 +97,6 @@ ActiveRecord::Schema.define(version: 20150515102858) do
   add_index "petitions", ["department_id", "state", "created_at"], name: "index_petitions_on_department_id_and_state_and_created_at", using: :btree
   add_index "petitions", ["department_id", "state", "signature_count"], name: "petitions_by_sig_count", using: :btree
   add_index "petitions", ["department_id", "state", "title"], name: "petitions_by_title", using: :btree
-  add_index "petitions", ["get_an_mp_email_sent_at"], name: "index_petitions_on_get_an_mp_email_sent_at", using: :btree
   add_index "petitions", ["response_required", "signature_count"], name: "index_petitions_on_response_required_and_signature_count", using: :btree
   add_index "petitions", ["state", "created_at"], name: "index_petitions_on_state_and_created_at", using: :btree
   add_index "petitions", ["state", "signature_count"], name: "index_petitions_on_state_and_signature_count", using: :btree

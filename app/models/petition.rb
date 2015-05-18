@@ -21,7 +21,6 @@
 #  rejection_code          :string(50)
 #  notified_by_email       :boolean(1)      default(FALSE)
 #  email_requested_at      :datetime
-#  get_an_mp_email_sent_at :datetime
 #
 
 class Petition < ActiveRecord::Base
@@ -102,12 +101,6 @@ class Petition < ActiveRecord::Base
                               group('petitions.id').
                               limit(12)
                             }
-
-  scope :eligible_for_get_an_mp_email, -> {
-    where('state = ? and closed_at >= ?', OPEN_STATE, Time.current).
-    where(get_an_mp_email_sent_at: nil).
-    where("signature_count >= ?", SystemSetting.value_of_key(SystemSetting::GET_AN_MP_SIGNATURE_COUNT).to_i)
-  }
 
   def sponsor_emails
     @sponsor_emails || []
