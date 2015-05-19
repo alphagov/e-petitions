@@ -86,5 +86,4 @@ class Signature < ActiveRecord::Base
   def postal_district
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
-
 end
