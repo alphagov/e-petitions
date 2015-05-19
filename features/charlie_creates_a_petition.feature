@@ -38,6 +38,7 @@ Scenario: Charlie creates our petition
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
+  And I press "Next"
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
@@ -102,6 +103,13 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Next"
   And I press "Next"
 
+  And I press "Next"
+  Then I should see a fieldset called "Make sure this is right"
+
+  When I fill in "Email" with ""
+  And I press "Submit"
+  Then I should see "Email must be completed"
+  When I fill in "Email" with "womboid@wimbledon.com"
   And I press "Submit"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"

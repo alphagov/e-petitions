@@ -20,6 +20,7 @@ module PetitionHelper
       concat render('/petitions/create/sponsor_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'sponsors'
       if stage_manager.stage_object.creator_signature.present?
         concat render('/petitions/create/your_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'creator'
+        concat render('/petitions/create/email_hidden', petition: stage_manager.stage_object, f: form) unless ['creator', 'replay-email'].include? stage_manager.stage
       end
     end
   end
@@ -36,6 +37,8 @@ module PetitionHelper
       render('/petitions/create/sponsor_details_ui', petition: stage_manager.stage_object, f: form)
     when 'replay-petition'
       render('/petitions/create/replay_petition_ui', petition: stage_manager.stage_object, f: form)
+    when 'replay-email'
+      render('/petitions/create/replay_email_ui', petition: stage_manager.stage_object, f: form)
     end
   end
 end
