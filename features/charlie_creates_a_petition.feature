@@ -38,7 +38,6 @@ Scenario: Charlie creates our petition
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
-  And I check "I agree to the Terms & Conditions"
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
@@ -103,9 +102,6 @@ Scenario: Charlie tries to submit an invalid petition
   # And I should see "Department for International Development"
   # And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
-  And I press "Submit"
-  Then I should see "You must accept the terms and conditions."
-  When I check "I agree to the Terms & Conditions"
   And I press "Back"
   And I press "Back"
   And I fill in "Name" with "Mr. Wibbledon"

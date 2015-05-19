@@ -17,10 +17,6 @@ Then /^I have not yet signed the petition$/ do
   expect(page).to have_css("dd.signature_count", :text => "1")
 end
 
-When /^I accept the terms and conditions$/ do
-  check "I agree"
-end
-
 When /^I confirm my email address$/ do
   steps %Q(
     And I open the email
@@ -89,14 +85,12 @@ When /^I try to sign the petition with the same email address and a different na
   step "I decide to sign the petition"
   step "I fill in my details"
   step %{I fill in "Name" with "Sam Wibbledon"}
-  step "I accept the terms and conditions"
   step "I try to sign"
 end
 
 When /^I try to sign the petition with the same email address and the same name$/ do
   step "I decide to sign the petition"
   step "I fill in my details"
-  step "I accept the terms and conditions"
   step "I try to sign"
 end
 
@@ -105,7 +99,6 @@ When /^I try to sign the petition with the same email address, a different name,
   step "I fill in my details"
   step %{I fill in "Name" with "Sam Wibbledon"}
   step %{I fill in "Postcode" with "W1A 1AA"}
-  step "I accept the terms and conditions"
   step "I try to sign"
 end
 
@@ -113,7 +106,6 @@ When /^I try to sign the petition with the same email address and a third name$/
   step "I decide to sign the petition"
   step "I fill in my details"
   step %{I fill in "Name" with "Sarah Wibbledon"}
-  step "I accept the terms and conditions"
   step "I try to sign"
 end
 

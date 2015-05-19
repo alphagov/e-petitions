@@ -32,7 +32,6 @@ class Signature < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::SignerDetails
-  include Staged::Validations::Terms
 
   validate do |signature|
     matcher = Signature.where(:encrypted_email => signature.encrypted_email, :petition_id => signature.petition_id)
@@ -67,7 +66,6 @@ class Signature < ActiveRecord::Base
 
   # = Methods =
   attr_accessor :uk_citizenship
-  attr_accessor :terms_and_conditions
 
   def creator?
     petition.creator_signature == self

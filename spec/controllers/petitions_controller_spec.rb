@@ -45,7 +45,7 @@ describe PetitionsController do
         :name => 'John Mcenroe', :email => 'john@example.com',
         :email_confirmation => 'john@example.com',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
-        :uk_citizenship => '1', :terms_and_conditions => '1'
+        :uk_citizenship => '1'
       }
     end
     let(:petition_attributes) do
@@ -185,12 +185,6 @@ describe PetitionsController do
           petition_attributes[:sponsor_emails] = 'blah@'
           do_post
           expect(assigns[:stage_manager].stage).to eq 'sponsors'
-        end
-
-        it "has stage of 'submit' if there are errors on terms_and_conditions" do
-          creator_signature_attributes[:terms_and_conditions] = '0'
-          do_post
-          expect(assigns[:stage_manager].stage).to eq 'submit'
         end
       end
     end

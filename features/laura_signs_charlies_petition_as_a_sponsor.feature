@@ -10,13 +10,12 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Then the markup should be valid
     And I should be connected to the server via an ssl connection
     When I fill in my details as a sponsor
-    And I accept the terms and conditions
     And I try to sign
     Then I should have signed the petition as a sponsor
 
   Scenario: Laura makes mistakes signing the petition she is a sponsor of
     When I follow the link to the petition in my sponsor email
-    When I fill in my details as a sponsor
+    When I don't fill in my details correctly as a sponsor
     And I try to sign
     Then I should not have signed the petition as a sponsor
     And I should see an error

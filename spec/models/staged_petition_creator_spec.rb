@@ -107,7 +107,7 @@ describe StagedPetitionCreator do
         :name => 'John Mcenroe', :email => 'john@example.com',
         :email_confirmation => 'john@example.com',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
-        :uk_citizenship => '1', :terms_and_conditions => '1'
+        :uk_citizenship => '1'
       }
     end
     let(:petition_params) do
@@ -184,27 +184,6 @@ describe StagedPetitionCreator do
             for_stage 'sponsors', next_is: 'sponsors', back_is: 'creator', not_moving_is: 'sponsors'
             for_stage 'submit', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'submit'
             for_stage 'done', next_is: 'sponsors', back_is: 'sponsors', not_moving_is: 'sponsors'
-          end
-        end
-
-        context 'around the "terms" UI' do
-          before { creator_signature_params.delete(:terms_and_conditions) }
-
-          context 'before attempting to create the petition' do
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'submit', back_is: 'sponsors', not_moving_is: 'submit'
-            for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
-          end
-
-          context 'after attempting to create the petition' do
-            before { subject.create_petition }
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'sponsors', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'sponsors', next_is: 'submit', back_is: 'creator', not_moving_is: 'sponsors'
-            for_stage 'submit', next_is: 'submit', back_is: 'sponsors', not_moving_is: 'submit'
-            for_stage 'done', next_is: 'submit', back_is: 'submit', not_moving_is: 'submit'
           end
         end
       end

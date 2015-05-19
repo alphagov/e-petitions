@@ -71,8 +71,7 @@ describe SponsorsController do
         postcode: 'SP1 1NR',
         country: 'United Kingdom',
         uk_citizenship: '1',
-        notify_by_email: '0',
-        terms_and_conditions: '1'
+        notify_by_email: '0'
       }
     }
 
@@ -156,11 +155,11 @@ describe SponsorsController do
           expect(petition).to receive(:update_sponsored_state)
           do_patch
         end
-        
+
       end
 
       context 'with invalid signature params' do
-        before { signature_params[:terms_and_conditions] = '0' }
+        before { signature_params[:name] = '' }
 
         it 'does not persist the signature' do
           do_patch

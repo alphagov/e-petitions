@@ -85,7 +85,6 @@ FactoryGirl.define do
     country             "United Kingdom"
     uk_citizenship       '1'
     notify_by_email      '1'
-    terms_and_conditions '1'
     state                Signature::VALIDATED_STATE
   end
 
