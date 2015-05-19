@@ -194,7 +194,7 @@ describe SignaturesController do
       context "signature with same name/email/postcode" do
         let(:custom_params) {{ name: 'Joe Blow', email: 'jb@example.com',
                                email_confirmation: 'jb@example.com', postcode: 'SE3 4LL' }}
-        let(:unvalidated_signature) { FactoryGirl.build(:signature, name: 'Joe Blow', email:'jb@example.com',
+        let(:unvalidated_signature) { FactoryGirl.build(:pending_signature, name: 'Joe Blow', email:'jb@example.com',
                                                         email_confirmation:'jb@example.com', postcode: 'SE3 4LL',
                                                         petition_id: petition.id) }
         let(:validated_signature) { FactoryGirl.build(:validated_signature, name: 'Joe Blow', email:'jb@example.com',
@@ -202,9 +202,7 @@ describe SignaturesController do
                                                       petition_id: petition.id) }
         
         context "unvalidated signature already exists" do
-          before do
-            unvalidated_signature.save
-          end
+          before { unvalidated_signature.save }
           
           it "same name/email/postcode does not change count of signatures" do
             expect{ do_post(custom_params) }.to_not change(Signature, :count)
@@ -228,10 +226,7 @@ describe SignaturesController do
         end
 
         context "validated signature already exists" do
-
-          before do
-            validated_signature.save
-          end
+          before { validated_signature.save }
           
           it "sends to :new for same name/email/postcode" do
             do_post(custom_params)

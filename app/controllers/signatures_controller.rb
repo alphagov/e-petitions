@@ -12,7 +12,10 @@ class SignaturesController < ApplicationController
     @signature = Signature.new(signature_params_for_create)
     @signature.email.strip!
     @signature.petition = @petition
-    if (@signature.save)
+    @tmp = check_if_unvalidated_exists(@signature)
+    if @tmp
+      send_email_to_petition_signer(@tmp)
+    elsif (@signature.save)
       send_email_to_petition_signer(@signature)
     end
     respond_with @signature, :location => thank_you_petition_signature_path(@petition)
@@ -61,5 +64,13 @@ class SignaturesController < ApplicationController
       require(:signature).
       permit(:name, :email, :email_confirmation,
              :postcode, :country, :uk_citizenship)
+  end
+
+  def check_if_unvalidated_exists(signature)
+    matcher = Signature.where(:encrypted_email => signature.encrypted_email,
+                              :name => signature.name, 
+                              :petition_id => signature.petition_id,
+                              :state => 'pending')
+    matcher.first if matcher.any?
   end
 end
