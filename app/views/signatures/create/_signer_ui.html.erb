@@ -1,0 +1,9 @@
+<fieldset>
+  <legend>Your Details</legend>
+  <%= render 'signatures/form', f: f, signature: signature %>
+
+  <%= form_row :class => 'button_row' do %>
+    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= f.button 'Sign this e-petition', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
+  <% end %>
+</fieldset>

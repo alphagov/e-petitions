@@ -1,6 +1,3 @@
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-  <%= csf.hidden_field :name %>
-  <%= csf.hidden_field :uk_citizenship %>
-  <%= csf.hidden_field :postcode %>
-  <%= csf.hidden_field :country %>
+  <%= render 'signatures/create/signer_hidden', f: csf, signature: csf.object %>
 <% end %>

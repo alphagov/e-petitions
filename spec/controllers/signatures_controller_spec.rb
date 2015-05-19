@@ -89,30 +89,27 @@ describe SignaturesController do
   end
 
   describe "new" do
-    let(:petition) { double }
-    let(:signature) { double }
+    let(:petition) { FactoryGirl.build(:petition) }
 
     before do
       allow(Petition).to receive_messages(:visible => Petition)
       allow(Petition).to receive(:find).with('1').and_return(petition)
-      allow(Signature).to receive_messages(:new => signature)
     end
 
     with_ssl do
       it "assigns a new signature with the given petition" do
-        expect(Signature).to receive(:new).with(hash_including(:petition => petition)).and_return(signature)
         get :new, :petition_id => 1
-        expect(assigns(:signature)).to eq(signature)
+        expect(assigns(:stage_manager).signature.petition).to eq(petition)
       end
 
       it "sets the country to be UK" do
-        expect(Signature).to receive(:new).with(hash_including(:country => "United Kingdom")).and_return(signature)
         get :new, :petition_id => 1
+        expect(assigns(:stage_manager).signature.country).to eq 'United Kingdom'
       end
 
       it "finds the given petition" do
         get :new, :petition_id => 1
-        expect(assigns(:petition)).not_to be_nil
+        expect(assigns(:petition)).to eq petition
       end
 
       it "raises if petition id is not supplied" do
@@ -123,6 +120,11 @@ describe SignaturesController do
         allow(Petition).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
         expect(Petition).to receive(:visible).and_return(Petition)
         expect { get :new, :petition_id => 1 }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it 'sets the stage to "signer"' do
+        get :new, :petition_id => 1
+        expect(assigns(:stage_manager).stage).to eq 'signer'
       end
     end
   end
@@ -136,12 +138,18 @@ describe SignaturesController do
         :email => 'john@example.com',
         :uk_citizenship => "1",
         :postcode => 'SE3 4LL',
-        :country => 'UK'
+        :country => 'United Kingdom'
       }
     end
 
     def do_post(options = {})
-      post :create, :signature => signature_params.merge(options), :petition_id => petition.id
+      params = {
+        :stage => 'replay-email',
+        :move => 'next',
+        :signature => signature_params,
+        :petition_id => petition.id
+      }
+      post :create, params.merge(options)
     end
 
     with_ssl do
@@ -160,14 +168,15 @@ describe SignaturesController do
           expect { do_post(:email => ' john@example.com ') }.to change(Signature, :count).from(1).to(2)
         end
 
-        it "overrides the petition no matter what has been passed in" do
-          do_post(:petition_id => 1111)
-          expect(assigns(:signature).petition).to eq(petition)
+        it "overrides the petition no matter what has been provided in the signature params" do
+          signature_params[:petition_id] = '1111'
+          do_post
+          expect(assigns(:stage_manager).signature.petition).to eq(petition)
         end
 
         it "has not changed the default TRUE value for notify_by_email" do
           do_post
-          expect(assigns(:signature).notify_by_email).to eq(true)
+          expect(assigns(:stage_manager).signature.notify_by_email).to eq(true)
         end
 
         it "redirects to a thank you page" do
@@ -178,12 +187,39 @@ describe SignaturesController do
 
       context "invalid input" do
         it "renders :new again for empty email" do
-          do_post(:email => "")
+          signature_params[:email] = ''
+          do_post
           expect(response).to render_template(:new)
         end
 
         it "should not create a new signature" do
-          expect { do_post(:email => "") }.not_to change(Signature, :count)
+          signature_params[:email] = ''
+          expect { do_post }.not_to change(Signature, :count)
+        end
+
+        it "has stage of 'signer' if there are errors on name, uk_citizenship, postcode or country" do
+          do_post :signature => signature_params.merge(:name => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_post :signature => signature_params.merge(:uk_citizenship => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_post :signature => signature_params.merge(:postcode => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_post :signature => signature_params.merge(:country => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+        end
+
+        it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
+          new_signature_params = signature_params.merge(:email => 'foo@')
+          do_post :stage => 'replay-email',
+                  :signature => new_signature_params
+          expect(assigns[:stage_manager].stage).to eq 'replay-email'
+        end
+
+        it "has stage of 'creator' if there are errors on email and we came from 'signer' stage" do
+          new_signature_params = signature_params.merge(:email => 'foo@')
+          do_post :stage => 'signer',
+                  :signature => new_signature_params
+          expect(assigns[:stage_manager].stage).to eq 'signer'
         end
       end
 
@@ -192,43 +228,50 @@ describe SignaturesController do
       ### good way to split up the contexts?
       ### how to make one assertion per test? email and redirect are currently linked?
       context "signature with same name/email/postcode" do
-        let(:custom_params) {{ name: 'Joe Blow', email: 'jb@example.com', postcode: 'SE3 4LL' }}
+        let(:signature_params) do
+          {
+            name: 'Joe Blow',
+            email: 'jb@example.com',
+            postcode: 'SE3 4LL',
+            uk_citizenship: '1',
+            country: 'United Kingdom'
+          }
+        end
 
         context "unvalidated signature already exists" do
           before do
-            FactoryGirl.create(:pending_signature, name: 'Joe Blow', email:'jb@example.com',
-                               postcode: 'SE3 4LL', petition_id: petition.id)
+            FactoryGirl.create(:pending_signature, signature_params.merge(petition_id: petition.id))
           end
 
           it "same name/email/postcode does not change count of signatures" do
-            expect{ do_post(custom_params) }.to_not change(Signature, :count)
+            expect{ do_post }.to_not change(Signature, :count)
           end
 
           it "same email/postcode changes count of signatures" do
-            expect{ do_post(custom_params.merge( { name: 'Susan Blow' })) }.to change(Signature, :count).by(1)
+            signature_params[:name] = 'Susan Blow'
+            expect{ do_post }.to change(Signature, :count).by(1)
           end
 
           it "sends email to signer" do
             ActionMailer::Base.deliveries.clear
-            do_post(custom_params)
+            do_post
             email = ActionMailer::Base.deliveries.last
             expect(email.to).to eq(["jb@example.com"])
           end
 
           it "sends to thank you page" do
-            do_post(custom_params)
+            do_post
             expect(response).to redirect_to(thank_you_petition_signature_path(petition))
           end
         end
 
         context "validated signature already exists" do
           before do
-            FactoryGirl.create(:validated_signature, name: 'Joe Blow', email:'jb@example.com',
-                               postcode: 'SE3 4LL', petition_id: petition.id)
+            FactoryGirl.create(:validated_signature, signature_params.merge(petition_id: petition.id))
           end
 
           it "sends to :new for same name/email/postcode" do
-            do_post(custom_params)
+            do_post
             expect(response).to render_template(:new)
           end
         end

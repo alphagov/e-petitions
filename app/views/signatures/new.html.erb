@@ -6,21 +6,8 @@
   <h1 class="petition_title"><%= @petition.title %></h1>
 </div>
 
-<%= form_for @signature, :url => sign_petition_signature_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
-  <fieldset>
-    <%= render :partial => 'signatures/form', :locals => { :f => f, :signature => @signature } %>
-
-    <div class="row">
-      <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', terms_and_conditions_path %></p>
-    </div>
-
-    <div class="row button_row">
-
-      <%= link_to "Back", petition_path(@petition), :class => "backwards_action link_button", :tabindex => increment(2) %>
-      <%= f.submit "Sign this e-petition", :class => 'button', :tabindex => increment(-1) %>
-      <% increment(2) -%>
-    </div>
-  </fieldset>
+<%= form_for @stage_manager.stage_object, :url => sign_petition_signature_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
+  <%= render_signature_form @stage_manager, f %>
 <% end -%>
 
 <%= content_for :js, javascript_include_tag('lightbox') %>
