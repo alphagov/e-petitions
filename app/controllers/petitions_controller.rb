@@ -47,7 +47,7 @@ class PetitionsController < ApplicationController
 
   def resend_confirmation_email
     @petition = Petition.visible.find(params[:id])
-    SignatureConfirmer.new(@petition, params[:confirmation_email], PetitionMailer, Authlogic::Regex.email).confirm!
+    SignatureConfirmer.new(@petition, params[:confirmation_email], PetitionMailer, EMAIL_REGEX).confirm!
   end
 
   protected
@@ -112,4 +112,3 @@ class PetitionsController < ApplicationController
     emails.strip.split(/\r?\n/).map { |e| e.strip }
   end
 end
-

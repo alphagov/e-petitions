@@ -14,13 +14,12 @@ module EmailEncrypter
     validates_presence_of :email, message: "%{attribute} must be completed"
 
     validates_format_of :email,
-                        with: Authlogic::Regex.email,
+                        with: EMAIL_REGEX,
                         unless: 'email.blank?',
                         message: "Email '%{value}' not recognised."
-    
+
     # = Finders =
     scope :for_email, ->(email) { where(encrypted_email: encrypt_email(email)) }
-    
 
     # = Methods =
     # NOTE: These methods for the encrypted_email attribute are

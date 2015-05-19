@@ -240,7 +240,7 @@ describe PetitionsController do
 
     let(:confirmer) { double }
     it "asks the petition to resend the confirmation email" do
-      expect(SignatureConfirmer).to receive(:new).with(petition, email, PetitionMailer, Authlogic::Regex.email).and_return(confirmer)
+      expect(SignatureConfirmer).to receive(:new).with(petition, email, PetitionMailer, EMAIL_REGEX).and_return(confirmer)
       expect(confirmer).to receive(:confirm!)
       post :resend_confirmation_email, :id => petition.id, :confirmation_email => email
     end

@@ -1,6 +1,4 @@
-require 'active_model'
-require 'authlogic/regex'
-require 'feedback'
+require 'rails_helper'
 
 describe Feedback do
   it "can be constructed without params" do

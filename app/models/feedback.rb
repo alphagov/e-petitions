@@ -3,7 +3,7 @@ class Feedback
   include ActiveModel::Conversion
 
   validates_presence_of :name, :email, :email_confirmation, :comment, :message => "%{attribute} must be completed"
-  validates_format_of :email, :with => Authlogic::Regex.email, :unless => 'email.blank?', :message => "Email not recognised."
+  validates_format_of :email, :with => EMAIL_REGEX, :unless => 'email.blank?', :message => "Email not recognised."
   validates_confirmation_of :email
 
   attr_accessor :name, :email, :petition_link_or_title, :comment, :response_required
