@@ -951,9 +951,19 @@ form.new_petition_form .form_pagination li.active .step_no {
 form.new_petition_form .form_pagination li.step_2 {
   position: absolute;
   top: 0px;
-  left: 300px;
+  left: 150px;
 }
 form.new_petition_form .form_pagination li.step_3 {
+  position: absolute;
+  top: 0px;
+  left: 300px;
+}
+form.new_petition_form .form_pagination li.step_4 {
+  position: absolute;
+  top: 0px;
+  left: 450px;
+}
+form.new_petition_form .form_pagination li.step_5 {
   position: absolute;
   top: 0px;
   right: -12px;
@@ -1663,19 +1673,28 @@ html[xmlns] .clearfix {
 
   form.new_petition_form .form_pagination li{
     font-size: 1.2em;
+    width: 50px;
   }
 
-  form.new_petition_form .form_pagination li .step_no{
-    width: 50px;
+  form.new_petition_form .form_pagination li .step_no {
+    width: 30px;
     padding: 10px 5px;
   }
 
-  form.new_petition_form .form_pagination li.step_2{
-    left: 110px;
+  form.new_petition_form .form_pagination li.step_2 {
+    left: 63px;
   }
 
-  form.new_petition_form .form_pagination li.step_3  {
-    right: 0px;
+  form.new_petition_form .form_pagination li.step_3 {
+    left: 126px;
+  }
+
+  form.new_petition_form .form_pagination li.step_4 {
+    left: 189px;
+  }
+
+  form.new_petition_form .form_pagination li.step_5 {
+    right: -10px;
   }
 
   form fieldset#petition_submit_section .row{
