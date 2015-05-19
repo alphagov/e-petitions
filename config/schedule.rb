@@ -31,7 +31,3 @@ every 5.minutes do
   runner "Petition.update_all_signature_counts", :output => nil
   runner "TrendingPetition.update_homepage_trends", :output => nil
 end
-
-every :weekday, :at => '9am' do
-  runner "Petition.email_all_who_passed_finding_mp_threshold", :output => nil
-end

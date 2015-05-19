@@ -26,13 +26,6 @@ When /^I confirm my email address$/ do
   )
 end
 
-When /^the e\-petition recieves enough signatures to achieve 'critical mass'$/ do
-  SystemSetting.create!(:key => 'get_an_mp_signature_count', :value => '3')
-  4.times { @petition.signatures << FactoryGirl.create(:validated_signature) }
-  Petition.update_all_signature_counts
-  Petition.email_all_who_passed_finding_mp_threshold
-end
-
 def should_be_signature_count_of(count)
   Petition.update_all_signature_counts
   visit petition_path(@petition)

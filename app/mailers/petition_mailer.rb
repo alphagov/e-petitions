@@ -17,11 +17,6 @@ class PetitionMailer < ApplicationMailer
     mail(:subject => "HM Government e-petitions: Email address confirmation", :to => @signature.email)
   end
 
-  def ask_creator_to_find_an_mp(petition)
-    @petition = petition
-    mail(:subject => "HM Government e-petitions: Your e-petition is gaining momentum: time to find an MP", :to => @petition.creator_signature.email)
-  end
-
   def notify_creator_that_petition_is_published(signature)
     @signature = signature
     mail(:subject => "HM Government e-petitions: Your e-petition has been published", :to => @signature.email)
