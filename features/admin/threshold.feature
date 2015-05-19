@@ -55,7 +55,7 @@ Feature: Threshold list
     And I fill in "Internal response" with "Parliament here it comes"
     And I check "Public response required"
     And I press "Save"
-    Then I should be on the admin threshold page
+    Then I should be on the admin all petitions page
     And a petition should exist with title: "Petition 1", internal_response: "Parliament here it comes", response_required: true
 
   Scenario: A threshold user updates the public response to a petition
@@ -65,7 +65,7 @@ Feature: Threshold list
     And I fill in "Public response" with "Parliament here it comes"
     And I check "Email signees"
     And I press "Save"
-    Then I should be on the admin threshold page
+    Then I should be on the admin all petitions page
     And the petition with title: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
     And the response to "Petition 1" should be publicly viewable on the petition page
 

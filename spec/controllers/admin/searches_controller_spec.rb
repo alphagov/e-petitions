@@ -74,11 +74,6 @@ describe Admin::SearchesController do
                 allow(petition).to receive(:awaiting_moderation?).and_return false
               end
 
-              it "redirects to the internal response page if we can't edit responses" do
-                get :result, :search => { :query => '123' }
-                expect(response).to redirect_to(edit_internal_response_admin_petition_path(petition))
-              end
-
               it "redirects to the edit response page if we can edit responses" do
                 allow(petition).to receive(:response_editable_by?).and_return true
                 get :result, :search => { :query => '123' }

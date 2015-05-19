@@ -30,8 +30,6 @@ class Admin::SearchesController < Admin::AdminController
 
     if (petition.response_editable_by?(current_user))
       edit_response_admin_petition_path(petition)
-    else
-      edit_internal_response_admin_petition_path(petition)
     end
   end
 end
