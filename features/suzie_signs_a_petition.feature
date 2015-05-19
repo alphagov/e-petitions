@@ -12,10 +12,14 @@ Feature: Suzie signs a petition
     And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
     And the markup should be valid
     And I should be connected to the server via an ssl connection
-    And I fill in my details
+    And I fill in my details with email "womboid@wimbledon.com"
     And I try to sign
+    Then I am asked to review my email address
+    When I change my email address to "womboidian@wimbledon.com"
+    And I say I am happy with my email address
     Then I have not yet signed the petition
-    And "womboid@wimbledon.com" should receive 1 email
+    And "womboid@wimbledon.com" should receive no email
+    And "womboidian@wimbledon.com" should receive 1 email
     When I confirm my email address
     Then I am taken to a landing page
     And I can click on a link to return to the petition
@@ -26,6 +30,7 @@ Feature: Suzie signs a petition
     When I decide to sign the petition
     And I fill in my details
     And I try to sign
+    And I say I am happy with my email address
     Then I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address

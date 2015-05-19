@@ -41,10 +41,11 @@ When /^I fill in my non\-UK details$/ do
   uncheck "Yes, I am a British citizen or UK resident"
 end
 
-When /^I fill in my details$/ do
+When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
+  email_address ||= "womboid@wimbledon.com"
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
-    And I fill in "Email" with "womboid@wimbledon.com"
+    And I fill in "Email" with "#{email_address}"
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW14 9RQ"
     And I select "United Kingdom" from "Country"
@@ -59,13 +60,27 @@ When /^I fill in my details and sign a petition$/ do
     And I should be connected to the server via an ssl connection
     And I fill in my details
     And I try to sign
-    And I have not yet signed the petition
+    And I say I am happy with my email address
+    Then I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email
   )
 end
 
 Then /^I should see that I have already signed the petition$/ do
   expect(page).to have_text("Thank you. Your signature has already been added to the e-petition.")
+end
+
+Then(/^I am asked to review my email address$/) do
+  expect(page).to have_content 'Make sure this is right'
+  expect(page).to have_field('Email')
+end
+
+When(/^I change my email address to "(.*?)"$/) do |email_address|
+  fill_in 'Email', with: email_address
+end
+
+When(/^I say I am happy with my email address$/) do
+  click_on "Yes - this is my email address"
 end
 
 And "I have already signed the petition with an uppercase email" do
