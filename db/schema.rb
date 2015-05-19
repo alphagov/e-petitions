@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150518160218) do
+ActiveRecord::Schema.define(version: 20150519160815) do
 
   create_table "admin_users", force: :cascade do |t|
     t.string   "email",                limit: 255,                null: false
@@ -52,31 +52,12 @@ ActiveRecord::Schema.define(version: 20150518160218) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
-  create_table "department_assignments", force: :cascade do |t|
-    t.integer  "petition_id",   limit: 4
-    t.integer  "department_id", limit: 4
-    t.datetime "assigned_on"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "departments", force: :cascade do |t|
-    t.string   "name",        limit: 255,   null: false
-    t.text     "description", limit: 65535
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "website_url", limit: 255
-  end
-
-  add_index "departments", ["name"], name: "index_departments_on_name", unique: true, using: :btree
-
   create_table "petitions", force: :cascade do |t|
     t.string   "title",                   limit: 255,                       null: false
     t.text     "description",             limit: 65535
     t.text     "response",                limit: 65535
     t.string   "state",                   limit: 10,    default: "pending", null: false
     t.datetime "open_at"
-    t.integer  "department_id",           limit: 4
     t.integer  "creator_signature_id",    limit: 4,                         null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -92,11 +73,6 @@ ActiveRecord::Schema.define(version: 20150518160218) do
   end
 
   add_index "petitions", ["creator_signature_id"], name: "index_petitions_on_creator_signature_id", unique: true, using: :btree
-  add_index "petitions", ["department_id", "state", "closed_at", "signature_count"], name: "petitions_by_sig_count_closed_at", using: :btree
-  add_index "petitions", ["department_id", "state", "closed_at", "title"], name: "petitions_by_title_closed_at", using: :btree
-  add_index "petitions", ["department_id", "state", "created_at"], name: "index_petitions_on_department_id_and_state_and_created_at", using: :btree
-  add_index "petitions", ["department_id", "state", "signature_count"], name: "petitions_by_sig_count", using: :btree
-  add_index "petitions", ["department_id", "state", "title"], name: "petitions_by_title", using: :btree
   add_index "petitions", ["response_required", "signature_count"], name: "index_petitions_on_response_required_and_signature_count", using: :btree
   add_index "petitions", ["state", "created_at"], name: "index_petitions_on_state_and_created_at", using: :btree
   add_index "petitions", ["state", "signature_count"], name: "index_petitions_on_state_and_signature_count", using: :btree

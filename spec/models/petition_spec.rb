@@ -8,7 +8,6 @@
 #  response                :text
 #  state                   :string(10)      default("pending"), not null
 #  open_at                 :datetime
-#  department_id           :integer(4)
 #  creator_signature_id    :integer(4)      not null
 #  created_at              :datetime
 #  updated_at              :datetime
@@ -300,40 +299,6 @@ describe Petition do
         expect(Petition.visible).to include(@visible_petition_1, @visible_petition_2, @visible_petition_3)
       end
     end
-
-    context "for_departments" do
-      before :each do
-        @d1 = FactoryGirl.create(:department)
-        @d2 = FactoryGirl.create(:department)
-        @d3 = FactoryGirl.create(:department)
-        @p1 = FactoryGirl.create(:petition, :department => @d1)
-        @p2 = FactoryGirl.create(:petition, :department => @d1)
-        @p3 = FactoryGirl.create(:petition, :department => @d3)
-      end
-
-      it "should return all petitiions for d1" do
-        expect(Petition.for_departments([@d1]).size).to eq(2)
-        expect(Petition.for_departments([@d1])).to include(@p1, @p2)
-      end
-
-      it "should return 0 petitions for d2" do
-        expect(Petition.for_departments([@d2]).size).to eq(0)
-      end
-
-      it "should return 1 petition for d3" do
-        expect(Petition.for_departments([@d3]).size).to eq(1)
-        expect(Petition.for_departments([@d3])).to eq([@p3])
-      end
-
-      it "should return all petitions for d1, d2 and d3" do
-        expect(Petition.for_departments([@d1, @d2, @d3]).size).to eq(3)
-        expect(Petition.for_departments([@d1, @d2, @d3])).to include(@p1, @p2, @p3)
-      end
-
-      it "should return 0 for no departments" do
-        expect(Petition.for_departments([]).size).to eq(0)
-      end
-    end
   end
 
   describe "signature count" do
@@ -580,34 +545,6 @@ describe Petition do
     it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
       subject.publish!
       expect(subject.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
-    end
-  end
-
-  describe "#reassign!" do
-    let(:petition){ FactoryGirl.create(:petition) }
-    let(:department){ FactoryGirl.create(:department) }
-
-    it "takes a department id and saves the petition" do
-      petition.reassign!(department)
-      petition.reload
-      expect(petition.department_id).to eq(department.id)
-    end
-
-    it "creates a record of the assignment and timestamps it" do
-      frozen_time = Time.now
-      allow(Time).to receive(:now).and_return(frozen_time)
-      petition.reassign!(department)
-      department_assignment = DepartmentAssignment.first
-
-      expect(department_assignment.petition).to         eq(petition)
-      expect(department_assignment.department).to       eq(department)
-      expect(department_assignment.assigned_on.to_i).to eq(frozen_time.to_i)
-    end
-
-    it "blows up if it can't ressign" do
-      expect {
-        petition.ressign!(nil)
-      }.to raise_error
     end
   end
 

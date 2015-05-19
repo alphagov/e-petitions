@@ -8,7 +8,6 @@
 #  response                :text
 #  state                   :string(10)      default("pending"), not null
 #  open_at                 :datetime
-#  department_id           :integer(4)
 #  creator_signature_id    :integer(4)      not null
 #  created_at              :datetime
 #  updated_at              :datetime
@@ -35,14 +34,6 @@ class Petition < ActiveRecord::Base
     text :creator_name do
       creator_signature.name
     end
-    text :department_name do
-      if department.present?
-        department.name
-      else
-        ''
-      end
-    end
-    integer :department_id
     string :title
     integer :signature_count
     time :closed_at, :trie => true
@@ -51,11 +42,9 @@ class Petition < ActiveRecord::Base
   end
 
   # = Relationships =
-  belongs_to :department
   belongs_to :creator_signature, :class_name => 'Signature'
   accepts_nested_attributes_for :creator_signature
   has_many :signatures
-  has_many :department_assignments
   has_many :sponsors
 
   # = Validations =
@@ -82,7 +71,6 @@ class Petition < ActiveRecord::Base
       where(state: state)
     end
   }
-  scope :for_departments, ->(departments) { where(department_id: departments.map(&:id)) }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
   scope :trending, ->(number_of_days) {
@@ -133,12 +121,6 @@ class Petition < ActiveRecord::Base
     self.open_at = Time.current
     self.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
     save!
-  end
-
-  def reassign!(new_department)
-    self.department = new_department
-    save!
-    department_assignments.create!(:department => new_department, :assigned_on => Time.now)
   end
 
   def count_validated_signatures
