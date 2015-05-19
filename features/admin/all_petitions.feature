@@ -57,8 +57,8 @@ Feature: An admin user views all petitions
     When I view all petitions
     Then I should see "Simply the best"
 
-  Scenario: A threshold user can view all petitions
-    Given I am logged in as a threshold user
+  Scenario: A moderator user can view all petitions
+    Given I am logged in as a moderator user
     And an open petition exists with title: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"

@@ -25,7 +25,7 @@
 class AdminUser < ActiveRecord::Base
   DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'
-  THRESHOLD_ROLE = 'threshold'
+  MODERATOR_ROLE = 'moderator'
 
   acts_as_authentic do |config|
     config.merge_validates_length_of_password_field_options :minimum => 8
@@ -47,7 +47,7 @@ class AdminUser < ActiveRecord::Base
   validates_format_of :password, :with => /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/,
                       :message => 'must contain at least one digit, a lower and upper case letter and a special character',
                       :allow_blank => true
-  ROLES = [SYSADMIN_ROLE, THRESHOLD_ROLE]
+  ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE]
   validates_inclusion_of :role, :in => ROLES, :message => "'%{value}' is invalid"
 
   # = Finders =
@@ -64,8 +64,8 @@ class AdminUser < ActiveRecord::Base
     self.role == 'sysadmin'
   end
 
-  def is_a_threshold?
-    self.role == 'threshold'
+  def is_a_moderator?
+    self.role == 'moderator'
   end
 
   def has_to_change_password?
@@ -73,11 +73,11 @@ class AdminUser < ActiveRecord::Base
   end
 
   def can_take_petitions_down?
-    is_a_sysadmin? || is_a_threshold?
+    is_a_sysadmin? || is_a_moderator?
   end
 
   def can_edit_responses?
-    is_a_sysadmin? || is_a_threshold?
+    is_a_sysadmin? || is_a_moderator?
   end
 
   def account_disabled

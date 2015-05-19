@@ -507,8 +507,8 @@ describe Petition do
     let(:petition) { FactoryGirl.build(:petition) }
     let(:user) { AdminUser.new }
 
-    it "is editable by a threshold user" do
-      allow(user).to receive_messages(:is_a_threshold? => true)
+    it "is editable by a moderator user" do
+      allow(user).to receive_messages(:is_a_moderator? => true)
       expect(petition.editable_by?(user)).to be_truthy
     end
 
@@ -529,8 +529,8 @@ describe Petition do
       expect(petition.response_editable_by?(user)).to be_falsey
     end
 
-    it "allows editing of the response by threshold users" do
-      allow(user).to receive_messages(:is_a_threshold? => true)
+    it "allows editing of the response by moderator users" do
+      allow(user).to receive_messages(:is_a_moderator? => true)
       expect(petition.response_editable_by?(user)).to be_truthy
     end
 

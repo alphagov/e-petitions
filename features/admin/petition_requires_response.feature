@@ -1,5 +1,5 @@
 Feature: An admin user updates internal response and marks it for a public response
-  In order to assign a petition to a threshold user
+  In order to assign a petition to a moderator user
   As any admin user
   I want to be able add an internal response and flag a petition as requiring a public response
 

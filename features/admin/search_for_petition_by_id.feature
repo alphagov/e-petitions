@@ -16,19 +16,19 @@ Feature: Maggie searches for a petition by id
     When I search for a petition by id
     Then I should see the petition for editing the internal reponse and changing the status
 
-  Scenario: A threshold user sees the edit page if the petition needs moderation
+  Scenario: A moderator user sees the edit page if the petition needs moderation
     Given a sponsored petition "Loose benefits!"
-    And I am logged in as a threshold user
+    And I am logged in as a moderator user
     When I search for a petition by id
     Then I should see the petition for editing
 
-  Scenario: A threshold user sees the edit response page if the petition is open
+  Scenario: A moderator user sees the edit response page if the petition is open
     Given a set of petitions for the "Treasury"
-    And I am logged in as a threshold user
+    And I am logged in as a moderator user
     When I search for a petition by id
     Then I should see the petition for editing the reponses
 
   Scenario: A user doing a search for a petition id that doesn't exist gets an error
-    Given I am logged in as a threshold user
+    Given I am logged in as a moderator user
     When I search for a petition by id
     Then I should be taken back to the id search form with an error

@@ -1,7 +1,7 @@
 class EmailReminder
   # email out a list of all petitions that have reached the threshold or that have been marked for a response
   def self.threshold_email_reminder
-    admin_users = AdminUser.by_role(AdminUser::THRESHOLD_ROLE)
+    admin_users = AdminUser.by_role(AdminUser::MODERATOR_ROLE)
     if admin_users.any?
       petitions =  Petition.threshold.where(:notified_by_email => false).order(:signature_count)
       # only email if there are one or more petitions

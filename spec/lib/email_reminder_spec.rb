@@ -3,8 +3,8 @@ require 'rails_helper'
 describe EmailReminder do
   describe "threshold_email_reminders" do
     before :each do
-      @user1 = FactoryGirl.create(:threshold_user, :email => 'peter@directgov.uk')
-      @user2 = FactoryGirl.create(:threshold_user, :email => 'richard@directgov.uk')
+      @user1 = FactoryGirl.create(:moderator_user, :email => 'peter@directgov.uk')
+      @user2 = FactoryGirl.create(:moderator_user, :email => 'richard@directgov.uk')
       @p1 = FactoryGirl.create(:open_petition)
       @p1.update_attribute(:signature_count, 11)
       @p2 = FactoryGirl.create(:closed_petition)
@@ -16,7 +16,7 @@ describe EmailReminder do
       FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
     end
 
-    it "should email out an alert to threshold users for petitions that have reached their threshold or have been marked as requiring a response" do
+    it "should email out an alert to moderator users for petitions that have reached their threshold or have been marked as requiring a response" do
       email_no = ActionMailer::Base.deliveries.size
       EmailReminder.threshold_email_reminder
       email_no_new = ActionMailer::Base.deliveries.size

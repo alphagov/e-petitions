@@ -57,8 +57,8 @@ describe Admin::TodolistController do
       end
     end
 
-    describe "logged in as threshold user" do
-      let(:user) { FactoryGirl.create(:threshold_user) }
+    describe "logged in as moderator user" do
+      let(:user) { FactoryGirl.create(:moderator_user) }
       before { login_as(user) }
 
       with_ssl do

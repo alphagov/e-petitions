@@ -3,8 +3,8 @@ Given /^I am logged in as a sysadmin$/ do
   step "the admin user is logged in"
 end
 
-Given /^I am logged in as a threshold user$/ do
-  @user = FactoryGirl.create(:threshold_user)
+Given /^I am logged in as a moderator user$/ do
+  @user = FactoryGirl.create(:moderator_user)
   step "the admin user is logged in"
 end
 

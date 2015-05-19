@@ -4,7 +4,7 @@ Feature: Admin users index and crud
 
   Background:
     Given I am logged in as a sysadmin with the email "muddy@fox.com", first_name "Sys", last_name "Admin"
-    And a threshold user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
+    And a moderator user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
 
   Scenario: Accessing the admin users index
     When I go to the admin home page
@@ -19,9 +19,9 @@ Feature: Admin users index and crud
     Then I should see the following admin index table:
       | Name            | Email             | Role      | Disabled |
       | Admin, Sys      | muddy@fox.com     | sysadmin  |          |
-      | Campbell, Naomi | naomi@example.com | threshold |          |
-      | Hunt, Helen     | helen@example.com | threshold | Yes      |
-      | Jacobi, Derek   | derek@example.com | threshold |          |
+      | Campbell, Naomi | naomi@example.com | moderator |          |
+      | Hunt, Helen     | helen@example.com | moderator | Yes      |
+      | Jacobi, Derek   | derek@example.com | moderator |          |
     And the markup should be valid
 
   Scenario: Pagination of the users index
@@ -42,7 +42,7 @@ Feature: Admin users index and crud
     And I should see a "Email" text field
     And I should see a "Role" select field with the following options:
       | sysadmin  |
-      | threshold |
+      | moderator |
     And I should see a "Force password reset" checkbox field
     And I should see a "Account disabled" checkbox field
     And I should see a "Password" password field

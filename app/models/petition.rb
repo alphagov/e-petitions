@@ -197,7 +197,7 @@ class Petition < ActiveRecord::Base
   end
 
   def response_editable_by?(user)
-    return true if user.is_a_threshold? || user.is_a_sysadmin?
+    return true if user.is_a_moderator? || user.is_a_sysadmin?
     return false
   end
 

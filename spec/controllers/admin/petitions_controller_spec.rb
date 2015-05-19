@@ -56,9 +56,9 @@ describe Admin::PetitionsController do
   context "logged in as admin" do
   end
 
-  describe "logged in as threshold user" do
+  describe "logged in as moderator user" do
     before :each do
-      @user = FactoryGirl.create(:threshold_user)
+      @user = FactoryGirl.create(:moderator_user)
       login_as(@user)
 
       @p1 = FactoryGirl.create(:open_petition)

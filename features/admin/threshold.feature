@@ -1,10 +1,10 @@
 Feature: Threshold list
   In order to see and action petitions that require a response
-  As a threshold or sysadmin user I can see a list of petitions that have exceeded the signature threshold count
+  As a moderator or sysadmin user I can see a list of petitions that have exceeded the signature threshold count
   Or have been marked as requiring a response
 
   Background:
-    Given I am logged in as a threshold user
+    Given I am logged in as a moderator user
     And the date is the "21 April 2011 12:00"
     And a department "Treasury" exists with name: "Treasury"
     And a system setting exists with key: "threshold_signature_count", value: "5"
@@ -20,7 +20,7 @@ Feature: Threshold list
     And a closed petition "p6" exists with title: "Petition 6", response_required: true, closed_at: "21 April 2011"
     And all petitions have had their signatures counted
 
-  Scenario: A threshold user sees all petitions above the threshold signature count
+  Scenario: A moderator user sees all petitions above the threshold signature count
     When I go to the admin threshold page
     Then I should see the following admin index table:
       | Title      | Count | Closing date |
@@ -40,7 +40,7 @@ Feature: Threshold list
     And I follow "Previous"
     And I should see 20 rows in the admin index table
 
-  Scenario: A threshold user can view the details of a petition and form fields
+  Scenario: A moderator user can view the details of a petition and form fields
     When I go to the admin threshold page
     And I follow "Petition 1"
     And I should see "01-01-2012"
@@ -49,7 +49,7 @@ Feature: Threshold list
     And I should see a "Public response" textarea field
     And I should see a "Email signees" checkbox field
 
-  Scenario: A threshold user updates the internal response to a petition
+  Scenario: A moderator user updates the internal response to a petition
     When I go to the admin threshold page
     And I follow "Petition 1"
     And I fill in "Internal response" with "Parliament here it comes"
@@ -58,7 +58,7 @@ Feature: Threshold list
     Then I should be on the admin all petitions page
     And a petition should exist with title: "Petition 1", internal_response: "Parliament here it comes", response_required: true
 
-  Scenario: A threshold user updates the public response to a petition
+  Scenario: A moderator user updates the public response to a petition
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
     And I follow "Petition 1"
@@ -69,7 +69,7 @@ Feature: Threshold list
     And the petition with title: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
     And the response to "Petition 1" should be publicly viewable on the petition page
 
-  Scenario: A threshold user unsuccessfully tries to update the public response to a petition
+  Scenario: A moderator user unsuccessfully tries to update the public response to a petition
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
     And I follow "Petition 1"

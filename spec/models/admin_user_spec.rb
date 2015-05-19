@@ -70,8 +70,8 @@ describe AdminUser do
       expect(u).to be_valid
     end
 
-    it "should allow threshold role" do
-      u = FactoryGirl.build(:admin_user, :role => 'threshold')
+    it "should allow moderator role" do
+      u = FactoryGirl.build(:admin_user, :role => 'moderator')
       expect(u).to be_valid
     end
 
@@ -84,7 +84,7 @@ describe AdminUser do
   context "scopes" do
     before :each do
       @user1 = FactoryGirl.create(:sysadmin_user, :first_name => 'Ronald', :last_name => 'Reagan')
-      @user2 = FactoryGirl.create(:threshold_user, :first_name => 'Bill', :last_name => 'Clinton')
+      @user2 = FactoryGirl.create(:moderator_user, :first_name => 'Bill', :last_name => 'Clinton')
     end
 
     context "by_name" do
@@ -94,9 +94,8 @@ describe AdminUser do
     end
 
     context "by_role" do
-      it "should return threshold users" do
-        expect(AdminUser.by_role(AdminUser::THRESHOLD_ROLE)).to eq([@user2])
-      end
+      it "should return moderator users" do
+        expect(AdminUser.by_role(AdminUser::MODERATOR_ROLE)).to eq([@user2]) end
     end
   end
 
@@ -112,21 +111,21 @@ describe AdminUser do
         expect(user.is_a_sysadmin?).to be_truthy
       end
 
-      it "should return false when user is a threshold user" do
-        user = FactoryGirl.create(:admin_user, :role => 'threshold')
+      it "should return false when user is a moderator user" do
+        user = FactoryGirl.create(:admin_user, :role => 'moderator')
         expect(user.is_a_sysadmin?).to be_falsey
       end
     end
 
-    context "is_a_threshold?" do
-      it "should return true when user is a threshold user" do
-        user = FactoryGirl.create(:admin_user, :role => 'threshold')
-        expect(user.is_a_threshold?).to be_truthy
+    context "is_a_moderator?" do
+      it "should return true when user is a moderator user" do
+        user = FactoryGirl.create(:admin_user, :role => 'moderator')
+        expect(user.is_a_moderator?).to be_truthy
       end
 
       it "should return false when user is a sysadmin" do
         user = FactoryGirl.create(:admin_user, :role => 'sysadmin')
-        expect(user.is_a_threshold?).to be_falsey
+        expect(user.is_a_moderator?).to be_falsey
       end
     end
 
@@ -158,8 +157,8 @@ describe AdminUser do
         expect(user.can_take_petitions_down?).to be_truthy
       end
 
-      it "is true if the user is a threshold user" do
-        user = FactoryGirl.create(:admin_user, :role => 'threshold')
+      it "is true if the user is a moderator user" do
+        user = FactoryGirl.create(:admin_user, :role => 'moderator')
         expect(user.can_take_petitions_down?).to be_truthy
       end
     end

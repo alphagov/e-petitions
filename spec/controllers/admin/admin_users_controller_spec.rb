@@ -100,7 +100,7 @@ describe Admin::AdminUsersController do
             {
               :first_name => 'John',
               :last_name => 'Kennedy',
-              :role => 'threshold',
+              :role => 'moderator',
               :email => 'admin@example.com',
               :password => 'Letmein1!',
               :password_confirmation => 'Letmein1!'

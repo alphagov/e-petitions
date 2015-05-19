@@ -7,7 +7,7 @@ FactoryGirl.define do
     password_confirmation "Letmein1!"
     sequence(:first_name) {|n| "AdminUser#{n}" }
     sequence(:last_name) {|n| "AdminUser#{n}" }
-    role 'threshold'
+    role 'moderator'
     force_password_reset  false
   end
 
@@ -15,8 +15,8 @@ FactoryGirl.define do
     role "sysadmin"
   end
 
-  factory :threshold_user, :parent => :admin_user do
-    role "threshold"
+  factory :moderator_user, :parent => :admin_user do
+    role "moderator"
   end
 
   factory :department do
