@@ -27,7 +27,7 @@ class SignaturesController < ApplicationController
     if @signature.perishable_token == params[:token]
       @signature.perishable_token = nil
       @signature.state = Signature::VALIDATED_STATE
-      @signature.save(:validate => false)    #WHY SKIPPING VALIDATIONS??
+      @signature.save(:validate => false)
 
       # if signature is that of the petition's creator, mark the petition as validated
       if @signature.petition.creator_signature == @signature
