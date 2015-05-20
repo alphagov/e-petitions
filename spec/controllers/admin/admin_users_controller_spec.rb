@@ -20,9 +20,9 @@ describe Admin::AdminUsersController do
     end
   end
 
-  describe "logged in as admin user" do
+  describe "logged in as moderator user" do
     with_ssl do
-      let(:user) { FactoryGirl.create(:admin_user) }
+      let(:user) { FactoryGirl.create(:moderator_user) }
       before :each do
         login_as(user)
       end
@@ -60,10 +60,10 @@ describe Admin::AdminUsersController do
     with_ssl do
       describe "GET 'index'" do
         before :each do
-          @user1 = FactoryGirl.create(:admin_user, :first_name => 'John', :last_name => 'Kennedy')
-          @user2 = FactoryGirl.create(:admin_user, :first_name => 'Hilary', :last_name => 'Clinton')
-          @user3 = FactoryGirl.create(:admin_user, :first_name => 'Ronald', :last_name => 'Reagan')
-          @user4 = FactoryGirl.create(:admin_user, :first_name => 'Bill', :last_name => 'Clinton')
+          @user1 = FactoryGirl.create(:moderator_user, :first_name => 'John', :last_name => 'Kennedy')
+          @user2 = FactoryGirl.create(:moderator_user, :first_name => 'Hilary', :last_name => 'Clinton')
+          @user3 = FactoryGirl.create(:moderator_user, :first_name => 'Ronald', :last_name => 'Reagan')
+          @user4 = FactoryGirl.create(:moderator_user, :first_name => 'Bill', :last_name => 'Clinton')
         end
 
         it "should be successful" do
@@ -140,7 +140,7 @@ describe Admin::AdminUsersController do
       end
 
       describe "GET 'edit'" do
-        let(:edit_user) { FactoryGirl.create(:admin_user) }
+        let(:edit_user) { FactoryGirl.create(:moderator_user) }
 
         def do_get
           get :edit, :id => edit_user.to_param
@@ -159,7 +159,7 @@ describe Admin::AdminUsersController do
       end
 
       describe "PUT 'update'" do
-        let(:edit_user) { FactoryGirl.create(:admin_user, :email => "admin@example.com", :failed_login_count => 5) }
+        let(:edit_user) { FactoryGirl.create(:moderator_user, :email => "admin@example.com", :failed_login_count => 5) }
 
         def do_update
           patch :update,
@@ -206,7 +206,7 @@ describe Admin::AdminUsersController do
       end
 
       describe "DELETE 'destroy'" do
-        let(:delete_user) { FactoryGirl.create(:admin_user, :email => 'admin@example.com') }
+        let(:delete_user) { FactoryGirl.create(:moderator_user, :email => 'admin@example.com') }
 
         it "deletes the requested user" do
           delete :destroy, :id => delete_user.to_param

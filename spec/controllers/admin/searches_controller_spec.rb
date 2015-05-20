@@ -13,10 +13,10 @@ describe Admin::SearchesController do
     end
   end
 
-  describe "logged in as admin user" do
+  describe "logged in as moderator user" do
     with_ssl do
       before :each do
-        @user = FactoryGirl.create(:admin_user)
+        @user = FactoryGirl.create(:moderator_user)
         login_as(@user)
       end
 

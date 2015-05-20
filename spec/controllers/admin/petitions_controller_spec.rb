@@ -38,9 +38,9 @@ describe Admin::PetitionsController do
     end
   end
 
-  context "logged in as admin user but need to reset password" do
+  context "logged in as moderator user but need to reset password" do
     before :each do
-      @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
+      @user = FactoryGirl.create(:moderator_user, :force_password_reset => true)
       login_as(@user)
     end
 
@@ -51,9 +51,6 @@ describe Admin::PetitionsController do
         expect(response).to redirect_to(edit_admin_profile_path(@user))
       end
     end
-  end
-
-  context "logged in as admin" do
   end
 
   describe "logged in as moderator user" do

@@ -4,7 +4,7 @@ Feature: Threshold list
   Or have been marked as requiring a response
 
   Background:
-    Given I am logged in as a moderator user
+    Given I am logged in as a moderator
     And the date is the "21 April 2011 12:00"
     And a department "Treasury" exists with name: "Treasury"
     And a system setting exists with key: "threshold_signature_count", value: "5"

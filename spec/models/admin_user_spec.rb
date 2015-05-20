@@ -47,20 +47,20 @@ describe AdminUser do
     it { is_expected.not_to allow_value("jimbo").for(:email) }
 
     it "should validate uniqueness of email" do
-      FactoryGirl.create(:admin_user, :role => 'sysadmin')
+      FactoryGirl.create(:moderator_user)
       is_expected.to validate_uniqueness_of(:email).case_insensitive
     end
 
     it "should only allow passwords with a digit, lower and upper case alpha and a special char" do
       ['Letmein1!', 'Letmein1_', '1Ab*aaaa'].each do |email|
-        u = FactoryGirl.build(:admin_user, :password => email, :password_confirmation => email)
+        u = FactoryGirl.build(:moderator_user, :password => email, :password_confirmation => email)
         expect(u).to be_valid
       end
     end
 
     it "should not allow passwords without a digit, lower and upper case alpha and a special char" do
       ['Letmein1', 'hell$0123', '^%ttttFFFFF', 'KJDL_3444'].each do |email|
-        u = FactoryGirl.build(:admin_user, :password => email, :password_confirmation => email)
+        u = FactoryGirl.build(:moderator_user, :password => email, :password_confirmation => email)
         expect(u).not_to be_valid
       end
     end
@@ -101,7 +101,7 @@ describe AdminUser do
 
   context "methods" do
     it "should return a user's name" do
-      user = FactoryGirl.create(:admin_user, :first_name => 'Jo', :last_name => 'Public')
+      user = FactoryGirl.create(:moderator_user, :first_name => 'Jo', :last_name => 'Public')
       expect(user.name).to eq('Public, Jo')
     end
 
@@ -131,22 +131,22 @@ describe AdminUser do
 
     context "has_to_change_password?" do
       it "should be true when force_reset_password is true" do
-        user = FactoryGirl.create(:admin_user, :force_password_reset => true)
+        user = FactoryGirl.create(:moderator_user, :force_password_reset => true)
         expect(user.has_to_change_password?).to be_truthy
       end
 
       it "should be false when force_reset_password is false" do
-        user = FactoryGirl.create(:admin_user, :force_password_reset => false)
+        user = FactoryGirl.create(:moderator_user, :force_password_reset => false)
         expect(user.has_to_change_password?).to be_falsey
       end
 
       it "should be true when password was last changed over 9 months ago" do
-        user = FactoryGirl.create(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago - 1.minute)
+        user = FactoryGirl.create(:moderator_user, :force_password_reset => false, :password_changed_at => 9.months.ago - 1.minute)
         expect(user.has_to_change_password?).to be_truthy
       end
 
       it "should be false when password was last changed less than 9 months ago" do
-        user = FactoryGirl.create(:admin_user, :force_password_reset => false, :password_changed_at => 9.months.ago + 1.minute)
+        user = FactoryGirl.create(:moderator_user, :force_password_reset => false, :password_changed_at => 9.months.ago + 1.minute)
         expect(user.has_to_change_password?).to be_falsey
       end
     end
@@ -165,19 +165,19 @@ describe AdminUser do
 
     context "account_disabled" do
       it "should return true when user has tried to login 5 times unsuccessfully" do
-        user = FactoryGirl.create(:admin_user)
+        user = FactoryGirl.create(:moderator_user)
         user.failed_login_count = 5
         expect(user.account_disabled).to be_truthy
       end
 
       it "should return true when user has tried to login 6 times unsuccessfully" do
-        user = FactoryGirl.create(:admin_user)
+        user = FactoryGirl.create(:moderator_user)
         user.failed_login_count = 6
         expect(user.account_disabled).to be_truthy
       end
 
       it "should return false when user has tried to login 4 times unsuccessfully" do
-        user = FactoryGirl.create(:admin_user)
+        user = FactoryGirl.create(:moderator_user)
         user.failed_login_count = 4
         expect(user.account_disabled).to be_falsey
       end
@@ -185,13 +185,13 @@ describe AdminUser do
 
     context "account_disabled=" do
       it "should set the failed login count to 5 when true" do
-        u = FactoryGirl.create(:admin_user)
+        u = FactoryGirl.create(:moderator_user)
         u.account_disabled = true
         expect(u.failed_login_count).to eq(5)
       end
 
       it "should set the failed login count to 0 when false" do
-        u = FactoryGirl.create(:admin_user)
+        u = FactoryGirl.create(:moderator_user)
         u.failed_login_count = 5
         u.account_disabled = false
         expect(u.failed_login_count).to eq(0)

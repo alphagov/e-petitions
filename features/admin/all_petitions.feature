@@ -1,10 +1,10 @@
-Feature: An admin user views all petitions
+Feature: A moderator user views all petitions
   In order to see a full list of all the petitions
-  As any admin user
+  As any moderator user
   I want to view a paginated list of Open, Rejected and Closed petitions, sorted by signature count (descending), then most recent. I want to be able to filter this list by state and department, and follow links to change petition details.
 
   Background:
-    Given I am logged in as an admin
+    Given I am logged in as a moderator
     And a department "Treasury" exists with name: "Treasury"
     And a department "Cabinet Office" exists with name: "Cabinet Office"
 
@@ -58,7 +58,7 @@ Feature: An admin user views all petitions
     Then I should see "Simply the best"
 
   Scenario: A moderator user can view all petitions
-    Given I am logged in as a moderator user
+    Given I am logged in as a moderator
     And an open petition exists with title: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"

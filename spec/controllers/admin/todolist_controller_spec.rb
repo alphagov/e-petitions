@@ -13,8 +13,8 @@ describe Admin::TodolistController do
     end
   end
 
-  context "logged in as admin user but need to reset password" do
-    let(:user) { FactoryGirl.create(:admin_user, :force_password_reset => true) }
+  context "logged in as moderator user but need to reset password" do
+    let(:user) { FactoryGirl.create(:moderator_user, :force_password_reset => true) }
     before { login_as(user) }
 
     with_ssl do
@@ -76,8 +76,8 @@ describe Admin::TodolistController do
       end
     end
 
-    describe "logged in as admin user" do
-      let(:user) { FactoryGirl.create(:admin_user) }
+    describe "logged in as moderator user" do
+      let(:user) { FactoryGirl.create(:moderator_user) }
       before { login_as(user) }
 
       with_ssl do
