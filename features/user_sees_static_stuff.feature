@@ -44,10 +44,3 @@ Feature: User views static pages
     And I should see "Accessibility - e-petitions" in the browser page title
     And the markup should be valid
 
-  Scenario: I navigate to FAQ page
-    When I go to the home page
-    And I follow "FAQ"
-    Then I should be on the FAQ page
-    And I should see "Frequently asked questions - e-petitions" in the browser page title
-    And the markup should be valid
-
