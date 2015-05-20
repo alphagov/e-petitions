@@ -72,9 +72,6 @@
           <%= link_to image_tag("icons/twitter.png"), "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(@petition))}", :class => "text_link_plain" %>
         </div>
         <div class='share'>
-          <%= link_to image_tag("icons/linkedin.png"), "http://www.linkedin.com/shareArticle?mini=true&url=#{URI.escape(petition_url(@petition))}&title=#{URI.escape(title)}&source=HM+Government+e-petitions", :class => "text_link_plain" %>
-        </div>
-        <div class='share'>
           <%= link_to image_tag("icons/facebook.png"), "http://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(@petition))}", :class => "text_link_plain" %>
         </div>
       </dd>
