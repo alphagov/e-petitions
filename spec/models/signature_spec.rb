@@ -278,11 +278,38 @@ describe Signature do
       end
     end
 
+    context "pending" do
+      it "should return only pending signatures" do
+        signatures = Signature.pending
+        expect(signatures.size).to eq(1)
+        expect(signatures).to include(signature2)
+      end
+    end
+    
     context "need emailing" do
       it "should return only validated signatures who have opted in to receiving email updates" do
         expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
         expect(Signature.need_emailing(two_days_ago)).to include(signature1, signature3, petition.creator_signature)
         expect(Signature.need_emailing(week_ago)).to include(signature1, petition.creator_signature)
+      end
+    end
+
+    context "matching" do
+      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
+      
+      it "should return a signature matching in name, email and petition_id" do
+        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
+        expect(Signature.matching(signature)).to include(signature1)
+      end
+
+      it "should not return a signature matching in name, email and different petition" do
+        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition_id: 2)
+        expect(Signature.matching(signature)).to_not include(signature1)
+      end
+
+      it "should not return a signature matching in email, petition and different name" do
+        signature = FactoryGirl.build(:signature, name: "Josey Public", email: "person1@example.com", petition: petition)
+        expect(Signature.matching(signature)).to_not include(signature1)
       end
     end
 

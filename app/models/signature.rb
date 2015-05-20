@@ -38,19 +38,15 @@ class Signature < ActiveRecord::Base
     matcher = matcher.where("signatures.id != ?", signature.id) unless signature.new_record?
     existing_email_address_count = matcher.count
     next if existing_email_address_count == 0
-    # if 2 or more sigs already exist for this email
     if existing_email_address_count > 1
       signature.errors.add(:email, 'This email address is not allowed to sign this petition again')
       next
     end
-    #grab the signature
     existing_signature =  matcher.first
-    #if signature with this name already exists
     if (existing_signature.name.strip.downcase == signature.name.strip.downcase)
       signature.errors.add(:email, 'You cannot sign this petition again')
       next
     end
-    #checking the postcode for people living at same address
     if (existing_signature.postcode.gsub(/\s+/,'').downcase !=
         signature.postcode.gsub(/\s+/,'').downcase)
       signature.errors.add(:email, 'This email address is not allowed to sign this petition again')

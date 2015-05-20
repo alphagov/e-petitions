@@ -175,13 +175,13 @@ describe SignaturesController do
           expect(response).to redirect_to(thank_you_petition_signature_path(petition))
         end
       end
-      
+
       context "invalid input" do
         it "renders :new again for empty email" do
           do_post(:email => "")
           expect(response).to render_template(:new)
         end
-        
+
         it "should not create a new signature" do
           expect { do_post(:email => "") }.not_to change(Signature, :count)
         end
@@ -192,33 +192,29 @@ describe SignaturesController do
       ### good way to split up the contexts?
       ### how to make one assertion per test? email and redirect are currently linked?
       context "signature with same name/email/postcode" do
-        let(:custom_params) {{ name: 'Joe Blow', email: 'jb@example.com',
-                               email_confirmation: 'jb@example.com', postcode: 'SE3 4LL' }}
-        let(:unvalidated_signature) { FactoryGirl.build(:pending_signature, name: 'Joe Blow', email:'jb@example.com',
-                                                        email_confirmation:'jb@example.com', postcode: 'SE3 4LL',
-                                                        petition_id: petition.id) }
-        let(:validated_signature) { FactoryGirl.build(:validated_signature, name: 'Joe Blow', email:'jb@example.com',
-                                                      email_confirmation:'jb@example.com', postcode: 'SE3 4LL',
-                                                      petition_id: petition.id) }
-        
+        let(:custom_params) {{ name: 'Joe Blow', email: 'jb@example.com', postcode: 'SE3 4LL' }}
+
         context "unvalidated signature already exists" do
-          before { unvalidated_signature.save }
-          
+          before do
+            FactoryGirl.create(:pending_signature, name: 'Joe Blow', email:'jb@example.com',
+                               postcode: 'SE3 4LL', petition_id: petition.id)
+          end
+
           it "same name/email/postcode does not change count of signatures" do
             expect{ do_post(custom_params) }.to_not change(Signature, :count)
           end
-          
+
           it "same email/postcode changes count of signatures" do
             expect{ do_post(custom_params.merge( { name: 'Susan Blow' })) }.to change(Signature, :count).by(1)
           end
-          
+
           it "sends email to signer" do
             ActionMailer::Base.deliveries.clear
             do_post(custom_params)
             email = ActionMailer::Base.deliveries.last
             expect(email.to).to eq(["jb@example.com"])
           end
-          
+
           it "sends to thank you page" do
             do_post(custom_params)
             expect(response).to redirect_to(thank_you_petition_signature_path(petition))
@@ -226,8 +222,11 @@ describe SignaturesController do
         end
 
         context "validated signature already exists" do
-          before { validated_signature.save }
-          
+          before do
+            FactoryGirl.create(:validated_signature, name: 'Joe Blow', email:'jb@example.com',
+                               postcode: 'SE3 4LL', petition_id: petition.id)
+          end
+
           it "sends to :new for same name/email/postcode" do
             do_post(custom_params)
             expect(response).to render_template(:new)

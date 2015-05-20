@@ -39,12 +39,26 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario: Suzie cannot sign if she has already signed
-    And I have already signed the petition with an uppercase email
-    When I decide to sign the petition
+  Scenario: Suzie cannot sign if she has already signed and validated
+    When I have already signed the petition with an uppercase email
+    And I decide to sign the petition
     And I fill in my details
     And I try to sign
     Then I should see an error
+
+  Scenario: Suzie receives another email if she has already signed but not validated
+    When I have already signed the petition but not validated my email
+    And I decide to sign the petition
+    And I fill in my details
+    And I try to sign
+    Then "womboid@wimbledon.com" should receive 1 email
+
+  Scenario: Suzie receives an email if her email has been used to sign the petition already
+    When Eric has already signed the petition with Suzies email
+    And I decide to sign the petition
+    And I fill in my details
+    And I try to sign
+    Then "womboid@wimbledon.com" should receive 1 email
 
   Scenario: Suzie cannot sign if she does not provide her details
     When I decide to sign the petition
