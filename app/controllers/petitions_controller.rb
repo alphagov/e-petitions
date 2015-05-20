@@ -1,5 +1,4 @@
 class PetitionsController < ApplicationController
-  before_filter :assign_departments, :only => [:new, :create]
   before_filter :sanitise_page_param
   before_filter :sanitise_state_param
   caches_action_with_params :index

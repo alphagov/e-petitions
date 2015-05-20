@@ -15,15 +15,6 @@ describe PetitionsController do
         expect(assigns[:stage_manager].petition).not_to be_nil
       end
 
-      it "should assign departments" do
-        department1 = FactoryGirl.create(:department, :name => 'DFID')
-        department2 = FactoryGirl.create(:department, :name => 'Treasury')
-
-        get :new
-
-        expect(assigns[:departments]).to eq [department1, department2]
-      end
-
       it "is on stage 'petition'" do
         get :new
         expect(assigns[:stage_manager].stage).to eq 'petition';
@@ -38,7 +29,6 @@ describe PetitionsController do
   end
 
   describe "create" do
-    let(:department) { FactoryGirl.create(:department) }
     let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n") }
     let(:creator_signature_attributes) do
       {
@@ -148,12 +138,6 @@ describe PetitionsController do
           do_post
           expect(Petition.find_by_title('Save the planet')).to be_nil
           expect(response).to be_success
-        end
-
-        it "should assign departments if submission fails" do
-          petition_attributes[:title] = ''
-          do_post
-          expect(assigns[:departments]).to eq([department])
         end
 
         it "has stage of 'petition' if there are errors on title, action, or description" do

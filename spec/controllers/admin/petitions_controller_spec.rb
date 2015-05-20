@@ -177,7 +177,6 @@ describe Admin::PetitionsController do
 
   describe "logged in as sysadmin" do
     before :each do
-      @department = FactoryGirl.create(:department)
       @user = FactoryGirl.create(:sysadmin_user)
       login_as(@user)
     end
@@ -268,14 +267,6 @@ describe Admin::PetitionsController do
             email = ActionMailer::Base.deliveries.last
             expect(email.subject).to match(/Your e-petition has been published/)
           end
-        end
-
-        it "re-assign successfully" do
-          @department = FactoryGirl.create(:department)
-          do_post :commit => 'Re-assign', :petition => {:department_id => @department.id}
-          @petition.reload
-          expect(@petition.department).to eq(@department)
-          expect(response).to redirect_to(admin_root_path)
         end
 
         context "reject" do

@@ -18,11 +18,6 @@ FactoryGirl.define do
     role "moderator"
   end
 
-  factory :department do
-    sequence(:name) {|n| "Department #{n}" }
-    website_url "http://department.gov.uk"
-  end
-
   factory :petition do
     transient do
       creator_signature_attributes { {} }
