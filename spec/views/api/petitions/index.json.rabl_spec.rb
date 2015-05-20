@@ -6,7 +6,6 @@ describe "api/petitions/index.json.rabl" do
     :title => 'foo',
     :description => "description",
     :creator_signature => double(:name => "Tod Ham", :postal_district => "SO12"),
-    :department => double(:name => "Treasury"),
     :created_at => Time.parse("2012-02-02 02:02:02"),
     :closed_at => Time.parse("2013-02-02 02:02:02"),
     :response => "hello, yes",
@@ -26,7 +25,6 @@ describe "api/petitions/index.json.rabl" do
     example { expect(subject['title']).to eq("foo") }
     example { expect(subject['description']).to eq("description") }
     example { expect(subject['creator_name']).to eq("Tod Ham") }
-    example { expect(subject['department_name']).to eq("Treasury") }
     example { expect(subject['created_datetime']).to eq("2012-02-02T02:02:02Z") }
     example { expect(subject['closing_datetime']).to eq("2013-02-02T02:02:02Z") }
     example { expect(subject['last_update_datetime']).to eq("2012-03-02T02:02:02Z") }

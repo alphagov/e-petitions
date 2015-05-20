@@ -8,6 +8,3 @@ node(:last_update_datetime) { |p| p.updated_at.gmtime.iso8601 }
 glue :creator_signature do
   attributes :name => :creator_name
 end
-glue :department do
-  attributes :name => :department_name
-end
