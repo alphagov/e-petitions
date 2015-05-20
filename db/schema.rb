@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20150526154706) do
     t.boolean  "notify_by_email",              default: true
     t.datetime "last_emailed_at"
     t.string   "encrypted_email",  limit: 255
+    t.string   "unsubscribe_token"
   end
 
   add_index "signatures", ["encrypted_email", "petition_id", "name"], name: "index_signatures_on_encrypted_email_and_petition_id_and_name", unique: true, using: :btree
