@@ -7,9 +7,9 @@ module Staged
       def initialize(signature)
         @signature = signature
       end
-      delegate :id, :to_param, :model_name, :to_key,
-               :name, :email, :uk_citizenship,
-               :postcode, :country,
+      delegate :id, :to_param, :model_name, :to_key, :new_record?,
+               :name, :email, :encrypted_email, :uk_citizenship,
+               :postcode, :country, :petition_id,
                to: :signature
 
       def validation_context

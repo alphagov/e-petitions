@@ -8,7 +8,7 @@ Feature: Sam signs a petition
     And all petitions have had their signatures counted
     And Suzie has already signed the petition
 
-  Scenario:
+  Scenario: Sam can sign the petition with a different name
     When I try to sign the petition with the same email address and a different name
     Then I should have signed the petition after confirming my email address
 

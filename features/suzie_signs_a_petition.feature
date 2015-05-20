@@ -49,6 +49,11 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then I should see an error
+    And I fill in my details with email "womboidian@wimbledon.com"
+    And I try to sign
+    When I change my email address to "womboid@wimbledon.com"
+    And I say I am happy with my email address
+    Then I should see an error
 
   Scenario: Suzie receives another email if she has already signed but not validated
     When I have already signed the petition but not validated my email
@@ -56,7 +61,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     Then the signature count stays at 2
-    And I have not yet signed the petition	
+    And I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email
 
   Scenario: Suzie receives an email if her email has been used to sign the petition already
@@ -64,6 +69,7 @@ Feature: Suzie signs a petition
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
+    And I say I am happy with my email address
     Then the signature count goes up to 3
     And I have not yet signed the petition
     And "womboid@wimbledon.com" should receive 1 email

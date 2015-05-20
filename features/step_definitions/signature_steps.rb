@@ -109,10 +109,13 @@ Given /^I have signed the petition with a second name$/ do
 end
 
 When /^I try to sign the petition with the same email address and a different name$/ do
-  step "I decide to sign the petition"
-  step "I fill in my details"
-  step %{I fill in "Name" with "Sam Wibbledon"}
-  step "I try to sign"
+  steps %Q{
+    When I decide to sign the petition
+    And I fill in my details
+    And I fill in "Name" with "Sam Wibbledon"
+    And I try to sign
+    And I say I am happy with my email address
+  }
 end
 
 When /^I try to sign the petition with the same email address and the same name$/ do
