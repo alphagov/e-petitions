@@ -50,3 +50,14 @@ Feature: Suzie signs a petition
     When I decide to sign the petition
     And I try to sign
     Then I should see an error
+
+  Scenario: Suzie sees notice that she has already signed when she validates more than once
+    When I fill in my details and sign a petition
+    And I confirm my email address
+    And I am taken to a landing page
+    And I can click on a link to return to the petition
+    And I should have signed the petition
+    When I confirm my email address
+    And I am taken to a landing page
+    And I can click on a link to return to the petition
+    Then I should see that I have already signed the petition

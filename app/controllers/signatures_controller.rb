@@ -39,7 +39,7 @@ class SignaturesController < ApplicationController
     else
       # We've found the signature, but it's already been verified.
       if @signature.state == Signature::VALIDATED_STATE
-        flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>.".html_safe
+        flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
         redirect_to signed_petition_signature_path(@signature.petition) and return
       else
         raise ActiveRecord::RecordNotFound
