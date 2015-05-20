@@ -1,4 +1,3 @@
-@departments
 Feature: Maggie searches for a petition by id
   In order to quickly find a petition and view the contents
   As Maggie
@@ -11,7 +10,7 @@ Feature: Maggie searches for a petition by id
     Then I should see the petition for editing
 
   Scenario: A user sees the edit internal page if the petition is visible
-    Given a petition "Duplicate" has been rejected by the "Treasury"
+    Given a petition "Duplicate" has been rejected
     And I am logged in as a moderator
     When I search for a petition by id
     Then I should see the petition for editing the internal reponse and changing the status
@@ -23,7 +22,7 @@ Feature: Maggie searches for a petition by id
     Then I should see the petition for editing
 
   Scenario: A moderator user sees the edit response page if the petition is open
-    Given a set of petitions for the "Treasury"
+    Given a set of petitions
     And I am logged in as a moderator
     When I search for a petition by id
     Then I should see the petition for editing the reponses

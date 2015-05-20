@@ -3,17 +3,6 @@ When /^I look at the next petition on my list$/ do
   visit edit_admin_petition_path(@petition)
 end
 
-When /^I re\-assign it to a different department$/ do
-  FactoryGirl.create(:department, :name => "Another department")
-  visit edit_admin_petition_path(@petition)
-  select "Another department"
-  click_button "Re-assign"
-end
-
-Then /^the petition should be assigned to that department$/ do
-  expect(@petition.reload.department.name).to eq "Another department"
-end
-
 When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
   select reason_code, :from => :petition_rejection_code
   click_button "Reject"
@@ -66,7 +55,7 @@ Then /^the petition should be visible on the site for signing$/ do
   expect(page).to have_css("a", :text => "Sign")
 end
 
-Then /^the creator should recieve a notification email$/ do
+Then /^the creator should receive a notification email$/ do
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
@@ -74,7 +63,7 @@ Then /^the creator should recieve a notification email$/ do
   )
 end
 
-Then /^the creator should recieve a (libel\/profanity )?rejection notification email$/ do |petition_is_libellous|
+Then /^the creator should receive a (libel\/profanity )?rejection notification email$/ do |petition_is_libellous|
   @petition.reload
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
@@ -92,6 +81,15 @@ end
 When /^I view all petitions$/ do
   click_link "All petitions"
 end
+
+Then /^I should see the petition "([^"]*)"$/ do |petition_title|
+  expect(page).to have_link(petition_title)
+end
+
+Then /^I should not see the petition "([^"]*)"$/ do |petition_title|
+  expect(page).not_to have_link(petition_title)
+end
+
 
 When /^I filter the list to show "([^"]*)" petitions$/ do |option|
   select option

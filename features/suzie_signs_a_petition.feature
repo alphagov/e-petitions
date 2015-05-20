@@ -1,11 +1,10 @@
-@departments
 Feature: Suzie signs a petition
   In order to have my say
   As Suzie
   I want to sign an existing petition
 
   Background:
-    Given a petition "Do something!" belonging to the "Treasury"
+    Given a petition "Do something!"
     And all petitions have had their signatures counted
 
   Scenario: Suzie signs a petition after validating her email

@@ -1,11 +1,10 @@
-@departments
 Feature: Suzie views a petition
   In order to read a petition and potentially sign it
   As Suzie the signer
   I want to view a petition of my choice from a list, seeing the vote count, closed and open dates, along with the reason for rejection if applicable
 
   Scenario: Suzie views an open petition
-    Given an open petition "Spend more money on Defence" belonging to the "Treasury"
+    Given an open petition "Spend more money on Defence"
     When I view the petition
     Then I should see the petition details
     And I should see "Spend more money on Defence - e-petitions" in the browser page title
@@ -22,7 +21,7 @@ Feature: Suzie views a petition
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
 
   Scenario: Suzie sees reason for rejection if appropriate
-    Given a petition "Please bring back Eldorado" has been rejected by the "Treasury" with the reason "<i>We<i> like http://www.google.com and bambi@gmail.com"
+    Given a petition "Please bring back Eldorado" has been rejected with the reason "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I view the petition
     Then I should see the petition details
     And I should see the reason for rejection
@@ -32,12 +31,12 @@ Feature: Suzie views a petition
     And I cannot sign the petition
 
   Scenario: Suzie cannot sign closed petition
-    Given a petition "Spend more money on Defence" belonging to the "Treasury" has been closed
+    Given a petition "Spend more money on Defence" has been closed
     When I view the petition
     Then I should see the petition details
     And I cannot sign the petition
     
   Scenario: Suzie sees a 'closed' message when viewing a closed petition
-    Given a petition "Spend more money on Defence" belonging to the "Treasury" has been closed
+    Given a petition "Spend more money on Defence" has been closed
     When I view the petition
     Then I should see "This e-petition is now closed"

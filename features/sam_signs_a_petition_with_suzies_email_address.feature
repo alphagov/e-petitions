@@ -1,11 +1,10 @@
-@departments
 Feature: Sam signs a petition
   In order to have my say as well as Suzie without needing a seperate email address
   As Sam, Suzie's partner
   I want to sign a petition that has already been signed by Suzie
 
   Background:
-    Given a petition "Do something!" belonging to the "Treasury"
+    Given a petition "Do something!"
     And all petitions have had their signatures counted
     And Suzie has already signed the petition
 

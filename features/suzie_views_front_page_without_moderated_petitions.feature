@@ -6,4 +6,3 @@ Feature: Suzie views front page without moderated petitions
   Scenario:
     When I go to the home page
     Then I should not be able to search via free text
-    And I should not be able to search via department
