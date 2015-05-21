@@ -5,7 +5,7 @@ describe Staged::PetitionSigner do
   let(:move) { '' }
   let(:stage) { '' }
   let(:petition) { FactoryGirl.create(:open_petition) }
-  subject { described_class.new(signature_params, petition, stage, move) }
+  subject { described_class.manage(signature_params, petition, stage, move) }
   let(:signature) { subject.signature }
 
   describe '#create_signature' do

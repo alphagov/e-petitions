@@ -1,54 +1,58 @@
 module Staged
-  class PetitionSigner
-    def initialize(params, petition, stage, move)
-      @params = params
-      @petition = petition
-      @previous_stage = stage
-      @move = move
-    end
-
-    # This is the stage we came from - the UI elements we showed the user
-    # that generated these params
-    attr_reader :previous_stage
-    attr_reader :move
-
-    def signature
-      @_signature ||= build_signature
-    end
-
-    def stage
-      stage_manager.result_stage.name
-    end
-
-    def stage_object
-      stage_manager.result_stage.stage_object
-    end
-
-    def create_signature
-      sanitize!
-      stage_manager.create
+  module PetitionSigner
+    def self.manage(params, petition, stage, move)
+      Manager.new(params, petition, stage, move, self::Stages)
     end
 
     def self.stages
-      stages_scenario.stage_names
+      self::Stages.stage_names
     end
 
-    private
+    class Manager
+      def initialize(params, petition, stage, move, stages)
+        @params = params
+        @petition = petition
+        @previous_stage = stage
+        @move = move
+        @stages = stages
+      end
 
-    def self.stages_scenario
-      Staged::Signature::Stages
-    end
+      # This is the stage we came from - the UI elements we showed the user
+      # that generated these params
+      attr_reader :previous_stage
+      attr_reader :move
+      attr_reader :stages
 
-    def stage_manager
-      @_stage_manager ||= Staged::StageManager.new(self.class.stages_scenario, previous_stage, move, signature)
-    end
+      def signature
+        @_signature ||= build_signature
+      end
 
-    def sanitize!
-      signature.email.strip! unless signature.email.blank?
-    end
+      def stage
+        stage_manager.result_stage.name
+      end
 
-    def build_signature
-      @petition.signatures.build(@params)
+      def stage_object
+        stage_manager.result_stage.stage_object
+      end
+
+      def create_signature
+        sanitize!
+        stage_manager.create
+      end
+
+      private
+
+      def stage_manager
+        @_stage_manager ||= Staged::StageManager.new(stages, previous_stage, move, signature)
+      end
+
+      def sanitize!
+        signature.email.strip! unless signature.email.blank?
+      end
+
+      def build_signature
+        @petition.signatures.build(@params)
+      end
     end
   end
 end

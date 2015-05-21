@@ -1,5 +1,5 @@
 module Staged
-  module Signature
+  module PetitionSigner
     module Stages
       def self.stage_names
         ['signer', 'replay-email', 'done']
@@ -12,19 +12,19 @@ module Staged
       def self.for_name(name)
         case name
         when 'signer'
-          Stages::Signer
+          self::Signer
         when 'replay-email'
-          Stages::ReplayEmail
+          self::ReplayEmail
         when 'done'
-          Stages::Done
+          self::Done
         else
-          Stages::Signer
+          self::Signer
         end
       end
 
       class Signer < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Signature::Signer.new(model)
+          @_stage_object ||= ::Staged::PetitionSigner::Signer.new(model)
         end
 
         def name; 'signer'; end
@@ -34,7 +34,7 @@ module Staged
 
       class ReplayEmail < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Signature::ReplayEmail.new(model)
+          @_stage_object ||= ::Staged::PetitionSigner::ReplayEmail.new(model)
         end
 
         def name; 'replay-email'; end
