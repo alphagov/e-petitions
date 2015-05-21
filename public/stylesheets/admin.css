@@ -244,9 +244,3 @@ form.filter {
 .links {
   margin-bottom: 8px;
 }
-
-#num_petitions_per_department_report{
-  border-top: 3px solid #ddd;
-  margin-top: 30px;
-  padding-top: 30px;
-}

@@ -3,10 +3,6 @@ class ApplicationController < ActionController::Base
 
   protected
 
-  def assign_departments
-    @departments = Department.by_name
-  end
-
   def sanitise_page_param(param = :page)
     params[param] = params[param].to_i
     params[param] = 1 if params[param] < 1

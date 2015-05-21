@@ -10,10 +10,6 @@ Rails.application.routes.draw do
   get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
   post 'feedback' => 'feedback#create', :as => nil
 
-  resources :departments, :only => [:index, :show] do
-    get 'info', :action => :info, :on => :collection, :as => :info
-  end
-
   resources :petitions, :only => [:new, :show, :index] do
     collection do
       get 'check'

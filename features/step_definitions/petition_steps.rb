@@ -1,6 +1,6 @@
-Given /^a set of petitions for the "([^"]*)"$/ do |department_name|
+Given /^a set of petitions$/ do
   3.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description", :department => Department.find_by(name: department_name))
+    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description")
   end
 end
 
@@ -9,15 +9,12 @@ Then /^I am taken to a landing page$/ do
 end
 
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"(?: belonging to the "([^"]*)")?$/ do |a_or_an, state, petition_title, department_name|
+Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_title|
   petition_args = {
     :title => petition_title,
     :closed_at => 1.day.from_now,
     :state => state || "open"
   }
-  if department_name.present?
-    petition_args[:department] = Department.find_or_create_by(name: department_name)
-  end
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
@@ -44,24 +41,22 @@ Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |title, no_va
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
 end
 
-Given /^a petition "([^"]*)" belonging to the "([^"]*)" has been closed$/ do |petition_title, department_name|
-  @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago, :department => Department.find_by(name: department_name))
+Given /^a petition "([^"]*)" has been closed$/ do |petition_title|
+  @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago)
 end
 
-Given /^a libelous petition "([^"]*)" has been rejected by the "([^"]*)"$/ do |petition_title, department_name|
+Given /^a libelous petition "([^"]*)" has been rejected$/ do |petition_title|
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_or_create_by(name: department_name),
     :state => Petition::HIDDEN_STATE,
     :rejection_code => "libellous",
     :rejection_text => "You can't say that!")
 end
 
-Given /^a petition "([^"]*)" has been rejected by the "([^"]*)"( with the reason "([^"]*)")?$/ do |petition_title, department_name, reason_or_not, reason|
-  reason_text = reason.nil? ? "We are the #{department_name}, not television executives" : reason
+Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_title, reason_or_not, reason|
+  reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:petition,
     :title => petition_title,
-    :department => Department.find_or_create_by(name: department_name),
     :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
     :rejection_text => reason_text)
@@ -91,9 +86,9 @@ When /^I change the number viewed per page to (\d+)$/ do |per_page|
   select per_page.to_s, :from => 'per_page'
 end
 
-Then /^I should see petitions for all departments$/ do
+Then /^I should see all petitions$/ do
   expect(page).to have_content("All e-petitions")
-  expect(page).to have_css("tbody tr", :count => 6)
+  expect(page).to have_css("tbody tr", :count => 3)
 end
 
 Then /^I should see the petition details$/ do

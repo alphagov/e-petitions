@@ -3,7 +3,6 @@ Feature: Searching for signatures as Terry
   As Terry
   I would like to be able to enter an email address, and see all signatures associated with it
 
-  @departments
   Scenario:
     Given 2 petitions signed by "bob@example.com"
     And I am logged in as a moderator

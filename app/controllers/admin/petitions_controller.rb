@@ -1,6 +1,4 @@
 class Admin::PetitionsController < Admin::AdminController
-  before_filter :assign_departments, :only => [:edit, :update]
-
   respond_to :html
 
   def index
@@ -74,11 +72,6 @@ class Admin::PetitionsController < Admin::AdminController
   def publish
     @petition.publish!
     PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_now
-  end
-
-  def reassign
-    department = Department.find(params[:petition][:department_id])
-    @petition.reassign!(department)
   end
 
   def reject

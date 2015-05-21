@@ -2,13 +2,9 @@ Feature: As Charlie
   In order to have an issue discussed in parliament
   I want to be able to create a petition and verify my email address.
 
-Background:
-  Given a department exists with name: "Cabinet Office", description: "Where cabinets do their paperwork"
-  And a department exists with name: "Department for International Development", description: "A large portion of the UK population cannot intonate their words properly. This department is responsible for developing this."
-
 @search
 Scenario: Charlie has to search for a petition before creating one
-  Given a petition "Rioters should loose benefits" belonging to the "Cabinet Office"
+  Given a petition "Rioters should loose benefits"
   Given I am on the home page
   When I follow "Create a new e-petition"
   Then I should be asked to search for a new petition
@@ -114,11 +110,3 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"
-
-
-Scenario: Charlie looks up information about departments
-  Given I am on the department information page
-  And I should see "Cabinet Office"
-  And I should see "Where cabinets do their paperwork"
-  And I should see "Department for International Development"
-  And I should see "A large portion of the UK population cannot intonate their words properly. This department is responsible for developing this."

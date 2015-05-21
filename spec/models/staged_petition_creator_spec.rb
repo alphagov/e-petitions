@@ -100,7 +100,6 @@ describe StagedPetitionCreator do
       end
     end
 
-    let(:department) { FactoryGirl.create(:department) }
     let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
     let(:creator_signature_params) do
       {

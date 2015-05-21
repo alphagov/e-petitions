@@ -11,7 +11,6 @@ A few things to know:
 You will need `ruby 2.2.2`
 
 You will need to set up the `database.yml`
-You will need to run `seeds.rb` to seed the 'department' data required for moderation of petitions
 
 For setting up a sysadmin user, run `rake epets:add_sysadmin_user` - the password must contain a mix of upper and lower case letters, numbers and special characters.
 

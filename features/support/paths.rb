@@ -41,11 +41,6 @@ module NavigationHelpers
     when /^the search results page$/
       search_path
 
-    when /^the departments page$/
-      departments_path
-    when /^the department info(rmation)? page$/
-      info_departments_path
-
     when /^the Admin (.*)$/i
       admin_path($1)
 

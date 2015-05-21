@@ -26,13 +26,6 @@ describe Admin::ReportsController do
             get :index
             expect(assigns(:counts)).to eq(counts)
           end
-
-          it "assigns departments to the view" do
-            departments = [double]
-            expect(Department).to receive(:by_petition_count).and_return(departments)
-            get :index
-            expect(assigns(:departments)).to eq(departments)
-          end
         end
 
         describe "for trending petitions" do
@@ -40,7 +33,6 @@ describe Admin::ReportsController do
 
           before do
             allow(Petition).to receive(:trending).and_return(trending_petitions)
-            allow(Department).to receive(:by_petition_count).and_return []
           end
 
           it "assigns number_of_days_to_trend to the view" do

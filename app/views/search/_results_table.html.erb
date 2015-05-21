@@ -1,8 +1,6 @@
 <%
   if petition_search.search_term.present?
     results_table_summary = "#{petition_search.state.capitalize} e-petitions which match \"#{petition_search.search_term}\""
-  elsif @department
-    results_table_summary = "#{petition_search.state.capitalize} e-petitions owned by the #{@department.name}"
   else
     results_table_summary = "#{petition_search.state.capitalize} e-petitions"
   end

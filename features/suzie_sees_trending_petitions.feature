@@ -1,4 +1,3 @@
-@departments
 Feature: Suzie sees trending petitions
   In order to make the site more engaging for browsing
   As Suzie the signer

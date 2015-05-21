@@ -29,9 +29,6 @@ form.new_petition_form .form_pagination ul {
 #header #header_content {
   margin-right: 30px;
 }
-#header #header_content .search_by_departments_link {
-  display: inline-block;
-}
 
 #header #header_content form label {
   clear: both;

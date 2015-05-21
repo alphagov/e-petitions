@@ -23,10 +23,6 @@ Then /^I should not be able to search via free text$/ do
   expect(page).to have_no_css("form[action=search]")
 end
 
-Then /^I should not be able to search via department$/ do
-  expect(page).to have_no_css("a", :text => "Search by department")
-end
-
 Then /^I should see an? "([^"]*)" petition count of (\d+)$/ do |state, count|
   expect(page).to have_css(%{#petition_state_tabs li:contains("#{state.capitalize}")}, :text => count.to_s)
 end

@@ -1,11 +1,10 @@
-@departments
 Feature: Resending confirmation emails as Suzie
   In order to confirm a signature on a petition
   As Suzie
   I want to be able to have the confirmation email resent to me
 
   Background:
-    Given a petition "Free the Wombles!" belonging to the "Treasury"
+    Given a petition "Free the Wombles!"
 
   Scenario: Single Suzie has never even started signing the petition
     When I ask for my confirmation email to be resent
