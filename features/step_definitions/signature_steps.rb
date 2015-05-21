@@ -51,6 +51,23 @@ When /^I fill in my details$/ do
   )
 end
 
+When /^I fill in my details and sign a petition$/ do
+  steps %Q(
+    When I go to the new signature page for "Do something!"
+    And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
+    And the markup should be valid
+    And I should be connected to the server via an ssl connection
+    And I fill in my details
+    And I try to sign
+    And I have not yet signed the petition
+    And "womboid@wimbledon.com" should receive 1 email
+  )
+end
+
+Then /^I should see that I have already signed the petition$/ do
+  expect(page).to have_text("Thank you. Your signature has already been added to the e-petition.")
+end
+
 And "I have already signed the petition with an uppercase email" do
   FactoryGirl.create(:signature, :petition => @petition, :email => "WOMBOID@WIMBLEDON.COM")
 end
