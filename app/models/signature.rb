@@ -47,6 +47,9 @@ class Signature < ActiveRecord::Base
                                          name: signature.name, 
                                          petition_id: signature.petition_id) }
 
+  # callbacks
+  before_create :generate_unsubscribe_token
+
   # = Methods =
   attr_accessor :uk_citizenship
 
@@ -64,5 +67,9 @@ class Signature < ActiveRecord::Base
 
   def postal_district
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
+  end
+
+  def generate_unsubscribe_token
+    self.unsubscribe_token = Authlogic::Random.friendly_token
   end
 end

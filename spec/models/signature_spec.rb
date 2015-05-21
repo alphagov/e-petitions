@@ -30,12 +30,7 @@ describe Signature do
       expect(s.state).to eq("pending")
     end
 
-    it "perishable token should be populated by a call to friendly_token" do
-      expect(Authlogic::Random).to receive(:friendly_token)
-      FactoryGirl.create(:signature)
-    end
-
-    it "perishable token should not be nil" do
+    it "generates perishable token" do
       s = FactoryGirl.create(:signature, :perishable_token => nil)
       expect(s.perishable_token).not_to be_nil
     end
@@ -44,6 +39,12 @@ describe Signature do
       s = Signature.new
       expect(s.notify_by_email).to be_truthy
     end
+
+    it "generates unsubscription token" do
+      s = FactoryGirl.create(:signature, :unsubscribe_token=> nil)
+      expect(s.unsubscribe_token).not_to be_nil
+    end
+
   end
 
   context "encryption of email" do
