@@ -5,7 +5,6 @@
 <div class="title_block">
   <h2>Feedback</h2>
 </div>
-<p class="flash_notice">If you have a question about e-petitions, please check the <%= link_to 'FAQs', '/faq', :class => 'flash_notice_link' %> first to see if it's answered there.</p>
 <%= form_for @feedback, :url => feedback_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <fieldset>
     <p class='form_header'>We'd love to hear from you with any feedback on the e-petitions site that you have.  Please fill in the details using the form below.  If your comment or question relates to a specific e-petition, please ensure you include the exact e-petition title - or a link to it.

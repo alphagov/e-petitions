@@ -1209,20 +1209,20 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#96258e', end
 }
 
 /* Department index page */
-.department_list_block, .faq_block {
+.department_list_block {
  background-image: none;
  border-bottom: none;
 }
-ul.department_list, ul.faq {
+ul.department_list {
   padding-bottom: 30px;
 }
-ul.department_list li, ul.faq li {
+ul.department_list li {
   font-size: 1.5em;
   font-weight: bold;
   line-height: 1.55em;
   margin-bottom: 10px;
 }
-ul.department_list li a, ul.faq li a {
+ul.department_list li a {
   font-size: 1em;
 }
 
@@ -1455,18 +1455,6 @@ ul.department_list li a, ul.faq li a {
   letter-spacing: 0.01em;
 }
 
-.faq_answer ul {
-  list-style: disc outside none;
-  margin-bottom: 16px;
-}
-
-.faq_answer ul li {
-  margin-left: 30px;
-  font-size: 1.3em;
-  letter-spacing: 0.01em;
-}
-
-
 .thank_you_block .large_link_button {
   margin-bottom: 30px;
   margin-top: 20px;
@@ -1642,7 +1630,7 @@ html[xmlns] .clearfix {
     clear: both;
   }
 
-  ul.department_list, ul.faq{
+  ul.department_list{
     padding: 20px;
     font-size: 0.8em;
   }
@@ -1825,10 +1813,6 @@ html[xmlns] .clearfix {
     width: 280px;
     padding: 10px;
     margin-left: -150px;
-  }
-
-  .faq_list_block .get_started_button {
-    margin: 0px 0px 20px 20px;
   }
 
   .how_it_works{

@@ -26,9 +26,6 @@ module NavigationHelpers
     when /^the crown copyright page$/
       crown_copyright_path
 
-    when /^the FAQ page$/
-      faq_path
-
     when /^the feedback page$/
       feedback_path
 
