@@ -44,6 +44,9 @@ describe('validation methods', function() {
     it ('matches a regular email address', function() {
       expect('foo@bar.com').toBeValidEmailAddress();
     });
+    it ('matches an email address with long tld', function() {
+      expect('foo@bar.averylongtldname').toBeValidEmailAddress();
+    });
     it ('rejects two @s', function() {
       expect('foo@bar@baz.com').not.toBeValidEmailAddress();
     });
