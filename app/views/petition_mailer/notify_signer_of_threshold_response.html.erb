@@ -9,3 +9,5 @@
 <p>Thanks,</p>
 
 <p>HM Government e-petitions <%= link_to home_url, home_url %></p>
+
+<p>Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></p>
