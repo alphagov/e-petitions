@@ -11,12 +11,7 @@ module EmailEncrypter
                    marshaler: EmailDowncaser
 
     # = Validations =
-    validates_presence_of :email, message: "%{attribute} must be completed"
-
-    validates_format_of :email,
-                        with: EMAIL_REGEX,
-                        unless: 'email.blank?',
-                        message: "Email '%{value}' not recognised."
+    include Staged::Validations::Email
 
     # = Finders =
     scope :for_email, ->(email) { where(encrypted_email: encrypt_email(email)) }
@@ -29,11 +24,11 @@ module EmailEncrypter
     def encrypted_email
       super
     end
-    
+
     def encrypted_email=(value)
       super
     end
-    
+
     def encrypted_email?
       super
     end

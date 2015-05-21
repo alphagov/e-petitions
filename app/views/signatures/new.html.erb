@@ -50,10 +50,6 @@ $().ready(function() {
     method: [E_PETS.FormController.validation_methods.validate_format, E_PETS.FormController.validation_formats.email],
     message: "Email not recognised."
   });
-  signature_form.validates('signature[email_confirmation]', {
-    method: [E_PETS.FormController.validation_methods.validate_confirmation, 'signature[email]'],
-    message: "Email must match confirmation."
-  });
   signature_form.validates('signature[uk_citizenship]', {
     method: E_PETS.FormController.validation_methods.validate_checked,
     message: "You must be a British citizen or normally live in the UK to create or sign e-petitions."

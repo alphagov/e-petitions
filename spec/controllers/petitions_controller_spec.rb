@@ -43,7 +43,6 @@ describe PetitionsController do
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
-        :email_confirmation => 'john@example.com',
         :postcode => 'SE3 4LL', :country => 'United Kingdom',
         :uk_citizenship => '1'
       }
@@ -59,7 +58,7 @@ describe PetitionsController do
     end
 
     def do_post(options = {})
-      post :create, {:stage => 'submit', :move => 'next', :petition => petition_attributes}.merge(options)
+      post :create, {:stage => 'replay-email', :move => 'next', :petition => petition_attributes}.merge(options)
     end
 
     with_ssl do
@@ -166,12 +165,8 @@ describe PetitionsController do
           expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 
-        it "has stage of 'creator' if there are errors on name, email, email_confirmation, uk_citizenship, postcode or country" do
+        it "has stage of 'creator' if there are errors on name, uk_citizenship, postcode or country" do
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:email => 'dave@example.com', :l_confirmation => 'laura@example.com'))
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
@@ -185,6 +180,22 @@ describe PetitionsController do
           petition_attributes[:sponsor_emails] = 'blah@'
           do_post
           expect(assigns[:stage_manager].stage).to eq 'sponsors'
+        end
+
+        it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
+          new_creator_signature_attribtues = creator_signature_attributes.merge(:email => 'foo@')
+          new_petition_attributes = petition_attributes.merge(:creator_signature => new_creator_signature_attribtues)
+          do_post :stage => 'replay-email',
+                  :petition => new_petition_attributes
+          expect(assigns[:stage_manager].stage).to eq 'replay-email'
+        end
+
+        it "has stage of 'creator' if there are errors on email and we came from 'creator' stage" do
+          new_creator_signature_attribtues = creator_signature_attributes.merge(:email => 'foo@')
+          new_petition_attributes = petition_attributes.merge(:creator_signature => new_creator_signature_attribtues)
+          do_post :stage => 'creator',
+                  :petition => new_petition_attributes
+          expect(assigns[:stage_manager].stage).to eq 'creator'
         end
       end
     end

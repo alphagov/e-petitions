@@ -8,7 +8,7 @@ module Staged
         @petition = petition
       end
       delegate :id, :to_param, :model_name, :to_key,
-               :name, :email, :email_confirmation, :uk_citizenship,
+               :name, :email, :uk_citizenship,
                :postcode, :country,
                to: :creator_signature
 

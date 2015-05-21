@@ -1,5 +1,5 @@
 module Staged
-  class Submit < Staged::Base::Petition
+  class ReplayPetition < Staged::Base::Petition
     include Staged::HasCreatorSignature
 
     class CreatorSignature < Staged::Base::CreatorSignature

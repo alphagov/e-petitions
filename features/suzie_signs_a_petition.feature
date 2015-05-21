@@ -39,13 +39,6 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario: Suzie cannot sign if she enters the email confirmation incorrectly
-    When I decide to sign the petition
-    And I fill in my details
-    And I fill in "Email confirmation" with "something@different.com"
-    And I try to sign
-    Then I should see an error
-
   Scenario: Suzie cannot sign if she has already signed
     And I have already signed the petition with an uppercase email
     When I decide to sign the petition

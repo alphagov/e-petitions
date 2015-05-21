@@ -1,5 +1,5 @@
 <fieldset id="petition_submit_section">
-  <legend>Submit Petition</legend>
+  <legend>Review Petition</legend>
 
   <div class="strap_block">
     <p>Here's your chance to review your e-petition. Once you press 'submit', you can't go back.
@@ -21,6 +21,6 @@
 
   <%= form_row :class => 'button_row' do %>
     <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Submit', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
+    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
   <% end %>
 </fieldset>

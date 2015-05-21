@@ -38,6 +38,7 @@ Scenario: Charlie creates our petition
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
+  And I press "Next"
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
@@ -83,10 +84,6 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "You must be a British citizen"
   And I should see "Postcode must be completed"
 
-  When I fill in my details with email "wimbledon@womble.com" and confirmation "uncleb@wimbledon.com"
-  And I press "Next"
-  And I should see "Email should match confirmation"
-
   When I fill in my details
 
   And I press "Next"
@@ -95,12 +92,10 @@ Scenario: Charlie tries to submit an invalid petition
   And I fill in sponsor emails
 
   And I press "Next"
-  Then I should see a fieldset called "Submit Petition"
+  Then I should see a fieldset called "Review Petition"
 
-  #Seems there's an envjs bug here
-  # And I should see "The wombats of wimbledon rock."
-  # And I should see "Department for International Development"
-  # And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I should see "The wombats of wimbledon rock."
+  And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Back"
   And I press "Back"
@@ -108,6 +103,13 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Next"
   And I press "Next"
 
+  And I press "Next"
+  Then I should see a fieldset called "Make sure this is right"
+
+  When I fill in "Email" with ""
+  And I press "Submit"
+  Then I should see "Email must be completed"
+  When I fill in "Email" with "womboid@wimbledon.com"
   And I press "Submit"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
