@@ -65,11 +65,19 @@ class Signature < ActiveRecord::Base
     state == VALIDATED_STATE
   end
 
+  def unsubscribed?
+   notify_by_email == false
+  end
+
   def postal_district
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
 
   def generate_unsubscribe_token
     self.unsubscribe_token = Authlogic::Random.friendly_token
+  end
+
+  def unsubscribe!
+    self.update(notify_by_email: false)
   end
 end

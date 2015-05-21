@@ -278,4 +278,70 @@ describe SignaturesController do
       end
     end
   end
+
+  describe '#unsubscribe' do
+    before do
+      @petition = FactoryGirl.create(:petition)
+      @signature = FactoryGirl.create(:signature, :petition => @petition)
+    end
+
+    context "with valid unsubscription token" do
+      before do
+        get :unsubscribe, :id => @signature.id, :unsubscribe_token => @signature.unsubscribe_token
+        @signature.reload
+      end
+
+      it 'unsubscribes signer' do
+        expect(@signature.notify_by_email).to be_falsey
+      end
+
+      it 'renders a view stating that unsubscribing was successfull' do
+        expect(response).to render_template(:unsubscribe)
+      end
+    end
+
+    context "with invalid parameters" do
+
+      context "with invalid unsubscription token" do
+        before do
+          get :unsubscribe, :id => @signature.id, :unsubscribe_token => 'INVALID_TOKEN'
+        end
+
+        it 'does not unsubscribe signer' do
+          expect(@signature.notify_by_email).to be_truthy
+        end
+
+        it 'renders a simple text response that indicates that unsubscription failed' do
+          expect(response.body).to eq("Failed to unsubscribe")
+        end
+
+      end
+
+      context "with non-matching signature id and unsubscription token" do
+        before do
+          anohter_signature = FactoryGirl.create(:signature, :petition => @petition)
+          get :unsubscribe, :id => @signature.id, :unsubscribe_token =>  anohter_signature.unsubscribe_token
+        end
+
+        it 'does not unsubscribe signer' do
+          expect(@signature.notify_by_email).to be_truthy
+        end
+
+        it 'renders a simple text response that indicates that unsubscription failed' do
+          expect(response.body).to eq("Failed to unsubscribe")
+        end
+
+      end
+
+      context "with already unsubscribed signer" do
+        it 'renders a simple text responser to indicate signer has already unsubscribed' do
+          @signature.notify_by_email = false
+          @signature.save
+
+          get :unsubscribe, :id => @signature.id, :unsubscribe_token => @signature.unsubscribe_token
+          expect(response.body).to eq("You have already unsubscribed")
+        end
+      end
+    end
+  end
 end
