@@ -350,6 +350,6 @@ E_PETS.FormController.validation_methods = {
 };
 
 E_PETS.FormController.validation_formats = {
-  email: /^([A-Za-z0-9_\.%\+\-\'])+\@([A-Za-z0-9\-\.])+\.([A-Za-z]{2,4})$/,
+  email: /^[^@\s]+@[^@\s]+\.[^@\s]+$/,
   postcode: /^(([A-Z]{1,2}[0-9][0-9A-Z]? ?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO? ?(C\/O)? ?[0-9]{1,4}))$/i
 };
