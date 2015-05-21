@@ -1,9 +1,9 @@
-Feature: Admin users password change
-  As a an admin
+Feature: Moderator users password change
+  As a an moderator
   I can change my password
 
   Background:
-    Given I am logged in as an admin with the password "Letmein1!"
+    Given I am logged in as a moderator with the password "Letmein1!"
     
   Scenario: Accessing the Profile page
     When I go to the admin home page

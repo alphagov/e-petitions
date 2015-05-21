@@ -22,7 +22,7 @@
       <% @trending_petitions.each do |petition| %>
         <tr class="trending_petition">
           <td><%= petition.id %></td>
-          <td class="title"><%= link_to petition.title, [:edit_internal_response, :admin, petition] %></td>
+          <td class="title"><%= link_to petition.title, [:edit_response, :admin, petition] %></td>
           <td class="count"><%= petition.signatures.in_days(@number_of_days_to_trend).count %></td>
         </tr>
       <% end %>

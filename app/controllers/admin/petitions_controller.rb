@@ -57,7 +57,7 @@ class Admin::PetitionsController < Admin::AdminController
         Delayed::Job.enqueue EmailThresholdResponseJob.new(@petition.id, requested_at, Petition, PetitionMailer), :run_at => 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
       end
 
-      redirect_to threshold_admin_petitions_path
+      redirect_to admin_petitions_path
     else
       render :edit_response
     end
@@ -67,18 +67,6 @@ class Admin::PetitionsController < Admin::AdminController
     @petition = Petition.find(params[:id])
     reject
     respond_with @petition, :location => admin_petitions_path
-  end
-
-  def edit_internal_response
-    @petition = Petition.find(params[:id])
-  end
-
-  def update_internal_response
-    @petition = Petition.find(params[:id])
-    @petition.internal_response = params[:petition][:internal_response]
-    @petition.response_required = params[:petition][:response_required]
-    @petition.save!
-    redirect_to admin_petitions_path
   end
 
   protected

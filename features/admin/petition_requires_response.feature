@@ -1,10 +1,10 @@
-Feature: An admin user updates internal response and marks it for a public response
-  In order to assign a petition to a threshold user
-  As any admin user
+Feature: An moderator user updates internal response and marks it for a public response
+  In order to assign a petition to a moderator user
+  As any moderator user
   I want to be able add an internal response and flag a petition as requiring a public response
 
   Background:
-    Given I am logged in as an admin
+    Given I am logged in as a moderator
     And a department "Treasury" exists with name: "Treasury"
     And a department "Cabinet Office" exists with name: "Cabinet Office"
     And an open petition exists with title: "Solidarity with the Unions"

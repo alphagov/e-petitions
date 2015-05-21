@@ -59,8 +59,6 @@ Rails.application.routes.draw do
       member do
         get   :edit_response
         patch :update_response
-        get   :edit_internal_response
-        patch :update_internal_response
         patch :take_down
       end
     end

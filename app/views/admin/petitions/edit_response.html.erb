@@ -1,9 +1,25 @@
+<%= render 'petition_details' %>
+<%= render 'published_petition_details' %>
+
+<% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
+  <%= form_for [:admin, @petition ], :html => { :id => 'take_down_petition_form' }, :url => take_down_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
+    <div class='takedown'>
+      <h2>Take this petition down</h2>
+      <%= render :partial => 'reject', :locals => { :f => f, :button_label => "Take down" } %>
+    </div>
+  <% end -%>
+<% elsif @petition.rejected? -%>
+  <%= form_for [:admin, @petition ], :html => { :id => 'change_petition_rejection_status_form' }, :url => take_down_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
+    <div class='takedown'>
+      <h2>Change rejection status</h2>
+      <p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
+      <%= render :partial => 'reject', :locals => { :f => f, :button_label => "Change rejection status" } %>
+    </div>
+  <% end -%>
+<% end -%>
+
 <%= form_for [:admin, @petition ], :url => update_response_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
-  
-  <%= render 'petition_details', :f => f %>
-  <%= render 'published_petition_details' %>
   <%= render 'internal_response', :f => f %>
-  
   <div>
     <%= f.text_area :response, :label => 'Public response', :rows => 8, :cols => 70 %>
     <%= error_messages_for_field @petition, :response %>

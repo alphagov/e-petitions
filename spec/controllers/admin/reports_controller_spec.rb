@@ -5,7 +5,7 @@ describe Admin::ReportsController do
   describe "GET #index" do
     context "logged in" do
       before(:each) do
-        login_as FactoryGirl.create(:admin_user)
+        login_as FactoryGirl.create(:moderator_user)
       end
 
       with_ssl do
@@ -42,7 +42,6 @@ describe Admin::ReportsController do
             allow(Petition).to receive(:trending).and_return(trending_petitions)
             allow(Department).to receive(:by_petition_count).and_return []
           end
-
 
           it "assigns number_of_days_to_trend to the view" do
             get :index

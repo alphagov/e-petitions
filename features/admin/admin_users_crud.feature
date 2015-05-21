@@ -4,7 +4,7 @@ Feature: Admin users index and crud
 
   Background:
     Given I am logged in as a sysadmin with the email "muddy@fox.com", first_name "Sys", last_name "Admin"
-    And a threshold user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
+    And a moderator user exists with email: "naomi@example.com", first_name: "Naomi", last_name: "Campbell"
 
   Scenario: Accessing the admin users index
     When I go to the admin home page
@@ -13,19 +13,19 @@ Feature: Admin users index and crud
     And I should be connected to the server via an ssl connection
 
   Scenario: Ordering of the users index
-    Given an admin user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi"
-    And an admin user exists with email: "helen@example.com", first_name: "Helen", last_name: "Hunt", failed_login_count: 5
+    Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi"
+    And a moderator user exists with email: "helen@example.com", first_name: "Helen", last_name: "Hunt", failed_login_count: 5
     When I go to the admin users index page
     Then I should see the following admin index table:
       | Name            | Email             | Role      | Disabled |
       | Admin, Sys      | muddy@fox.com     | sysadmin  |          |
-      | Campbell, Naomi | naomi@example.com | threshold |          |
-      | Hunt, Helen     | helen@example.com | admin     | Yes      |
-      | Jacobi, Derek   | derek@example.com | admin     |          |
+      | Campbell, Naomi | naomi@example.com | moderator |          |
+      | Hunt, Helen     | helen@example.com | moderator | Yes      |
+      | Jacobi, Derek   | derek@example.com | moderator |          |
     And the markup should be valid
 
   Scenario: Pagination of the users index
-    Given 20 admin users exist
+    Given 20 moderator users exist
     When I go to the admin users index page
     And I follow "Next"
     Then I should see 2 rows in the admin index table
@@ -41,9 +41,8 @@ Feature: Admin users index and crud
     And I should see a "Last name" text field
     And I should see a "Email" text field
     And I should see a "Role" select field with the following options:
-      | admin     |
       | sysadmin  |
-      | threshold |
+      | moderator |
     And I should see a "Force password reset" checkbox field
     And I should see a "Account disabled" checkbox field
     And I should see a "Password" password field
@@ -77,11 +76,11 @@ Feature: Admin users index and crud
     When I follow "Campbell, Nolene"
     And the "Email" field should contain "helen@example.com"
     And the "Account disabled" checkbox should be checked
-    And an admin user should exist with email: "helen@example.com", failed_login_count: "5"
+    And a moderator user should exist with email: "helen@example.com", failed_login_count: "5"
     And I should be connected to the server via an ssl connection
 
   Scenario: Enabling a user's disabled account
-    Given an admin user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi", failed_login_count: "5"
+    Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi", failed_login_count: "5"
     When I go to the admin users index page
     And I follow "Jacobi, Derek"
     And the "Account disabled" checkbox should be checked
@@ -90,7 +89,7 @@ Feature: Admin users index and crud
     Then I should be on the admin users index page
     When I follow "Jacobi, Derek"
     And the "Account disabled" checkbox should not be checked
-    And an admin user should exist with email: "derek@example.com", failed_login_count: "0"
+    And a moderator user should exist with email: "derek@example.com", failed_login_count: "0"
 
   Scenario: Deleting a user
     When I go to the admin users index page

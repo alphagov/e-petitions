@@ -6,6 +6,6 @@ Feature: Searching for signatures as Terry
   @departments
   Scenario:
     Given 2 petitions signed by "bob@example.com"
-    And I am logged in as a threshold user
+    And I am logged in as a moderator
     When I search for petitions signed by "bob@example.com" in the admin section
     Then I should see 2 petitions associated with the email address

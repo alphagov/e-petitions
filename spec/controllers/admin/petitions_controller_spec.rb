@@ -38,9 +38,9 @@ describe Admin::PetitionsController do
     end
   end
 
-  context "logged in as admin user but need to reset password" do
+  context "logged in as moderator user but need to reset password" do
     before :each do
-      @user = FactoryGirl.create(:admin_user, :force_password_reset => true)
+      @user = FactoryGirl.create(:moderator_user, :force_password_reset => true)
       login_as(@user)
     end
 
@@ -53,43 +53,9 @@ describe Admin::PetitionsController do
     end
   end
 
-  context "logged in as admin" do
+  describe "logged in as moderator user" do
     before :each do
-      @user = FactoryGirl.create(:admin_user)
-      @treasury = FactoryGirl.create(:department, :name => 'Treasury')
-      login_as(@user)
-      @p1 = FactoryGirl.create(:open_petition, :department => @treasury)
-      @p1.update_attribute(:signature_count, 11)
-      @p2 = FactoryGirl.create(:open_petition)
-      @p2.update_attribute(:signature_count, 10)
-      @p3 = FactoryGirl.create(:closed_petition)
-      @p2.update_attribute(:signature_count, 20)
-    end
-
-    with_ssl do
-      it "should show moderated petitions" do
-        get :index
-        expect(response).to be_success
-        expect(assigns[:petitions]).to eq([@p3, @p1, @p2])
-      end
-
-      it "should redirect to all petitions on update of internal response" do
-        patch :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
-        expect(response).to redirect_to(admin_petitions_path)
-      end
-
-      it "should update internal response and response required flag" do
-        patch :update_internal_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
-        @p1.reload
-        expect(@p1.internal_response).to eq('This is popular')
-        expect(@p1.response_required).to be_truthy
-      end
-    end
-  end
-
-  describe "logged in as threshold user" do
-    before :each do
-      @user = FactoryGirl.create(:threshold_user)
+      @user = FactoryGirl.create(:moderator_user)
       login_as(@user)
 
       @p1 = FactoryGirl.create(:open_petition)
@@ -104,6 +70,7 @@ describe Admin::PetitionsController do
     end
 
     with_ssl do
+
       it "should return all petitions that have more than the threshold number of signatures in ascending count order" do
         get :threshold
         expect(assigns[:petitions]).to eq([@p2, @p1, @p4])
@@ -114,6 +81,15 @@ describe Admin::PetitionsController do
         expect(assigns[:petition]).to eq(@p1)
       end
 
+      context 'update internal response' do
+        it "should update internal response and response required flag" do
+          patch :update_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
+          @p1.reload
+          expect(@p1.internal_response).to eq('This is popular')
+          expect(@p1.response_required).to be_truthy
+        end
+      end
+
       context "update_response" do
         def do_patch(options = {})
           patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :email_signees => '1'}.merge(options)
@@ -121,7 +97,7 @@ describe Admin::PetitionsController do
         it "should update response and email signees flag with true" do
           expect(Delayed::Job).to receive(:enqueue)
           do_patch
-          expect(response).to redirect_to(threshold_admin_petitions_path)
+          expect(response).to redirect_to(admin_petitions_path)
           @p1.reload
           expect(@p1.response).to eq('Doh!')
           expect(@p1.email_requested_at).not_to be_nil

@@ -13,7 +13,7 @@
       t.highlights_on :controller => "admin/searches"
       t.highlights_on :controller => "admin/petitions", :action => :show
     end
-    if current_user.is_a_sysadmin? || current_user.is_a_threshold?
+    if current_user.is_a_sysadmin? || current_user.is_a_moderator?
       n.add_tab do |t|
         t.named "Threshold"
         t.links_to threshold_admin_petitions_path
@@ -26,8 +26,6 @@
       t.named "All petitions"
       t.links_to admin_petitions_path
       t.highlights_on :controller => "admin/petitions", :action => :index
-      t.highlights_on :controller => "admin/petitions", :action => :edit_internal_response
-      t.highlights_on :controller => "admin/petitions", :action => :update_internal_response
     end
 
     n.add_tab do |t|

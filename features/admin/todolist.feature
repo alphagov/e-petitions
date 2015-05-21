@@ -24,8 +24,8 @@ Feature: Dashboard todo list
   And I should be connected to the server via an ssl connection
   And the markup should be valid
 
-  Scenario: An admin sees pending petitions
-    Given I am logged in as an admin
+  Scenario: An moderator sees pending petitions
+    Given I am logged in as a moderator
     When I go to the admin todolist page
     Then I should see the following admin index table:
       | Title      | Date       |
