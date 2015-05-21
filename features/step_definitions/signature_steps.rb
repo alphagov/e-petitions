@@ -69,12 +69,23 @@ Then /^I should see that I have already signed the petition$/ do
 end
 
 And "I have already signed the petition with an uppercase email" do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "WOMBOID@WIMBLEDON.COM")
+  FactoryGirl.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
+                     :email => "WOMBOID@WIMBLEDON.COM")
+end
+
+And "I have already signed the petition but not validated my email" do
+  FactoryGirl.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
+                     :email => "womboid@wimbledon.com")
 end
 
 Given /^Suzie has already signed the petition$/ do
   FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+end
+
+Given /^Eric has already signed the petition with Suzies email$/ do
+  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+         :postcode => "SW14 9RQ", :name => "Eric Wibbledon")
 end
 
 Given /^I have signed the petition with a second name$/ do
@@ -135,3 +146,9 @@ end
 When /^I fill in "([^"]*)" with my email address$/ do |field_name|
   step "I fill in \"#{field_name}\" with \"suzie@example.com\""
 end
+
+Then /^the signature count (?:stays at|goes up to) (\d+)$/ do |number|
+  signatures = @petition.signatures
+  expect(signatures.count).to eq number
+end
+

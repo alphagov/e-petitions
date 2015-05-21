@@ -58,11 +58,15 @@ class Signature < ActiveRecord::Base
 
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
+  scope :pending, -> { where(state: PENDING_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
   scope :need_emailing, ->(job_datetime) {
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
+  scope :matching, ->(signature) { where(encrypted_email: signature.encrypted_email,
+                                         name: signature.name, 
+                                         petition_id: signature.petition_id) }
 
   # = Methods =
   attr_accessor :uk_citizenship
@@ -82,5 +86,4 @@ class Signature < ActiveRecord::Base
   def postal_district
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
-
 end
