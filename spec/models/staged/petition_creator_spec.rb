@@ -5,7 +5,7 @@ describe Staged::PetitionCreator do
   let(:move) { '' }
   let(:stage) { '' }
   let(:request) { double(remote_ip: '192.168.0.1') }
-  subject { described_class.new(petition_params, request, stage, move) }
+  subject { described_class.manager(petition_params, request, stage, move) }
   let(:petition) { subject.petition }
 
   describe '#create_petition' do

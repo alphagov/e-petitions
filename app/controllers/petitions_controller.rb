@@ -18,14 +18,14 @@ class PetitionsController < ApplicationController
   def new
     assign_title
     assign_stage
-    @stage_manager = Staged::PetitionCreator.new(petition_params_for_new, request, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionCreator.manager(petition_params_for_new, request, params[:stage], params[:move])
     respond_with @stage_manager.stage_object
   end
 
   def create
     assign_move
     assign_stage
-    @stage_manager = Staged::PetitionCreator.new(petition_params_for_create, request, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionCreator.manager(petition_params_for_create, request, params[:stage], params[:move])
     if @stage_manager.create_petition
       send_email_to_verify_petition_creator(@stage_manager.petition)
       redirect_to thank_you_petition_path(@stage_manager.petition, :secure => true)

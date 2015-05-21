@@ -1,5 +1,5 @@
 module Staged
-  module Petition
+  module PetitionCreator
     module HasCreatorSignature
       extend ActiveSupport::Concern
 

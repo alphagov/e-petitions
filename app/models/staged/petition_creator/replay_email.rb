@@ -1,7 +1,7 @@
 module Staged
-  module Petition
+  module PetitionCreator
     class ReplayEmail < Staged::Base::Petition
-      include Staged::Petition::HasCreatorSignature
+      include Staged::PetitionCreator::HasCreatorSignature
 
       class CreatorSignature < Staged::Base::CreatorSignature
         include Staged::Validations::Email

@@ -1,5 +1,5 @@
 module Staged
-  module Petition
+  module PetitionCreator
     class Petition < Staged::Base::Petition
       include Staged::Validations::PetitionDetails
     end

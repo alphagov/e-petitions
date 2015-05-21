@@ -1,5 +1,5 @@
 module Staged
-  module Petition
+  module PetitionCreator
     module Stages
       def self.stage_names
         ['petition', 'creator', 'sponsors', 'replay-petition', 'replay-email', 'done']
@@ -12,25 +12,25 @@ module Staged
       def self.for_name(name)
         case name
         when 'petition'
-          Stages::Petition
+          self::Petition
         when 'creator'
-          Stages::Creator
+          self::Creator
         when 'sponsors'
-          Stages::Sponsors
+          self::Sponsors
         when 'replay-petition'
-          Stages::ReplayPetition
+          self::ReplayPetition
         when 'replay-email'
-          Stages::ReplayEmail
+          self::ReplayEmail
         when 'done'
-          Stages::Done
+          self::Done
         else
-          Stages::Petition
+          self::Petition
         end
       end
 
       class Petition < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Petition::Petition.new(model)
+          @_stage_object ||= ::Staged::PetitionCreator::Petition.new(model)
         end
 
         def name; 'petition'; end
@@ -40,7 +40,7 @@ module Staged
 
       class Creator < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Petition::Creator.new(model)
+          @_stage_object ||= ::Staged::PetitionCreator::Creator.new(model)
         end
 
         def name; 'creator'; end
@@ -50,7 +50,7 @@ module Staged
 
       class Sponsors < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Petition::Sponsors.new(model)
+          @_stage_object ||= ::Staged::PetitionCreator::Sponsors.new(model)
         end
 
         def name; 'sponsors'; end
@@ -60,7 +60,7 @@ module Staged
 
       class ReplayPetition < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Petition::ReplayPetition.new(model)
+          @_stage_object ||= ::Staged::PetitionCreator::ReplayPetition.new(model)
         end
 
         def name; 'replay-petition'; end
@@ -70,7 +70,7 @@ module Staged
 
       class ReplayEmail < Staged::Stage
         def stage_object
-          @_stage_object ||= Staged::Petition::ReplayEmail.new(model)
+          @_stage_object ||= ::Staged::PetitionCreator::ReplayEmail.new(model)
         end
 
         def name; 'replay-email'; end
