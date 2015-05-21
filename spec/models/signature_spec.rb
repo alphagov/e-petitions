@@ -457,4 +457,11 @@ describe Signature do
       end
     end
   end
+
+  describe "#constituency" do
+    it "returns the constituency for valid postcode" do
+      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
+      expect(signature.constituency).to eq "Islington South and Finsbury"
+    end
+  end
 end

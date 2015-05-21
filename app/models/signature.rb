@@ -95,4 +95,10 @@ class Signature < ActiveRecord::Base
   def unsubscribe!
     self.update(notify_by_email: false)
   end
+    
+  def constituency
+    response = HTTParty.get("http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/#{self.postcode.gsub(/\s+/, "")}")
+    response.parsed_response["Constituencies"] && response.parsed_response["Constituencies"]["Constituency"]["Name"]
+  end
 end
+

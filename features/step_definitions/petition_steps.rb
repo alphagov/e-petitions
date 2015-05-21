@@ -160,3 +160,26 @@ When /^I fill in sponsor emails$/ do
   fill_in "Sponsor emails", :with => "test1@test.com\ntest2@test.com\ntest3@test.com\ntest4@test.com\ntest5@test.com"
 end
 
+When /^I start a new petition/ do
+  steps %Q(
+    Given I am on the new petition page
+    Then I should see "Create a new e-petition - e-petitions" in the browser page title
+    And I should be connected to the server via an ssl connection
+  )
+end
+
+When /^I fill in the petition details/ do
+  steps %Q(
+    When I fill in "Title" with "The wombats of wimbledon rock."
+    And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
+    And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  )
+end
+
+Then /^I should see my constituency "([^"]*)"/ do |constituency|
+  expect(page).to have_text(constituency)  
+end
+
+Then /^I should not see the text "([^"]*)"/ do |text|
+  expect(page).to_not have_text(text)  
+end

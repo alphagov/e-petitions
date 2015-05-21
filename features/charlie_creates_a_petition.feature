@@ -46,6 +46,31 @@ Scenario: Charlie creates our petition
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
   And there should be a "validated" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
 
+
+Scenario: Charlie creates a petition with valid postcode N1 1TY
+  Given I start a new petition
+  And I fill in the petition details
+  And I press "Next"
+  And I fill in my details
+  And I fill in "Postcode" with "N1 1TY"
+  And I press "Next"
+  And I fill in sponsor emails
+  And I press "Next"
+  Then I should see my constituency "Islington South and Finsbury"
+
+
+Scenario: Charlie creates a petition with invalid postcode SW14
+  Given I start a new petition
+  And I fill in the petition details
+  And I press "Next"
+  And I fill in my details
+  And I fill in "Postcode" with "SW14 9RQ"
+  And I press "Next"
+  And I fill in sponsor emails
+  And I press "Next"
+  Then I should not see the text "Your constituency is"
+
+
 @javascript
 Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page

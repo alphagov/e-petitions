@@ -9,7 +9,7 @@ module Staged
       end
       delegate :id, :to_param, :model_name, :to_key,
                :name, :email, :uk_citizenship,
-               :postcode, :country,
+               :postcode, :country, :constituency,
                to: :creator_signature
 
       def validation_context

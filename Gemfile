@@ -24,6 +24,7 @@ gem 'airbrake'
 gem 'rabl'
 gem 'attr_encrypted'
 gem 'dynamic_form'
+gem 'httparty'
 
 group :development, :test do
   gem 'rspec-rails'
