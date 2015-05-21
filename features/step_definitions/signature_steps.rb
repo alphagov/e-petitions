@@ -146,3 +146,9 @@ end
 When /^I fill in "([^"]*)" with my email address$/ do |field_name|
   step "I fill in \"#{field_name}\" with \"suzie@example.com\""
 end
+
+Then /^the signature count (?:stays at|goes up to) (\d+)$/ do |number|
+  signatures = @petition.signatures
+  expect(signatures.count).to eq number
+end
+

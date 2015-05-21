@@ -51,14 +51,18 @@ Feature: Suzie signs a petition
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
-    Then "womboid@wimbledon.com" should receive 1 email
+    Then the signature count stays at 2
+    And I have not yet signed the petition	
+    And "womboid@wimbledon.com" should receive 1 email
 
   Scenario: Suzie receives an email if her email has been used to sign the petition already
     When Eric has already signed the petition with Suzies email
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
-    Then "womboid@wimbledon.com" should receive 1 email
+    Then the signature count goes up to 3
+    And I have not yet signed the petition
+    And "womboid@wimbledon.com" should receive 1 email
 
   Scenario: Suzie cannot sign if she does not provide her details
     When I decide to sign the petition
