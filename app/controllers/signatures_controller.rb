@@ -5,19 +5,17 @@ class SignaturesController < ApplicationController
   respond_to :html
 
   def new
-    @signature = Signature.new(:petition => @petition, :country => "United Kingdom")
+    assign_stage
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
+    respond_with @stage_manager.stage_object
   end
 
   def create
-    @signature = Signature.new(signature_params_for_create)
-    @signature.email.strip!
-    @signature.petition = @petition
-
-    matching_signatures = Signature.pending.matching(@signature)
+    matching_signatures = find_existing_pending_signatures
     if matching_signatures.any?
       handle_existing_signatures(matching_signatures, @petition)
     else
-      handle_new_signature(@signature, @petition)
+      handle_new_signature(@petition)
     end
   end
 
@@ -59,11 +57,28 @@ class SignaturesController < ApplicationController
     PetitionMailer.email_confirmation_for_signer(signature).deliver_now
   end
 
+  def assign_stage
+    return if Staged::PetitionSigner.stages.include? params[:stage]
+    params[:stage] = 'signer'
+  end
+
+  def signature_params_for_new
+    {country: 'United Kingdom'}
+  end
+
   def signature_params_for_create
-    params.
-      require(:signature).
-      permit(:name, :email, :email_confirmation,
-             :postcode, :country, :uk_citizenship)
+    @_signature_params_for_create ||=
+      params.
+        require(:signature).
+        permit(:name, :email, :email_confirmation,
+               :postcode, :country, :uk_citizenship)
+  end
+
+  def find_existing_pending_signatures
+    @signature = Signature.new(signature_params_for_create)
+    @signature.email.strip!
+    @signature.petition = @petition
+    Signature.pending.matching(@signature)
   end
 
   def handle_existing_signatures(signatures, petition)
@@ -71,8 +86,14 @@ class SignaturesController < ApplicationController
     redirect_to thank_you_petition_signature_path(petition)
   end
 
-  def handle_new_signature(signature, petition)
-    send_email_to_petition_signer(signature) if signature.save
-    respond_with signature, :location => thank_you_petition_signature_path(petition)
+  def handle_new_signature(petition)
+    assign_stage
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
+    if @stage_manager.create_signature
+      send_email_to_petition_signer(@stage_manager.signature)
+      respond_with @stage_manager.stage_object, :location => thank_you_petition_signature_path(petition)
+    else
+      render :new
+    end
   end
 end

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-describe StagedPetitionCreator do
+describe Staged::PetitionCreator do
   let(:petition_params) { {} }
   let(:move) { '' }
   let(:stage) { '' }
   let(:request) { double(remote_ip: '192.168.0.1') }
-  subject { described_class.new(petition_params, request, stage, move) }
+  subject { described_class.manager(petition_params, request, stage, move) }
   let(:petition) { subject.petition }
 
   describe '#create_petition' do
@@ -55,7 +55,7 @@ describe StagedPetitionCreator do
         expect(subject.create_petition).to eq true
       end
 
-      it 'returns true if the petition object can not be saved' do
+      it 'returns false if the petition object can not be saved' do
         allow(petition).to receive(:save).and_return false
         expect(subject.create_petition).to eq false
       end
@@ -76,29 +76,7 @@ describe StagedPetitionCreator do
   end
 
   describe 'stages' do
-    def self.for_stage(name, next_is:, back_is:, not_moving_is:)
-      context "and the previous_stage was \"#{name}\"" do
-        let(:stage) { name }
-        context 'and we are moving forwards' do
-          let(:move) { 'next' }
-          it "is \"#{next_is}\"" do
-            expect(subject.stage).to eq next_is
-          end
-        end
-        context 'and we are moving backwards' do
-          let(:move) { 'back' }
-          it "is \"#{back_is}\"" do
-            expect(subject.stage).to eq back_is
-          end
-        end
-        context 'and we are not moving' do
-          let(:move) { nil }
-          it "is \"#{not_moving_is}\"" do
-            expect(subject.stage).to eq not_moving_is
-          end
-        end
-      end
-    end
+    extend StagedObjectHelpers
 
     let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
     let(:creator_signature_params) do

@@ -8,12 +8,14 @@ module PetitionHelper
 
   def render_petition_form(stage_manager, form)
     capture do
-      concat render_hidden_details(stage_manager, form)
-      concat render_ui(stage_manager, form)
+      concat render_petition_hidden_details(stage_manager, form)
+      concat render_petition_ui(stage_manager, form)
     end
   end
 
-  def render_hidden_details(stage_manager, form)
+  private
+
+  def render_petition_hidden_details(stage_manager, form)
     capture do
       concat hidden_field_tag(:stage, stage_manager.stage)
       concat render('/petitions/create/petition_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'petition'
@@ -25,7 +27,7 @@ module PetitionHelper
     end
   end
 
-  def render_ui(stage_manager, form)
+  def render_petition_ui(stage_manager, form)
     # NOTE: make sure we skip past the existing tabindex-ed elements on the page, no matter which ui we render
     increment(4)
     case stage_manager.stage
