@@ -1,6 +1,6 @@
 Feature: User views static pages
   In order to let users know about the site
-  I can navigate to how E-petitions works, terms and conditions, privacy, crown copyright and accessibility pages
+  I can navigate to how E-petitions works, terms and conditions, privacy and accessibility pages
 
   Scenario: I navigate to the home page
     When I go to the home page
