@@ -28,10 +28,4 @@ describe StaticPagesController do
       expect(privacy_policy_path).to eq "/privacy-policy"
     end
   end
-  describe "crown_copyright" do
-    it "should respond to /crown-copyright" do
-      expect({:get => "/crown-copyright"}).to route_to({:controller => "static_pages", :action => "crown_copyright"})
-      expect(crown_copyright_path).to eq "/crown-copyright"
-    end
-  end
 end
