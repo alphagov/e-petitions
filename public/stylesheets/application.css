@@ -133,13 +133,7 @@ dl dd {
   float: right;
   width: 250px;
 }
-#header #header_content .accessibility_link,
-#header #header_content .home_link {
-  float: right;
-  margin-bottom: 8px;
-  margin-right: 3px;
-  margin-left: 15px;
-}
+
 #header #header_content form.search_form {
   padding-bottom: 5px;
   overflow-y: auto;
@@ -1493,18 +1487,6 @@ html[xmlns] .clearfix {
     right: 0;
     float: none;
     margin: 0px;
-  }
-
-  #header #header_content .home_link{
-    position: absolute;
-    top: 10px;
-    right: 110px;
-  }
-
-  #header #header_content .accessibility_link{
-    position: absolute;
-    top: 10px;
-    right: 5px;
   }
 
   #header #header_content form.search_form{

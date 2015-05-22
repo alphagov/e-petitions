@@ -29,12 +29,10 @@
             <%= link_to image_tag('logos/hm_gov.gif', :alt => 'HM Government') + raw('<span class="link_description">Click here to return to the home page</span>'), home_path, :class => 'logo_link', :title => 'Click here to return to the home page', :tabindex => 1 %>
           </div>
           <div id="header_content">
-            <%= link_to 'Accessibility', accessibility_path, :class => 'accessibility_link', :tabindex => 3 %>
-            <%= link_to 'Home', home_path, :class => 'home_link', :tabindex => 2 %>
             <% if params[:action] != 'home' and Petition.visible.count > 0 %>
               <% focus = (params[:action] == 'search' or params[:action] == 'show') ? "autofocus=\"autofocus\"".html_safe : '' %>
               <form method="get" action="/search" class="search_form">
-                <input type='text' name="q" id="search_header" value="<%= @petition_search.try(:search_term) %>" size="30" tabindex="4" <%= focus %>/>
+                <input type='text' name="q" id="search_header" value="<%= @petition_search.try(:search_term) %>" size="30" tabindex="2" <%= focus %>/>
                 <input type='submit' value='Search' class="button" id="search_button_header"/>
                 <label for='search_header'>Search published e-petitions</label>
               </form>
@@ -57,6 +55,10 @@
               t.named 'Terms and conditions'
               t.links_to terms_and_conditions_path
             end
+            n.add_tab do |t|
+              t.named 'Accessibility'
+              t.links_to accessibility_path
+            end            
             n.add_tab do |t|
               t.named 'Privacy'
               t.links_to privacy_policy_path
