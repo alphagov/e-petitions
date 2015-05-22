@@ -30,13 +30,6 @@ Feature: User views static pages
     And I should see "Privacy policy - e-petitions" in the browser page title
     And the markup should be valid
 
-  Scenario: I navigate to Crown Copyright
-    When I go to the home page
-    And I follow "Crown copyright"
-    Then I should be on the crown copyright page
-    And I should see "Crown copyright - e-petitions" in the browser page title
-    And the markup should be valid
-
   Scenario: I navigate to Accessbility page
     When I go to the home page
     And I follow "Accessibility"
