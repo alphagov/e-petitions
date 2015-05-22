@@ -31,6 +31,8 @@ group :development, :test do
   gem 'evergreen', :require => 'evergreen/rails'
   gem 'annotate'
   gem 'pry'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 group :test do

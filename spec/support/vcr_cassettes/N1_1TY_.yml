@@ -1,0 +1,134 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/N11TY
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 307
+      message: Temporary Redirect
+    headers:
+      Cache-Control:
+      - private
+      Content-Length:
+      - '2021'
+      Content-Type:
+      - text/html; charset=UTF-8
+      Location:
+      - http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/N11TY/
+      Server:
+      - Microsoft-IIS/7.5
+      Access-Control-Allow-Origin:
+      - "*"
+      Set-Cookie:
+      - ASP.NET_SessionId=5v2qz1n42elw10cp5541nsoo; path=/; HttpOnly
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 22 May 2015 11:05:42 GMT
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        77u/PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwh
+        RE9DVFlQRSBodG1sIFBVQkxJQyAiLS8vVzNDLy9EVEQgWEhUTUwgMS4wIFRy
+        YW5zaXRpb25hbC8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9UUi94aHRtbDEv
+        RFREL3hodG1sMS10cmFuc2l0aW9uYWwuZHRkIj4NCjxodG1sIHhtbG5zPSJo
+        dHRwOi8vd3d3LnczLm9yZy8xOTk5L3hodG1sIj4NCiAgPGhlYWQ+DQogICAg
+        PHRpdGxlPlNlcnZpY2U8L3RpdGxlPg0KICAgIDxzdHlsZT5CT0RZIHsgY29s
+        b3I6ICMwMDAwMDA7IGJhY2tncm91bmQtY29sb3I6IHdoaXRlOyBmb250LWZh
+        bWlseTogVmVyZGFuYTsgbWFyZ2luLWxlZnQ6IDBweDsgbWFyZ2luLXRvcDog
+        MHB4OyB9ICNjb250ZW50IHsgbWFyZ2luLWxlZnQ6IDMwcHg7IGZvbnQtc2l6
+        ZTogLjcwZW07IHBhZGRpbmctYm90dG9tOiAyZW07IH0gQTpsaW5rIHsgY29s
+        b3I6ICMzMzY2OTk7IGZvbnQtd2VpZ2h0OiBib2xkOyB0ZXh0LWRlY29yYXRp
+        b246IHVuZGVybGluZTsgfSBBOnZpc2l0ZWQgeyBjb2xvcjogIzY2OTljYzsg
+        Zm9udC13ZWlnaHQ6IGJvbGQ7IHRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5l
+        OyB9IEE6YWN0aXZlIHsgY29sb3I6ICMzMzY2OTk7IGZvbnQtd2VpZ2h0OiBi
+        b2xkOyB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZTsgfSAuaGVhZGluZzEg
+        eyBiYWNrZ3JvdW5kLWNvbG9yOiAjMDAzMzY2OyBib3JkZXItYm90dG9tOiAj
+        MzM2Njk5IDZweCBzb2xpZDsgY29sb3I6ICNmZmZmZmY7IGZvbnQtZmFtaWx5
+        OiBUYWhvbWE7IGZvbnQtc2l6ZTogMjZweDsgZm9udC13ZWlnaHQ6IG5vcm1h
+        bDttYXJnaW46IDBlbSAwZW0gMTBweCAtMjBweDsgcGFkZGluZy1ib3R0b206
+        IDhweDsgcGFkZGluZy1sZWZ0OiAzMHB4O3BhZGRpbmctdG9wOiAxNnB4O30g
+        cHJlIHsgZm9udC1zaXplOnNtYWxsOyBiYWNrZ3JvdW5kLWNvbG9yOiAjZTVl
+        NWNjOyBwYWRkaW5nOiA1cHg7IGZvbnQtZmFtaWx5OiBDb3VyaWVyIE5ldzsg
+        bWFyZ2luLXRvcDogMHB4OyBib3JkZXI6IDFweCAjZjBmMGUwIHNvbGlkOyB3
+        aGl0ZS1zcGFjZTogcHJlLXdyYXA7IHdoaXRlLXNwYWNlOiAtcHJlLXdyYXA7
+        IHdvcmQtd3JhcDogYnJlYWstd29yZDsgfSB0YWJsZSB7IGJvcmRlci1jb2xs
+        YXBzZTogY29sbGFwc2U7IGJvcmRlci1zcGFjaW5nOiAwcHg7IGZvbnQtZmFt
+        aWx5OiBWZXJkYW5hO30gdGFibGUgdGggeyBib3JkZXItcmlnaHQ6IDJweCB3
+        aGl0ZSBzb2xpZDsgYm9yZGVyLWJvdHRvbTogMnB4IHdoaXRlIHNvbGlkOyBm
+        b250LXdlaWdodDogYm9sZDsgYmFja2dyb3VuZC1jb2xvcjogI2NlY2Y5Yzt9
+        IHRhYmxlIHRkIHsgYm9yZGVyLXJpZ2h0OiAycHggd2hpdGUgc29saWQ7IGJv
+        cmRlci1ib3R0b206IDJweCB3aGl0ZSBzb2xpZDsgYmFja2dyb3VuZC1jb2xv
+        cjogI2U1ZTVjYzt9PC9zdHlsZT4NCiAgPC9oZWFkPg0KICA8Ym9keT4NCiAg
+        ICA8ZGl2IGlkPSJjb250ZW50Ij4NCiAgICAgIDxwIGNsYXNzPSJoZWFkaW5n
+        MSI+U2VydmljZTwvcD4NCiAgICAgIDxwIHhtbG5zPSIiPlRoZXJlIGlzIG5v
+        IG9wZXJhdGlvbiBsaXN0ZW5pbmcgZm9yIDxhIGhyZWY9Imh0dHA6Ly9kYXRh
+        LnBhcmxpYW1lbnQudWsvbWVtYmVyc2RhdGFwbGF0Zm9ybS9zZXJ2aWNlcy9t
+        bmlzL0NvbnN0aXR1ZW5jaWVzL04xMVRZIj5odHRwOi8vZGF0YS5wYXJsaWFt
+        ZW50LnVrL21lbWJlcnNkYXRhcGxhdGZvcm0vc2VydmljZXMvbW5pcy9Db25z
+        dGl0dWVuY2llcy9OMTFUWTwvYT4sIGJ1dCB0aGVyZSBpcyBhbiBvcGVyYXRp
+        b24gbGlzdGVuaW5nIGZvciA8YSBocmVmPSJodHRwOi8vZGF0YS5wYXJsaWFt
+        ZW50LnVrL21lbWJlcnNkYXRhcGxhdGZvcm0vc2VydmljZXMvbW5pcy9Db25z
+        dGl0dWVuY2llcy9OMTFUWS8iPmh0dHA6Ly9kYXRhLnBhcmxpYW1lbnQudWsv
+        bWVtYmVyc2RhdGFwbGF0Zm9ybS9zZXJ2aWNlcy9tbmlzL0NvbnN0aXR1ZW5j
+        aWVzL04xMVRZLzwvYT4sIHNvIHlvdSBhcmUgYmVpbmcgcmVkaXJlY3RlZCB0
+        aGVyZS48L3A+DQogICAgPC9kaXY+DQogIDwvYm9keT4NCjwvaHRtbD4=
+    http_version: 
+  recorded_at: Fri, 22 May 2015 11:05:43 GMT
+- request:
+    method: get
+    uri: http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/N11TY/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Cookie:
+      - ASP.NET_SessionId=5v2qz1n42elw10cp5541nsoo
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Length:
+      - '622'
+      Content-Type:
+      - application/xml; charset=utf-8
+      Expires:
+      - "-1"
+      Server:
+      - Microsoft-IIS/7.5
+      Access-Control-Allow-Origin:
+      - "*"
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 22 May 2015 11:05:44 GMT
+    body:
+      encoding: UTF-8
+      string: <Constituencies><Constituency><Constituency_Id>3550</Constituency_Id><Name>Islington
+        South and Finsbury</Name><ONSCode>E14000764</ONSCode><RepresentingMembers><RepresentingMember><Member_Id>1536</Member_Id><Member>Emily
+        Thornberry MP</Member><StartDate>2015-05-07T00:00:00</StartDate><EndDate xsi:nil="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/></RepresentingMember><RepresentingMember><Member_Id>1536</Member_Id><Member>Emily
+        Thornberry MP</Member><StartDate>2010-05-06T00:00:00</StartDate><EndDate>2015-03-30T00:00:00</EndDate></RepresentingMember></RepresentingMembers></Constituency></Constituencies>
+    http_version: 
+  recorded_at: Fri, 22 May 2015 11:05:44 GMT
+recorded_with: VCR 2.9.3

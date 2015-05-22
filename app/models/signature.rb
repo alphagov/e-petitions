@@ -97,8 +97,7 @@ class Signature < ActiveRecord::Base
   end
     
   def constituency
-    response = HTTParty.get("http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/#{self.postcode.gsub(/\s+/, "")}")
-    response.parsed_response["Constituencies"] && response.parsed_response["Constituencies"]["Constituency"]["Name"]
+    @constituency ||= ConstituencyApi.new.constituency(self.postcode)
   end
 end
 
