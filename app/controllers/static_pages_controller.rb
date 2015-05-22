@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  caches_page :accessibility, :how_it_works, :terms_and_conditions, :privacy_policy, :crown_copyright
+  caches_page :accessibility, :how_it_works, :terms_and_conditions, :privacy_policy
   caches_action :home, :expires_in => 5.minutes
 
   def home

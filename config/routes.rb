@@ -4,7 +4,6 @@ Rails.application.routes.draw do
   get 'how-it-works' => 'static_pages#how_it_works', :as => 'how_it_works'
   get 'terms-and-conditions' => 'static_pages#terms_and_conditions', :as => 'terms_and_conditions'
   get 'privacy-policy' => 'static_pages#privacy_policy', :as => 'privacy_policy'
-  get 'crown-copyright' => 'static_pages#crown_copyright', :as => 'crown_copyright'
 
   get 'feedback' => 'feedback#index', :as => 'feedback'
   get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
