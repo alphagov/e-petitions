@@ -20,6 +20,9 @@ module NavigationHelpers
     when /^the terms and conditions page$/
       terms_and_conditions_path
 
+    when /^the cookies page$/
+      cookies_path
+
     when /^the privacy policy page$/
       privacy_policy_path
 
