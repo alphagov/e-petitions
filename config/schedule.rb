@@ -29,5 +29,4 @@ end
 
 every 5.minutes do
   runner "Petition.update_all_signature_counts", :output => nil
-  runner "TrendingPetition.update_homepage_trends", :output => nil
 end

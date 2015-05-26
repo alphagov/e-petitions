@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519160815) do
+ActiveRecord::Schema.define(version: 20150526154706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,12 +120,5 @@ ActiveRecord::Schema.define(version: 20150519160815) do
   end
 
   add_index "system_settings", ["key"], name: "index_system_settings_on_key", unique: true, using: :btree
-
-  create_table "trending_petitions", force: :cascade do |t|
-    t.integer  "petition_id"
-    t.integer  "signatures_in_last_hour", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
 end

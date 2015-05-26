@@ -22,18 +22,6 @@
         <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
       <% end -%>
     </ul>
-
-    <% if @additional_petitions.present? %>
-      <%= link_to 'See more trending e-petitions', '#', :id => 'see_more_trending_petitions' %>
-
-      <div id="additional_trending_petitions_block">
-        <ul>
-          <% @additional_petitions.each do |trending_petition| %>
-            <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
-          <% end -%>
-        </ul>
-      </div>
-    <% end %>
   </div>
 <% end %>
 
@@ -43,18 +31,3 @@
   <%= link_to 'How e-petitions work', how_it_works_path, :class => 'large_link' %>
   <%= link_to "Create a new e-petition", check_petitions_path, :class => 'link_button large_link_button' %>
 </div>
-
-<% content_for :js do %>
-  <script type="text/javascript">
-  //<![CDATA[
-    $().ready(function(){
-      $('#see_more_trending_petitions').show();
-      $('#see_more_trending_petitions').click(function(){
-        $(this).hide();
-        $('#additional_trending_petitions_block').show();
-        return false;
-      });
-    });
-  //]]>
-  </script>
-<% end %>

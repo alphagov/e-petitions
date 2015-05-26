@@ -9,12 +9,5 @@ Feature: Suzie sees trending petitions
 
   Scenario: Seeing a number of trending petitions
     Given there has been activity on a number of petitions in the last hour
-    And the trending petitions cache has been updated
     And I am on the home page
     Then I should see the most popular petitions listed on the front page
-
-  Scenario: Viewing additional petitions
-    Given there has been activity on a number of petitions in the last hour
-    And the trending petitions cache has been updated
-    And I am on the home page
-    Then there should be addition petitions hidden and a link to display them
