@@ -9,9 +9,7 @@ module Staged
         :create
       end
 
-      def valid?
-        super && sponsors_valid?
-      end
+      validate :sponsors_valid?
 
       private
 
