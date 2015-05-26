@@ -94,7 +94,7 @@ And "I have already signed the petition but not validated my email" do
 end
 
 Given /^Suzie has already signed the petition$/ do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  @suzies_signature = FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
 end
 
