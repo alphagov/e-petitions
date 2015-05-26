@@ -60,6 +60,10 @@
               t.links_to accessibility_path
             end            
             n.add_tab do |t|
+              t.named 'Cookies'
+              t.links_to cookies_path
+            end
+            n.add_tab do |t|
               t.named 'Privacy'
               t.links_to privacy_policy_path
             end

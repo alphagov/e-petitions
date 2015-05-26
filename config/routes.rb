@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   get 'accessibility' => 'static_pages#accessibility', :as => 'accessibility'
   get 'how-it-works' => 'static_pages#how_it_works', :as => 'how_it_works'
   get 'terms-and-conditions' => 'static_pages#terms_and_conditions', :as => 'terms_and_conditions'
+  get 'cookies' => 'static_pages#cookies', :as => 'cookies'
   get 'privacy-policy' => 'static_pages#privacy_policy', :as => 'privacy_policy'
 
   get 'feedback' => 'feedback#index', :as => 'feedback'

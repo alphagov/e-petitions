@@ -28,4 +28,10 @@ describe StaticPagesController do
       expect(privacy_policy_path).to eq "/privacy-policy"
     end
   end
+  describe "cookies" do
+    it "should respond to /cookies" do
+      expect({:get => "/cookies"}).to route_to({:controller => "static_pages", :action => "cookies"})
+      expect(cookies_path).to eq "/cookies"
+    end
+  end  
 end
