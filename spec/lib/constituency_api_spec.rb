@@ -1,28 +1,55 @@
 require 'rails_helper'
-require 'support/vcr_setup'
+require 'webmock/rspec'
 
-describe ConstituencyApi, :vcr => true do
-  describe "#constituency" do
+describe ConstituencyApi do
+
+  describe "#constituencies" do
     let(:api) { ConstituencyApi.new }
-    
-    it "returns the constituency for concatenated postcode" do
-      VCR.use_cassette "N11TY" do
-        expect(api.constituency("N11TY")).to eq "Islington South and Finsbury"
-      end
-    end
-    it "returns the constituency for postcode with whitespaces" do
-      VCR.use_cassette "N1 1TY " do
-        expect(api.constituency("N1 1TY ")).to eq "Islington South and Finsbury"
-      end
-    end
-    it "returns nil for invalid postcode" do
+    let(:constituency_array_1) { [ConstituencyApi::Constituency.new("Islington South and Finsbury")] }
+    let(:constituency_array_2) { [ConstituencyApi::Constituency.new("Hackney North and Stoke Newington"),
+                                  ConstituencyApi::Constituency.new("Hackney South and Shoreditch"),
+                                  ConstituencyApi::Constituency.new("Holborn and St Pancras"),
+                                  ConstituencyApi::Constituency.new("Islington North"),
+                                  ConstituencyApi::Constituency.new("Islington South and Finsbury")] }
+
+    it "returns an empty array for invalid postcode" do
       VCR.use_cassette "SW14 9RQ" do
-        expect(api.constituency("SW14 9RQ")).to be_nil
+        expect(api.constituencies("SW14 9RQ")).to eq []
       end
     end
-    it "returns nil for too short postcode that would return several constituencies" do
+
+    it "returns array for valid postcode" do
+      VCR.use_cassette "N11TY" do
+        expect(api.constituencies("N11TY")).to eq constituency_array_1
+      end
+    end
+
+    it "returns array for valid postcode with whitespaces" do
+      VCR.use_cassette "N1 1TY " do
+        expect(api.constituencies("N1 1TY ")).to eq constituency_array_1
+      end
+    end
+
+    it "returns array for valid postcode with lowercase" do
+      VCR.use_cassette "n11ty_lowercase" do
+        expect(api.constituencies("n11ty")).to eq constituency_array_1
+      end
+    end
+
+    it "returns an array with multiple entries" do
       VCR.use_cassette "N1" do
-        expect(api.constituency("N1")).to be_nil
+        expect(api.constituencies("N1")).to eq constituency_array_2
+      end
+    end
+
+    it "handles timeout errors" do
+      stub_request(:any, /.*data.parliament.uk.*/).to_timeout
+      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
+    end
+
+    it "handles unexpected response" do
+      VCR.use_cassette "N1_status_500" do
+        expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
       end
     end
   end

@@ -18,6 +18,7 @@
 #
 
 require 'rails_helper'
+require 'webmock/rspec'
 
 describe Signature do
   it "should have a valid factory" do
@@ -459,9 +460,45 @@ describe Signature do
   end
 
   describe "#constituency" do
+    it "returns a constituency object for valid postcode" do
+      VCR.use_cassette "N1 1TY" do
+        signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
+        expect(signature.constituency).to be_kind_of(ConstituencyApi::Constituency)
+      end
+    end
+
     it "returns the constituency for valid postcode" do
+      VCR.use_cassette "N1 1TY" do
+        signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
+        expect(signature.constituency).to eq ConstituencyApi::Constituency.new("Islington South and Finsbury")
+      end
+    end
+    
+    it "returns the first constituency for postcode with prefix only eg N1" do
+      VCR.use_cassette "N1" do
+        signature = FactoryGirl.build(:signature, postcode: 'N1')
+        expect(signature.constituency).to eq ConstituencyApi::Constituency.new("Hackney North and Stoke Newington")
+      end
+    end
+
+    it "returns nil for invalid postcode" do
+      VCR.use_cassette "SW14 9RQ" do
+        signature = FactoryGirl.build(:signature, postcode: 'SW14 9RQ')
+        expect(signature.constituency).to be_nil
+      end
+    end
+
+    it "returns nil for timed out API request" do
+      stub_request(:any, /.*data.parliament.uk.*/).to_timeout
       signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to eq "Islington South and Finsbury"
+      expect(signature.constituency).to be_nil
+    end
+
+    it "returns nil for unexpected API response" do
+      VCR.use_cassette "N1_status_500" do
+        signature = FactoryGirl.build(:signature, postcode: 'N1')
+        expect(signature.constituency).to be_nil
+      end
     end
   end
 end

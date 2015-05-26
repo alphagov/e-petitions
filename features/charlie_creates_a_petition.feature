@@ -59,7 +59,7 @@ Scenario: Charlie creates a petition with valid postcode N1 1TY
   Then I should see my constituency "Islington South and Finsbury"
 
 
-Scenario: Charlie creates a petition with invalid postcode SW14
+Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
   And I fill in the petition details
   And I press "Next"

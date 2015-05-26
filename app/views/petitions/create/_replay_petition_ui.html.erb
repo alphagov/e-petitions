@@ -15,11 +15,11 @@
     <p>Your petition will be open for <%= AppConfig.petition_duration %> months after it is reviewed by Parliament.</p>
     <% if petition.creator_signature.constituency %>
     <p>
-      Your constituency is <%= petition.creator_signature.constituency %>
+      Your constituency is <%= petition.creator_signature.constituency.name %>
     </p>
+    <% end %>
   </div>
-  <% end %>
-
+  
   <div class="row">
     <p>By creating this petition, you agree to the <%= link_to 'Terms & Conditions', terms_and_conditions_path %></p>
   </div>

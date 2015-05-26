@@ -1,0 +1,48 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies/N1/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 500
+      message: OK
+    headers:
+      Cache-Control:
+      - no-cache
+      Pragma:
+      - no-cache
+      Content-Length:
+      - '2937'
+      Content-Type:
+      - application/xml; charset=utf-8
+      Expires:
+      - "-1"
+      Server:
+      - Microsoft-IIS/7.5
+      Access-Control-Allow-Origin:
+      - "*"
+      Set-Cookie:
+      - ASP.NET_SessionId=kde0vrmuwzu02g3owtp1qrvv; path=/; HttpOnly
+      X-Aspnet-Version:
+      - 4.0.30319
+      X-Powered-By:
+      - ASP.NET
+      Date:
+      - Fri, 22 May 2015 15:40:21 GMT
+    body:
+      encoding: UTF-8
+      string: "500"
+    http_version: 
+  recorded_at: Fri, 22 May 2015 15:40:23 GMT
+recorded_with: VCR 2.9.3
