@@ -221,6 +221,13 @@ GEM
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
     safe_yaml (1.0.4)
+    sass (3.4.14)
+    sass-rails (5.0.3)
+      railties (>= 4.0.0, < 5.0)
+      sass (~> 3.1)
+      sprockets (>= 2.8, < 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
+      tilt (~> 1.1)
     scrypt (1.2.1)
       ffi-compiler (>= 0.0.2)
       rake
@@ -253,7 +260,7 @@ GEM
       actionpack (>= 2.3.8)
     thor (0.19.1)
     thread_safe (0.3.5)
-    tilt (2.0.1)
+    tilt (1.4.1)
     timecop (0.7.3)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -311,6 +318,7 @@ DEPENDENCIES
   responders
   rspec-collection_matchers
   rspec-rails
+  sass-rails (~> 5.0)
   shoulda
   sunspot_rails
   sunspot_solr

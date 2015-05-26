@@ -9,6 +9,7 @@ public/cucumber
 public/index.html
 public/javascripts/all.js
 public/api/**
+public/assets
 solr/data
 solr/pids
 vendor/bundle
@@ -19,3 +20,4 @@ coverage
 */.DS_Store
 */*/.DS_Store
 .idea
+.ruby-version
