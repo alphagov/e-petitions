@@ -7,7 +7,7 @@
 
 <%= form_for @signature, url: petition_sponsor_path(@petition, @sponsor.perishable_token), html: {method: 'patch', class: 'wizard_form new_petition_form'} do |f| %>
   <fieldset>
-    <%= render 'signatures/form', f: f, signature: @signature, with_email: false %>
+    <%= render 'signatures/form', f: f, signature: @signature %>
 
     <div class="row">
       <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', terms_and_conditions_path %></p>

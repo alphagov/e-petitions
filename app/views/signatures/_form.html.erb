@@ -9,9 +9,7 @@
 
 <% end %>
 
-<% if local_assigns.fetch(:with_email, true) %>
-  <%= render 'signatures/email', f: f, signature: signature %>
-<% end %>
+<%= render 'signatures/email', f: f, signature: signature %>
 
 <%= form_row :class => 'checkbox_row', :for => [signature, :uk_citizenship] do %>
   <%= f.check_box :uk_citizenship, :tabindex => increment %>
