@@ -17,7 +17,11 @@
 </div>
 
 <div class="row">
+  <label>Petition action:</label>
+  <p class="text_block"><%= raw auto_link(h(@petition.action), :html => { :target => '_blank' }) %></p>
+</div>
+
+<div class="row">
   <label>Petition description:</label>
   <p class="text_block"><%= raw auto_link(h(@petition.description), :html => { :target => '_blank' }) %></p>
 </div>
-

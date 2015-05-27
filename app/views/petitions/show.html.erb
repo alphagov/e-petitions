@@ -12,7 +12,8 @@
 <div class="petition_view">
   <div class="content">
     <h1><%= @petition.title %></h1>
-    <p class='description'><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></p>
+    <div class='action'><%= raw auto_link(simple_format(h(@petition.action)), :html => { :target => '_blank' }) %></div>
+    <div class='description'><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></div>
 
     <% if @petition.rejected? -%>
       <div class="petition_rejected">
