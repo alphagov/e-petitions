@@ -62,7 +62,6 @@ describe Signature do
     end
   end
 
-
   RSpec::Matchers.define :have_valid do |field|
     match do |actual|
       expect(actual.errors_on(field)).to be_blank
@@ -355,6 +354,32 @@ describe Signature do
     it "returns false if the signature is validated state" do
       signature = FactoryGirl.build(:validated_signature)
       expect(signature.pending?).to be_falsey
+    end
+  end
+
+  describe "#validated?" do
+    it "returns true if the signature has a validated state" do
+      signature = FactoryGirl.build(:validated_signature)
+      expect(signature.validated?).to be_truthy
+    end
+
+    it "returns false if the signature is pending state" do
+      signature = FactoryGirl.build(:pending_signature)
+      expect(signature.validated?).to be_falsey
+    end
+  end
+
+  describe '#creator?' do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+    let(:creator_signature) { petition.creator_signature }
+
+    it 'is true if the signature is the creator_signature for the petition it belongs to' do
+      expect(creator_signature.creator?).to be_truthy
+    end
+
+    it 'is false if the signature is not the creator_signature for the petition it belongs to' do
+      expect(signature.creator?).to be_falsey
     end
   end
 
