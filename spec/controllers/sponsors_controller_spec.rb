@@ -114,10 +114,10 @@ describe SponsorsController do
           expect(sponsor.signature.notify_by_email).to eq true
         end
 
-        it 'creates the signature in the validated state' do
+        it 'creates the signature in the pending state' do
           do_patch
-          expect(sponsor.signature.state).to eq Signature::VALIDATED_STATE
-          expect(sponsor.signature.perishable_token).to be_nil
+          expect(sponsor.signature).to be_pending
+          expect(sponsor.signature.perishable_token).not_to be_nil
         end
 
         it 'creates a signature for the sponsor using the petition from the sponsor' do
@@ -146,21 +146,14 @@ describe SponsorsController do
         it "ignores attempts to set the state of signature" do
           signature_params[:state] = 'not-a-state'
           do_patch
-          expect(sponsor.signature.state).to eq Signature::VALIDATED_STATE
+          expect(sponsor.signature).to be_pending
         end
 
-        it 'sends email notification to the petition creator' do
-          allow(Petition).to receive(:find).with(petition.to_param).and_return petition
-          expect(petition).to receive(:notify_creator_about_sponsor_support).with(sponsor)
+        it "emails the sponsor" do
           do_patch
+          email = ActionMailer::Base.deliveries.last
+          expect(email.to).to eq([sponsor.email])
         end
-
-        it 'updates petition sponsored state' do
-          allow(Petition).to receive(:find).with(petition.to_param).and_return petition
-          expect(petition).to receive(:update_sponsored_state)
-          do_patch
-        end
-
       end
 
       context 'with invalid signature params' do

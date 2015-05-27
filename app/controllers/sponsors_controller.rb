@@ -20,14 +20,7 @@ class SponsorsController < ApplicationController
       if @stage_manager.create_signature
         @signature = @stage_manager.signature
         @sponsor.update_attribute(:signature, @signature)
-        # If the user has filled in all the correc things then we can
-        # go straight to validated without the email: the sponsor email
-        # that gets them here acts as a validation of their email address
-        @signature.perishable_token = nil
-        @signature.state = Signature::VALIDATED_STATE
-        @signature.save(:validate => false)
-        send_sponsor_support_notificaiton_email_to_petition_owner(@petition, @sponsor)
-        @petition.update_sponsored_state
+        send_email_to_sponsor(@sponsor)
         redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
       else
         render :show
@@ -68,7 +61,7 @@ class SponsorsController < ApplicationController
       permit(:name, :email, :postcode, :country, :uk_citizenship)
   end
 
-  def send_sponsor_support_notificaiton_email_to_petition_owner(petition, sponsor)
-    petition.notify_creator_about_sponsor_support(sponsor)
+  def send_email_to_sponsor(sponsor)
+    SponsorMailer.petition_and_email_confirmation_for_sponsor(sponsor).deliver_now
   end
 end
