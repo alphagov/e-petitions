@@ -82,12 +82,12 @@ class Petition < ActiveRecord::Base
                     }
   scope :last_hour_trending, -> {
                               joins(:signatures).
-                              select("petitions.id as id, count('signatures.id') as signatures_in_last_hour").
+                              select("petitions.*, count('signatures.id') as signatures_in_last_hour").
                               where("signatures.state" => "validated").
                               where("signatures.updated_at > ?", 1.hour.ago).
                               order("signatures_in_last_hour DESC").
                               group('petitions.id').
-                              limit(12)
+                              limit(3)
                             }
 
   def sponsor_emails

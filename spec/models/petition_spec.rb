@@ -186,17 +186,17 @@ describe Petition do
 
       it "returns the signature count for the last hour as an additional attribute" do
         expect(Petition.last_hour_trending.first.signatures_in_last_hour).to eq(11)
-        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to eq(1)
+        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to eq(9)
       end
 
-      it "limits the result to 12 petitions" do
+      it "limits the result to 3 petitions" do
         # 13 petitions signed in the last hour
         2.times do |count|
           petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        expect(Petition.last_hour_trending.to_a.size).to eq(12)
+        expect(Petition.last_hour_trending.to_a.size).to eq(3)
       end
     end
 

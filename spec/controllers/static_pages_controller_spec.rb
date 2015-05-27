@@ -9,10 +9,9 @@ describe StaticPagesController do
 
     it "assigns trending petitions" do
       trending_petitions = [double]
-      allow(TrendingPetition).to receive_messages(:order => double(:limit => trending_petitions))
+      allow(Petition).to receive_messages(:last_hour_trending => trending_petitions)
       get :home
-      expect(assigns(:trending_petitions)).to eq trending_petitions[0..5]
-      expect(assigns(:additional_petitions)).to eq trending_petitions[6..11]
+      expect(assigns(:trending_petitions)).to eq trending_petitions
     end
   end
 
@@ -33,5 +32,5 @@ describe StaticPagesController do
       expect({:get => "/cookies"}).to route_to({:controller => "static_pages", :action => "cookies"})
       expect(cookies_path).to eq "/cookies"
     end
-  end  
+  end
 end
