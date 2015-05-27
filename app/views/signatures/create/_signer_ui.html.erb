@@ -2,8 +2,12 @@
   <legend>Your Details</legend>
   <%= render 'signatures/form', f: f, signature: signature %>
 
+  <div class="row">
+    <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', terms_and_conditions_path %></p>
+  </div>
+
   <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
+    <%= link_to "Back", petition_path(@petition), :class => "backwards_action link_button", :tabindex => increment %>
     <%= f.button 'Sign this e-petition', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
   <% end %>
 </fieldset>
