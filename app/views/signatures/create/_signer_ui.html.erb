@@ -7,7 +7,9 @@
   </div>
 
   <%= form_row :class => 'button_row' do %>
-    <%= link_to "Back", petition_path(@petition), :class => "backwards_action link_button", :tabindex => increment %>
+    <% if local_assigns.fetch(:with_signer_ui_back_link, true) %>
+      <%= link_to "Back", petition_path(@petition), :class => "backwards_action link_button", :tabindex => increment %>
+    <% end %>
     <%= f.button 'Sign this e-petition', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
   <% end %>
 </fieldset>
