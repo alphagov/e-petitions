@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 
   resources :signatures, :only => [] do
     get 'verify/:token', :action => :verify, :on => :member, :as => :verify
+    get 'unsubscribe/:unsubscribe_token', :action => :unsubscribe, :on => :member, :as => :unsubscribe
   end
 
   namespace :admin do

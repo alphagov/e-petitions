@@ -48,6 +48,18 @@ class SignaturesController < ApplicationController
     end
   end
 
+  def unsubscribe
+    signature = Signature.find(params[:id])
+    if signature.unsubscribe_token != params[:unsubscribe_token]
+      render 'signatures/unsubscribe/failed_to_unsubscribe'
+    elsif signature.unsubscribed?
+      render 'signatures/unsubscribe/already_unsubscribed'
+    else
+      signature.unsubscribe!
+      render 'signatures/unsubscribe/successfully_unsubscribed'
+    end
+  end
+
   private
   def retrieve_petition
     @petition = Petition.visible.find(params[:petition_id])

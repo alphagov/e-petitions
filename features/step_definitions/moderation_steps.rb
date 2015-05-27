@@ -106,3 +106,15 @@ Then /^I see relevant reason descriptions when I browse different reason codes$/
   select "Confidential, libellous, false or defamatory statements", :from => :petition_rejection_code
   expect(page).to have_content "injunction or court order"
 end
+
+Given(/^a moderator responds to the petition$/) do
+  steps %Q(
+    Given I am logged in as a moderator
+    And I follow "#{@petition.title}"
+    And I fill in "Public response" with "Parliament here it comes"
+    And I check "Email signees"
+    And I press "Save"
+  )
+  # run the delayed job that sends petition response emails
+  Delayed::Job.last.payload_object.perform
+end

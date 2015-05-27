@@ -1,0 +1,11 @@
+<% content_for(:page_title) { "Successfully unsubscribed" } %>
+<% content_for :title do %>
+  <div class="title_block">
+    <h1>Failed to unsubscribe</h1>
+  </div>
+<% end %>
+
+<div>
+  <p>Failed to unsubscribe. Your unsubscription token is invalid.</p>
+  <%= link_to "Return to home page", home_path, :class => 'link_button large_link_button return_to_homepage_button' %>
+</div>
