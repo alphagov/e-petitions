@@ -24,10 +24,12 @@ When(/^a sponsor supports my e\-petition$/) do
     When "#{sponsor.email}" opens the email with subject "Parliament petitions - #{@petition.creator_signature.name} would like your support"
     And they click the first link in the email
     And I fill in "Name" with "Anonymous Sponsor"
+    And I fill in "Email" with "#{sponsor.email}"
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in "Postcode" with "SW1A 1AA"
     And I select "United Kingdom" from "Country"
     And I try to sign
+    And I say I am happy with my email address
   }
   expect(sponsor.reload.signature).to be_present
 end

@@ -55,9 +55,9 @@ describe SponsorsController do
 
       it 'builds a signature for the sponsor' do
         get :show, petition_id: petition, token: sponsor.perishable_token
-        expect(assigns[:signature]).to be_present
-        expect(assigns[:signature].petition).to eq sponsor.petition
-        expect(assigns[:signature].email).to eq sponsor.email
+        expect(assigns[:stage_manager].signature).to be_present
+        expect(assigns[:stage_manager].signature.petition).to eq sponsor.petition
+        expect(assigns[:stage_manager].signature.email).to eq sponsor.email
       end
     end
   end
@@ -68,6 +68,7 @@ describe SponsorsController do
     let(:signature_params) {
       {
         name: 'S. Ponsor',
+        email: sponsor.email,
         postcode: 'SP1 1NR',
         country: 'United Kingdom',
         uk_citizenship: '1',
@@ -75,10 +76,15 @@ describe SponsorsController do
       }
     }
 
-    def do_patch
-      patch :update, petition_id: petition,
-                     token: sponsor.perishable_token,
-                     signature: signature_params
+    def do_patch(options = {})
+      params = {
+        petition_id: petition,
+        token: sponsor.perishable_token,
+        signature: signature_params,
+        stage: 'replay-email',
+        move: 'next'
+      }.merge(options)
+      patch :update, params
       sponsor.reload
     end
 
@@ -114,9 +120,8 @@ describe SponsorsController do
           expect(sponsor.signature.perishable_token).to be_nil
         end
 
-        it 'creates a signature for the sponsor using the email and petition from the sponsor' do
+        it 'creates a signature for the sponsor using the petition from the sponsor' do
           do_patch
-          expect(sponsor.signature.email).to eq sponsor.email
           expect(sponsor.signature.petition).to eq sponsor.petition
         end
 
@@ -126,10 +131,10 @@ describe SponsorsController do
           expect(response).to redirect_to redirect_url
         end
 
-        it "overrides the email of the signature, no matter what has been passed in" do
+        it "allows overriding of the email via params" do
           signature_params[:email] = 'not-the-sponsors-email-address@example.com'
           do_patch
-          expect(sponsor.signature.email).to eq sponsor.email
+          expect(sponsor.signature.email).to eq 'not-the-sponsors-email-address@example.com'
         end
 
         it "overrides the petition of the signature, no matter what has been passed in" do
@@ -164,12 +169,37 @@ describe SponsorsController do
         it 'does not persist the signature' do
           do_patch
           expect(sponsor.signature).not_to be_present
-          expect(assigns[:signature]).not_to be_persisted
+          expect(assigns[:stage_manager].signature).not_to be_persisted
         end
 
         it 'renders the form again' do
           do_patch
           expect(response).to render_template :show
+        end
+
+        it "has stage of 'signer' if there are errors on name, uk_citizenship, postcode or country" do
+          do_patch signature: signature_params.merge(:name => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_patch signature: signature_params.merge(:uk_citizenship => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_patch signature: signature_params.merge(:postcode => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+          do_patch signature: signature_params.merge(:country => '')
+          expect(assigns[:stage_manager].stage).to eq 'signer'
+        end
+
+        it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
+          new_signature_params = signature_params.merge(:email => 'foo@')
+          do_patch stage: 'replay-email',
+                   signature: new_signature_params
+          expect(assigns[:stage_manager].stage).to eq 'replay-email'
+        end
+
+        it "has stage of 'creator' if there are errors on email and we came from 'signer' stage" do
+          new_signature_params = signature_params.merge(:email => 'foo@')
+          do_patch stage: 'signer',
+                   signature: new_signature_params
+          expect(assigns[:stage_manager].stage).to eq 'signer'
         end
       end
     end
