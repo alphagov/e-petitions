@@ -27,8 +27,9 @@ describe Feedback do
   end
 
   def valid_attributes
-    { :name => "Joe Public", :email => "foo@example.com", :email_confirmation => "foo@example.com",
-      :comment => "I can't submit a petition for some reason", :petition_link_or_title => 'link' }
+    { :name => "Joe Public", :email => "foo@example.com",
+      :comment => "I can't submit a petition for some reason",
+      :petition_link_or_title => 'link' }
   end
 
   describe "valid?" do
@@ -39,17 +40,11 @@ describe Feedback do
     it "is not valid when a required attribute is missing" do
       expect(Feedback.new(valid_attributes.except(:name))).not_to be_valid
       expect(Feedback.new(valid_attributes.except(:email))).not_to be_valid
-      expect(Feedback.new(valid_attributes.except(:email_confirmation))).not_to be_valid
       expect(Feedback.new(valid_attributes.except(:comment))).not_to be_valid
     end
 
-    it "requires an email confirmation" do
-      feedback = Feedback.new(valid_attributes.merge({:email_confirmation => 'invalid'}))
-      expect(feedback).not_to be_valid
-    end
-
     it "is not valid when the email format is wrong" do
-      expect(Feedback.new(valid_attributes.merge(:email => 'foo', :email_confirmation => 'foo'))).not_to be_valid
+      expect(Feedback.new(valid_attributes.merge(:email => 'foo'))).not_to be_valid
     end
   end
 

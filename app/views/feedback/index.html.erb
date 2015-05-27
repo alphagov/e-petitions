@@ -29,13 +29,6 @@
       <%= error_messages_for_field @feedback, :email %>
     <% end %>
 
-    <%= form_row :for => [@feedback, :email_confirmation] do %>
-      <%= f.label :email_confirmation %>
-      <%= f.text_field :email_confirmation, :type => 'email', :tabindex => increment,
-                                            :onpaste => 'return false', :autocomplete => 'off' %>
-      <%= error_messages_for_field @feedback, :email_confirmation %>
-    <% end %>
-
     <%= form_row :for => [@feedback, :petition_link_or_title] do %>
       <%= f.label :petition_link_or_title, "e-petition title/link (optional)" %>
       <%= f.text_field :petition_link_or_title, :tabindex => increment  %>
