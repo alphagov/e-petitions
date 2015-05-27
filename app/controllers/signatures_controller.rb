@@ -22,18 +22,14 @@ class SignaturesController < ApplicationController
   def verify
     @signature = Signature.find(params[:id])
 
-    if @signature.perishable_token == params[:token]
-      @signature.perishable_token = nil
-      @signature.state = Signature::VALIDATED_STATE
-      @signature.save(:validate => false)
-
+    if @signature.validate_from_token!(params[:token])
       # if signature is that of the petition's creator, mark the petition as validated
       if @signature.petition.creator_signature == @signature
         @signature.petition.state = Petition::VALIDATED_STATE
         @signature.petition.notify_sponsors
         @signature.petition.save!
 
-    # else signature is from an ordinary signee so let's redirect to petition's page
+      # else signature is from an ordinary signee so let's redirect to petition's page
       else
         redirect_to signed_petition_signature_url(@signature.petition) and return
       end

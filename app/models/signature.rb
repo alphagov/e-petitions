@@ -44,7 +44,7 @@ class Signature < ActiveRecord::Base
   }
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(encrypted_email: signature.encrypted_email,
-                                         name: signature.name, 
+                                         name: signature.name,
                                          petition_id: signature.petition_id) }
 
   # callbacks
@@ -67,6 +67,17 @@ class Signature < ActiveRecord::Base
 
   def unsubscribed?
     notify_by_email == false
+  end
+
+  def validate_from_token!(token)
+    return false if perishable_token.nil? || self.validated?
+    if perishable_token == token
+      self.update_columns(perishable_token: nil, state: Signature::VALIDATED_STATE)
+      self.touch
+      true
+    else
+      false
+    end
   end
 
   def postal_district
