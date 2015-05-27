@@ -4,13 +4,13 @@ module Staged
       extend ActiveSupport::Concern
 
       included do
-        def valid?
-          super && creator_signature_valid?
-        end
+        validate :creator_signature_valid?
 
         def creator_signature
           @_creator_signature ||= self.class::CreatorSignature.new(petition)
         end
+
+        private
 
         def creator_signature_valid?
           if creator_signature.valid?
