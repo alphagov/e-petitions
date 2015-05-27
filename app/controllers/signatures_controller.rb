@@ -51,11 +51,12 @@ class SignaturesController < ApplicationController
   def unsubscribe
     signature = Signature.find(params[:id])
     if signature.unsubscribe_token != params[:unsubscribe_token]
-      render text: "Failed to unsubscribe"
+      render 'signatures/unsubscribe/failed_to_unsubscribe'
     elsif signature.unsubscribed?
-      render text: "You have already unsubscribed"
+      render 'signatures/unsubscribe/already_unsubscribed'
     else
       signature.unsubscribe!
+      render 'signatures/unsubscribe/successfully_unsubscribed'
     end
   end
 

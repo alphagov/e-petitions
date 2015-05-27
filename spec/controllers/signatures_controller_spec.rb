@@ -296,7 +296,7 @@ describe SignaturesController do
       end
 
       it 'renders a view stating that unsubscribing was successfull' do
-        expect(response).to render_template(:unsubscribe)
+        expect(response).to render_template(:successfully_unsubscribed)
       end
     end
 
@@ -311,8 +311,8 @@ describe SignaturesController do
           expect(@signature.notify_by_email).to be_truthy
         end
 
-        it 'renders a simple text response that indicates that unsubscription failed' do
-          expect(response.body).to eq("Failed to unsubscribe")
+        it 'renders a template that indicates that unsubscription failed' do
+          expect(response.body).to render_template(:failed_to_unsubscribe)
         end
 
       end
@@ -327,19 +327,19 @@ describe SignaturesController do
           expect(@signature.notify_by_email).to be_truthy
         end
 
-        it 'renders a simple text response that indicates that unsubscription failed' do
-          expect(response.body).to eq("Failed to unsubscribe")
+        it 'renders a template that indicates that unsubscription failed' do
+          expect(response.body).to render_template(:failed_to_unsubscribe)
         end
 
       end
 
       context "with already unsubscribed signer" do
-        it 'renders a simple text responser to indicate signer has already unsubscribed' do
+        it 'renders a template stating that the signer has already unsubscribed' do
           @signature.notify_by_email = false
           @signature.save
 
           get :unsubscribe, :id => @signature.id, :unsubscribe_token => @signature.unsubscribe_token
-          expect(response.body).to eq("You have already unsubscribed")
+          expect(response.body).to render_template(:already_unsubscribed)
         end
       end
     end
