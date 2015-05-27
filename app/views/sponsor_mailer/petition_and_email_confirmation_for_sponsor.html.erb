@@ -11,8 +11,8 @@
   </li>
 
   <li>
-    <p>Confirm your email address by clicking on the link below:</p>
-    <%= link_to nil verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>
+    <p>Click the link below to confirm your email address:</p>
+    <%= link_to nil, verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>
   </li>
 </ol>
 

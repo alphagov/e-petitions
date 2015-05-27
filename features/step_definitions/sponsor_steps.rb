@@ -106,6 +106,7 @@ Then(/^I should not have signed the petition as a sponsor$/) do
 end
 
 Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponsoring$/) do |address|
+  address = address || 'laura.the.sponsor@example.com'
   expect(unread_emails_for(address).size).to eq 1
   open_last_email_for(address)
   steps %Q{
