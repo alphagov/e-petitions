@@ -201,7 +201,7 @@ describe SponsorsController do
   context 'GET thank-you' do
     let(:petition) { FactoryGirl.create(:petition) }
     let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
+    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:pending_signature)) }
 
     before { signature.present? }
 
@@ -237,7 +237,7 @@ describe SponsorsController do
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
-    it 'renders the view if the sponsor has signed the petition' do
+    it 'renders the view if the sponsor has signed the petition and not validated their signature' do
       get :thank_you, petition_id: petition, token: sponsor.perishable_token
       expect(response).to render_template :thank_you
     end
@@ -246,6 +246,69 @@ describe SponsorsController do
       signature.destroy
       get :thank_you, petition_id: petition, token: sponsor.perishable_token
       expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}"
+    end
+
+    it 'redirects to sponsored if the sponsor has signed the petition but already validated their signature' do
+      signature.update_column(:state, Signature::VALIDATED_STATE)
+      get :thank_you, petition_id: petition, token: sponsor.perishable_token
+      expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/sponsored"
+    end
+  end
+
+  context 'GET sponsored' do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
+    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
+
+    before { signature.present? }
+
+    it 'fetches the requested petition' do
+      get :sponsored, petition_id: petition, token: sponsor.perishable_token
+      expect(assigns[:petition]).to eq petition
+    end
+
+    it 'fetches the requested sponsor by the token' do
+      get :sponsored, petition_id: petition, token: sponsor.perishable_token
+      expect(assigns[:sponsor]).to eq sponsor
+    end
+
+    # TODO: check for invalid petition states?
+    it '404s if the requested petition does not exist' do
+      petition_param = petition.to_param
+      petition.destroy
+      expect {
+        get :sponsored, petition_id: petition_param, token: sponsor.perishable_token
+      }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it '404s if the requested sponsor token does not exist' do
+      expect {
+        get :sponsored, petition_id: petition, token: 'not-a-real-sponsor-perishable-token'
+      }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it '404s if the requested sponsor token belongs to a different petition' do
+      petition_2 = FactoryGirl.create(:petition)
+      expect {
+        get :sponsored, petition_id: petition_2, token: sponsor.perishable_token
+      }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it 'renders the view if the sponsor has signed the petition and validated their signature' do
+      get :sponsored, petition_id: petition, token: sponsor.perishable_token
+      expect(response).to render_template :sponsored
+    end
+
+    it 'redirects to show if the sponsor has not signed the petition yet' do
+      signature.destroy
+      get :sponsored, petition_id: petition, token: sponsor.perishable_token
+      expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}"
+    end
+
+    it 'redirects to thank-you if the sponsor has signed the petition, but not validated their signature yet' do
+      signature.update_column(:state, Signature::PENDING_STATE)
+      get :sponsored, petition_id: petition, token: sponsor.perishable_token
+      expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/thank-you"
     end
   end
 end

@@ -31,8 +31,18 @@ class SponsorsController < ApplicationController
   end
 
   def thank_you
-    unless @sponsor.signature.present?
+    if @sponsor.signature.nil?
       redirect_to petition_sponsor_url(@petition, token: @sponsor.perishable_token)
+    elsif @sponsor.signature.validated?
+      redirect_to sponsored_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
+    end
+  end
+
+  def sponsored
+    if @sponsor.signature.nil?
+      redirect_to petition_sponsor_url(@petition, token: @sponsor.perishable_token)
+    elsif @sponsor.signature.pending?
+      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
     end
   end
 
