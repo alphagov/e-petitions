@@ -52,7 +52,7 @@ class AdminUser < ActiveRecord::Base
 
   # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }
-  scope :by_role, ->(role) { where(role: role) }
+  scope :by_role, ->(role) { where(role: role).order(:id) }
 
   # = Methods =
 
