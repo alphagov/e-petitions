@@ -1,0 +1,50 @@
+// Validation summary box
+
+@import "../../govuk_frontend_toolkit/colours";
+@import "../../govuk_frontend_toolkit/measurements";
+@import "../../govuk_frontend_toolkit/conditionals";
+@import "../../govuk_frontend_toolkit/typography";
+
+.validation-summary {
+  border: 3px solid $error-colour;
+  padding: $gutter-half $gutter;
+  margin-bottom: $gutter;
+
+  @include ie-lte(6) {
+    zoom: 1;
+  }
+
+  ul {
+    margin-top: 10px;
+  }
+
+  li,
+  p {
+    @include core-16;
+  }
+
+  p {
+    margin-top: $gutter-half;
+    margin-bottom: 5px;
+  }
+
+  a {
+    color: $error-colour;
+
+    @include ie-lte(6) {
+      color: $error-colour !important;
+    }
+  }
+
+  .heading-small {
+    margin-top: $gutter-half;
+  }
+
+}
+
+// Validation message
+.validation-message {
+  @include core-16;
+  display: block;
+  color: $error-colour;
+}

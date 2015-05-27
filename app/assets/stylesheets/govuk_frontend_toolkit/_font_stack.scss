@@ -1,0 +1,32 @@
+//  Petitions font stacks, referred to in typography.scss
+
+// Petitions font stack
+$petitions-font: "Roboto", Arial, sans-serif;
+
+// No tabular font stack yet
+$petitions-font-tabular: $petitions-font;
+
+// Font reset for print
+$print-reset: sans-serif;
+
+//  Font stack weirdness
+//
+//  To ensure embedded fonts fall back to appropriate
+//  system fonts (eg, bold embedded font falls back to
+//  bold system font, without anyone getting horrible
+//  artificially emboldened weights) we're setting
+//  the font-stack in a font-face declaration rather
+//  than with the usual font-family.
+
+// // Helvetica Regular
+// @font-face {
+//   font-family: GDS-Logo;
+//   src: local("HelveticaNeue"),
+//        local("Helvetica Neue"),
+//        local("Arial"),
+//        local("Helvetica");
+// }
+
+// $Helvetica-Regular:
+//   "GDS-Logo",
+//   sans-serif;
