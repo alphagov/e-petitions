@@ -6,8 +6,8 @@ If you're happy to support this petition, please follow the link below to
 provide a few details additional details.
 </p>
 <%=
-  url = petition_sponsor_url(@sponsor.petition, token: @sponsor.perishable_token, :secure => true)
-  link_to url, url
+  link_to nil, petition_sponsor_url(@sponsor.petition, token: @sponsor.perishable_token, :protocol => 'https')
 %>
 <p><%= @sponsor.petition.title  %></p>
+<p><%= @sponsor.petition.action  %></p>
 <p><%= @sponsor.petition.description  %></p>

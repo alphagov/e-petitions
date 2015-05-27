@@ -93,6 +93,7 @@ end
 
 Then /^I should see the petition details$/ do
   expect(page).to have_content(@petition.title)
+  expect(page).to have_content(@petition.action)
   expect(page).to have_content(@petition.description)
 end
 

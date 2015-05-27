@@ -4,11 +4,12 @@ Feature: Moderator respond to petition
   I want to respond to a petition, accepting, rejecting or re-assigning it
 
   Scenario: Accessing the petitions page
-    Given a sponsored petition exists with title: "More money for charities"
+    Given a sponsored petition "More money for charities"
     And I am logged in as a sysadmin
     When I go to the admin moderate petitions page for "More money for charities"
     Then I should be connected to the server via an ssl connection
     And the markup should be valid
+    And I should see the petition details
 
   Scenario: Moderator publishes petition
     Given I am logged in as a moderator
