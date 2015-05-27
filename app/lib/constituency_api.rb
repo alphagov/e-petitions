@@ -1,6 +1,8 @@
 # Or wrap things up in your own class
 class ConstituencyApi
 
+  include Faraday
+
   ConstituencyApiError = Class.new(RuntimeError)
   
   class Constituency
@@ -15,11 +17,12 @@ class ConstituencyApi
     end
   end
 
-  
-  include HTTParty
-  base_uri 'data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
-  default_timeout 10
 
+  def initialize
+    url =  'http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
+    @connection = Faraday.new url
+  end
+  
   def constituencies(postcode)
     response = call_api(postcode)
     parse_constituencies(response)
@@ -29,28 +32,18 @@ class ConstituencyApi
   
   def parse_constituencies(response)
     return [] unless response["Constituencies"]
-
     constituencies = response["Constituencies"]["Constituency"]
-    if constituencies.kind_of?(Array)
-      parse_multiple_constituencies(constituencies)
-    else
-      parse_constituency(constituencies)
-    end
-  end
-
-  def parse_multiple_constituencies(constituencies)
-    constituencies.map { |c| Constituency.new(c["Name"]) }
-  end
-
-  def parse_constituency(constituency)
-    [Constituency.new(constituency["Name"])]
+    Array.wrap(constituencies).map { |c| Constituency.new(c["Name"]) }
   end
   
   def call_api(postcode)
-    response = self.class.get("/#{postcode_param(postcode)}/")
-    raise ConstituencyApiError.new('Unexpected response') unless response.code == 200
-    response.parsed_response
-  rescue Timeout::Error
+    response = @connection.get "#{postcode_param(postcode)}/" do |req|
+      req.options[:timeout] = 10
+      req.options[:open_timeout] = 10
+    end
+    raise ConstituencyApiError.new('Unexpected response') unless response.status == 200
+    Hash.from_xml(response.body)
+  rescue Faraday::TimeoutError
     raise ConstituencyApiError.new('Timeout after 10 seconds')
   end
 
