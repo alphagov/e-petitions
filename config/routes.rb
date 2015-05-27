@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     resources :sponsors, only: [:show, :update], param: :token do
       get 'thank-you', on: :member
+      get 'sponsored', on: :member
     end
 
     resource :signature, :only => [:new] do

@@ -30,6 +30,8 @@ When(/^a sponsor supports my e\-petition$/) do
     And I select "United Kingdom" from "Country"
     And I try to sign
     And I say I am happy with my email address
+    And "#{sponsor.email}" opens the email with text "confirm your email address"
+    And they click the first link in the email
   }
   expect(sponsor.reload.signature).to be_present
 end
