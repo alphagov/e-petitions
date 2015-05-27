@@ -57,6 +57,10 @@ class Signature < ActiveRecord::Base
     petition.creator_signature == self
   end
 
+  def sponsor?
+    petition.sponsor_signatures.exists? self.id
+  end
+
   def pending?
     state == PENDING_STATE
   end

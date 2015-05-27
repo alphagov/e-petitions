@@ -46,6 +46,7 @@ class Petition < ActiveRecord::Base
   accepts_nested_attributes_for :creator_signature
   has_many :signatures
   has_many :sponsors
+  has_many :sponsor_signatures, :through => :sponsors, :source => :signature
 
   # = Validations =
   include Staged::Validations::PetitionDetails

@@ -383,6 +383,21 @@ describe Signature do
     end
   end
 
+  describe '#sponsor?' do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
+    let(:sponsor_signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:signature)) }
+    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+    it 'is true if the signature is a sponsor signature for the petition it belongs to' do
+      expect(sponsor_signature.sponsor?).to be_truthy
+    end
+
+    it 'is false if the signature is not a sponsor signature for the petition it belongs to' do
+      expect(signature.sponsor?).to be_falsey
+    end
+  end
+
   describe '#validate_from_token!' do
     subject { FactoryGirl.create(:pending_signature) }
 
