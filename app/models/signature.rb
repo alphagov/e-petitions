@@ -66,7 +66,7 @@ class Signature < ActiveRecord::Base
   end
 
   def unsubscribed?
-   notify_by_email == false
+    notify_by_email == false
   end
 
   def postal_district
