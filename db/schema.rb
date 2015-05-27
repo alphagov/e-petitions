@@ -82,18 +82,18 @@ ActiveRecord::Schema.define(version: 20150528121200) do
   add_index "petitions", ["state", "signature_count"], name: "index_petitions_on_state_and_signature_count", using: :btree
 
   create_table "signatures", force: :cascade do |t|
-    t.string   "name",             limit: 255,                     null: false
-    t.string   "state",            limit: 10,  default: "pending", null: false
-    t.string   "perishable_token", limit: 255
-    t.string   "postcode",         limit: 255
-    t.string   "country",          limit: 255
-    t.string   "ip_address",       limit: 20
+    t.string   "name",              limit: 255,                     null: false
+    t.string   "state",             limit: 10,  default: "pending", null: false
+    t.string   "perishable_token",  limit: 255
+    t.string   "postcode",          limit: 255
+    t.string   "country",           limit: 255
+    t.string   "ip_address",        limit: 20
     t.integer  "petition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "notify_by_email",              default: true
+    t.boolean  "notify_by_email",               default: true
     t.datetime "last_emailed_at"
-    t.string   "encrypted_email",  limit: 255
+    t.string   "encrypted_email",   limit: 255
     t.string   "unsubscribe_token"
   end
 

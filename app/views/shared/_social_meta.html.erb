@@ -1,0 +1,23 @@
+<!-- Dublin core -->
+<meta name="dcterms.spatial" xml:lang="en" lang="en" content="UK"/>
+<meta name="dcterms.creator" content="Government Digital Service"/>
+<%# <meta name="dcterms.modified" content="19072011"/>
+  Ideally, this should show the activity date on a per-page basis :( %>
+<meta name="dc.language" xml:lang="en" lang="en" content="en"/>
+<meta name="dcterms.publisher" content="Government Digital Service"/>
+<meta name="dcterms.subject" xml:lang="en" lang="en" content="petitions"/>
+<meta name="dcterms.title" content="<%= @title %>">
+
+<!-- Open Graph -->
+<meta property="og:title" content="<%= @title %>" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="/images/opengraph-image.png" />
+<meta property="og:url" content="<%= @path %>" />
+<meta property="og:site_name" content="UK Parliament petitions" />
+<meta property="og:description" content="<%= @action %>" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="<%= @title %>">
+<meta name="twitter:description" content="<%= @action %>">
+<meta name="twitter:image" content="/images/opengraph-image.png">

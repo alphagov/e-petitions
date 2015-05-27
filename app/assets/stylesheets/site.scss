@@ -21,11 +21,25 @@
 // @import "govuk_elements/buttons";
 // @import "govuk_elements/details";
 // @import "govuk_elements/elements-typography";
-// @import "govuk_elements/forms";
+@import "govuk_elements/forms";
 // @import "govuk_elements/helpers";
 // @import "govuk_elements/icons";
 // @import "govuk_elements/layout";
-// @import "govuk_elements/lists";
+@import "govuk_elements/lists";
 // @import "govuk_elements/panels";
 // @import "govuk_elements/tables";
 
+// Petitions styles
+@import "petitions/helpers";
+@import "petitions/reset";
+@import "petitions/basic";
+@import "petitions/colours";
+@import "petitions/typography";
+@import "petitions/accessibility";
+@import "petitions/details";
+@import "petitions/panels";
+@import "petitions/buttons";
+@import "petitions/layout";
+@import "petitions/header";
+@import "petitions/footer";
+@import "petitions/views/petition-show";

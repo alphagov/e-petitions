@@ -1,0 +1,7 @@
+// Copied from govuk_elements helpers
+
+// Return ems from a pixel value
+// This assumes a base of 19px
+@function em($px, $base: 19) {
+  @return ($px / $base) + em;
+}

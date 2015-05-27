@@ -1,0 +1,81 @@
+// Mostly taken from govuk_elements typography file
+
+@import "../govuk_frontend_toolkit/typography";
+@import "../govuk_frontend_toolkit/colours";
+@import "helpers";
+
+html, body, button, input, table, td, th, main {
+  @include core-19;
+  -webkit-font-smoothing: antialiased;
+}
+
+
+// Common heading sizes
+// Using the bold-xx mixins from the govuk_toolkit _typography.scss file
+// Spacing is set in em, using em() in the helpers
+
+// Headings
+h1 {
+  @include bold-36();
+
+  margin-top: em(25, 36);
+  margin-bottom: em(10, 36);
+
+  @include media(tablet) {
+    margin-top: em(45, 36);
+    margin-bottom: em(20, 36);
+  }
+
+  .heading-secondary {
+    @include heading-24();
+
+    display: block;
+    color: $secondary-text-colour;
+  }
+
+}
+
+h2, h3, h4 {
+  @include bold-19();
+
+  margin-top: em(10, 16);
+  margin-bottom: em(5, 16);
+
+  @include media(tablet) {
+    margin-top: em(20, 19);
+  }
+
+}
+
+p {
+  margin-top: em(5, 16);
+  margin-bottom: em(20, 16);
+
+  @include media(tablet) {
+    margin-top: em(5);
+    margin-bottom: em(20);
+  }
+
+}
+
+.text-secondary {
+  color: $secondary-text-colour;
+}
+
+// Link styles
+a {
+  color: $link-colour;
+  text-decoration: none;
+}
+
+a:visited {
+  color: $link-visited-colour;
+}
+
+a:hover {
+  color: $link-hover-colour;
+}
+
+a:active {
+  color: $link-colour;
+}

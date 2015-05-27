@@ -14,7 +14,7 @@ body {
   width: 100%;
   text-align: center;
   background-color: ;
-  background: #B2B6B9 url(/images/shadows/gray_top.gif) no-repeat 50% 5px;
+  background: #B2B6B9 url(/images/admin/shadows/gray_top.gif) no-repeat 50% 5px;
   padding-top: 18px;
   padding-bottom: 50px;
 }
@@ -23,14 +23,14 @@ body {
   margin-right: auto;
   width: 820px;
   text-align: left;
-  background: white url(/images/shadows/gray_bottom.gif) no-repeat bottom center;
+  background: white url(/images/admin/shadows/gray_bottom.gif) no-repeat bottom center;
   padding-bottom: 14px;
 }
 
 #header {
   height: 89px;
   border-bottom: solid 1px #9C9C9C;
-  background: transparent url(/images/shadows/white_top.gif) no-repeat bottom center;
+  background: transparent url(/images/admin/shadows/white_top.gif) no-repeat bottom center;
 }
 #header .logo {
   margin: 23px 0 0 58px;

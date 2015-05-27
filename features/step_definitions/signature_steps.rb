@@ -14,7 +14,7 @@ end
 Then /^I have not yet signed the petition$/ do
   expect(page).to have_title("Thank you")
   click_link("view")
-  expect(page).to have_css("dd.signature_count", :text => "1")
+  expect(page).to have_css("p.signature-count", :text => "1 signatures")
 end
 
 Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
@@ -32,7 +32,7 @@ end
 def should_be_signature_count_of(count)
   Petition.update_all_signature_counts
   visit petition_path(@petition)
-  expect(page).to have_css("dd.signature_count", :text => count.to_s)
+  expect(page).to have_css("p.signature-count", :text => count.to_s + " signatures")
 end
 
 Then /^I should have signed the petition$/ do

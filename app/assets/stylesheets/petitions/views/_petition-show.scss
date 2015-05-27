@@ -1,0 +1,97 @@
+.petitions-details {
+  border-bottom: 1px solid $panel-colour;
+  padding: $gutter-half;
+  margin: 0 $gutter-half * -1;
+
+  li {
+    margin-bottom: $gutter-half;
+  }
+}
+
+.signature-count {
+  @include bold-48;
+
+  span {
+    @include bold-36;
+  }
+}
+
+.signature-count-legend-item {
+  color: $secondary-text-colour;
+
+  padding: 0 0 0 50px;
+  h2 {
+    @include bold-36;
+
+    span {
+      @include bold-19;
+    }
+  }
+}
+.signature-count-legend-item.count-10000 {
+  background-image: image-url("logos/hm-gov-crown.png");
+  background-repeat: no-repeat;
+  background-position: 4px 0px;
+  background-size: 35px 25px;
+
+  @include device-pixel-ratio() {
+    background-image: image-url("logos/hm-gov-crown-2x.png");
+  }
+
+  @include ie(6) {
+    background-image: image-url("logos/hm-gov-crown-ie.png");
+  }
+}
+.signature-count-legend-item.count-100000 {
+  background-image: image-url("logos/parliament-crest.png");
+  background-repeat: no-repeat;
+  background-position: 5px 0px;
+  background-size: 32px 40px;
+
+  @include device-pixel-ratio() {
+    background-image: image-url("logos/parliament-crest-2x.png");
+  }
+
+  @include ie(6) {
+    background-image: image-url("logos/parliament-crest-ie.png");
+  }
+}
+
+.petition-share {
+  @extend %contain-floats;
+  margin: 0 $gutter-half * -1;
+  border-bottom: 1px solid $panel-colour;
+  li {
+    float: left;
+    @include box-sizing(border-box);
+    width: 50%;
+    border-top: 1px solid $panel-colour;
+    padding: 10px $gutter-half;
+  }
+  li:nth-child(odd) {
+    border-right: 1px solid $panel-colour;
+  }
+  a {
+    color: $text-colour;
+  }
+  a:hover {
+    color: $secondary-text-colour;
+  }
+}
+
+.petition-meta {
+  @extend %contain-floats;
+  margin: 0 $gutter-half * -1;
+  margin-top: $gutter;
+  li {
+    @include bold-24;
+    float: left;
+    @include box-sizing(border-box);
+    width: 50%;
+    padding: 0px $gutter-half;
+  }
+  .label {
+    display: block;
+    @include core-16;
+  }
+}

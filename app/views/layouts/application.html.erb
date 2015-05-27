@@ -1,72 +1,32 @@
 <!DOCTYPE html>
 <html lang="EN-GB">
   <head>
-    <% @title = yield :page_title; @title = 'HM Government e-petitions' if @title.blank? -%>
+    <% @title = yield :page_title; @title = "Petition parliament" if @title.blank? -%>
     <title><%= @title %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
     <%= stylesheet_link_tag 'application' %>
     <!--[if IE 6]><%= stylesheet_link_tag 'ie6' %><![endif]-->
     <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7under' %><![endif]-->
     <!--[if gte IE 9]><%= stylesheet_link_tag 'ie9' %><![endif]-->
-    <%= javascript_include_tag 'vendor/jquery', 'application', 'accessibility', 'form_controller' %>
 
+    <%= javascript_include_tag 'vendor/jquery', 'application', 'accessibility', 'form_controller' %>
     <%= yield :js %>
-    <meta name="dcterms.spatial" xml:lang="en" lang="en" content="UK"/>
-    <meta name="dcterms.creator" content="Government Digital Service"/>
-    <meta name="dcterms.modified" content="19072011"/>
-    <meta name="dc.language" xml:lang="en" lang="en" content="en"/>
-    <meta name="dcterms.publisher" content="Government Digital Service"/>
-    <meta name="dcterms.subject" xml:lang="en" lang="en" content="e-petitions"/>
-    <meta name="dcterms.title" content="<%= @title %>">
     <meta name="viewport" content="width = device-width"/>
+    <%= render 'shared/icons' %>
+    <%= render 'shared/social_meta' %>
     <%= render 'layouts/analytics' %>
   </head>
   <body>
-    <div id="outer_page_wrapper">
-      <div id="inner_page_wrapper">
-        <div id="header">
-          <div class="logo">
-            <%= link_to image_tag('logos/hm_gov.gif', :alt => 'HM Government') + raw('<span class="link_description">Click here to return to the home page</span>'), home_path, :class => 'logo_link', :title => 'Click here to return to the home page', :tabindex => 1 %>
-          </div>
-          <div id="header_content">
-            <% if params[:action] != 'home' and Petition.visible.count > 0 %>
-              <% focus = (params[:action] == 'search' or params[:action] == 'show') ? "autofocus=\"autofocus\"".html_safe : '' %>
-              <form method="get" action="/search" class="search_form">
-                <input type='text' name="q" id="search_header" value="<%= @petition_search.try(:search_term) %>" size="30" tabindex="2" <%= focus %>/>
-                <input type='submit' value='Search' class="button" id="search_button_header"/>
-                <label for='search_header'>Search published e-petitions</label>
-              </form>
-            <% end -%>
-          </div>
+    <%= render "shared/header" %>
 
-        </div>
-        <div id="page_content">
-          <%= yield :title %>
-          <%= render :partial => 'shared/messages' %>
-          <%= yield %>
-        </div>
-        <div id="footer">
-          <%= render_tabnav :id => "footer_nav" do |n|
-            n.add_tab do |t|
-              t.named 'How e-petitions work'
-              t.links_to how_it_works_path
-            end
-            n.add_tab do |t|
-              t.named 'Help'
-              t.links_to help_path
-            end
-            n.add_tab do |t|
-              t.named 'Crown copyright'
-              t.links_to "http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/copyright-and-re-use/crown-copyright/"
-            end
-            n.add_tab do |t|
-              t.named 'Feedback'
-              t.links_to feedback_path
-            end
-          end %>
-        </div>
-      </div>
-    </div>
+    <main id="content">
+      <%= yield :title %>
+      <%= render 'shared/messages' %>
+      <%= yield %>
+    </main>
+
+    <%= render "shared/footer" %>
+
   </body>
 </html>
