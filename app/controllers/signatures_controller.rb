@@ -35,13 +35,13 @@ class SignaturesController < ApplicationController
 
     # else signature is from an ordinary signee so let's redirect to petition's page
       else
-        redirect_to signed_petition_signature_path(@signature.petition) and return
+        redirect_to signed_petition_signature_url(@signature.petition) and return
       end
     else
       # We've found the signature, but it's already been verified.
       if @signature.state == Signature::VALIDATED_STATE
         flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
-        redirect_to signed_petition_signature_path(@signature.petition) and return
+        redirect_to signed_petition_signature_url(@signature.petition) and return
       else
         raise ActiveRecord::RecordNotFound
       end
@@ -95,7 +95,7 @@ class SignaturesController < ApplicationController
 
   def handle_existing_signatures(signatures, petition)
     signatures.each { |sig| send_email_to_petition_signer(sig) }
-    redirect_to thank_you_petition_signature_path(petition)
+    redirect_to thank_you_petition_signature_url(petition)
   end
 
   def handle_new_signature(petition)
@@ -103,7 +103,7 @@ class SignaturesController < ApplicationController
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
     if @stage_manager.create_signature
       send_email_to_petition_signer(@stage_manager.signature)
-      respond_with @stage_manager.stage_object, :location => thank_you_petition_signature_path(petition)
+      respond_with @stage_manager.stage_object, :location => thank_you_petition_signature_url(petition)
     else
       render :new
     end

@@ -8,7 +8,7 @@ class SponsorsController < ApplicationController
     if @sponsor.signature.nil?
       @signature = @sponsor.build_signature(:country => "United Kingdom")
     else
-      redirect_to thank_you_petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
+      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
     end
   end
 
@@ -25,18 +25,18 @@ class SponsorsController < ApplicationController
         @signature.save(:validate => false)
         send_sponsor_support_notificaiton_email_to_petition_owner(@petition, @sponsor)
         @petition.update_sponsored_state
-        redirect_to thank_you_petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
+        redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
       else
         render :show
       end
     else
-      redirect_to thank_you_petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
+      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
     end
   end
 
   def thank_you
     unless @sponsor.signature.present?
-      redirect_to petition_sponsor_path(@petition, token: @sponsor.perishable_token, secure: true)
+      redirect_to petition_sponsor_url(@petition, token: @sponsor.perishable_token)
     end
   end
 

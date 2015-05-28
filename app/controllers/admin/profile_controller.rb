@@ -19,7 +19,7 @@ class Admin::ProfileController < Admin::AdminController
       current_user.errors.add(:password, "is the same as the current password")
     elsif update_params[:password].present? and current_user.update_attributes(update_params)
       flash[:notice] = "Password was successfully updated"
-      redirect_to admin_root_path and return
+      redirect_to admin_root_url and return
     end
     render :edit
   end
