@@ -1,11 +1,4 @@
 module PetitionHelper
-  def sponsor_email_error_messages(petition)
-    sponsor_error_messages = petition.sponsors.map(&:errors).flatten.map(&:messages)
-    error_messages = sponsor_error_messages.map { |field_messages| field_messages.values }.flatten
-    error_messages << petition.errors[:sponsor_emails]
-    content_tag(:div, error_messages.join("</br>\n").html_safe, class: 'errors')
-  end
-
   def render_petition_form(stage_manager, form)
     capture do
       concat render_petition_hidden_details(stage_manager, form)
@@ -19,7 +12,6 @@ module PetitionHelper
     capture do
       concat hidden_field_tag(:stage, stage_manager.stage)
       concat render('/petitions/create/petition_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'petition'
-      concat render('/petitions/create/sponsor_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'sponsors'
       if stage_manager.stage_object.creator_signature.present?
         concat render('/petitions/create/your_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'creator'
         concat render('/petitions/create/email_hidden', petition: stage_manager.stage_object, f: form) unless ['creator', 'replay-email'].include? stage_manager.stage
@@ -35,8 +27,6 @@ module PetitionHelper
       render('/petitions/create/petition_details_ui', petition: stage_manager.stage_object, f: form)
     when 'creator'
       render('/petitions/create/your_details_ui', petition: stage_manager.stage_object, f: form)
-    when 'sponsors'
-      render('/petitions/create/sponsor_details_ui', petition: stage_manager.stage_object, f: form)
     when 'replay-petition'
       render('/petitions/create/replay_petition_ui', petition: stage_manager.stage_object, f: form)
     when 'replay-email'

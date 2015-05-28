@@ -155,12 +155,6 @@ describe PetitionsController do
           expect(assigns[:stage_manager].stage).to eq 'creator'
         end
 
-        it "has stage of 'sponsors' if there are errors on sponsor_emails" do
-          petition_attributes[:sponsor_emails] = 'blah@'
-          do_post
-          expect(assigns[:stage_manager].stage).to eq 'sponsors'
-        end
-
         it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
           new_creator_signature_attribtues = creator_signature_attributes.merge(:email => 'foo@')
           new_petition_attributes = petition_attributes.merge(:creator_signature => new_creator_signature_attribtues)
