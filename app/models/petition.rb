@@ -50,7 +50,6 @@ class Petition < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  include Staged::Validations::SponsorDetails
   validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
@@ -92,14 +91,6 @@ class Petition < ActiveRecord::Base
                               group('petitions.id').
                               limit(3)
                             }
-
-  def sponsor_emails
-    @sponsor_emails || []
-  end
-
-  def sponsor_emails=(emails)
-    @sponsor_emails = emails
-  end
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|

@@ -78,7 +78,6 @@ describe Staged::PetitionCreator do
   describe 'stages' do
     extend StagedObjectHelpers
 
-    let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" } }
     let(:creator_signature_params) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
@@ -91,7 +90,6 @@ describe Staged::PetitionCreator do
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
-        :sponsor_emails => sponsor_emails,
         :creator_signature_attributes => creator_signature_params
       }
     end

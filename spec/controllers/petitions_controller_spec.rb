@@ -26,7 +26,6 @@ describe PetitionsController do
   end
 
   describe "create" do
-    let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n") }
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
@@ -39,7 +38,6 @@ describe PetitionsController do
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
-        :sponsor_emails => sponsor_emails,
         :creator_signature => creator_signature_attributes
       }
     end
