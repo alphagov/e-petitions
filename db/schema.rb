@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528104643) do
+ActiveRecord::Schema.define(version: 20150528121200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20150528104643) do
     t.boolean  "notified_by_email",                default: false
     t.datetime "email_requested_at"
     t.string   "action",               limit: 200
+    t.string   "sponsor_token",        limit: 255
   end
 
   add_index "petitions", ["creator_signature_id"], name: "index_petitions_on_creator_signature_id", unique: true, using: :btree

@@ -24,6 +24,9 @@
 
 class Petition < ActiveRecord::Base
   include State
+  include PerishableTokenGenerator
+
+  has_perishable_token called: 'sponsor_token'
 
   after_create :set_petition_on_creator_signature
 

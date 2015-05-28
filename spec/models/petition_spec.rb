@@ -36,6 +36,11 @@ describe Petition do
       p = Petition.new
       expect(p.email_signees).to be_falsey
     end
+
+    it "generates sponsor token" do
+      p = FactoryGirl.create(:petition, :sponsor_token => nil)
+      expect(p.sponsor_token).not_to be_nil
+    end
   end
 
   context "validations" do
