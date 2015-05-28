@@ -198,6 +198,13 @@ describe Petition do
 
         expect(Petition.last_hour_trending.to_a.size).to eq(3)
       end
+
+      it "excludes petitions that are not open" do
+        petition = FactoryGirl.create(:validated_petition)
+        20.times{ FactoryGirl.create(:validated_signature, :petition => petition) }
+
+        expect(Petition.last_hour_trending.to_a).not_to include(petition)
+      end
     end
 
     describe "trending" do
@@ -230,6 +237,15 @@ describe Petition do
       context "finding trending petitions for the last 7 days" do
         it "includes the petition with older signatures" do
           expect(Petition.trending(7).map(&:title).include?(@petition_with_old_signatures.title)).to be_truthy
+        end
+      end
+
+      context "when there are validated petitions" do
+        it "excludes petitions that are not open" do
+          petition = FactoryGirl.create(:validated_petition)
+          20.times{ FactoryGirl.create(:validated_signature, :petition => petition) }
+
+          expect(Petition.trending(1).to_a).not_to include(petition)
         end
       end
     end

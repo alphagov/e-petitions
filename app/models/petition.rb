@@ -75,6 +75,7 @@ class Petition < ActiveRecord::Base
   scope :moderated, -> { where(state: MODERATED_STATES) }
   scope :trending, ->(number_of_days) {
                       joins(:signatures).
+                      where("petitions.state" => "open").
                       where("signatures.state" => "validated").
                       where("signatures.updated_at > ?", number_of_days.day.ago).
                       order("count('signatures.id') DESC").
@@ -83,6 +84,7 @@ class Petition < ActiveRecord::Base
   scope :last_hour_trending, -> {
                               joins(:signatures).
                               select("petitions.*, count('signatures.id') as signatures_in_last_hour").
+                              where("petitions.state" => "open").
                               where("signatures.state" => "validated").
                               where("signatures.updated_at > ?", 1.hour.ago).
                               order("signatures_in_last_hour DESC").
