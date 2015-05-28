@@ -21,10 +21,10 @@ class Sponsor < ActiveRecord::Base
   validates_presence_of :petition, message: "Needs a petition"
 
   def self.supporting_the_petition
-    where.not(signature_id: nil)
+    joins(:signature).merge(Signature.validated)
   end
   def supports_the_petition?
-    signature.present?
+    signature.present? && signature.validated?
   end
 
   def self.for(signature)

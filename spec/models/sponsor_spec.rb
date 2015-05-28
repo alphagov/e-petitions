@@ -92,13 +92,27 @@ describe Sponsor do
     end
 
     context 'when the sponsor has a signature' do
-      before { sponsor.create_signature!(FactoryGirl.attributes_for(:signature)) }
 
-      it 'supports the petition' do
-        expect(sponsor.supports_the_petition?).to be_truthy
+      context 'that is pending' do
+        before { sponsor.create_signature!(FactoryGirl.attributes_for(:pending_signature)) }
+
+        it 'does not support the petition' do
+          expect(sponsor.supports_the_petition?).to be_falsey
+        end
+        it 'is not included in the supporting_the_petition scope' do
+          expect(Sponsor.supporting_the_petition).not_to include(sponsor)
+        end
       end
-      it 'is included in the supporting_the_petition scope' do
-        expect(Sponsor.supporting_the_petition).to include(sponsor)
+
+      context 'thas has been validated' do
+        before { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
+
+        it 'supports the petition' do
+          expect(sponsor.supports_the_petition?).to be_truthy
+        end
+        it 'is included in the supporting_the_petition scope' do
+          expect(Sponsor.supporting_the_petition).to include(sponsor)
+        end
       end
     end
   end
