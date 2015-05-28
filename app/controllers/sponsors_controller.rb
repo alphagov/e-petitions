@@ -1,47 +1,42 @@
 class SponsorsController < ApplicationController
   before_action :retrieve_petition
+  before_action :validate_token_and_petition_match
 
   respond_to :html
 
   def show
-    if @petition.sponsor_token == params[:token]
-      assign_stage
-      @sponsor = @petition.sponsors.build
-      @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
-    else
-      raise ActiveRecord::RecordNotFound
-    end
+    assign_stage
+    @sponsor = @petition.sponsors.build
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
   end
 
   def update
-    if @petition.sponsor_token == params[:token]
-      assign_stage
-      @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
-      if @stage_manager.create_signature
-        @signature = @stage_manager.signature
-        @sponsor = @petition.sponsors.create(signature: @signature)
-        send_email_to_sponsor(@sponsor)
-        redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
-      else
-        render :show
-      end
+    assign_stage
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
+    if @stage_manager.create_signature
+      @signature = @stage_manager.signature
+      @sponsor = @petition.sponsors.create(signature: @signature)
+      send_email_to_sponsor(@sponsor)
+      redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
-      raise ActiveRecord::RecordNotFound
+      render :show
     end
   end
 
   def thank_you
-    raise ActiveRecord::RecordNotFound unless @petition.sponsor_token == params[:token]
   end
 
   def sponsored
-    raise ActiveRecord::RecordNotFound unless @petition.sponsor_token == params[:token]
   end
 
   private
   def retrieve_petition
     # TODO: scope the petitions we look at?
     @petition = Petition.find(params[:petition_id])
+  end
+
+  def validate_token_and_petition_match
+    raise ActiveRecord::RecordNotFound unless @petition.sponsor_token == params[:token]
   end
 
   def assign_stage
