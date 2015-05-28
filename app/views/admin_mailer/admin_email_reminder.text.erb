@@ -3,6 +3,6 @@ Dear <%= @admin_user.first_name %>,
 <%= @new_petitions_count %> <%= @new_petitions_count == 1 ? 'petition is new' : 'petitions are new' %>
 <%= @petitions.length %> <%= @petitions.length == 1 ? 'petition requires action' : 'petitions require action' %>
 
-Please go here <%= admin_root_url(:secure => true) %>
+Please go here <%= admin_root_url %>
 
 Thank you.

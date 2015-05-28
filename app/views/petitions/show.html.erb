@@ -35,7 +35,7 @@
 
     <div class='button_row'>
       <% if @petition.can_be_signed? -%>
-        <%= link_to "Sign this petition", new_petition_signature_path(@petition, :secure => true), :class => 'link_button', :tabindex => increment(5) %>
+        <%= link_to "Sign this petition", new_petition_signature_path(@petition), :class => 'link_button', :tabindex => increment(5) %>
       <% end -%>
     </div>
 

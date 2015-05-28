@@ -2,7 +2,7 @@ Dear <%= @signature.name %>,
 
 Before your signature is added to the e-petition "<%= @signature.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:
 
-<%= verify_signature_url(@signature, @signature.perishable_token, :secure => true) %>
+<%= verify_signature_url(@signature, @signature.perishable_token) %>
 
 If you don't want to sign this e-petition or believe this message was sent in error, please ignore this email.
 

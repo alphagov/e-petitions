@@ -62,7 +62,7 @@ describe PetitionsController do
           do_post
           petition = Petition.find_by_title!('Save the planet')
           expect(petition.creator_signature).not_to be_nil
-          expect(response).to redirect_to(thank_you_petition_path(petition, secure: true))
+          expect(response).to redirect_to(thank_you_petition_path(petition))
         end
 
         it "should successfully create a new petition and a signature even when email has white space either end" do
