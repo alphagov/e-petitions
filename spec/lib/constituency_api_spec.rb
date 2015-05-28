@@ -4,7 +4,7 @@ require 'webmock/rspec'
 describe ConstituencyApi do
 
   describe "#constituencies" do
-    let(:api) { ConstituencyApi }
+    let(:api) { ConstituencyApi::Client }
     let(:api_url) { "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies" }
 
     let(:constituency_array_1) { [ConstituencyApi::Constituency.new("Islington South and Finsbury")] }

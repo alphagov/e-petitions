@@ -97,7 +97,7 @@ class Signature < ActiveRecord::Base
   end
     
   def constituency
-    @constituency ||= ConstituencyApi.constituencies(self.postcode).first
+    @constituency ||= ConstituencyApi::Client.constituencies(self.postcode).first
   rescue ConstituencyApi::ConstituencyApiError
     nil
   end
