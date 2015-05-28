@@ -72,11 +72,21 @@ describe PetitionsController do
       end
 
       it "should send verification email to petition's creator" do
+        ActionMailer::Base.deliveries.clear
         do_post
-        email = ActionMailer::Base.deliveries.last
+        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Email address confirmation/ }
+        expect(email).to be_present
         expect(email.from).to eq(["no-reply@example.gov"])
         expect(email.to).to eq(["john@example.com"])
-        expect(email.subject).to match(/Email address confirmation/)
+      end
+
+      it "should send gather sponsors email to petition's creator" do
+        ActionMailer::Base.deliveries.clear
+        do_post
+        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /get sponsors to support your petition/ }
+        expect(email).to be_present
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq(["john@example.com"])
       end
 
       it "should successfully point the signature at the petition" do
