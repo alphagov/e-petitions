@@ -68,7 +68,7 @@ class PetitionSearch
     Petition.search do |query|
       query.fulltext search_term_sanitised
       query.paginate page: 1, per_page: 3
-      query.without(:state, 'hidden')
+      query.with(:state, ['open', 'rejected'])
       query.order_by *SearchOrder.sort_order(@params, [:score, :desc])
     end
   end
