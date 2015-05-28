@@ -1,5 +1,5 @@
 class ApplicationMailer < ActionMailer::Base
-  helper :link
+  default_url_options[:protocol] = AppConfig.email_protocol
 
   layout 'default_mail'
   default :from => AppConfig.email_from
