@@ -24,7 +24,6 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
 
 Scenario: Charlie creates our petition
   Given I am on the new petition page
-  And ConstituencyAPI call SW149RQ has been stubbed
   Then I should see "Create a new e-petition - e-petitions" in the browser page title
   And I should be connected to the server via an ssl connection
   When I fill in "Title" with "The wombats of wimbledon rock."
@@ -50,11 +49,9 @@ Scenario: Charlie creates our petition
 
 Scenario: Charlie creates a petition with valid postcode N1 1TY
   Given I start a new petition
-  And ConstituencyAPI call N11TY has been stubbed
   And I fill in the petition details
   And I press "Next"
-  And I fill in my details
-  And I fill in "Postcode" with "N1 1TY"
+  And I fill in my details with postcode "N1 1TY"
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
@@ -63,11 +60,9 @@ Scenario: Charlie creates a petition with valid postcode N1 1TY
 
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
-  And ConstituencyAPI call SW149RQ has been stubbed	
   And I fill in the petition details
   And I press "Next"
-  And I fill in my details
-  And I fill in "Postcode" with "SW14 9RQ"
+  And I fill in my details with postcode "SW14 9RQ"
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
@@ -77,7 +72,6 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
 @javascript
 Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page
-  And ConstituencyAPI call SW149RQ has been stubbed		
 
   Then I should see a fieldset called "Petition Details"
 

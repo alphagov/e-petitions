@@ -178,17 +178,3 @@ end
 Then /^show me the page$/ do
   save_and_open_page
 end
-
-Given /^ConstituencyAPI call SW149RQ has been stubbed$/ do
-  api_url = "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies"
-  empty_body = "<Constituencies/>"
-  stub_request(:get, "#{ api_url }/SW149RQ/").to_return(status: 200, body: empty_body)
-end
-
-Given /^ConstituencyAPI call N11TY has been stubbed$/ do
-  api_url = "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies"
-  fake_body =  "<Constituencies>
-        <Constituency><Name>Islington South and Finsbury</Name></Constituency>
-       </Constituencies>"
-  stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-end
