@@ -42,8 +42,8 @@ describe SponsorsController do
 
       it 'redirects to the thank-you page if the sponsor has already signed the petition' do
         get :show, petition_id: petition, token: sponsor.perishable_token
-        redirect_path = thank_you_petition_sponsor_url(petition, token: sponsor.perishable_token)
-        expect(response).to redirect_to redirect_path
+        redirect_url = "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/thank-you"
+        expect(response).to redirect_to redirect_url
       end
     end
 
@@ -87,7 +87,7 @@ describe SponsorsController do
 
       it 'redirects to the thank-you page if the sponsor has already signed the petition' do
         do_patch
-        redirect_url = thank_you_petition_sponsor_url(petition, token: sponsor.perishable_token)
+        redirect_url = "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/thank-you"
         expect(response).to redirect_to redirect_url
       end
 
@@ -122,7 +122,7 @@ describe SponsorsController do
 
         it 'redirects to the thank you page' do
           do_patch
-          redirect_url = thank_you_petition_sponsor_path(petition, token: sponsor.perishable_token)
+          redirect_url = "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/thank-you"
           expect(response).to redirect_to redirect_url
         end
 
@@ -222,7 +222,7 @@ describe SponsorsController do
     it 'redirects to show if the sponsor has not signed the petition' do
       signature.destroy
       get :thank_you, petition_id: petition, token: sponsor.perishable_token
-      expect(response).to redirect_to petition_sponsor_url(petition, token: sponsor.perishable_token)
+      expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}"
     end
   end
 end

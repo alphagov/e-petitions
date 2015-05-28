@@ -3,12 +3,10 @@ require 'rails_helper'
 describe Admin::TodolistController do
 
   describe "not logged in" do
-    with_ssl do
-      describe "GET 'index'" do
-        it "should redirect to the login page" do
-          get 'index'
-          expect(response).to redirect_to(admin_login_path)
-        end
+    describe "GET 'index'" do
+      it "should redirect to the login page" do
+        get 'index'
+        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
       end
     end
   end
@@ -17,12 +15,10 @@ describe Admin::TodolistController do
     let(:user) { FactoryGirl.create(:moderator_user, :force_password_reset => true) }
     before { login_as(user) }
 
-    with_ssl do
-      it "should redirect to edit profile page" do
-        expect(user.has_to_change_password?).to be_truthy
-        get :index
-        expect(response).to redirect_to(edit_admin_profile_path(user))
-      end
+    it "should redirect to edit profile page" do
+      expect(user.has_to_change_password?).to be_truthy
+      get :index
+      expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
     end
   end
 
@@ -39,17 +35,15 @@ describe Admin::TodolistController do
       let(:user) { FactoryGirl.create(:sysadmin_user) }
       before { login_as(user) }
 
-      with_ssl do
-        describe "GET 'index'" do
-          it "should be successful" do
-            get :index
-            expect(response).to be_success
-          end
+      describe "GET 'index'" do
+        it "should be successful" do
+          get :index
+          expect(response).to be_success
+        end
 
-          it "should return all validated petitions ordered by created_at" do
-            get :index
-            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
-          end
+        it "should return all validated petitions ordered by created_at" do
+          get :index
+          expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
         end
       end
     end
@@ -58,17 +52,15 @@ describe Admin::TodolistController do
       let(:user) { FactoryGirl.create(:moderator_user) }
       before { login_as(user) }
 
-      with_ssl do
-        describe "GET 'index'" do
-          it "should be successful" do
-            get :index
-            expect(response).to be_success
-          end
+      describe "GET 'index'" do
+        it "should be successful" do
+          get :index
+          expect(response).to be_success
+        end
 
-          it "should return all validated petitions ordered by created_at" do
-            get :index
-            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
-          end
+        it "should return all validated petitions ordered by created_at" do
+          get :index
+          expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
         end
       end
     end
@@ -77,17 +69,15 @@ describe Admin::TodolistController do
       let(:user) { FactoryGirl.create(:moderator_user) }
       before { login_as(user) }
 
-      with_ssl do
-        describe "GET 'index'" do
-          it "should be successful" do
-            get :index
-            expect(response).to be_success
-          end
+      describe "GET 'index'" do
+        it "should be successful" do
+          get :index
+          expect(response).to be_success
+        end
 
-          it "should return all validated petitions ordered by created_at" do
-            get :index
-            expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
-          end
+        it "should return all validated petitions ordered by created_at" do
+          get :index
+          expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
         end
       end
     end

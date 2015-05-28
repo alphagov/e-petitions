@@ -2,29 +2,26 @@ require 'rails_helper'
 
 describe PetitionsController do
   describe "new" do
+    it "should respond to /petitions/new" do
+      expect({:get => "/petitions/new"}).to route_to({:controller => "petitions", :action => "new"})
+      expect(new_petition_path).to eq '/petitions/new'
+    end
 
-    with_ssl do
-      it "should respond to /petitions/new" do
-        expect({:get => "/petitions/new"}).to route_to({:controller => "petitions", :action => "new"})
-        expect(new_petition_path).to eq '/petitions/new'
-      end
+    it "should assign a new stage_manager with a petition" do
+      get :new
+      expect(assigns[:stage_manager]).not_to be_nil
+      expect(assigns[:stage_manager].petition).not_to be_nil
+    end
 
-      it "should assign a new stage_manager with a petition" do
-        get :new
-        expect(assigns[:stage_manager]).not_to be_nil
-        expect(assigns[:stage_manager].petition).not_to be_nil
-      end
+    it "is on stage 'petition'" do
+      get :new
+      expect(assigns[:stage_manager].stage).to eq 'petition';
+    end
 
-      it "is on stage 'petition'" do
-        get :new
-        expect(assigns[:stage_manager].stage).to eq 'petition';
-      end
-
-      it "fills in the title if given" do
-        title = "my fancy new title"
-        get :new, :title => title
-        expect(assigns[:stage_manager].petition.title).to eq title
-      end
+    it "fills in the title if given" do
+      title = "my fancy new title"
+      get :new, :title => title
+      expect(assigns[:stage_manager].petition.title).to eq title
     end
   end
 
@@ -51,70 +48,68 @@ describe PetitionsController do
       post :create, {:stage => 'replay-email', :move => 'next', :petition => petition_attributes}.merge(options)
     end
 
-    with_ssl do
-      it "should respond to posts to /petitions/new" do
-        expect({:post => "/petitions/new"}).to route_to({:controller => "petitions", :action => "create"})
-        expect(create_petition_path).to eq('/petitions/new')
+    it "should respond to posts to /petitions/new" do
+      expect({:post => "/petitions/new"}).to route_to({:controller => "petitions", :action => "create"})
+      expect(create_petition_path).to eq('/petitions/new')
+    end
+
+    context "valid post" do
+      it "should successfully create a new petition and a signature" do
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+        expect(petition.creator_signature).not_to be_nil
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
       end
 
-      context "valid post" do
-        it "should successfully create a new petition and a signature" do
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-          expect(petition.creator_signature).not_to be_nil
-          expect(response).to redirect_to(thank_you_petition_path(petition))
-        end
+      it "should successfully create a new petition and a signature even when email has white space either end" do
+        creator_signature_attributes[:email] = ' john@example.com '
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+      end
 
-        it "should successfully create a new petition and a signature even when email has white space either end" do
-          creator_signature_attributes[:email] = ' john@example.com '
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-        end
+      it "should strip a petition title on petition creation" do
+        petition_attributes[:title] = ' Save the planet'
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+      end
 
-        it "should strip a petition title on petition creation" do
-          petition_attributes[:title] = ' Save the planet'
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-        end
+      it "should send verification email to petition's creator" do
+        do_post
+        email = ActionMailer::Base.deliveries.last
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq(["john@example.com"])
+        expect(email.subject).to match(/Email address confirmation/)
+      end
 
-        it "should send verification email to petition's creator" do
-          do_post
-          email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@example.gov"])
-          expect(email.to).to eq(["john@example.com"])
-          expect(email.subject).to match(/Email address confirmation/)
-        end
+      it "should successfully point the signature at the petition" do
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+        expect(petition.creator_signature.petition).to eq(petition)
+      end
 
-        it "should successfully point the signature at the petition" do
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-          expect(petition.creator_signature.petition).to eq(petition)
-        end
+      it "should set user's ip address on signature" do
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+        expect(petition.creator_signature.ip_address).to eq("0.0.0.0")
+      end
 
-        it "should set user's ip address on signature" do
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-          expect(petition.creator_signature.ip_address).to eq("0.0.0.0")
-        end
+      it "should not be able to set the state of a new petition" do
+        petition_attributes[:state] = Petition::VALIDATED_STATE
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+        expect(petition.state).to eq(Petition::PENDING_STATE)
+      end
 
-        it "should not be able to set the state of a new petition" do
-          petition_attributes[:state] = Petition::VALIDATED_STATE
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-          expect(petition.state).to eq(Petition::PENDING_STATE)
-        end
+      it "should not be able to set the state of a new signature" do
+        creator_signature_attributes[:state] = Signature::VALIDATED_STATE
+        do_post
+        petition = Petition.find_by_title!('Save the planet')
+        expect(petition.creator_signature.state).to eq(Signature::PENDING_STATE)
+      end
 
-        it "should not be able to set the state of a new signature" do
-          creator_signature_attributes[:state] = Signature::VALIDATED_STATE
-          do_post
-          petition = Petition.find_by_title!('Save the planet')
-          expect(petition.creator_signature.state).to eq(Signature::PENDING_STATE)
-        end
-
-        it "should set notify_by_email to true on the creator signature" do
-          do_post
-          expect(Petition.find_by_title!('Save the planet').creator_signature.notify_by_email).to be_truthy
-        end
+      it "should set notify_by_email to true on the creator signature" do
+        do_post
+        expect(Petition.find_by_title!('Save the planet').creator_signature.notify_by_email).to be_truthy
       end
 
       context "invalid post" do
