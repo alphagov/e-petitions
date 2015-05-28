@@ -19,39 +19,8 @@ describe Sponsor do
     expect(FactoryGirl.build(:sponsor)).to be_valid
   end
 
-  context "defaults" do
-    it "generates perishable token" do
-      s = FactoryGirl.create(:sponsor, :perishable_token => nil)
-      expect(s.perishable_token).not_to be_nil
-    end
-  end
-
-  context "encryption of email" do
-    let(:sponsor) { FactoryGirl.create(:sponsor,
-                                       email: "foo@example.net") }
-    it "decrypts email correctly" do
-      expect(Sponsor.find(sponsor.id).email).to eq("foo@example.net")
-    end
-    it "is case insensitive" do
-      expect(FactoryGirl.build(:sponsor, :email => "FOO@exAmplE.net")
-              .encrypted_email).to eq(sponsor.encrypted_email)
-    end
-    it "returns the sponsor with unencrypted email" do
-      expect(Sponsor.for_email("foo@example.net")).to eq([sponsor])
-    end
-  end
-
   context "validations" do
-    it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:petition).with_message(/Needs a petition/) }
-    it { is_expected.to allow_value('joe@example.com').for(:email) }
-    it { is_expected.not_to allow_value('not an email').for(:email) }
-
-    it 'does not accept petition creator email as a sponsor email ' do
-      petition = FactoryGirl.create(:petition)
-      sponsor = FactoryGirl.build(:sponsor, petition: petition, email: petition.creator_signature.email)
-      expect(sponsor).not_to be_valid
-    end
   end
 
   context 'signature association' do
@@ -63,13 +32,16 @@ describe Sponsor do
         expect(subject.petition).to eq sponsor.petition
       end
 
-      it 'is has the same email address as the sponsor' do
-        expect(subject.email).to eq sponsor.email
+      it 'does not allow overriding the petition (by object)' do
+        other_petition = FactoryGirl.create(:petition)
+        attributes[:petition] = other_petition
+        expect(subject.petition).not_to eq other_petition
       end
 
-      it 'does not allow overriding the defaults' do
-        attributes[:email] = 'a-brand-new-email@example.com'
-        expect(subject.email).not_to eq 'a-brand-new-email@example.com'
+      it 'does not allow overriding the petition (by id)' do
+        other_petition = FactoryGirl.create(:petition)
+        attributes[:petition_id] = other_petition.id
+        expect(subject.petition_id).not_to eq other_petition.id
       end
     end
 
@@ -90,6 +62,20 @@ describe Sponsor do
       subject { sponsor.create_signature!(attributes) }
 
       it_behaves_like 'constructing a signature from a sponsor'
+    end
+  end
+
+  context '.for_email' do
+    it 'finds sponsors with a signature that matches the supplied email address' do
+      no_sig = FactoryGirl.create(:sponsor)
+      matching_pending_sig = FactoryGirl.create(:sponsor, :pending, email: 'dave@example.com')
+      matching_validated_sig = FactoryGirl.create(:sponsor, :pending, email: 'dave@example.com')
+      non_matching_pending_sig = FactoryGirl.create(:sponsor, :pending, email: 'laura@example.com')
+      non_matching_validated_sig = FactoryGirl.create(:sponsor, :pending, email: 'suzy@example.com')
+
+      for_email_sponsors = Sponsor.for_email('dave@example.com')
+      expect(for_email_sponsors).to include(matching_pending_sig, matching_validated_sig)
+      expect(for_email_sponsors).not_to include(no_sig, non_matching_pending_sig, non_matching_validated_sig)
     end
   end
 

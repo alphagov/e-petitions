@@ -92,11 +92,10 @@ FactoryGirl.define do
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
 
   factory :sponsor do
-    email { generate(:sponsor_email) }
     association :petition
 
     trait :with_signature do
-      signature  { |s| s.association(:signature, petition: s.petition, email: s.email, state: Signature::VALIDATED_STATE) }
+      signature  { |s| s.association(:signature, petition: s.petition, email: generate(:sponsor_email), state: Signature::VALIDATED_STATE) }
     end
   end
 
