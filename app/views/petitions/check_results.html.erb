@@ -23,6 +23,6 @@
 
 <div class="cta_block reduced_padding_block" id="create_pet_cta_block">
   <p><%= creation_prefix %></p>
-  <%= link_to "Create e-petition", new_petition_path(:secure => true, :title => @petition_search.search_term),
+  <%= link_to "Create e-petition", new_petition_path(:title => @petition_search.search_term),
         :class => 'link_button large_link_button' %>
 </div>

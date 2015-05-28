@@ -29,7 +29,7 @@ class Admin::PetitionsController < Admin::AdminController
         raise "Don't know how to do this action"
     end
 
-    respond_with @petition, :location => admin_root_path
+    respond_with @petition, :location => admin_root_url
   end
 
   def threshold
@@ -55,7 +55,7 @@ class Admin::PetitionsController < Admin::AdminController
         Delayed::Job.enqueue EmailThresholdResponseJob.new(@petition.id, requested_at, Petition, PetitionMailer), :run_at => 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
       end
 
-      redirect_to admin_petitions_path
+      redirect_to admin_petitions_url
     else
       render :edit_response
     end
@@ -64,7 +64,7 @@ class Admin::PetitionsController < Admin::AdminController
   def take_down
     @petition = Petition.find(params[:id])
     reject
-    respond_with @petition, :location => admin_petitions_path
+    respond_with @petition, :location => admin_petitions_url
   end
 
   protected

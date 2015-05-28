@@ -7,7 +7,7 @@ If you're happy to support this petition, please follow the link below to
 provide a few details additional details.
 
 <%=
-  petition_sponsor_url(@sponsor.petition, token: @sponsor.perishable_token, :protocol => 'https')
+  petition_sponsor_url(@sponsor.petition, token: @sponsor.perishable_token)
 %>
 
 <%= @sponsor.petition.title  %>

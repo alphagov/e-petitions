@@ -9,7 +9,7 @@ class FeedbackController < ApplicationController
     @feedback = Feedback.new(params[:feedback])
     if @feedback.valid?
       FeedbackMailer.send_feedback(@feedback).deliver_now
-      redirect_to thanks_feedback_path
+      redirect_to thanks_feedback_url
     else
       render 'index'
     end

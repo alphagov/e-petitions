@@ -28,7 +28,7 @@ class PetitionsController < ApplicationController
     @stage_manager = Staged::PetitionCreator.manager(petition_params_for_create, request, params[:stage], params[:move])
     if @stage_manager.create_petition
       send_email_to_verify_petition_creator(@stage_manager.petition)
-      redirect_to thank_you_petition_path(@stage_manager.petition, :secure => true)
+      redirect_to thank_you_petition_url(@stage_manager.petition)
     else
       render :new
     end
