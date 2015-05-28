@@ -27,7 +27,6 @@ class SignaturesController < ApplicationController
       # if signature is that of the petition's creator, mark the petition as validated
       if @signature.creator?
         @petition.state = Petition::VALIDATED_STATE
-        @petition.notify_sponsors
         @petition.save!
 
       # if signature is a sponsor, tell the creator about the support

@@ -182,10 +182,6 @@ class Petition < ActiveRecord::Base
     self.creator_signature.update_attribute(:petition_id, self.id)
   end
 
-  def notify_sponsors
-    sponsors.each { |s| SponsorMailer.delay.new_sponsor_email(s) }
-  end
-
   def signature_counts_by_postal_district
     Hash.new(0).tap do |counts|
       signatures.validated.find_each do |signature|
