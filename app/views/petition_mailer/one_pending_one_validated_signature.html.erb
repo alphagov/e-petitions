@@ -2,7 +2,7 @@
 
 <p>Before your signatures can be added to the e-petition "<%= @pending_signature.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
 
-<p><%= @pending_signature.name %>: <%= linkify(verify_signature_url(@pending_signature, @pending_signature.perishable_token, :secure => true)) %></p>
+<p><%= @pending_signature.name %>: <%= link_to nil, verify_signature_url(@pending_signature, @pending_signature.perishable_token) %></p>
 
 <p>Signature for <%= @validated_signature.name %> has already been confirmed.</p>
 
