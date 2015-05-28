@@ -89,8 +89,10 @@ FactoryGirl.define do
     state      Signature::VALIDATED_STATE
   end
 
+  sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
+
   factory :sponsor do
-    sequence(:email) {|n| "sponsor#{n}@public.com" }
+    email { generate(:sponsor_email) }
     association :petition
 
     trait :with_signature do

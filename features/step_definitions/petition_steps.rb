@@ -8,7 +8,6 @@ Then /^I am taken to a landing page$/ do
   expect(page).to have_content("Thank you")
 end
 
-
 Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_title|
   petition_args = {
     :title => petition_title,
@@ -156,10 +155,6 @@ Then(/^the petition with title: "(.*?)" should not have requested an email$/) do
   expect(petition.email_requested_at).to be_nil
 end
 
-When /^I fill in sponsor emails$/ do
-  fill_in "Sponsor emails", :with => "test1@test.com\ntest2@test.com\ntest3@test.com\ntest4@test.com\ntest5@test.com"
-end
-
 When /^I start a new petition/ do
   steps %Q(
     Given I am on the new petition page
@@ -177,9 +172,9 @@ When /^I fill in the petition details/ do
 end
 
 Then /^I should see my constituency "([^"]*)"/ do |constituency|
-  expect(page).to have_text(constituency)  
+  expect(page).to have_text(constituency)
 end
 
 Then /^I should not see the text "([^"]*)"/ do |text|
-  expect(page).to_not have_text(text)  
+  expect(page).to_not have_text(text)
 end
