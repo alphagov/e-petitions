@@ -72,4 +72,12 @@ class PetitionMailer < ApplicationMailer
          :to      => @signature.email
   end
 
+  def gather_sponsors_for_petition(petition)
+    @petition = petition
+    @creator = petition.creator_signature
+    mail(
+      subject: "Parliament petitions - It's time to get sponsors to support your petition",
+      to: @creator.email
+    )
+  end
 end
