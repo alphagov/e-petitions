@@ -51,7 +51,7 @@ describe SignaturesController do
       it "should redirect to the petition sponsored page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/sponsored")
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/sponsored")
       end
 
       it "should not set petition state to validated" do
