@@ -1193,6 +1193,15 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#96258e', end
   margin: 60px 60px 40px;
 }
 
+.petition_pre_create_results {
+  font-size: 1.5em;
+  margin: 60px 60px 40px;
+}
+
+.petition_pre_create_results ul {
+    padding-top: 30px
+}
+
 /* How it works page */
 .how_it_works {
   text-align: center;

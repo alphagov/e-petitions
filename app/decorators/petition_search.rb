@@ -22,6 +22,10 @@ class PetitionSearch
     @results ||= petitions.results
   end
 
+  def limited_results_for_create_petition_search
+    execute_search_for_create_petition_query.results
+  end
+
   def result_count_for_state(state)
     @facets ||= petition_result_counts.facet(:state).rows
     default = -> { NullFacet.new }
@@ -45,7 +49,6 @@ class PetitionSearch
   def execute_search_query
     Petition.search do |query|
       query.fulltext search_term_sanitised
-      query.facet :state
       query.paginate page: @params[:page], per_page: 20
       case state
       when State::CLOSED_STATE
@@ -57,6 +60,15 @@ class PetitionSearch
         query.with(:state).equal_to("open")
         query.with(:closed_at).greater_than(Time.current.utc)
       end
+      query.order_by *SearchOrder.sort_order(@params, [:score, :desc])
+    end
+  end
+
+  def execute_search_for_create_petition_query
+    Petition.search do |query|
+      query.fulltext search_term_sanitised
+      query.paginate page: 1, per_page: 3
+      query.without(:state, 'hidden')
       query.order_by *SearchOrder.sort_order(@params, [:score, :desc])
     end
   end

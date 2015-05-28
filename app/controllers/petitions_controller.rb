@@ -40,7 +40,6 @@ class PetitionsController < ApplicationController
   def check_results
     search_params = params
     search_params[:q] = search_params[:search]
-    search_params[:per_page] = 10
     @petition_search = PetitionSearch.new(search_params)
   end
 

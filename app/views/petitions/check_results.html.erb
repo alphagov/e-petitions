@@ -9,15 +9,13 @@
 <%= render "pre_creation_search_form" %>
 
 <div class="petition_index_view">
-  <%= render 'search/result_tabs' %>
-  <div class="petition_list">
-    <% if @petition_search.present? -%>
-      <div class="title_pagination_row"></div>
-      <%= render 'search/results_table', :petition_search => @petition_search %>
+  <div class="petition_pre_create_results">
+    <% if @petition_search.limited_results_for_create_petition_search.present? %>
+      <%= render 'search/results_for_pre_create_petition', petition_search: @petition_search %>
       <% creation_prefix = "If there are no existing e-petitions on the same subject, click the 'Create e-petition' button to continue." -%>
-    <% else -%>
+    <% else %>
       <p class="no_petitions_warning">We didn't find any existing e-petitions that match your subject, click the 'Create e-petition' button to continue.</p>
-    <% end -%>
+    <% end %>
   </div>
 </div>
 
