@@ -5,9 +5,17 @@ class SponsorsController < ApplicationController
   respond_to :html
 
   def show
-    assign_stage
-    @sponsor = @petition.sponsors.build
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
+    if @petition.hidden?
+      raise ActiveRecord::RecordNotFound
+    elsif @petition.rejected? || @petition.closed?
+      redirect_to petition_url(@petition)
+    elsif @petition.open?
+      redirect_to sign_petition_signature_url(@petition)
+    else
+      assign_stage
+      @sponsor = @petition.sponsors.build
+      @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
+    end
   end
 
   def update

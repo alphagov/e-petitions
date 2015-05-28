@@ -20,6 +20,36 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Then I am taken to a landing page
     And I should have fully signed the petition as a sponsor
 
+  Scenario: Laura wants to sign the petition that is already published
+    Given the petition I want to sign is open
+    When I visit the "sponsor this petition" url I was given
+    Then I should be connected to the server via an ssl connection
+    And I am redirected to the petition sign page
+
+  Scenario: Laura wants to sign the petition that is in moderation state
+    Given the petition I want to sign is sponsored
+    When I visit the "sponsor this petition" url I was given
+    Then I should be connected to the server via an ssl connection
+    And the markup should be valid
+
+  Scenario: Laura wants to sign the petition that is closed
+    Given the petition I want to sign has been closed
+    When I visit the "sponsor this petition" url I was given
+    Then I should be connected to the server via an ssl connection
+    And I am redirected to the petition closed page
+
+  Scenario: Laura wants to sign the petition that is rejected
+    Given the petition I want to sign is rejected
+    When I visit the "sponsor this petition" url I was given
+    Then I should be connected to the server via an ssl connection
+    And I am redirected to the petition closed page
+
+  @allow-rescue
+  Scenario: Laura wants to sign the petition that is hidden from publishing
+    Given the petition I want to sign is hidden
+    When I visit the "sponsor this petition" url I was given
+    And I will see 404 error page
+
   Scenario: Laura gets her email address wrong and changes it while sponsoring
     When I visit the "sponsor this petition" url I was given
     And I fill in my details as a sponsor with email "sponsor@example.com"
