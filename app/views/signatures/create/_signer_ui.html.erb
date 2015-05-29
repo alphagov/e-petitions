@@ -3,7 +3,7 @@
   <%= render 'signatures/form', f: f, signature: signature %>
 
   <div class="row">
-    <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', help_path %></p>
+    <p>By signing this petition, you agree to the <%= link_to 'Terms & Conditions', help_path(anchor: 'terms-and-conditions') %></p>
   </div>
 
   <%= form_row :class => 'button_row' do %>
