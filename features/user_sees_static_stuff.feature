@@ -1,6 +1,6 @@
 Feature: User views static pages
   In order to let users know about the site
-  I can navigate to how E-petitions works, terms and conditions, cookies, privacy and accessibility pages
+  I can navigate to how E-petitions works and help pages
 
   Scenario: I navigate to the home page
     When I go to the home page
@@ -16,31 +16,9 @@ Feature: User views static pages
     And I should see "How e-petitions works - e-petitions" in the browser page title
     And the markup should be valid
 
-  Scenario: I navigate to Terms and conditions
+  Scenario: I navigate to Help
     When I go to the home page
-    And I follow "Terms and conditions"
-    Then I should be on the terms and conditions page
-    And I should see "Terms and conditions - e-petitions" in the browser page title
+    And I follow "Help"
+    Then I should be on the help page
+    And I should see "Help using the Petition Parliament service" in the browser page title
     And the markup should be valid
-
-  Scenario: I navigate to Cookies
-    When I go to the home page
-    And I follow "Cookies"
-    Then I should be on the cookies page
-    And I should see "Cookies" in the browser page title
-    And the markup should be valid
-    
-  Scenario: I navigate to Privacy
-    When I go to the home page
-    And I follow "Privacy"
-    Then I should be on the privacy policy page
-    And I should see "Privacy policy - e-petitions" in the browser page title
-    And the markup should be valid
-
-  Scenario: I navigate to Accessbility page
-    When I go to the home page
-    And I follow "Accessibility"
-    Then I should be on the accessibility page
-    And I should see "Accessibility - e-petitions" in the browser page title
-    And the markup should be valid
-
