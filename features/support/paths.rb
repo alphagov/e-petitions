@@ -11,20 +11,11 @@ module NavigationHelpers
     when /^the home\s?page$/
       '/'
 
-    when /^the accessibility page$/
-      accessibility_path
-
     when /^the how e-Petitions works page$/
       how_it_works_path
 
-    when /^the terms and conditions page$/
-      terms_and_conditions_path
-
-    when /^the cookies page$/
-      cookies_path
-
-    when /^the privacy policy page$/
-      privacy_policy_path
+    when /^the help page$/
+      help_path
 
     when /^the feedback page$/
       feedback_path
