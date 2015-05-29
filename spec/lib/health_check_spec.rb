@@ -92,5 +92,16 @@ describe HealthCheck do
         expect(subject['database_integrity']).to eq 'FAILED'
       end
     end
+
+    describe "includes search connection status" do
+      it "is normally ok" do
+        expect(subject['search_connection']).to eq 'OK'
+      end
+
+      it "detects failure" do
+        allow(Petition).to receive(:search).and_raise(StandardError)
+        expect(subject['search_connection']).to eq 'FAILED'
+      end
+    end
   end
 end
