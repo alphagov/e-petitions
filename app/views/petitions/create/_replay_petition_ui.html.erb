@@ -13,8 +13,13 @@
   </div>
   <div class="generic_block">
     <p>Your petition will be open for <%= AppConfig.petition_duration %> months after it is reviewed by Parliament.</p>
+    <% if petition.creator_signature.constituency %>
+    <p>
+      Your constituency is <%= petition.creator_signature.constituency.name %>
+    </p>
+    <% end %>
   </div>
-
+  
   <div class="row">
     <p>By creating this petition, you agree to the <%= link_to 'Terms & Conditions', help_path(anchor: 'terms-and-conditions') %></p>
   </div>

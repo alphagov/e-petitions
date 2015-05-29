@@ -95,4 +95,12 @@ class Signature < ActiveRecord::Base
   def unsubscribe!
     self.update(notify_by_email: false)
   end
+    
+  def constituency
+    @constituency ||= ConstituencyApi::Client.constituencies(self.postcode).first
+  rescue ConstituencyApi::ConstituencyApiError => e
+    Rails.logger.error("Failed to fetch constituency - #{e}")
+    nil
+  end
 end
+

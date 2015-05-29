@@ -46,10 +46,34 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "#{email_address}"
     And I check "Yes, I am a British citizen or UK resident"
-    And I fill in "Postcode" with "SW14 9RQ"
+    And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Country"
   )
 end
+
+When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
+  steps %Q(
+    When I fill in "Name" with "Womboid Wibbledon"
+    And I fill in "Email" with "womboid@wimbledon.com"
+    And I check "Yes, I am a British citizen or UK resident"
+    And I fill in my postcode with "#{postcode}"
+    And I select "United Kingdom" from "Country"
+  )
+end
+
+When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
+  step %{I fill in "Postcode" with "#{postcode}"}
+
+  api_url = "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies"
+  body = "<Constituencies/>"
+  if postcode == "N1 1TY"
+    body = "<Constituencies>
+              <Constituency><Name>Islington South and Finsbury</Name></Constituency>
+            </Constituencies>"
+  end
+  stub_request(:get, "#{ api_url }/#{postcode.gsub(/\s+/, '')}/").to_return(status: 200, body: body)
+end
+
 
 When /^I fill in my details and sign a petition$/ do
   steps %Q(

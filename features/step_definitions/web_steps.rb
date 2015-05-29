@@ -7,6 +7,7 @@
 
 require 'uri'
 require 'cgi'
+require 'webmock/cucumber'
 require File.expand_path(File.join(File.dirname(__FILE__), "..", "support", "paths"))
 
 module WithinHelpers

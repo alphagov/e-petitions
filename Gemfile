@@ -24,6 +24,8 @@ gem 'airbrake'
 gem 'rabl'
 gem 'attr_encrypted'
 gem 'dynamic_form'
+gem 'faraday'
+gem 'faraday_middleware'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -47,6 +49,7 @@ group :test do
   gem 'timecop'
   gem 'launchy'
   gem 'rspec-collection_matchers'
+  gem 'webmock'
 end
 
 group :production do
