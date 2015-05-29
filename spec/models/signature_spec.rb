@@ -18,7 +18,6 @@
 #
 
 require 'rails_helper'
-require 'webmock/rspec'
 
 describe Signature do
   it "should have a valid factory" do

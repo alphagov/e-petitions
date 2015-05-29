@@ -1,18 +1,9 @@
 module ConstituencyApi
   ConstituencyApiError = Class.new(RuntimeError)
-  
-  class Constituency
-    attr_accessor :name
-    
-    def initialize(name)
-      self.name = name
-    end
-    
-    def ==(another_constituency)
-      self.name == another_constituency.name
-    end
-  end
 
+  class Constituency < Struct.new(:name)
+  end
+  
   class Client
     include Faraday
     URL = 'http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
@@ -23,7 +14,6 @@ module ConstituencyApi
       parse_constituencies(response)
     end
     
-    private
     
     def self.parse_constituencies(response)
       return [] unless response["Constituencies"]
@@ -36,7 +26,12 @@ module ConstituencyApi
         req.options[:timeout] = TIMEOUT
         req.options[:open_timeout] = TIMEOUT
       end
-      raise ConstituencyApiError.new("Unexpected response") unless response.status == 200
+      unless response.status == 200
+        raise ConstituencyApiError.new("Unexpected response from API:"\
+                                       "status #{response.status}"\
+                                       "body #{response.body}"\
+                                       "request #{URL}/#{postcode_param(postcode)}/")
+      end
       Hash.from_xml(response.body)
     rescue Faraday::TimeoutError
       raise ConstituencyApiError.new("Timeout after #{TIMEOUT} seconds")
@@ -45,6 +40,7 @@ module ConstituencyApi
     def self.postcode_param(postcode)
       postcode.gsub(/\s+/, "")
     end
+    private_class_method :parse_constituencies, :call_api, :postcode_param
   end
 end
 

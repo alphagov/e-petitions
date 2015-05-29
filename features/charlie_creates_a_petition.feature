@@ -23,18 +23,15 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
   Then the markup should be valid
 
 Scenario: Charlie creates our petition
-  Given I am on the new petition page
-  Then I should see "Create a new e-petition - e-petitions" in the browser page title
-  And I should be connected to the server via an ssl connection
-  When I fill in "Title" with "The wombats of wimbledon rock."
-  And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
-  And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  Given I start a new petition
+  And I fill in the petition details
   And I press "Next"
-  And I fill in my details
+  And I fill in my details with postcode "N1 1TY"
   And I press "Next"
   And I fill in sponsor emails
   And I press "Next"
-  And I press "Next"
+  Then I should see my constituency "Islington South and Finsbury"	
+  When I press "Next"
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
@@ -45,18 +42,6 @@ Scenario: Charlie creates our petition
   When I confirm my email address
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
   And there should be a "validated" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
-
-
-Scenario: Charlie creates a petition with valid postcode N1 1TY
-  Given I start a new petition
-  And I fill in the petition details
-  And I press "Next"
-  And I fill in my details with postcode "N1 1TY"
-  And I press "Next"
-  And I fill in sponsor emails
-  And I press "Next"
-  Then I should see my constituency "Islington South and Finsbury"
-
 
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
