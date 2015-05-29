@@ -39,6 +39,10 @@ class Sponsor < ActiveRecord::Base
     signature.present?
   end
 
+  def self.for(signature)
+    find_by(signature_id: signature.id)
+  end
+
   def build_signature(new_attributes = {})
     super(new_attributes.merge(default_signature_attribtues))
   end

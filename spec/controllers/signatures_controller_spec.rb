@@ -3,87 +3,143 @@ require 'rails_helper'
 describe SignaturesController do
   describe "verify" do
     context "signature of user who is not the petition's creator" do
-      before :each do
-        petition = FactoryGirl.create(:petition)
-        @signature = FactoryGirl.create(:signature, :petition => petition)
-      end
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
 
       it "should respond to /signatures/:id/verify/:token" do
-        expect({:get => "/signatures/#{@signature.id}/verify/#{@signature.perishable_token}"}).
-          to route_to({:controller => "signatures", :action => "verify", :id => @signature.id.to_s, :token => @signature.perishable_token})
-        expect(verify_signature_path(@signature, @signature.perishable_token)).to eq("/signatures/#{@signature.id}/verify/#{@signature.perishable_token}")
+        expect({:get => "/signatures/#{signature.id}/verify/#{signature.perishable_token}"}).
+          to route_to({:controller => "signatures", :action => "verify", :id => signature.id.to_s, :token => signature.perishable_token})
+        expect(verify_signature_path(signature, signature.perishable_token)).to eq("/signatures/#{signature.id}/verify/#{signature.perishable_token}")
       end
 
-      it "should redirect to the petitions page" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        expect(assigns[:signature]).to eq(@signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{@signature.petition_id}/signature/signed")
+      it "should redirect to the petition signed page" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(assigns[:signature]).to eq(signature)
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signature/signed")
       end
 
       it "should not set petition state to validated" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        expect(Petition.find(@signature.petition.id).state).to eq(Petition::PENDING_STATE)
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(petition.reload.state).to eq(Petition::PENDING_STATE)
       end
 
-      it "should set creator signature state to validated and set token to nil" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        signature = Signature.find(@signature.id)
+      it "should set state to validated and set token to nil" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        signature.reload
         expect(signature.state).to eq(Signature::VALIDATED_STATE)
         expect(signature.perishable_token).to be_nil
       end
 
       it "should raise exception if id not found" do
         expect do
-          get :verify, :id => @signature.id + 1, :token => @signature.perishable_token
+          get :verify, :id => signature.id + 1, :token => signature.perishable_token
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "should raise exception if token not found" do
         expect do
-          petition = FactoryGirl.create(:petition)
-          @signature = FactoryGirl.create(:signature, :petition => petition, :state => Signature::PENDING_STATE)
-          get :verify, :id => @signature.id, :token => "#{@signature.perishable_token}a"
+          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context 'signature to be verified is a sponsor' do
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
+      let(:signature) { sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition)) }
+
+      it "should redirect to the petition sponsored page" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(assigns[:signature]).to eq(signature)
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{sponsor.perishable_token}/sponsored")
+      end
+
+      it "should not set petition state to validated" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(petition.reload.state).to eq(Petition::PENDING_STATE)
+      end
+
+      it "should set state to validated and set token to nil" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        signature.reload
+        expect(signature.state).to eq(Signature::VALIDATED_STATE)
+        expect(signature.perishable_token).to be_nil
+      end
+
+      it 'sends email notification to the petition creator' do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        Delayed::Job.last.payload_object.perform
+        email = ActionMailer::Base.deliveries.last
+        expect(email.to).to eq([petition.creator_signature.email])
+      end
+
+      it 'updates petition sponsored state' do
+        allow(Signature).to receive(:find).with(signature.to_param).and_return signature
+        allow(signature).to receive(:petition).and_return petition
+        expect(petition).to receive(:update_sponsored_state)
+        get :verify, :id => signature.id, :token => signature.perishable_token
+      end
+
+      it "should raise exception if id not found" do
+        expect do
+          get :verify, :id => signature.id + 1, :token => signature.perishable_token
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "should raise exception if token not found" do
+        expect do
+          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
     context "signature to be verified is petition creator's" do
-      before :each do
-        @petition = FactoryGirl.create(:petition)
-        @signature = @petition.creator_signature
-      end
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { petition.creator_signature }
 
       it "should render successfully if petition creator verifies email address" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        expect(assigns[:signature]).to eq(@signature)
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(assigns[:signature]).to eq(signature)
         expect(response).to be_success
       end
 
       it "should set petition state to validated" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        expect(Petition.find(@petition.id).state).to eq(Petition::VALIDATED_STATE)
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(petition.reload.state).to eq(Petition::VALIDATED_STATE)
       end
 
       it "should set creator signature state to validated and set token to nil" do
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
-        signature = Signature.find(@signature.id)
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        signature.reload
         expect(signature.state).to eq(Signature::VALIDATED_STATE)
         expect(signature.perishable_token).to be_nil
       end
 
       it "sends emails to petition sponsors after verification" do
-        @petition.sponsors.clear
-        @petition.sponsors.create(email: "test@test.com")
+        petition.sponsors.clear
+        petition.sponsors.create(email: "test@test.com")
 
-        get :verify, :id => @signature.id, :token => @signature.perishable_token
+        get :verify, :id => signature.id, :token => signature.perishable_token
 
         Delayed::Job.last.payload_object.perform
 
         email = ActionMailer::Base.deliveries.last
         expect(email.from).to eq(["no-reply@example.gov"])
         expect(email.to).to eq(["test@test.com"])
-        expect(email.cc).to eq([@petition.creator_signature.email])
-        expect(email.subject).to eq("Parliament petitions - #{@petition.creator_signature.name} would like your support")
+        expect(email.cc).to eq([petition.creator_signature.email])
+        expect(email.subject).to eq("Parliament petitions - #{petition.creator_signature.name} would like your support")
+      end
+
+      it "should raise exception if id not found" do
+        expect do
+          get :verify, :id => signature.id + 1, :token => signature.perishable_token
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "should raise exception if token not found" do
+        expect do
+          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

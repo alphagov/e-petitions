@@ -1,0 +1,23 @@
+<p>Dear <%= @signature.name %>,</p>
+
+<p>To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.title %>" you should:</p>
+
+<ol>
+  <li>
+    <p>Review the details of the petition to make sure you agree with it:</p>
+    <p><b>Title</b>: <%= @petition.title  %></p>
+    <p><b>Action</b>: <%= @petition.action  %></p>
+    <p><b>Full description</b>: <%= @petition.description  %></p>
+  </li>
+
+  <li>
+    <p>Click the link below to confirm your email address:</p>
+    <%= link_to nil, verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>
+  </li>
+</ol>
+
+<p>If you don't want to sponsor this e-petition or believe this message was sent in error, please ignore this email.</p>
+
+<p>Thanks,</p>
+
+<p>Parliament e-petitions <%= link_to nil, home_url %></p>

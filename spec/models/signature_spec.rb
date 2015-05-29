@@ -62,7 +62,6 @@ describe Signature do
     end
   end
 
-
   RSpec::Matchers.define :have_valid do |field|
     match do |actual|
       expect(actual.errors_on(field)).to be_blank
@@ -286,7 +285,7 @@ describe Signature do
         expect(signatures).to include(signature2)
       end
     end
-    
+
     context "need emailing" do
       it "should return only validated signatures who have opted in to receiving email updates" do
         expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
@@ -297,7 +296,7 @@ describe Signature do
 
     context "matching" do
       let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
-      
+
       it "should return a signature matching in name, email and petition_id" do
         signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
         expect(Signature.matching(signature)).to include(signature1)
@@ -355,6 +354,107 @@ describe Signature do
     it "returns false if the signature is validated state" do
       signature = FactoryGirl.build(:validated_signature)
       expect(signature.pending?).to be_falsey
+    end
+  end
+
+  describe "#validated?" do
+    it "returns true if the signature has a validated state" do
+      signature = FactoryGirl.build(:validated_signature)
+      expect(signature.validated?).to be_truthy
+    end
+
+    it "returns false if the signature is pending state" do
+      signature = FactoryGirl.build(:pending_signature)
+      expect(signature.validated?).to be_falsey
+    end
+  end
+
+  describe '#creator?' do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+    let(:creator_signature) { petition.creator_signature }
+
+    it 'is true if the signature is the creator_signature for the petition it belongs to' do
+      expect(creator_signature.creator?).to be_truthy
+    end
+
+    it 'is false if the signature is not the creator_signature for the petition it belongs to' do
+      expect(signature.creator?).to be_falsey
+    end
+  end
+
+  describe '#sponsor?' do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
+    let(:sponsor_signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:signature)) }
+    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+    it 'is true if the signature is a sponsor signature for the petition it belongs to' do
+      expect(sponsor_signature.sponsor?).to be_truthy
+    end
+
+    it 'is false if the signature is not a sponsor signature for the petition it belongs to' do
+      expect(signature.sponsor?).to be_falsey
+    end
+  end
+
+  describe '#validate_from_token!' do
+    subject { FactoryGirl.create(:pending_signature) }
+
+    it 'returns false if the signature has no token' do
+      subject.perishable_token = nil
+      expect(subject.validate_from_token!('any-token')).to be_falsey
+      expect(subject.validate_from_token!(nil)).to be_falsey
+    end
+
+    it 'returns false if the signature is already validated' do
+      subject.state = Signature::VALIDATED_STATE
+      expect(subject.validate_from_token!(subject.perishable_token)).to be_falsey
+      expect(subject.validate_from_token!('any-token')).to be_falsey
+      expect(subject.validate_from_token!(nil)).to be_falsey
+    end
+
+    context 'when the supplied token matches the signatures perishable_token' do
+      let(:token) { subject.perishable_token }
+      it 'returns true' do
+        expect(subject.validate_from_token!(token)).to be_truthy
+      end
+
+      it 'removes the perishable token from the signature' do
+        subject.validate_from_token!(token)
+        expect(subject.perishable_token).to be_nil
+      end
+
+      it 'transitions the signature to the validated state' do
+        subject.validate_from_token!(token)
+        expect(subject).to be_validated
+      end
+
+      it 'timestamps the signature to say it was updated just now' do
+        now = Chronic.parse("1 Jan 2011").utc
+        # Unlike our code which uses Time.current, AR actually uses Time.now to do timestamping
+        allow(Time).to receive(:now).and_return(now)
+
+        subject.validate_from_token!(token)
+        expect(subject.updated_at).to eq now
+      end
+    end
+
+    context 'when the supplied token does not match the signatures perishable_token' do
+      let(:token) { 'some-token-that-isnt-the-real-thing' }
+      it 'returns false' do
+        expect(subject.validate_from_token!(token)).to be_falsey
+      end
+
+      it 'leaves the perishable token on the signature' do
+        subject.validate_from_token!(token)
+        expect(subject.perishable_token).not_to be_nil
+      end
+
+      it 'leaves the signature in the pending state' do
+        subject.validate_from_token!(token)
+        expect(subject).to be_pending
+      end
     end
   end
 end

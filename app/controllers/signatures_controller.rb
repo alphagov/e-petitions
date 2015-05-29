@@ -21,27 +21,29 @@ class SignaturesController < ApplicationController
 
   def verify
     @signature = Signature.find(params[:id])
+    @petition = @signature.petition
 
-    if @signature.perishable_token == params[:token]
-      @signature.perishable_token = nil
-      @signature.state = Signature::VALIDATED_STATE
-      @signature.save(:validate => false)
-
+    if @signature.validate_from_token!(params[:token])
       # if signature is that of the petition's creator, mark the petition as validated
-      if @signature.petition.creator_signature == @signature
-        @signature.petition.state = Petition::VALIDATED_STATE
-        @signature.petition.notify_sponsors
-        @signature.petition.save!
+      if @signature.creator?
+        @petition.state = Petition::VALIDATED_STATE
+        @petition.notify_sponsors
+        @petition.save!
 
-    # else signature is from an ordinary signee so let's redirect to petition's page
+      # if signature is a sponsor, tell the creator about the support
+      elsif @signature.sponsor?
+        send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
+        @petition.update_sponsored_state
+        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsors.for(@signature).perishable_token) and return
+      # else signature is from an ordinary or sponsor signee so let's redirect to petition's page
       else
-        redirect_to signed_petition_signature_url(@signature.petition) and return
+        redirect_to signed_petition_signature_url(@petition) and return
       end
     else
       # We've found the signature, but it's already been verified.
-      if @signature.state == Signature::VALIDATED_STATE
+      if @signature.validated?
         flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
-        redirect_to signed_petition_signature_url(@signature.petition) and return
+        redirect_to signed_petition_signature_url(@petition) and return
       else
         raise ActiveRecord::RecordNotFound
       end
@@ -84,6 +86,10 @@ class SignaturesController < ApplicationController
         require(:signature).
         permit(:name, :email, :email_confirmation,
                :postcode, :country, :uk_citizenship)
+  end
+
+  def send_sponsor_support_notification_email_to_petition_owner(petition, signature)
+    petition.notify_creator_about_sponsor_support(petition.sponsors.for(signature))
   end
 
   def find_existing_pending_signatures
