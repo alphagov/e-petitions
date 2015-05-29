@@ -15,22 +15,10 @@ describe StaticPagesController do
     end
   end
 
-  describe "terms_and_conditions" do
-    it "should respond to /terms-and-conditions" do
-      expect({:get => "/terms-and-conditions"}).to route_to({:controller => "static_pages", :action => "terms_and_conditions"})
-      expect(terms_and_conditions_path).to eq "/terms-and-conditions"
-    end
-  end
-  describe "privacy_policy" do
-    it "should respond to /privacy-policy" do
-      expect({:get => "/privacy-policy"}).to route_to({:controller => "static_pages", :action => "privacy_policy"})
-      expect(privacy_policy_path).to eq "/privacy-policy"
-    end
-  end
-  describe "cookies" do
-    it "should respond to /cookies" do
-      expect({:get => "/cookies"}).to route_to({:controller => "static_pages", :action => "cookies"})
-      expect(cookies_path).to eq "/cookies"
+  describe "help" do
+    it "should respond to /help" do
+      expect({:get => "/help"}).to route_to({:controller => "static_pages", :action => "help"})
+      expect(help_path).to eq "/help"
     end
   end
 end
