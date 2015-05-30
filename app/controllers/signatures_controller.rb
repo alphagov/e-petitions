@@ -1,5 +1,6 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
+  before_filter :retrieve_signature, :only => [:signed]
   include ActionView::Helpers::NumberHelper
 
   respond_to :html
@@ -36,13 +37,13 @@ class SignaturesController < ApplicationController
         redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
       # else signature is from an ordinary or sponsor signee so let's redirect to petition's page
       else
-        redirect_to signed_petition_signature_url(@petition) and return
+        redirect_to signed_petition_signature_url(@petition, @signature) and return
       end
     else
       # We've found the signature, but it's already been verified.
       if @signature.validated?
         flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
-        redirect_to signed_petition_signature_url(@petition) and return
+        redirect_to signed_petition_signature_url(@petition, @signature) and return
       else
         raise ActiveRecord::RecordNotFound
       end
@@ -66,6 +67,10 @@ class SignaturesController < ApplicationController
     @petition = Petition.visible.find(params[:petition_id])
   end
 
+  def retrieve_signature
+    @signature = Signature.find(params[:id])
+  end
+  
   def send_email_to_petition_signer(signature)
     PetitionMailer.email_confirmation_for_signer(signature).deliver_now
   end
@@ -100,7 +105,7 @@ class SignaturesController < ApplicationController
 
   def handle_existing_signatures(signatures, petition)
     signatures.each { |sig| send_email_to_petition_signer(sig) }
-    redirect_to thank_you_petition_signature_url(petition)
+    redirect_to thank_you_petition_signatures_url(petition)
   end
 
   def handle_new_signature(petition)
@@ -108,7 +113,7 @@ class SignaturesController < ApplicationController
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
     if @stage_manager.create_signature
       send_email_to_petition_signer(@stage_manager.signature)
-      respond_with @stage_manager.stage_object, :location => thank_you_petition_signature_url(petition)
+      respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
     else
       render :new
     end

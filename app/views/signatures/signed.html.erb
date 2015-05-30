@@ -9,4 +9,11 @@
   <p>Your signature has now been added to this e-petition.</p>
 
   <%= link_to "Click here to view the e-petition", petition_path(@petition), :class => 'link_button large_link_button return_to_homepage_button' %>
+
+  <% if @signature.constituency %>
+  <p>
+    Your constituency is <%= @signature.constituency.name %>
+  </p>
+  <% end %>
+  
 </div>
