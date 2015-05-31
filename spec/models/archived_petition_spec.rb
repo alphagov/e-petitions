@@ -4,21 +4,28 @@ describe ArchivedPetition do
   subject(:petition){ described_class.new }
 
   describe ".search" do
+    let!(:petition_1) do
+      FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago)
+    end
+
+    let!(:petition_2) do
+      FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago)
+    end
+
+    before do
+      Sunspot.commit
+    end
+
     it "searches based upon title" do
-      petition = FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great")
-      expect(ArchivedPetition.search(q: "Wombles")).to include(petition)
+      expect(ArchivedPetition.search(q: "Wombles")).to include(petition_1)
     end
 
     it "searches based upon description" do
-      petition = FactoryGirl.create(:archived_petition, :closed, description: "Wombles are great")
-      expect(ArchivedPetition.search(q: "Wombles")).to include(petition)
+      expect(ArchivedPetition.search(q: "Wombles")).to include(petition_2)
     end
 
     it "sorts the results by the created_at timestamp" do
-      pet1 = FactoryGirl.create(:archived_petition, :closed, created_at: 1.year.ago)
-      pet2 = FactoryGirl.create(:archived_petition, :closed, created_at: 2.years.ago)
-
-      expect(ArchivedPetition.search(q: "Petition")).to eq([pet2, pet1])
+      expect(ArchivedPetition.search(q: "Petition")).to eq([petition_2, petition_1])
     end
   end
 
