@@ -115,6 +115,4 @@ Given(/^a moderator responds to the petition$/) do
     And I check "Email signees"
     And I press "Save"
   )
-  # run the delayed job that sends petition response emails
-  Delayed::Job.last.payload_object.perform
 end

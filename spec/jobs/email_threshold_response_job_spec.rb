@@ -1,14 +1,14 @@
 require 'net/smtp'
+require 'rails_helper'
+include ActiveJob::TestHelper
 
 describe EmailThresholdResponseJob do
   let(:email_requested_at) { Time.now }
-  let(:petition) { double(:petition, :email_requested_at => email_requested_at, :title => 'my petition') }
-  let(:signature) { double(:signature, :email => 'foo@bar.com', :update_attribute => nil) }
+  let(:petition) { FactoryGirl.create(:open_petition, :email_requested_at => email_requested_at) }
+  let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
 
-  let(:model) { double(:model, :find => petition) }
   let(:mailer) { double.as_null_object }
   let(:logger) { double.as_null_object }
-  let(:now) { double }
 
   before do
     allow(petition).to receive_message_chain(:need_emailing, :find_each).and_yield(signature)
@@ -16,9 +16,7 @@ describe EmailThresholdResponseJob do
   end
 
   def perform_job
-    job = EmailThresholdResponseJob.new(1, email_requested_at, model, mailer)
-    allow(job).to receive_messages(:logger => logger)
-    job.perform
+    EmailThresholdResponseJob.perform_now(petition, email_requested_at, mailer, logger)
   end
 
   it "sends emails to each signatory of a petition" do
@@ -28,9 +26,8 @@ describe EmailThresholdResponseJob do
 
   it "doesn't run unless it's the latest request" do
     expect(mailer).not_to receive(:notify_signer_of_threshold_response)
-    job = EmailThresholdResponseJob.new(1, Time.now - 1000, model, mailer)
-    allow(job).to receive_messages(:logger => logger)
-    job.perform
+    requested_at = Time.now - 1000
+    EmailThresholdResponseJob.perform_now(petition, requested_at, mailer, logger)
   end
 
   it "marks the signature with the last emailing time" do
@@ -48,7 +45,7 @@ describe EmailThresholdResponseJob do
     end
 
     it "skips that signature and moves on" do
-      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at)
+      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at, email_requested_at)
       perform_job
     end
 
@@ -79,7 +76,7 @@ describe EmailThresholdResponseJob do
     end
 
     it "skips that signature and moves on" do
-      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at)
+      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at, email_requested_at)
       perform_job
     end
   end

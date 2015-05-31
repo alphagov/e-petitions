@@ -31,3 +31,7 @@ BeValidAsset::Configuration.feed_validator_host = 'validator.unboxedconsulting.c
 BeValidAsset::Configuration.enable_caching = true
 BeValidAsset::Configuration.cache_path = File.join(Rails.root.to_s, %w(tmp be_valid_asset_cache))
 BeValidAsset::Configuration.display_invalid_lines = true
+
+# run background jobs inline with delayed job
+ActiveJob::Base.queue_adapter = :delayed_job
+Delayed::Worker.delay_jobs = false
