@@ -1,0 +1,48 @@
+<% content_for(:page_title) { "Search results - archived e-petitions" } %>
+<% content_for :title do %>
+<div class="title_block">
+  <h1>Search results <span class="search_terms">for "<%= params[:q] %>"</span></h1>
+</div>
+<% end %>
+
+<div class="petition_index_view">
+  <div class="petition_list">
+    <% if @petitions.empty? %>
+      <p class="no_petitions_warning">No archived petitions could be found matching your search terms.</p>
+    <% else %>
+      <div class="title_pagination_row">
+        <h2>Archive e-petitions matching your search terms</h2>
+        <%= will_paginate @petitions %>
+      </div>
+
+      <table>
+        <caption>Archived e-petitions</caption>
+        <thead>
+          <tr>
+            <th class="name">Name</th>
+            <th class="sig_count">No. of signatures</th>
+            <th class="closing_date last">Closing date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @petitions.each do |petition| %>
+            <tr>
+              <td class="name">
+                <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
+                (<%= petition.rejected? ? 'Rejected' : 'Closed' %>)
+              </td>
+              <% if petition.rejected? %>
+                <td class="sig_count">&ndash;</td>
+                <td class="closing_date last">&ndash;</td>
+              <% else %>
+                <td class="sig_count"><%= number_with_delimiter(petition.signature_count) %></td>
+                <td class="closing_date"><%= date_format(petition.closed_at) %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= will_paginate @petitions %>
+    <% end %>
+  </div>
+</div>

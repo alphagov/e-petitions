@@ -26,6 +26,15 @@ module NavigationHelpers
     when /^the petition page for "([^\"]*)"$/
       petition_path(Petition.find_by(title: $1))
 
+    when /^the archived petitions page$/
+      archived_petitions_path
+
+    when /^the archived petitions search results page$/
+      search_archived_petitions_path
+
+    when /^the archived petition page for "([^\"]*)"$/
+      archived_petition_path(ArchivedPetition.find_by(title: $1))
+
     when /^the new signature page for "([^\"]*)"$/
       new_petition_signature_path(Petition.find_by(title: $1))
 

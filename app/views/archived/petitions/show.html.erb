@@ -1,0 +1,41 @@
+<% content_for(:page_title) { "#{@petition.title} - e-petitions" } %>
+<% content_for :title do %>
+<div class="title_block">
+  <h2>e-petition</h2>
+</div>
+<% end %>
+
+<%= content_tag :p, :class => 'flash_notice' do -%>
+  This e-petition is now closed
+<% end if @petition.closed? %>
+
+<div class="petition_view">
+  <div class="content">
+    <h1><%= @petition.title %></h1>
+    <div class="description"><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></div>
+
+    <% if @petition.rejected? -%>
+      <div class="petition_rejected">
+        <h2>This e-petition has been rejected with the following reason given:</h2>
+        <div class"reason"><%= raw auto_link(simple_format(h(@petition.reason_for_rejection)), :html => { :target => '_blank' }) %></div>
+      </div>
+    <% end -%>
+
+    <% if @petition.response? -%>
+      <div class="petition_response">
+        <h2>This e-petition has received the following response:</h2>
+        <%= raw auto_link(simple_format(h(@petition.response), :class => 'response'), :html => { :target => '_blank' }) %>
+      </div>
+    <% end -%>
+  </div>
+
+  <dl class="data">
+    <dt class="signature_count">Number of signatures:</dt>
+    <dd class="signature_count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+
+    <% if @petition.closed_at? -%>
+      <dt class="closing_date">Closed:</dt>
+      <dd class="closing_date"><%= local_date_time_format @petition.closed_at %></dd>
+    <% end -%>
+  </dl>
+</div>
