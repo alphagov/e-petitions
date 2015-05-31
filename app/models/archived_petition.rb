@@ -10,6 +10,20 @@ class ArchivedPetition < ActiveRecord::Base
   searchable do
     text :title
     text :description
+    time :created_at, trie: true
+  end
+
+  class << self
+    def search(params)
+      query = params[:q].to_s
+      page  = [params[:page].to_i, 1].max
+
+      solr_search do
+        fulltext query
+        paginate page: page, per_page: 20
+        order_by 'created_at', 'asc'
+      end.results
+    end
   end
 
   def open?

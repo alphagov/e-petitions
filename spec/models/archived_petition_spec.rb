@@ -3,6 +3,25 @@ require 'rails_helper'
 describe ArchivedPetition do
   subject(:petition){ described_class.new }
 
+  describe ".search" do
+    it "searches based upon title" do
+      petition = FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great")
+      expect(ArchivedPetition.search(q: "Wombles")).to include(petition)
+    end
+
+    it "searches based upon description" do
+      petition = FactoryGirl.create(:archived_petition, :closed, description: "Wombles are great")
+      expect(ArchivedPetition.search(q: "Wombles")).to include(petition)
+    end
+
+    it "sorts the results by the created_at timestamp" do
+      pet1 = FactoryGirl.create(:archived_petition, :closed, created_at: 1.year.ago)
+      pet2 = FactoryGirl.create(:archived_petition, :closed, created_at: 2.years.ago)
+
+      expect(ArchivedPetition.search(q: "Petition")).to eq([pet2, pet1])
+    end
+  end
+
   describe "#title" do
     it "defaults to nil" do
       expect(petition.title).to be_nil
