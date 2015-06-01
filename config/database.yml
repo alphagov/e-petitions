@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  url: <%= ENV.fetch("DATABASE_URL") %>
+  pool: 5
+
+development:
+  <<: *default
+  database: epets_development
+
+test:
+  <<: *default
+  database: epets_test
+
+production:
+  <<: *default
+  database: epets_production

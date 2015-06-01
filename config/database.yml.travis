@@ -1,9 +1,0 @@
-test: &TEST
-  adapter: postgresql
-  database: epets_test
-  encoding: utf8
-  username: postgres
-  password:
-
-cucumber:
-  <<: *TEST
