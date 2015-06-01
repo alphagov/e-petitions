@@ -5,7 +5,7 @@ describe SignaturesController do
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
-      let(:api_url) { "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies" }
+      let(:api_url) { ConstituencyApi::Client::URL }
       let(:fake_body) {
         "<Constituencies>
         <Constituency><Name>Cities of London and Westminster</Name></Constituency>
