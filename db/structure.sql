@@ -223,7 +223,7 @@ CREATE TABLE signatures (
     updated_at timestamp without time zone,
     notify_by_email boolean DEFAULT true,
     last_emailed_at timestamp without time zone,
-    encrypted_email character varying(255),
+    email character varying(255),
     unsubscribe_token character varying
 );
 
@@ -467,10 +467,10 @@ CREATE INDEX index_petitions_on_state_and_signature_count ON petitions USING btr
 
 
 --
--- Name: index_signatures_on_encrypted_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX index_signatures_on_encrypted_email_and_petition_id_and_name ON signatures USING btree (encrypted_email, petition_id, name);
+CREATE UNIQUE INDEX index_signatures_on_email_and_petition_id_and_name ON signatures USING btree (email, petition_id, name);
 
 
 --
@@ -527,6 +527,8 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 --
 
 SET search_path TO "$user",public;
+
+INSERT INTO schema_migrations (version) VALUES ('20150601153013');
 
 INSERT INTO schema_migrations (version) VALUES ('20150602200239');
 

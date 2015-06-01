@@ -3,8 +3,6 @@
 # Table name: sponsors
 #
 #  id               :integer          not null, primary key
-#  encrypted_email  :string(255)
-#  perishable_token :string(255)
 #  petition_id      :integer
 #  signature_id     :integer
 #  created_at       :datetime         not null
