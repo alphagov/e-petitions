@@ -18,6 +18,33 @@ FactoryGirl.define do
     role "moderator"
   end
 
+  factory :archived_petition do
+    sequence(:title) { |n| "Petition #{n}" }
+    description "Petition description"
+    signature_count 0
+    opened_at { 2.years.ago }
+
+    trait :response do
+      response "Petition response"
+    end
+
+    trait :open do
+      state "open"
+      signature_count 100
+    end
+
+    trait :closed do
+      state "open"
+      signature_count 100
+      closed_at { 1.year.ago }
+    end
+
+    trait :rejected do
+      reason_for_rejection "Petition rejection"
+      state "rejected"
+    end
+  end
+
   factory :petition do
     transient do
       creator_signature_attributes { {} }

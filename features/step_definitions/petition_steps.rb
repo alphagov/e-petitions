@@ -17,6 +17,14 @@ Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
+Given(/^an archived petition "([^"]*)"$/) do |title|
+  @petition = FactoryGirl.create(:archived_petition, :closed, title: title)
+end
+
+Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
+  @petition = FactoryGirl.create(:archived_petition, :rejected, title: title)
+end
+
 Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |title, no_validated, no_pending|
   petition = Petition.find_by(title: title)
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
@@ -61,8 +69,24 @@ Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do
     :rejection_text => reason_text)
 end
 
+Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |title, reason_for_rejection|
+  @petition = FactoryGirl.create(:archived_petition, :rejected, title: title, reason_for_rejection: reason_for_rejection)
+end
+
 When /^I view the petition$/ do
+  if @petition.is_a?(ArchivedPetition)
+    visit archived_petition_path(@petition)
+  else
+    visit petition_path(@petition)
+  end
+end
+
+When(/^I view the petition at the old url$/) do
   visit petition_path(@petition)
+end
+
+Then(/^I should be redirected to the archived url$/) do
+  expect(current_path).to eq(archived_petition_path(@petition))
 end
 
 When /^I view all petitions from the home page$/ do
@@ -92,20 +116,31 @@ end
 
 Then /^I should see the petition details$/ do
   expect(page).to have_content(@petition.title)
-  expect(page).to have_content(@petition.action)
   expect(page).to have_content(@petition.description)
+
+  unless @petition.is_a?(ArchivedPetition)
+    expect(page).to have_content(@petition.action)
+  end
 end
 
 Then /^I should see the vote count, closed and open dates$/ do
   @petition.reload
   expect(page).to have_css("p.signature-count", :text => @petition.signature_count.to_s + " signatures")
-  expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
   expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
+
+  unless @petition.is_a?(ArchivedPetition)
+    expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
+  end
 end
 
 Then /^I should see the reason for rejection$/ do
   @petition.reload
-  expect(page).to have_content(@petition.rejection_text)
+
+  if @petition.is_a?(ArchivedPetition)
+    expect(page).to have_content(@petition.reason_for_rejection)
+  else
+    expect(page).to have_content(@petition.rejection_text)
+  end
 end
 
 And /^all petitions have had their signatures counted$/ do

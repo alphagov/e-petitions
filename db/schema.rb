@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150528121200) do
+ActiveRecord::Schema.define(version: 20150529100225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,19 @@ ActiveRecord::Schema.define(version: 20150528121200) do
 
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name", using: :btree
+
+  create_table "archived_petitions", force: :cascade do |t|
+    t.string   "title",                limit: 255,                  null: false
+    t.text     "description"
+    t.text     "response"
+    t.string   "state",                limit: 10,  default: "open", null: false
+    t.text     "reason_for_rejection"
+    t.datetime "opened_at"
+    t.datetime "closed_at"
+    t.integer  "signature_count",                  default: 0
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",               default: 0

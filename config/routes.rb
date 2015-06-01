@@ -38,6 +38,12 @@ Rails.application.routes.draw do
     get 'unsubscribe/:unsubscribe_token', :action => :unsubscribe, :on => :member, :as => :unsubscribe
   end
 
+  namespace :archived do
+    resources :petitions, only: [:index, :show] do
+      get :search, on: :collection
+    end
+  end
+
   namespace :admin do
     root :to => 'todolist#index'
 

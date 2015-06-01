@@ -12,7 +12,15 @@ class PetitionsController < ApplicationController
   end
 
   def show
-    respond_with @petition = Petition.visible.find(params[:id])
+    begin
+      respond_with @petition = Petition.visible.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      if @petition = ArchivedPetition.find_by_id(params[:id])
+        redirect_to archived_petition_url(@petition)
+      else
+        raise e
+      end
+    end
   end
 
   def new
