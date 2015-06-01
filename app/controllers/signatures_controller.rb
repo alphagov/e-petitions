@@ -1,6 +1,6 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  before_filter :retrieve_signature, :only => [:signed]
+  before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
   include ActionView::Helpers::NumberHelper
 
   respond_to :html
@@ -21,7 +21,6 @@ class SignaturesController < ApplicationController
   end
 
   def verify
-    @signature = Signature.find(params[:id])
     @petition = @signature.petition
 
     if @signature.validate_from_token!(params[:token])
@@ -51,13 +50,12 @@ class SignaturesController < ApplicationController
   end
 
   def unsubscribe
-    signature = Signature.find(params[:id])
-    if signature.unsubscribe_token != params[:unsubscribe_token]
+    if @signature.unsubscribe_token != params[:unsubscribe_token]
       render 'signatures/unsubscribe/failed_to_unsubscribe'
-    elsif signature.unsubscribed?
+    elsif @signature.unsubscribed?
       render 'signatures/unsubscribe/already_unsubscribed'
     else
-      signature.unsubscribe!
+      @signature.unsubscribe!
       render 'signatures/unsubscribe/successfully_unsubscribed'
     end
   end
