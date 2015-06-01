@@ -26,6 +26,7 @@ gem 'attr_encrypted'
 gem 'dynamic_form'
 gem 'faraday'
 gem 'faraday_middleware'
+gem 'sass-rails', '~> 5.0'
 
 group :development, :test do
   gem 'rspec-rails'

@@ -98,9 +98,9 @@ end
 
 Then /^I should see the vote count, closed and open dates$/ do
   @petition.reload
-  expect(page).to have_css("dd.signature_count", :text => @petition.signature_count.to_s)
-  expect(page).to have_css("dd.created_by", :text => @petition.creator_signature.name)
-  expect(page).to have_css("dd.closing_date", :text => @petition.closed_at.to_s(:dotted_short_date))
+  expect(page).to have_css("p.signature-count", :text => @petition.signature_count.to_s + " signatures")
+  expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
+  expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
 end
 
 Then /^I should see the reason for rejection$/ do

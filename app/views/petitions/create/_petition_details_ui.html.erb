@@ -3,7 +3,7 @@
 
   <%= form_row :for => [petition, :title] do %>
     <%= f.label :title %>
-    <%= f.text_field :title, :tabindex => increment, :maxlength => 150 %>
+    <%= f.text_field :title, :tabindex => increment, :maxlength => 150, :size => nil %>
     <%= error_messages_for_field petition, :title %>
     <div class="tip">
       <div class="arrow"></div>

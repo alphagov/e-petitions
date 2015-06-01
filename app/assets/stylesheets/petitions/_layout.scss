@@ -1,0 +1,61 @@
+// Mostly copied from govuk_elements layout
+
+// GOV.UK front end toolkit dependencies
+@import "../govuk_frontend_toolkit/measurements";
+@import "../govuk_frontend_toolkit/conditionals";
+@import "../govuk_frontend_toolkit/grid_layout";
+@import "helpers";
+
+// Wrapper sets the site width
+.wrapper {
+  @extend %site-width-container;
+}
+
+// Content wraps the entire site content block
+#content {
+  @extend %site-width-container;
+  @extend %contain-floats;
+  padding-bottom: $gutter;
+
+  @include media(desktop) {
+    padding-bottom: $gutter*3;
+  }
+}
+
+// Grid layout
+// ==========================================================================
+
+// Usage:
+// For two equal columns
+
+// <div class="grid-row">
+//   <div class="column-half">
+//
+//   </div>
+//   <div class="column-half">
+//
+//   </div>
+// </div>
+
+// Use .grid-row to define a row for grid columns to sit in
+.grid-row {
+  @extend %grid-row;
+}
+
+// Use .grid-column to create a grid column with 15px gutter
+// By default grid columns break to become full width at tablet size
+.column-quarter {
+  @include grid-column(1/4);
+}
+
+.column-half {
+  @include grid-column(1/2);
+}
+
+.column-third {
+  @include grid-column(1/3);
+}
+
+.column-two-thirds {
+  @include grid-column(2/3);
+}
