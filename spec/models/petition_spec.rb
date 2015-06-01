@@ -36,6 +36,11 @@ describe Petition do
       p = Petition.new
       expect(p.email_signees).to be_falsey
     end
+
+    it "generates sponsor token" do
+      p = FactoryGirl.create(:petition, :sponsor_token => nil)
+      expect(p.sponsor_token).not_to be_nil
+    end
   end
 
   context "validations" do
@@ -43,51 +48,6 @@ describe Petition do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
-
-    context "sponsor validations" do
-
-      it 'is valid with 5 sponsor emails' do
-        sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)).to be_valid
-      end
-
-      it 'is not valid with less than 5 sponsor emails' do
-        sponsor_emails = ['test1@test.com', 'test2@test.com']
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
-      end
-
-      it 'is not valid with more than 20 sponsor emails' do
-        sponsor_emails = (1..25).map { |i| "sponsor#{i}@example.com" }
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
-      end
-
-      it 'is not valid with invalid sponsor emails' do
-        sponsor_emails = ['test1test', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-        expect(FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)).not_to be_valid
-      end
-
-      it 'constructs sponsor objects from the sponsor emails as part of validation' do
-        sponsor_emails = ['test1@test.com', 'test2@test.com']
-        petition = FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)
-        expect(petition.sponsors.map &:email).to eq []
-        petition.valid?
-        expect(petition.sponsors.map &:email).to eq ['test1@test.com', 'test2@test.com']
-      end
-
-      it 'removes duplicate sponsor emails as part of validation' do
-        sponsor_emails = ['test1@test.com', 'test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test3@test.com']
-        petition = FactoryGirl.build(:petition, sponsor_emails: sponsor_emails)
-        petition.valid?
-        expect(petition.sponsors.map &:email).to eq ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com']
-      end
-
-      it 'resets any existing sponsors from the emails as part of validation' do
-        petition = FactoryGirl.build(:petition, sponsor_emails: ['should-be-the-only-one@example.com'])
-        petition.sponsors.build(email: 'should-be-removed@example.com')
-        petition.valid?
-        expect(petition.sponsors.map &:email).to eq ['should-be-the-only-one@example.com']
-      end
-    end
 
     it "should validate the length of :title to within 150 characters" do
       expect(FactoryGirl.build(:petition, :title => 'x' * 150)).to be_valid
@@ -584,18 +544,8 @@ describe Petition do
     end
   end
 
-
-  describe "creating sponsors from sponsor emails in after create callback" do
-    it 'persists sponsors to match the emails' do
-      sponsor_emails = ['test1@test.com', 'test2@test.com', 'test3@test.com', 'test4@test.com', 'test5@test.com']
-      petition = FactoryGirl.create(:petition, sponsor_emails: sponsor_emails)
-      expect(petition.sponsors.map(&:email)).to include(*sponsor_emails)
-    end
-  end
-
   describe "#notify_creator_about_sponsor_support", immediate_delayed_job_work_off: true do
-    let(:sponsor_emails) { (1..AppConfig.sponsor_moderation_threshold).map { |n| "sponsor-#{n}@example.com" } }
-    subject { FactoryGirl.create(:petition, sponsor_emails: sponsor_emails) }
+    subject { FactoryGirl.create(:petition, sponsor_count: AppConfig.sponsor_moderation_threshold) }
     before { ActionMailer::Base.deliveries.clear }
 
     it 'breaks if the provided sponsor does not belong to the petition' do

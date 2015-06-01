@@ -2,7 +2,18 @@ require "rails_helper"
 
 describe PetitionMailer do
 
-  let(:petition) { FactoryGirl.create(:open_petition) }
+  let :creator do
+    FactoryGirl.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
+  end
+
+  let :petition do
+    FactoryGirl.create(:pending_petition,
+      creator_signature: creator,
+      title: "Allow organic vegetable vans to use red diesel",
+      action: "Add vans to permitted users of red diesel",
+      description: "To promote organic vegetables"
+    )
+  end
   let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
   let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
 
@@ -27,7 +38,7 @@ describe PetitionMailer do
       expect(mail.subject).to eq("HM Government e-petitions: Signature already confirmed")
     end
 
-    it "informs the use they've already signed the petition" do
+    it "informs the user they've already signed the petition" do
       expect(mail.body.encoded).to match("Your signature has already been added to the e-petition")
     end
   end
@@ -108,4 +119,37 @@ describe PetitionMailer do
     end
   end
 
+  describe 'gathering sponsors for petition' do
+    subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
+
+    it "has the correct subject" do
+      expect(mail.subject).to eq("Parliament petitions - It's time to get sponsors to support your petition")
+    end
+
+    it "has the addresses the creator by name" do
+      expect(mail.body.encoded).to match(/Dear Barry Butler\,/)
+    end
+
+    it "sends it only to the petition creator" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "includes a link to pass on to potential sponsors to have them support the petition" do
+      expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}])
+    end
+
+    it "includes the petition title" do
+      expect(mail.body.encoded).to match(%r[Allow organic vegetable vans to use red diesel])
+    end
+
+    it "includes the petition action" do
+      expect(mail.body.encoded).to match(%r[Add vans to permitted users of red diesel])
+    end
+
+    it "includes the petition description" do
+      expect(mail.body.encoded).to match(%r[To promote organic vegetables])
+    end
+  end
 end

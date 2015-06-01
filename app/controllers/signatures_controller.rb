@@ -27,14 +27,13 @@ class SignaturesController < ApplicationController
       # if signature is that of the petition's creator, mark the petition as validated
       if @signature.creator?
         @petition.state = Petition::VALIDATED_STATE
-        @petition.notify_sponsors
         @petition.save!
 
       # if signature is a sponsor, tell the creator about the support
       elsif @signature.sponsor?
         send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
         @petition.update_sponsored_state
-        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsors.for(@signature).perishable_token) and return
+        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
       # else signature is from an ordinary or sponsor signee so let's redirect to petition's page
       else
         redirect_to signed_petition_signature_url(@petition) and return

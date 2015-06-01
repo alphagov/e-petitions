@@ -1,49 +1,32 @@
 class SponsorsController < ApplicationController
   before_action :retrieve_petition
-  before_action :retrieve_sponsor
+  before_action :validate_token_and_petition_match
 
   respond_to :html
 
   def show
-    if @sponsor.signature.nil?
-      assign_stage
-      @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
-    else
-      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-    end
+    assign_stage
+    @sponsor = @petition.sponsors.build
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
   end
 
   def update
-    if @sponsor.signature.nil?
-      assign_stage
-      @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
-      if @stage_manager.create_signature
-        @signature = @stage_manager.signature
-        @sponsor.update_attribute(:signature, @signature)
-        send_email_to_sponsor(@sponsor)
-        redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-      else
-        render :show
-      end
+    assign_stage
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
+    if @stage_manager.create_signature
+      @signature = @stage_manager.signature
+      @sponsor = @petition.sponsors.create(signature: @signature)
+      send_email_to_sponsor(@sponsor)
+      redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
-      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
+      render :show
     end
   end
 
   def thank_you
-    if @sponsor.signature.nil?
-      redirect_to petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-    elsif @sponsor.signature.validated?
-      redirect_to sponsored_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-    end
   end
 
   def sponsored
-    if @sponsor.signature.nil?
-      redirect_to petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-    elsif @sponsor.signature.pending?
-      redirect_to thank_you_petition_sponsor_url(@petition, token: @sponsor.perishable_token)
-    end
   end
 
   private
@@ -52,8 +35,8 @@ class SponsorsController < ApplicationController
     @petition = Petition.find(params[:petition_id])
   end
 
-  def retrieve_sponsor
-    @sponsor = @petition.sponsors.find_by!(perishable_token: params[:token])
+  def validate_token_and_petition_match
+    raise ActiveRecord::RecordNotFound unless @petition.sponsor_token == params[:token]
   end
 
   def assign_stage
@@ -62,7 +45,7 @@ class SponsorsController < ApplicationController
   end
 
   def signature_params_for_new
-    {country: 'United Kingdom', email: @sponsor.email}
+    {country: 'United Kingdom'}
   end
 
   def signature_params_for_create

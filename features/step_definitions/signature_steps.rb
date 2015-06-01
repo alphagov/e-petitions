@@ -17,6 +17,10 @@ Then /^I have not yet signed the petition$/ do
   expect(page).to have_css("dd.signature_count", :text => "1")
 end
 
+Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
+  expect(find_email(address, with_text: "confirm your email address")).to be_present
+end
+
 When /^I confirm my email address$/ do
   steps %Q(
     And I open the email with text "confirm your email address"

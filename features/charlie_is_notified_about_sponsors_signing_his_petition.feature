@@ -4,7 +4,7 @@ Feature: Charlie is notified to get an MP
   I want to be emailed when they sign with a countdown to the threshold
 
   Background:
-    Given I have created an e-petition with sponsors
+    Given I have created an e-petition and told people to sponsor it
 
   Scenario: Charlie is emailed about sponsor support before passing the threshold
     When a sponsor supports my e-petition

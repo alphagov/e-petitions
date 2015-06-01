@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526154706) do
+ActiveRecord::Schema.define(version: 20150528121200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 20150526154706) do
     t.boolean  "notified_by_email",                default: false
     t.datetime "email_requested_at"
     t.string   "action",               limit: 200
+    t.string   "sponsor_token",        limit: 255
   end
 
   add_index "petitions", ["creator_signature_id"], name: "index_petitions_on_creator_signature_id", unique: true, using: :btree
@@ -104,12 +105,10 @@ ActiveRecord::Schema.define(version: 20150526154706) do
   add_index "signatures", ["updated_at"], name: "index_signatures_on_updated_at", using: :btree
 
   create_table "sponsors", force: :cascade do |t|
-    t.string   "encrypted_email",  limit: 255
-    t.string   "perishable_token", limit: 255
     t.integer  "petition_id"
     t.integer  "signature_id"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "system_settings", force: :cascade do |t|

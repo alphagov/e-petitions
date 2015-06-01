@@ -26,7 +26,6 @@ describe PetitionsController do
   end
 
   describe "create" do
-    let(:sponsor_emails) { (1..AppConfig.sponsor_count_min).map { |i| "sponsor#{i}@example.com" }.join("\n") }
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
@@ -39,7 +38,6 @@ describe PetitionsController do
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
         :description => 'Global warming is upon us',
-        :sponsor_emails => sponsor_emails,
         :creator_signature => creator_signature_attributes
       }
     end
@@ -74,11 +72,21 @@ describe PetitionsController do
       end
 
       it "should send verification email to petition's creator" do
+        ActionMailer::Base.deliveries.clear
         do_post
-        email = ActionMailer::Base.deliveries.last
+        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Email address confirmation/ }
+        expect(email).to be_present
         expect(email.from).to eq(["no-reply@example.gov"])
         expect(email.to).to eq(["john@example.com"])
-        expect(email.subject).to match(/Email address confirmation/)
+      end
+
+      it "should send gather sponsors email to petition's creator" do
+        ActionMailer::Base.deliveries.clear
+        do_post
+        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /get sponsors to support your petition/ }
+        expect(email).to be_present
+        expect(email.from).to eq(["no-reply@example.gov"])
+        expect(email.to).to eq(["john@example.com"])
       end
 
       it "should successfully point the signature at the petition" do
@@ -153,12 +161,6 @@ describe PetitionsController do
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:country => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
-        end
-
-        it "has stage of 'sponsors' if there are errors on sponsor_emails" do
-          petition_attributes[:sponsor_emails] = 'blah@'
-          do_post
-          expect(assigns[:stage_manager].stage).to eq 'sponsors'
         end
 
         it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do

@@ -27,8 +27,12 @@ FactoryGirl.define do
     sequence(:title) {|n| "Petition #{n}" }
     action "Petition action"
     description "Petition description"
-    sponsor_emails { (1..sponsor_count).map { |i| "sponsor#{i}@example.com" } }
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)) }
+    after(:build) do |petition, evaluator|
+      evaluator.sponsor_count.times do
+        petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
+      end
+    end
   end
 
   factory :pending_petition, :parent => :petition do
@@ -89,12 +93,21 @@ FactoryGirl.define do
     state      Signature::VALIDATED_STATE
   end
 
+  sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
+
   factory :sponsor do
-    sequence(:email) {|n| "sponsor#{n}@public.com" }
+    transient do
+      email { generate(:sponsor_email) }
+    end
+
     association :petition
 
-    trait :with_signature do
-      signature  { |s| s.association(:signature, petition: s.petition, email: s.email, state: Signature::VALIDATED_STATE) }
+    trait :pending do
+      signature  { |s| s.association(:pending_signature, petition: s.petition, email: s.email) }
+    end
+
+    trait :validated do
+      signature  { |s| s.association(:validated_signature, petition: s.petition, email: s.email) }
     end
   end
 

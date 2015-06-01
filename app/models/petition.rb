@@ -24,6 +24,9 @@
 
 class Petition < ActiveRecord::Base
   include State
+  include PerishableTokenGenerator
+
+  has_perishable_token called: 'sponsor_token'
 
   after_create :set_petition_on_creator_signature
 
@@ -50,7 +53,6 @@ class Petition < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  include Staged::Validations::SponsorDetails
   validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
@@ -92,14 +94,6 @@ class Petition < ActiveRecord::Base
                               group('petitions.id').
                               limit(3)
                             }
-
-  def sponsor_emails
-    @sponsor_emails || []
-  end
-
-  def sponsor_emails=(emails)
-    @sponsor_emails = emails
-  end
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
@@ -189,10 +183,6 @@ class Petition < ActiveRecord::Base
   # need this callback since the relationship is circular
   def set_petition_on_creator_signature
     self.creator_signature.update_attribute(:petition_id, self.id)
-  end
-
-  def notify_sponsors
-    sponsors.each { |s| SponsorMailer.delay.new_sponsor_email(s) }
   end
 
   def signature_counts_by_postal_district

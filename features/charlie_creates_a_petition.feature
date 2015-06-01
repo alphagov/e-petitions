@@ -28,16 +28,15 @@ Scenario: Charlie creates our petition
   And I press "Next"
   And I fill in my details with postcode "N1 1TY"
   And I press "Next"
-  And I fill in sponsor emails
-  And I press "Next"
-  Then I should see my constituency "Islington South and Finsbury"	
+  Then I should see my constituency "Islington South and Finsbury"
   When I press "Next"
   Then the markup should be valid
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
-  And "womboid@wimbledon.com" should receive 1 email
+  And "womboid@wimbledon.com" should be asked to confirm their email address
+  And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
 
   When I confirm my email address
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
@@ -49,10 +48,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I press "Next"
   And I fill in my details with postcode "SW14 9RQ"
   And I press "Next"
-  And I fill in sponsor emails
-  And I press "Next"
   Then I should not see the text "Your constituency is"
-
 
 @javascript
 Scenario: Charlie tries to submit an invalid petition
@@ -91,23 +87,16 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in my details
 
   And I press "Next"
-  Then I should see a fieldset called "Sponsor email addresses"
-
-  And I fill in sponsor emails
-
-  And I press "Next"
   Then I should see a fieldset called "Review Petition"
 
   And I should see "The wombats of wimbledon rock."
   And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Back"
-  And I press "Back"
   And I fill in "Name" with "Mr. Wibbledon"
   And I press "Next"
   And I press "Next"
 
-  And I press "Next"
   Then I should see a fieldset called "Make sure this is right"
 
   When I fill in "Email" with ""

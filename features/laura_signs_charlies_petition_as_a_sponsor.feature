@@ -3,10 +3,10 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
   I want to be able to sign the petition by providing my details
 
   Background:
-    Given I have been listed as a sponsor of a petition
+    Given I have been told about a petition that needs sponsoring
 
   Scenario: Laura signs the petition she is a sponsor of
-    When I follow the link to the petition in my sponsor email
+    When I visit the "sponsor this petition" url I was given
     Then the markup should be valid
     And I should be connected to the server via an ssl connection
     When I fill in my details as a sponsor
@@ -21,7 +21,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I should have fully signed the petition as a sponsor
 
   Scenario: Laura gets her email address wrong and changes it while sponsoring
-    When I follow the link to the petition in my sponsor email
+    When I visit the "sponsor this petition" url I was given
     And I fill in my details as a sponsor with email "sponsor@example.com"
     And I try to sign
     And I change my email address to "laura.the.sponsor@example.com"
@@ -30,7 +30,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     But "sponsor@example.com" should not have received an email explaining the petition I am sponsoring
 
   Scenario: Laura makes mistakes signing the petition she is a sponsor of
-    When I follow the link to the petition in my sponsor email
+    When I visit the "sponsor this petition" url I was given
     And I don't fill in my details correctly as a sponsor
     And I try to sign
     Then I should see an error

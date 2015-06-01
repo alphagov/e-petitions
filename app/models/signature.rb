@@ -22,6 +22,9 @@ class Signature < ActiveRecord::Base
   include EmailEncrypter
   include PerishableTokenGenerator
 
+  has_perishable_token
+  has_perishable_token called: 'unsubscribe_token'
+
   PENDING_STATE = 'pending'
   VALIDATED_STATE = 'validated'
   STATES = [PENDING_STATE, VALIDATED_STATE]
@@ -46,9 +49,6 @@ class Signature < ActiveRecord::Base
   scope :matching, ->(signature) { where(encrypted_email: signature.encrypted_email,
                                          name: signature.name,
                                          petition_id: signature.petition_id) }
-
-  # callbacks
-  before_create :generate_unsubscribe_token
 
   # = Methods =
   attr_accessor :uk_citizenship
@@ -86,10 +86,6 @@ class Signature < ActiveRecord::Base
 
   def postal_district
     postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
-  end
-
-  def generate_unsubscribe_token
-    self.unsubscribe_token = Authlogic::Random.friendly_token
   end
 
   def unsubscribe!
