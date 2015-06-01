@@ -1,54 +1,57 @@
-class PleaseRetryEmailJob < Exception
+class PleaseRetryEmailJob < StandardError
 end
 
 class EmailThresholdResponseJob < ActiveJob::Base
   queue_as :default
 
+  def setup_job(petition, email_requested_at, mailer, threshold_logger)
+    @petition = petition
+    @email_requested_at = email_requested_at.in_time_zone
+    @mailer = mailer.constantize
+    @logger = threshold_logger || construct_threshold_logger
+  end
+
   def perform(petition, email_requested_at, mailer, threshold_logger = nil)
-    email_requested_at = email_requested_at.in_time_zone if email_requested_at.is_a? String
-    mailer = mailer.constantize if mailer.is_a? String
-    @logger = threshold_logger
-    threshold_logger(petition.id).info("Starting job for petition '#{petition.title}' with email requested at : #{petition.email_requested_at}")
+    setup_job(petition, email_requested_at, mailer, threshold_logger)
+    return unless newest_threshold_email_request?
 
-    if petition.email_requested_at.to_i != email_requested_at.to_i
-      return
-    end
+    @logger.info("Starting job for petition '#{petition.title}' with email requested at : #{petition.email_requested_at}")
+    email_signees
+    @logger.info("Finished job for petition '#{@petition.title}'")
 
-    i = 1
-    petition.need_emailing.find_each do |signature|
-      begin
-        mailer.notify_signer_of_threshold_response(petition, signature).deliver_now
-        threshold_logger(petition.id).info("Email #{i} to #{signature.email} sent")
-        signature.update_attribute(:last_emailed_at, petition.email_requested_at)
-      rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, Net::SMTPError => e
-        # try this one again later
-        threshold_logger(petition.id).info("#{e.class.name} while sending to: #{signature.email}")
-      end
-      i = i + 1
-    end
-
-    threshold_logger(petition.id).info("Finished job for petition '#{petition.title}'")
-    if (petition.need_emailing.count > 0)
-      threshold_logger(petition.id).info("Raising error to force a retry of email send of '#{petition.title}'")
-      raise PleaseRetryEmailJob
-    end
-
-    rescue Exception => e
-      # re-raise error so job is re-tried
-      threshold_logger(petition.id).error("#{e.class.name} while processing EmailThresholdResponseJob (petition id #{petition.id}): #{e.message}", e.backtrace) unless e.is_a?(PleaseRetryEmailJob)
-      raise e
+    assert_all_signees_notified
   end
 
   private
-  def threshold_logger(petition_id)
-    unless @logger
-      logfilename = "threshold_response_for_petition_id_#{petition_id}.log"
-      @logger = AuditLogger.new(Rails.root.join('log', logfilename), 'Email threshold response error')
-    end
-    @logger
+
+  # admins can modify threshold response message multiple times
+  # each of those modifications enqueues a new job to send out emails
+  # we want to execute only the latest job enqueued
+  def newest_threshold_email_request?
+    @petition.email_requested_at.to_i == @email_requested_at.to_i
   end
 
-  def failure
-    threshold_logger(petition.id).error("EmailThresholdResponseJob has failed for petition '#{petition.title}'. Please see log file threshold_response_for_petition_id_#{petition.id}.log")
+  def email_signees
+    @petition.need_emailing.find_each do |signature|
+      begin
+        @mailer.notify_signer_of_threshold_response(@petition, signature).deliver_now
+        signature.update_attribute(:last_emailed_at, @petition.email_requested_at)
+      rescue Errno::ECONNREFUSED, Errno::ETIMEDOUT, Net::SMTPError => e
+        # try this one again later
+        @logger.info("#{e.class.name} while sending to: #{signature.email}")
+      end
+    end
+  end
+
+  def assert_all_signees_notified
+    return if @petition.need_emailing.count == 0
+
+    @logger.info("Raising error to force a retry of email send of '#{@petition.title}'")
+    raise PleaseRetryEmailJob
+  end
+
+  def construct_threshold_logger
+    logfilename = "threshold_response_for_petition_id_#{@petition_id}.log"
+    AuditLogger.new(Rails.root.join('log', logfilename), 'Email threshold response error')
   end
 end
