@@ -5,10 +5,10 @@
     <title><%= @title %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href='//fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
-    <%= stylesheet_link_tag 'application' %>
-    <!--[if IE 6]><%= stylesheet_link_tag 'ie6' %><![endif]-->
-    <!--[if lte IE 7]><%= stylesheet_link_tag 'ie7under' %><![endif]-->
-    <!--[if gte IE 9]><%= stylesheet_link_tag 'ie9' %><![endif]-->
+
+    <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
+    <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
+    <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
 
     <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
