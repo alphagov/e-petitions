@@ -1,0 +1,17 @@
+E-petition "<%= @petition.title %>" hasn't been accepted.
+
+<%= strip_tags(@petition.rejection_description) %>
+
+<%= @petition.rejection_text if @petition.rejection_text.present? %>
+
+<% if @petition.state != Petition::HIDDEN_STATE -%>
+Copy and paste the link below into your browser to view your rejected e-petition:
+
+<%= petition_url(@petition) %>
+
+<% end -%>
+If you'd like to submit a new e-petition, please read the site's terms and conditions which explain the rules in detail.
+
+Thanks,
+
+HM Government e-petitions <%= home_url %>
