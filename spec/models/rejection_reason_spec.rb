@@ -1,7 +1,6 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'rails_helper'
 
 describe RejectionReason do
-
   describe "#options_for_select" do
     it "should load the reasons and codes from the rejection reasons file" do
       expect(RejectionReason.options_for_select.size).to eq(6)
