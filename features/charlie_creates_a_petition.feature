@@ -43,7 +43,7 @@ Scenario: First person sponsors a petition
   And a sponsor supports my e-petition
   Then the e-petition should be validated
   And the e-petition creator signature should be validated
-  
+
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
   And I fill in the petition details

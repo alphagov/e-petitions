@@ -1,6 +1,6 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
+  before_filter :retrieve_signature, :only => [:signed, :unsubscribe]
   include ActionView::Helpers::NumberHelper
 
   respond_to :html
@@ -21,32 +21,23 @@ class SignaturesController < ApplicationController
   end
 
   def verify
+    fetch_signature
     @petition = @signature.petition
 
-    if @signature.validate_from_token!(params[:token])
-      # if signature is that of the petition's creator, mark the petition as validated
-      if @signature.creator?
-        @petition.state = Petition::VALIDATED_STATE
-        @petition.save!
+    if @signature.validated?
+      flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
+      redirect_to signed_petition_signature_url(@petition, @signature) and return
+    end
 
-      # if signature is a sponsor, tell the creator about the support
-      elsif @signature.sponsor?
-        send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
-        @petition.update_validated_state
-        @petition.update_sponsored_state
-        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
-      # else signature is from an ordinary or sponsor signee so let's redirect to petition's page
-      else
-        redirect_to signed_petition_signature_url(@petition, @signature) and return
-      end
+    @signature.validate!
+
+    if @signature.sponsor?
+      send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
+      @petition.update_validated_state
+      @petition.update_sponsored_state
+      redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
     else
-      # We've found the signature, but it's already been verified.
-      if @signature.validated?
-        flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
-        redirect_to signed_petition_signature_url(@petition, @signature) and return
-      else
-        raise ActiveRecord::RecordNotFound
-      end
+      redirect_to signed_petition_signature_url(@petition, @signature) and return
     end
   end
 
@@ -62,6 +53,11 @@ class SignaturesController < ApplicationController
   end
 
   private
+
+  def fetch_signature
+    @signature = Signature.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @signature.perishable_token == params[:token]
+  end
   def retrieve_petition
     @petition = Petition.visible.find(params[:petition_id])
   end

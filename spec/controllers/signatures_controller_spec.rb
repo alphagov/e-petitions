@@ -35,13 +35,6 @@ describe SignaturesController do
         expect(petition.reload.state).to eq(Petition::PENDING_STATE)
       end
 
-      it "should set state to validated and set token to nil" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        signature.reload
-        expect(signature.state).to eq(Signature::VALIDATED_STATE)
-        expect(signature.perishable_token).to be_nil
-      end
-
       it "should raise exception if id not found" do
         expect do
           get :verify, :id => signature.id + 1, :token => signature.perishable_token
@@ -66,16 +59,15 @@ describe SignaturesController do
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/sponsored")
       end
 
-      it "should not set petition state to validated" do
+      it "should set petition state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
-        expect(petition.reload.state).to eq(Petition::PENDING_STATE)
+        expect(petition.reload.state).to eq(Petition::VALIDATED_STATE)
       end
 
-      it "should set state to validated and set token to nil" do
+      it "should set state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         signature.reload
         expect(signature.state).to eq(Signature::VALIDATED_STATE)
-        expect(signature.perishable_token).to be_nil
       end
 
       it 'sends email notification to the petition creator' do
@@ -91,41 +83,6 @@ describe SignaturesController do
         allow(signature).to receive(:petition).and_return petition
         expect(petition).to receive(:update_sponsored_state)
         get :verify, :id => signature.id, :token => signature.perishable_token
-      end
-
-      it "should raise exception if id not found" do
-        expect do
-          get :verify, :id => signature.id + 1, :token => signature.perishable_token
-        end.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      it "should raise exception if token not found" do
-        expect do
-          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
-        end.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
-    context "signature to be verified is petition creator's" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { petition.creator_signature }
-
-      it "should render successfully if petition creator verifies email address" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        expect(assigns[:signature]).to eq(signature)
-        expect(response).to be_success
-      end
-
-      it "should set petition state to validated" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        expect(petition.reload.state).to eq(Petition::VALIDATED_STATE)
-      end
-
-      it "should set creator signature state to validated and set token to nil" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        signature.reload
-        expect(signature.state).to eq(Signature::VALIDATED_STATE)
-        expect(signature.perishable_token).to be_nil
       end
 
       it "should raise exception if id not found" do
