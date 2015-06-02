@@ -392,6 +392,12 @@ describe Petition do
     end
   end
 
+  describe "#in_moderation?" do
+    it "is in moderation when the state is sponsored" do
+      expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_moderation?).to be_truthy
+    end
+  end
+
   describe "rejection_reason" do
     it "should give rejection reason from json file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')

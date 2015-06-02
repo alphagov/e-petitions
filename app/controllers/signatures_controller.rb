@@ -91,7 +91,7 @@ class SignaturesController < ApplicationController
   end
 
   def send_sponsor_support_notification_email_to_petition_owner(petition, signature)
-    petition.notify_creator_about_sponsor_support(petition.sponsors.for(signature))
+    petition.notify_creator_about_sponsor_support(petition.sponsors.for(signature)) unless petition.in_moderation?
   end
 
   def find_existing_pending_signatures

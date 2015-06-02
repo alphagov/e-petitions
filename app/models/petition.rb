@@ -132,6 +132,10 @@ class Petition < ActiveRecord::Base
     self.state == VALIDATED_STATE
   end
 
+  def in_moderation?
+    self.state == SPONSORED_STATE
+  end
+
   def open?
     self.state == OPEN_STATE
   end
