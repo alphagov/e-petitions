@@ -215,6 +215,13 @@ class Petition < ActiveRecord::Base
     supporting_sponsors_count < AppConfig.sponsor_moderation_threshold
   end
 
+  def update_validated_state
+    if supporting_sponsors_count == 1
+      update_attribute(:state, VALIDATED_STATE) if state == PENDING_STATE
+      self.creator_signature.update_attribute(:state, VALIDATED_STATE) if creator_signature.state == PENDING_STATE
+    end
+  end
+  
   def update_sponsored_state
     update_attribute(:state, SPONSORED_STATE) if self.on_sponsor_moderation_threshold?
   end

@@ -22,7 +22,7 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
   When I press "Search"
   Then the markup should be valid
 
-Scenario: Charlie creates our petition
+Scenario: Charlie creates a petition
   Given I start a new petition
   And I fill in the petition details
   And I press "Next"
@@ -31,17 +31,19 @@ Scenario: Charlie creates our petition
   Then I should see my constituency "Islington South and Finsbury"
   When I press "Next"
   Then the markup should be valid
+  And I am asked to review my email address
   When I press "Submit"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
-  And "womboid@wimbledon.com" should be asked to confirm their email address
   And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
 
-  When I confirm my email address
-  Then a petition should exist with title: "The wombats of wimbledon rock.", state: "validated"
-  And there should be a "validated" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
-
+Scenario: First person sponsors a petition
+  When I have created an e-petition and told people to sponsor it
+  And a sponsor supports my e-petition
+  Then the e-petition should be validated
+  And the e-petition creator signature should be validated
+  
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
   And I fill in the petition details

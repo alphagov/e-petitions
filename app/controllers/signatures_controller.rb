@@ -32,6 +32,7 @@ class SignaturesController < ApplicationController
       # if signature is a sponsor, tell the creator about the support
       elsif @signature.sponsor?
         send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
+        @petition.update_validated_state
         @petition.update_sponsored_state
         redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
       # else signature is from an ordinary or sponsor signee so let's redirect to petition's page

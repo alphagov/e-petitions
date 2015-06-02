@@ -546,6 +546,26 @@ describe Petition do
     end
   end
 
+  describe "#update_state" do
+    context "with first validated sponsor" do
+      let(:petition){ FactoryGirl.create(:pending_petition) }
+      let(:sponsor){ FactoryGirl.build(:sponsor, :validated, petition: petition) }
+      
+      it "changes state to validated" do
+        sponsor.save
+        expect{petition.update_validated_state}.to change{petition.state}
+                                                    .from(Petition::PENDING_STATE)
+                                                    .to(Petition::VALIDATED_STATE)
+      end
+      it "changes creator signature state to validated" do
+        sponsor.save
+        expect{petition.update_validated_state}.to change{petition.creator_signature.state}
+                                                    .from(Petition::PENDING_STATE)
+                                                    .to(Petition::VALIDATED_STATE)
+      end
+    end
+  end
+
   describe "#notify_creator_about_sponsor_support", immediate_delayed_job_work_off: true do
     subject { FactoryGirl.create(:petition, sponsor_count: AppConfig.sponsor_moderation_threshold) }
     before { ActionMailer::Base.deliveries.clear }
