@@ -68,7 +68,7 @@ end
 When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
 
-  api_url = "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies"
+  api_url = ConstituencyApi::Client::URL
   body = "<Constituencies/>"
   if postcode == "N1 1TY"
     body = "<Constituencies>

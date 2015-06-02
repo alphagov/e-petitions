@@ -22,10 +22,10 @@ Rails.application.routes.draw do
       get 'sponsored', on: :member
     end
 
-    resource :signature, :only => [:new] do
-      post 'new' => 'signatures#create', :as => :sign
+    resources :signatures, :only => [:new] do
+      post 'new' => 'signatures#create', :as => :sign, :on => :collection
       get 'thank-you', :action => :thank_you, :on => :collection, :as => :thank_you
-      get 'signed', :action => :signed, :on => :collection, :as => :signed
+      get 'signed', :action => :signed, :on => :member, :as => :signed
     end
   end
 

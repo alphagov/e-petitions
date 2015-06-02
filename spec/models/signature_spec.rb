@@ -44,7 +44,6 @@ describe Signature do
       s = FactoryGirl.create(:signature, :unsubscribe_token=> nil)
       expect(s.unsubscribe_token).not_to be_nil
     end
-
   end
 
   context "encryption of email" do
@@ -459,57 +458,29 @@ describe Signature do
   end
 
   describe "#constituency" do
-    let(:api_url) { "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies" }
-    let(:empty_body) {
-      "<Constituencies/>"
-    }
-    let(:fake_body) {
-      "<Constituencies>
-        <Constituency><Name>Islington South and Finsbury</Name></Constituency>
-       </Constituencies>"
-    }
-    let(:fake_body_multiple) {
-      "<Constituencies>
-        <Constituency><Name>Hackney North and Stoke Newington</Name></Constituency>
-        <Constituency><Name>Hackney South and Shoreditch</Name></Constituency>
-        <Constituency><Name>Holborn and St Pancras</Name></Constituency>
-        <Constituency><Name>Islington North</Name></Constituency>
-        <Constituency><Name>Islington South and Finsbury</Name></Constituency>
-       </Constituencies>"
-    }
+    let(:constituency1) { ConstituencyApi::Constituency.new(name: "Shoreditch") }
+    let(:constituency2) { ConstituencyApi::Constituency.new(name: "Lambeth") }
+    
+    it "returns a constituency object from the API return array" do
+      allow(ConstituencyApi::Client).to receive(:constituencies).with('N1 1TY').and_return([constituency1])
+      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
+      expect(signature.constituency).to eq(constituency1)
+    end
 
-    it "returns a constituency object for valid postcode" do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to be_kind_of(ConstituencyApi::Constituency)
-    end
-    
-    it "returns the constituency for valid postcode" do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to eq ConstituencyApi::Constituency.new("Islington South and Finsbury")
-    end
-    
-    it "returns the first constituency for postcode with prefix only eg N1" do
-      stub_request(:get, "#{ api_url }/N1/").to_return(status: 200, body: fake_body_multiple)
+    it "returns the first object for multiple results" do
+      allow(ConstituencyApi::Client).to receive(:constituencies).with('N1').and_return([constituency1, constituency2])
       signature = FactoryGirl.build(:signature, postcode: 'N1')
-      expect(signature.constituency).to eq ConstituencyApi::Constituency.new("Hackney North and Stoke Newington")
+      expect(signature.constituency).to eq(constituency1)
     end
 
     it "returns nil for invalid postcode" do
-      stub_request(:get, "#{ api_url }/SW149RQ/").to_return(status: 200, body: empty_body)
+      allow(ConstituencyApi::Client).to receive(:constituencies).with('SW14 9RQ').and_return([])
       signature = FactoryGirl.build(:signature, postcode: 'SW14 9RQ')
       expect(signature.constituency).to be_nil
     end
 
-    it "returns nil for timed out API request" do
-      stub_request(:any, /.*data.parliament.uk.*/).to_timeout
-      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to be_nil
-    end
-    
     it "returns nil for unexpected API response" do
-      stub_request(:get, "#{ api_url }/N1/").to_return(status: 500, body: fake_body)
+      allow(ConstituencyApi::Client).to receive(:constituencies).and_raise(ConstituencyApi::ConstituencyApiError)
       signature = FactoryGirl.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
     end

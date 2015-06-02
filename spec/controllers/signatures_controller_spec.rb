@@ -7,6 +7,16 @@ describe SignaturesController do
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+      let(:api_url) { ConstituencyApi::Client::URL }
+      let(:fake_body) {
+        "<Constituencies>
+        <Constituency><Name>Cities of London and Westminster</Name></Constituency>
+       </Constituencies>"
+      }
+      
+      before do
+        stub_request(:get, "#{ api_url }/SW1A1AA/").to_return(status: 200, body: fake_body)
+      end
 
       it "should respond to /signatures/:id/verify/:token" do
         expect({:get => "/signatures/#{signature.id}/verify/#{signature.perishable_token}"}).
@@ -17,7 +27,7 @@ describe SignaturesController do
       it "should redirect to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signature/signed")
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.id}/signed")
       end
 
       it "should not set petition state to validated" do
@@ -222,7 +232,7 @@ describe SignaturesController do
 
       it "redirects to a thank you page" do
         do_post
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signature/thank-you")
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signatures/thank-you")
       end
     end
 
@@ -301,7 +311,7 @@ describe SignaturesController do
 
         it "sends to thank you page" do
           do_post
-          expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signature/thank-you")
+          expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signatures/thank-you")
         end
       end
 

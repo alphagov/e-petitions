@@ -13,6 +13,7 @@ Feature: Suzie signs a petition
     And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details with email "womboid@wimbledon.com"
+    And I fill in my postcode with "N1 1TY"
     And I try to sign
     Then I am asked to review my email address
     When I change my email address to "womboidian@wimbledon.com"
@@ -22,10 +23,24 @@ Feature: Suzie signs a petition
     And "womboidian@wimbledon.com" should receive 1 email
     When I confirm my email address
     Then I am taken to a landing page
+    And I should see my constituency "Islington South and Finsbury"	
     And I can click on a link to return to the petition
     And I should have signed the petition
 
-  @javascript
+  Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
+    When I go to the new signature page for "Do something!"
+    And I fill in my details with email "womboid@wimbledon.com"
+    And I fill in my postcode with "SW14 9RQ"
+    And I try to sign
+    Then I am asked to review my email address
+    And I say I am happy with my email address
+    Then I have not yet signed the petition
+    And "womboid@wimbledon.com" should receive 1 email
+    When I confirm my email address
+    Then I am taken to a landing page
+    And I should not see the text "Your constituency is"
+
+    @javascript
   Scenario: Suzie signs a petition after validating her email (javascript run-through)
     When I decide to sign the petition
     And I fill in my details
