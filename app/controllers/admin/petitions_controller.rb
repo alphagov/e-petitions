@@ -52,7 +52,7 @@ class Admin::PetitionsController < Admin::AdminController
         # run the job at some random point beween midnight and 4 am
         requested_at = Time.current
         @petition.update_attribute(:email_requested_at, requested_at)
-        Delayed::Job.enqueue EmailThresholdResponseJob.new(@petition.id, requested_at, Petition, PetitionMailer), :run_at => 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
+        EmailThresholdResponseJob.set(wait_until: 1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds).perform_later(@petition, requested_at.getutc.iso8601, PetitionMailer.to_s)
       end
 
       redirect_to admin_petitions_url

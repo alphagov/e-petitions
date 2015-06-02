@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe SignaturesController do
+  include ActiveJob::TestHelper
+
   describe "verify" do
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
@@ -67,10 +69,11 @@ describe SignaturesController do
       end
 
       it 'sends email notification to the petition creator' do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        Delayed::Job.last.payload_object.perform
-        email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq([petition.creator_signature.email])
+        perform_enqueued_jobs do
+          get :verify, :id => signature.id, :token => signature.perishable_token
+          email = ActionMailer::Base.deliveries.last
+          expect(email.to).to eq([petition.creator_signature.email])
+        end
       end
 
       it 'updates petition sponsored state' do

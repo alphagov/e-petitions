@@ -26,6 +26,8 @@
 require 'rails_helper'
 
 describe Petition do
+  include ActiveJob::TestHelper
+
   context "defaults" do
     it "state should default to pending" do
       p = Petition.new
@@ -565,11 +567,13 @@ describe Petition do
       before { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
 
       it 'sends an email to the petition creator telling them about the sponsor' do
-        subject.notify_creator_about_sponsor_support(sponsor)
-        email = ActionMailer::Base.deliveries.last
-        expect(email.from).to eq(["no-reply@example.gov"])
-        expect(email.to).to eq([subject.creator_signature.email])
-        expect(email.subject).to match(/has received support from a sponsor/)
+        perform_enqueued_jobs do
+          subject.notify_creator_about_sponsor_support(sponsor)
+          email = ActionMailer::Base.deliveries.last
+          expect(email.from).to eq(["no-reply@example.gov"])
+          expect(email.to).to eq([subject.creator_signature.email])
+          expect(email.subject).to match(/has received support from a sponsor/)
+        end
       end
     end
 
@@ -578,11 +582,13 @@ describe Petition do
       subject { FactoryGirl.create(:validated_petition, sponsors_signed: true) }
 
       it 'sends an email to the petition creator telling them about the sponsor' do
-        subject.notify_creator_about_sponsor_support(sponsor)
-        email = ActionMailer::Base.deliveries.last
-        expect(email.from).to eq(["no-reply@example.gov"])
-        expect(email.to).to eq([subject.creator_signature.email])
-        expect(email.subject).to match(/has received support from a sponsor/)
+        perform_enqueued_jobs do
+          subject.notify_creator_about_sponsor_support(sponsor)
+          email = ActionMailer::Base.deliveries.last
+          expect(email.from).to eq(["no-reply@example.gov"])
+          expect(email.to).to eq([subject.creator_signature.email])
+          expect(email.subject).to match(/has received support from a sponsor/)
+        end
       end
 
     end
