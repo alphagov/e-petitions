@@ -29,13 +29,11 @@
     <% end -%>
   </div>
 
-  <dl class="data">
-    <dt class="signature_count">Number of signatures:</dt>
-    <dd class="signature_count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+  <p class="signature-count"><%= number_with_delimiter(@petition.signature_count) %> <span>signatures</span></p>
 
-    <% if @petition.closed_at? -%>
-      <dt class="closing_date">Closed:</dt>
-      <dd class="closing_date"><%= local_date_time_format @petition.closed_at %></dd>
-    <% end -%>
-  </dl>
+  <ul class="petition-meta">
+    <li class="meta-deadline">
+      <span class="label">Deadline</span> <%= short_date_format @petition.closed_at %>
+    </li>
+  </ul>
 </div>
