@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150529100225) do
+ActiveRecord::Schema.define(version: 20150602200239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20150529100225) do
     t.string   "queue",      limit: 255
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+  add_index "delayed_jobs", ["priority", "run_at"], name: "index_delayed_jobs_on_priority_and_run_at", using: :btree
 
   create_table "petitions", force: :cascade do |t|
     t.string   "title",                limit: 255,                     null: false
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20150529100225) do
   add_index "signatures", ["encrypted_email", "petition_id", "name"], name: "index_signatures_on_encrypted_email_and_petition_id_and_name", unique: true, using: :btree
   add_index "signatures", ["petition_id", "state", "name"], name: "index_signatures_on_petition_id_and_state_and_name", using: :btree
   add_index "signatures", ["petition_id", "state"], name: "index_signatures_on_petition_id_and_state", using: :btree
-  add_index "signatures", ["petition_id"], name: "index_signatures_on_petition_id_and_email", using: :btree
+  add_index "signatures", ["petition_id"], name: "index_signatures_on_petition_id", using: :btree
   add_index "signatures", ["state"], name: "index_signatures_on_state", using: :btree
   add_index "signatures", ["updated_at"], name: "index_signatures_on_updated_at", using: :btree
 
