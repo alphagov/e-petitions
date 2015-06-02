@@ -42,16 +42,6 @@
     background-size: 100%;
   }
 }
-.graphic-portcullis {
-  width: 26px;
-  height: 32px;
-  background-image: url("/images/graphics/graphic_portcullis.png");
-
-  @include device-pixel-ratio() {
-    background-image: url("/images/graphics/graphic_portcullis-2x.png");
-    background-size: 100%;
-  }
-}
 .graphic-portcullis-white {
   width: 26px;
   height: 32px;

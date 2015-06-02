@@ -51,11 +51,9 @@
         height: 17px;
         overflow:hidden;
         text-indent: -999em;
-        background: image-url("/images/graphics/graphic_open-government-licence.png") 0 0 no-repeat;
-        @include device-pixel-ratio() {
-          background-image: image-url("/images/graphics/graphic_open-government-licence-2x.png");
-          background-size: 41px 17px;
-        }
+        @include background-image("/images/graphics/graphic_open-government-licence", 41, 17);
+        background-position: 0 0;
+        background-repeat: no-repeat;
       }
     }
 

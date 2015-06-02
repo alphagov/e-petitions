@@ -51,8 +51,8 @@
 <details class="confirmation-resend">
   <summary><span class="summary">Not received your confirmation email?</span></summary>
   <div class="panel-indent">
-    <div class="form-group">
     <%= form_tag [:resend_confirmation_email, @petition] do %>
+      <div class="form-group">
         <%= label_tag :confirmation_email, "If you have already signed this petition, but didn't receive an email to confirm your signature, you can request a confirmation to be resent by providing your email address below.", :class => 'form-label' %>
         <%= text_field_tag :confirmation_email, "", :class => 'form-control' %>
       </div>
@@ -63,16 +63,7 @@
 
 <p class="signature-count"><%= number_with_delimiter(@petition.signature_count) %> <span>signatures</span></p>
 
-<article>
-  <section class="signature-count-legend-item count-10000">
-    <h2>10,000 <span>signatures</span></h2>
-    <p>If a petition gets 10,000 signatures, the government will respond</p>
-  </section>
-  <section class="signature-count-legend-item count-100000">
-    <h2>100,000 <span>signatures</span></h2>
-    <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>
-  </section>
-</article>
+<%= render 'shared/about_petitions' %>
 
 <%# Sharing %>
 <% if @petition.can_be_signed? -%>

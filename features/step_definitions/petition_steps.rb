@@ -177,7 +177,7 @@ When(/^I am allowed to make the petition title too long$/) do
   # NOTE: we do this to remove the maxlength attribtue on the petition
   # title input because any modern browser/driver will not let us enter
   # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "$('#petition_title').attr('maxlength', '');"
+  page.execute_script "document.getElementById('petition_title').removeAttribute('maxlength');"
 end
 
 Then(/^the petition with title: "(.*?)" should have requested an email after "(.*?)"$/) do |title, timestamp|

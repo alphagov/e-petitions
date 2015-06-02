@@ -1,0 +1,14 @@
+.trending {
+  h2 {
+    margin-top: $gutter-half; 
+    margin-bottom: $gutter-half;
+  }
+}
+.view-all {
+  margin-top: $gutter-half;
+}
+.home-panel {
+  border-bottom: 1px solid $panel-colour;
+  margin: $gutter-half $gutter-half * -1;
+  padding: 0 $gutter-half $gutter-half;
+}
