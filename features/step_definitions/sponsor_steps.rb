@@ -68,7 +68,7 @@ Then(/^I am redirected to the petition closed page$/) do
 end
 
 Then(/^I am redirected to the petition sign page$/) do
-  expect(current_path).to eq(sign_petition_signature_path(@sponsor_petition))
+  expect(current_path).to eq(sign_petition_signatures_path(@sponsor_petition))
 end
 
 Then(/^I will see 404 error page$/) do

@@ -59,7 +59,7 @@ describe SponsorsController do
     it 'redirects to petition sign page if the petition is already published' do
       published_petition = FactoryGirl.create(:open_petition)
       get :show, petition_id: published_petition, token: published_petition.sponsor_token
-      redirect_url = "https://petition.parliament.uk/petitions/#{published_petition.id}/signature/new"
+      redirect_url = "https://petition.parliament.uk/petitions/#{published_petition.id}/signatures/new"
       expect(response).to redirect_to redirect_url
     end
 
