@@ -22,8 +22,14 @@ namespace :import do
       "honours"    => "E-petitions cannot include information about honours or appointments. Find information about nominations for honours at https://www.gov.uk/honours.",
     }
 
+    converters = [
+      ->(value) { value == 'NULL' ? nil : value },
+      ->(value) { value =~ /\A\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\z/ ? Time.strptime(value + ' UTC', '%Y-%m-%d %H:%M:%S %Z') : value },
+      ->(value) { value =~ /\A\d+\z/ ? Integer(value) : value }
+    ]
+
     Sunspot.batch do
-      CSV.foreach(file, headers: true) do |row|
+      CSV.foreach(file, headers: true, converters: converters) do |row|
         if ArchivedPetition::STATES.include?(row['state'])
           petition = ArchivedPetition.find_or_initialize_by(id: row['id'])
 
