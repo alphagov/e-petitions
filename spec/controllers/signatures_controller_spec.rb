@@ -66,8 +66,12 @@ describe SignaturesController do
 
       it "should set state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
-        signature.reload
-        expect(signature.state).to eq(Signature::VALIDATED_STATE)
+        expect(signature.reload.state).to eq(Signature::VALIDATED_STATE)
+      end
+
+      it "should set petition creator signature state to validated" do
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        expect(petition.creator_signature.reload.state).to eq(Signature::VALIDATED_STATE)
       end
 
       it 'sends email notification to the petition creator' do
@@ -81,7 +85,7 @@ describe SignaturesController do
       it 'updates petition sponsored state' do
         allow(Signature).to receive(:find).with(signature.to_param).and_return signature
         allow(signature).to receive(:petition).and_return petition
-        expect(petition).to receive(:update_sponsored_state)
+        expect(petition).to receive(:update_state_after_new_validated_sponsor!)
         get :verify, :id => signature.id, :token => signature.perishable_token
       end
 
@@ -231,9 +235,6 @@ describe SignaturesController do
       end
     end
 
-    ### How to reduce code? use behaves_like?
-    ### good way to split up the contexts?
-    ### how to make one assertion per test? email and redirect are currently linked?
     context "signature with same name/email/postcode" do
       let(:signature_params) do
         {

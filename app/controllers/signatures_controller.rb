@@ -1,6 +1,6 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  before_filter :retrieve_signature, :only => [:signed, :unsubscribe]
+  before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
   include ActionView::Helpers::NumberHelper
 
   respond_to :html
@@ -21,7 +21,7 @@ class SignaturesController < ApplicationController
   end
 
   def verify
-    fetch_signature
+    verify_token
     @petition = @signature.petition
 
     if @signature.validated?
@@ -33,11 +33,11 @@ class SignaturesController < ApplicationController
 
     if @signature.sponsor?
       send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
-      @petition.update_validated_state
-      @petition.update_sponsored_state
-      redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
+      @petition.validate_creator_signature!
+      @petition.update_state_after_new_validated_sponsor!
+      redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
-      redirect_to signed_petition_signature_url(@petition, @signature) and return
+      redirect_to signed_petition_signature_url(@petition, @signature)
     end
   end
 
@@ -54,10 +54,10 @@ class SignaturesController < ApplicationController
 
   private
 
-  def fetch_signature
-    @signature = Signature.find(params[:id])
+  def verify_token
     raise ActiveRecord::RecordNotFound unless @signature.perishable_token == params[:token]
   end
+  
   def retrieve_petition
     @petition = Petition.visible.find(params[:petition_id])
   end
