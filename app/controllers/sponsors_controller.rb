@@ -11,6 +11,8 @@ class SponsorsController < ApplicationController
       redirect_to petition_url(@petition)
     elsif @petition.open?
       redirect_to sign_petition_signature_url(@petition)
+    elsif @petition.has_maximum_sponsors?
+      redirect_to moderation_info_petition_url(@petition)
     else
       assign_stage
       @sponsor = @petition.sponsors.build

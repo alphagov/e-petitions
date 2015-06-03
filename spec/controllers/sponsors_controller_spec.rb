@@ -69,6 +69,22 @@ describe SponsorsController do
         get :show, petition_id: hidden_petition, token: hidden_petition.sponsor_token
       }.to raise_error ActiveRecord::RecordNotFound
     end
+
+    context 'petition has reached maximum amount of sponsors' do
+      it 'redirects to petition moderation info page when petition is in sponsored state' do
+        sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: sponsored_petition, token: sponsored_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{sponsored_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
+
+      it 'redirects to petition moderation info page when petition is in validated state' do
+        validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: validated_petition, token: validated_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
+    end
   end
 
   context 'PATCH update' do

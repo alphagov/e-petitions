@@ -57,6 +57,10 @@ class PetitionsController < ApplicationController
     SignatureConfirmer.new(@petition, params[:confirmation_email], PetitionMailer, EMAIL_REGEX).confirm!
   end
 
+  def moderation_info
+    @petition = Petition.find(params[:id])
+  end
+
   protected
 
   def sanitise_state_param

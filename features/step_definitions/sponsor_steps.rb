@@ -75,6 +75,14 @@ Then(/^I will see 404 error page$/) do
   expect(page.status_code).to eq 404
 end
 
+Given(/^the petition I want to sign has enough sponsors and is (validated|sponsored)?$/) do |state|
+  @sponsor_petition = FactoryGirl.create(:open_petition, state: state, sponsor_count: AppConfig.sponsor_count_max)
+end
+
+Then(/^I am redirected to the petition moderation info page$/) do
+  expect(current_path).to eq(moderation_info_petition_path(@sponsor_petition))
+end
+
 When(/^I visit the \"sponsor this petition\" url I was given$/) do
   visit petition_sponsor_path(@sponsor_petition, token: @sponsor_petition.sponsor_token)
 end

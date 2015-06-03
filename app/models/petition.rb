@@ -222,5 +222,9 @@ class Petition < ActiveRecord::Base
   def update_sponsored_state
     update_attribute(:state, SPONSORED_STATE) if self.on_sponsor_moderation_threshold?
   end
+
+  def has_maximum_sponsors?
+    sponsors.count >= AppConfig.sponsor_count_max && (state == SPONSORED_STATE || state == VALIDATED_STATE)
+  end
 end
 

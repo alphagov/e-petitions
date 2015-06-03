@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     member do
       post 'resend_confirmation_email'
       get  'thank-you', :action => :thank_you, :as => :thank_you
+      get  'moderation-info', :action => :moderation_info, :as => :moderation_info
     end
     resources :sponsors, only: [:show, :update], param: :token do
       get 'thank-you', on: :member
