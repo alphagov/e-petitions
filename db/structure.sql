@@ -101,7 +101,7 @@ CREATE SEQUENCE archived_petitions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
-    NO MAXVALUE
+    MAXVALUE 99999
     CACHE 1;
 
 
@@ -183,9 +183,9 @@ CREATE TABLE petitions (
 --
 
 CREATE SEQUENCE petitions_id_seq
-    START WITH 1
+    START WITH 100000
     INCREMENT BY 1
-    NO MINVALUE
+    MINVALUE 100000
     NO MAXVALUE
     CACHE 1;
 
@@ -529,4 +529,6 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 SET search_path TO "$user",public;
 
 INSERT INTO schema_migrations (version) VALUES ('20150602200239');
+
+INSERT INTO schema_migrations (version) VALUES ('20150603033108');
 

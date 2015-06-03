@@ -604,5 +604,13 @@ describe Petition do
       end
     end
   end
+
+  describe "#id" do
+    let(:petition){ FactoryGirl.create(:petition) }
+
+    it "is greater than 100000" do
+      expect(petition.id).to be >= 100000
+    end
+  end
 end
 
