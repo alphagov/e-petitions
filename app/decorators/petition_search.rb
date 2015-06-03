@@ -47,7 +47,7 @@ class PetitionSearch
   end
 
   def execute_search_query
-    Petition.search do |query|
+    Petition.solr_search do |query|
       query.fulltext search_term_sanitised
       query.paginate page: @params[:page], per_page: 50
       case state
@@ -65,7 +65,7 @@ class PetitionSearch
   end
 
   def execute_search_for_create_petition_query
-    Petition.search do |query|
+    Petition.solr_search do |query|
       query.fulltext search_term_sanitised
       query.paginate page: 1, per_page: 3
       query.with(:state, ['open', 'rejected'])
@@ -74,7 +74,7 @@ class PetitionSearch
   end
 
   def execute_result_counts_query
-    Petition.search do |query|
+    Petition.solr_search do |query|
       query.fulltext search_term_sanitised
       query.facet(:state) do
         row(:open) do

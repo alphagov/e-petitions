@@ -1,3 +1,5 @@
+require 'textacular/searchable'
+
 class ArchivedPetition < ActiveRecord::Base
   OPEN_STATE = 'open'
   REJECTED_STATE = 'rejected'
@@ -7,22 +9,18 @@ class ArchivedPetition < ActiveRecord::Base
   validates :description, presence: true, length: { maximum: 1000 }
   validates :state, presence: true, inclusion: STATES
 
-  searchable do
-    text :title
-    text :description
-    time :created_at, trie: true
-  end
+  extend Searchable(:title, :description)
 
   class << self
     def search(params)
       query = params[:q].to_s
       page  = [params[:page].to_i, 1].max
 
-      solr_search do
-        fulltext query
-        paginate page: page, per_page: 20
-        order_by 'created_at', 'asc'
-      end.results
+      basic_search(query).
+        except(:select).
+        select(arel_table[Arel.star]).
+        reorder(:created_at).
+        paginate(page: page, per_page: 20)
     end
   end
 
