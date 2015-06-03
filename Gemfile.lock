@@ -258,6 +258,8 @@ GEM
     sunspot_solr (2.2.0)
     tabnav (1.2.0)
       actionpack (>= 2.3.8)
+    textacular (3.2.2)
+      activerecord (>= 3.0, < 5.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -317,6 +319,7 @@ DEPENDENCIES
   sunspot_rails
   sunspot_solr
   tabnav
+  textacular
   uglifier
   webmock
   whenever
