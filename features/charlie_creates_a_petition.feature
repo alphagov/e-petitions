@@ -26,9 +26,8 @@ Scenario: Charlie creates our petition
   Given I start a new petition
   And I fill in the petition details
   And I press "Next"
-  And I fill in my details with postcode "N1 1TY"
+  And I fill in my details
   And I press "Next"
-  Then I should see my constituency "Islington South and Finsbury"
   When I press "Next"
   Then the markup should be valid
   When I press "Submit"

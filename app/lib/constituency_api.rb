@@ -7,13 +7,12 @@ module ConstituencyApi
   class Client
     include Faraday
     URL = 'http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
-    TIMEOUT = 10
+    TIMEOUT = 5
     
     def self.constituencies(postcode)
       response = call_api(postcode)
       parse_constituencies(response)
     end
-    
     
     def self.parse_constituencies(response)
       return [] unless response["Constituencies"]
@@ -33,8 +32,10 @@ module ConstituencyApi
                                        "request #{URL}/#{postcode_param(postcode)}/")
       end
       Hash.from_xml(response.body)
-    rescue Faraday::TimeoutError
+    rescue Faraday::Error::TimeoutError
       raise ConstituencyApiError.new("Timeout after #{TIMEOUT} seconds")
+    rescue Faraday::Error => e
+      raise ConstituencyApiError.new("Network error - #{e}")
     end
     
     def self.postcode_param(postcode)
