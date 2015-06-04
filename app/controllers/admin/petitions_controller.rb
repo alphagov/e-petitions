@@ -86,9 +86,9 @@ class Admin::PetitionsController < Admin::AdminController
       @petition.state = Petition::REJECTED_STATE
     end
 
-    # send rejection email
+    # send rejection emails
     if @petition.save
-      PetitionMailer.notify_creator_that_petition_is_rejected(@petition.creator_signature).deliver_now
+      PetitionMailer.petition_rejected(@petition).deliver_now
     end
   end
 end

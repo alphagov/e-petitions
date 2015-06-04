@@ -1,0 +1,17 @@
+<p>e-petition "<%= @petition.title %>" hasn't been accepted.</p>
+
+<%= @petition.rejection_description.html_safe %>
+
+<% if @petition.rejection_text.present? %>
+<p><%= raw auto_link(h(@petition.rejection_text)) %></p>
+<% end %>
+
+<% if @petition.state != Petition::HIDDEN_STATE -%>
+  <p><%= link_to 'View your rejected e-petition', petition_url(@petition) %></p>
+<% end -%>
+
+<p>If you'd like to submit a new e-petition, please read the site's terms and conditions which explain the rules in detail.</p>
+
+<p>Thanks,</p>
+
+<p>HM Government e-petitions <%= link_to home_url, home_url %></p>

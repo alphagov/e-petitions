@@ -22,9 +22,11 @@ class PetitionMailer < ApplicationMailer
     mail(:subject => "HM Government e-petitions: Your e-petition has been published", :to => @signature.email)
   end
 
-  def notify_creator_that_petition_is_rejected(signature)
-    @signature = signature
-    mail(:subject => "HM Government e-petitions: Your e-petition has been rejected", :to => @signature.email)
+  def petition_rejected(petition)
+    @petition = petition
+    to = @petition.creator_signature.email
+    bcc = @petition.sponsor_signatures.validated.map(&:email)
+    mail(:subject => "HM Government e-petitions: e-petition has been rejected", :to => to, :bcc => bcc)
   end
 
   def notify_signer_of_threshold_response(petition, signature)

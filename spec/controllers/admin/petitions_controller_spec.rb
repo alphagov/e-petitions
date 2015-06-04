@@ -275,10 +275,26 @@ describe Admin::PetitionsController do
         end
 
         it "sends an email to the petition creator" do
+          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
           email = ActionMailer::Base.deliveries.last
           expect(email.from).to eq(["no-reply@example.gov"])
           expect(email.to).to eq(["john@example.com"])
-          expect(email.subject).to match(/Your e-petition has been rejected/)
+          expect(email.subject).to match(/e-petition has been rejected/)
+        end
+
+        it "sends an email to validated petition sponsors" do
+          validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: @petition)
+          validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: @petition)
+          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
+          email = ActionMailer::Base.deliveries.last
+          expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
+        end
+
+        it "does not send an email to pending petition sponsors" do
+          pending_sponsor  = FactoryGirl.create(:sponsor, :pending, petition: @petition)
+          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
+          email = ActionMailer::Base.deliveries.last
+          expect(email.bcc).not_to include([pending_sponsor.signature.email])
         end
 
         it "reject fails when no reason code given" do
