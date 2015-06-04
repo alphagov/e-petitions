@@ -1,9 +1,10 @@
 /* Global footer */
 
 #footer {
+  border-top: 10px solid $house-of-commons-green;
   background-color: $panel-colour;
   padding-top: $gutter;
-  border-top: 10px solid $house-of-commons-green;
+  padding-bottom: $gutter *1.5;
 
   a {
     color: $black;
@@ -17,7 +18,8 @@
     margin-bottom: $gutter;
   }
   li {
-    margin-bottom: $gutter-half;
+    @include core-16;
+    margin-bottom: $gutter-one-third;
   }
 
   .open-government-licence {
@@ -49,9 +51,9 @@
         height: 17px;
         overflow:hidden;
         text-indent: -999em;
-        background: image-url("logos/open-government-licence.png") 0 0 no-repeat;
+        background: image-url("/images/graphics/graphic_open-government-licence.png") 0 0 no-repeat;
         @include device-pixel-ratio() {
-          background-image: image-url("logos/open-government-licence_2x.png");
+          background-image: image-url("/images/graphics/graphic_open-government-licence-2x.png");
           background-size: 41px 17px;
         }
       }
@@ -68,7 +70,7 @@
 .copyright {
   @include core-16;
 
-  margin: 30px 0 0 0;
+  margin: $gutter*1.5 0 0 0;
   width: 100%;
   display: block;
   text-align: center;
@@ -87,41 +89,8 @@
     width: 24%;
   }
 
-  .crest-parliament {
-    @include inline-block;
-    width: 48px;
-    height: 60px;
-    margin-right: 60px;
-
-    background-image: image-url("logos/parliament-crest.png");
-    background-repeat: no-repeat;
-
-    @include device-pixel-ratio() {
-      background-image: image-url("logos/parliament-crest-2x.png");
-      background-size: 48px 60px;
-    }
-
-    @include ie(6) {
-      background-image: image-url("logos/parliament-crest-ie.png");
-    }
-  }
-
-  .crest-hm-gov {
-    @include inline-block;
-    width: 73px;
-    height: 60px;
-
-    background-image: image-url("logos/hm-gov-crest.png");
-    background-repeat: no-repeat;
-
-    @include device-pixel-ratio() {
-      background-image: image-url("logos/hm-gov-crest-2x.png");
-      background-size: 73px 60px;
-    }
-
-    @include ie(6) {
-      background-image: image-url("logos/hm-gov-crest-ie.png");
-    }
+  .graphic-portcullis-large-grey {
+    margin-right: $gutter *1.5;
   }
 
   a {
@@ -130,7 +99,7 @@
     text-align: center;
     text-decoration: none;
 
-    margin-top: 10px;
+    margin-top: $gutter-half;
 
     @include media(tablet) {
       text-align: right;
