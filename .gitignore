@@ -18,6 +18,9 @@
 # Ignore precompiled assets
 /public/assets
 
+# Ignore deployment packages
+/pkg
+
 # Dotenv 2.0 uses a .env.local for local overrides
 .env.local
 
