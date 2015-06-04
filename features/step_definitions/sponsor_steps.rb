@@ -75,7 +75,7 @@ Then(/^I will see 404 error page$/) do
   expect(page.status_code).to eq 404
 end
 
-Given(/^the petition I want to sign has enough sponsors and is (validated|sponsored)?$/) do |state|
+Given(/^the petition I want to sign has enough sponsors and is (validated|sponsored|pending)?$/) do |state|
   @sponsor_petition = FactoryGirl.create(:open_petition, state: state, sponsor_count: AppConfig.sponsor_count_max)
 end
 

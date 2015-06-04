@@ -57,7 +57,13 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I am redirected to the petition moderation info page
 
   Scenario: Laura is the 21th sponsor that wants to sign the sponsored petition
-    Given the petition I want to sign has enough sponsors and is validated
+    Given the petition I want to sign has enough sponsors and is sponsored
+    When I visit the "sponsor this petition" url I was given
+    Then I should be connected to the server via an ssl connection
+    And I am redirected to the petition moderation info page
+
+  Scenario: Laura is the 21th sponsor that wants to sign the pending petition
+    Given the petition I want to sign has enough sponsors and is pending
     When I visit the "sponsor this petition" url I was given
     Then I should be connected to the server via an ssl connection
     And I am redirected to the petition moderation info page

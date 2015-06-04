@@ -84,6 +84,13 @@ describe SponsorsController do
         redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
+
+      it 'redirects to petition moderation info page when petition is in pending state' do
+        pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: pending_petition, token: pending_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{pending_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
     end
   end
 

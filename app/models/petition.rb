@@ -224,7 +224,11 @@ class Petition < ActiveRecord::Base
   end
 
   def has_maximum_sponsors?
-    sponsors.count >= AppConfig.sponsor_count_max && (state == SPONSORED_STATE || state == VALIDATED_STATE)
+    sponsors.count >= AppConfig.sponsor_count_max && stop_collecting_sponsors_states
+  end
+
+  def stop_collecting_sponsors_states
+    state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
   end
 end
 
