@@ -1,32 +1,29 @@
-<%= form_row :for => [signature, :name] do %>
-  <%= f.label :name %>
-  <%= f.text_field :name, :tabindex => increment, :maxlength => 255  %>
-  <%= error_messages_for_field signature, :name %>
-  <div class="tip">
-    <div class="arrow"></div>
-    <p>Give your full name, not the name of a company or organisation.</p>
-  </div>
+<%= form_row :for => [signature, :uk_citizenship], :class => 'uk-citizen' do %>
+  <span class="form-label">Only British citizens or UK residents have the right to sign.</span>
+  <%= error_messages_for_field signature, :uk_citizenship %>
+  <%= f.label :uk_citizenship,  :class => 'block-label', :for => nil do  %>
+    <%# Don't use rails' checkbox helper when nesting because it creates two checkboxes, which is not valid markup inside the label %>
+    <%= f.check_box :uk_citizenship, :tabindex => increment %>
+    Yes, I am a British citizen or UK resident
+  <% end %>
+<% end %>
 
+<%= form_row :for => [signature, :name] do %>
+  <%= f.label :name, :class => 'form-label' %>
+  <%= error_messages_for_field signature, :name %>
+  <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
 <% end %>
 
 <%= render 'signatures/email', f: f, signature: signature %>
 
-<%= form_row :class => 'checkbox_row', :for => [signature, :uk_citizenship] do %>
-  <%= f.check_box :uk_citizenship, :tabindex => increment %>
-  <%= f.label :uk_citizenship,
-      "Yes, I am a British citizen or UK resident"
-      %>
-  <%= error_messages_for_field signature, :uk_citizenship %>
+<%= form_row :for => [signature, :country] do %>
+  <%= f.label :country, :class => 'form-label' %>
+  <%= error_messages_for_field signature, :country %>
+  <%= f.select :country, countries_for_select, {}, :tabindex => increment, :class => 'form-control' %>
 <% end %>
 
 <%= form_row :for => [signature, :postcode] do %>
-  <%= f.label :postcode %>
-  <%= f.text_field :postcode, :class => 'postcode', :tabindex => increment %>
+  <%= f.label :postcode, :class => 'form-label' %>
   <%= error_messages_for_field signature, :postcode %>
-<% end %>
-
-<%= form_row :for => [signature, :country] do %>
-  <%= f.label :country %>
-  <%= f.select :country, countries_for_select, {}, :tabindex => increment %>
-  <%= error_messages_for_field signature, :country %>
+  <%= f.text_field :postcode, :tabindex => increment, :class => 'form-control small' %>
 <% end %>

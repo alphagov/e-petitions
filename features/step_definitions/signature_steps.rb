@@ -8,7 +8,7 @@ When /^I decide to sign the petition$/ do
 end
 
 When /^I try to sign$/ do
-  click_button "Sign this e-petition"
+  click_button "Sign this petition"
 end
 
 Then /^I have not yet signed the petition$/ do
@@ -83,7 +83,6 @@ When /^I fill in my details and sign a petition$/ do
   steps %Q(
     When I go to the new signature page for "Do something!"
     And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
-    And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details
     And I try to sign

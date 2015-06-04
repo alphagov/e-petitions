@@ -8,9 +8,19 @@ Feature: Suzie signs a petition
     And all petitions have had their signatures counted
 
   Scenario: Suzie signs a petition after validating her email
+    When I decide to sign the petition
+    And I fill in my details
+    And I try to sign
+    And I say I am happy with my email address
+    Then I have not yet signed the petition
+    And "womboid@wimbledon.com" should receive 1 email
+    When I confirm my email address
+    And all petitions have had their signatures counted
+    Then I should have signed the petition
+
+  Scenario: Suzie signs a petition after validating her email
     When I go to the new signature page for "Do something!"
     And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
-    And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details with email "womboid@wimbledon.com"
     And I fill in my postcode with "N1 1TY"
@@ -23,7 +33,7 @@ Feature: Suzie signs a petition
     And "womboidian@wimbledon.com" should receive 1 email
     When I confirm my email address
     Then I am taken to a landing page
-    And I should see my constituency "Islington South and Finsbury"	
+    And I should see my constituency "Islington South and Finsbury"
     And I can click on a link to return to the petition
     And I should have signed the petition
 
@@ -39,18 +49,6 @@ Feature: Suzie signs a petition
     When I confirm my email address
     Then I am taken to a landing page
     And I should not see the text "Your constituency is"
-
-    @javascript
-  Scenario: Suzie signs a petition after validating her email (javascript run-through)
-    When I decide to sign the petition
-    And I fill in my details
-    And I try to sign
-    And I say I am happy with my email address
-    Then I have not yet signed the petition
-    And "womboid@wimbledon.com" should receive 1 email
-    When I confirm my email address
-    And all petitions have had their signatures counted
-    Then I should have signed the petition
 
   Scenario: Suzie cannot sign if she is not a UK citizen
     When I decide to sign the petition

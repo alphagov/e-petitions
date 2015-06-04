@@ -51,7 +51,7 @@
         height: 17px;
         overflow:hidden;
         text-indent: -999em;
-        @include background-image("/images/graphics/graphic_open-government-licence", 41, 17);
+        @include background-image("/images/graphics/graphic_open-government-licence", 41px, 17px);
         background-position: 0 0;
         background-repeat: no-repeat;
       }

@@ -1,0 +1,16 @@
+select.form-control {
+  -webkit-appearance: menulist;
+}
+
+.form-control.small {
+  width: 8.5em;
+}
+
+.form-group.error {
+  margin-left: -15px;
+}
+
+// Replication .form-label-bold without the font
+.error .form-label {
+  @extend .form-label-bold;
+}

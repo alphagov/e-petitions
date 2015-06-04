@@ -7,7 +7,6 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
 
   Scenario: Laura signs the petition she is a sponsor of
     When I visit the "sponsor this petition" url I was given
-    Then the markup should be valid
     And I should be connected to the server via an ssl connection
     When I fill in my details as a sponsor
     And I try to sign
@@ -30,7 +29,6 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Given the petition I want to sign is sponsored
     When I visit the "sponsor this petition" url I was given
     Then I should be connected to the server via an ssl connection
-    And the markup should be valid
 
   Scenario: Laura wants to sign the petition that is closed
     Given the petition I want to sign has been closed
