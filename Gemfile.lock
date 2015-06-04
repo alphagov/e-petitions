@@ -128,7 +128,6 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
-    memcache-client (1.8.5)
     method_source (0.8.2)
     mime-types (2.5)
     mini_portile (0.6.2)
@@ -298,7 +297,6 @@ DEPENDENCIES
   faraday_middleware
   json
   launchy
-  memcache-client
   newrelic_rpm
   nokogiri
   pg

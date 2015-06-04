@@ -21,8 +21,5 @@ class AppConfig
       end
     end
 
-    def memcached_namespace
-      "#{self.memcached_namespace_base}_#{Rails.env}"
-    end
   end
 end

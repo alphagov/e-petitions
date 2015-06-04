@@ -10,11 +10,6 @@ namespace :epets do
      end
   end
 
-  desc "Flushes memcached"
-  task :flush_memcached => :environment do
-    Rails.cache.clear
-  end
-
   desc 'Wait for sunspot server to start.'
   task :wait_for_sunspot_to_start => :environment do
     require 'lib/sunspot_server_util'

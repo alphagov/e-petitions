@@ -1,8 +1,5 @@
 defaults: &defaults
   email_from: "no-reply@example.gov"
-  memcached_servers:
-    - "localhost:11211"
-  memcached_namespace_base: "e_petitions"
   email_encryption_key: 'notasecret'
   sponsor_count_min: 5
   sponsor_count_max: 20
