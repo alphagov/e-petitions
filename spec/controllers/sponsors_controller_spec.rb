@@ -41,6 +41,57 @@ describe SponsorsController do
       expect(assigns[:stage_manager].signature).to be_present
       expect(assigns[:stage_manager].signature.petition).to eq petition
     end
+
+    it 'redirects to petition page when the petition is closed' do
+      closed_petition = FactoryGirl.create(:closed_petition)
+      get :show, petition_id: closed_petition, token: closed_petition.sponsor_token
+      redirect_url = "https://petition.parliament.uk/petitions/#{closed_petition.id}"
+      expect(response).to redirect_to redirect_url
+    end
+
+    it 'redirects to petition page when the petition is rejected' do
+      rejected_petition = FactoryGirl.create(:rejected_petition)
+      get :show, petition_id: rejected_petition, token: rejected_petition.sponsor_token
+      redirect_url = "https://petition.parliament.uk/petitions/#{rejected_petition.id}"
+      expect(response).to redirect_to redirect_url
+    end
+
+    it 'redirects to petition sign page if the petition is already published' do
+      published_petition = FactoryGirl.create(:open_petition)
+      get :show, petition_id: published_petition, token: published_petition.sponsor_token
+      redirect_url = "https://petition.parliament.uk/petitions/#{published_petition.id}/signatures/new"
+      expect(response).to redirect_to redirect_url
+    end
+
+    it 'redirects to 404 if the petition is hidden' do
+      hidden_petition = FactoryGirl.create(:hidden_petition)
+      expect {
+        get :show, petition_id: hidden_petition, token: hidden_petition.sponsor_token
+      }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    context 'petition has reached maximum amount of sponsors' do
+      it 'redirects to petition moderation info page when petition is in sponsored state' do
+        sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: sponsored_petition, token: sponsored_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{sponsored_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
+
+      it 'redirects to petition moderation info page when petition is in validated state' do
+        validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: validated_petition, token: validated_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
+
+      it 'redirects to petition moderation info page when petition is in pending state' do
+        pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max)
+        get :show, petition_id: pending_petition, token: pending_petition.sponsor_token
+        redirect_url = "https://petition.parliament.uk/petitions/#{pending_petition.id}/moderation-info"
+        expect(response).to redirect_to redirect_url
+      end
+    end
   end
 
   context 'PATCH update' do

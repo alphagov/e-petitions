@@ -392,6 +392,12 @@ describe Petition do
     end
   end
 
+  describe "#in_moderation?" do
+    it "is in moderation when the state is sponsored" do
+      expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_moderation?).to be_truthy
+    end
+  end
+
   describe "rejection_reason" do
     it "should give rejection reason from json file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
@@ -635,6 +641,38 @@ describe Petition do
 
     it "is greater than 100000" do
       expect(petition.id).to be >= 100000
+    end
+  end
+
+  describe '#has_maximum_sponsors?' do
+    it 'is true when sponsored petition has reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
+    end
+
+    it 'is true when validated petition has reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
+    end
+
+    it 'is true when pending petition has reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
+    end
+
+    it 'is false when sponsored petition has not reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
+    end
+
+    it 'is false when validated petition has not reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
+    end
+
+    it 'is false when validated petition has not reached maximum amount of sponsors' do
+      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
   end
 end

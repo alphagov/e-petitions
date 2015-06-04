@@ -132,6 +132,10 @@ class Petition < ActiveRecord::Base
     self.state == VALIDATED_STATE
   end
 
+  def in_moderation?
+    self.state == SPONSORED_STATE
+  end
+
   def open?
     self.state == OPEN_STATE
   end
@@ -227,5 +231,13 @@ class Petition < ActiveRecord::Base
     if on_sponsor_moderation_threshold?
       update_attribute(:state, SPONSORED_STATE)
     end
+  end
+
+  def has_maximum_sponsors?
+    sponsors.count >= AppConfig.sponsor_count_max && stop_collecting_sponsors_states
+  end
+
+  def stop_collecting_sponsors_states
+    state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
   end
 end
