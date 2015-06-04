@@ -121,7 +121,6 @@ GEM
     i18n (0.7.0)
     json (1.8.2)
     json_pure (1.8.2)
-    kgio (2.9.3)
     launchy (2.4.3)
       addressable (~> 2.3)
     loofah (2.0.1)
@@ -152,6 +151,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    puma (2.11.3)
+      rack (>= 1.1, < 2.0)
     rabl (0.11.6)
       activesupport (>= 2.3.14)
     rack (1.6.0)
@@ -185,7 +186,6 @@ GEM
       activesupport (= 4.2.1)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    raindrops (0.13.0)
     rake (10.4.2)
     request_store (1.1.0)
     responders (2.1.0)
@@ -259,10 +259,6 @@ GEM
     timecop (0.7.3)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    unicorn (4.9.0)
-      kgio (~> 2.6)
-      rack
-      raindrops (~> 0.7)
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -303,6 +299,7 @@ DEPENDENCIES
   pickle
   poltergeist
   pry
+  puma
   rabl
   rails (= 4.2.1)
   rails_autolink
@@ -316,7 +313,6 @@ DEPENDENCIES
   sunspot_solr
   tabnav
   timecop
-  unicorn
   webmock
   whenever
   will_paginate
