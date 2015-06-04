@@ -6,11 +6,11 @@ Given(/^I have been told about a petition that needs sponsoring$/) do
 end
 
 Given(/^I have created an e\-petition and told people to sponsor it$/) do
-  @sponsor_petition = FactoryGirl.create(:open_petition,
+  @sponsor_petition = FactoryGirl.create(:pending_petition,
     title: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
-    state: Petition::VALIDATED_STATE,
-    creator_signature_attributes: {email: 'charlie.the.creator@example.com'} )
+    state: Petition::PENDING_STATE,
+    creator_signature_attributes: { email: 'charlie.the.creator@example.com' })
 end
 
 When(/^a sponsor supports my e\-petition$/) do

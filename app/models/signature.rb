@@ -73,15 +73,9 @@ class Signature < ActiveRecord::Base
     notify_by_email == false
   end
 
-  def validate_from_token!(token)
-    return false if perishable_token.nil? || self.validated?
-    if perishable_token == token
-      self.update_columns(perishable_token: nil, state: Signature::VALIDATED_STATE)
-      self.touch
-      true
-    else
-      false
-    end
+  def validate!
+    self.update_columns(state: Signature::VALIDATED_STATE)
+    self.touch
   end
 
   def postal_district
@@ -91,7 +85,7 @@ class Signature < ActiveRecord::Base
   def unsubscribe!
     self.update(notify_by_email: false)
   end
-    
+
   def constituency
     @constituency ||= ConstituencyApi::Client.constituencies(self.postcode).first
   rescue ConstituencyApi::ConstituencyApiError => e

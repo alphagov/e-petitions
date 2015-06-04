@@ -526,22 +526,47 @@ describe Petition do
     end
   end
 
-  describe "#update_sponsored_state" do
+  describe "#update_state_after_new_validated_sponsor!" do
     context "with sufficient sponsor count" do
       let(:petition){ FactoryGirl.create(:validated_petition, sponsors_signed: true) }
 
       it "sets state to sponsored" do
-        expect{petition.update_sponsored_state}.to change{petition.state}
-                                                    .from(Petition::VALIDATED_STATE)
-                                                    .to(Petition::SPONSORED_STATE)
+        expect{petition.update_state_after_new_validated_sponsor!}.to change{petition.state}
+                                                                       .from(Petition::VALIDATED_STATE)
+                                                                       .to(Petition::SPONSORED_STATE)
       end
     end
-
     context "with insufficient sponsor count" do
       let(:petition){ FactoryGirl.create(:validated_petition) }
 
       it "leaves state unchanged" do
-        expect{petition.update_sponsored_state}.to_not change{petition.state}
+        expect{petition.update_state_after_new_validated_sponsor!}.to_not change{petition.state}
+      end
+    end
+    context "with first validated sponsor" do
+      let(:petition){ FactoryGirl.create(:pending_petition) }
+      let(:sponsor){ FactoryGirl.create(:sponsor, :validated, petition: petition) }
+
+      it "changes state to validated" do
+        sponsor.reload
+        expect{petition.update_state_after_new_validated_sponsor!}.to change{petition.state}
+                                                                       .from(Petition::PENDING_STATE)
+                                                                       .to(Petition::VALIDATED_STATE)
+      end
+    end
+  end
+
+  describe "#validate_creator_signature!" do
+    context "with first validated sponsor" do
+
+      let(:petition){ FactoryGirl.create(:pending_petition) }
+      let(:sponsor){ FactoryGirl.create(:sponsor, :validated, petition: petition) }
+
+      it "changes creator signature state to validated" do
+        sponsor.reload
+        expect{petition.validate_creator_signature!}.to change{petition.creator_signature.state}
+                                                         .from(Signature::PENDING_STATE)
+                                                         .to(Signature::VALIDATED_STATE)
       end
     end
   end
@@ -613,4 +638,3 @@ describe Petition do
     end
   end
 end
-

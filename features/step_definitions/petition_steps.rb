@@ -213,3 +213,13 @@ end
 Then /^I should not see the text "([^"]*)"/ do |text|
   expect(page).to_not have_text(text)
 end
+
+Then(/^the e\-petition should be validated$/) do
+  @sponsor_petition.reload
+  expect(@sponsor_petition.state).to eq Petition::VALIDATED_STATE
+end
+
+Then(/^the e\-petition creator signature should be validated$/) do
+  @sponsor_petition.reload
+  expect(@sponsor_petition.creator_signature.state).to eq Signature::VALIDATED_STATE
+end

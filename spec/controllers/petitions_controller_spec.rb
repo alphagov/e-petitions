@@ -71,15 +71,6 @@ describe PetitionsController do
         petition = Petition.find_by_title!('Save the planet')
       end
 
-      it "should send verification email to petition's creator" do
-        ActionMailer::Base.deliveries.clear
-        do_post
-        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Email address confirmation/ }
-        expect(email).to be_present
-        expect(email.from).to eq(["no-reply@example.gov"])
-        expect(email.to).to eq(["john@example.com"])
-      end
-
       it "should send gather sponsors email to petition's creator" do
         ActionMailer::Base.deliveries.clear
         do_post

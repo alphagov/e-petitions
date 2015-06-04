@@ -2,11 +2,6 @@ class PetitionMailer < ApplicationMailer
   include ActionView::Helpers::NumberHelper
   add_template_helper(DateTimeHelper)
 
-  def email_confirmation_for_creator(signature)
-    @signature = signature
-    mail(:subject => "HM Government e-petitions: Email address confirmation", :to => @signature.email)
-  end
-
   def email_confirmation_for_signer(signature)
     @signature = signature
     mail(:subject => "HM Government e-petitions: Email address confirmation", :to => @signature.email)

@@ -397,63 +397,21 @@ describe Signature do
     end
   end
 
-  describe '#validate_from_token!' do
+  describe '#validate!' do
     subject { FactoryGirl.create(:pending_signature) }
 
-    it 'returns false if the signature has no token' do
-      subject.perishable_token = nil
-      expect(subject.validate_from_token!('any-token')).to be_falsey
-      expect(subject.validate_from_token!(nil)).to be_falsey
+    it 'transitions the signature to the validated state' do
+      subject.validate!
+      expect(subject).to be_validated
     end
 
-    it 'returns false if the signature is already validated' do
-      subject.state = Signature::VALIDATED_STATE
-      expect(subject.validate_from_token!(subject.perishable_token)).to be_falsey
-      expect(subject.validate_from_token!('any-token')).to be_falsey
-      expect(subject.validate_from_token!(nil)).to be_falsey
-    end
+    it 'timestamps the signature to say it was updated just now' do
+      now = Chronic.parse("1 Jan 2011").utc
+      # Unlike our code which uses Time.current, AR actually uses Time.now to do timestamping
+      allow(Time).to receive(:now).and_return(now)
 
-    context 'when the supplied token matches the signatures perishable_token' do
-      let(:token) { subject.perishable_token }
-      it 'returns true' do
-        expect(subject.validate_from_token!(token)).to be_truthy
-      end
-
-      it 'removes the perishable token from the signature' do
-        subject.validate_from_token!(token)
-        expect(subject.perishable_token).to be_nil
-      end
-
-      it 'transitions the signature to the validated state' do
-        subject.validate_from_token!(token)
-        expect(subject).to be_validated
-      end
-
-      it 'timestamps the signature to say it was updated just now' do
-        now = Chronic.parse("1 Jan 2011").utc
-        # Unlike our code which uses Time.current, AR actually uses Time.now to do timestamping
-        allow(Time).to receive(:now).and_return(now)
-
-        subject.validate_from_token!(token)
-        expect(subject.updated_at).to eq now
-      end
-    end
-
-    context 'when the supplied token does not match the signatures perishable_token' do
-      let(:token) { 'some-token-that-isnt-the-real-thing' }
-      it 'returns false' do
-        expect(subject.validate_from_token!(token)).to be_falsey
-      end
-
-      it 'leaves the perishable token on the signature' do
-        subject.validate_from_token!(token)
-        expect(subject.perishable_token).not_to be_nil
-      end
-
-      it 'leaves the signature in the pending state' do
-        subject.validate_from_token!(token)
-        expect(subject).to be_pending
-      end
+      subject.validate!
+      expect(subject.updated_at).to eq now
     end
   end
 

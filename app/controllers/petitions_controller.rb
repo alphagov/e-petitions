@@ -35,7 +35,6 @@ class PetitionsController < ApplicationController
     assign_stage
     @stage_manager = Staged::PetitionCreator.manager(petition_params_for_create, request, params[:stage], params[:move])
     if @stage_manager.create_petition
-      send_email_to_verify_petition_creator(@stage_manager.petition)
       send_email_to_gather_sponsors(@stage_manager.petition)
       redirect_to thank_you_petition_url(@stage_manager.petition)
     else
@@ -65,10 +64,6 @@ class PetitionsController < ApplicationController
 
   def parse_emails(emails)
     emails.strip.split(/\r?\n/).map { |e| e.strip }
-  end
-
-  def send_email_to_verify_petition_creator(petition)
-    PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
   end
 
   def petition_params_for_new
@@ -109,10 +104,6 @@ class PetitionsController < ApplicationController
   def assign_stage
     return if Staged::PetitionCreator.stages.include? params[:stage]
     params[:stage] = 'petition'
-  end
-
-  def send_email_to_verify_petition_creator(petition)
-    PetitionMailer.email_confirmation_for_creator(petition.creator_signature).deliver_now
   end
 
   def send_email_to_gather_sponsors(petition)
