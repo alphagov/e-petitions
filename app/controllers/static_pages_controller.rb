@@ -1,5 +1,5 @@
 class StaticPagesController < ApplicationController
-  caches_page :how_it_works, :help
+  caches_page :help
   caches_action :home, :expires_in => 5.minutes
 
   def home
