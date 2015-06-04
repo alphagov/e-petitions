@@ -100,7 +100,7 @@ describe SponsorsController do
       {
         name: 'S. Ponsor',
         email: 's.ponsor@example.com',
-        postcode: 'SP1 1NR',
+        postcode: 'SP11NR',
         country: 'United Kingdom',
         uk_citizenship: '1',
         notify_by_email: '0'
