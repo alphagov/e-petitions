@@ -38,22 +38,22 @@ h1 {
 h2, h3, h4 {
   @include bold-19();
 
-  margin-top: em(10, 16);
-  margin-bottom: em(5, 16);
+  margin-top: em(20, 16);
+  margin-bottom: em(10, 16);
 
   @include media(tablet) {
-    margin-top: em(20, 19);
+    margin-top: em(30, 19);
   }
 
 }
 
 p {
   margin-top: em(5, 16);
-  margin-bottom: em(20, 16);
+  margin-bottom: em(15, 16);
 
   @include media(tablet) {
     margin-top: em(5);
-    margin-bottom: em(20);
+    margin-bottom: em(15);
   }
 
 }
@@ -78,4 +78,18 @@ a:hover {
 
 a:active {
   color: $link-colour;
+}
+
+// More heading hierarchy for .text-page
+.text-page h2 {
+  @include bold-24();
+
+  margin-top: em(40, 20);
+  margin-bottom: em(10, 20);
+
+  @include media(tablet) {
+    margin-top: em(60, 24);
+    margin-bottom: em(20, 24);
+  }
+
 }

@@ -3,6 +3,9 @@
 // GOV.UK front end toolkit dependencies
 @import "helpers";
 
+details {
+  margin-bottom: $gutter-half;
+}
 
 // Indented panels with a grey left hand border
 .panel-indent {
