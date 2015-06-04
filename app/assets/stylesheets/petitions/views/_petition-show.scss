@@ -16,47 +16,6 @@
   }
 }
 
-.signature-count-legend-item {
-  color: $secondary-text-colour;
-
-  padding: 0 0 0 50px;
-  h2 {
-    @include bold-36;
-
-    span {
-      @include bold-19;
-    }
-  }
-}
-.signature-count-legend-item.count-10000 {
-  background-image: image-url("logos/hm-gov-crown.png");
-  background-repeat: no-repeat;
-  background-position: 4px 0px;
-  background-size: 35px 25px;
-
-  @include device-pixel-ratio() {
-    background-image: image-url("logos/hm-gov-crown-2x.png");
-  }
-
-  @include ie(6) {
-    background-image: image-url("logos/hm-gov-crown-ie.png");
-  }
-}
-.signature-count-legend-item.count-100000 {
-  background-image: image-url("logos/parliament-crest.png");
-  background-repeat: no-repeat;
-  background-position: 5px 0px;
-  background-size: 32px 40px;
-
-  @include device-pixel-ratio() {
-    background-image: image-url("logos/parliament-crest-2x.png");
-  }
-
-  @include ie(6) {
-    background-image: image-url("logos/parliament-crest-ie.png");
-  }
-}
-
 .petition-share {
   @extend %contain-floats;
   margin: 0 $gutter-half * -1;

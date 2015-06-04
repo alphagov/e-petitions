@@ -1,0 +1,53 @@
+// Petition item
+// =============
+.petition-item {
+  color: $secondary-text-colour;
+  margin-bottom: em(19);
+  a {
+    font-weight: bold;
+  }
+  .count {
+    @include core-36();
+  }
+}
+
+// About item
+// ==========
+.about-item {
+  padding: 0 0 0 50px;
+  h2 {
+    @include bold-36;
+
+    span {
+      @include bold-19;
+    }
+  }
+}
+.about-item-sign {
+  @include background-image("/images/graphics/graphic_pen", 25px, 35px);
+  background-repeat: no-repeat;
+  background-position: 10px 0px;
+}
+.about-item-count-10000 {
+  @include background-image("/images/graphics/graphic_crown", 36px, 25px);
+  background-repeat: no-repeat;
+  background-position: 4px 0px;
+}
+.about-item-count-100000 {
+  @include background-image("/images/graphics/graphic_portcullis", 26px, 32px);
+  background-repeat: no-repeat;
+  background-position: 5px 0px;
+}
+
+// Light variation
+.about-petitions-light {
+  .about-item {
+    color: $secondary-text-colour;
+  }
+  .about-item-count-10000 {
+    @include background-image("/images/graphics/graphic_crown-grey", 35px, 25px);
+  }
+  .about-item-count-100000 {
+    @include background-image("/images/graphics/graphic_portcullis-grey", 26px, 32px);
+  }
+}
