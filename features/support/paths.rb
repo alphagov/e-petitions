@@ -11,9 +11,6 @@ module NavigationHelpers
     when /^the home\s?page$/
       '/'
 
-    when /^the how e-Petitions works page$/
-      how_it_works_path
-
     when /^the help page$/
       help_path
 
