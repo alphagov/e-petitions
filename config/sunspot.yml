@@ -5,9 +5,6 @@ development: &DEV
     log_level: INFO
     path: /solr/development
 
-development_with_caching:
-  <<: *DEV
-
 test: &TEST
   solr:
     hostname: localhost

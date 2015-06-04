@@ -5,20 +5,16 @@ defaults: &defaults
   sponsor_count_max: 20
   sponsor_moderation_threshold: 5
   petition_duration: 6
+  host_for_email: <%= ENV.fetch('EPETITIONS_HOST').inspect %>
   email_protocol: http
 
 development:
   <<: *defaults
-  host_for_email: "localhost:3000"
-
-development_with_caching:
-  <<: *defaults
-  host_for_email: "localhost:3000"
 
 test:
   <<: *defaults
-  host_for_email: "www.example.com"
-  sponsor_count_min: 5
-  sponsor_count_max: 20
-  sponsor_moderation_threshold: 5
+  email_protocol: https
+
+production:
+  <<: *defaults
   email_protocol: https
