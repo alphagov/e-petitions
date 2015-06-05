@@ -16,15 +16,12 @@
   background: $panel-colour;
   border: 1px solid $panel-colour;
   padding: (18px $gutter $gutter-half $gutter*1.5);
-  margin-top: 10px;
-  margin-bottom: 10px;
 
+  margin-bottom: 10px;
   cursor: pointer; // Encourage clicking on block labels
 
   @include media(tablet) {
     float: left;
-    margin-top: 5px;
-    margin-bottom: 5px;
     // width: 25%; - Test : check that text within labels will wrap
   }
 
@@ -40,6 +37,10 @@
   &:hover {
     border-color: $black;
   }
+}
+
+.block-label:last-child {
+  margin-bottom: 0;
 }
 
 // To stack horizontally, use .inline on parent, to sit block labels next to each other
