@@ -20,12 +20,12 @@
 require 'rails_helper'
 
 describe Signature do
-  it "should have a valid factory" do
+  it "has a valid factory" do
     expect(FactoryGirl.build(:signature)).to be_valid
   end
 
   context "defaults" do
-    it "state should default to pending" do
+    it "has pending as default state" do
       s = Signature.new
       expect(s.state).to eq("pending")
     end
@@ -35,7 +35,7 @@ describe Signature do
       expect(s.perishable_token).not_to be_nil
     end
 
-    it "should set notify_by_email to truthy" do
+    it "sets notify_by_email to truthy" do
       s = Signature.new
       expect(s.notify_by_email).to be_truthy
     end
@@ -56,15 +56,15 @@ describe Signature do
     describe "#postcode=" do
       let(:signature) { FactoryGirl.build(:signature) }
 
-      it "should remove all whitespace" do
+      it "removes all whitespace" do
         signature.postcode = " N1  1TY  "
         expect(signature.postcode).to eq "N11TY"
       end
-      it "should upcase the postcode" do
+      it "upcases the postcode" do
         signature.postcode = "n11ty "
         expect(signature.postcode).to eq "N11TY"
       end
-      it "should remove whitespaces and upcase the postcode" do
+      it "removes whitespaces and upcase the postcode" do
         signature.postcode = "   N1  1ty "
         expect(signature.postcode).to eq "N11TY"
       end
@@ -72,7 +72,7 @@ describe Signature do
     describe "#email=" do
       let(:signature) { FactoryGirl.build(:signature) }
 
-      it "should downcase the email" do
+      it "downcases the email" do
         signature.email = "JOE@PUBLIC.COM"
         expect(signature.email).to eq "joe@public.com"
       end
@@ -85,12 +85,12 @@ describe Signature do
     it { is_expected.to validate_presence_of(:country).with_message(/must be completed/) }
     it { is_expected.to validate_length_of(:name).is_at_most(255) }
 
-    it "should validate format of email" do
+    it "validates format of email" do
       s = FactoryGirl.build(:signature, :email => 'joe@example.com')
       expect(s).to have_valid(:email)
     end
 
-    it "should not allow invalid email" do
+    it "does not allow invalid email" do
       s = FactoryGirl.build(:signature, :email => 'not an email')
       expect(s).not_to have_valid(:email)
     end
@@ -177,14 +177,14 @@ describe Signature do
       end
     end
 
-    it "should not allow blank or unknown state" do
+    it "does not allow blank or unknown state" do
       s = FactoryGirl.build(:signature, :state => '')
       expect(s).not_to have_valid(:state)
       s.state = 'unknown'
       expect(s).not_to have_valid(:state)
     end
 
-    it "should allow known states" do
+    it "allows known states" do
       s = FactoryGirl.build(:signature)
       %w(pending validated ).each do |state|
         s.state = state
@@ -249,13 +249,13 @@ describe Signature do
     end
 
     describe "uk_citizenship" do
-      it "should require acceptance of uk_citizenship for a new record" do
+      it "requires acceptance of uk_citizenship for a new record" do
         expect(FactoryGirl.build(:signature, :uk_citizenship => '1')).to be_valid
         expect(FactoryGirl.build(:signature, :uk_citizenship => '0')).not_to be_valid
         expect(FactoryGirl.build(:signature, :uk_citizenship => nil)).not_to be_valid
       end
 
-      it "should not require acceptance of uk_citizenship for old records" do
+      it "does not require acceptance of uk_citizenship for old records" do
         sig = FactoryGirl.create(:signature)
         sig.reload
         sig.uk_citizenship = '0'
@@ -275,7 +275,7 @@ describe Signature do
     let!(:signature5) { FactoryGirl.create(:signature, :email => "person5@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false, :last_emailed_at => two_days_ago) }
 
     context "validated" do
-      it "should return only validated signatures" do
+      it "returns only validated signatures" do
         signatures = Signature.validated
         expect(signatures.size).to eq(5)
         expect(signatures).to include(signature1, signature3, signature4, signature5, petition.creator_signature)
@@ -283,7 +283,7 @@ describe Signature do
     end
 
     context "pending" do
-      it "should return only pending signatures" do
+      it "returns only pending signatures" do
         signatures = Signature.pending
         expect(signatures.size).to eq(1)
         expect(signatures).to include(signature2)
@@ -291,7 +291,7 @@ describe Signature do
     end
 
     context "need emailing" do
-      it "should return only validated signatures who have opted in to receiving email updates" do
+      it "returns only validated signatures who have opted in to receiving email updates" do
         expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
         expect(Signature.need_emailing(two_days_ago)).to include(signature1, signature3, petition.creator_signature)
         expect(Signature.need_emailing(week_ago)).to include(signature1, petition.creator_signature)
@@ -301,17 +301,17 @@ describe Signature do
     context "matching" do
       let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
 
-      it "should return a signature matching in name, email and petition_id" do
+      it "returns a signature matching in name, email and petition_id" do
         signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
         expect(Signature.matching(signature)).to include(signature1)
       end
 
-      it "should not return a signature matching in name, email and different petition" do
+      it "does not return a signature matching in name, email and different petition" do
         signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition_id: 2)
         expect(Signature.matching(signature)).to_not include(signature1)
       end
 
-      it "should not return a signature matching in email, petition and different name" do
+      it "does not return a signature matching in email, petition and different name" do
         signature = FactoryGirl.build(:signature, name: "Josey Public", email: "person1@example.com", petition: petition)
         expect(Signature.matching(signature)).to_not include(signature1)
       end
