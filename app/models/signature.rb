@@ -14,12 +14,11 @@
 #  updated_at       :datetime
 #  notify_by_email  :boolean(1)      default(TRUE)
 #  last_emailed_at  :datetime
-#  encrypted_email  :string(255)
+#  email            :string(255)
 #
 
 class Signature < ActiveRecord::Base
 
-  include EmailEncrypter
   include PerishableTokenGenerator
 
   has_perishable_token
@@ -34,6 +33,7 @@ class Signature < ActiveRecord::Base
   has_one :sponsor
 
   # = Validations =
+  include Staged::Validations::Email
   include Staged::Validations::SignerDetails
   include Staged::Validations::MultipleSigners
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
@@ -42,16 +42,21 @@ class Signature < ActiveRecord::Base
   scope :validated, -> { where(state: VALIDATED_STATE) }
   scope :pending, -> { where(state: PENDING_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
+  scope :for_email, ->(email) { where(email: email) }
   scope :need_emailing, ->(job_datetime) {
     validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
   }
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
-  scope :matching, ->(signature) { where(encrypted_email: signature.encrypted_email,
+  scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,
                                          petition_id: signature.petition_id) }
 
   # = Methods =
   attr_accessor :uk_citizenship
+
+  def email=(value)
+    super(value.to_s.downcase)
+  end
 
   def creator?
     petition.creator_signature == self

@@ -5,7 +5,7 @@ module Staged
 
       included do
         validate do |signature|
-          matcher = ::Signature.where(:encrypted_email => signature.encrypted_email, :petition_id => signature.petition_id)
+          matcher = ::Signature.where(:email => signature.email, :petition_id => signature.petition_id)
           matcher = matcher.where("signatures.id != ?", signature.id) unless signature.new_record?
           existing_email_address_count = matcher.count
           next if existing_email_address_count == 0

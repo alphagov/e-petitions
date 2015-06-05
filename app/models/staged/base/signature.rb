@@ -4,22 +4,19 @@ module Staged
       include ActiveModel::Model
       include ActiveModel::Validations::Callbacks
 
+      attr_reader :signature
+
+      delegate :id, :to_param, :model_name, :to_key, :new_record?, :name,
+               :email, :uk_citizenship, :postcode, :country, :petition_id,
+               to: :signature
+
       def initialize(signature)
         @signature = signature
       end
-      delegate :id, :to_param, :model_name, :to_key, :new_record?,
-               :name, :email, :encrypted_email, :uk_citizenship,
-               :postcode, :country, :petition_id,
-               to: :signature
 
       def validation_context
         :create
       end
-
-      attr_reader :signature
-
-      private
-
     end
   end
 end

@@ -14,7 +14,7 @@
 #  updated_at       :datetime
 #  notify_by_email  :boolean(1)      default(FALSE)
 #  last_emailed_at  :datetime
-#  encrypted_email  :string(255)
+#  email            :string(255)
 #
 
 require 'rails_helper'
@@ -43,21 +43,6 @@ describe Signature do
     it "generates unsubscription token" do
       s = FactoryGirl.create(:signature, :unsubscribe_token=> nil)
       expect(s.unsubscribe_token).not_to be_nil
-    end
-  end
-
-  context "encryption of email" do
-    let(:signature) { FactoryGirl.create(:signature, :email => "foo@example.net") }
-    it "transparently alters the email" do
-      expect(Signature.find(signature.id).email).to eq("foo@example.net")
-    end
-
-    it "take no notice of the case" do
-      expect(FactoryGirl.build(:signature, :email => "FOO@exAmplE.net").encrypted_email).to eq(signature.encrypted_email)
-    end
-
-    it "for_email takes into account the encrypted email" do
-      expect(Signature.for_email("foo@example.net")).to eq([signature])
     end
   end
 
@@ -418,7 +403,7 @@ describe Signature do
   describe "#constituency" do
     let(:constituency1) { ConstituencyApi::Constituency.new(name: "Shoreditch") }
     let(:constituency2) { ConstituencyApi::Constituency.new(name: "Lambeth") }
-    
+
     it "returns a constituency object from the API return array" do
       allow(ConstituencyApi::Client).to receive(:constituencies).with('N1 1TY').and_return([constituency1])
       signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
