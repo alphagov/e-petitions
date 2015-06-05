@@ -6,8 +6,6 @@ gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rails', '4.2.1'
 
 # Legacy Rails feature gems - will no longer be supported in Rails 5.0
-gem 'actionpack-action_caching'
-gem 'actionpack-page_caching'
 gem 'responders'
 gem 'rails_autolink'
 
