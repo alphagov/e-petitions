@@ -1,9 +1,6 @@
 class PetitionsController < ApplicationController
   before_filter :sanitise_page_param
   before_filter :sanitise_state_param
-  caches_action_with_params :index
-
-  caches_page :show
 
   respond_to :html
 
