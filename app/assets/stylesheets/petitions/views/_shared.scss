@@ -1,4 +1,5 @@
 // Common page title
+// =================
 .page-title {
   margin-top: em(40, 36);
   margin-bottom: 1em;
@@ -6,6 +7,25 @@
 .page-subtitle {
   @include bold-27();
   margin-bottom: em(35, 27);
+}
+
+// Notifications
+// =============
+.notification {
+  background-color: $text-colour;
+  color: $white;
+  padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
+  position: relative;
+
+  .icon {
+    position: absolute;
+    top: $gutter-half;
+    left: $gutter-half;
+  }
+
+  .content {
+    margin-top: 0px;
+  }
 }
 
 // Petition item

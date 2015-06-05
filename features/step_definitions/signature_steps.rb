@@ -11,10 +11,9 @@ When /^I try to sign$/ do
   click_button "Sign this petition"
 end
 
-Then /^I have not yet signed the petition$/ do
+Then /^I am told to check my inbox to complete signing$/ do
   expect(page).to have_title("Thank you")
-  click_link("view")
-  expect(page).to have_css("p.signature-count", :text => "1 signatures")
+  expect(page).to have_content("Please check your inbox")
 end
 
 Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
@@ -87,7 +86,7 @@ When /^I fill in my details and sign a petition$/ do
     And I fill in my details
     And I try to sign
     And I say I am happy with my email address
-    Then I have not yet signed the petition
+    Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
   )
 end
