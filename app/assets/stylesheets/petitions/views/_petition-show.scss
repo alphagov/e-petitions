@@ -1,7 +1,7 @@
 .petitions-details {
   border-bottom: 1px solid $panel-colour;
   padding: $gutter-half;
-  margin: 0 $gutter-half * -1;
+  @extend %outdent-to-full-width;
 
   li {
     margin-bottom: $gutter-half;
