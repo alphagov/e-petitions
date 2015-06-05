@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   get '/' => 'static_pages#home', :as => :home
   get 'help' => 'static_pages#help', :as => 'help'
+  get 'ping' => 'ping#ping'
 
   get 'feedback' => 'feedback#index', :as => 'feedback'
   get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
