@@ -341,7 +341,11 @@ class PackageBuilder
     <<-SCRIPT.strip_heredoc
       #!/usr/bin/env bash
       chown -R deploy:deploy /home/deploy/epetitions/releases/#{release}
-      su - deploy -c 'mkdir /home/deploy/epetitions/releases/#{release}/tmp'
+
+      if [ ! -e /home/deploy/epetitions/releases/#{release}/tmp ]; then
+        su - deploy -c 'mkdir /home/deploy/epetitions/releases/#{release}/tmp'
+      fi
+
       su - deploy -c 'ln -nfs /home/deploy/epetitions/shared/log /home/deploy/epetitions/releases/#{release}/log'
       su - deploy -c 'ln -nfs /home/deploy/epetitions/shared/bundle /home/deploy/epetitions/releases/#{release}/vendor/bundle'
       su - deploy -c 'ln -s /home/deploy/epetitions/releases/#{release} /home/deploy/epetitions/current_#{release}'
