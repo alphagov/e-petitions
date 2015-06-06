@@ -184,7 +184,7 @@ class PackageBuilder
   end
 
   def latest_key
-    "#{environment}/latest.tar.gz"
+    "/latest.tar.gz"
   end
 
   def package_gems
@@ -226,11 +226,11 @@ class PackageBuilder
   end
 
   def release_bucket
-    'ubxd-epetitions-releases'
+    "ubxd-epetitions-#{environment}-releases"
   end
 
   def release_key
-    "#{environment}/#{release}.tar.gz"
+    "#{release}.tar.gz"
   end
 
   def remove_archive
