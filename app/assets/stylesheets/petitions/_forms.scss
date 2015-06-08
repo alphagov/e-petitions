@@ -10,6 +10,11 @@ select.form-control {
 
 .form-group.error {
   @extend %outdent-to-full-width;
+
+  @include media(tablet) {
+    padding-left: $gutter - 5px;
+    padding-right: $gutter;
+  }
 }
 
 // Replication .form-label-bold without the font
@@ -21,10 +26,8 @@ select.form-control {
   padding: 0.5em;
 }
 
-.error,
-.error-summary {
-  @include media(tablet) {
-    padding-left: $gutter - 5px;
-    padding-right: $gutter;
-  }
+.character-count {
+  color: $secondary-text-colour;
+  display: block;
+  text-align: right;
 }

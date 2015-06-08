@@ -1,23 +1,22 @@
 <% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Create a new e-petition</h1>
-</div>
+
+<%= link_to check_petitions_path, class: "back-page" do %>
+  &#9666; Back <span class="visuallyhidden"> to previous page</span>
 <% end %>
 
-<%= render "pre_creation_search_form" %>
+<% if @petitions.empty? %>
+  <h1 class="page-title">We did not find any similar petitions</h1>
+  <p>We didn't find any existing petitions that match your subject, click the 'Create a new petition' button to continue.</p>
+  <% create_button_text = "Create a new petition" -%>
+<% else %>
+  <h1 class="page-title">We found some similar petitions</h1>
+  <p>If there's already a petition on the same topic, your petition is likely to be rejected</p>
+  <%= render 'search/results_for_pre_create_petition', petitions: @petitions %>
+  <% create_button_text = "My petition is different" -%>
+  <%= render 'shared/notification', text: 'If there\'s already a petition on the same topic, your petition is likely to be rejected' %>
 
-<div class="petition_index_view">
-  <div class="petition_pre_create_results">
-    <% if @petitions.empty? %>
-      <p class="no_petitions_warning">We didn't find any existing e-petitions that match your subject, click the 'Create e-petition' button to continue.</p>
-    <% else %>
-      <%= render 'search/results_for_pre_create_petition', petitions: @petitions %>
-    <% end %>
-  </div>
-</div>
-
-<div class="cta_block reduced_padding_block" id="create_pet_cta_block">
-  <p>If there are no existing e-petitions on the same subject, click the 'Create e-petition' button to continue.</p>
-  <%= link_to "Create e-petition", new_petition_path(title: @petitions.query) %>
-</div>
+  <p>If one of the petitions above matches yours, sign it and share it instead.</p>
+  <p>You're more likely to get to 10,000 and 100,000 signatures that way.</p>
+<% end %>
+<%= link_to create_button_text, new_petition_path(:title => @petitions.query.first(80)),
+    :class => 'button' %>

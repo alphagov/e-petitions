@@ -109,15 +109,13 @@ When /^I view all petitions from the home page$/ do
   click_link "View all"
 end
 
-When /^I check my petition title$/ do
-  within(:css, "form#pre_creation_search") do
-    fill_in "search", :with => "Rioters should loose benefits"
-    click_button("Search")
-  end
+When /^I check for similar petitions$/ do
+  fill_in "q", :with => "Rioters should loose benefits"
+  click_button("Check for similar petitions")
 end
 
 When /^I choose to create a petition anyway$/ do
-  click_link_or_button "Create e-petition"
+  click_link_or_button "My petition is different"
 end
 
 When /^I change the number viewed per page to (\d+)$/ do |per_page|
@@ -162,7 +160,8 @@ And /^all petitions have had their signatures counted$/ do
 end
 
 Then /^I should be asked to search for a new petition$/ do
-  expect(page).to have_css("form input[name=q]")
+  expect(page).to have_content("What action would you like the government to take?")
+  expect(page).to have_css("form textarea[name=q]")
 end
 
 Then /^I should see a list of existing petitions I can sign$/ do

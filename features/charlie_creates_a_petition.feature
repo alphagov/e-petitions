@@ -6,9 +6,9 @@ Feature: As Charlie
 Scenario: Charlie has to search for a petition before creating one
   Given a petition "Rioters should loose benefits"
   Given I am on the home page
-  When I follow "Start a new e-petition"
+  When I follow "Start a new petition"
   Then I should be asked to search for a new petition
-  When I check my petition title
+  When I check for similar petitions
   Then I should see a list of existing petitions I can sign
   When I choose to create a petition anyway
   Then I should be on the new petition page
@@ -17,9 +17,9 @@ Scenario: Charlie has to search for a petition before creating one
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
-  When I follow "Start a new e-petition"
-  Then I fill in "search" with "'onmouseover='alert(1)'"
-  When I press "Search"
+  When I follow "Start a new petition"
+  Then I fill in "q" with "'onmouseover='alert(1)'"
+  When I press "Check for similar petitions"
   Then the markup should be valid
 
 Scenario: Charlie creates a petition
