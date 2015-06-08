@@ -1,5 +1,5 @@
 class HealthCheck
-  CUSTOM_ITEMS = %w(hostname fqdn url host_ip client_ip localtime utctime)
+  CUSTOM_ITEMS = %w(hostname url host_ip client_ip localtime utctime)
   BOOLEAN_ITEMS = %w(database_connection database_persistence database_integrity search_connection)
 
   TEST_SETTINGS_KEY = 'healthcheck_test_key'
@@ -26,10 +26,6 @@ class HealthCheck
   private
 
   def hostname
-    Socket.gethostname.split('.')[0]
-  end
-
-  def fqdn
     Socket.gethostname
   end
 

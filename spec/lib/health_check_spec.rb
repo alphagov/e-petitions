@@ -9,13 +9,7 @@ describe HealthCheck do
     it 'includes the hostname' do
       allow(Socket).to receive(:gethostname).and_return("testhost.example.com")
 
-      expect(subject['hostname']).to eq 'testhost'
-    end
-
-    it 'includes the fully qualified domain name' do
-      allow(Socket).to receive(:gethostname).and_return("testhost.example.com")
-
-      expect(subject['fqdn']).to eq 'testhost.example.com'
+      expect(subject['hostname']).to eq 'testhost.example.com'
     end
 
     it "includes the url of the client request (as provided by the REQUEST_URI)" do
