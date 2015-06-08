@@ -90,11 +90,11 @@ class InitialSchema < ActiveRecord::Migration
       t.datetime :updated_at
       t.boolean  :notify_by_email, default: true
       t.datetime :last_emailed_at
-      t.string   :encrypted_email, limit: 255
+      t.string   :email, limit: 255
       t.string   :unsubscribe_token
     end
 
-    add_index :signatures, [:encrypted_email, :petition_id, :name], unique: true
+    add_index :signatures, [:email, :petition_id, :name], unique: true
     add_index :signatures, [:petition_id, :state, :name]
     add_index :signatures, [:petition_id, :state]
     add_index :signatures, [:petition_id]
