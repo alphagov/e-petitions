@@ -90,9 +90,13 @@ Then /^I should not see the petition "([^"]*)"$/ do |petition_title|
   expect(page).not_to have_link(petition_title)
 end
 
-
 When /^I filter the list to show "([^"]*)" petitions$/ do |option|
   select option
+  click_button "Go"
+end
+
+When /^I select the option to view "([^"]*)" petitions$/ do |option|
+  choose option
   click_button "Go"
 end
 
