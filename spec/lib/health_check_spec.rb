@@ -22,12 +22,6 @@ describe HealthCheck do
       expect(subject['url']).to eq 'FAILED: no REQUEST_URI present in env'
     end
 
-    it "includes the host_ip" do
-      allow(Socket).to receive(:getaddrinfo).and_return([[nil ,nil ,nil, '1.2.3.4']])
-
-      expect(subject['host_ip']).to eq '1.2.3.4'
-    end
-
     it 'includes the ip of the client request (as provided by the REMOTE_ADDR)' do
       env['REMOTE_ADDR'] = '10.11.12.13'
       expect(subject['client_ip']).to eq '10.11.12.13'

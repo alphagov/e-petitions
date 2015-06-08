@@ -1,5 +1,5 @@
 class HealthCheck
-  CUSTOM_ITEMS = %w(hostname url host_ip client_ip localtime utctime)
+  CUSTOM_ITEMS = %w(hostname url client_ip localtime utctime)
   BOOLEAN_ITEMS = %w(database_connection database_persistence database_integrity search_connection)
 
   TEST_SETTINGS_KEY = 'healthcheck_test_key'
@@ -31,12 +31,6 @@ class HealthCheck
 
   def url
     @env.fetch('REQUEST_URI', 'FAILED: no REQUEST_URI present in env')
-  end
-
-  def host_ip
-    Socket.getaddrinfo(Socket.gethostname, nil, Socket::AF_INET)[0][3]
-  rescue
-    "UNKNOWN"
   end
 
   def client_ip
