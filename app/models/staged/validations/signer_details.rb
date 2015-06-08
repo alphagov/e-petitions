@@ -13,7 +13,7 @@ module Staged
         validates :postcode,
           presence: { message: 'Postcode must be completed.' },
           format: {
-            with: /\A(([A-Z]{1,2}[0-9][0-9A-Z]? ?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO? ?(C\/O)? ?[0-9]{1,4})|(GIR 0AA))\Z/i,
+            with: /\A(([A-Z]{1,2}[0-9][0-9A-Z]?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO?(C\/O)?[0-9]{1,4})|(GIR0AA))\Z/i,
             message: 'Postcode not recognised.'
           },
           if: ->(cd) { cd.country == 'United Kingdom' }

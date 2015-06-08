@@ -58,6 +58,10 @@ class Signature < ActiveRecord::Base
     super(value.to_s.downcase)
   end
 
+  def postcode=(value)
+    super(value.to_s.gsub(/\s+/, "").upcase)
+  end
+
   def creator?
     petition.creator_signature == self
   end
@@ -84,7 +88,7 @@ class Signature < ActiveRecord::Base
   end
 
   def postal_district
-    postcode.upcase[0..-4].match(/[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
+    postcode.upcase[0..-4].match(/^[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
   end
 
   def unsubscribe!
