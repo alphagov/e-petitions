@@ -65,6 +65,7 @@ class Petition < ActiveRecord::Base
 
   # = Finders =
   scope :threshold, -> { where('signature_count >= ? OR response_required = ?', SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true) }
+
   scope :for_state, ->(state) {
     if CLOSED_STATE.casecmp(state) == 0
       where('state = ? AND closed_at < ?', OPEN_STATE, Time.current)
@@ -76,6 +77,9 @@ class Petition < ActiveRecord::Base
   }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
+  scope :in_moderation, -> { where(state: SPONSORED_STATE) }
+  scope :todo_list, -> { where(state: TODO_LIST_STATES) }
+  scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }
   scope :trending, ->(number_of_days) {
                       joins(:signatures).
                       where("petitions.state" => "open").
@@ -134,6 +138,10 @@ class Petition < ActiveRecord::Base
 
   def in_moderation?
     self.state == SPONSORED_STATE
+  end
+
+  def collecting_sponsors?
+    self.state == VALIDATED_STATE || self.state == PENDING_STATE
   end
 
   def open?
@@ -222,12 +230,12 @@ class Petition < ActiveRecord::Base
   def validate_creator_signature!
     self.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
   end
-  
+
   def update_state_after_new_validated_sponsor!
     if state == PENDING_STATE
       update_attribute(:state, VALIDATED_STATE)
     end
-    
+
     if on_sponsor_moderation_threshold?
       update_attribute(:state, SPONSORED_STATE)
     end
