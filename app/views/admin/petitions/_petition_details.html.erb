@@ -25,3 +25,9 @@
   <label>Petition description:</label>
   <p class="text_block"><%= raw auto_link(h(@petition.description), :html => { :target => '_blank' }) %></p>
 </div>
+
+<div class="row">
+  <label>State:</label>
+  <p class="text_block"><%= @petition.state %></p>
+</div>
+

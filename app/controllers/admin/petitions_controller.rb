@@ -12,11 +12,11 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def edit
-    @petition = Petition.for_state(Petition::SPONSORED_STATE).find(params[:id])
+    @petition = Petition.todo_list.find(params[:id])
   end
 
   def update
-    @petition = Petition.for_state(Petition::SPONSORED_STATE).find(params[:id])
+    @petition = Petition.todo_list.find(params[:id])
     user_action = params['commit']
     case user_action
       when 'Publish this petition'

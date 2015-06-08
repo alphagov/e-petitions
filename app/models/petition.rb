@@ -99,6 +99,8 @@ class Petition < ActiveRecord::Base
                               limit(3)
                             }
 
+  scope :by_oldest, -> { order(created_at: :asc) }
+
   def self.update_all_signature_counts
     Petition.visible.each do |petition|
       petition_current_count = petition.count_validated_signatures

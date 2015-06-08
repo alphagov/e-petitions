@@ -244,3 +244,7 @@ form.filter {
 .links {
   margin-bottom: 8px;
 }
+
+.radio-button {
+  padding-right: 20px;
+}
