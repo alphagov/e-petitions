@@ -9,24 +9,7 @@ Given(/^a constituency "(.*?)" is found by postcode "(.*?)"$/) do |constituency_
 
   for_postcode = @constituencies[postcode]
   if for_postcode.nil?
-    body = <<-RESPONSE.strip_heredoc
-      <Constituencies>
-        <Constituency>
-          <Constituency_Id>#{constituency.id}</Constituency_Id>
-          <Name>#{constituency.name}</Name>
-          <RepresentingMembers>
-            <RepresentingMember>
-              <Member_Id>0001</Member_Id>
-              <Member>A. N. Other MP</Member>
-              <StartDate>2015-05-07T00:00:00</StartDate>
-              <EndDate xsi:nil="true"
-                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-            </RepresentingMember>
-          </RepresentingMembers>
-        </Constituency>
-      </Constituencies>
-      RESPONSE
-    stub_request(:get, "#{ ConstituencyApi::Client::URL }/#{postcode.gsub(/\s+/, '')}/").to_return(status: 200, body: body)
+    stub_constituency(postcode, constituency.id, constituency.name)
     @constituencies[postcode] = constituency
   elsif for_postcode == constituency
     # noop
@@ -70,7 +53,7 @@ Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petit
 end
 
 Given(/^the constituency api is down$/) do
-  stub_request(:get, %r[#{ Regexp.escape(ConstituencyApi::Client::URL) }/*]).to_return(status: 500, body: "Daisy, Daisy / Give me your answer, do. / I'm half crazy / all for the love of you.")
+  stub_broken_api
 end
 
 Then(/^I should see an explanation that my constituency couldn't be found$/) do

@@ -143,4 +143,5 @@ FactoryGirl.define do
   end
 
   sequence(:constituency_id) { |n| (1234 + n).to_s }
+  sequence(:mp_id) { |n| (4321 + n).to_s }
 end

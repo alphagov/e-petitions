@@ -2,38 +2,18 @@ require 'rails_helper'
 
 describe LocalPetitionsController, type: :controller do
   describe 'GET :index' do
+    include ConstituencyApiHelpers::NetworkLevel
+
     context 'when a postcode is supplied' do
       let(:postcode) { 'SW1A 1aa' }
       let(:params) { { postcode: postcode } }
 
       context 'that can be found on the API' do
-        let(:api_url) { ConstituencyApi::Client::URL }
         let(:constituency_id) { FactoryGirl.generate(:constituency_id) }
         let(:constituency_name) { 'Cities of London and Westminster' }
-        let(:mp) { ConstituencyApi::Mp.new('4321', 'Emma Pee MP', 3.years.ago.to_date) }
-        let(:api_response) do
-          <<-RESPONSE.strip_heredoc
-            <Constituencies>
-              <Constituency>
-                <Constituency_Id>#{ constituency_id }</Constituency_Id>
-                <Name>#{ constituency_name }</Name>
-                <RepresentingMembers>
-                  <RepresentingMember>
-                    <Member_Id>#{mp.id}</Member_Id>
-                    <Member>#{mp.name}</Member>
-                    <StartDate>#{mp.start_date}</StartDate>
-                    <EndDate xsi:nil="true"
-                             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                  </RepresentingMember>
-                </RepresentingMembers>
-              </Constituency>
-            </Constituencies>
-          RESPONSE
-        end
-
-        before do
-          stub_request(:get, "#{ api_url }/#{PostcodeSanitizer.call(postcode)}/").to_return(status: 200, body: api_response)
-        end
+        let(:mp_id) { FactoryGirl.generate(:mp_id) }
+        let(:mp) { ConstituencyApi::Mp.new(mp_id, 'Emma Pee MP', 3.years.ago.to_date) }
+        before { stub_constituency(postcode, constituency_id, constituency_name, mp_id: mp.id, mp_name: mp.name, mp_start_date: mp.start_date) }
 
         it 'exposes a constituency object for the postcode' do
           get :index, params
@@ -64,25 +44,12 @@ describe LocalPetitionsController, type: :controller do
       end
 
       context 'that cannot be found on the API' do
-        let(:api_url) { ConstituencyApi::Client::URL }
-        let(:api_response) do
-          <<-RESPONSE.strip_heredoc
-            <Constituencies/>
-          RESPONSE
-        end
-
-        before do
-          stub_request(:get, "#{ api_url }/#{PostcodeSanitizer.call(postcode)}/").to_return(status: 200, body: api_response)
-        end
-
+        before { stub_no_constituencies(postcode) }
         it_behaves_like 'a local petitions controller that failed to lookup a constituency'
       end
 
       context 'but the API is down' do
-        let(:api_url) { ConstituencyApi::Client::URL }
-        before do
-          stub_request(:get, "#{ api_url }/#{PostcodeSanitizer.call(postcode)}/").to_return(status: 500)
-        end
+        before { stub_broken_api }
 
         it_behaves_like 'a local petitions controller that failed to lookup a constituency'
       end

@@ -2,21 +2,14 @@ require 'rails_helper'
 
 describe SignaturesController do
   include ActiveJob::TestHelper
+  include ConstituencyApiHelpers::NetworkLevel
 
   describe "verify" do
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
-      let(:api_url) { ConstituencyApi::Client::URL }
-      let(:fake_body) {
-        "<Constituencies>
-        <Constituency><Name>Cities of London and Westminster</Name></Constituency>
-       </Constituencies>"
-      }
 
-      before do
-        stub_request(:get, "#{ api_url }/SW1A1AA/").to_return(status: 200, body: fake_body)
-      end
+      before { stub_constituency('SW1A 1AA', '1234', 'Cities of London and Westminster') }
 
       it "should respond to /signatures/:id/verify/:token" do
         expect({:get => "/signatures/#{signature.id}/verify/#{signature.perishable_token}"}).
