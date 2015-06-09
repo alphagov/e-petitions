@@ -149,7 +149,7 @@ When /^I try to sign the petition with the same email address, a different name,
   step "I decide to sign the petition"
   step "I fill in my details"
   step %{I fill in "Name" with "Sam Wibbledon"}
-  step %{I fill in "Postcode" with "W1A 1AA"}
+  step %{I fill in my postcode with "W1A 1AA"}
   step "I try to sign"
 end
 
