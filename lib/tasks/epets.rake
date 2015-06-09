@@ -1,5 +1,4 @@
 namespace :epets do
-
   desc 'Add sysadmin user'
   task :add_sysadmin_user => :environment do
     if AdminUser.find_by(email: 'admin@example.com').nil?
@@ -56,19 +55,11 @@ namespace :epets do
       )
     end
   end
+
   namespace :jobs do
     desc "Unlock all delayed jobs (to be used after a restart)"
     task :unlock_all => :environment do
       Delayed::Job.update_all("locked_by = NULL, locked_at = NULL")
     end
   end
-
-  desc "Writes out the json data"
-  task :write_json_data => :environment do
-    require 'json_renderer'
-    renderer = JsonRenderer.new
-    renderer.render_all_petitions
-    renderer.render_individual_over_threshold_petitions
-  end
 end
-
