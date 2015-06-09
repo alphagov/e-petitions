@@ -8,9 +8,21 @@
     <% end %>
   </li>
   <li>
+    <%= link_to "mailto:?subject=#{URI.escape(title)}&body=#{URI.escape(petition_url(petition))}" do %>
+      <span class="icon icon-share-email"></span>
+      Email
+    <% end %>
+  </li>
+  <li>
     <%= link_to "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(petition))}" do %>
       <span class="icon icon-share-twitter"></span>
       Twitter
+    <% end %>
+  </li>
+  <li>
+    <%= link_to "whatsapp://send?text=#{URI.escape(title + "\n" + petition_url(petition))}" do %>
+      <span class="icon icon-share-whatsapp"></span>
+      Whatsapp
     <% end %>
   </li>
 </ul>

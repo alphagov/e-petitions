@@ -223,3 +223,26 @@ Then(/^the e\-petition creator signature should be validated$/) do
   @sponsor_petition.reload
   expect(@sponsor_petition.creator_signature.state).to eq Signature::VALIDATED_STATE
 end
+
+Then(/^I can share it via (.+)$/) do |service|
+  case service
+  when 'Email'
+    within(:css, '.petition-share') do
+      expect(page).to have_link('Email', %r[\Amailto:?subject=#{URI.escape(@petition.title)}&body=#{URI.escape(petition_url(@petition))}\z])
+    end
+  when 'Facebook'
+    within(:css, '.petition-share') do
+      expect(page).to have_link('Facebook', %r[\Ahttp://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(@petition))}\z])
+    end
+  when 'Twitter'
+    within(:css, '.petition-share') do
+      expect(page).to have_link('Twitter', %r[\Ahttp://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(@petition))}\z])
+    end
+  when 'Whatsapp'
+    within(:css, '.petition-share') do
+      expect(page).to have_link('Whatsapp', %r[\Awhatsapp://send?text=#{URI.escape(title + "\n" + petition_url(@petition))}\z])
+    end
+  else
+    raise ArgumentError, "Unknown sharing service: #{service.inspect}"
+  end
+end
