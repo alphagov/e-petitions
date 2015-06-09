@@ -1,3 +1,5 @@
+require 'postcode_sanitizer'
+
 module ConstituencyApi
   class Error < RuntimeError; end
 
@@ -49,7 +51,8 @@ module ConstituencyApi
     end
 
     def self.call_api(postcode)
-      response = Faraday.new(URL).get("#{postcode_param(postcode)}/") do |req|
+      sanitized_postcode = PostcodeSanitizer.call(postcode)
+      response = Faraday.new(URL).get("#{sanitized_postcode}/") do |req|
         req.options[:timeout] = TIMEOUT
         req.options[:open_timeout] = TIMEOUT
       end
@@ -57,7 +60,7 @@ module ConstituencyApi
         raise Error.new("Unexpected response from API:"\
                         "status #{response.status}"\
                         "body #{response.body}"\
-                        "request #{URL}/#{postcode_param(postcode)}/")
+                        "request #{URL}/#{sanitized_postcode}/")
       end
       Hash.from_xml(response.body)
     rescue Faraday::Error::TimeoutError
@@ -77,10 +80,7 @@ module ConstituencyApi
       Array.wrap(mps).map { |m| Mp.new(m["Member_Id"], m["Member"], m["StartDate"]) }
     end
 
-    def self.postcode_param(postcode)
-      postcode.gsub(/\s+/, "")
-    end
-    private_class_method :parse_constituencies, :call_api, :postcode_param, :parse_mps, :last_mp
+    private_class_method :parse_constituencies, :call_api, :parse_mps, :last_mp
   end
 end
 

@@ -58,7 +58,7 @@ describe ConstituencyApi do
     end
 
     it "returns Constituency array for valid postcode with lowercase" do
-      stub_request(:get, "#{ api_url }/n11ty/").to_return(status: 200, body: fake_body)
+      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
       expect(api.constituencies("n11ty")).to match_array constituencies_islington
     end
 

@@ -1,3 +1,5 @@
+require 'postcode_sanitizer'
+
 class Signature < ActiveRecord::Base
 
   include PerishableTokenGenerator
@@ -41,7 +43,7 @@ class Signature < ActiveRecord::Base
   end
 
   def postcode=(value)
-    super(value.to_s.gsub(/\s+/, "").upcase)
+    super(PostcodeSanitizer.call(value))
   end
 
   def creator?
