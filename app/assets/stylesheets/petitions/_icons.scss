@@ -15,10 +15,10 @@
 // .graphic .graphic-open-government-licence
 
 // Icons
-// .icon .icon-facebook-share
-// .icon .icon-email-share
-// .icon .icon-twitter-share
-// .icon .icon-whatsapp-share
+// .icon .icon-share-facebook
+// .icon .icon-share-email
+// .icon .icon-share-twitter
+// .icon .icon-share-whatsapp
 // .icon .icon-email
 // .icon .icon-warning-white
 // .icon .icon-confirmation-tick
@@ -122,43 +122,43 @@
     background-size: 100%;
   }
 }
-.icon-facebook-share {
+.icon-share-facebook {
   width: 7px;
   height: 16px;
-  background-image: url("/images/icons/icon_facebook-share.png");
+  background-image: url("/images/icons/icon_share-facebook.png");
 
   @include device-pixel-ratio() {
-    background-image: url("/images/icons/icon_facebook-share-2x.png");
+    background-image: url("/images/icons/icon_share-facebook-2x.png");
     background-size: 100%;
   }
 }
-.icon-email-share {
+.icon-share-email {
   width: 18px;
   height: 13px;
-  background-image: url("/images/icons/icon_email-share.png");
+  background-image: url("/images/icons/icon_share-email.png");
 
   @include device-pixel-ratio() {
-    background-image: url("/images/icons/icon_email-share-2x.png");
+    background-image: url("/images/icons/icon_share-email-2x.png");
     background-size: 100%;
   }
 }
-.icon-twitter-share {
+.icon-share-twitter {
   width: 16px;
   height: 13px;
-  background-image: url("/images/icons/icon_twitter-share.png");
+  background-image: url("/images/icons/icon_share-twitter.png");
 
   @include device-pixel-ratio() {
-    background-image: url("/images/icons/icon_twitter-share-2x.png");
+    background-image: url("/images/icons/icon_share-twitter-2x.png");
     background-size: 100%;
   }
 }
-.icon-whatsapp-share {
+.icon-share-whatsapp {
   width: 19px;
   height: 19px;
-  background-image: url("/images/icons/icon_whatsapp-share.png");
+  background-image: url("/images/icons/icon_share-whatsapp.png");
 
   @include device-pixel-ratio() {
-    background-image: url("/images/icons/icon_whatsapp-share-2x.png");
+    background-image: url("/images/icons/icon_share-whatsapp-2x.png");
     background-size: 100%;
   }
 }

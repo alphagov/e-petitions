@@ -8,13 +8,12 @@ When /^I decide to sign the petition$/ do
 end
 
 When /^I try to sign$/ do
-  click_button "Sign this e-petition"
+  click_button "Sign this petition"
 end
 
-Then /^I have not yet signed the petition$/ do
+Then /^I am told to check my inbox to complete signing$/ do
   expect(page).to have_title("Thank you")
-  click_link("view")
-  expect(page).to have_css("p.signature-count", :text => "1 signatures")
+  expect(page).to have_content("Please check your inbox")
 end
 
 Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
@@ -83,12 +82,11 @@ When /^I fill in my details and sign a petition$/ do
   steps %Q(
     When I go to the new signature page for "Do something!"
     And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
-    And the markup should be valid
     And I should be connected to the server via an ssl connection
     And I fill in my details
     And I try to sign
     And I say I am happy with my email address
-    Then I have not yet signed the petition
+    Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
   )
 end

@@ -1,0 +1,22 @@
+// Adds to ../govuk_elements/_forms.scss
+
+select.form-control {
+  -webkit-appearance: menulist;
+}
+
+.form-control.small {
+  width: 8.5em;
+}
+
+.form-group.error {
+  @extend %outdent-to-full-width;
+}
+
+// Replication .form-label-bold without the font
+.error .form-label {
+  @extend .form-label-bold;
+}
+
+.form-control {
+  padding: 0.5em;
+}

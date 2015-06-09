@@ -1,3 +1,49 @@
+@import "shared/share-petition";
+
+// Common page title
+// =================
+.page-title {
+  margin-top: em(40, 36);
+  margin-bottom: 1em;
+
+  .icon {
+    margin-right: $gutter;
+  }
+}
+.page-subtitle {
+  @include bold-27();
+  margin-bottom: em(35, 27);
+}
+
+// Common page title
+// =================
+.section-panel {
+  @extend %outdent-to-full-width;
+  border-bottom: 1px solid $panel-colour;
+  margin-top: $gutter-half;
+  margin-bottom: $gutter-half;
+  padding: 0 $gutter-half $gutter-half;
+}
+
+// Notifications
+// =============
+.notification {
+  background-color: $text-colour;
+  color: $white;
+  padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
+  position: relative;
+
+  .icon {
+    position: absolute;
+    top: $gutter-half;
+    left: $gutter-half;
+  }
+
+  .content {
+    margin-top: 0px;
+  }
+}
+
 // Petition item
 // =============
 .petition-item {

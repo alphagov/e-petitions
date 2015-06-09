@@ -1,10 +1,4 @@
 <% content_for(:page_title) { "#{@petition.title} - Sign this e-petition - e-petitions" } %>
-<% # set tab index to start at 5
- increment(5) %>
-<div class="title_block">
-  <h2>Sign this e-petition</h2>
-  <h1 class="petition_title"><%= @petition.title %></h1>
-</div>
 
 <%= form_for @stage_manager.stage_object, :url => sign_petition_signatures_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
   <%= render_signature_form @stage_manager, f %>

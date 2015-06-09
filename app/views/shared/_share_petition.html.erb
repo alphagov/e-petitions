@@ -1,0 +1,16 @@
+<h2>Share this petition</h2>
+<% title = petition.title + " - e-petitions" -%>
+<ul class="petition-share">
+  <li>
+    <%= link_to "http://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(petition))}" do %>
+      <span class="icon icon-share-facebook"></span>
+      Facebook
+    <% end %>
+  </li>
+  <li>
+    <%= link_to "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(petition))}" do %>
+      <span class="icon icon-share-twitter"></span>
+      Twitter
+    <% end %>
+  </li>
+</ul>

@@ -2,7 +2,7 @@
 <p class="strap-line">Tell the government what you think</p>
 <% end -%>
 
-<div class="home-panel">
+<div class="section-panel">
   <% if @trending_petitions.present? %>
     <section class="trending">
       <h2>Popular petitions</h2>
@@ -16,7 +16,7 @@
   <%= link_to 'View all e-petitions', petitions_path, :class => 'view-all' %>
 </div>
 
-<section class="home-panel">
+<section class="section-panel">
   <h2>Start a new petition</h2>
   <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
   <%= link_to "Start a new e-petition", check_petitions_path, :class => 'button' %>

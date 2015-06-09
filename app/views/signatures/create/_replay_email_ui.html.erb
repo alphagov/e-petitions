@@ -1,11 +1,12 @@
-<fieldset>
-  <legend>Make sure this is right</legend>
-  <%= render 'signatures/email', f: f, signature: signature %>
+<h1 class='page-title'>Make sure this is right</h1>
 
-  <p>If your email address is wrong, just change it above.</p>
+<%# Not using signatures/email because autofocus and hidden label %>
+<%= form_row :for => [signature, :email] do %>
+  <%= f.label :email, :class => 'form-label visuallyhidden' %>
+  <%= error_messages_for_field signature, :email %>
+  <%= f.text_field :email, :type => 'email', :tabindex => increment, :class => 'form-control', :autofocus => true %>
+<% end %>
 
-  <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
-  <% end %>
-</fieldset>
+<%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
+
+<p>If your email address is wrong, just change it above.</p>

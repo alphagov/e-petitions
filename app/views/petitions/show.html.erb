@@ -63,20 +63,11 @@
 
 <p class="signature-count"><%= number_with_delimiter(@petition.signature_count) %> <span>signatures</span></p>
 
-<%= render 'shared/about_petitions' %>
+<%= render 'shared/about_petitions', variation: 'about-petitions-light' %>
 
 <%# Sharing %>
 <% if @petition.can_be_signed? -%>
-  <h2>Share this petition</h2>
-  <% title = @petition.title + " - e-petitions" -%>
-  <ul class="petition-share">
-    <li>
-      <%= link_to "Facebook", "http://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(@petition))}" %>
-    </li>
-    <li>
-      <%= link_to "Twitter", "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(@petition))}" %>
-    </li>
-  </ul>
+  <%= render 'shared/share_petition', petition: @petition %>
 <% end -%>
 
 <ul class="petition-meta">

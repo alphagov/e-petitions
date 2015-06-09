@@ -1,19 +1,27 @@
 <% content_for(:page_title) { "Thank you - e-petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Thank you.</h1>
-</div>
+<h1 class="page-title">
+  <span class="icon icon-confirmation-tick"></span>
+  Thank you
+</h1>
+
+<p>Your signature has now been added to the <%= link_to @petition.title, petition_path(@petition) %> petition.</p>
+
+<%= render 'shared/share_petition', petition: @petition %>
+
+<section class="section-panel">
+  <h2>What's next</h2>
+  <%= render "shared/about_petitions" %>
+</section>
+
+<% if @signature.constituency %>
+  <div class="section-panel">
+    <p>
+      Your constituency is <%= @signature.constituency.name %>
+    </p>
+  </div>
 <% end %>
 
-<div class="cta_block thank_you_block">
-  <p>Your signature has now been added to this e-petition.</p>
-
-  <%= link_to "Click here to view the e-petition", petition_path(@petition), :class => 'link_button large_link_button return_to_homepage_button' %>
-
-  <% if @signature.constituency %>
-  <p>
-    Your constituency is <%= @signature.constituency.name %>
-  </p>
-  <% end %>
-  
-</div>
+<h2>Register to vote</h2>
+<p>To vote in local, national and EU elections, you must be registered to vote.</p>
+<p>It takes less than 5 minutes.</p>
+<%= link_to "Register to vote", "https://www.gov.uk/register-to-vote" %>

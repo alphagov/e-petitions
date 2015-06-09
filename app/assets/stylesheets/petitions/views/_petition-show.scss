@@ -1,7 +1,7 @@
 .petitions-details {
   border-bottom: 1px solid $panel-colour;
   padding: $gutter-half;
-  margin: 0 $gutter-half * -1;
+  @extend %outdent-to-full-width;
 
   li {
     margin-bottom: $gutter-half;
@@ -13,28 +13,6 @@
 
   span {
     @include bold-36;
-  }
-}
-
-.petition-share {
-  @extend %contain-floats;
-  margin: 0 $gutter-half * -1;
-  border-bottom: 1px solid $panel-colour;
-  li {
-    float: left;
-    @include box-sizing(border-box);
-    width: 50%;
-    border-top: 1px solid $panel-colour;
-    padding: 10px $gutter-half;
-  }
-  li:nth-child(odd) {
-    border-right: 1px solid $panel-colour;
-  }
-  a {
-    color: $text-colour;
-  }
-  a:hover {
-    color: $secondary-text-colour;
   }
 }
 
