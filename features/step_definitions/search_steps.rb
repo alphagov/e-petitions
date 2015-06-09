@@ -9,8 +9,10 @@ end
 
 When /^I search for "([^"]*)"$/ do |query|
   visit home_path
-  fill_in :search, :with => query
-  click_link_or_button "Search"
+  within :css, '.search-form' do
+    fill_in :search, :with => query
+    click_on "Search"
+  end
 end
 
 Then /^I should not be able to search via free text$/ do

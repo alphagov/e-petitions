@@ -18,9 +18,7 @@ Feature: Suzy Singer searches by free text
     And all petitions have had their signatures counted
 
   Scenario: Search for open petitions
-    When I go to the home page
-    And I fill in "search" with "Wombles"
-    And I press "Search"
+    When I search for "Wombles"
     Then I should be on the search results page
     And I should see "Search results - e-petitions" in the browser page title
     And I should see /For "Wombles"/
@@ -34,26 +32,20 @@ Feature: Suzy Singer searches by free text
     And the markup should be valid
 
   Scenario: See search counts
-    When I go to the home page
-    And I fill in "search" with "Wombles"
-    And I press "Search"
+    When I search for "Wombles"
     Then I should see an "open" petition count of 4
     Then I should see a "closed" petition count of 1
     Then I should see a "rejected" petition count of 1
 
   Scenario: Search for open petitions using multiple search terms
-    When I go to the home page
-    And I fill in "search" with "overthrow the"
-    And I press "Search"
-    But I should see the following search results:
-      | Overthrow the Wombles | 1 signatures          |
+    When I search for "overthrow the"
+    Then I should see the following search results:
+      | Overthrow the Wombles | 1 signatures |
 
   Scenario: Search for special lucene characters to ensure they are escaped correctly
-    When I go to the home page
-    And I fill in "search" with "+ -|| ! && Common () { } [ ] ^ ~ * ? : \\"
-    And I press "Search"
+    When I search for "+ -|| ! && Common () { } [ ] ^ ~ * ? : \\"
     Then I should see the following search results:
-      | Common People | 1 signatures          |
+      | Common People | 1 signatures |
 
   Scenario: Search for rejected petitions
     When I go to the search page

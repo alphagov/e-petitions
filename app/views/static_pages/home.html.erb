@@ -16,13 +16,25 @@
   <%= link_to 'View all e-petitions', petitions_path, :class => 'view-all' %>
 </div>
 
+<section class="section-panel local-to-you">
+  <h2>Local to you</h2>
+  <p>Find petitions about local issues</p>
+  <form method="get" action="/petitions/local">
+    <div class="form-group">
+      <label for="postcode" class="form-label">UK postcode</label>
+      <input type="text" name="postcode" id="postcode" class="form-control" />
+    </div>
+    <input type="submit" value="Search" class="button" />
+  </form>
+</section>
+
 <section class="section-panel">
   <h2>Start a new petition</h2>
   <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
   <%= link_to "Start a new petition", check_petitions_path, :class => 'button' %>
 </section>
 
-<form method="get" action="/search">
+<form method="get" action="/search" class="search-form">
   <div class="form-group">
     <label for="search" class="form-label">Search for an e-petition to sign</label>
     <input type='text' name="q" id="search" class="form-control" />

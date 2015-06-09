@@ -45,7 +45,10 @@ end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
   @my_constituency = @constituencies.fetch(postcode)
-  step %{I fill in "UK postcode" with "#{postcode}"}
+  within :css, '.local-to-you' do
+    fill_in "UK postcode", with: postcode
+    click_on "Search"
+  end
 end
 
 Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_title|
