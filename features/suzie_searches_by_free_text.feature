@@ -26,16 +26,13 @@ Feature: Suzy Singer searches by free text
     Then I should be on the search results page
     And I should see "Search results - e-petitions" in the browser page title
     And I should see /For "Wombles"/
-    And I should see "Listed below are any e-petitions that can be signed"
-    And the "Open" tab should be active
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"
-    But I should see the following search results table:
-      | Wombles View                            | 1                                       | 01/05/2011              |
-      | Overthrow the Wombles View              | 1                                       | 21/04/2012              |
-      | Uncle Bulgaria View                     | 1                                       | 21/04/2011              |
-      | Common People View                      | 1                                       | 02/05/2011              |
-    And the search results table should have the caption /Open e-petitions which match "Wombles"/
+    But I should see the following search results:
+      | Wombles                            | 1 signatures |
+      | Overthrow the Wombles              | 1 signatures |
+      | Uncle Bulgaria                     | 1 signatures |
+      | Common People                      | 1 signatures |
     And the markup should be valid
 
   Scenario: See search counts
@@ -50,40 +47,36 @@ Feature: Suzy Singer searches by free text
     When I go to the home page
     And I fill in "search" with "overthrow the"
     And I press "Search"
-    But I should see the following search results table:
-      | Overthrow the Wombles View | 1          |
+    But I should see the following search results:
+      | Overthrow the Wombles | 1 signatures          |
 
   Scenario: Search for special lucene characters to ensure they are escaped correctly
     When I go to the home page
     And I fill in "search" with "+ -|| ! && Common () { } [ ] ^ ~ * ? : \\"
     And I press "Search"
-    Then I should see the following search results table:
-      | Common People View | 1          |
+    Then I should see the following search results:
+      | Common People | 1 signatures          |
 
   Scenario: Search for rejected petitions
     When I go to the search page
     And I search for "rejected" petitions with "WOMBLES"
-    And I should see "Listed below are the e-petitions that failed to meet the terms and conditions"
-    And the "Rejected" tab should be active
-    Then I should see the following search results table:
-      | Eavis vs the Wombles View |
-    And the search results table should have the caption /Rejected e-petitions which match "WOMBLES"/
-
+    Then I should see the following search results:
+      | Eavis vs the Wombles |
 
   Scenario: Search for closed petitions
     When I go to the search page
     And I search for "closed" petitions with "WOMBLES"
-    Then I should see the following search results table:
-      | The Wombles will rock Glasto View | 1          |
+    Then I should see the following search results:
+      | The Wombles will rock Glasto | 1 signatures          |
 
   Scenario: Search for open petitions and order by title
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "title"
-    Then I should see the following search results table:
-      | Common People View         |
-      | Overthrow the Wombles View |
-      | Uncle Bulgaria View        |
-      | Wombles View               |
+    Then I should see the following search results:
+      | Common People         |
+      | Overthrow the Wombles |
+      | Uncle Bulgaria        |
+      | Wombles               |
 
   Scenario: Search for open petitions and order by signature count
     Given the petition "Uncle Bulgaria" has 5 validated and 3 pending signatures
@@ -93,11 +86,11 @@ Feature: Suzy Singer searches by free text
     And all petitions have had their signatures counted
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "count"
-    Then I should see the following search results table:
-      | Common People View         | 10         |
-      | Uncle Bulgaria View        | 5          |
-      | Overthrow the Wombles View | 4          |
-      | Wombles View               | 2          |
+    Then I should see the following search results:
+      | Common People         | 10 signatures         |
+      | Uncle Bulgaria        | 5 signatures          |
+      | Overthrow the Wombles | 4 signatures          |
+      | Wombles               | 2 signatures          |
 
   Scenario: Search for open petitions and order by signature count asc
     Given the petition "Uncle Bulgaria" has 5 validated and 3 pending signatures
@@ -107,102 +100,40 @@ Feature: Suzy Singer searches by free text
     And all petitions have had their signatures counted
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "count asc"
-    Then I should see the following search results table:
-      | Wombles View               | 2          |
-      | Overthrow the Wombles View | 4          |
-      | Uncle Bulgaria View        | 5          |
-      | Common People View         | 10         |
+    Then I should see the following search results:
+      | Wombles               | 2 signatures          |
+      | Overthrow the Wombles | 4 signatures          |
+      | Uncle Bulgaria        | 5 signatures          |
+      | Common People         | 10 signatures         |
 
   Scenario: Search for open petitions and order by closing date
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "closing"
-    Then I should see the following search results table:
-      | Uncle Bulgaria View        | 21/04/2011 |
-      | Wombles View               | 01/05/2011 |
-      | Common People View         | 02/05/2011 |
-      | Overthrow the Wombles View | 21/04/2012 |
+    Then I should see the following search results:
+      | Uncle Bulgaria        |
+      | Wombles               |
+      | Common People         |
+      | Overthrow the Wombles |
 
   Scenario: Search for open petitions and order by closing date desc
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "closing desc"
-    Then I should see the following search results table:
-      | Overthrow the Wombles View | 21/04/2012 |
-      | Common People View         | 02/05/2011 |
-      | Wombles View               | 01/05/2011 |
-      | Uncle Bulgaria View        | 21/04/2011 |
+    Then I should see the following search results:
+      | Overthrow the Wombles |
+      | Common People         |
+      | Wombles               |
+      | Uncle Bulgaria        |
 
   Scenario: Paginate through open petitions
     Given 21 open petitions exist with title: "International development spending"
     When I go to the search page
     And I search for "open" petitions with "spending"
-    And I follow "Next" within ".//*[contains(@class, 'title_pagination_row')]"
+    And I follow "Next"
     Then I should see 1 petition
-    And I follow "Previous" within ".//*[contains(@class, 'title_pagination_row')]"
+    And I follow "Previous"
     Then I should see 20 petitions
 
   Scenario: Searching for a profane search term
     When I go to the search page
     And I search for "hidden" petitions with "profane"
     Then I should see "No petitions could be found matching your search terms."
-
-  Scenario: Searching and then reordering results
-    Given the petition "Uncle Bulgaria" has 5 validated and 3 pending signatures
-    And the petition "Wombles" has 2 validated and 20 pending signatures
-    And the petition "Common People" has 10 validated and 10 pending signatures
-    And the petition "Overthrow the Wombles" has 4 validated and 0 pending signatures
-    And all petitions have had their signatures counted
-
-    When I go to the search page
-    And I search for "open" petitions with "WOMBLES"
-
-    Then "e-petition name sort by e-petition name" should show as "search_normal"
-    Then "Signatures sort by number of signatures" should show as "search_normal"
-    Then "Closing sort by closing date" should show as "search_normal"
-
-    And I follow "e-petition name"
-    Then "e-petition name sort by e-petition name" should show as "active_search_normal"
-    And I should see the following search results table:
-      | Common People View         |
-      | Overthrow the Wombles View |
-      | Uncle Bulgaria View        |
-      | Wombles View               |
-
-    When I follow "e-petition name"
-    Then "e-petition name sort by e-petition name" should show as "active_search_inverse"
-    And I should see the following search results table:
-      | Wombles View               |
-      | Uncle Bulgaria View        |
-      | Overthrow the Wombles View |
-      | Common People View         |
-
-    When I follow "Signatures"
-    Then "Signatures sort by number of signatures" should show as "active_search_normal"
-    And I should see the following search results table:
-      | Common People View         | 10         |
-      | Uncle Bulgaria View        | 5          |
-      | Overthrow the Wombles View | 4          |
-      | Wombles View               | 2          |
-
-    When I follow "Signatures"
-    Then "Signatures sort by number of signatures" should show as "active_search_inverse"
-    And I should see the following search results table:
-      | Wombles View               | 2          |
-      | Overthrow the Wombles View | 4          |
-      | Uncle Bulgaria View        | 5          |
-      | Common People View         | 10         |
-
-    When I follow "Closing"
-    Then "Closing sort by closing date" should show as "active_search_normal"
-    And I should see the following search results table:
-      | Uncle Bulgaria View        | 21/04/2011 |
-      | Wombles View               | 01/05/2011 |
-      | Common People View         | 02/05/2011 |
-      | Overthrow the Wombles View | 21/04/2012 |
-
-    When I follow "Closing"
-    Then "Closing sort by closing date" should show as "active_search_inverse"
-    And I should see the following search results table:
-      | Overthrow the Wombles View | 21/04/2012 |
-      | Common People View         | 02/05/2011 |
-      | Wombles View               | 01/05/2011 |
-      | Uncle Bulgaria View        | 21/04/2011 |

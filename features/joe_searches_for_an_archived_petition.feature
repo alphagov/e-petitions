@@ -18,11 +18,10 @@ Feature: Joe searches for an archived petition
     Then I should be on the archived petitions search results page
     And I should see "Search results - archived e-petitions" in the browser page title
     And I should see /for "Wombles"/
-    But I should see the following search results table:
+    But I should see the following search results:
       | Eavis vs the Wombles (Rejected)   | –   | –          |
       | The Wombles of Wimbledon (Closed) | 243 | 01/04/2012 |
       | Wombles are great (Closed)        | 835 | 01/01/2013 |
-    And the search results table should have the caption /Archived e-petitions/
     And the markup should be valid
 
   Scenario: Paging through archived petitions
@@ -32,7 +31,7 @@ Feature: Joe searches for an archived petition
     And I press "Search"
     Then I should be on the archived petitions search results page
     And I should see 20 petitions
-    Then I follow "Next" within ".//*[contains(@class, 'title_pagination_row')]"
+    Then I follow "Next"
     And I should see 1 petition
-    Then I follow "Previous" within ".//*[contains(@class, 'title_pagination_row')]"
+    Then I follow "Previous"
     And I should see 20 petitions

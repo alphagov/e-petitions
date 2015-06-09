@@ -1,21 +1,19 @@
 module SearchHelper
-  def sort_link_tag link_text, field_name, options={}
-    default_order = options[:default_order] || 'asc'
-
-    if params[:sort] == field_name.to_s
-      link_display = (params[:order] == default_order) ? 'normal' : 'inverse'
-      next_order = (params[:order] == 'asc') ? 'desc' : 'asc'
-      is_active = true
-    else
-      link_display = 'normal'
-      next_order = default_order
-      is_active = false
+  def petition_search_lists(petition_search, params)
+    search_list_links = Petition::SEARCHABLE_STATES.map do |state|
+      link_text = petition_list_url_link_text(state.capitalize, petition_search.result_count_for_state(state))
+      link_to(link_text.html_safe, petition_list_url(state, params))
     end
+    safe_join(search_list_links)
+  end
 
-    link_to link_text,
-            url_for(params.merge(:sort => field_name,
-                                 :order => next_order)),
-            :class => "#{ 'active_' if is_active}search_#{link_display}",
-            :title => options[:title]
+  private
+
+  def petition_list_url(state, params)
+    url_for(params.merge(:state => state, :page => nil, :order => nil, :sort => nil))
+  end
+
+  def petition_list_url_link_text(list_name, count)
+    "#{list_name} (#{number_with_delimiter(count)})"
   end
 end

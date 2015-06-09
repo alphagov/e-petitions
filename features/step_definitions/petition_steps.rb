@@ -110,8 +110,7 @@ When /^I change the number viewed per page to (\d+)$/ do |per_page|
 end
 
 Then /^I should see all petitions$/ do
-  expect(page).to have_content("All e-petitions")
-  expect(page).to have_css("tbody tr", :count => 3)
+  expect(page).to have_css("ol li", :count => 3)
 end
 
 Then /^I should see the petition details$/ do
