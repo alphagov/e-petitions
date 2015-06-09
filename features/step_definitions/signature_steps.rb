@@ -68,15 +68,13 @@ When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
 
   api_url = ConstituencyApi::Client::URL
-  body = "<Constituencies/>"
   if postcode == "N1 1TY"
-    body = "<Constituencies>
-              <Constituency><Name>Islington South and Finsbury</Name></Constituency>
-            </Constituencies>"
+    body = IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N11TY.xml"))
+  else
+    body = IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_results.xml"))
   end
   stub_request(:get, "#{ api_url }/#{postcode.gsub(/\s+/, '')}/").to_return(status: 200, body: body)
 end
-
 
 When /^I fill in my details and sign a petition$/ do
   steps %Q(
