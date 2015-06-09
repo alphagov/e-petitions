@@ -279,3 +279,16 @@ end
 Then /^I expand "([^"]*)"/ do |text|
   page.find("//details/summary[contains(., '#{text}')]").click
 end
+
+Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |state, title|
+  petition_closed_at = state == 'closed' ? 1.day.ago : 1.day.from_now
+  petition_state = state == 'closed' ? 'open' : state
+  petition_args = {
+    title: title,
+    open_at: 3.months.ago,
+    closed_at: petition_closed_at,
+    state: petition_state
+  }
+  petition = FactoryGirl.create(:open_petition, petition_args)
+  5.times { FactoryGirl.create(:validated_signature, petition: petition) }
+end

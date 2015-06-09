@@ -141,4 +141,6 @@ FactoryGirl.define do
   factory :system_setting do
     sequence(:key)  {|n| "key#{n}"}
   end
+
+  sequence(:constituency_id) { |n| (1234 + n).to_s }
 end
