@@ -40,7 +40,6 @@ class SignaturesController < ApplicationController
 
     if @signature.sponsor?
       send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
-      @petition.validate_creator_signature!
       @petition.update_state_after_new_validated_sponsor!
       redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else

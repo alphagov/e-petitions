@@ -154,6 +154,10 @@ class Petition < ActiveRecord::Base
     save
   end
 
+  def validate_creator_signature!
+    creator_signature.validate! && reload
+  end
+
   def count_validated_signatures
     signatures.validated.count
   end
@@ -256,10 +260,6 @@ class Petition < ActiveRecord::Base
 
   def below_sponsor_moderation_threshold?
     supporting_sponsors_count < Site.threshold_for_moderation
-  end
-
-  def validate_creator_signature!
-    creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
   end
 
   def update_state_after_new_validated_sponsor!

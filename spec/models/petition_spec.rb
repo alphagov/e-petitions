@@ -806,17 +806,17 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#validate_creator_signature!" do
-    context "with first validated sponsor" do
+    let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
+    let(:signature) { petition.creator_signature }
 
-      let(:petition){ FactoryGirl.create(:pending_petition) }
-      let(:sponsor){ FactoryGirl.create(:sponsor, :validated, petition: petition) }
+    let(:attributes) do
+      { created_at: 2.days.ago, updated_at: 2.days.ago }
+    end
 
-      it "changes creator signature state to validated" do
-        sponsor.reload
-        expect{petition.validate_creator_signature!}.to change{petition.creator_signature.state}
-                                                         .from(Signature::PENDING_STATE)
-                                                         .to(Signature::VALIDATED_STATE)
-      end
+    it "changes creator signature state to validated" do
+      expect {
+        petition.validate_creator_signature!
+      }.to change { signature.reload.validated? }.from(false).to(true)
     end
   end
 

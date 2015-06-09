@@ -4,6 +4,7 @@ class SponsorsController < ApplicationController
   before_action :retrieve_petition
   before_action :redirect_to_petition_url, if: :moderated?
   before_action :redirect_to_moderation_info_url, if: :has_maximum_sponsors?
+  before_action :validate_creator_signature, only: %i[show]
 
   respond_to :html
 
@@ -58,6 +59,10 @@ class SponsorsController < ApplicationController
 
   def has_maximum_sponsors?
     @petition.has_maximum_sponsors?
+  end
+
+  def validate_creator_signature
+    @petition.validate_creator_signature!
   end
 
   def assign_stage
