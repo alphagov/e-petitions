@@ -19,13 +19,13 @@
 <section class="section-panel local-to-you">
   <h2>Local to you</h2>
   <p>Find petitions about local issues</p>
-  <form method="get" action="/petitions/local">
+  <%= form_tag local_petitions_path, method: 'get' do %>
     <div class="form-group">
-      <label for="postcode" class="form-label">UK postcode</label>
-      <input type="text" name="postcode" id="postcode" class="form-control" />
+      <%= label_tag 'postcode', 'UK postcode', class: 'form-label' %>
+      <%= search_field_tag 'postcode', nil, class: 'form-control' %>
     </div>
-    <input type="submit" value="Search" class="button" />
-  </form>
+    <%= submit_tag 'Search', class: 'button' %>
+  <% end %>
 </section>
 
 <section class="section-panel">
