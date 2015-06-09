@@ -224,7 +224,8 @@ CREATE TABLE signatures (
     notify_by_email boolean DEFAULT true,
     last_emailed_at timestamp without time zone,
     email character varying(255),
-    unsubscribe_token character varying
+    unsubscribe_token character varying,
+    constituency_id character varying
 );
 
 
@@ -584,4 +585,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150603033108');
 INSERT INTO schema_migrations (version) VALUES ('20150603112821');
 
 INSERT INTO schema_migrations (version) VALUES ('20150605100049');
+
+INSERT INTO schema_migrations (version) VALUES ('20150609111042');
 

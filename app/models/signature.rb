@@ -18,6 +18,7 @@ class Signature < ActiveRecord::Base
   include Staged::Validations::SignerDetails
   include Staged::Validations::MultipleSigners
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
+  validates :constituency_id, length: { maximum: 255 }
 
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
