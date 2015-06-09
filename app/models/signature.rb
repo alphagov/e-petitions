@@ -81,5 +81,9 @@ class Signature < ActiveRecord::Base
     Rails.logger.error("Failed to fetch constituency - #{e}")
     nil
   end
+
+  def set_constituency_id
+    self.constituency_id = constituency.try(:id)
+  end
 end
 

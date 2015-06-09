@@ -375,32 +375,64 @@ describe Signature do
     end
   end
 
+  include ConstituencyApiHelpers::ApiLevel
   describe "#constituency" do
-    let(:constituency1) { ConstituencyApi::Constituency.new(name: "Shoreditch") }
-    let(:constituency2) { ConstituencyApi::Constituency.new(name: "Lambeth") }
+    let(:constituency1) { ConstituencyApi::Constituency.new('1234', "Shoreditch") }
+    let(:constituency2) { ConstituencyApi::Constituency.new('1235', "Lambeth") }
 
     it "returns a constituency object from the API return array" do
-      allow(ConstituencyApi::Client).to receive(:constituencies).with('N11TY').and_return([constituency1])
+      stub_constituency('N1 1TY', constituency1)
       signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
       expect(signature.constituency).to eq(constituency1)
     end
 
     it "returns the first object for multiple results" do
-      allow(ConstituencyApi::Client).to receive(:constituencies).with('N1').and_return([constituency1, constituency2])
+      stub_constituencies('N1', constituency1, constituency2)
       signature = FactoryGirl.build(:signature, postcode: 'N1')
       expect(signature.constituency).to eq(constituency1)
     end
 
     it "returns nil for invalid postcode" do
-      allow(ConstituencyApi::Client).to receive(:constituencies).with('SW149RQ').and_return([])
+      stub_no_constituencies('SW149RQ')
       signature = FactoryGirl.build(:signature, postcode: 'SW14 9RQ')
       expect(signature.constituency).to be_nil
     end
 
     it "returns nil for unexpected API response" do
-      allow(ConstituencyApi::Client).to receive(:constituencies).and_raise(ConstituencyApi::Error)
+      stub_broken_api
       signature = FactoryGirl.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
+    end
+  end
+
+  describe 'set_constituency_id' do
+    let(:signature) { FactoryGirl.build(:signature, postcode: 'SW1 1AA')}
+
+    it 'sets the constituency_id based on the id of the constituency' do
+      stub_constituency('SW1 1AA', '12345', 'North Idshire')
+      signature.set_constituency_id
+      expect(signature.constituency_id).to eq '12345'
+    end
+
+    it 'does not raise if the api fails' do
+      stub_broken_api
+      expect { signature.set_constituency_id }.not_to raise_error
+      expect(signature.constituency_id).to be_nil
+    end
+
+    it 'leaves it blank if there are no constituencies found' do
+      stub_no_constituencies('SW1 1AA')
+      signature.set_constituency_id
+      expect(signature.constituency_id).to be_nil
+    end
+
+    it 'chooses the first one if multiple constituencies are found' do
+      constituency1 = ConstituencyApi::Constituency.new('1234', "Shoreditch")
+      constituency2 = ConstituencyApi::Constituency.new('1235', "Lambeth")
+
+      stub_constituencies('SW1 1AA', constituency2, constituency1)
+      signature.set_constituency_id
+      expect(signature.constituency_id).to eq '1235'
     end
   end
 end

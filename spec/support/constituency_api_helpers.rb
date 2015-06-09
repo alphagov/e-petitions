@@ -1,6 +1,38 @@
 require 'postcode_sanitizer'
 
 module ConstituencyApiHelpers
+  module ApiLevel
+    def stub_constituency(postcode, *constituency_params)
+      constituency =
+        if constituency_params.first.is_a? ConstituencyApi::Constituency
+          constituency_params.first
+        else
+          ConstituencyApi::Constituency.new(*constituency_params)
+        end
+      allow(ConstituencyApi::Client).to receive(:constituencies).
+                                        with(PostcodeSanitizer.call(postcode)).
+                                        and_return([constituency])
+    end
+
+    def stub_constituencies(partial_postcode, *constituencies)
+      allow(ConstituencyApi::Client).to receive(:constituencies).
+                                        with(PostcodeSanitizer.call(partial_postcode)).
+                                        and_return(constituencies)
+
+    end
+
+    def stub_no_constituencies(postcode)
+      allow(ConstituencyApi::Client).to receive(:constituencies).
+                                        with(PostcodeSanitizer.call(postcode)).
+                                        and_return([])
+    end
+
+    def stub_broken_api
+      allow(ConstituencyApi::Client).to receive(:constituencies).
+                                        and_raise(ConstituencyApi::Error)
+    end
+  end
+
   module NetworkLevel
     def api_url
       ConstituencyApi::Client::URL
