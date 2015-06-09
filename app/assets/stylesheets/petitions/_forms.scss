@@ -8,6 +8,10 @@ select.form-control {
   width: 8.5em;
 }
 
+.form-group {
+  margin-bottom: $gutter;
+}
+
 .form-group.error {
   @extend %outdent-to-full-width;
 
@@ -28,6 +32,17 @@ select.form-control {
 
 .character-count {
   color: $secondary-text-colour;
-  display: block;
-  text-align: right;
+  float: right;
+}
+
+.form-hint {
+  margin-top: em(10, 19);
+}
+
+.form-label {
+  margin-bottom: em(13, 19);
+}
+
+.form-group-help {
+  margin-bottom: 0;
 }
