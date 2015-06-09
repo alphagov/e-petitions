@@ -2,14 +2,14 @@ module ConstituencyApi
   class Error < RuntimeError; end
 
   class Constituency
-    attr_reader :name, :mp
+    attr_reader :id, :name, :mp
 
-    def initialize(name, mp = nil)
-      @name, @mp = name, mp
+    def initialize(id, name, mp = nil)
+      @id, @name, @mp = id, name, mp
     end
 
     def ==(other)
-      other.is_a?(self.class) && name == other.name && mp == other.mp
+      other.is_a?(self.class) && id == other.id && name == other.name && mp == other.mp
     end
     alias_method :eql?, :==
   end
@@ -45,7 +45,7 @@ module ConstituencyApi
     def self.parse_constituencies(response)
       return [] unless response["Constituencies"]
       constituencies = response["Constituencies"]["Constituency"]
-      Array.wrap(constituencies).map { |c| Constituency.new(c["Name"], last_mp(c)) }
+      Array.wrap(constituencies).map { |c| Constituency.new(c["Constituency_Id"], c["Name"], last_mp(c)) }
     end
 
     def self.call_api(postcode)

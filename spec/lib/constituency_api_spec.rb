@@ -8,10 +8,10 @@ describe ConstituencyApi::Mp do
       expect(mp.start_date).to eq Date.new(2015, 5, 7)
     end
   end
-  
+
   describe "#url" do
     let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", Date.new(2015, 5, 7)) }
-    
+
     it "returns the URL for the mp" do
       expect(mp.url).to eq "#{ConstituencyApi::Mp::URL}/emily-thornberry-mp/1536"
     end
@@ -29,13 +29,13 @@ describe ConstituencyApi do
     let(:mp_keir) { ConstituencyApi::Mp.new("4514", "Keir Starmer MP", Date.new(2015, 5, 7)) }
     let(:mp_jeremy) { ConstituencyApi::Mp.new("185", "Jeremy Corbyn MP", Date.new(2015, 5, 7)) }
 
-    let(:constituencies_islington) { [ConstituencyApi::Constituency.new("Islington South and Finsbury", mp_emily)] }
-    let(:constituencies_n1) { [ConstituencyApi::Constituency.new("Hackney North and Stoke Newington", mp_diane),
-                               ConstituencyApi::Constituency.new("Hackney South and Shoreditch", mp_meg),
-                               ConstituencyApi::Constituency.new("Holborn and St Pancras", mp_keir),
-                               ConstituencyApi::Constituency.new("Islington North", mp_jeremy),
-                               ConstituencyApi::Constituency.new("Islington South and Finsbury", mp_emily)] }
-    let(:constituencies_holborn) { [ConstituencyApi::Constituency.new("Holborn and St Pancras", mp_keir)] }
+    let(:constituencies_islington) { [ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", mp_emily)] }
+    let(:constituencies_n1) { [ConstituencyApi::Constituency.new('3506', "Hackney North and Stoke Newington", mp_diane),
+                               ConstituencyApi::Constituency.new('3507', "Hackney South and Shoreditch", mp_meg),
+                               ConstituencyApi::Constituency.new('3536', "Holborn and St Pancras", mp_keir),
+                               ConstituencyApi::Constituency.new('3549', "Islington North", mp_jeremy),
+                               ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", mp_emily)] }
+    let(:constituencies_holborn) { [ConstituencyApi::Constituency.new('3536', "Holborn and St Pancras", mp_keir)] }
 
     let(:empty_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_results.xml")) }
     let(:fake_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N11TY.xml")) }
