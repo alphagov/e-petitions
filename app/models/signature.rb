@@ -87,10 +87,6 @@ class Signature < ActiveRecord::Base
     self.touch
   end
 
-  def postal_district
-    postcode.upcase[0..-4].match(/^[A-Z]{1,2}[0-9]{1,2}[A-Z]?/).to_s
-  end
-
   def unsubscribe!
     self.update(notify_by_email: false)
   end
