@@ -16,7 +16,7 @@ class Petition < ActiveRecord::Base
 
   STATES            = %w[pending validated sponsored open rejected hidden]
   VISIBLE_STATES    = %w[open rejected]
-  MODERATED_STATES  = %w[open hidden]
+  MODERATED_STATES  = %w[open hidden rejected]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
@@ -77,6 +77,7 @@ class Petition < ActiveRecord::Base
       where(state: state)
     end
   }
+  scope :not_hidden, -> { where.not(state: HIDDEN_STATE) }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
   scope :selectable, -> { where(state: SELECTABLE_STATES) }
@@ -138,10 +139,7 @@ class Petition < ActiveRecord::Base
   end
 
   def publish!
-    self.state = Petition::OPEN_STATE
-    self.open_at = Time.current
-    self.closed_at = Site.petition_duration.months.from_now.end_of_day
-    save!
+    update!(state: OPEN_STATE, open_at: Time.current, closed_at: Site.petition_closed_at)
   end
 
   def reject(attributes)
@@ -165,31 +163,35 @@ class Petition < ActiveRecord::Base
   end
 
   def awaiting_moderation?
-    self.state == VALIDATED_STATE
+    state == VALIDATED_STATE
   end
 
   def in_moderation?
-    self.state == SPONSORED_STATE
+    state == SPONSORED_STATE
+  end
+
+  def moderated?
+    MODERATED_STATES.include?(state)
   end
 
   def open?
-    self.state == OPEN_STATE
+    state == OPEN_STATE
   end
 
   def can_be_signed?
-    self.state == OPEN_STATE and self.closed_at > Time.current
+    state == OPEN_STATE && closed_at > Time.current
   end
 
   def rejected?
-    self.state == REJECTED_STATE
+    state == REJECTED_STATE
   end
 
   def hidden?
-    self.state == HIDDEN_STATE
+    state == HIDDEN_STATE
   end
 
   def closed?
-    self.state == OPEN_STATE && self.closed_at <= Time.current
+    state == OPEN_STATE && closed_at <= Time.current
   end
 
   def can_have_debate_added?
@@ -201,11 +203,7 @@ class Petition < ActiveRecord::Base
   end
 
   def state_label
-    if (self.closed?)
-      CLOSED_STATE
-    else
-      self.state
-    end
+    closed? ? CLOSED_STATE : state
   end
 
   def rejection_reason
@@ -235,7 +233,7 @@ class Petition < ActiveRecord::Base
 
   # need this callback since the relationship is circular
   def set_petition_on_creator_signature
-    self.creator_signature.update_attribute(:petition_id, self.id)
+    creator_signature.update_attribute(:petition_id, id)
   end
 
   def supporting_sponsors_count
@@ -261,7 +259,7 @@ class Petition < ActiveRecord::Base
   end
 
   def validate_creator_signature!
-    self.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
+    creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
   end
 
   def update_state_after_new_validated_sponsor!
@@ -285,6 +283,5 @@ class Petition < ActiveRecord::Base
   def stamp_government_response_at
     self.government_response_at = Time.current
   end
-
 end
 

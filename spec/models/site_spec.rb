@@ -382,6 +382,20 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe ".petition_closed_at" do
+    let(:site) { double(:site) }
+    let(:closed_at) { 3.months.from_now.end_of_day }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    it "delegates petition_closed_at to the instance" do
+      expect(site).to receive(:petition_closed_at).and_return(closed_at)
+      expect(Site.petition_closed_at).to eq(closed_at)
+    end
+  end
+
   describe ".reload" do
     let(:site) { double(:site) }
 
@@ -488,6 +502,16 @@ RSpec.describe Site, type: :model do
 
     it "the protocol of the url" do
       expect(site.email_protocol).to eq("https")
+    end
+  end
+
+  describe "#petition_closed_at" do
+    subject :site do
+      described_class.create!(petition_duration: 3)
+    end
+
+    it "returns the closing date in petition_duration months" do
+      expect(site.petition_closed_at).to eq(3.months.from_now.end_of_day)
     end
   end
 end

@@ -313,6 +313,14 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "not_hidden" do
+      let!(:petition) { FactoryGirl.create(:hidden_petition) }
+
+      it "returns only petitions that are not hidden" do
+        expect(Petition.not_hidden).not_to include(petition)
+      end
+    end
+
     context "with_response" do
       before do
         @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
@@ -532,6 +540,40 @@ RSpec.describe Petition, type: :model do
   describe "#in_moderation?" do
     it "is in moderation when the state is sponsored" do
       expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_moderation?).to be_truthy
+    end
+  end
+
+  describe "#moderated?" do
+    context "when the petition is hidden" do
+      subject { FactoryGirl.create(:hidden_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is rejected" do
+      subject { FactoryGirl.create(:rejected_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is open" do
+      subject { FactoryGirl.create(:open_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is closed" do
+      subject { FactoryGirl.create(:closed_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
     end
   end
 
