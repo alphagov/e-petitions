@@ -1,0 +1,4 @@
+<h1 class="page-title">Sorry!</h1>
+<p>We could not find your constituency from the postcode you provided: <q><%= params[:postcode] %></q>.</p>
+<p>It's possible that the API we use is down, or that your postcode wasn't recognised.  Why not try again?</p>
+<%= render 'local_petitions/search', postcode: params[:postcode] %>
