@@ -7,10 +7,8 @@ class SponsorsController < ApplicationController
   def show
     if @petition.hidden?
       raise ActiveRecord::RecordNotFound
-    elsif @petition.rejected? || @petition.closed?
+    elsif @petition.rejected? || @petition.closed? || @petition.open?
       redirect_to petition_url(@petition)
-    elsif @petition.open?
-      redirect_to sign_petition_signatures_url(@petition)
     elsif @petition.has_maximum_sponsors?
       redirect_to moderation_info_petition_url(@petition)
     else

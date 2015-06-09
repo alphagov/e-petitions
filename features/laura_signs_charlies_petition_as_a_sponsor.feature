@@ -24,7 +24,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Given the petition I want to sign is open
     When I visit the "sponsor this petition" url I was given
     Then I should be connected to the server via an ssl connection
-    And I am redirected to the petition sign page
+    And I am redirected to the petition view page
 
   Scenario: Laura wants to sign the petition that is in moderation state
     Given the petition I want to sign is sponsored
