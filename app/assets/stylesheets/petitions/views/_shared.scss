@@ -44,6 +44,39 @@
   }
 }
 
+// Pagination
+// ==========
+.search-pagination {
+  @extend %contain-floats;
+  @include bold-27();
+  margin-top: $gutter;
+  padding-bottom: $gutter-half;
+}
+
+.search-pagination a:visited {
+  color: $link-colour
+}
+
+.paginate {
+  display: block;
+  line-height: 55px;
+}
+
+.disabled .paginate {
+  display: none;
+}
+
+.paginate-previous {
+  float: left;
+  padding-left: 10px;
+}
+
+.paginate-next {
+  float: right;
+  padding-right: 20px;
+}
+
+
 // Petition item
 // =============
 .petition-item {
