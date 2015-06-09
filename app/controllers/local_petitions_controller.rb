@@ -1,0 +1,2 @@
+class LocalPetitionsController < ApplicationController
+end
