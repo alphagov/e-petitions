@@ -18,6 +18,12 @@
     <p>
       Your constituency is <%= @signature.constituency.name %>
     </p>
+    <% if @signature.constituency.mp %>
+      <p>
+        Your local MP is <%= @signature.constituency.mp.name %>
+        <%= link_to "Contact your MP", @signature.constituency.mp.url %>
+      </p>
+    <% end %>
   </div>
 <% end %>
 
