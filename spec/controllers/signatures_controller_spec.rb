@@ -2,9 +2,10 @@ require 'rails_helper'
 
 describe SignaturesController do
   include ActiveJob::TestHelper
-  include ConstituencyApiHelpers::NetworkLevel
 
   describe "verify" do
+    include ConstituencyApiHelpers::NetworkLevel
+
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
@@ -145,6 +146,8 @@ describe SignaturesController do
   end
 
   describe "#create" do
+    include ConstituencyApiHelpers::ApiLevel
+
     let!(:petition) { FactoryGirl.create(:open_petition) }
 
     let(:signature_params) do
@@ -157,14 +160,17 @@ describe SignaturesController do
       }
     end
 
+    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'Greater Signatureton')}
+
     def do_post(options = {})
       params = {
         :stage => 'replay-email',
         :move => 'next',
         :signature => signature_params,
         :petition_id => petition.id
-      }
-      post :create, params.merge(options)
+      }.merge(options)
+      stub_constituency(params[:signature][:postcode], constituency)
+      post :create, params
     end
 
     context 'managing the "move" parameter' do
@@ -223,6 +229,11 @@ describe SignaturesController do
       it "has not changed the default TRUE value for notify_by_email" do
         do_post
         expect(assigns(:stage_manager).signature.notify_by_email).to eq(true)
+      end
+
+      it "sets the constituency_id on the signature, based on the postcode" do
+        do_post
+        expect(assigns(:stage_manager).signature.constituency_id).to eq constituency.id
       end
 
       it "redirects to a thank you page" do

@@ -109,6 +109,7 @@ class SignaturesController < ApplicationController
     assign_stage
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
     if @stage_manager.create_signature
+      @stage_manager.signature.store_constituency_id
       send_email_to_petition_signer(@stage_manager.signature)
       respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
     else

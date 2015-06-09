@@ -85,5 +85,10 @@ class Signature < ActiveRecord::Base
   def set_constituency_id
     self.constituency_id = constituency.try(:id)
   end
+
+  def store_constituency_id
+    set_constituency_id
+    save if constituency_id_changed?
+  end
 end
 

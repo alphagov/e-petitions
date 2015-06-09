@@ -95,6 +95,8 @@ describe SponsorsController do
   end
 
   context 'PATCH update' do
+    include ConstituencyApiHelpers::ApiLevel
+
     let(:petition) { FactoryGirl.create(:petition) }
     let(:signature_params) {
       {
@@ -107,6 +109,8 @@ describe SponsorsController do
       }
     }
 
+    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'Sponsor-upon-petition')}
+
     def do_patch(options = {})
       params = {
         petition_id: petition,
@@ -115,6 +119,7 @@ describe SponsorsController do
         stage: 'replay-email',
         move: 'next'
       }.merge(options)
+      stub_constituency(params[:signature][:postcode], constituency)
       patch :update, params
     end
 
@@ -183,6 +188,11 @@ describe SponsorsController do
         do_patch
         expect(signature).to be_pending
         expect(signature.perishable_token).not_to be_nil
+      end
+
+      it "sets the constituency_id on the creator signature, based on the postcode" do
+        do_patch
+        expect(signature.constituency_id).to eq constituency.id
       end
 
       it 'redirects to the thank you page' do

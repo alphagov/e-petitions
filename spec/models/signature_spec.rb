@@ -435,5 +435,23 @@ describe Signature do
       expect(signature.constituency_id).to eq '1235'
     end
   end
+
+  describe 'store_constituency_id' do
+    let(:signature) { FactoryGirl.build(:signature, postcode: 'SW1 1AA')}
+
+    it 'saves the instance and sets the constituency id' do
+      stub_constituency('SW1 1AA', '12345', 'North Idshire')
+      signature.store_constituency_id
+      expect(signature.constituency_id).to eq '12345'
+      expect(signature).to be_persisted
+    end
+
+    it 'does not save the instance if it did not set a constituency id' do
+      stub_no_constituencies('SW1 1AA')
+      signature.store_constituency_id
+      expect(signature.constituency_id).to be_nil
+      expect(signature).not_to be_persisted
+    end
+  end
 end
 

@@ -26,6 +26,7 @@ class SponsorsController < ApplicationController
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
     if @stage_manager.create_signature
       @signature = @stage_manager.signature
+      @signature.store_constituency_id
       @sponsor = @petition.sponsors.create(signature: @signature)
       send_email_to_sponsor(@sponsor)
       redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
