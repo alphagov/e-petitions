@@ -220,34 +220,6 @@ describe Signature do
       end
     end
 
-    describe "post district" do
-      it "is the first half of the postcode" do
-        expect(Signature.new(:postcode => "SW1A 1AA").postal_district).to eq("SW1A")
-        expect(Signature.new(:postcode => "E5C 2PL").postal_district).to eq("E5C")
-        expect(Signature.new(:postcode => "E5 2PL").postal_district).to eq("E5")
-        expect(Signature.new(:postcode => "E52 2PL").postal_district).to eq("E52")
-        expect(Signature.new(:postcode => "SO22 2PL").postal_district).to eq("SO22")
-      end
-
-      it "handles the lack of spaces" do
-        expect(Signature.new(:postcode => "SO222PL").postal_district).to eq("SO22")
-      end
-
-      it "handles lack of spaces for shorter codes" do
-        expect(Signature.new(:postcode => "wn88en").postal_district).to eq("WN8")
-        expect(Signature.new(:postcode => "hd58tf").postal_district).to eq("HD5")
-      end
-
-      it "handles case correctly" do
-        expect(Signature.new(:postcode => "So222pL").postal_district).to eq("SO22")
-      end
-
-      it "is blank for non-standard postcodes" do
-        expect(Signature.new(:postcode => "").postal_district).to eq("")
-        expect(Signature.new(:postcode => "BFPO 1234").postal_district).to eq("")
-      end
-    end
-
     describe "uk_citizenship" do
       it "requires acceptance of uk_citizenship for a new record" do
         expect(FactoryGirl.build(:signature, :uk_citizenship => '1')).to be_valid

@@ -70,8 +70,4 @@ Rails.application.routes.draw do
     get 'logout' => 'user_sessions#destroy', :as => :logout
     get 'login' => 'user_sessions#new', :as => :login
   end
-
-  namespace :api do
-    resources :petitions, :only => [:index, :show]
-  end
 end

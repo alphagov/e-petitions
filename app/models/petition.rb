@@ -189,14 +189,6 @@ class Petition < ActiveRecord::Base
     self.creator_signature.update_attribute(:petition_id, self.id)
   end
 
-  def signature_counts_by_postal_district
-    Hash.new(0).tap do |counts|
-      signatures.validated.find_each do |signature|
-        counts[signature.postal_district] += 1 if signature.postal_district.present?
-      end
-    end
-  end
-
   def supporting_sponsors_count
     sponsors.supporting_the_petition.count
   end
@@ -222,12 +214,12 @@ class Petition < ActiveRecord::Base
   def validate_creator_signature!
     self.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
   end
-  
+
   def update_state_after_new_validated_sponsor!
     if state == PENDING_STATE
       update_attribute(:state, VALIDATED_STATE)
     end
-    
+
     if on_sponsor_moderation_threshold?
       update_attribute(:state, SPONSORED_STATE)
     end

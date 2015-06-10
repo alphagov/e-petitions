@@ -306,32 +306,6 @@ describe Petition do
     end
   end
 
-  describe "signature counts by postal code" do
-    let(:petition) { FactoryGirl.create(:open_petition) }
-    subject { petition.signature_counts_by_postal_district }
-
-    before do
-      5.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "SO23 0AA") }
-      2.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "so231BB") }
-      1.times { FactoryGirl.create(:signature, :petition => petition, :postcode => "b178jl") }
-    end
-
-    it "returns a hash of counts" do
-      expect(subject["SO23"]).to eq(7)
-      expect(subject["B17"]).to eq(1)
-    end
-
-    it "only returns validated signatures" do
-      FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "b17 1SS")
-      expect(subject["B17"]).to eq(1)
-    end
-
-    it "ignores special signatures" do
-      FactoryGirl.create(:pending_signature, :petition => @petition, :postcode => "BFPO 1234")
-      expect(subject[""]).to eq(0)
-    end
-  end
-
   describe "can_be_signed?" do
     def petition(state = Petition::OPEN_STATE)
       @petition ||= FactoryGirl.create(:petition, :state => state)
