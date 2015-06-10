@@ -90,4 +90,54 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
       expect(subject.signature_count).not_to eq old_signature_count
     end
   end
+
+  context '.record_new_signature_for' do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:constituency_id) { FactoryGirl.generate(:constituency_id) }
+    let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
+
+    it 'does nothing if the supplied signature is nil' do
+      expect {
+        described_class.record_new_signature_for(nil)
+      }.not_to change(described_class, :count)
+    end
+
+    it 'does nothing if the supplied signature has no petition' do
+      signature.petition = nil
+      expect {
+        described_class.record_new_signature_for(signature)
+      }.not_to change(described_class, :count)
+    end
+
+    it 'does nothing if the supplied signature has no constituency_id' do
+      signature.constituency_id = nil
+      expect {
+        described_class.record_new_signature_for(signature)
+      }.not_to change(described_class, :count)
+    end
+
+    it 'does nothing if the supplied signature is not validated?' do
+      signature.state = Signature::PENDING_STATE
+      expect {
+        described_class.record_new_signature_for(signature)
+      }.not_to change(described_class, :count)
+    end
+
+    it 'creates a new instance and sets the count to 1 if nothing exists already' do
+      expect {
+        described_class.record_new_signature_for(signature)
+      }.to change(described_class, :count).by(1)
+      expect(described_class.for(petition, constituency_id).signature_count).to eq 1
+    end
+
+    it 'increments the signature_count of the existing instance by 1' do
+      existing = described_class.for(signature.petition, signature.constituency_id)
+      existing.update_column(:signature_count, 20)
+
+      described_class.record_new_signature_for(signature)
+
+      existing.reload
+      expect(existing.signature_count).to eq 21
+    end
+  end
 end

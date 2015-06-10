@@ -373,6 +373,17 @@ describe Signature do
       subject.validate!
       expect(subject.updated_at).to eq now
     end
+
+    it 'tells the relevant constituency petition journal to record a new signature' do
+      expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(subject)
+      subject.validate!
+    end
+
+    it 'does not talk to the constituency petition journal if the signature is not pending' do
+      expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
+      subject.state = Signature::VALIDATED_STATE
+      subject.validate!
+    end
   end
 
   include ConstituencyApiHelpers::ApiLevel

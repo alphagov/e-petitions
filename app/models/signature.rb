@@ -67,8 +67,13 @@ class Signature < ActiveRecord::Base
   end
 
   def validate!
-    self.update_columns(state: Signature::VALIDATED_STATE)
-    self.touch
+    if pending?
+      self.update_columns(
+        state: VALIDATED_STATE,
+        updated_at: Time.current
+      )
+      ConstituencyPetitionJournal.record_new_signature_for(self)
+    end
   end
 
   def unsubscribe!

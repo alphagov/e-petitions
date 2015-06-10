@@ -10,6 +10,11 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     find_or_create_by(petition: petition, constituency_id: constituency_id)
   end
 
+  def self.record_new_signature_for(signature)
+    return if signature.nil? || signature.petition.nil? || signature.constituency_id.blank? || !signature.validated?
+    self.for(signature.petition, signature.constituency_id).record_new_signature
+  end
+
   def record_new_signature(at = Time.current)
     signature_count_field = self.class.connection.quote_column_name('signature_count')
     changes = "#{signature_count_field} = #{signature_count_field} + 1, updated_at = :updated_at"

@@ -22,7 +22,7 @@ Given(/^constituents in "(.*?)" support "(.*?)"$/) do |constituency, petition_ti
   petition = Petition.find_by!(title: petition_title)
   constituency = @constituencies.fetch(constituency)
   10.times do
-    FactoryGirl.create(:validated_signature, petition: petition, constituency_id: constituency.id)
+    FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.id).validate!
   end
 end
 
