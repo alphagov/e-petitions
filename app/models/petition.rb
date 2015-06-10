@@ -1,6 +1,25 @@
 class Petition < ActiveRecord::Base
-  include State
   include PerishableTokenGenerator
+
+  PENDING_STATE     = 'pending'
+  VALIDATED_STATE   = 'validated'
+  SPONSORED_STATE   = 'sponsored'
+  OPEN_STATE        = 'open'
+  REJECTED_STATE    = 'rejected'
+  HIDDEN_STATE      = 'hidden'
+
+  # this is not a state that appears in the state column since a closed petition has
+  # a state that is 'open' but the 'closed at' date time is in the past
+  CLOSED_STATE      = 'closed'
+
+  STATES            = %w[pending validated sponsored open rejected hidden]
+  VISIBLE_STATES    = %w[open rejected]
+  MODERATED_STATES  = %w[open hidden]
+  SELECTABLE_STATES = %w[open closed rejected hidden]
+  SEARCHABLE_STATES = %w[open closed rejected]
+
+  TODO_LIST_STATES           = %w[pending sponsored validated]
+  COLLECTING_SPONSORS_STATES = %w[pending validated]
 
   REJECTION_CODES = %w[no-action duplicate libellous offensive irrelevant honours]
   HIDDEN_REJECTION_CODES = %w[libellous offensive]
@@ -92,7 +111,7 @@ class Petition < ActiveRecord::Base
 
   def self.counts_by_state
     counts_by_state = {}
-    states = State::STATES + [CLOSED_STATE]
+    states = STATES + [CLOSED_STATE]
     states.each do |key_name|
       counts_by_state[key_name.to_sym] = for_state(key_name.to_s).count
     end

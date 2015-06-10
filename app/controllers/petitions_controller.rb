@@ -65,7 +65,7 @@ class PetitionsController < ApplicationController
   end
 
   def sanitise_state_param
-    params[:state] = State::SEARCHABLE_STATES.include?(params[:state]) ? params[:state] : 'open'
+    params[:state] = Petition::SEARCHABLE_STATES.include?(params[:state]) ? params[:state] : 'open'
   end
 
   def parse_emails(emails)
