@@ -3,25 +3,25 @@
 <ul class="petition-share">
   <li>
     <%= link_to "http://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(petition))}" do %>
-      <span class="icon icon-share-facebook"></span>
+      <span class="icon icon-share-facebook" aria-hidden="true"></span>
       Facebook
     <% end %>
   </li>
   <li>
     <%= link_to "mailto:?subject=#{URI.escape(title)}&body=#{URI.escape(petition_url(petition))}" do %>
-      <span class="icon icon-share-email"></span>
+      <span class="icon icon-share-email" aria-hidden="true"></span>
       Email
     <% end %>
   </li>
   <li>
     <%= link_to "http://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(petition))}" do %>
-      <span class="icon icon-share-twitter"></span>
+      <span class="icon icon-share-twitter" aria-hidden="true"></span>
       Twitter
     <% end %>
   </li>
   <li>
     <%= link_to "whatsapp://send?text=#{URI.escape(title + "\n" + petition_url(petition))}" do %>
-      <span class="icon icon-share-whatsapp"></span>
+      <span class="icon icon-share-whatsapp" aria-hidden="true"></span>
       Whatsapp
     <% end %>
   </li>
