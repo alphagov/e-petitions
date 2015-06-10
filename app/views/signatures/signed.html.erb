@@ -15,14 +15,11 @@
 
 <% if @signature.constituency %>
   <div class="section-panel">
-    <p>
-      Your constituency is <%= @signature.constituency.name %>
-    </p>
+    <h2>Contact your MP</h2>
+    <p>Your constituency is <%= @signature.constituency.name %></p>
     <% if @signature.constituency.mp %>
-      <p>
-        Your local MP is <%= @signature.constituency.mp.name %>
-        <%= link_to "Contact your MP", @signature.constituency.mp.url %>
-      </p>
+      <p>Your local MP is <%= @signature.constituency.mp.name %></p>
+      <p><%= link_to "Contact your MP", @signature.constituency.mp.url %></p>
     <% end %>
   </div>
 <% end %>
@@ -31,3 +28,4 @@
 <p>To vote in local, national and EU elections, you must be registered to vote.</p>
 <p>It takes less than 5 minutes.</p>
 <%= link_to "Register to vote", "https://www.gov.uk/register-to-vote" %>
+
