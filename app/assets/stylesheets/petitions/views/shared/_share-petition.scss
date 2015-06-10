@@ -1,6 +1,7 @@
 // Share petition
 // ==============
 .petition-share {
+  $icon-size: 19px;
   @extend %contain-floats;
   margin: 0 $gutter-half * -1;
   border-bottom: 1px solid $panel-colour;
@@ -16,12 +17,22 @@
   }
   a {
     color: $text-colour;
+    display: block;
+    line-height: 1.8;
+    padding-left: $icon-size + 10;
+    position: relative;
   }
   a:hover {
     color: $secondary-text-colour;
   }
   .icon {
     margin-right: 5px;
-    width: 19px;
+    width: $icon-size;
+    height: $icon-size;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    margin-top: $icon-size / 2 * -1;
+    background-position: center left;
   }
 }
