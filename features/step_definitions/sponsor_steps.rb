@@ -93,7 +93,7 @@ When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_ad
     When I fill in "Name" with "Laura The Sponsor"
     And I fill in "Email" with "#{email_address}"
     And I check "Yes, I am a British citizen or UK resident"
-    And I fill in "Postcode" with "AB10 1AA"
+    And I fill in my postcode with "AB10 1AA"
     And I select "United Kingdom" from "Location"
   )
 end
@@ -148,3 +148,18 @@ Then(/^(I|they|".*?") should be emailed a link for gathering support from sponso
     Then they should see /\/petitions\/\\d+\/sponsors\/[A-Za-z0-9]+/ in the email body
   }
 end
+
+When(/^I have sponsored a petition$/) do
+  steps %Q{
+    When I visit the "sponsor this petition" url I was given
+    And I should be connected to the server via an ssl connection
+    When I fill in my details as a sponsor
+    And I try to sign
+    Then I should not have signed the petition as a sponsor
+    And I am asked to review my email address
+    When I say I am happy with my email address
+    Then I should have a pending signature on the petition as a sponsor
+    And I should receive an email explaining the petition I am sponsoring
+}
+end
+

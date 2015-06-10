@@ -87,3 +87,12 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I say I am happy with my email address
     Then I should see an error
     And I should not have signed the petition as a sponsor
+
+  Scenario: Laura sees notice that she has already signed when she validates more than once
+    When I have sponsored a petition
+    When I confirm my email address
+    Then I am taken to a landing page
+    And I should have fully signed the petition as a sponsor
+    When I confirm my email address
+    Then I am taken to a landing page
+    And I should see that I have already signed the petition
