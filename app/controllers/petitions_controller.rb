@@ -61,7 +61,14 @@ class PetitionsController < ApplicationController
   protected
 
   def set_default_petition_listview_sorting
-    params.merge!(sort: 'count')
+    case params[:state]
+    when Petition::OPEN_STATE
+      params.merge!(sort: 'count')
+    when Petition::CLOSED_STATE
+      params.merge!(sort: 'count')
+    when Petition::REJECTED_STATE
+      params.merge!(sort: 'created')
+    end
   end
 
   def sanitise_state_param
