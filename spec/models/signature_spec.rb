@@ -29,7 +29,8 @@ describe Signature do
 
   RSpec::Matchers.define :have_valid do |field|
     match do |actual|
-      expect(actual.errors_on(field)).to be_blank
+      actual.valid?
+      expect(actual.errors[field]).to be_empty
     end
   end
 

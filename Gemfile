@@ -45,7 +45,6 @@ group :test do
   gem 'be_valid_asset', :require => false
   gem 'email_spec'
   gem 'launchy'
-  gem 'rspec-collection_matchers'
   gem 'webmock'
 end
 
