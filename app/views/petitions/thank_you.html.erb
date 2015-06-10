@@ -1,14 +1,13 @@
 <% content_for(:page_title) { "Thank you - e-petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Thank you for submitting your e-petition</h1>
-</div>
-<% end %>
 
-<div class="cta_block thank_you_block">
-  <p>An email will be sent to you now to confirm your email address. If we're busy this may take a few hours to arrive, thanks for your patience.</p>
+<h1 class="page-title">
+  <span class="icon icon-email" aria-hidden></span>
+  One more step&hellip;
+</h1>
 
-  <p>We can't check your e-petition until you've clicked on the link in this email.</p>
+<p class="lede">We've emailed you a link to send to your potential supporters</p>
 
-  <%= link_to "Return to home page", home_path, :class => 'link_button large_link_button return_to_homepage_button' %>
-</div>
+<h2>You need <%= AppConfig.sponsor_count_min %> supporters</h2>
+<p><%= AppConfig.sponsor_count_min %> people need to click this link and confirm their support for your petition to go live</p>
+
+<%= render 'shared/notification', text: 'Your petition will only go live when 5 people confirm their support' %>

@@ -1,11 +1,15 @@
-<fieldset>
-  <legend>Your Details</legend>
-  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-    <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
-  <% end %>
+<%= link_to :back, class: "back-page" do %>
+  &#9666; Back <span class="visuallyhidden"> to previous page</span>
+<% end %>
 
-  <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
-  <% end %>
-</fieldset>
+<h1 class="page-title">Sign your petition</h1>
+<h2 class="page-subtitle"><%= petition.title %></h2>
+
+<%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+  <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
+<% end %>
+
+<p>By signing you agree to the <%= link_to 'terms and conditions', help_path(anchor: 'terms-and-conditions') %></p>
+
+<%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
+<%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button-secondary', :tabindex => increment %>

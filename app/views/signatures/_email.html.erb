@@ -1,5 +1,5 @@
 <%= form_row :for => [signature, :email] do %>
-  <%= f.label :email, :class => 'form-label' %>
+  <%= f.label :email, 'Email', :class => 'form-label' %>
   <%= error_messages_for_field signature, :email %>
   <%= f.text_field :email, :type => 'email', :tabindex => increment, :class => 'form-control' %>
 <% end %>

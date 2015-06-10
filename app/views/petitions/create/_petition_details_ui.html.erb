@@ -1,3 +1,11 @@
+<%= link_to :back, class: "back-page" do %>
+  &#9666; Back <span class="visuallyhidden"> to previous page</span>
+<% end %>
+
+<h1 class="page-title">Create petition</h1>
+
+<p>Before you start - your petition must meet our <%= link_to 'guidelines', help_path(anchor: 'creating-a-petition') %></p>
+
 <%= form_row :for => [petition, :title] do %>
   <%= f.label :title, class: 'form-label' do %>
     Action
@@ -39,7 +47,7 @@
     <summary><span class="summary">Help writing background</span></summary>
     <div class="panel-indent">
       <p>Use this section to back up why you want action. Some people include a personal story here.</p>
-      <p>Remember that people won’t always know that much about the issue you’re petitioning about – explain it.</p>
+      <p>Remember that people won’t always know that much about the issue you’re petitioning about - explain it.</p>
     </div>
   </details>
 <% end %>

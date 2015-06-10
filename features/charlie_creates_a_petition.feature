@@ -28,10 +28,10 @@ Scenario: Charlie creates a petition
   And I press "Next"
   And I fill in my details
   And I press "Next"
-  When I press "Next"
+  When I press "This looks good"
   Then the markup should be valid
   And I am asked to review my email address
-  When I press "Submit"
+  When I press "Yes - this is my email address"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
@@ -70,14 +70,12 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Background is too long."
   And I should see "Supporting details is too long."
 
-
-
   When I fill in "Action" with "The wombats of wimbledon rock."
   And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Next"
 
-  Then I should see a fieldset called "Your Details"
+  Then I should see a title called "Sign your petition"
 
   When I press "Next"
   Then I should see "Name must be completed"
@@ -88,23 +86,23 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in my details
 
   And I press "Next"
-  Then I should see a fieldset called "Review Petition"
-
+  Then I should see a title called "Check your petition"
   And I should see "The wombats of wimbledon rock."
+  And I expand "More details"
   And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
-  And I press "Back"
+  And I press "Go back and make changes"
   And I fill in "Name" with "Mr. Wibbledon"
   And I press "Next"
-  And I press "Next"
+  And I press "This looks good"
 
-  Then I should see a fieldset called "Make sure this is right"
+  Then I should see a title called "Make sure this is right"
 
   When I fill in "Email" with ""
-  And I press "Submit"
+  And I press "Yes - this is my email address"
   Then I should see "Email must be completed"
   When I fill in "Email" with "womboid@wimbledon.com"
-  And I press "Submit"
+  And I press "Yes - this is my email address"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"

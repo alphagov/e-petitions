@@ -62,6 +62,11 @@ p {
   color: $secondary-text-colour;
 }
 
+// Lede, or intro text
+.lede {
+  @include core-24;
+}
+
 // Link styles
 a {
   color: $link-colour;

@@ -1,13 +1,5 @@
 <% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
 
-<%= link_to check_petitions_path, class: "back-page" do %>
-  &#9666; Back <span class="visuallyhidden"> to previous page</span>
-<% end %>
-
-<h1 class="page-title">Create petition</h1>
-
-<p>Before you start - your petition must meet our <%= link_to 'guidelines', help_path(anchor: 'creating-a-petition') %></p>
-
 <%= form_for @stage_manager.stage_object, :url => create_petition_path do |f| %>
 
   <% if f.object.errors.any? -%>

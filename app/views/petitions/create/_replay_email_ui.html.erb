@@ -1,13 +1,15 @@
-<fieldset>
-  <legend>Make sure this is right</legend>
-  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-    <%= render 'signatures/email', f: csf, signature: csf.object %>
-  <% end %>
+<% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
 
-  <p>If your email address is wrong, just change it above.</p>
+<%= link_to :back, class: "back-page" do %>
+  &#9666; Back <span class="visuallyhidden"> to previous page</span>
+<% end %>
 
-  <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Submit', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
-  <% end %>
-</fieldset>
+<h1 class="page-title">Make sure this is right</h1>
+
+<%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+  <%= render 'signatures/email', f: csf, signature: csf.object %>
+<% end %>
+
+<%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
+
+<p>If your email address is wrong, just change it above</p>

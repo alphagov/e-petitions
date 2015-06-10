@@ -276,3 +276,6 @@ Then(/^I can share it via (.+)$/) do |service|
   end
 end
 
+Then /^I expand "([^"]*)"/ do |text|
+  page.find("//details/summary[contains(., '#{text}')]").click
+end
