@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: sponsors
-#
-#  id               :integer          not null, primary key
-#  petition_id      :integer
-#  signature_id     :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
-#
-
 require 'rails_helper'
 
 describe Sponsor do

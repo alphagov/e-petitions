@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: system_settings
-#
-#  id          :integer(4)      not null, primary key
-#  key         :string(64)      not null
-#  value       :text
-#  description :text
-#  created_at  :datetime
-#  updated_at  :datetime
-#
-
 require 'rails_helper'
 
 describe SystemSetting do

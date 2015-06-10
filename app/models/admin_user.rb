@@ -1,27 +1,3 @@
-# == Schema Information
-#
-# Table name: admin_users
-#
-#  id                   :integer(4)      not null, primary key
-#  email                :string(255)     not null
-#  persistence_token    :string(255)
-#  crypted_password     :string(255)
-#  password_salt        :string(255)
-#  login_count          :integer(4)      default(0)
-#  failed_login_count   :integer(4)      default(0)
-#  current_login_at     :datetime
-#  last_login_at        :datetime
-#  current_login_ip     :string(255)
-#  last_login_ip        :string(255)
-#  first_name           :string(255)
-#  last_name            :string(255)
-#  role                 :string(10)      not null
-#  force_password_reset :boolean(1)      default(TRUE)
-#  password_changed_at  :datetime
-#  created_at           :datetime
-#  updated_at           :datetime
-#
-
 class AdminUser < ActiveRecord::Base
   DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'

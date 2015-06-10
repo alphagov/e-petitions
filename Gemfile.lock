@@ -40,9 +40,6 @@ GEM
     airbrake (4.1.0)
       builder
       multi_json
-    annotate (2.6.8)
-      activerecord (>= 3.2, <= 4.3)
-      rake (~> 10.4)
     arel (6.0.0)
     authlogic (3.4.5)
       activerecord (>= 3.2)
@@ -283,7 +280,6 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
-  annotate
   authlogic
   aws-sdk
   be_valid_asset

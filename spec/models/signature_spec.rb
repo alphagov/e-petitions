@@ -1,22 +1,3 @@
-# == Schema Information
-#
-# Table name: signatures
-#
-#  id               :integer(4)      not null, primary key
-#  name             :string(255)     not null
-#  state            :string(10)      default("pending"), not null
-#  perishable_token :string(255)
-#  postcode         :string(255)
-#  country          :string(255)
-#  ip_address       :string(20)
-#  petition_id      :integer(4)
-#  created_at       :datetime
-#  updated_at       :datetime
-#  notify_by_email  :boolean(1)      default(FALSE)
-#  last_emailed_at  :datetime
-#  email            :string(255)
-#
-
 require 'rails_helper'
 
 describe Signature do
