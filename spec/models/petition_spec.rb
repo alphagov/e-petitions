@@ -66,32 +66,41 @@ describe Petition do
       expect(FactoryGirl.build(:petition, :description => 'x' * 1001)).not_to be_valid
     end
 
-    it "should not allow blank or unknown state" do
-      p = FactoryGirl.build(:petition, :state => '')
-      expect(p.errors_on(:state)).not_to be_blank
-      p.state = 'unknown'
-      expect(p.errors_on(:state)).not_to be_blank
+    it "should not allow a blank state" do
+      petition = FactoryGirl.build(:petition, state: '')
+
+      expect(petition).not_to be_valid
+      expect(petition.errors[:state]).not_to be_empty
     end
 
-    it "should allow known states" do
-      p = FactoryGirl.build(:petition)
-      %w(pending validated open rejected hidden).each do |state|
-        p.state = state
-        expect(p.errors_on(:state)).to be_blank
+    it "should not allow an unknown state" do
+      petition = FactoryGirl.build(:petition, state: 'unknown')
+
+      expect(petition).not_to be_valid
+      expect(petition.errors[:state]).not_to be_empty
+    end
+
+    %w(pending validated open rejected hidden).each do |state|
+      it "should allow state: #{state}" do
+        petition = FactoryGirl.build(:"#{state}_petition")
+
+        expect(petition).to be_valid
+        expect(petition.state).to eq(state)
+        expect(petition.errors[:state]).to be_empty
       end
     end
 
     context "when state is open" do
-      let(:petition) { FactoryGirl.build(:open_petition, :open_at => nil, :closed_at => nil) }
+      let(:petition) { FactoryGirl.build(:open_petition, open_at: nil, closed_at: nil) }
 
       it "should check petition is invalid if no open_at date" do
         expect(petition).not_to be_valid
-        expect(petition.errors_on(:open_at)).not_to be_blank
+        expect(petition.errors[:open_at]).not_to be_empty
       end
 
       it "should check petition is invalid if no closed_at date" do
         expect(petition).not_to be_valid
-        expect(petition.errors_on(:closed_at)).not_to be_blank
+        expect(petition.errors[:closed_at]).not_to be_empty
       end
 
       it "should check petition is valid if there is a open_at and closed_at date" do
@@ -102,11 +111,11 @@ describe Petition do
     end
 
     context "when state is rejected" do
-      let(:petition) { FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE) }
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
 
       it "should check petition is invalid if no rejection code" do
         expect(petition).not_to be_valid
-        expect(petition.errors_on(:rejection_code)).not_to be_blank
+        expect(petition.errors[:rejection_code]).not_to be_empty
       end
 
       it "should check there is a rejection code" do
@@ -116,7 +125,7 @@ describe Petition do
     end
 
     context "response" do
-      let(:petition) { FactoryGirl.build(:petition, :response => 'Hello', :email_signees => false) }
+      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', email_signees: false) }
 
       it "should check petition is valid if there is a response when email_signees is true" do
         expect(petition).to be_valid
@@ -125,7 +134,9 @@ describe Petition do
       it "should check petition is invalid if there is no response when email_signees is true" do
         petition.response = nil
         petition.email_signees = true
-        expect(petition.errors_on(:response)).not_to be_blank
+
+        expect(petition).not_to be_valid
+        expect(petition.errors[:response]).not_to be_empty
       end
     end
   end
