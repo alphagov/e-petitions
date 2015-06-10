@@ -49,7 +49,7 @@ class PetitionSearch
   def execute_search_query
     Petition.search do |query|
       query.fulltext search_term_sanitised
-      query.paginate page: @params[:page], per_page: 20
+      query.paginate page: @params[:page], per_page: 50
       case state
       when State::CLOSED_STATE
         query.with(:state).equal_to("open")

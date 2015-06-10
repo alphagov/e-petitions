@@ -125,13 +125,13 @@ Feature: Suzy Singer searches by free text
       | Uncle Bulgaria        |
 
   Scenario: Paginate through open petitions
-    Given 21 open petitions exist with title: "International development spending"
+    Given 51 open petitions exist with title: "International development spending"
     When I go to the search page
     And I search for "open" petitions with "spending"
     And I follow "Next"
     Then I should see 1 petition
     And I follow "Previous"
-    Then I should see 20 petitions
+    Then I should see 50 petitions
 
   Scenario: Searching for a profane search term
     When I go to the search page
