@@ -45,8 +45,6 @@ group :test do
   gem 'factory_girl_rails'
   gem 'be_valid_asset', :require => false
   gem 'email_spec'
-  gem 'chronic'
-  gem 'timecop'
   gem 'launchy'
   gem 'rspec-collection_matchers'
   gem 'webmock'

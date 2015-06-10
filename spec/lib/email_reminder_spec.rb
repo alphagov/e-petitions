@@ -58,10 +58,8 @@ describe EmailReminder do
     end
 
     it "updates the time so they aren't sent again" do
-      Timecop.freeze do
-        EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-        expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.current.change(usec: 0))
-      end
+      EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
+      expect(petition.signatures.last.updated_at).to be_within(1.second).of(Time.current)
     end
 
     it "allows customisation of the last updated time" do
@@ -85,10 +83,8 @@ describe EmailReminder do
       end
 
       it "still updates the timestamp" do
-        Timecop.freeze do
-          EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
-          expect(petition.signatures.last.updated_at.change(usec: 0)).to eq(Time.current.change(usec: 0))
-        end
+        EmailReminder.special_resend_of_signature_email_validation('2011-09-02')
+        expect(petition.signatures.last.updated_at).to be_within(1.second).of(Time.current)
       end
     end
   end
