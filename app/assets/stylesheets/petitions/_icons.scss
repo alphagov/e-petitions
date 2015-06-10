@@ -25,6 +25,8 @@
 // .icon .icon-search-white
 // .icon .icon-location-white
 // .icon .icon-play-white
+// .icon .icon-paginate-next
+// .icon .icon-paginate-previous
 
 .icon, .graphic {
   background-position: 0 0;
@@ -219,6 +221,27 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_play-white-2x.png");
+    background-size: 100%;
+  }
+}
+
+.icon-paginate-next {
+  width: 32px;
+  height: 57px;
+  background-image: url("/images/icons/icon_paginate-next.png");
+
+  @include device-pixel-ratio() {
+    background-image: url("/images/icons/icon_paginate-next-2x.png");
+    background-size: 100%;
+  }
+}
+.icon-paginate-previous {
+  width: 32px;
+  height: 57px;
+  background-image: url("/images/icons/icon_paginate-previous.png");
+
+  @include device-pixel-ratio() {
+    background-image: url("/images/icons/icon_paginate-previous-2x.png");
     background-size: 100%;
   }
 }

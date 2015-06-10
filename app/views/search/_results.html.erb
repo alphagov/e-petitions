@@ -1,14 +1,8 @@
-<div class="petition_index_view">
-  <%= render 'search/result_tabs' %>
-  <div class="petition_list">
-    <% unless @petition_search.results.empty? -%>
-      <div class="title_pagination_row">
-        <%= render 'search/result_list_header', :petition_search => @petition_search, :state => @petition_search.state %>
-      </div>
-      <%= render 'search/results_table', :petition_search => @petition_search %>
-      <%= render 'search/result_list_footer', :petition_search => @petition_search %>
-    <% else -%>
-      <p class="no_petitions_warning">No petitions could be found matching your search terms.</p>
-    <% end -%>
-  </div>
+<div class="search-results section-panel">
+  <% unless @petition_search.results.empty? -%>
+    <%= render 'search/results_table', :petition_search => @petition_search %>
+    <%= render 'search/result_list_footer', :petition_search => @petition_search %>
+  <% else -%>
+    <p>No petitions could be found matching your search terms.</p>
+  <% end -%>
 </div>

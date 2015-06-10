@@ -24,9 +24,5 @@ Then /^I should not be able to search via free text$/ do
 end
 
 Then /^I should see an? "([^"]*)" petition count of (\d+)$/ do |state, count|
-  expect(page).to have_css(%{#petition_state_tabs li:contains("#{state.capitalize}")}, :text => count.to_s)
-end
-
-Then /^the search results table should have the caption [\/"]([^\/]+)[\/"]$/ do |summary_text|
-  expect(page).to have_xpath("//*[contains(@class, 'petition_list')]//table/caption[text()='#{summary_text}']")
+  expect(page).to have_css(%{#other-search-lists a:contains("#{state.capitalize}")}, :text => count.to_s)
 end

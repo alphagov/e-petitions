@@ -1,6 +1,8 @@
 <% content_for(:page_title) { "View all e-petitions - e-petitions" } %>
-<div class="title_block">
-  <h1>All e-petitions</h1>
-</div>
+<a class="lists-of-petitions" href="#other-search-lists">Lists of petitions</a>
 
-<%= render '/search/results' %>
+<h1 class="page-title"><%="#{@petition_search.state.capitalize} petitions"%></h1>
+
+<%= render 'search/results' %>
+
+<%= render 'search/filter_nav' %>

@@ -1,0 +1,20 @@
+.lists-of-petitions {
+  display: block;
+  margin-top: $gutter;
+}
+
+.search-results {
+  margin-top: $gutter-half;
+  margin-bottom: $gutter;
+}
+
+#other-search-lists {
+  a {
+    display: block;
+    padding-top: $gutter-one-quarter;
+    padding-bottom: $gutter-one-quarter;
+  }
+  h1 {
+    @include bold-24();
+  }
+}

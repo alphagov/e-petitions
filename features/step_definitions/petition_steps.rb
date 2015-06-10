@@ -38,6 +38,11 @@ Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, coun
   end
 end
 
+Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |title, count|
+    p = FactoryGirl.create(:open_petition, title: title)
+    p.update_attribute(:signature_count, count)
+end
+
 Given /^I have created an e-petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
@@ -110,8 +115,7 @@ When /^I change the number viewed per page to (\d+)$/ do |per_page|
 end
 
 Then /^I should see all petitions$/ do
-  expect(page).to have_content("All e-petitions")
-  expect(page).to have_css("tbody tr", :count => 3)
+  expect(page).to have_css("ol li", :count => 3)
 end
 
 Then /^I should see the petition details$/ do

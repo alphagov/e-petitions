@@ -68,12 +68,18 @@ Then /^I should see the following admin index table:$/ do |values_table|
   values_table.diff!(actual_table)
 end
 
-Then /^I should see the following search results table:$/ do |values_table|
+Then /^I should see the following search results:$/ do |values_table|
   values_table.raw.each do |row|
     row.each do |column|
       expect(page).to have_content(column)
     end
   end
+end
+
+Then(/^I should see the following ordered list of petitions:$/) do |table|
+  actual_petitions = page.all(:css, '.search-results ol li a').map(&:text)
+  expected_petitions = table.raw.flatten
+  expect(actual_petitions).to eq(expected_petitions)
 end
 
 Then /^I should see the creation date of the petition$/ do
@@ -94,11 +100,7 @@ Then /^I should see (\d+) rows? in the admin index table$/ do |number|
 end
 
 Then /^I should see (\d+) petitions?$/ do |number|
-  expect(page).to have_xpath( "//table/tbody[count(tr)=#{number.to_i}]" )
-end
-
-Then /^the "([^"]*)" tab should be active$/ do |tab_text|
-  expect(page).to have_css("ul.tab_menu li.active a", :text => tab_text)
+  expect(page).to have_xpath( "//ol[count(li)=#{number.to_i}]" )
 end
 
 ### Links

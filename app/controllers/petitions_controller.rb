@@ -5,6 +5,7 @@ class PetitionsController < ApplicationController
   respond_to :html
 
   def index
+    set_default_petition_listview_sorting
     @petition_search = PetitionSearch.new(params)
   end
 
@@ -58,6 +59,10 @@ class PetitionsController < ApplicationController
   end
 
   protected
+
+  def set_default_petition_listview_sorting
+    params.merge!(sort: 'count')
+  end
 
   def sanitise_state_param
     params[:state] = State::SEARCHABLE_STATES.include?(params[:state]) ? params[:state] : 'open'
