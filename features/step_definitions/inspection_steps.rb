@@ -76,6 +76,12 @@ Then /^I should see the following search results:$/ do |values_table|
   end
 end
 
+Then(/^I should see the following ordered list of petitions:$/) do |table|
+  actual_petitions = page.all(:css, '.search-results ol li a').map(&:text)
+  expected_petitions = table.raw.flatten
+  expect(actual_petitions).to eq(expected_petitions)
+end
+
 Then /^I should see the creation date of the petition$/ do
   expect(page).to have_css("th", :text => "Created")
 end
