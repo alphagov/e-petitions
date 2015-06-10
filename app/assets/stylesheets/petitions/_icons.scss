@@ -131,7 +131,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_share-facebook-2x.png");
-    background-size: 100%;
+    background-size: 7px 16px;
   }
 }
 .icon-share-email {
@@ -141,7 +141,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_share-email-2x.png");
-    background-size: 100%;
+    background-size: 18px 13px;
   }
 }
 .icon-share-twitter {
@@ -151,7 +151,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_share-twitter-2x.png");
-    background-size: 100%;
+    background-size: 16px 13px;
   }
 }
 .icon-share-whatsapp {
@@ -161,7 +161,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_share-whatsapp-2x.png");
-    background-size: 100%;
+    background-size: 19px 19px;
   }
 }
 .icon-email {
@@ -171,7 +171,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_email-2x.png");
-    background-size: 100%;
+    background-size: 25px 17px;
   }
 }
 .icon-warning-white {
@@ -181,7 +181,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_warning-white-2x.png");
-    background-size: 100%;
+    background-size: 25px 25px;
   }
 }
 .icon-confirmation-tick {
@@ -191,7 +191,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_confirmation-tick-2x.png");
-    background-size: 100%;
+    background-size: 22px 17px;
   }
 }
 .icon-search-white {
@@ -201,7 +201,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_search-white-2x.png");
-    background-size: 100%;
+    background-size: 18px 18px;
   }
 }
 .icon-location-white {
@@ -211,7 +211,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_location-white-2x.png");
-    background-size: 100%;
+    background-size: 18px 18px;
   }
 }
 .icon-play-white {
@@ -221,7 +221,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_play-white-2x.png");
-    background-size: 100%;
+    background-size: 18px 23px;
   }
 }
 
@@ -232,7 +232,7 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_paginate-next-2x.png");
-    background-size: 100%;
+    background-size: 32px 57px;
   }
 }
 .icon-paginate-previous {
@@ -242,6 +242,6 @@
 
   @include device-pixel-ratio() {
     background-image: url("/images/icons/icon_paginate-previous-2x.png");
-    background-size: 100%;
+    background-size: 32px 57px;
   }
 }
