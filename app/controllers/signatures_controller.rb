@@ -1,8 +1,8 @@
 class SignaturesController < ApplicationController
   include ManagingMoveParameter
 
-  before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
-  before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
+  before_filter :retrieve_petition, :only => [:new, :create, :thank_you]
+  before_filter :retrieve_signature, :only => [:verify, :unsubscribe]
 
   respond_to :html
 
@@ -21,13 +21,19 @@ class SignaturesController < ApplicationController
     end
   end
 
+  def signed
+    @signature = Signature.find_by!(perishable_token: params[:id])
+    redirect_to(verify_signature_url(@signature, @signature.perishable_token)) and return unless @signature.validated?
+    @petition = @signature.petition
+  end
+
   def verify
     verify_token
     @petition = @signature.petition
 
     if @signature.validated?
       flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
-      redirect_to signed_petition_signature_url(@petition, @signature) and return
+      redirect_to signed_petition_signature_url(@petition, @signature.perishable_token) and return
     end
 
     @signature.validate!
@@ -38,7 +44,7 @@ class SignaturesController < ApplicationController
       @petition.update_state_after_new_validated_sponsor!
       redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
-      redirect_to signed_petition_signature_url(@petition, @signature)
+      redirect_to signed_petition_signature_url(@petition, @signature.perishable_token)
     end
   end
 
@@ -116,3 +122,4 @@ class SignaturesController < ApplicationController
     end
   end
 end
+
