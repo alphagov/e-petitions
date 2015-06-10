@@ -1,7 +1,6 @@
 class SignaturesController < ApplicationController
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
   before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
-  include ActionView::Helpers::NumberHelper
 
   respond_to :html
 
@@ -57,7 +56,7 @@ class SignaturesController < ApplicationController
   def verify_token
     raise ActiveRecord::RecordNotFound unless @signature.perishable_token == params[:token]
   end
-  
+
   def retrieve_petition
     @petition = Petition.visible.find(params[:petition_id])
   end
@@ -65,7 +64,7 @@ class SignaturesController < ApplicationController
   def retrieve_signature
     @signature = Signature.find(params[:id])
   end
-  
+
   def send_email_to_petition_signer(signature)
     PetitionMailer.email_confirmation_for_signer(signature).deliver_now
   end
