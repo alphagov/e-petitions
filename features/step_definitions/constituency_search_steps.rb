@@ -18,12 +18,21 @@ Given(/^a constituency "(.*?)" is found by postcode "(.*?)"$/) do |constituency_
   end
 end
 
-Given(/^constituents in "(.*?)" support "(.*?)"$/) do |constituency, petition_title|
+Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_title|
   petition = Petition.find_by!(title: petition_title)
   constituency = @constituencies.fetch(constituency)
-  10.times do
+  how_many =
+    case how_many
+    when 'a' then 1
+    when 'few' then 3
+    when 'some' then 5
+    when 'many' then 10
+    end
+
+  how_many.times do
     FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.id).validate!
   end
+  Petition.update_all_signature_counts
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
@@ -59,4 +68,12 @@ end
 Then(/^I should see an explanation that my constituency couldn't be found$/) do
   expect(page).not_to have_selector(:css, '.local-petitions ol')
   expect(page).to have_content('We could not find your constituency from the postcode you provided')
+end
+
+Then(/^the petitions I see should be ordered by my fellow constituents level of support$/) do
+  within :css, '.local-petitions ol' do
+    list_elements = page.all(:css, 'li')
+    my_constituents_signature_counts = list_elements.map { |li| Integer(li.text.match(/(\d+) signatures from your constituency/)[1]) }
+    expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
+  end
 end

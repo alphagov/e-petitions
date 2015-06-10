@@ -291,4 +291,5 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
   }
   petition = FactoryGirl.create(:open_petition, petition_args)
   5.times { FactoryGirl.create(:validated_signature, petition: petition) }
+  Petition.update_all_signature_counts
 end

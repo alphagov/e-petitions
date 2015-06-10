@@ -10,11 +10,11 @@ Feature: Freya searches petitions by constituency
     And an open petition "Restore vintage diggers" with some signatures
     And an open petition "Build more quirky theme parks" with some signatures
     And a closed petition "What about other primates?" with some signatures
-    And constituents in "Rochester and Strood" support "Restore vintage diggers"
-    And constituents in "South Dorset" support "Save the monkeys"
-    And constituents in "South Dorset" support "Build more quirky theme parks"
-    And constituents in "Rochester and Strood" support "Build more quirky theme parks"
-    And constituents in "South Dorset" support "What about other primates?"
+    And a constituent in "Rochester and Strood" supports "Restore vintage diggers"
+    And few constituents in "South Dorset" support "Save the monkeys"
+    And some constituents in "South Dorset" support "Build more quirky theme parks"
+    And many constituents in "Rochester and Strood" support "Build more quirky theme parks"
+    And a constituent in "South Dorset" supports "What about other primates?"
 
   Scenario: Searching for local petitions
     Given I am on the home page
@@ -26,6 +26,7 @@ Feature: Freya searches petitions by constituency
     And I should see that my fellow constituents support "Build more quirky theme parks"
     But I should not see that my fellow constituents support "What about other primates?"
     And I should not see that my fellow constituents support "Restore vintage diggers"
+    And the petitions I see should be ordered by my fellow constituents level of support
 
   Scenario: Searching for local petitions when the api is down
     Given the constituency api is down
