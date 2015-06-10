@@ -36,11 +36,13 @@ describe ConstituencyApi do
                                ConstituencyApi::Constituency.new('3549', "Islington North", mp_jeremy),
                                ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", mp_emily)] }
     let(:constituencies_holborn) { [ConstituencyApi::Constituency.new('3536', "Holborn and St Pancras", mp_keir)] }
+    let(:constituencies_islington_no_mp) { [ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", nil)] }
 
     let(:empty_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_results.xml")) }
     let(:fake_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N11TY.xml")) }
     let(:fake_body_multiple) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N1.xml")) }
     let(:fake_body_multiple_mps) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N1C4QP.xml")) }
+    let(:fake_body_no_mps) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_mps.xml")) }
 
     it "returns an empty Constituency array for invalid postcode" do
       stub_request(:get, "#{ api_url }/SW149RQ/").to_return(status: 200, body: empty_body)
@@ -70,6 +72,11 @@ describe ConstituencyApi do
     it "returns Constituency array with the last MP where the MP has changed since the last term" do
       stub_request(:get, "#{ api_url }/N1/").to_return(status: 200, body: fake_body_multiple_mps)
       expect(api.constituencies("N1")).to match_array constituencies_holborn
+    end
+
+    it 'handles a constituency without an MP' do
+      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body_no_mps)
+      expect(api.constituencies("N1 1TY")).to eq constituencies_islington_no_mp
     end
 
     it "handles timeout errors" do
