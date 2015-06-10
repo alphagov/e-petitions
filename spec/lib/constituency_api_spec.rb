@@ -66,22 +66,22 @@ describe ConstituencyApi do
 
     it "handles timeout errors" do
       stub_request(:any, /.*data.parliament.uk.*/).to_timeout
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
+      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
     end
 
     it "handles connection failed errors" do
       stub_request(:any, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ConnectionFailed)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
+      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
     end
 
     it "handles resource not found errors" do
       stub_request(:any, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ResourceNotFound)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
+      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
     end
 
     it "handles unexpected response" do
       stub_request(:get, "#{ api_url }/N1/").to_return(status: 500, body: fake_body)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::ConstituencyApiError)
+      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
     end
   end
 end

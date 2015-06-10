@@ -93,7 +93,7 @@ class Signature < ActiveRecord::Base
 
   def constituency
     @constituency ||= ConstituencyApi::Client.constituencies(self.postcode).first
-  rescue ConstituencyApi::ConstituencyApiError => e
+  rescue ConstituencyApi::Error => e
     Rails.logger.error("Failed to fetch constituency - #{e}")
     nil
   end

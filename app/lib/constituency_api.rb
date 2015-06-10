@@ -1,5 +1,5 @@
 module ConstituencyApi
-  ConstituencyApiError = Class.new(RuntimeError)
+  class Error < RuntimeError; end
 
   class Constituency < Struct.new(:name, :mp)
   end
@@ -33,16 +33,16 @@ module ConstituencyApi
         req.options[:open_timeout] = TIMEOUT
       end
       unless response.status == 200
-        raise ConstituencyApiError.new("Unexpected response from API:"\
-                                       "status #{response.status}"\
-                                       "body #{response.body}"\
-                                       "request #{URL}/#{postcode_param(postcode)}/")
+        raise Error.new("Unexpected response from API:"\
+                        "status #{response.status}"\
+                        "body #{response.body}"\
+                        "request #{URL}/#{postcode_param(postcode)}/")
       end
       Hash.from_xml(response.body)
     rescue Faraday::Error::TimeoutError
-      raise ConstituencyApiError.new("Timeout after #{TIMEOUT} seconds")
+      raise Error.new("Timeout after #{TIMEOUT} seconds")
     rescue Faraday::Error => e
-      raise ConstituencyApiError.new("Network error - #{e}")
+      raise Error.new("Network error - #{e}")
     end
 
     def self.last_mp(constituency_hash)
