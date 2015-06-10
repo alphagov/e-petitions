@@ -113,6 +113,39 @@ ALTER SEQUENCE archived_petitions_id_seq OWNED BY archived_petitions.id;
 
 
 --
+-- Name: constituency_petition_journals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE constituency_petition_journals (
+    id integer NOT NULL,
+    constituency_id character varying NOT NULL,
+    petition_id integer NOT NULL,
+    signature_count integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: constituency_petition_journals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE constituency_petition_journals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: constituency_petition_journals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE constituency_petition_journals_id_seq OWNED BY constituency_petition_journals.id;
+
+
+--
 -- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -331,6 +364,13 @@ ALTER TABLE ONLY archived_petitions ALTER COLUMN id SET DEFAULT nextval('archive
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY constituency_petition_journals ALTER COLUMN id SET DEFAULT nextval('constituency_petition_journals_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
 
 
@@ -379,6 +419,14 @@ ALTER TABLE ONLY archived_petitions
 
 
 --
+-- Name: constituency_petition_journals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY constituency_petition_journals
+    ADD CONSTRAINT constituency_petition_journals_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: delayed_jobs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -416,6 +464,13 @@ ALTER TABLE ONLY sponsors
 
 ALTER TABLE ONLY system_settings
     ADD CONSTRAINT system_settings_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: idx_constituency_petition_journal_uniqueness; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX idx_constituency_petition_journal_uniqueness ON constituency_petition_journals USING btree (petition_id, constituency_id);
 
 
 --
@@ -587,4 +642,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150603112821');
 INSERT INTO schema_migrations (version) VALUES ('20150605100049');
 
 INSERT INTO schema_migrations (version) VALUES ('20150609111042');
+
+INSERT INTO schema_migrations (version) VALUES ('20150610091149');
 
