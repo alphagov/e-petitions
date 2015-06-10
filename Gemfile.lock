@@ -264,7 +264,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    timecop (0.7.3)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     webmock (1.21.0)
@@ -289,7 +288,6 @@ DEPENDENCIES
   aws-sdk
   be_valid_asset
   capybara
-  chronic
   cucumber-rails
   database_cleaner
   delayed_job_active_record
@@ -320,7 +318,6 @@ DEPENDENCIES
   sunspot_rails
   sunspot_solr
   tabnav
-  timecop
   webmock
   whenever
   will_paginate

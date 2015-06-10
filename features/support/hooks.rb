@@ -7,7 +7,3 @@ end
 Before do
   default_url_options[:protocol] = 'https'
 end
-
-After do
-  travel_back
-end
