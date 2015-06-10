@@ -30,7 +30,6 @@ gem 'aws-sdk'
 group :development, :test do
   gem 'rspec-rails'
   gem 'evergreen', :require => 'evergreen/rails'
-  gem 'annotate'
   gem 'pry'
 end
 

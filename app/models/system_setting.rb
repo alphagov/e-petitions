@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: system_settings
-#
-#  id          :integer(4)      not null, primary key
-#  key         :string(64)      not null
-#  value       :text
-#  description :text
-#  created_at  :datetime
-#  updated_at  :datetime
-#
-
 class SystemSetting < ActiveRecord::Base
   THRESHOLD_SIGNATURE_COUNT = "threshold_signature_count"
   GET_AN_MP_SIGNATURE_COUNT = "get_an_mp_signature_count"

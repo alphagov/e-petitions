@@ -1,28 +1,3 @@
-# == Schema Information
-#
-# Table name: petitions
-#
-#  id                      :integer(4)      not null, primary key
-#  title                   :string(255)     not null
-#  description             :text
-#  response                :text
-#  state                   :string(10)      default("pending"), not null
-#  open_at                 :datetime
-#  creator_signature_id    :integer(4)      not null
-#  created_at              :datetime
-#  updated_at              :datetime
-#  creator_id              :integer(4)
-#  rejection_text          :text
-#  closed_at               :datetime
-#  signature_count         :integer(4)      default(0)
-#  response_required       :boolean(1)      default(FALSE)
-#  internal_response       :text
-#  rejection_code          :string(50)
-#  notified_by_email       :boolean(1)      default(FALSE)
-#  email_requested_at      :datetime
-#  get_an_mp_email_sent_at :datetime
-#
-
 require 'rails_helper'
 
 describe Petition do
