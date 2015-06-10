@@ -415,7 +415,7 @@ describe Signature do
     end
 
     it "returns nil for unexpected API response" do
-      allow(ConstituencyApi::Client).to receive(:constituencies).and_raise(ConstituencyApi::ConstituencyApiError)
+      allow(ConstituencyApi::Client).to receive(:constituencies).and_raise(ConstituencyApi::Error)
       signature = FactoryGirl.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
     end

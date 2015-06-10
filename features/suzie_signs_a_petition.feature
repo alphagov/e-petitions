@@ -34,6 +34,8 @@ Feature: Suzie signs a petition
     When I confirm my email address
     Then I am taken to a landing page
     And I should see my constituency "Islington South and Finsbury"
+    And I should see my MP
+    And I can click on a link to visit my MP
     And I can click on a link to return to the petition
     And I should have signed the petition
 
@@ -49,6 +51,7 @@ Feature: Suzie signs a petition
     When I confirm my email address
     Then I am taken to a landing page
     And I should not see the text "Your constituency is"
+    And I should not see the text "Your MP is"
 
   Scenario: Suzie cannot sign if she is not a UK citizen
     When I decide to sign the petition
