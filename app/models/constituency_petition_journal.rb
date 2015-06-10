@@ -6,6 +6,14 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   validates :petition_id, uniqueness: { scope: [:constituency_id] }
   validates :signature_count, presence: true
 
+  scope :ordered, -> {
+    order("#{table_name}.signature_count DESC")
+  }
+  scope :with_signatures_for, ->(constituency_id) {
+    where("#{table_name}.signature_count > 0").
+    where(table_name => { constituency_id: constituency_id})
+  }
+
   def self.for(petition, constituency_id)
     find_or_create_by(petition: petition, constituency_id: constituency_id)
   end
