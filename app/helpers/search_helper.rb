@@ -4,7 +4,8 @@ module SearchHelper
       link_text = petition_list_url_link_text(state.capitalize, petition_search.result_count_for_state(state))
       link_to(link_text.html_safe, petition_list_url(state, params))
     end
-    safe_join(search_list_links)
+    lists = search_list_links.map { |a| content_tag(:li, a) }
+    content_tag(:ul, safe_join(lists))
   end
 
   def will_paginate_petitions(collection_or_options = nil, options = {})
