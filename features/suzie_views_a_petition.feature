@@ -10,6 +10,10 @@ Feature: Suzie views a petition
     And I should see "Spend more money on Defence - e-petitions" in the browser page title
     And I should see the vote count, closed and open dates
     And I should not see "This e-petition is now closed"
+    And I can share it via Email
+    And I can share it via Facebook
+    And I can share it via Twitter
+    And I can share it via Whatsapp
 
   Scenario: Suzie views a petition containing urls, email addresses and html tags
     Given an open petition exists with title: "Defence review", description: "<i>We<i> like http://www.google.com and bambi@gmail.com"
@@ -35,7 +39,7 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should see the petition details
     And I cannot sign the petition
-    
+
   Scenario: Suzie sees a 'closed' message when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
