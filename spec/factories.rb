@@ -95,7 +95,7 @@ FactoryGirl.define do
 
   factory :rejected_petition, :parent => :petition do
     state  Petition::REJECTED_STATE
-    rejection_code "Just do not like"
+    rejection_code "duplicate"
   end
 
   factory :hidden_petition, :parent => :petition do

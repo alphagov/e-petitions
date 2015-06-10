@@ -6,6 +6,20 @@ module PetitionHelper
     end
   end
 
+  def rejection_reasons
+    t(:"petitions.rejection_reasons.titles").map do |value, label|
+      if value.to_s.in?(Petition::HIDDEN_REJECTION_CODES)
+        ["#{label} (will be hidden)", value]
+      else
+        [label, value]
+      end
+    end
+  end
+
+  def rejection_descriptions
+    t(:"petitions.rejection_reasons.descriptions")
+  end
+
   private
 
   def render_petition_hidden_details(stage_manager, form)

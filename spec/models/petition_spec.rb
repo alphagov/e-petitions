@@ -359,14 +359,14 @@ describe Petition do
   end
 
   describe "rejection_reason" do
-    it "should give rejection reason from json file" do
+    it "should give rejection reason from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_reason).to eq('Duplicate of an existing e-petition')
     end
   end
 
   describe "rejection_description" do
-    it "should give rejection description from json file" do
+    it "should give rejection description from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_description).to eq('<p>There is already an e-petition about this issue.</p>')
     end
@@ -489,6 +489,42 @@ describe Petition do
     it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
       subject.publish!
       expect(subject.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
+    end
+  end
+
+  describe "#reject" do
+    subject { FactoryGirl.create(:petition) }
+
+    %w[no-action duplicate irrelevant honours].each do |rejection_code|
+      context "when the reason for rejection is #{rejection_code}" do
+        before do
+          subject.reject(rejection_code: rejection_code)
+        end
+
+        it "sets Petition#rejection_code to '#{rejection_code}'" do
+          expect(subject.rejection_code).to eq(rejection_code)
+        end
+
+        it "sets Petition#state to 'rejected'" do
+          expect(subject.state).to eq("rejected")
+        end
+      end
+    end
+
+    %w[libellous offensive].each do |rejection_code|
+      context "when the reason for rejection is #{rejection_code}" do
+        before do
+          subject.reject(rejection_code: rejection_code)
+        end
+
+        it "sets Petition#rejection_code to '#{rejection_code}'" do
+          expect(subject.rejection_code).to eq(rejection_code)
+        end
+
+        it "sets Petition#state to 'hidden'" do
+          expect(subject.state).to eq("hidden")
+        end
+      end
     end
   end
 
