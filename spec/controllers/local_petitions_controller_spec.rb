@@ -22,6 +22,17 @@ describe LocalPetitionsController, type: :controller do
           expect(constituency).to eq ConstituencyApi::Constituency.new(constituency_id, constituency_name, mp)
         end
 
+        it 'exposes the 3 most popular petitions in the constituency' do
+          petitions = double
+          expect(Petition).to receive(:popular_in_constituency).with(constituency_id, 3).and_return petitions
+
+          get :index, params
+
+          petitions = assigns(:petitions)
+          expect(petitions).to be_present
+          expect(petitions).to eq petitions
+        end
+
         it 'responds successfully and renders the index template' do
           get :index, params
           expect(response).to be_success
