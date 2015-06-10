@@ -41,6 +41,7 @@
 
   .content {
     margin-top: 0px;
+    @include bold-19();
   }
 }
 
