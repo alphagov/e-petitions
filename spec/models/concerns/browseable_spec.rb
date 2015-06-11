@@ -258,7 +258,7 @@ RSpec.describe Browseable do
           expect(klass).to receive(:except).with(:select).and_return(klass)
           expect(klass).to receive(:arel_table).and_return(arel_table)
           expect(klass).to receive(:select).with("*").and_return(klass)
-          expect(klass).to receive(:reorder).with(:created_at).and_return(klass)
+          expect(klass).to receive(:except).with(:order).and_return(klass)
           expect(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
           expect(results).to receive(:to_a).and_return(petitions)
         end

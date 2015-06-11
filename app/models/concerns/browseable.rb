@@ -131,7 +131,7 @@ module Browseable
       if search?
         relation = klass.basic_search(query)
         relation = relation.except(:select).select(star)
-        relation = relation.reorder(:created_at)
+        relation = relation.except(:order)
       else
         relation = klass
       end

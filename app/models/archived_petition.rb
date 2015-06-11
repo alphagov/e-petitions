@@ -12,10 +12,10 @@ class ArchivedPetition < ActiveRecord::Base
   extend Searchable(:title, :description)
   include Browseable
 
-  facet :all, -> { self.by_created_at }
-  facet :open, -> { self.open.by_created_at }
-  facet :closed, -> { self.closed.by_created_at }
-  facet :rejected, -> { self.rejected.by_created_at }
+  facet :all, -> { by_created_at }
+  facet :open, -> { open.by_created_at }
+  facet :closed, -> { closed.by_created_at }
+  facet :rejected, -> { rejected.by_created_at }
 
   class << self
     def closed(time = Time.current)
@@ -31,7 +31,7 @@ class ArchivedPetition < ActiveRecord::Base
     end
 
     def by_created_at
-      order(:created_at)
+      reorder(:created_at)
     end
 
     private
