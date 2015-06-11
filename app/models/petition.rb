@@ -34,9 +34,9 @@ class Petition < ActiveRecord::Base
   include Browseable
 
   facet :all, -> { reorder(:signature_count).reverse_order }
-  facet :open, -> { for_state('open').reorder(:signature_count).reverse_order }
-  facet :closed, -> { for_state('closed').reorder(:signature_count).reverse_order }
-  facet :rejected, -> { for_state('rejected').reorder(:created_at) }
+  facet :open, -> { for_state(OPEN_STATE).reorder(:signature_count).reverse_order }
+  facet :closed, -> { for_state(CLOSED_STATE).reorder(:signature_count).reverse_order }
+  facet :rejected, -> { for_state(REJECTED_STATE).reorder(:created_at) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
