@@ -14,7 +14,7 @@
   <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
 <% end %>
 
-<%= render 'signatures/email', f: f, signature: signature %>
+<%= render 'signatures/email', f: f, signature: signature,  hide_label: false %>
 
 <%= form_row :for => [signature, :country] do %>
   <%= f.label :country, 'Location', :class => 'form-label' %>

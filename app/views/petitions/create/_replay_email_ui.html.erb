@@ -7,7 +7,7 @@
 <h1 class="page-title">Make sure this is right</h1>
 
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-  <%= render 'signatures/email', f: csf, signature: csf.object %>
+  <%= render 'signatures/email', f: csf, signature: csf.object,  hide_label: true %>
 <% end %>
 
 <%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>

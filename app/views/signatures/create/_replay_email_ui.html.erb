@@ -1,11 +1,6 @@
 <h1 class='page-title'>Make sure this is right</h1>
 
-<%# Not using signatures/email because autofocus and hidden label %>
-<%= form_row :for => [signature, :email] do %>
-  <%= f.label :email, :class => 'form-label visuallyhidden' %>
-  <%= error_messages_for_field signature, :email %>
-  <%= f.text_field :email, :type => 'email', :tabindex => increment, :class => 'form-control', :autofocus => true %>
-<% end %>
+<%= render 'signatures/email', f: f, signature: signature,  hide_label: true %>
 
 <%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
 
