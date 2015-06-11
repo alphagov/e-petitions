@@ -1,4 +1,12 @@
-<%= render 'admin/shared/results_per_page', :path => admin_root_path %>
+<%= form_tag admin_root_path, method: :get, class: 'filter' do %>
+  <%= radio_button_tag :petition, 'in_moderation', true %>
+  <%= label_tag :petition_in_moderation, 'awaiting moderation', class: 'radio-button' %>
+  <%= radio_button_tag :petition, 'collecting_sponsors',  params[:petition] == 'collecting_sponsors' %>
+  <%= label_tag :petition_collecting_sponsors, 'collecting sponsors', class: 'radio-button' %>
+  <%= label_tag :per_page, "Results per page:" %>
+  <%= select_tag :per_page, options_for_select(%w(20 50 100), params[:per_page]) %>
+  <%= submit_tag "Go" %>
+<% end %>
 <table class="admin_index">
   <tr>
     <th>Id</th>
@@ -6,7 +14,7 @@
     <th>Creator</th>
     <th>Date</th>
   </tr>
-  <%- @petitions.each do |petition| -%>
+  <% @petitions.each do |petition| %>
     <tr>
       <td class='petition_id'><%= petition.id %></td>
       <td><%= link_to petition.title, edit_admin_petition_path(petition) %></td>
@@ -16,7 +24,7 @@
       </td>
       <td><%= date_format_admin(petition.created_at) %></td>
     </tr>
-  <%- end -%>
-  
+  <% end %>
+
   <%= will_paginate(@petitions) if @petitions.any? %>
 </table>

@@ -53,6 +53,16 @@ Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |title, no_va
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
 end
 
+And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |title|
+  petition = Petition.find_by(title: title)
+  AppConfig.sponsor_count_max.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
+end
+
+And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |title, sponsors|
+  petition = Petition.find_by(title: title)
+  sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
+end
+
 Given /^a petition "([^"]*)" has been closed$/ do |petition_title|
   @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago)
 end

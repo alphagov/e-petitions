@@ -1,6 +1,11 @@
 class Admin::TodolistController < Admin::AdminController
-
   def index
-    @petitions = Petition.for_state(Petition::SPONSORED_STATE).order(:created_at).paginate(:page => params[:page], :per_page => params[:per_page] || 20)
+    if params[:petition] == 'collecting_sponsors'
+      petitions = Petition.collecting_sponsors
+    else
+      petitions = Petition.in_moderation
+    end
+    @petitions = petitions.by_oldest.paginate(page: params[:page], per_page: params[:per_page] || 20)
   end
 end
+

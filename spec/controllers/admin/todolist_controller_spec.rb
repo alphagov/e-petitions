@@ -27,8 +27,9 @@ describe Admin::TodolistController do
       @p1 = FactoryGirl.create(:petition, :created_at => 3.days.ago, :state => Petition::SPONSORED_STATE)
       @p2 = FactoryGirl.create(:petition, :created_at => 12.days.ago, :state => Petition::SPONSORED_STATE)
       @p3 = FactoryGirl.create(:petition, :created_at => 7.days.ago, :state => Petition::SPONSORED_STATE)
-      @p4 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
+      @p4 = FactoryGirl.create(:petition, :created_at => 10.days.ago, :state => Petition::PENDING_STATE)
       @p5 = FactoryGirl.create(:open_petition)
+      @p6 = FactoryGirl.create(:petition, :created_at => 1.day.ago, :state => Petition::VALIDATED_STATE)
     end
 
     describe "logged in as sysadmin user" do
@@ -41,9 +42,14 @@ describe Admin::TodolistController do
           expect(response).to be_success
         end
 
-        it "should return all validated petitions ordered by created_at" do
+        it "should return all sponsored petitions ordered by oldest first" do
           get :index
           expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
+        end
+
+        it 'filters petitions by state' do
+          get :index, petition: 'collecting_sponsors'
+          expect(assigns[:petitions]).to match_array([@p4, @p6])
         end
       end
     end
@@ -58,26 +64,14 @@ describe Admin::TodolistController do
           expect(response).to be_success
         end
 
-        it "should return all validated petitions ordered by created_at" do
+        it "should return all sponsored petitions ordered by oldest first" do
           get :index
           expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
         end
-      end
-    end
 
-    describe "logged in as moderator user" do
-      let(:user) { FactoryGirl.create(:moderator_user) }
-      before { login_as(user) }
-
-      describe "GET 'index'" do
-        it "should be successful" do
-          get :index
-          expect(response).to be_success
-        end
-
-        it "should return all validated petitions ordered by created_at" do
-          get :index
-          expect(assigns[:petitions]).to eq([@p2, @p3, @p1])
+        it 'filters petitions by state' do
+          get :index, petition: 'collecting_sponsors'
+          expect(assigns[:petitions]).to match_array([@p4, @p6])
         end
       end
     end
