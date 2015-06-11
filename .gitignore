@@ -11,10 +11,6 @@
 /log/*
 /tmp/*
 
-# Ignore Solr data
-/solr/data
-/solr/pids
-
 # Ignore precompiled assets
 /public/assets
 

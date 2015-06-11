@@ -15,7 +15,6 @@ Feature: Suzy Singer searches by free text
     And a rejected petition exists with title: "Eavis vs the Wombles"
     And a hidden petition exists with title: "The Wombles are profane"
     And an open petition exists with title: "Wombles", closed_at: "10 days from now"
-    And sunspot is re-indexed
     And all petitions have had their signatures counted
 
   Scenario: Search for open petitions
