@@ -21,7 +21,7 @@ describe ArchivedPetition do
     end
 
     it "sorts the results by the created_at timestamp" do
-      expect(ArchivedPetition.search(q: "Petition")).to match_array([petition_2, petition_1])
+      expect(ArchivedPetition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
     end
   end
 
