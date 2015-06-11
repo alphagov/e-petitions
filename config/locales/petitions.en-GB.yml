@@ -1,5 +1,17 @@
 en-GB:
   petitions:
+    page_titles:
+      all: "All petitions"
+      open: "Open petitions"
+      closed: "Closed petitions"
+      rejected: "Rejected petitions"
+
+    lists:
+      all: "All petitions (%{quantity})"
+      open: "Open petitions (%{quantity})"
+      closed: "Closed petitions (%{quantity})"
+      rejected: "Rejected petitions (%{quantity})"
+
     rejection_reasons:
       titles:
         no-action: "Does not include a request for action"

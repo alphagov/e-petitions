@@ -2,7 +2,7 @@ class PetitionsController < ApplicationController
   respond_to :html
 
   def index
-    @petition_search = PetitionSearch.new(params)
+    @petitions = Petition.visible.search(params)
   end
 
   def show
@@ -40,9 +40,7 @@ class PetitionsController < ApplicationController
   end
 
   def check_results
-    search_params = params
-    search_params[:q] = search_params[:search]
-    @petition_search = PetitionSearch.new(search_params)
+    @petitions = Petition.visible.search(params.merge(count: 3))
   end
 
   def resend_confirmation_email

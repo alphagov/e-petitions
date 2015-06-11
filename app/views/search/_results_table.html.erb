@@ -1,5 +1,5 @@
 <ol>
-  <% petition_search.results.each do |petition| %>
+  <% petitions.each do |petition| %>
     <li class="petition-item petition-<%= petition.state %>">
       <%= link_to petition.title, petition_path(petition) %>
       <% unless petition.rejected? %>
