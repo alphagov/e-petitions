@@ -102,7 +102,7 @@ module Browseable
     end
 
     def page_size
-      20
+      @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
     end
 
     def scope

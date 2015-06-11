@@ -125,8 +125,42 @@ RSpec.describe Browseable do
     end
 
     describe "#page_size" do
-      it "returns 20" do
-        expect(search.page_size).to eq(20)
+      context "when the count param is not set" do
+        it "returns 50" do
+          expect(search.page_size).to eq(50)
+        end
+      end
+
+      context "when the count param is set to less than 50" do
+        let(:params) { { q: 'search', page: '1', count: '3' } }
+
+        it "returns 3" do
+          expect(search.page_size).to eq(3)
+        end
+      end
+
+      context "when the count param is set to more than 50" do
+        let(:params) { { q: 'search', page: '1', count: '500' } }
+
+        it "returns 50" do
+          expect(search.page_size).to eq(50)
+        end
+      end
+
+      context "when the count param is set to zero" do
+        let(:params) { { q: 'search', page: '1', count: '0' } }
+
+        it "returns 1" do
+          expect(search.page_size).to eq(1)
+        end
+      end
+
+      context "when the count param is set to less than 0" do
+        let(:params) { { q: 'search', page: '1', count: '-10' } }
+
+        it "returns 1" do
+          expect(search.page_size).to eq(1)
+        end
       end
     end
 
