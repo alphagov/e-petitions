@@ -1,3 +1,5 @@
+require 'textacular/searchable'
+
 class Petition < ActiveRecord::Base
   include PerishableTokenGenerator
 
@@ -28,19 +30,13 @@ class Petition < ActiveRecord::Base
 
   after_create :set_petition_on_creator_signature
 
-  searchable do
-    text :title
-    text :action
-    text :description
-    text :creator_name do
-      creator_signature.name
-    end
-    string :title
-    integer :signature_count
-    time :closed_at, :trie => true
-    time :created_at, :trie => true
-    string :state
-  end
+  extend Searchable(:title, :action, :description)
+  include Browseable
+
+  facet :all, -> { self }
+  facet :open, -> { self.for_state('open').order(:signature_count).reverse_order }
+  facet :closed, -> { self.for_state('closed').order(:signature_count).reverse_order }
+  facet :rejected, -> { self.for_state('rejected').order(:created_at).reverse_order }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
