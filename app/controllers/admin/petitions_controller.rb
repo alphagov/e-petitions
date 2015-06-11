@@ -75,20 +75,12 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def reject
-    @petition.rejection_code = params[:petition][:rejection_code]
-    @petition.rejection_text = params[:petition][:rejection_text]
-
-    # if a petition is rejected for a reason that means it should be hidden, then set the state accordingly
-    reason = RejectionReason.for_code(@petition.rejection_code)
-    if reason and ! reason.published
-      @petition.state = Petition::HIDDEN_STATE
-    else
-      @petition.state = Petition::REJECTED_STATE
-    end
-
-    # send rejection emails
-    if @petition.save
+    if @petition.reject(rejection_params)
       PetitionMailer.petition_rejected(@petition).deliver_now
     end
+  end
+
+  def rejection_params
+    params.require(:petition).permit(:rejection_code, :rejection_text)
   end
 end

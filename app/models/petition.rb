@@ -2,6 +2,9 @@ class Petition < ActiveRecord::Base
   include State
   include PerishableTokenGenerator
 
+  REJECTION_CODES = %w[no-action duplicate libellous offensive irrelevant honours]
+  HIDDEN_REJECTION_CODES = %w[libellous offensive]
+
   has_perishable_token called: 'sponsor_token'
 
   after_create :set_petition_on_creator_signature
@@ -32,6 +35,7 @@ class Petition < ActiveRecord::Base
   validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
+  validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
   # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
   # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
   validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
@@ -102,6 +106,18 @@ class Petition < ActiveRecord::Base
     save!
   end
 
+  def reject(attributes)
+    assign_attributes(attributes)
+
+    if rejection_code.in?(HIDDEN_REJECTION_CODES)
+      self.state = HIDDEN_STATE
+    else
+      self.state = REJECTED_STATE
+    end
+
+    save
+  end
+
   def count_validated_signatures
     signatures.validated.count
   end
@@ -151,11 +167,11 @@ class Petition < ActiveRecord::Base
   end
 
   def rejection_reason
-    RejectionReason.for_code(self.rejection_code).title
+    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.titles")
   end
 
   def rejection_description
-    RejectionReason.for_code(self.rejection_code).description
+    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.descriptions").strip.html_safe
   end
 
   def editable_by?(user)
