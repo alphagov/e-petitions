@@ -13,9 +13,4 @@ class ApplicationController < ActionController::Base
   def show_cookie_message?
     @show_cookie_message ||= cookies[:seen_cookie_message] != 'yes'
   end
-
-  def sanitise_page_param(param = :page)
-    params[param] = params[param].to_i
-    params[param] = 1 if params[param] < 1
-  end
 end

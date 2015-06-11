@@ -1,11 +1,7 @@
 class PetitionsController < ApplicationController
-  before_filter :sanitise_page_param
-  before_filter :sanitise_state_param
-
   respond_to :html
 
   def index
-    set_default_petition_listview_sorting
     @petition_search = PetitionSearch.new(params)
   end
 
@@ -59,21 +55,6 @@ class PetitionsController < ApplicationController
   end
 
   protected
-
-  def set_default_petition_listview_sorting
-    case params[:state]
-    when Petition::OPEN_STATE
-      params.merge!(sort: 'count')
-    when Petition::CLOSED_STATE
-      params.merge!(sort: 'count')
-    when Petition::REJECTED_STATE
-      params.merge!(sort: 'created')
-    end
-  end
-
-  def sanitise_state_param
-    params[:state] = Petition::SEARCHABLE_STATES.include?(params[:state]) ? params[:state] : 'open'
-  end
 
   def parse_emails(emails)
     emails.strip.split(/\r?\n/).map { |e| e.strip }
