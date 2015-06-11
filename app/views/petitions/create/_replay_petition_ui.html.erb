@@ -18,6 +18,7 @@
 
 </div>
 
-<%= f.button 'This looks good', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
-<%= f.button 'Go back and make changes', :name => 'move', :value => 'back', :class => 'button-secondary', :tabindex => increment %>
+
+<%= f.submit 'This looks good', :name => 'move:next', :class => 'button', :tabindex => increment %>
+<%= f.submit 'Go back and make changes', :name => 'move:back', :class => 'button-secondary', :tabindex => increment %>
 

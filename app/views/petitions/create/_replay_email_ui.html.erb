@@ -10,6 +10,6 @@
   <%= render 'signatures/email', f: csf, signature: csf.object,  hide_label: true %>
 <% end %>
 
-<%= f.button 'Yes - this is my email address', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
+<%= f.submit 'Yes - this is my email address', :name => 'move:next', :class => 'button', :tabindex => increment %>
 
 <p>If your email address is wrong, just change it above</p>

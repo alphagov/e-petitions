@@ -13,5 +13,5 @@
 
 <p>By signing you agree to the <%= link_to 'terms and conditions', help_path(anchor: 'terms-and-conditions') %></p>
 
-<%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
-<%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button-secondary', :tabindex => increment %>
+<%= f.submit 'Next', :name => 'move:next', :class => 'button', :tabindex => increment %>
+<%= f.submit 'Back', :name => 'move:back', :class => 'button-secondary', :tabindex => increment %>

@@ -4,7 +4,7 @@
 <%= render 'signatures/form', f: f, signature: signature, context: 'sign' %>
 
 <%= form_row do %>
-  <%= f.button 'Sign this petition', :name => 'move', :value => 'next', :class => 'button', :tabindex => increment %>
+  <%= f.submit 'Sign this petition', :name => 'move:next', :class => 'button', :tabindex => increment %>
 <% end %>
 
 <section class="signature-terms">
