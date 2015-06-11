@@ -35,4 +35,9 @@
     margin-top: $icon-size / 2 * -1;
     background-position: center left;
   }
+  .petition-share-whatsapp a {
+    @include media(desktop) {
+      display: none;
+    }
+  }
 }
