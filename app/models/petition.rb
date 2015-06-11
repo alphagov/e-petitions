@@ -33,7 +33,7 @@ class Petition < ActiveRecord::Base
   extend Searchable(:title, :action, :description)
   include Browseable
 
-  facet :all, -> { self }
+  facet :all, -> { self.order(:signature_count).reverse_order }
   facet :open, -> { self.for_state('open').order(:signature_count).reverse_order }
   facet :closed, -> { self.for_state('closed').order(:signature_count).reverse_order }
   facet :rejected, -> { self.for_state('rejected').order(:created_at).reverse_order }
