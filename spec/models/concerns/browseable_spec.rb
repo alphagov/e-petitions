@@ -29,7 +29,7 @@ RSpec.describe Browseable do
   end
 
   describe Browseable::Search do
-    let(:klass)  { double(:klass, facets: { all: -> { self } }) }
+    let(:klass)  { double(:klass, facets: { all: -> { self }, open: -> { self } }) }
     let(:params) { { q: 'search', page: '3'} }
     let(:search) { described_class.new(klass, params) }
 
@@ -166,33 +166,33 @@ RSpec.describe Browseable do
 
     describe "#scope" do
       context "when the search scope is valid" do
-        let(:params) { { q: 'search', page: '3', state: 'all'} }
+        let(:params) { { q: 'search', page: '3', state: 'open'} }
 
         it "returns the current scope as a symbol" do
-          expect(search.scope).to eq(:all)
+          expect(search.scope).to eq(:open)
         end
       end
 
       context "when the search scope is invalid" do
         let(:params) { { q: 'search', page: '3', state: 'unknown'} }
 
-        it "returns nil" do
-          expect(search.scope).to be_nil
+        it "returns :all" do
+          expect(search.scope).to eq(:all)
         end
       end
 
       context "when the search scope is not present" do
         let(:params) { { q: 'search', page: '3' } }
 
-        it "returns nil" do
-          expect(search.scope).to be_nil
+        it "returns all" do
+          expect(search.scope).to eq(:all)
         end
       end
     end
 
     describe "#scoped?" do
       context "when the search scope is valid" do
-        let(:params) { { q: 'search', page: '3', state: 'all'} }
+        let(:params) { { q: 'search', page: '3', state: 'open'} }
 
         it "returns true" do
           expect(search.scoped?).to eq(true)

@@ -106,11 +106,11 @@ module Browseable
     end
 
     def scope
-      @scope ||= facets.keys.detect{ |key| key.to_s == params[:state] }
+      @scope ||= facets.keys.detect(-> { :all }){ |key| key.to_s == params[:state] }
     end
 
     def scoped?
-      scope.present?
+      scope != :all
     end
 
     def search?
@@ -136,10 +136,7 @@ module Browseable
         relation = klass
       end
 
-      if scoped?
-        relation = relation.instance_exec(&klass.facets[scope])
-      end
-
+      relation = relation.instance_exec(&klass.facets[scope])
       relation.paginate(page: current_page, per_page: page_size)
     end
 
