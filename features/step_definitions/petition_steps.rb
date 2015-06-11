@@ -162,7 +162,7 @@ And /^all petitions have had their signatures counted$/ do
 end
 
 Then /^I should be asked to search for a new petition$/ do
-  expect(page).to have_css("form#pre_creation_search input#q")
+  expect(page).to have_css("form input[name=q]")
 end
 
 Then /^I should see a list of existing petitions I can sign$/ do
