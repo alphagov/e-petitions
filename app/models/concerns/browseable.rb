@@ -106,7 +106,7 @@ module Browseable
     end
 
     def scope
-      @scope ||= facets.keys.detect{ |key| key.to_s == params[:scope] }
+      @scope ||= facets.keys.detect{ |key| key.to_s == params[:state] }
     end
 
     def scoped?

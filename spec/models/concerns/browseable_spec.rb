@@ -166,7 +166,7 @@ RSpec.describe Browseable do
 
     describe "#scope" do
       context "when the search scope is valid" do
-        let(:params) { { q: 'search', page: '3', scope: 'all'} }
+        let(:params) { { q: 'search', page: '3', state: 'all'} }
 
         it "returns the current scope as a symbol" do
           expect(search.scope).to eq(:all)
@@ -174,7 +174,7 @@ RSpec.describe Browseable do
       end
 
       context "when the search scope is invalid" do
-        let(:params) { { q: 'search', page: '3', scope: 'unknown'} }
+        let(:params) { { q: 'search', page: '3', state: 'unknown'} }
 
         it "returns nil" do
           expect(search.scope).to be_nil
@@ -192,7 +192,7 @@ RSpec.describe Browseable do
 
     describe "#scoped?" do
       context "when the search scope is valid" do
-        let(:params) { { q: 'search', page: '3', scope: 'all'} }
+        let(:params) { { q: 'search', page: '3', state: 'all'} }
 
         it "returns true" do
           expect(search.scoped?).to eq(true)
@@ -200,7 +200,7 @@ RSpec.describe Browseable do
       end
 
       context "when the search scope is invalid" do
-        let(:params) { { q: 'search', page: '3', scope: 'unknown'} }
+        let(:params) { { q: 'search', page: '3', state: 'unknown'} }
 
         it "returns false" do
           expect(search.scoped?).to eq(false)
