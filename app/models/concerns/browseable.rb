@@ -128,9 +128,13 @@ module Browseable
     end
 
     def execute_search
-      relation = klass.basic_search(query)
-      relation = relation.except(:select).select(star)
-      relation = relation.reorder(:created_at)
+      if search?
+        relation = klass.basic_search(query)
+        relation = relation.except(:select).select(star)
+        relation = relation.reorder(:created_at)
+      else
+        relation = klass
+      end
 
       if scoped?
         relation = relation.instance_exec(&klass.facets[scope])

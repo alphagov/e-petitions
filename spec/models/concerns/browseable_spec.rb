@@ -238,36 +238,61 @@ RSpec.describe Browseable do
       let(:petitions)  { [petition] }
       let(:results)    { double(:results, to_a: petitions) }
 
-      before do
-        # This list of stubs is effectively testing the implementation of the
-        # execute_search private method, however this is important because of
-        # the need to exclude the ranking column added by the textacular gem
-        # which can add a significant performance penalty.
+      context "when there is a search term" do
+        before do
+          # This list of stubs is effectively testing the implementation of the
+          # execute_search private method, however this is important because of
+          # the need to exclude the ranking column added by the textacular gem
+          # which can add a significant performance penalty.
 
-        expect(arel_table).to receive(:[]).with("*").and_return("*")
-        expect(klass).to receive(:basic_search).with('search').and_return(klass)
-        expect(klass).to receive(:except).with(:select).and_return(klass)
-        expect(klass).to receive(:arel_table).and_return(arel_table)
-        expect(klass).to receive(:select).with("*").and_return(klass)
-        expect(klass).to receive(:reorder).with(:created_at).and_return(klass)
-        expect(klass).to receive(:paginate).with(page: 3, per_page: 20).and_return(results)
-        expect(results).to receive(:to_a).and_return(petitions)
-      end
+          expect(arel_table).to receive(:[]).with("*").and_return("*")
+          expect(klass).to receive(:basic_search).with('search').and_return(klass)
+          expect(klass).to receive(:except).with(:select).and_return(klass)
+          expect(klass).to receive(:arel_table).and_return(arel_table)
+          expect(klass).to receive(:select).with("*").and_return(klass)
+          expect(klass).to receive(:reorder).with(:created_at).and_return(klass)
+          expect(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+          expect(results).to receive(:to_a).and_return(petitions)
+        end
 
-      context "when the search is not scoped" do
-        let(:params) { { q: 'search', page: '3'} }
+        context "and the search is not scoped" do
+          let(:params) { { q: 'search', page: '3'} }
 
-        it "returns the list of petitions" do
-          expect(search.to_a).to eq(petitions)
+          it "returns the list of petitions" do
+            expect(search.to_a).to eq(petitions)
+          end
+        end
+
+        context "and the search is scoped" do
+          let(:params) { { q: 'search', page: '3', state: 'all'} }
+
+          it "merges in the facet scope" do
+            expect(klass).to receive(:instance_exec).and_return(klass)
+            expect(search.to_a).to eq(petitions)
+          end
         end
       end
 
-      context "when the search is scoped" do
-        let(:params) { { q: 'search', page: '3', scope: 'all'} }
+      context "when there is not a search term" do
+        before do
+          expect(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+        end
 
-        it "merges in the facet scope" do
-          expect(klass).to receive(:instance_exec).and_return(klass)
-          expect(search.to_a).to eq(petitions)
+        context "and the search is not scoped" do
+          let(:params) { { page: '3'} }
+
+          it "returns the list of petitions" do
+            expect(search.to_a).to eq(petitions)
+          end
+        end
+
+        context "and the search is scoped" do
+          let(:params) { { page: '3', state: 'all'} }
+
+          it "merges in the facet scope" do
+            expect(klass).to receive(:instance_exec).and_return(klass)
+            expect(search.to_a).to eq(petitions)
+          end
         end
       end
     end
