@@ -166,11 +166,11 @@ ul#admin_nav li.active a:hover {
   background-color: #aaa;
 }
 
-.flash_notice {
+.flash-notice {
   color: green;
 }
 
-.flash_error, .flash_warn, .flash_notice {
+.flash_error, .flash_warn, .flash-notice {
   padding: 3px 0 8px 0;
 }
 
