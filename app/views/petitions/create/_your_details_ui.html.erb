@@ -11,7 +11,6 @@
   <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object, :context => 'create-petition' } %>
 <% end %>
 
-<p>By signing you agree to the <%= link_to 'terms and conditions', help_path(anchor: 'terms-and-conditions') %></p>
+<p>By signing you agree to the <%= link_to 'petition guidelines', help_path(anchor: 'creating-a-petition') %></p>
 
-<%= f.submit 'Next', :name => 'move:next', :class => 'button', :tabindex => increment %>
-<%= f.submit 'Back', :name => 'move:back', :class => 'button-secondary', :tabindex => increment %>
+<%= f.submit 'Sign this petition', :name => 'move:next', :class => 'button', :tabindex => increment %>

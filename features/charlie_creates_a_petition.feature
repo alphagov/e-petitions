@@ -27,7 +27,7 @@ Scenario: Charlie creates a petition
   And I fill in the petition details
   And I press "Next"
   And I fill in my details
-  And I press "Next"
+  And I press "Sign this petition"
   When I press "This looks good"
   Then the markup should be valid
   And I am asked to review my email address
@@ -48,7 +48,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I fill in the petition details
   And I press "Next"
   And I fill in my details with postcode "SW14 9RQ"
-  And I press "Next"
+  And I press "Sign this petition"
   Then I should not see the text "Your constituency is"
 
 @javascript
@@ -77,7 +77,7 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then I should see a title called "Sign your petition"
 
-  When I press "Next"
+  When I press "Sign this petition"
   Then I should see "Name must be completed"
   And I should see "Email must be completed"
   And I should see "You must be a British citizen"
@@ -85,7 +85,7 @@ Scenario: Charlie tries to submit an invalid petition
 
   When I fill in my details
 
-  And I press "Next"
+  And I press "Sign this petition"
   Then I should see a title called "Check your petition"
   And I should see "The wombats of wimbledon rock."
   And I expand "More details"
@@ -93,7 +93,7 @@ Scenario: Charlie tries to submit an invalid petition
 
   And I press "Go back and make changes"
   And I fill in "Name" with "Mr. Wibbledon"
-  And I press "Next"
+  And I press "Sign this petition"
   And I press "This looks good"
 
   Then I should see a title called "Make sure this is right"
