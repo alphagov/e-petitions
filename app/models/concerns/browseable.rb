@@ -151,7 +151,7 @@ module Browseable
     end
 
     def search(params)
-      Search.new(self, params)
+      Search.new(all, params)
     end
   end
 end

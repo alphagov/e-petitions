@@ -1,7 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Browseable do
-  let(:browseable) { Class.new{ include Browseable } }
+  let(:browseable) do
+    Class.new do
+      include Browseable
+
+      def self.all
+        self
+      end
+    end
+  end
 
   describe "including the module" do
     it "adds a facets class attribute" do
