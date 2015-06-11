@@ -33,9 +33,9 @@ class Petition < ActiveRecord::Base
   extend Searchable(:title, :action, :description)
   include Browseable
 
-  facet :all, -> { reorder(:signature_count).reverse_order }
-  facet :open, -> { for_state(OPEN_STATE).reorder(:signature_count).reverse_order }
-  facet :closed, -> { for_state(CLOSED_STATE).reorder(:signature_count).reverse_order }
+  facet :all, -> { reorder(signature_count: :desc) }
+  facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
+  facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(:created_at) }
 
   # = Relationships =
