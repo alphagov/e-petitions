@@ -9,10 +9,10 @@ module Browseable
   class Facets
     include Enumerable
 
-    attr_reader :search, :klass
+    attr_reader :klass
 
-    def initialize(search)
-      @search, @klass = search, search.klass
+    def initialize(klass)
+      @klass = klass
     end
 
     def [](key)
@@ -59,7 +59,7 @@ module Browseable
     end
 
     def scope(key)
-      search.klass.instance_exec(&facet(key))
+      klass.instance_exec(&facet(key))
     end
   end
 
@@ -86,7 +86,7 @@ module Browseable
     end
 
     def facets
-      @facets ||= Facets.new(self)
+      @facets ||= Facets.new(klass)
     end
 
     def first_page?

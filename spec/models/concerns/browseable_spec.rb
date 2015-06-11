@@ -311,8 +311,7 @@ RSpec.describe Browseable do
     let(:query)  { double(:query) }
     let(:scopes) { { open: scope } }
     let(:klass)  { double(:klass, facets: scopes) }
-    let(:search) { double(:search, klass: klass) }
-    let(:facets) { described_class.new(search) }
+    let(:facets) { described_class.new(klass) }
 
     describe "#[]" do
       it "raises ArgumentError for unknown facets" do
