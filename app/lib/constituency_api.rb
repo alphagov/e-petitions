@@ -1,14 +1,35 @@
 module ConstituencyApi
   class Error < RuntimeError; end
 
-  class Constituency < Struct.new(:name, :mp)
+  class Constituency
+    attr_reader :name, :mp
+
+    def initialize(name, mp = nil)
+      @name, @mp = name, mp
+    end
+
+    def ==(other)
+      other.is_a?(self.class) && name == other.name && mp == other.mp
+    end
+    alias_method :eql?, :==
   end
 
-  class Mp < Struct.new(:id, :name, :start_date)
+  class Mp
+    attr_reader :id, :name, :start_date
     URL = "http://www.parliament.uk/biographies/commons"
+
+    def initialize(id, name, start_date)
+      @id, @name, @start_date = id, name, start_date.to_date
+    end
+
     def url
       "#{URL}/#{name.parameterize}/#{id}"
     end
+
+    def ==(other)
+      other.is_a?(self.class) && id == other.id && name == other.name && start_date && other.start_date
+    end
+    alias_method :eql?, :==
   end
 
   class Client
@@ -47,19 +68,19 @@ module ConstituencyApi
 
     def self.last_mp(constituency_hash)
       mps = parse_mps(constituency_hash)
-      mps.sort_by {|mp| mp.start_date}.last
+      mps.select(&:start_date).sort_by(&:start_date).last
     end
 
     def self.parse_mps(response)
-      return nil unless response["RepresentingMembers"]
+      return [] unless response["RepresentingMembers"]
       mps = response["RepresentingMembers"]["RepresentingMember"]
-      Array.wrap(mps).map { |m| Mp.new(m["Member_Id"].to_i, m["Member"], m["StartDate"].to_date) }
+      Array.wrap(mps).map { |m| Mp.new(m["Member_Id"], m["Member"], m["StartDate"]) }
     end
 
     def self.postcode_param(postcode)
       postcode.gsub(/\s+/, "")
     end
-    private_class_method :parse_constituencies, :call_api, :postcode_param
+    private_class_method :parse_constituencies, :call_api, :postcode_param, :parse_mps, :last_mp
   end
 end
 
