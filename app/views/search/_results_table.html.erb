@@ -1,10 +1,12 @@
 <ol>
   <% petition_search.results.each do |petition| %>
-    <li class="petition-item">
+    <li class="petition-item petition-<%= petition.state %>">
       <%= link_to petition.title, petition_path(petition) %>
-      <p>
-        <%= number_with_delimiter(petition.signature_count) %> signatures
-      </p>
+      <% unless petition.rejected? %>
+        <p>
+          <%= "#{number_with_delimiter(petition.signature_count)} signatures"  %>
+        </p>
+      <% end %>
     </li>
   <% end -%>
 </ol>
