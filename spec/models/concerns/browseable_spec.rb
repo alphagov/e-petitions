@@ -12,9 +12,9 @@ RSpec.describe Browseable do
   end
 
   describe "including the module" do
-    it "adds a facets class attribute" do
-      expect(browseable).to respond_to(:facets)
-      expect(browseable.facets).to eq({})
+    it "adds a facet_definitions class attribute" do
+      expect(browseable).to respond_to(:facet_definitions)
+      expect(browseable.facet_definitions).to eq({})
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe Browseable do
 
     it "adds a facet scope to the facets class attribute" do
       browseable.facet(:open, scope)
-      expect(browseable.facets).to eq({ open: scope })
+      expect(browseable.facet_definitions).to eq({ open: scope })
     end
   end
 
@@ -37,7 +37,8 @@ RSpec.describe Browseable do
   end
 
   describe Browseable::Search do
-    let(:klass)  { double(:klass, facets: { all: -> { self }, open: -> { self } }) }
+    let(:scopes) { { all: -> { self }, open: -> { self } } }
+    let(:klass)  { double(:klass, facet_definitions: scopes) }
     let(:params) { { q: 'search', page: '3'} }
     let(:search) { described_class.new(klass, params) }
 
@@ -310,8 +311,17 @@ RSpec.describe Browseable do
     let(:scope)  { ->{ where(state: 'open') } }
     let(:query)  { double(:query) }
     let(:scopes) { { open: scope } }
-    let(:klass)  { double(:klass, facets: scopes) }
+    let(:klass)  { double(:klass, facet_definitions: scopes) }
     let(:facets) { described_class.new(klass) }
+
+    describe "delegated methods" do
+      subject{ facets }
+
+      it { is_expected.to delegate_method(:facet_definitions).to(:klass) }
+      it { is_expected.to delegate_method(:key?).to(:facet_definitions) }
+      it { is_expected.to delegate_method(:has_key?).to(:facet_definitions) }
+      it { is_expected.to delegate_method(:keys).to(:facet_definitions) }
+    end
 
     describe "#[]" do
       it "raises ArgumentError for unknown facets" do
@@ -337,10 +347,6 @@ RSpec.describe Browseable do
       it "doesn't execute the facet query" do
         expect(klass).not_to receive(:where)
         expect(facets.key?(:open)).to eq(true)
-      end
-
-      it "is aliased to has_key?" do
-        expect(facets.method(:has_key?)).to eq(facets.method(:key?))
       end
     end
 

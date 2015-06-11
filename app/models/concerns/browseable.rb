@@ -2,8 +2,8 @@ module Browseable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :facets
-    self.facets = {}
+    class_attribute :facet_definitions
+    self.facet_definitions = {}
   end
 
   class Facets
@@ -11,21 +11,15 @@ module Browseable
 
     attr_reader :klass
 
+    delegate :facet_definitions, to: :klass
+    delegate :key?, :has_key?, :keys, to: :facet_definitions
+
     def initialize(klass)
       @klass = klass
     end
 
     def [](key)
-      facets[key]
-    end
-
-    def key?(key)
-      facet?(key)
-    end
-    alias_method :has_key?, :key?
-
-    def keys
-      klass.facets.keys
+      facet_counts[key]
     end
 
     def each(&block)
@@ -36,30 +30,22 @@ module Browseable
 
     private
 
-    def facet(key)
-      klass.facets.fetch(key)
+    def facet_counts
+      @facet_counts ||= Hash.new(&facet_count_query)
     end
 
-    def facet?(key)
-      klass.facets.key?(key)
-    end
-
-    def facets
-      @facets ||= Hash.new(&facet_query)
-    end
-
-    def facet_query
+    def facet_count_query
       lambda do |hash, key|
-        unless facet?(key)
+        unless facet_definitions.key?(key)
           raise ArgumentError, "Unsupported facet: #{key.inspect}"
         end
 
-        hash[key] = scope(key).count
+        hash[key] = facet_scope(key).count
       end
     end
 
-    def scope(key)
-      klass.instance_exec(&facet(key))
+    def facet_scope(key)
+      klass.instance_exec(&facet_definitions.fetch(key))
     end
   end
 
@@ -136,7 +122,7 @@ module Browseable
         relation = klass
       end
 
-      relation = relation.instance_exec(&klass.facets[scope])
+      relation = relation.instance_exec(&klass.facet_definitions[scope])
       relation.paginate(page: current_page, per_page: page_size)
     end
 
@@ -147,7 +133,7 @@ module Browseable
 
   module ClassMethods
     def facet(key, scope)
-      self.facets[key] = scope
+      self.facet_definitions[key] = scope
     end
 
     def search(params)
