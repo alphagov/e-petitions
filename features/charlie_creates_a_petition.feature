@@ -77,6 +77,12 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then I should see a title called "Sign your petition"
 
+  And I press "Back"
+  And the "Action" field should contain "The wombats of wimbledon rock."
+  And the "Background" field should contain "Give half of Wimbledon rock to wombats!"
+  And the "Supporting details" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I press "Next"
+
   When I press "Sign this petition"
   Then I should see "Name must be completed"
   And I should see "Email must be completed"

@@ -23,9 +23,17 @@
 // =================
 .back-page {
   @include core-16();
-  display: block;
   margin-top: em(20, 16);
   color: $secondary-text-colour;
+}
+a.back-page {
+  display: block;
+}
+input.back-page {
+  border-width: 0px;
+  background-color: $white;
+  padding: 0;
+  cursor: pointer;
 }
 .back-page:visited {
   color: $secondary-text-colour;

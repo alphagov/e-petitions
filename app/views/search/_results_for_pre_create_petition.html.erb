@@ -5,7 +5,7 @@
         <%= link_to petition.title, petition_path(petition) %>
         <p>
           <% unless petition.rejected? -%>
-            <%= number_with_delimiter(petition.signature_count) %> signatures
+            <%= signature_count(:default, petition.signature_count) %>
           <% end %>
         </p>
         <p class="description">

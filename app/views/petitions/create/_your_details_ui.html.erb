@@ -1,6 +1,4 @@
-<%= link_to :back, class: "back-page" do %>
-  &#9666; Back <span class="visuallyhidden"> to previous page</span>
-<% end %>
+<%= f.submit raw('&#9664; Back'), :name => 'move:back', :class => 'back-page' %>
 
 <h1 class="page-title">Sign your petition</h1>
 <h2 class="page-subtitle"><%= petition.title %></h2>
