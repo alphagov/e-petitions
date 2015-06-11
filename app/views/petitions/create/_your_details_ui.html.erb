@@ -8,7 +8,7 @@
 <%= render 'petitions/create/error_summary', f: f %>
 
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-  <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
+  <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object, :context => 'create-petition' } %>
 <% end %>
 
 <p>By signing you agree to the <%= link_to 'terms and conditions', help_path(anchor: 'terms-and-conditions') %></p>
