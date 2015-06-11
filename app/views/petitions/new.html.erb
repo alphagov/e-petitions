@@ -2,18 +2,6 @@
 
 <%= form_for @stage_manager.stage_object, :url => create_petition_path do |f| %>
 
-  <% if f.object.errors.any? -%>
-    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-      <h2 class="error-summary-heading" id="error-summary-heading">We couldn't create this petition</h2>
-      <p>Please fix the following errors:</p>
-      <ul class="error-summary-list">
-        <% f.object.errors.each do |key, error| -%>
-          <li><%= error %></li>
-        <% end -%>
-      </ul>
-    </div>
-  <% end -%>
-
   <%= render_petition_form @stage_manager, f %>
 
 <% end %>

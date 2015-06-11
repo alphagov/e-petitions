@@ -5,6 +5,8 @@
 <h1 class="page-title">Sign your petition</h1>
 <h2 class="page-subtitle"><%= petition.title %></h2>
 
+<%= render 'petitions/create/error_summary', f: f %>
+
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
   <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
 <% end %>
