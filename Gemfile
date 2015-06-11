@@ -31,6 +31,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'evergreen', :require => 'evergreen/rails'
   gem 'pry'
+  gem 'faker'
 end
 
 group :test do
