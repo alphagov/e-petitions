@@ -45,6 +45,16 @@
   }
 }
 
+// Flash messages
+// =========
+.flash-notice {
+  color: $white;
+  background: $grey-1;
+  padding: $gutter-one-quarter;
+  @include bold-27();
+  text-align: center;
+}
+
 // Pagination
 // ==========
 .search-pagination {
