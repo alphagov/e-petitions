@@ -1,6 +1,6 @@
 class HealthCheck
   CUSTOM_ITEMS = %w(hostname url client_ip localtime utctime)
-  BOOLEAN_ITEMS = %w(database_connection database_persistence database_integrity search_connection)
+  BOOLEAN_ITEMS = %w(database_connection database_persistence database_integrity)
 
   TEST_SETTINGS_KEY = 'healthcheck_test_key'
 
@@ -72,15 +72,5 @@ class HealthCheck
   def database_integrity
     return false unless database_connection
     !ActiveRecord::Migrator.needs_migration?
-  end
-
-  def search_connection
-    Petition.search do |query|
-      query.fulltext 'hello this is a test search'
-      query.paginate page: 1, per_page: 1
-    end
-    true
-  rescue
-    false
   end
 end
