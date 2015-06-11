@@ -1,3 +1,7 @@
 .uk-citizen p {
   margin-bottom: 0;
 }
+.signature-terms {
+  @include core-16;
+  color: $secondary-text-colour;
+}
