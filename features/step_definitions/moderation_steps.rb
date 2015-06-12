@@ -115,6 +115,7 @@ Given(/^a moderator responds to the petition$/) do
   steps %Q(
     Given I am logged in as a moderator
     And I follow "#{@petition.title}"
+    And I fill in "Public response summary" with "Get ready"
     And I fill in "Public response" with "Parliament here it comes"
     And I check "Email signees"
     And I press "Save"

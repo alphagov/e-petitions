@@ -43,6 +43,10 @@ Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |title,
     p.update_attribute(:signature_count, count)
 end
 
+Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |title, response, response_summary|
+  @petition = FactoryGirl.create(:open_petition, title: title, response: response, response_summary: response_summary)
+end
+
 Given /^I have created an e-petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
@@ -293,3 +297,4 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
   5.times { FactoryGirl.create(:validated_signature, petition: petition) }
   Petition.update_all_signature_counts
 end
+
