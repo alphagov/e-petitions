@@ -28,6 +28,7 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
+  before_save :stamp_parliament_response_at, if: -> { response.present? && response_was.nil? }
   after_create :set_petition_on_creator_signature
 
   extend Searchable(:title, :action, :description)
@@ -272,5 +273,10 @@ class Petition < ActiveRecord::Base
   def stop_collecting_sponsors_states
     state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
   end
+
+  def stamp_parliament_response_at
+    self.parliament_response_at = Time.current
+  end
+
 end
 

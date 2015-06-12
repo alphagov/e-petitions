@@ -20,6 +20,25 @@ describe Petition do
     end
   end
 
+  context "callbacks" do
+    context "stamp_parliament_response_at" do
+      it "does not stamp the timestamp if no response is present" do
+        petition = FactoryGirl.create(:open_petition)
+        expect(petition.parliament_response_at).to be_nil
+      end
+
+      it "stamps the timestamp if setting the response for the first time" do
+        petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
+        expect(petition.parliament_response_at).not_to be_nil
+      end
+
+      it "does not change the timestamp with subsequent response updates" do
+        petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
+        expect { petition.update(response: 'Sorry, promised too much') }.to_not change { petition.parliament_response_at }
+      end
+    end
+  end
+
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
