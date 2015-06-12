@@ -62,6 +62,10 @@ FactoryGirl.define do
       evaluator.sponsor_count.times do
         petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
       end
+
+      if petition.signature_count.zero?
+        petition.signature_count += 1 if petition.creator_signature.validated?
+      end
     end
 
     trait :with_additional_details do
@@ -134,6 +138,12 @@ FactoryGirl.define do
     uk_citizenship       '1'
     notify_by_email      '1'
     state                Signature::VALIDATED_STATE
+
+    after(:create) do |signature, evaluator|
+      if signature.petition
+        signature.petition.increment!(:signature_count) if signature.validated?
+      end
+    end
   end
 
   factory :pending_signature, :parent => :signature do

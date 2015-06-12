@@ -117,18 +117,54 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       end
 
       context "email out threshold update response" do
-        before :each do
-          signature = FactoryGirl.create(:signature, :name => 'Jason', :email => 'jason@example.com', :state => Petition::VALIDATED_STATE, :notify_by_email => true)
-          @petition = FactoryGirl.create(:open_petition, :action => 'Make me the PM', :creator_signature => signature)
-          6.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_notify_#{i}@example.com",
-                                :state => Petition::VALIDATED_STATE, :notify_by_email => true, :petition => @petition) }
-          3.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_#{i}@example.com",
-                                :state => Petition::VALIDATED_STATE, :notify_by_email => false, :petition => @petition) }
+        before do
+          @signature =  FactoryGirl.create(:pending_signature,
+                          name: 'Jason',
+                          email: 'jason@example.com',
+                          notify_by_email: true
+                        )
+
+          @petition = FactoryGirl.create(:open_petition,
+                        action: 'Make me the PM',
+                        creator_signature: @signature
+                      )
+
+          6.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_valid_notify_#{i}@example.com",
+              notify_by_email: true,
+              petition: @petition
+            }
+
+            s = FactoryGirl.create(:pending_signature, attributes)
+            s.validate!
+          end
+
+          3.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_valid_#{i}@example.com",
+              notify_by_email: false,
+              petition: @petition
+            }
+
+            s = FactoryGirl.create(:pending_signature, attributes)
+            s.validate!
+          end
+
+          2.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_invalid_#{i}@example.com",
+              notify_by_email: true,
+              petition: @petition
+            }
+
+            FactoryGirl.create(:pending_signature, attributes)
+          end
+
           @petition.reload
-          @petition.signatures.last.save! # needed in order to get the signature count updated
-          2.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_invalid_#{i}@example.com",
-                                :state => Petition::PENDING_STATE, :notify_by_email => true, :petition => @petition) }
-          Petition.update_all_signature_counts
         end
 
         it "sets up a delayed job" do

@@ -17,7 +17,6 @@ Feature: Threshold list
     And the petition "Petition 4" has 10 validated signatures
     And an open petition "p5" exists with action: "Petition 5", response_required: false
     And a closed petition "p6" exists with action: "Petition 6", response_required: true, closed_at: "21 April 2011"
-    And all petitions have had their signatures counted
 
   Scenario: A moderator user sees all petitions above the threshold signature count
     When I go to the admin threshold page

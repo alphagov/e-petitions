@@ -104,8 +104,5 @@ namespace :data do
         ) if @should_create_response
       end
     end
-
-    #Update the horrible cache of signature counts
-    Petition.update_all_signature_counts
   end
 end

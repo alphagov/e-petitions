@@ -358,31 +358,76 @@ RSpec.describe Signature, type: :model do
   end
 
   describe '#validate!' do
-    subject { FactoryGirl.create(:pending_signature) }
+    let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
-    it 'transitions the signature to the validated state' do
-      subject.validate!
-      expect(subject).to be_validated
+    context "when the petition is open" do
+      let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+
+      it "transitions the signature to the validated state" do
+        signature.validate!
+        expect(signature).to be_validated
+      end
+
+      it "timestamps the signature to say it was updated just now" do
+        signature.validate!
+        expect(signature.updated_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "timestamps the signature to say it was validated just now" do
+        signature.validate!
+        expect(signature.validated_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "increments the petition count" do
+        expect{ signature.validate! }.to change{ petition.reload.signature_count }.by(1)
+      end
+
+      it "updates the petition to say it was updated just now" do
+        signature.validate!
+        expect(petition.reload.updated_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "updates the petition to say it was last signed at just now" do
+        signature.validate!
+        expect(petition.reload.last_signed_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "doesn't increment the petition count twice" do
+        signature.validate!
+        expect{ signature.validate! }.to change{ petition.reload.signature_count }.by(0)
+      end
+
+      it 'tells the relevant constituency petition journal to record a new signature' do
+        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
+        signature.validate!
+      end
+
+      it 'does not talk to the constituency petition journal if the signature is not pending' do
+        expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
+        signature.state = Signature::VALIDATED_STATE
+        signature.validate!
+      end
     end
 
-    it 'timestamps the signature to say it was updated just now' do
-      now = Chronic.parse("1 Jan 2011").utc
-      # Unlike our code which uses Time.current, AR actually uses Time.now to do timestamping
-      allow(Time).to receive(:now).and_return(now)
+    context "when the petition is pending" do
+      let(:petition) { FactoryGirl.create(:pending_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+      let(:creator_signature) { petition.creator_signature }
 
-      subject.validate!
-      expect(subject.updated_at).to eq now
-    end
+      it "transitions the creator signature to the validated state" do
+        expect{ signature.validate! }.to change{ creator_signature.reload.validated? }.from(false).to(true)
+      end
 
-    it 'tells the relevant constituency petition journal to record a new signature' do
-      expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(subject)
-      subject.validate!
-    end
+      it 'tells the relevant constituency petition journal to record a new signature' do
+        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
+        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
+        signature.validate!
+      end
 
-    it 'does not talk to the constituency petition journal if the signature is not pending' do
-      expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
-      subject.state = Signature::VALIDATED_STATE
-      subject.validate!
+      it 'does not talk to the constituency petition journal if the signature is not pending' do
+        expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
+        signature.state = Signature::VALIDATED_STATE
+        signature.validate!
+      end
     end
   end
 

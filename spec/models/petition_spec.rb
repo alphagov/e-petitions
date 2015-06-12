@@ -431,29 +431,25 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "signature count" do
-    before :each do
-      @petition = FactoryGirl.create(:open_petition)
-      @petition.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE)
-      Petition.update_all_signature_counts
+    let(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+
+    before do
+      petition.validate_creator_signature!
     end
 
     it "returns 1 (the creator) for a new petition" do
-      @petition.reload
-      expect(@petition.signature_count).to eq(1)
+      expect(petition.signature_count).to eq(1)
     end
 
     it "still returns 1 with a new signature" do
-      FactoryGirl.create(:signature, :petition => @petition)
-      @petition.reload
-      expect(@petition.signature_count).to eq(1)
+      signature && petition.reload
+      expect(petition.signature_count).to eq(1)
     end
 
     it "returns 2 when signature is validated" do
-      s = FactoryGirl.create(:signature, :petition => @petition)
-      s.update_attribute(:state, Signature::VALIDATED_STATE)
-      Petition.update_all_signature_counts
-      @petition.reload
-      expect(@petition.signature_count).to eq(2)
+      signature.validate! && petition.reload
+      expect(petition.signature_count).to eq(2)
     end
   end
 
@@ -602,25 +598,6 @@ RSpec.describe Petition, type: :model do
     it "gives rejection description from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_description).to eq('<p>There is already a petition about this issue.</p>')
-    end
-  end
-
-  describe "updating signature counts" do
-    let(:petition) { double }
-    before do
-      allow(Petition).to receive_messages(:visible => [petition])
-    end
-    it "calls update signature counts for each petition" do
-      allow(petition).to receive(:count_validated_signatures).and_return(123)
-      allow(petition).to receive(:signature_count).and_return(122)
-      expect(petition).to receive(:update_attribute).with(:signature_count, 123)
-      Petition.update_all_signature_counts
-    end
-    it "doesn't change signature counts when not changed" do
-      allow(petition).to receive(:count_validated_signatures).and_return(122)
-      allow(petition).to receive(:signature_count).and_return(122)
-      expect(petition).not_to receive(:update_attribute).with(:signature_count, 122)
-      Petition.update_all_signature_counts
     end
   end
 
@@ -817,6 +794,42 @@ RSpec.describe Petition, type: :model do
       expect {
         petition.validate_creator_signature!
       }.to change { signature.reload.validated? }.from(false).to(true)
+    end
+
+    it "increments the signature count" do
+      expect {
+        petition.validate_creator_signature!
+      }.to change { petition.signature_count }.by(1)
+    end
+
+    it "timestamps the petition to say it was updated just now" do
+      petition.validate_creator_signature!
+      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "timestamps the petition to say it was last signed at just now" do
+      petition.validate_creator_signature!
+      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+    end
+  end
+
+  describe "#validated_creator_signature?" do
+    context "when the creator signature is not validated" do
+      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
+      let(:signature) { FactoryGirl.create(:pending_signature) }
+
+      it "returns false" do
+        expect(petition.validated_creator_signature?).to eq(false)
+      end
+    end
+
+    context "when the creator signature is validated" do
+      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+
+      it "returns false" do
+        expect(petition.validated_creator_signature?).to eq(true)
+      end
     end
   end
 

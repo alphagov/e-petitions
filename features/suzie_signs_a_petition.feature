@@ -5,7 +5,6 @@ Feature: Suzie signs a petition
 
   Background:
     Given a petition "Do something!"
-    And all petitions have had their signatures counted
 
   Scenario: Suzie signs a petition after validating her email
     When I decide to sign the petition
@@ -15,7 +14,6 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    And all petitions have had their signatures counted
     Then I should have signed the petition
 
   Scenario: Suzie signs a petition after validating her email

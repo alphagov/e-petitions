@@ -108,15 +108,6 @@ class Petition < ActiveRecord::Base
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
 
-  def self.update_all_signature_counts
-    Petition.visible.each do |petition|
-      petition_current_count = petition.count_validated_signatures
-      if petition_current_count != petition.signature_count
-        petition.update_attribute(:signature_count, petition_current_count)
-      end
-    end
-  end
-
   def self.counts_by_state
     counts_by_state = {}
     states = STATES + [CLOSED_STATE]
@@ -138,6 +129,11 @@ class Petition < ActiveRecord::Base
       to_a
   end
 
+  def increment_signature_count(petition_id, time = Time.current)
+    sql = "signature_count = signature_count + 1, last_signed_at = ?, updated_at = ?"
+    self.class.where(id: id).update_all([sql, time, time])
+  end
+
   def publish!
     update!(state: OPEN_STATE, open_at: Time.current, closed_at: Site.petition_closed_at)
   end
@@ -155,7 +151,11 @@ class Petition < ActiveRecord::Base
   end
 
   def validate_creator_signature!
-    creator_signature.validate! && reload
+    creator_signature && creator_signature.validate! && reload
+  end
+
+  def validated_creator_signature?
+    creator_signature && creator_signature.validated?
   end
 
   def count_validated_signatures
@@ -284,4 +284,3 @@ class Petition < ActiveRecord::Base
     self.government_response_at = Time.current
   end
 end
-

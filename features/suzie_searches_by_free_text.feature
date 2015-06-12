@@ -15,7 +15,6 @@ Feature: Suzy Singer searches by free text
     And a rejected petition exists with action: "Eavis vs the Wombles"
     And a hidden petition exists with action: "The Wombles are profane"
     And an open petition exists with action: "Wombles", closed_at: "10 days from now"
-    And all petitions have had their signatures counted
 
   Scenario: Search for open petitions
     When I search for "Wombles"
@@ -73,7 +72,6 @@ Feature: Suzy Singer searches by free text
     And the petition "Wombles" has 2 validated and 20 pending signatures
     And the petition "Common People" has 10 validated and 10 pending signatures
     And the petition "Overthrow the Wombles" has 4 validated and 0 pending signatures
-    And all petitions have had their signatures counted
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "count"
     Then I should see the following search results:
@@ -87,7 +85,6 @@ Feature: Suzy Singer searches by free text
     And the petition "Wombles" has 2 validated and 20 pending signatures
     And the petition "Common People" has 10 validated and 10 pending signatures
     And the petition "Overthrow the Wombles" has 4 validated and 0 pending signatures
-    And all petitions have had their signatures counted
     When I go to the search page
     And I search for "open" petitions with "WOMBLES" ordered by "count asc"
     Then I should see the following search results:

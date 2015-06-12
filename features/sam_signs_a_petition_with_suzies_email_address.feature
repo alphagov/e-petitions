@@ -5,7 +5,6 @@ Feature: Sam signs a petition
 
   Background:
     Given a petition "Do something!"
-    And all petitions have had their signatures counted
     And Suzie has already signed the petition
 
   Scenario: Sam can sign the petition with a different name
