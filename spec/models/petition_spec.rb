@@ -100,14 +100,36 @@ describe Petition do
     end
 
     context "response" do
-      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', email_signees: false) }
+      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi', email_signees: true) }
 
-      it "should check petition is valid if there is a response when email_signees is true" do
+      it "passes validation if there is a response and response summary when email_signees is true" do
+        expect(petition).to be_valid
+      end
+      
+      it "does not pass validation if there is a response and NO response summary when email_signees is true" do
+        petition.response_summary = nil
+        expect(petition).to_not be_valid
+      end
+
+      it "does not pass validation if there is NO response and a response summary when email_signees is true" do
+        petition.response = nil
+        expect(petition).to_not be_valid
+      end
+
+      it "checks petition is valid if there is a response and response summary when email_signees is true" do
         expect(petition).to be_valid
       end
 
-      it "should check petition is invalid if there is no response when email_signees is true" do
+      it "checks petition is invalid if there is no response when email_signees is true" do
         petition.response = nil
+        petition.email_signees = true
+
+        expect(petition).not_to be_valid
+        expect(petition.errors[:response]).not_to be_empty
+      end
+
+      it "checks petition is invalid if there is no response summary when email_signees is true" do
+        petition.response_summary = nil
         petition.email_signees = true
 
         expect(petition).not_to be_valid
@@ -506,6 +528,20 @@ describe Petition do
     it "allows editing of the response by sysadmins" do
       allow(user).to receive_messages(:is_a_sysadmin? => true)
       expect(petition.response_editable_by?(user)).to be_truthy
+    end
+
+    it "doesn't allow editing of response summary generally" do
+      expect(petition.response_summary_editable_by?(user)).to be_falsey
+    end
+
+    it "allows editing of the response summary by moderator users" do
+      allow(user).to receive_messages(:is_a_moderator? => true)
+      expect(petition.response_summary_editable_by?(user)).to be_truthy
+    end
+    
+    it "allows editing of the response summary by sysadmins" do
+      allow(user).to receive_messages(:is_a_sysadmin? => true)
+      expect(petition.response_summary_editable_by?(user)).to be_truthy
     end
   end
 
