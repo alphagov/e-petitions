@@ -1,15 +1,17 @@
-Given(/^a constituency "(.*?)" is found by postcode "(.*?)"$/) do |constituency_name, postcode|
+Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"$/) do |constituency_name, mp_name, postcode|
   @constituencies ||= {}
 
   constituency = @constituencies[constituency_name]
   if constituency.nil?
-    constituency = ConstituencyApi::Constituency.new(FactoryGirl.generate(:constituency_id), constituency_name)
+    mp_name = mp_name.present? ? mp_name : 'Rye Tonnemem-Burr MP'
+    mp = ConstituencyApi::Mp.new(FactoryGirl.generate(:mp_id), mp_name, 3.years.ago)
+    constituency = ConstituencyApi::Constituency.new(FactoryGirl.generate(:constituency_id), constituency_name, mp)
     @constituencies[constituency.name] = constituency
   end
 
   for_postcode = @constituencies[postcode]
   if for_postcode.nil?
-    stub_constituency(postcode, constituency.id, constituency.name)
+    stub_constituency(postcode, constituency.id, constituency.name, mp_id: constituency.mp.id, mp_name: constituency.mp.name, mp_start_date: constituency.mp.start_date )
     @constituencies[postcode] = constituency
   elsif for_postcode == constituency
     # noop
@@ -76,4 +78,8 @@ Then(/^the petitions I see should be ordered by my fellow constituents level of 
     my_constituents_signature_counts = list_elements.map { |li| Integer(li.text.match(/(\d+) signatures from your constituency/)[1]) }
     expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
   end
+end
+
+Then(/^I should see a link to the MP for my constituency$/) do
+  expect(page).to have_link(@my_constituency.mp.name, href: @my_constituency.mp.url)
 end
