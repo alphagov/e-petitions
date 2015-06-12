@@ -696,41 +696,43 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#publish!' do
-    subject { FactoryGirl.create(:petition) }
-    let(:now) { Chronic.parse("1 Jan 2011") }
-    before { allow(Time).to receive(:current).and_return(now) }
+    subject(:petition) { FactoryGirl.create(:petition) }
+    let(:now) { Time.current }
+    let(:duration) { Site.petition_duration.months }
+    let(:closing_date) { (now + duration).end_of_day }
+
+    before do
+      petition.publish!
+    end
 
     it "sets the state to OPEN" do
-      subject.publish!
-      expect(subject.state).to eq(Petition::OPEN_STATE)
+      expect(petition.state).to eq(Petition::OPEN_STATE)
     end
 
     it "sets the open date to now" do
-      subject.publish!
-      expect(subject.open_at.change(usec: 0)).to eq(now.change(usec: 0))
+      expect(petition.open_at).to be_within(1.second).of(now)
     end
 
     it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-      subject.publish!
-      expect(subject.closed_at.change(usec: 0)).to eq( (now + Site.petition_duration.months).end_of_day.change(usec: 0) )
+      expect(petition.closed_at).to be_within(1.second).of(closing_date)
     end
   end
 
   describe "#reject" do
-    subject { FactoryGirl.create(:petition) }
+    subject(:petition) { FactoryGirl.create(:petition) }
 
     %w[no-action duplicate irrelevant honours].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          subject.reject(rejection_code: rejection_code)
+          petition.reject(rejection_code: rejection_code)
         end
 
         it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(subject.rejection_code).to eq(rejection_code)
+          expect(petition.rejection_code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'rejected'" do
-          expect(subject.state).to eq("rejected")
+          expect(petition.state).to eq("rejected")
         end
       end
     end
@@ -738,15 +740,15 @@ RSpec.describe Petition, type: :model do
     %w[libellous offensive].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          subject.reject(rejection_code: rejection_code)
+          petition.reject(rejection_code: rejection_code)
         end
 
         it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(subject.rejection_code).to eq(rejection_code)
+          expect(petition.rejection_code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'hidden'" do
-          expect(subject.state).to eq("hidden")
+          expect(petition.state).to eq("hidden")
         end
       end
     end
