@@ -25,10 +25,10 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
 Scenario: Charlie creates a petition
   Given I start a new petition
   And I fill in the petition details
-  And I press "Next"
+  And I press "Preview petition"
+  And I press "This looks good"
   And I fill in my details
-  And I press "Sign this petition"
-  When I press "This looks good"
+  When I press "Sign this petition"
   Then the markup should be valid
   And I am asked to review my email address
   When I press "Yes - this is my email address"
@@ -46,7 +46,8 @@ Scenario: First person sponsors a petition
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition
   And I fill in the petition details
-  And I press "Next"
+  And I press "Preview petition"
+  And I press "This looks good"
   And I fill in my details with postcode "SW14 9RQ"
   And I press "Sign this petition"
   Then I should not see the text "Your constituency is"
@@ -55,7 +56,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
 Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page
 
-  When I press "Next"
+  When I press "Preview petition"
   Then I should see "Action must be completed"
   And I should see "Background must be completed"
   And I should see "Supporting details must be completed"
@@ -64,7 +65,7 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in "Action" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
   And I fill in "Background" with "This text is longer than 300 characters. 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
   And I fill in "Supporting details" with "This text is longer than 500 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
-  And I press "Next"
+  And I press "Preview petition"
 
   Then I should see "Action is too long."
   And I should see "Background is too long."
@@ -73,15 +74,23 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in "Action" with "The wombats of wimbledon rock."
   And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
-  And I press "Next"
+  And I press "Preview petition"
 
-  Then I should see a heading called "Sign your petition"
+  Then I should see a heading called "Check your petition"
 
-  And I press "Back"
+  And I should see "The wombats of wimbledon rock."
+  And I expand "More details"
+  And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+
+  And I press "Go back and make changes"
   And the "Action" field should contain "The wombats of wimbledon rock."
   And the "Background" field should contain "Give half of Wimbledon rock to wombats!"
   And the "Supporting details" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
-  And I press "Next"
+
+  And I press "Preview petition"
+  And I press "This looks good"
+
+  Then I should see a heading called "Sign your petition"
 
   When I press "Sign this petition"
   Then I should see "Name must be completed"
@@ -90,17 +99,14 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Postcode must be completed"
 
   When I fill in my details
-
   And I press "Sign this petition"
-  Then I should see a heading called "Check your petition"
-  And I should see "The wombats of wimbledon rock."
-  And I expand "More details"
-  And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
-  And I press "Go back and make changes"
+  Then I should see a heading called "Make sure this is right"
+
+  And I press "Back"
   And I fill in "Name" with "Mr. Wibbledon"
+
   And I press "Sign this petition"
-  And I press "This looks good"
 
   Then I should see a heading called "Make sure this is right"
 

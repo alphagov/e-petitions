@@ -13,10 +13,10 @@ module Staged
         case name
         when 'petition'
           self::Petition
-        when 'creator'
-          self::Creator
         when 'replay-petition'
           self::ReplayPetition
+        when 'creator'
+          self::Creator
         when 'replay-email'
           self::ReplayEmail
         when 'done'
@@ -33,16 +33,6 @@ module Staged
 
         def name; 'petition'; end
         def go_back; self; end
-        def go_next; Stages.for_name('creator').new(model); end
-      end
-
-      class Creator < Staged::Stage
-        def stage_object
-          @_stage_object ||= ::Staged::PetitionCreator::Creator.new(model)
-        end
-
-        def name; 'creator'; end
-        def go_back; Stages.for_name('petition').new(model); end
         def go_next; Stages.for_name('replay-petition').new(model); end
       end
 
@@ -52,7 +42,17 @@ module Staged
         end
 
         def name; 'replay-petition'; end
-        def go_back; Stages.for_name('creator').new(model); end
+        def go_back; Stages.for_name('petition').new(model); end
+        def go_next; Stages.for_name('creator').new(model); end
+      end
+
+      class Creator < Staged::Stage
+        def stage_object
+          @_stage_object ||= ::Staged::PetitionCreator::Creator.new(model)
+        end
+
+        def name; 'creator'; end
+        def go_back; Stages.for_name('replay-petition').new(model); end
         def go_next; Stages.for_name('replay-email').new(model); end
       end
 
@@ -62,7 +62,7 @@ module Staged
         end
 
         def name; 'replay-email'; end
-        def go_back; Stages.for_name('replay-petition').new(model); end
+        def go_back; Stages.for_name('creator').new(model); end
         def go_next; Stages.for_name('done').new(model); end
       end
 
