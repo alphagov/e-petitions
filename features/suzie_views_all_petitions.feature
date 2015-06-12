@@ -31,3 +31,15 @@ Feature: Suzy Signer views all petitions
      | Force supermarkets to give unsold food to charities |
      | Free the wombles                                    |
     And the markup should be valid
+
+  Scenario: Suzie browses petitions with a goverment response
+    Given a closed petition "Free the wombles" exists and has received a parliament response 100 days ago
+    Given a petition "Force supermarkets to give unsold food to charities" exists and has received a parliament response 10 days ago
+    Given a petition "Make every monday bank holiday" exists and has received a parliament response 1 days ago
+    When I view all petitions from the home page
+    And I follow "Petitions with a Government response"
+    Then I should see the following ordered list of petitions:
+     | Make every monday bank holiday                      |
+     | Force supermarkets to give unsold food to charities |
+     | Free the wombles                                    |
+    And the markup should be valid

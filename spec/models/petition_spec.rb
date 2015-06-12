@@ -290,6 +290,18 @@ describe Petition do
         expect(Petition.visible).to include(@visible_petition_1, @visible_petition_2, @visible_petition_3)
       end
     end
+
+    context "with_response" do
+      before do
+        @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response => "govt response")
+        @p2 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response => "govt response")
+        @p3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
+      end
+
+      it "returns only the petitions which have governments response" do
+        expect(Petition.with_response).to match_array([@p1, @p2])
+      end
+    end
   end
 
   describe '.popular_in_constituency' do

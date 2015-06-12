@@ -38,6 +38,8 @@ class Petition < ActiveRecord::Base
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
 
+  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(parliament_response_at: :desc) }
+
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
   accepts_nested_attributes_for :creator_signature
@@ -97,6 +99,8 @@ class Petition < ActiveRecord::Base
                             }
 
   scope :by_oldest, -> { order(created_at: :asc) }
+
+  scope :with_response, -> { where.not(response: nil) }
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|

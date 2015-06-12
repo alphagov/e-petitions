@@ -11,6 +11,7 @@ en-GB:
       open: "Open petitions (%{quantity})"
       closed: "Closed petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
+      with_response: "Petitions with a Government response (%{quantity})"
 
     counts:
       default:
