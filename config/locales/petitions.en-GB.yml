@@ -12,6 +12,16 @@ en-GB:
       closed: "Closed petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
 
+    counts:
+      default:
+        html:
+          one: "%{formatted_count} <span>signature</span>"
+          other: "%{formatted_count} <span>signatures</span>"
+      trending:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> signature in the last hour"
+          other: "<span class=\"count\">%{formatted_count}</span> signatures in the last hour"
+
     rejection_reasons:
       titles:
         no-action: "Does not include a request for action"

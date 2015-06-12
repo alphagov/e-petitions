@@ -6,6 +6,10 @@ module SignatureHelper
     end
   end
 
+  def signature_count(key, count)
+    t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
+  end
+
   private
 
   def render_signature_hidden_details(stage_manager, form, options)
