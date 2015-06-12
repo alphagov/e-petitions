@@ -1,0 +1,143 @@
+module Browseable
+  extend ActiveSupport::Concern
+
+  included do
+    class_attribute :facet_definitions
+    self.facet_definitions = {}
+  end
+
+  class Facets
+    include Enumerable
+
+    attr_reader :klass
+
+    delegate :facet_definitions, to: :klass
+    delegate :key?, :has_key?, :keys, to: :facet_definitions
+
+    def initialize(klass)
+      @klass = klass
+    end
+
+    def [](key)
+      facet_counts[key]
+    end
+
+    def each(&block)
+      keys.each do |key|
+        yield key, self[key]
+      end
+    end
+
+    private
+
+    def facet_counts
+      @facet_counts ||= Hash.new(&facet_count_query)
+    end
+
+    def facet_count_query
+      lambda do |hash, key|
+        unless facet_definitions.key?(key)
+          raise ArgumentError, "Unsupported facet: #{key.inspect}"
+        end
+
+        hash[key] = facet_scope(key).count
+      end
+    end
+
+    def facet_scope(key)
+      klass.instance_exec(&facet_definitions.fetch(key))
+    end
+  end
+
+  class Search
+    include Enumerable
+
+    attr_reader :klass, :params
+
+    delegate :offset, :out_of_bounds?, to: :results
+    delegate :next_page, :previous_page, to: :results
+    delegate :total_entries, :total_pages, to: :results
+    delegate :each, :empty?, :map, :to_a, to: :results
+
+    def initialize(klass, params = {})
+      @klass, @params = klass, params
+    end
+
+    def current_page
+      @current_page ||= [params[:page].to_i, 1].max
+    end
+
+    def each(&block)
+      results.each(&block)
+    end
+
+    def facets
+      @facets ||= Facets.new(klass)
+    end
+
+    def first_page?
+      current_page <= 1
+    end
+
+    def last_page?
+      current_page >= total_pages
+    end
+
+    def query
+      @query ||= params[:q].to_s
+    end
+
+    def page_size
+      @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
+    end
+
+    def scope
+      @scope ||= facets.keys.detect(-> { :all }){ |key| key.to_s == params[:state] }
+    end
+
+    def scoped?
+      scope != :all
+    end
+
+    def search?
+      query.present?
+    end
+
+    def to_a
+      results.to_a
+    end
+
+    private
+
+    def results
+      @results ||= execute_search
+    end
+
+    def execute_search
+      if search?
+        relation = klass.basic_search(query)
+        relation = relation.except(:select).select(star)
+        relation = relation.except(:order)
+      else
+        relation = klass
+      end
+
+      relation = relation.instance_exec(&klass.facet_definitions[scope])
+      relation.paginate(page: current_page, per_page: page_size)
+    end
+
+    def star
+      klass.arel_table[Arel.star]
+    end
+  end
+
+  module ClassMethods
+    def facet(key, scope)
+      self.facet_definitions[key] = scope
+    end
+
+    def search(params)
+      Search.new(all, params)
+    end
+  end
+end

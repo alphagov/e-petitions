@@ -9,17 +9,6 @@ namespace :epets do
      end
   end
 
-  desc 'Wait for sunspot server to start.'
-  task :wait_for_sunspot_to_start => :environment do
-    require 'lib/sunspot_server_util'
-    port = ENV['port']
-    if port.blank? then
-      puts 'Specify a port number (port={port number})'
-    else
-      SunspotServerUtil.wait_for_sunspot_to_start(port)
-    end
-  end
-
   desc "Email admin users with a list of validated petitions"
   task :admin_email_reminder => :environment do
     EmailReminder.admin_email_reminder

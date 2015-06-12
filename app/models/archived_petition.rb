@@ -1,3 +1,5 @@
+require 'textacular/searchable'
+
 class ArchivedPetition < ActiveRecord::Base
   OPEN_STATE = 'open'
   REJECTED_STATE = 'rejected'
@@ -7,22 +9,47 @@ class ArchivedPetition < ActiveRecord::Base
   validates :description, presence: true, length: { maximum: 1000 }
   validates :state, presence: true, inclusion: STATES
 
-  searchable do
-    text :title
-    text :description
-    time :created_at, trie: true
-  end
+  extend Searchable(:title, :description)
+  include Browseable
+
+  facet :all, -> { by_created_at }
+  facet :open, -> { open.by_created_at }
+  facet :closed, -> { closed.by_created_at }
+  facet :rejected, -> { rejected.by_created_at }
 
   class << self
-    def search(params)
-      query = params[:q].to_s
-      page  = [params[:page].to_i, 1].max
+    def closed(time = Time.current)
+      where(open_state.and(closed_at_has_passed(time)))
+    end
 
-      solr_search do
-        fulltext query
-        paginate page: page, per_page: 20
-        order_by 'created_at', 'asc'
-      end.results
+    def open(time = Time.current)
+      where(open_state.and(closed_at_has_not_passed(time)))
+    end
+
+    def rejected
+      where(rejected_state)
+    end
+
+    def by_created_at
+      reorder(:created_at)
+    end
+
+    private
+
+    def closed_at_has_not_passed(time)
+      arel_table[:closed_at].gteq(time)
+    end
+
+    def closed_at_has_passed(time)
+      arel_table[:closed_at].lt(time)
+    end
+
+    def open_state
+      arel_table[:state].eq(OPEN_STATE)
+    end
+
+    def rejected_state
+      arel_table[:state].eq(REJECTED_STATE)
     end
   end
 

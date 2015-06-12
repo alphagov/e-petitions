@@ -12,10 +12,6 @@ describe ArchivedPetition do
       FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago)
     end
 
-    before do
-      Sunspot.commit
-    end
-
     it "searches based upon title" do
       expect(ArchivedPetition.search(q: "Wombles")).to include(petition_1)
     end
@@ -25,7 +21,7 @@ describe ArchivedPetition do
     end
 
     it "sorts the results by the created_at timestamp" do
-      expect(ArchivedPetition.search(q: "Petition")).to eq([petition_2, petition_1])
+      expect(ArchivedPetition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
     end
   end
 

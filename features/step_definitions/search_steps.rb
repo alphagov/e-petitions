@@ -13,12 +13,6 @@ When /^I search for "([^"]*)"$/ do |query|
   click_link_or_button "Search"
 end
 
-When /^sunspot is re\-indexed$/ do
-  if Petition.respond_to?(:reindex)
-    Petition.reindex
-  end
-end
-
 Then /^I should not be able to search via free text$/ do
   expect(page).to have_no_css("form[action=search]")
 end

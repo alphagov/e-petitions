@@ -1,9 +1,9 @@
-<% petition_search.limited_results_for_create_petition_search.each do |petition| %>
+<% petitions.each do |petition| %>
   <ul>
     <li>
       <%= link_to petition.title, petition_path(petition), class: 'link_prompt text_link' %>
     </li>
-    <% if petition.state != Petition::REJECTED_STATE -%>
+    <% unless petition.rejected? -%>
       <li><%= number_with_delimiter(petition.signature_count) %> signatures</li>
     <% end %>
     <li><%= petition.closed? ? "closed" : petition.state %></li>

@@ -2,21 +2,19 @@
 Feature: Suzy Singer searches by free text
   In order to find interesting petitions to sign for a particular area of goverment
   As Suzy the signer
-  I want to search against petition title, description and creator name
+  I want to search against petition title, action, description
 
   Background:
     Given the date is the "21 April 2011 12:00"
     And a pending petition exists with title: "Wombles are great"
     And a validated petition exists with title: "The Wombles of Wimbledon"
     And an open petition exists with title: "Uncle Bulgaria", description: "The Wombles are here", closed_at: "1 minute from now"
-    And a validated signature "creator" exists with name: "Mr Wombles"
-    And an open petition exists with title: "Common People", creator_signature: signature "creator", closed_at: "11 days from now"
+    And an open petition exists with title: "Common People", action: "The Wombles belong to us all", closed_at: "11 days from now"
     And an open petition exists with title: "Overthrow the Wombles", closed_at: "1 year from now"
     And a closed petition exists with title: "The Wombles will rock Glasto", closed_at: "1 minute ago"
     And a rejected petition exists with title: "Eavis vs the Wombles"
     And a hidden petition exists with title: "The Wombles are profane"
     And an open petition exists with title: "Wombles", closed_at: "10 days from now"
-    And sunspot is re-indexed
     And all petitions have had their signatures counted
 
   Scenario: Search for open petitions

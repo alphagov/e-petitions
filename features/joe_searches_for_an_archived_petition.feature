@@ -25,13 +25,13 @@ Feature: Joe searches for an archived petition
     And the markup should be valid
 
   Scenario: Paging through archived petitions
-    Given 21 archived petitions exist with title: "International development spending"
+    Given 51 archived petitions exist with title: "International development spending"
     When I go to the archived petitions page
     And I fill in "search" with "spending"
     And I press "Search"
     Then I should be on the archived petitions search results page
-    And I should see 20 petitions
+    And I should see 50 petitions
     Then I follow "Next"
     And I should see 1 petition
     Then I follow "Previous"
-    And I should see 20 petitions
+    And I should see 50 petitions

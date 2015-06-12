@@ -1,8 +1,8 @@
 <div class="search-results section-panel">
-  <% unless @petition_search.results.empty? -%>
-    <%= render 'search/results_table', :petition_search => @petition_search %>
-    <%= render 'search/result_list_footer', :petition_search => @petition_search %>
-  <% else -%>
+  <% if @petitions.empty? %>
     <p>No petitions could be found matching your search terms.</p>
-  <% end -%>
+  <% else %>
+    <%= render 'search/results_table', petitions: @petitions %>
+    <%= render 'search/result_list_footer', petitions: @petitions %>
+  <% end %>
 </div>
