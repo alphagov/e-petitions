@@ -259,7 +259,6 @@ describe Petition do
         @p3.update_attribute(:signature_count, 99999)
         @p4 = FactoryGirl.create(:open_petition)
         @p4.update_attribute(:signature_count, 200000)
-        FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "100000")
         @p5 = FactoryGirl.create(:open_petition, :response_required => true)
         @p6 = FactoryGirl.create(:open_petition, :response_required => false)
       end
@@ -624,9 +623,9 @@ describe Petition do
       expect(subject.open_at.change(usec: 0)).to eq(now.change(usec: 0))
     end
 
-    it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
+    it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
       subject.publish!
-      expect(subject.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
+      expect(subject.closed_at.change(usec: 0)).to eq( (now + Site.petition_duration.months).end_of_day.change(usec: 0) )
     end
   end
 
@@ -712,7 +711,7 @@ describe Petition do
   end
 
   describe "#notify_creator_about_sponsor_support", immediate_delayed_job_work_off: true do
-    subject { FactoryGirl.create(:petition, sponsor_count: AppConfig.sponsor_moderation_threshold) }
+    subject { FactoryGirl.create(:petition, sponsor_count: Site.threshold_for_moderation) }
     before { ActionMailer::Base.deliveries.clear }
 
     it 'breaks if the provided sponsor does not belong to the petition' do
@@ -735,7 +734,7 @@ describe Petition do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@example.gov"])
+          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/has received support from a sponsor/)
         end
@@ -750,7 +749,7 @@ describe Petition do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@example.gov"])
+          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/has received support from a sponsor/)
         end
@@ -780,32 +779,32 @@ describe Petition do
 
   describe '#has_maximum_sponsors?' do
     it 'is true when sponsored petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max)
+      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
       expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
     end
 
     it 'is true when validated petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max)
+      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
       expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
     end
 
     it 'is true when pending petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max)
+      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
       expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
     end
 
     it 'is false when sponsored petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
 
     it 'is false when validated petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
 
     it 'is false when validated petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: AppConfig.sponsor_count_max - 1)
+      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
   end

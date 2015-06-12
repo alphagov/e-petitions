@@ -64,7 +64,8 @@ describe Admin::PetitionsController do
       @p3.update_attribute(:signature_count, 9)
       @p4 = FactoryGirl.create(:closed_petition)
       @p4.update_attribute(:signature_count, 20)
-      FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
+
+      allow(Site).to receive(:threshold_for_debate).and_return(10)
     end
 
     it "should return all petitions that have more than the threshold number of signatures in ascending count order" do
@@ -236,9 +237,9 @@ describe Admin::PetitionsController do
           expect(@petition.open_at.change(usec: 0)).to eq(now.change(usec: 0))
         end
 
-        it "sets the closed date to the end of the day on the date #{AppConfig.petition_duration} months from now" do
+        it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
           set_up
-          expect(@petition.closed_at.change(usec: 0)).to eq( (now + AppConfig.petition_duration.months).end_of_day.change(usec: 0) )
+          expect(@petition.closed_at.change(usec: 0)).to eq( (now + Site.petition_duration.months).end_of_day.change(usec: 0) )
         end
 
         it "redirects to the main admin page" do
@@ -277,7 +278,7 @@ describe Admin::PetitionsController do
         it "sends an email to the petition creator" do
           do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@example.gov"])
+          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
           expect(email.to).to eq(["john@example.com"])
           expect(email.subject).to match(/e-petition has been rejected/)
         end

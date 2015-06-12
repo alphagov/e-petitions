@@ -70,7 +70,7 @@ end
 
 And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |title|
   petition = Petition.find_by(title: title)
-  AppConfig.sponsor_count_max.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
+  Site.maximum_number_of_sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
 end
 
 And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |title, sponsors|
@@ -309,3 +309,6 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
   Petition.update_all_signature_counts
 end
 
+Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
+  Site.instance.update!(threshold_for_debate: amount)
+end

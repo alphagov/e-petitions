@@ -31,7 +31,7 @@ FactoryGirl.define do
     trait :response_summary do
       response_summary "Petition summary"
     end
-    
+
     trait :open do
       state "open"
       signature_count 100
@@ -53,7 +53,7 @@ FactoryGirl.define do
     transient do
       creator_signature_attributes { {} }
       sponsors_signed false
-      sponsor_count { AppConfig.sponsor_count_min }
+      sponsor_count { Site.minimum_number_of_sponsors }
     end
     sequence(:title) {|n| "Petition #{n}" }
     action "Petition action"
@@ -142,13 +142,8 @@ FactoryGirl.define do
     end
   end
 
-  factory :system_setting do
-    sequence(:key)  {|n| "key#{n}"}
-  end
-
   sequence(:constituency_id) { |n| (1234 + n).to_s }
   sequence(:mp_id) { |n| (4321 + n).to_s }
-
 
   factory :constituency_petition_journal do
     constituency_id { generate(:constituency_id) }

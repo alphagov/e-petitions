@@ -7,3 +7,7 @@ end
 Before do
   default_url_options[:protocol] = 'https'
 end
+
+After do
+  Site.reload
+end

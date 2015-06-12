@@ -1,0 +1,308 @@
+require 'rails_helper'
+
+RSpec.describe Site, type: :model do
+  describe "schema" do
+    it { is_expected.to have_db_column(:title).of_type(:string).with_options(limit: 50, null: false, default: "Petition parliament") }
+    it { is_expected.to have_db_column(:url).of_type(:string).with_options(limit: 50, null: false, default: "https://petition.parliament.uk") }
+    it { is_expected.to have_db_column(:email_from).of_type(:string).with_options(limit: 50, null: false, default: "no-reply@petition.parliament.uk") }
+    it { is_expected.to have_db_column(:username).of_type(:string).with_options(limit: 30) }
+    it { is_expected.to have_db_column(:password_digest).of_type(:string).with_options(limit: 60) }
+    it { is_expected.to have_db_column(:enabled).of_type(:boolean).with_options(null: false, default: true) }
+    it { is_expected.to have_db_column(:protected).of_type(:boolean).with_options(null: false, default: false) }
+    it { is_expected.to have_db_column(:petition_duration).of_type(:integer).with_options(null: false, default: 6) }
+    it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
+    it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 10000) }
+    it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 100000) }
+    it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  end
+
+  describe "validations" do
+    it { is_expected.to validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:url) }
+    it { is_expected.to validate_presence_of(:email_from) }
+    it { is_expected.to validate_presence_of(:petition_duration) }
+    it { is_expected.to validate_presence_of(:minimum_number_of_sponsors) }
+    it { is_expected.to validate_presence_of(:maximum_number_of_sponsors) }
+    it { is_expected.to validate_presence_of(:threshold_for_moderation) }
+    it { is_expected.to validate_presence_of(:threshold_for_response) }
+    it { is_expected.to validate_presence_of(:threshold_for_debate) }
+
+    it { is_expected.to validate_length_of(:title).is_at_most(50) }
+    it { is_expected.to validate_length_of(:url).is_at_most(50) }
+    it { is_expected.to validate_length_of(:email_from).is_at_most(50) }
+
+    it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+    it { is_expected.to validate_numericality_of(:minimum_number_of_sponsors).only_integer }
+    it { is_expected.to validate_numericality_of(:maximum_number_of_sponsors).only_integer }
+    it { is_expected.to validate_numericality_of(:threshold_for_moderation).only_integer }
+    it { is_expected.to validate_numericality_of(:threshold_for_response).only_integer }
+    it { is_expected.to validate_numericality_of(:threshold_for_debate).only_integer }
+
+    context "when protected" do
+      subject { described_class.new(protected: true) }
+
+      it { is_expected.to validate_presence_of(:username) }
+      it { is_expected.to validate_presence_of(:password) }
+      it { is_expected.to validate_length_of(:username).is_at_most(30) }
+      it { is_expected.to validate_length_of(:password).is_at_most(30) }
+      it { is_expected.to validate_confirmation_of(:password) }
+    end
+  end
+
+  describe "singleton methods" do
+    let(:site) { double(:site) }
+    let(:now) { Time.current }
+
+    before do
+      Thread.current[:__site__] = nil
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    it "delegates title to the instance" do
+      expect(site).to receive(:title).and_return("Petition parliament (Test)")
+      expect(Site.title).to eq("Petition parliament (Test)")
+    end
+
+    it "delegates url to the instance" do
+      expect(site).to receive(:url).and_return("https://petition.parliament.test")
+      expect(Site.url).to eq("https://petition.parliament.test")
+    end
+
+    it "delegates email_from to the instance" do
+      expect(site).to receive(:email_from).and_return("no-reply@petition.parliament.test")
+      expect(Site.email_from).to eq("no-reply@petition.parliament.test")
+    end
+
+    it "delegates username to the instance" do
+      expect(site).to receive(:username).and_return("username")
+      expect(Site.username).to eq("username")
+    end
+
+    it "delegates password_digest to the instance" do
+      expect(site).to receive(:password_digest).and_return("password_digest")
+      expect(Site.password_digest).to eq("password_digest")
+    end
+
+    it "delegates enabled? to the instance" do
+      expect(site).to receive(:enabled?).and_return(false)
+      expect(Site.enabled?).to eq(false)
+    end
+
+    it "delegates protected? to the instance" do
+      expect(site).to receive(:protected?).and_return(true)
+      expect(Site.protected?).to eq(true)
+    end
+
+    it "delegates petition_duration to the instance" do
+      expect(site).to receive(:petition_duration).and_return(3)
+      expect(Site.petition_duration).to eq(3)
+    end
+
+    it "delegates minimum_number_of_sponsors to the instance" do
+      expect(site).to receive(:minimum_number_of_sponsors).and_return(1)
+      expect(Site.minimum_number_of_sponsors).to eq(1)
+    end
+
+    it "delegates maximum_number_of_sponsors to the instance" do
+      expect(site).to receive(:maximum_number_of_sponsors).and_return(5)
+      expect(Site.maximum_number_of_sponsors).to eq(5)
+    end
+
+    it "delegates threshold_for_moderation to the instance" do
+      expect(site).to receive(:threshold_for_moderation).and_return(5)
+      expect(Site.threshold_for_moderation).to eq(5)
+    end
+
+    it "delegates threshold_for_response to the instance" do
+      expect(site).to receive(:threshold_for_response).and_return(10)
+      expect(Site.threshold_for_response).to eq(10)
+    end
+
+    it "delegates threshold_for_debate to the instance" do
+      expect(site).to receive(:threshold_for_debate).and_return(100)
+      expect(Site.threshold_for_debate).to eq(100)
+    end
+
+    it "delegates last_checked_at to the instance" do
+      expect(site).to receive(:last_checked_at).and_return(now)
+      expect(Site.last_checked_at).to eq(now)
+    end
+
+    it "delegates created_at to the instance" do
+      expect(site).to receive(:created_at).and_return(now)
+      expect(Site.created_at).to eq(now)
+    end
+
+    it "delegates updated_at to the instance" do
+      expect(site).to receive(:updated_at).and_return(now)
+      expect(Site.updated_at).to eq(now)
+    end
+  end
+
+  describe ".authenticate" do
+    let(:site) { double(:site) }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    it "delegates authenticate to the instance" do
+      expect(site).to receive(:authenticate).with("username", "password").and_return(true)
+      expect(Site.authenticate("username", "password")).to eq(true)
+    end
+  end
+
+  describe ".email_protocol" do
+    let(:site) { double(:site) }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    it "delegates email_protocol to the instance" do
+      expect(site).to receive(:email_protocol).and_return("https")
+      expect(Site.email_protocol).to eq("https")
+    end
+  end
+
+  describe ".reload" do
+    let(:site) { double(:site) }
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    context "when it is cached in Thread.current" do
+      before do
+        Thread.current[:__site__] = site
+      end
+
+      it "clears the cached instance in Thread.current" do
+        expect{ Site.reload }.to change {
+          Thread.current[:__site__]
+        }.from(site).to(nil)
+      end
+    end
+  end
+
+  describe ".touch" do
+    let(:site) { double(:site) }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    it "delegates to the instance" do
+      expect(site).to receive(:touch).with(:last_checked_at).and_return(true)
+      expect(Site.touch(:last_checked_at)).to eq(true)
+    end
+
+    it "can accept multiple names" do
+      expect(site).to receive(:touch).with(:last_checked_at, :updated_at).and_return(true)
+      expect(Site.touch(:last_checked_at, :updated_at)).to eq(true)
+    end
+  end
+
+  describe ".instance" do
+    let(:site) { double(:site) }
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    context "when it isn't cached in Thread.current" do
+      before do
+        Thread.current[:__site__] = nil
+      end
+
+      it "finds the first record or creates it" do
+        expect(Site).to receive(:first_or_create).and_return(site)
+        expect(Site.instance).to equal(site)
+      end
+
+      it "caches it in Thread.current" do
+        expect(Site).to receive(:first_or_create).and_return(site)
+        expect(Site.instance).to equal(Thread.current[:__site__])
+      end
+    end
+
+    context "when it is cached in Thread.current" do
+      before do
+        Thread.current[:__site__] = site
+      end
+
+      it "returns the cached instance" do
+        expect(Site).not_to receive(:first_or_create)
+        expect(Site.instance).to equal(site)
+      end
+    end
+  end
+
+  describe ".before_remove_const" do
+    let(:site) { double(:site) }
+
+    after do
+      Thread.current[:__site__] = nil
+    end
+
+    context "when it is cached in Thread.current" do
+      before do
+        Thread.current[:__site__] = site
+      end
+
+      it "clears the cached instance in Thread.current" do
+        expect{ Site.before_remove_const }.to change {
+          Thread.current[:__site__]
+        }.from(site).to(nil)
+      end
+    end
+  end
+
+  describe "#authenticate" do
+    subject :site do
+      described_class.create!(username: "petitions", password: "letmein")
+    end
+
+    context "when the username and password are correct" do
+      it "returns true" do
+        expect(site.authenticate("petitions", "letmein")).to eq(true)
+      end
+    end
+
+    context "when the username and password are incorrect" do
+      it "returns false" do
+        expect(site.authenticate("petitions", "!letmein")).to eq(false)
+      end
+    end
+  end
+
+  describe "#email_protocol" do
+    subject :site do
+      described_class.create!(url: "https://petition.parliament.test")
+    end
+
+    it "the protocol of the url" do
+      expect(site.email_protocol).to eq("https")
+    end
+  end
+end

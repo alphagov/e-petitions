@@ -27,5 +27,10 @@ module Epets
     config.active_record.raise_in_transactional_callbacks = true
 
     config.active_job.queue_adapter = :delayed_job
+
+    # Add 503 Service Unavailable to the rescue response
+    config.action_dispatch.rescue_responses.merge!(
+      'Site::ServiceUnavailable' => :service_unavailable
+    )
   end
 end

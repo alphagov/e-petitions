@@ -12,7 +12,7 @@ end
 
 Then(/^the sponsor support notification email should include the countdown to the threshold$/) do
   signed = @sponsor_petition.sponsors.where.not(signature_id: nil).count
-  threshold = AppConfig.sponsor_moderation_threshold
+  threshold = Site.threshold_for_moderation
   email = open_last_email_for("charlie.the.creator@example.com")
   expect(email.subject).to eq "Parliament Petitions - #{@sponsor_petition.title} has received support from a sponsor"
   mail_body = email.default_part_body.to_s
@@ -21,7 +21,7 @@ Then(/^the sponsor support notification email should include the countdown to th
 end
 
 Then(/^the sponsor support notification email should tell me about my e\-petition going into moderation$/) do
-  threshold = AppConfig.sponsor_moderation_threshold
+  threshold = Site.threshold_for_moderation
 
   email = open_last_email_for("charlie.the.creator@example.com")
   expect(email.subject).to eq "Parliament Petitions - #{@sponsor_petition.title} has received support from a sponsor"

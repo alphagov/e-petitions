@@ -26,6 +26,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'aws-sdk'
 gem 'textacular'
 gem 'uglifier'
+gem 'bcrypt'
 
 group :development, :test do
   gem 'rspec-rails'

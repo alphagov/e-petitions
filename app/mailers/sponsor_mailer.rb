@@ -3,7 +3,7 @@ class SponsorMailer < ApplicationMailer
     @petition = petition
     @sponsor = sponsor
     @supporting_sponsors_count = petition.supporting_sponsors_count
-    @moderation_threshold = AppConfig.sponsor_moderation_threshold
+    @moderation_threshold = Site.threshold_for_moderation
     mail(
       subject: "Parliament Petitions - #{@petition.title} has received support from a sponsor",
       to: @petition.creator_signature.email
@@ -13,7 +13,7 @@ class SponsorMailer < ApplicationMailer
   def sponsor_signed_email_on_threshold(petition, sponsor)
     @petition = petition
     @sponsor = sponsor
-    @moderation_threshold = AppConfig.sponsor_moderation_threshold
+    @moderation_threshold = Site.threshold_for_moderation
     mail(
       subject: "Parliament Petitions - #{@petition.title} has received support from a sponsor",
       to: @petition.creator_signature.email
