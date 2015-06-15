@@ -1,6 +1,6 @@
 module DateTimeHelper
   def short_date_format(date_time)
-    date_time && date_time.strftime("%e %B %Y")
+    date_time && date_time.strftime("%-d %B %Y")
   end
 
   def date_time_format(date_time)
