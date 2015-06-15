@@ -75,7 +75,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Next"
 
-  Then I should see a title called "Sign your petition"
+  Then I should see a heading called "Sign your petition"
 
   And I press "Back"
   And the "Action" field should contain "The wombats of wimbledon rock."
@@ -92,7 +92,7 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in my details
 
   And I press "Sign this petition"
-  Then I should see a title called "Check your petition"
+  Then I should see a heading called "Check your petition"
   And I should see "The wombats of wimbledon rock."
   And I expand "More details"
   And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
@@ -102,7 +102,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Sign this petition"
   And I press "This looks good"
 
-  Then I should see a title called "Make sure this is right"
+  Then I should see a heading called "Make sure this is right"
 
   When I fill in "Email" with ""
   And I press "Yes - this is my email address"
