@@ -20,3 +20,11 @@ select.form-control {
 .form-control {
   padding: 0.5em;
 }
+
+.error,
+.error-summary {
+  @include media(tablet) {
+    padding-left: $gutter - 5px;
+    padding-right: $gutter;
+  }
+}
