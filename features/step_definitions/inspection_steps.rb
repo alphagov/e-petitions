@@ -2,6 +2,10 @@ Then(/^I should see a fieldset called "(.*?)"$/) do |legend|
   expect(page).to have_xpath("//fieldset/legend[contains(., '#{legend}')]", visible: false)
 end
 
+Then(/^I should see a heading called "(.*?)"$/) do |title|
+  expect(page).to have_css('h1', "#{title}")
+end
+
 Then /^I should (not |)see "([^\"]*)" in the ((?!email\b).*)$/ do |see_or_not, text, section_name|
   if section_name == 'browser page title'
     if see_or_not.blank?

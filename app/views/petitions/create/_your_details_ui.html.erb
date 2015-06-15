@@ -1,11 +1,14 @@
-<fieldset>
-  <legend>Your Details</legend>
-  <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-    <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object } %>
-  <% end %>
+<%= f.submit raw('&#9664; Back'), :name => 'move:back', :class => 'back-page' %>
 
-  <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
-  <% end %>
-</fieldset>
+<h1 class="page-title">Sign your petition</h1>
+<h2 class="page-subtitle"><%= petition.title %></h2>
+
+<%= render 'petitions/create/error_summary', f: f %>
+
+<%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+  <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object, :context => 'create-petition' } %>
+<% end %>
+
+<p>By signing you agree to the <%= link_to 'petition guidelines', help_path(anchor: 'creating-a-petition') %></p>
+
+<%= f.submit 'Sign this petition', :name => 'move:next', :class => 'button', :tabindex => increment %>

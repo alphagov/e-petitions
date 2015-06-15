@@ -1,4 +1,6 @@
 class SponsorsController < ApplicationController
+  include ManagingMoveParameter
+
   before_action :retrieve_petition
   before_action :validate_token_and_petition_match
 
@@ -19,6 +21,7 @@ class SponsorsController < ApplicationController
   end
 
   def update
+    assign_move
     assign_stage
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
     if @stage_manager.create_signature

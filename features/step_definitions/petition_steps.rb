@@ -109,15 +109,13 @@ When /^I view all petitions from the home page$/ do
   click_link "View all"
 end
 
-When /^I check my petition title$/ do
-  within(:css, "form#pre_creation_search") do
-    fill_in "search", :with => "Rioters should loose benefits"
-    click_button("Search")
-  end
+When /^I check for similar petitions$/ do
+  fill_in "q", :with => "Rioters should loose benefits"
+  click_button("Check for similar petitions")
 end
 
 When /^I choose to create a petition anyway$/ do
-  click_link_or_button "Create e-petition"
+  click_link_or_button "My petition is different"
 end
 
 When /^I change the number viewed per page to (\d+)$/ do |per_page|
@@ -162,7 +160,8 @@ And /^all petitions have had their signatures counted$/ do
 end
 
 Then /^I should be asked to search for a new petition$/ do
-  expect(page).to have_css("form input[name=q]")
+  expect(page).to have_content("What action would you like the government to take?")
+  expect(page).to have_css("form textarea[name=q]")
 end
 
 Then /^I should see a list of existing petitions I can sign$/ do
@@ -174,7 +173,7 @@ Then /^I should see a list of (\d+) petitions$/ do |petition_count|
 end
 
 Then /^I should see my search query already filled in as the title of the petition$/ do
-  expect(page).to have_css("input[value='#{@petition.title}']")
+  expect(page).to have_field("Action", "#{@petition.title}")
 end
 
 Then /^I can click on a link to return to the petition$/ do
@@ -214,9 +213,9 @@ end
 
 When /^I fill in the petition details/ do
   steps %Q(
-    When I fill in "Title" with "The wombats of wimbledon rock."
-    And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    When I fill in "Action" with "The wombats of wimbledon rock."
+    And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
+    And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   )
 end
 
@@ -277,3 +276,6 @@ Then(/^I can share it via (.+)$/) do |service|
   end
 end
 
+Then /^I expand "([^"]*)"/ do |text|
+  page.find("//details/summary[contains(., '#{text}')]").click
+end

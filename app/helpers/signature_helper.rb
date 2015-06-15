@@ -15,6 +15,7 @@ module SignatureHelper
   def render_signature_hidden_details(stage_manager, form, options)
     capture do
       concat hidden_field_tag(:stage, stage_manager.stage)
+      concat hidden_field_tag(:move, 'next')
       concat render('/signatures/create/signer_hidden', options.merge(signature: stage_manager.stage_object, f: form)) unless stage_manager.stage == 'signer'
     end
   end

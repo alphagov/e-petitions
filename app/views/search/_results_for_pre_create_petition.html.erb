@@ -1,12 +1,17 @@
 <% petitions.each do |petition| %>
   <ul>
-    <li>
-      <%= link_to petition.title, petition_path(petition), class: 'link_prompt text_link' %>
+    <li class="petition-item petition-item-existing">
+      <div class="panel-indent">
+        <%= link_to petition.title, petition_path(petition) %>
+        <p>
+          <% unless petition.rejected? -%>
+            <%= signature_count(:default, petition.signature_count) %>
+          <% end %>
+        </p>
+        <p class="description">
+          <%= petition.description %>
+        </p>
+      </div>
     </li>
-    <% unless petition.rejected? -%>
-      <li><%= number_with_delimiter(petition.signature_count) %> signatures</li>
-    <% end %>
-    <li><%= petition.closed? ? "closed" : petition.state %></li>
-    <li><%= petition.action %></li>
   </ul>
 <% end %>

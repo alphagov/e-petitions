@@ -1,8 +1,21 @@
 <% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Create a new e-petition</h1>
-</div>
-<% end %>
+<h1 class="page-title">What action would you like the government to take?</h1>
 
-<%= render "pre_creation_search_form" %>
+<form method="get" action="/petitions/check_results">
+  <div class="form-group">
+    <label for="q" class="form-label visuallyhidden">
+      Action
+    </label>
+    <textarea name="q" id="q" value="<%= @petitions.try(:query) %>" class="form-control" rows="3" maxlength="80"></textarea>
+    <span class="character-count">80</span>
+    <%= render 'petitions/action_help' %>
+  </div>
+
+  <section class="create-warning">
+    <h2>Just so you know</h2>
+    <span aria-hidden="true">5</span>
+    <p>Later on, you'll need email addresses for <%= AppConfig.sponsor_count_min %> supporters to get your petition started</p>
+  </section>
+
+  <input type="submit" value="Check for similar petitions" class="button" />
+</form>

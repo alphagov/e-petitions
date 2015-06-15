@@ -1,32 +1,6 @@
 <% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Create a new e-petition</h1>
-</div>
-<% end %>
 
-<%= form_for @stage_manager.stage_object, :url => create_petition_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
-  <div class="form_pagination">
-    <ul>
-      <li class="step_1 pagination_tab<%= ' active' if @stage_manager.stage == 'petition' %>"><span class="step_no">1</span>e-petition<br/>details</li>
-      <li class="step_2 pagination_tab<%= ' active' if @stage_manager.stage == 'creator' %>"><span class="step_no">2</span>Your details</li>
-      <li class="step_3 pagination_tab<%= ' active' if @stage_manager.stage == 'sponsors' %>"><span class="step_no">3</span>Sponsor emails</li>
-      <li class="step_4 pagination_tab<%= ' active' if @stage_manager.stage == 'replay-petition' %>"><span class="step_no">4</span>Preview<br/>e-petition</li>
-      <li class="step_5 pagination_tab<%= ' active' if @stage_manager.stage == 'replay-email' %>"><span class="step_no">5</span>Submit<br/>e-petition</li>
-    </ul>
-  </div>
-
-  <% if f.object.errors.any? -%>
-    <div id='errorExplanation' class='errorExplanation'>
-      <h2>We couldn't create this petition</h2>
-      <p>Please fix the following errors:</p>
-      <ul>
-        <% f.object.errors.each do |key, error| -%>
-          <li><%= error %></li>
-        <% end -%>
-      </ul>
-    </div>
-  <% end -%>
+<%= form_for @stage_manager.stage_object, :url => create_petition_path do |f| %>
 
   <%= render_petition_form @stage_manager, f %>
 

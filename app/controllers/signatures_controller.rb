@@ -1,4 +1,6 @@
 class SignaturesController < ApplicationController
+  include ManagingMoveParameter
+
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you, :signed]
   before_filter :retrieve_signature, :only => [:signed, :verify, :unsubscribe]
 
@@ -103,6 +105,7 @@ class SignaturesController < ApplicationController
   end
 
   def handle_new_signature(petition)
+    assign_move
     assign_stage
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
     if @stage_manager.create_signature

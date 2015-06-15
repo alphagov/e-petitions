@@ -51,6 +51,38 @@ describe PetitionsController do
       expect(create_petition_path).to eq('/petitions/new')
     end
 
+    context 'managing the "move" parameter' do
+      it 'defaults to "next" if it is not present' do
+        do_post :move => nil
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'defaults to "next" if it is present but blank' do
+        do_post :move => ''
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "next" if it is present but not "next" or "back"' do
+        do_post :move => 'blah'
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "next" if "move:next" is present' do
+        do_post :move => 'blah', :'move:next' => 'Onwards!'
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "back" if "move:back" is present' do
+        do_post :move => 'blah', :'move:back' => 'Backwards!'
+        expect(controller.params['move']).to eq 'back'
+      end
+
+      it 'overrides it to "next" if both "move:next" and "move:back" are present' do
+        do_post :move => 'blah',  :'move:next' => 'Onwards!', :'move:back' => 'Backwards!'
+        expect(controller.params['move']).to eq 'next'
+      end
+    end
+
     context "valid post" do
       it "should successfully create a new petition and a signature" do
         do_post

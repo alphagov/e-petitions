@@ -120,6 +120,38 @@ describe SponsorsController do
 
     let(:signature) { petition.signatures.for_email('s.ponsor@example.com').first }
 
+    context 'managing the "move" parameter' do
+      it 'defaults to "next" if it is not present' do
+        do_patch :move => nil
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'defaults to "next" if it is present but blank' do
+        do_patch :move => ''
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "next" if it is present but not "next" or "back"' do
+        do_patch :move => 'blah'
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "next" if "move:next" is present' do
+        do_patch :move => 'blah', :'move:next' => 'Onwards!'
+        expect(controller.params['move']).to eq 'next'
+      end
+
+      it 'overrides it to "back" if "move:back" is present' do
+        do_patch :move => 'blah', :'move:back' => 'Backwards!'
+        expect(controller.params['move']).to eq 'back'
+      end
+
+      it 'overrides it to "next" if both "move:next" and "move:back" are present' do
+        do_patch :move => 'blah',  :'move:next' => 'Onwards!', :'move:back' => 'Backwards!'
+        expect(controller.params['move']).to eq 'next'
+      end
+    end
+
     it '404s if the requested petition does not exist' do
       petition_param = petition.to_param
       petition.destroy

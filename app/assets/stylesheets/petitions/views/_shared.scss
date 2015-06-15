@@ -1,4 +1,5 @@
 @import "shared/share-petition";
+@import "shared/petition-item";
 
 // Common page title
 // =================
@@ -14,8 +15,34 @@
   @include bold-27();
   margin-bottom: em(35, 27);
 }
+.back-page + .page-title {
+  margin-top: em(30, 36);
+}
 
-// Common page title
+// Back
+// =================
+.back-page {
+  @include core-16();
+  margin-top: em(20, 16);
+  color: $secondary-text-colour;
+}
+a.back-page {
+  display: block;
+}
+input.back-page {
+  border-width: 0px;
+  background-color: $white;
+  padding: 0;
+  cursor: pointer;
+}
+.back-page:visited {
+  color: $secondary-text-colour;
+}
+.back-page:hover {
+  color: $text-colour;
+}
+
+// Section panel
 // =================
 .section-panel {
   @extend %outdent-to-full-width;
@@ -32,6 +59,7 @@
   color: $white;
   padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
   position: relative;
+  margin-bottom: $gutter-half;
 
   .icon {
     position: absolute;
@@ -85,24 +113,6 @@
 .paginate-next {
   float: right;
   padding-right: 20px;
-}
-
-
-// Petition item
-// =============
-.petition-item {
-  color: $secondary-text-colour;
-  margin-bottom: em(19);
-  a {
-    font-weight: bold;
-  }
-  .count {
-    @include core-36();
-  }
-}
-
-.petition-item.petition-rejected {
-  margin-bottom: $gutter;
 }
 
 // About item

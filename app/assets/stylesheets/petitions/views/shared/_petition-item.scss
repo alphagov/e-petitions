@@ -1,0 +1,30 @@
+// Petition item
+// =============
+.petition-item {
+  color: $secondary-text-colour;
+  margin-bottom: em(19);
+  a {
+    font-weight: bold;
+    display: block;
+  }
+  .count {
+    @include core-36();
+  }
+  .description {
+    color: $text-colour;
+  }
+  .panel-indent {
+    margin: 0;
+  }
+}
+.petition-item-existing {
+  a {
+    margin-bottom: em(10, 19);
+  }
+  a + p {
+    margin-bottom: 0;
+  }
+}
+.petition-item.petition-rejected {
+  margin-bottom: $gutter;
+}

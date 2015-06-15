@@ -1,5 +1,11 @@
 <%= form_row :for => [signature, :uk_citizenship], :class => 'uk-citizen' do %>
-  <span class="form-label">Only British citizens or UK residents have the right to sign</span>
+  <span class="form-label">
+    <% if context == 'create-petition' %>
+      Only British citizens or UK residents have the right to create or sign petitions
+    <% else %>
+      Only British citizens or UK residents have the right to sign
+    <% end %>
+  </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
   <%= f.label :uk_citizenship,  :class => 'block-label', :for => nil do  %>
     <%# Don't use rails' checkbox helper when nesting because it creates two checkboxes, which is not valid markup inside the label %>
@@ -14,7 +20,7 @@
   <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
 <% end %>
 
-<%= render 'signatures/email', f: f, signature: signature %>
+<%= render 'signatures/email', f: f, signature: signature,  hide_label: false %>
 
 <%= form_row :for => [signature, :country] do %>
   <%= f.label :country, 'Location', :class => 'form-label' %>

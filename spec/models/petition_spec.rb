@@ -26,19 +26,19 @@ describe Petition do
     it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
-    it "should validate the length of :title to within 150 characters" do
-      expect(FactoryGirl.build(:petition, :title => 'x' * 150)).to be_valid
-      expect(FactoryGirl.build(:petition, :title => 'x' * 151)).not_to be_valid
+    it "should validate the length of :title to within 80 characters" do
+      expect(FactoryGirl.build(:petition, :title => 'x' * 80)).to be_valid
+      expect(FactoryGirl.build(:petition, :title => 'x' * 81)).not_to be_valid
     end
 
-    it "should validate the length of :action to within 200 characters" do
-      expect(FactoryGirl.build(:petition, :action => 'x' * 200)).to be_valid
-      expect(FactoryGirl.build(:petition, :action => 'x' * 201)).not_to be_valid
+    it "should validate the length of :action to within 300 characters" do
+      expect(FactoryGirl.build(:petition, :action => 'x' * 300)).to be_valid
+      expect(FactoryGirl.build(:petition, :action => 'x' * 301)).not_to be_valid
     end
 
-    it "should validate the length of :description to within 1000 characters" do
-      expect(FactoryGirl.build(:petition, :description => 'x' * 1000)).to be_valid
-      expect(FactoryGirl.build(:petition, :description => 'x' * 1001)).not_to be_valid
+    it "should validate the length of :description to within 800 characters" do
+      expect(FactoryGirl.build(:petition, :description => 'x' * 800)).to be_valid
+      expect(FactoryGirl.build(:petition, :description => 'x' * 801)).not_to be_valid
     end
 
     it "should not allow a blank state" do

@@ -25,6 +25,7 @@ module PetitionHelper
   def render_petition_hidden_details(stage_manager, form)
     capture do
       concat hidden_field_tag(:stage, stage_manager.stage)
+      concat hidden_field_tag(:move, 'next')
       concat render('/petitions/create/petition_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'petition'
       if stage_manager.stage_object.creator_signature.present?
         concat render('/petitions/create/your_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'creator'

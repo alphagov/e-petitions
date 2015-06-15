@@ -1,26 +1,22 @@
-<fieldset id="petition_submit_section">
-  <legend>Review Petition</legend>
+<% content_for(:page_title) { "Create a new e-petition - e-petitions" } %>
 
-  <div class="strap_block">
-    <p>Here's your chance to review your e-petition. Once you press 'submit', you can't go back.
-    This is how it will appear on the website. If you like what you see, press 'submit'.
-    If you want to make changes, press 'back'.</p>
-  </div>
-  <div class="generic_block" id="petition_summary_block">
-    <h2 id="title_summary_field"><%= petition.title %></h2>
-    <div id="action_summary_field"><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></div>
-    <div id="description_summary_field"><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></div>
-  </div>
-  <div class="generic_block">
-    <p>Your petition will be open for <%= AppConfig.petition_duration %> months after it is reviewed by Parliament.</p>
-  </div>
+<%= f.submit raw('&#9664; Back'), :name => 'move:back', :class => 'back-page' %>
 
-  <div class="row">
-    <p>By creating this petition, you agree to the <%= link_to 'Terms & Conditions', help_path(anchor: 'terms-and-conditions') %></p>
-  </div>
+<h1 class="page-title">Check your petition</h1>
 
-  <%= form_row :class => 'button_row' do %>
-    <%= f.button 'Back', :name => 'move', :value => 'back', :class => 'button backwards_action', :tabindex => increment %>
-    <%= f.button 'Next', :name => 'move', :value => 'next', :class => 'button forward_action', :tabindex => increment %>
-  <% end %>
-</fieldset>
+<div class="panel-indent">
+  <h1><%= petition.title %></h1>
+  <p><%= petition.action %></p>
+  <details>
+    <summary><span class="summary">More details</span></summary>
+    <div>
+      <p><%= petition.description %></p>
+    </div>
+  </details>
+
+</div>
+
+
+<%= f.submit 'This looks good', :name => 'move:next', :class => 'button', :tabindex => increment %>
+<%= f.submit 'Go back and make changes', :name => 'move:back', :class => 'button-secondary', :tabindex => increment %>
+

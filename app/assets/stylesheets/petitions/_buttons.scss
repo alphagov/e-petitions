@@ -5,8 +5,8 @@
 @import "../govuk_frontend_toolkit/measurements";
 @import "../govuk_frontend_toolkit/typography";
 
-.button {
-  @include button ($petitions-button-colour);
+@mixin button-override($colour) {
+  @include button($colour);
   margin: 0 $gutter-half $gutter-half 0;
   padding: em(10) 0 em(10) 0;
   vertical-align: top;
@@ -15,6 +15,10 @@
   width: 100%;
   @include bold-24;
   text-align: center;
+}
+
+.button {
+  @include button-override($petitions-button-colour);
 }
 
 // Fix unwanted button padding in Firefox
@@ -34,4 +38,8 @@
 
 .button[disabled="disabled"]:focus {
   outline: none;
+}
+
+.button-secondary{
+  @include button-override($panel-colour);
 }

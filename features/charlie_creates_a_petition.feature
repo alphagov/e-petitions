@@ -6,9 +6,9 @@ Feature: As Charlie
 Scenario: Charlie has to search for a petition before creating one
   Given a petition "Rioters should loose benefits"
   Given I am on the home page
-  When I follow "Start a new e-petition"
+  When I follow "Start a new petition"
   Then I should be asked to search for a new petition
-  When I check my petition title
+  When I check for similar petitions
   Then I should see a list of existing petitions I can sign
   When I choose to create a petition anyway
   Then I should be on the new petition page
@@ -17,9 +17,9 @@ Scenario: Charlie has to search for a petition before creating one
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
-  When I follow "Start a new e-petition"
-  Then I fill in "search" with "'onmouseover='alert(1)'"
-  When I press "Search"
+  When I follow "Start a new petition"
+  Then I fill in "q" with "'onmouseover='alert(1)'"
+  When I press "Check for similar petitions"
   Then the markup should be valid
 
 Scenario: Charlie creates a petition
@@ -27,11 +27,11 @@ Scenario: Charlie creates a petition
   And I fill in the petition details
   And I press "Next"
   And I fill in my details
-  And I press "Next"
-  When I press "Next"
+  And I press "Sign this petition"
+  When I press "This looks good"
   Then the markup should be valid
   And I am asked to review my email address
-  When I press "Submit"
+  When I press "Yes - this is my email address"
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
@@ -48,38 +48,42 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I fill in the petition details
   And I press "Next"
   And I fill in my details with postcode "SW14 9RQ"
-  And I press "Next"
+  And I press "Sign this petition"
   Then I should not see the text "Your constituency is"
 
 @javascript
 Scenario: Charlie tries to submit an invalid petition
   Given I am on the new petition page
 
-  Then I should see a fieldset called "Petition Details"
-
   When I press "Next"
-  Then I should see "Title must be completed"
-  And I should see "Action must be completed"
-  And I should see "Description must be completed"
+  Then I should see "Action must be completed"
+  And I should see "Background must be completed"
+  And I should see "Supporting details must be completed"
 
   When I am allowed to make the petition title too long
-  When I fill in "Title" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
-  And I fill in "Action" with "This text is longer than 200 characters. 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
-  And I fill in "Description" with "This text is longer than 1000 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
+  When I fill in "Action" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
+  And I fill in "Background" with "This text is longer than 300 characters. 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
+  And I fill in "Supporting details" with "This text is longer than 500 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
   And I press "Next"
 
-  Then I should see "Title is too long."
-  And I should see "Description is too long."
-  And I should see "Action is too long."
+  Then I should see "Action is too long."
+  And I should see "Background is too long."
+  And I should see "Supporting details is too long."
 
-  When I fill in "Title" with "The wombats of wimbledon rock."
-  And I fill in "Action" with "Give half of Wimbledon rock to wombats!"
-  And I fill in "Description" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  When I fill in "Action" with "The wombats of wimbledon rock."
+  And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
+  And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Next"
 
-  Then I should see a fieldset called "Your Details"
+  Then I should see a heading called "Sign your petition"
 
-  When I press "Next"
+  And I press "Back"
+  And the "Action" field should contain "The wombats of wimbledon rock."
+  And the "Background" field should contain "Give half of Wimbledon rock to wombats!"
+  And the "Supporting details" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I press "Next"
+
+  When I press "Sign this petition"
   Then I should see "Name must be completed"
   And I should see "Email must be completed"
   And I should see "You must be a British citizen"
@@ -87,24 +91,24 @@ Scenario: Charlie tries to submit an invalid petition
 
   When I fill in my details
 
-  And I press "Next"
-  Then I should see a fieldset called "Review Petition"
-
+  And I press "Sign this petition"
+  Then I should see a heading called "Check your petition"
   And I should see "The wombats of wimbledon rock."
+  And I expand "More details"
   And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
-  And I press "Back"
+  And I press "Go back and make changes"
   And I fill in "Name" with "Mr. Wibbledon"
-  And I press "Next"
-  And I press "Next"
+  And I press "Sign this petition"
+  And I press "This looks good"
 
-  Then I should see a fieldset called "Make sure this is right"
+  Then I should see a heading called "Make sure this is right"
 
   When I fill in "Email" with ""
-  And I press "Submit"
+  And I press "Yes - this is my email address"
   Then I should see "Email must be completed"
   When I fill in "Email" with "womboid@wimbledon.com"
-  And I press "Submit"
+  And I press "Yes - this is my email address"
 
   Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"
