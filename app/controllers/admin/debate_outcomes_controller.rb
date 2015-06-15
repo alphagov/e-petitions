@@ -3,7 +3,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def show
     @petition = Petition.find(params[:petition_id])
-    if @petition.open? || @petition.closed?
+    if @petition.can_have_debate_added?
 
     else
       raise ActiveRecord::RecordNotFound

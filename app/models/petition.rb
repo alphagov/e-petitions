@@ -193,6 +193,10 @@ class Petition < ActiveRecord::Base
     self.state == OPEN_STATE && self.closed_at <= Time.current
   end
 
+  def can_have_debate_added?
+    self.open? || self.closed?
+  end
+
   def state_label
     if (self.closed?)
       CLOSED_STATE
