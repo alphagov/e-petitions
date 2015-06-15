@@ -846,4 +846,8 @@ RSpec.describe Petition, type: :model do
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
   end
+
+  describe 'debate outcomes' do
+    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
+  end
 end

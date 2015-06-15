@@ -48,6 +48,7 @@ class Petition < ActiveRecord::Base
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
   has_many :constituency_petition_journals, :dependent => :destroy
+  has_one :debate_outcome, dependent: :destroy
 
   # = Validations =
   include Staged::Validations::PetitionDetails
