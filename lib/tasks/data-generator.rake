@@ -5,11 +5,11 @@
 # Random response   RANDOM_RESP=true      default false
 #                   If true will create 10K sigs for every 5th petition and add response
 
-require 'faker'
-
 namespace :data do
   desc "Generate random petitions with signatures. PET_STATE=open, PET_COUNT=100, SIG_COUNT=100"
   task :generate => :environment do
+    require 'faker'
+
     POSTCODES       = ['SE58BB', 'IG110UD', 'IG110FX', 'W1F7HS', 'RM9 8PD'];
     REJECTION_CODES = ["no-action", "irrelevant", "honours", "no-action", "duplicate"]
     HIDDEN_CODES    = ["libellous", "offensive"]
