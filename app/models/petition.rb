@@ -36,7 +36,7 @@ class Petition < ActiveRecord::Base
   facet :all, -> { reorder(signature_count: :desc) }
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
-  facet :rejected, -> { for_state(REJECTED_STATE).reorder(:created_at) }
+  facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
