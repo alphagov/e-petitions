@@ -27,7 +27,7 @@ describe SignaturesController do
       it "should redirect to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.id}/signed")
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.perishable_token}/signed")
       end
 
       it "should not set petition state to validated" do
@@ -109,6 +109,23 @@ describe SignaturesController do
           get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
+    end
+  end
+
+  describe "signed" do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+    
+    it "redirects to the signature verify page if unvalidated" do
+      get :signed, :petition_id => petition.id, :id => signature.perishable_token
+      expect(assigns[:signature]).to eq(signature)
+      expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
+    end
+
+    it "raises exception if token not found" do
+      expect do
+        get :signed, :petition_id => petition.id, :id => "#{signature.perishable_token}a"
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
