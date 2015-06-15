@@ -39,8 +39,10 @@ Feature: Suzie views a petition
     Then I should see the petition details
     And I should see the reason for rejection
     And I should see "<i>We<i>"
-    And I should see a link called "http://www.google.com" linking to "http://www.google.com"
-    And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
+    And I should not see a link called "http://www.google.com" linking to "http://www.google.com"
+    And I should not see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
+    And I should not see the vote count
+    And I should see submitted date
     And I cannot sign the petition
 
   Scenario: Suzie cannot sign closed petition

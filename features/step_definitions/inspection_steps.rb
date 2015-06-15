@@ -109,9 +109,13 @@ end
 
 ### Links
 
-Then /^I should see a link called "([^\"]*)" linking to "([^\"]*)"$/ do |link_text, link_target|
+Then /^I should (not |)see a link called "([^\"]*)" linking to "([^\"]*)"$/ do |see_or_not, link_text, link_target|
   xpath = "//a[@href=\"#{link_target}\"][. = \"#{link_text}\"]"
-  expect(page).to have_xpath( xpath )
+  if see_or_not.blank?
+    expect(page).to have_xpath(xpath)
+  else
+    expect(page).to_not have_xpath(xpath)
+  end
 end
 
 Then /^"([^"]*)" should show as "([^"]*)"$/ do |node_text, node_class_name|
