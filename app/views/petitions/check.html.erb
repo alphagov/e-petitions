@@ -8,28 +8,7 @@
     </label>
     <textarea name="q" id="q" value="<%= @petitions.try(:query) %>" class="form-control" rows="3" maxlength="80"></textarea>
     <span class="character-count">80</span>
-    <details class="form-group-help">
-      <summary><span class="summary">Help writing good actions</span></summary>
-      <div class="panel-indent">
-        <p>What do you want the government to do and why? Write as briefly and clearly as you can.</p>
-        <p>Here are some examples of well-written titles:</p>
-        <ul class="list-bullet">
-          <li>"End non-stun slaughter to promote animal welfare"</li>
-          <li>"Introduce Black History to the primary curriculum"</li>
-          <li>"Don't increase MPs' salaries - they are well-paid already"</li>
-        </ul>
-        <p>You don't need to say "Petition to...", "Call on the government to..." or "We the undersigned...".</p>
-        <p>Here are some examples of badly-written titles:</p>
-        <ul class="list-bullet">
-          <li>"Jack's law"</li>
-          <li>"Russia Problem on US ruling"</li>
-          <li>"Justice for David Thomas"</li>
-        </ul>
-        <p>In each case, it’s not clear what the government is being asked to do or why.</p>
-        <p>Don't write in all caps. It's harder to read.</p>
-        <p>You’re limited to 80 characters here. You can add more in the next step.</p>
-      </div>
-    </details>
+    <%= render 'petitions/action_help' %>
   </div>
 
   <section class="create-warning">
