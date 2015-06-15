@@ -27,7 +27,7 @@ Feature: Suzy Signer views all petitions
     When I view all petitions from the home page
     And I follow "Rejected"
     Then I should see the following ordered list of petitions:
-     | Free the wombles                                    |
-     | Force supermarkets to give unsold food to charities |
      | Make every monday bank holiday                      |
+     | Force supermarkets to give unsold food to charities |
+     | Free the wombles                                    |
     And the markup should be valid
