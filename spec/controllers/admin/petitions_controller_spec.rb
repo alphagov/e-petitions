@@ -160,6 +160,91 @@ RSpec.describe Admin::PetitionsController, type: :controller do
         end
       end
     end
+
+    context "updating scheduled debate date" do
+      let!(:petition) { FactoryGirl.create(:open_petition) }
+
+      context "edit_scheduled_debate_date" do
+        it "renders a view to update scheduled debate date" do
+          get :edit_scheduled_debate_date, :id => petition.id
+          expect(response).to render_template("edit_scheduled_debate_date")
+        end
+
+        shared_examples_for 'trying to view edit scheduled debate date view for a petition in the wrong state' do
+          it 'raises a 404 error' do
+            expect {
+              get :edit_scheduled_debate_date, id: petition.id
+            }.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+
+        describe 'for a pending petition' do
+          before { petition.update_column(:state, Petition::PENDING_STATE) }
+          it_behaves_like 'trying to view edit scheduled debate date view for a petition in the wrong state'
+        end
+
+        describe 'for a validated petition' do
+          before { petition.update_column(:state, Petition::VALIDATED_STATE) }
+          it_behaves_like 'trying to view edit scheduled debate date view for a petition in the wrong state'
+        end
+
+        describe 'for a sponsored petition' do
+          before { petition.update_column(:state, Petition::SPONSORED_STATE) }
+          it_behaves_like 'trying to view edit scheduled debate date view for a petition in the wrong state'
+        end
+
+        describe 'for a rejected petition' do
+          before { petition.update_column(:state, Petition::REJECTED_STATE) }
+          it_behaves_like 'trying to view edit scheduled debate date view for a petition in the wrong state'
+        end
+
+        describe 'for a hidden petition' do
+          before { petition.update_column(:state, Petition::HIDDEN_STATE) }
+          it_behaves_like 'trying to view edit scheduled debate date view for a petition in the wrong state'
+        end
+      end
+
+      context "update_scheduled_debate_date" do
+        it "updates scheduled debate date with valid param" do
+          patch :update_scheduled_debate_date, :id => @p1.id, :petition => { :scheduled_debate_date => '06/12/2015' }
+          @p1.reload
+          expect(@p1.scheduled_debate_date).to eq("06/12/2015".to_date)
+        end
+
+        shared_examples_for 'trying to view update scheduled debate date for a petition in the wrong state' do
+          it 'raises a 404 error' do
+            expect {
+              get :edit_scheduled_debate_date, id: petition.id
+            }.to raise_error ActiveRecord::RecordNotFound
+          end
+        end
+
+        describe 'for a pending petition' do
+          before { petition.update_column(:state, Petition::PENDING_STATE) }
+          it_behaves_like 'trying to view update scheduled debate date for a petition in the wrong state'
+        end
+
+        describe 'for a validated petition' do
+          before { petition.update_column(:state, Petition::VALIDATED_STATE) }
+          it_behaves_like 'trying to view update scheduled debate date for a petition in the wrong state'
+        end
+
+        describe 'for a sponsored petition' do
+          before { petition.update_column(:state, Petition::SPONSORED_STATE) }
+          it_behaves_like 'trying to view update scheduled debate date for a petition in the wrong state'
+        end
+
+        describe 'for a rejected petition' do
+          before { petition.update_column(:state, Petition::REJECTED_STATE) }
+          it_behaves_like 'trying to view update scheduled debate date for a petition in the wrong state'
+        end
+
+        describe 'for a hidden petition' do
+          before { petition.update_column(:state, Petition::HIDDEN_STATE) }
+          it_behaves_like 'trying to view update scheduled debate date for a petition in the wrong state'
+        end
+      end
+    end
   end
 
   describe "logged in as sysadmin" do
