@@ -55,3 +55,10 @@ Feature: Suzie views a petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
     Then I should see "This e-petition is now closed"
+
+  Scenario: Suzie sees information about the outcomes when viewing a debated petition
+    Given a petition "Ban Badger Baiting" has been debated
+    When I view the petition
+    Then I should see the date of the debate
+    And I should see links to transcript and video
+    And I should see a summary of the debate outcome
