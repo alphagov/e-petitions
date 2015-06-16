@@ -6,7 +6,7 @@ describe FeedbackMailer do
     let(:mail) { FeedbackMailer.send_feedback(feedback) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("e-petitions: Feedback received")
+      expect(mail.subject).to eq("Feedback from the Petitions service")
     end
 
     it "renders the body" do
