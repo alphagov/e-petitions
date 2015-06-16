@@ -5,6 +5,7 @@ en-GB:
       open: "Open petitions"
       closed: "Closed petitions"
       rejected: "Rejected petitions"
+      with_response: "Petitions with a Government response"
 
     lists:
       all: "All petitions (%{quantity})"
