@@ -47,6 +47,17 @@ Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*
   @petition = FactoryGirl.create(:open_petition, title: title, response: response, response_summary: response_summary)
 end
 
+Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a parliament response (\d+) days ago$/ do |state, title, parliament_response_days_ago |
+  petition_attributes = {
+    title: title,
+    closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
+    response_summary: 'Response Summary',
+    response: 'Parliament Response',
+    parliament_response_at: parliament_response_days_ago.to_i.days.ago
+  }
+  FactoryGirl.create(:open_petition, petition_attributes)
+end
+
 Given /^I have created an e-petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
