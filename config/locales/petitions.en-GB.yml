@@ -43,6 +43,8 @@ en-GB:
           HM Government & Parliament Petitions: change to your petition closing date
         gather_sponsors_for_petition: |-
           Parliament petitions - It's time to get sponsors to support your petition
+        notify_signer_of_debate_outcome: |-
+          Parliament petitions - The petition '%{action}' has been debated
       signoff_prefix: "HM Government & Parliament Petitions"
 
     waiting_for_response_in_words:

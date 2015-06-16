@@ -63,6 +63,15 @@ class PetitionMailer < ApplicationMailer
     mail to: @creator.email, subject: subject_for(:gather_sponsors_for_petition)
   end
 
+  def notify_signer_of_debate_outcome(petition, signature)
+    @petition = petition
+    @signature = signature
+    mail(
+      subject: subject_for(:notify_signer_of_debate_outcome),
+      to: @signature.email
+    )
+  end
+
   private
 
   def subject_for(key, options = {})
