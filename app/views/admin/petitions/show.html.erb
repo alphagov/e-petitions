@@ -10,6 +10,9 @@
 <nav class="actions">
   <ul>
     <li><%= link_to 'Edit parliament response', edit_response_admin_petition_path(@petition) %></li>
-    <% if @petition.can_have_debate_added? %><li><%= link_to 'Add details of a debate outcome', admin_petition_debate_outcome_path(@petition) %></li><% end %>
+    <% if @petition.can_have_debate_added? %>
+      <li><%= link_to 'Add details of a debate outcome', admin_petition_debate_outcome_path(@petition) %></li>
+      <li><%= link_to("Publish Debate Schedule", edit_scheduled_debate_date_admin_petition_path(@petition)) %></li>
+    <% end %>
   </ul>
 </nav>

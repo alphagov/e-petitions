@@ -1,0 +1,17 @@
+<%= form_for @petition, url: update_scheduled_debate_date_admin_petition_path(@petition), method: :patch do |f| %>
+
+  <%= render 'admin/petitions/petition_details', f: f %>
+
+  <h2>Scheduled Debate Date</h2>
+
+  <%= form_row :for => [f.object, :scheduled_debate_date] do %>
+    <%= f.label :scheduled_debate_date, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :debated_on %>
+    <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row do %>
+    <%= f.submit 'Publish and Send Email', data: { confirm: "Are you sure you want to save the scheduled debate date?" } %>
+  <% end %>
+
+<% end %>
