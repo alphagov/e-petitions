@@ -1,0 +1,20 @@
+<section class="about-item  about-item-count-100000">
+  <h2>100,000 <span>signatures</span></h2>
+  <%# Has debate outcome details #%>
+  <% if petition.debate_outcome.present? -%>
+    <section class="debate-outcome">
+      <p>This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
+      <% if petition.debate_outcome.video_url? -%>
+        <p><%= link_to 'Watch the debate', petition.debate_outcome.video_url %></p>
+      <% end -%>
+      <% if petition.debate_outcome.transcript_url? -%>
+        <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url %></p>
+      <% end -%>
+      <% if petition.debate_outcome.overview? -%>
+        <%= raw auto_link(simple_format( h(petition.debate_outcome.overview) ), :html => { :target => '_blank' }) %>
+      <% end -%>
+    </section>
+  <% else -%>
+    <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>
+  <% end -%>
+</section>

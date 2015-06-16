@@ -10,38 +10,6 @@
 <p><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></p>
 <p><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></p>
 
-<%# Has debate outcome details #%>
-<% if petition.debate_outcome.present? -%>
-  <section class="debate-outcome">
-    <h2>100,000 signatures</h2>
-    <p>This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
-    <% if petition.debate_outcome.video_url? -%>
-      <p><%= link_to 'Watch the debate', petition.debate_outcome.video_url %></p>
-    <% end -%>
-    <% if petition.debate_outcome.transcript_url? -%>
-      <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url %></p>
-    <% end -%>
-    <% if petition.debate_outcome.overview? -%>
-      <%= raw auto_link(simple_format( h(petition.debate_outcome.overview) ), :html => { :target => '_blank' }) %>
-    <% end -%>
-  </section>
-<% end -%>
-
-<%# Has response #%>
-<% if petition.response_summary.present? -%>
-    <h2>This e-petition has received the following response:</h2>
-    <%= raw auto_link(simple_format(h(petition.response_summary) ), :html => { :target => '_blank' }) %>
-
-    <% if petition.response.present? -%>
-        <details>
-          <summary><span class="summary">Read the response in full</span></summary>
-          <div class="panel-indent">
-            <%= raw auto_link(simple_format(h(petition.response) ), :html => { :target => '_blank' }) %>
-          </div>
-        </details>
-    <% end -%>
-<% end -%>
-
 <%# Signable #%>
 <% if petition.can_be_signed? -%>
     <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
@@ -62,7 +30,7 @@
 
 <p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
 
-<%= render 'shared/about_petitions', variation: 'about-petitions-light' %>
+<%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
 
 <%# Sharing %>
 <% if petition.can_be_signed? -%>
