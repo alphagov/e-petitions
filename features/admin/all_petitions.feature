@@ -17,11 +17,6 @@ Feature: A moderator user views all petitions
     And I view the petition
     Then I should see the petition details
 
-  Scenario: Can see hidden petitions
-    Given a libelous petition "You suck!" has been rejected
-    When I view all petitions
-    Then I should see the petition "You suck!"
-
   Scenario: Cannot see pending or validated petitions
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
@@ -30,13 +25,33 @@ Feature: A moderator user views all petitions
     Then I should not see the petition "My validation petition"
 
   Scenario: Filter list by state
-    Given a petition "My open petition"
-    And a libelous petition "You suck!" has been rejected
+    Given an open petition exists with title: "My open petition"
+    And a closed petition exists with title: "My closed petition"
+    And a rejected petition exists with title: "My rejected petition"
+    And a hidden petition exists with title: "My hidden petition"
+
     When I view all petitions
+    Then I should see the following list of petitions:
+     | My open petition     |
+     | My closed petition   |
+     | My rejected petition |
+     | My hidden petition   |
+
     And I filter the list to show "open" petitions
-    Then I should not see any "rejected" petitions
-    When I filter the list to show "rejected" petitions
-    Then I should not see any "open" petitions
+    Then I should see the following list of petitions:
+     | My open petition     |
+     
+    And I filter the list to show "closed" petitions
+    Then I should see the following list of petitions:
+     | My closed petition   |
+
+    And I filter the list to show "rejected" petitions
+    Then I should see the following list of petitions:
+     | My rejected petition |
+
+    And I filter the list to show "hidden" petitions
+    Then I should see the following list of petitions:
+     | My hidden petition   |
 
   @javascript
   Scenario: Change number per page
