@@ -130,3 +130,7 @@ end
 Then(/^I am redirected to the petition edit page$/) do
   expect(current_path).to eq(edit_admin_petition_path(@sponsored_petition))
 end
+
+Then(/^I am redirected to the petition edit details page$/) do
+  expect(current_path).to eq(admin_petition_petition_details_path(@sponsored_petition))
+end

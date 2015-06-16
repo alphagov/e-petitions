@@ -65,6 +65,7 @@ Rails.application.routes.draw do
         patch :take_down
       end
       resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
+      resource :petition_details, :only => [:show, :update]
     end
     resources :profile, :only => [:edit, :update]
     resources :reports,  :only => [:index]

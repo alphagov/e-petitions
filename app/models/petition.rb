@@ -198,6 +198,10 @@ class Petition < ActiveRecord::Base
     self.open? || self.closed?
   end
 
+  def in_todo_list?
+    TODO_LIST_STATES.include? state
+  end
+
   def state_label
     if (self.closed?)
       CLOSED_STATE
