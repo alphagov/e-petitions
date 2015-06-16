@@ -3,6 +3,11 @@ When /^I look at the next petition on my list$/ do
   visit edit_admin_petition_path(@petition)
 end
 
+When /^I visit a sponsored petition with title: "([^"]*)", that has action: "([^"]*)" and description: "([^"]*)"$/ do |title, action, description|
+  @sponsored_petition = FactoryGirl.create(:sponsored_petition, title: title, action: action, description: description)
+  visit edit_admin_petition_path(@sponsored_petition)
+end
+
 When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
   select reason_code, :from => :petition_rejection_code
   click_button "Reject"
@@ -120,4 +125,8 @@ Given(/^a moderator responds to the petition$/) do
     And I check "Email signees"
     And I press "Save"
   )
+end
+
+Then(/^I am redirected to the petition edit page$/) do
+  expect(current_path).to eq(edit_admin_petition_path(@sponsored_petition))
 end
