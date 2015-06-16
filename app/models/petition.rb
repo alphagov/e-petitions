@@ -28,7 +28,7 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
-  before_save :stamp_parliament_response_at, if: -> { response.present? && response_was.nil? }
+  before_save :stamp_parliament_response_at, if: -> { response_summary.present? && response.present? && parliament_response_at.nil? }
   after_create :set_petition_on_creator_signature
 
   extend Searchable(:title, :action, :description)
@@ -101,7 +101,7 @@ class Petition < ActiveRecord::Base
 
   scope :by_oldest, -> { order(created_at: :asc) }
 
-  scope :with_response, -> { where.not(response: nil) }
+  scope :with_response, -> { where.not(response_summary: nil, response: nil) }
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|

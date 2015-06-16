@@ -22,18 +22,23 @@ describe Petition do
 
   context "callbacks" do
     context "stamp_parliament_response_at" do
-      it "does not stamp the timestamp if no response is present" do
+      it "does not stamp the timestamp if no response and no response_summary is present" do
         petition = FactoryGirl.create(:open_petition)
         expect(petition.parliament_response_at).to be_nil
       end
-
-      it "stamps the timestamp if setting the response for the first time" do
+      it "does not stamp the timestamp if either response_summary or response is missing" do
         petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
+        expect(petition.parliament_response_at).to be_nil
+        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary')
+        expect(petition.parliament_response_at).to be_nil
+      end
+      it "stamps the timestamp if setting the response for the first time" do
+        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
         expect(petition.parliament_response_at).not_to be_nil
       end
 
       it "does not change the timestamp with subsequent response updates" do
-        petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
+        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
         expect { petition.update(response: 'Sorry, promised too much') }.to_not change { petition.parliament_response_at }
       end
     end
@@ -129,7 +134,7 @@ describe Petition do
       it "passes validation if there is a response and response summary when email_signees is true" do
         expect(petition).to be_valid
       end
-      
+
       it "does not pass validation if there is a response and NO response summary when email_signees is true" do
         petition.response_summary = nil
         expect(petition).to_not be_valid
@@ -312,12 +317,13 @@ describe Petition do
 
     context "with_response" do
       before do
-        @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response => "govt response")
-        @p2 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response => "govt response")
-        @p3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
+        @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
+        @p2 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response_summary => "summary", :response => "govt response")
+        @p3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response => "govt response")
+        @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
       end
 
-      it "returns only the petitions which have governments response" do
+      it "returns only the petitions which have governments response; both summary and the whole response" do
         expect(Petition.with_response).to match_array([@p1, @p2])
       end
     end
@@ -574,7 +580,7 @@ describe Petition do
       allow(user).to receive_messages(:is_a_moderator? => true)
       expect(petition.response_summary_editable_by?(user)).to be_truthy
     end
-    
+
     it "allows editing of the response summary by sysadmins" do
       allow(user).to receive_messages(:is_a_sysadmin? => true)
       expect(petition.response_summary_editable_by?(user)).to be_truthy

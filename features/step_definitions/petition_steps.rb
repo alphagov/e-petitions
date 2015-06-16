@@ -51,6 +51,7 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a parliamen
   petition_attributes = {
     title: title,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
+    response_summary: 'Response Summary',
     response: 'Parliament Response',
     parliament_response_at: parliament_response_days_ago.to_i.days.ago
   }
