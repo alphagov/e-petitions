@@ -97,20 +97,20 @@ describe Staged::PetitionCreator do
     describe '#stage' do
       context 'when there are no errors on the petition' do
         context 'before attempting to create the petition' do
-          for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-          for_stage 'creator', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'creator'
-          for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-          for_stage 'replay-email', next_is: 'done', back_is: 'replay-petition', not_moving_is: 'replay-email'
+          for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+          for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+          for_stage 'creator', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'creator'
+          for_stage 'replay-email', next_is: 'done', back_is: 'creator', not_moving_is: 'replay-email'
           for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
         end
 
         context 'after attempting to create the petition' do
           before { subject.create_petition }
 
-          for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-          for_stage 'creator', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'creator'
-          for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-          for_stage 'replay-email', next_is: 'done', back_is: 'replay-petition', not_moving_is: 'replay-email'
+          for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+          for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+          for_stage 'creator', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'creator'
+          for_stage 'replay-email', next_is: 'done', back_is: 'creator', not_moving_is: 'replay-email'
           for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
         end
       end
@@ -121,9 +121,9 @@ describe Staged::PetitionCreator do
 
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'done', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'creator', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-email', next_is: 'done', back_is: 'creator', not_moving_is: 'replay-email'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
@@ -131,9 +131,9 @@ describe Staged::PetitionCreator do
             before { subject.create_petition }
 
             for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'petition', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'creator', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'replay-email', next_is: 'petition', back_is: 'creator', not_moving_is: 'replay-email'
             for_stage 'done', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'
           end
         end
@@ -142,20 +142,20 @@ describe Staged::PetitionCreator do
           before { creator_signature_params.delete(:postcode) }
 
           context 'before attempting to create the petition' do
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'done', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-email', next_is: 'done', back_is: 'creator', not_moving_is: 'replay-email'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
           context 'after attempting to create the petition' do
             before { subject.create_petition }
 
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'creator', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-email', next_is: 'creator', back_is: 'creator', not_moving_is: 'replay-email'
             for_stage 'done', next_is: 'creator', back_is: 'creator', not_moving_is: 'creator'
           end
         end
@@ -168,19 +168,19 @@ describe Staged::PetitionCreator do
           # also trigger the creator stage.
 
           context 'before attempting to create the petition' do
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-email', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-email'
             for_stage 'done', next_is: 'done', back_is: 'done', not_moving_is: 'done'
           end
 
           context 'after attempting to create the petition' do
             before { subject.create_petition }
-            for_stage 'petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'petition'
-            for_stage 'creator', next_is: 'creator', back_is: 'petition', not_moving_is: 'creator'
-            for_stage 'replay-petition', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-petition'
-            for_stage 'replay-email', next_is: 'replay-email', back_is: 'replay-petition', not_moving_is: 'replay-email'
+            for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
+            for_stage 'creator', next_is: 'creator', back_is: 'replay-petition', not_moving_is: 'creator'
+            for_stage 'replay-petition', next_is: 'creator', back_is: 'petition', not_moving_is: 'replay-petition'
+            for_stage 'replay-email', next_is: 'replay-email', back_is: 'creator', not_moving_is: 'replay-email'
             # NOTE: ideally this would be 'replay-email', but we can't
             # tell the difference between a 'creator' failure and a
             # 'replay-email' failure if we started from 'done'.
