@@ -325,8 +325,8 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
     closed_at: petition_closed_at,
     state: petition_state
   }
-  petition = FactoryGirl.create(:open_petition, petition_args)
-  5.times { FactoryGirl.create(:validated_signature, petition: petition) }
+  @petition = FactoryGirl.create(:open_petition, petition_args)
+  5.times { FactoryGirl.create(:validated_signature, petition: @petition) }
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
