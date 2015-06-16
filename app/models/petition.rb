@@ -44,6 +44,7 @@ class Petition < ActiveRecord::Base
   has_many :signatures
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
+  has_many :constituency_petition_journals, :dependent => :destroy
 
   # = Validations =
   include Staged::Validations::PetitionDetails
@@ -112,6 +113,18 @@ class Petition < ActiveRecord::Base
       counts_by_state[key_name.to_sym] = for_state(key_name.to_s).count
     end
     counts_by_state
+  end
+
+  def self.popular_in_constituency(constituency_id, how_many = 3)
+    # NOTE: this query is complex, so we'll flatten it at the end
+    # to prevent chaining things off the end that might break it.
+    self.
+      select("#{table_name}.*, #{ConstituencyPetitionJournal.table_name}.signature_count AS constituency_signature_count").
+      for_state(OPEN_STATE).
+      joins(:constituency_petition_journals).
+      merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
+      limit(how_many).
+      to_a
   end
 
   def publish!

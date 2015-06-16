@@ -1,15 +1,17 @@
+require 'postcode_sanitizer'
+
 module ConstituencyApi
   class Error < RuntimeError; end
 
   class Constituency
-    attr_reader :name, :mp
+    attr_reader :id, :name, :mp
 
-    def initialize(name, mp = nil)
-      @name, @mp = name, mp
+    def initialize(id, name, mp = nil)
+      @id, @name, @mp = id, name, mp
     end
 
     def ==(other)
-      other.is_a?(self.class) && name == other.name && mp == other.mp
+      other.is_a?(self.class) && id == other.id && name == other.name && mp == other.mp
     end
     alias_method :eql?, :==
   end
@@ -45,11 +47,12 @@ module ConstituencyApi
     def self.parse_constituencies(response)
       return [] unless response["Constituencies"]
       constituencies = response["Constituencies"]["Constituency"]
-      Array.wrap(constituencies).map { |c| Constituency.new(c["Name"], last_mp(c)) }
+      Array.wrap(constituencies).map { |c| Constituency.new(c["Constituency_Id"], c["Name"], last_mp(c)) }
     end
 
     def self.call_api(postcode)
-      response = Faraday.new(URL).get("#{postcode_param(postcode)}/") do |req|
+      sanitized_postcode = PostcodeSanitizer.call(postcode)
+      response = Faraday.new(URL).get("#{sanitized_postcode}/") do |req|
         req.options[:timeout] = TIMEOUT
         req.options[:open_timeout] = TIMEOUT
       end
@@ -57,7 +60,7 @@ module ConstituencyApi
         raise Error.new("Unexpected response from API:"\
                         "status #{response.status}"\
                         "body #{response.body}"\
-                        "request #{URL}/#{postcode_param(postcode)}/")
+                        "request #{URL}/#{sanitized_postcode}/")
       end
       Hash.from_xml(response.body)
     rescue Faraday::Error::TimeoutError
@@ -77,10 +80,7 @@ module ConstituencyApi
       Array.wrap(mps).map { |m| Mp.new(m["Member_Id"], m["Member"], m["StartDate"]) }
     end
 
-    def self.postcode_param(postcode)
-      postcode.gsub(/\s+/, "")
-    end
-    private_class_method :parse_constituencies, :call_api, :postcode_param, :parse_mps, :last_mp
+    private_class_method :parse_constituencies, :call_api, :parse_mps, :last_mp
   end
 end
 

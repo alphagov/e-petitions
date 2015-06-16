@@ -1,3 +1,5 @@
+require 'postcode_sanitizer'
+
 class Signature < ActiveRecord::Base
 
   include PerishableTokenGenerator
@@ -18,6 +20,7 @@ class Signature < ActiveRecord::Base
   include Staged::Validations::SignerDetails
   include Staged::Validations::MultipleSigners
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
+  validates :constituency_id, length: { maximum: 255 }
 
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
@@ -40,7 +43,7 @@ class Signature < ActiveRecord::Base
   end
 
   def postcode=(value)
-    super(value.to_s.gsub(/\s+/, "").upcase)
+    super(PostcodeSanitizer.call(value))
   end
 
   def creator?
@@ -64,8 +67,13 @@ class Signature < ActiveRecord::Base
   end
 
   def validate!
-    self.update_columns(state: Signature::VALIDATED_STATE)
-    self.touch
+    if pending?
+      self.update_columns(
+        state: VALIDATED_STATE,
+        updated_at: Time.current
+      )
+      ConstituencyPetitionJournal.record_new_signature_for(self)
+    end
   end
 
   def unsubscribe!
@@ -77,6 +85,15 @@ class Signature < ActiveRecord::Base
   rescue ConstituencyApi::Error => e
     Rails.logger.error("Failed to fetch constituency - #{e}")
     nil
+  end
+
+  def set_constituency_id
+    self.constituency_id = constituency.try(:id)
+  end
+
+  def store_constituency_id
+    set_constituency_id
+    save if constituency_id_changed?
   end
 end
 

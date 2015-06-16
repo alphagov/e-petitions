@@ -141,4 +141,13 @@ FactoryGirl.define do
   factory :system_setting do
     sequence(:key)  {|n| "key#{n}"}
   end
+
+  sequence(:constituency_id) { |n| (1234 + n).to_s }
+  sequence(:mp_id) { |n| (4321 + n).to_s }
+
+
+  factory :constituency_petition_journal do
+    constituency_id { generate(:constituency_id) }
+    association :petition
+  end
 end

@@ -41,6 +41,9 @@ module NavigationHelpers
     when /^the Admin (.*)$/i
       admin_path($1)
 
+    when /^the local petitions results page$/
+      local_petitions_path
+
     else
       begin
         page_name =~ /^the (.*) page$/

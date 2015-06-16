@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     collection do
       get 'check'
       get 'check_results'
+      get 'local' => 'local_petitions#index'
     end
 
     member do

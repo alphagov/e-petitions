@@ -21,6 +21,14 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> signature in the last hour"
           other: "<span class=\"count\">%{formatted_count}</span> signatures in the last hour"
+      in_your_constituency:
+        html:
+          one: "%{formatted_count} signature from your constituency"
+          other: "%{formatted_count} signatures from your constituency"
+      in_total:
+        html:
+          one: "%{formatted_count} signature total"
+          other: "%{formatted_count} signatures total"
 
     rejection_reasons:
       titles:

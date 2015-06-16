@@ -26,6 +26,8 @@ describe PetitionsController do
   end
 
   describe "create" do
+    include ConstituencyApiHelpers::ApiLevel
+
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
@@ -41,9 +43,16 @@ describe PetitionsController do
         :creator_signature => creator_signature_attributes
       }
     end
+    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'North Creatorshire') }
 
     def do_post(options = {})
-      post :create, {:stage => 'replay-email', :move => 'next', :petition => petition_attributes}.merge(options)
+      params = {
+        :stage => 'replay-email',
+        :move => 'next',
+        :petition => petition_attributes
+      }.merge(options)
+      stub_constituency(params[:petition][:creator_signature][:postcode], constituency)
+      post :create, params
     end
 
     it "should respond to posts to /petitions/new" do
@@ -141,6 +150,11 @@ describe PetitionsController do
       it "should set notify_by_email to true on the creator signature" do
         do_post
         expect(Petition.find_by_title!('Save the planet').creator_signature.notify_by_email).to be_truthy
+      end
+
+      it "sets the constituency_id on the creator signature, based on the postcode" do
+        do_post
+        expect(Petition.find_by_title!('Save the planet').creator_signature.constituency_id).to eq constituency.id
       end
 
       context "invalid post" do

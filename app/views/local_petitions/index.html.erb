@@ -1,0 +1,24 @@
+<% content_for(:page_title) { "Petitions in #{@constituency.name}" } %>
+<h1 class="page-title">Petitions in <%= @constituency.name %></h1>
+
+<% if @constituency.mp %>
+  <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url %></p>
+<% end %>
+
+<div class="section-panel local-petitions">
+  <% if @petitions.any? %>
+    <ol>
+      <% @petitions.each do |petition| %>
+        <li class="petition-item petition-<%= petition.state %>">
+          <%= link_to petition.title, petition_path(petition) %>
+          <p>
+            <%= signature_count(:in_your_constituency, petition.constituency_signature_count) %>
+            (<%= signature_count(:in_total, petition.signature_count) %>)
+          </p>
+        </li>
+      <% end -%>
+    </ol>
+  <% else %>
+    <p>No petitions are popular in your constituency.</p>
+  <% end %>
+</div>
