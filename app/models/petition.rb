@@ -48,7 +48,8 @@ class Petition < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  validates_presence_of :response, :if => :email_signees, :message => "must be completed when email signees is checked"
+  validates_presence_of :response, :response_summary, :if => :email_signees, :message => "must be completed when email signees is checked"
+  validates :response_summary, length: { maximum: 500, message: 'Response summary is too long.' }
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
   validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
@@ -214,6 +215,11 @@ class Petition < ActiveRecord::Base
     return false
   end
 
+  def response_summary_editable_by?(user)
+    return true if user.is_a_moderator? || user.is_a_sysadmin?
+    return false
+  end
+
   # need this callback since the relationship is circular
   def set_petition_on_creator_signature
     self.creator_signature.update_attribute(:petition_id, self.id)
@@ -263,3 +269,4 @@ class Petition < ActiveRecord::Base
     state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
   end
 end
+

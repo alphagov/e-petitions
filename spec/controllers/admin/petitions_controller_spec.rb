@@ -88,7 +88,7 @@ describe Admin::PetitionsController do
 
     context "update_response" do
       def do_patch(options = {})
-        patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :email_signees => '1'}.merge(options)
+        patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}.merge(options)
       end
       it "should update response and email signees flag with true" do
         do_patch
@@ -132,13 +132,13 @@ describe Admin::PetitionsController do
 
         it "should setup a delayed job" do
           assert_enqueued_jobs 1 do
-            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
           end
         end
 
         it "should set the email signees flag to false when the job runs" do
           perform_enqueued_jobs do
-            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
             @petition.reload
             expect(@petition.email_requested_at).not_to be_nil
             @petition.signatures.validated.notify_by_email.each do |signature|
@@ -150,7 +150,7 @@ describe Admin::PetitionsController do
         it "should email out to the validated signees who have opted in when the delayed job runs" do
           perform_enqueued_jobs do
             no_emails = ActionMailer::Base.deliveries.length
-            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :email_signees => '1'}
+            patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
             expect(ActionMailer::Base.deliveries.length - no_emails).to eq(7)
             expect(ActionMailer::Base.deliveries[no_emails].to).to eq(["jason@example.com"])
             expect(ActionMailer::Base.deliveries[no_emails].subject).to match(/The petition 'Make me the PM' has reached 10 signatures/)

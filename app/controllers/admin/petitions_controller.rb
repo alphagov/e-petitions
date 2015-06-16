@@ -42,11 +42,7 @@ class Admin::PetitionsController < Admin::AdminController
 
   def update_response
     @petition = Petition.find(params[:id])
-    @petition.internal_response = params[:petition][:internal_response]
-    @petition.response_required = params[:petition][:response_required]
-    @petition.response = params[:petition][:response]
-    @petition.email_signees = params[:petition][:email_signees] == '1'
-    if @petition.save
+    if @petition.update_attributes(params_for_update_response)
       # if email signees has been selected then set up a delayed job to email out to all signees who opted in
       if @petition.email_signees
         # run the job at some random point beween midnight and 4 am
@@ -61,6 +57,18 @@ class Admin::PetitionsController < Admin::AdminController
     end
   end
 
+  def assign_email_signees_param
+    return unless params[:petition]
+    params[:petition][:email_signees] = params[:petition][:email_signees] == '1'
+  end
+  
+  def params_for_update_response
+    assign_email_signees_param
+    params.
+      require(:petition).
+      permit(:internal_response, :response_required, :response, :response_summary, :email_signees)
+  end
+  
   def take_down
     @petition = Petition.find(params[:id])
     reject

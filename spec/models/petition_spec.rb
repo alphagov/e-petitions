@@ -4,12 +4,12 @@ describe Petition do
   include ActiveJob::TestHelper
 
   context "defaults" do
-    it "state should default to pending" do
+    it "has pending as default state" do
       p = Petition.new
       expect(p.state).to eq("pending")
     end
 
-    it "email signees should default to false" do
+    it "defaults to false for email signees" do
       p = Petition.new
       expect(p.email_signees).to be_falsey
     end
@@ -41,14 +41,19 @@ describe Petition do
       expect(FactoryGirl.build(:petition, :description => 'x' * 801)).not_to be_valid
     end
 
-    it "should not allow a blank state" do
+    it "validates the length of :response_summary to within 500 characters" do
+      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 500)).to be_valid
+      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 501)).not_to be_valid
+    end
+
+    it "does not allow a blank state" do
       petition = FactoryGirl.build(:petition, state: '')
 
       expect(petition).not_to be_valid
       expect(petition.errors[:state]).not_to be_empty
     end
 
-    it "should not allow an unknown state" do
+    it "does not allow an unknown state" do
       petition = FactoryGirl.build(:petition, state: 'unknown')
 
       expect(petition).not_to be_valid
@@ -56,7 +61,7 @@ describe Petition do
     end
 
     %w(pending validated open rejected hidden).each do |state|
-      it "should allow state: #{state}" do
+      it "allows state: #{state}" do
         petition = FactoryGirl.build(:"#{state}_petition")
 
         expect(petition).to be_valid
@@ -68,17 +73,17 @@ describe Petition do
     context "when state is open" do
       let(:petition) { FactoryGirl.build(:open_petition, open_at: nil, closed_at: nil) }
 
-      it "should check petition is invalid if no open_at date" do
+      it "checks petition is invalid if no open_at date" do
         expect(petition).not_to be_valid
         expect(petition.errors[:open_at]).not_to be_empty
       end
 
-      it "should check petition is invalid if no closed_at date" do
+      it "checks petition is invalid if no closed_at date" do
         expect(petition).not_to be_valid
         expect(petition.errors[:closed_at]).not_to be_empty
       end
 
-      it "should check petition is valid if there is a open_at and closed_at date" do
+      it "checks petition is valid if there is a open_at and closed_at date" do
         petition.open_at = Time.current
         petition.closed_at = Time.current
         expect(petition).to be_valid
@@ -88,30 +93,52 @@ describe Petition do
     context "when state is rejected" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
 
-      it "should check petition is invalid if no rejection code" do
+      it "checks petition is invalid if no rejection code" do
         expect(petition).not_to be_valid
         expect(petition.errors[:rejection_code]).not_to be_empty
       end
 
-      it "should check there is a rejection code" do
+      it "checks there is a rejection code" do
         petition.rejection_code = 'libellous'
         expect(petition).to be_valid
       end
     end
 
     context "response" do
-      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', email_signees: false) }
+      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi', email_signees: true) }
 
-      it "should check petition is valid if there is a response when email_signees is true" do
+      it "passes validation if there is a response and response summary when email_signees is true" do
+        expect(petition).to be_valid
+      end
+      
+      it "does not pass validation if there is a response and NO response summary when email_signees is true" do
+        petition.response_summary = nil
+        expect(petition).to_not be_valid
+      end
+
+      it "does not pass validation if there is NO response and a response summary when email_signees is true" do
+        petition.response = nil
+        expect(petition).to_not be_valid
+      end
+
+      it "checks petition is valid if there is a response and response summary when email_signees is true" do
         expect(petition).to be_valid
       end
 
-      it "should check petition is invalid if there is no response when email_signees is true" do
+      it "checks petition is invalid if there is no response when email_signees is true" do
         petition.response = nil
         petition.email_signees = true
 
         expect(petition).not_to be_valid
         expect(petition.errors[:response]).not_to be_empty
+      end
+
+      it "checks petition is invalid if there is no response summary when email_signees is true" do
+        petition.response_summary = nil
+        petition.email_signees = true
+
+        expect(petition).not_to be_valid
+        expect(petition.errors[:response_summary]).not_to be_empty
       end
     end
   end
@@ -213,7 +240,7 @@ describe Petition do
         @p6 = FactoryGirl.create(:open_petition, :response_required => false)
       end
 
-      it "should return 4 petitions over the threshold or marked as requiring a response" do
+      it "returns 4 petitions over the threshold or marked as requiring a response" do
         petitions = Petition.threshold
         expect(petitions.size).to eq(4)
         expect(petitions).to include(@p1, @p2, @p4, @p5)
@@ -231,13 +258,13 @@ describe Petition do
         @p7 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
       end
 
-      it "should return 2 pending petitions" do
+      it "returns 2 pending petitions" do
         petitions = Petition.for_state(Petition::PENDING_STATE)
         expect(petitions.size).to eq(2)
         expect(petitions).to include(@p1, @p3)
       end
 
-      it "should return 1 validated, sponsored, open, closed and hidden petitions" do
+      it "returns 1 validated, sponsored, open, closed and hidden petitions" do
         [[Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE, @p4],
          [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6], [Petition::SPONSORED_STATE, @p7]].each do |state_and_petition|
           petitions = Petition.for_state(state_and_petition[0])
@@ -377,11 +404,11 @@ describe Petition do
   end
 
   describe "open?" do
-    it "should be open when state is open" do
+    it "is open when state is open" do
       expect(FactoryGirl.build(:petition, :state => Petition::OPEN_STATE).open?).to  be_truthy
     end
 
-    it "should be not be open when state is anything else" do
+    it "is not open when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).open?).to be_falsey
       end
@@ -389,11 +416,11 @@ describe Petition do
   end
 
   describe "rejected?" do
-    it "should be rejected when state is rejected" do
+    it "is rejected when state is rejected" do
       expect(FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE).rejected?).to be_truthy
     end
 
-    it "should be not be rejected when state is anything else" do
+    it "is not rejected when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).rejected?).to be_falsey
       end
@@ -401,11 +428,11 @@ describe Petition do
   end
 
   describe "hidden?" do
-    it "should be hidden when state is hidden" do
+    it "is hidden when state is hidden" do
       expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
     end
 
-    it "should be not be hidden when state is anything else" do
+    it "is not hidden when state is anything else" do
       [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
         expect(FactoryGirl.build(:petition, :state => state).hidden?).to be_falsey
       end
@@ -419,14 +446,14 @@ describe Petition do
   end
 
   describe "rejection_reason" do
-    it "should give rejection reason from the locale file" do
+    it "gives rejection reason from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_reason).to eq('Duplicate of an existing e-petition')
     end
   end
 
   describe "rejection_description" do
-    it "should give rejection description from the locale file" do
+    it "gives rejection description from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_description).to eq('<p>There is already an e-petition about this issue.</p>')
     end
@@ -454,7 +481,7 @@ describe Petition do
   describe "counting validated signatures" do
     let(:petition) { FactoryGirl.build(:petition) }
 
-    it "should only count validated signtatures" do
+    it "only counts validated signtatures" do
       expect(petition.signatures).to receive(:validated).and_return(double(:valid_signatures, :count => 123))
       expect(petition.count_validated_signatures).to eq(123)
     end
@@ -506,6 +533,20 @@ describe Petition do
     it "allows editing of the response by sysadmins" do
       allow(user).to receive_messages(:is_a_sysadmin? => true)
       expect(petition.response_editable_by?(user)).to be_truthy
+    end
+
+    it "doesn't allow editing of response summary generally" do
+      expect(petition.response_summary_editable_by?(user)).to be_falsey
+    end
+
+    it "allows editing of the response summary by moderator users" do
+      allow(user).to receive_messages(:is_a_moderator? => true)
+      expect(petition.response_summary_editable_by?(user)).to be_truthy
+    end
+    
+    it "allows editing of the response summary by sysadmins" do
+      allow(user).to receive_messages(:is_a_sysadmin? => true)
+      expect(petition.response_summary_editable_by?(user)).to be_truthy
     end
   end
 

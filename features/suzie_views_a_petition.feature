@@ -24,6 +24,15 @@ Feature: Suzie views a petition
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
 
+  @javascript
+  Scenario: Suzie views an open petition that has received a response
+    Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"
+    When I view the petition
+    Then I should see "Oh yes please"
+    And I should not see "Defence is the best Offence"
+    When I expand "Read the response in full"
+    Then I should see "Defence is the best Offence"
+    
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I view the petition

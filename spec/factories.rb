@@ -28,6 +28,10 @@ FactoryGirl.define do
       response "Petition response"
     end
 
+    trait :response_summary do
+      response_summary "Petition summary"
+    end
+    
     trait :open do
       state "open"
       signature_count 100
