@@ -734,7 +734,7 @@ describe Petition do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
+          expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/has received support from a sponsor/)
         end
@@ -749,7 +749,7 @@ describe Petition do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
+          expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/has received support from a sponsor/)
         end

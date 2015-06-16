@@ -117,7 +117,7 @@ describe PetitionsController do
         do_post
         email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /get sponsors to support your petition/ }
         expect(email).to be_present
-        expect(email.from).to eq(["no-reply@petition.parliament.uk"])
+        expect(email.from).to eq(["no-reply@test.epetitions.website"])
         expect(email.to).to eq(["john@example.com"])
       end
 

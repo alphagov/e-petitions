@@ -278,7 +278,7 @@ describe Admin::PetitionsController do
         it "sends an email to the petition creator" do
           do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
+          expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq(["john@example.com"])
           expect(email.subject).to match(/e-petition has been rejected/)
         end

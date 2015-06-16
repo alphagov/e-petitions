@@ -147,6 +147,197 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe "defaults" do
+    subject(:defaults) { described_class.defaults }
+
+    before do
+      allow(ENV).to receive(:fetch).and_call_original
+    end
+
+    describe "for title" do
+      it "defaults to 'Petition parliament'" do
+        allow(ENV).to receive(:fetch).with("SITE_TITLE", "Petition parliament").and_return("Petition parliament")
+        expect(defaults[:title]).to eq("Petition parliament")
+      end
+
+      it "can be overridden with the SITE_TITLE environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_TITLE", "Petition parliament").and_return("Petition parliament (Test)")
+        expect(defaults[:title]).to eq("Petition parliament (Test)")
+      end
+    end
+
+    describe "for url" do
+      it "defaults to 'https://petition.parliament.uk'" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("petition.parliament.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
+
+        expect(defaults[:url]).to eq("https://petition.parliament.uk")
+      end
+
+      it "allows overriding via environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("http")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("localhost")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
+
+        expect(defaults[:url]).to eq("http://localhost:3000")
+      end
+    end
+
+    describe "for email_from" do
+      it "defaults to 'no-reply@petition.parliament.uk'" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("petition.parliament.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
+
+        expect(defaults[:email_from]).to eq("no-reply@petition.parliament.uk")
+      end
+
+      it "allows overriding via the url environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("http")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("localhost")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
+
+        expect(defaults[:email_from]).to eq("no-reply@localhost")
+      end
+
+      it "allows overriding via the EPETITIONS_FROM environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM", "no-reply@test.epetitions.website").and_return("no-reply@downingstreet.gov.uk")
+        expect(defaults[:email_from]).to eq("no-reply@downingstreet.gov.uk")
+      end
+    end
+
+    describe "for username" do
+      it "defaults to nil" do
+        allow(ENV).to receive(:fetch).with("SITE_USERNAME", nil).and_return(nil)
+        expect(defaults[:username]).to be_nil
+      end
+
+      it "can be overridden with the SITE_USERNAME environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_USERNAME", nil).and_return("petitions")
+        expect(defaults[:username]).to eq("petitions")
+      end
+
+      it "is nil if the SITE_USERNAME environment variable is set to ''" do
+        allow(ENV).to receive(:fetch).with("SITE_USERNAME", nil).and_return("")
+        expect(defaults[:username]).to be_nil
+      end
+    end
+
+    describe "for password" do
+      it "defaults to nil" do
+        allow(ENV).to receive(:fetch).with("SITE_PASSWORD", nil).and_return(nil)
+        expect(defaults[:password]).to be_nil
+      end
+
+      it "can be overridden with the SITE_PASSWORD environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_PASSWORD", nil).and_return("letmein")
+        expect(defaults[:password]).to eq("letmein")
+      end
+
+      it "is nil if the SITE_PASSWORD environment variable is set to ''" do
+        allow(ENV).to receive(:fetch).with("SITE_PASSWORD", nil).and_return("")
+        expect(defaults[:password]).to be_nil
+      end
+    end
+
+    describe "for enabled" do
+      it "defaults to true" do
+        allow(ENV).to receive(:fetch).with("SITE_ENABLED", '1').and_return("1")
+        expect(defaults[:enabled]).to eq(true)
+      end
+
+      it "can be overridden with the SITE_ENABLED environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_ENABLED", '1').and_return("0")
+        expect(defaults[:enabled]).to eq(false)
+      end
+    end
+
+    describe "for protected" do
+      it "defaults to false" do
+        allow(ENV).to receive(:fetch).with("SITE_PROTECTED", '0').and_return("0")
+        expect(defaults[:protected]).to eq(false)
+      end
+
+      it "can be overridden with the SITE_PROTECTED environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_PROTECTED", '0').and_return("1")
+        expect(defaults[:protected]).to eq(true)
+      end
+    end
+
+    describe "for petition_duration" do
+      it "defaults to 6" do
+        allow(ENV).to receive(:fetch).with("PETITION_DURATION", '6').and_return("6")
+        expect(defaults[:petition_duration]).to eq(6)
+      end
+
+      it "can be overridden with the PETITION_DURATION environment variable" do
+        allow(ENV).to receive(:fetch).with("PETITION_DURATION", '6').and_return("12")
+        expect(defaults[:petition_duration]).to eq(12)
+      end
+    end
+
+    describe "for minimum_number_of_sponsors" do
+      it "defaults to 5" do
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("5")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(5)
+      end
+
+      it "can be overridden with the MINIMUM_NUMBER_OF_SPONSORS environment variable" do
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("3")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(3)
+      end
+    end
+
+    describe "for maximum_number_of_sponsors" do
+      it "defaults to 20" do
+        allow(ENV).to receive(:fetch).with("MAXIMUM_NUMBER_OF_SPONSORS", '20').and_return("20")
+        expect(defaults[:maximum_number_of_sponsors]).to eq(20)
+      end
+
+      it "can be overridden with the MAXIMUM_NUMBER_OF_SPONSORS environment variable" do
+        allow(ENV).to receive(:fetch).with("MAXIMUM_NUMBER_OF_SPONSORS", '20').and_return("50")
+        expect(defaults[:maximum_number_of_sponsors]).to eq(50)
+      end
+    end
+
+    describe "for threshold_for_moderation" do
+      it "defaults to 5" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("5")
+        expect(defaults[:threshold_for_moderation]).to eq(5)
+      end
+
+      it "can be overridden with the THRESHOLD_FOR_MODERATION environment variable" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("10")
+        expect(defaults[:threshold_for_moderation]).to eq(10)
+      end
+    end
+
+    describe "for threshold_for_response" do
+      it "defaults to 10000" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("10000")
+        expect(defaults[:threshold_for_response]).to eq(10000)
+      end
+
+      it "can be overridden with the THRESHOLD_FOR_RESPONSE environment variable" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("5000")
+        expect(defaults[:threshold_for_response]).to eq(5000)
+      end
+    end
+
+    describe "for threshold_for_debate" do
+      it "defaults to 10000" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("100000")
+        expect(defaults[:threshold_for_debate]).to eq(100000)
+      end
+
+      it "can be overridden with the THRESHOLD_FOR_DEBATE environment variable" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("50000")
+        expect(defaults[:threshold_for_debate]).to eq(50000)
+      end
+    end
+  end
+
   describe ".authenticate" do
     let(:site) { double(:site) }
 
