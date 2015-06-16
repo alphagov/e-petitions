@@ -13,70 +13,7 @@
 </details>
 
 <% if @petition.rejected? %>
-  <%= render 'rejected_petition', petition: @petition %>
+  <%= render 'rejected_petition_show', petition: @petition %>
 <% else %>
-
-  <%= content_tag :p, :class => 'flash-notice' do -%>
-    This e-petition is now closed
-  <% end if @petition.closed? %>
-
-  <h1>
-    <span class="heading-secondary">Petition</span>
-    <%= @petition.title %>
-  </h1>
-
-  <p><%= raw auto_link(simple_format(h(@petition.action)), :html => { :target => '_blank' }) %></p>
-  <p><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></p>
-
-  <%# Has response #%>
-  <% if @petition.response_summary.present? -%>
-    <h2>This e-petition has received the following response:</h2>
-    <%= raw auto_link(simple_format(h(@petition.response_summary) ), :html => { :target => '_blank' }) %>
-
-    <% if @petition.response.present? -%>
-    <details>
-      <summary><span class="summary">Read the response in full</span></summary>
-      <div class="panel-indent">
-        <%= raw auto_link(simple_format(h(@petition.response) ), :html => { :target => '_blank' }) %>
-      </div>
-    </details>
-    <% end -%>
-  <% end -%>
-
-  <%# Signable #%>
-  <% if @petition.can_be_signed? -%>
-    <%= link_to "Sign this petition", new_petition_signature_path(@petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
-  <% end -%>
-
-  <details class="confirmation-resend">
-    <summary><span class="summary">Not received your confirmation email?</span></summary>
-    <div class="panel-indent">
-      <%= form_tag [:resend_confirmation_email, @petition] do %>
-        <div class="form-group">
-          <%= label_tag :confirmation_email, "If you have already signed this petition, but didn't receive an email to confirm your signature, you can request a confirmation to be resent by providing your email address below.", :class => 'form-label' %>
-          <%= text_field_tag :confirmation_email, "", :class => 'form-control' %>
-        </div>
-        <%= submit_tag 'Resend', :class => 'button' %>
-      <% end %>
-    </div>
-  </details>
-
-  <p class="signature-count"><%= signature_count(:default, @petition.signature_count) %></p>
-
-  <%= render 'shared/about_petitions', variation: 'about-petitions-light' %>
-
-  <%# Sharing %>
-  <% if @petition.can_be_signed? -%>
-    <%= render 'shared/share_petition', petition: @petition %>
-  <% end -%>
-
-  <ul class="petition-meta">
-    <li class="meta-deadline">
-      <span class="label">Deadline</span> <%= short_date_format @petition.closed_at %>
-    </li>
-    <li class="meta-created-by">
-      <span class="label">Created by</span> <%= @petition.creator_signature.name %>
-    </li>
-  </ul>
-
+  <%= render 'petition_show', petition: @petition %>
 <% end %>
