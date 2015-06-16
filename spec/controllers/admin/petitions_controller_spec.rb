@@ -10,28 +10,28 @@ describe Admin::PetitionsController do
 
   describe "not logged in" do
     describe "GET 'edit'" do
-      it "should redirect to the login page" do
+      it "redirects to the login page" do
         get :edit, :id => @petition.id
         expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
       end
     end
 
     describe "GET 'threshold'" do
-      it "should redirect to the login page" do
+      it "redirects to the login page" do
         get :threshold
         expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
       end
     end
 
     describe "GET 'index'" do
-      it "should redirect to the login page" do
+      it "redirects to the login page" do
         get :index
         expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
       end
     end
 
     describe "GET 'show'" do
-      it "should redirect to the login page" do
+      it "redirects to the login page" do
         get :show, :id => @petition.id
         expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
       end
@@ -44,7 +44,7 @@ describe Admin::PetitionsController do
       login_as(@user)
     end
 
-    it "should redirect to edit profile page" do
+    it "redirects to edit profile page" do
       expect(@user.has_to_change_password?).to be_truthy
       get :edit, :id => @petition.id
       expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{@user.id}/edit")
@@ -67,18 +67,18 @@ describe Admin::PetitionsController do
       FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
     end
 
-    it "should return all petitions that have more than the threshold number of signatures in ascending count order" do
+    it "returns all petitions that have more than the threshold number of signatures in ascending count order" do
       get :threshold
       expect(assigns[:petitions]).to eq([@p2, @p1, @p4])
     end
 
-    it "should assign petition" do
+    it "assigns petition" do
       get :edit_response, :id => @p1.id
       expect(assigns[:petition]).to eq(@p1)
     end
 
     context 'update internal response' do
-      it "should update internal response and response required flag" do
+      it "updates internal response and response required flag" do
         patch :update_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
         @p1.reload
         expect(@p1.internal_response).to eq('This is popular')
@@ -90,7 +90,7 @@ describe Admin::PetitionsController do
       def do_patch(options = {})
         patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}.merge(options)
       end
-      it "should update response and email signees flag with true" do
+      it "updates response and email signees flag with true" do
         do_patch
         assert_enqueued_jobs 1
         expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions")
@@ -99,7 +99,7 @@ describe Admin::PetitionsController do
         expect(@p1.email_requested_at).not_to be_nil
       end
 
-      it "should update response and email signees flag with false" do
+      it "updates response and email signees flag with false" do
         do_patch(:email_signees => '0')
         assert_enqueued_jobs 0
         @p1.reload
@@ -107,7 +107,7 @@ describe Admin::PetitionsController do
         expect(@p1.email_requested_at).to be_nil
       end
 
-      it "should fail to update response and email signees flag due to validation error" do
+      it "fails to update response and email signees flag due to validation error" do
         do_patch(:response => '', :email_signees => '1')
         assert_enqueued_jobs 0
         expect(response).to be_success
@@ -130,13 +130,13 @@ describe Admin::PetitionsController do
           Petition.update_all_signature_counts
         end
 
-        it "should setup a delayed job" do
+        it "sets up a delayed job" do
           assert_enqueued_jobs 1 do
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
           end
         end
 
-        it "should set the email signees flag to false when the job runs" do
+        it "sets the email signees flag to false when the job runs" do
           perform_enqueued_jobs do
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
             @petition.reload
@@ -147,7 +147,7 @@ describe Admin::PetitionsController do
           end
         end
 
-        it "should email out to the validated signees who have opted in when the delayed job runs" do
+        it "emails out to the validated signees who have opted in when the delayed job runs" do
           perform_enqueued_jobs do
             no_emails = ActionMailer::Base.deliveries.length
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
@@ -186,12 +186,12 @@ describe Admin::PetitionsController do
     end
 
     context "edit" do
-      it "should be successful" do
+      it "assigns petition successfully" do
         get :edit, :id => @petition.id
         expect(assigns[:petition]).to eq(@petition)
       end
 
-      it "should be unsuccessful for a petition that is not validated" do
+      it "is unsuccessful for a petition that is not validated" do
         petition = FactoryGirl.create(:open_petition)
         expect {
           get :edit, :id => petition.id
@@ -200,7 +200,7 @@ describe Admin::PetitionsController do
     end
 
     context "show" do
-      it "should be successful" do
+      it "assigns petition successfully" do
         get :show, :id => @petition.id
         expect(assigns(:petition)).to eq(@petition)
       end
@@ -211,7 +211,7 @@ describe Admin::PetitionsController do
         patch :update, {:id => @petition.id}.merge(options)
       end
 
-      it "should be unsuccessful for a petition that is not validated" do
+      it "is unsuccessful for a petition that is not validated" do
         petition = FactoryGirl.create(:open_petition)
         expect {
           do_post(:id => petition.id)
