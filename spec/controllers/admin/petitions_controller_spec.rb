@@ -171,11 +171,11 @@ describe Admin::PetitionsController do
       let(:petitions) { double.as_null_object }
 
       before do
-        allow(Petition).to receive(:moderated).and_return(petitions)
+        allow(Petition).to receive(:selectable).and_return(petitions)
       end
 
-      it "shows all moderated petitions" do
-        expect(Petition).to receive(:moderated).and_return(petitions)
+      it "shows all selectable petitions" do
+        expect(Petition).to receive(:selectable).and_return(petitions)
         get :index
       end
 
