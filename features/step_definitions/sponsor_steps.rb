@@ -148,3 +148,18 @@ Then(/^(I|they|".*?") should be emailed a link for gathering support from sponso
     Then they should see /\/petitions\/\\d+\/sponsors\/[A-Za-z0-9]+/ in the email body
   }
 end
+
+When(/^I have sponsored a petition$/) do
+  steps %Q{
+    When I visit the "sponsor this petition" url I was given
+    And I should be connected to the server via an ssl connection
+    When I fill in my details as a sponsor
+    And I try to sign
+    Then I should not have signed the petition as a sponsor
+    And I am asked to review my email address
+    When I say I am happy with my email address
+    Then I should have a pending signature on the petition as a sponsor
+    And I should receive an email explaining the petition I am sponsoring
+}
+end
+

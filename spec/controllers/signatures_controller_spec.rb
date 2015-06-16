@@ -12,30 +12,30 @@ describe SignaturesController do
 
       before { stub_constituency('SW1A 1AA', '1234', 'Cities of London and Westminster') }
 
-      it "should respond to /signatures/:id/verify/:token" do
+      it "responds to /signatures/:id/verify/:token" do
         expect({:get => "/signatures/#{signature.id}/verify/#{signature.perishable_token}"}).
           to route_to({:controller => "signatures", :action => "verify", :id => signature.id.to_s, :token => signature.perishable_token})
         expect(verify_signature_path(signature, signature.perishable_token)).to eq("/signatures/#{signature.id}/verify/#{signature.perishable_token}")
       end
 
-      it "should redirect to the petition signed page" do
+      it "redirects to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.id}/signed")
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.perishable_token}/signed")
       end
 
-      it "should not set petition state to validated" do
+      it "does not set petition state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(petition.reload.state).to eq(Petition::PENDING_STATE)
       end
 
-      it "should raise exception if id not found" do
+      it "raises exception if id not found" do
         expect do
           get :verify, :id => signature.id + 1, :token => signature.perishable_token
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
-      it "should raise exception if token not found" do
+      it "raises exception if token not found" do
         expect do
           get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
         end.to raise_error(ActiveRecord::RecordNotFound)
@@ -47,23 +47,23 @@ describe SignaturesController do
       let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
       let(:signature) { sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition)) }
 
-      it "should redirect to the petition sponsored page" do
+      it "redirects to the petition sponsored page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/sponsored")
       end
 
-      it "should set petition state to validated" do
+      it "sets petition state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(petition.reload.state).to eq(Petition::VALIDATED_STATE)
       end
 
-      it "should set state to validated" do
+      it "sets state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(signature.reload.state).to eq(Signature::VALIDATED_STATE)
       end
 
-      it "should set petition creator signature state to validated" do
+      it "sets petition creator signature state to validated" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(petition.creator_signature.reload.state).to eq(Signature::VALIDATED_STATE)
       end
@@ -92,17 +92,34 @@ describe SignaturesController do
         get :verify, :id => signature.id, :token => signature.perishable_token
       end
 
-      it "should raise exception if id not found" do
+      it "raises exception if id not found" do
         expect do
           get :verify, :id => signature.id + 1, :token => signature.perishable_token
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
-      it "should raise exception if token not found" do
+      it "raises exception if token not found" do
         expect do
           get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
+    end
+  end
+
+  describe "signed" do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+    
+    it "redirects to the signature verify page if unvalidated" do
+      get :signed, :petition_id => petition.id, :id => signature.perishable_token
+      expect(assigns[:signature]).to eq(signature)
+      expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
+    end
+
+    it "raises exception if token not found" do
+      expect do
+        get :signed, :petition_id => petition.id, :id => "#{signature.perishable_token}a"
+      end.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -249,7 +266,7 @@ describe SignaturesController do
         expect(response).to render_template(:new)
       end
 
-      it "should not create a new signature" do
+      it "does not create a new signature" do
         signature_params[:email] = ''
         expect { do_post }.not_to change(Signature, :count)
       end
