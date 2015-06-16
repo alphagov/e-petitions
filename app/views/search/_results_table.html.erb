@@ -1,12 +1,7 @@
 <ol>
   <% petitions.each do |petition| %>
     <li class="petition-item petition-<%= petition.state %>">
-      <%= link_to petition.title, petition_path(petition) %>
-      <% unless petition.rejected? %>
-        <p>
-          <%= "#{number_with_delimiter(petition.signature_count)} signatures"  %>
-        </p>
-      <% end %>
+      <%= render "search/petitions/petition_result_for_facet_#{facet}", petition: petition %>
     </li>
   <% end -%>
 </ol>
