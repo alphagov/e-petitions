@@ -61,7 +61,7 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
       it "does not log the exception as an error" do
         allow(petition).to receive_message_chain(:need_emailing, :count => 1)
         expect(logger).not_to receive(:error)
-        expect { perform_job }.to raise_error
+        expect { perform_job }.to raise_error(PleaseRetryEmailJob)
       end
     end
   end
@@ -83,8 +83,8 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
 
   context "update attribute fails" do
     it "lets other exceptions through" do
-      allow(signature).to receive(:update_attribute).and_raise(Exception)
-      expect { perform_job }.to raise_error
+      allow(signature).to receive(:update_attribute).and_raise(ActiveRecord::RecordNotSaved, "The record wasn't saved")
+      expect { perform_job }.to raise_error(ActiveRecord::RecordNotSaved)
     end
   end
 end

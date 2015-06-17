@@ -147,7 +147,8 @@ RSpec.describe SignaturesController, type: :controller do
     end
 
     it "raises if petition id is not supplied" do
-      expect { get :new }.to raise_error
+      allow(Petition).to receive(:find).with("").and_raise(ActiveRecord::RecordNotFound)
+      expect { get :new, :petition_id => ""}.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "does not show if the petition is not open" do
