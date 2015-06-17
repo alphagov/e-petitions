@@ -1014,4 +1014,25 @@ RSpec.describe Petition, type: :model do
   describe 'debate outcomes' do
     it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
   end
+
+  describe 'email requested receipts' do
+    it { is_expected.to have_one(:email_requested_receipt).dependent(:destroy) }
+
+    describe '#email_requested_receipt!' do
+      let(:petition) { FactoryGirl.create(:petition) }
+
+      it 'returns the existing db object if one exists' do
+        existing = petition.create_email_requested_receipt
+        expect(petition.email_requested_receipt!).to eq existing
+      end
+
+      it 'returns a newly created instance if does not already exist' do
+        instance = petition.email_requested_receipt!
+        expect(instance).to be_present
+        expect(instance).to be_a(EmailRequestedReceipt)
+        expect(instance.petition).to eq petition
+        expect(instance.petition).to be_persisted
+      end
+    end
+  end
 end

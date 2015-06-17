@@ -309,4 +309,9 @@ class Petition < ActiveRecord::Base
   def signatures_to_email(_)
     need_emailing
   end
+
+  has_one :email_requested_receipt, dependent: :destroy
+  def email_requested_receipt!
+    email_requested_receipt || create_email_requested_receipt
+  end
 end
