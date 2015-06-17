@@ -1,4 +1,3 @@
-require 'net/smtp'
 require 'rails_helper'
 include ActiveJob::TestHelper
 
@@ -15,76 +14,24 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
     allow(petition).to receive_message_chain(:need_emailing, :count => 0)
   end
 
-  def perform_job
-    EmailThresholdResponseJob.perform_now(petition, email_requested_at, mailer, logger)
+  def perform_job(requested_at = email_requested_at)
+    described_class.perform_now(petition, requested_at.getutc.iso8601, mailer, logger)
   end
 
-  it "sends emails to each signatory of a petition" do
+  it "sends the notify_signer_of_threshold_response emails to each signatory of a petition" do
     expect(mailer).to receive(:notify_signer_of_threshold_response).with(petition, signature).and_return(mailer)
     perform_job
   end
 
-  it "doesn't run unless it's the latest request" do
-    expect(mailer).not_to receive(:notify_signer_of_threshold_response)
-    requested_at = Time.now - 1000
-    EmailThresholdResponseJob.perform_now(petition, requested_at, mailer, logger)
-  end
-
-  it "marks the signature with the last emailing time" do
-    expect(signature).to receive(:update_attribute).with(:last_emailed_at, email_requested_at)
+  it "marks the signature with the 'email_requested_at' last emailing time" do
+    expect(signature).to receive(:set_email_sent_timestamp).with('email_requested_at', email_requested_at)
     perform_job
   end
 
-  context "email sending fails" do
-    before do
-      allow(mailer).to receive(:notify_signer_of_threshold_response).and_raise(Errno::ECONNREFUSED)
-    end
-
-    it "should catch the error" do
-      expect { perform_job }.not_to raise_error
-    end
-
-    it "skips that signature and moves on" do
-      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at, email_requested_at)
-      perform_job
-    end
-
-    context "with more emails to process" do
-      before do
-        allow(petition).to receive_message_chain(:need_emailing, :count => 1)
-      end
-
-      it "raises an error at the end of the run to force a retry" do
-        expect { perform_job }.to raise_error(PleaseRetryEmailJob)
-      end
-
-      it "does not log the exception as an error" do
-        allow(petition).to receive_message_chain(:need_emailing, :count => 1)
-        expect(logger).not_to receive(:error)
-        expect { perform_job }.to raise_error(PleaseRetryEmailJob)
-      end
-    end
-  end
-
-  context "email fails with an SMTPError" do
-    before do
-      allow(mailer).to receive(:notify_signer_of_threshold_response).and_raise(Net::SMTPFatalError)
-    end
-
-    it "should catch the error" do
-      expect { perform_job }.not_to raise_error
-    end
-
-    it "skips that signature and moves on" do
-      expect(signature).not_to receive(:update_attribute).with(:last_emailed_at, email_requested_at)
-      perform_job
-    end
-  end
-
-  context "update attribute fails" do
-    it "lets other exceptions through" do
-      allow(signature).to receive(:update_attribute).and_raise(ActiveRecord::RecordNotSaved, "The record wasn't saved")
-      expect { perform_job }.to raise_error(ActiveRecord::RecordNotSaved)
-    end
+  it 'uses a EmailPetitionSignatories::Worker to do the work' do
+    worker = double
+    expect(worker).to receive(:do_work!)
+    expect(EmailPetitionSignatories::Worker).to receive(:new).with(instance_of(described_class), petition, petition.email_requested_at.getutc.iso8601, anything).and_return worker
+    perform_job
   end
 end

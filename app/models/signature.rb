@@ -101,5 +101,11 @@ class Signature < ActiveRecord::Base
     set_constituency_id
     save if constituency_id_changed?
   end
-end
 
+  def set_email_sent_timestamp(_, timestamp)
+    self.update_column(:last_emailed_at, timestamp)
+  end
+  def get_email_sent_timestamp(_)
+    last_emailed_at
+  end
+end
