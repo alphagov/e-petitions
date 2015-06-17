@@ -1,6 +1,5 @@
 class PetitionMailer < ApplicationMailer
-  include ActionView::Helpers::NumberHelper
-  add_template_helper(DateTimeHelper)
+  include ActiveSupport::NumberHelper
 
   def email_confirmation_for_signer(signature)
     @signature = signature
