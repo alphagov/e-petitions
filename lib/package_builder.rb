@@ -352,6 +352,7 @@ class PackageBuilder
       su - deploy -c 'mv -Tf /home/deploy/epetitions/current_#{release} /home/deploy/epetitions/current'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle install --without development test --deployment --quiet'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec rake db:migrate'
+      su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec whenever -w'
     SCRIPT
   end
 end
