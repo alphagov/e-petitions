@@ -4,7 +4,7 @@ class FeedbackMailer < ApplicationMailer
   def send_feedback(feedback)
     @feedback = feedback
     mail :to => TO,
-      :subject => "e-petitions: Feedback received",
+      :subject => "Feedback from the Petitions service",
       'Reply-To' => feedback.email
   end
 end

@@ -41,8 +41,18 @@ select.form-control {
 
 .form-label {
   margin-bottom: em(13, 19);
+
+  .optional {
+    color: $secondary-text-colour;
+    margin-left: 0.5em;
+  }
 }
 
 .form-group-help {
   margin-bottom: 0;
+}
+
+.inline-terms {
+  @include core-16;
+  color: $secondary-text-colour;
 }
