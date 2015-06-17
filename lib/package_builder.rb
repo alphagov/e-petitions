@@ -74,7 +74,7 @@ class PackageBuilder
   private
 
   def application_name
-    ENV.fetch('AWS_DEPLOYMENT_APP_NAME', 'epetitions')
+    "#{ENV.fetch('AWS_DEPLOYMENT_APP_NAME', 'epetitions')}-#{environment}"
   end
 
   def archive_file

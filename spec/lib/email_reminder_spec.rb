@@ -13,7 +13,8 @@ describe EmailReminder do
       @p3.update_attribute(:signature_count, 9)
       @p4 = FactoryGirl.create(:open_petition, :response_required => true)
       @p5 = FactoryGirl.create(:open_petition, :response_required => true, :notified_by_email => true)
-      FactoryGirl.create(:system_setting, :key => SystemSetting::THRESHOLD_SIGNATURE_COUNT, :value => "10")
+
+      allow(Site).to receive(:threshold_for_debate).and_return(10)
     end
 
     it "should email out an alert to moderator users for petitions that have reached their threshold or have been marked as requiring a response" do
@@ -22,7 +23,7 @@ describe EmailReminder do
       email_no_new = ActionMailer::Base.deliveries.size
       expect(email_no_new - email_no).to eq(1)
       email = ActionMailer::Base.deliveries.last
-      expect(email.from).to eq(["no-reply@example.gov"])
+      expect(email.from).to eq(["no-reply@test.epetitions.website"])
       expect(email.to).to match_array(["peter@directgov.uk", "richard@directgov.uk"])
       expect(email.subject).to eq('e-Petitions alert')
     end

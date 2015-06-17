@@ -1,6 +1,6 @@
 <p>Dear <%= @creator.name %>,</p>
 
-<p>Before your petition is passed to parliament for moderation review you must gather support from at least <%= AppConfig.sponsor_moderation_threshold %> sponsors.</p>
+<p>Before your petition is passed to parliament for moderation review you must gather support from at least <%= Site.threshold_for_moderation %> sponsors.</p>
 
 <p>To gather sponsors give out this url to people you think might want to support your petition:</p>
 
@@ -8,7 +8,7 @@
 
 <p>When they visit this url they will be asked to fill in their details and sign the petition as a sponsor.</p>
 
-<p>You will be notified when people sign as a sponsor and kept up-to-date with your progress towards gathering the <%= AppConfig.sponsor_moderation_threshold %> sponsors you need to go into moderation review.</p>
+<p>You will be notified when people sign as a sponsor and kept up-to-date with your progress towards gathering the <%= Site.threshold_for_moderation %> sponsors you need to go into moderation review.</p>
 
 <p>You should consider sending your chosen sponsors the full text of the petition so they can review it and be sure they agree with you before signing it as a sponsor.</p>
 

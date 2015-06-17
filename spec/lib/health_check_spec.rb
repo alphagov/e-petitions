@@ -6,6 +6,10 @@ describe HealthCheck do
     let(:env) { {} }
     subject { HealthCheck.checkup(env) }
 
+    before do
+      Site.reload
+    end
+
     it 'includes the hostname' do
       allow(Socket).to receive(:gethostname).and_return("testhost.example.com")
 
@@ -59,12 +63,12 @@ describe HealthCheck do
       end
 
       it "detects failure to read records" do
-        allow(SystemSetting).to receive(:find_by_key).with(HealthCheck::TEST_SETTINGS_KEY).and_return(nil)
+        allow(Site).to receive(:first_or_create).and_return(nil)
         expect(subject['database_persistence']).to eq 'FAILED'
       end
 
       it "detects failure to write records" do
-        allow(SystemSetting).to receive(:create!).and_raise(StandardError)
+        allow(Site).to receive(:touch).with(:last_checked_at).and_return(false)
         expect(subject['database_persistence']).to eq 'FAILED'
       end
     end

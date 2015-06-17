@@ -284,6 +284,50 @@ ALTER SEQUENCE signatures_id_seq OWNED BY signatures.id;
 
 
 --
+-- Name: sites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE sites (
+    id integer NOT NULL,
+    title character varying(50) DEFAULT 'Petition parliament'::character varying NOT NULL,
+    url character varying(50) DEFAULT 'https://petition.parliament.uk'::character varying NOT NULL,
+    email_from character varying(50) DEFAULT 'no-reply@petition.parliament.uk'::character varying NOT NULL,
+    username character varying(30),
+    password_digest character varying(60),
+    enabled boolean DEFAULT true NOT NULL,
+    protected boolean DEFAULT false NOT NULL,
+    petition_duration integer DEFAULT 6 NOT NULL,
+    minimum_number_of_sponsors integer DEFAULT 5 NOT NULL,
+    maximum_number_of_sponsors integer DEFAULT 20 NOT NULL,
+    threshold_for_moderation integer DEFAULT 5 NOT NULL,
+    threshold_for_response integer DEFAULT 10000 NOT NULL,
+    threshold_for_debate integer DEFAULT 100000 NOT NULL,
+    last_checked_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: sites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE sites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE sites_id_seq OWNED BY sites.id;
+
+
+--
 -- Name: sponsors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -313,39 +357,6 @@ CREATE SEQUENCE sponsors_id_seq
 --
 
 ALTER SEQUENCE sponsors_id_seq OWNED BY sponsors.id;
-
-
---
--- Name: system_settings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE system_settings (
-    id integer NOT NULL,
-    key character varying(64) NOT NULL,
-    value text,
-    description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: system_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE system_settings_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: system_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE system_settings_id_seq OWNED BY system_settings.id;
 
 
 --
@@ -394,14 +405,14 @@ ALTER TABLE ONLY signatures ALTER COLUMN id SET DEFAULT nextval('signatures_id_s
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
+ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regclass);
 
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY system_settings ALTER COLUMN id SET DEFAULT nextval('system_settings_id_seq'::regclass);
+ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
 
 
 --
@@ -453,19 +464,19 @@ ALTER TABLE ONLY signatures
 
 
 --
+-- Name: sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY sites
+    ADD CONSTRAINT sites_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: sponsors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY sponsors
     ADD CONSTRAINT sponsors_pkey PRIMARY KEY (id);
-
-
---
--- Name: system_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY system_settings
-    ADD CONSTRAINT system_settings_pkey PRIMARY KEY (id);
 
 
 --
@@ -616,13 +627,6 @@ CREATE INDEX index_signatures_on_updated_at ON signatures USING btree (updated_a
 
 
 --
--- Name: index_system_settings_on_key; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_system_settings_on_key ON system_settings USING btree (key);
-
-
---
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -646,6 +650,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150605100049');
 INSERT INTO schema_migrations (version) VALUES ('20150609111042');
 
 INSERT INTO schema_migrations (version) VALUES ('20150610091149');
+
+INSERT INTO schema_migrations (version) VALUES ('20150612095611');
+
+INSERT INTO schema_migrations (version) VALUES ('20150612103324');
 
 INSERT INTO schema_migrations (version) VALUES ('20150612111204');
 

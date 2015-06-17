@@ -6,7 +6,7 @@ Feature: Threshold list
   Background:
     Given I am logged in as a moderator
     And the date is the "21 April 2011 12:00"
-    And a system setting exists with key: "threshold_signature_count", value: "5"
+    And the threshold for a parliamentary debate is "5"
     And an open petition "p1" exists with title: "Petition 1", closed_at: "1 January 2012"
     And the petition "Petition 1" has 25 validated signatures
     And an open petition "p2" exists with title: "Petition 2", closed_at: "20 August 2011"

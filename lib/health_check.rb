@@ -59,11 +59,8 @@ class HealthCheck
 
   def database_persistence
     return false unless database_connection
-    SystemSetting.destroy_all key: TEST_SETTINGS_KEY
-    SystemSetting.create!(key: TEST_SETTINGS_KEY, value: 'only used for testing')
-    s = SystemSetting.find_by_key(TEST_SETTINGS_KEY)
-    s.value == 'only used for testing' or raise
-    s.destroy
+    return false unless Site.first_or_create
+    return false unless Site.touch(:last_checked_at)
     true
   rescue
     false

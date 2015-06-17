@@ -33,7 +33,7 @@ When(/^a sponsor supports my e\-petition$/) do
 end
 
 Given(/^I only need one more sponsor to support my e\-petition$/) do
-  before_threshold = AppConfig.sponsor_moderation_threshold - 1
+  before_threshold = Site.threshold_for_moderation - 1
   while (@sponsor_petition.supporting_sponsors_count < before_threshold) do
     steps %Q{
       And a sponsor supports my e-petition
@@ -45,7 +45,7 @@ Given(/^I only need one more sponsor to support my e\-petition$/) do
 end
 
 Given(/^I have enough support from sponsors for my e\-petition$/) do
-  while (@sponsor_petition.supporting_sponsors_count < AppConfig.sponsor_moderation_threshold) do
+  while (@sponsor_petition.supporting_sponsors_count < Site.threshold_for_moderation) do
     steps %Q{
       And a sponsor supports my e-petition
     }
@@ -76,7 +76,7 @@ Then(/^I will see 404 error page$/) do
 end
 
 Given(/^the petition I want to sign has enough sponsors and is (validated|sponsored|pending)?$/) do |state|
-  @sponsor_petition = FactoryGirl.create(:open_petition, state: state, sponsor_count: AppConfig.sponsor_count_max)
+  @sponsor_petition = FactoryGirl.create(:open_petition, state: state, sponsor_count: Site.maximum_number_of_sponsors)
 end
 
 Then(/^I am redirected to the petition moderation info page$/) do

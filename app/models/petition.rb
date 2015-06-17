@@ -64,7 +64,7 @@ class Petition < ActiveRecord::Base
   attr_accessor :email_signees
 
   # = Finders =
-  scope :threshold, -> { where('signature_count >= ? OR response_required = ?', SystemSetting.value_of_key(SystemSetting::THRESHOLD_SIGNATURE_COUNT).to_i, true) }
+  scope :threshold, -> { where('signature_count >= ? OR response_required = ?', Site.threshold_for_debate, true) }
 
   scope :for_state, ->(state) {
     if CLOSED_STATE.casecmp(state) == 0
@@ -136,7 +136,7 @@ class Petition < ActiveRecord::Base
   def publish!
     self.state = Petition::OPEN_STATE
     self.open_at = Time.current
-    self.closed_at = AppConfig.petition_duration.months.from_now.end_of_day
+    self.closed_at = Site.petition_duration.months.from_now.end_of_day
     save!
   end
 
@@ -245,11 +245,11 @@ class Petition < ActiveRecord::Base
   end
 
   def on_sponsor_moderation_threshold?
-    supporting_sponsors_count == AppConfig.sponsor_moderation_threshold
+    supporting_sponsors_count == Site.threshold_for_moderation
   end
 
   def below_sponsor_moderation_threshold?
-    supporting_sponsors_count < AppConfig.sponsor_moderation_threshold
+    supporting_sponsors_count < Site.threshold_for_moderation
   end
 
   def validate_creator_signature!
@@ -267,7 +267,7 @@ class Petition < ActiveRecord::Base
   end
 
   def has_maximum_sponsors?
-    sponsors.count >= AppConfig.sponsor_count_max && stop_collecting_sponsors_states
+    sponsors.count >= Site.maximum_number_of_sponsors && stop_collecting_sponsors_states
   end
 
   def stop_collecting_sponsors_states

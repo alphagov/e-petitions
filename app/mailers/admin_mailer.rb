@@ -1,5 +1,5 @@
 class AdminMailer < ActionMailer::Base
-  default :from => AppConfig.email_from
+  default :from => Site.email_from
 
   def threshold_email_reminder(admin_users, petitions)
     @petitions = petitions

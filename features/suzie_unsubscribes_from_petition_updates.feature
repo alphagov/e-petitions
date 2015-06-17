@@ -5,7 +5,10 @@ Feature: Unsubscribing from petiton updates as Suzie
 
   Background:
     Given a petition "Wombles of Wimbledon"
+    And the petition "Wombles of Wimbledon" has 5 validated signatures
     And Suzie has already signed the petition
+    And the threshold for a parliamentary debate is "5"
+    And all petitions have had their signatures counted
     And a moderator responds to the petition
 
   Scenario: Suzie receives and email containing an unsubscription link

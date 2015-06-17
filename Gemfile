@@ -26,12 +26,13 @@ gem 'sass-rails', '~> 5.0'
 gem 'aws-sdk'
 gem 'textacular'
 gem 'uglifier'
+gem 'bcrypt'
+gem 'faker'
 
 group :development, :test do
   gem 'rspec-rails'
   gem 'evergreen', :require => 'evergreen/rails'
   gem 'pry'
-  gem 'faker'
 end
 
 group :test do
