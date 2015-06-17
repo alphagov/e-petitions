@@ -14,6 +14,33 @@ en-GB:
       rejected: "Rejected petitions (%{quantity})"
       with_response: "Petitions with a Government response (%{quantity})"
 
+    emails:
+      subjects:
+        email_confirmation_for_signer: |-
+          HM Government e-petitions: Email address confirmation
+        special_resend_of_email_confirmation_for_signer: |-
+          HM Government e-petitions: Email address confirmation
+        notify_creator_that_petition_is_published: |-
+          HM Government e-petitions: Your e-petition has been published
+        petition_rejected: |-
+          HM Government e-petitions: e-petition has been rejected
+        notify_signer_of_threshold_response: |-
+          HM Government e-petitions: The petition '%{title}' has reached %{formatted_count} signatures"
+        no_signature_for_petition: |-
+          HM Government e-petitions: a confirmation email has been requested
+        email_already_confirmed_for_signature: |-
+          HM Government e-petitions: Signature already confirmed
+        two_pending_signatures: |-
+          HM Government e-petitions: Signature confirmations
+        one_pending_one_validated_signature: |-
+          HM Government e-petitions: Signature confirmation
+        double_signature_confirmation: |-
+          HM Government e-petitions: Signatures already confirmed
+        notify_creator_of_closing_date_change: |-
+          HM Government e-petitions: change to your e-petition closing date
+        gather_sponsors_for_petition: |-
+          Parliament petitions - It's time to get sponsors to support your petition
+
     counts:
       default:
         html:
