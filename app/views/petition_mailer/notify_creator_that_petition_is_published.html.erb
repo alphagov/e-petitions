@@ -1,11 +1,11 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Your e-petition "<%= @signature.petition.title %>" has now been published. You can view your e-petition at: <%=
+<p>Your petition "<%= @signature.petition.title %>" has now been published. You can view your petition at: <%=
   url = petition_url(@signature.petition)
   link_to url, url
   %></p>
 
-<p>You can also share this URL to promote your e-petition or use the social network links available on your e-petition's page.</p>
+<p>You can also share this URL to promote your petition or use the social network links available on your petition's page.</p>
 
 <p>Thanks,</p>
 <p>HM Government e-petitions <%= link_to home_url, home_url %></p>

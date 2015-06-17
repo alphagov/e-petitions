@@ -1,4 +1,4 @@
-<% content_for(:page_title) { "Search results - archived e-petitions" } %>
+<% content_for(:page_title) { "Search results - archived petitions" } %>
 <% content_for :title do %>
 <div class="title_block">
   <h1>Search results <span class="search_terms">for "<%= params[:q] %>"</span></h1>
@@ -10,7 +10,7 @@
     <p class="no_petitions_warning">No archived petitions could be found matching your search terms.</p>
   <% else %>
     <div class="title_pagination_row">
-      <h2>Archive e-petitions matching your search terms</h2>
+      <h2>Archive petitions matching your search terms</h2>
     </div>
     <ol>
       <% @petitions.each do |petition| %>

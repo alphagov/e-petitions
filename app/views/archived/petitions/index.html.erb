@@ -1,16 +1,16 @@
 <div class="cta_block" id="search_pet_cta_block">
-  <h1>Archived e-petitions</h1>
+  <h1>Archived petitions</h1>
 
   <form method="get" action="/archived/petitions/search">
-    <label for="search">Search for an archived e-petition</label>
+    <label for="search">Search for an archived petition</label>
     <input type='text' name="q" id="search" />
     <input type='submit' value='Search' class="button" id="home_search_button"/>
   </form>
 </div>
 
 <div class="cta_block" id="create_pet_cta_block">
-  <h2>What are e-petitions?</h2>
-  <p>e-petitions <span class="nowrap">are</span> an easy, personal way for you to influence government and Parliament in the UK. You can create an e-petition about anything that the government is responsible for and if it gets at least 100,000 signatures, it will be considered for debate in the House of Commons.  You can find more information about how the House of Commons deals with e-petitions on the <%= new_window_link_to "Backbench Business Committee website", "http://www.parliament.uk/bbcom" %>.</p>
-  <%= link_to 'How e-petitions work', help_path, :class => 'large_link' %>
-  <%= link_to "Create a new e-petition", check_petitions_path, :class => 'link_button large_link_button' %>
+  <h2>What are petitions?</h2>
+  <p>Petitions are an easy, personal way for you to influence government and Parliament in the UK. You can create a petition about anything that the government is responsible for and if it gets at least 100,000 signatures, it will be considered for debate in the House of Commons.  You can find more information about how the House of Commons deals with petitions on the <%= new_window_link_to "Backbench Business Committee website", "http://www.parliament.uk/bbcom" %>.</p>
+  <%= link_to 'How petitions work', help_path, :class => 'large_link' %>
+  <%= link_to "Create a new petition", check_petitions_path, :class => 'link_button large_link_button' %>
 </div>

@@ -1,12 +1,12 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Before your signature is added to the e-petition "<%= @signature.petition.title %>" you need to confirm your email address by clicking on the link below:</p>
+<p>Before your signature is added to the petition "<%= @signature.petition.title %>" you need to confirm your email address by clicking on the link below:</p>
 
 <%=
   link_to nil, verify_signature_url(@signature, @signature.perishable_token)
 %>
 
-<p>If you don't want to sign this e-petition or believe this message was sent in error, please ignore this email.</p>
+<p>If you don't want to sign this petition or believe this message was sent in error, please ignore this email.</p>
 
 <p>Thanks,</p>
 

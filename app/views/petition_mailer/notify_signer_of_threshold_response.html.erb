@@ -1,10 +1,10 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>The e-petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.</p>
+<p>The petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.</p>
 
 <p><%= @petition.response %></p>
 
-<p><%= link_to "View the response to the e-petition", petition_url(@signature.petition) %></p>
+<p><%= link_to "View the response to the petition", petition_url(@signature.petition) %></p>
 
 <p>Thanks,</p>
 

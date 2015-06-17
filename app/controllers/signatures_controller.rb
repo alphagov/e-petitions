@@ -32,7 +32,7 @@ class SignaturesController < ApplicationController
     @petition = @signature.petition
 
     if @signature.validated?
-      flash[:notice] = "Thank you. Your signature has already been added to the <span class='nowrap'>e-petition</span>."
+      flash[:notice] = "Thank you. Your signature has already been added to the petition."
       redirect_to signed_petition_signature_url(@petition, @signature.perishable_token) and return
     end
 

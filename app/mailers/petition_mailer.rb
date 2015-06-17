@@ -20,7 +20,6 @@ class PetitionMailer < ApplicationMailer
     @petition = petition
     to = @petition.creator_signature.email
     bcc = @petition.sponsor_signatures.validated.map(&:email)
-
     mail to: to, bcc: bcc, subject: subject_for(:petition_rejected)
   end
 
