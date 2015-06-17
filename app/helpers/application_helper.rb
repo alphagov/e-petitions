@@ -12,8 +12,4 @@ module ApplicationHelper
     options[:class] = ("info_link " + options[:class]).strip
     link_to "Click for more information", path, {:title => 'Click for more information'}.merge(options)
   end
-
-  def http_prefix
-    request.ssl? ? "https://" : "http://"
-  end
 end
