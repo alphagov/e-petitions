@@ -160,6 +160,16 @@ Then /^I should see the vote count, closed and open dates$/ do
   end
 end
 
+Then /^I should not see the vote count$/ do
+  @petition.reload
+  expect(page).to_not have_css("p.signature-count", :text => @petition.signature_count.to_s + " signatures")
+end
+
+Then /^I should see submitted date$/ do
+  @petition.reload
+  expect(page).to have_css("li", :text =>  "Date submitted " + @petition.created_at.strftime("%e %B %Y").squish)
+end
+
 Then /^I should see the reason for rejection$/ do
   @petition.reload
 
