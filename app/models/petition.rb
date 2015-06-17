@@ -170,10 +170,6 @@ class Petition < ActiveRecord::Base
     self.state == SPONSORED_STATE
   end
 
-  def collecting_sponsors?
-    self.state == VALIDATED_STATE || self.state == PENDING_STATE
-  end
-
   def open?
     self.state == OPEN_STATE
   end
