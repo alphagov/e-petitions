@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Staged::PetitionSigner do
+RSpec.describe Staged::PetitionSigner, type: :model do
   let(:signature_params) { {} }
   let(:move) { '' }
   let(:stage) { '' }

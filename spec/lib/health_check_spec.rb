@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'health_check'
 
-describe HealthCheck do
+RSpec.describe HealthCheck do
   describe '.checkup' do
     let(:env) { {} }
     subject { HealthCheck.checkup(env) }

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Signature do
+RSpec.describe Signature, type: :model do
   it "has a valid factory" do
     expect(FactoryGirl.build(:signature)).to be_valid
   end

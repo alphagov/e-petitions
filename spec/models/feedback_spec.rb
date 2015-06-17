@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Feedback do
+RSpec.describe Feedback, type: :model do
   it "can be constructed without params" do
     expect(Feedback.new.comment).to be_nil
   end

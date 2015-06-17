@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::TodolistController do
+RSpec.describe Admin::TodolistController, type: :controller do
 
   describe "not logged in" do
     describe "GET 'index'" do

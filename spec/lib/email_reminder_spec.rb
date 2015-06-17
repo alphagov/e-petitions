@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe EmailReminder do
+RSpec.describe EmailReminder do
   describe "threshold_email_reminders" do
     before :each do
       @user1 = FactoryGirl.create(:moderator_user, :email => 'peter@directgov.uk')

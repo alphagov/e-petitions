@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe DateTimeHelper do
+RSpec.describe DateTimeHelper, type: :helper do
 
   describe "local_date_time" do
     it "displays nothing if the date is nil" do

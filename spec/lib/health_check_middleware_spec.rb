@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'health_check_middleware'
 
-describe HealthCheckMiddleware do
+RSpec.describe HealthCheckMiddleware do
   let(:env) { {} }
   let(:app) { double }
   subject { HealthCheckMiddleware.new(app) }

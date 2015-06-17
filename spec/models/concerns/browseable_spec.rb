@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Browseable do
+RSpec.describe Browseable, type: :model do
   let(:browseable) do
     Class.new do
       include Browseable

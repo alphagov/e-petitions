@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Petition do
+RSpec.describe Petition, type: :model do
   include ActiveJob::TestHelper
 
   context "defaults" do

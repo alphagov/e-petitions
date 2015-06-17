@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe LocalPetitionsController, type: :controller do
+RSpec.describe LocalPetitionsController, type: :controller do
   describe 'GET :index' do
     include ConstituencyApiHelpers::NetworkLevel
 

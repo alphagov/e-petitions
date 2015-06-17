@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::SearchesController do
+RSpec.describe Admin::SearchesController, type: :controller do
 
   describe "not logged in" do
     describe "GET 'new'" do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe AdminUser do
+RSpec.describe AdminUser, type: :model do
 
   context "behaviours" do
     it { expect(AdminUser.respond_to?(:acts_as_authentic)).to be_truthy }

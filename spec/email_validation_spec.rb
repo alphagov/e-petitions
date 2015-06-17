@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'Email validation' do
+RSpec.describe 'Email validation' do
   subject { EMAIL_REGEX }
 
   it 'matches simple email addresses' do

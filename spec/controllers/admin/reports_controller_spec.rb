@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::ReportsController do
+RSpec.describe Admin::ReportsController, type: :controller do
 
   describe "GET #index" do
     context "logged in" do

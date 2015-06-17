@@ -2,7 +2,7 @@ require 'net/smtp'
 require 'rails_helper'
 include ActiveJob::TestHelper
 
-describe EmailThresholdResponseJob do
+RSpec.describe EmailThresholdResponseJob, type: :job do
   let(:email_requested_at) { Time.now }
   let(:petition) { FactoryGirl.create(:open_petition, :email_requested_at => email_requested_at) }
   let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }

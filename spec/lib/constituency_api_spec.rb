@@ -1,24 +1,24 @@
 require 'rails_helper'
 
-describe ConstituencyApi::Mp do
-  describe "#initialize" do
-    let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", "2015-05-07T00:00:00") }
+RSpec.describe ConstituencyApi do
+  describe ConstituencyApi::Mp do
+    describe "#initialize" do
+      let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", "2015-05-07T00:00:00") }
 
-    it "converts valid date string into a datetime variable" do
-      expect(mp.start_date).to eq Date.new(2015, 5, 7)
+      it "converts valid date string into a datetime variable" do
+        expect(mp.start_date).to eq Date.new(2015, 5, 7)
+      end
+    end
+
+    describe "#url" do
+      let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", Date.new(2015, 5, 7)) }
+
+      it "returns the URL for the mp" do
+        expect(mp.url).to eq "#{ConstituencyApi::Mp::URL}/emily-thornberry-mp/1536"
+      end
     end
   end
 
-  describe "#url" do
-    let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", Date.new(2015, 5, 7)) }
-
-    it "returns the URL for the mp" do
-      expect(mp.url).to eq "#{ConstituencyApi::Mp::URL}/emily-thornberry-mp/1536"
-    end
-  end
-end
-
-describe ConstituencyApi do
   describe "#constituencies" do
     let(:api) { ConstituencyApi::Client }
     let(:api_url) { "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies" }

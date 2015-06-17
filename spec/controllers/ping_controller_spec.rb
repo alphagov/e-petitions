@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PingController do
+RSpec.describe PingController, type: :controller do
   describe "ping" do
     it "should respond to the /ping path" do
       expect({:get => "/ping"}).to route_to({:controller => "ping", :action => "ping"})
