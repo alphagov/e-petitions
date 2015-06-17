@@ -202,6 +202,29 @@ RSpec.describe Site, type: :model do
       end
     end
 
+    describe "for feedback_email" do
+      it "defaults to 'feedback@petition.parliament.uk'" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("petition.parliament.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
+
+        expect(defaults[:feedback_email]).to eq("feedback@petition.parliament.uk")
+      end
+
+      it "allows overriding via the url environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("http")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("localhost")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
+
+        expect(defaults[:feedback_email]).to eq("feedback@localhost")
+      end
+
+      it "allows overriding via the EPETITIONS_FEEDBACK environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", "feedback@test.epetitions.website").and_return("petitions@downingstreet.gov.uk")
+        expect(defaults[:feedback_email]).to eq("petitions@downingstreet.gov.uk")
+      end
+    end
+
     describe "for username" do
       it "defaults to nil" do
         allow(ENV).to receive(:fetch).with("SITE_USERNAME", nil).and_return(nil)

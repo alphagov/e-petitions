@@ -41,6 +41,7 @@ class Site < ActiveRecord::Base
         title:                      default_title,
         url:                        default_url,
         email_from:                 default_email_from,
+        feedback_email:             default_feedback_email,
         username:                   default_username,
         password:                   default_password,
         enabled:                    default_enabled,
@@ -82,6 +83,10 @@ class Site < ActiveRecord::Base
 
     def default_email_from
       ENV.fetch('EPETITIONS_FROM', "no-reply@#{default_host}")
+    end
+
+    def default_feedback_email
+      ENV.fetch('EPETITIONS_FEEDBACK', "feedback@#{default_host}")
     end
 
     def default_username

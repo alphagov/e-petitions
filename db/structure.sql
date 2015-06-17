@@ -304,7 +304,8 @@ CREATE TABLE sites (
     threshold_for_debate integer DEFAULT 100000 NOT NULL,
     last_checked_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    feedback_email character varying(100) DEFAULT 'feedback@petition.parliament.uk'::character varying NOT NULL
 );
 
 
@@ -658,4 +659,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150612103324');
 INSERT INTO schema_migrations (version) VALUES ('20150612111204');
 
 INSERT INTO schema_migrations (version) VALUES ('20150615131623');
+
+INSERT INTO schema_migrations (version) VALUES ('20150617164310');
 

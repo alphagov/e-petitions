@@ -13,7 +13,7 @@ end
 
 Then /^the site owners should be notified$/ do
   steps %Q(
-    Then "#{FeedbackMailer::TO}" should receive an email
+    Then "#{Site.feedback_email}" should receive an email
     When they open the email
     Then they should see "#{@feedback.email}" in the email body
     Then they should see "#{@feedback.petition_link_or_title}" in the email body
@@ -24,5 +24,5 @@ end
 Then /^I cannot submit feedback without filling in the required fields$/ do
   click_button("Send feedback")
   expect(page).to have_content("must be completed")
-  step %{"#{FeedbackMailer::TO}" should have no emails}
+  step %{"#{Site.feedback_email}" should have no emails}
 end
