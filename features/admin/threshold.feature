@@ -56,7 +56,7 @@ Feature: Threshold list
     And I press "Save"
     Then I should be on the admin all petitions page
     And a petition should exist with action: "Petition 1", internal_response: "Parliament here it comes", response_required: true
-    But the petition with action: "Petition 1" should not have requested an email
+    But the petition with action: "Petition 1" should not have requested a government response email
     And the petition signatories of "Petition 1" should not receive a response notification email
 
   Scenario: A moderator user updates the public response to a petition
@@ -68,7 +68,7 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should be on the admin all petitions page
-    And the petition with action: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
+    And the petition with action: "Petition 1" should have requested a government response email after "2010-12-03 01:00:00"
     And the response summary to "Petition 1" should be publicly viewable on the petition page
     And the response to "Petition 1" should be publicly viewable on the petition page
     And the petition signatories of "Petition 1" should receive a response notification email
@@ -80,5 +80,5 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should see "must be completed when email signees is checked"
-    And the petition with action: "Petition 1" should not have requested an email
+    And the petition with action: "Petition 1" should not have requested a government response email
     And the petition signatories of "Petition 1" should not receive a response notification email

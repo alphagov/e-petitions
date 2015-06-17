@@ -1,7 +1,7 @@
 class EmailThresholdResponseJob < ActiveJob::Base
   def self.run_later_tonight(petition)
-    petition.set_email_requested_timestamp('email_requested_at', Time.current)
-    EmailPetitionSignatories.run_later_tonight(self, petition, petition.get_email_requested_timestamp('email_requested_at'))
+    petition.set_email_requested_at_for('government_response', to: Time.current)
+    EmailPetitionSignatories.run_later_tonight(self, petition, petition.get_email_requested_at_for('government_response'))
   end
 
   queue_as :default
@@ -17,7 +17,7 @@ class EmailThresholdResponseJob < ActiveJob::Base
   end
 
   def timestamp_name
-    'email_requested_at'
+    'government_response'
   end
 
   def create_email(petition, signature)

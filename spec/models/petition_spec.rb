@@ -1034,5 +1034,40 @@ RSpec.describe Petition, type: :model do
         expect(instance.petition).to be_persisted
       end
     end
+
+    describe '#get_email_requested_at_for' do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:receipt) { petition.email_requested_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'returns nil when nothing has been stamped for the supplied name' do
+        expect(petition.get_email_requested_at_for('government_response')).to be_nil
+      end
+
+      it 'returns the stored timestamp for the supplied name' do
+        receipt.update_column('government_response', the_stored_time)
+        expect(petition.get_email_requested_at_for('government_response')).to eq the_stored_time
+      end
+    end
+
+    describe '#set_email_requested_at_for' do
+      include ActiveSupport::Testing::TimeHelpers
+
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:receipt) { petition.email_requested_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'sets the stored timestamp for the supplied name to the supplied time' do
+        petition.set_email_requested_at_for('government_response', to: the_stored_time)
+        expect(receipt.government_response).to eq the_stored_time
+      end
+
+      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
+        travel_to the_stored_time do
+          petition.set_email_requested_at_for('government_response')
+          expect(receipt.government_response).to eq Time.current
+        end
+      end
+    end
   end
 end

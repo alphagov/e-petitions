@@ -299,11 +299,11 @@ class Petition < ActiveRecord::Base
     self.class.unscoped.where(id: id).update_all(updates)
   end
 
-  def get_email_requested_timestamp(_)
-    email_requested_at
+  def get_email_requested_at_for(name)
+    email_requested_receipt!.get(name)
   end
-  def set_email_requested_timestamp(_, timestamp)
-    self.update_column(:email_requested_at, timestamp)
+  def set_email_requested_at_for(name, to: Time.current)
+    email_requested_receipt!.set(name, to)
   end
 
   def signatures_to_email(_)

@@ -2,14 +2,15 @@ require 'rails_helper'
 include ActiveJob::TestHelper
 
 RSpec.describe EmailThresholdResponseJob, type: :job do
-  let(:email_requested_at) { Time.now }
-  let(:petition) { FactoryGirl.create(:open_petition, :email_requested_at => email_requested_at) }
+  let(:email_requested_at) { Time.current }
+  let(:petition) { FactoryGirl.create(:open_petition) }
   let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
 
   let(:mailer) { double.as_null_object }
   let(:logger) { double.as_null_object }
 
   before do
+    petition.set_email_requested_at_for('government_response', to: email_requested_at)
     allow(petition).to receive_message_chain(:need_emailing, :find_each).and_yield(signature)
     allow(petition).to receive_message_chain(:need_emailing, :count => 0)
   end
@@ -31,7 +32,7 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
   it 'uses a EmailPetitionSignatories::Worker to do the work' do
     worker = double
     expect(worker).to receive(:do_work!)
-    expect(EmailPetitionSignatories::Worker).to receive(:new).with(instance_of(described_class), petition, petition.email_requested_at.getutc.iso8601, anything).and_return worker
+    expect(EmailPetitionSignatories::Worker).to receive(:new).with(instance_of(described_class), petition, email_requested_at.getutc.iso8601, anything).and_return worker
     perform_job
   end
 end

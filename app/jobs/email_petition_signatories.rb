@@ -37,7 +37,7 @@ class EmailPetitionSignatories
     delegate :timestamp_name, :create_email, to: :job
 
     def petition_timestamp
-      petition.get_email_requested_timestamp(timestamp_name)
+      petition.get_email_requested_at_for(timestamp_name)
     end
 
     def signatures_to_email

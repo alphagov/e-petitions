@@ -229,14 +229,17 @@ When(/^I am allowed to make the petition action too long$/) do
   page.execute_script "document.getElementById('petition_action').removeAttribute('maxlength');"
 end
 
-Then(/^the petition with action: "(.*?)" should have requested an email after "(.*?)"$/) do |petition_action, timestamp|
+Then(/^the petition with action: "(.*?)" should have requested a government response email after "(.*?)"$/) do |petition_action, timestamp|
   petition = Petition.find_by!(action: petition_action)
-  expect(petition.email_requested_at).to be >= timestamp.in_time_zone
+  email_requested_at = petition.get_email_requested_at_for('government_response')
+  expect(email_requested_at).to be_present
+  expect(email_requested_at).to be >= timestamp.in_time_zone
 end
 
-Then(/^the petition with action: "(.*?)" should not have requested an email$/) do |petition_action|
+Then(/^the petition with action: "(.*?)" should not have requested a government response email$/) do |petition_action|
   petition = Petition.find_by!(action: petition_action)
-  expect(petition.email_requested_at).to be_nil
+  email_requested_at = petition.get_email_requested_at_for('government_response')
+  expect(email_requested_at).to be_nil
 end
 
 When /^I start a new petition/ do
