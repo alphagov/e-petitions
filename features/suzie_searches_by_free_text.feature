@@ -25,10 +25,10 @@ Feature: Suzy Singer searches by free text
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"
     But I should see the following search results:
-      | Wombles                            | 1 signatures |
-      | Overthrow the Wombles              | 1 signatures |
-      | Uncle Bulgaria                     | 1 signatures |
-      | Common People                      | 1 signatures |
+      | Wombles                            | 1 signature |
+      | Overthrow the Wombles              | 1 signature |
+      | Uncle Bulgaria                     | 1 signature |
+      | Common People                      | 1 signature |
     And the markup should be valid
 
   Scenario: See search counts
@@ -40,12 +40,12 @@ Feature: Suzy Singer searches by free text
   Scenario: Search for open petitions using multiple search terms
     When I search for "overthrow the"
     Then I should see the following search results:
-      | Overthrow the Wombles | 1 signatures |
+      | Overthrow the Wombles | 1 signature |
 
   Scenario: Search for special lucene characters to ensure they are escaped correctly
     When I search for "+ -|| ! && Common () { } [ ] ^ ~ * ? : \\"
     Then I should see the following search results:
-      | Common People | 1 signatures |
+      | Common People | 1 signature |
 
   Scenario: Search for rejected petitions
     When I go to the search page
@@ -57,7 +57,7 @@ Feature: Suzy Singer searches by free text
     When I go to the search page
     And I search for "closed" petitions with "WOMBLES"
     Then I should see the following search results:
-      | The Wombles will rock Glasto | 1 signatures          |
+      | The Wombles will rock Glasto | 1 signature          |
 
   Scenario: Search for open petitions and order by title
     When I go to the search page
