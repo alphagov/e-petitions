@@ -77,6 +77,7 @@ class Petition < ActiveRecord::Base
   }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
+  scope :selectable, -> { where(state: SELECTABLE_STATES) }
   scope :in_moderation, -> { where(state: SPONSORED_STATE) }
   scope :todo_list, -> { where(state: TODO_LIST_STATES) }
   scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }

@@ -82,14 +82,6 @@ Given /^a petition "([^"]*)" has been closed$/ do |petition_title|
   @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago)
 end
 
-Given /^a libelous petition "([^"]*)" has been rejected$/ do |petition_title|
-  @petition = FactoryGirl.create(:petition,
-    :title => petition_title,
-    :state => Petition::HIDDEN_STATE,
-    :rejection_code => "libellous",
-    :rejection_text => "You can't say that!")
-end
-
 Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_title, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:petition,

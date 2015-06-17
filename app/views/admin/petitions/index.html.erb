@@ -20,7 +20,7 @@
     <% @petitions.each do |petition| -%>
       <tr>
         <td class='petition_id'><%= petition.id %></td>
-        <td><%= link_to petition.title, edit_response_admin_petition_path(petition) %></td>
+        <td class='petition-title'><%= link_to petition.title, edit_response_admin_petition_path(petition) %></td>
         <td><%= petition.creator_signature.name %><br/>
         <%= mail_to petition.creator_signature.email %></td>
         <td><%= petition.state_label %></td>

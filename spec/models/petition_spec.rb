@@ -326,6 +326,24 @@ RSpec.describe Petition, type: :model do
         expect(Petition.with_response).to match_array([@p1, @p2])
       end
     end
+
+    context "selectable" do
+      before :each do
+        @non_selectable_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
+        @non_selectable_petition_2 = FactoryGirl.create(:petition, :state => Petition::VALIDATED_STATE)
+        @non_selectable_petition_3 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
+
+        @selectable_petition_1 = FactoryGirl.create(:open_petition)
+        @selectable_petition_2 = FactoryGirl.create(:rejected_petition)
+        @selectable_petition_3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
+        @selectable_petition_4 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
+      end
+
+      it "returns only selectable petitions" do
+        expect(Petition.selectable.size).to eq(4)
+        expect(Petition.selectable).to include(@selectable_petition_1, @selectable_petition_2, @selectable_petition_3, @selectable_petition_4)
+      end
+    end
   end
 
   describe '.popular_in_constituency' do
