@@ -58,12 +58,7 @@ RSpec.describe Site, type: :model do
     let(:now) { Time.current }
 
     before do
-      Thread.current[:__site__] = nil
       expect(Site).to receive(:first_or_create).and_return(site)
-    end
-
-    after do
-      Thread.current[:__site__] = nil
     end
 
     it "delegates title to the instance" do
@@ -345,10 +340,6 @@ RSpec.describe Site, type: :model do
       expect(Site).to receive(:first_or_create).and_return(site)
     end
 
-    after do
-      Thread.current[:__site__] = nil
-    end
-
     it "delegates authenticate to the instance" do
       expect(site).to receive(:authenticate).with("username", "password").and_return(true)
       expect(Site.authenticate("username", "password")).to eq(true)
@@ -362,10 +353,6 @@ RSpec.describe Site, type: :model do
       expect(Site).to receive(:first_or_create).and_return(site)
     end
 
-    after do
-      Thread.current[:__site__] = nil
-    end
-
     it "delegates email_protocol to the instance" do
       expect(site).to receive(:email_protocol).and_return("https")
       expect(Site.email_protocol).to eq("https")
@@ -374,10 +361,6 @@ RSpec.describe Site, type: :model do
 
   describe ".reload" do
     let(:site) { double(:site) }
-
-    after do
-      Thread.current[:__site__] = nil
-    end
 
     context "when it is cached in Thread.current" do
       before do
@@ -399,10 +382,6 @@ RSpec.describe Site, type: :model do
       expect(Site).to receive(:first_or_create).and_return(site)
     end
 
-    after do
-      Thread.current[:__site__] = nil
-    end
-
     it "delegates to the instance" do
       expect(site).to receive(:touch).with(:last_checked_at).and_return(true)
       expect(Site.touch(:last_checked_at)).to eq(true)
@@ -416,10 +395,6 @@ RSpec.describe Site, type: :model do
 
   describe ".instance" do
     let(:site) { double(:site) }
-
-    after do
-      Thread.current[:__site__] = nil
-    end
 
     context "when it isn't cached in Thread.current" do
       before do
@@ -451,10 +426,6 @@ RSpec.describe Site, type: :model do
 
   describe ".before_remove_const" do
     let(:site) { double(:site) }
-
-    after do
-      Thread.current[:__site__] = nil
-    end
 
     context "when it is cached in Thread.current" do
       before do
