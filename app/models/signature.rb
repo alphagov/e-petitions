@@ -102,10 +102,15 @@ class Signature < ActiveRecord::Base
     save if constituency_id_changed?
   end
 
-  def set_email_sent_timestamp(_, timestamp)
-    self.update_column(:last_emailed_at, timestamp)
+  def get_email_sent_at_for(name)
+    email_sent_receipt!.get(name)
   end
-  def get_email_sent_timestamp(_)
-    last_emailed_at
+  def set_email_sent_at_for(name, to: Time.current)
+    email_sent_receipt!.set(name, to)
+  end
+
+  has_one :email_sent_receipt, dependent: :destroy
+  def email_sent_receipt!
+    email_sent_receipt || create_email_sent_receipt
   end
 end

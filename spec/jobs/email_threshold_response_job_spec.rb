@@ -24,8 +24,8 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
     perform_job
   end
 
-  it "marks the signature with the 'email_requested_at' last emailing time" do
-    expect(signature).to receive(:set_email_sent_timestamp).with('email_requested_at', email_requested_at)
+  it "marks the signature with the 'government_response' last emailing time" do
+    expect(signature).to receive(:set_email_sent_at_for).with('government_response', to: email_requested_at)
     perform_job
   end
 

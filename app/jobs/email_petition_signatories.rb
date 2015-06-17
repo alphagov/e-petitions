@@ -46,7 +46,7 @@ class EmailPetitionSignatories
 
     def send_email_to(signature)
       create_email(petition, signature).deliver_now
-      signature.set_email_sent_timestamp(timestamp_name, petition_timestamp)
+      signature.set_email_sent_at_for(timestamp_name, to: petition_timestamp)
     end
 
     # admins can ask to send the email multiple times and each time they

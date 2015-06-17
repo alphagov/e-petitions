@@ -509,5 +509,61 @@ RSpec.describe Signature, type: :model do
       expect(signature).not_to be_persisted
     end
   end
+
+  describe 'email sent receipts' do
+    it { is_expected.to have_one(:email_sent_receipt).dependent(:destroy) }
+
+    describe '#email_sent_receipt!' do
+      let(:signature) { FactoryGirl.create(:signature) }
+
+      it 'returns the existing db object if one exists' do
+        existing = signature.create_email_sent_receipt
+        expect(signature.email_sent_receipt!).to eq existing
+      end
+
+      it 'returns a newly created instance if does not already exist' do
+        instance = signature.email_sent_receipt!
+        expect(instance).to be_present
+        expect(instance).to be_a(EmailSentReceipt)
+        expect(instance.signature).to eq signature
+        expect(instance.signature).to be_persisted
+      end
+    end
+
+    describe '#get_email_sent_at_for' do
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:receipt) { signature.email_sent_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'returns nil when nothing has been stamped for the supplied name' do
+        expect(signature.get_email_sent_at_for('government_response')).to be_nil
+      end
+
+      it 'returns the stored timestamp for the supplied name' do
+        receipt.update_column('government_response', the_stored_time)
+        expect(signature.get_email_sent_at_for('government_response')).to eq the_stored_time
+      end
+    end
+
+    describe '#set_email_sent_at_for' do
+      include ActiveSupport::Testing::TimeHelpers
+
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:receipt) { signature.email_sent_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'sets the stored timestamp for the supplied name to the supplied time' do
+        signature.set_email_sent_at_for('government_response', to: the_stored_time)
+        expect(receipt.government_response).to eq the_stored_time
+      end
+
+      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
+        travel_to the_stored_time do
+          signature.set_email_sent_at_for('government_response')
+          expect(receipt.government_response).to eq Time.current
+        end
+      end
+    end
+  end
 end
 

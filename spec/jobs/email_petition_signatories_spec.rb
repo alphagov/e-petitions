@@ -80,7 +80,7 @@ RSpec.describe EmailPetitionSignatories do
     it "marks the signature using the timestamp name and the time the job was requested " do
       do_work
       signature.reload
-      expect(signature.get_email_sent_timestamp(timestamp_name)).to eq email_requested_at
+      expect(signature.get_email_sent_at_for(timestamp_name)).to eq email_requested_at
     end
 
     context "email sending fails" do
@@ -102,14 +102,14 @@ RSpec.describe EmailPetitionSignatories do
         it "does not mark the signature" do
           suppress(EmailPetitionSignatories::PleaseRetry) { do_work }
           signature.reload
-          expect(signature.get_email_sent_timestamp(timestamp_name)).not_to eq email_requested_at
+          expect(signature.get_email_sent_at_for(timestamp_name)).not_to eq email_requested_at
         end
 
         it 'continues to process other signatures after the one that errored' do
           other_signature = FactoryGirl.create(:validated_signature, :petition => petition)
           suppress(EmailPetitionSignatories::PleaseRetry) { do_work }
           other_signature.reload
-          expect(other_signature.get_email_sent_timestamp(timestamp_name)).to eq email_requested_at
+          expect(other_signature.get_email_sent_at_for(timestamp_name)).to eq email_requested_at
         end
       end
 
@@ -144,14 +144,14 @@ RSpec.describe EmailPetitionSignatories do
         it "does not mark the signature" do
           suppress(ActiveRecord::RecordNotSaved) { do_work }
           signature.reload
-          expect(signature.get_email_sent_timestamp(timestamp_name)).not_to eq email_requested_at
+          expect(signature.get_email_sent_at_for(timestamp_name)).not_to eq email_requested_at
         end
 
         it 'does not process other signatures after the one that errored' do
           other_signature = FactoryGirl.create(:validated_signature, :petition => petition)
           suppress(ActiveRecord::RecordNotSaved) { do_work }
           other_signature.reload
-          expect(other_signature.get_email_sent_timestamp(timestamp_name)).not_to eq email_requested_at
+          expect(other_signature.get_email_sent_at_for(timestamp_name)).not_to eq email_requested_at
         end
       end
     end
