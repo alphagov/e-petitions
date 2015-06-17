@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe StaticPagesController do
+RSpec.describe StaticPagesController, type: :controller do
   describe "home" do
     it "should respond to root path" do
       expect({:get => "/"}).to route_to({:controller => "static_pages", :action => "home"})

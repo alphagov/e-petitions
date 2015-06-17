@@ -2,7 +2,7 @@ require 'net/smtp'
 require 'rails_helper'
 include ActiveJob::TestHelper
 
-describe EmailThresholdResponseJob do
+RSpec.describe EmailThresholdResponseJob, type: :job do
   let(:email_requested_at) { Time.now }
   let(:petition) { FactoryGirl.create(:open_petition, :email_requested_at => email_requested_at) }
   let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
@@ -61,7 +61,7 @@ describe EmailThresholdResponseJob do
       it "does not log the exception as an error" do
         allow(petition).to receive_message_chain(:need_emailing, :count => 1)
         expect(logger).not_to receive(:error)
-        expect { perform_job }.to raise_error
+        expect { perform_job }.to raise_error(PleaseRetryEmailJob)
       end
     end
   end
@@ -83,8 +83,8 @@ describe EmailThresholdResponseJob do
 
   context "update attribute fails" do
     it "lets other exceptions through" do
-      allow(signature).to receive(:update_attribute).and_raise(Exception)
-      expect { perform_job }.to raise_error
+      allow(signature).to receive(:update_attribute).and_raise(ActiveRecord::RecordNotSaved, "The record wasn't saved")
+      expect { perform_job }.to raise_error(ActiveRecord::RecordNotSaved)
     end
   end
 end

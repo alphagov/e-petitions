@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::PetitionsController do
+RSpec.describe Admin::PetitionsController, type: :controller do
   include ActiveJob::TestHelper
 
   before :each do

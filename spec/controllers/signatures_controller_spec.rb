@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SignaturesController do
+RSpec.describe SignaturesController, type: :controller do
   include ActiveJob::TestHelper
 
   describe "verify" do
@@ -109,7 +109,7 @@ describe SignaturesController do
   describe "signed" do
     let(:petition) { FactoryGirl.create(:petition) }
     let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
-    
+
     it "redirects to the signature verify page if unvalidated" do
       get :signed, :petition_id => petition.id, :id => signature.perishable_token
       expect(assigns[:signature]).to eq(signature)
@@ -147,7 +147,8 @@ describe SignaturesController do
     end
 
     it "raises if petition id is not supplied" do
-      expect { get :new }.to raise_error
+      allow(Petition).to receive(:find).with("").and_raise(ActiveRecord::RecordNotFound)
+      expect { get :new, :petition_id => ""}.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "does not show if the petition is not open" do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Admin::AdminUsersController do
+RSpec.describe Admin::AdminUsersController, type: :controller do
   describe "not logged in" do
     describe "GET 'index'" do
       it "should redirect to the login page" do

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe SponsorsController do
+RSpec.describe SponsorsController, type: :controller do
   context 'GET show' do
     let(:petition) { FactoryGirl.create(:petition) }
 

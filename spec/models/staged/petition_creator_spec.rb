@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Staged::PetitionCreator do
+RSpec.describe Staged::PetitionCreator, type: :model do
   let(:petition_params) { {} }
   let(:move) { '' }
   let(:stage) { '' }

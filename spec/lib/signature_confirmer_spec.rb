@@ -1,6 +1,6 @@
 require 'signature_confirmer'
 
-describe SignatureConfirmer do
+RSpec.describe SignatureConfirmer do
   let(:petition) { double }
   let(:email) { "suzie@example.com" }
   let(:mailer) { double }

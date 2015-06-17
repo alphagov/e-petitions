@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'postcode_sanitizer'
 
-describe PostcodeSanitizer do
+RSpec.describe PostcodeSanitizer do
   describe '.call' do
     it "removes all whitespace" do
       postcode = " N1  1TY  "

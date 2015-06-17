@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ArchivedPetition do
+RSpec.describe ArchivedPetition, type: :model do
   subject(:petition){ described_class.new }
 
   describe ".search" do

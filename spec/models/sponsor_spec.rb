@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Sponsor do
+RSpec.describe Sponsor, type: :model do
 
   it "has a valid factory" do
     expect(FactoryGirl.build(:sponsor)).to be_valid

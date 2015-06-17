@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe PetitionsController do
+RSpec.describe PetitionsController, type: :controller do
   describe "new" do
     it "should respond to /petitions/new" do
       expect({:get => "/petitions/new"}).to route_to({:controller => "petitions", :action => "new"})

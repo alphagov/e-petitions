@@ -1,6 +1,6 @@
 require "rails_helper"
 
-describe PetitionMailer do
+RSpec.describe PetitionMailer, type: :mailer do
 
   let :creator do
     FactoryGirl.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
