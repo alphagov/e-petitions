@@ -14,6 +14,11 @@
         <%= raw auto_link(simple_format( h(petition.debate_outcome.overview) ), :html => { :target => '_blank' }) %>
       <% end -%>
     </section>
+  <% elsif petition.scheduled_debate_date.present? %>
+    <p class="about-item-scheduled-debate-date">
+      This petition is scheduled for debate on <%= short_date_format(petition.scheduled_debate_date) %>.
+      You'll be able to watch online at <%= link_to("parliamentlive.tv", "http://parliamentlive.tv") %>
+    </p>
   <% else -%>
     <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>
   <% end -%>

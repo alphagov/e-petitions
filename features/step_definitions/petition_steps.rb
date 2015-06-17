@@ -17,6 +17,12 @@ Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
+Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/ do |_, state, petition_title, scheduled_debate_date|
+  step "an #{state} petition \"#{petition_title}\""
+  @petition.scheduled_debate_date = scheduled_debate_date.to_date
+  @petition.save
+end
+
 Given(/^an archived petition "([^"]*)"$/) do |title|
   @petition = FactoryGirl.create(:archived_petition, :closed, title: title)
 end

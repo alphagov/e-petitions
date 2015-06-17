@@ -32,7 +32,7 @@ Feature: Suzie views a petition
     And I should not see "Defence is the best Offence"
     When I expand "Read the response in full"
     Then I should see "Defence is the best Offence"
-    
+
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I view the petition
@@ -62,3 +62,8 @@ Feature: Suzie views a petition
     Then I should see the date of the debate
     And I should see links to transcript and video
     And I should see a summary of the debate outcome
+
+  Scenario: Suzie views a petition which has a scheduled debate date
+    Given an open petition "Spend more money on Defence" with scheduled debate date of "18/08/2015"
+    When I view the petition
+    Then I should see "This petition is scheduled for debate on 18 August 2015. You'll be able to watch online at parliamentlive.tv"
