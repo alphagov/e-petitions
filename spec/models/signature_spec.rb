@@ -245,14 +245,6 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "need emailing" do
-      it "returns only validated signatures who have opted in to receiving email updates" do
-        expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
-        expect(Signature.need_emailing(two_days_ago)).to include(signature1, signature3, petition.creator_signature)
-        expect(Signature.need_emailing(week_ago)).to include(signature1, petition.creator_signature)
-      end
-    end
-
     context "matching" do
       let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
 
@@ -562,6 +554,45 @@ RSpec.describe Signature, type: :model do
           signature.set_email_sent_at_for('government_response')
           expect(receipt.government_response).to eq Time.current
         end
+      end
+    end
+
+    describe "#need_emailing_for" do
+      let!(:a_signature) { FactoryGirl.create(:validated_signature) }
+      let!(:another_signature) { FactoryGirl.create(:validated_signature) }
+      let(:since_timestamp) { 5.days.ago }
+
+      subject { Signature.need_emailing_for('government_response', since: since_timestamp) }
+
+      it "does not return those that do not want to be emailed" do
+        a_signature.update_attribute(:notify_by_email, false)
+        expect(subject).not_to include a_signature
+      end
+
+      it 'does not return unvalidated signatures' do
+        another_signature.update_column(:state, Signature::PENDING_STATE)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does not return signatures that have a sent receipt newer than the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp + 1.day)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does not return signatures that have a sent receipt equal to the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does return signatures that have a sent receipt older than the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp - 1.day)
+        expect(subject).to include another_signature
+      end
+
+      it 'returns signatures that have no sent receipt, or null for the requested timestamp in their receipt' do
+        another_signature.email_sent_receipt!.destroy && another_signature.reload
+        a_signature.email_sent_receipt!.update_column('government_response', nil)
+        expect(subject).to match_array [a_signature, another_signature]
       end
     end
   end

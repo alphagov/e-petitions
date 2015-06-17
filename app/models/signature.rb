@@ -27,9 +27,28 @@ class Signature < ActiveRecord::Base
   scope :pending, -> { where(state: PENDING_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
   scope :for_email, ->(email) { where(email: email) }
-  scope :need_emailing, ->(job_datetime) {
-    validated.notify_by_email.where('last_emailed_at is null or last_emailed_at < ?', job_datetime)
-  }
+  def self.need_emailing_for(name, since:)
+    receipts_table = EmailSentReceipt.arel_table
+    validated.
+      notify_by_email.
+      joins(arel_join_onto_sent_receipts).
+      where(
+        receipts_table['id'].eq(nil).or(
+          receipts_table[name].eq(nil).or(
+            receipts_table[name].lt(since)
+          )
+        )
+      )
+  end
+
+  def self.arel_join_onto_sent_receipts
+    receipts = EmailSentReceipt.arel_table
+    sigs = self.arel_table
+    join_on = sigs.create_on(sigs[:id].eq(receipts[:signature_id]))
+    sigs.create_join(receipts, join_on, Arel::Nodes::OuterJoin)
+  end
+  private_class_method :arel_join_onto_sent_receipts
+
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,

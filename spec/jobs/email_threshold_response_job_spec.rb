@@ -11,8 +11,8 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
 
   before do
     petition.set_email_requested_at_for('government_response', to: email_requested_at)
-    allow(petition).to receive_message_chain(:need_emailing, :find_each).and_yield(signature)
-    allow(petition).to receive_message_chain(:need_emailing, :count => 0)
+    allow(petition).to receive_message_chain(:signatures_to_email_for, :find_each).and_yield(signature)
+    allow(petition).to receive_message_chain(:signatures_to_email_for, :count => 0)
   end
 
   def perform_job(requested_at = email_requested_at)

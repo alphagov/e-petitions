@@ -41,7 +41,7 @@ class EmailPetitionSignatories
     end
 
     def signatures_to_email
-      petition.signatures_to_email(timestamp_name)
+      petition.signatures_to_email_for(timestamp_name)
     end
 
     def send_email_to(signature)
