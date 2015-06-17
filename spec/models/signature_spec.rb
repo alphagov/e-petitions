@@ -223,17 +223,23 @@ RSpec.describe Signature, type: :model do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
     let!(:petition) { FactoryGirl.create(:petition) }
-    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => nil) }
-    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => week_ago) }
-    let!(:signature4) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature5) { FactoryGirl.create(:signature, :email => "person5@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false, :last_emailed_at => two_days_ago) }
+    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
+    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
+    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
 
     context "validated" do
       it "returns only validated signatures" do
         signatures = Signature.validated
-        expect(signatures.size).to eq(5)
-        expect(signatures).to include(signature1, signature3, signature4, signature5, petition.creator_signature)
+        expect(signatures.size).to eq(3)
+        expect(signatures).to include(signature1, signature3, petition.creator_signature)
+      end
+    end
+
+    context "notify_by_email" do
+      it "returns only signatures with notify_by_email: true" do
+        signatures = Signature.notify_by_email
+        expect(signatures.size).to eq(3)
+        expect(signatures).to include(signature1, signature2, petition.creator_signature)
       end
     end
 
@@ -246,7 +252,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "matching" do
-      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
+      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE) }
 
       it "returns a signature matching in name, email and petition_id" do
         signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
@@ -267,9 +273,12 @@ RSpec.describe Signature, type: :model do
     describe "for_email" do
       let!(:other_petition) { FactoryGirl.create(:petition) }
       let!(:other_signature) do
-        FactoryGirl.create(:signature, :email => "person3@example.com",
-        :petition => other_petition, :state => Signature::PENDING_STATE,
-        :last_emailed_at => two_days_ago)
+        FactoryGirl.create(
+          :signature,
+          :email => "person3@example.com",
+          :petition => other_petition,
+          :state => Signature::PENDING_STATE
+        )
       end
 
       it "returns an empty set if the email is not found" do
