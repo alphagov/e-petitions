@@ -128,17 +128,17 @@ input.back-page {
   }
 }
 .about-item-sign {
-  @include background-image("/images/graphics/graphic_pen", 25px, 35px);
+  @include background-image("graphics/graphic_pen", 25px, 35px);
   background-repeat: no-repeat;
   background-position: 10px 0px;
 }
 .about-item-count-10000 {
-  @include background-image("/images/graphics/graphic_crown", 36px, 25px);
+  @include background-image("graphics/graphic_crown", 36px, 25px);
   background-repeat: no-repeat;
   background-position: 4px 0px;
 }
 .about-item-count-100000 {
-  @include background-image("/images/graphics/graphic_portcullis", 26px, 32px);
+  @include background-image("graphics/graphic_portcullis", 26px, 32px);
   background-repeat: no-repeat;
   background-position: 5px 0px;
 }
@@ -149,9 +149,9 @@ input.back-page {
     color: $secondary-text-colour;
   }
   .about-item-count-10000 {
-    @include background-image("/images/graphics/graphic_crown-grey", 35px, 25px);
+    @include background-image("graphics/graphic_crown-grey", 35px, 25px);
   }
   .about-item-count-100000 {
-    @include background-image("/images/graphics/graphic_portcullis-grey", 26px, 32px);
+    @include background-image("graphics/graphic_portcullis-grey", 26px, 32px);
   }
 }
