@@ -334,6 +334,22 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context 'awaiting_debate_date' do
+      before do
+        @p1 = FactoryGirl.create(:open_petition)
+        @p2 = FactoryGirl.create(:awaiting_debate_petition)
+        @p3 = FactoryGirl.create(:debated_petition)
+      end
+
+      it 'returns only petitions that reached the debate threshold' do
+        expect(Petition.awaiting_debate_date).to include(@p2)
+      end
+
+      it 'doesn\'t include petitions that has the debate date' do
+        expect(Petition.awaiting_debate_date).not_to include(@p3)
+      end
+    end
+
     context "selectable" do
       before :each do
         @non_selectable_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
@@ -704,6 +720,19 @@ RSpec.describe Petition, type: :model do
         expect(petition.response_threshold_reached_at).to be_within(1.second).of(Time.current)
       end
     end
+
+    context "when the signature count crosses the threshold for a debate" do
+      let(:signature_count) { 9 }
+
+      before do
+        expect(Site).to receive(:threshold_for_debate).and_return(10)
+      end
+
+      it "records the time it happened" do
+        petition.increment_signature_count!
+        expect(petition.debate_threshold_reached_at).to be_within(1.second).of(Time.current)
+      end
+    end
   end
 
   describe "at_threshold_for_response?" do
@@ -756,6 +785,50 @@ RSpec.describe Petition, type: :model do
 
       it "is falsey" do
         expect(petition.at_threshold_for_response?).to be_falsey
+      end
+    end
+  end
+
+  describe 'at_threshold_for_debate?' do
+    let(:petition) { FactoryGirl.create(:petition, signature_count: signature_count) }
+
+    context 'when signature count is 1 less than the threshold' do
+      let(:signature_count) { Site.threshold_for_debate - 1 }
+
+      it 'is truthy' do
+        expect(petition.at_threshold_for_debate?).to be_truthy
+      end
+    end
+
+    context 'when signature count is equal to the threshold' do
+      let(:signature_count) { Site.threshold_for_debate }
+
+      it 'is truthy' do
+        expect(petition.at_threshold_for_debate?).to be_truthy
+      end
+    end
+
+    context 'when signature count is 1 or more than the threshold' do
+      let(:signature_count) { Site.threshold_for_debate + 1 }
+
+      it 'is truthy' do
+        expect(petition.at_threshold_for_debate?).to be_truthy
+      end
+    end
+
+    context 'when signature count is 2 or more less than the threshold' do
+      let(:signature_count) { Site.threshold_for_debate - 2 }
+
+      it 'is falsey' do
+        expect(petition.at_threshold_for_debate?).to be_falsey
+      end
+    end
+
+    context 'when the debate_threshold_reached_at is present' do
+      let(:petition) { FactoryGirl.create(:awaiting_debate_petition) }
+
+      it 'is falsey' do
+        expect(petition.at_threshold_for_debate?).to be_falsey
       end
     end
   end

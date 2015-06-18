@@ -22,18 +22,13 @@ module PetitionHelper
 
   def waiting_for_response_in_words(petition)
     if petition.response_threshold_reached_at
-      scope = :"petitions.waiting_for_response_in_words"
-      now   = Time.current.end_of_day
-      from  = petition.response_threshold_reached_at.end_of_day
-      count = ((now - from) / 86400.0).floor
+      waiting_in_days(petition)
+    end
+  end
 
-      key = case count
-            when 0 then :zero
-            when 1 then :one
-            else :other
-            end
-
-      t(key, scope: scope, formatted_count: number_with_delimiter(count))
+  def waiting_for_debate_date_in_words(petition)
+    if petition.debate_threshold_reached_at
+      waiting_in_days(petition)
     end
   end
 
@@ -64,5 +59,24 @@ module PetitionHelper
     when 'replay-email'
       render('/petitions/create/replay_email_ui', petition: stage_manager.stage_object, f: form)
     end
+  end
+
+  def waiting_in_days(petition)
+    scope = :"petitions.waiting_for_date_in_words"
+    now   = Time.current.end_of_day
+    if petition.response_threshold_reached_at
+      from = petition.response_threshold_reached_at.end_of_day
+    elsif petition.debate_threshold_reached_at
+      from = petition.debate_threshold_reached_at.end_of_day
+    end
+    count = ((now - from) / 86400.0).floor
+
+    key = case count
+            when 0 then :zero
+            when 1 then :one
+            else :other
+          end
+
+    t(key, scope: scope, formatted_count: number_with_delimiter(count))
   end
 end

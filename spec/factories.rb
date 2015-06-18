@@ -122,6 +122,10 @@ FactoryGirl.define do
     response_summary  "Government Response Summary"
   end
 
+  factory :awaiting_debate_petition, :parent => :open_petition do
+    debate_threshold_reached_at { 1.week.ago }
+  end
+
   factory :debated_petition, :parent => :open_petition do
     transient do
       debated_on { nil }

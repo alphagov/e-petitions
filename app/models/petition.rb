@@ -42,6 +42,8 @@ class Petition < ActiveRecord::Base
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
   facet :all, -> { reorder(signature_count: :desc) }
 
+  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
+
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
   accepts_nested_attributes_for :creator_signature
@@ -100,6 +102,10 @@ class Petition < ActiveRecord::Base
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
 
+  scope :without_debate_outcome, -> { where.not(id: DebateOutcome.select(:petition_id).uniq) }
+
+  scope :awaiting_debate_date, ->  { where.not(debate_threshold_reached_at: nil) }
+
   def self.awaiting_response
     where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
   end
@@ -134,6 +140,10 @@ class Petition < ActiveRecord::Base
       updates << "response_threshold_reached_at = :now"
     end
 
+    if at_threshold_for_debate?
+      updates << "debate_threshold_reached_at = :now"
+    end
+
     if update_all([updates.join(", "), now: time]) > 0
       self.reload
     end
@@ -142,6 +152,12 @@ class Petition < ActiveRecord::Base
   def at_threshold_for_response?
     unless response_threshold_reached_at?
       signature_count >= Site.threshold_for_response - 1
+    end
+  end
+
+  def at_threshold_for_debate?
+    unless debate_threshold_reached_at?
+      signature_count >= Site.threshold_for_debate - 1
     end
   end
 
