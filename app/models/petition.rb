@@ -28,7 +28,7 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
-  before_save :stamp_parliament_response_at, if: -> { response_summary.present? && response.present? && parliament_response_at.nil? }
+  before_save :stamp_government_response_at, if: -> { response_summary.present? && response.present? && government_response_at.nil? }
   after_create :set_petition_on_creator_signature
 
   extend Searchable(:title, :action, :description)
@@ -39,7 +39,7 @@ class Petition < ActiveRecord::Base
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
 
-  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(parliament_response_at: :desc) }
+  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
@@ -280,8 +280,8 @@ class Petition < ActiveRecord::Base
     state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
   end
 
-  def stamp_parliament_response_at
-    self.parliament_response_at = Time.current
+  def stamp_government_response_at
+    self.government_response_at = Time.current
   end
 
 end
