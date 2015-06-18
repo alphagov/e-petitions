@@ -1,7 +1,7 @@
-e-petitions
+Petitions
 ===========
 
-This is the code base for the UK Government's e-petitions service (http://epetitions.direct.gov.uk).
+This is the code base for the UK Government's petitions service (http://epetitions.direct.gov.uk).
 We have open sourced the code for you to use under the terms of licence contained in this repository.
 
 We hope you enjoy it!

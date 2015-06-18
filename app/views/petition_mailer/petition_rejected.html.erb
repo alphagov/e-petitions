@@ -1,4 +1,4 @@
-<p>e-petition "<%= @petition.title %>" hasn't been accepted.</p>
+<p>Petition "<%= @petition.title %>" hasn't been accepted.</p>
 
 <%= @petition.rejection_description.html_safe %>
 
@@ -7,11 +7,11 @@
 <% end %>
 
 <% if @petition.state != Petition::HIDDEN_STATE -%>
-  <p><%= link_to 'View your rejected e-petition', petition_url(@petition) %></p>
+  <p><%= link_to 'View your rejected petition', petition_url(@petition) %></p>
 <% end -%>
 
-<p>If you'd like to submit a new e-petition, please read the site's terms and conditions which explain the rules in detail.</p>
+<p>If you'd like to submit a new petition, please read the site's terms and conditions which explain the rules in detail.</p>
 
 <p>Thanks,</p>
 
-<p>HM Government e-petitions <%= link_to home_url, home_url %></p>
+<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to home_url, home_url %></p>

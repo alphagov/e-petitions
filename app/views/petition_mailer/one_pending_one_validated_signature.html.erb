@@ -1,13 +1,13 @@
 <p>Dear <%= @pending_signature.name %> and <%= @validated_signature.name %>,</p>
 
-<p>Before your signatures can be added to the e-petition "<%= @pending_signature.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
+<p>Before your signatures can be added to the petition "<%= @pending_signature.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
 
 <p><%= @pending_signature.name %>: <%= link_to nil, verify_signature_url(@pending_signature, @pending_signature.perishable_token) %></p>
 
 <p>Signature for <%= @validated_signature.name %> has already been confirmed.</p>
 
-<p>If you don't want to sign this e-petition or believe this message was sent in error, please ignore this email.</p>
+<p>If you don't want to sign this petition or believe this message was sent in error, please ignore this email.</p>
 
 <p>Thanks,</p>
 
-<p>HM Government e-petitions <%= home_url %></p>
+<p><%= t("petitions.emails.signoff_prefix") %> <%= home_url %></p>

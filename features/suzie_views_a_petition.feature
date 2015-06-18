@@ -7,9 +7,9 @@ Feature: Suzie views a petition
     Given an open petition "Spend more money on Defence"
     When I view the petition
     Then I should see the petition details
-    And I should see "Spend more money on Defence - e-petitions" in the browser page title
+    And I should see "Spend more money on Defence - Petitions" in the browser page title
     And I should see the vote count, closed and open dates
-    And I should not see "This e-petition is now closed"
+    And I should not see "This petition is now closed"
     And I can share it via Email
     And I can share it via Facebook
     And I can share it via Twitter
@@ -54,7 +54,7 @@ Feature: Suzie views a petition
   Scenario: Suzie sees a 'closed' message when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
-    Then I should see "This e-petition is now closed"
+    Then I should see "This petition is now closed"
 
   Scenario: Suzie sees information about the outcomes when viewing a debated petition
     Given a petition "Ban Badger Baiting" has been debated

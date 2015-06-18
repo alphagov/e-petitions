@@ -16,7 +16,7 @@ Feature: Joe searches for an archived petition
     And I fill in "search" with "Wombles"
     And I press "Search"
     Then I should be on the archived petitions search results page
-    And I should see "Search results - archived e-petitions" in the browser page title
+    And I should see "Search results - archived petitions" in the browser page title
     And I should see /for "Wombles"/
     But I should see the following search results:
       | Eavis vs the Wombles (Rejected)   | –   | –          |

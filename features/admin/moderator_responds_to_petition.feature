@@ -34,7 +34,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code and text
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And I reject the petition with a reason code "Duplicate of an existing e-petition" and some explanatory text
+    And I reject the petition with a reason code "Duplicate of an existing petition" and some explanatory text
     Then the explanation is displayed on the petition for viewing by the public
     And the creator should receive a rejection notification email
 

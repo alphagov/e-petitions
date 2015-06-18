@@ -1,13 +1,13 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>The e-petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.</p>
+<p>The petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.</p>
 
 <p><%= @petition.response %></p>
 
-<p><%= link_to "View the response to the e-petition", petition_url(@signature.petition) %></p>
+<p><%= link_to "View the response to the petition", petition_url(@signature.petition) %></p>
 
 <p>Thanks,</p>
 
-<p>HM Government e-petitions <%= link_to home_url, home_url %></p>
+<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to home_url, home_url %></p>
 
 <p>Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></p>

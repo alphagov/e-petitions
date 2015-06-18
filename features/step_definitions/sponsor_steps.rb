@@ -5,7 +5,7 @@ Given(/^I have been told about a petition that needs sponsoring$/) do
     state: Petition::VALIDATED_STATE)
 end
 
-Given(/^I have created an e\-petition and told people to sponsor it$/) do
+Given(/^I have created a petition and told people to sponsor it$/) do
   @sponsor_petition = FactoryGirl.create(:pending_petition,
     title: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
@@ -13,7 +13,7 @@ Given(/^I have created an e\-petition and told people to sponsor it$/) do
     creator_signature_attributes: { email: 'charlie.the.creator@example.com' })
 end
 
-When(/^a sponsor supports my e\-petition$/) do
+When(/^a sponsor supports my petition$/) do
   sponsor_email = FactoryGirl.generate(:sponsor_email)
   steps %{
     When I visit the "sponsor this petition" url I was given
@@ -32,11 +32,11 @@ When(/^a sponsor supports my e\-petition$/) do
   expect(signature).to be_sponsor
 end
 
-Given(/^I only need one more sponsor to support my e\-petition$/) do
+Given(/^I only need one more sponsor to support my petition$/) do
   before_threshold = Site.threshold_for_moderation - 1
   while (@sponsor_petition.supporting_sponsors_count < before_threshold) do
     steps %Q{
-      And a sponsor supports my e-petition
+      And a sponsor supports my petition
     }
   end
   steps %Q{
@@ -44,10 +44,10 @@ Given(/^I only need one more sponsor to support my e\-petition$/) do
   }
 end
 
-Given(/^I have enough support from sponsors for my e\-petition$/) do
+Given(/^I have enough support from sponsors for my petition$/) do
   while (@sponsor_petition.supporting_sponsors_count < Site.threshold_for_moderation) do
     steps %Q{
-      And a sponsor supports my e-petition
+      And a sponsor supports my petition
     }
   end
   steps %Q{

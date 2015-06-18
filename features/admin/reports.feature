@@ -1,5 +1,5 @@
 Feature: Viewing reports
-  In order to gauge utilisation of the e-petitions site
+  In order to gauge utilisation of the petitions site
   As Maggie or Terry
   I would like to be able to see summary of number of petitions in particular states
 

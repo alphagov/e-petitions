@@ -20,7 +20,7 @@ Then(/^the sponsor support notification email should include the countdown to th
   expect(mail_body).to include "still need #{threshold - signed} more before"
 end
 
-Then(/^the sponsor support notification email should tell me about my e\-petition going into moderation$/) do
+Then(/^the sponsor support notification email should tell me about my petition going into moderation$/) do
   threshold = Site.threshold_for_moderation
 
   email = open_last_email_for("charlie.the.creator@example.com")

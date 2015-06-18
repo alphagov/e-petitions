@@ -20,7 +20,7 @@ Feature: Suzie signs a petition
 
   Scenario: Suzie signs a petition after validating her email
     When I go to the new signature page for "Do something!"
-    And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
+    And I should see "Do something! - Sign this petition - Petitions" in the browser page title
     And I should be connected to the server via an ssl connection
     And I fill in my details with email "womboid@wimbledon.com"
     And I fill in my postcode with "N1 1TY"

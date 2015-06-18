@@ -17,29 +17,30 @@ en-GB:
     emails:
       subjects:
         email_confirmation_for_signer: |-
-          HM Government e-petitions: Email address confirmation
+          HM Government & Parliament Petitions: Email address confirmation
         special_resend_of_email_confirmation_for_signer: |-
-          HM Government e-petitions: Email address confirmation
+          HM Government & Parliament Petitions: Email address confirmation
         notify_creator_that_petition_is_published: |-
-          HM Government e-petitions: Your e-petition has been published
+          HM Government & Parliament Petitions: Your petition has been published
         petition_rejected: |-
-          HM Government e-petitions: e-petition has been rejected
+          HM Government & Parliament Petitions: petition has been rejected
         notify_signer_of_threshold_response: |-
-          HM Government e-petitions: The petition '%{title}' has reached %{formatted_count} signatures"
+          HM Government & Parliament Petitions: The petition '%{title}' has reached %{formatted_count} signatures"
         no_signature_for_petition: |-
-          HM Government e-petitions: a confirmation email has been requested
+          HM Government & Parliament Petitions: a confirmation email has been requested
         email_already_confirmed_for_signature: |-
-          HM Government e-petitions: Signature already confirmed
+          HM Government & Parliament Petitions: Signature already confirmed
         two_pending_signatures: |-
-          HM Government e-petitions: Signature confirmations
+          HM Government & Parliament Petitions: Signature confirmations
         one_pending_one_validated_signature: |-
-          HM Government e-petitions: Signature confirmation
+          HM Government & Parliament Petitions: Signature confirmation
         double_signature_confirmation: |-
-          HM Government e-petitions: Signatures already confirmed
+          HM Government & Parliament Petitions: Signatures already confirmed
         notify_creator_of_closing_date_change: |-
-          HM Government e-petitions: change to your e-petition closing date
+          HM Government & Parliament Petitions: change to your petition closing date
         gather_sponsors_for_petition: |-
           Parliament petitions - It's time to get sponsors to support your petition
+      signoff_prefix: "HM Government & Parliament Petitions"
 
     counts:
       default:
@@ -62,18 +63,18 @@ en-GB:
     rejection_reasons:
       titles:
         no-action: "Does not include a request for action"
-        duplicate: "Duplicate of an existing e-petition"
+        duplicate: "Duplicate of an existing petition"
         libellous: "Confidential, libellous, false or defamatory statements"
-        offensive: "Offensive, joke or nonsense e-petitions"
+        offensive: "Offensive, joke or nonsense petitions"
         irrelevant: "Matters which are not the responsibility of HM Government"
         honours: "Matters relating to honours or appointments"
       descriptions:
         no-action: |
           <p>It did not have a clear statement explaining what action you want the government to take.</p>
         duplicate: |
-          <p>There is already an e-petition about this issue.</p>
+          <p>There is already a petition about this issue.</p>
         libellous: |
-          <p>E-petitions will not be accepted if they:</p>
+          <p>Petitions will not be accepted if they:</p>
           <ul>
             <li>contain information which may be protected by an injunction or court order</li>
             <li>contain material that is potentially confidential, commercially sensitive or which may cause personal distress or loss</li>
@@ -82,7 +83,7 @@ en-GB:
             <li>include the names of family members of elected representatives, eg MPs, or officials who work for public bodies</li>
           </ul>
         offensive: |
-          <p>E-petitions will not be accepted if they:</p>
+          <p>Petitions will not be accepted if they:</p>
           <ul>
             <li>contain offensive, joke or nonsense content</li>
             <li>use language which may cause offence, is provocative or extreme in its views</li>
@@ -90,14 +91,14 @@ en-GB:
             <li>include statements that amount to advertisements</li>
           </ul>
         irrelevant: |
-          <p>E-petitions cannot be used to request action on issues that are outside the responsibility of the government. This includes:</p>
+          <p>Petitions cannot be used to request action on issues that are outside the responsibility of the government. This includes:</p>
           <ul>
             <li>party political material</li>
             <li>commercial endorsements including the promotion of any product, service or publication</li>
             <li>issues that are dealt with by devolved bodies, eg The Scottish Parliament</li>
             <li>correspondence on personal issues</li>
           </ul>
-          <p>E-petitions cannot be used for freedom of information requests.</p>
+          <p>Petitions cannot be used for freedom of information requests.</p>
         honours: |
-          <p>E-petitions cannot include information about honours or appointments.</p>
+          <p>Petitions cannot include information about honours or appointments.</p>
           <p>Find information about nominations for honours at: <a href='https://www.gov.uk/honours'>https://www.gov.uk/honours</a></p>

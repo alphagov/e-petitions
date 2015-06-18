@@ -1,7 +1,7 @@
 Dear <%= @signature.name %>,
 
-Your signature has already been added to the e-petition "<%= @signature.petition.title %>"
+Your signature has already been added to the petition "<%= @signature.petition.title %>"
 
 Thanks,
 
-HM Government e-petitions <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>

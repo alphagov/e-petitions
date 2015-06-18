@@ -1,15 +1,15 @@
 Dear <%= @signature.name %>,
 
-The e-petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.
+The petition '<%= @petition.title %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.
 
 <%= @petition.response %>
 
-View the response to the e-petition here:
+View the response to the petition here:
 
 <%= petition_url(@signature.petition) %>
 
 Thanks,
 
-HM Government e-petitions <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
 
 Don't want to receive any more emails regarding this petition? Unsubscribe by clicking this link: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
