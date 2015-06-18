@@ -1,16 +1,23 @@
 class EmailPetitionSignatories
   class PleaseRetry < StandardError; end
 
-  def self.run_later_tonight(job_class, petition, requested_at, *extra_args)
-    job_class.
-      set(wait_until: later_tonight).
-      perform_later(petition, requested_at.getutc.iso8601, *extra_args)
-  end
+  class Job < ActiveJob::Base
+    queue_as :default
 
-  def self.later_tonight
-    1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
+    def self.run_later_tonight(petition, requested_at, *extra_args)
+      set(wait_until: later_tonight).
+        perform_later(petition, requested_at.getutc.iso8601, *extra_args)
+    end
+
+    def self.later_tonight
+      1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
+    end
+    private_class_method :later_tonight
+
+    def worker(petition, requested_at_string, threshold_logger)
+      Worker.new(self, petition, requested_at_string, threshold_logger)
+    end
   end
-  private_class_method :later_tonight
 
   class Worker
     def initialize(job, petition, requested_at_string, threshold_logger = nil)
