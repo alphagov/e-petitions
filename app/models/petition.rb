@@ -40,6 +40,7 @@ class Petition < ActiveRecord::Base
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
 
   facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
+  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
@@ -104,6 +105,7 @@ class Petition < ActiveRecord::Base
   scope :by_oldest, -> { order(created_at: :asc) }
 
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
+  scope :with_debate_outcome, -> { joins(:debate_outcome) }
 
   def self.update_all_signature_counts
     Petition.visible.each do |petition|

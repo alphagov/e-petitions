@@ -1,16 +1,16 @@
-Given(/^a petition "(.*?)" has been debated$/) do |petition_title|
+Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_title, debated_days_ago|
   @petition = FactoryGirl.create(:debated_petition,
     title: petition_title,
-    debated_on: 6.months.ago.to_date,
+    debated_on: debated_days_ago.days.ago.to_date,
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'http://transcripts.parliament.example.com/2.html',
     video_url: 'http://videos.parliament.example.com/2.avi'
   )
 end
 
-Then(/^I should see the date of the debate$/) do
+Then(/^I should see the date of the debate is (\d+) days ago$/) do |debated_days_ago|
   within :css, '.debate-outcome' do
-    expect(page).to have_content("This topic was debated on #{6.months.ago.to_date.strftime('%-d %B %Y')}")
+    expect(page).to have_content("This topic was debated on #{debated_days_ago.days.ago.to_date.strftime('%-d %B %Y')}")
   end
 end
 

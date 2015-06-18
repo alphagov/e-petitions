@@ -43,3 +43,16 @@ Feature: Suzy Signer views all petitions
      | Force supermarkets to give unsold food to charities |
      | Free the wombles                                    |
     And the markup should be valid
+
+  Scenario: Suzie browses petitions which have been debated
+    Given a petition "Ban Badger Baiting" has been debated 2 days ago
+    Given a petition "Spend more money on Defence" has been debated 18 days ago
+    Given a petition "Force supermarkets to give unsold food to charities" has been debated 234 days ago
+    Given a petition "Make every monday bank holiday" exists
+    When I view all petitions from the home page
+    And I follow "Petitions debated in Parliament"
+    Then I should see the following ordered list of petitions:
+     | Ban Badger Baiting                                  |
+     | Spend more money on Defence                         |
+     | Force supermarkets to give unsold food to charities |
+    And the markup should be valid

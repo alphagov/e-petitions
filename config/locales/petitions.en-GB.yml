@@ -6,6 +6,7 @@ en-GB:
       closed: "Closed petitions"
       rejected: "Rejected petitions"
       with_response: "Petitions with a Government response"
+      with_debate_outcome: "Petitions debated in Parliament"
 
     lists:
       all: "All petitions (%{quantity})"
@@ -13,6 +14,7 @@ en-GB:
       closed: "Closed petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
       with_response: "Petitions with a Government response (%{quantity})"
+      with_debate_outcome: "Petitions debated in Parliament (%{quantity})"
 
     emails:
       subjects:
