@@ -26,7 +26,7 @@ RSpec.describe EmailSentReceipt, type: :model do
 
     it 'returns the stored timestamp for the supplied name' do
       receipt.government_response = the_stored_time
-      expect(receipt.get('government_response')).to eq the_stored_time
+      expect(receipt.get('government_response')).to be_usec_precise_with the_stored_time
     end
 
     it 'raises an error if the supplied name is not a valid timestamp' do
@@ -52,7 +52,7 @@ RSpec.describe EmailSentReceipt, type: :model do
     it 'saves the stored timestamp for the supplied name in the db to the supplied time' do
       receipt.set('government_response', the_stored_time)
       receipt.reload
-      expect(receipt.government_response).to eq the_stored_time
+      expect(receipt.government_response).to be_usec_precise_with the_stored_time
     end
 
     it 'raises an error if the supplied name is not a valid timestamp' do
