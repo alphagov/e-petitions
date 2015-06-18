@@ -64,8 +64,8 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_supporting_details do
-      description "Petition description"
+    trait :with_additional_details do
+      additional_details "Petition additional details"
     end
   end
 

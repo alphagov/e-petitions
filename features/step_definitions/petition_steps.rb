@@ -1,6 +1,6 @@
 Given /^a set of petitions$/ do
   3.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description")
+    @petition = FactoryGirl.create(:open_petition, :with_additional_details, :title => "Petition #{x}")
   end
 end
 
@@ -141,9 +141,10 @@ end
 
 Then /^I should see the petition details$/ do
   expect(page).to have_content(@petition.title)
-  expect(page).to have_content(@petition.description)
-
-  unless @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(ArchivedPetition)
+    expect(page).to have_content(@petition.description)
+  else
+    expect(page).to have_content(@petition.additional_details)
     expect(page).to have_content(@petition.action)
   end
 end
@@ -238,7 +239,7 @@ When /^I fill in the petition details/ do
   steps %Q(
     When I fill in "Action" with "The wombats of wimbledon rock."
     And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   )
 end
 

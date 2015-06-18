@@ -33,13 +33,13 @@
   </details>
 <% end %>
 
-<%= form_row :for => [petition, :description] do %>
-  <%= f.label :description, class: 'form-label' do %>
-    Supporting details
+<%= form_row :for => [petition, :additional_details] do %>
+  <%= f.label :additional_details, class: 'form-label' do %>
+    Additional details
     <span class='form-hint'>Optional - background information, evidence and references</span>
   <% end %>
-  <%= error_messages_for_field petition, :description %>
-  <%= f.text_area :description, tabindex: increment, rows: 7, class: 'form-control' %>
+  <%= error_messages_for_field petition, :additional_details %>
+  <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
   <span class="character-count">500</span>
 <% end %>
 

@@ -8,7 +8,7 @@
 </h1>
 
 <p><%= raw auto_link(simple_format(h(petition.action)), :html => { :target => '_blank' }) %></p>
-<p><%= raw auto_link(simple_format(h(petition.description)), :html => { :target => '_blank' }) %></p>
+<p><%= raw auto_link(simple_format(h(petition.additional_details)), :html => { :target => '_blank' }) %></p>
 
 <%# Signable #%>
 <% if petition.can_be_signed? -%>

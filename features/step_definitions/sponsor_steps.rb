@@ -133,7 +133,7 @@ Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponso
     Then they should see "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.title}" in the email subject
     And they should see "#{@sponsor_petition.title}" in the email body
     And they should see "#{@sponsor_petition.action}" in the email body
-    And they should see "#{@sponsor_petition.description}" in the email body
+    And they should see "#{@sponsor_petition.additional_details}" in the email body
   }
 end
 

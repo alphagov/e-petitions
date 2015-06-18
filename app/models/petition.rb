@@ -31,7 +31,7 @@ class Petition < ActiveRecord::Base
   before_save :stamp_government_response_at, if: -> { response_summary.present? && response.present? && government_response_at.nil? }
   after_create :set_petition_on_creator_signature
 
-  extend Searchable(:title, :action, :description)
+  extend Searchable(:title, :action, :additional_details)
   include Browseable
 
   facet :all, -> { reorder(signature_count: :desc) }

@@ -8,7 +8,7 @@ Feature: Suzy Singer searches by free text
     Given the date is the "21 April 2011 12:00"
     And a pending petition exists with title: "Wombles are great"
     And a validated petition exists with title: "The Wombles of Wimbledon"
-    And an open petition exists with title: "Uncle Bulgaria", description: "The Wombles are here", closed_at: "1 minute from now"
+    And an open petition exists with title: "Uncle Bulgaria", additional_details: "The Wombles are here", closed_at: "1 minute from now"
     And an open petition exists with title: "Common People", action: "The Wombles belong to us all", closed_at: "11 days from now"
     And an open petition exists with title: "Overthrow the Wombles", closed_at: "1 year from now"
     And a closed petition exists with title: "The Wombles will rock Glasto", closed_at: "1 minute ago"

@@ -10,7 +10,7 @@ RSpec.describe SponsorMailer, type: :mailer do
       creator_signature: creator,
       title: "Allow organic vegetable vans to use red diesel",
       action: "Add vans to permitted users of red diesel",
-      description: "To promote organic vegetables"
+      additional_details: "To promote organic vegetables"
     )
   end
 
@@ -47,7 +47,7 @@ RSpec.describe SponsorMailer, type: :mailer do
       expect(mail.body.encoded).to match(%r[Add vans to permitted users of red diesel])
     end
 
-    it "includes the petition description" do
+    it "includes the petition additional details" do
       expect(mail.body.encoded).to match(%r[To promote organic vegetables])
     end
   end

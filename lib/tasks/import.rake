@@ -32,13 +32,13 @@ namespace :import do
       if ArchivedPetition::STATES.include?(row['state'])
         petition = ArchivedPetition.find_or_initialize_by(id: row['id'])
 
-        petition.title             = row['title']
-        petition.description       = row['description']
-        petition.response          = row['response']
-        petition.state             = row['state']
-        petition.opened_at         = row['open_at']
-        petition.closed_at         = row['closed_at']
-        petition.signature_count   = row['signature_count']
+        petition.title              = row['title']
+        petition.additional_details = row['description']
+        petition.response           = row['response']
+        petition.state              = row['state']
+        petition.opened_at          = row['open_at']
+        petition.closed_at          = row['closed_at']
+        petition.signature_count    = row['signature_count']
 
         if petition.rejected?
           if row['rejection_text'].blank?

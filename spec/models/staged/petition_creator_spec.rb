@@ -89,7 +89,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
       {
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
-        :description => 'Global warming is upon us',
+        :additional_details => 'Global warming is upon us',
         :creator_signature_attributes => creator_signature_params
       }
     end

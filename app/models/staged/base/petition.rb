@@ -10,7 +10,7 @@ module Staged
       end
 
       delegate :id, :to_param, :model_name, :to_key,
-               :title, :action, :description,
+               :title, :action, :additional_details,
                :duration, :sponsor_emails, :creator_signature,
                to: :petition
     end

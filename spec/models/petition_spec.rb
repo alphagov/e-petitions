@@ -59,9 +59,9 @@ RSpec.describe Petition, type: :model do
       expect(FactoryGirl.build(:petition, :action => 'x' * 301)).not_to be_valid
     end
 
-    it "should validate the length of :description to within 800 characters" do
-      expect(FactoryGirl.build(:petition, :description => 'x' * 800)).to be_valid
-      expect(FactoryGirl.build(:petition, :description => 'x' * 801)).not_to be_valid
+    it "should validate the length of :additional_details to within 800 characters" do
+      expect(FactoryGirl.build(:petition, :additional_details => 'x' * 800)).to be_valid
+      expect(FactoryGirl.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
     end
 
     it "validates the length of :response_summary to within 500 characters" do

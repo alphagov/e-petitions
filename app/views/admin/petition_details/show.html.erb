@@ -14,10 +14,10 @@
     <%= f.text_area :action, tabindex: increment, rows: 5, class: 'form-control' %>
   <% end %>
 
-  <%= form_row for: [f.object, :description] do %>
-    <%= f.label :description, class: 'form-label' %>
-    <%= error_messages_for_field @petition, :description %>
-    <%= f.text_area :description, tabindex: increment, rows: 7, class: 'form-control' %>
+  <%= form_row for: [f.object, :additional_details] do %>
+    <%= f.label :additional_details, class: 'form-label' %>
+    <%= error_messages_for_field @petition, :additional_details %>
+    <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
   <% end %>
 
   <%= form_row do %>

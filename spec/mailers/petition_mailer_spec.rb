@@ -11,13 +11,13 @@ RSpec.describe PetitionMailer, type: :mailer do
       creator_signature: creator,
       title: "Allow organic vegetable vans to use red diesel",
       action: "Add vans to permitted users of red diesel",
-      description: "To promote organic vegetables"
+      additional_details: "To promote organic vegetables"
     )
   end
   let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
   let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
-  
+
   describe "When no signature for an email address exists on a petition" do
     let(:mail) { PetitionMailer.no_signature_for_petition(petition, 'wibble@example.com') }
 
@@ -149,7 +149,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail.body.encoded).to match(%r[Add vans to permitted users of red diesel])
     end
 
-    it "includes the petition description" do
+    it "includes the petition additional details" do
       expect(mail.body.encoded).to match(%r[To promote organic vegetables])
     end
   end

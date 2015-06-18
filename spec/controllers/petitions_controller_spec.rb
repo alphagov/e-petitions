@@ -39,7 +39,7 @@ RSpec.describe PetitionsController, type: :controller do
       {
         :title => 'Save the planet',
         :action => 'Limit temperature rise at two degrees',
-        :description => 'Global warming is upon us',
+        :additional_details => 'Global warming is upon us',
         :creator_signature => creator_signature_attributes
       }
     end
@@ -180,12 +180,12 @@ RSpec.describe PetitionsController, type: :controller do
           expect(response).to be_success
         end
 
-        it "has stage of 'petition' if there are errors on title, action, or description" do
+        it "has stage of 'petition' if there are errors on title, action, or additional_details" do
           do_post :petition => petition_attributes.merge(:title => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'
           do_post :petition => petition_attributes.merge(:action => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'
-          do_post :petition => petition_attributes.merge(:description => 'a'*801)
+          do_post :petition => petition_attributes.merge(:additional_details => 'a'*801)
           expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 
