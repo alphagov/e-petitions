@@ -37,9 +37,6 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
-    airbrake (4.2.1)
-      builder
-      multi_json
     arel (6.0.0)
     authlogic (3.4.5)
       activerecord (>= 3.2)
@@ -272,7 +269,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   authlogic
   aws-sdk
   bcrypt
