@@ -21,3 +21,5 @@ namespace :deploy do
     PackageBuilder.deploy!(:production)
   end
 end
+
+task deploy: 'deploy:staging'
