@@ -8,13 +8,13 @@
 
 <p>Before you start - your petition must meet our <%= link_to 'guidelines', help_path(anchor: 'creating-a-petition') %></p>
 
-<%= form_row :for => [petition, :title] do %>
-  <%= f.label :title, class: 'form-label' do %>
+<%= form_row :for => [petition, :action] do %>
+  <%= f.label :action, class: 'form-label' do %>
     Action
     <span class="form-hint">What do you want the government to do?</span>
   <% end %>
-  <%= error_messages_for_field petition, :title %>
-  <%= f.text_area :title, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+  <%= error_messages_for_field petition, :action %>
+  <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
   <span class="character-count">80</span>
   <%= render 'petitions/action_help' %>
 <% end %>

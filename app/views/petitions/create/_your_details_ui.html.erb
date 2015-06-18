@@ -1,7 +1,7 @@
 <%= f.submit raw('&#9664; Back'), :name => 'move:back', :class => 'back-page' %>
 
 <h1 class="page-title">Sign your petition</h1>
-<h2 class="page-subtitle"><%= petition.title %></h2>
+<h2 class="page-subtitle"><%= petition.action %></h2>
 
 <%= render 'petitions/create/error_summary', f: f %>
 

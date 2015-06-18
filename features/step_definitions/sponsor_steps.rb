@@ -1,13 +1,13 @@
 Given(/^I have been told about a petition that needs sponsoring$/) do
   @sponsor_petition = FactoryGirl.create(:open_petition,
-    title: 'Charles to be nominated for sublimation',
+    action: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
     state: Petition::VALIDATED_STATE)
 end
 
 Given(/^I have created a petition and told people to sponsor it$/) do
   @sponsor_petition = FactoryGirl.create(:pending_petition,
-    title: 'Charles to be nominated for sublimation',
+    action: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
     state: Petition::PENDING_STATE,
     creator_signature_attributes: { email: 'charlie.the.creator@example.com' })
@@ -130,15 +130,15 @@ Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponso
   expect(unread_emails_for(address).size).to eq 1
   open_last_email_for(address)
   steps %Q{
-    Then they should see "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.title}" in the email subject
-    And they should see "#{@sponsor_petition.title}" in the email body
+    Then they should see "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.action}" in the email subject
+    And they should see "#{@sponsor_petition.action}" in the email body
     And they should see "#{@sponsor_petition.background}" in the email body
     And they should see "#{@sponsor_petition.additional_details}" in the email body
   }
 end
 
 Then(/^(?:I|"(.*?)") should not have received an email explaining the petition I am sponsoring$/) do |address|
-  step %Q{#{address.blank? ? "\"#{address}\"" : "I"} should receive no email with subject "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.title}"}
+  step %Q{#{address.blank? ? "\"#{address}\"" : "I"} should receive no email with subject "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.action}"}
 end
 
 Then(/^(I|they|".*?") should be emailed a link for gathering support from sponsors$/) do |address|

@@ -2,19 +2,19 @@
 Feature: Suzy Singer searches by free text
   In order to find interesting petitions to sign for a particular area of goverment
   As Suzy the signer
-  I want to search against petition title, action, description
+  I want to search against petition action, background, supporting details
 
   Background:
     Given the date is the "21 April 2011 12:00"
-    And a pending petition exists with title: "Wombles are great"
-    And a validated petition exists with title: "The Wombles of Wimbledon"
-    And an open petition exists with title: "Uncle Bulgaria", additional_details: "The Wombles are here", closed_at: "1 minute from now"
-    And an open petition exists with title: "Common People", background: "The Wombles belong to us all", closed_at: "11 days from now"
-    And an open petition exists with title: "Overthrow the Wombles", closed_at: "1 year from now"
-    And a closed petition exists with title: "The Wombles will rock Glasto", closed_at: "1 minute ago"
-    And a rejected petition exists with title: "Eavis vs the Wombles"
-    And a hidden petition exists with title: "The Wombles are profane"
-    And an open petition exists with title: "Wombles", closed_at: "10 days from now"
+    And a pending petition exists with action: "Wombles are great"
+    And a validated petition exists with action: "The Wombles of Wimbledon"
+    And an open petition exists with action: "Uncle Bulgaria", additional_details: "The Wombles are here", closed_at: "1 minute from now"
+    And an open petition exists with action: "Common People", background: "The Wombles belong to us all", closed_at: "11 days from now"
+    And an open petition exists with action: "Overthrow the Wombles", closed_at: "1 year from now"
+    And a closed petition exists with action: "The Wombles will rock Glasto", closed_at: "1 minute ago"
+    And a rejected petition exists with action: "Eavis vs the Wombles"
+    And a hidden petition exists with action: "The Wombles are profane"
+    And an open petition exists with action: "Wombles", closed_at: "10 days from now"
     And all petitions have had their signatures counted
 
   Scenario: Search for open petitions
@@ -59,9 +59,9 @@ Feature: Suzy Singer searches by free text
     Then I should see the following search results:
       | The Wombles will rock Glasto | 1 signature          |
 
-  Scenario: Search for open petitions and order by title
+  Scenario: Search for open petitions and order by action
     When I go to the search page
-    And I search for "open" petitions with "WOMBLES" ordered by "title"
+    And I search for "open" petitions with "WOMBLES" ordered by "action"
     Then I should see the following search results:
       | Common People         |
       | Overthrow the Wombles |
@@ -115,7 +115,7 @@ Feature: Suzy Singer searches by free text
       | Uncle Bulgaria        |
 
   Scenario: Paginate through open petitions
-    Given 51 open petitions exist with title: "International development spending"
+    Given 51 open petitions exist with action: "International development spending"
     When I go to the search page
     And I search for "open" petitions with "spending"
     And I follow "Next"

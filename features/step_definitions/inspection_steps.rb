@@ -87,7 +87,7 @@ Then(/^I should see the following ordered list of petitions:$/) do |table|
 end
 
 Then(/^I should see the following list of petitions:$/) do |table|
-  actual_petitions = page.all(:css, '.petition-title').map(&:text)
+  actual_petitions = page.all(:css, '.petition-action').map(&:text)
   expected_petitions = table.raw.flatten
   expect(actual_petitions).to match_array(expected_petitions)
 end

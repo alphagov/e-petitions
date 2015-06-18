@@ -1,6 +1,6 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Your petition "<%= @signature.petition.title %>" has now been published. You can view your petition at: <%=
+<p>Your petition "<%= @signature.petition.action %>" has now been published. You can view your petition at: <%=
   url = petition_url(@signature.petition)
   link_to url, url
   %></p>

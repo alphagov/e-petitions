@@ -2,7 +2,7 @@
   <ul>
     <li class="petition-item petition-item-existing">
       <div class="panel-indent">
-        <%= link_to petition.title, petition_path(petition) %>
+        <%= link_to petition.action, petition_path(petition) %>
         <p>
           <% unless petition.rejected? -%>
             <%= signature_count(:default, petition.signature_count) %>

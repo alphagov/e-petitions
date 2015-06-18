@@ -4,9 +4,9 @@ module Staged
       extend ActiveSupport::Concern
 
       included do
-        validates :title,
+        validates :action,
           presence: { message: 'Action must be completed.' },
-          length: { maximum: 80, unless: ->(pd) { pd.title.blank? }, message: 'Action is too long.' }
+          length: { maximum: 80, unless: ->(pd) { pd.action.blank? }, message: 'Action is too long.' }
         validates :background,
           presence: { message: 'Background must be completed.' },
           length: { maximum: 300, unless: ->(pd) { pd.background.blank? }, message: 'Background is too long.' }

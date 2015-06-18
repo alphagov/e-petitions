@@ -55,7 +55,7 @@ FactoryGirl.define do
       sponsors_signed false
       sponsor_count { Site.minimum_number_of_sponsors }
     end
-    sequence(:title) {|n| "Petition #{n}" }
+    sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)) }
     after(:build) do |petition, evaluator|

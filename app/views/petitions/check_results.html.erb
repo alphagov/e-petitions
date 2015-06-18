@@ -18,5 +18,5 @@
   <p>If one of the petitions above matches yours, sign it and share it instead.</p>
   <p>You're more likely to get to 10,000 and 100,000 signatures that way.</p>
 <% end %>
-<%= link_to create_button_text, new_petition_path(:title => @petitions.query.first(80)),
+<%= link_to create_button_text, new_petition_path(:petition_action => @petitions.query.first(80)),
     :class => 'button' %>

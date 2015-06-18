@@ -9,7 +9,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   let :petition do
     FactoryGirl.create(:pending_petition,
       creator_signature: creator,
-      title: "Allow organic vegetable vans to use red diesel",
+      action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
       additional_details: "To promote organic vegetables"
     )
@@ -141,7 +141,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}])
     end
 
-    it "includes the petition title" do
+    it "includes the petition action" do
       expect(mail.body.encoded).to match(%r[Allow organic vegetable vans to use red diesel])
     end
 

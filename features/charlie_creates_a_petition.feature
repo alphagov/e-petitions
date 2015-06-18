@@ -12,7 +12,7 @@ Scenario: Charlie has to search for a petition before creating one
   Then I should see a list of existing petitions I can sign
   When I choose to create a petition anyway
   Then I should be on the new petition page
-  And I should see my search query already filled in as the title of the petition
+  And I should see my search query already filled in as the action of the petition
 
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
@@ -32,7 +32,7 @@ Scenario: Charlie creates a petition
   Then the markup should be valid
   And I am asked to review my email address
   When I press "Yes - this is my email address"
-  Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
+  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
   And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
@@ -60,7 +60,7 @@ Scenario: Charlie tries to submit an invalid petition
   Then I should see "Action must be completed"
   And I should see "Background must be completed"
 
-  When I am allowed to make the petition title too long
+  When I am allowed to make the petition action too long
   When I fill in "Action" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
   And I fill in "Background" with "This text is longer than 300 characters. 012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789"
   And I fill in "Additional details" with "This text is longer than 500 characters. 012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789"
@@ -115,5 +115,5 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in "Email" with "womboid@wimbledon.com"
   And I press "Yes - this is my email address"
 
-  Then a petition should exist with title: "The wombats of wimbledon rock.", state: "pending"
+  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"

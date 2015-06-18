@@ -1,10 +1,10 @@
 When /^I look at the next petition on my list$/ do
-  @petition = FactoryGirl.create(:sponsored_petition, :with_additional_details, :title => "Petition 1")
+  @petition = FactoryGirl.create(:sponsored_petition, :with_additional_details, :action => "Petition 1")
   visit edit_admin_petition_path(@petition)
 end
 
-When /^I visit a sponsored petition with title: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/ do |title, background, additional_details|
-  @sponsored_petition = FactoryGirl.create(:sponsored_petition, title: title, background: background, additional_details: additional_details)
+When /^I visit a sponsored petition with action: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/ do |petition_action, background, additional_details|
+  @sponsored_petition = FactoryGirl.create(:sponsored_petition, action: petition_action, background: background, additional_details: additional_details)
   visit edit_admin_petition_path(@sponsored_petition)
 end
 
@@ -34,8 +34,8 @@ When /^I publish the petition$/ do
 end
 
 Then /^the petition is still available for searching or viewing$/ do
-  step %{I search for "rejected" petitions with "#{@petition.title}"}
-  step %{I should see the petition "#{@petition.title}"}
+  step %{I search for "rejected" petitions with "#{@petition.action}"}
+  step %{I should see the petition "#{@petition.action}"}
   step %{I view the petition}
   step %{I should see the petition details}
 end
@@ -46,13 +46,13 @@ Then /^the explanation is displayed on the petition for viewing by the public$/ 
 end
 
 Then /^the petition is not available for searching or viewing$/ do
-  step %{I search for "rejected" petitions with "#{@petition.title}"}
-  step %{I should not see the petition "#{@petition.title}"}
+  step %{I search for "rejected" petitions with "#{@petition.action}"}
+  step %{I should not see the petition "#{@petition.action}"}
 end
 
 Then /^the petition will still show up in the back\-end reporting$/ do
   visit admin_petitions_path
-  step %{I should see the petition "#{@petition.title}"}
+  step %{I should see the petition "#{@petition.action}"}
 end
 
 Then /^the petition should be visible on the site for signing$/ do
@@ -87,12 +87,12 @@ When /^I view all petitions$/ do
   click_link "All petitions"
 end
 
-Then /^I should see the petition "([^"]*)"$/ do |petition_title|
-  expect(page).to have_link(petition_title)
+Then /^I should see the petition "([^"]*)"$/ do |petition_action|
+  expect(page).to have_link(petition_action)
 end
 
-Then /^I should not see the petition "([^"]*)"$/ do |petition_title|
-  expect(page).not_to have_link(petition_title)
+Then /^I should not see the petition "([^"]*)"$/ do |petition_action|
+  expect(page).not_to have_link(petition_action)
 end
 
 When /^I filter the list to show "([^"]*)" petitions$/ do |option|
@@ -119,7 +119,7 @@ end
 Given(/^a moderator responds to the petition$/) do
   steps %Q(
     Given I am logged in as a moderator
-    And I follow "#{@petition.title}"
+    And I follow "#{@petition.action}"
     And I fill in "Public response summary" with "Get ready"
     And I fill in "Public response" with "Parliament here it comes"
     And I check "Email signees"

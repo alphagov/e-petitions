@@ -32,7 +32,7 @@ namespace :import do
       if ArchivedPetition::STATES.include?(row['state'])
         petition = ArchivedPetition.find_or_initialize_by(id: row['id'])
 
-        petition.title              = row['title']
+        petition.action             = row['title']
         petition.additional_details = row['description']
         petition.response           = row['response']
         petition.state              = row['state']

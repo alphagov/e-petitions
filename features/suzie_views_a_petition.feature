@@ -16,7 +16,7 @@ Feature: Suzie views a petition
     And I can share it via Whatsapp
 
   Scenario: Suzie views a petition containing urls, email addresses and html tags
-    Given an open petition exists with title: "Defence review", additional_details: "<i>We<i> like http://www.google.com and bambi@gmail.com"
+    Given an open petition exists with action: "Defence review", additional_details: "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I go to the petition page for "Defence review"
     # Cannot test for validity due to iframe attribute required for IE7
     # Then the markup should be valid

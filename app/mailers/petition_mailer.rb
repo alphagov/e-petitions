@@ -76,7 +76,7 @@ class PetitionMailer < ApplicationMailer
       if defined?(@petition)
         options[:count] = @petition.signature_count
         options[:formatted_count] = number_to_delimited(@petition.signature_count)
-        options[:title] = @petition.title
+        options[:action] = @petition.action
       end
     end
   end

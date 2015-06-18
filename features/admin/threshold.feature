@@ -7,22 +7,22 @@ Feature: Threshold list
     Given I am logged in as a moderator
     And the date is the "21 April 2011 12:00"
     And the threshold for a parliamentary debate is "5"
-    And an open petition "p1" exists with title: "Petition 1", closed_at: "1 January 2012"
+    And an open petition "p1" exists with action: "Petition 1", closed_at: "1 January 2012"
     And the petition "Petition 1" has 25 validated signatures
-    And an open petition "p2" exists with title: "Petition 2", closed_at: "20 August 2011"
+    And an open petition "p2" exists with action: "Petition 2", closed_at: "20 August 2011"
     And the petition "Petition 2" has 4 validated signatures
-    And an open petition "p3" exists with title: "Petition 3", closed_at: "20 September 2011"
+    And an open petition "p3" exists with action: "Petition 3", closed_at: "20 September 2011"
     And the petition "Petition 3" has 5 validated signatures
-    And a closed petition "p4" exists with title: "Petition 4", closed_at: "20 April 2011"
+    And a closed petition "p4" exists with action: "Petition 4", closed_at: "20 April 2011"
     And the petition "Petition 4" has 10 validated signatures
-    And an open petition "p5" exists with title: "Petition 5", response_required: false
-    And a closed petition "p6" exists with title: "Petition 6", response_required: true, closed_at: "21 April 2011"
+    And an open petition "p5" exists with action: "Petition 5", response_required: false
+    And a closed petition "p6" exists with action: "Petition 6", response_required: true, closed_at: "21 April 2011"
     And all petitions have had their signatures counted
 
   Scenario: A moderator user sees all petitions above the threshold signature count
     When I go to the admin threshold page
     Then I should see the following admin index table:
-      | Title      | Count | Closing date |
+      | Action     | Count | Closing date |
       | Petition 6 | 1     | 21-04-2011   |
       | Petition 3 | 5     | 20-09-2011   |
       | Petition 4 | 10    | 20-04-2011   |
@@ -56,7 +56,7 @@ Feature: Threshold list
     And I check "Public response required"
     And I press "Save"
     Then I should be on the admin all petitions page
-    And a petition should exist with title: "Petition 1", internal_response: "Parliament here it comes", response_required: true
+    And a petition should exist with action: "Petition 1", internal_response: "Parliament here it comes", response_required: true
 
   Scenario: A moderator user updates the public response to a petition
     Given the time is "3 Dec 2010 01:00"
@@ -67,7 +67,7 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should be on the admin all petitions page
-    And the petition with title: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
+    And the petition with action: "Petition 1" should have requested an email after "2010-12-03 01:00:00"
     And the response summary to "Petition 1" should be publicly viewable on the petition page
     And the response to "Petition 1" should be publicly viewable on the petition page
 
@@ -78,4 +78,4 @@ Feature: Threshold list
     And I check "Email signees"
     And I press "Save"
     Then I should see "must be completed when email signees is checked"
-    And the petition with title: "Petition 1" should not have requested an email
+    And the petition with action: "Petition 1" should not have requested an email

@@ -2,10 +2,10 @@
 
   <h2>Edit petition</h2>
 
-  <%= form_row for: [f.object, :title] do %>
-    <%= f.label :title, class: 'form-label' %>
-    <%= error_messages_for_field @petition, :title %>
-    <%= f.text_area :title, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+  <%= form_row for: [f.object, :action] do %>
+    <%= f.label :action, class: 'form-label' %>
+    <%= error_messages_for_field @petition, :action %>
+    <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
   <% end %>
 
   <%= form_row for: [f.object, :background] do %>

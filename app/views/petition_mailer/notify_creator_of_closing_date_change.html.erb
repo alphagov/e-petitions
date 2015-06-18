@@ -1,6 +1,6 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Unfortunately we've had to bring forward the closing date of your petition <%= link_to @signature.petition.title, petition_url(@signature.petition) %> from  <%= short_date_format @signature.petition.closed_at %> to 30 March 2015</p>
+<p>Unfortunately we've had to bring forward the closing date of your petition <%= link_to @signature.petition.action, petition_url(@signature.petition) %> from  <%= short_date_format @signature.petition.closed_at %> to 30 March 2015</p>
 
 <p>The dissolution of this Parliament has now been scheduled for 30 March 2015, and it’s not possible for petitions to remain open once Parliament has been dissolved.</p>
 

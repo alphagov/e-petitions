@@ -4,7 +4,7 @@
   Thank you
 </h1>
 
-<p>Your signature has now been added to the <%= link_to @petition.title, petition_path(@petition) %> petition.</p>
+<p>Your signature has now been added to the <%= link_to @petition.action, petition_path(@petition) %> petition.</p>
 
 <%= render 'shared/share_petition', petition: @petition %>
 

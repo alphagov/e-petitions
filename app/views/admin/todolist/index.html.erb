@@ -10,14 +10,14 @@
 <table class="admin_index">
   <tr>
     <th>Id</th>
-    <th>Title</th>
+    <th>Action</th>
     <th>Creator</th>
     <th>Date</th>
   </tr>
   <% @petitions.each do |petition| %>
     <tr>
       <td class='petition_id'><%= petition.id %></td>
-      <td><%= link_to petition.title, edit_admin_petition_path(petition) %></td>
+      <td><%= link_to petition.action, edit_admin_petition_path(petition) %></td>
       <td>
         <%= petition.creator_signature.name %><br/>
         <%= mail_to petition.creator_signature.email %>

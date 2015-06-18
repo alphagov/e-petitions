@@ -1,4 +1,4 @@
 <li class="petition-item">
-  <%= link_to truncate(trending_petition.title, :length => 100), petition_path(trending_petition) %>
+  <%= link_to truncate(trending_petition.action, :length => 100), petition_path(trending_petition) %>
   <p><%= signature_count(:trending, trending_petition.signatures_in_last_hour) %></p>
 </li>

@@ -119,7 +119,7 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       context "email out threshold update response" do
         before :each do
           signature = FactoryGirl.create(:signature, :name => 'Jason', :email => 'jason@example.com', :state => Petition::VALIDATED_STATE, :notify_by_email => true)
-          @petition = FactoryGirl.create(:open_petition, :title => 'Make me the PM', :creator_signature => signature)
+          @petition = FactoryGirl.create(:open_petition, :action => 'Make me the PM', :creator_signature => signature)
           6.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_notify_#{i}@example.com",
                                 :state => Petition::VALIDATED_STATE, :notify_by_email => true, :petition => @petition) }
           3.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_#{i}@example.com",

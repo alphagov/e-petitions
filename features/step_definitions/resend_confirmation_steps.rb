@@ -17,8 +17,8 @@ Then /^I should receive an email with my confirmation link$/ do
   open_email("suzie@example.com", :with_text => "confirm your email address")
 end
 
-Given /^I have already signed the petition "([^"]*)"$/ do |petition_title|
-  petition = Petition.find_by(title: petition_title)
+Given /^I have already signed the petition "([^"]*)"$/ do |petition_action|
+  petition = Petition.find_by(action: petition_action)
   FactoryGirl.create(:validated_signature, :petition => petition, :email => 'suzie@example.com')
 end
 
@@ -26,13 +26,13 @@ Then /^I should receive an email telling me (?:I|we)'ve already confirmed$/ do
   open_email("suzie@example.com", :with_text => "already been added")
 end
 
-Given /^Sam has signed the petition "([^"]*)" but not confirmed by email$/ do |petition_title|
-  petition = Petition.find_by(title: petition_title)
+Given /^Sam has signed the petition "([^"]*)" but not confirmed by email$/ do |petition_action|
+  petition = Petition.find_by(action: petition_action)
   FactoryGirl.create(:pending_signature, :petition => petition, :email => 'suzie@example.com')
 end
 
-Given /^Sam has signed the petition "([^"]*)"$/ do |petition_title|
-  petition = Petition.find_by(title: petition_title)
+Given /^Sam has signed the petition "([^"]*)"$/ do |petition_action|
+  petition = Petition.find_by(action: petition_action)
   FactoryGirl.create(:validated_signature, :petition => petition, :email => 'suzie@example.com')
 end
 
