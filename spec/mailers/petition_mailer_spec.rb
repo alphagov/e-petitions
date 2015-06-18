@@ -16,16 +16,17 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
   let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
   let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
-
+  let(:subject_prefix) { "HM Government & Parliament Petitions" }
+  
   describe "When no signature for an email address exists on a petition" do
     let(:mail) { PetitionMailer.no_signature_for_petition(petition, 'wibble@example.com') }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("HM Government e-petitions: a confirmation email has been requested")
+      expect(mail.subject).to eq("#{subject_prefix}: a confirmation email has been requested")
     end
 
     it "informs them there is no signature for that email address on the petition" do
-      expect(mail.body.encoded).to match("This email address has not been used to sign this e-petition")
+      expect(mail.body.encoded).to match("This email address has not been used to sign this petition")
       expect(mail.body.encoded).to have_css("a", "/petitions/#{petition.id}")
     end
   end
@@ -35,11 +36,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.email_already_confirmed_for_signature(signature) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("HM Government e-petitions: Signature already confirmed")
+      expect(mail.subject).to eq("#{subject_prefix}: Signature already confirmed")
     end
 
     it "informs the user they've already signed the petition" do
-      expect(mail.body.encoded).to match("Your signature has already been added to the e-petition")
+      expect(mail.body.encoded).to match("Your signature has already been added to the petition")
     end
   end
 
@@ -49,7 +50,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.two_pending_signatures(signature_one, signature_two) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("HM Government e-petitions: Signature confirmations")
+      expect(mail.subject).to eq("#{subject_prefix}: Signature confirmations")
     end
 
     it "is addressed to both signees" do
@@ -68,7 +69,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.one_pending_one_validated_signature(pending_signature, validated_signature) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("HM Government e-petitions: Signature confirmation")
+      expect(mail.subject).to eq("#{subject_prefix}: Signature confirmation")
     end
 
     it "is addressed to both signees" do
@@ -90,7 +91,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.double_signature_confirmation([signature_one, signature_two]) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("HM Government e-petitions: Signatures already confirmed")
+      expect(mail.subject).to eq("#{subject_prefix}: Signatures already confirmed")
     end
 
     it "is addressed to both signees" do
@@ -98,7 +99,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "Informs the signees that their signatures have both been confirmed" do
-      expect(mail.body.encoded).to match("signatures have already been added to the e-petition")
+      expect(mail.body.encoded).to match("signatures have already been added to the petition")
     end
   end
 
@@ -107,7 +108,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
 
     it 'has an appropriate subject heading' do
-      expect(mail.subject).to eq("HM Government e-petitions: change to your e-petition closing date")
+      expect(mail.subject).to eq("#{subject_prefix}: change to your petition closing date")
     end
 
     it 'is addressed to the creator' do

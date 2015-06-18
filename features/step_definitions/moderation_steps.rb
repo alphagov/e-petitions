@@ -105,8 +105,8 @@ Then /^I should not see any "([^"]*)" petitions$/ do |state|
 end
 
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
-  select "Duplicate of an existing e-petition", :from => :petition_rejection_code
-  expect(page).to have_content "already an e-petition"
+  select "Duplicate of an existing petition", :from => :petition_rejection_code
+  expect(page).to have_content "already a petition"
   select "Confidential, libellous, false or defamatory statements", :from => :petition_rejection_code
   expect(page).to have_content "injunction or court order"
 end

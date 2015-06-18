@@ -9,7 +9,7 @@ RSpec.describe Feedback, type: :model do
     expect(Feedback.new(:email => 'foo').email).to eq('foo')
   end
 
-  it "has an e-petition link or title" do
+  it "has a petition link or title" do
     expect(Feedback.new(:petition_link_or_title => 'foo').petition_link_or_title).to eq('foo')
   end
 

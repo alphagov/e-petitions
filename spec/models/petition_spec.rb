@@ -522,14 +522,14 @@ RSpec.describe Petition, type: :model do
   describe "rejection_reason" do
     it "gives rejection reason from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_reason).to eq('Duplicate of an existing e-petition')
+      expect(petition.rejection_reason).to eq('Duplicate of an existing petition')
     end
   end
 
   describe "rejection_description" do
     it "gives rejection description from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_description).to eq('<p>There is already an e-petition about this issue.</p>')
+      expect(petition.rejection_description).to eq('<p>There is already a petition about this issue.</p>')
     end
   end
 

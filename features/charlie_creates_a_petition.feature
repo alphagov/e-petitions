@@ -38,10 +38,10 @@ Scenario: Charlie creates a petition
   And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
 
 Scenario: First person sponsors a petition
-  When I have created an e-petition and told people to sponsor it
-  And a sponsor supports my e-petition
-  Then the e-petition should be validated
-  And the e-petition creator signature should be validated
+  When I have created a petition and told people to sponsor it
+  And a sponsor supports my petition
+  Then my petition should be validated
+  And the petition creator signature should be validated
 
 Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   Given I start a new petition

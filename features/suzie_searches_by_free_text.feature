@@ -20,7 +20,7 @@ Feature: Suzy Singer searches by free text
   Scenario: Search for open petitions
     When I search for "Wombles"
     Then I should be on the search results page
-    And I should see "Search results - e-petitions" in the browser page title
+    And I should see "Search results - Petitions" in the browser page title
     And I should see /For "Wombles"/
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"

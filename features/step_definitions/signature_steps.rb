@@ -77,7 +77,7 @@ end
 When /^I fill in my details and sign a petition$/ do
   steps %Q(
     When I go to the new signature page for "Do something!"
-    And I should see "Do something! - Sign this e-petition - e-petitions" in the browser page title
+    And I should see "Do something! - Sign this petition - Petitions" in the browser page title
     And I should be connected to the server via an ssl connection
     And I fill in my details
     And I try to sign
@@ -88,7 +88,7 @@ When /^I fill in my details and sign a petition$/ do
 end
 
 Then /^I should see that I have already signed the petition$/ do
-  expect(page).to have_text("Thank you. Your signature has already been added to the e-petition.")
+  expect(page).to have_text("Thank you. Your signature has already been added to the petition.")
 end
 
 Then(/^I am asked to review my email address$/) do

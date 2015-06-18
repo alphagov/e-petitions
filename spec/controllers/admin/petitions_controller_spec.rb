@@ -250,7 +250,7 @@ RSpec.describe Admin::PetitionsController, type: :controller do
         it "sends an email to the petition creator" do
           set_up
           email = ActionMailer::Base.deliveries.last
-          expect(email.subject).to match(/Your e-petition has been published/)
+          expect(email.subject).to match(/Your petition has been published/)
         end
       end
 
@@ -280,7 +280,7 @@ RSpec.describe Admin::PetitionsController, type: :controller do
           email = ActionMailer::Base.deliveries.last
           expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq(["john@example.com"])
-          expect(email.subject).to match(/e-petition has been rejected/)
+          expect(email.subject).to match(/petition has been rejected/)
         end
 
         it "sends an email to validated petition sponsors" do

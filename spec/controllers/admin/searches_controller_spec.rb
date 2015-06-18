@@ -44,7 +44,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
         end
       end
 
-      context "searching for e-petition by id" do
+      context "searching for petition by id" do
         let(:petition) { double(:id => 123, :to_param => '123', :editable_by? => false, :response_editable_by? => false) }
 
         before do

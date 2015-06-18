@@ -58,7 +58,7 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a parliamen
   FactoryGirl.create(:open_petition, petition_attributes)
 end
 
-Given /^I have created an e-petition$/ do
+Given /^I have created a petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
 end
@@ -223,7 +223,7 @@ end
 When /^I start a new petition/ do
   steps %Q(
     Given I am on the new petition page
-    Then I should see "Create a new e-petition - e-petitions" in the browser page title
+    Then I should see "Create a new petition - Petitions" in the browser page title
     And I should be connected to the server via an ssl connection
   )
 end
@@ -260,12 +260,12 @@ Then /^I should not see the text "([^"]*)"/ do |text|
   expect(page).to_not have_text(text)
 end
 
-Then(/^the e\-petition should be validated$/) do
+Then(/^my petition should be validated$/) do
   @sponsor_petition.reload
   expect(@sponsor_petition.state).to eq Petition::VALIDATED_STATE
 end
 
-Then(/^the e\-petition creator signature should be validated$/) do
+Then(/^the petition creator signature should be validated$/) do
   @sponsor_petition.reload
   expect(@sponsor_petition.creator_signature.state).to eq Signature::VALIDATED_STATE
 end

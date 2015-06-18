@@ -10,7 +10,7 @@ Then /^I should see an ambiguous message telling me I'll receive an email$/ do
 end
 
 Then /^I should receive an email telling me that I've not signed this petition$/ do
-  open_email("suzie@example.com", :with_text => "This email address has not been used to sign this e-petition")
+  open_email("suzie@example.com", :with_text => "This email address has not been used to sign this petition")
 end
 
 Then /^I should receive an email with my confirmation link$/ do
