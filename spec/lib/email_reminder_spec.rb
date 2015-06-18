@@ -25,7 +25,7 @@ RSpec.describe EmailReminder do
       email = ActionMailer::Base.deliveries.last
       expect(email.from).to eq(["no-reply@test.epetitions.website"])
       expect(email.to).to match_array(["peter@directgov.uk", "richard@directgov.uk"])
-      expect(email.subject).to eq('e-Petitions alert')
+      expect(email.subject).to eq('Petitions alert')
     end
 
     it "should email out details of three petitions and set the notified_by_email flag to true" do
