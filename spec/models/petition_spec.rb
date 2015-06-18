@@ -47,7 +47,6 @@ RSpec.describe Petition, type: :model do
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     it "should validate the length of :title to within 80 characters" do

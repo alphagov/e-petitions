@@ -11,7 +11,6 @@ module Staged
           presence: { message: 'Background must be completed.' },
           length: { maximum: 300, unless: ->(pd) { pd.action.blank? }, message: 'Background is too long.' }
         validates :description,
-          presence: { message: 'Supporting details must be completed.' },
           length: { maximum: 800, unless: ->(pd) { pd.description.blank? }, message: 'Supporting details is too long.' }
       end
     end

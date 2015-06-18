@@ -185,7 +185,7 @@ RSpec.describe PetitionsController, type: :controller do
           expect(assigns[:stage_manager].stage).to eq 'petition'
           do_post :petition => petition_attributes.merge(:action => '')
           expect(assigns[:stage_manager].stage).to eq 'petition'
-          do_post :petition => petition_attributes.merge(:description => '')
+          do_post :petition => petition_attributes.merge(:description => 'a'*801)
           expect(assigns[:stage_manager].stage).to eq 'petition'
         end
 

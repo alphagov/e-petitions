@@ -59,7 +59,6 @@ Scenario: Charlie tries to submit an invalid petition
   When I press "Preview petition"
   Then I should see "Action must be completed"
   And I should see "Background must be completed"
-  And I should see "Supporting details must be completed"
 
   When I am allowed to make the petition title too long
   When I fill in "Action" with "012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789312345678941234567895123456789012345678911234567892123456789Blah"
