@@ -24,11 +24,12 @@ A few things to know:
 	* `# ALTER USER epets WITH PASSWORD 'replace_me';`
 	* `# \q` to quit
 * You will need to set up the `config/database.yml`. Copy what is in `config/database.example.yml` and add the password you used earlier for the `epets` postgres user
-* `$ rake db:schema:load` - load the schema into your new databases using
+* `$ rake db:structure:load` - load the sql structure into your new databases
 * `$ rails s` - boot the app
 
 ### Auxiliary
 
+* If you want to seed your database with sample petitions, use `$ rake data:generate`
 * If you want jobs (like emails) to be run, use `$ rake jobs:work`
 * For setting up a sysadmin user
 	* `rake epets:add_sysadmin_user` - to set up an admin user with email 'admin@example.com' and password 'Letmein1!'
