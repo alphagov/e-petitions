@@ -1,8 +1,15 @@
-<div class='petition'>
+<div class="petition">
   <%= render 'petition_details' %>
   <%= render 'published_petition_details' %>
   <div class="row">
     <label>Public Response:</label>
-    <p class="text_block"><%= @petition.response %></p>
+    <p class="text_block"><%= @petition.response || raw('&nbsp;') %></p>
   </div>
 </div>
+
+<nav class="actions">
+  <ul>
+    <li><%= link_to 'Edit parliament response', edit_response_admin_petition_path(@petition) %></li>
+    <% if @petition.can_have_debate_added? %><li><%= link_to 'Add details of a debate outcome', admin_petition_debate_outcome_path(@petition) %></li><% end %>
+  </ul>
+</nav>

@@ -106,6 +106,23 @@ FactoryGirl.define do
     state      Petition::HIDDEN_STATE
   end
 
+  factory :debated_petition, :parent => :open_petition do
+    transient do
+      debated_on { nil }
+      overview { nil }
+      transcript_url { nil }
+      video_url { nil }
+    end
+    debate_outcome do |p|
+      debate_outcome_attributes = {}
+      debate_outcome_attributes[:debated_on] = debated_on if debated_on.present?
+      debate_outcome_attributes[:overview] = overview if overview.present?
+      debate_outcome_attributes[:transcript_url] = transcript_url if transcript_url.present?
+      debate_outcome_attributes[:video_url] = video_url if video_url.present?
+      p.association(:debate_outcome, :fully_specified, debate_outcome_attributes)
+    end
+  end
+
   factory :signature do
     sequence(:name) {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
@@ -148,5 +165,21 @@ FactoryGirl.define do
   factory :constituency_petition_journal do
     constituency_id { generate(:constituency_id) }
     association :petition
+  end
+
+  factory :debate_outcome do
+    association :petition, factory: :open_petition
+    debated_on { 1.month.from_now.to_date }
+
+    trait :fully_specified do
+      overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
+      sequence(:transcript_url) { |n|
+        "http://www.publications.parliament.uk/pa/cm#{debated_on.strftime('%Y%m')}/cmhansrd/cm#{debated_on.strftime('%y%m%d')}/debtext/#{debated_on.strftime('%y%m%d')}-0003.htm##{debated_on.strftime('%y%m%d')}49#{ '%06d' % n }"
+      }
+      video_url {
+        "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
+      }
+
+    end
   end
 end

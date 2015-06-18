@@ -10,6 +10,7 @@ Feature: An moderator user updates internal response and marks it for a public r
   Scenario: Viewing the update internal response page
     When I am on the admin all petitions page
     And I follow "Solidarity with the Unions"
+    And I follow "Edit parliament response"
     Then I should see a "Internal response" textarea field
     And I should see a "Public response required" checkbox field
     And the markup should be valid
@@ -17,6 +18,7 @@ Feature: An moderator user updates internal response and marks it for a public r
   Scenario: Updating the internal response and response required
     When I am on the admin all petitions page
     And I follow "Solidarity with the Unions"
+    And I follow "Edit parliament response"
     And I fill in "Internal response" with "Lets debate this in parliament"
     And I check "Public response required"
     And I press "Save"

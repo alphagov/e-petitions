@@ -92,6 +92,9 @@ module NavigationHelpers
     when /^reports page$/
       admin_reports_path
 
+    when /^debate outcomes form page for "([^\"]*)"$/
+      admin_petition_debate_outcome_path(Petition.find_by(title: $1))
+
     else
       raise "Can't find mapping from \"#{admin_page}\" to an Admin path.\n" +
         "Now, go and add a mapping in #{__FILE__}"

@@ -433,18 +433,38 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe 'can_have_debate_added?' do
+    it "is true if the petition is OPEN and the closed_at date is in the future" do
+      petition = FactoryGirl.build(:open_petition, :closed_at => 1.year.from_now)
+      expect(petition.can_have_debate_added?).to be_truthy
+    end
+
+    it "is true if the petition is OPEN and the closed_at date is in the past" do
+      petition = FactoryGirl.build(:open_petition, :closed_at => 2.minutes.ago)
+      expect(petition.can_have_debate_added?).to be_truthy
+    end
+
+    it "is false otherwise" do
+      expect(FactoryGirl.build(:open_petition, state: Petition::PENDING_STATE).can_have_debate_added?).to be_falsey
+      expect(FactoryGirl.build(:open_petition, state: Petition::HIDDEN_STATE).can_have_debate_added?).to be_falsey
+      expect(FactoryGirl.build(:open_petition, state: Petition::REJECTED_STATE).can_have_debate_added?).to be_falsey
+      expect(FactoryGirl.build(:open_petition, state: Petition::VALIDATED_STATE).can_have_debate_added?).to be_falsey
+      expect(FactoryGirl.build(:open_petition, state: Petition::SPONSORED_STATE).can_have_debate_added?).to be_falsey
+    end
+  end
+
   describe "can_be_signed?" do
     def petition(state = Petition::OPEN_STATE)
-      @petition ||= FactoryGirl.create(:petition, :state => state)
+      FactoryGirl.build(:petition, :state => state)
     end
 
     it "is true if and only if the petition is OPEN and the closed_at date is in the future" do
-      petition = FactoryGirl.create(:open_petition, :closed_at => 1.year.from_now)
+      petition = FactoryGirl.build(:open_petition, :closed_at => 1.year.from_now)
       expect(petition.can_be_signed?).to be_truthy
     end
 
     it "is false if the petition is OPEN and the closed_at date is in the past" do
-      petition = FactoryGirl.create(:open_petition, :closed_at => 2.minutes.ago)
+      petition = FactoryGirl.build(:open_petition, :closed_at => 2.minutes.ago)
       expect(petition.can_be_signed?).to be_falsey
     end
 
@@ -825,5 +845,9 @@ RSpec.describe Petition, type: :model do
       sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
+  end
+
+  describe 'debate outcomes' do
+    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
   end
 end

@@ -146,6 +146,41 @@ ALTER SEQUENCE constituency_petition_journals_id_seq OWNED BY constituency_petit
 
 
 --
+-- Name: debate_outcomes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE debate_outcomes (
+    id integer NOT NULL,
+    petition_id integer NOT NULL,
+    debated_on date NOT NULL,
+    transcript_url character varying(500),
+    video_url character varying(500),
+    overview text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: debate_outcomes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE debate_outcomes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: debate_outcomes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE debate_outcomes_id_seq OWNED BY debate_outcomes.id;
+
+
+--
 -- Name: delayed_jobs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -385,6 +420,13 @@ ALTER TABLE ONLY constituency_petition_journals ALTER COLUMN id SET DEFAULT next
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY debate_outcomes ALTER COLUMN id SET DEFAULT nextval('debate_outcomes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_id_seq'::regclass);
 
 
@@ -438,6 +480,14 @@ ALTER TABLE ONLY archived_petitions
 
 ALTER TABLE ONLY constituency_petition_journals
     ADD CONSTRAINT constituency_petition_journals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: debate_outcomes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY debate_outcomes
+    ADD CONSTRAINT debate_outcomes_pkey PRIMARY KEY (id);
 
 
 --
@@ -527,6 +577,20 @@ CREATE INDEX index_archived_petitions_on_state_and_closed_at ON archived_petitio
 --
 
 CREATE INDEX index_archived_petitions_on_title ON archived_petitions USING gin (to_tsvector('english'::regconfig, (title)::text));
+
+
+--
+-- Name: index_debate_outcomes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_debate_outcomes_on_petition_id ON debate_outcomes USING btree (petition_id);
+
+
+--
+-- Name: index_debate_outcomes_on_petition_id_and_debated_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_debate_outcomes_on_petition_id_and_debated_on ON debate_outcomes USING btree (petition_id, debated_on);
 
 
 --
@@ -659,6 +723,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150612103324');
 INSERT INTO schema_migrations (version) VALUES ('20150612111204');
 
 INSERT INTO schema_migrations (version) VALUES ('20150615131623');
+
+INSERT INTO schema_migrations (version) VALUES ('20150615151103');
 
 INSERT INTO schema_migrations (version) VALUES ('20150617164310');
 
