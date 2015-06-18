@@ -48,7 +48,6 @@ class PackageBuilder
     s3 = Aws::S3::Resource.new(region: region, profile: profile)
     bucket = s3.bucket(release_bucket)
     release_obj = bucket.object(release_key)
-    latest_obj = bucket.object(latest_key)
 
     info "Uploading package #{package_name} to S3 ..."
     start_time = Time.now
@@ -57,9 +56,6 @@ class PackageBuilder
 
     duration = Time.now - start_time
     info "Upload completed in #{duration} seconds."
-
-    info "Copying file #{release_key} to #{latest_key} ..."
-    latest_obj.copy_from(copy_source: "#{release_bucket}/#{release_key}")
   end
 
   def deploy!
