@@ -111,8 +111,12 @@ class PackageBuilder
 
   def create_deployment!
     client = Aws::CodeDeploy::Client.new(credentials)
-    client.create_deployment(deployment_config)
+    response = client.create_deployment(deployment_config)
     info "Deployment created."
+
+    track_progress(response.deployment_id) do |deployment_info|
+      notify_new_relic
+    end
   end
 
   def create_revision_file
@@ -217,6 +221,21 @@ class PackageBuilder
     ENV.fetch('RELEASE', '1').to_i.nonzero?
   end
 
+  def notify_new_relic
+    args = %w[newrelic deployments]
+    args.concat ['-a', application_name]
+    args.concat ['-e', 'production']
+    args.concat ['-r', revision]
+    args.concat ['-l', new_relic_license_key]
+
+    info "Notifying New Relic of deployment ..."
+    Kernel.system *args
+  end
+
+  def new_relic_license_key
+    ENV.fetch('NEW_RELIC_LICENSE_KEY')
+  end
+
   def region
     ENV.fetch('AWS_REGION', 'eu-west-1')
   end
@@ -255,6 +274,55 @@ class PackageBuilder
 
   def skip_gems?
     ENV.fetch('SKIP_GEMS', '0').to_i.nonzero?
+  end
+
+  def track_progress(deployment_id, &block)
+    client = Aws::CodeDeploy::Client.new(credentials)
+    completed = false
+
+    while !completed do
+      response = client.get_deployment(deployment_id: deployment_id)
+
+      if response.successful?
+        deployment = response.deployment_info
+        status     = deployment.status
+        completed  = !deployment.complete_time.nil?
+
+        if completed
+          deployment_complete(deployment)
+        else
+          if status == "InProgress"
+            deployment_progress(deployment)
+          end
+
+          sleep(5)
+        end
+
+        yield deployment if status == "Succeeded"
+      else
+        raise RuntimeError, "Error getting status for deployment: #{deployment_id}"
+      end
+    end
+  end
+
+  def deployment_complete(deployment)
+    id           = deployment.deployment_id
+    created_at   = deployment.create_time
+    completed_at = deployment.complete_time
+    duration     = completed_at - created_at
+    status       = deployment.status.downcase
+
+    info ("Deployment %s %s in %0.2f seconds" % [id, status, duration])
+  end
+
+  def deployment_progress(deployment)
+    id           = deployment.deployment_id
+    created_at   = deployment.create_time
+    duration     = Time.current - created_at
+    overview     = deployment.deployment_overview
+    progress     = "Pending: %d, InProgress: %d, Succeeded: %d, Failed: %d, Skipped: %d" % overview.values
+
+    info ("Deploying %s (%s) in %0.2f seconds" % [id, progress, duration])
   end
 
   def treeish
