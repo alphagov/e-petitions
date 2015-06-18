@@ -69,3 +69,15 @@ Feature: Suzy Signer views all petitions
      | Spend more money on Defence                         |
      | Force supermarkets to give unsold food to charities |
     And the markup should be valid
+
+  Scenario: Suzie browses petitions awaiting a debate in Parliament
+    Given a petition "Save the planet" exists and hasn't passed the threshold for a debate
+    Given a petition "Conquer the Moon" passed the threshold for a debate less than a day ago and has no debate date set
+    Given a petition "Free the wombles" passed the threshold for a debate 10 days ago and has no debate date set
+    When I view all petitions from the home page
+    And I follow "Petitions waiting for a debate in Parliament"
+    Then I should see the following ordered list of petitions:
+      | Free the wombles |
+      | Conquer the Moon |
+    And the markup should be valid
+
