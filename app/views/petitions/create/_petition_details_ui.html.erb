@@ -19,10 +19,10 @@
   <%= render 'petitions/action_help' %>
 <% end %>
 
-<%= form_row :for => [petition, :action] do %>
-  <%= f.label :action, 'Background', class: 'form-label' %>
-  <%= error_messages_for_field petition, :action %>
-  <%= f.text_area :action, tabindex: increment, rows: 5, class: 'form-control' %>
+<%= form_row :for => [petition, :background] do %>
+  <%= f.label :background, 'Background', class: 'form-label' %>
+  <%= error_messages_for_field petition, :background %>
+  <%= f.text_area :background, tabindex: increment, rows: 5, class: 'form-control' %>
   <span class="character-count">300</span>
   <details class="form-group-help">
     <summary><span class="summary">Help writing background</span></summary>

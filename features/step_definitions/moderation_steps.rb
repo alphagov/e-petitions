@@ -3,8 +3,8 @@ When /^I look at the next petition on my list$/ do
   visit edit_admin_petition_path(@petition)
 end
 
-When /^I visit a sponsored petition with title: "([^"]*)", that has action: "([^"]*)" and additional details: "([^"]*)"$/ do |title, action, additional_details|
-  @sponsored_petition = FactoryGirl.create(:sponsored_petition, title: title, action: action, additional_details: additional_details)
+When /^I visit a sponsored petition with title: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/ do |title, background, additional_details|
+  @sponsored_petition = FactoryGirl.create(:sponsored_petition, title: title, background: background, additional_details: additional_details)
   visit edit_admin_petition_path(@sponsored_petition)
 end
 

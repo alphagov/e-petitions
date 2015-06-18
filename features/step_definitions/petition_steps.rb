@@ -145,7 +145,7 @@ Then /^I should see the petition details$/ do
     expect(page).to have_content(@petition.description)
   else
     expect(page).to have_content(@petition.additional_details)
-    expect(page).to have_content(@petition.action)
+    expect(page).to have_content(@petition.background)
   end
 end
 

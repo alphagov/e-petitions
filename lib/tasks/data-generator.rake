@@ -31,7 +31,7 @@ namespace :data do
 
         petition = Petition.create!({
           title: Faker::Lorem.sentence(rand(3..10)).first(80),
-          action: Faker::Lorem.sentence(rand(7..22)).first(200),
+          background: Faker::Lorem.sentence(rand(7..22)).first(200),
           additional_details: Faker::Lorem.paragraph(rand(2..20)).first(500),
           creator_signature: Signature.new({
             uk_citizenship: '1',

@@ -70,7 +70,7 @@ class PetitionsController < ApplicationController
   def petition_params_for_create
     params.
       require(:petition).
-      permit(:title, :action, :additional_details, :duration, :sponsor_emails,
+      permit(:title, :background, :additional_details, :duration, :sponsor_emails,
              creator_signature: [
                :name, :email, :email_confirmation,
                :postcode, :country, :uk_citizenship

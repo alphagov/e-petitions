@@ -96,7 +96,7 @@ RSpec.describe Admin::PetitionDetailsController do
     end
 
     describe 'PATCH #update' do
-      let(:petition) { FactoryGirl.create(:sponsored_petition, title: 'Old title', action: 'Old action', additional_details: 'Old additional details') }
+      let(:petition) { FactoryGirl.create(:sponsored_petition, title: 'Old title', background: 'Old background', additional_details: 'Old additional details') }
 
       def do_update
         patch :update,
@@ -105,14 +105,14 @@ RSpec.describe Admin::PetitionDetailsController do
       end
 
       describe 'allowed params' do
-        it { should permit(:title, :action, :additional_details).for(:update, params: { petition_id: petition.id }) }
+        it { should permit(:title, :background, :additional_details).for(:update, params: { petition_id: petition.id }) }
       end
 
       describe 'with valid params' do
         let(:petition_attributes) do
           {
               title: 'New title',
-              action: 'New action',
+              background: 'New background',
               additional_details: 'New additional_details'
           }
         end
@@ -129,7 +129,7 @@ RSpec.describe Admin::PetitionDetailsController do
             petition.reload
             expect(petition).to be_present
             expect(petition.title).to eq('New title')
-            expect(petition.action).to eq('New action')
+            expect(petition.background).to eq('New background')
             expect(petition.additional_details).to eq('New additional_details')
           end
         end
@@ -153,7 +153,7 @@ RSpec.describe Admin::PetitionDetailsController do
         let(:petition_attributes) do
           {
               title: '',
-              action: '',
+              background: '',
               additional_details: 'Blah'
           }
         end

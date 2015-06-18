@@ -13,15 +13,15 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator edits petition before publishing
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
+    And I visit a sponsored petition with title: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "Edit petition content"
     Then I am redirected to the petition edit details page
     And the markup should be valid
     And the "Title" field should contain "wee need to save our plaanet"
-    And the "Action" field should contain "Reduce polootion"
+    And the "Background" field should contain "Reduce polootion"
     And the "Additional details" field should contain "Enforce Kyotoe protocol in more countries"
     Then I fill in "Title" with "We need to save our planet"
-    And I fill in "Action" with "Reduce pollution"
+    And I fill in "Background" with "Reduce pollution"
     And I fill in "Additional details" with "Enforce Kyoto Protocol in more countries"
     And I press "Save"
     Then I am redirected to the petition edit page
@@ -31,10 +31,10 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator edits and tries to save an invalid petition
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
+    And I visit a sponsored petition with title: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "Edit petition content"
     Then I fill in "Title" with ""
-    And I fill in "Action" with ""
+    And I fill in "Background" with ""
     And I fill in "Additional details" with ""
     And I press "Save"
     Then I should see "Action must be completed"
@@ -42,7 +42,7 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator cancel editing petition
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "Blah", that has action: "Blah" and additional details: "Blah"
+    And I visit a sponsored petition with title: "Blah", that has background: "Blah" and additional details: "Blah"
     And I follow "Edit petition content"
     Then I am redirected to the petition edit details page
     When I follow "Cancel"

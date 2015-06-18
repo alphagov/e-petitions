@@ -46,7 +46,7 @@ RSpec.describe Petition, type: :model do
 
   context "validations" do
     it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
     it "should validate the length of :title to within 80 characters" do
@@ -54,9 +54,9 @@ RSpec.describe Petition, type: :model do
       expect(FactoryGirl.build(:petition, :title => 'x' * 81)).not_to be_valid
     end
 
-    it "should validate the length of :action to within 300 characters" do
-      expect(FactoryGirl.build(:petition, :action => 'x' * 300)).to be_valid
-      expect(FactoryGirl.build(:petition, :action => 'x' * 301)).not_to be_valid
+    it "should validate the length of :background to within 300 characters" do
+      expect(FactoryGirl.build(:petition, :background => 'x' * 300)).to be_valid
+      expect(FactoryGirl.build(:petition, :background => 'x' * 301)).not_to be_valid
     end
 
     it "should validate the length of :additional_details to within 800 characters" do

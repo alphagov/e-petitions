@@ -22,6 +22,6 @@ class Admin::PetitionDetailsController < Admin::AdminController
   end
 
   def petition_params
-    params.require(:petition).permit(:title, :action, :additional_details)
+    params.require(:petition).permit(:title, :background, :additional_details)
   end
 end
