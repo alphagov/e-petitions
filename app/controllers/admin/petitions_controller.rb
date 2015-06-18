@@ -61,14 +61,27 @@ class Admin::PetitionsController < Admin::AdminController
     return unless params[:petition]
     params[:petition][:email_signees] = params[:petition][:email_signees] == '1'
   end
-  
+
   def params_for_update_response
     assign_email_signees_param
     params.
       require(:petition).
       permit(:internal_response, :response_required, :response, :response_summary, :email_signees)
   end
-  
+
+  def edit_scheduled_debate_date
+    fetch_petition_for_scheduled_debate_date
+  end
+
+  def update_scheduled_debate_date
+    fetch_petition_for_scheduled_debate_date
+    if @petition.update(update_scheduled_debate_date_params)
+      redirect_to edit_response_admin_petition_path(@petition), notice: "Scheduled debate date was successfully updated."
+    else
+      render :edit_scheduled_debate_date
+    end
+  end
+
   def take_down
     @petition = Petition.find(params[:id])
     reject
@@ -76,6 +89,11 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   protected
+
+  def fetch_petition_for_scheduled_debate_date
+    @petition = Petition.find(params[:id])
+    raise ActiveRecord::RecordNotFound unless @petition.can_have_debate_added?
+  end
 
   def publish
     @petition.publish!
@@ -90,5 +108,9 @@ class Admin::PetitionsController < Admin::AdminController
 
   def rejection_params
     params.require(:petition).permit(:rejection_code, :rejection_text)
+  end
+
+  def update_scheduled_debate_date_params
+    params.require(:petition).permit(:scheduled_debate_date)
   end
 end

@@ -62,6 +62,8 @@ Rails.application.routes.draw do
       member do
         get   :edit_response
         patch :update_response
+        get   :edit_scheduled_debate_date
+        patch :update_scheduled_debate_date
         patch :take_down
       end
       resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes

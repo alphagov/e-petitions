@@ -143,6 +143,10 @@ input.back-page {
   background-position: 5px 0px;
 }
 
+.about-item-scheduled-debate-date {
+  @include bold-19;
+}
+
 // Light variation
 .about-petitions-light {
   .about-item {

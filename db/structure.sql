@@ -244,7 +244,8 @@ CREATE TABLE petitions (
     action character varying(200),
     sponsor_token character varying(255),
     response_summary character varying(500),
-    parliament_response_at timestamp without time zone
+    parliament_response_at timestamp without time zone,
+    scheduled_debate_date date
 );
 
 
@@ -727,4 +728,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150615131623');
 INSERT INTO schema_migrations (version) VALUES ('20150615151103');
 
 INSERT INTO schema_migrations (version) VALUES ('20150617164310');
+
+INSERT INTO schema_migrations (version) VALUES ('20150615145953');
 
