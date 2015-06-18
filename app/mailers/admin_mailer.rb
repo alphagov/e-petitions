@@ -3,6 +3,6 @@ class AdminMailer < ActionMailer::Base
 
   def threshold_email_reminder(admin_users, petitions)
     @petitions = petitions
-    mail(subject: "e-Petitions alert", to: admin_users.map(&:email))
+    mail(subject: "Petitions alert", to: admin_users.map(&:email))
   end
 end
