@@ -305,6 +305,52 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "#number" do
+    let(:attributes) { FactoryGirl.attributes_for(:petition) }
+    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:petition) do
+      Petition.create(attributes) do |petition|
+        petition.creator_signature = creator
+
+        5.times do
+          petition.signatures << FactoryGirl.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each do |signature|
+        signature.validate!
+      end
+
+      petition.publish!
+    end
+
+    it "returns the signature number" do
+      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature.validate!
+
+      expect(petition.signature_count).to eq(7)
+      expect(signature.number).to eq(7)
+    end
+
+    it "remains the same after another signature is added" do
+      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      later_signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature.validate!
+
+      expect { later_signature.validate! }.not_to change{ signature.number }
+    end
+
+    it "remains the same even if an earlier signature is validated" do
+      earlier_signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature.validate!
+
+      expect { earlier_signature.validate! }.not_to change{ signature.number }
+    end
+  end
+
   describe "#pending?" do
     it "returns true if the signature has a pending state" do
       signature = FactoryGirl.build(:pending_signature)

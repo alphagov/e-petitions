@@ -6,10 +6,23 @@
 .page-title {
   margin-top: em(40, 36);
   margin-bottom: 1em;
+  position: relative;
 
   .icon {
-    margin-right: $gutter;
+    background-position: left center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 25px;
   }
+
+  .signature-number {
+    @include bold-48();
+    display: block;
+  }
+}
+.page-title-with-icon {
+  padding-left: $gutter * 1.5;
 }
 .page-subtitle {
   @include bold-27();
