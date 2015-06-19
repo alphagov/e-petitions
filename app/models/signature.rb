@@ -38,8 +38,18 @@ class Signature < ActiveRecord::Base
   # = Methods =
   attr_accessor :uk_citizenship
 
+  def self.signature_number(validated_at)
+    where(arel_table[:validated_at].lt(validated_at)).count + 1
+  end
+
   def email=(value)
     super(value.to_s.downcase)
+  end
+
+  def number
+    if validated_at?
+      @number ||= self.class.signature_number(validated_at)
+    end
   end
 
   def postcode=(value)

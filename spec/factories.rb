@@ -159,7 +159,8 @@ FactoryGirl.define do
   end
 
   factory :validated_signature, :parent => :signature do
-    state      Signature::VALIDATED_STATE
+    state          Signature::VALIDATED_STATE
+    validated_at { Time.current }
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }

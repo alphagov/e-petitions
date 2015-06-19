@@ -1,10 +1,10 @@
 <% content_for(:page_title) { "Thank you - Petitions" } %>
-<h1 class="page-title">
+<h1 class="page-title page-title-with-icon">
   <span class="icon icon-confirmation-tick"></span>
-  Thank you
+  You are signature <span class="signature-number"><%= number_with_delimiter(@signature.number) %></span>
 </h1>
 
-<p>Your signature has now been added to the <%= link_to @petition.action, petition_path(@petition) %> petition.</p>
+<p class="signed-petition-title"><%= link_to @petition.action, petition_path(@petition) %></p>
 
 <%= render 'shared/share_petition', petition: @petition %>
 

@@ -24,7 +24,6 @@ When /^I confirm my email address$/ do
   steps %Q(
     And I open the email with text "confirm your email address"
     When I click the first link in the email
-    Then I should see "Thank you"
   )
 end
 
