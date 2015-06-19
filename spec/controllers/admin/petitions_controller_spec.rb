@@ -117,18 +117,54 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       end
 
       context "email out threshold update response" do
-        before :each do
-          signature = FactoryGirl.create(:signature, :name => 'Jason', :email => 'jason@example.com', :state => Petition::VALIDATED_STATE, :notify_by_email => true)
-          @petition = FactoryGirl.create(:open_petition, :action => 'Make me the PM', :creator_signature => signature)
-          6.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_notify_#{i}@example.com",
-                                :state => Petition::VALIDATED_STATE, :notify_by_email => true, :petition => @petition) }
-          3.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_valid_#{i}@example.com",
-                                :state => Petition::VALIDATED_STATE, :notify_by_email => false, :petition => @petition) }
+        before do
+          @signature =  FactoryGirl.create(:pending_signature,
+                          name: 'Jason',
+                          email: 'jason@example.com',
+                          notify_by_email: true
+                        )
+
+          @petition = FactoryGirl.create(:open_petition,
+                        action: 'Make me the PM',
+                        creator_signature: @signature
+                      )
+
+          6.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_valid_notify_#{i}@example.com",
+              notify_by_email: true,
+              petition: @petition
+            }
+
+            s = FactoryGirl.create(:pending_signature, attributes)
+            s.validate!
+          end
+
+          3.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_valid_#{i}@example.com",
+              notify_by_email: false,
+              petition: @petition
+            }
+
+            s = FactoryGirl.create(:pending_signature, attributes)
+            s.validate!
+          end
+
+          2.times do |i|
+            attributes = {
+              name: "Jason #{i}",
+              email: "jason_invalid_#{i}@example.com",
+              notify_by_email: true,
+              petition: @petition
+            }
+
+            FactoryGirl.create(:pending_signature, attributes)
+          end
+
           @petition.reload
-          @petition.signatures.last.save! # needed in order to get the signature count updated
-          2.times { |i| FactoryGirl.create(:signature, :name => "Jason #{i}", :email => "jason_invalid_#{i}@example.com",
-                                :state => Petition::PENDING_STATE, :notify_by_email => true, :petition => @petition) }
-          Petition.update_all_signature_counts
         end
 
         it "sets up a delayed job" do
@@ -305,36 +341,33 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       end
 
       context "publishing" do
-        let(:now) { Chronic.parse("1 Jan 2011") }
-        def set_up
-          allow(Time).to receive(:current).and_return(now)
+        let(:now) { Time.current }
+        let(:email) { ActionMailer::Base.deliveries.last }
+        let(:duration) { Site.petition_duration.months }
+        let(:closing_date) { (now + duration).end_of_day }
+
+        before do
           do_post :commit => 'Publish this petition'
           @petition.reload
         end
 
         it "opens the petition" do
-          set_up
           expect(@petition.state).to eq(Petition::OPEN_STATE)
         end
 
         it "sets the open date to now" do
-          set_up
-          expect(@petition.open_at.change(usec: 0)).to eq(now.change(usec: 0))
+          expect(@petition.open_at).to be_within(1.second).of(now)
         end
 
         it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-          set_up
-          expect(@petition.closed_at.change(usec: 0)).to eq( (now + Site.petition_duration.months).end_of_day.change(usec: 0) )
+          expect(@petition.closed_at).to be_within(1.second).of(closing_date)
         end
 
         it "redirects to the main admin page" do
-          set_up
           expect(response).to redirect_to("https://petition.parliament.uk/admin")
         end
 
         it "sends an email to the petition creator" do
-          set_up
-          email = ActionMailer::Base.deliveries.last
           expect(email.subject).to match(/Your petition has been published/)
         end
       end

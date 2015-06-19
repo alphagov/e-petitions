@@ -16,7 +16,7 @@ class Petition < ActiveRecord::Base
 
   STATES            = %w[pending validated sponsored open rejected hidden]
   VISIBLE_STATES    = %w[open rejected]
-  MODERATED_STATES  = %w[open hidden]
+  MODERATED_STATES  = %w[open hidden rejected]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
@@ -34,13 +34,13 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action, :background, :additional_details)
   include Browseable
 
-  facet :all, -> { reorder(signature_count: :desc) }
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
+  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
+  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
+  facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
-
-  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
-  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
+  facet :all, -> { reorder(signature_count: :desc) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
@@ -77,6 +77,7 @@ class Petition < ActiveRecord::Base
       where(state: state)
     end
   }
+  scope :not_hidden, -> { where.not(state: HIDDEN_STATE) }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
   scope :selectable, -> { where(state: SELECTABLE_STATES) }
@@ -107,13 +108,8 @@ class Petition < ActiveRecord::Base
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
 
-  def self.update_all_signature_counts
-    Petition.visible.each do |petition|
-      petition_current_count = petition.count_validated_signatures
-      if petition_current_count != petition.signature_count
-        petition.update_attribute(:signature_count, petition_current_count)
-      end
-    end
+  def self.awaiting_response
+    where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
   end
 
   def self.counts_by_state
@@ -137,11 +133,28 @@ class Petition < ActiveRecord::Base
       to_a
   end
 
+  def increment_signature_count!(time = Time.current)
+    updates = ["signature_count = signature_count + 1"]
+    updates << "last_signed_at = :now"
+    updates << "updated_at = :now"
+
+    if at_threshold_for_response?
+      updates << "response_threshold_reached_at = :now"
+    end
+
+    if update_all([updates.join(", "), now: time]) > 0
+      self.reload
+    end
+  end
+
+  def at_threshold_for_response?
+    unless response_threshold_reached_at?
+      signature_count >= Site.threshold_for_response - 1
+    end
+  end
+
   def publish!
-    self.state = Petition::OPEN_STATE
-    self.open_at = Time.current
-    self.closed_at = Site.petition_duration.months.from_now.end_of_day
-    save!
+    update!(state: OPEN_STATE, open_at: Time.current, closed_at: Site.petition_closed_at)
   end
 
   def reject(attributes)
@@ -156,6 +169,14 @@ class Petition < ActiveRecord::Base
     save
   end
 
+  def validate_creator_signature!
+    creator_signature && creator_signature.validate! && reload
+  end
+
+  def validated_creator_signature?
+    creator_signature && creator_signature.validated?
+  end
+
   def count_validated_signatures
     signatures.validated.count
   end
@@ -165,31 +186,35 @@ class Petition < ActiveRecord::Base
   end
 
   def awaiting_moderation?
-    self.state == VALIDATED_STATE
+    state == VALIDATED_STATE
   end
 
   def in_moderation?
-    self.state == SPONSORED_STATE
+    state == SPONSORED_STATE
+  end
+
+  def moderated?
+    MODERATED_STATES.include?(state)
   end
 
   def open?
-    self.state == OPEN_STATE
+    state == OPEN_STATE
   end
 
   def can_be_signed?
-    self.state == OPEN_STATE and self.closed_at > Time.current
+    state == OPEN_STATE && closed_at > Time.current
   end
 
   def rejected?
-    self.state == REJECTED_STATE
+    state == REJECTED_STATE
   end
 
   def hidden?
-    self.state == HIDDEN_STATE
+    state == HIDDEN_STATE
   end
 
   def closed?
-    self.state == OPEN_STATE && self.closed_at <= Time.current
+    state == OPEN_STATE && closed_at <= Time.current
   end
 
   def can_have_debate_added?
@@ -201,11 +226,7 @@ class Petition < ActiveRecord::Base
   end
 
   def state_label
-    if (self.closed?)
-      CLOSED_STATE
-    else
-      self.state
-    end
+    closed? ? CLOSED_STATE : state
   end
 
   def rejection_reason
@@ -235,7 +256,7 @@ class Petition < ActiveRecord::Base
 
   # need this callback since the relationship is circular
   def set_petition_on_creator_signature
-    self.creator_signature.update_attribute(:petition_id, self.id)
+    creator_signature.update_attribute(:petition_id, id)
   end
 
   def supporting_sponsors_count
@@ -260,10 +281,6 @@ class Petition < ActiveRecord::Base
     supporting_sponsors_count < Site.threshold_for_moderation
   end
 
-  def validate_creator_signature!
-    self.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE) if creator_signature.state == Signature::PENDING_STATE
-  end
-
   def update_state_after_new_validated_sponsor!
     if state == PENDING_STATE
       update_attribute(:state, VALIDATED_STATE)
@@ -286,5 +303,7 @@ class Petition < ActiveRecord::Base
     self.government_response_at = Time.current
   end
 
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
+  end
 end
-

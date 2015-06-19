@@ -33,8 +33,9 @@ end
 
 Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |petition_action, no_validated, no_pending|
   petition = Petition.find_by(action: petition_action)
-  (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
-  no_pending.times { petition.signatures << FactoryGirl.create(:pending_signature) }
+  (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
+  no_pending.times { FactoryGirl.create(:pending_signature, petition: petition) }
+  petition.reload
 end
 
 Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, count|
@@ -64,6 +65,18 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
   FactoryGirl.create(:open_petition, petition_attributes)
 end
 
+Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a response$/) do |action|
+  FactoryGirl.create(:open_petition, action: action)
+end
+
+Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
+  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
+end
+
+Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
+  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+end
+
 Given /^I have created a petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
@@ -71,7 +84,9 @@ end
 
 Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |petition_action, no_validated|
   petition = Petition.find_by(action: petition_action)
-  (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
+  (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
+  petition.reload
+  @petition.reload if @petition
 end
 
 And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |petition_action|
@@ -152,7 +167,7 @@ end
 
 Then /^I should see the vote count, closed and open dates$/ do
   @petition.reload
-  expect(page).to have_css("p.signature-count", :text => @petition.signature_count.to_s + " signatures")
+  expect(page).to have_css("p.signature-count", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
   expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
 
   unless @petition.is_a?(ArchivedPetition)
@@ -178,10 +193,6 @@ Then /^I should see the reason for rejection$/ do
   else
     expect(page).to have_content(@petition.rejection_text)
   end
-end
-
-And /^all petitions have had their signatures counted$/ do
-  Petition.update_all_signature_counts
 end
 
 Then /^I should be asked to search for a new petition$/ do
@@ -316,7 +327,6 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
   }
   petition = FactoryGirl.create(:open_petition, petition_args)
   5.times { FactoryGirl.create(:validated_signature, petition: petition) }
-  Petition.update_all_signature_counts
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|

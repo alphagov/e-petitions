@@ -24,6 +24,10 @@ class Site < ActiveRecord::Base
       instance.enabled?
     end
 
+    def petition_closed_at(time = Time.current)
+      instance.petition_closed_at(time)
+    end
+
     def protected?
       instance.protected?
     end
@@ -158,6 +162,10 @@ class Site < ActiveRecord::Base
     else
       self.password_digest = nil
     end
+  end
+
+  def petition_closed_at(time = Time.current)
+    time.end_of_day + petition_duration.months
   end
 
   validates :title, presence: true, length: { maximum: 50 }

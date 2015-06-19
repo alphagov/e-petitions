@@ -1,2 +1,2 @@
-<%= render "search/petitions/shared/petition_action_link", petition: petition %>
-<%= render "search/petitions/shared/signature_count", petition: petition %>
+<%= link_to petition.action, petition_path(petition) %>
+<p><%= signature_count(:default, petition.signature_count) %></p>

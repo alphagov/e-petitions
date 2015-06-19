@@ -40,11 +40,6 @@ RSpec.describe Admin::ProfileController, type: :controller do
     end
 
     describe "GET 'update'" do
-      before :each do
-        @time = Chronic.parse('4 August 2010 13:41')
-        allow(Time).to receive(:current).and_return(@time)
-      end
-
       def do_patch(current_password, new_password, password_confirmation)
         patch :update, :id => 50000, :current_password => current_password,
               :admin_user => {:password => new_password, :password_confirmation => password_confirmation}
@@ -60,7 +55,7 @@ RSpec.describe Admin::ProfileController, type: :controller do
         it "should update password_changed_at to current time" do
           do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
           @user.reload
-          expect(@user.password_changed_at).to eq(@time)
+          expect(@user.password_changed_at).to be_within(1.second).of(Time.current)
         end
 
         it "should set force_password_reset to false" do
@@ -87,7 +82,7 @@ RSpec.describe Admin::ProfileController, type: :controller do
         it "should not update password_changed_at" do
           do_patch('Letmeout1!', 'Letmein1!', 'Letmein1!')
           @user.reload
-          expect(@user.password_changed_at).not_to eq(@time)
+          expect(@user.password_changed_at).not_to be_within(1.second).of(Time.current)
           expect(@user.valid_password?('Letmein1!')).to be_truthy
         end
 

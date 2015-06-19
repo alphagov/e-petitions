@@ -62,6 +62,10 @@ FactoryGirl.define do
       evaluator.sponsor_count.times do
         petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
       end
+
+      if petition.signature_count.zero?
+        petition.signature_count += 1 if petition.creator_signature.validated?
+      end
     end
 
     trait :with_additional_details do
@@ -109,6 +113,14 @@ FactoryGirl.define do
     state      Petition::HIDDEN_STATE
   end
 
+  factory :awaiting_petition, :parent => :open_petition do
+    response_threshold_reached_at { 1.week.ago }
+  end
+
+  factory :responded_petition, :parent => :awaiting_petition do
+    response "Government Response"
+  end
+
   factory :debated_petition, :parent => :open_petition do
     transient do
       debated_on { nil }
@@ -134,6 +146,12 @@ FactoryGirl.define do
     uk_citizenship       '1'
     notify_by_email      '1'
     state                Signature::VALIDATED_STATE
+
+    after(:create) do |signature, evaluator|
+      if signature.petition
+        signature.petition.increment!(:signature_count) if signature.validated?
+      end
+    end
   end
 
   factory :pending_signature, :parent => :signature do

@@ -70,6 +70,17 @@ RSpec.describe SponsorsController, type: :controller do
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
+    context 'creator signature is pending' do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { petition.creator_signature }
+
+      it 'validates the creator signature' do
+        expect {
+          get :show, petition_id: petition.id, token: petition.sponsor_token
+        }.to change{ signature.reload.validated? }.from(false).to(true)
+      end
+    end
+
     context 'petition has reached maximum amount of sponsors' do
       it 'redirects to petition moderation info page when petition is in sponsored state' do
         sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)

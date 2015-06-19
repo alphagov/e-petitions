@@ -13,7 +13,8 @@ en-GB:
       open: "Open petitions (%{quantity})"
       closed: "Closed petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
-      with_response: "Petitions with a Government response (%{quantity})"
+      awaiting_response: "Awaiting a government response (%{quantity})"
+      with_response: "Government responses (%{quantity})"
       with_debate_outcome: "Petitions debated in Parliament (%{quantity})"
 
     emails:
@@ -43,6 +44,11 @@ en-GB:
         gather_sponsors_for_petition: |-
           Parliament petitions - It's time to get sponsors to support your petition
       signoff_prefix: "HM Government & Parliament Petitions"
+
+    waiting_for_response_in_words:
+      zero: "Waiting for less than a day"
+      one: "Waiting for 1 day"
+      other: "Waiting for %{formatted_count} days"
 
     counts:
       default:

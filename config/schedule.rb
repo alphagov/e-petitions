@@ -26,7 +26,3 @@ end
 every :weekday, :at => '6.30am' do # Use any day of the week or :weekend, :weekday
   rake "epets:threshold_email_reminder", :output => nil
 end
-
-every 5.minutes do
-  runner "Petition.update_all_signature_counts", :output => nil
-end

@@ -29,7 +29,6 @@ When /^I confirm my email address$/ do
 end
 
 def should_be_signature_count_of(count)
-  Petition.update_all_signature_counts
   visit petition_path(@petition)
   expect(page).to have_css("p.signature-count", :text => count.to_s + " signatures")
 end
@@ -164,7 +163,6 @@ Then /^I should have signed the petition after confirming my email address$/ do
   steps %Q(
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    And all petitions have had their signatures counted
   )
   should_be_signature_count_of(3)
 end

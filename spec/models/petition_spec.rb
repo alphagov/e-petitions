@@ -313,6 +313,40 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "not_hidden" do
+      let!(:petition) { FactoryGirl.create(:hidden_petition) }
+
+      it "returns only petitions that are not hidden" do
+        expect(Petition.not_hidden).not_to include(petition)
+      end
+    end
+
+    context "awaiting_response" do
+      context "when the petition has not reached the response threshold" do
+        let(:petition) { FactoryGirl.create(:open_petition) }
+
+        it "is not included in the list" do
+          expect(Petition.awaiting_response).not_to include(petition)
+        end
+      end
+
+      context "when a petition has reached the response threshold" do
+        let(:petition) { FactoryGirl.create(:awaiting_petition) }
+
+        it "is included in the list" do
+          expect(Petition.awaiting_response).to include(petition)
+        end
+      end
+
+      context "when a petition has a response" do
+        let(:petition) { FactoryGirl.create(:responded_petition) }
+
+        it "is not included in the list" do
+          expect(Petition.awaiting_response).not_to include(petition)
+        end
+      end
+    end
+
     context "with_response" do
       before do
         @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
@@ -423,29 +457,25 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "signature count" do
-    before :each do
-      @petition = FactoryGirl.create(:open_petition)
-      @petition.creator_signature.update_attribute(:state, Signature::VALIDATED_STATE)
-      Petition.update_all_signature_counts
+    let(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+
+    before do
+      petition.validate_creator_signature!
     end
 
     it "returns 1 (the creator) for a new petition" do
-      @petition.reload
-      expect(@petition.signature_count).to eq(1)
+      expect(petition.signature_count).to eq(1)
     end
 
     it "still returns 1 with a new signature" do
-      FactoryGirl.create(:signature, :petition => @petition)
-      @petition.reload
-      expect(@petition.signature_count).to eq(1)
+      signature && petition.reload
+      expect(petition.signature_count).to eq(1)
     end
 
     it "returns 2 when signature is validated" do
-      s = FactoryGirl.create(:signature, :petition => @petition)
-      s.update_attribute(:state, Signature::VALIDATED_STATE)
-      Petition.update_all_signature_counts
-      @petition.reload
-      expect(@petition.signature_count).to eq(2)
+      signature.validate! && petition.reload
+      expect(petition.signature_count).to eq(2)
     end
   end
 
@@ -535,6 +565,40 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#moderated?" do
+    context "when the petition is hidden" do
+      subject { FactoryGirl.create(:hidden_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is rejected" do
+      subject { FactoryGirl.create(:rejected_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is open" do
+      subject { FactoryGirl.create(:open_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+
+    context "when the petition is closed" do
+      subject { FactoryGirl.create(:closed_petition) }
+
+      it "returns true" do
+        expect(subject.moderated?).to eq(true)
+      end
+    end
+  end
+
   describe "#in_todo_list?" do
     it "is in todo list when the state is sponsored" do
       expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_todo_list?).to be_truthy
@@ -560,25 +624,6 @@ RSpec.describe Petition, type: :model do
     it "gives rejection description from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
       expect(petition.rejection_description).to eq('<p>There is already a petition about this issue.</p>')
-    end
-  end
-
-  describe "updating signature counts" do
-    let(:petition) { double }
-    before do
-      allow(Petition).to receive_messages(:visible => [petition])
-    end
-    it "calls update signature counts for each petition" do
-      allow(petition).to receive(:count_validated_signatures).and_return(123)
-      allow(petition).to receive(:signature_count).and_return(122)
-      expect(petition).to receive(:update_attribute).with(:signature_count, 123)
-      Petition.update_all_signature_counts
-    end
-    it "doesn't change signature counts when not changed" do
-      allow(petition).to receive(:count_validated_signatures).and_return(122)
-      allow(petition).to receive(:signature_count).and_return(122)
-      expect(petition).not_to receive(:update_attribute).with(:signature_count, 122)
-      Petition.update_all_signature_counts
     end
   end
 
@@ -676,42 +721,138 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#increment_signature_count!" do
+    let(:signature_count) { 8 }
+    let(:petition) do
+      FactoryGirl.create(:open_petition, {
+        signature_count: signature_count,
+        last_signed_at: 2.days.ago,
+        updated_at: 2.days.ago
+      })
+    end
+
+    it "increases the signature count by 1" do
+      expect{
+        petition.increment_signature_count!
+      }.to change{ petition.signature_count }.by(1)
+    end
+
+    it "updates the last_signed_at timestamp" do
+      petition.increment_signature_count!
+      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "updates the updated_at timestamp" do
+      petition.increment_signature_count!
+      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    context "when the signature count crosses the threshold for a response" do
+      let(:signature_count) { 9 }
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(10)
+      end
+
+      it "records the time it happened" do
+        petition.increment_signature_count!
+        expect(petition.response_threshold_reached_at).to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "at_threshold_for_response?" do
+    context "when response_threshold_reached_at is not present" do
+      let(:petition) { FactoryGirl.create(:open_petition, signature_count: signature_count) }
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(10)
+      end
+
+      context "and the signature count is 2 or more less than the threshold" do
+        let(:signature_count) { 8 }
+
+        it "is falsey" do
+          expect(petition.at_threshold_for_response?).to be_falsey
+        end
+      end
+
+      context "and the signature count is 1 less than the threshold" do
+        let(:signature_count) { 9 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+
+      context "and the signature count equal to the threshold" do
+        let(:signature_count) { 10 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+
+      context "and the signature count is more than the threshold" do
+        let(:signature_count) { 10 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+    end
+
+    context "when response_threshold_reached_at is present" do
+      let(:petition) { FactoryGirl.create(:awaiting_petition) }
+
+      before do
+        expect(Site).not_to receive(:threshold_for_response)
+      end
+
+      it "is falsey" do
+        expect(petition.at_threshold_for_response?).to be_falsey
+      end
+    end
+  end
+
   describe '#publish!' do
-    subject { FactoryGirl.create(:petition) }
-    let(:now) { Chronic.parse("1 Jan 2011") }
-    before { allow(Time).to receive(:current).and_return(now) }
+    subject(:petition) { FactoryGirl.create(:petition) }
+    let(:now) { Time.current }
+    let(:duration) { Site.petition_duration.months }
+    let(:closing_date) { (now + duration).end_of_day }
+
+    before do
+      petition.publish!
+    end
 
     it "sets the state to OPEN" do
-      subject.publish!
-      expect(subject.state).to eq(Petition::OPEN_STATE)
+      expect(petition.state).to eq(Petition::OPEN_STATE)
     end
 
     it "sets the open date to now" do
-      subject.publish!
-      expect(subject.open_at.change(usec: 0)).to eq(now.change(usec: 0))
+      expect(petition.open_at).to be_within(1.second).of(now)
     end
 
     it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-      subject.publish!
-      expect(subject.closed_at.change(usec: 0)).to eq( (now + Site.petition_duration.months).end_of_day.change(usec: 0) )
+      expect(petition.closed_at).to be_within(1.second).of(closing_date)
     end
   end
 
   describe "#reject" do
-    subject { FactoryGirl.create(:petition) }
+    subject(:petition) { FactoryGirl.create(:petition) }
 
     %w[no-action duplicate irrelevant honours].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          subject.reject(rejection_code: rejection_code)
+          petition.reject(rejection_code: rejection_code)
         end
 
         it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(subject.rejection_code).to eq(rejection_code)
+          expect(petition.rejection_code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'rejected'" do
-          expect(subject.state).to eq("rejected")
+          expect(petition.state).to eq("rejected")
         end
       end
     end
@@ -719,15 +860,15 @@ RSpec.describe Petition, type: :model do
     %w[libellous offensive].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          subject.reject(rejection_code: rejection_code)
+          petition.reject(rejection_code: rejection_code)
         end
 
         it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(subject.rejection_code).to eq(rejection_code)
+          expect(petition.rejection_code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'hidden'" do
-          expect(subject.state).to eq("hidden")
+          expect(petition.state).to eq("hidden")
         end
       end
     end
@@ -764,16 +905,52 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#validate_creator_signature!" do
-    context "with first validated sponsor" do
+    let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
+    let(:signature) { petition.creator_signature }
 
-      let(:petition){ FactoryGirl.create(:pending_petition) }
-      let(:sponsor){ FactoryGirl.create(:sponsor, :validated, petition: petition) }
+    let(:attributes) do
+      { created_at: 2.days.ago, updated_at: 2.days.ago }
+    end
 
-      it "changes creator signature state to validated" do
-        sponsor.reload
-        expect{petition.validate_creator_signature!}.to change{petition.creator_signature.state}
-                                                         .from(Signature::PENDING_STATE)
-                                                         .to(Signature::VALIDATED_STATE)
+    it "changes creator signature state to validated" do
+      expect {
+        petition.validate_creator_signature!
+      }.to change { signature.reload.validated? }.from(false).to(true)
+    end
+
+    it "increments the signature count" do
+      expect {
+        petition.validate_creator_signature!
+      }.to change { petition.signature_count }.by(1)
+    end
+
+    it "timestamps the petition to say it was updated just now" do
+      petition.validate_creator_signature!
+      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "timestamps the petition to say it was last signed at just now" do
+      petition.validate_creator_signature!
+      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+    end
+  end
+
+  describe "#validated_creator_signature?" do
+    context "when the creator signature is not validated" do
+      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
+      let(:signature) { FactoryGirl.create(:pending_signature) }
+
+      it "returns false" do
+        expect(petition.validated_creator_signature?).to eq(false)
+      end
+    end
+
+    context "when the creator signature is validated" do
+      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+
+      it "returns false" do
+        expect(petition.validated_creator_signature?).to eq(true)
       end
     end
   end

@@ -245,7 +245,9 @@ CREATE TABLE petitions (
     sponsor_token character varying(255),
     response_summary character varying(500),
     government_response_at timestamp without time zone,
-    scheduled_debate_date date
+    scheduled_debate_date date,
+    last_signed_at timestamp without time zone,
+    response_threshold_reached_at timestamp without time zone
 );
 
 
@@ -296,7 +298,8 @@ CREATE TABLE signatures (
     last_emailed_at timestamp without time zone,
     email character varying(255),
     unsubscribe_token character varying,
-    constituency_id character varying
+    constituency_id character varying,
+    validated_at timestamp without time zone
 );
 
 
@@ -630,10 +633,24 @@ CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING b
 
 
 --
+-- Name: index_petitions_on_last_signed_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_last_signed_at ON petitions USING btree (last_signed_at);
+
+
+--
 -- Name: index_petitions_on_response_required_and_signature_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_petitions_on_response_required_and_signature_count ON petitions USING btree (response_required, signature_count);
+
+
+--
+-- Name: index_petitions_on_response_threshold_reached_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_response_threshold_reached_at ON petitions USING btree (response_threshold_reached_at);
 
 
 --
@@ -693,6 +710,13 @@ CREATE INDEX index_signatures_on_updated_at ON signatures USING btree (updated_a
 
 
 --
+-- Name: index_signatures_on_validated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_validated_at ON signatures USING btree (validated_at);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -736,6 +760,12 @@ INSERT INTO schema_migrations (version) VALUES ('20150618134919');
 INSERT INTO schema_migrations (version) VALUES ('20150618143114');
 
 INSERT INTO schema_migrations (version) VALUES ('20150618144922');
+
+INSERT INTO schema_migrations (version) VALUES ('20150618233548');
+
+INSERT INTO schema_migrations (version) VALUES ('20150618233718');
+
+INSERT INTO schema_migrations (version) VALUES ('20150619075903');
 
 INSERT INTO schema_migrations (version) VALUES ('20150619090833');
 

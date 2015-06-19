@@ -34,7 +34,6 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
   how_many.times do
     FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.id).validate!
   end
-  Petition.update_all_signature_counts
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
