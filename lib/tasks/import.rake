@@ -32,8 +32,8 @@ namespace :import do
       if ArchivedPetition::STATES.include?(row['state'])
         petition = ArchivedPetition.find_or_initialize_by(id: row['id'])
 
-        petition.action             = row['title']
-        petition.additional_details = row['description']
+        petition.title              = row['title']
+        petition.description        = row['description']
         petition.response           = row['response']
         petition.state              = row['state']
         petition.opened_at          = row['open_at']
@@ -47,12 +47,12 @@ namespace :import do
             petition.reason_for_rejection = "#{rejection_reasons[row['rejection_code']]}\n\nThe following explanatory notes have been added:\n\n#{row['rejection_text']}"
           end
         end
+
+        petition.created_at = row['created_at']
+        petition.updated_at = row['updated_at']
+
+        petition.save!
       end
-
-      petition.created_at = row['created_at']
-      petition.updated_at = row['updated_at']
-
-      petition.save!
     end
   end
 end
