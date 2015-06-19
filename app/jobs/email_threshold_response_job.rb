@@ -15,9 +15,9 @@ class EmailThresholdResponseJob < ActiveJob::Base
     setup_job(petition, email_requested_at, mailer, threshold_logger)
     return unless newest_threshold_email_request?
 
-    @logger.info("Starting job for petition '#{petition.title}' with email requested at : #{petition.email_requested_at}")
+    @logger.info("Starting job for petition '#{petition.action}' with email requested at : #{petition.email_requested_at}")
     email_signees
-    @logger.info("Finished job for petition '#{@petition.title}'")
+    @logger.info("Finished job for petition '#{@petition.action}'")
 
     assert_all_signees_notified
   end
@@ -46,7 +46,7 @@ class EmailThresholdResponseJob < ActiveJob::Base
   def assert_all_signees_notified
     return if @petition.need_emailing.count == 0
 
-    @logger.info("Raising error to force a retry of email send of '#{@petition.title}'")
+    @logger.info("Raising error to force a retry of email send of '#{@petition.action}'")
     raise PleaseRetryEmailJob
   end
 

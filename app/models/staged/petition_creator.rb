@@ -51,7 +51,7 @@ module Staged
           petition.creator_signature.email.strip! unless petition.creator_signature.email.blank?
           petition.creator_signature.ip_address = @request.remote_ip
         end
-        petition.title.strip! unless petition.title.blank?
+        petition.action.strip! unless petition.action.blank?
       end
 
       def build_petition

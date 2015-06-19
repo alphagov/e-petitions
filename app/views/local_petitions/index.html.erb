@@ -10,7 +10,7 @@
     <ol>
       <% @petitions.each do |petition| %>
         <li class="petition-item petition-<%= petition.state %>">
-          <%= link_to petition.title, petition_path(petition) %>
+          <%= link_to petition.action, petition_path(petition) %>
           <p>
             <%= signature_count(:in_your_constituency, petition.constituency_signature_count) %>
             (<%= signature_count(:in_total, petition.signature_count) %>)

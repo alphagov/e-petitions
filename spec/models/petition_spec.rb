@@ -45,24 +45,23 @@ RSpec.describe Petition, type: :model do
   end
 
   context "validations" do
-    it { is_expected.to validate_presence_of(:title).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:description).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
-    it "should validate the length of :title to within 80 characters" do
-      expect(FactoryGirl.build(:petition, :title => 'x' * 80)).to be_valid
-      expect(FactoryGirl.build(:petition, :title => 'x' * 81)).not_to be_valid
+    it "should validate the length of :action to within 80 characters" do
+      expect(FactoryGirl.build(:petition, :action => 'x' * 80)).to be_valid
+      expect(FactoryGirl.build(:petition, :action => 'x' * 81)).not_to be_valid
     end
 
-    it "should validate the length of :action to within 300 characters" do
-      expect(FactoryGirl.build(:petition, :action => 'x' * 300)).to be_valid
-      expect(FactoryGirl.build(:petition, :action => 'x' * 301)).not_to be_valid
+    it "should validate the length of :background to within 300 characters" do
+      expect(FactoryGirl.build(:petition, :background => 'x' * 300)).to be_valid
+      expect(FactoryGirl.build(:petition, :background => 'x' * 301)).not_to be_valid
     end
 
-    it "should validate the length of :description to within 800 characters" do
-      expect(FactoryGirl.build(:petition, :description => 'x' * 800)).to be_valid
-      expect(FactoryGirl.build(:petition, :description => 'x' * 801)).not_to be_valid
+    it "should validate the length of :additional_details to within 800 characters" do
+      expect(FactoryGirl.build(:petition, :additional_details => 'x' * 800)).to be_valid
+      expect(FactoryGirl.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
     end
 
     it "validates the length of :response_summary to within 500 characters" do
@@ -171,11 +170,11 @@ RSpec.describe Petition, type: :model do
     describe "last_hour_trending" do
       before(:each) do
         11.times do |count|
-          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :title => "petition out of range")
+        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :action => "petition out of range")
         @petition_with_old_signatures.signatures.first.update_attribute(:updated_at, 2.hours.ago)
       end
 
@@ -191,7 +190,7 @@ RSpec.describe Petition, type: :model do
       it "limits the result to 3 petitions" do
         # 13 petitions signed in the last hour
         2.times do |count|
-          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
@@ -209,11 +208,11 @@ RSpec.describe Petition, type: :model do
     describe "trending" do
       before(:each) do
         15.times do |count|
-          petition = FactoryGirl.create(:open_petition, :title => "petition ##{count+1}")
+          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
           count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
         end
 
-        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :title => "petition out of range")
+        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :action => "petition out of range")
         10.times { FactoryGirl.create(:validated_signature, :petition => @petition_with_old_signatures, :updated_at => 2.days.ago) }
       end
 
@@ -224,18 +223,18 @@ RSpec.describe Petition, type: :model do
 
         it "orders the petitions by the highest signature count" do
           trending_petitions = Petition.trending(1)
-          expect(trending_petitions.first.title).to eq("petition #15")
-          expect(trending_petitions.last.title).to  eq("petition #6")
+          expect(trending_petitions.first.action).to eq("petition #15")
+          expect(trending_petitions.last.action).to  eq("petition #6")
         end
 
         it "ignores petitions with signatures that are outside a rolling 24 hour period" do
-          expect(Petition.trending(1).map(&:title).include?(@petition_with_old_signatures.title)).to be_falsey
+          expect(Petition.trending(1).map(&:action).include?(@petition_with_old_signatures.action)).to be_falsey
         end
       end
 
       context "finding trending petitions for the last 7 days" do
         it "includes the petition with older signatures" do
-          expect(Petition.trending(7).map(&:title).include?(@petition_with_old_signatures.title)).to be_truthy
+          expect(Petition.trending(7).map(&:action).include?(@petition_with_old_signatures.action)).to be_truthy
         end
       end
 

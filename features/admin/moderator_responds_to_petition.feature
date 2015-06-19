@@ -13,16 +13,16 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator edits petition before publishing
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and description: "Enforce Kyotoe protocol in more countries"
+    And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "Edit petition content"
     Then I am redirected to the petition edit details page
     And the markup should be valid
-    And the "Title" field should contain "wee need to save our plaanet"
-    And the "Action" field should contain "Reduce polootion"
-    And the "Description" field should contain "Enforce Kyotoe protocol in more countries"
-    Then I fill in "Title" with "We need to save our planet"
-    And I fill in "Action" with "Reduce pollution"
-    And I fill in "Description" with "Enforce Kyoto Protocol in more countries"
+    And the "Action" field should contain "wee need to save our plaanet"
+    And the "Background" field should contain "Reduce polootion"
+    And the "Additional details" field should contain "Enforce Kyotoe protocol in more countries"
+    Then I fill in "Action" with "We need to save our planet"
+    And I fill in "Background" with "Reduce pollution"
+    And I fill in "Additional details" with "Enforce Kyoto Protocol in more countries"
     And I press "Save"
     Then I am redirected to the petition edit page
     And I should see "We need to save our planet"
@@ -31,19 +31,18 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator edits and tries to save an invalid petition
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and description: "Enforce Kyotoe protocol in more countries"
+    And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "Edit petition content"
-    Then I fill in "Title" with ""
-    And I fill in "Action" with ""
-    And I fill in "Description" with ""
+    Then I fill in "Action" with ""
+    And I fill in "Background" with ""
+    And I fill in "Additional details" with ""
     And I press "Save"
     Then I should see "Action must be completed"
     And I should see "Background must be completed"
-    And I should see "Supporting details must be completed"
 
   Scenario: Moderator cancel editing petition
     Given I am logged in as a moderator
-    And I visit a sponsored petition with title: "Blah", that has action: "Blah" and description: "Blah"
+    And I visit a sponsored petition with action: "Blah", that has background: "Blah" and additional details: "Blah"
     And I follow "Edit petition content"
     Then I am redirected to the petition edit details page
     When I follow "Cancel"
@@ -86,10 +85,10 @@ Feature: Moderator respond to petition
 
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as a moderator
-    And a sponsored petition exists with title: "Rupert Murdoch is on the run"
+    And a sponsored petition exists with action: "Rupert Murdoch is on the run"
     When I go to the Admin moderate petitions page for "Rupert Murdoch is on the run"
     And I reject the petition with a reason code "-- Select a rejection code --"
-    Then a petition should exist with title: "Rupert Murdoch is on the run", state: "sponsored"
+    Then a petition should exist with action: "Rupert Murdoch is on the run", state: "sponsored"
     And I should see "can't be blank"
 
   Scenario: Moderator rejects and hides previously rejected (and public) petition

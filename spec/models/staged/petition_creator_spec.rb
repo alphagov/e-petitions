@@ -9,10 +9,10 @@ RSpec.describe Staged::PetitionCreator, type: :model do
   let(:petition) { subject.petition }
 
   describe '#create_petition' do
-    it 'strips trailing whitespace from the petition title' do
-      petition_params[:title] = ' woo '
+    it 'strips trailing whitespace from the petition action' do
+      petition_params[:action] = ' woo '
       subject.create_petition
-      expect(petition.title).to eq 'woo'
+      expect(petition.action).to eq 'woo'
     end
 
     context 'when creator_signature attributes are present' do
@@ -87,9 +87,9 @@ RSpec.describe Staged::PetitionCreator, type: :model do
     end
     let(:petition_params) do
       {
-        :title => 'Save the planet',
-        :action => 'Limit temperature rise at two degrees',
-        :description => 'Global warming is upon us',
+        :action => 'Save the planet',
+        :background => 'Limit temperature rise at two degrees',
+        :additional_details => 'Global warming is upon us',
         :creator_signature_attributes => creator_signature_params
       }
     end
@@ -117,7 +117,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
 
       context 'when there are errors on the petition' do
         context 'around the "petition" UI' do
-          before { petition_params.delete(:title) }
+          before { petition_params.delete(:action) }
 
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'petition', back_is: 'petition', not_moving_is: 'petition'

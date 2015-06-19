@@ -1,6 +1,6 @@
 Given /^a set of petitions$/ do
   3.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :title => "Petition #{x}", :description => "description")
+    @petition = FactoryGirl.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
   end
 end
 
@@ -8,9 +8,9 @@ Then /^I am taken to a landing page$/ do
   expect(page).to have_content("Thank you")
 end
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_title|
+Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_action|
   petition_args = {
-    :title => petition_title,
+    :action => petition_action,
     :closed_at => 1.day.from_now,
     :state => state || "open"
   }
@@ -31,8 +31,8 @@ Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
   @petition = FactoryGirl.create(:archived_petition, :rejected, title: title)
 end
 
-Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |title, no_validated, no_pending|
-  petition = Petition.find_by(title: title)
+Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |petition_action, no_validated, no_pending|
+  petition = Petition.find_by(action: petition_action)
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
   no_pending.times { petition.signatures << FactoryGirl.create(:pending_signature) }
 end
@@ -44,22 +44,22 @@ Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, coun
   end
 end
 
-Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |title, count|
-    p = FactoryGirl.create(:open_petition, title: title)
+Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |petition_action, count|
+    p = FactoryGirl.create(:open_petition, action: petition_action)
     p.update_attribute(:signature_count, count)
 end
 
-Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |title, response, response_summary|
-  @petition = FactoryGirl.create(:open_petition, title: title, response: response, response_summary: response_summary)
+Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, response, response_summary|
+  @petition = FactoryGirl.create(:open_petition, action: petition_action, response: response, response_summary: response_summary)
 end
 
-Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/ do |state, title, government_response_days_ago |
+Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/ do |state, petition_action, parliament_response_days_ago |
   petition_attributes = {
-    title: title,
+    action: petition_action,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
     response_summary: 'Response Summary',
     response: 'Government Response',
-    government_response_at: government_response_days_ago.to_i.days.ago
+    government_response_at: parliament_response_days_ago.to_i.days.ago
   }
   FactoryGirl.create(:open_petition, petition_attributes)
 end
@@ -69,29 +69,29 @@ Given /^I have created a petition$/ do
   reset_mailer
 end
 
-Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |title, no_validated|
-  petition = Petition.find_by(title: title)
+Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |petition_action, no_validated|
+  petition = Petition.find_by(action: petition_action)
   (no_validated - 1).times { petition.signatures << FactoryGirl.create(:validated_signature) }
 end
 
-And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |title|
-  petition = Petition.find_by(title: title)
+And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |petition_action|
+  petition = Petition.find_by(action: petition_action)
   Site.maximum_number_of_sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
 end
 
-And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |title, sponsors|
-  petition = Petition.find_by(title: title)
+And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |petition_action, sponsors|
+  petition = Petition.find_by(action: petition_action)
   sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
 end
 
-Given /^a petition "([^"]*)" has been closed$/ do |petition_title|
-  @petition = FactoryGirl.create(:open_petition, :title => petition_title, :closed_at => 1.day.ago)
+Given /^a petition "([^"]*)" has been closed$/ do |petition_action|
+  @petition = FactoryGirl.create(:open_petition, :action => petition_action, :closed_at => 1.day.ago)
 end
 
-Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_title, reason_or_not, reason|
+Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:petition,
-    :title => petition_title,
+    :action => petition_action,
     :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
     :rejection_text => reason_text)
@@ -140,11 +140,13 @@ Then /^I should see all petitions$/ do
 end
 
 Then /^I should see the petition details$/ do
-  expect(page).to have_content(@petition.title)
-  expect(page).to have_content(@petition.description)
-
-  unless @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(ArchivedPetition)
+    expect(page).to have_content(@petition.title)
+    expect(page).to have_content(@petition.description)
+  else
     expect(page).to have_content(@petition.action)
+    expect(page).to have_content(@petition.additional_details)
+    expect(page).to have_content(@petition.background)
   end
 end
 
@@ -188,15 +190,15 @@ Then /^I should be asked to search for a new petition$/ do
 end
 
 Then /^I should see a list of existing petitions I can sign$/ do
-  expect(page).to have_content(@petition.title)
+  expect(page).to have_content(@petition.action)
 end
 
 Then /^I should see a list of (\d+) petitions$/ do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
-Then /^I should see my search query already filled in as the title of the petition$/ do
-  expect(page).to have_field("Action", "#{@petition.title}")
+Then /^I should see my search query already filled in as the action of the petition$/ do
+  expect(page).to have_field("Action", "#{@petition.action}")
 end
 
 Then /^I can click on a link to return to the petition$/ do
@@ -209,20 +211,20 @@ Then /^I should receive an email telling me how to get an MP on board$/ do
   expect(current_email.default_part_body.to_s).to include("MP")
 end
 
-When(/^I am allowed to make the petition title too long$/) do
+When(/^I am allowed to make the petition action too long$/) do
   # NOTE: we do this to remove the maxlength attribtue on the petition
-  # title input because any modern browser/driver will not let us enter
+  # action input because any modern browser/driver will not let us enter
   # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "document.getElementById('petition_title').removeAttribute('maxlength');"
+  page.execute_script "document.getElementById('petition_action').removeAttribute('maxlength');"
 end
 
-Then(/^the petition with title: "(.*?)" should have requested an email after "(.*?)"$/) do |title, timestamp|
-  petition = Petition.find_by!(title: title)
+Then(/^the petition with action: "(.*?)" should have requested an email after "(.*?)"$/) do |petition_action, timestamp|
+  petition = Petition.find_by!(action: petition_action)
   expect(petition.email_requested_at).to be >= timestamp.in_time_zone
 end
 
-Then(/^the petition with title: "(.*?)" should not have requested an email$/) do |title|
-  petition = Petition.find_by!(title: title)
+Then(/^the petition with action: "(.*?)" should not have requested an email$/) do |petition_action|
+  petition = Petition.find_by!(action: petition_action)
   expect(petition.email_requested_at).to be_nil
 end
 
@@ -238,7 +240,7 @@ When /^I fill in the petition details/ do
   steps %Q(
     When I fill in "Action" with "The wombats of wimbledon rock."
     And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Supporting details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   )
 end
 
@@ -280,19 +282,19 @@ Then(/^I can share it via (.+)$/) do |service|
   case service
   when 'Email'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Email', %r[\Amailto:?subject=#{URI.escape(@petition.title)}&body=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Email', %r[\Amailto:?subject=#{URI.escape(@petition.action)}&body=#{URI.escape(petition_url(@petition))}\z])
     end
   when 'Facebook'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Facebook', %r[\Ahttp://www.facebook.com/sharer.php?t=#{URI.escape(title)}&u=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Facebook', %r[\Ahttp://www.facebook.com/sharer.php?t=#{URI.escape(@petition.action)}&u=#{URI.escape(petition_url(@petition))}\z])
     end
   when 'Twitter'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Twitter', %r[\Ahttp://twitter.com/share?text=#{URI.escape(title)}&url=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Twitter', %r[\Ahttp://twitter.com/share?text=#{URI.escape(@petition.action)}&url=#{URI.escape(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Whatsapp', %r[\Awhatsapp://send?text=#{URI.escape(title + "\n" + petition_url(@petition))}\z])
+      expect(page).to have_link('Whatsapp', %r[\Awhatsapp://send?text=#{URI.escape(@petition.action + "\n" + petition_url(@petition))}\z])
     end
   else
     raise ArgumentError, "Unknown sharing service: #{service.inspect}"
@@ -303,11 +305,11 @@ Then /^I expand "([^"]*)"/ do |text|
   page.find("//details/summary[contains(., '#{text}')]").click
 end
 
-Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |state, title|
+Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |state, petition_action|
   petition_closed_at = state == 'closed' ? 1.day.ago : 1.day.from_now
   petition_state = state == 'closed' ? 'open' : state
   petition_args = {
-    title: title,
+    action: petition_action,
     open_at: 3.months.ago,
     closed_at: petition_closed_at,
     state: petition_state

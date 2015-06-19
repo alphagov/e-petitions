@@ -225,8 +225,8 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 CREATE TABLE petitions (
     id integer NOT NULL,
-    title character varying(255) NOT NULL,
-    description text,
+    action character varying(255) NOT NULL,
+    additional_details text,
     response text,
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     open_at timestamp without time zone,
@@ -241,7 +241,7 @@ CREATE TABLE petitions (
     rejection_code character varying(50),
     notified_by_email boolean DEFAULT false,
     email_requested_at timestamp without time zone,
-    action character varying(200),
+    background character varying(200),
     sponsor_token character varying(255),
     response_summary character varying(500),
     government_response_at timestamp without time zone,
@@ -605,7 +605,21 @@ CREATE INDEX index_delayed_jobs_on_priority_and_run_at ON delayed_jobs USING btr
 -- Name: index_petitions_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_petitions_on_action ON petitions USING gin (to_tsvector('english'::regconfig, description));
+CREATE INDEX index_petitions_on_action ON petitions USING gin (to_tsvector('english'::regconfig, (action)::text));
+
+
+--
+-- Name: index_petitions_on_additional_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_additional_details ON petitions USING gin (to_tsvector('english'::regconfig, additional_details));
+
+
+--
+-- Name: index_petitions_on_background; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_background ON petitions USING gin (to_tsvector('english'::regconfig, (background)::text));
 
 
 --
@@ -613,13 +627,6 @@ CREATE INDEX index_petitions_on_action ON petitions USING gin (to_tsvector('engl
 --
 
 CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING btree (creator_signature_id);
-
-
---
--- Name: index_petitions_on_description; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_petitions_on_description ON petitions USING gin (to_tsvector('english'::regconfig, description));
 
 
 --
@@ -641,13 +648,6 @@ CREATE INDEX index_petitions_on_state_and_created_at ON petitions USING btree (s
 --
 
 CREATE INDEX index_petitions_on_state_and_signature_count ON petitions USING btree (state, signature_count);
-
-
---
--- Name: index_petitions_on_title; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_petitions_on_title ON petitions USING gin (to_tsvector('english'::regconfig, (title)::text));
 
 
 --
@@ -730,6 +730,12 @@ INSERT INTO schema_migrations (version) VALUES ('20150615145953');
 INSERT INTO schema_migrations (version) VALUES ('20150615151103');
 
 INSERT INTO schema_migrations (version) VALUES ('20150617164310');
+
+INSERT INTO schema_migrations (version) VALUES ('20150618134919');
+
+INSERT INTO schema_migrations (version) VALUES ('20150618143114');
+
+INSERT INTO schema_migrations (version) VALUES ('20150618144922');
 
 INSERT INTO schema_migrations (version) VALUES ('20150619090833');
 

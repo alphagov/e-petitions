@@ -25,10 +25,10 @@ Feature: A moderator user views all petitions
     Then I should not see the petition "My validation petition"
 
   Scenario: Filter list by state
-    Given an open petition exists with title: "My open petition"
-    And a closed petition exists with title: "My closed petition"
-    And a rejected petition exists with title: "My rejected petition"
-    And a hidden petition exists with title: "My hidden petition"
+    Given an open petition exists with action: "My open petition"
+    And a closed petition exists with action: "My closed petition"
+    And a rejected petition exists with action: "My rejected petition"
+    And a hidden petition exists with action: "My hidden petition"
 
     When I view all petitions
     Then I should see the following list of petitions:
@@ -40,7 +40,7 @@ Feature: A moderator user views all petitions
     And I filter the list to show "open" petitions
     Then I should see the following list of petitions:
      | My open petition     |
-     
+
     And I filter the list to show "closed" petitions
     Then I should see the following list of petitions:
      | My closed petition   |
@@ -65,12 +65,12 @@ Feature: A moderator user views all petitions
 
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin
-    And an open petition exists with title: "Simply the best"
+    And an open petition exists with action: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"
 
   Scenario: A moderator user can view all petitions
     Given I am logged in as a moderator
-    And an open petition exists with title: "Simply the best"
+    And an open petition exists with action: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"

@@ -1,13 +1,13 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.title %>" you should:</p>
+<p>To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.action %>" you should:</p>
 
 <ol>
   <li>
     <p>Review the details of the petition to make sure you agree with it:</p>
-    <p><b>Title</b>: <%= @petition.title  %></p>
     <p><b>Action</b>: <%= @petition.action  %></p>
-    <p><b>Full description</b>: <%= @petition.description  %></p>
+    <p><b>Background</b>: <%= @petition.background  %></p>
+    <p><b>Additional details</b>: <%= @petition.additional_details  %></p>
   </li>
 
   <li>

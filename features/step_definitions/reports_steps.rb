@@ -5,14 +5,14 @@ end
 
 Then /^I should see trending petitions for the last (\d+) (hours|days)$/ do |time_period, hours_or_days|
   (11..15).each do |petition_number|
-    expect(page).to have_css("tr.trending_petition td.title", :text => "Petition #{petition_number}")
+    expect(page).to have_css("tr.trending_petition td.action", :text => "Petition #{petition_number}")
     expect(page).to have_css("tr.trending_petition td.count", :text => "#{petition_number+1}")
   end
 end
 
 Given /^there has been activity on a number of petitions in the last (\d+) (hours|days)$/ do |number_of_days, hours_or_days|
   (1..15).each do |count|
-    petition = FactoryGirl.create(:open_petition, :title => "Petition #{count}")
+    petition = FactoryGirl.create(:open_petition, :action => "Petition #{count}")
     timestamp = (number_of_days - 1).send(hours_or_days).ago
     count.times { FactoryGirl.create(:validated_signature, :petition => petition, :updated_at => timestamp) }
   end

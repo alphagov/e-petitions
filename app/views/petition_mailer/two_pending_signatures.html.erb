@@ -1,6 +1,6 @@
 <p>Dear <%= @signature_one.name %> and <%= @signature_two.name %>,<p>
 
-<p>Before your signatures can be added to the petition "<%= @signature_one.petition.title %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
+<p>Before your signatures can be added to the petition "<%= @signature_one.petition.action %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:</p>
 
 <p><%= @signature_one.name %>: <%= link_to nil, verify_signature_url(@signature_one, @signature_one.perishable_token) %></p>
 

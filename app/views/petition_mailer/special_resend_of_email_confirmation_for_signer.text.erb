@@ -1,6 +1,6 @@
 Dear <%= @signature.name %>,
 
-We notice that you signed the "<%= @signature.petition.title %>" petition recently, but haven't yet validated your email address.  In order to add your signature to this petition, we need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:
+We notice that you signed the "<%= @signature.petition.action %>" petition recently, but haven't yet validated your email address.  In order to add your signature to this petition, we need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:
 
 <%= verify_signature_url(@signature, @signature.perishable_token) %>
 

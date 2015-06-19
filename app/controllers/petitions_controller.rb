@@ -20,7 +20,7 @@ class PetitionsController < ApplicationController
   end
 
   def new
-    assign_title
+    assign_action
     assign_stage
     @stage_manager = Staged::PetitionCreator.manager(petition_params_for_new, request, params[:stage], params[:move])
     respond_with @stage_manager.stage_object
@@ -64,13 +64,13 @@ class PetitionsController < ApplicationController
   def petition_params_for_new
     params.
       fetch('petition', {}).
-      permit(:title)
+      permit(:action)
   end
 
   def petition_params_for_create
     params.
       require(:petition).
-      permit(:title, :action, :description, :duration, :sponsor_emails,
+      permit(:action, :background, :additional_details, :duration, :sponsor_emails,
              creator_signature: [
                :name, :email, :email_confirmation,
                :postcode, :country, :uk_citizenship
@@ -84,11 +84,11 @@ class PetitionsController < ApplicationController
              end
   end
 
-  def assign_title
-    return if params[:title].blank?
-    title = params.delete(:title)
+  def assign_action
+    return if params[:petition_action].blank?
+    petition_action = params.delete(:petition_action)
     params[:petition] ||= {}
-    params[:petition][:title] = title
+    params[:petition][:action] = petition_action
   end
 
   def assign_stage

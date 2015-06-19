@@ -20,8 +20,8 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
   end
 end
 
-Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_title|
-  petition = Petition.find_by!(title: petition_title)
+Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_action|
+  petition = Petition.find_by!(action: petition_action)
   constituency = @constituencies.fetch(constituency)
   how_many =
     case how_many
@@ -45,21 +45,21 @@ When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
   end
 end
 
-Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_title|
-  petition = Petition.find_by!(title: petition_title)
+Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_action|
+  petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.id).count
   within :css, '.local-petitions ol' do
-    within ".//li[a[.='#{petition_title}']]" do
+    within ".//li[a[.='#{petition_action}']]" do
       expect(page).to have_text("#{local_signature_count} signatures from your constituency")
       expect(page).to have_text("#{all_signature_count} signatures total")
     end
   end
 end
 
-Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petition_title|
+Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petition_action|
   within :css, '.local-petitions ol' do |list|
-    expect(list).not_to have_selector(".//li[a[.='#{petition_title}']]")
+    expect(list).not_to have_selector(".//li[a[.='#{petition_action}']]")
   end
 end
 

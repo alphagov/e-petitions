@@ -5,7 +5,7 @@ Feature: An moderator user updates internal response and marks it for a public r
 
   Background:
     Given I am logged in as a moderator
-    And an open petition exists with title: "Solidarity with the Unions"
+    And an open petition exists with action: "Solidarity with the Unions"
 
   Scenario: Viewing the update internal response page
     When I am on the admin all petitions page
@@ -23,4 +23,4 @@ Feature: An moderator user updates internal response and marks it for a public r
     And I check "Public response required"
     And I press "Save"
     Then I should be on the admin all petitions page
-    And a petition should exist with title: "Solidarity with the Unions", internal_response: "Lets debate this in parliament", response_required: true
+    And a petition should exist with action: "Solidarity with the Unions", internal_response: "Lets debate this in parliament", response_required: true

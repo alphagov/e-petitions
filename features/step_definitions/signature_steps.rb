@@ -177,8 +177,8 @@ Then /^"([^"]*)" wants to be notified about the petition's progress$/ do |name|
   expect(Signature.find_by(name: name).notify_by_email?).to be_truthy
 end
 
-Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_title|
-  petition = Petition.find_by(title: petition_title)
+Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_action|
+  petition = Petition.find_by(action: petition_action)
   FactoryGirl.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
 end
 

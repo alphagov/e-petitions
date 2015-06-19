@@ -1,11 +1,11 @@
 Dear <%= @signature.name %>,
 
-To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.title %>" you should:
+To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.action %>" you should:
 
 1. Review the details of the petition to make sure you agree with it:
-   Title: <%= @petition.title  %>
    Action: <%= @petition.action  %>
-   Full description: <%= @petition.description  %>
+   Background: <%= @petition.background  %>
+   Additional details: <%= @petition.additional_details  %>
 
 2. Click the link below to confirm your email address:
    <%= verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>

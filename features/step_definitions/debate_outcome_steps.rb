@@ -1,6 +1,6 @@
-Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_title, debated_days_ago|
+Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_action, debated_days_ago|
   @petition = FactoryGirl.create(:debated_petition,
-    title: petition_title,
+    action: petition_action,
     debated_on: debated_days_ago.days.ago.to_date,
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'http://transcripts.parliament.example.com/2.html',
