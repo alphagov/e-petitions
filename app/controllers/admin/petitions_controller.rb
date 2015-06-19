@@ -21,8 +21,6 @@ class Admin::PetitionsController < Admin::AdminController
     case user_action
       when 'Publish this petition'
         publish
-      when 'Re-assign'
-        reassign
       when 'Reject'
         reject
       else
