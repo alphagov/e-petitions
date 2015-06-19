@@ -1,0 +1,11 @@
+Dear <%= @signature.name %>,
+
+The petition '<%= @petition.action %>' you've supported has been debated by parliament. Please read the outcome of the debate:
+
+<%= petition_url(@signature.petition) %>
+
+Thanks,
+
+<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+
+Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

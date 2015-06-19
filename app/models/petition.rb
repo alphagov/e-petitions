@@ -173,10 +173,6 @@ class Petition < ActiveRecord::Base
     signatures.validated.count
   end
 
-  def need_emailing
-    signatures.need_emailing(email_requested_at)
-  end
-
   def awaiting_moderation?
     state == VALIDATED_STATE
   end
@@ -297,5 +293,23 @@ class Petition < ActiveRecord::Base
 
   def update_all(updates)
     self.class.unscoped.where(id: id).update_all(updates)
+  end
+
+  def get_email_requested_at_for(name)
+    email_requested_receipt!.get(name)
+  end
+  def set_email_requested_at_for(name, to: Time.current)
+    email_requested_receipt!.set(name, to)
+  end
+
+  def signatures_to_email_for(name)
+    timestamp = get_email_requested_at_for(name)
+    raise ArgumentError if timestamp.nil?
+    signatures.need_emailing_for(name, since: timestamp)
+  end
+
+  has_one :email_requested_receipt, dependent: :destroy
+  def email_requested_receipt!
+    email_requested_receipt || create_email_requested_receipt
   end
 end

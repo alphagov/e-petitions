@@ -1,0 +1,11 @@
+<p>Dear <%= @signature.name %>,</p>
+
+<p>The petition '<%= @petition.action %>' you've supported has been debated by parliament. Please read the outcome of the debate:</p>
+
+<p><%= link_to nil, petition_url(@signature.petition) %></p>
+
+<p>Thanks,</p>
+
+<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to nil, home_url %></p>
+
+<p>Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></p>

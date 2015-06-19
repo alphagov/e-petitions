@@ -223,17 +223,23 @@ RSpec.describe Signature, type: :model do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
     let!(:petition) { FactoryGirl.create(:petition) }
-    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => nil) }
-    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => week_ago) }
-    let!(:signature4) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :last_emailed_at => two_days_ago) }
-    let!(:signature5) { FactoryGirl.create(:signature, :email => "person5@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false, :last_emailed_at => two_days_ago) }
+    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
+    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
+    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
 
     context "validated" do
       it "returns only validated signatures" do
         signatures = Signature.validated
-        expect(signatures.size).to eq(5)
-        expect(signatures).to include(signature1, signature3, signature4, signature5, petition.creator_signature)
+        expect(signatures.size).to eq(3)
+        expect(signatures).to include(signature1, signature3, petition.creator_signature)
+      end
+    end
+
+    context "notify_by_email" do
+      it "returns only signatures with notify_by_email: true" do
+        signatures = Signature.notify_by_email
+        expect(signatures.size).to eq(3)
+        expect(signatures).to include(signature1, signature2, petition.creator_signature)
       end
     end
 
@@ -245,16 +251,8 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "need emailing" do
-      it "returns only validated signatures who have opted in to receiving email updates" do
-        expect(Signature.need_emailing(Time.now)).to include(signature1, signature3, signature4, petition.creator_signature)
-        expect(Signature.need_emailing(two_days_ago)).to include(signature1, signature3, petition.creator_signature)
-        expect(Signature.need_emailing(week_ago)).to include(signature1, petition.creator_signature)
-      end
-    end
-
     context "matching" do
-      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE, last_emailed_at: nil) }
+      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE) }
 
       it "returns a signature matching in name, email and petition_id" do
         signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
@@ -275,9 +273,12 @@ RSpec.describe Signature, type: :model do
     describe "for_email" do
       let!(:other_petition) { FactoryGirl.create(:petition) }
       let!(:other_signature) do
-        FactoryGirl.create(:signature, :email => "person3@example.com",
-        :petition => other_petition, :state => Signature::PENDING_STATE,
-        :last_emailed_at => two_days_ago)
+        FactoryGirl.create(
+          :signature,
+          :email => "person3@example.com",
+          :petition => other_petition,
+          :state => Signature::PENDING_STATE
+        )
       end
 
       it "returns an empty set if the email is not found" do
@@ -507,6 +508,101 @@ RSpec.describe Signature, type: :model do
       signature.store_constituency_id
       expect(signature.constituency_id).to be_nil
       expect(signature).not_to be_persisted
+    end
+  end
+
+  describe 'email sent receipts' do
+    it { is_expected.to have_one(:email_sent_receipt).dependent(:destroy) }
+
+    describe '#email_sent_receipt!' do
+      let(:signature) { FactoryGirl.create(:signature) }
+
+      it 'returns the existing db object if one exists' do
+        existing = signature.create_email_sent_receipt
+        expect(signature.email_sent_receipt!).to eq existing
+      end
+
+      it 'returns a newly created instance if does not already exist' do
+        instance = signature.email_sent_receipt!
+        expect(instance).to be_present
+        expect(instance).to be_a(EmailSentReceipt)
+        expect(instance.signature).to eq signature
+        expect(instance.signature).to be_persisted
+      end
+    end
+
+    describe '#get_email_sent_at_for' do
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:receipt) { signature.email_sent_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'returns nil when nothing has been stamped for the supplied name' do
+        expect(signature.get_email_sent_at_for('government_response')).to be_nil
+      end
+
+      it 'returns the stored timestamp for the supplied name' do
+        receipt.update_column('government_response', the_stored_time)
+        expect(signature.get_email_sent_at_for('government_response')).to eq the_stored_time
+      end
+    end
+
+    describe '#set_email_sent_at_for' do
+      include ActiveSupport::Testing::TimeHelpers
+
+      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:receipt) { signature.email_sent_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'sets the stored timestamp for the supplied name to the supplied time' do
+        signature.set_email_sent_at_for('government_response', to: the_stored_time)
+        expect(receipt.government_response).to eq the_stored_time
+      end
+
+      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
+        travel_to the_stored_time do
+          signature.set_email_sent_at_for('government_response')
+          expect(receipt.government_response).to eq Time.current
+        end
+      end
+    end
+
+    describe "#need_emailing_for" do
+      let!(:a_signature) { FactoryGirl.create(:validated_signature) }
+      let!(:another_signature) { FactoryGirl.create(:validated_signature) }
+      let(:since_timestamp) { 5.days.ago }
+
+      subject { Signature.need_emailing_for('government_response', since: since_timestamp) }
+
+      it "does not return those that do not want to be emailed" do
+        a_signature.update_attribute(:notify_by_email, false)
+        expect(subject).not_to include a_signature
+      end
+
+      it 'does not return unvalidated signatures' do
+        another_signature.update_column(:state, Signature::PENDING_STATE)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does not return signatures that have a sent receipt newer than the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp + 1.day)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does not return signatures that have a sent receipt equal to the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp)
+        expect(subject).not_to include another_signature
+      end
+
+      it 'does return signatures that have a sent receipt older than the petitions requested receipt' do
+        another_signature.set_email_sent_at_for('government_response', to: since_timestamp - 1.day)
+        expect(subject).to include another_signature
+      end
+
+      it 'returns signatures that have no sent receipt, or null for the requested timestamp in their receipt' do
+        another_signature.email_sent_receipt!.destroy && another_signature.reload
+        a_signature.email_sent_receipt!.update_column('government_response', nil)
+        expect(subject).to match_array [a_signature, another_signature]
+      end
     end
   end
 end

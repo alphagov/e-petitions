@@ -145,6 +145,76 @@ RSpec.describe Admin::DebateOutcomesController do
             expect(petition.debate_outcome.transcript_url).to eq debate_outcome_attributes[:transcript_url]
             expect(petition.debate_outcome.video_url).to eq debate_outcome_attributes[:video_url]
           end
+
+          context "emails out debate outcomes response" do
+            include ActiveJob::TestHelper
+
+            before do
+              3.times do |i|
+                attributes = {
+                  name: "Laura #{i}",
+                  email: "laura_#{i}@example.com",
+                  notify_by_email: true,
+                  petition: petition
+                }
+                s = FactoryGirl.create(:pending_signature, attributes)
+                s.validate!
+              end
+              2.times do |i|
+                attributes = {
+                  name: "Sarah #{i}",
+                  email: "sarah_#{i}@example.com",
+                  notify_by_email: false,
+                  petition: petition
+                }
+
+                s = FactoryGirl.create(:pending_signature, attributes)
+                s.validate!
+              end
+              2.times do |i|
+                attributes = {
+                  name: "Brian #{i}",
+                  email: "brian_#{i}@example.com",
+                  notify_by_email: true,
+                  petition: petition
+                }
+                FactoryGirl.create(:pending_signature, attributes)
+              end
+              petition.reload
+            end
+
+            it "queues a job to process the emails" do
+              assert_enqueued_jobs 1 do
+                do_patch
+              end
+            end
+
+            it "stamps the 'debate_outcome' email sent receipt on each signature when the job runs" do
+              perform_enqueued_jobs do
+                do_patch
+                petition.reload
+                petition_timestamp = petition.get_email_requested_at_for('debate_outcome')
+                expect(petition_timestamp).not_to be_nil
+                petition.signatures.validated.notify_by_email.each do |signature|
+                  expect(signature.get_email_sent_at_for('debate_outcome')).to eq(petition_timestamp)
+                end
+              end
+            end
+
+            it "should email out to the validated signees who have opted in when the delayed job runs" do
+              ActionMailer::Base.deliveries.clear
+              perform_enqueued_jobs do
+                do_patch
+                expect(ActionMailer::Base.deliveries.length).to eq 4
+                expect(ActionMailer::Base.deliveries.map(&:to)).to eq([
+                  [petition.creator_signature.email],
+                  ['laura_0@example.com'],
+                  ['laura_1@example.com'],
+                  ['laura_2@example.com']
+                ])
+              end
+            end
+          end
         end
 
         describe 'with invalid params' do

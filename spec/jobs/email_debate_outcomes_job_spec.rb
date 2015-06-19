@@ -1,7 +1,7 @@
 require 'rails_helper'
 include ActiveJob::TestHelper
 
-RSpec.describe EmailThresholdResponseJob, type: :job do
+RSpec.describe EmailDebateOutcomesJob, type: :job do
   let(:email_requested_at) { Time.current }
   let(:petition) { FactoryGirl.create(:open_petition) }
   let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
@@ -10,7 +10,7 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
   let(:logger) { double.as_null_object }
 
   before do
-    petition.set_email_requested_at_for('government_response', to: email_requested_at)
+    petition.set_email_requested_at_for('debate_outcome', to: email_requested_at)
     allow(petition).to receive_message_chain(:signatures_to_email_for, :find_each).and_yield(signature)
     allow(petition).to receive_message_chain(:signatures_to_email_for, :count => 0)
   end
@@ -19,13 +19,13 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
     described_class.perform_now(petition, requested_at.getutc.iso8601, mailer, logger)
   end
 
-  it "sends the notify_signer_of_threshold_response emails to each signatory of a petition" do
-    expect(mailer).to receive(:notify_signer_of_threshold_response).with(petition, signature).and_return(mailer)
+  it "sends the notify_signer_of_debate_outcome emails to each signatory of a petition" do
+    expect(mailer).to receive(:notify_signer_of_debate_outcome).with(petition, signature).and_return(mailer)
     perform_job
   end
 
-  it "marks the signature with the 'government_response' last emailing time" do
-    expect(signature).to receive(:set_email_sent_at_for).with('government_response', to: email_requested_at)
+  it "marks the signature with the 'debate_outcome' last emailing time" do
+    expect(signature).to receive(:set_email_sent_at_for).with('debate_outcome', to: email_requested_at)
     perform_job
   end
 

@@ -91,34 +91,35 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       def do_patch(options = {})
         patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}.merge(options)
       end
-      it "updates response and email signees flag with true" do
+
+      it "updates response and stamp the 'government_response' email requested receipt timestamp when email signees flag is true" do
         do_patch
         assert_enqueued_jobs 1
         expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions")
         @p1.reload
         expect(@p1.response).to eq('Doh!')
-        expect(@p1.email_requested_at).not_to be_nil
+        expect(@p1.get_email_requested_at_for('government_response')).not_to be_nil
       end
 
-      it "updates response and email signees flag with false" do
+      it "updates response and not stamp the 'governent_rsponse' email requested receipt timestamp when email signees flag is false" do
         do_patch(:email_signees => '0')
         assert_enqueued_jobs 0
         @p1.reload
         expect(@p1.response).to eq('Doh!')
-        expect(@p1.email_requested_at).to be_nil
+        expect(@p1.get_email_requested_at_for('government_response')).to be_nil
       end
 
-      it "fails to update response and email signees flag due to validation error" do
+      it "doest not update response or stamp the 'government_response' email requested receipt timestamp if there is a validation error" do
         do_patch(:response => '', :email_signees => '1')
         assert_enqueued_jobs 0
         expect(response).to be_success
         @p1.reload
-        expect(@p1.email_requested_at).to be_nil
+        expect(@p1.get_email_requested_at_for('government_response')).to be_nil
       end
 
       context "email out threshold update response" do
         before do
-          @signature =  FactoryGirl.create(:pending_signature,
+          signature =  FactoryGirl.create(:pending_signature,
                           name: 'Jason',
                           email: 'jason@example.com',
                           notify_by_email: true
@@ -126,10 +127,10 @@ RSpec.describe Admin::PetitionsController, type: :controller do
 
           @petition = FactoryGirl.create(:open_petition,
                         action: 'Make me the PM',
-                        creator_signature: @signature
+                        creator_signature: signature
                       )
 
-          6.times do |i|
+          3.times do |i|
             attributes = {
               name: "Jason #{i}",
               email: "jason_valid_notify_#{i}@example.com",
@@ -141,9 +142,9 @@ RSpec.describe Admin::PetitionsController, type: :controller do
             s.validate!
           end
 
-          3.times do |i|
+          2.times do |i|
             attributes = {
-              name: "Jason #{i}",
+              name: "Jason #{i+3}",
               email: "jason_valid_#{i}@example.com",
               notify_by_email: false,
               petition: @petition
@@ -155,7 +156,7 @@ RSpec.describe Admin::PetitionsController, type: :controller do
 
           2.times do |i|
             attributes = {
-              name: "Jason #{i}",
+              name: "Jason #{i+5}",
               email: "jason_invalid_#{i}@example.com",
               notify_by_email: true,
               petition: @petition
@@ -167,31 +168,39 @@ RSpec.describe Admin::PetitionsController, type: :controller do
           @petition.reload
         end
 
-        it "sets up a delayed job" do
+        it "queues a job to process the emails" do
           assert_enqueued_jobs 1 do
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
           end
         end
 
-        it "sets the email signees flag to false when the job runs" do
+        it "stamps the 'government_response' email sent receipt on each signature when the job runs" do
           perform_enqueued_jobs do
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
             @petition.reload
-            expect(@petition.email_requested_at).not_to be_nil
+            petition_timestamp = @petition.get_email_requested_at_for('government_response')
+            expect(petition_timestamp).not_to be_nil
             @petition.signatures.validated.notify_by_email.each do |signature|
-              expect(signature.last_emailed_at).to eq(@petition.email_requested_at)
+              expect(signature.get_email_sent_at_for('government_response')).to eq(petition_timestamp)
             end
           end
         end
 
         it "emails out to the validated signees who have opted in when the delayed job runs" do
+          ActionMailer::Base.deliveries.clear
           perform_enqueued_jobs do
-            no_emails = ActionMailer::Base.deliveries.length
             patch :update_response, :id => @petition.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}
-            expect(ActionMailer::Base.deliveries.length - no_emails).to eq(7)
-            expect(ActionMailer::Base.deliveries[no_emails].to).to eq(["jason@example.com"])
-            expect(ActionMailer::Base.deliveries[no_emails].subject).to match(/The petition 'Make me the PM' has reached 10 signatures/)
-            expect(ActionMailer::Base.deliveries.last.to).to eq(["jason_valid_notify_5@example.com"])
+            expect(ActionMailer::Base.deliveries.length).to eq(4)
+            expect(ActionMailer::Base.deliveries.map(&:to)).to eq([
+              ["jason@example.com"],
+              ["jason_valid_notify_0@example.com"],
+              ["jason_valid_notify_1@example.com"],
+              ["jason_valid_notify_2@example.com"]
+            ])
+            expect(ActionMailer::Base.deliveries[0].subject).to match(/The petition 'Make me the PM' has reached 6 signatures/)
+            expect(ActionMailer::Base.deliveries[1].subject).to match(/The petition 'Make me the PM' has reached 6 signatures/)
+            expect(ActionMailer::Base.deliveries[2].subject).to match(/The petition 'Make me the PM' has reached 6 signatures/)
+            expect(ActionMailer::Base.deliveries[3].subject).to match(/The petition 'Make me the PM' has reached 6 signatures/)
           end
         end
       end

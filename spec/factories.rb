@@ -203,4 +203,12 @@ FactoryGirl.define do
 
     end
   end
+
+  factory :email_requested_receipt do
+    association :petition, factory: :open_petition
+  end
+
+  factory :email_sent_receipt do
+    association :signature, factory: :validated_signature
+  end
 end

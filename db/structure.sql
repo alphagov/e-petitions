@@ -220,6 +220,72 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
+-- Name: email_requested_receipts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE email_requested_receipts (
+    id integer NOT NULL,
+    petition_id integer,
+    government_response timestamp without time zone,
+    debate_outcome timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: email_requested_receipts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE email_requested_receipts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: email_requested_receipts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE email_requested_receipts_id_seq OWNED BY email_requested_receipts.id;
+
+
+--
+-- Name: email_sent_receipts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE email_sent_receipts (
+    id integer NOT NULL,
+    signature_id integer,
+    government_response timestamp without time zone,
+    debate_outcome timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: email_sent_receipts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE email_sent_receipts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: email_sent_receipts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE email_sent_receipts_id_seq OWNED BY email_sent_receipts.id;
+
+
+--
 -- Name: petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -240,7 +306,6 @@ CREATE TABLE petitions (
     internal_response text,
     rejection_code character varying(50),
     notified_by_email boolean DEFAULT false,
-    email_requested_at timestamp without time zone,
     background character varying(200),
     sponsor_token character varying(255),
     response_summary character varying(500),
@@ -295,7 +360,6 @@ CREATE TABLE signatures (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     notify_by_email boolean DEFAULT true,
-    last_emailed_at timestamp without time zone,
     email character varying(255),
     unsubscribe_token character varying,
     constituency_id character varying,
@@ -438,6 +502,20 @@ ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY email_requested_receipts ALTER COLUMN id SET DEFAULT nextval('email_requested_receipts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY email_sent_receipts ALTER COLUMN id SET DEFAULT nextval('email_sent_receipts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq'::regclass);
 
 
@@ -500,6 +578,22 @@ ALTER TABLE ONLY debate_outcomes
 
 ALTER TABLE ONLY delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: email_requested_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY email_requested_receipts
+    ADD CONSTRAINT email_requested_receipts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: email_sent_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY email_sent_receipts
+    ADD CONSTRAINT email_sent_receipts_pkey PRIMARY KEY (id);
 
 
 --
@@ -602,6 +696,20 @@ CREATE INDEX index_debate_outcomes_on_petition_id_and_debated_on ON debate_outco
 --
 
 CREATE INDEX index_delayed_jobs_on_priority_and_run_at ON delayed_jobs USING btree (priority, run_at);
+
+
+--
+-- Name: index_email_requested_receipts_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_email_requested_receipts_on_petition_id ON email_requested_receipts USING btree (petition_id);
+
+
+--
+-- Name: index_email_sent_receipts_on_signature_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts USING btree (signature_id);
 
 
 --
@@ -724,6 +832,22 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_898597541e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY email_requested_receipts
+    ADD CONSTRAINT fk_rails_898597541e FOREIGN KEY (petition_id) REFERENCES petitions(id);
+
+
+--
+-- Name: fk_rails_e256832d5d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY email_sent_receipts
+    ADD CONSTRAINT fk_rails_e256832d5d FOREIGN KEY (signature_id) REFERENCES signatures(id);
+
+
+--
 -- PostgreSQL database dump complete
 --
 
@@ -752,6 +876,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150615131623');
 INSERT INTO schema_migrations (version) VALUES ('20150615145953');
 
 INSERT INTO schema_migrations (version) VALUES ('20150615151103');
+
+INSERT INTO schema_migrations (version) VALUES ('20150617114935');
+
+INSERT INTO schema_migrations (version) VALUES ('20150617135014');
 
 INSERT INTO schema_migrations (version) VALUES ('20150617164310');
 

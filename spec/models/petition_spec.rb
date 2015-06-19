@@ -593,18 +593,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "signatures that need emailing" do
-    let(:petition) { FactoryGirl.create(:petition) }
-    it "returns validated signatures" do
-      expect(petition.need_emailing).to eq([petition.creator_signature])
-    end
-
-    it "only returns those yet to be emailed" do
-      petition.creator_signature.update_attribute(:last_emailed_at, Time.now)
-      expect(petition.need_emailing).to eq([])
-    end
-  end
-
   describe "permissions" do
     let(:petition) { FactoryGirl.build(:petition) }
     let(:user) { AdminUser.new }
@@ -1013,5 +1001,111 @@ RSpec.describe Petition, type: :model do
 
   describe 'debate outcomes' do
     it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
+  end
+
+  describe 'email requested receipts' do
+    it { is_expected.to have_one(:email_requested_receipt).dependent(:destroy) }
+
+    describe '#email_requested_receipt!' do
+      let(:petition) { FactoryGirl.create(:petition) }
+
+      it 'returns the existing db object if one exists' do
+        existing = petition.create_email_requested_receipt
+        expect(petition.email_requested_receipt!).to eq existing
+      end
+
+      it 'returns a newly created instance if does not already exist' do
+        instance = petition.email_requested_receipt!
+        expect(instance).to be_present
+        expect(instance).to be_a(EmailRequestedReceipt)
+        expect(instance.petition).to eq petition
+        expect(instance.petition).to be_persisted
+      end
+    end
+
+    describe '#get_email_requested_at_for' do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:receipt) { petition.email_requested_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'returns nil when nothing has been stamped for the supplied name' do
+        expect(petition.get_email_requested_at_for('government_response')).to be_nil
+      end
+
+      it 'returns the stored timestamp for the supplied name' do
+        receipt.update_column('government_response', the_stored_time)
+        expect(petition.get_email_requested_at_for('government_response')).to eq the_stored_time
+      end
+    end
+
+    describe '#set_email_requested_at_for' do
+      include ActiveSupport::Testing::TimeHelpers
+
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:receipt) { petition.email_requested_receipt! }
+      let(:the_stored_time) { 6.days.ago }
+
+      it 'sets the stored timestamp for the supplied name to the supplied time' do
+        petition.set_email_requested_at_for('government_response', to: the_stored_time)
+        expect(receipt.government_response).to eq the_stored_time
+      end
+
+      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
+        travel_to the_stored_time do
+          petition.set_email_requested_at_for('government_response')
+          expect(receipt.government_response).to eq Time.current
+        end
+      end
+    end
+
+    describe "#signatures_to_email_for" do
+      let!(:petition) { FactoryGirl.create(:petition) }
+      let!(:creator_signature) { petition.creator_signature }
+      let!(:other_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+      let(:petition_timestamp) { 5.days.ago }
+
+      before { petition.set_email_requested_at_for('government_response', to: petition_timestamp) }
+
+      it 'raises an error if the petition does not have an email requested receipt' do
+        petition.email_requested_receipt.destroy && petition.reload
+        expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+      end
+
+      it 'raises an error if the petition does not have the requested timestamp in its email requested receipt' do
+        petition.email_requested_receipt.update_column('government_response', nil)
+        expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+      end
+
+      it "does not return those that do not want to be emailed" do
+        petition.creator_signature.update_attribute(:notify_by_email, false)
+        expect(petition.signatures_to_email_for('government_response')).not_to include creator_signature
+      end
+
+      it 'does not return unvalidated signatures' do
+        other_signature.update_column(:state, Signature::PENDING_STATE)
+        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      end
+
+      it 'does not return signatures that have a sent receipt newer than the petitions requested receipt' do
+        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp + 1.day)
+        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      end
+
+      it 'does not return signatures that have a sent receipt equal to the petitions requested receipt' do
+        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp)
+        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      end
+
+      it 'does return signatures that have a sent receipt older than the petitions requested receipt' do
+        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp - 1.day)
+        expect(petition.signatures_to_email_for('government_response')).to include other_signature
+      end
+
+      it 'returns signatures that have no sent receipt, or null for the requested timestamp in their receipt' do
+        other_signature.email_sent_receipt!.destroy && other_signature.reload
+        creator_signature.email_sent_receipt!.update_column('government_response', nil)
+        expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
+      end
+    end
   end
 end

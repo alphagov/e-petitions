@@ -9,6 +9,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
   def update
     fetch_debate_outcome
     if @debate_outcome.update_attributes(params_for_update)
+      EmailDebateOutcomesJob.run_later_tonight(@petition)
       redirect_to [:admin, @petition]
     else
       render :show
