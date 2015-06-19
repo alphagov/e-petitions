@@ -1,7 +1,7 @@
 Feature: Moderator respond to petition
   In order to allow or prevent the signing of petitions
   As a moderator
-  I want to respond to a petition, accepting, rejecting or re-assigning it
+  I want to respond to a petition, editing, accepting, rejecting or re-assigning it
 
   Scenario: Accessing the petitions page
     Given a sponsored petition "More money for charities"
@@ -10,6 +10,44 @@ Feature: Moderator respond to petition
     Then I should be connected to the server via an ssl connection
     And the markup should be valid
     And I should see the petition details
+
+  Scenario: Moderator edits petition before publishing
+    Given I am logged in as a moderator
+    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and description: "Enforce Kyotoe protocol in more countries"
+    And I follow "Edit petition content"
+    Then I am redirected to the petition edit details page
+    And the markup should be valid
+    And the "Title" field should contain "wee need to save our plaanet"
+    And the "Action" field should contain "Reduce polootion"
+    And the "Description" field should contain "Enforce Kyotoe protocol in more countries"
+    Then I fill in "Title" with "We need to save our planet"
+    And I fill in "Action" with "Reduce pollution"
+    And I fill in "Description" with "Enforce Kyoto Protocol in more countries"
+    And I press "Save"
+    Then I am redirected to the petition edit page
+    And I should see "We need to save our planet"
+    And I should see "Reduce pollution"
+    And I should see "Enforce Kyoto Protocol in more countries"
+
+  Scenario: Moderator edits and tries to save an invalid petition
+    Given I am logged in as a moderator
+    And I visit a sponsored petition with title: "wee need to save our plaanet", that has action: "Reduce polootion" and description: "Enforce Kyotoe protocol in more countries"
+    And I follow "Edit petition content"
+    Then I fill in "Title" with ""
+    And I fill in "Action" with ""
+    And I fill in "Description" with ""
+    And I press "Save"
+    Then I should see "Action must be completed"
+    And I should see "Background must be completed"
+    And I should see "Supporting details must be completed"
+
+  Scenario: Moderator cancel editing petition
+    Given I am logged in as a moderator
+    And I visit a sponsored petition with title: "Blah", that has action: "Blah" and description: "Blah"
+    And I follow "Edit petition content"
+    Then I am redirected to the petition edit details page
+    When I follow "Cancel"
+    Then I am redirected to the petition edit page
 
   Scenario: Moderator publishes petition
     Given I am logged in as a moderator

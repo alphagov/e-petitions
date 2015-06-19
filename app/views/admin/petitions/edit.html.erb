@@ -2,7 +2,11 @@
 
   <%= render :partial => 'petition_details', :locals => { :f => f } %>
 
-  <div>
+  <div class="row">
+    <%= link_to 'Edit petition content', admin_petition_petition_details_path(@petition) %>
+  </div>
+
+  <div class="row">
     <%= submit_tag 'Publish this petition', :data => { :confirm => "Are you sure you want to publish this petition?" } %>
   </div>
 

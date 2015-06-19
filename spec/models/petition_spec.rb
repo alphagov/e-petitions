@@ -519,6 +519,20 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#in_todo_list?" do
+    it "is in todo list when the state is sponsored" do
+      expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_todo_list?).to be_truthy
+    end
+
+    it "is in todo list when the state is validated" do
+      expect(FactoryGirl.build(:petition, :state => Petition::VALIDATED_STATE).in_todo_list?).to be_truthy
+    end
+
+    it "is in todo list when the state is pending" do
+      expect(FactoryGirl.build(:petition, :state => Petition::PENDING_STATE).in_todo_list?).to be_truthy
+    end
+  end
+
   describe "rejection_reason" do
     it "gives rejection reason from the locale file" do
       petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')

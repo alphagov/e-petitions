@@ -170,10 +170,6 @@ class Petition < ActiveRecord::Base
     self.state == SPONSORED_STATE
   end
 
-  def collecting_sponsors?
-    self.state == VALIDATED_STATE || self.state == PENDING_STATE
-  end
-
   def open?
     self.state == OPEN_STATE
   end
@@ -196,6 +192,10 @@ class Petition < ActiveRecord::Base
 
   def can_have_debate_added?
     self.open? || self.closed?
+  end
+
+  def in_todo_list?
+    TODO_LIST_STATES.include? state
   end
 
   def state_label
