@@ -83,14 +83,6 @@ class Petition < ActiveRecord::Base
   scope :in_moderation, -> { where(state: SPONSORED_STATE) }
   scope :todo_list, -> { where(state: TODO_LIST_STATES) }
   scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }
-  scope :trending, ->(number_of_days) {
-                      joins(:signatures).
-                      where("petitions.state" => "open").
-                      where("signatures.state" => "validated").
-                      where("signatures.updated_at > ?", number_of_days.day.ago).
-                      order("count('signatures.id') DESC").
-                      group('petitions.id').limit(10)
-                    }
   scope :last_hour_trending, -> {
                               joins(:signatures).
                               select("petitions.*, count('signatures.id') as signatures_in_last_hour").

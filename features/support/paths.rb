@@ -89,9 +89,6 @@ module NavigationHelpers
     when /^edit profile page for "([^\"]*)"$/
       edit_admin_profile_path(AdminUser.find_by(email: $1))
 
-    when /^reports page$/
-      admin_reports_path
-
     when /^debate outcomes form page for "([^\"]*)"$/
       admin_petition_debate_outcome_path(Petition.find_by(action: $1))
 
