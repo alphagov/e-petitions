@@ -327,6 +327,23 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "with_debate_outcome" do
+      before do
+        @p1 = FactoryGirl.create(:debated_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:debated_petition)
+        @p4 = FactoryGirl.create(:closed_petition)
+        @p5 = FactoryGirl.create(:rejected_petition)
+        @p6 = FactoryGirl.create(:sponsored_petition)
+        @p7 = FactoryGirl.create(:pending_petition)
+        @p8 = FactoryGirl.create(:validated_petition)
+      end
+
+      it "returns only the petitions which have a debate outcome" do
+        expect(Petition.with_debate_outcome).to match_array([@p1, @p3])
+      end
+    end
+
     context "selectable" do
       before :each do
         @non_selectable_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
