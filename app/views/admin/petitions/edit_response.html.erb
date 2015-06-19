@@ -18,8 +18,6 @@
   <% end -%>
 <% end -%>
 
-<%= link_to("Publish Debate Schedule", edit_scheduled_debate_date_admin_petition_path(@petition)) %>
-
 <%= form_for [:admin, @petition ], :url => update_response_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
   <%= render 'internal_response', :f => f %>
   <div>
