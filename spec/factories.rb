@@ -113,6 +113,14 @@ FactoryGirl.define do
     state      Petition::HIDDEN_STATE
   end
 
+  factory :awaiting_petition, :parent => :open_petition do
+    response_threshold_reached_at { 1.week.ago }
+  end
+
+  factory :responded_petition, :parent => :awaiting_petition do
+    response "Government Response"
+  end
+
   factory :debated_petition, :parent => :open_petition do
     transient do
       debated_on { nil }

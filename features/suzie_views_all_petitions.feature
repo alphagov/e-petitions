@@ -32,12 +32,25 @@ Feature: Suzy Signer views all petitions
      | Free the wombles                                    |
     And the markup should be valid
 
+  Scenario: Suzie browses petitions awaiting a goverment response
+    Given a petition "Abolish bank holidays" exists and hasn't passed the threshold for a response
+    Given a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
+    Given a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
+    Given a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
+    When I view all petitions from the home page
+    And I follow "Awaiting a government response"
+    Then I should see the following ordered list of petitions:
+     | Make every monday bank holiday                      |
+     | Force supermarkets to give unsold food to charities |
+     | Free the wombles                                    |
+    And the markup should be valid
+
   Scenario: Suzie browses petitions with a goverment response
     Given a closed petition "Free the wombles" exists and has received a government response 100 days ago
     Given a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
     Given a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
     When I view all petitions from the home page
-    And I follow "Petitions with a Government response"
+    And I follow "Government responses"
     Then I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |

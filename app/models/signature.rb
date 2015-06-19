@@ -77,7 +77,7 @@ class Signature < ActiveRecord::Base
 
         ConstituencyPetitionJournal.record_new_signature_for(self)
         petition.creator_signature.validate!
-        petition.increment_signature_count(petition_id)
+        petition.increment_signature_count!
       end
     end
   end

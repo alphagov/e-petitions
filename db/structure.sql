@@ -246,7 +246,8 @@ CREATE TABLE petitions (
     response_summary character varying(500),
     government_response_at timestamp without time zone,
     scheduled_debate_date date,
-    last_signed_at timestamp without time zone
+    last_signed_at timestamp without time zone,
+    response_threshold_reached_at timestamp without time zone
 );
 
 
@@ -646,6 +647,13 @@ CREATE INDEX index_petitions_on_response_required_and_signature_count ON petitio
 
 
 --
+-- Name: index_petitions_on_response_threshold_reached_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_response_threshold_reached_at ON petitions USING btree (response_threshold_reached_at);
+
+
+--
 -- Name: index_petitions_on_state_and_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -756,6 +764,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150618144922');
 INSERT INTO schema_migrations (version) VALUES ('20150618233548');
 
 INSERT INTO schema_migrations (version) VALUES ('20150618233718');
+
+INSERT INTO schema_migrations (version) VALUES ('20150619075903');
 
 INSERT INTO schema_migrations (version) VALUES ('20150619090833');
 

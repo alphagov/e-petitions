@@ -34,13 +34,13 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action, :background, :additional_details)
   include Browseable
 
-  facet :all, -> { reorder(signature_count: :desc) }
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
+  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
+  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
+  facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
-
-  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
-  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
+  facet :all, -> { reorder(signature_count: :desc) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
@@ -108,6 +108,10 @@ class Petition < ActiveRecord::Base
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
 
+  def self.awaiting_response
+    where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
+  end
+
   def self.counts_by_state
     counts_by_state = {}
     states = STATES + [CLOSED_STATE]
@@ -129,9 +133,24 @@ class Petition < ActiveRecord::Base
       to_a
   end
 
-  def increment_signature_count(petition_id, time = Time.current)
-    sql = "signature_count = signature_count + 1, last_signed_at = ?, updated_at = ?"
-    self.class.where(id: id).update_all([sql, time, time])
+  def increment_signature_count!(time = Time.current)
+    updates = ["signature_count = signature_count + 1"]
+    updates << "last_signed_at = :now"
+    updates << "updated_at = :now"
+
+    if at_threshold_for_response?
+      updates << "response_threshold_reached_at = :now"
+    end
+
+    if update_all([updates.join(", "), now: time]) > 0
+      self.reload
+    end
+  end
+
+  def at_threshold_for_response?
+    unless response_threshold_reached_at?
+      signature_count >= Site.threshold_for_response - 1
+    end
   end
 
   def publish!
@@ -282,5 +301,9 @@ class Petition < ActiveRecord::Base
 
   def stamp_government_response_at
     self.government_response_at = Time.current
+  end
+
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
   end
 end

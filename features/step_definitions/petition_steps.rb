@@ -65,6 +65,18 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
   FactoryGirl.create(:open_petition, petition_attributes)
 end
 
+Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a response$/) do |action|
+  FactoryGirl.create(:open_petition, action: action)
+end
+
+Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
+  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
+end
+
+Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
+  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+end
+
 Given /^I have created a petition$/ do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer

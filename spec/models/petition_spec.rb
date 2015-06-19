@@ -321,6 +321,32 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "awaiting_response" do
+      context "when the petition has not reached the response threshold" do
+        let(:petition) { FactoryGirl.create(:open_petition) }
+
+        it "is not included in the list" do
+          expect(Petition.awaiting_response).not_to include(petition)
+        end
+      end
+
+      context "when a petition has reached the response threshold" do
+        let(:petition) { FactoryGirl.create(:awaiting_petition) }
+
+        it "is included in the list" do
+          expect(Petition.awaiting_response).to include(petition)
+        end
+      end
+
+      context "when a petition has a response" do
+        let(:petition) { FactoryGirl.create(:responded_petition) }
+
+        it "is not included in the list" do
+          expect(Petition.awaiting_response).not_to include(petition)
+        end
+      end
+    end
+
     context "with_response" do
       before do
         @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
@@ -692,6 +718,100 @@ RSpec.describe Petition, type: :model do
       expect(Petition.counts_by_state[:closed]).to    eq(5)
       expect(Petition.counts_by_state[:rejected]).to  eq(6)
       expect(Petition.counts_by_state[:hidden]).to    eq(7)
+    end
+  end
+
+  describe "#increment_signature_count!" do
+    let(:signature_count) { 8 }
+    let(:petition) do
+      FactoryGirl.create(:open_petition, {
+        signature_count: signature_count,
+        last_signed_at: 2.days.ago,
+        updated_at: 2.days.ago
+      })
+    end
+
+    it "increases the signature count by 1" do
+      expect{
+        petition.increment_signature_count!
+      }.to change{ petition.signature_count }.by(1)
+    end
+
+    it "updates the last_signed_at timestamp" do
+      petition.increment_signature_count!
+      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "updates the updated_at timestamp" do
+      petition.increment_signature_count!
+      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    context "when the signature count crosses the threshold for a response" do
+      let(:signature_count) { 9 }
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(10)
+      end
+
+      it "records the time it happened" do
+        petition.increment_signature_count!
+        expect(petition.response_threshold_reached_at).to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "at_threshold_for_response?" do
+    context "when response_threshold_reached_at is not present" do
+      let(:petition) { FactoryGirl.create(:open_petition, signature_count: signature_count) }
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(10)
+      end
+
+      context "and the signature count is 2 or more less than the threshold" do
+        let(:signature_count) { 8 }
+
+        it "is falsey" do
+          expect(petition.at_threshold_for_response?).to be_falsey
+        end
+      end
+
+      context "and the signature count is 1 less than the threshold" do
+        let(:signature_count) { 9 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+
+      context "and the signature count equal to the threshold" do
+        let(:signature_count) { 10 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+
+      context "and the signature count is more than the threshold" do
+        let(:signature_count) { 10 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_response?).to be_truthy
+        end
+      end
+    end
+
+    context "when response_threshold_reached_at is present" do
+      let(:petition) { FactoryGirl.create(:awaiting_petition) }
+
+      before do
+        expect(Site).not_to receive(:threshold_for_response)
+      end
+
+      it "is falsey" do
+        expect(petition.at_threshold_for_response?).to be_falsey
+      end
     end
   end
 
