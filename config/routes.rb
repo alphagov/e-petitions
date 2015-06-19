@@ -70,7 +70,6 @@ Rails.application.routes.draw do
       resource :petition_details, :only => [:show, :update]
     end
     resources :profile, :only => [:edit, :update]
-    resources :reports,  :only => [:index]
     resources :user_sessions, :only => [:create]
     get 'logout' => 'user_sessions#destroy', :as => :logout
     get 'login' => 'user_sessions#new', :as => :login

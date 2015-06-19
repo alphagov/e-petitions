@@ -205,49 +205,6 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    describe "trending" do
-      before(:each) do
-        15.times do |count|
-          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
-          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
-        end
-
-        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :action => "petition out of range")
-        10.times { FactoryGirl.create(:validated_signature, :petition => @petition_with_old_signatures, :updated_at => 2.days.ago) }
-      end
-
-      context "finding trending petitions for the last 24 hours" do
-        it "only returns 10 petitions" do
-          expect(Petition.trending(1).to_a.size).to eq(10)
-        end
-
-        it "orders the petitions by the highest signature count" do
-          trending_petitions = Petition.trending(1)
-          expect(trending_petitions.first.action).to eq("petition #15")
-          expect(trending_petitions.last.action).to  eq("petition #6")
-        end
-
-        it "ignores petitions with signatures that are outside a rolling 24 hour period" do
-          expect(Petition.trending(1).map(&:action).include?(@petition_with_old_signatures.action)).to be_falsey
-        end
-      end
-
-      context "finding trending petitions for the last 7 days" do
-        it "includes the petition with older signatures" do
-          expect(Petition.trending(7).map(&:action).include?(@petition_with_old_signatures.action)).to be_truthy
-        end
-      end
-
-      context "when there are validated petitions" do
-        it "excludes petitions that are not open" do
-          petition = FactoryGirl.create(:validated_petition)
-          20.times{ FactoryGirl.create(:validated_signature, :petition => petition) }
-
-          expect(Petition.trending(1).to_a).not_to include(petition)
-        end
-      end
-    end
-
     context "threshold" do
       before :each do
         @p1 = FactoryGirl.create(:open_petition)

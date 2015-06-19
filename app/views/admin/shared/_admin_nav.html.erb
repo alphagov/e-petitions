@@ -28,12 +28,6 @@
       t.highlights_on :controller => "admin/petitions", :action => :index
     end
 
-    n.add_tab do |t|
-      t.named "Reports"
-      t.links_to admin_reports_path
-      t.highlights_on :controller => "admin/reports"
-    end
-
     if current_user.is_a_sysadmin?
       n.add_tab do |t|
         t.named "Users"
