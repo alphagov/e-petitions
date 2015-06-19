@@ -59,7 +59,7 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
     response_summary: 'Response Summary',
     response: 'Government Response',
-    parliament_response_at: government_response_days_ago.to_i.days.ago
+    government_response_at: government_response_days_ago.to_i.days.ago
   }
   FactoryGirl.create(:open_petition, petition_attributes)
 end
