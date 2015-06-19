@@ -4,9 +4,9 @@ class EmailThresholdResponseJob < EmailPetitionSignatories::Job
     super(petition, petition.get_email_requested_at_for('government_response'))
   end
 
-  def perform(petition, requested_at_string, mailer = PetitionMailer.name, threshold_logger = nil)
+  def perform(petition, requested_at_string, mailer = PetitionMailer.name, logger = nil)
     @mailer = mailer.constantize
-    worker(petition, requested_at_string, threshold_logger).do_work!
+    worker(petition, requested_at_string, logger).do_work!
   end
 
   def timestamp_name

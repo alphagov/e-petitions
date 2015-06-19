@@ -14,17 +14,17 @@ class EmailPetitionSignatories
     end
     private_class_method :later_tonight
 
-    def worker(petition, requested_at_string, threshold_logger)
-      Worker.new(self, petition, requested_at_string, threshold_logger)
+    def worker(petition, requested_at_string, logger)
+      Worker.new(self, petition, requested_at_string, logger)
     end
   end
 
   class Worker
-    def initialize(job, petition, requested_at_string, threshold_logger = nil)
+    def initialize(job, petition, requested_at_string, logger = nil)
       @job = job
       @petition = petition
       @requested_at = requested_at_string.in_time_zone
-      @logger = threshold_logger || construct_threshold_logger
+      @logger = logger || construct_logger
     end
 
     def do_work!
@@ -84,7 +84,7 @@ class EmailPetitionSignatories
       raise PleaseRetry
     end
 
-    def construct_threshold_logger
+    def construct_logger
       logfilename = "#{job.class.name}_for_petition_id_#{petition.id}.log"
       AuditLogger.new(Rails.root.join('log', logfilename), "Email #{job.class.name} error")
     end
