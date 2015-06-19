@@ -263,7 +263,8 @@ CREATE TABLE email_sent_receipts (
     government_response timestamp without time zone,
     debate_outcome timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    debate_scheduled timestamp without time zone
 );
 
 
@@ -949,4 +950,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150619090833');
 INSERT INTO schema_migrations (version) VALUES ('20150621200307');
 
 INSERT INTO schema_migrations (version) VALUES ('20150619133502');
+
+INSERT INTO schema_migrations (version) VALUES ('20150619134335');
 
