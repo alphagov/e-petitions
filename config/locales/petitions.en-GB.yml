@@ -53,7 +53,7 @@ en-GB:
       one: "Waiting for 1 day"
       other: "Waiting for %{formatted_count} days"
 
-    counts:
+    signature_counts:
       default:
         html:
           one: "%{formatted_count} <span>signature</span>"
@@ -70,6 +70,16 @@ en-GB:
         html:
           one: "%{formatted_count} signature total"
           other: "%{formatted_count} signatures total"
+
+    counts:
+      with_response:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from government"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from government"
+      with_debate_outcome:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in parliament"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in parliament"
 
     rejection_reasons:
       titles:

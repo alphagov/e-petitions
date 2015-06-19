@@ -118,7 +118,8 @@ FactoryGirl.define do
   end
 
   factory :responded_petition, :parent => :awaiting_petition do
-    response "Government Response"
+    response          "Government Response"
+    response_summary  "Government Response Summary"
   end
 
   factory :debated_petition, :parent => :open_petition do

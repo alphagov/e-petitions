@@ -7,7 +7,7 @@ module SignatureHelper
   end
 
   def signature_count(key, count)
-    t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
+    t(:"#{key}.html", scope: :"petitions.signature_counts", count: count, formatted_count: number_with_delimiter(count))
   end
 
   private
