@@ -185,4 +185,32 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail.body.encoded).to match(%r[https://www.example.com/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
     end
   end
+
+  describe 'notifying signature of debate scheduled' do
+    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, action: "Allow organic vegetable vans to use red diesel") }
+    let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: 'Laura Palmer', email: 'laura@red-room.example.com') }
+    subject(:mail) { described_class.notify_signer_of_debate_scheduled(petition, signature) }
+
+    it "has the correct subject" do
+      expect(mail.subject).to eq("HM Government & Parliament Petitions: A debate has been scheduled for the petition '#{petition.action}' you've supported.")
+    end
+
+    it "addresses the signatory by name" do
+      expect(mail.body.encoded).to match(/Dear Laura Palmer\,/)
+    end
+
+    it "sends it only to the signatory" do
+      expect(mail.to).to eq(%w[laura@red-room.example.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "includes a link to the petition page" do
+      expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}])
+    end
+
+    it 'includes an unsubscribe link' do
+      expect(mail.body.encoded).to match(%r[https://www.example.com/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+    end
+  end
 end

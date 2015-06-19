@@ -72,6 +72,15 @@ class PetitionMailer < ApplicationMailer
     )
   end
 
+  def notify_signer_of_debate_scheduled(petition, signature)
+    @petition = petition
+    @signature = signature
+    mail(
+      subject: subject_for(:notify_signer_of_debate_scheduled),
+      to: @signature.email
+    )
+  end
+
   private
 
   def subject_for(key, options = {})

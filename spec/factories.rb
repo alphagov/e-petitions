@@ -139,6 +139,10 @@ FactoryGirl.define do
     end
   end
 
+  trait :scheduled_for_debate do
+    scheduled_debate_date 10.days.from_now
+  end
+
   factory :signature do
     sequence(:name) {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
