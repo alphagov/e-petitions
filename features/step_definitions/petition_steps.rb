@@ -46,8 +46,8 @@ Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, coun
 end
 
 Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |petition_action, count|
-    p = FactoryGirl.create(:open_petition, action: petition_action)
-    p.update_attribute(:signature_count, count)
+    @petition = FactoryGirl.create(:open_petition, action: petition_action)
+    @petition.update_attribute(:signature_count, count)
 end
 
 Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, response, response_summary|
