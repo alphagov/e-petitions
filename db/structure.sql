@@ -244,7 +244,7 @@ CREATE TABLE petitions (
     action character varying(200),
     sponsor_token character varying(255),
     response_summary character varying(500),
-    parliament_response_at timestamp without time zone,
+    government_response_at timestamp without time zone,
     scheduled_debate_date date
 );
 
