@@ -1,7 +1,5 @@
-<%= form_tag local_petitions_path, method: 'get' do %>
-  <div class="form-group">
-    <%= label_tag 'postcode', 'UK postcode', class: 'form-label' %>
-    <%= search_field_tag 'postcode', local_assigns[:postcode], class: 'form-control' %>
-  </div>
-  <%= submit_tag 'Search', class: 'button' %>
+<%= form_tag local_petitions_path, class: 'search-inline', method: 'get' do %>
+  <%= label_tag 'postcode', 'UK postcode', class: 'form-label' %>
+  <%= search_field_tag 'postcode', local_assigns[:postcode], class: 'form-control' %>
+  <%= submit_tag 'Search', class: 'inline-submit' %>
 <% end %>
