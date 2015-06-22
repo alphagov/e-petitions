@@ -29,23 +29,6 @@ When /^I view the petition through the admin interface$/ do
   click_button 'Search'
 end
 
-Then /^I should see the petition for viewing only$/ do
-  expect(page).to have_css('.petition')
-end
-
-Then /^I should see the petition for editing$/ do
-  expect(page).to have_css('form.edit_petition')
-end
-
-Then /^I should see the petition for editing the internal reponse and changing the status$/ do
-  expect(page).to have_css('form textarea#petition_internal_response')
-  expect(page).to have_css('form select#petition_rejection_code')
-end
-
-Then /^I should see the petition for editing the reponses$/ do
-  expect(page).to have_css('form textarea#petition_response')
-end
-
 Then /^I should see (\d+) petitions associated with the email address$/ do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
