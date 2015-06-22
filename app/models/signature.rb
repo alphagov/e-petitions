@@ -57,8 +57,8 @@ class Signature < ActiveRecord::Base
   # = Methods =
   attr_accessor :uk_citizenship
 
-  def self.signature_number(validated_at)
-    where(arel_table[:validated_at].lt(validated_at)).count + 1
+  def self.signature_number(petition_id, validated_at)
+    where('petition_id = ? AND validated_at < ?', petition_id, validated_at).count + 1
   end
 
   def email=(value)
@@ -67,7 +67,7 @@ class Signature < ActiveRecord::Base
 
   def number
     if validated_at?
-      @number ||= self.class.signature_number(validated_at)
+      @number ||= self.class.signature_number(petition_id, validated_at)
     end
   end
 
