@@ -69,6 +69,7 @@ Rails.application.routes.draw do
       resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
       resource :petition_details, :only => [:show, :update]
       resource :moderation, :only => [:update], controller: :moderation
+      resource :notes, :only => [:show, :update]
     end
     resources :profile, :only => [:edit, :update]
     resources :user_sessions, :only => [:create]
