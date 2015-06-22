@@ -3,6 +3,45 @@
   margin-top: $gutter;
 }
 
+.search-inline {
+  @extend %contain-floats;
+
+  .form-control {
+    @include box-sizing(border-box);
+    @include appearance(none);
+    float: left;
+    min-width: 0;
+    margin: 0;
+    border-right: 0;
+    height: 40px;
+    padding: 6px 0;
+    width: 85%;
+    width: -webkit-calc(100% - 40px);
+    width: calc(100% - 40px);
+    padding: 6px;
+  }
+  #postcode {
+    text-transform: uppercase;
+  }
+
+  .inline-submit {
+    float: left;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    overflow: hidden;
+    text-indent: -5000px;
+    cursor: pointer;
+    color: $white;
+    background: $petitions-brand image-url("icons/icon_search-white.png") no-repeat 45% 50%;
+
+    @include device-pixel-ratio() {
+      background-image: image-url("icons/icon_search-white-2x.png");
+      background-size: 18px 18px;
+    }
+  }
+}
+
 .search-results {
   margin-top: $gutter-half;
   margin-bottom: $gutter;
