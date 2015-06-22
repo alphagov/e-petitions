@@ -3,18 +3,18 @@ Feature: Moderator users password change
   I can change my password
 
   Background:
-    Given I am logged in as a moderator with the password "Letmein1!"
-    
+    Given I am logged in as a moderator named "John Moderator" with the password "Letmein1!"
+
   Scenario: Accessing the Profile page
     When I go to the admin home page
-    And I follow "Profile" in the admin nav
+    And I follow "John Moderator"
     Then I should be on the admin edit profile page
     And I should see a "Current password" text field
     And I should see a "New password" text field
     And I should see a "Password confirmation" text field
     And I should be connected to the server via an ssl connection
     And the markup should be valid
-    
+
   Scenario: Changing password successfully
     When I go to the admin edit profile page
     And I fill in "Current password" with "Letmein1!"
@@ -23,7 +23,7 @@ Feature: Moderator users password change
     And I press "Save"
     Then I should be on the admin home page
     And I should see "Password was successfully updated"
-    
+
   Scenario: Incorrect current password
     When I go to the admin edit profile page
     And I fill in "Current password" with "wrong password"

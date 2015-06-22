@@ -8,7 +8,7 @@ Feature: Admin users index and crud
 
   Scenario: Accessing the admin users index
     When I go to the admin home page
-    And I follow "Users" in the admin nav
+    And I follow "Users"
     Then I should be on the admin users index page
     And I should be connected to the server via an ssl connection
 

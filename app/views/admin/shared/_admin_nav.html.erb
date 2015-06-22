@@ -27,22 +27,5 @@
       t.links_to admin_petitions_path
       t.highlights_on :controller => "admin/petitions", :action => :index
     end
-
-    if current_user.is_a_sysadmin?
-      n.add_tab do |t|
-        t.named "Users"
-        t.links_to admin_admin_users_path
-        t.highlights_on :controller => "admin/admin_users"
-      end
-    end
-    n.add_tab do |t|
-      t.named "Profile"
-      t.links_to edit_admin_profile_path(current_user)
-      t.highlights_on :controller => "admin/profile"
-    end
-    n.add_tab do |t|
-      t.named "Logout"
-      t.links_to admin_logout_path
-    end
   end %>
 <% end -%>
