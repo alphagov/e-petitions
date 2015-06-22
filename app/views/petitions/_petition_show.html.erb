@@ -41,7 +41,9 @@
   <li class="meta-deadline">
     <span class="label">Deadline</span> <%= short_date_format petition.closed_at %>
   </li>
-  <li class="meta-created-by">
-    <span class="label">Created by</span> <%= petition.creator_signature.name %>
-  </li>
+  <% unless petition.closed? %>
+    <li class="meta-created-by">
+      <span class="label">Created by</span> <%= petition.creator_signature.name %>
+    </li>
+  <% end %>
 </ul>
