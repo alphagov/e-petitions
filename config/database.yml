@@ -15,3 +15,4 @@ test:
 production:
   <<: *default
   database: epets_production
+  pool: 16
