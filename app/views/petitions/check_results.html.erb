@@ -1,4 +1,4 @@
-<% content_for(:page_title) { "Create a new petition - Petitions" } %>
+<% content_for(:page_title) { "Start a petition - Petitions" } %>
 
 <%= link_to check_petitions_path, class: "back-page" do %>
   &#9664; Back
@@ -6,8 +6,8 @@
 
 <% if @petitions.empty? %>
   <h1 class="page-title">We did not find any similar petitions</h1>
-  <p>We didn't find any existing petitions that match your subject, click the 'Create a new petition' button to continue.</p>
-  <% create_button_text = "Create a new petition" -%>
+  <p>We didn't find any existing petitions that match your subject, click the 'Start a petition' button to continue.</p>
+  <% create_button_text = "Start a petition" -%>
 <% else %>
   <h1 class="page-title">We found some similar petitions</h1>
   <p>If there's already a petition on the same topic, your petition is likely to be rejected</p>
