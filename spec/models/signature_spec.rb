@@ -315,17 +315,43 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    before do
-      petition.signatures.each do |signature|
-        signature.validate!
-      end
+    let(:other_attributes) { FactoryGirl.attributes_for(:petition) }
+    let(:other_creator) { FactoryGirl.create(:pending_signature) }
+    let(:other_petition) do
+      Petition.create(other_attributes) do |petition|
+        petition.creator_signature = other_creator
 
+        5.times do
+          petition.signatures << FactoryGirl.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each { |s| s.validate! }
       petition.publish!
+
+      other_petition.signatures.each { |s| s.validate! }
+      other_petition.publish!
     end
 
     it "returns the signature number" do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
+
+      expect(petition.signature_count).to eq(7)
+      expect(signature.number).to eq(7)
+    end
+
+    it "is scoped to the petition" do
+      other_signature = FactoryGirl.create(:pending_signature, petition: other_petition)
+      other_signature.validate!
+
+      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature.validate!
+
+      expect(other_petition.signature_count).to eq(7)
+      expect(other_signature.number).to eq(7)
 
       expect(petition.signature_count).to eq(7)
       expect(signature.number).to eq(7)
