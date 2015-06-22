@@ -42,22 +42,9 @@ Feature: Threshold list
     When I go to the admin threshold page
     And I follow "Petition 1"
     And I should see "01-01-2012"
-    And I should see a "Internal response" textarea field
-    And I should see a "Public response required" checkbox field
     And I should see a "Public response summary" textarea field
     And I should see a "Public response" textarea field
     And I should see a "Email signees" checkbox field
-
-  Scenario: A moderator user updates the internal response to a petition
-    When I go to the admin threshold page
-    And I follow "Petition 1"
-    And I fill in "Internal response" with "Parliament here it comes"
-    And I check "Public response required"
-    And I press "Save"
-    Then I should be on the admin all petitions page
-    And a petition should exist with action: "Petition 1", internal_response: "Parliament here it comes", response_required: true
-    But the petition with action: "Petition 1" should not have requested a government response email
-    And the petition signatories of "Petition 1" should not receive a response notification email
 
   Scenario: A moderator user updates the public response to a petition
     Given the time is "3 Dec 2010 01:00"
