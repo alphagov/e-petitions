@@ -832,11 +832,59 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_38c9c83a88; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sponsors
+    ADD CONSTRAINT fk_rails_38c9c83a88 FOREIGN KEY (signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_3e01179571; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY signatures
+    ADD CONSTRAINT fk_rails_3e01179571 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_5186723bbd; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY constituency_petition_journals
+    ADD CONSTRAINT fk_rails_5186723bbd FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_5451a341b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY petitions
+    ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_898597541e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_requested_receipts
     ADD CONSTRAINT fk_rails_898597541e FOREIGN KEY (petition_id) REFERENCES petitions(id);
+
+
+--
+-- Name: fk_rails_bc381510eb; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY sponsors
+    ADD CONSTRAINT fk_rails_bc381510eb FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_cb057e3dd1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY debate_outcomes
+    ADD CONSTRAINT fk_rails_cb057e3dd1 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -896,4 +944,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150618233718');
 INSERT INTO schema_migrations (version) VALUES ('20150619075903');
 
 INSERT INTO schema_migrations (version) VALUES ('20150619090833');
+
+INSERT INTO schema_migrations (version) VALUES ('20150621200307');
 

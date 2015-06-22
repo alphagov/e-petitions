@@ -79,84 +79,81 @@ RSpec.describe Signature, type: :model do
     end
 
     describe "uniqueness of email" do
-      before do
-        FactoryGirl.create(:signature, :name => "Suzy Signer",
-                       :petition_id => 1, :postcode => "sw1a 1aa",
-                       :email => 'foo@example.com')
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:other_petition) { FactoryGirl.create(:open_petition) }
+      let(:attributes) do
+        {
+          name:     "Suzy Signer",
+          petition: petition,
+          postcode: "SW1A 1AA",
+          email:    "foo@example.com"
+        }
       end
 
-      it "allows a second email to be used" do
-        s = FactoryGirl.build(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        expect(s).to have_valid(:email)
+      context "when a signature already exists with the same email address" do
+        before do
+          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
+        end
+
+        it "doesn't allow a second signature with the same email address and the same name" do
+          signature = FactoryGirl.build(:signature, attributes)
+          expect(signature).not_to have_valid(:email)
+        end
+
+        it "does allow a second signature with the same email address but a different name" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer"))
+          expect(signature).to have_valid(:email)
+        end
+
+        it "is scoped to a petition" do
+          signature = FactoryGirl.build(:signature, attributes.merge(petition: other_petition))
+          expect(signature).to have_valid(:email)
+        end
+
+        it "ignores extra whitespace at the end of the name" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Suzy Signer "))
+          expect(signature).not_to have_valid(:email)
+        end
+
+        it "ignores extra whitespace at the beginning of the name" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: " Suzy Signer"))
+          expect(signature).not_to have_valid(:email)
+        end
+
+        it "only allows the second email if the postcode is the same" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A 1AB"))
+          expect(signature).not_to have_valid(:email)
+        end
+
+        it "ignores the space on the postcode check" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AA"))
+          expect(signature).to have_valid(:email)
+
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AB"))
+          expect(signature).not_to have_valid(:email)
+        end
+
+        it "does a case insensitive postcode check" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "sw1a 1aa"))
+          expect(signature).to have_valid(:email)
+        end
+
+        it "is case insensitive about the email validation" do
+          signature = FactoryGirl.build(:signature, attributes.merge(email: "FOO@example.com"))
+          expect(signature).not_to have_valid(:email)
+        end
       end
 
-      it "does not allow a third email to be used" do
-        FactoryGirl.create(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        s = FactoryGirl.build(:signature, :name => "Sarah Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-      end
+      context "when two signatures already exist with the same email address" do
+        before do
+          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
+          FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
+        end
 
-      it "does not allow the second email if the name is the same" do
-        s = FactoryGirl.build(:signature, :name => "Suzy Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-      end
-
-      it "ignores extra whitespace on name" do
-        s = FactoryGirl.build(:signature, :name => "Suzy Signer ",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-        s = FactoryGirl.build(:signature, :name => " Suzy Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-      end
-
-      it "only allows the second email if the postcode is the same" do
-        s = FactoryGirl.build(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1ab',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-      end
-
-      it "ignores the space on the postcode check" do
-        s = FactoryGirl.build(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a1aa',
-                          :email => 'foo@example.com')
-        expect(s).to have_valid(:email)
-        s = FactoryGirl.build(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a1ab',
-                          :email => 'foo@example.com')
-        expect(s).not_to have_valid(:email)
-      end
-
-      it "does a case insensitive postcode check" do
-        s = FactoryGirl.build(:signature, :name => "Sam Signer",
-                          :petition_id => 1, :postcode => 'sw1a 1Aa',
-                          :email => 'foo@example.com')
-        expect(s).to have_valid(:email)
-      end
-
-      it "is case insensitive about the subsequent validations" do
-        s = FactoryGirl.create(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
-                      :email => 'fOo@Example.com')
-        expect(s).to have_valid(:email)
-        s = FactoryGirl.build(:signature, :petition_id => 1, :postcode => 'sw1a 1aa',
-                          :email => 'FOO@Example.com')
-        expect(s).not_to have_valid(:email)
-      end
-
-      it "is scoped to petition" do
-        s = FactoryGirl.build(:signature, :petition_id => 2, :email => 'foo@example.com')
-        expect(s).to have_valid(:email)
+        it "doesn't allow a third signature with the same email address" do
+          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sarah Signer"))
+          expect(signature).not_to have_valid(:email)
+        end
       end
     end
 

@@ -3,7 +3,7 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
 
   validates :petition, presence: true
   validates :constituency_id, presence: true, length: { maximum: 255 }
-  validates :petition_id, uniqueness: { scope: [:constituency_id] }
+  validates :constituency_id, uniqueness: { scope: [:petition_id] }
   validates :signature_count, presence: true
 
   scope :ordered, -> {
