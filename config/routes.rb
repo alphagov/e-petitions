@@ -70,6 +70,7 @@ Rails.application.routes.draw do
       resource :petition_details, :only => [:show, :update]
       resource :moderation, :only => [:update], controller: :moderation
       resource :notes, :only => [:show, :update]
+      resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
     end
     resources :profile, :only => [:edit, :update]
     resources :user_sessions, :only => [:create]
