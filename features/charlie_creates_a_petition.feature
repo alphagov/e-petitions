@@ -6,7 +6,7 @@ Feature: As Charlie
 Scenario: Charlie has to search for a petition before creating one
   Given a petition "Rioters should loose benefits"
   Given I am on the home page
-  When I follow "Start a petition"
+  When I follow "Start a petition" within ".//main"
   Then I should be asked to search for a new petition
   When I check for similar petitions
   Then I should see a list of existing petitions I can sign
@@ -17,7 +17,7 @@ Scenario: Charlie has to search for a petition before creating one
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
-  When I follow "Start a petition"
+  When I follow "Start a petition" within ".//main"
   Then I fill in "q" with "'onmouseover='alert(1)'"
   When I press "Check for similar petitions"
   Then the markup should be valid
