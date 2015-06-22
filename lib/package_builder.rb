@@ -1,6 +1,7 @@
 require 'tmpdir'
 require 'active_support/core_ext/string/strip'
 require 'aws-sdk'
+require 'slack-notifier'
 
 class PackageBuilder
   class << self
@@ -59,12 +60,16 @@ class PackageBuilder
   end
 
   def deploy!
-    unless skip_build?
-      build!
-      upload!
-    end
+    if ci? && !deploy_build?
+      info "Skipping deployment ..."
+    else
+      unless skip_build?
+        build!
+        upload!
+      end
 
-    create_deployment! if deploy_release?
+      create_deployment! if deploy_release?
+    end
   end
 
   private
@@ -98,6 +103,10 @@ class PackageBuilder
     Kernel.system *args
   end
 
+  def ci?
+    ENV.fetch('CI', 'false') == 'true'
+  end
+
   def create_archive
     args = %w[git archive]
     args.concat ['--format', 'tar']
@@ -116,6 +125,7 @@ class PackageBuilder
 
     track_progress(response.deployment_id) do |deployment_info|
       notify_new_relic
+      notify_slack
     end
   end
 
@@ -125,6 +135,14 @@ class PackageBuilder
 
   def credentials
     { region: region, profile: profile }
+  end
+
+  def deploy_branch?
+    ENV.fetch('TRAVIS_BRANCH', 'master') == 'master'
+  end
+
+  def deploy_build?
+    !pull_request? && deploy_branch?
   end
 
   def deployment_config
@@ -236,6 +254,29 @@ class PackageBuilder
     ENV.fetch('NEW_RELIC_LICENSE_KEY')
   end
 
+  def notify_slack
+    if slack_webhook
+      notifier = Slack::Notifier.new(slack_webhook)
+      notifier.ping slack_message, slack_options
+    end
+  end
+
+  def slack_webhook
+    ENV.fetch('SLACK_WEBHOOK_URL', nil)
+  end
+
+  def slack_message
+    "Deployed revision <#{commit_url}|#{short_revision}> to <#{website_url}>"
+  end
+
+  def slack_options
+    { channel: '#epetitions', username: 'deploy', icon_emoji: ':tada:' }
+  end
+
+  def pull_request?
+    ENV.fetch('TRAVIS_PULL_REQUEST', 'false') != 'false'
+  end
+
   def region
     ENV.fetch('AWS_REGION', 'eu-west-1')
   end
@@ -266,6 +307,22 @@ class PackageBuilder
 
   def revision_file
     File.join(archive_path, 'REVISION')
+  end
+
+  def short_revision
+    revision.first(7)
+  end
+
+  def commit_url
+    "https://github.com/alphagov/e-petitions/commit/#{revision}"
+  end
+
+  def website_url
+    if environment == :production
+      "https://petition.parliament.uk/"
+    else
+      "https://#{environment}.epetitions.website/"
+    end
   end
 
   def skip_build?

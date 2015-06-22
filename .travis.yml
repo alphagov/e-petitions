@@ -1,10 +1,17 @@
 language: ruby
 cache: bundler
 rvm:
-  - 2.2.2
+- 2.2.2
 before_install:
-  - gem install bundler
+- gem install bundler
 before_script:
-  - bundle install
-  - psql -c 'create database epets_test;' -U postgres
+- bundle install
+- psql -c 'create database epets_test;' -U postgres
 script: bundle exec rake
+after_success: RAILS_ENV=development bundle exec rake deploy:staging
+env:
+  global:
+  - secure: bqjqhceSOQYekPv5swVtYTjKG9A689j3xRFRqBxbzYEpYy+pujIQK+jIFARWtQqUULI/ZFc0ERZMpFHfWG9IwTvMwKti5L/hT5n/uGT7XlAMp0pH+mA9D+/3sHQyN+66uRfAHyz6fdd2pz/nDYq5KJtpkN/GTBhXQgO5KHTggMQ=
+  - secure: cmxFOfbwZv58O6HIN3SPdIC7EyC9EK2OiCJylnIw4aG5yP7zN7TPz+JukXv684szIxYnskYEyZx2wUY2oSl7J7bTtMKDxJ4BzM+UrTQExgtcm2s/0ZZEzh8u54Bx2aPUhuedEkSuyFst2dY/3GjxHHJ8PhtDvWdL4Fa74WN9cuE=
+  - secure: s+TrZenxB1PxnPy8wgMBfTdlPLe1rgVxa+lW4FB45L+MVTm1VqfDv+rU+i9CMXC9kLKjhCHJoZlFFOTMtgBCoLybkloTRkLULjeOA9BmFs26pUBBmajfwnmu7Vix3zwzjBqq6xYWjZ10eIea3OCqB/0sQRoLaJylodOzVWGi9Ts=
+  - secure: gDyAoPkiNpH7xdv1iAkj2phjlCBCofre5EU+bv8EMaAiddDi14QndEaTEyHgo2F18Rjeub4nagqFUtk9SUmf42tztS2X5cU7LyRRKpYCkYceZ/ex9t8k1i3JoNH3JaNQmmfCoVcw9rTarbbngk6gyFXmw35EB0Z0C6wlaOv4tCs=
