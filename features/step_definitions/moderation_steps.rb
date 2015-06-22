@@ -1,16 +1,17 @@
-When /^I look at the next petition on my list$/ do
+When(/^I look at the next petition on my list$/) do
   @petition = FactoryGirl.create(:sponsored_petition, :with_additional_details, :action => "Petition 1")
-  visit edit_admin_petition_path(@petition)
+  visit admin_petition_path(@petition)
 end
 
-When /^I visit a sponsored petition with action: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/ do |petition_action, background, additional_details|
+When(/^I visit a sponsored petition with action: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/) do |petition_action, background, additional_details|
   @sponsored_petition = FactoryGirl.create(:sponsored_petition, action: petition_action, background: background, additional_details: additional_details)
-  visit edit_admin_petition_path(@sponsored_petition)
+  visit admin_petition_path(@sponsored_petition)
 end
 
-When /^I reject the petition with a reason code "([^"]*)"$/ do |reason_code|
+When(/^I reject the petition with a reason code "([^"]*)"$/) do |reason_code|
+  choose "Reject"
   select reason_code, :from => :petition_rejection_code
-  click_button "Reject"
+  click_button "Email petition creator"
 end
 
 When /^I change the rejection status of the petition with a reason code "([^"]*)"$/ do |reason_code|
@@ -18,10 +19,11 @@ When /^I change the rejection status of the petition with a reason code "([^"]*)
   click_button "Change rejection status"
 end
 
-When /^I reject the petition with a reason code "([^"]*)" and some explanatory text$/ do |reason_code|
+When(/^I reject the petition with a reason code "([^"]*)" and some explanatory text$/) do |reason_code|
+  choose "Reject"
   select reason_code, :from => :petition_rejection_code
   fill_in :petition_rejection_text, :with => "See guidelines at http://direct.gov.uk"
-  click_button "Reject"
+  click_button "Email petition creator"
 end
 
 Then /^the petition is not available for signing$/ do
@@ -29,8 +31,9 @@ Then /^the petition is not available for signing$/ do
   expect(page).not_to have_css("a", :text => "Sign")
 end
 
-When /^I publish the petition$/ do
-  click_button "Publish this petition"
+When(/^I publish the petition$/) do
+  choose "Approve"
+  click_button "Email petition creator"
 end
 
 Then /^the petition is still available for searching or viewing$/ do
@@ -125,12 +128,4 @@ Given(/^a moderator responds to the petition$/) do
     And I check "Email signees"
     And I press "Save"
   )
-end
-
-Then(/^I am redirected to the petition edit page$/) do
-  expect(current_path).to eq(edit_admin_petition_path(@sponsored_petition))
-end
-
-Then(/^I am redirected to the petition edit details page$/) do
-  expect(current_path).to eq(admin_petition_petition_details_path(@sponsored_petition))
 end

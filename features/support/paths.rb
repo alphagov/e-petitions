@@ -68,8 +68,8 @@ module NavigationHelpers
     when /^todolist page$/
       admin_root_path
 
-    when /^moderate petitions page for "([^\"]*)"$/
-      edit_admin_petition_path(Petition.find_by(action: $1))
+    when /^petition page for "([^\"]*)"$/
+      admin_petition_path(Petition.find_by(action: $1))
 
     when /^threshold page$/
       threshold_admin_petitions_path
@@ -91,6 +91,9 @@ module NavigationHelpers
 
     when /^debate outcomes form page for "([^\"]*)"$/
       admin_petition_debate_outcome_path(Petition.find_by(action: $1))
+
+    when /^petition edit details page for "([^\"]*)"$/
+      admin_petition_petition_details_path(Petition.find_by(action: $1))
 
     else
       raise "Can't find mapping from \"#{admin_page}\" to an Admin path.\n" +
