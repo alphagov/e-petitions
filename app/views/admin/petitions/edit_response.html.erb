@@ -19,7 +19,6 @@
 <% end -%>
 
 <%= form_for [:admin, @petition ], :url => update_response_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
-  <%= render 'internal_response', :f => f %>
   <div>
     <%= f.text_area :response_summary, :label => 'Public response summary', :rows => 3, :cols => 70 %>
     <%= error_messages_for_field @petition, :response_summary %>
