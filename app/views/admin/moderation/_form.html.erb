@@ -1,0 +1,17 @@
+<%= form_for petition, url: admin_petition_moderation_path(petition), method: :patch do |f| -%>
+  <%= form_row do %>
+    <%= label_tag :moderation_approve, nil do %>
+      <%= radio_button_tag :moderation, 'approve', params[:moderation] == 'approve' %> Approve
+    <% end %>
+    <%= label_tag :moderation_reject, nil do %>
+      <%= radio_button_tag :moderation, 'reject', params[:moderation] == 'reject' %> Reject
+    <% end %>
+  <% end %>
+
+  <%= render 'admin/petitions/reject', f: f %>
+
+  <%= form_row do %>
+    <%= f.submit 'Email petition creator' %>
+  <% end %>
+
+<% end -%>
