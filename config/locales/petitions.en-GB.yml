@@ -5,6 +5,7 @@ en-GB:
       open: "Open petitions"
       closed: "Closed petitions"
       rejected: "Rejected petitions"
+      awaiting_response: "Petitions awaiting a Government response"
       with_response: "Petitions with a Government response"
       with_debate_outcome: "Petitions debated in Parliament"
 
