@@ -15,6 +15,10 @@
         t.links_to check_petitions_path
       end
       n.add_tab do |t|
+        t.named 'Help'
+        t.links_to help_path
+      end
+      n.add_tab do |t|
         t.named 'Feedback'
         t.links_to feedback_path
       end
