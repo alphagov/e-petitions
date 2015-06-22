@@ -14,6 +14,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Force supermarkets to give unsold food to charities" exists with a signature count of 500000
     Given a petition "Make every monday bank holiday" exists with a signature count of 1000
     When I view all petitions from the home page
+    Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Force supermarkets to give unsold food to charities |
      | Make every monday bank holiday                      |
@@ -26,6 +27,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Make every monday bank holiday" has been rejected
     When I view all petitions from the home page
     And I follow "Rejected"
+    Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
@@ -39,6 +41,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
     When I view all petitions from the home page
     And I follow "Awaiting a government response"
+    Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
@@ -51,6 +54,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
     When I view all petitions from the home page
     And I follow "Government responses"
+    Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
@@ -64,6 +68,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Make every monday bank holiday" exists
     When I view all petitions from the home page
     And I follow "Petitions debated in Parliament"
+    Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Ban Badger Baiting                                  |
      | Spend more money on Defence                         |
