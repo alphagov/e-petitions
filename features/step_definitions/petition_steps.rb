@@ -200,7 +200,7 @@ Then /^I should see the reason for rejection$/ do
 end
 
 Then /^I should be asked to search for a new petition$/ do
-  expect(page).to have_content("What action would you like the government to take?")
+  expect(page).to have_content("What do you want us to do?")
   expect(page).to have_css("form textarea[name=q]")
 end
 
