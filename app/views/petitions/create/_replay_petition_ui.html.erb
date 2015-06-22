@@ -6,14 +6,13 @@
 
 <div class="panel-indent">
   <h1><%= petition.action %></h1>
-  <p><%= petition.background %></p>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div>
-      <p><%= petition.additional_details %></p>
-    </div>
-  </details>
-
+  <div><%= raw auto_link(simple_format(h(petition.background)), :html => { :target => '_blank' }) %></div>
+  <% unless petition.additional_details.blank? %>
+    <details>
+      <summary><span class="summary">More details</span></summary>
+      <div><%= raw auto_link(simple_format(h(petition.additional_details)), :html => { :target => '_blank' }) %></div>
+    </details>
+  <% end %>
 </div>
 
 
