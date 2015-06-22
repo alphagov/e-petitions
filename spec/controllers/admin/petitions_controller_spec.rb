@@ -73,10 +73,9 @@ RSpec.describe Admin::PetitionsController, type: :controller do
 
     context 'update internal response' do
       it "updates internal response and response required flag" do
-        patch :update_response, :id => @p1.id, :petition => {:internal_response => 'This is popular', :response_required => '1'}
+        patch :update_response, :id => @p1.id, :petition => {:admin_notes => 'This is popular'}
         @p1.reload
-        expect(@p1.internal_response).to eq('This is popular')
-        expect(@p1.response_required).to be_truthy
+        expect(@p1.admin_notes).to eq('This is popular')
       end
     end
 

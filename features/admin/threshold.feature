@@ -1,7 +1,7 @@
 Feature: Threshold list
   In order to see and action petitions that require a response
-  As a moderator or sysadmin user I can see a list of petitions that have exceeded the signature threshold count
-  Or have been marked as requiring a response
+  As a moderator or sysadmin user
+  I want to see a list of petitions that have exceeded the signature threshold count
 
   Background:
     Given I am logged in as a moderator
@@ -15,14 +15,13 @@ Feature: Threshold list
     And the petition "Petition 3" has 5 validated signatures
     And a closed petition "p4" exists with action: "Petition 4", closed_at: "20 April 2011"
     And the petition "Petition 4" has 10 validated signatures
-    And an open petition "p5" exists with action: "Petition 5", response_required: false
-    And a closed petition "p6" exists with action: "Petition 6", response_required: true, closed_at: "21 April 2011"
+    And an open petition "p5" exists with action: "Petition 5"
+    And a closed petition "p6" exists with action: "Petition 6", closed_at: "21 April 2011"
 
   Scenario: A moderator user sees all petitions above the threshold signature count
     When I go to the admin threshold page
     Then I should see the following admin index table:
       | Action     | Count | Closing date |
-      | Petition 6 | 1     | 21-04-2011   |
       | Petition 3 | 5     | 20-09-2011   |
       | Petition 4 | 10    | 20-04-2011   |
       | Petition 1 | 25    | 01-01-2012   |
@@ -34,7 +33,7 @@ Feature: Threshold list
     And 20 petitions exist with a signature count of 6
     When I go to the admin threshold page
     And I follow "Next"
-    Then I should see 4 rows in the admin index table
+    Then I should see 3 rows in the admin index table
     And I follow "Previous"
     And I should see 20 rows in the admin index table
 

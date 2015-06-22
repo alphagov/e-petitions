@@ -68,7 +68,7 @@ class Petition < ActiveRecord::Base
   attr_accessor :email_signees
 
   # = Finders =
-  scope :threshold, -> { where('signature_count >= ? OR response_required = ?', Site.threshold_for_debate, true) }
+  scope :threshold, -> { where('signature_count >= ?', Site.threshold_for_debate) }
 
   scope :for_state, ->(state) {
     if CLOSED_STATE.casecmp(state) == 0

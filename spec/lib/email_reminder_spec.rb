@@ -11,8 +11,7 @@ RSpec.describe EmailReminder do
       @p2.update_attribute(:signature_count, 10)
       @p3 = FactoryGirl.create(:open_petition)
       @p3.update_attribute(:signature_count, 9)
-      @p4 = FactoryGirl.create(:open_petition, :response_required => true)
-      @p5 = FactoryGirl.create(:open_petition, :response_required => true, :notified_by_email => true)
+      @p4 = FactoryGirl.create(:open_petition, :notified_by_email => true)
 
       allow(Site).to receive(:threshold_for_debate).and_return(10)
     end
@@ -29,9 +28,9 @@ RSpec.describe EmailReminder do
     end
 
     it "should email out details of three petitions and set the notified_by_email flag to true" do
-      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p4, @p2, @p1]).and_return(double('email', :deliver_now => nil))
+      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p2, @p1]).and_return(double('email', :deliver_now => nil))
       EmailReminder.threshold_email_reminder
-      [@p4, @p2, @p1].each do |petition|
+      [@p2, @p1].each do |petition|
         petition.reload
         expect(petition.notified_by_email).to be_truthy
       end

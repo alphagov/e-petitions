@@ -41,7 +41,7 @@ class Admin::PetitionsController < Admin::AdminController
     assign_email_signees_param
     params.
       require(:petition).
-      permit(:internal_response, :response_required, :response, :response_summary, :email_signees)
+      permit(:admin_notes, :response, :response_summary, :email_signees)
   end
 
   def edit_scheduled_debate_date

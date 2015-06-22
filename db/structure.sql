@@ -304,8 +304,7 @@ CREATE TABLE petitions (
     rejection_text text,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
-    response_required boolean DEFAULT false,
-    internal_response text,
+    admin_notes text,
     rejection_code character varying(50),
     notified_by_email boolean DEFAULT false,
     background character varying(200),
@@ -758,13 +757,6 @@ CREATE INDEX index_petitions_on_last_signed_at ON petitions USING btree (last_si
 
 
 --
--- Name: index_petitions_on_response_required_and_signature_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_petitions_on_response_required_and_signature_count ON petitions USING btree (response_required, signature_count);
-
-
---
 -- Name: index_petitions_on_response_threshold_reached_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -962,4 +954,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150619134335');
 INSERT INTO schema_migrations (version) VALUES ('20150621200307');
 
 INSERT INTO schema_migrations (version) VALUES ('20150622083615');
+
+INSERT INTO schema_migrations (version) VALUES ('20150622140322');
 

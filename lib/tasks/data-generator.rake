@@ -99,7 +99,6 @@ namespace :data do
 
         # Add responses on random petitions when 10,000 signatures
         petition.update_attributes(
-          response_required: true,
           response: Faker::Lorem.paragraph(rand(10..30))
         ) if @should_create_response
       end
