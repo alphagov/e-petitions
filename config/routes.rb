@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     end
 
     resources :admin_users
-    resources :petitions, :only => [:show, :edit, :update, :index] do
+    resources :petitions, :only => [:show, :index] do
       collection do
         get :threshold
       end
