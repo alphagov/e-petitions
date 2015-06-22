@@ -1,14 +1,7 @@
 <%= render 'petition_details' %>
 <%= render 'published_petition_details' %>
 
-<% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
-  <%= form_for [:admin, @petition ], :html => { :id => 'take_down_petition_form' }, :url => take_down_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
-    <div class='takedown'>
-      <h2>Take this petition down</h2>
-      <%= render :partial => 'reject', :locals => { :f => f, :button_label => "Take down" } %>
-    </div>
-  <% end -%>
-<% elsif @petition.rejected? -%>
+<% if @petition.rejected? -%>
   <%= form_for [:admin, @petition ], :html => { :id => 'change_petition_rejection_status_form' }, :url => take_down_admin_petition_path(@petition), :builder => AdminFormBuilder do |f| -%>
     <div class='takedown'>
       <h2>Change rejection status</h2>

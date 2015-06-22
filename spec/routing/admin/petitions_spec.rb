@@ -48,8 +48,4 @@ RSpec.describe "routes for admin petitions", type: :routing do
   it "routes PATCH /admin/petitions/1/update_scheduled_debate_date to admin/petitions#update_scheduled_debate_date" do
     expect(patch("/admin/petitions/1/update_scheduled_debate_date")).to route_to('admin/petitions#update_scheduled_debate_date', id: '1')
   end
-
-  it "routes PATCH /admin/petitions/1/take_down to admin/petitions#take_down" do
-    expect(patch("/admin/petitions/1/take_down")).to route_to('admin/petitions#take_down', id: '1')
-  end
 end

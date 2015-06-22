@@ -71,14 +71,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       expect(assigns[:petition]).to eq(@p1)
     end
 
-    context 'update internal response' do
-      it "updates internal response and response required flag" do
-        patch :update_response, :id => @p1.id, :petition => {:admin_notes => 'This is popular'}
-        @p1.reload
-        expect(@p1.admin_notes).to eq('This is popular')
-      end
-    end
-
     context "update_response" do
       def do_patch(options = {})
         patch :update_response, :id => @p1.id, :petition => { :response => 'Doh!', :response_summary => 'Summary', :email_signees => '1'}.merge(options)
@@ -307,33 +299,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       it "assigns petition successfully" do
         get :show, :id => @petition.id
         expect(assigns(:petition)).to eq(@petition)
-      end
-    end
-
-    describe "take down" do
-      context "an open petition" do
-        before { @petition.publish! }
-        it "succeeds" do
-          @petition.save
-          post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
-          @petition.reload
-          expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-          expect(@petition.rejection_code).to eq('offensive')
-        end
-      end
-
-      context "a rejected (but visible) petition" do
-        before do
-          @petition.state = Petition::REJECTED_STATE
-          @petition.rejection_code = 'offensive'
-          @petition.save!
-        end
-
-        it "succeeds" do
-          post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
-          @petition.reload
-          expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-        end
       end
     end
   end

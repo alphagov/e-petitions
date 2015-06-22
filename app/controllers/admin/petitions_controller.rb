@@ -58,20 +58,7 @@ class Admin::PetitionsController < Admin::AdminController
     end
   end
 
-  def take_down
-    @petition = Petition.find(params[:id])
-    if @petition.reject(rejection_params)
-      PetitionMailer.petition_rejected(@petition).deliver_now
-    end
-
-    respond_with @petition, :location => admin_petitions_url
-  end
-
   protected
-
-  def rejection_params
-    params.require(:petition).permit(:rejection_code, :rejection_text)
-  end
 
   def fetch_petition_for_scheduled_debate_date
     @petition = Petition.find(params[:id])
