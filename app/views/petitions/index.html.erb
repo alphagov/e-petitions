@@ -3,6 +3,13 @@
 
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
-<%= render 'search/results' %>
+<form method="get" action="/petitions" class="search-form">
+  <div class="form-group">
+    <input type='text' name="q" id="search" class="form-control" value="<%= @petitions.query %>" />
+    <input type='hidden' name="state" id="state" class="form-control" value="<%= @petitions.scope %>"/>
+  </div>
+  <input type='submit' value='Search' class="button" />
+</form>
 
+<%= render 'search/results' %>
 <%= render 'search/filter_nav' %>
