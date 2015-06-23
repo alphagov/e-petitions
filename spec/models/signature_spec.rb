@@ -283,7 +283,7 @@ RSpec.describe Signature, type: :model do
       end
 
       it "returns only signatures for the given email address" do
-        expect(Signature.for_email("person3@example.com")).to eq(
+        expect(Signature.for_email("person3@example.com")).to match_array(
           [signature3, other_signature]
         )
       end
