@@ -11,27 +11,6 @@ class Admin::PetitionsController < Admin::AdminController
     @petition = Petition.find(params[:id])
   end
 
-  def edit
-    @petition = Petition.todo_list.find(params[:id])
-  end
-
-  def update
-    @petition = Petition.todo_list.find(params[:id])
-    user_action = params['commit']
-    case user_action
-      when 'Publish this petition'
-        publish
-      when 'Re-assign'
-        reassign
-      when 'Reject'
-        reject
-      else
-        raise "Don't know how to do this action"
-    end
-
-    respond_with @petition, :location => admin_root_url
-  end
-
   def threshold
     @petitions = Petition.threshold.order(:signature_count).paginate(:page => params[:page], :per_page => params[:per_page] || 20)
   end
@@ -82,30 +61,22 @@ class Admin::PetitionsController < Admin::AdminController
 
   def take_down
     @petition = Petition.find(params[:id])
-    reject
+    if @petition.reject(rejection_params)
+      PetitionMailer.petition_rejected(@petition).deliver_now
+    end
+
     respond_with @petition, :location => admin_petitions_url
   end
 
   protected
 
+  def rejection_params
+    params.require(:petition).permit(:rejection_code, :rejection_text)
+  end
+
   def fetch_petition_for_scheduled_debate_date
     @petition = Petition.find(params[:id])
     raise ActiveRecord::RecordNotFound unless @petition.can_have_debate_added?
-  end
-
-  def publish
-    @petition.publish!
-    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_now
-  end
-
-  def reject
-    if @petition.reject(rejection_params)
-      PetitionMailer.petition_rejected(@petition).deliver_now
-    end
-  end
-
-  def rejection_params
-    params.require(:petition).permit(:rejection_code, :rejection_text)
   end
 
   def update_scheduled_debate_date_params

@@ -64,7 +64,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
           it "redirects to the edit page" do
             allow(petition).to receive(:awaiting_moderation?).and_return true
             get :result, :search => { :query => '123' }
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}/edit")
+            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
           end
 
           context "and is open" do

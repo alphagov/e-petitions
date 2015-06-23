@@ -6,7 +6,7 @@ Feature: Moderator respond to petition
   Scenario: Accessing the petitions page
     Given a sponsored petition "More money for charities"
     And I am logged in as a sysadmin
-    When I go to the admin moderate petitions page for "More money for charities"
+    When I go to the admin petition page for "More money for charities"
     Then I should be connected to the server via an ssl connection
     And the markup should be valid
     And I should see the petition details
@@ -15,7 +15,7 @@ Feature: Moderator respond to petition
     Given I am logged in as a moderator
     And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "Edit petition content"
-    Then I am redirected to the petition edit details page
+    Then I am on the admin petition edit details page for "wee need to save our plaanet"
     And the markup should be valid
     And the "Action" field should contain "wee need to save our plaanet"
     And the "Background" field should contain "Reduce polootion"
@@ -24,7 +24,7 @@ Feature: Moderator respond to petition
     And I fill in "Background" with "Reduce pollution"
     And I fill in "Additional details" with "Enforce Kyoto Protocol in more countries"
     And I press "Save"
-    Then I am redirected to the petition edit page
+    Then I am on the admin petition page for "We need to save our planet"
     And I should see "We need to save our planet"
     And I should see "Reduce pollution"
     And I should see "Enforce Kyoto Protocol in more countries"
@@ -44,9 +44,9 @@ Feature: Moderator respond to petition
     Given I am logged in as a moderator
     And I visit a sponsored petition with action: "Blah", that has background: "Blah" and additional details: "Blah"
     And I follow "Edit petition content"
-    Then I am redirected to the petition edit details page
+    Then I am on the admin petition edit details page for "Blah"
     When I follow "Cancel"
-    Then I am redirected to the petition edit page
+    Then I am on the admin petition page for "Blah"
 
   Scenario: Moderator publishes petition
     Given I am logged in as a moderator
@@ -86,7 +86,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as a moderator
     And a sponsored petition exists with action: "Rupert Murdoch is on the run"
-    When I go to the Admin moderate petitions page for "Rupert Murdoch is on the run"
+    When I go to the admin petition page for "Rupert Murdoch is on the run"
     And I reject the petition with a reason code "-- Select a rejection code --"
     Then a petition should exist with action: "Rupert Murdoch is on the run", state: "sponsored"
     And I should see "can't be blank"

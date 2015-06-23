@@ -26,7 +26,7 @@ class Admin::SearchesController < Admin::AdminController
 
   def url_for_petition_state(petition)
     return admin_petition_url(petition) unless petition.editable_by?(current_user)
-    return edit_admin_petition_url(petition) if petition.awaiting_moderation?
+    return admin_petition_url(petition) if petition.awaiting_moderation?
 
     if (petition.response_editable_by?(current_user))
       edit_response_admin_petition_url(petition)

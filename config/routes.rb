@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     end
 
     resources :admin_users
-    resources :petitions, :only => [:show, :edit, :update, :index] do
+    resources :petitions, :only => [:show, :index] do
       collection do
         get :threshold
       end
@@ -68,6 +68,7 @@ Rails.application.routes.draw do
       end
       resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
       resource :petition_details, :only => [:show, :update]
+      resource :moderation, :only => [:update], controller: :moderation
     end
     resources :profile, :only => [:edit, :update]
     resources :user_sessions, :only => [:create]

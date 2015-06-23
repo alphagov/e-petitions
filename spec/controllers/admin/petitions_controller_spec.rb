@@ -9,13 +9,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
   end
 
   describe "not logged in" do
-    describe "GET 'edit'" do
-      it "redirects to the login page" do
-        get :edit, :id => @petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
-      end
-    end
-
     describe "GET 'threshold'" do
       it "redirects to the login page" do
         get :threshold
@@ -46,7 +39,7 @@ RSpec.describe Admin::PetitionsController, type: :controller do
 
     it "redirects to edit profile page" do
       expect(@user.has_to_change_password?).to be_truthy
-      get :edit, :id => @petition.id
+      get :show, :id => @petition.id
       expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{@user.id}/edit")
     end
   end
@@ -316,20 +309,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       end
     end
 
-    context "edit" do
-      it "assigns petition successfully" do
-        get :edit, :id => @petition.id
-        expect(assigns[:petition]).to eq(@petition)
-      end
-
-      it "is unsuccessful for a petition that is not validated" do
-        petition = FactoryGirl.create(:open_petition)
-        expect {
-          get :edit, :id => petition.id
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-    end
-
     context "show" do
       it "assigns petition successfully" do
         get :show, :id => @petition.id
@@ -337,125 +316,29 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       end
     end
 
-    context "update" do
-      def do_post(options ={})
-        patch :update, {:id => @petition.id}.merge(options)
+    describe "take down" do
+      context "an open petition" do
+        before { @petition.publish! }
+        it "succeeds" do
+          @petition.save
+          post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
+          @petition.reload
+          expect(@petition.state).to eq(Petition::HIDDEN_STATE)
+          expect(@petition.rejection_code).to eq('offensive')
+        end
       end
 
-      it "is unsuccessful for a petition that is not validated" do
-        petition = FactoryGirl.create(:open_petition)
-        expect {
-          do_post(:id => petition.id)
-        }.to raise_error(ActiveRecord::RecordNotFound)
-      end
-
-      context "publishing" do
-        let(:now) { Time.current }
-        let(:email) { ActionMailer::Base.deliveries.last }
-        let(:duration) { Site.petition_duration.months }
-        let(:closing_date) { (now + duration).end_of_day }
-
+      context "a rejected (but visible) petition" do
         before do
-          do_post :commit => 'Publish this petition'
-          @petition.reload
+          @petition.state = Petition::REJECTED_STATE
+          @petition.rejection_code = 'offensive'
+          @petition.save!
         end
 
-        it "opens the petition" do
-          expect(@petition.state).to eq(Petition::OPEN_STATE)
-        end
-
-        it "sets the open date to now" do
-          expect(@petition.open_at).to be_within(1.second).of(now)
-        end
-
-        it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-          expect(@petition.closed_at).to be_within(1.second).of(closing_date)
-        end
-
-        it "redirects to the main admin page" do
-          expect(response).to redirect_to("https://petition.parliament.uk/admin")
-        end
-
-        it "sends an email to the petition creator" do
-          expect(email.subject).to match(/Your petition has been published/)
-        end
-      end
-
-      context "reject" do
-        it "reject successfully" do
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'duplicate'}
-          @petition.reload
-          expect(@petition.state).to eq(Petition::REJECTED_STATE)
-          expect(@petition.rejection_code).to eq('duplicate')
-          expect(response).to redirect_to("https://petition.parliament.uk/admin")
-        end
-
-        it "reject with 'offensive' causes petition to be hidden" do
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'offensive'}
+        it "succeeds" do
+          post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
           @petition.reload
           expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-        end
-
-        it "reject with 'libellous' causes petition to be hidden" do
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
-          @petition.reload
-          expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-        end
-
-        it "sends an email to the petition creator" do
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
-          email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@test.epetitions.website"])
-          expect(email.to).to eq(["john@example.com"])
-          expect(email.subject).to match(/petition has been rejected/)
-        end
-
-        it "sends an email to validated petition sponsors" do
-          validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: @petition)
-          validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: @petition)
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
-          email = ActionMailer::Base.deliveries.last
-          expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
-        end
-
-        it "does not send an email to pending petition sponsors" do
-          pending_sponsor  = FactoryGirl.create(:sponsor, :pending, petition: @petition)
-          do_post :commit => 'Reject', :petition => {:rejection_code => 'libellous'}
-          email = ActionMailer::Base.deliveries.last
-          expect(email.bcc).not_to include([pending_sponsor.signature.email])
-        end
-
-        it "reject fails when no reason code given" do
-          do_post :commit => 'Reject', :petition => {:rejection_code => nil}
-          @petition.reload
-          expect(@petition.state).to eq(Petition::SPONSORED_STATE)
-        end
-      end
-
-      describe "take down" do
-        context "an open petition" do
-          before { @petition.publish! }
-          it "succeeds" do
-            @petition.save
-            post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
-            @petition.reload
-            expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-            expect(@petition.rejection_code).to eq('offensive')
-          end
-        end
-
-        context "a rejected (but visible) petition" do
-          before do
-            @petition.state = Petition::REJECTED_STATE
-            @petition.rejection_code = 'offensive'
-            @petition.save!
-          end
-
-          it "succeeds" do
-            post :take_down, :id => @petition.id, :petition => {:rejection_code => 'offensive' }
-            @petition.reload
-            expect(@petition.state).to eq(Petition::HIDDEN_STATE)
-          end
         end
       end
     end
