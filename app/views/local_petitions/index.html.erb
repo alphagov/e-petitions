@@ -2,7 +2,7 @@
 <h1 class="page-title">Petitions in <%= @constituency.name %></h1>
 
 <% if @constituency.mp %>
-  <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url %></p>
+  <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url, rel: 'external' %></p>
 <% end %>
 
 <div class="section-panel local-petitions">

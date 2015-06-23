@@ -112,4 +112,4 @@ en-GB:
           <p>Petitions cannot be used for freedom of information requests.</p>
         honours: |
           <p>Petitions cannot include information about honours or appointments.</p>
-          <p>Find information about nominations for honours at: <a href='https://www.gov.uk/honours'>https://www.gov.uk/honours</a></p>
+          <p>Find information about nominations for honours at: <a href='https://www.gov.uk/honours' rel='external'>https://www.gov.uk/honours</a></p>
