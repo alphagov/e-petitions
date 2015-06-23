@@ -16,8 +16,8 @@
 
 <div class="section-panel">
   <% if @trending_petitions.present? %>
-    <section class="trending">
-      <h2>Popular petitions</h2>
+    <section class="trending" aria-labelledby="trending-heading">
+      <h2 id="trending-heading">Popular petitions</h2>
       <ul>
         <% @trending_petitions.each do |trending_petition| %>
           <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
@@ -28,14 +28,14 @@
   <%= link_to 'View all petitions', petitions_path, :class => 'view-all' %>
 </div>
 
-<section class="section-panel local-to-you">
-  <h2>Local to you</h2>
+<section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
+  <h2 id="local-to-you-heading">Local to you</h2>
   <p>Find petitions about local issues</p>
   <%= render 'local_petitions/search' %>
 </section>
 
-<section class="section-panel">
-  <h2>Start a petition</h2>
+<section class="section-panel" aria-labelledby="start-new-petition-heading">
+  <h2 id="start-new-petition-heading">Start a petition</h2>
   <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
   <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
 </section>

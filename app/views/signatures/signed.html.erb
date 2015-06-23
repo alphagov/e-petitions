@@ -8,14 +8,14 @@
 
 <%= render 'shared/share_petition', petition: @petition %>
 
-<section class="section-panel">
-  <h2>What's next</h2>
+<section class="section-panel" aria-labelledby="whats-next-heading">
+  <h2 id="whats-next-heading">What's next</h2>
   <%= render "petitions/threshold_details", petition: @petition %>
 </section>
 
 <% if @signature.constituency %>
-  <div class="section-panel">
-    <h2>Contact your MP</h2>
+  <div class="section-panel" aria-labelledby="contact-your-mp-heading">
+    <h2 id="contact-your-mp-heading">Contact your MP</h2>
     <p>Your constituency is <%= @signature.constituency.name %></p>
     <% if @signature.constituency.mp %>
       <p>Your local MP is <%= @signature.constituency.mp.name %></p>
