@@ -46,6 +46,8 @@ en-GB:
           Parliament petitions - It's time to get sponsors to support your petition
         notify_signer_of_debate_outcome: |-
           Parliament petitions - The petition '%{action}' has been debated
+        notify_signer_of_debate_scheduled: |-
+          HM Government & Parliament Petitions: A debate has been scheduled for the petition '%{action}' you've supported.
       signoff_prefix: "HM Government & Parliament Petitions"
 
     waiting_for_response_in_words:

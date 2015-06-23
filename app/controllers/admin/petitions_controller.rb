@@ -53,6 +53,7 @@ class Admin::PetitionsController < Admin::AdminController
   def update_scheduled_debate_date
     fetch_petition_for_scheduled_debate_date
     if @petition.update(update_scheduled_debate_date_params)
+      EmailDebateScheduledJob.run_later_tonight(@petition)
       redirect_to admin_petition_path(@petition), notice: "Scheduled debate date was successfully updated."
     else
       render :edit_scheduled_debate_date
