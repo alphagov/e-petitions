@@ -6,16 +6,14 @@
 
 <div class="panel-indent">
   <h1><%= petition.action %></h1>
-  <div><%= raw auto_link(simple_format(h(petition.background)), :html => { :target => '_blank' }) %></div>
+  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
   <% unless petition.additional_details.blank? %>
     <details>
       <summary><span class="summary">More details</span></summary>
-      <div><%= raw auto_link(simple_format(h(petition.additional_details)), :html => { :target => '_blank' }) %></div>
+      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
   <% end %>
 </div>
 
-
 <%= f.submit 'This looks good', :name => 'move:next', :class => 'button', :tabindex => increment %>
 <%= f.submit 'Go back and make changes', :name => 'move:back', :class => 'button-secondary', :tabindex => increment %>
-

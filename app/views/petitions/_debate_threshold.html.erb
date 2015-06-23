@@ -5,19 +5,19 @@
     <section class="debate-outcome">
       <p>This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
       <% if petition.debate_outcome.video_url? -%>
-        <p><%= link_to 'Watch the debate', petition.debate_outcome.video_url %></p>
+        <p><%= link_to 'Watch the debate', petition.debate_outcome.video_url, rel: 'external' %></p>
       <% end -%>
       <% if petition.debate_outcome.transcript_url? -%>
-        <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url %></p>
+        <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url, rel: 'external' %></p>
       <% end -%>
       <% if petition.debate_outcome.overview? -%>
-        <%= raw auto_link(simple_format( h(petition.debate_outcome.overview) ), :html => { :target => '_blank' }) %>
+        <%= auto_link(simple_format(h(petition.debate_outcome.overview)), html: { rel: 'nofollow' }) %>
       <% end -%>
     </section>
   <% elsif petition.scheduled_debate_date.present? %>
     <p class="about-item-scheduled-debate-date">
       This petition is scheduled for debate on <%= short_date_format(petition.scheduled_debate_date) %>.
-      You'll be able to watch online at <%= link_to("parliamentlive.tv", "http://parliamentlive.tv") %>
+      You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
     </p>
   <% else -%>
     <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>

@@ -1,4 +1,4 @@
-<article class="about-petitions <%= local_assigns[:variation] %>">
+<div class="about-petitions <%= local_assigns[:variation] %>">
   <%-
     order = ['response_threshold', 'debate_threshold']
     order.reverse! if petition.debate_outcome.present?
@@ -6,4 +6,4 @@
   <% order.each do |partial_name| -%>
     <%= render "petitions/#{partial_name}", petition: petition %>
   <% end -%>
-</article>
+</div>
