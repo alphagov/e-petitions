@@ -11,7 +11,7 @@
 <!-- Open Graph -->
 <meta property="og:title" content="<%= @title %>" />
 <meta property="og:type" content="article" />
-<meta property="og:image" content="/images/os-social/opengraph-image.png" />
+<meta property="og:image" content="<%= path_to_image('os-social/opengraph-image.png') %>" />
 <meta property="og:url" content="<%= @path %>" />
 <meta property="og:site_name" content="Petitions" />
 <meta property="og:description" content="<%= @action %>" />
@@ -20,4 +20,4 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="<%= @title %>">
 <meta name="twitter:description" content="<%= @action %>">
-<meta name="twitter:image" content="/images/os-social/opengraph-image.png">
+<meta name="twitter:image" content="<%= path_to_image('os-social/opengraph-image.png') %>">
