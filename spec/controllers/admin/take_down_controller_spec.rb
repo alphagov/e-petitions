@@ -44,7 +44,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
     before { login_as(user) }
 
     describe 'GET /show' do
-      describe 'for an open petition' do
+      shared_examples_for 'viewing take down UI for a petition' do
         it 'fetches the requested petition' do
           get :show, petition_id: petition.id
           expect(assigns(:petition)).to eq petition
@@ -57,42 +57,38 @@ RSpec.describe Admin::TakeDownController, type: :controller do
         end
       end
 
-      shared_examples_for 'trying to view take down UI for a petition in the wrong state' do
-        it 'raises a 404 error' do
-          expect {
-            get :show, petition_id: petition.id
-          }.to raise_error ActiveRecord::RecordNotFound
-        end
+      describe 'for an open petition' do
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a closed petition' do
         before { petition.update_column(:closed_at, 2.days.ago) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a pending petition' do
         before { petition.update_column(:state, Petition::PENDING_STATE) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a validated petition' do
         before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a sponsored petition' do
         before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'trying to view take down UI for a petition in the wrong state'
+        it_behaves_like 'viewing take down UI for a petition'
       end
     end
 
@@ -111,7 +107,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
         patch :update, params.merge(overrides)
       end
 
-      context 'for an open petition' do
+      context 'using valid take down params' do
         shared_examples_for 'rejecting a petition' do
           it 'sets the petition state to "rejected"' do
             do_patch
@@ -212,11 +208,11 @@ RSpec.describe Admin::TakeDownController, type: :controller do
         context 'with no rejection code' do
           let(:rejection_code) { '' }
 
-          it "leaves the state alone in the DB, but leaves it rejected in-memory" do
+          it "leaves the state alone in the DB, and in-memory" do
             do_patch
             petition.reload
             expect(petition.state).to eq(Petition::OPEN_STATE)
-            expect(assigns(:petition).state).to eq(Petition::REJECTED_STATE)
+            expect(assigns(:petition).state).to eq(Petition::OPEN_STATE)
           end
 
           it "renders the take_down/show template" do
@@ -227,48 +223,53 @@ RSpec.describe Admin::TakeDownController, type: :controller do
         end
       end
 
-      shared_examples_for 'trying to take down a petition in the wrong state' do
-        it 'raises a 404 error' do
-          expect {
-            do_patch
-          }.to raise_error ActiveRecord::RecordNotFound
+      shared_examples_for 'taking down a petition' do
+        it 'fetches the requested petition' do
+          do_patch
+          expect(assigns(:petition)).to eq petition
         end
 
-        it 'does not change the rejection details in the db' do
-          suppress(ActiveRecord::RecordNotFound) { do_patch }
+        it 'performs the requested take down on the petition' do
+          do_patch
           petition.reload
-          expect(petition.rejection_text).not_to eq take_down_attributes[:rejection_text]
+          expect(petition.state).to eq Petition::REJECTED_STATE
+          expect(petition.rejection_code).to eq take_down_attributes[:rejection_code]
+          expect(petition.rejection_text).to eq take_down_attributes[:rejection_text]
         end
+      end
+
+      describe 'for an open petition' do
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a closed petition' do
         before { petition.update_column(:closed_at, 3.days.ago) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a pending petition' do
         before { petition.update_column(:state, Petition::PENDING_STATE) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a validated petition' do
         before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a sponsored petition' do
         before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'trying to take down a petition in the wrong state'
+        it_behaves_like 'taking down a petition'
       end
     end
   end

@@ -2,7 +2,12 @@
 
   <%= render 'admin/petitions/petition_details', f: f %>
 
-  <h2>Take this petition down</h2>
+  <% if @petition.rejected? %>
+    <h2>Change rejection status</h2>
+    <p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
+  <% else %>
+    <h2>Take this petition down</h2>
+  <% end %>
   <%= render 'admin/petitions/reject', f: f %>
 
   <%= form_row do %>

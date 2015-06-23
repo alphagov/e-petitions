@@ -32,7 +32,9 @@
       <% end %>
       <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
         <li><%= link_to 'Take this petition down', admin_petition_take_down_path(@petition) %></li>
-      <% end %>
+      <% elsif @petition.rejected? -%>
+        <li><%= link_to 'Change rejection status', admin_petition_take_down_path(@petition) %></li>
+      <% end -%>
     <% end %>
     <li><%= link_to 'Notes', admin_petition_notes_path(@petition) %></li>
   </ul>

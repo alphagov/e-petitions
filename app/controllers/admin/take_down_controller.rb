@@ -10,13 +10,14 @@ class Admin::TakeDownController < Admin::AdminController
       PetitionMailer.petition_rejected(@petition).deliver_now
       redirect_to [:admin, @petition]
     else
+      @petition.state = @petition.state_was
       render 'show'
     end
   end
 
   private
   def fetch_petition
-    @petition = Petition.for_state(Petition::OPEN_STATE).find(params[:petition_id])
+    @petition = Petition.find(params[:petition_id])
   end
 
   def rejection_params

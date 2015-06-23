@@ -95,7 +95,6 @@ Feature: Moderator respond to petition
     And I am logged in as a moderator
     And a petition "actually libellous" has been rejected with the reason "duplicate"
     When I go to the admin petition page for "actually libellous"
-    And I follow "Government response"
     And I change the rejection status of the petition with a reason code "Confidential, libellous, false or defamatory statements (will be hidden)"
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
