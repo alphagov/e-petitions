@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::DebateOutcomesController do
+RSpec.describe Admin::DebateOutcomesController, type: :controller do
 
   let!(:petition) { FactoryGirl.create(:open_petition) }
 

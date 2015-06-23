@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::PetitionDetailsController do
+RSpec.describe Admin::PetitionDetailsController, type: :controller do
 
   let(:petition) { FactoryGirl.create(:sponsored_petition) }
 
