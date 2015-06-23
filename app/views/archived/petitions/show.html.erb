@@ -12,19 +12,19 @@
 <div class="petition_view">
   <div class="content">
     <h1><%= @petition.title %></h1>
-    <div class="description"><%= raw auto_link(simple_format(h(@petition.description)), :html => { :target => '_blank' }) %></div>
+    <div class="description"><%= raw auto_link(simple_format(h(@petition.description))) %></div>
 
     <% if @petition.rejected? -%>
       <div class="petition_rejected">
         <h2>This petition has been rejected with the following reason given:</h2>
-        <div class"reason"><%= raw auto_link(simple_format(h(@petition.reason_for_rejection)), :html => { :target => '_blank' }) %></div>
+        <div class"reason"><%= raw auto_link(simple_format(h(@petition.reason_for_rejection))) %></div>
       </div>
     <% end -%>
 
     <% if @petition.response? -%>
       <div class="petition_response">
         <h2>This petition has received the following response:</h2>
-        <%= raw auto_link(simple_format(h(@petition.response), :class => 'response'), :html => { :target => '_blank' }) %>
+        <%= raw auto_link(simple_format(h(@petition.response), :class => 'response')) %>
       </div>
     <% end -%>
   </div>

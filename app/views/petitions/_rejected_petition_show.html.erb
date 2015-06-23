@@ -3,11 +3,11 @@
   <%= petition.action %>
 </h1>
 
-<div><%= raw auto_link(simple_format(h(petition.background)), :html => { :target => '_blank' }) %></div>
+<div><%= raw auto_link(simple_format(h(petition.background))) %></div>
 <% unless petition.additional_details.blank? %>
   <details>
     <summary><span class="summary">More details</span></summary>
-    <div><%= raw auto_link(simple_format(h(petition.additional_details)), :html => { :target => '_blank' }) %></div>
+    <div><%= raw auto_link(simple_format(h(petition.additional_details))) %></div>
   </details>
 <% end %>
 
