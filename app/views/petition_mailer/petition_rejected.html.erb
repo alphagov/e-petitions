@@ -3,7 +3,7 @@
 <%= @petition.rejection_description.html_safe %>
 
 <% if @petition.rejection_text.present? %>
-<p><%= raw auto_link(h(@petition.rejection_text)) %></p>
+<p><%= auto_link(h(@petition.rejection_text)) %></p>
 <% end %>
 
 <% if @petition.state != Petition::HIDDEN_STATE -%>

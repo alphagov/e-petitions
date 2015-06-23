@@ -3,13 +3,13 @@
   <%# Has response #%>
   <% if petition.response_summary.present? -%>
     <h2>This petition has received the following response:</h2>
-    <%= raw auto_link(simple_format( h(petition.response_summary) )) %>
+    <%= auto_link(simple_format( h(petition.response_summary) )) %>
 
     <% if petition.response.present? -%>
       <details>
         <summary><span class="summary">Read the response in full</span></summary>
         <div class="panel-indent">
-          <%= raw auto_link(simple_format( h(petition.response) )) %>
+          <%= auto_link(simple_format( h(petition.response) )) %>
         </div>
       </details>
     <% end -%>

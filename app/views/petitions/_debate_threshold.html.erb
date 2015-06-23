@@ -11,7 +11,7 @@
         <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url, rel: 'external' %></p>
       <% end -%>
       <% if petition.debate_outcome.overview? -%>
-        <%= raw auto_link(simple_format( h(petition.debate_outcome.overview) )) %>
+        <%= auto_link(simple_format( h(petition.debate_outcome.overview) )) %>
       <% end -%>
     </section>
   <% elsif petition.scheduled_debate_date.present? %>
