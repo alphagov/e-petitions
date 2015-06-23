@@ -13,6 +13,11 @@ Given /^I am logged in as a moderator with the password "([^\"]*)"$/ do |passwor
   step "the admin user is logged in"
 end
 
+Given /^I am logged in as a moderator named "([^\"]*)" with the password "([^\"]*)"$/ do |name, password|
+  first_name, last_name = name.split
+  @user = FactoryGirl.create(:moderator_user, first_name: first_name, last_name: last_name, :password => password, :password_confirmation => password)
+  step "the admin user is logged in"
+end
 
 Given /^I am logged in as a sysadmin with the email "([^\"]*)", first_name "([^\"]*)", last_name "([^\"]*)"$/ do |email, first_name, last_name|
   @user = FactoryGirl.create(:sysadmin_user, :email => email, :first_name => first_name, :last_name => last_name)

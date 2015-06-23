@@ -36,6 +36,10 @@ class AdminUser < ActiveRecord::Base
     "#{last_name}, #{first_name}"
   end
 
+  def pretty_name
+    "#{first_name} #{last_name}"
+  end
+
   def is_a_sysadmin?
     self.role == 'sysadmin'
   end
