@@ -7,6 +7,14 @@
         t.links_to home_path
       end
       n.add_tab do |t|
+        t.named 'All petitions'
+        t.links_to petitions_path
+      end
+      n.add_tab do |t|
+        t.named 'Start a petition'
+        t.links_to check_petitions_path
+      end
+      n.add_tab do |t|
         t.named 'Help'
         t.links_to help_path
       end

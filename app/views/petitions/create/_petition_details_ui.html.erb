@@ -2,11 +2,9 @@
   &#9664; Back
 <% end %>
 
-<h1 class="page-title">Create petition</h1>
+<h1 class="page-title">Start a petition</h1>
 
 <%= render 'petitions/create/error_summary', f: f %>
-
-<p>Before you start - your petition must meet our <%= link_to 'guidelines', help_path(anchor: 'creating-a-petition') %></p>
 
 <%= form_row :for => [petition, :action] do %>
   <%= f.label :action, class: 'form-label' do %>
