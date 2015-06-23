@@ -95,4 +95,5 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I should have fully signed the petition as a sponsor
     When I confirm my email address
     Then I am taken to a landing page
-    And I should see that I have already signed the petition
+    And I should see "You have already sponsored this petition."
+    And I should see "This petition is waiting for more sponsors"
