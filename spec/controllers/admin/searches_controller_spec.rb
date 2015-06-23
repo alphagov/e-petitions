@@ -96,6 +96,13 @@ RSpec.describe Admin::SearchesController, type: :controller do
           end
         end
       end
+
+      context "searching by keyword" do
+        it "redirects to the all petitions page for a keyword" do
+          get :result, :search => { :query => 'example_keyword' }
+          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions?q=example_keyword")
+        end
+      end
     end
   end
 end
