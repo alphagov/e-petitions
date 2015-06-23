@@ -29,25 +29,11 @@ class SignaturesController < ApplicationController
 
   def verify
     verify_token
-    @petition = @signature.petition
-
-    if @signature.validated?
-      flash[:notice] = "Thank you. Your signature has already been added to the petition."
-      if @signature.sponsor?
-        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
-      else
-        redirect_to signed_petition_signature_url(@petition, @signature.perishable_token) and return
-      end
-    end
-
-    @signature.validate!
 
     if @signature.sponsor?
-      send_sponsor_support_notification_email_to_petition_owner(@petition, @signature)
-      @petition.update_state_after_new_validated_sponsor!
-      redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token)
+      validate_sponsor
     else
-      redirect_to signed_petition_signature_url(@petition, @signature.perishable_token)
+      validate_signature
     end
   end
 
@@ -124,6 +110,26 @@ class SignaturesController < ApplicationController
     else
       render :new
     end
+  end
+
+  def validate_sponsor
+    if @signature.validated?
+      flash[:notice] = "Thank you. You have already sponsored this petition."
+    else
+      @signature.validate!
+      send_sponsor_support_notification_email_to_petition_owner(@signature.petition, @signature)
+      @signature.petition.update_state_after_new_validated_sponsor!
+    end
+    redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
+  end
+
+  def validate_signature
+    if @signature.validated?
+      flash[:notice] = "Thank you. Your signature has already been added to the petition."
+    else
+      @signature.validate!
+    end
+    redirect_to signed_petition_signature_url(@signature.petition, @signature.perishable_token)
   end
 end
 
