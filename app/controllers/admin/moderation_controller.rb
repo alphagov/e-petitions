@@ -19,7 +19,7 @@ class Admin::ModerationController < Admin::AdminController
       @petition.state = @petition.state_was
       render 'admin/petitions/show'
     else
-      redirect_to admin_petition_path(@petition)
+      redirect_to [:admin, @petition]
     end
   end
 
