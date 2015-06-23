@@ -1,0 +1,37 @@
+<%= render 'admin/petitions/petition_details' %>
+<%= render 'admin/petitions/published_petition_details' %>
+
+<%= form_for [:admin, @petition ], :url => admin_petition_government_response_path(@petition), method: :put do |f| -%>
+  <%= form_row :for => [f.object, :response_summary] do %>
+    <%= f.label :response_summary, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :response_summary %>
+    <%= f.text_area :response_summary, rows: 3, cols: 70, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row :for => [f.object, :response] do %>
+    <%= f.label :response, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :response %>
+    <%= f.text_area :response, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row :for => [f.object, :response_summary] do %>
+    <%= error_messages_for_field f.object, :email_signees %>
+    <%= f.label :email_signees, class: 'form-label' do %>
+      <%= f.check_box :email_signees, tabindex: increment, class: 'form-control checkbox' %>
+      Email signees
+    <% end %>
+  <% end %>
+
+  <%= form_row do %>
+    <%= f.submit 'Save' %>
+  <% end %>
+<% end -%>
+<% content_for :js do -%>
+  <script type="text/javascript">
+    //<![CDATA[
+    $().ready(function() {
+      new EditResponseController({form:'form.edit_petition', confirm_if_checked: '#petition_email_signees', message: "This action will send an email to each person who signed this petition. Are you sure you want to do this?"});
+    });
+    //]]>
+  </script>
+<% end -%>

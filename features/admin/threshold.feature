@@ -40,20 +40,22 @@ Feature: Threshold list
   Scenario: A moderator user can view the details of a petition and form fields
     When I go to the admin threshold page
     And I follow "Petition 1"
-    And I should see "01-01-2012"
-    And I should see a "Public response summary" textarea field
-    And I should see a "Public response" textarea field
+    Then I should see "01-01-2012"
+    When I follow "Government response"
+    Then I should see a "Response summary" textarea field
+    And I should see a "Response" textarea field
     And I should see a "Email signees" checkbox field
 
   Scenario: A moderator user updates the public response to a petition
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
     And I follow "Petition 1"
-    And I fill in "Public response summary" with "Ready yourselves"
-    And I fill in "Public response" with "Parliament here it comes. This is a long text."
+    And I follow "Government response"
+    And I fill in "Response summary" with "Ready yourselves"
+    And I fill in "Response" with "Parliament here it comes. This is a long text."
     And I check "Email signees"
     And I press "Save"
-    Then I should be on the admin all petitions page
+    Then I should be on the admin petition page for "Petition 1"
     And the petition with action: "Petition 1" should have requested a government response email after "2010-12-03 01:00:00"
     And the response summary to "Petition 1" should be publicly viewable on the petition page
     And the response to "Petition 1" should be publicly viewable on the petition page
@@ -63,6 +65,7 @@ Feature: Threshold list
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
     And I follow "Petition 1"
+    And I follow "Government response"
     And I check "Email signees"
     And I press "Save"
     Then I should see "must be completed when email signees is checked"

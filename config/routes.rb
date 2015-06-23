@@ -60,8 +60,6 @@ Rails.application.routes.draw do
         get :threshold
       end
       member do
-        get   :edit_response
-        patch :update_response
         get   :edit_scheduled_debate_date
         patch :update_scheduled_debate_date
         patch :take_down
@@ -71,6 +69,7 @@ Rails.application.routes.draw do
       resource :moderation, :only => [:update], controller: :moderation
       resource :notes, :only => [:show, :update]
       resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
+      resource 'government-response', :only => [:show, :update], as: :government_response, controller: :government_response
     end
     resources :profile, :only => [:edit, :update]
     resources :user_sessions, :only => [:create]

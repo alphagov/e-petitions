@@ -18,8 +18,7 @@
         t.named "Threshold"
         t.links_to threshold_admin_petitions_path
         t.highlights_on :controller => "admin/petitions", :action => :threshold
-        t.highlights_on :controller => "admin/petitions", :action => :edit_response
-        t.highlights_on :controller => "admin/petitions", :action => :update_response
+        t.highlights_on :controller => "admin/government_response"
       end
     end
     n.add_tab do |t|
