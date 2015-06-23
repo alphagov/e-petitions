@@ -7,3 +7,19 @@
 .view-all {
   margin-top: $gutter-half;
 }
+
+.actioned-petitions {
+  @extend %contain-floats;
+  li {
+    float: left;
+    width: 50%;
+    @include box-sizing(border-box);
+  }
+  li:first-child {
+    padding-right: $gutter-half;
+  }
+  .count {
+    @include bold-48();
+    display: block;
+  }
+}

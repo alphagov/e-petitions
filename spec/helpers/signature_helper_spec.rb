@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe SearchHelper, type: :helper do
+RSpec.describe SignatureHelper, type: :helper do
   describe "#signature_count" do
     describe "for normal petition lists" do
       it "returns a HTML-safe string" do

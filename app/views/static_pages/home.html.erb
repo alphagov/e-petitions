@@ -2,6 +2,18 @@
 <p class="strap-line">Tell the government what you think</p>
 <% end -%>
 
+<% petition_counts do |counts| %>
+  <div class="section-panel actioned-petitions">
+    <ul>
+      <% counts.each do |state, count| %>
+        <li>
+          <%= link_to petition_count(state, count), petitions_url(state: state) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
 <div class="section-panel">
   <% if @trending_petitions.present? %>
     <section class="trending">
