@@ -7,8 +7,8 @@ force_ssl: true
 
 # list of file expressions to include as source files
 # relative path from src_dir
-# src_files:
-#  - "application.js"
+src_files:
+ - "application.js"
 
 # path to parent directory of spec_files
 # relative path from Rails.root
@@ -23,8 +23,8 @@ force_ssl: true
 
 # list of file expressions to include as helpers into spec runner
 # relative path from spec_dir
-helpers:
-  - "helpers/jquery-2.1.4.min.js"
+# helpers:
+#   - "helpers/*.js"
 
 # list of file expressions to include as specs into spec runner
 # relative path from spec_dir

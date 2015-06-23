@@ -5,3 +5,7 @@
   <%= render_petition_form @stage_manager, f %>
 
 <% end %>
+
+<% content_for :js do -%>
+<%= javascript_include_tag 'create-petition' %>
+<% end -%>

@@ -34,6 +34,9 @@ select.form-control {
   color: $secondary-text-colour;
   text-align: right;
 }
+.character-count.too-many-characters {
+  color: $error-colour;
+}
 
 .form-hint {
   margin-top: em(10, 19);
