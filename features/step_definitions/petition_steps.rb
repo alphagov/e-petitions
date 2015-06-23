@@ -185,6 +185,10 @@ Then /^I should see submitted date$/ do
   expect(page).to have_css("li", :text =>  "Date submitted " + @petition.created_at.strftime("%e %B %Y").squish)
 end
 
+Then(/^I should not see the petition creator$/) do
+  expect(page).not_to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
+end
+
 Then /^I should see the reason for rejection$/ do
   @petition.reload
 
