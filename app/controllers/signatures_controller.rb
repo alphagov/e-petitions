@@ -33,7 +33,11 @@ class SignaturesController < ApplicationController
 
     if @signature.validated?
       flash[:notice] = "Thank you. Your signature has already been added to the petition."
-      redirect_to signed_petition_signature_url(@petition, @signature.perishable_token) and return
+      if @signature.sponsor?
+        redirect_to sponsored_petition_sponsor_url(@petition, token: @petition.sponsor_token) and return
+      else
+        redirect_to signed_petition_signature_url(@petition, @signature.perishable_token) and return
+      end
     end
 
     @signature.validate!
