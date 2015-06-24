@@ -1,6 +1,7 @@
 class Admin::GovernmentResponseController < Admin::AdminController
   respond_to :html
   before_action :fetch_petition
+  before_action :avoid_no_op_updates, only: :update
 
   def show
   end
@@ -20,13 +21,12 @@ class Admin::GovernmentResponseController < Admin::AdminController
     @petition = Petition.selectable.find(params[:petition_id])
   end
 
-  def assign_email_signees_param
-    return unless params[:petition]
-    params[:petition][:email_signees] = params[:petition][:email_signees] == '1'
+  def avoid_no_op_updates
+    redirect_to [:admin, @petition] if params_for_update_response.values.all? &:blank?
   end
 
   def params_for_update_response
-    params.
+    @_params_for_update_response ||= params.
       require(:petition).
       permit(:response, :response_summary)
   end

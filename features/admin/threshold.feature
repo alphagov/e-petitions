@@ -59,12 +59,12 @@ Feature: Threshold list
     And the response to "Petition 1" should be publicly viewable on the petition page
     And the petition signatories of "Petition 1" should receive a response notification email
 
-  Scenario: A moderator user unsuccessfully tries to update the public response to a petition
+  Scenario: A moderator user tries to update the government response to a petition without entering anything
     Given the time is "3 Dec 2010 01:00"
     When I go to the admin threshold page
     And I follow "Petition 1"
     And I follow "Government response"
     And I press "Email 25 signatures"
-    Then I should see "must be completed when email signees is checked"
-    And the petition with action: "Petition 1" should not have requested a government response email
+    Then I should be on the admin petition page for "Petition 1"
+    But the petition with action: "Petition 1" should not have requested a government response email
     And the petition signatories of "Petition 1" should not receive a response notification email

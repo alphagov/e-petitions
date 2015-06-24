@@ -213,7 +213,33 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
               expect(ActionMailer::Base.deliveries[3].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
             end
           end
+        end
+      end
 
+      describe 'using no params to add a government response' do
+        before do
+          government_response_attributes[:response_summary] = nil
+          government_response_attributes[:response] = nil
+        end
+
+        it "does not set the 'government_response' email requested receipt timestamp" do
+          time = 5.days.from_now
+          travel_to time do
+            do_patch
+            petition.reload
+            expect(petition.get_email_requested_at_for('government_response')).to be_nil
+          end
+        end
+
+        it "does not queue a job to process the emails" do
+          assert_enqueued_jobs 0 do
+            do_patch
+          end
+        end
+
+        it 'redirects to the petition show page' do
+          do_patch
+          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
         end
       end
 
