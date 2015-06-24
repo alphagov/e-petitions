@@ -1,1 +1,1 @@
-//= require vendor/details.polyfill.js
+//= require details.polyfill
