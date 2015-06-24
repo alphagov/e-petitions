@@ -42,8 +42,8 @@ Feature: Threshold list
     And I follow "Petition 1"
     Then I should see "01-01-2012"
     When I follow "Government response"
-    Then I should see a "Response summary" textarea field
-    And I should see a "Response" textarea field
+    Then I should see a "Summary quote" textarea field
+    And I should see a "Response in full" textarea field
     And I should see a "Email signees" checkbox field
 
   Scenario: A moderator user updates the public response to a petition
@@ -51,8 +51,8 @@ Feature: Threshold list
     When I go to the admin threshold page
     And I follow "Petition 1"
     And I follow "Government response"
-    And I fill in "Response summary" with "Ready yourselves"
-    And I fill in "Response" with "Parliament here it comes. This is a long text."
+    And I fill in "Summary quote" with "Ready yourselves"
+    And I fill in "Response in full" with "Parliament here it comes. This is a long text."
     And I check "Email signees"
     And I press "Save"
     Then I should be on the admin petition page for "Petition 1"
