@@ -35,8 +35,8 @@ class Petition < ActiveRecord::Base
   include Browseable
 
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
-  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
   facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
+  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
   facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
   facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
