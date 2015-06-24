@@ -35,6 +35,7 @@ class Petition < ActiveRecord::Base
   include Browseable
 
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
+  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
   facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
   facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
   facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
@@ -42,8 +43,6 @@ class Petition < ActiveRecord::Base
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
   facet :hidden, -> { for_state(HIDDEN_STATE).reorder(created_at: :desc) }
   facet :all, -> { reorder(signature_count: :desc) }
-
-  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
