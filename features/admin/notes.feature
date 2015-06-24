@@ -20,7 +20,7 @@ Feature: A moderator user updates records notes
 
   Scenario: Adding notes to an in moderation petition
     Given an sponsored petition exists with action: "Solidarity with the Unions"
-    When I am on the admin todolist page
+    When I am on the admin all petitions page
     And I follow "Solidarity with the Unions"
     And I follow "Notes"
     Then I should see a "Notes" textarea field
