@@ -22,9 +22,9 @@ RSpec.describe LocalPetitionsController, type: :controller do
           expect(constituency).to eq ConstituencyApi::Constituency.new(constituency_id, constituency_name, mp)
         end
 
-        it 'exposes the 3 most popular petitions in the constituency' do
+        it 'exposes the 50 most popular petitions in the constituency' do
           petitions = double
-          expect(Petition).to receive(:popular_in_constituency).with(constituency_id, 3).and_return petitions
+          expect(Petition).to receive(:popular_in_constituency).with(constituency_id, 50).and_return petitions
 
           get :index, params
 
