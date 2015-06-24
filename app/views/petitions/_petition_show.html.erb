@@ -33,7 +33,27 @@
   </div>
 </details>
 
-<p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
+<div class="signature-count">
+  <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
+  <div class="signature-count-graph" aria-hidden="true">
+    <span class="signature-count-current" style="width:
+      <% if petition.signature_count < Site.threshold_for_response %>
+        <%= number_to_percentage((petition.signature_count / Site.threshold_for_response.to_f) *100) %>
+      <% elsif petition.signature_count < Site.threshold_for_debate %>
+        <%= number_to_percentage((petition.signature_count / Site.threshold_for_debate.to_f) *100) %>
+      <% else %>
+        100%
+      <% end %>
+      "></span>
+  </div>
+  <p class="signature-count-goal">
+    <% if petition.signature_count < Site.threshold_for_response %>
+      <%= number_with_delimiter(Site.threshold_for_response) %>
+    <% else %>
+      <%= number_with_delimiter(Site.threshold_for_debate) %>
+    <% end %>
+  </p>
+</div>
 
 <%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
 
