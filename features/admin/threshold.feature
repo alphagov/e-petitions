@@ -53,7 +53,8 @@ Feature: Threshold list
     And I fill in "Summary quote" with "Ready yourselves"
     And I fill in "Response in full" with "Parliament here it comes. This is a long text."
     And I press "Email 25 signatures"
-    Then I should be on the admin petition page for "Petition 1"
+    Then I should be on the admin government response page for "Petition 1"
+    And I should see "Email will be sent overnight"
     And the petition with action: "Petition 1" should have requested a government response email after "2010-12-03 01:00:00"
     And the response summary to "Petition 1" should be publicly viewable on the petition page
     And the response to "Petition 1" should be publicly viewable on the petition page
@@ -65,6 +66,7 @@ Feature: Threshold list
     And I follow "Petition 1"
     And I follow "Government response"
     And I press "Email 25 signatures"
-    Then I should be on the admin petition page for "Petition 1"
-    But the petition with action: "Petition 1" should not have requested a government response email
+    Then I should be on the admin government response page for "Petition 1"
+    But I should not see "Email will be sent overnight"
+    And the petition with action: "Petition 1" should not have requested a government response email
     And the petition signatories of "Petition 1" should not receive a response notification email

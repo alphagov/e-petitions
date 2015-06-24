@@ -113,9 +113,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
       describe 'using valid params to add a government response' do
 
-        it 'redirects to the petition show page' do
+        it 'redirects to the show page' do
           do_patch
-          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
+          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}/government-response"
+        end
+
+        it 'tells the moderator that their email will be sent overnight' do
+          do_patch
+          expect(flash[:notice]).to eq 'Email will be sent overnight'
         end
 
         it 'stores the supplied government response in the db' do
@@ -222,6 +227,11 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           government_response_attributes[:response] = nil
         end
 
+        it 'does not tell the moderator that their email will be sent overnight' do
+          do_patch
+          expect(flash[:notice]).to be_blank
+        end
+
         it "does not set the 'government_response' email requested receipt timestamp" do
           time = 5.days.from_now
           travel_to time do
@@ -237,9 +247,9 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           end
         end
 
-        it 'redirects to the petition show page' do
+        it 'redirects to the show page' do
           do_patch
-          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
+          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}/government-response"
         end
       end
 

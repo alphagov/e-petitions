@@ -10,7 +10,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
     if @petition.update_attributes(params_for_update_response)
       # run the job at some random point beween midnight and 4 am
       EmailThresholdResponseJob.run_later_tonight(@petition)
-      redirect_to [:admin, @petition]
+      redirect_to [:admin, @petition, :government_response], notice: 'Email will be sent overnight'
     else
       render :show
     end
@@ -22,7 +22,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
   end
 
   def avoid_no_op_updates
-    redirect_to [:admin, @petition] if params_for_update_response.values.all? &:blank?
+    redirect_to [:admin, @petition, :government_response] if params_for_update_response.values.all? &:blank?
   end
 
   def params_for_update_response
