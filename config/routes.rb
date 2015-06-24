@@ -54,9 +54,6 @@ Rails.application.routes.draw do
 
     resources :admin_users
     resources :petitions, :only => [:show, :index] do
-      collection do
-        get :threshold
-      end
       member do
         get   :edit_scheduled_debate_date
         patch :update_scheduled_debate_date

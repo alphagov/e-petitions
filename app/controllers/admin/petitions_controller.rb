@@ -9,10 +9,6 @@ class Admin::PetitionsController < Admin::AdminController
     @petition = Petition.find(params[:id])
   end
 
-  def threshold
-    @petitions = Petition.threshold.order(:signature_count).paginate(:page => params[:page], :per_page => 50)
-  end
-
   def edit_scheduled_debate_date
     fetch_petition_for_scheduled_debate_date
   end
