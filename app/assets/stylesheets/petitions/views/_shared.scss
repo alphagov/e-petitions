@@ -80,6 +80,8 @@ input.back-page {
   padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
   position: relative;
   margin-bottom: $gutter-half;
+  @extend %animated;
+  @extend %bounce;
 
   .icon {
     position: absolute;
