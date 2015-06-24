@@ -13,6 +13,7 @@
   <% end %>
   <%= error_messages_for_field petition, :action %>
   <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+    <span class="form-hint">Example: End non-stun slaughter in slaughterhouses</span>
   <span class="character-count">80</span>
   <%= render 'petitions/action_help' %>
 <% end %>

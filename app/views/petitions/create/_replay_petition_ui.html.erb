@@ -7,7 +7,7 @@
 <div class="panel-indent">
   <h1><%= petition.action %></h1>
   <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% unless petition.additional_details.blank? %>
+  <% if petition.additional_details.present? %>
     <details>
       <summary><span class="summary">More details</span></summary>
       <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
