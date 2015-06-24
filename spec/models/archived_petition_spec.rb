@@ -159,4 +159,16 @@ RSpec.describe ArchivedPetition, type: :model do
       end
     end
   end
+
+  describe "#by_most_signatures" do
+    before do
+      @p1 = FactoryGirl.create(:archived_petition, signature_count: 100)
+      @p2 = FactoryGirl.create(:archived_petition, signature_count: 10)
+      @p3 = FactoryGirl.create(:archived_petition, signature_count: 50)
+    end
+
+    it 'returns archived petitions ordered by highest number of signatures' do
+      expect(ArchivedPetition.by_most_signatures).to match_array([@p1, @p3, @p2])
+    end
+  end
 end

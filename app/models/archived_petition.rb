@@ -34,6 +34,10 @@ class ArchivedPetition < ActiveRecord::Base
       reorder(:created_at)
     end
 
+    def by_most_signatures
+      order("signature_count DESC")
+    end
+
     private
 
     def closed_at_has_not_passed(time)
