@@ -11,7 +11,7 @@ class LocalPetitionsController < ApplicationController
         constituencies = ConstituencyApi::Client.constituencies(sanitized_postcode)
         if constituencies.any?
           @constituency = constituencies.first
-          @petitions = Petition.popular_in_constituency(@constituency.id, 3)
+          @petitions = Petition.popular_in_constituency(@constituency.id, 50)
         else
           render 'constituency_lookup_failed'
         end
