@@ -68,8 +68,8 @@ en-GB:
           other: "<span class=\"count\">%{formatted_count}</span> signatures in the last hour"
       in_your_constituency:
         html:
-          one: "%{formatted_count} signature from your constituency"
-          other: "%{formatted_count} signatures from your constituency"
+          one: "%{formatted_count} signature from "
+          other: "%{formatted_count} signatures from "
       in_total:
         html:
           one: "%{formatted_count} signature total"
