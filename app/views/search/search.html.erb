@@ -1,8 +1,0 @@
-<% content_for(:page_title) { "Search results - Petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h1>Search results <span class="search_terms">For "<%= @petitions.query %>"</span></h1>
-</div>
-<% end %>
-<%= render 'search/results' %>
-<%= render 'search/filter_nav' %>
