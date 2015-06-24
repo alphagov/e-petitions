@@ -1,16 +1,26 @@
-<div class="cta_block" id="search_pet_cta_block">
-  <h1>Archived petitions</h1>
+<% content_for(:page_title) { "View archived petitions - Petitions" } %>
 
-  <form method="get" action="/archived/petitions/search">
-    <label for="search">Search for an archived petition</label>
-    <input type='text' name="q" id="search" />
-    <input type='submit' value='Search' class="button" id="home_search_button"/>
-  </form>
-</div>
+<h1 class="page-title">Archived petitions</h1>
 
-<div class="cta_block" id="create_pet_cta_block">
-  <h2>What are petitions?</h2>
-  <p>Petitions are an easy, personal way for you to influence government and Parliament in the UK. You can create a petition about anything that the government is responsible for and if it gets at least 100,000 signatures, it will be considered for debate in the House of Commons.  You can find more information about how the House of Commons deals with petitions on the <%= new_window_link_to "Backbench Business Committee website", "http://www.parliament.uk/bbcom" %>.</p>
-  <%= link_to 'How petitions work', help_path, :class => 'large_link' %>
-  <%= link_to "Create a new petition", check_petitions_path, :class => 'link_button large_link_button' %>
-</div>
+  <% if @petitions.empty? %>
+      <p class="no_petitions_warning">No archived petitions could be found.</p>
+  <% else %>
+    <form method="get" action="/archived/petitions/search" class="search-form search-inline">
+      <label for="search" class="form-label">Search for an archived petition</label>
+      <input type='text' name="q" id="search" class="form-control" />
+      <input type='submit' value='Search' class="inline-submit" id="home_search_button"/>
+    </form>
+    <div class="search-results section-panel">
+      <ol>
+        <% @petitions.each do |petition| %>
+          <li class="petition-item petition">
+            <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
+            <%= 'Rejected' if petition.rejected? %>
+            <p><%= signature_count(:default, petition.signature_count) unless petition.rejected? %></p>
+          </li>
+        <% end %>
+      </ol>
+     </div>
+  <% end %>
+
+<%= render 'search/result_list_footer', petitions: @petitions %>

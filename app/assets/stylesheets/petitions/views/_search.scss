@@ -43,6 +43,12 @@
   margin-bottom: $gutter;
 }
 
+.search-results {
+  ol {
+    margin-top: $gutter;
+  }
+}
+
 .filtered-petition-count {
   margin-top: $gutter-half;
   margin-bottom: $gutter;

@@ -5,30 +5,23 @@
 </div>
 <% end %>
 
-<div class="search-results">
+<div class="search-results section-panel">
   <% if @petitions.empty? %>
-    <p class="no_petitions_warning">No archived petitions could be found matching your search terms.</p>
+    <p class="no_petitions_warning">No archived petitions could be found matching your search terms</p>
   <% else %>
     <div class="title_pagination_row">
-      <h2>Archive petitions matching your search terms</h2>
+      <h2>Archived petitions matching your search terms</h2>
     </div>
     <ol>
       <% @petitions.each do |petition| %>
-        <li class="petition-item">
-          <span class="name">
+          <li class="petition-item petition">
             <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
-            (<%= petition.rejected? ? 'Rejected' : 'Closed' %>)
-          </span>
-          <% if petition.rejected? %>
-            <span class="sig_count">&ndash;</span>
-            <span class="closing_date last">&ndash;</span>
-          <% else %>
-            <span class="sig_count"><%= number_with_delimiter(petition.signature_count) %></span>
-            <span class="closing_date"><%= date_format(petition.closed_at) %></span>
-          <% end %>
-        </li>
+            <%= 'Rejected' if petition.rejected? %>
+            <p><%= signature_count(:default, petition.signature_count) unless petition.rejected? %></p>
+          </li>
       <% end %>
     </ol>
-    <%= will_paginate @petitions %>
   <% end %>
 </div>
+
+<%= render 'search/result_list_footer', petitions: @petitions %>

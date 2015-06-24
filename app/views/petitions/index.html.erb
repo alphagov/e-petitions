@@ -3,6 +3,10 @@
 
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
+<% if @petitions.params[:state] == 'closed' %>
+    <p class="text-secondary">See petitions from the<a href="archived/petitions"> 2010-2015 Conservative - Liberal Democrat coalition government</a></p>
+<% end %>
+
 <%= form_tag petitions_path, class: 'search-inline', method: 'get' do %>
   <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
   <%= hidden_field_tag 'state', @petitions.scope %>

@@ -1,6 +1,6 @@
 class Archived::PetitionsController < ApplicationController
   def index
-    @petitions = ArchivedPetition.by_most_signatures.paginate(page: params[:page], per_page: params[:per_page] || 20)
+    @petitions = ArchivedPetition.by_most_signatures.paginate(page: params[:page], per_page: params[:per_page] || 50)
   end
 
   def show
