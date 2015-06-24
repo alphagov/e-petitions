@@ -15,6 +15,6 @@
   <% end %>
 
   <%= form_row do %>
-    <%= f.submit "Email #{number_with_delimiter(@petition.signature_count)} #{'signature'.pluralize}" %>
+    <%= email_signatures_with_count_submit_button(f, @petition) %>
   <% end %>
 <% end -%>

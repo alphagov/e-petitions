@@ -136,6 +136,11 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
             expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
           end
 
+          it 'tells the moderator that their email will be sent overnight' do
+            do_patch
+            expect(flash[:notice]).to eq 'Email will be sent overnight'
+          end
+
           it 'stores the supplied debate outcome details in the db' do
             do_patch
             petition.reload
