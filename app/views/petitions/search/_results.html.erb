@@ -1,0 +1,16 @@
+<div class="search-results section-panel">
+  <% if @petitions.empty? %>
+    <p>No petitions could be found matching your search terms.</p>
+  <% else %>
+    <ol>
+      <% @petitions.each do |petition| %>
+        <li class="petition-item petition-<%= petition.state %>">
+          <%= render "petitions/search/result_items/petition_result_for_facet_#{@petitions.scope}", petition: petition %>
+        </li>
+      <% end -%>
+    </ol>
+    <div class="search-pagination">
+      <%= will_paginate_petitions @petitions %>
+    </div>
+  <% end %>
+</div>

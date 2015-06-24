@@ -1,7 +1,0 @@
-<ol>
-  <% petitions.each do |petition| %>
-    <li class="petition-item petition-<%= petition.state %>">
-      <%= render "search/petitions/petition_result_for_facet_#{facet}", petition: petition %>
-    </li>
-  <% end -%>
-</ol>
