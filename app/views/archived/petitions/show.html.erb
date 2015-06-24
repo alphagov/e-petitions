@@ -21,7 +21,7 @@
 <% end -%>
 
 <% unless @petition.rejected? %>
-  <p class="signature-count"><%= signature_count(:default, @petition.signature_count) %></p>
+  <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
 
   <ul class="petition-meta">
     <li class="meta-deadline">
