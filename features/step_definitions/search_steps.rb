@@ -1,5 +1,8 @@
-When /^I search for "([^"]*)"? petitions with "([^"]*)"$/ do |state, term|
-  visit petitions_path(:state => state, :q => term)
+When /^I search for "([^"]*)"? with "([^"]*)"$/ do |facet, term|
+  step "I go to the petitions page"
+  step "I follow \"#{facet}\""
+  step "I fill in \"#{term}\" as my search term"
+  step "I press \"Search\""
 end
 
 Then /^I should not be able to search via free text$/ do

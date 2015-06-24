@@ -16,6 +16,18 @@ Feature: Suzy Singer searches by free text
     And a hidden petition exists with action: "The Wombles are profane"
     And an open petition exists with action: "Wombles", closed_at: "10 days from now"
 
+    # waiting for govts response
+    And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
+    And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
+
+    # having a govt response
+    Given a petition "Spend more money on defence" exists and has received a government response 10 days ago
+    Given a petition "Save the city foxes" exists and has received a government response 1 days ago
+
+    # debated
+    Given a petition "Ban Badger Baiting" has been debated 2 days ago
+    Given a petition "Leave EU" has been debated 18 days ago
+
   Scenario: Search for open petitions
     When I go to the petitions page
     And I follow "Open petitions"
@@ -33,34 +45,47 @@ Feature: Suzy Singer searches by free text
     And the markup should be valid
 
   Scenario: See search counts
-    When I search for "all" petitions with "Wombles"
-    Then I should see an "open" petition count of 4
+    When I go to the petitions page
+    And I fill in "Wombles" as my search term
+    And I press "Search"
+    Then I should see an "open" petition count of 12
     Then I should see a "closed" petition count of 1
     Then I should see a "rejected" petition count of 1
 
   Scenario: Search for open petitions using multiple search terms
-    When I search for "open" petitions with "overthrow the"
+    When I search for "Open petitions" with "overthrow the"
     Then I should see the following search results:
       | Overthrow the Wombles | 1 signature |
 
   Scenario: Search for rejected petitions
-    When I search for "rejected" petitions with "WOMBLES"
+    When I search for "Rejected petitions" with "WOMBLES"
     Then I should see the following search results:
       | Eavis vs the Wombles |
 
   Scenario: Search for closed petitions
-    When I search for "closed" petitions with "WOMBLES"
+    When I search for "Closed petitions" with "WOMBLES"
     Then I should see the following search results:
       | The Wombles will rock Glasto | 1 signature          |
 
+  Scenario: Search for petitions awaiting a goverment response
+    When I search for "Awaiting a government response" with "Monday"
+    Then I should see the following search results:
+      | Make every monday bank holiday | 1 signature |
+
+  Scenario: Search for petitions having a goverment response
+    When I search for "Government responses" with "foxes"
+    Then I should see the following search results:
+      | Save the city foxes            | 1 signature |
+
+  Scenario: Search for petitions debated in Parliament
+    When I search for "Petitions debated in Parliament" with "EU"
+    Then I should see the following search results:
+      | Leave EU                        | 1 signature |
+
   Scenario: Paginate through open petitions
     Given 51 open petitions exist with action: "International development spending"
-    When I search for "open" petitions with "spending"
+    When I search for "Open petitions" with "International"
     And I follow "Next"
     Then I should see 1 petition
     And I follow "Previous"
     Then I should see 50 petitions
-
-  Scenario: Searching for a profane search term
-    When I search for "hidden" petitions with "profane"
-    Then I should see "No petitions could be found matching your search terms."
