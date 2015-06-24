@@ -65,7 +65,7 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
   FactoryGirl.create(:open_petition, petition_attributes)
 end
 
-Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a response$/) do |action|
+Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
   FactoryGirl.create(:open_petition, action: action)
 end
 
@@ -75,6 +75,16 @@ end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
   FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+end
+
+Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
+  petition = FactoryGirl.create(:open_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
+  petition.debate_outcome = nil
+end
+
+Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and has no debate date set$/) do |action, amount|
+  petition = FactoryGirl.create(:open_petition, action: action, debate_threshold_reached_at: amount.days.ago)
+  petition.debate_outcome = nil
 end
 
 Given /^I have created a petition$/ do

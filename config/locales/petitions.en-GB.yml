@@ -8,6 +8,7 @@ en-GB:
       awaiting_response: "Petitions awaiting a Government response"
       with_response: "Petitions with a Government response"
       with_debate_outcome: "Petitions debated in Parliament"
+      awaiting_debate_date: "Petitions waiting for a debate in Parliament"
 
     lists:
       all: "All petitions (%{quantity})"
@@ -17,6 +18,7 @@ en-GB:
       awaiting_response: "Awaiting a government response (%{quantity})"
       with_response: "Government responses (%{quantity})"
       with_debate_outcome: "Petitions debated in Parliament (%{quantity})"
+      awaiting_debate_date: "Petitions waiting for a debate in Parliament (%{quantity})"
 
     emails:
       subjects:
@@ -50,7 +52,7 @@ en-GB:
           HM Government & Parliament Petitions: A debate has been scheduled for the petition '%{action}' you've supported.
       signoff_prefix: "HM Government & Parliament Petitions"
 
-    waiting_for_response_in_words:
+    waiting_for_date_in_words:
       zero: "Waiting for less than a day"
       one: "Waiting for 1 day"
       other: "Waiting for %{formatted_count} days"

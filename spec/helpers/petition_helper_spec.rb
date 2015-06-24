@@ -52,4 +52,48 @@ RSpec.describe PetitionHelper, type: :helper do
       end
     end
   end
+
+  describe "#waiting_for_debate_date_in_words" do
+    let(:now) { Time.current.noon }
+
+    context "when the debate threshold has not been reached" do
+      let(:petition2) { FactoryGirl.create(:petition, debate_threshold_reached_at: nil) }
+
+      it "returns nil" do
+        expect(helper.waiting_for_debate_date_in_words(petition2)).to be_nil
+      end
+    end
+
+    context "when the response threshold was reached today" do
+      let(:petition2) { FactoryGirl.create(:petition, debate_threshold_reached_at: 2.hours.ago(now)) }
+
+      it "returns 'Waiting for less than a day'" do
+        expect(helper.waiting_for_debate_date_in_words(petition2)).to eq("Waiting for less than a day")
+      end
+    end
+
+    context "when the response threshold was reached yesterday" do
+      let(:petition) { FactoryGirl.create(:petition, debate_threshold_reached_at: 1.day.ago(now)) }
+
+      it "returns 'Waiting for 1 day'" do
+        expect(helper.waiting_for_debate_date_in_words(petition)).to eq("Waiting for 1 day")
+      end
+    end
+
+    context "when the response threshold was reached last week" do
+      let(:petition) { FactoryGirl.create(:petition, debate_threshold_reached_at: 7.days.ago(now)) }
+
+      it "returns 'Waiting for 7 days'" do
+        expect(helper.waiting_for_debate_date_in_words(petition)).to eq("Waiting for 7 days")
+      end
+    end
+
+    context "when the response threshold was reached 3 years ago" do
+      let(:petition) { FactoryGirl.create(:petition, debate_threshold_reached_at: 1095.days.ago(now)) }
+
+      it "returns 'Waiting for 1,095 days'" do
+        expect(helper.waiting_for_debate_date_in_words(petition)).to eq("Waiting for 1,095 days")
+      end
+    end
+  end
 end
