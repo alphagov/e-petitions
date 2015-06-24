@@ -9,7 +9,7 @@ Feature: Suzie views a petition
     Then I should see the petition details
     And I should see "Spend more money on Defence - Petitions" in the browser page title
     And I should see the vote count, closed and open dates
-    And I should not see "This petition is now closed"
+    And I should not see "This petition is closed"
     And I can share it via Email
     And I can share it via Facebook
     And I can share it via Twitter
@@ -71,4 +71,4 @@ Feature: Suzie views a petition
   Scenario: Suzie views a petition which has a scheduled debate date
     Given an open petition "Spend more money on Defence" with scheduled debate date of "18/08/2015"
     When I view the petition
-    Then I should see "This petition is scheduled for debate on 18 August 2015. You'll be able to watch online at parliamentlive.tv"
+    Then I should see "This petition will be debated on 18 August 2015. You'll be able to watch online at parliamentlive.tv"

@@ -1,19 +1,9 @@
 <% content_for(:page_title) { "#{@petition.action} - Petitions" } %>
 
-<details class="petitions-details">
-  <summary><span class="summary">How petitions work</span></summary>
-  <div class="panel-indent">
-    <ol class="list-number">
-      <li>Anyone can <%= link_to "create a petition", check_petitions_path %> about an issue they care about</li>
-      <li>If the petition gets 10,000 signatures, the government will reply</li>
-      <li>If the petition gets 100,000 signatures, the petition will be considered for debate in Parliament</li>
-    </ol>
-    <%= link_to "Find out more", help_path %>
-  </div>
-</details>
-
 <% if @petition.rejected? %>
   <%= render 'rejected_petition_show', petition: @petition %>
+<% elsif @petition.closed? %>
+  <%= render 'closed_petition_show', petition: @petition %>
 <% else %>
-  <%= render 'petition_show', petition: @petition %>
+  <%= render 'open_petition_show', petition: @petition %>
 <% end %>

@@ -1,0 +1,27 @@
+<h1>
+  <span class="heading-secondary">Closed petition</span>
+  <%= petition.action %>
+</h1>
+
+<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+<% unless petition.additional_details.blank? %>
+  <details>
+    <summary><span class="summary">More details</span></summary>
+    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+  </details>
+<% end %>
+
+<p class="flash-notice">
+  This petition is closed
+  <span>All petitions run for 6 months</span>
+</p>
+
+<p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
+
+<%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
+
+<ul class="petition-meta">
+  <li>
+    <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
+  </li>
+</ul>

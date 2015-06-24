@@ -91,9 +91,15 @@ input.back-page {
 .flash-notice {
   color: $white;
   background: $grey-1;
-  padding: $gutter-one-quarter;
-  @include bold-27();
+  margin: 0 0 $gutter-half 0;
+  padding: em(15, 24) em(15, 24);
+  @include bold-24();
   text-align: center;
+  span {
+    @include bold-19();
+    display: block;
+    margin: em(5) 0;
+  }
 }
 
 // Pagination
@@ -128,18 +134,27 @@ input.back-page {
   padding-right: 20px;
 }
 
-// About item
+// About petitions
 // ==========
+.about-petitions {
+  margin-bottom: $gutter;
+}
+
 .about-item {
   padding: 0 0 0 50px;
   h2 {
     @include bold-36;
+    span { @include bold-19; }
 
-    span {
-      @include bold-19;
+    margin-top: em(10, 16);
+    margin-bottom: em(5, 16);
+
+    @include media(tablet) {
+      margin-top: em(15, 19);
     }
   }
 }
+
 .about-item-sign {
   @include background-image("graphics/graphic_pen", 25px, 35px);
   background-repeat: no-repeat;
@@ -148,12 +163,12 @@ input.back-page {
 .about-item-count-10000 {
   @include background-image("graphics/graphic_crown", 36px, 25px);
   background-repeat: no-repeat;
-  background-position: 4px 0px;
+  background-position: 0px 0px;
 }
 .about-item-count-100000 {
   @include background-image("graphics/graphic_portcullis", 26px, 32px);
   background-repeat: no-repeat;
-  background-position: 5px 0px;
+  background-position: 3px 0px;
 }
 
 .about-item-scheduled-debate-date {

@@ -18,17 +18,14 @@
 
 .petition-meta {
   @extend %contain-floats;
-  margin: 0 $gutter-half * -1;
-  margin-top: $gutter;
+  margin: $gutter 0;
   li {
     @include bold-24;
-    float: left;
-    @include box-sizing(border-box);
-    width: 50%;
-    padding: 0px $gutter-half;
+    margin-bottom: $gutter-two-thirds;
   }
   .label {
     display: block;
     @include core-16;
+    margin-bottom: 5px;
   }
 }

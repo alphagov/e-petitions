@@ -96,5 +96,8 @@ a:active {
     margin-top: em(60, 24);
     margin-bottom: em(20, 24);
   }
+}
 
+.secondary, .inline-terms {
+  color: $secondary-text-colour;
 }
