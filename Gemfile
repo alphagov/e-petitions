@@ -32,8 +32,9 @@ gem 'daemons'
 
 group :development, :test do
   gem 'rspec-rails'
-  gem 'evergreen', :require => 'evergreen/rails'
+  gem 'jasmine-rails'
   gem 'pry'
+  gem 'phantomjs', '~> 1.9.7.0'
 end
 
 group :test do

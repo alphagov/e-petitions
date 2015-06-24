@@ -89,4 +89,5 @@ Rails.application.routes.draw do
 
   get '/crown-copyright', to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
 
+  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
 end
