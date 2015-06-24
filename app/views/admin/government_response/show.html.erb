@@ -14,16 +14,8 @@
     <%= f.text_area :response, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
   <% end %>
 
-  <%= form_row :for => [f.object, :response_summary] do %>
-    <%= error_messages_for_field f.object, :email_signees %>
-    <%= f.label :email_signees, class: 'form-label' do %>
-      <%= f.check_box :email_signees, tabindex: increment, class: 'form-control checkbox' %>
-      Email signees
-    <% end %>
-  <% end %>
-
   <%= form_row do %>
-    <%= f.submit 'Save' %>
+    <%= f.submit "Email #{number_with_delimiter(@petition.signature_count)} #{'signature'.pluralize}" %>
   <% end %>
 <% end -%>
 <% content_for :js do -%>

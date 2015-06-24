@@ -55,7 +55,6 @@ class Petition < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  validates_presence_of :response, :response_summary, :if => :email_signees, :message => "must be completed when email signees is checked"
   validates :response_summary, length: { maximum: 500, message: 'Response summary is too long.' }
   validates_presence_of :open_at, :closed_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
@@ -64,8 +63,6 @@ class Petition < ActiveRecord::Base
   # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
   validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
   validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
-
-  attr_accessor :email_signees
 
   # = Finders =
   scope :threshold, -> { where('signature_count >= ?', Site.threshold_for_debate) }

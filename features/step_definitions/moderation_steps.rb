@@ -126,7 +126,6 @@ Given(/^a moderator responds to the petition$/) do
     And I follow "Government response"
     And I fill in "Summary quote" with "Get ready"
     And I fill in "Response in full" with "Parliament here it comes"
-    And I check "Email signees"
-    And I press "Save"
+    And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} #{'signature'.pluralize}"
   )
 end

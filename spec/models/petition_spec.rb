@@ -9,11 +9,6 @@ RSpec.describe Petition, type: :model do
       expect(p.state).to eq("pending")
     end
 
-    it "defaults to false for email signees" do
-      p = Petition.new
-      expect(p.email_signees).to be_falsey
-    end
-
     it "generates sponsor token" do
       p = FactoryGirl.create(:petition, :sponsor_token => nil)
       expect(p.sponsor_token).not_to be_nil
@@ -128,38 +123,28 @@ RSpec.describe Petition, type: :model do
     end
 
     context "response" do
-      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi', email_signees: true) }
+      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi') }
 
-      it "passes validation if there is a response and response summary when email_signees is true" do
+      it "is valid if response and response_summary are nil" do
+        petition.response_summary = nil
+        petition.response = nil
         expect(petition).to be_valid
       end
 
-      it "does not pass validation if there is a response and NO response summary when email_signees is true" do
-        petition.response_summary = nil
-        expect(petition).to_not be_valid
-      end
-
-      it "does not pass validation if there is NO response and a response summary when email_signees is true" do
+      it "is valid if response is nil" do
         petition.response = nil
-        expect(petition).to_not be_valid
-      end
-
-      it "checks petition is valid if there is a response and response summary when email_signees is true" do
         expect(petition).to be_valid
       end
 
-      it "checks petition is invalid if there is no response when email_signees is true" do
-        petition.response = nil
-        petition.email_signees = true
-
-        expect(petition).not_to be_valid
-        expect(petition.errors[:response]).not_to be_empty
+      it "is valid if response_summary are nil" do
+        petition.response_summary = nil
+        expect(petition).to be_valid
       end
 
-      it "checks petition is invalid if there is no response summary when email_signees is true" do
-        petition.response_summary = nil
-        petition.email_signees = true
-
+      it "is invalid if response_summary is too long (500 chars)" do
+        petition.response_summary = 'a' * 500
+        expect(petition).to be_valid
+        petition.response_summary += 'a'
         expect(petition).not_to be_valid
         expect(petition.errors[:response_summary]).not_to be_empty
       end

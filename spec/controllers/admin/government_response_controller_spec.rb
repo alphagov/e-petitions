@@ -102,8 +102,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
       let(:government_response_attributes) do
         {
           response_summary: 'The government agrees',
-          response: 'Your petition is brilliant and we will do our utmost to make it law.',
-          email_signees: '0'
+          response: 'Your petition is brilliant and we will do our utmost to make it law.'
         }
       end
 
@@ -135,105 +134,83 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           end
         end
 
-        context 'when email_signees param is "1"' do
-          before { government_response_attributes[:email_signees] = '1' }
-          it "sets the 'government_response' email requested receipt timestamp" do
-            time = 5.days.from_now
-            travel_to time do
-              do_patch
-              petition.reload
-              expect(petition.get_email_requested_at_for('government_response')).to be_within(1.second).of time
-            end
-          end
-
-          context "emails out debate outcomes response" do
-            before do
-              3.times do |i|
-                attributes = {
-                  name: "Laura #{i}",
-                  email: "laura_#{i}@example.com",
-                  notify_by_email: true,
-                  petition: petition
-                }
-                s = FactoryGirl.create(:pending_signature, attributes)
-                s.validate!
-              end
-              2.times do |i|
-                attributes = {
-                  name: "Sarah #{i}",
-                  email: "sarah_#{i}@example.com",
-                  notify_by_email: false,
-                  petition: petition
-                }
-
-                s = FactoryGirl.create(:pending_signature, attributes)
-                s.validate!
-              end
-              2.times do |i|
-                attributes = {
-                  name: "Brian #{i}",
-                  email: "brian_#{i}@example.com",
-                  notify_by_email: true,
-                  petition: petition
-                }
-                FactoryGirl.create(:pending_signature, attributes)
-              end
-              petition.reload
-            end
-
-            it "queues a job to process the emails" do
-              assert_enqueued_jobs 1 do
-                do_patch
-              end
-            end
-
-            it "stamps the 'government_response' email sent receipt on each signature when the job runs" do
-              perform_enqueued_jobs do
-                do_patch
-                petition.reload
-                petition_timestamp = petition.get_email_requested_at_for('government_response')
-                expect(petition_timestamp).not_to be_nil
-                petition.signatures.validated.notify_by_email.each do |signature|
-                  expect(signature.get_email_sent_at_for('government_response')).to eq(petition_timestamp)
-                end
-              end
-            end
-
-            it "should email out to the validated signees who have opted in when the delayed job runs" do
-              ActionMailer::Base.deliveries.clear
-              perform_enqueued_jobs do
-                do_patch
-                expect(ActionMailer::Base.deliveries.length).to eq 4
-                expect(ActionMailer::Base.deliveries.map(&:to)).to eq([
-                  [petition.creator_signature.email],
-                  ['laura_0@example.com'],
-                  ['laura_1@example.com'],
-                  ['laura_2@example.com']
-                ])
-                expect(ActionMailer::Base.deliveries[0].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-                expect(ActionMailer::Base.deliveries[1].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-                expect(ActionMailer::Base.deliveries[2].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-                expect(ActionMailer::Base.deliveries[3].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-              end
-            end
+        it "sets the 'government_response' email requested receipt timestamp" do
+          time = 5.days.from_now
+          travel_to time do
+            do_patch
+            petition.reload
+            expect(petition.get_email_requested_at_for('government_response')).to be_within(1.second).of time
           end
         end
 
-        context 'when email_signees param is "0"' do
-          before { government_response_attributes[:email_signees] = '0' }
+        context "emails out debate outcomes response" do
+          before do
+            3.times do |i|
+              attributes = {
+                name: "Laura #{i}",
+                email: "laura_#{i}@example.com",
+                notify_by_email: true,
+                petition: petition
+              }
+              s = FactoryGirl.create(:pending_signature, attributes)
+              s.validate!
+            end
+            2.times do |i|
+              attributes = {
+                name: "Sarah #{i}",
+                email: "sarah_#{i}@example.com",
+                notify_by_email: false,
+                petition: petition
+              }
 
-          it "does not set the 'government_response' email requested receipt timestamp" do
-            time = 5.days.from_now
-            travel_to time do
+              s = FactoryGirl.create(:pending_signature, attributes)
+              s.validate!
+            end
+            2.times do |i|
+              attributes = {
+                name: "Brian #{i}",
+                email: "brian_#{i}@example.com",
+                notify_by_email: true,
+                petition: petition
+              }
+              FactoryGirl.create(:pending_signature, attributes)
+            end
+            petition.reload
+          end
+
+          it "queues a job to process the emails" do
+            assert_enqueued_jobs 1 do
               do_patch
-              petition.reload
-              expect(petition.get_email_requested_at_for('government_response')).to be_nil
             end
           end
 
-          it "does not queue a job to process the emails" do
-            assert_enqueued_jobs 0 do
+          it "stamps the 'government_response' email sent receipt on each signature when the job runs" do
+            perform_enqueued_jobs do
               do_patch
+              petition.reload
+              petition_timestamp = petition.get_email_requested_at_for('government_response')
+              expect(petition_timestamp).not_to be_nil
+              petition.signatures.validated.notify_by_email.each do |signature|
+                expect(signature.get_email_sent_at_for('government_response')).to eq(petition_timestamp)
+              end
+            end
+          end
+
+          it "should email out to the validated signees who have opted in when the delayed job runs" do
+            ActionMailer::Base.deliveries.clear
+            perform_enqueued_jobs do
+              do_patch
+              expect(ActionMailer::Base.deliveries.length).to eq 4
+              expect(ActionMailer::Base.deliveries.map(&:to)).to eq([
+                [petition.creator_signature.email],
+                ['laura_0@example.com'],
+                ['laura_1@example.com'],
+                ['laura_2@example.com']
+              ])
+              expect(ActionMailer::Base.deliveries[0].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
+              expect(ActionMailer::Base.deliveries[1].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
+              expect(ActionMailer::Base.deliveries[2].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
+              expect(ActionMailer::Base.deliveries[3].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
             end
           end
 
@@ -267,15 +244,13 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           expect(petition.government_response_at).to be_nil
         end
 
-        it "does not stamp the 'government_response' email requested receipt timestamp if email_signess is '1'" do
-          government_response_attributes[:email_signees] = '1'
+        it "does not stamp the 'government_response' email requested receipt timestamp" do
           do_patch
           petition.reload
           expect(petition.get_email_requested_at_for('government_response')).to be_nil
         end
 
         it "doest not queue up a job to send the 'government_response' emails" do
-          government_response_attributes[:email_signees] = '1'
           do_patch
           assert_enqueued_jobs 0
         end
