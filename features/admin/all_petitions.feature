@@ -18,33 +18,55 @@ Feature: A moderator user views all petitions
     And I view the petition
     Then I should see the petition details
 
-  Scenario: Cannot see pending or validated petitions
+  Scenario: Filter list by state
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
-    When I view all petitions
-    Then I should not see the petition "My pending petition"
-    Then I should not see the petition "My validation petition"
-
-  Scenario: Filter list by state
-    Given an open petition exists with action: "My open petition"
+    And a sponsored petition "My sponsored petition"
+    
+    And an open petition exists with action: "My open petition"
     And a closed petition exists with action: "My closed petition"
     And a rejected petition exists with action: "My rejected petition"
     And a hidden petition exists with action: "My hidden petition"
 
+    And a petition "My open petition with debate outcome" exists with a debate outcome    
+    And a petition "My open petition awaiting debate date" exists awaiting debate date
+    And a petition "My open petition with government response" exists with government response
+    And a petition "My open petition awaiting government response" exists awaiting government response
+      
     When I view all petitions
     Then I should see the following list of petitions:
-     | My open petition     |
-     | My closed petition   |
-     | My rejected petition |
-     | My hidden petition   |
+     | My pending petition                           |
+     | My validated petition                         |
+     | My sponsored petition                         |
+     | My open petition                              |
+     | My closed petition                            |
+     | My rejected petition                          |
+     | My hidden petition                            |
+     | My open petition with debate outcome          |
+     | My open petition awaiting debate date         |
+     | My open petition with government response     |
+     | My open petition awaiting government response |
+
+    And I filter the list to show "Collecting sponsors" petitions
+    Then I should see the following list of petitions:
+     | My pending petition                           |
+     | My validated petition                         |
+
+    And I filter the list to show "Awaiting moderation" petitions
+    Then I should see the following list of petitions:
+     | My sponsored petition  |
 
     And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:
-     | My open petition     |
+     | My open petition                              |
+     | My open petition with debate outcome          |
+     | My open petition awaiting debate date         |
+     | My open petition with government response     |
+     | My open petition awaiting government response |
 
     And I filter the list to show "Closed" petitions
     Then I should see the following list of petitions:
-     | My closed petition   |
+     | My closed petition |
 
     And I filter the list to show "Rejected" petitions
     Then I should see the following list of petitions:
@@ -52,7 +74,24 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Hidden" petitions
     Then I should see the following list of petitions:
-     | My hidden petition   |
+     | My hidden petition |
+
+    And I filter the list to show "Awaiting a government response" petitions
+    Then I should see the following list of petitions:
+     | My open petition awaiting government response |
+
+    And I filter the list to show "With a government response" petitions
+    Then I should see the following list of petitions:
+     | My open petition with government response |
+
+    And I filter the list to show "Awaiting a debate in parliament" petitions
+    Then I should see the following list of petitions:
+     | My open petition awaiting debate date |
+
+    And I filter the list to show "Has been debated in parliament" petitions
+    Then I should see the following list of petitions:
+     | My open petition with debate outcome |
+
 
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin
