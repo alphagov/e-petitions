@@ -18,12 +18,3 @@
     <%= f.submit "Email #{number_with_delimiter(@petition.signature_count)} #{'signature'.pluralize}" %>
   <% end %>
 <% end -%>
-<% content_for :js do -%>
-  <script type="text/javascript">
-    //<![CDATA[
-    $().ready(function() {
-      new EditResponseController({form:'form.edit_petition', confirm_if_checked: '#petition_email_signees', message: "This action will send an email to each person who signed this petition. Are you sure you want to do this?"});
-    });
-    //]]>
-  </script>
-<% end -%>
