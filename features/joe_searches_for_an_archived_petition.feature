@@ -19,9 +19,9 @@ Feature: Joe searches for an archived petition
     And I should see "Search results - archived petitions" in the browser page title
     And I should see /for "Wombles"/
     But I should see the following search results:
-      | Eavis vs the Wombles (Rejected)   | –   | –          |
-      | The Wombles of Wimbledon (Closed) | 243 | 01/04/2012 |
-      | Wombles are great (Closed)        | 835 | 01/01/2013 |
+      | Eavis vs the Wombles           | Rejected       |
+      | The Wombles of Wimbledon       | 243 signatures |
+      | Wombles are great              | 835 signatures |
     And the markup should be valid
 
   Scenario: Paging through archived petitions
