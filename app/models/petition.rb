@@ -40,6 +40,7 @@ class Petition < ActiveRecord::Base
   facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
+  facet :hidden, -> { for_state(HIDDEN_STATE).reorder(created_at: :desc) }
   facet :all, -> { reorder(signature_count: :desc) }
 
   facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }

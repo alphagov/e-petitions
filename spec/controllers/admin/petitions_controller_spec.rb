@@ -302,11 +302,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
         expect(Petition).to receive(:selectable).and_return(petitions)
         get :index
       end
-
-      it "optionally filters by state" do
-        expect(petitions).to receive(:for_state).with('open').and_return(petitions)
-        get :index, :state => 'open'
-      end
     end
 
     context "show" do

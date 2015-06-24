@@ -2,9 +2,7 @@ class Admin::PetitionsController < Admin::AdminController
   respond_to :html
 
   def index
-    @petitions = Petition.selectable.order(:signature_count)
-    @petitions = @petitions.for_state(params[:state]) unless params[:state].blank?
-    @petitions = @petitions.paginate(:page => params[:page], :per_page => params[:per_page] || 20)
+    @petitions = Petition.selectable.search(params.merge(count: params[:per_page] || 20))
   end
 
   def show

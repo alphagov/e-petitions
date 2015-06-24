@@ -17,6 +17,12 @@ When /^I search for a petition by id$/ do
   click_button 'Search'
 end
 
+When /^I search for petitions with keyword "([^"]*)" in the admin section$/ do |keyword|
+  visit new_admin_search_path
+  fill_in "Search", :with => keyword
+  click_button 'Search'
+end
+
 When /^I view the petition through the admin interface$/ do
   visit new_admin_search_path
   fill_in "Search", :with => @petition.id
