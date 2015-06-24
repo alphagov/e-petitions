@@ -1,8 +1,8 @@
 <%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
   <%= label_tag :state, "Filter by status:" %>
-  <%= select_tag :state, options_for_select(Petition::SELECTABLE_STATES, params[:state]), :include_blank => "-- all moderated petitions --" %>
+  <%= select_tag :state, options_for_select(Petition::SELECTABLE_STATES, params[:state]), :include_blank => "-- all moderated petitions --", data: {autosubmit: true} %>
   <%= label_tag :per_page, "Results per page:" %>
-  <%= select_tag :per_page, options_for_select(%w(20 50 100), params[:per_page]) %>
+  <%= select_tag :per_page, options_for_select(%w(20 50 100), params[:per_page]), data: {autosubmit: true} %>
   <%= submit_tag "Go" %>
 <% end -%>
 <table class="admin_index">

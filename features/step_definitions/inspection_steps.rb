@@ -87,9 +87,12 @@ Then(/^I should see the following ordered list of petitions:$/) do |table|
 end
 
 Then(/^I should see the following list of petitions:$/) do |table|
-  actual_petitions = page.all(:css, '.petition-action').map(&:text)
   expected_petitions = table.raw.flatten
-  expect(actual_petitions).to match_array(expected_petitions)
+  expect(page).to have_selector(:css, '.petition-action', count: expected_petitions.size)
+
+  expected_petitions.each.with_index do |expected_petition, idx|
+    expect(page).to have_selector(:css, "tr:nth-child(#{idx+1}) .petition-action", text: expected_petition)
+  end
 end
 
 Then /^I should see the creation date of the petition$/ do
