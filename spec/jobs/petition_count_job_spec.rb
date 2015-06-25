@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe PetitionCountJob, type: :job do
-  include ActiveJob::TestHelper
-
   context "when there are no petitions with invalid signature counts" do
     let!(:petition) { FactoryGirl.create(:open_petition) }
 

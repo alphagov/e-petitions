@@ -1,5 +1,4 @@
 require 'rails_helper'
-include ActiveJob::TestHelper
 
 RSpec.describe EmailDebateScheduledJob, type: :job do
   let(:email_requested_at) { Time.current }

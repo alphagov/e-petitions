@@ -1,11 +1,9 @@
 require 'net/smtp'
 require 'rails_helper'
 
-RSpec.describe EmailPetitionSignatories do
+RSpec.describe EmailPetitionSignatories, type: :job do
   describe EmailPetitionSignatories::Job do
     context '.run_later_tonight' do
-      include ActiveJob::TestHelper
-
       let(:petition) { FactoryGirl.create(:open_petition) }
       let(:requested_at) { Time.current }
       before do
