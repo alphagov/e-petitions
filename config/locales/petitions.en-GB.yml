@@ -25,6 +25,17 @@ en-GB:
       with_debate_outcome: "Petitions debated in Parliament (%{quantity})"
       awaiting_debate_date: "Petitions waiting for a debate in Parliament (%{quantity})"
 
+    facets:
+      public:
+        - 'all'
+        - 'open'
+        - 'closed'
+        - 'rejected'
+        - 'awaiting_response'
+        - 'with_response'
+        - 'awaiting_debate_date'
+        - 'with_debate_outcome'
+
     emails:
       subjects:
         email_confirmation_for_signer: |-
