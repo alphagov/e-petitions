@@ -22,7 +22,7 @@ module PetitionHelper
 
   def public_petition_facets_with_counts(petition_search)
     Hash[
-      I18n.t('public', scope: :"petitions.facets").map do |key|
+      public_petition_facets.map do |key|
         if petition_search.facets.key? key.to_sym
           [key, petition_search.facets[key.to_sym]]
         else

@@ -1,5 +1,6 @@
 class PetitionsController < ApplicationController
   include ManagingMoveParameter
+  before_action :avoid_unknown_state_filters, only: :index
 
   respond_to :html
 
@@ -56,6 +57,11 @@ class PetitionsController < ApplicationController
   end
 
   protected
+
+  def avoid_unknown_state_filters
+    return if params[:state].blank?
+    redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state]
+  end
 
   def parse_emails(emails)
     emails.strip.split(/\r?\n/).map { |e| e.strip }
