@@ -177,7 +177,7 @@ end
 
 Then /^I should see the vote count, closed and open dates$/ do
   @petition.reload
-  expect(page).to have_css("p.signature-count", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
+  expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
   expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
 
   unless @petition.is_a?(ArchivedPetition)
@@ -187,7 +187,7 @@ end
 
 Then /^I should not see the vote count$/ do
   @petition.reload
-  expect(page).to_not have_css("p.signature-count", :text => @petition.signature_count.to_s + " signatures")
+  expect(page).to_not have_css("p.signature-count-number", :text => @petition.signature_count.to_s + " signatures")
 end
 
 Then /^I should see submitted date$/ do
