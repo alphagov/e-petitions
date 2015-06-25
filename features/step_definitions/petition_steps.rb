@@ -213,7 +213,7 @@ Then /^I should see a list of (\d+) petitions$/ do |petition_count|
 end
 
 Then /^I should see my search query already filled in as the action of the petition$/ do
-  expect(page).to have_field("Action", "#{@petition.action}")
+  expect(page).to have_field("What do you want us to do?", "#{@petition.action}")
 end
 
 Then /^I can click on a link to return to the petition$/ do
@@ -256,7 +256,7 @@ end
 
 When /^I fill in the petition details/ do
   steps %Q(
-    When I fill in "Action" with "The wombats of wimbledon rock."
+    When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
     And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
     And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   )
