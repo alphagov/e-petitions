@@ -87,7 +87,7 @@
       height: 10px;
       background-color: $petitions-brand;
       @extend %animated;
-      @extend %fadeInLeft;
+      @extend %slideInLeft;
     }
   }
 }

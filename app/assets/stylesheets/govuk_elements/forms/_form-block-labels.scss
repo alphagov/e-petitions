@@ -15,7 +15,7 @@
 
   background: $panel-colour;
   border: 1px solid $panel-colour;
-  padding: (18px $gutter $gutter-half $gutter*1.5);
+  padding: ($gutter-one-third 25px $gutter-one-third 50px);
 
   margin-bottom: 10px;
   cursor: pointer; // Encourage clicking on block labels
@@ -28,7 +28,7 @@
   // Absolutely position inputs within label, to allow text to wrap
   input {
     position: absolute;
-    top: 18px;
+    top: $gutter-one-third;
     left: $gutter-half;
     cursor: pointer;
   }

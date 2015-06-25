@@ -70,14 +70,16 @@ input.back-page {
 .notification {
   background-color: $text-colour;
   color: $white;
-  padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
+  padding: $gutter-half $gutter-one-third 1px 50px;
   position: relative;
   margin-bottom: $gutter-half;
+  @extend %animated;
+  @extend %bounce;
 
   .icon {
     position: absolute;
-    top: $gutter-half;
-    left: $gutter-half;
+    top: 12px;
+    left: 12px;
   }
 
   .content {
