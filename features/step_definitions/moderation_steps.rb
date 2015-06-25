@@ -99,9 +99,8 @@ Then /^I should not see the petition "([^"]*)"$/ do |petition_action|
   expect(page).not_to have_link(petition_action)
 end
 
-When /^I filter the list to show "([^"]*)" petitions$/ do |option|
+When(/^I filter the list to show "([^"]*)" petitions$/) do |option|
   select option
-  click_button "Go"
 end
 
 When /^I select the option to view "([^"]*)" petitions$/ do |option|
