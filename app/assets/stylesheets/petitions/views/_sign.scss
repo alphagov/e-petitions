@@ -6,3 +6,7 @@
   padding-left: $gutter * 1.5;
   margin-bottom: $gutter * 1.3;
 }
+
+#signature_postcode, #petition_creator_signature_postcode {
+  text-transform: uppercase;
+}
