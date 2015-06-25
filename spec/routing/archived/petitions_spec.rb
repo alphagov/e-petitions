@@ -5,10 +5,6 @@ RSpec.describe "routes for Archived Petitions", type: :routing do
     expect(get("/archived/petitions")).to route_to("archived/petitions#index")
   end
 
-  it "routes GET /archived/petitions/search to archived/petitions#search" do
-    expect(get("/archived/petitions/search")).to route_to("archived/petitions#search")
-  end
-
   it "routes GET /archived/petitions/new to archived/petitions#show" do
     expect(get("/archived/petitions/new")).to route_to("archived/petitions#show", id: "new")
   end
@@ -41,12 +37,6 @@ RSpec.describe "routes for Archived Petitions", type: :routing do
     describe "#archived_petitions" do
       it "generates /archived/petitions" do
         expect(archived_petitions_path).to eq("/archived/petitions")
-      end
-    end
-
-    describe "#search_archived_petitions" do
-      it "generates /archived/petitions/search" do
-        expect(search_archived_petitions_path).to eq("/archived/petitions/search")
       end
     end
 

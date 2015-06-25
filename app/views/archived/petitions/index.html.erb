@@ -2,17 +2,17 @@
 
 <h1 class="page-title">Archived petitions</h1>
 
-  <% if @petitions.empty? %>
-      <p class="no_petitions_warning">No archived petitions could be found.</p>
-  <% else %>
-    <form method="get" action="/archived/petitions/search" class="search-form search-inline">
-      <label for="search" class="form-label">Search for an archived petition</label>
-      <input type='text' name="q" id="search" class="form-control" />
-      <input type='submit' value='Search' class="inline-submit" id="home_search_button"/>
-    </form>
-    <div class="search-results section-panel">
-      <ol>
-        <% @petitions.each do |petition| %>
+<%= form_tag archived_petitions_path, class: 'search-inline', method: 'get' do %>
+    <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
+    <%= submit_tag 'Search', class: 'inline-submit' %>
+<% end %>
+
+<% if @petitions.empty? %>
+    <p>No archived petitions could be found matching your search terms</p>
+<% else %>
+  <div class="search-results section-panel">
+    <ol>
+      <% @petitions.each do |petition| %>
           <li class="petition-item petition">
             <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
             <%= 'Rejected' if petition.rejected? %>

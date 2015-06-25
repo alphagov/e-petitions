@@ -1,13 +1,13 @@
 class Archived::PetitionsController < ApplicationController
   def index
-    @petitions = ArchivedPetition.by_most_signatures.paginate(page: params[:page], per_page: params[:per_page] || 50)
+    if params[:q].blank?
+      @petitions = ArchivedPetition.search(params.merge({state: 'by_most_signatures'}))
+    else
+      @petitions = ArchivedPetition.search(params)
+    end
   end
 
   def show
     @petition = ArchivedPetition.find(params[:id])
-  end
-
-  def search
-    @petitions = ArchivedPetition.search(params)
   end
 end

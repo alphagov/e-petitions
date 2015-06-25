@@ -16,6 +16,7 @@ class ArchivedPetition < ActiveRecord::Base
   facet :open, -> { open.by_created_at }
   facet :closed, -> { closed.by_created_at }
   facet :rejected, -> { rejected.by_created_at }
+  facet :by_most_signatures, -> { by_most_signatures }
 
   class << self
     def closed(time = Time.current)
