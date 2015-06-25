@@ -28,6 +28,7 @@ gem 'uglifier'
 gem 'bcrypt'
 gem 'faker'
 gem 'slack-notifier'
+gem 'daemons'
 
 group :development, :test do
   gem 'rspec-rails'

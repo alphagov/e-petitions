@@ -80,6 +80,7 @@ GEM
       mime-types (>= 1.16, < 3)
       nokogiri (~> 1.5)
       rails (>= 3, < 5)
+    daemons (1.2.2)
     database_cleaner (1.4.1)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
@@ -276,6 +277,7 @@ DEPENDENCIES
   be_valid_asset
   capybara
   cucumber-rails
+  daemons
   database_cleaner
   delayed_job_active_record
   dotenv-rails
