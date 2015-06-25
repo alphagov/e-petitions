@@ -18,7 +18,7 @@
 
 <p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
 
-<%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
+<%= render 'threshold_details', petition: petition %>
 
 <ul class="petition-meta">
   <li>
