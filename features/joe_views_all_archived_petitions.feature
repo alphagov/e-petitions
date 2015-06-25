@@ -14,9 +14,8 @@ Feature: Joe views all archived petition
 
   Scenario:
     When I view all petitions from the home page
-    And I follow "Closed petitions"
-    And I follow "2010-2015 Conservative - Liberal Democrat coalition government"
-    Then I should see the following list of archived petitions:
+    And I follow "Archived petitions"
+    And I should see the following list of archived petitions:
       | Wombles are great         | 835 signatures |
       | Common People             | 639 signatures |
       | Save the planet           | 243 signatures |
