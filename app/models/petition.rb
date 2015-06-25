@@ -110,15 +110,6 @@ class Petition < ActiveRecord::Base
     where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
   end
 
-  def self.counts_by_state
-    counts_by_state = {}
-    states = STATES + [CLOSED_STATE]
-    states.each do |key_name|
-      counts_by_state[key_name.to_sym] = for_state(key_name.to_s).count
-    end
-    counts_by_state
-  end
-
   def self.popular_in_constituency(constituency_id, how_many = 50)
     # NOTE: this query is complex, so we'll flatten it at the end
     # to prevent chaining things off the end that might break it.
