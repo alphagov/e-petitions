@@ -128,18 +128,18 @@ FactoryGirl.define do
 
   factory :debated_petition, :parent => :open_petition do
     transient do
-      debated_on { nil }
+      debated_on { 1.day.ago }
       overview { nil }
       transcript_url { nil }
       video_url { nil }
     end
-    debate_outcome do |p|
-      debate_outcome_attributes = {}
-      debate_outcome_attributes[:debated_on] = debated_on if debated_on.present?
-      debate_outcome_attributes[:overview] = overview if overview.present?
-      debate_outcome_attributes[:transcript_url] = transcript_url if transcript_url.present?
-      debate_outcome_attributes[:video_url] = video_url if video_url.present?
-      p.association(:debate_outcome, :fully_specified, debate_outcome_attributes)
+    after(:build) do |petition, evaluator|
+      debate_outcome_attributes = {petition: petition}
+      debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
+      debate_outcome_attributes[:overview] = evaluator.overview if evaluator.overview.present?
+      debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
+      debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
+      petition.create_debate_outcome(debate_outcome_attributes)
     end
   end
 
