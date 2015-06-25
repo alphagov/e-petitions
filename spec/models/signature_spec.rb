@@ -302,6 +302,28 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".petition_ids_with_invalid_signature_counts" do
+    subject do
+      described_class.petition_ids_with_invalid_signature_counts
+    end
+
+    context "when there are no petitions with invalid signature counts" do
+      let!(:petition) { FactoryGirl.create(:open_petition) }
+
+      it "returns an empty array" do
+        expect(subject).to eq([])
+      end
+    end
+
+    context "when there are petitions with invalid signature counts" do
+      let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 100) }
+
+      it "returns an array of ids" do
+        expect(described_class.petition_ids_with_invalid_signature_counts).to eq([petition.id])
+      end
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
     let(:creator) { FactoryGirl.create(:pending_signature) }

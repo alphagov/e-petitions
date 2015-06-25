@@ -658,6 +658,46 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".with_invalid_signature_counts" do
+    let!(:petition) { FactoryGirl.create(:open_petition, attributes) }
+
+    context "when there are no petitions with invalid signature counts" do
+      let(:attributes) { { created_at: 2.days.ago, updated_at: 2.days.ago } }
+
+      it "doesn't return any petitions" do
+        expect(described_class.with_invalid_signature_counts).to eq([])
+      end
+    end
+
+    context "when there are petitions with invalid signature counts" do
+      let(:attributes) { { created_at: 2.days.ago, updated_at: 2.days.ago, signature_count: 100 } }
+
+      it "returns the petitions" do
+        expect(described_class.with_invalid_signature_counts).to eq([petition])
+      end
+    end
+  end
+
+  describe "#update_signature_count!" do
+    let!(:petition) { FactoryGirl.create(:open_petition, attributes) }
+
+    context "when there are petitions with invalid signature counts" do
+      let(:attributes) { { created_at: 2.days.ago, updated_at: 2.days.ago, signature_count: 100 } }
+
+      it "updates the signature count" do
+        expect{
+          petition.update_signature_count!
+        }.to change{ petition.reload.signature_count }.from(100).to(1)
+      end
+
+      it "updates the updated_at timestamp" do
+        expect{
+          petition.update_signature_count!
+        }.to change{ petition.reload.updated_at }.to(be_within(1.second).of(Time.current))
+      end
+    end
+  end
+
   describe "#increment_signature_count!" do
     let(:signature_count) { 8 }
     let(:petition) do

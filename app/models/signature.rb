@@ -49,6 +49,13 @@ class Signature < ActiveRecord::Base
   end
   private_class_method :arel_join_onto_sent_receipts
 
+  def self.petition_ids_with_invalid_signature_counts
+    validated.joins(:petition).
+      group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
+      having(arel_table[Arel.star].count.not_eq(Petition.arel_table[:signature_count])).
+      pluck(:petition_id)
+  end
+
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,

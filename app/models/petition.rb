@@ -110,6 +110,10 @@ class Petition < ActiveRecord::Base
     where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
   end
 
+  def self.with_invalid_signature_counts
+    where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
+  end
+
   def self.popular_in_constituency(constituency_id, how_many = 50)
     # NOTE: this query is complex, so we'll flatten it at the end
     # to prevent chaining things off the end that might break it.
@@ -120,6 +124,16 @@ class Petition < ActiveRecord::Base
       merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
       limit(how_many).
       to_a
+  end
+
+  def update_signature_count!
+    sql = "signature_count = (?), updated_at = ?"
+    count = Signature.arel_table[Arel.star].count
+    query = Signature.validated.where(petition_id: id).select(count)
+
+    if update_all([sql, query, Time.current]) > 0
+      self.reload
+    end
   end
 
   def increment_signature_count!(time = Time.current)
