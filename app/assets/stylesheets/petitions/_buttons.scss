@@ -7,14 +7,16 @@
 
 @mixin button-override($colour) {
   @include button($colour);
-  margin: 0 $gutter-half $gutter-half 0;
-  padding: em(10) 0 em(10) 0;
+  margin: 0 0 $gutter-half 0;
+  padding: em(10, 24) em(15, 24);
   vertical-align: top;
-
-  // Mobile
-  width: 100%;
   @include bold-24;
   text-align: center;
+  width: 100%;
+
+  @include media(tablet) {
+    width: inherit;
+  }
 }
 
 .button {

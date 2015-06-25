@@ -51,8 +51,3 @@ select.form-control {
 .form-group-help {
   margin-bottom: 0;
 }
-
-.inline-terms {
-  @include core-16;
-  color: $secondary-text-colour;
-}

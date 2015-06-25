@@ -17,8 +17,8 @@
   @extend %contain-floats;
   padding-bottom: $gutter;
 
-  @include media(desktop) {
-    padding-bottom: $gutter*3;
+  @include media(tablet) {
+    padding-bottom: $gutter*2;
   }
 }
 

@@ -16,7 +16,7 @@
     </section>
   <% elsif petition.scheduled_debate_date.present? %>
     <p class="about-item-scheduled-debate-date">
-      This petition is scheduled for debate on <%= short_date_format(petition.scheduled_debate_date) %>.
+      This petition will be debated on <%= short_date_format(petition.scheduled_debate_date) %>.
       You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
     </p>
   <% else -%>

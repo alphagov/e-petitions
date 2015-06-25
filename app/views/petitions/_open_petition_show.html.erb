@@ -1,7 +1,3 @@
-<%= content_tag :p, :class => 'flash-notice' do -%>
-    This petition is now closed
-<% end if petition.closed? %>
-
 <h1>
   <span class="heading-secondary">Petition</span>
   <%= petition.action %>
@@ -15,10 +11,22 @@
   </details>
 <% end %>
 
-<%# Signable #%>
-<% if petition.can_be_signed? -%>
-    <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
-<% end -%>
+<%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
+
+<p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
+
+<%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
+
+<%= render 'shared/share_petition', petition: petition %>
+
+<ul class="petition-meta">
+  <li class="meta-deadline">
+    <span class="label">Deadline</span> <%= short_date_format petition.closed_at %>
+  </li>
+  <li class="meta-created-by">
+    <span class="label">Created by</span> <%= petition.creator_signature.name %>
+  </li>
+</ul>
 
 <details class="confirmation-resend">
   <summary><span class="summary">Not received your confirmation email?</span></summary>
@@ -32,23 +40,3 @@
     <% end %>
   </div>
 </details>
-
-<p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
-
-<%= render 'threshold_details', variation: (petition.response.present? || petition.debate_outcome.present? ? '' : 'about-petitions-light'), petition: petition %>
-
-<%# Sharing %>
-<% if petition.can_be_signed? -%>
-    <%= render 'shared/share_petition', petition: petition %>
-<% end -%>
-
-<ul class="petition-meta">
-  <li class="meta-deadline">
-    <span class="label">Deadline</span> <%= short_date_format petition.closed_at %>
-  </li>
-  <% unless petition.closed? %>
-    <li class="meta-created-by">
-      <span class="label">Created by</span> <%= petition.creator_signature.name %>
-    </li>
-  <% end %>
-</ul>
