@@ -29,6 +29,7 @@ gem 'bcrypt'
 gem 'faker'
 gem 'slack-notifier'
 gem 'daemons'
+gem 'jquery-rails'
 
 group :development, :test do
   gem 'rspec-rails'
