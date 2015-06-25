@@ -1,0 +1,9 @@
+<% action_counts do |counts| %>
+  <ul>
+    <% counts.each do |state, count| %>
+      <li class="action-<%= state.to_s.gsub(/_/, '-') %>">
+        <%= link_to action_count(state, count), admin_petitions_url(state: state) %>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

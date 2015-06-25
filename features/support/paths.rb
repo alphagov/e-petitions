@@ -66,7 +66,7 @@ module NavigationHelpers
       admin_root_path
 
     when /^todolist page$/
-      admin_root_path
+      admin_todo_path
 
     when /^petition page for "([^\"]*)"$/
       admin_petition_path(Petition.find_by(action: $1))
