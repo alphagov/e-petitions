@@ -1,1 +1,3 @@
-//= require autosubmit_selects.js
+//= require jquery
+//= require jquery_ujs
+//= require autosubmit_selects
