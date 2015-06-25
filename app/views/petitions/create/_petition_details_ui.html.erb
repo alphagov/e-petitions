@@ -7,13 +7,10 @@
 <%= render 'petitions/create/error_summary', f: f %>
 
 <%= form_row :for => [petition, :action] do %>
-  <%= f.label :action, class: 'form-label' do %>
-    Action
-    <span class="form-hint">What do you want the government to do?</span>
-  <% end %>
+  <%= f.label :action, 'What do you want us to do?', class: 'form-label' %>
   <%= error_messages_for_field petition, :action %>
   <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
-  <span class="character-count">80</span>
+  <p class="character-count">80 characters max</p>
   <%= render 'petitions/action_help' %>
 <% end %>
 
@@ -21,7 +18,7 @@
   <%= f.label :background, 'Background', class: 'form-label' %>
   <%= error_messages_for_field petition, :background %>
   <%= f.text_area :background, tabindex: increment, rows: 5, class: 'form-control' %>
-  <span class="character-count">300</span>
+  <p class="character-count">300 characters max</p>
   <details class="form-group-help">
     <summary><span class="summary">Help writing background</span></summary>
     <div class="panel-indent">
@@ -38,7 +35,7 @@
   <% end %>
   <%= error_messages_for_field petition, :additional_details %>
   <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
-  <span class="character-count">500</span>
+  <p class="character-count">500 characters max</p>
 <% end %>
 
 <%= f.submit 'Preview petition', :name => 'move:next', :class => 'button', :tabindex => increment %>

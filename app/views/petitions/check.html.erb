@@ -1,13 +1,11 @@
 <% content_for(:page_title) { "Start a petition - Petitions" } %>
-<h1 class="page-title">What action would you like the government to take?</h1>
+<h1 class="page-title">Start a petition</h1>
 
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
-    <label for="q" class="form-label visuallyhidden">
-      Action
-    </label>
+    <label for="q" class="form-label">What do you want us to do?</label>
     <textarea name="q" id="q" value="<%= @petitions.try(:query) %>" class="form-control" rows="3" maxlength="80"></textarea>
-    <span class="character-count">80</span>
+    <p class="character-count">80 characters max</p>
     <%= render 'petitions/action_help' %>
   </div>
 
