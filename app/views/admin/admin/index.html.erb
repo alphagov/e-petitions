@@ -1,9 +1,16 @@
-<% action_counts do |counts| %>
-  <ul>
-    <% counts.each do |state, count| %>
-      <li class="action-<%= state.to_s.gsub(/_/, '-') %>">
-        <%= link_to action_count(state, count), admin_petitions_url(state: state) %>
-      </li>
+<h1>Petition admin</h1>
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <% action_counts do |counts| %>
+      <ul class="hub-actions grid-row">
+        <% counts.each do |state, count| %>
+          <li class="column-half action-<%= state.to_s.dasherize %>">
+            <%= link_to admin_petitions_url(state: state) do %>
+              <%= action_count(state, count) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
     <% end %>
-  </ul>
-<% end %>
+  </div>
+</div>

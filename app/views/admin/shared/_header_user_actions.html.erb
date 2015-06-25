@@ -1,7 +1,9 @@
 <% if current_user %>
-  <%= link_to current_user.pretty_name, edit_admin_profile_path(current_user) %>
-  <% if current_user.is_a_sysadmin? %>
-    <%= link_to "Users", admin_admin_users_path %>
-  <% end %>
-  <%= link_to "Logout", admin_logout_path %>
+  <ul>
+    <li><%= link_to current_user.pretty_name, edit_admin_profile_path(current_user) %></li>
+    <% if current_user.is_a_sysadmin? %>
+      <li><%= link_to "Users", admin_admin_users_path %></li>
+    <% end %>
+    <li><%= link_to "Logout", admin_logout_path %></li>
+  </ul>
 <% end %>

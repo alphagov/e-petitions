@@ -1,0 +1,21 @@
+.admin {
+  #global-header {
+    background-color: $black;
+    a {
+      display: inline-block;
+    }
+    ul {
+      margin: 3px 0 0 0;
+      float: right;
+    }
+    li {
+      display: inline;
+      margin-left: $gutter-one-third;
+      a {
+        @include core-19();
+        display: inline;
+        padding: 0;
+      }
+    }
+  }
+}

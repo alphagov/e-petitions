@@ -1,249 +1,46 @@
-/* Generic Styling */
-* {
-  margin: 0px;
-  padding: 0px;
-}
+// Edited version of govuk_frontend_toolkit
+// https://github.com/alphagov/govuk_frontend_toolkit/
+@import "govuk_frontend_toolkit/conditionals";
+@import "govuk_frontend_toolkit/shims";
+@import "govuk_frontend_toolkit/css3";
+@import "govuk_frontend_toolkit/colours";
+@import "govuk_frontend_toolkit/typography";
+@import "govuk_frontend_toolkit/grid_layout";
+@import "govuk_frontend_toolkit/design-patterns/buttons";
 
-body {
-  font-family: arial;
-  font-size: 85%;
-}
+// Edited version of govuk_elements repo
+// https://github.com/alphagov/govuk_elements
+// @import "govuk_elements/reset";
+// @import "govuk_elements/buttons";
+// @import "govuk_elements/details";
+// @import "govuk_elements/elements-typography";
+@import "govuk_elements/forms";
+// @import "govuk_elements/helpers";
+// @import "govuk_elements/icons";
+// @import "govuk_elements/layout";
+// @import "govuk_elements/lists";
+// @import "govuk_elements/panels";
+@import "govuk_elements/tables";
 
-/* Layout */
-#outer_page_wrapper {
-  width: 100%;
-  text-align: center;
-  background: #B2B6B9 image-url("admin/shadows/gray_top.gif") no-repeat 50% 5px;
-  padding-top: 18px;
-  padding-bottom: 50px;
-}
-#inner_page_wrapper {
-  margin-left: auto;
-  margin-right: auto;
-  width: 820px;
-  text-align: left;
-  background: white image-url("admin/shadows/gray_bottom.gif") no-repeat bottom center;
-  padding-bottom: 14px;
-}
+// Petitions styles
+@import "petitions/helpers";
+@import "petitions/reset";
+@import "petitions/basic";
+@import "petitions/colours";
+@import "petitions/typography";
+@import "petitions/accessibility";
+// @import "petitions/details";
+@import "petitions/icons";
+// @import "petitions/panels";
+@import "petitions/buttons";
+@import "petitions/layout";
+@import "petitions/header";
+@import "petitions/footer";
+@import "petitions/forms";
 
-#header {
-  height: 89px;
-  border-bottom: solid 1px #9C9C9C;
-  background: transparent image-url("admin/shadows/white_top.gif") no-repeat bottom center;
-}
-#header .logo {
-  margin: 23px 0 0 58px;
-}
+@import "petitions/admin/layout";
+@import "petitions/admin/header";
+@import "petitions/admin/temporary_tab_nav";
 
-#content {
-  overflow-y: auto;
-}
-
-.form_field {
-  margin: 8px 0;
-  padding: 0 5px;
-  font-size: 1.1em;
-}
-
-.mandatory {
-  color: red;
-}
-
-.checkbox {
-  margin-right: 5px;
-}
-
-td.petition_id {
-  font-weight: bold;
-}
-
-table {
-  margin-top: 8px;
-  margin-bottom: 10px;
-  border-collapse: collapse;
-}
-table tr th {
-  border-bottom: solid 2px #888;
-  padding: 4px 12px 0 12px;
-}
-table tr td {
-  border-bottom: solid 1px #888;
-  margin: 0px;
-  padding: 4px 12px;
-}
-
-.heavy_bottom_border{
-  border-bottom: solid 2px #888;
-}
-
-td.count {
-  text-align: right;
-}
-
-td.center {
-  text-align: center;
-}
-
-.center_col_full {
-  float: left;
-  max-width: 740px;
-}
-
-.center_col_full div.row label {
-  font-style: italic;
-  float: left;
-  width: 160px;
-}
-
-.center_col_full div.row .text_block {
-  margin-left: 160px;
-}
-
-.center_col_full form > div {
-  padding: 4px 12px;
-}
-
-.left_col {
-  float: left;
-  margin-right: 20px;
-  margin-left: 10px;
-  clear: left;
-  height: 910px;
-}
-
-#admin_nav {
-  width: 940px;
-  height: 27px;
-  margin: 10px;
-  position: relative;
-}
-
-ul#admin_nav li {
-  display: block;
-  float: left;
-  padding: 0px 1px;
-}
-ul#admin_nav li a {
-  height: 21px;
-  background-color: white;
-  display: block;
-  color: #333333;
-  border: solid 1px #ccc;
-  padding: 6px 10px 0 10px;
-  text-decoration: none;
-  font-weight: bold;
-}
-ul#admin_nav li a:hover {
-  background-color: #efefef;
-}
-ul#admin_nav li.active a {
-  background-color: #781D7E;
-  border: solid 1px #781D7E;
-  color: white;
-  cursor: default;
-}
-ul#admin_nav li.active a:hover {
-  background-color: #781D7E;
-}
-
-#secondary_nav li {
-  display: block;
-}
-
-#secondary_nav li a {
-  background-color: #ddd;
-  padding: 3px 10px;
-  margin: 0 0px 2px 0;
-  font-size: 1.0em;
-  text-decoration: none;
-}
-#secondary_nav li a:hover {
-  background-color: #eee;
-}
-
-#secondary_nav li.active a {
-  background-color: #aaa;
-}
-
-.flash-notice {
-  color: green;
-}
-
-.flash_error, .flash_warn, .flash-notice {
-  padding: 3px 0 8px 0;
-}
-
-.flash_error, .formError, .inline-errors, .errors {
-  color: red;
-}
-
-.pagination {
-  overflow-y: auto;
-}
-.pagination li {
-  float: left;
-  display: block;
-  margin-left: 3px;
-}
-.pagination li a {
-  display: block;
-  padding: 0;
-  background-image: none;
-  color: #414042;
-}
-.pagination li span {
-  display: block;
-  color: #414042;
-}
-.pagination li span.current {
-  background-color: #231F20;
-  color: white;
-  padding: 0 4px;
-}
-.pagination li.inactive {
- display: none;
-}
-
-.text_block {
-  word-wrap: break-word;
-}
-
-form.filter {
-  padding: 10px 0px;
-}
-
-#rejection_preview {
-  background: white;
-  padding: 20px 10px;
-  margin: 10px 0;
-}
-#rejection_preview ul {
-  margin-left: 20px;
-}
-
-#rejection_preview .content {
-  padding-top: 10px;
-}
-
-.takedown {
-  padding: 20px !important;
-  margin: 10px !important;
-  border: 5px dotted #f90;
-  background: #feb;
-}
-
-.takedown h2 {
-  margin-bottom: 10px;
-}
-
-.takedown p {
-  margin: 5px 0;
-}
-
-.links {
-  margin-bottom: 8px;
-}
-
-.radio-button {
-  padding-right: 20px;
-}
+// Petition admin views
+@import "petitions/admin/views/hub";

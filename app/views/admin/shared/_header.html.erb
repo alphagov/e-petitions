@@ -1,3 +1,8 @@
-<%= image_tag 'admin/logos/hm_gov.gif', :alt => 'HM Government', :class => 'logo' %>
-
-<%= render 'admin/shared/header_user_actions' %>
+<header role="banner" id="global-header">
+  <div class="wrapper">
+    <%= link_to(admin_root_path, :title => 'Go to the petitions admin hub', :tabindex => 1) do %>
+      <span class="graphic graphic-portcullis-white" aria-hidden="true"></span> Petitions Admin
+    <% end %>
+    <%= render 'admin/shared/header_user_actions' %>
+  </div>
+</header>

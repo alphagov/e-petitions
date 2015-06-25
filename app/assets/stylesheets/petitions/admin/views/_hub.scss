@@ -1,0 +1,21 @@
+.hub-actions {
+  li {
+    margin-bottom: $gutter;
+  }
+  a {
+    display: block;
+    @include box-sizing(border-box);
+    width: 100%;
+    height: 200px;
+    background-color: $house-of-commons-green;
+    padding: $gutter-half;
+    color: $white;
+    @include bold-27;
+
+    .count {
+      @include bold-48;
+      display: block;
+      margin-bottom: $gutter * 2;
+    }
+  }
+}
