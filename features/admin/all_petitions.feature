@@ -38,19 +38,19 @@ Feature: A moderator user views all petitions
      | My rejected petition |
      | My hidden petition   |
 
-    And I filter the list to show "open" petitions
+    And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:
      | My open petition     |
 
-    And I filter the list to show "closed" petitions
+    And I filter the list to show "Closed" petitions
     Then I should see the following list of petitions:
      | My closed petition   |
 
-    And I filter the list to show "rejected" petitions
+    And I filter the list to show "Rejected" petitions
     Then I should see the following list of petitions:
      | My rejected petition |
 
-    And I filter the list to show "hidden" petitions
+    And I filter the list to show "Hidden" petitions
     Then I should see the following list of petitions:
      | My hidden petition   |
 

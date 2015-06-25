@@ -35,6 +35,23 @@ en-GB:
         - 'with_response'
         - 'awaiting_debate_date'
         - 'with_debate_outcome'
+      admin:
+        - 'all'
+        - 'open'
+        - 'closed'
+        - 'rejected'
+        - 'hidden'
+        - 'awaiting_response'
+        - 'with_response'
+        - 'awaiting_debate_date'
+        - 'with_debate_outcome'
+      names:
+        admin:
+          all: "All moderated petitions"
+          awaiting_response: "Awaiting a government response"
+          with_response: "With a government response"
+          awaiting_debate_date: "Awaiting a debate in parliament"
+          with_debate_outcome: "Has been debated in parliament"
 
     emails:
       subjects:
