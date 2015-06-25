@@ -29,7 +29,7 @@ end
 
 def should_be_signature_count_of(count)
   visit petition_path(@petition)
-  expect(page).to have_css("p.signature-count", :text => count.to_s + " signatures")
+  expect(page).to have_css("p.signature-count-number", :text => count.to_s + " signatures")
 end
 
 Then /^I should have signed the petition$/ do
