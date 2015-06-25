@@ -70,7 +70,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Background is too long."
   And I should see "Additional details is too long."
 
-  When I fill in "Action" with "The wombats of wimbledon rock."
+  When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
   And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Preview petition"
@@ -82,7 +82,7 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "The racial tensions between the wombles and the wombats are heating up.  Racial attacks are a regular occurrence and the death count is already in 5 figures.  The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Go back and make changes"
-  And the "Action" field should contain "The wombats of wimbledon rock."
+  And the "What do you want us to do?" field should contain "The wombats of wimbledon rock."
   And the "Background" field should contain "Give half of Wimbledon rock to wombats!"
   And the "Additional details" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
