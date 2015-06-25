@@ -18,8 +18,8 @@ html, body, button, input, table, td, th, main {
 h1 {
   @include bold-36();
 
-  margin-top: em(25, 36);
-  margin-bottom: em(10, 36);
+  margin-top: em(15, 24);
+  margin-bottom: em(10, 24);
 
   @include media(tablet) {
     margin-top: em(45, 36);
@@ -65,6 +65,13 @@ p {
 // Lede, or intro text
 .lede {
   @include core-24;
+  margin-top: em(5, 18);
+  margin-bottom: em(15, 18);
+
+  @include media(tablet) {
+    margin-top: em(5, 24);
+    margin-bottom: em(15, 24);
+  }
 }
 
 // Link styles

@@ -2,13 +2,15 @@
   <h2>10,000 <span>signatures</span></h2>
   <%# Has response #%>
   <% if petition.response_summary.present? -%>
-    <h2>This petition has received the following response:</h2>
-    <%= auto_link(simple_format(h(petition.response_summary)), html: { rel: 'nofollow' }) %>
+    <h3>The government responded</h3>
+    <blockquote>
+      <%= auto_link(simple_format(h(petition.response_summary)), html: { rel: 'nofollow' }) %>
+    </blockquote>
 
     <% if petition.response.present? -%>
       <details>
         <summary><span class="summary">Read the response in full</span></summary>
-        <div class="panel-indent">
+        <div class="panel-indent panel-no-border">
           <%= auto_link(simple_format(h(petition.response)), html: { rel: 'nofollow' }) %>
         </div>
       </details>
