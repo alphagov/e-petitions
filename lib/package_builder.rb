@@ -177,7 +177,7 @@ class PackageBuilder
   end
 
   def deployment_group_name
-    ENV.fetch('AWS_DEPLOYMENT_GROUP_NAME', 'Webservers')
+    ENV.fetch('AWS_DEPLOYMENT_GROUP_NAME', 'RailsAppServers')
   end
 
   def deployment_key
@@ -240,18 +240,20 @@ class PackageBuilder
   end
 
   def notify_new_relic
-    args = %w[newrelic deployments]
-    args.concat ['-a', application_name]
-    args.concat ['-e', 'production']
-    args.concat ['-r', revision]
-    args.concat ['-l', new_relic_license_key]
+    if new_relic_license_key
+      args = %w[newrelic deployments]
+      args.concat ['-a', application_name]
+      args.concat ['-e', 'production']
+      args.concat ['-r', revision]
+      args.concat ['-l', new_relic_license_key]
 
-    info "Notifying New Relic of deployment ..."
-    Kernel.system *args
+      info "Notifying New Relic of deployment ..."
+      Kernel.system *args
+    end
   end
 
   def new_relic_license_key
-    ENV.fetch('NEW_RELIC_LICENSE_KEY')
+    ENV.fetch('NEW_RELIC_LICENSE_KEY', nil)
   end
 
   def notify_slack
@@ -540,7 +542,7 @@ class PackageBuilder
           if [ -z "$AWS_REGION" ]; then
               AWS_REGION=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document \
                   | grep -i region \
-                  | awk -F\" '{print $4}')
+                  | awk -F'"' '{print $4}')
           fi
 
           echo $AWS_REGION
@@ -700,7 +702,7 @@ class PackageBuilder
 
           local state=$($AWS_CLI autoscaling describe-auto-scaling-instances \
               --instance-ids $instance_id \
-              --query "AutoScalingInstances[?InstanceId == \`$instance_id\`].LifecycleState | [0]" \
+              --query "AutoScalingInstances[?InstanceId == \'$instance_id\'].LifecycleState | [0]" \
               --output text)
           if [ $? != 0 ]; then
               return 1
@@ -976,7 +978,7 @@ class PackageBuilder
       # express or implied. See the License for the specific language governing
       # permissions and limitations under the License.
 
-      if [ $SERVER_TPE == "worker"]; then
+      if [ "$SERVER_TYPE" == "worker" ]; then
         msg "Workers are not registered with a load balancer"
         exit 0
       fi
@@ -1075,7 +1077,7 @@ class PackageBuilder
       # express or implied. See the License for the specific language governing
       # permissions and limitations under the License.
 
-      if [ $SERVER_TPE == "worker"]; then
+      if [ "$SERVER_TYPE" == "worker" ]; then
         msg "Workers are not registered with a load balancer"
         exit 0
       fi
