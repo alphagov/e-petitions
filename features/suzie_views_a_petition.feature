@@ -54,7 +54,7 @@ Feature: Suzie views a petition
   Scenario: Suzie sees a 'closed' message when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
-    Then I should see "This petition is now closed"
+    Then I should see "This petition is closed"
 
   Scenario: Suzie does not see the creator when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
