@@ -215,14 +215,12 @@ RSpec.describe Petition, type: :model do
         @p3.update_attribute(:signature_count, 99999)
         @p4 = FactoryGirl.create(:open_petition)
         @p4.update_attribute(:signature_count, 200000)
-        @p5 = FactoryGirl.create(:open_petition, :response_required => true)
-        @p6 = FactoryGirl.create(:open_petition, :response_required => false)
       end
 
-      it "returns 4 petitions over the threshold or marked as requiring a response" do
+      it "returns 4 petitions over the threshold" do
         petitions = Petition.threshold
-        expect(petitions.size).to eq(4)
-        expect(petitions).to include(@p1, @p2, @p4, @p5)
+        expect(petitions.size).to eq(3)
+        expect(petitions).to include(@p1, @p2, @p4)
       end
     end
 

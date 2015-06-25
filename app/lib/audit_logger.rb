@@ -12,13 +12,11 @@ class AuditLogger < Logger
   end
 
   def error(msg, exception = nil)
-    airbrake_params = {
-      :error_message => msg.dup,
-      :environment_name => Rails.env
-    }
-    airbrake_params[:error_class] = exception.nil? ? @error_class : exception.class.name
-    airbrake_params[:backtrace] = exception.backtrace if ! exception.nil?
-    Airbrake.notify(airbrake_params)
+    if exception.nil?
+      exception = RuntimeError.new("#{@error_class}: #{msg}")
+      exception.set_backtrace msg
+    end
+    NewRelic::Agent.notice_error(exception)
 
     add(ERROR, nil, msg)
   end

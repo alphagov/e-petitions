@@ -19,7 +19,7 @@ class Admin::SearchesController < Admin::AdminController
   def find_petition_by_id(query)
     begin
       petition = Petition.find(query.to_i)
-      redirect_to url_for_petition_state(petition)
+      redirect_to admin_petition_url(petition)
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Cannot find petition with id: #{query}"
       redirect_to new_admin_search_url
@@ -32,15 +32,6 @@ class Admin::SearchesController < Admin::AdminController
 
   def find_petitions_by_keyword(query)
     redirect_to(controller: 'admin/petitions', action: 'index', q: query)
-  end
-  
-  def url_for_petition_state(petition)
-    return admin_petition_url(petition) unless petition.editable_by?(current_user)
-    return admin_petition_url(petition) if petition.awaiting_moderation?
-
-    if (petition.response_editable_by?(current_user))
-      edit_response_admin_petition_url(petition)
-    end
   end
 
   def is_number?(query)

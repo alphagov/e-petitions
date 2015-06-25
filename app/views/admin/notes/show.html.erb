@@ -1,0 +1,16 @@
+<%= form_for @petition, url: admin_petition_notes_path(@petition), method: :patch do |f| -%>
+
+  <%= render 'admin/petitions/petition_details', f: f %>
+
+  <h2>Notes</h2>
+
+  <%= form_row :for => [f.object, :admin_notes] do %>
+    <%= f.label :admin_notes, 'Notes', class: 'form-label' %>
+    <%= error_messages_for_field f.object, :admin_notes %>
+    <%= f.text_area :admin_notes, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row do %>
+    <%= f.submit 'Save' %>
+  <% end %>
+<% end -%>

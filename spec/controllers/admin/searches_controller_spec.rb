@@ -56,30 +56,6 @@ RSpec.describe Admin::SearchesController, type: :controller do
           expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
-        context "where the petition is editable by us" do
-          before do
-            allow(petition).to receive(:editable_by?).and_return true
-          end
-
-          it "redirects to the edit page" do
-            allow(petition).to receive(:awaiting_moderation?).and_return true
-            get :result, :search => { :query => '123' }
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
-          end
-
-          context "and is open" do
-            before do
-              allow(petition).to receive(:awaiting_moderation?).and_return false
-            end
-
-            it "redirects to the edit response page if we can edit responses" do
-              allow(petition).to receive(:response_editable_by?).and_return true
-              get :result, :search => { :query => '123' }
-              expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}/edit_response")
-            end
-          end
-        end
-
         context "when petition not found" do
           before do
             allow(Petition).to receive(:find).and_raise(ActiveRecord::RecordNotFound)

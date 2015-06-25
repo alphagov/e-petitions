@@ -14,9 +14,10 @@ When(/^I reject the petition with a reason code "([^"]*)"$/) do |reason_code|
   click_button "Email petition creator"
 end
 
-When /^I change the rejection status of the petition with a reason code "([^"]*)"$/ do |reason_code|
+When(/^I change the rejection status of the petition with a reason code "([^"]*)"$/) do |reason_code|
+  click_on 'Change rejection status'
   select reason_code, :from => :petition_rejection_code
-  click_button "Change rejection status"
+  click_button "Email petition creator"
 end
 
 When(/^I reject the petition with a reason code "([^"]*)" and some explanatory text$/) do |reason_code|
@@ -123,8 +124,9 @@ Given(/^a moderator responds to the petition$/) do
   steps %Q(
     Given I am logged in as a moderator
     And I follow "#{@petition.action}"
-    And I fill in "Public response summary" with "Get ready"
-    And I fill in "Public response" with "Parliament here it comes"
+    And I follow "Government response"
+    And I fill in "Response summary" with "Get ready"
+    And I fill in "Response" with "Parliament here it comes"
     And I check "Email signees"
     And I press "Save"
   )

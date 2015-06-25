@@ -33,23 +33,11 @@ RSpec.describe "routes for admin petitions", type: :routing do
     expect(get("/admin/petitions/threshold")).to route_to('admin/petitions#threshold')
   end
 
-  it "routes GET /admin/petitions/1/edit_response to admin/petitions#edit_response" do
-    expect(get("/admin/petitions/1/edit_response")).to route_to('admin/petitions#edit_response', id: '1')
-  end
-
-  it "routes PATCH /admin/petitions/1/update_response to admin/petitions#update_response" do
-    expect(patch("/admin/petitions/1/update_response")).to route_to('admin/petitions#update_response', id: '1')
-  end
-
   it "routes GET /admin/petitions/1/edit_scheduled_debate_date to admin/petitions#edit_scheduled_debate_date" do
     expect(get("/admin/petitions/1/edit_scheduled_debate_date")).to route_to('admin/petitions#edit_scheduled_debate_date', id: '1')
   end
 
   it "routes PATCH /admin/petitions/1/update_scheduled_debate_date to admin/petitions#update_scheduled_debate_date" do
     expect(patch("/admin/petitions/1/update_scheduled_debate_date")).to route_to('admin/petitions#update_scheduled_debate_date', id: '1')
-  end
-
-  it "routes PATCH /admin/petitions/1/take_down to admin/petitions#take_down" do
-    expect(patch("/admin/petitions/1/take_down")).to route_to('admin/petitions#take_down', id: '1')
   end
 end
