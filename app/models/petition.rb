@@ -119,7 +119,7 @@ class Petition < ActiveRecord::Base
     counts_by_state
   end
 
-  def self.popular_in_constituency(constituency_id, how_many = 3)
+  def self.popular_in_constituency(constituency_id, how_many = 50)
     # NOTE: this query is complex, so we'll flatten it at the end
     # to prevent chaining things off the end that might break it.
     self.

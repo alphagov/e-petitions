@@ -6,8 +6,9 @@ module SignatureHelper
     end
   end
 
-  def signature_count(key, count)
-    t(:"#{key}.html", scope: :"petitions.signature_counts", count: count, formatted_count: number_with_delimiter(count))
+  def signature_count(key, count, options = {})
+    options = options.merge({scope: :"petitions.signature_counts", count: count, formatted_count: number_with_delimiter(count)})
+    t(:"#{key}.html", options)
   end
 
   private

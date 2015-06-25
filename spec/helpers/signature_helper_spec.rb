@@ -49,5 +49,29 @@ RSpec.describe SignatureHelper, type: :helper do
         end
       end
     end
+
+    describe "for petitions in your constituency" do
+      it "returns a HTML-safe string" do
+        expect(helper.signature_count(:in_your_constituency, 1, constituency: 'North Votingshire')).to be_an(ActiveSupport::SafeBuffer)
+      end
+
+      context "when the signature count is 1" do
+        it "returns a correctly formatted signature count" do
+          expect(helper.signature_count(:in_your_constituency, 1, constituency: 'North Votingshire')).to eq("1 signature from North Votingshire")
+        end
+      end
+
+      context "when the signature count is 100" do
+        it "returns a correctly formatted signature count" do
+          expect(helper.signature_count(:in_your_constituency, 100, constituency: 'North Votingshire')).to eq("100 signatures from North Votingshire")
+        end
+      end
+
+      context "when the signature count is 1000" do
+        it "returns a correctly formatted signature count" do
+          expect(helper.signature_count(:in_your_constituency, 1000, constituency: 'North Votingshire')).to eq("1,000 signatures from North Votingshire")
+        end
+      end
+    end
   end
 end
