@@ -1,8 +1,0 @@
-<div class="search-results section-panel">
-  <% if @petitions.empty? %>
-    <p>No petitions could be found matching your search terms.</p>
-  <% else %>
-    <%= render 'search/results_table', petitions: @petitions, facet: params[:state] || "all" %>
-    <%= render 'search/result_list_footer', petitions: @petitions %>
-  <% end %>
-</div>
