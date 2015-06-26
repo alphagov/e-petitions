@@ -54,15 +54,6 @@ Feature: A moderator user views all petitions
     Then I should see the following list of petitions:
      | My hidden petition   |
 
-  @javascript
-  Scenario: Change number per page
-    Given I am logged in as a sysadmin
-    And 25 petitions exist with a signature count of 5
-    When I view all petitions
-    Then I should see a list of 20 petitions
-    When I change the number viewed per page to 50
-    Then I should see a list of 25 petitions
-
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin
     And an open petition exists with action: "Simply the best"

@@ -5,7 +5,7 @@ class Admin::TodolistController < Admin::AdminController
     else
       petitions = Petition.in_moderation
     end
-    @petitions = petitions.by_oldest.paginate(page: params[:page], per_page: params[:per_page] || 20)
+    @petitions = petitions.by_oldest.paginate(page: params[:page], per_page: 50)
   end
 end
 

@@ -25,12 +25,12 @@ Feature: Admin users index and crud
     And the markup should be valid
 
   Scenario: Pagination of the users index
-    Given 20 moderator users exist
+    Given 50 moderator users exist
     When I go to the admin users index page
     And I follow "Next"
     Then I should see 2 rows in the admin index table
     And I follow "Previous"
-    Then I should see 20 rows in the admin index table
+    Then I should see 50 rows in the admin index table
 
   Scenario: Inspecting the new user form
     When I go to the admin users index page
