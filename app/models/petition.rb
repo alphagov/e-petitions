@@ -7,16 +7,14 @@ class Petition < ActiveRecord::Base
   VALIDATED_STATE   = 'validated'
   SPONSORED_STATE   = 'sponsored'
   OPEN_STATE        = 'open'
+  CLOSED_STATE      = 'closed'
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
 
-  # this is not a state that appears in the state column since a closed petition has
-  # a state that is 'open' but the 'closed at' date time is in the past
-  CLOSED_STATE      = 'closed'
 
-  STATES            = %w[pending validated sponsored open rejected hidden]
-  VISIBLE_STATES    = %w[open rejected]
-  MODERATED_STATES  = %w[open hidden rejected]
+  STATES            = %w[pending validated sponsored open closed rejected hidden]
+  VISIBLE_STATES    = %w[open closed rejected]
+  MODERATED_STATES  = %w[open closed hidden rejected]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
@@ -69,6 +67,7 @@ class Petition < ActiveRecord::Base
 
   # = Finders =
   scope :threshold, -> { where('signature_count >= ?', Site.threshold_for_debate) }
+  scope :for_state, ->(state) { where(state: state) }
   scope :not_hidden, -> { where.not(state: HIDDEN_STATE) }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
@@ -94,16 +93,6 @@ class Petition < ActiveRecord::Base
   class << self
     def awaiting_response
       where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
-    end
-
-    def for_state(state)
-      if state == CLOSED_STATE
-        where('state = ? AND closed_at < ?', OPEN_STATE, Time.current)
-      elsif state == OPEN_STATE
-        where('state = ? AND closed_at >= ?', OPEN_STATE, Time.current)
-      else
-        where(state: state)
-      end
     end
 
     def trending(since = 1.hour.ago, limit = 3)
@@ -229,8 +218,8 @@ class Petition < ActiveRecord::Base
     state == HIDDEN_STATE
   end
 
-  def closed?
-    state == OPEN_STATE && closed_at <= Time.current
+  def closed?(time = Time.current)
+    state == CLOSED_STATE || state == OPEN_STATE && closed_at <= time
   end
 
   def can_have_debate_added?
