@@ -7,6 +7,7 @@
 
 @mixin button-override($colour) {
   @include button($colour);
+  @include box-sizing(border-box);
   margin: 0 0 $gutter-half 0;
   padding: em(10, 24) em(15, 24);
   vertical-align: top;
