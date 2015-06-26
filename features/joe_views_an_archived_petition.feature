@@ -34,6 +34,8 @@ Feature: Joe views an archived petition
     And I should see "<i>We<i>"
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
+    And I should not see "0 signatures"
+    And I should not see "Deadline"
     And I cannot sign the petition
 
   Scenario: Joe cannot sign an archived petition
