@@ -9,8 +9,6 @@
         </li>
       <% end -%>
     </ol>
-    <div class="search-pagination">
-      <%= will_paginate_petitions @petitions %>
-    </div>
+    <%= render 'petitions/search/result_list_footer', petitions: @petitions %>
   <% end %>
 </div>

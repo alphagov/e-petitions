@@ -102,6 +102,10 @@ input.back-page {
   }
 }
 
+.flash-notice-description {
+  @include bold-16();
+}
+
 // Pagination
 // ==========
 .search-pagination {

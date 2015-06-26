@@ -16,6 +16,7 @@ class ArchivedPetition < ActiveRecord::Base
   facet :open, -> { open.by_created_at }
   facet :closed, -> { closed.by_created_at }
   facet :rejected, -> { rejected.by_created_at }
+  facet :by_most_signatures, -> { by_most_signatures }
 
   class << self
     def closed(time = Time.current)
@@ -32,6 +33,10 @@ class ArchivedPetition < ActiveRecord::Base
 
     def by_created_at
       reorder(:created_at)
+    end
+
+    def by_most_signatures
+      order("signature_count DESC")
     end
 
     private

@@ -41,9 +41,7 @@ Rails.application.routes.draw do
   end
 
   namespace :archived do
-    resources :petitions, only: [:index, :show] do
-      get :search, on: :collection
-    end
+    resources :petitions, only: [:index, :show]
   end
 
   namespace :admin do

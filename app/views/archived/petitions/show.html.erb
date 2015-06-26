@@ -1,39 +1,36 @@
 <% content_for(:page_title) { "#{@petition.title} - Petitions" } %>
-<% content_for :title do %>
-<div class="title_block">
-  <h2>Petition</h2>
-</div>
+
+<%= content_tag :div, class: 'flash-notice' do -%>
+  <p>This petition has been archived</p>
+  <p class="flash-notice-description">It was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government</p>
 <% end %>
 
-<%= content_tag :p, :class => 'flash-notice' do -%>
-  This petition is now closed
-<% end if @petition.closed? %>
 
-<div class="petition_view">
-  <div class="content">
-    <h1><%= @petition.title %></h1>
-    <div class="description"><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
+<h1>
+  <span class="heading-secondary">Petition</span>
+  <%= @petition.title %>
+</h1>
 
-    <% if @petition.rejected? -%>
-      <div class="petition_rejected">
-        <h2>This petition has been rejected with the following reason given:</h2>
-        <div class"reason"><%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %></div>
-      </div>
-    <% end -%>
+<div class="description"><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
 
-    <% if @petition.response? -%>
-      <div class="petition_response">
-        <h2>This petition has received the following response:</h2>
-        <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
-      </div>
-    <% end -%>
+<% if @petition.rejected? -%>
+  <div class="petition_rejected">
+    <h2>This petition has been rejected with the following reason given:</h2>
+    <div class="reason"><%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %></div>
   </div>
+<% end -%>
 
-  <p class="signature-count"><%= signature_count(:default, @petition.signature_count) %></p>
+<% if @petition.response? -%>
+  <div class="petition_response">
+    <h2>This petition has received the following response:</h2>
+    <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
+  </div>
+<% end -%>
 
-  <ul class="petition-meta">
-    <li class="meta-deadline">
-      <span class="label">Deadline</span> <%= short_date_format @petition.closed_at %>
-    </li>
-  </ul>
-</div>
+<p class="signature-count"><%= signature_count(:default, @petition.signature_count) %></p>
+
+<ul class="petition-meta">
+  <li class="meta-deadline">
+    <span class="label">Deadline</span> <%= short_date_format @petition.closed_at %>
+  </li>
+</ul>

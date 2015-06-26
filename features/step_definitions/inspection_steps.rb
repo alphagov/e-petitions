@@ -95,6 +95,14 @@ Then(/^I should see the following list of petitions:$/) do |table|
   end
 end
 
+Then /^I should see the following list of archived petitions:$/ do |table|
+  table.raw.each do |row|
+    row.each do |column|
+      expect(page).to have_content(column)
+    end
+  end
+end
+
 Then /^I should see the creation date of the petition$/ do
   expect(page).to have_css("th", :text => "Created")
 end

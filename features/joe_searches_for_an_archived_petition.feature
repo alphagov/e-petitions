@@ -2,6 +2,7 @@ Feature: Joe searches for an archived petition
   In order to see what petitions were created in the past
   As Joe, a member of the general public
   I want to be able to search archived petitions
+  And I want to see the results ordered by the oldest petitions
 
   Background:
     Given the following archived petitions exist:
@@ -15,13 +16,11 @@ Feature: Joe searches for an archived petition
     When I go to the archived petitions page
     And I fill in "search" with "Wombles"
     And I press "Search"
-    Then I should be on the archived petitions search results page
-    And I should see "Search results - archived petitions" in the browser page title
-    And I should see /for "Wombles"/
+    Then I should be on the archived petitions page
     But I should see the following search results:
-      | Eavis vs the Wombles (Rejected)   | –   | –          |
-      | The Wombles of Wimbledon (Closed) | 243 | 01/04/2012 |
-      | Wombles are great (Closed)        | 835 | 01/01/2013 |
+      | Eavis vs the Wombles           | Rejected       |
+      | The Wombles of Wimbledon       | 243 signatures |
+      | Wombles are great              | 835 signatures |
     And the markup should be valid
 
   Scenario: Paging through archived petitions
@@ -29,7 +28,7 @@ Feature: Joe searches for an archived petition
     When I go to the archived petitions page
     And I fill in "search" with "spending"
     And I press "Search"
-    Then I should be on the archived petitions search results page
+    Then I should be on the archived petitions page
     And I should see 50 petitions
     Then I follow "Next"
     And I should see 1 petition
