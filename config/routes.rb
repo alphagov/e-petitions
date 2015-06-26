@@ -74,4 +74,19 @@ Rails.application.routes.draw do
     get 'logout' => 'user_sessions#destroy', :as => :logout
     get 'login' => 'user_sessions#new', :as => :login
   end
+
+  # REDIRECTS OLD PAGES
+  get '/departments',           to: redirect('/')
+  get '/departments/:id',       to: redirect('/')
+  get '/api/petitions',         to: redirect('/')
+  get '/api/petitions/:id',     to: redirect('/')
+
+  get '/privacy-policy',       to: redirect('/help')
+  get '/accessibility',        to: redirect('/help')
+  get '/terms-and-conditions', to: redirect('/help')
+  get '/how-it-works',         to: redirect('/help')
+  get '/faq',                  to: redirect('/help')
+
+  get '/crown-copyright', to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
+
 end
