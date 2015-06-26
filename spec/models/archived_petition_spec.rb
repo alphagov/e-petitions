@@ -66,7 +66,7 @@ RSpec.describe ArchivedPetition, type: :model do
     end
 
     it { is_expected.to validate_presence_of(:state) }
-    it { is_expected.to validate_inclusion_of(:state).in_array(%w[open rejected]) }
+    it { is_expected.to validate_inclusion_of(:state).in_array(%w[open closed rejected]) }
   end
 
   describe "#reason_for_rejection" do
@@ -85,6 +85,8 @@ RSpec.describe ArchivedPetition, type: :model do
     it "defaults to nil" do
       expect(petition.closed_at).to be_nil
     end
+
+    it { is_expected.to validate_presence_of(:closed_at) }
   end
 
   describe "#signature_count" do

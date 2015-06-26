@@ -7,9 +7,9 @@ Feature: Joe searches for an archived petition
   Background:
     Given the following archived petitions exist:
       | title                    | state    | signature_count| opened_at  | closed_at  | created_at |
-      | Wombles are great        | open     | 835            | 2012-01-01 | 2013-01-01 | 2012-01-01 |
-      | The Wombles of Wimbledon | open     | 243            | 2011-04-01 | 2012-04-01 | 2011-04-01 |
-      | Common People            | open     | 639            | 2014-10-01 | 2015-03-31 | 2014-10-01 |
+      | Wombles are great        | closed   | 835            | 2012-01-01 | 2013-01-01 | 2012-01-01 |
+      | The Wombles of Wimbledon | closed   | 243            | 2011-04-01 | 2012-04-01 | 2011-04-01 |
+      | Common People            | closed   | 639            | 2014-10-01 | 2015-03-31 | 2014-10-01 |
       | Eavis vs the Wombles     | rejected |                |            |            | 2011-01-01 |
 
   Scenario: Searching for petitions
