@@ -373,10 +373,6 @@ RSpec.describe Browseable, type: :model do
         expect(facets.slice(:open)).to eq({open: 999})
       end
 
-      it 'accepts keys as strings' do
-        expect(facets.slice('pending')).to eq({pending: 20})
-      end
-
       it 'returns a hash with keys ordered by the supplied keys' do
         expect(facets.slice(:pending, :open).keys).to eq([:pending, :open])
       end

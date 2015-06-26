@@ -27,24 +27,24 @@ en-GB:
 
     facets:
       public:
-        - 'all'
-        - 'open'
-        - 'closed'
-        - 'rejected'
-        - 'awaiting_response'
-        - 'with_response'
-        - 'awaiting_debate_date'
-        - 'with_debate_outcome'
+        - :all
+        - :open
+        - :closed
+        - :rejected
+        - :awaiting_response
+        - :with_response
+        - :awaiting_debate_date
+        - :with_debate_outcome
       admin:
-        - 'all'
-        - 'open'
-        - 'closed'
-        - 'rejected'
-        - 'hidden'
-        - 'awaiting_response'
-        - 'with_response'
-        - 'awaiting_debate_date'
-        - 'with_debate_outcome'
+        - :all
+        - :open
+        - :closed
+        - :rejected
+        - :hidden
+        - :awaiting_response
+        - :with_response
+        - :awaiting_debate_date
+        - :with_debate_outcome
       names:
         admin:
           all: "All moderated petitions"

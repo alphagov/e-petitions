@@ -21,7 +21,7 @@ module PetitionHelper
   end
 
   def public_petition_facets_with_counts(petition_search)
-    petition_search.facets.slice(*public_petition_facets).stringify_keys
+    petition_search.facets.slice(*public_petition_facets)
   end
 
   private

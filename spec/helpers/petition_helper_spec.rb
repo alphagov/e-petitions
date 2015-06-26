@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PetitionHelper, type: :helper do
   describe '#public_petition_facets_with_counts' do
-    let(:public_petition_facets) { ['all', 'open', 'with_response'] }
+    let(:public_petition_facets) { [:all, :open, :with_response] }
     before do
       def helper.public_petition_facets; end
       allow(helper).to receive(:public_petition_facets).and_return public_petition_facets
@@ -14,7 +14,7 @@ RSpec.describe PetitionHelper, type: :helper do
         open: 10,
         with_response: 20,
         hidden: 30
-      }.with_indifferent_access
+      }
     end
     let(:petition_search) { double(facets: facets) }
 

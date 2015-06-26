@@ -29,8 +29,6 @@ module Browseable
     end
 
     def slice(*only_these_keys)
-      only_these_keys = only_these_keys.map(&:to_sym)
-
       only_these_keys.each_with_object({}) do |key, hash|
         hash[key] = self[key] if has_key?(key)
       end
