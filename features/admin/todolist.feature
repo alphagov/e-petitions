@@ -27,8 +27,8 @@ Feature: Dashboard todo list
       | Petition 1 | 10-02-2009 |
       | Petition 4 | 01-01-2010 |
       | Petition 3 | 11-11-2010 |
-  And I should be connected to the server via an ssl connection
-  And the markup should be valid
+    And I should be connected to the server via an ssl connection
+    And the markup should be valid
 
   Scenario: Petitions waiting for moderation are paginated
     Given 50 petitions exist with state: "sponsored"
