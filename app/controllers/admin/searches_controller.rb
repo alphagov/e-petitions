@@ -27,7 +27,7 @@ class Admin::SearchesController < Admin::AdminController
   end
 
   def find_signatures_by_email(query)
-    @signatures = Signature.for_email(query).paginate(:page => params[:page], :per_page => 20)
+    @signatures = Signature.for_email(query).paginate(:page => params[:page], :per_page => 50)
   end
 
   def find_petitions_by_keyword(query)

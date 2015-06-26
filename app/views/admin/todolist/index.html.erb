@@ -3,8 +3,6 @@
   <%= label_tag :petition_in_moderation, 'awaiting moderation', class: 'radio-button' %>
   <%= radio_button_tag :petition, 'collecting_sponsors',  params[:petition] == 'collecting_sponsors' %>
   <%= label_tag :petition_collecting_sponsors, 'collecting sponsors', class: 'radio-button' %>
-  <%= label_tag :per_page, "Results per page:" %>
-  <%= select_tag :per_page, options_for_select(%w(20 50 100), params[:per_page]) %>
   <%= submit_tag "Go" %>
 <% end %>
 <table class="admin_index">

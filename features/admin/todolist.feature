@@ -31,12 +31,12 @@ Feature: Dashboard todo list
   And the markup should be valid
 
   Scenario: Petitions waiting for moderation are paginated
-    Given 20 petitions exist with state: "sponsored"
+    Given 50 petitions exist with state: "sponsored"
     When I go to the admin todolist page
     And I follow "Next"
     Then I should see 3 rows in the admin index table
     And I follow "Previous"
-    And I should see 20 rows in the admin index table
+    And I should see 50 rows in the admin index table
 
   Scenario: Filter list by state
     When I go to the admin todolist page

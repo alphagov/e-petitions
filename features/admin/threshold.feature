@@ -30,12 +30,12 @@ Feature: Threshold list
 
   Scenario: Threshold petitions are paginated
     Given I am logged in as a sysadmin
-    And 20 petitions exist with a signature count of 6
+    And 50 petitions exist with a signature count of 6
     When I go to the admin threshold page
     And I follow "Next"
     Then I should see 3 rows in the admin index table
     And I follow "Previous"
-    And I should see 20 rows in the admin index table
+    And I should see 50 rows in the admin index table
 
   Scenario: A moderator user can view the details of a petition and form fields
     When I go to the admin threshold page

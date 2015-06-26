@@ -156,10 +156,6 @@ When /^I choose to create a petition anyway$/ do
   click_link_or_button "My petition is different"
 end
 
-When /^I change the number viewed per page to (\d+)$/ do |per_page|
-  select per_page.to_s, :from => 'per_page'
-end
-
 Then /^I should see all petitions$/ do
   expect(page).to have_css("ol li", :count => 3)
 end

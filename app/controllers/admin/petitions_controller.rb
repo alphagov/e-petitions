@@ -2,7 +2,7 @@ class Admin::PetitionsController < Admin::AdminController
   respond_to :html
 
   def index
-    @petitions = Petition.selectable.search(params.merge(count: params[:per_page] || 20))
+    @petitions = Petition.selectable.search(params.merge(count: 50))
   end
 
   def show
@@ -10,7 +10,7 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def threshold
-    @petitions = Petition.threshold.order(:signature_count).paginate(:page => params[:page], :per_page => params[:per_page] || 20)
+    @petitions = Petition.threshold.order(:signature_count).paginate(:page => params[:page], :per_page => 50)
   end
 
   def edit_scheduled_debate_date
