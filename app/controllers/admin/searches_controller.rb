@@ -1,9 +1,5 @@
 class Admin::SearchesController < Admin::AdminController
 
-  def new
-    @query = ""
-  end
-
   def result
     @query = params[:search][:query]
     if is_number?(@query)
@@ -22,7 +18,7 @@ class Admin::SearchesController < Admin::AdminController
       redirect_to admin_petition_url(petition)
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Cannot find petition with id: #{query}"
-      redirect_to new_admin_search_url
+      redirect_to admin_petitions_url
     end
   end
 

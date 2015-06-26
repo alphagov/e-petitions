@@ -2,30 +2,10 @@ require 'rails_helper'
 
 RSpec.describe Admin::SearchesController, type: :controller do
 
-  describe "not logged in" do
-    describe "GET 'new'" do
-      it "should redirect to the login page" do
-        get :new
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
-      end
-    end
-  end
-
   describe "logged in as moderator user" do
     before :each do
       @user = FactoryGirl.create(:moderator_user)
       login_as(@user)
-    end
-
-    describe "GET 'new'" do
-      it "is successful" do
-        get :new
-        expect(response).to be_success
-      end
-      it "sets @query to blank" do
-        get :new
-        expect(assigns(:query)).to eq("")
-      end
     end
 
     describe "GET 'result'" do
@@ -63,7 +43,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
 
           it "renders the form with an error" do
             get :result, :search => { :query => '123' }
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/search/new")
+            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions")
           end
 
           it "sets the flash error" do
