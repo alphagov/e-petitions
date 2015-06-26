@@ -5,24 +5,26 @@
 <p class="text-secondary">Petitions from the 2010&ndash;2015 Conservative &ndash; Liberal Democrat coalition government</p>
 
 <%= form_tag archived_petitions_path, class: 'search-inline', method: 'get' do %>
-    <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
-    <%= submit_tag 'Search', class: 'inline-submit' %>
+  <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
+  <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
 <% end %>
 
 <% if @petitions.empty? %>
-    <p>No archived petitions could be found matching your search terms</p>
+  <p>No archived petitions could be found matching your search terms</p>
 <% else %>
   <div class="search-results section-panel">
     <ol>
       <% @petitions.each do |petition| %>
-          <li class="petition-item petition">
-            <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
-            <%= 'Rejected' if petition.rejected? %>
-            <p><%= signature_count(:default, petition.signature_count) unless petition.rejected? %></p>
-          </li>
-        <% end %>
-      </ol>
-     </div>
-  <% end %>
+        <li class="petition-item petition">
+          <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
+          <%= 'Rejected' if petition.rejected? %>
+          <p><%= signature_count(:default, petition.signature_count) unless petition.rejected? %></p>
+        </li>
+      <% end %>
+    </ol>
+  </div>
+<% end %>
 
-<%= render 'petitions/search/result_list_footer', petitions: @petitions %>
+<div class="search-pagination">
+  <%= will_paginate @petitions, page_links: false %>
+</div>
