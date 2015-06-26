@@ -105,6 +105,18 @@ class Petition < ActiveRecord::Base
       limit(3)
     end
 
+    def close_petitions!(time = Time.current)
+      in_need_of_closing(time).update_all(state: CLOSED_STATE, updated_at: time)
+    end
+
+    def in_need_of_closing(time = Time.current)
+      where(state: OPEN_STATE).where(arel_table[:closed_at].lt(time))
+    end
+
+    def with_invalid_signature_counts
+      where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
+    end
+
     def with_invalid_signature_counts
       where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
     end

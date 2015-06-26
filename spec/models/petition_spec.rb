@@ -723,6 +723,62 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".close_petitions!" do
+    context "when a petition is in the open state and closed_at has not passed" do
+      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.from_now) }
+
+      it "does not close the petition" do
+        expect{
+          described_class.close_petitions!
+        }.not_to change{ petition.reload.state }
+      end
+    end
+
+    context "when a petition is in the open state and closed_at has passed" do
+      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.ago) }
+
+      it "does close the petition" do
+        expect{
+          described_class.close_petitions!
+        }.to change{ petition.reload.state }.from('open').to('closed')
+      end
+    end
+  end
+
+  describe ".in_need_of_closing" do
+    context "when a petition is in the closed state and closed_at has not passed" do
+      let!(:petition) { FactoryGirl.create(:closed_petition, closed_at: 3.days.from_now) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is in the closed state and closed_at has passed" do
+      let!(:petition) { FactoryGirl.create(:closed_petition, closed_at: 3.days.ago) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is in the open state and closed_at has not passed" do
+      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.from_now) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is in the open state and closed_at has passed" do
+      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.ago) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).to include(petition)
+      end
+    end
+  end
+
   describe ".with_invalid_signature_counts" do
     let!(:petition) { FactoryGirl.create(:open_petition, attributes) }
 
