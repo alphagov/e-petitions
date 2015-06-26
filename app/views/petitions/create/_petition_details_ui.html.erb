@@ -31,7 +31,7 @@
 <%= form_row :for => [petition, :additional_details] do %>
   <%= f.label :additional_details, class: 'form-label' do %>
     Additional details
-    <span class='form-hint'>Optional - background information, evidence and references</span>
+    <span class="form-hint">Optional - background information, evidence and references</span>
   <% end %>
   <%= error_messages_for_field petition, :additional_details %>
   <%= f.text_area :additional_details, tabindex: increment, rows: 7, 'data-max-length' => '500', class: 'form-control' %>
