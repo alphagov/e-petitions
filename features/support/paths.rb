@@ -92,6 +92,9 @@ module NavigationHelpers
     when /^debate outcomes form page for "([^\"]*)"$/
       admin_petition_debate_outcome_path(Petition.find_by(action: $1))
 
+    when /^government response page for "([^\"]*)"$/
+      admin_petition_government_response_path(Petition.find_by(action: $1))
+
     when /^petition edit details page for "([^\"]*)"$/
       admin_petition_petition_details_path(Petition.find_by(action: $1))
 

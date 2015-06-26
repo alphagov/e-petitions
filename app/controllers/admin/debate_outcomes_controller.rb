@@ -10,7 +10,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
     fetch_debate_outcome
     if @debate_outcome.update_attributes(params_for_update)
       EmailDebateOutcomesJob.run_later_tonight(@petition)
-      redirect_to [:admin, @petition]
+      redirect_to [:admin, @petition], notice: 'Email will be sent overnight'
     else
       render :show
     end

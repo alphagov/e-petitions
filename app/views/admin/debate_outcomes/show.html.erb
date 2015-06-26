@@ -29,6 +29,6 @@
   <% end %>
 
   <%= form_row do %>
-    <%= f.submit 'Publish & Send Email', data: { confirm: "Are you sure you want to publish these debate outcome details and email all of the supporters?" } %>
+    <%= email_signatures_with_count_submit_button(f, @petition) %>
   <% end %>
 <% end -%>

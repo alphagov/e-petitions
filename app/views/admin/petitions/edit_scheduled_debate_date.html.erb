@@ -11,7 +11,6 @@
   <% end %>
 
   <%= form_row do %>
-    <%= f.submit 'Publish and Send Email', data: { confirm: "Are you sure you want to save the scheduled debate date?" } %>
+    <%= email_signatures_with_count_submit_button(f, @petition) %>
   <% end %>
-
 <% end %>
