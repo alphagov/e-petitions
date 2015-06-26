@@ -2,7 +2,7 @@
   <h2 id="other-lists-heading">Other lists of petitions</h2>
   <div class="section-panel">
     <ul>
-    <% @petitions.facets.each do |facet, count| %>
+    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
         <%= link_to petitions_url(state: facet) do %>
           <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>

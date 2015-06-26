@@ -16,4 +16,13 @@ module AdminHelper
                         :method => :delete
                       }
   end
+
+  def admin_petition_facets_for_select(selected)
+    options_for_select(
+      admin_petition_facets.map do |facet|
+        [I18n.t(facet,  scope: :"petitions.facets.names.admin", default: facet.to_s.humanize), facet]
+      end,
+      selected
+    )
+  end
 end

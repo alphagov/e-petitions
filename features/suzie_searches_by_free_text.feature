@@ -49,8 +49,9 @@ Feature: Suzy Singer searches by free text
     And I fill in "Wombles" as my search term
     And I press "Search"
     Then I should see an "open" petition count of 12
-    Then I should see a "closed" petition count of 1
-    Then I should see a "rejected" petition count of 1
+    And I should see a "closed" petition count of 1
+    And I should see a "rejected" petition count of 1
+    But I should not see a "hidden" petition count of 1
 
   Scenario: Search for open petitions using multiple search terms
     When I search for "Open petitions" with "overthrow the"

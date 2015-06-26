@@ -62,4 +62,14 @@ RSpec.describe ApplicationController, type: :controller do
       end
     end
   end
+
+  context '#public_petition_facets' do
+    it 'extracts the list of public facets from the locale file' do
+      expect(controller.send(:public_petition_facets)).to eq I18n.t(:"petitions.facets.public")
+    end
+
+    it 'is a helper method' do
+      expect(controller.class.helpers).to respond_to :public_petition_facets
+    end
+  end
 end

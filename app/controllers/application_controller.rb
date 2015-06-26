@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   before_filter :authenticate, if: :site_protected?
 
   before_action :set_seen_cookie_message, if: :show_cookie_message?
-  helper_method :show_cookie_message?
+  helper_method :show_cookie_message?, :public_petition_facets
 
   protected
 
@@ -38,5 +38,9 @@ class ApplicationController < ActionController::Base
 
   def show_cookie_message?
     @show_cookie_message ||= cookies[:seen_cookie_message] != 'yes'
+  end
+
+  def public_petition_facets
+    I18n.t('public', scope: :"petitions.facets")
   end
 end

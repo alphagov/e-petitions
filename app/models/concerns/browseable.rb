@@ -28,6 +28,12 @@ module Browseable
       end
     end
 
+    def slice(*only_these_keys)
+      only_these_keys.each_with_object({}) do |key, hash|
+        hash[key] = self[key] if has_key?(key)
+      end
+    end
+
     private
 
     def facet_counts

@@ -236,9 +236,42 @@ RSpec.describe PetitionsController, type: :controller do
   end
 
   describe "GET #index" do
-    it "is successful" do
-      get :index
-      expect(response).to be_success
+    context 'when no state param is provided' do
+      it "is successful" do
+        get :index
+        expect(response).to be_success
+      end
+
+      it "exposes a search scoped to the all facet" do
+        get :index
+        expect(assigns(:petitions).scope).to eq :all
+      end
+    end
+
+    context 'when a state param is provided' do
+      context 'but it is not a public facet from the locale file' do
+        it 'redirects to itself with state=all' do
+          get :index, state: 'awaiting_monkey'
+          expect(response).to redirect_to 'https://petition.parliament.uk/petitions?state=all'
+        end
+
+        it 'preserves other params when it redirects' do
+          get :index, q: 'what is clocks', state: 'awaiting_monkey'
+          expect(response).to redirect_to 'https://petition.parliament.uk/petitions?q=what+is+clocks&state=all'
+        end
+      end
+
+      context 'and it is a public facet from the locale file' do
+        it 'is successful' do
+          get :index, state: 'open'
+          expect(response).to be_success
+        end
+
+        it "exposes a search scoped to the state param" do
+          get :index, state: 'open'
+          expect(assigns(:petitions).scope).to eq :open
+        end
+      end
     end
   end
 
