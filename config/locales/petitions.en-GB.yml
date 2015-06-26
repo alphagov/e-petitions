@@ -37,6 +37,8 @@ en-GB:
         - :with_debate_outcome
       admin:
         - :all
+        - :collecting_sponsors
+        - :sponsored
         - :open
         - :closed
         - :rejected
@@ -47,7 +49,8 @@ en-GB:
         - :with_debate_outcome
       names:
         admin:
-          all: "All moderated petitions"
+          all: "All"
+          sponsored: "Awaiting moderation"
           awaiting_response: "Awaiting a government response"
           with_response: "With a government response"
           awaiting_debate_date: "Awaiting a debate in parliament"

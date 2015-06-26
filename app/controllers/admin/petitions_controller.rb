@@ -2,7 +2,7 @@ class Admin::PetitionsController < Admin::AdminController
   respond_to :html
 
   def index
-    @petitions = Petition.selectable.search(params.merge(count: 50))
+    @petitions = Petition.search(params.merge(count: 50))
   end
 
   def show

@@ -146,19 +146,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       login_as(@user)
     end
 
-    context "index" do
-      let(:petitions) { double.as_null_object }
-
-      before do
-        allow(Petition).to receive(:selectable).and_return(petitions)
-      end
-
-      it "shows all selectable petitions" do
-        expect(Petition).to receive(:selectable).and_return(petitions)
-        get :index
-      end
-    end
-
     context "show" do
       it "assigns petition successfully" do
         get :show, :id => @petition.id
