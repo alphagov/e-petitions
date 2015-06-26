@@ -41,8 +41,12 @@ RSpec.describe Admin::ProfileController, type: :controller do
 
     describe "GET 'update'" do
       def do_patch(current_password, new_password, password_confirmation)
-        patch :update, :id => 50000, :current_password => current_password,
-              :admin_user => {:password => new_password, :password_confirmation => password_confirmation}
+        admin_user_attributes = {
+          current_password: current_password,
+          password: new_password,
+          password_confirmation: password_confirmation
+        }
+        patch :update, id: 50000, admin_user: admin_user_attributes
       end
 
       context "successful password change" do

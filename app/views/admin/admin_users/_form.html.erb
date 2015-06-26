@@ -1,19 +1,58 @@
-<%= form_for [:admin, @user], :builder => AdminFormBuilder do |f| -%>
-  <%= f.error_messages(:header_message => nil) %>
-  <%= f.text_field :first_name, :is_mandatory => true, :autofocus => 'autofocus' %>
-  <%= f.text_field :last_name, :is_mandatory => true %>
-  <%= f.text_field :email, :type => 'email', :is_mandatory => true %>
+<%= form_for [:admin, @user] do |f| -%>
+  <%= f.error_messages(header_message: nil) %>
 
-  <%= f.label :role %><br />
-  <%= f.select('role', AdminUser::ROLES) %>
+  <%= form_row for: [f.object, :first_name] do %>
+    <%= f.label :first_name, class: 'form-label' %><%= mandatory_field %>
+    <%= error_messages_for_field f.object, :first_name %>
+    <%= f.text_field :first_name, tabindex: increment, class: 'form-control', autofocus: 'autofocus' %>
+  <% end %>
 
-  <%= f.check_box :force_password_reset, :class => 'checkbox' %>
+  <%= form_row for: [f.object, :last_name] do %>
+    <%= f.label :last_name, class: 'form-label' %><%= mandatory_field %>
+    <%= error_messages_for_field f.object, :last_name %>
+    <%= f.text_field :last_name, tabindex: increment, class: 'form-control' %>
+  <% end %>
 
-  <%= f.check_box :account_disabled, :class => 'checkbox' %>
+  <%= form_row for: [f.object, :email] do %>
+    <%= f.label :email, class: 'form-label' %><%= mandatory_field %>
+    <%= error_messages_for_field f.object, :email %>
+    <%= f.email_field :email, tabindex: increment, class: 'form-control' %>
+  <% end %>
 
-  <%= "Note, no password needs to be entered unless you want to change it" unless @user.new_record? %>
-  <%= f.password_field :password, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
-  <%= f.password_field :password_confirmation, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
+  <%= form_row for: [f.object, :email] do %>
+    <%= f.label :role, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :role %>
+    <%= f.select('role', AdminUser::ROLES) %>
+  <% end %>
 
-  <%= f.submit 'Save' %>
+  <%= form_row for: [f.object, :force_password_reset] do %>
+    <%= f.check_box :force_password_reset, tabindex: increment, class: 'checkbox' %>
+    <%= f.label :force_password_reset %>
+    <%= error_messages_for_field f.object, :force_password_reset %>
+  <% end %>
+
+  <%= form_row for: [f.object, :account_disabled] do %>
+    <%= f.check_box :account_disabled, tabindex: increment, class: 'checkbox' %>
+    <%= f.label :account_disabled %>
+    <%= error_messages_for_field f.object, :account_disabled %>
+  <% end %>
+
+  <%= field_set_tag 'Passwords' do %>
+    <%= content_tag(:p, 'Note, no password needs to be entered unless you want to change it') unless f.object.new_record? %>
+    <%= form_row for: [f.object, :password] do %>
+      <%= f.label :password, class: 'form-label' %><%= mandatory_field if f.object.new_record? %>
+      <%= error_messages_for_field f.object, :password %>
+      <%= f.password_field :password, tabindex: increment, class: 'form-control', autocomplete: 'off' %>
+    <% end %>
+
+    <%= form_row for: [f.object, :password_confirmation] do %>
+      <%= f.label :password_confirmation, class: 'form-label' %><%= mandatory_field if f.object.new_record? %>
+      <%= error_messages_for_field f.object, :password_confirmation %>
+      <%= f.password_field :password_confirmation, tabindex: increment, class: 'form-control', autocomplete: 'off' %>
+    <% end %>
+  <% end %>
+
+  <%= form_row do %>
+    <%= f.submit 'Save' %>
+  <% end %>
 <% end -%>
