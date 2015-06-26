@@ -21,15 +21,7 @@ module PetitionHelper
   end
 
   def public_petition_facets_with_counts(petition_search)
-    Hash[
-      public_petition_facets.map do |key|
-        if petition_search.facets.key? key.to_sym
-          [key, petition_search.facets[key.to_sym]]
-        else
-          nil
-        end
-      end.compact
-    ]
+    petition_search.facets.slice(*public_petition_facets).stringify_keys
   end
 
   private

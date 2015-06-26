@@ -350,9 +350,45 @@ RSpec.describe Browseable, type: :model do
       end
     end
 
-    describe "keys" do
+    describe "#keys" do
       it "returns the list of facet keys" do
         expect(facets.keys).to eq([:open])
+      end
+    end
+
+    describe "#slice" do
+      before do
+        scopes[:pending] = -> { where(state: 'pending') }
+
+        open_query = double(:query)
+        allow(klass).to receive(:where).with(state: 'open').and_return(open_query)
+        allow(open_query).to receive(:count).and_return(999)
+
+        pending_query = double(:query)
+        allow(klass).to receive(:where).with(state: 'pending').and_return(pending_query)
+        allow(pending_query).to receive(:count).and_return(20)
+      end
+
+      it 'returns a hash with only the specified keys and their counts' do
+        expect(facets.slice(:open)).to eq({open: 999})
+      end
+
+      it 'accepts keys as strings' do
+        expect(facets.slice('pending')).to eq({pending: 20})
+      end
+
+      it 'returns a hash with keys ordered by the supplied keys' do
+        expect(facets.slice(:pending, :open).keys).to eq([:pending, :open])
+      end
+
+      it 'does not raise if asked for unknown keys' do
+        expect {
+          facets.slice(:unknown)
+        }.not_to raise_error
+      end
+
+      it 'does not include unknown keys in the returned hash' do
+        expect(facets.slice(:unknown)).to eq({})
       end
     end
   end

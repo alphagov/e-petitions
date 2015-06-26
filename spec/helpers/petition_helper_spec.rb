@@ -14,7 +14,7 @@ RSpec.describe PetitionHelper, type: :helper do
         open: 10,
         with_response: 20,
         hidden: 30
-      }
+      }.with_indifferent_access
     end
     let(:petition_search) { double(facets: facets) }
 
