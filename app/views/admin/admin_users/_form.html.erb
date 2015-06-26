@@ -15,5 +15,5 @@
   <%= f.password_field :password, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
   <%= f.password_field :password_confirmation, :autocomplete => 'off', :is_mandatory => @user.new_record? %>
 
-  <%= save_button(f.object) %>
+  <%= f.submit 'Save' %>
 <% end -%>
