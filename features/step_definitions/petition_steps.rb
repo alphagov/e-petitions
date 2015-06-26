@@ -345,3 +345,9 @@ end
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
   Site.instance.update!(threshold_for_debate: amount)
 end
+
+Given /^There are (\d+) petitions awaiting a government response$/ do |response_count|
+  response_count.times do |count|
+    petition = FactoryGirl.create(:awaiting_petition, :action => "Petition #{count}")
+  end
+end

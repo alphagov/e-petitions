@@ -2,7 +2,7 @@
   <%= render_tabnav :id => 'admin_nav' do |n|
     n.add_tab do |t|
       t.named 'To do list'
-      t.links_to admin_root_path
+      t.links_to admin_todo_path
       t.highlights_on :controller => 'admin/todolist'
       t.highlights_on :controller => 'admin/petitions', :action => :edit
       t.highlights_on :controller => 'admin/petitions', :action => :update

@@ -118,6 +118,17 @@ en-GB:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in parliament"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in parliament"
 
+    action_counts:
+      in_moderation: 
+        html:
+          "<span class=\"count\">%{formatted_count}</span> Moderation queue"
+      awaiting_response: 
+        html:
+          "<span class=\"count\">%{formatted_count}</span> Government response queue"
+      all:
+        html:
+          "<span class=\"count\">%{formatted_count}</span> All petitions"
+
     rejection_reasons:
       titles:
         no-action: "Does not include a request for action"

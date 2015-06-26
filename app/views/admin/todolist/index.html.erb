@@ -1,4 +1,4 @@
-<%= form_tag admin_root_path, method: :get, class: 'filter' do %>
+<%= form_tag admin_todo_path, method: :get, class: 'filter' do %>
   <%= radio_button_tag :petition, 'in_moderation', true %>
   <%= label_tag :petition_in_moderation, 'awaiting moderation', class: 'radio-button' %>
   <%= radio_button_tag :petition, 'collecting_sponsors',  params[:petition] == 'collecting_sponsors' %>

@@ -1,0 +1,11 @@
+.admin {
+  $site-width: 960px;
+  .wrapper {
+    @include site-width-container($site-width);
+  }
+
+  // Content wraps the entire site content block
+  #content {
+    @include site-width-container($site-width);
+  }
+}

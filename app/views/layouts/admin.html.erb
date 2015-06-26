@@ -7,25 +7,12 @@
   <%= csrf_meta_tag %>
   <%= yield :js %>
 </head>
-<body>
-  <div id="outer_page_wrapper">
-    <div id="inner_page_wrapper">
-      <div id="header">
-        <%= render '/admin/shared/header' %>
-      </div>
-
-      <%= render '/admin/shared/admin_nav' %>
-
-      <div id="content">
-        <div class="left_col">&nbsp;
-          <%= yield :left_col %>
-        </div>
-        <div class="center_col_full">
-          <%= render :partial => '/admin/shared/messages' %>
-          <%= yield %>
-        </div>
-      </div>
-    </div>
-  </div>
+<body class="admin">
+  <%= render '/admin/shared/header' %>
+  <main id="content">
+    <%= render '/admin/shared/admin_nav' %>
+    <%= render '/admin/shared/messages' %>
+    <%= yield %>
+  </main>
 </body>
 </html>

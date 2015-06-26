@@ -5,6 +5,9 @@ class Admin::AdminController < ApplicationController
   layout 'admin'
   helper_method :admin_petition_facets
 
+  def index
+  end
+
   protected
 
   def admin_petition_facets

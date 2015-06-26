@@ -45,7 +45,9 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    root :to => 'todolist#index'
+    root :to => 'admin#index'
+
+    get 'todo' => 'todolist#index', :as => 'todo'
 
     resource :search, :only => [:new] do
       get :result, :on => :member
