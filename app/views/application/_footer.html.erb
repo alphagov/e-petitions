@@ -1,28 +1,13 @@
 <footer id="footer" role="contentinfo">
 
   <div class="wrapper">
-    <%= render_tabnav :id => "footer_nav" do |n|
-      n.add_tab do |t|
-        t.named 'Home'
-        t.links_to home_path
-      end
-      n.add_tab do |t|
-        t.named 'All petitions'
-        t.links_to petitions_path
-      end
-      n.add_tab do |t|
-        t.named 'Start a petition'
-        t.links_to check_petitions_path
-      end
-      n.add_tab do |t|
-        t.named 'Help'
-        t.links_to help_path
-      end
-      n.add_tab do |t|
-        t.named 'Feedback'
-        t.links_to feedback_path
-      end
-    end %>
+    <ul id="footer_nav">
+      <li><%= link_to 'Home', home_path %></li>
+      <li><%= link_to 'All petitions', petitions_path %></li>
+      <li><%= link_to 'Start a petition', check_petitions_path %></li>
+      <li><%= link_to 'Help', help_path %></li>
+      <li><%= link_to 'Feedback', feedback_path %></li>
+    </ul>
 
     <div class="open-government-licence">
       <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
