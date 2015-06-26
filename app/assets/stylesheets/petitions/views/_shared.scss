@@ -91,7 +91,7 @@ input.back-page {
 .flash-notice {
   color: $white;
   background: $grey-1;
-  margin: 0 0 $gutter-half 0;
+  margin: $gutter-half 0;
   padding: em(15, 24) em(15, 24);
   @include bold-24();
   text-align: center;
