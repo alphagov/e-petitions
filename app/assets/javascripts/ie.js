@@ -1,2 +1,2 @@
-//= require vendor/html5shiv.js
-//= require vendor/html5shiv-printshiv.js
+//= require html5shiv
+//= require html5shiv-printshiv
