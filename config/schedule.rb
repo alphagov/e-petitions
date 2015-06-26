@@ -19,10 +19,14 @@
 
 # Learn more: http://github.com/javan/whenever
 
-every :weekday, :at => '7am' do # Use any day of the week or :weekend, :weekday
-  rake "epets:admin_email_reminder", :output => nil
+every :weekday, at: '7am' do
+  rake "epets:admin_email_reminder", output: nil
 end
 
-every :weekday, :at => '6.30am' do # Use any day of the week or :weekend, :weekday
-  rake "epets:threshold_email_reminder", :output => nil
+every :weekday, at: '6.30am' do
+  rake "epets:threshold_email_reminder", output: nil
+end
+
+every 30.minutes do
+  runner "PetitionCountJob.perform_later"
 end

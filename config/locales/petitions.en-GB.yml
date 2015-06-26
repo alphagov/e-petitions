@@ -1,5 +1,10 @@
 en-GB:
   petitions:
+    errors:
+      invalid_signature_counts:
+        one: "There was 1 petition with id: %{id} that had an invalid signature count"
+        other: "There were %{count} petitions with ids: %{ids} that had invalid signature counts"
+
     page_titles:
       all: "All petitions"
       open: "Open petitions"
