@@ -1,9 +1,5 @@
 module AdminHelper
 
-  def save_button(resource)
-    submit_tag 'Save'
-  end
-
   def mandatory_field()
     return '<span class="mandatory">&nbsp;*</span>'
   end
