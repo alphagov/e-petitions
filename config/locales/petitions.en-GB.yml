@@ -52,7 +52,7 @@ en-GB:
           HM Government & Parliament Petitions: A debate has been scheduled for the petition '%{action}' you've supported.
       signoff_prefix: "HM Government & Parliament Petitions"
 
-    waiting_for_date_in_words:
+    waiting_for_in_words:
       zero: "Waiting for less than a day"
       one: "Waiting for 1 day"
       other: "Waiting for %{formatted_count} days"
