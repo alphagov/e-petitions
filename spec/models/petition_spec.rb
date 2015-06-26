@@ -658,28 +658,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe ".counts_by_state" do
-    it "returns a hash containing counts of petition states" do
-      1.times { FactoryGirl.create(:pending_petition) }
-      2.times { FactoryGirl.create(:validated_petition) }
-      3.times { FactoryGirl.create(:sponsored_petition) }
-      4.times { FactoryGirl.create(:open_petition) }
-      5.times { FactoryGirl.create(:closed_petition) }
-      6.times { FactoryGirl.create(:rejected_petition) }
-      7.times { FactoryGirl.create(:hidden_petition) }
-
-      # Petition.counts_by_state.class.should == Hash
-
-      expect(Petition.counts_by_state[:pending]).to   eq(1)
-      expect(Petition.counts_by_state[:validated]).to eq(2)
-      expect(Petition.counts_by_state[:sponsored]).to eq(3)
-      expect(Petition.counts_by_state[:open]).to      eq(4)
-      expect(Petition.counts_by_state[:closed]).to    eq(5)
-      expect(Petition.counts_by_state[:rejected]).to  eq(6)
-      expect(Petition.counts_by_state[:hidden]).to    eq(7)
-    end
-  end
-
   describe "#increment_signature_count!" do
     let(:signature_count) { 8 }
     let(:petition) do
