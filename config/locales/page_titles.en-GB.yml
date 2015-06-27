@@ -1,0 +1,33 @@
+en-GB:
+  page_titles:
+    default: "Petition parliament"
+    archived_petitions:
+      index: "View archived petitions - Petitions"
+      show: "%{petition} - Petitions"
+    feedback:
+      index: "Send feedback - Petitions"
+      thanks: "Thank you - Petitions"
+    local_petitions:
+      index: "Petitions in %{constituency}"
+    petitions:
+      index: "View all petitions - Petitions"
+      check: "Start a petition - Petitions"
+      check_results: "Start a petition - Petitions"
+      create: "Start a petition - Petitions"
+      moderation_info: "%{petition} - has been already sent to moderation - Petitions"
+      new: "Start a petition - Petitions"
+      resend_confirmation_email: "Confirmation email re-sent - Petitions"
+      show: "%{petition} - Petitions"
+      thank_you: "Thank you - Petitions"
+    signatures:
+      new: "%{petition} - Sign this petition - Petitions"
+      signed: "Thank you - Petitions"
+      thank_you: "Thank you - Petitions"
+      unsubscribe: "Successfully unsubscribed"
+    sponsors:
+      show: "%{petition} - Support this petition - Petitions"
+      sponsored: "Thank you - Petitions"
+      thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
+    static_pages:
+      home: "Petition parliament"
+      help: "Help"
