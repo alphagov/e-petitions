@@ -39,6 +39,10 @@ module ConstituencyApi
     URL = 'http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
     TIMEOUT = 5
 
+    def self.constituency(postcode)
+      constituencies(postcode).first
+    end
+
     def self.constituencies(postcode)
       response = call_api(postcode)
       parse_constituencies(response)

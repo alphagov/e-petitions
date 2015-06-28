@@ -19,85 +19,183 @@ RSpec.describe ConstituencyApi do
     end
   end
 
-  describe "#constituencies" do
+  describe "query methods" do
     let(:api) { ConstituencyApi::Client }
-    let(:api_url) { "http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies" }
+    let(:url) { "http://data.parliament.uk" }
+    let(:endpoint) { "#{url}/membersdataplatform/services/mnis/Constituencies" }
 
-    let(:mp_emily) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", Date.new(2015, 5, 7)) }
-    let(:mp_diane) { ConstituencyApi::Mp.new("172", "Ms Diane Abbott MP", Date.new(2015, 5, 7)) }
-    let(:mp_meg) { ConstituencyApi::Mp.new("1524", "Meg Hillier MP", Date.new(2015, 5, 7)) }
-    let(:mp_keir) { ConstituencyApi::Mp.new("4514", "Keir Starmer MP", Date.new(2015, 5, 7)) }
-    let(:mp_jeremy) { ConstituencyApi::Mp.new("185", "Jeremy Corbyn MP", Date.new(2015, 5, 7)) }
-
-    let(:constituencies_islington) { [ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", mp_emily)] }
-    let(:constituencies_n1) { [ConstituencyApi::Constituency.new('3506', "Hackney North and Stoke Newington", mp_diane),
-                               ConstituencyApi::Constituency.new('3507', "Hackney South and Shoreditch", mp_meg),
-                               ConstituencyApi::Constituency.new('3536', "Holborn and St Pancras", mp_keir),
-                               ConstituencyApi::Constituency.new('3549', "Islington North", mp_jeremy),
-                               ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", mp_emily)] }
-    let(:constituencies_holborn) { [ConstituencyApi::Constituency.new('3536', "Holborn and St Pancras", mp_keir)] }
-    let(:constituencies_islington_no_mp) { [ConstituencyApi::Constituency.new('3550', "Islington South and Finsbury", nil)] }
-
-    let(:empty_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_results.xml")) }
-    let(:fake_body) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N11TY.xml")) }
-    let(:fake_body_multiple) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N1.xml")) }
-    let(:fake_body_multiple_mps) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "N1C4QP.xml")) }
-    let(:fake_body_no_mps) { IO.read(Rails.root.join("spec", "fixtures", "constituency_api", "no_mps.xml")) }
-
-    it "returns an empty Constituency array for invalid postcode" do
-      stub_request(:get, "#{ api_url }/SW149RQ/").to_return(status: 200, body: empty_body)
-      expect(api.constituencies("SW14 9RQ")).to match_array []
+    def stub_api_request(postcode, status, body)
+      stub_request(:get, api_url(postcode)).to_return(api_response(status, body))
     end
 
-    it "returns Constituency array for valid postcode" do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-      expect(api.constituencies("N11TY")).to match_array constituencies_islington
+    def api_url(postcode)
+      "#{endpoint}/#{postcode}/"
     end
 
-    it "returns Constituency array for valid postcode with whitespaces" do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-      expect(api.constituencies("N1 1TY ")).to match_array constituencies_islington
+    def api_response(status, body)
+      { status: status, body: api_fixture(body) }
     end
 
-    it "returns Constituency array for valid postcode with lowercase" do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body)
-      expect(api.constituencies("n11ty")).to match_array constituencies_islington
+    def api_fixture(body)
+      File.read(Rails.root.join("spec", "fixtures", "constituency_api", "#{body}.xml"))
     end
 
-    it "returns Constituency array with multiple entries" do
-      stub_request(:get, "#{ api_url }/N1/").to_return(status: 200, body: fake_body_multiple)
-      expect(api.constituencies("N1")).to match_array constituencies_n1
+    def mp(id, name)
+      ConstituencyApi::Mp.new(id, name, Date.new(2015, 5, 7))
     end
 
-    it "returns Constituency array with the last MP where the MP has changed since the last term" do
-      stub_request(:get, "#{ api_url }/N1/").to_return(status: 200, body: fake_body_multiple_mps)
-      expect(api.constituencies("N1")).to match_array constituencies_holborn
+    def constituency(id, name, mp = nil, &block)
+      ConstituencyApi::Constituency.new(id, name, (block_given? ? block.call : mp))
     end
 
-    it 'handles a constituency without an MP' do
-      stub_request(:get, "#{ api_url }/N11TY/").to_return(status: 200, body: fake_body_no_mps)
-      expect(api.constituencies("N1 1TY")).to eq constituencies_islington_no_mp
+    describe "#constituency" do
+      context "when there multiple constituencies" do
+        before do
+          stub_api_request("N1", 200, "multiple")
+        end
+
+        it "returns the first constituency result" do
+          expect(api.constituency("N1")).to eq(
+            constituency("3506", "Hackney North and Stoke Newington") {
+              mp("172", "Ms Diane Abbott MP")
+            }
+          )
+        end
+      end
     end
 
-    it "handles timeout errors" do
-      stub_request(:any, /.*data.parliament.uk.*/).to_timeout
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
-    end
+    describe "#constituencies" do
+      context "when an invalid postcode is supplied" do
+        before do
+          stub_api_request("SW149RQ", 200, "no_results")
+        end
 
-    it "handles connection failed errors" do
-      stub_request(:any, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ConnectionFailed)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
-    end
+        it "returns an empty array" do
+          expect(api.constituencies("SW14 9RQ")).to eq([])
+        end
+      end
 
-    it "handles resource not found errors" do
-      stub_request(:any, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ResourceNotFound)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
-    end
+      context "when there is a single result" do
+        before do
+          stub_api_request("N11TY", 200, "single")
+        end
 
-    it "handles unexpected response" do
-      stub_request(:get, "#{ api_url }/N1/").to_return(status: 500, body: fake_body)
-      expect{ api.constituencies("N1").count }.to raise_error(ConstituencyApi::Error)
+        it "returns an array" do
+          expect(api.constituencies("N11TY")).to eq([
+            constituency("3550", "Islington South and Finsbury") {
+              mp("1536", "Emily Thornberry MP")
+            }
+          ])
+        end
+
+        it "returns an array for a postcode with whitespaces" do
+          expect(api.constituencies("N1 1TY ")).to eq([
+            constituency("3550", "Islington South and Finsbury") {
+              mp("1536", "Emily Thornberry MP")
+            }
+          ])
+        end
+
+        it "returns an array for a postcode with lowercase characters" do
+          expect(api.constituencies("n11ty")).to eq([
+            constituency("3550", "Islington South and Finsbury") {
+              mp("1536", "Emily Thornberry MP")
+            }
+          ])
+        end
+      end
+
+      context "when there are multiple constituencies" do
+        before do
+          stub_api_request("N1", 200, "multiple")
+        end
+
+        it "returns an array with multiple entries" do
+          expect(api.constituencies("N1")).to eq([
+            constituency("3506", "Hackney North and Stoke Newington") {
+              mp("172", "Ms Diane Abbott MP")
+            },
+            constituency("3507", "Hackney South and Shoreditch") {
+              mp("1524", "Meg Hillier MP")
+            },
+            constituency("3536", "Holborn and St Pancras") {
+              mp("4514", "Keir Starmer MP")
+            },
+            constituency("3549", "Islington North") {
+              mp("185", "Jeremy Corbyn MP")
+            },
+            constituency("3550", "Islington South and Finsbury") {
+              mp("1536", "Emily Thornberry MP")
+            }
+          ])
+        end
+      end
+
+      context "when the MP has changed" do
+        before do
+          stub_api_request("N1C4QP", 200, "changed")
+        end
+
+        it "returns an array with the last MP" do
+          expect(api.constituencies("N1C 4QP")).to eq([
+            constituency("3536", "Holborn and St Pancras") {
+              mp("4514", "Keir Starmer MP")
+            }
+          ])
+        end
+      end
+
+      context "when there is no sitting MP" do
+        before do
+          stub_api_request("N11TY", 200, "no_mps")
+        end
+
+        it "handles a constituency without an MP" do
+          expect(api.constituencies("N1 1TY")).to eq([
+            constituency("3550", "Islington South and Finsbury", nil)
+          ])
+        end
+      end
+
+      context "when the API is not responding" do
+        before do
+          stub_request(:get, /.*data.parliament.uk.*/).to_timeout
+        end
+
+        it "raises a ConstituencyApi::Error" do
+          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        end
+      end
+
+      context "when the API is blocking connections" do
+        before do
+          stub_request(:get, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ConnectionFailed)
+        end
+
+        it "raises a ConstituencyApi::Error" do
+          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        end
+      end
+
+      context "when the API can't find the resource" do
+        before do
+          stub_request(:get, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ResourceNotFound)
+        end
+
+        it "raises a ConstituencyApi::Error" do
+          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        end
+      end
+
+      context "when the API is returning an internal server error" do
+        before do
+          stub_request(:get, /.*data.parliament.uk.*/).to_return(status: 500, body: "<Constituencies/>")
+        end
+
+        it "raises a ConstituencyApi::Error" do
+          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        end
+      end
     end
   end
 end
-

@@ -66,7 +66,7 @@ When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
 
   if postcode == 'N1 1TY'
-    stub_constituency_from_file(postcode, Rails.root.join("spec", "fixtures", "constituency_api", "N11TY.xml"))
+    stub_constituency_from_file(postcode, Rails.root.join("spec", "fixtures", "constituency_api", "single.xml"))
   else
     stub_no_constituencies(postcode)
   end
