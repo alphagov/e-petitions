@@ -1,5 +1,4 @@
 module HomeHelper
-
   class PetitionCountsDecorator
     delegate :each, :empty?, to: :counts
 
@@ -26,4 +25,8 @@ module HomeHelper
     t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
   end
 
+  def trending_petitions
+    petitions = Petition.trending.to_a
+    yield petitions unless petitions.empty?
+  end
 end

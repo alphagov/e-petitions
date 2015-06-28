@@ -6,13 +6,6 @@ RSpec.describe StaticPagesController, type: :controller do
       expect({:get => "/"}).to route_to({:controller => "static_pages", :action => "home"})
       expect(home_path).to eq "/"
     end
-
-    it "assigns trending petitions" do
-      trending_petitions = [double]
-      allow(Petition).to receive_messages(:last_hour_trending => trending_petitions)
-      get :home
-      expect(assigns(:trending_petitions)).to eq trending_petitions
-    end
   end
 
   describe "help" do

@@ -57,7 +57,7 @@ FactoryGirl.define do
     end
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
-    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE)) }
+    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
     after(:build) do |petition, evaluator|
       evaluator.sponsor_count.times do
         petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
