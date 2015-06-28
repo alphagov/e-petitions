@@ -28,6 +28,6 @@ en-GB:
       show: "%{petition} - Support this petition - Petitions"
       sponsored: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
-    static_pages:
-      home: "Petition parliament"
+    pages:
+      index: "Petition parliament"
       help: "Help"

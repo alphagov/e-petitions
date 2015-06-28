@@ -17,8 +17,8 @@ RSpec.describe PageTitleHelper, type: :helper do
   let :translations do
     { page_titles: {
         default: "Une pétition au Parlement",
-        static_pages: {
-          home: "Une pétition au Parlement - vers le bas avec ce genre de chose"
+        pages: {
+          index: "Une pétition au Parlement - vers le bas avec ce genre de chose"
         },
         local_petitions: {
           index: "Pétitions à %{constituency}"
@@ -32,8 +32,8 @@ RSpec.describe PageTitleHelper, type: :helper do
   describe "#page_title" do
     context "when the controller and action keys exist" do
       before do
-        params[:controller] = "static_pages"
-        params[:action] = "home"
+        params[:controller] = "pages"
+        params[:action] = "index"
       end
 
       it "uses the key 'page_titles.controller.action'" do

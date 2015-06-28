@@ -4,8 +4,8 @@ RSpec.describe ApplicationHelper, type: :helper do
   describe "#home_page?" do
     context "when on the home page" do
       before do
-        params[:controller] = "static_pages"
-        params[:action] = "home"
+        params[:controller] = "pages"
+        params[:action] = "index"
       end
 
       it "returns true" do
@@ -15,7 +15,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     context "when not on the home page" do
       before do
-        params[:controller] = "static_pages"
+        params[:controller] = "pages"
         params[:action] = "help"
       end
 

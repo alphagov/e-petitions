@@ -5,6 +5,6 @@ module ApplicationHelper
   end
 
   def home_page?
-    params.values_at(:controller, :action) == %w[static_pages home]
+    params.values_at(:controller, :action) == %w[pages index]
   end
 end
