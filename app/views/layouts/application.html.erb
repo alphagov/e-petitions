@@ -12,9 +12,9 @@
     <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
     <meta name="viewport" content="width = device-width"/>
-    <%= render 'shared/os' %>
-    <%= render 'shared/social_meta' %>
-    <%= render 'layouts/analytics' %>
+    <%= render 'os' %>
+    <%= render 'social_meta' %>
+    <%= render 'analytics' %>
   </head>
   <body>
     <% if show_cookie_message? %>
@@ -23,15 +23,15 @@
       </div>
     <% end %>
 
-    <%= render "shared/header" %>
+    <%= render "header" %>
 
     <main id="content" role="main">
       <%= yield :title %>
-      <%= render 'shared/messages' %>
+      <%= render 'messages' %>
       <%= yield %>
     </main>
 
-    <%= render "shared/footer" %>
+    <%= render "footer" %>
 
     <%= javascript_include_tag 'application' %>
     <% if create_petition_page? %>
