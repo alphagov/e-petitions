@@ -7,4 +7,8 @@ module ApplicationHelper
   def home_page?
     params.values_at(:controller, :action) == %w[pages index]
   end
+
+  def create_petition_page?
+    params[:controller] == 'petitions' && params[:action].in?(%w[check create new])
+  end
 end

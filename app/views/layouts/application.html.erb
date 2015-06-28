@@ -34,6 +34,8 @@
     <%= render "shared/footer" %>
 
     <%= javascript_include_tag 'application' %>
-    <%= yield :js %>
+    <% if create_petition_page? %>
+      <%= javascript_include_tag 'create-petition' %>
+    <% end %>
   </body>
 </html>
