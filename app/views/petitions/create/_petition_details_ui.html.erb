@@ -9,7 +9,7 @@
 <%= form_row :for => [petition, :action] do %>
   <%= f.label :action, 'What do you want us to do?', class: 'form-label' %>
   <%= error_messages_for_field petition, :action %>
-  <%= f.text_area :action, tabindex: increment, rows: 3, 'data-max-length': '80', class: 'form-control' %>
+  <%= f.text_area :action, tabindex: increment, rows: 3, 'data-max-length' => '80', class: 'form-control' %>
   <p class="character-count">80 characters max</p>
   <%= render 'petitions/action_help' %>
 <% end %>
@@ -17,7 +17,7 @@
 <%= form_row :for => [petition, :background] do %>
   <%= f.label :background, 'Background', class: 'form-label' %>
   <%= error_messages_for_field petition, :background %>
-  <%= f.text_area :background, tabindex: increment, rows: 5, 'data-max-length': '300', class: 'form-control' %>
+  <%= f.text_area :background, tabindex: increment, rows: 5, 'data-max-length' => '300', class: 'form-control' %>
   <p class="character-count">300 characters max</p>
   <details class="form-group-help">
     <summary><span class="summary">Help writing background</span></summary>
@@ -34,7 +34,7 @@
     <span class='form-hint'>Optional - background information, evidence and references</span>
   <% end %>
   <%= error_messages_for_field petition, :additional_details %>
-  <%= f.text_area :additional_details, tabindex: increment, rows: 7, 'data-max-length': '500', class: 'form-control' %>
+  <%= f.text_area :additional_details, tabindex: increment, rows: 7, 'data-max-length' => '500', class: 'form-control' %>
   <p class="character-count">500 characters max</p>
 <% end %>
 
