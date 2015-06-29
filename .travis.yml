@@ -9,7 +9,7 @@ before_script:
 - bundle install
 - psql -c 'create database epets_test;' -U postgres
 script: bundle exec rake
-after_success: RAILS_ENV=development bundle exec rake deploy:staging
+after_success: RAILS_ENV=development bundle exec rake deploy:preview
 env:
   global:
   - secure: bqjqhceSOQYekPv5swVtYTjKG9A689j3xRFRqBxbzYEpYy+pujIQK+jIFARWtQqUULI/ZFc0ERZMpFHfWG9IwTvMwKti5L/hT5n/uGT7XlAMp0pH+mA9D+/3sHQyN+66uRfAHyz6fdd2pz/nDYq5KJtpkN/GTBhXQgO5KHTggMQ=
