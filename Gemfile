@@ -29,6 +29,7 @@ gem 'faker'
 gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
+gem 'delayed-web', github: 'thebestday/delayed-web'
 
 group :development, :test do
   gem 'rspec-rails'
