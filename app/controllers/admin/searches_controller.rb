@@ -1,6 +1,6 @@
 class Admin::SearchesController < Admin::AdminController
 
-  def result
+  def show
     @query = params[:search][:query]
     if is_number?(@query)
       find_petition_by_id(@query)
