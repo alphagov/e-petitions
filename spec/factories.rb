@@ -71,6 +71,10 @@ FactoryGirl.define do
     trait :with_additional_details do
       additional_details "Petition additional details"
     end
+
+    trait :scheduled_for_debate do
+      scheduled_debate_date { 10.days.from_now }
+    end
   end
 
   factory :pending_petition, :parent => :petition do
@@ -141,10 +145,6 @@ FactoryGirl.define do
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
       petition.create_debate_outcome(debate_outcome_attributes)
     end
-  end
-
-  trait :scheduled_for_debate do
-    scheduled_debate_date 10.days.from_now
   end
 
   factory :signature do
