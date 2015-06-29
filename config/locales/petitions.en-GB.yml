@@ -120,12 +120,20 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in parliament"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in parliament"
+      with_response_explanation:
+        html:
+          zero: "There aren't any petitions with a government response yet"
+          other: "Petitions with a government response (%{formatted_count})"
+      with_debate_outcome_explanation:
+        html:
+          zero: There aren't any petitions that have been debated in parliament yet
+          other: "Petitions debated in parliament (%{formatted_count})"
 
     action_counts:
-      in_moderation: 
+      in_moderation:
         html:
           "<span class=\"count\">%{formatted_count}</span> Moderation queue"
-      awaiting_response: 
+      awaiting_response:
         html:
           "<span class=\"count\">%{formatted_count}</span> Government response queue"
       all:
