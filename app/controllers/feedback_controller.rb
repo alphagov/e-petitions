@@ -5,6 +5,7 @@ class FeedbackController < ApplicationController
     respond_with @feedback = Feedback.new
   end
 
+  # TODO: We should use deliver_later but serializing the feedback model is tricky.
   def create
     @feedback = Feedback.new(params[:feedback])
     if @feedback.valid?

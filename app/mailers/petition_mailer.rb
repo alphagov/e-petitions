@@ -48,7 +48,7 @@ class PetitionMailer < ApplicationMailer
     mail to: @pending_signature.email, subject: subject_for(:one_pending_one_validated_signature)
   end
 
-  def double_signature_confirmation(signatures)
+  def double_signature_confirmation(*signatures)
     @signature_one, @signature_two = signatures.first, signatures.second
     mail to: @signature_one.email, subject: subject_for(:double_signature_confirmation)
   end

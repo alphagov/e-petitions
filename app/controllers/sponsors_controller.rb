@@ -81,6 +81,6 @@ class SponsorsController < ApplicationController
   end
 
   def send_email_to_sponsor(sponsor)
-    SponsorMailer.petition_and_email_confirmation_for_sponsor(sponsor).deliver_now
+    SponsorMailer.petition_and_email_confirmation_for_sponsor(sponsor).deliver_later
   end
 end

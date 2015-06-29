@@ -27,6 +27,7 @@ RSpec.describe PetitionsController, type: :controller do
 
   describe "create" do
     include ConstituencyApiHelpers::ApiLevel
+    include ActiveJob::TestHelper
 
     let(:creator_signature_attributes) do
       {
@@ -52,7 +53,10 @@ RSpec.describe PetitionsController, type: :controller do
         :petition => petition_attributes
       }.merge(options)
       stub_constituency(params[:petition][:creator_signature][:postcode], constituency)
-      post :create, params
+
+      perform_enqueued_jobs do
+        post :create, params
+      end
     end
 
     it "should respond to posts to /petitions/new" do
