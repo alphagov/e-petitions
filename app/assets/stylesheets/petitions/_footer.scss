@@ -26,10 +26,6 @@
     clear: left;
     position: relative;
 
-    @include media(tablet) {
-      padding-left: 53px;
-    }
-
     @include ie(6) {
       zoom: 1;
     }
@@ -37,13 +33,6 @@
     .logo {
       margin-bottom: 1em;
       padding-top: 0;
-      @include media(tablet) {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 41px;
-        height: 100%;
-      }
 
       a {
         display: block;
@@ -63,6 +52,12 @@
       padding-top: 0.1em;
     }
   }
+
+  @include media(tablet) {
+    .wrapper {
+      position: relative;
+    }
+  }
 }
 
 .copyright {
@@ -74,11 +69,12 @@
   text-align: center;
 
   @include media(tablet) {
-    display: inline-block;
-    text-align: inherit;
-    width: 25%;
-    padding-top: 15px;
+    max-width: 200px;
+    position: absolute;
+    top: 0;
+    right: 0;
     margin-top: 0;
+    text-align: right;
   }
 
   @include ie-lte(7) {
@@ -93,15 +89,9 @@
 
   a {
     display: block;
-
-    text-align: center;
     text-decoration: none;
 
     margin-top: $gutter-half;
-
-    @include media(tablet) {
-      text-align: right;
-    }
 
   }
 }

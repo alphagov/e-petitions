@@ -1,11 +1,20 @@
 // Adds to ../govuk_elements/_forms.scss
 
+.form-control {
+  width: 100%;
+  padding: 0.5em;
+}
+
 select.form-control {
   -webkit-appearance: menulist;
 }
 
 .form-control.small {
   width: 8.5em;
+
+  @include media(tablet) {
+    width: 50%;
+  }
 }
 
 .form-group {
@@ -24,10 +33,6 @@ select.form-control {
 // Replication .form-label-bold without the font
 .error .form-label {
   @extend .form-label-bold;
-}
-
-.form-control {
-  padding: 0.5em;
 }
 
 .character-count {

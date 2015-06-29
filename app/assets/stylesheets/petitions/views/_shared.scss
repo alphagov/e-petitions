@@ -14,11 +14,11 @@
     left: 0;
     top: 0;
     height: 25px;
-  }
 
-  .signature-number {
-    @include bold-48();
-    display: block;
+    @include media(tablet) {
+      top: em(5, 36);
+    }
+
   }
 }
 .page-title-with-icon {
@@ -63,6 +63,13 @@ input.back-page {
   margin-top: $gutter-half;
   margin-bottom: $gutter-half;
   padding: 0 $gutter-half $gutter-half;
+
+  @include media(tablet){
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 // Notifications

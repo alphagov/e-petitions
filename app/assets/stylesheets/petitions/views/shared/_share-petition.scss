@@ -3,7 +3,7 @@
 .petition-share {
   $icon-size: 19px;
   @extend %contain-floats;
-  margin: 0 $gutter-half * -1;
+  @extend %outdent-to-full-width;
   border-bottom: 1px solid $panel-colour;
   li {
     float: left;
@@ -12,8 +12,8 @@
     border-top: 1px solid $panel-colour;
     padding: 10px $gutter-half;
   }
-  li:nth-child(odd) {
-    border-right: 1px solid $panel-colour;
+  li:nth-child(even) {
+    border-left: 1px solid $panel-colour;
   }
   a {
     color: $text-colour;
@@ -35,8 +35,24 @@
     margin-top: $icon-size / 2 * -1;
     background-position: center left;
   }
-  .petition-share-whatsapp a {
-    @include media(desktop) {
+  @include media(tablet) {
+    margin-left: 0;
+    margin-right: 0;
+
+    li {
+      width: 25%;
+      border-left: 1px solid $panel-colour;
+      border-right: none;
+    }
+    li:first-child {
+      border-left: none;
+    }
+  }
+  @include media(desktop) {
+    li {
+      width: 33.3333%;
+    }
+    .petition-share-whatsapp {
       display: none;
     }
   }
