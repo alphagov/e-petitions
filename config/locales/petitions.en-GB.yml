@@ -47,6 +47,7 @@ en-GB:
         - :with_response
         - :awaiting_debate_date
         - :with_debate_outcome
+        - :in_debate_queue
       names:
         admin:
           all: "All petitions"
@@ -128,6 +129,9 @@ en-GB:
       awaiting_response:
         html:
           "<span class=\"count\">%{formatted_count}</span> Government response queue"
+      in_debate_queue:
+        html:
+          "<span class=\"count\">%{formatted_count}</span> Debate queue"
       all:
         html:
           "<span class=\"count\">%{formatted_count}</span> All petitions"
