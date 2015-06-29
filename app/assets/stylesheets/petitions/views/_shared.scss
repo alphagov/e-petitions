@@ -145,22 +145,30 @@ input.back-page {
 }
 
 .about-item {
-  padding: 0 0 0 50px;
+  padding: $gutter-two-thirds 0 0 0;
+
+  p {
+    margin: em(5, 16) 0;
+
+    @include media(tablet) {
+      margin: em(10, 19) 0;
+    }
+  }
+
   h2 {
     @include bold-36;
     span { @include bold-19; }
-    margin-top: em(10, 24);
-    margin-bottom: em(5, 24);
+    margin: em(5, 24) 0;
 
     @include media(tablet) {
-      margin-top: em(15, 36);
+      margin: em(10, 36) 0;
     }
   }
   h3 {
     margin-top: em(10, 16);
 
     @include media(tablet) {
-      margin-top: em(15, 19);
+      margin: em(5, 19) 0;
     }
   }
   blockquote {
@@ -177,35 +185,6 @@ input.back-page {
   }
 }
 
-.about-item-sign {
-  @include background-image("graphics/graphic_pen", 25px, 35px);
-  background-repeat: no-repeat;
-  background-position: 10px 0px;
-}
-.about-item-count-10000 {
-  @include background-image("graphics/graphic_crown", 36px, 25px);
-  background-repeat: no-repeat;
-  background-position: 0px 0px;
-}
-.about-item-count-100000 {
-  @include background-image("graphics/graphic_portcullis", 26px, 32px);
-  background-repeat: no-repeat;
-  background-position: 3px 0px;
-}
-
 .about-item-scheduled-debate-date {
   @include bold-19;
-}
-
-// Light variation
-.about-petitions-light {
-  .about-item {
-    color: $secondary-text-colour;
-  }
-  .about-item-count-10000 {
-    @include background-image("graphics/graphic_crown-grey", 35px, 25px);
-  }
-  .about-item-count-100000 {
-    @include background-image("graphics/graphic_portcullis-grey", 26px, 32px);
-  }
 }

@@ -10,6 +10,10 @@
 
 .signature-count {
   @include bold-48;
+  margin: em(10, 32) 0;
+  @include media(tablet) {
+    margin: em(15, 48) 0;
+  }
 
   span {
     @include bold-36;

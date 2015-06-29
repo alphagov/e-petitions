@@ -1,4 +1,4 @@
-<div class="about-petitions <%= local_assigns[:variation] %>">
+<div class="about-petitions">
   <%-
     order = ['response_threshold', 'debate_threshold']
     order.reverse! if petition.debate_outcome.present? or petition.scheduled_debate_date.present?
