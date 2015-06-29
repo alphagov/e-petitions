@@ -1,25 +1,53 @@
-<% content_for(:page_title) { "Petitions in #{@constituency.name}" } %>
-<h1 class="page-title">Popular petitions in the constituency of <%= @constituency.name %></h1>
+<% content_for(:page_title) { "Petitions in #{@constituency.name}" } if @constituency.present? %>
+<h1 class="page-title">
+  <% if @petitions.present? %>
+    Popular petitions in the constituency of <%= @constituency.name %>
+  <% elsif @postcode.present? %>
+    Sorry!
+  <% else %>
+    Local to you
+  <% end %>
+</h1>
 
-<% if @constituency.mp %>
+<% if @constituency && @constituency.mp %>
   <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url, rel: 'external' %></p>
 <% end %>
 
-<div class="section-panel local-petitions">
-  <% if @petitions.any? %>
-    <ol>
-      <% @petitions.each do |petition| %>
-        <li class="petition-item petition-<%= petition.state %>">
-          <%= link_to petition.action, petition_path(petition) %>
-          <p>
-            <%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %>
-            <br/>
-            (<%= signature_count(:in_total, petition.signature_count) %>)
-          </p>
-        </li>
-      <% end -%>
-    </ol>
+<% if @petitions.present? %>
+
+  <div class="section-panel local-petitions">
+    <% if @petitions.any? %>
+      <ol>
+        <% @petitions.each do |petition| %>
+          <li class="petition-item petition-<%= petition.state %>">
+            <%= link_to petition.action, petition_path(petition) %>
+            <p>
+              <%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %>
+              <br/>
+              (<%= signature_count(:in_total, petition.signature_count) %>)
+            </p>
+          </li>
+        <% end -%>
+      </ol>
+    <% else %>
+      <p>No petitions are popular in your constituency.</p>
+    <% end %>
+  </div>
+
+<% else %>
+
+  <% if @postcode.blank? %>
+    <p>Find petitions about local issues</p>
   <% else %>
-    <p>No petitions are popular in your constituency.</p>
+    <p>
+      We could not find your constituency from the postcode you provided:
+      <q><%= params[:postcode] %></q>.
+    </p>
+    <p>
+      It's possible that the API we use is down, or that your postcode wasn't
+      recognised. Why not try again?
+    </p>
   <% end %>
-</div>
+
+  <%= render 'local_search' %>
+<% end %>

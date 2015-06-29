@@ -50,7 +50,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
         it 'responds successfully and renders the error template' do
           get :index, params
           expect(response).to be_success
-          expect(response).to render_template 'local_petitions/constituency_lookup_failed'
+          expect(response).to render_template 'local_petitions/index'
         end
       end
 
@@ -68,14 +68,14 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     shared_examples_for 'a local petitions controller that does not try to lookup a constituency' do
       it 'does not communicate with the API' do
-        expect(ConstituencyApi::Client).not_to receive(:constituencies)
+        expect(ConstituencyApi::Client).not_to receive(:constituency)
         get :index, params
       end
 
       it 'responds successfully and renders the blank postcode template' do
         get :index, params
         expect(response).to be_success
-        expect(response).to render_template 'local_petitions/no_postcode_provided'
+        expect(response).to render_template 'local_petitions/index'
       end
     end
 
