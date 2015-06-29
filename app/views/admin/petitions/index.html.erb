@@ -1,6 +1,4 @@
-<p>
-  <%= render 'admin/searches/form', query: @query %>
-</p>
+<%= render 'admin/searches/form', query: @query %>
 
 <%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
   <%= label_tag :state, "Filter by status:" %>
