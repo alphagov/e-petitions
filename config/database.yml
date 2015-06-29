@@ -15,4 +15,4 @@ test:
 production:
   <<: *default
   database: epets_production
-  pool: 16
+  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
