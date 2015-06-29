@@ -31,7 +31,7 @@
     <div class="threshold-panel-header">
       <span class="graphic graphic-crown-white"></span>
       <h2 id="response-threshold-heading"><%= number_with_delimiter Site.threshold_for_response %> <span>signatures</span></h2>
-      <p>If a petition gets 10,000 signatures, the government will respond</p>
+      <p>If a petition gets <%= number_with_delimiter Site.threshold_for_response %>, the government will respond</p>
     </div>
     <div class="threshold-panel-body">
       <p><%= link_to_unless counts[:with_response].zero?, petition_count(:with_response_explanation, counts[:with_response]), petitions_path(state: :with_response) %></p>
@@ -41,8 +41,8 @@
   <section class="threshold-panel"  aria-labelledby="debate-threshold-heading">
     <div class="threshold-panel-header">
       <span class="graphic graphic-portcullis-white"></span>
-      <h2 id="debate-threshold-heading"><%= number_with_delimiter Site.threshold_for_response %> <span>signatures</span></h2>
-      <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>
+      <h2 id="debate-threshold-heading"><%= number_with_delimiter Site.threshold_for_debate %> <span>signatures</span></h2>
+      <p>If a petition gets <%= number_with_delimiter Site.threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
     </div>
     <div class="threshold-panel-body">
       <p><%= link_to_unless counts[:with_debate_outcome].zero?, petition_count(:with_debate_outcome_explanation, counts[:with_debate_outcome]), petitions_path(state: :with_debate_outcome) %></p>
