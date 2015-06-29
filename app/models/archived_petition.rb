@@ -5,6 +5,8 @@ class ArchivedPetition < ActiveRecord::Base
   REJECTED_STATE = 'rejected'
   STATES = [OPEN_STATE, REJECTED_STATE]
 
+  alias_attribute :action, :title
+
   validates :title, presence: true, length: { maximum: 150 }
   validates :description, presence: true, length: { maximum: 1000 }
   validates :state, presence: true, inclusion: STATES

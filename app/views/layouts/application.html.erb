@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-GB">
   <head>
-    <% @title = yield :page_title; @title = "Petition parliament" if @title.blank? -%>
-    <title><%= @title %></title>
+    <title><%= page_title %></title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href='//fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 
@@ -13,9 +12,9 @@
     <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
     <meta name="viewport" content="width = device-width"/>
-    <%= render 'shared/os' %>
-    <%= render 'shared/social_meta' %>
-    <%= render 'layouts/analytics' %>
+    <%= render 'os' %>
+    <%= render 'social_meta' %>
+    <%= render 'analytics' %>
   </head>
   <body>
     <% if show_cookie_message? %>
@@ -24,17 +23,18 @@
       </div>
     <% end %>
 
-    <%= render "shared/header" %>
+    <%= render "header" %>
 
     <main id="content" role="main">
-      <%= yield :title %>
-      <%= render 'shared/messages' %>
+      <%= render 'messages' %>
       <%= yield %>
     </main>
 
-    <%= render "shared/footer" %>
+    <%= render "footer" %>
 
     <%= javascript_include_tag 'application' %>
-    <%= yield :js %>
+    <% if create_petition_page? %>
+      <%= javascript_include_tag 'create-petition' %>
+    <% end %>
   </body>
 </html>

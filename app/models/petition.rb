@@ -68,16 +68,6 @@ class Petition < ActiveRecord::Base
 
   # = Finders =
   scope :threshold, -> { where('signature_count >= ?', Site.threshold_for_debate) }
-
-  scope :for_state, ->(state) {
-    if CLOSED_STATE.casecmp(state) == 0
-      where('state = ? AND closed_at < ?', OPEN_STATE, Time.current)
-    elsif OPEN_STATE.casecmp(state) == 0
-      where('state = ? AND closed_at >= ?', OPEN_STATE, Time.current)
-    else
-      where(state: state)
-    end
-  }
   scope :not_hidden, -> { where.not(state: HIDDEN_STATE) }
   scope :visible, -> { where(state: VISIBLE_STATES) }
   scope :moderated, -> { where(state: MODERATED_STATES) }
@@ -85,44 +75,52 @@ class Petition < ActiveRecord::Base
   scope :in_moderation, -> { where(state: SPONSORED_STATE) }
   scope :todo_list, -> { where(state: TODO_LIST_STATES) }
   scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }
-  scope :last_hour_trending, -> {
-                              joins(:signatures).
-                              select("petitions.*, count('signatures.id') as signatures_in_last_hour").
-                              where("petitions.state" => "open").
-                              where("signatures.state" => "validated").
-                              where("signatures.updated_at > ?", 1.hour.ago).
-                              order("signatures_in_last_hour DESC").
-                              group('petitions.id').
-                              limit(3)
-                            }
-
   scope :by_oldest, -> { order(created_at: :asc) }
-
   scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
-
   scope :without_debate_outcome, -> { where.not(id: DebateOutcome.select(:petition_id).uniq) }
-
   scope :awaiting_debate_date, ->  { where.not(debate_threshold_reached_at: nil) }
 
-  def self.awaiting_response
-    where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
-  end
+  class << self
+    def awaiting_response
+      where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
+    end
 
-  def self.with_invalid_signature_counts
-    where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
-  end
+    def for_state(state)
+      if state == CLOSED_STATE
+        where('state = ? AND closed_at < ?', OPEN_STATE, Time.current)
+      elsif state == OPEN_STATE
+        where('state = ? AND closed_at >= ?', OPEN_STATE, Time.current)
+      else
+        where(state: state)
+      end
+    end
 
-  def self.popular_in_constituency(constituency_id, how_many = 50)
-    # NOTE: this query is complex, so we'll flatten it at the end
-    # to prevent chaining things off the end that might break it.
-    self.
-      select("#{table_name}.*, #{ConstituencyPetitionJournal.table_name}.signature_count AS constituency_signature_count").
-      for_state(OPEN_STATE).
-      joins(:constituency_petition_journals).
-      merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
-      limit(how_many).
-      to_a
+    def trending(since = 1.hour.ago, limit = 3)
+      select('petitions.*, COUNT(signatures.id) AS signature_count_in_period').
+      joins(:signatures).
+      where('petitions.state = ?', OPEN_STATE).
+      where('petitions.last_signed_at > ?', since).
+      where('signatures.validated_at > ?', since).
+      group('petitions.id').order('signature_count_in_period DESC').
+      limit(3)
+    end
+
+    def with_invalid_signature_counts
+      where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
+    end
+
+    def popular_in_constituency(constituency_id, how_many = 50)
+      # NOTE: this query is complex, so we'll flatten it at the end
+      # to prevent chaining things off the end that might break it.
+      self.
+        select("#{table_name}.*, #{ConstituencyPetitionJournal.table_name}.signature_count AS constituency_signature_count").
+        for_state(OPEN_STATE).
+        joins(:constituency_petition_journals).
+        merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
+        limit(how_many).
+        to_a
+    end
   end
 
   def update_signature_count!

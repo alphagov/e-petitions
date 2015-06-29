@@ -1,11 +1,3 @@
-<% content_for(:page_title) { "Start a petition - Petitions" } %>
-
 <%= form_for @stage_manager.stage_object, :url => create_petition_path do |f| %>
-
   <%= render_petition_form @stage_manager, f %>
-
 <% end %>
-
-<% content_for :js do -%>
-<%= javascript_include_tag 'create-petition' %>
-<% end -%>

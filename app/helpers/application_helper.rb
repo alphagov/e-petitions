@@ -4,12 +4,11 @@ module ApplicationHelper
     @counter += amount
   end
 
-  def new_window_link_to(label, path, options = {})
-    link_to raw(label + ' <span class="new_window_icon">This link opens in a new window</span>'), path, options.merge(:target => '_blank')
+  def home_page?
+    params.values_at(:controller, :action) == %w[pages index]
   end
 
-  def info_link_to(path, options = {})
-    options[:class] = ("info_link " + options[:class]).strip
-    link_to "Click for more information", path, {:title => 'Click for more information'}.merge(options)
+  def create_petition_page?
+    params[:controller] == 'petitions' && params[:action].in?(%w[check create new])
   end
 end

@@ -30,12 +30,12 @@ Feature: Suzie signs a petition
     And "womboid@wimbledon.com" should receive no email
     And "womboidian@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "You are signature 1"
+    Then I should see "You are signature 2"
     And I should see my constituency "Islington South and Finsbury"
     And I should see my MP
     And I can click on a link to visit my MP
     And I can click on a link to return to the petition
-    And I should see "You are signature 1"
+    And I should see "You are signature 2"
 
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
@@ -47,7 +47,7 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     When I confirm my email address
-    Then I should see "You are signature 1"
+    Then I should see "You are signature 2"
     And I should not see the text "Your constituency is"
     And I should not see the text "Your MP is"
 
@@ -96,10 +96,10 @@ Feature: Suzie signs a petition
   Scenario: Suzie sees notice that she has already signed when she validates more than once
     When I fill in my details and sign a petition
     And I confirm my email address
-    And I should see "You are signature 1"
+    And I should see "You are signature 2"
     And I can click on a link to return to the petition
     And I should have signed the petition
     When I confirm my email address
-    And I should see "You are signature 1"
+    And I should see "You are signature 2"
     And I can click on a link to return to the petition
     Then I should see that I have already signed the petition

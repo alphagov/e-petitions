@@ -1,9 +1,6 @@
-<% content_for(:page_title) { "#{@petition.action} - has been already sent to moderation - Petitions" } %>
-<% content_for :title do %>
-  <div class="title_block">
-    <h2><%= @petition.creator_signature.name %>'s petition - "<%= @petition.action %>" already has its 5 sponsors and we're taking a look to make sure it meets the Petitions service terms and conditions.<h2>
-    <h2>The petition should be available for signing in a few days.</h2>
-  </div>
-<% end %>
+<div class="title_block">
+  <h2><%= @petition.creator_signature.name %>'s petition - "<%= @petition.action %>" already has its 5 sponsors and we're taking a look to make sure it meets the Petitions service terms and conditions.<h2>
+  <h2>The petition should be available for signing in a few days.</h2>
+</div>
 
 <%= link_to "Return to home page", home_path, :class => 'link_button large_link_button return_to_homepage_button' %>

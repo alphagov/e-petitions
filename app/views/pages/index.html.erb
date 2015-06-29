@@ -1,7 +1,3 @@
-<% content_for :strap_line do -%>
-<p class="strap-line">Tell the government what you think</p>
-<% end -%>
-
 <h1 class="visuallyhidden">Petitions - tell the government what you think</h1>
 
 <% petition_counts do |counts| %>
@@ -17,12 +13,12 @@
 <% end %>
 
 <div class="section-panel">
-  <% if @trending_petitions.present? %>
+  <% trending_petitions do |petitions| %>
     <section class="trending" aria-labelledby="trending-heading">
       <h2 id="trending-heading">Popular petitions</h2>
       <ul>
-        <% @trending_petitions.each do |trending_petition| %>
-          <%= render 'petitions/trending_petition', :trending_petition => trending_petition %>
+        <% petitions.each do |petition| %>
+          <%= render 'petitions/trending_petition', :trending_petition => petition %>
         <% end -%>
       </ul>
     </section>

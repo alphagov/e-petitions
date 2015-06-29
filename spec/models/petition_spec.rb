@@ -152,41 +152,41 @@ RSpec.describe Petition, type: :model do
   end
 
   context "scopes" do
-    describe "last_hour_trending" do
+    describe "trending" do
       before(:each) do
         11.times do |count|
-          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
-          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
+          petition = FactoryGirl.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
+          count.times { FactoryGirl.create(:validated_signature, petition: petition) }
         end
 
-        @petition_with_old_signatures = FactoryGirl.create(:open_petition, :action => "petition out of range")
-        @petition_with_old_signatures.signatures.first.update_attribute(:updated_at, 2.hours.ago)
+        @petition_with_old_signatures = FactoryGirl.create(:open_petition, action: "petition out of range", last_signed_at: 2.hours.ago)
+        @petition_with_old_signatures.signatures.first.update_attribute(:validated_at, 2.hours.ago)
       end
 
       it "returns petitions trending for the last hour" do
-        expect(Petition.last_hour_trending.map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
+        expect(Petition.trending.map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
       end
 
       it "returns the signature count for the last hour as an additional attribute" do
-        expect(Petition.last_hour_trending.first.signatures_in_last_hour).to eq(11)
-        expect(Petition.last_hour_trending.last.signatures_in_last_hour).to eq(9)
+        expect(Petition.trending.first.signature_count_in_period).to eq(11)
+        expect(Petition.trending.last.signature_count_in_period).to eq(9)
       end
 
       it "limits the result to 3 petitions" do
         # 13 petitions signed in the last hour
         2.times do |count|
-          petition = FactoryGirl.create(:open_petition, :action => "petition ##{count+1}")
-          count.times { FactoryGirl.create(:validated_signature, :petition => petition) }
+          petition = FactoryGirl.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
+          count.times { FactoryGirl.create(:validated_signature, petition: petition) }
         end
 
-        expect(Petition.last_hour_trending.to_a.size).to eq(3)
+        expect(Petition.trending.to_a.size).to eq(3)
       end
 
       it "excludes petitions that are not open" do
         petition = FactoryGirl.create(:validated_petition)
-        20.times{ FactoryGirl.create(:validated_signature, :petition => petition) }
+        20.times{ FactoryGirl.create(:validated_signature, petition: petition) }
 
-        expect(Petition.last_hour_trending.to_a).not_to include(petition)
+        expect(Petition.trending.to_a).not_to include(petition)
       end
     end
 

@@ -1,5 +1,3 @@
-<% content_for(:page_title) { "Start a petition - Petitions" } %>
-
 <%= link_to check_petitions_path, class: "back-page" do %>
   &#9664; Back
 <% end %>
@@ -13,7 +11,7 @@
   <p>If there's already a petition on the same topic, your petition is likely to be rejected</p>
   <%= render 'petitions/search/results_for_pre_create_petition', petitions: @petitions %>
   <% create_button_text = "My petition is different" -%>
-  <%= render 'shared/notification', text: 'If there\'s already a petition on the same topic, your petition is likely to be rejected' %>
+  <%= render 'notification', text: 'If there\'s already a petition on the same topic, your petition is likely to be rejected' %>
 
   <p>If one of the petitions above matches yours, sign it and share it instead.</p>
   <p>You're more likely to get to 10,000 and 100,000 signatures that way.</p>
