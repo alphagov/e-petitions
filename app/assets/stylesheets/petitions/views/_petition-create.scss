@@ -5,5 +5,9 @@
     float: left;
     width: 1.2em;
     @include bold-80;
+
+    @include media(tablet) {
+      @include bold-48;
+    }
   }
 }
