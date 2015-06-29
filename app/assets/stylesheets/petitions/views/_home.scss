@@ -23,3 +23,9 @@
     display: block;
   }
 }
+
+@include media(tablet) {
+  .local-to-you input.form-control {
+    @include calc(width, "65% - 53px");
+  }
+}
