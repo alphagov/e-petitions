@@ -1,27 +1,23 @@
-<%= content_tag :div, class: 'flash-notice' do -%>
-  <p>This petition has been archived</p>
-  <p class="flash-notice-description">It was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government</p>
-<% end %>
-
 <h1>
   <span class="heading-secondary">Petition</span>
   <%= @petition.title %>
 </h1>
 
-<div class="description"><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
+<div><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
+
+<div class="flash-notice">
+  <p>This petition has been archived</p>
+  <p class="flash-notice-description">It was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government</p>
+</div>
 
 <% if @petition.rejected? %>
-  <div class="petition_rejected">
-    <h2>This petition has been rejected with the following reason given:</h2>
-    <div class="reason"><%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %></div>
-  </div>
+  <h2>This petition has been rejected with the following reason given:</h2>
+  <%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %>
 <% end -%>
 
 <% if @petition.response? %>
-  <div class="petition_response">
-    <h2>This petition has received the following response:</h2>
-    <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
-  </div>
+  <h2>This petition has received the following response:</h2>
+  <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
 <% end -%>
 
 <% unless @petition.rejected? %>
