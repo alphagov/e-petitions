@@ -3,8 +3,9 @@
 <%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
   <%= label_tag :state, "Filter by status:" %>
   <%= select_tag :state, admin_petition_facets_for_select(params[:state]), data: {autosubmit: true} %>
-  <%= submit_tag "Go" %>
+  <%= submit_tag "Go", name: nil %>
 <% end -%>
+
 <table class="admin_index">
   <thead>
     <tr>
