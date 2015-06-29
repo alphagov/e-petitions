@@ -11,6 +11,10 @@ select.form-control {
 
 .form-control.small {
   width: 8.5em;
+
+  @include media(tablet) {
+    width: 50%;
+  }
 }
 
 .form-group {
