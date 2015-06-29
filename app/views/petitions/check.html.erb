@@ -4,7 +4,7 @@
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
     <label for="q" class="form-label">What do you want us to do?</label>
-    <textarea name="q" id="q" value="<%= @petitions.try(:query) %>" class="form-control" rows="3" data-max-length="80"></textarea>
+    <textarea name="q" id="q" value="<%= @petitions.try(:query) %>" class="form-control" rows="3"></textarea>
     <p class="character-count">80 characters max</p>
     <%= render 'petitions/action_help' %>
   </div>
