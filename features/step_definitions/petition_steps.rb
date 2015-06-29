@@ -8,7 +8,7 @@ Then /^I am taken to a landing page$/ do
   expect(page).to have_content("Thank you")
 end
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_action|
+Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
     :closed_at => 1.day.from_now,
@@ -17,7 +17,7 @@ Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/ do |_, state, petition_title, scheduled_debate_date|
+Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
   step "an #{state} petition \"#{petition_title}\""
   @petition.scheduled_debate_date = scheduled_debate_date.to_date
   @petition.save

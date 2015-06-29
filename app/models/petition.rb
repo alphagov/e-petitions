@@ -45,6 +45,7 @@ class Petition < ActiveRecord::Base
   facet :all, -> { reorder(signature_count: :desc) }
   facet :collecting_sponsors, -> { collecting_sponsors }
   facet :in_moderation, -> { in_moderation.reorder(created_at: :desc) }
+  facet :in_debate_queue, -> { in_debate_queue }
 
   # = Relationships =
   belongs_to :creator_signature, :class_name => 'Signature'
@@ -80,6 +81,15 @@ class Petition < ActiveRecord::Base
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
   scope :without_debate_outcome, -> { where.not(id: DebateOutcome.select(:petition_id).uniq) }
   scope :awaiting_debate_date, ->  { where.not(debate_threshold_reached_at: nil) }
+  scope :in_debate_queue, -> do
+    where(
+      arel_table['debate_threshold_reached_at'].not_eq(nil).
+      or(
+        arel_table['scheduled_debate_date'].not_eq(nil)
+      )
+    )
+  end
+
 
   class << self
     def awaiting_response
