@@ -14,10 +14,6 @@ module SectionHelpers
     when 'search results table'
       "#{prefix}div[contains(@class, 'petition_list')]//table"
 
-    # Admin specific
-    when 'the admin nav'
-      "//*[@id='admin_nav']"
-
     when 'admin index table'
       "#{prefix}table[contains(@class, 'admin_index')]"
 

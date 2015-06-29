@@ -87,8 +87,9 @@ Then /^the creator should receive a (libel\/profanity )?rejection notification e
   end
 end
 
-When /^I view all petitions$/ do
-  click_link "All petitions"
+When(/^I view all petitions$/) do
+  click_on 'Petitions Admin'
+  click_on 'All petitions'
 end
 
 Then /^I should see the petition "([^"]*)"$/ do |petition_action|
