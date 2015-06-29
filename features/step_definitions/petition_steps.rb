@@ -8,7 +8,7 @@ Then /^I am taken to a landing page$/ do
   expect(page).to have_content("Thank you")
 end
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or_an, state, petition_action|
+Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
     :closed_at => 1.day.from_now,
@@ -17,7 +17,7 @@ Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/ do |a_or
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
-Given /^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/ do |_, state, petition_title, scheduled_debate_date|
+Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
   step "an #{state} petition \"#{petition_title}\""
   @petition.scheduled_debate_date = scheduled_debate_date.to_date
   @petition.save
@@ -346,7 +346,7 @@ Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
   Site.instance.update!(threshold_for_debate: amount)
 end
 
-Given /^There are (\d+) petitions awaiting a government response$/ do |response_count|
+Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
   response_count.times do |count|
     petition = FactoryGirl.create(:awaiting_petition, :action => "Petition #{count}")
   end
@@ -367,3 +367,16 @@ end
 Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
   @petition = FactoryGirl.create(:awaiting_petition, action: action)
 end
+
+Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
+  scheduled_debate_petitions_count.times do |count|
+    FactoryGirl.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")
+  end
+end
+
+Given(/^there are (\d+) petitions with enough signatures to require a debate$/) do |debate_threshold_petitions_count|
+  debate_threshold_petitions_count.times do |count|
+    FactoryGirl.create(:awaiting_debate_petition, action: "Petition #{count}")
+  end
+end
+

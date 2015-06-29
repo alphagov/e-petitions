@@ -1,11 +1,25 @@
-<%= form_for [:admin, current_user], :url => admin_profile_path(current_user), :builder => AdminFormBuilder do |f| -%>
-  <%= f.error_messages(:header_message => nil) %>
-  
-  <p class="form_field"><label for="current_password">Current password</label><br/>
-    <%= password_field_tag :current_password, params[:current_password], :size => 30 ,:autocomplete => 'off', :autofocus => 'autofocus' %>
-  </p>
-  <%= f.password_field :password, :label => 'New password', :autocomplete => 'off' %>
-  <%= f.password_field :password_confirmation, :autocomplete => 'off' %>
-  
-  <%= save_button(f.object) %>
+<%= form_for [:admin, current_user], url: admin_profile_path(current_user) do |f| -%>
+  <%= f.error_messages(header_message: nil) %>
+
+  <%= form_row for: [f.object, :current_password] do %>
+    <%= f.label :current_password, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :current_password %>
+    <%= f.password_field :current_password, tabindex: increment, class: 'form-control', autofocus: 'autofocus', autocomplete: 'off' %>
+  <% end %>
+
+  <%= form_row for: [f.object, :password] do %>
+    <%= f.label :password, 'New password', class: 'form-label' %>
+    <%= error_messages_for_field f.object, :password %>
+    <%= f.password_field :password, tabindex: increment, class: 'form-control', autocomplete: 'off' %>
+  <% end %>
+
+  <%= form_row for: [f.object, :password_confirmation] do %>
+    <%= f.label :password_confirmation, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :password_confirmation %>
+    <%= f.password_field :password_confirmation, tabindex: increment, class: 'form-control', autocomplete: 'off' %>
+  <% end %>
+
+  <%= form_row do %>
+    <%= f.submit 'Save' %>
+  <% end %>
 <% end -%>

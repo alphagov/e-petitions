@@ -38,7 +38,7 @@ en-GB:
       admin:
         - :all
         - :collecting_sponsors
-        - :sponsored
+        - :in_moderation
         - :open
         - :closed
         - :rejected
@@ -47,10 +47,11 @@ en-GB:
         - :with_response
         - :awaiting_debate_date
         - :with_debate_outcome
+        - :in_debate_queue
       names:
         admin:
           all: "All petitions"
-          sponsored: "Awaiting moderation"
+          in_moderation: "Awaiting moderation"
           awaiting_response: "Awaiting a government response"
           with_response: "With a government response"
           awaiting_debate_date: "Awaiting a debate in parliament"
@@ -122,12 +123,15 @@ en-GB:
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in parliament"
 
     action_counts:
-      in_moderation: 
+      in_moderation:
         html:
           "<span class=\"count\">%{formatted_count}</span> Moderation queue"
-      awaiting_response: 
+      awaiting_response:
         html:
           "<span class=\"count\">%{formatted_count}</span> Government response queue"
+      in_debate_queue:
+        html:
+          "<span class=\"count\">%{formatted_count}</span> Debate queue"
       all:
         html:
           "<span class=\"count\">%{formatted_count}</span> All petitions"
@@ -173,4 +177,4 @@ en-GB:
           <p>Petitions cannot be used for freedom of information requests.</p>
         honours: |
           <p>Petitions cannot include information about honours or appointments.</p>
-          <p>Find information about nominations for honours at: <a href='https://www.gov.uk/honours' rel='external'>https://www.gov.uk/honours</a></p>
+          <p>Find information about nominations for honours at: <a href="https://www.gov.uk/honours" rel="external">https://www.gov.uk/honours</a></p>

@@ -350,6 +350,25 @@ RSpec.describe Petition, type: :model do
         expect(Petition.selectable).to include(@selectable_petition_1, @selectable_petition_2, @selectable_petition_3, @selectable_petition_4)
       end
     end
+
+    context 'in_debate_queue' do
+      let!(:petition_1) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: 1.day.ago) }
+      let!(:petition_2) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: nil) }
+      let!(:petition_3) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: nil, scheduled_debate_date: 3.days.from_now) }
+      let!(:petition_4) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: nil, scheduled_debate_date: nil) }
+
+      subject { described_class.in_debate_queue }
+
+      it 'includes petitions that have reached the debate threshold' do
+        expect(subject).to include(petition_1)
+        expect(subject).not_to include(petition_2)
+      end
+
+      it 'includes petitions that have not reached the debate threshold if they have been scheduled for debate' do
+        expect(subject).to include(petition_3)
+        expect(subject).not_to include(petition_4)
+      end
+    end
   end
 
   describe '.popular_in_constituency' do

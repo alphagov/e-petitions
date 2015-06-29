@@ -22,17 +22,19 @@ Feature: A moderator user views all petitions
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
     And a sponsored petition "My sponsored petition"
-    
+
     And an open petition exists with action: "My open petition"
     And a closed petition exists with action: "My closed petition"
     And a rejected petition exists with action: "My rejected petition"
     And a hidden petition exists with action: "My hidden petition"
 
-    And a petition "My open petition with debate outcome" exists with a debate outcome    
+    And a petition "My open petition with debate outcome" exists with a debate outcome
     And a petition "My open petition awaiting debate date" exists awaiting debate date
     And a petition "My open petition with government response" exists with government response
     And a petition "My open petition awaiting government response" exists awaiting government response
-      
+
+    And a petition "My open petition with scheduled debate date" with scheduled debate date of "23/10/2010"
+
     When I view all petitions
     Then I should see the following list of petitions:
      | My pending petition                           |
@@ -46,6 +48,7 @@ Feature: A moderator user views all petitions
      | My open petition awaiting debate date         |
      | My open petition with government response     |
      | My open petition awaiting government response |
+     | My open petition with scheduled debate date   |
 
     And I filter the list to show "Collecting sponsors" petitions
     Then I should see the following list of petitions:
@@ -63,6 +66,7 @@ Feature: A moderator user views all petitions
      | My open petition awaiting debate date         |
      | My open petition with government response     |
      | My open petition awaiting government response |
+     | My open petition with scheduled debate date   |
 
     And I filter the list to show "Closed" petitions
     Then I should see the following list of petitions:
@@ -92,6 +96,10 @@ Feature: A moderator user views all petitions
     Then I should see the following list of petitions:
      | My open petition with debate outcome |
 
+    And I filter the list to show "In debate queue" petitions
+    Then I should see the following list of petitions:
+     | My open petition awaiting debate date       |
+     | My open petition with scheduled debate date |
 
   Scenario: A sysadmin can view all petitions
     Given I am logged in as a sysadmin
