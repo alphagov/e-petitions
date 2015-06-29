@@ -25,6 +25,17 @@ RSpec.describe ArchivedPetition, type: :model do
     end
   end
 
+  describe ".by_most_signatures" do
+    let!(:petition_1) { FactoryGirl.create(:archived_petition, signature_count: 100) }
+    let!(:petition_2) { FactoryGirl.create(:archived_petition, signature_count: 10) }
+    let!(:petition_3) { FactoryGirl.create(:archived_petition, signature_count: 50) }
+    let(:petitions) { [petition_1, petition_3, petition_2] }
+
+    it 'returns archived petitions ordered by highest number of signatures' do
+      expect(ArchivedPetition.by_most_signatures).to eq(petitions)
+    end
+  end
+
   describe "#title" do
     it "defaults to nil" do
       expect(petition.title).to be_nil
@@ -157,18 +168,6 @@ RSpec.describe ArchivedPetition, type: :model do
       it "returns true" do
         expect(petition.rejected?).to eq(true)
       end
-    end
-  end
-
-  describe "#by_most_signatures" do
-    before do
-      @p1 = FactoryGirl.create(:archived_petition, signature_count: 100)
-      @p2 = FactoryGirl.create(:archived_petition, signature_count: 10)
-      @p3 = FactoryGirl.create(:archived_petition, signature_count: 50)
-    end
-
-    it 'returns archived petitions ordered by highest number of signatures' do
-      expect(ArchivedPetition.by_most_signatures).to match_array([@p1, @p3, @p2])
     end
   end
 end

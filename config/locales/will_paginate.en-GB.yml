@@ -1,7 +1,13 @@
 en-GB:
   will_paginate:
-    previous_label: "Previous"
-    next_label: "Next"
+    previous_label: |-
+      <span class="icon icon-paginate-previous paginate paginate-previous"></span>
+      <span class="paginate paginate-previous">Previous</span>
+
+    next_label: |-
+      <span class="icon icon-paginate-next paginate paginate-next"></span>
+      <span class="paginate paginate-next">Next</span>
+
     page_gap: "&hellip;"
 
     page_entries_info:
