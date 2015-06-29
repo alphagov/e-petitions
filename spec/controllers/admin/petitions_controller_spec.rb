@@ -9,13 +9,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
   end
 
   describe "not logged in" do
-    describe "GET 'threshold'" do
-      it "redirects to the login page" do
-        get :threshold
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
-      end
-    end
-
     describe "GET 'index'" do
       it "redirects to the login page" do
         get :index
@@ -59,11 +52,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
       @p4.update_attribute(:signature_count, 20)
 
       allow(Site).to receive(:threshold_for_debate).and_return(10)
-    end
-
-    it "returns all petitions that have more than the threshold number of signatures in ascending count order" do
-      get :threshold
-      expect(assigns[:petitions]).to eq([@p2, @p1, @p4])
     end
 
     context "updating scheduled debate date" do
@@ -156,19 +144,6 @@ RSpec.describe Admin::PetitionsController, type: :controller do
     before :each do
       @user = FactoryGirl.create(:sysadmin_user)
       login_as(@user)
-    end
-
-    context "index" do
-      let(:petitions) { double.as_null_object }
-
-      before do
-        allow(Petition).to receive(:selectable).and_return(petitions)
-      end
-
-      it "shows all selectable petitions" do
-        expect(Petition).to receive(:selectable).and_return(petitions)
-        get :index
-      end
     end
 
     context "show" do

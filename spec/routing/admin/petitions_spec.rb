@@ -29,10 +29,6 @@ RSpec.describe "routes for admin petitions", type: :routing do
     expect(delete("/admin/petitions/1")).not_to be_routable
   end
 
-  it "routes GET /admin/petitions/1 to admin/petitions#show" do
-    expect(get("/admin/petitions/threshold")).to route_to('admin/petitions#threshold')
-  end
-
   it "routes GET /admin/petitions/1/edit_scheduled_debate_date to admin/petitions#edit_scheduled_debate_date" do
     expect(get("/admin/petitions/1/edit_scheduled_debate_date")).to route_to('admin/petitions#edit_scheduled_debate_date', id: '1')
   end

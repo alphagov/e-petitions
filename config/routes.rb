@@ -47,8 +47,6 @@ Rails.application.routes.draw do
   namespace :admin do
     root :to => 'admin#index'
 
-    get 'todo' => 'todolist#index', :as => 'todo'
-
     resource :search, :only => [:new] do
       get :result, :on => :member
       get :petition_by_id, :on => :member
@@ -56,9 +54,6 @@ Rails.application.routes.draw do
 
     resources :admin_users
     resources :petitions, :only => [:show, :index] do
-      collection do
-        get :threshold
-      end
       member do
         get   :edit_scheduled_debate_date
         patch :update_scheduled_debate_date

@@ -1,6 +1,6 @@
 
 <%= @petitions.length %> <%= @petitions.length == 1 ? 'petition requires action' : 'petitions require action' %>
 
-Please go here <%= threshold_admin_petitions_url %>
+Please go here <%= admin_petitions_url(state: :awaiting_debate_date) %>
 
 Thank you.

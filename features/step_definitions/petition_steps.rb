@@ -351,3 +351,19 @@ Given /^There are (\d+) petitions awaiting a government response$/ do |response_
     petition = FactoryGirl.create(:awaiting_petition, :action => "Petition #{count}")
   end
 end
+
+Given(/^a petition "(.*?)" exists with a debate outcome$/) do |action|
+  @petition = FactoryGirl.create(:debated_petition, action: action, debated_on: 1.day.ago)
+end
+
+Given(/^a petition "(.*?)" exists awaiting debate date$/) do |action|
+  @petition = FactoryGirl.create(:awaiting_debate_petition, action: action)
+end
+
+Given(/^a petition "(.*?)" exists with government response$/) do |action|
+  @petition = FactoryGirl.create(:responded_petition, action: action)
+end
+
+Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
+  @petition = FactoryGirl.create(:awaiting_petition, action: action)
+end
