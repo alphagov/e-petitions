@@ -24,6 +24,16 @@ module PetitionHelper
     petition_search.facets.slice(*public_petition_facets)
   end
 
+  def signatures_threshold_percentage(petition)
+    if petition.signature_count < Site.threshold_for_response
+      number_to_percentage(petition.signature_count / Site.threshold_for_response.to_f * 100)
+    elsif petition.signature_count < Site.threshold_for_debate
+      number_to_percentage(petition.signature_count / Site.threshold_for_debate.to_f * 100)
+    else
+      "100%"
+    end
+  end
+
   private
 
   def render_petition_hidden_details(stage_manager, form)
