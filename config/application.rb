@@ -28,6 +28,8 @@ module Epets
 
     config.active_job.queue_adapter = :delayed_job
 
+    config.action_view.field_error_proc = -> (html_tag, instance) { html_tag }
+
     # Add 503 Service Unavailable to the rescue response
     config.action_dispatch.rescue_responses.merge!(
       'Site::ServiceUnavailable' => :service_unavailable
