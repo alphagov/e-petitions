@@ -1,6 +1,6 @@
-<section class="about-item about-item-count-100000" aria-labelledby="debate-threshold-heading">
+<section class="about-item about-item-count-debate" aria-labelledby="debate-threshold-heading">
   <span class="graphic graphic-portcullis"></span>
-  <h2 id="debate-threshold-heading">100,000 <span>signatures</span></h2>
+  <h2 id="debate-threshold-heading"><%= number_with_delimiter Site.threshold_for_debate %> <span>signatures</span></h2>
   <%# Has debate outcome details #%>
   <% if petition.debate_outcome.present? -%>
     <section class="debate-outcome">
@@ -23,6 +23,6 @@
       You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
     </p>
   <% else -%>
-    <p>If a petition gets 100,000 signatures, it will be considered for debate in Parliament</p>
+    <p>If a petition gets <%= number_with_delimiter Site.threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
   <% end -%>
 </section>
