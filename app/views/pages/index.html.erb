@@ -23,7 +23,7 @@
       </ul>
     </section>
   <% end %>
-  <%= link_to 'View all petitions', petitions_path, :class => 'view-all' %>
+  <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
 </div>
 
 <section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
