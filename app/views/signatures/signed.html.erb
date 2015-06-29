@@ -19,7 +19,7 @@
     <p>Your constituency is <%= @signature.constituency.name %></p>
     <% if @signature.constituency.mp %>
       <p>Your local MP is <%= @signature.constituency.mp.name %></p>
-      <p><%= link_to "Contact your MP", @signature.constituency.mp.url, rel: "external" %></p>
+      <p><%= link_to "Contact your MP to let them know you have signed this petition", @signature.constituency.mp.url, rel: "external" %></p>
     <% end %>
   </div>
 <% end %>
