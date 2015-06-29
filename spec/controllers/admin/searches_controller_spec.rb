@@ -14,12 +14,12 @@ RSpec.describe Admin::SearchesController, type: :controller do
         it "returns an array of signatures for an email address" do
           allow(signatures).to receive_messages(:paginate => signatures)
           allow(Signature).to receive_messages(:for_email => signatures)
-          get :show, :search => { :query => 'something@example.com' }
+          get :show, q: 'something@example.com'
           expect(assigns(:signatures)).to eq(signatures)
         end
 
         it "sets @query" do
-          get :show, :search => { :query => 'foo bar' }
+          get :show, q: 'foo bar'
           expect(assigns(:query)).to eq("foo bar")
         end
       end
@@ -32,7 +32,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
         end
 
         it "redirects to a petition if the id exists" do
-          get :show, :search => { :query => '123' }
+          get :show, q: '123'
           expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
@@ -42,12 +42,12 @@ RSpec.describe Admin::SearchesController, type: :controller do
           end
 
           it "renders the form with an error" do
-            get :show, :search => { :query => '123' }
+            get :show, q: '123'
             expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions")
           end
 
           it "sets the flash error" do
-            get :show, :search => { :query => '123' }
+            get :show, q: '123'
             expect(flash[:error]).to match(/123/)
           end
         end
@@ -55,7 +55,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
 
       context "searching by keyword" do
         it "redirects to the all petitions page for a keyword" do
-          get :show, :search => { :query => 'example_keyword' }
+          get :show, q: 'example_keyword'
           expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions?q=example_keyword")
         end
       end

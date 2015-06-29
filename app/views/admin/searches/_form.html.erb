@@ -1,5 +1,5 @@
-<%= form_for :search, url: [:admin, :search], html: { method: :get } do |form| %>
-  <%= form.label :query, "Search for id, title or an email address:" %>
-  <%= form.text_field :query, value: query %>
-  <%= form.submit 'Search', name: nil %>
+<%= form_tag [:admin, :search], method: :get do %>
+  <%= label_tag :q, "Search for id, title or an email address:" %>
+  <%= text_field_tag :q, query %>
+  <%= submit_tag 'Search', name: nil %>
 <% end %>
