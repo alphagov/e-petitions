@@ -91,6 +91,21 @@ RSpec.describe Site, type: :model do
       expect(Site.enabled?).to eq(false)
     end
 
+    it "delegates host to the instance" do
+      expect(site).to receive(:host).and_return("petition.parliament.test")
+      expect(Site.host).to eq("petition.parliament.test")
+    end
+
+    it "delegates host_with_port to the instance" do
+      expect(site).to receive(:host_with_port).and_return("petition.parliament.test:8443")
+      expect(Site.host_with_port).to eq("petition.parliament.test:8443")
+    end
+
+    it "delegates port to the instance" do
+      expect(site).to receive(:port).and_return(443)
+      expect(Site.port).to eq(443)
+    end
+
     it "delegates protected? to the instance" do
       expect(site).to receive(:protected?).and_return(true)
       expect(Site.protected?).to eq(true)
@@ -502,6 +517,48 @@ RSpec.describe Site, type: :model do
 
     it "the protocol of the url" do
       expect(site.email_protocol).to eq("https")
+    end
+  end
+
+  describe "#host" do
+    subject :site do
+      described_class.create!(url: "https://petition.parliament.test")
+    end
+
+    it "the host of the url" do
+      expect(site.host).to eq("petition.parliament.test")
+    end
+  end
+
+  describe "#host_with_port" do
+    context "when the port is the default port" do
+      subject :site do
+        described_class.create!(url: "https://petition.parliament.test")
+      end
+
+      it "the host without the port of the url" do
+        expect(site.host_with_port).to eq("petition.parliament.test")
+      end
+    end
+
+    context "when the port is not the default port" do
+      subject :site do
+        described_class.create!(url: "https://petition.parliament.test:8443")
+      end
+
+      it "the host with the port of the url" do
+        expect(site.host_with_port).to eq("petition.parliament.test:8443")
+      end
+    end
+  end
+
+  describe "#port" do
+    subject :site do
+      described_class.create!(url: "https://petition.parliament.test")
+    end
+
+    it "the port of the url" do
+      expect(site.port).to eq(443)
     end
   end
 
