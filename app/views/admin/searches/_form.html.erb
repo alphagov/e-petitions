@@ -1,4 +1,4 @@
-<%= form_for :search, url: result_admin_search_path, html: { method: :get } do |form| %>
+<%= form_for :search, url: [:admin, :search], html: { method: :get } do |form| %>
   <%= form.label :query, "Search for id, title or an email address:" %>
   <%= form.text_field :query, value: query %>
   <%= form.submit 'Search', name: nil %>

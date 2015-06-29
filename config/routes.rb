@@ -47,9 +47,7 @@ Rails.application.routes.draw do
   namespace :admin do
     root :to => 'admin#index'
 
-    resource :search, :only => [] do
-      get :result, :on => :member
-    end
+    resource :search, :only => [:show]
 
     resources :admin_users
     resources :petitions, :only => [:show, :index] do
