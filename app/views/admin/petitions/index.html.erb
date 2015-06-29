@@ -1,8 +1,11 @@
+<%= render 'admin/searches/form', query: @query %>
+
 <%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
   <%= label_tag :state, "Filter by status:" %>
   <%= select_tag :state, admin_petition_facets_for_select(params[:state]), data: {autosubmit: true} %>
-  <%= submit_tag "Go" %>
+  <%= submit_tag "Go", name: nil %>
 <% end -%>
+
 <table class="admin_index">
   <thead>
     <tr>
@@ -17,7 +20,7 @@
   <tbody>
     <% @petitions.each do |petition| -%>
       <tr>
-        <td class='petition_id'><%= petition.id %></td>
+        <td class="petition_id"><%= petition.id %></td>
         <td class="petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
         <td><%= petition.creator_signature.name %><br/>
         <%= mail_to petition.creator_signature.email %></td>

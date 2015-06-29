@@ -12,6 +12,7 @@ module AdminHubHelper
       counts = []
       counts << [:in_moderation, Petition.in_moderation.count]
       counts << [:awaiting_response, Petition.visible.awaiting_response.count]
+      counts << [:in_debate_queue, Petition.in_debate_queue.count]
       counts << [:all, Petition.all.count]
     end
   end

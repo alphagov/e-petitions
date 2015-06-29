@@ -31,3 +31,9 @@ Feature: Maggie searches for a petition by id
     Given I am logged in as a moderator
     When I search for a petition by id
     Then I should be taken back to the id search form with an error
+
+  Scenario: A user can search by id from the main admin hub
+    Given a sponsored petition "Loose benefits!"
+    And I am logged in as a moderator
+    When I search for a petition by id from the admin hub
+    Then I am on the admin petition page for "Loose benefits!"

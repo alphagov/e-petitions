@@ -3,6 +3,7 @@ class Admin::PetitionsController < Admin::AdminController
 
   def index
     @petitions = Petition.search(params.merge(count: 50))
+    @query = params[:q]
   end
 
   def show

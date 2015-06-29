@@ -1,11 +1,7 @@
 module AdminHelper
 
-  def save_button(resource)
-    submit_tag 'Save'
-  end
-
-  def mandatory_field()
-    return '<span class="mandatory">&nbsp;*</span>'
+  def mandatory_field
+    content_tag :span, raw('&nbsp;*'), class: 'mandatory'
   end
 
   def cms_delete_link(model, options = {})
