@@ -14,11 +14,11 @@
     left: 0;
     top: 0;
     height: 25px;
-  }
 
-  .signature-number {
-    @include bold-48();
-    display: block;
+    @include media(tablet) {
+      top: em(5, 36);
+    }
+
   }
 }
 .page-title-with-icon {
