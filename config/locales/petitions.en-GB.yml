@@ -49,7 +49,7 @@ en-GB:
         - :with_debate_outcome
       names:
         admin:
-          all: "All"
+          all: "All petitions"
           sponsored: "Awaiting moderation"
           awaiting_response: "Awaiting a government response"
           with_response: "With a government response"
