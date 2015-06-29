@@ -84,7 +84,7 @@ namespace :data do
 
         # Should we create a petition with response and 10K signatures
         @should_create_response = (((idx+1) % 5) == 0 && RANDOM_RESPONSE == 'true')
-        @signature_count = 10001 if @should_create_response
+        @signature_count = Site.threshold_for_response + 1 if @should_create_response
 
         @signature_count.to_i.times do
           petition.signatures.create!(

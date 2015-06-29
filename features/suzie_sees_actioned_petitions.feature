@@ -6,20 +6,28 @@ Feature: Suzie sees actioned petitions
   Scenario: There are no actioned petitions
     Given I am on the home page
     Then I should not see the actioned petitions section
+    But I should see an empty government response threshold section
+    And I should see an empty debate threshold section
 
   Scenario: There are petitions with a response from government
-    Given There are 2 petitions with a government response
+    Given there are 2 petitions with a government response
     And I am on the home page
     Then I should see there are 2 petitions with a government response
+    And I should see the government response threshold section with a count of 2
+    And I should see an empty debate threshold section
 
   Scenario: There are petitions debated in parliament
-    Given There are 123 petitions debated in parliament
+    Given there are 3 petitions debated in parliament
     And I am on the home page
-    Then I should see there are 123 petitions debated in parliament
+    Then I should see there are 3 petitions debated in parliament
+    And I should see an empty government response threshold section
+    And I should see the debate threshold section with a count of 3
 
   Scenario: There are petitions with a response from government and petitions debated in parliament
-    Given There are 57 petitions with a government response
-    Given There are 12 petitions debated in parliament
+    Given there are 5 petitions with a government response
+    And there are 2 petitions debated in parliament
     And I am on the home page
-    Then I should see there are 57 petitions with a government response
-    Then I should see there are 12 petitions debated in parliament
+    Then I should see there are 5 petitions with a government response
+    Then I should see there are 2 petitions debated in parliament
+    And I should see the government response threshold section with a count of 5
+    And I should see the debate threshold section with a count of 2

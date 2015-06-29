@@ -1,6 +1,6 @@
 .trending {
   h2 {
-    margin-top: $gutter-half; 
+    margin-top: $gutter-half;
     margin-bottom: $gutter-half;
   }
 }
@@ -21,6 +21,19 @@
   .count {
     @include bold-48();
     display: block;
+  }
+}
+
+.threshold-panel {
+  .threshold-panel-header {
+    @extend .section-panel;
+    background-color: $petitions-header-colour;
+    color: $white;
+    border-bottom: none;
+    padding-top: $gutter-half;
+  }
+  .threshold-panel-body {
+    @extend .section-panel;
   }
 }
 
