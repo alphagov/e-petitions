@@ -1,6 +1,6 @@
 Dear <%= @signature.name %>,
 
-The petition '<%= @petition.action %>' signed by you recently reached <%= number_with_delimiter(@petition.signature_count) %> signatures and a response has been made to it.
+The petition '<%= @petition.action %>' signed by you recently reached <%= number_with_delimiter Site.threshold_for_response %> signatures and a response has been made to it.
 
 <%= @petition.response %>
 
