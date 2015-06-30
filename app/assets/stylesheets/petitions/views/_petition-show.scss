@@ -8,17 +8,48 @@
   }
 }
 
+// Signature count and signature graph
+
 .signature-count {
-  @include bold-48;
-  margin: em(10, 32) 0;
-  @include media(tablet) {
-    margin: em(15, 48) 0;
+  @extend %contain-floats;
+
+  .signature-count-number {
+    font-size: 36px;
+    line-height: 40/36;
+    font-weight: 700;
+    margin-top: em(15, 36);
+    margin-bottom: em(10, 36);
+
+    span {
+      font-size: 24px;
+    }
   }
 
-  span {
-    @include bold-36;
+  .signature-count-goal {
+    color: $secondary-text-colour;
+    text-align: right;
+    margin: 10px 0 0;
+  }
+
+  .signature-count-graph {
+    clear: both;
+    width: 100%;
+    height: 10px;
+    overflow: hidden;
+    background-color: $border-colour;
+    padding: 0;
+
+    .signature-count-current {
+      display: block;
+      height: 10px;
+      background-color: $petitions-brand;
+      @extend %animated;
+      @extend %fadeInLeft;
+    }
   }
 }
+
+// Petition meta
 
 .petition-meta {
   @extend %contain-floats;

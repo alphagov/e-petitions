@@ -39,4 +39,31 @@ RSpec.describe PetitionHelper, type: :helper do
       expect(subject).not_to have_key('with_response')
     end
   end
+
+  describe "#signatures_threshold_percentage" do
+
+    context "when the signature count is less than the response threshold" do
+      let(:petition) { FactoryGirl.create(:petition, signature_count: 239) }
+
+      it "returns a percentage relative to the response threshold" do
+        expect(helper.signatures_threshold_percentage(petition)).to eq("2.390%")
+      end
+    end
+
+    context "when the signature count is greater than the response threshold and less than the debate threshold" do
+      let(:petition) { FactoryGirl.create(:petition, signature_count: 76239) }
+
+      it "returns a percentage relative to the debate threshold" do
+        expect(helper.signatures_threshold_percentage(petition)).to eq("76.239%")
+      end
+    end
+
+    context "when the signature count is greater than the debate threshold" do
+      let(:petition) { FactoryGirl.create(:petition, signature_count: 127989) }
+
+      it "returns 100 percent" do
+        expect(helper.signatures_threshold_percentage(petition)).to eq("100%")
+      end
+    end
+  end
 end
