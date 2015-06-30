@@ -58,18 +58,16 @@ input.back-page {
 // Section panel
 // =================
 .section-panel {
-  @extend %outdent-to-full-width;
-  border-bottom: 1px solid $panel-colour;
+  @extend %petitions-outdent-and-pad;
   margin-top: $gutter-half;
   margin-bottom: $gutter-half;
-  padding: 0 $gutter-half $gutter-half;
-
-  @include media(tablet){
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
+  padding-bottom: $gutter-half;
+  border-bottom: 1px solid $panel-colour;
+}
+.section-panel-borderless {
+  @extend .section-panel;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 // Notifications
