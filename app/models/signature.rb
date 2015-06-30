@@ -104,15 +104,15 @@ class Signature < ActiveRecord::Base
 
   def validate!
     if pending?
+      petition.creator_signature.validate! unless creator?
+
       Petition.transaction do
         self.update_columns(
           state:        VALIDATED_STATE,
           validated_at: Time.current,
           updated_at:   Time.current
         )
-
         ConstituencyPetitionJournal.record_new_signature_for(self)
-        petition.creator_signature.validate!
         petition.increment_signature_count!
       end
     end
