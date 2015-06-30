@@ -16,7 +16,19 @@
   <span>All petitions run for 6 months</span>
 </p>
 
-<p class="signature-count"><%= signature_count(:default, petition.signature_count) %></p>
+<div class="signature-count">
+  <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
+  <div class="signature-count-graph" aria-hidden="true">
+    <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
+  </div>
+  <p class="signature-count-goal">
+    <% if petition.signature_count < Site.threshold_for_response %>
+      <%= number_with_delimiter(Site.threshold_for_response) %>
+    <% else %>
+      <%= number_with_delimiter(Site.threshold_for_debate) %>
+    <% end %>
+  </p>
+</div>
 
 <%= render 'threshold_details', petition: petition %>
 
