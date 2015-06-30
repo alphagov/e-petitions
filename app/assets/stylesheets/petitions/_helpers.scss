@@ -26,3 +26,25 @@
   padding: 0;
   border: 0;
 }
+
+// Overrides frontend_toolkit
+%outdent-to-full-width {
+  margin-left: -$gutter-half;
+  margin-right: -$gutter-half;
+}
+%mobile-outdent {
+  @extend %outdent-to-full-width;
+  @include media(tablet){
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+%mobile-outdent-and-pad {
+  @extend %mobile-outdent;
+  padding-left: $gutter-half;
+  padding-right: $gutter-half;
+  @include media(tablet){
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

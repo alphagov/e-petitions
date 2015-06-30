@@ -25,15 +25,19 @@
 }
 
 .threshold-panel {
-  .threshold-panel-header {
-    @extend .section-panel;
-    background-color: $petitions-header-colour;
-    color: $white;
-    border-bottom: none;
-    padding-top: $gutter-half;
-  }
-  .threshold-panel-body {
-    @extend .section-panel;
+  @extend %outdent-to-full-width;
+  background-color: $petitions-header-colour;
+  color: $white;
+  padding: $gutter-half;
+  margin-bottom: $gutter-half;
+
+  h2 {
+    @include bold-36;
+    margin: em(15, 24) 0;
+
+    @include media(tablet) {
+      margin: em(15, 36) 0;
+    }
   }
 }
 

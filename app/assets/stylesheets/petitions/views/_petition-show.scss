@@ -1,13 +1,3 @@
-.petitions-details {
-  border-bottom: 1px solid $panel-colour;
-  padding: $gutter-half;
-  @extend %outdent-to-full-width;
-
-  li {
-    margin-bottom: $gutter-half;
-  }
-}
-
 // Signature count and signature graph
 
 .signature-count {
