@@ -736,6 +736,13 @@ CREATE INDEX index_petitions_on_background ON petitions USING gin (to_tsvector('
 
 
 --
+-- Name: index_petitions_on_created_at_and_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_created_at_and_state ON petitions USING btree (created_at, state);
+
+
+--
 -- Name: index_petitions_on_creator_signature_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -764,17 +771,10 @@ CREATE INDEX index_petitions_on_response_threshold_reached_at ON petitions USING
 
 
 --
--- Name: index_petitions_on_state_and_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_petitions_on_signature_count_and_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_petitions_on_state_and_created_at ON petitions USING btree (state, created_at);
-
-
---
--- Name: index_petitions_on_state_and_signature_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_petitions_on_state_and_signature_count ON petitions USING btree (state, signature_count);
+CREATE INDEX index_petitions_on_signature_count_and_state ON petitions USING btree (signature_count, state);
 
 
 --
