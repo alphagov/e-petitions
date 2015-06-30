@@ -26,3 +26,27 @@
   padding: 0;
   border: 0;
 }
+
+%petitions-outdent {
+  @extend %outdent-to-full-width;
+  @include media(tablet){
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+%petitions-outdent-and-pad {
+  @extend %petitions-outdent;
+  padding-left: $gutter-half;
+  padding-right: $gutter-half;
+  @include media(tablet){
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+%word-break {
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens:    auto;
+  hyphens:         auto;
+}

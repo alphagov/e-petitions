@@ -12,7 +12,7 @@
   </div>
 <% end %>
 
-<div class="section-panel">
+<div class="section-panel-borderless">
   <% trending_petitions do |petitions| %>
     <section class="trending" aria-labelledby="trending-heading">
       <h2 id="trending-heading">Popular petitions</h2>
@@ -27,26 +27,22 @@
 </div>
 
 <% explanation_petition_counts do |counts| %>
-  <section class="threshold-panel" aria-labelledby="response-threshold-heading">
-    <div class="threshold-panel-header">
+  <section class="section-panel-borderless" aria-labelledby="response-threshold-heading">
+    <div class="threshold-panel">
       <span class="graphic graphic-crown-white"></span>
       <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %> <span>signatures</span></h2>
       <p>If a petition gets <%= Site.formatted_threshold_for_response %>, the government will respond</p>
     </div>
-    <div class="threshold-panel-body">
-      <p><%= link_to_unless counts[:with_response].zero?, petition_count(:with_response_explanation, counts[:with_response]), petitions_path(state: :with_response) %></p>
-    </div>
+    <%= link_to_unless counts[:with_response].zero?, petition_count(:with_response_explanation, counts[:with_response]), petitions_path(state: :with_response) %>
   </section>
 
-  <section class="threshold-panel"  aria-labelledby="debate-threshold-heading">
-    <div class="threshold-panel-header">
+  <section class="section-panel" aria-labelledby="debate-threshold-heading">
+    <div class="threshold-panel">
       <span class="graphic graphic-portcullis-white"></span>
       <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %> <span>signatures</span></h2>
       <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
     </div>
-    <div class="threshold-panel-body">
-      <p><%= link_to_unless counts[:with_debate_outcome].zero?, petition_count(:with_debate_outcome_explanation, counts[:with_debate_outcome]), petitions_path(state: :with_debate_outcome) %></p>
-    </div>
+    <%= link_to_unless counts[:with_debate_outcome].zero?, petition_count(:with_debate_outcome_explanation, counts[:with_debate_outcome]), petitions_path(state: :with_debate_outcome) %>
   </section>
 <% end %>
 

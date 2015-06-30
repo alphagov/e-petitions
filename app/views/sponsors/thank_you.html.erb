@@ -1,13 +1,8 @@
-<div class="title_block">
-  <h2>Thank you.</h2>
-  <h1 class="petition_action"><%= @petition.action %></h1>
-  <h2>By <%= @petition.creator_signature.name %></h2>
-</div>
+<h1 class="page-title page-title-with-icon">
+  <span class="icon icon-email"></span>
+  One more step&hellip;
+</h1>
 
-<div class="cta_block thank_you_block">
-  <p>An email will be sent to you now to confirm your email address.  If we're busy this may take a few hours to arrive, thanks for your patience.</p>
+<p>Check your email and click the link to sign this petition.</p>
 
-  <p>We can't add you as a sponsor to the petition until you've clicked on the link in this email.</p>
-
-  <%= link_to "Return to home page", home_path, :class => 'link_button large_link_button return_to_homepage_button' %>
-</div>
+<%= render partial: "notification", locals: { text: "You have not signed until you click the link in the email" } %>

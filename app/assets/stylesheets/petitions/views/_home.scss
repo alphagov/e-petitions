@@ -25,16 +25,11 @@
 }
 
 .threshold-panel {
-  .threshold-panel-header {
-    @extend .section-panel;
-    background-color: $petitions-header-colour;
-    color: $white;
-    border-bottom: none;
-    padding-top: $gutter-half;
-  }
-  .threshold-panel-body {
-    @extend .section-panel;
-  }
+  @extend %petitions-outdent;
+  background-color: $petitions-header-colour;
+  color: $white;
+  padding: $gutter-half;
+  margin-bottom: $gutter-half;
 }
 
 @include media(tablet) {
