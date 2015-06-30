@@ -1,20 +1,33 @@
-<%= render 'admin/petitions/petition_details' %>
-<%= render 'admin/petitions/published_petition_details' %>
 
-<%= form_for [:admin, @petition ], :url => admin_petition_government_response_path(@petition), method: :put do |f| -%>
-  <%= form_row :for => [f.object, :response_summary] do %>
-    <%= f.label :response_summary, 'Summary quote', class: 'form-label' %>
-    <%= error_messages_for_field f.object, :response_summary %>
-    <%= f.text_area :response_summary, rows: 3, cols: 70, tabindex: increment, class: 'form-control' %>
-  <% end %>
+<!-- Back to X list -->
 
-  <%= form_row :for => [f.object, :response] do %>
-    <%= f.label :response, 'Response in full', class: 'form-label' %>
-    <%= error_messages_for_field f.object, :response %>
-    <%= f.text_area :response, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
-  <% end %>
+<div class="grid-row">
 
-  <%= form_row do %>
-    <%= email_signatures_with_count_submit_button(f, @petition) %>
-  <% end %>
-<% end -%>
+  <div class="column-two-thirds extra-gutter">
+    <%= render 'admin/petitions/petition_content' %>
+
+    <h2>Government response</h2>
+    <%= form_for [:admin, @petition ], :url => admin_petition_government_response_path(@petition), method: :put do |f| -%>
+      <%= form_row :for => [f.object, :response_summary] do %>
+        <%= f.label :response_summary, 'Summary quote', class: 'form-label' %>
+        <%= error_messages_for_field f.object, :response_summary %>
+        <%= f.text_area :response_summary, rows: 3, cols: 70, tabindex: increment, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row :for => [f.object, :response] do %>
+        <%= f.label :response, 'Response in full', class: 'form-label' %>
+        <%= error_messages_for_field f.object, :response %>
+        <%= f.text_area :response, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row do %>
+        <%= email_signatures_with_count_submit_button(f, @petition) %>
+      <% end %>
+    <% end -%>
+  </div>
+
+  <div class="admin-petition-meta column-third">
+    <%= render 'admin/petitions/petition_details' %>
+  </div>
+
+</div>

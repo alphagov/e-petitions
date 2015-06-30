@@ -1,0 +1,7 @@
+.admin-petition-meta {
+  padding-top: $gutter-two-thirds;
+
+  .admin-petition-state, .admin-signature-count {
+    @include core-48;
+  }
+}

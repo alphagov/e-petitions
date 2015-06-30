@@ -1,16 +1,27 @@
-<%= form_for @petition, url: admin_petition_take_down_path(@petition), method: :patch do |f| -%>
+<!-- Back to X list -->
 
-  <%= render 'admin/petitions/petition_details', f: f %>
+<div class="grid-row">
 
-  <% if @petition.rejected? %>
-    <h2>Change rejection status</h2>
-    <p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
-  <% else %>
-    <h2>Take this petition down</h2>
-  <% end %>
-  <%= render 'admin/petitions/reject', f: f %>
+  <div class="column-two-thirds extra-gutter">
+    <%= render 'admin/petitions/petition_content' %>
+    <%= form_for @petition, url: admin_petition_take_down_path(@petition), method: :patch do |f| -%>
 
-  <%= form_row do %>
-    <%= f.submit "Email petition creator" %>
-  <% end %>
-<% end -%>
+      <% if @petition.rejected? %>
+        <h2>Change rejection status</h2>
+        <p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
+      <% else %>
+        <h2>Take this petition down</h2>
+      <% end %>
+      <%= render 'admin/petitions/reject', f: f %>
+
+      <%= form_row do %>
+        <%= f.submit "Email petition creator" %>
+      <% end %>
+    <% end -%>
+  </div>
+
+  <div class="admin-petition-meta column-third">
+    <%= render 'admin/petitions/petition_details' %>
+  </div>
+
+</div>

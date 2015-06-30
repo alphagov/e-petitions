@@ -1,33 +1,33 @@
-<div class="row">
-  <label>Petition Id:</label>
-  <p class="text_block"><%=  @petition.id %></p>
-</div>
+<h2>Status</h2>
+<p class="admin-petition-state"><%= @petition.state.capitalize %></p>
 
-<div class="row">
-  <label>Petition action:</label>
-  <p class="text_block"><%=  @petition.action %></p>
-</div>
+<% if @petition.rejected? or @petition.hidden? -%>
+  <h2>Rejection reason</h2>
+  <p><%= @petition.rejection_reason %>&nbsp;</p>
 
-<div class="row">
-  <label>Creator:</label><%=  @petition.creator_signature.name %> - <%= @petition.creator_signature.email %>
-</div>
+  <h2>Rejection text</h2>
+  <p><%= @petition.rejection_text %>&nbsp;</p>
+<% end -%>
 
-<div class="row">
-  <label>Created date:</label><%= date_time_format(@petition.created_at) %>
-</div>
+<% unless @petition.in_todo_list? %>
+  <h2>Signatures</h2>
+  <p class="admin-signature-count"><%= number_with_delimiter(@petition.signature_count) %>&nbsp;</p>
+<% end %>
 
-<div class="row">
-  <label>Petition background:</label>
-  <p class="text_block"><%= auto_link(h(@petition.background)) %></p>
-</div>
+<h2>Creator</h2>
+<p>
+  <%=  @petition.creator_signature.name %><br />
+  <%= auto_link(@petition.creator_signature.email) %>
+</p>
 
-<div class="row">
-  <label>Petition additional details:</label>
-  <p class="text_block"><%= auto_link(h(@petition.additional_details)) %></p>
-</div>
+<% if @petition.in_todo_list? %>
+  <h2>Created on</h2>
+  <p><%= date_time_format(@petition.created_at) %></p>
+<% else %>
+  <h2>Deadline</h2>
+  <p><%= date_format_admin(@petition.closed_at) %></p>
 
-<div class="row">
-  <label>State:</label>
-  <p class="text_block"><%= @petition.state %></p>
-</div>
+  <h2>Link to petition</h2>
+  <p><%= link_to petition_path(@petition), petition_path(@petition), :target => "_blank" %></p>
 
+<% end %>
