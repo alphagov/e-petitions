@@ -88,7 +88,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "both signatures are validated" do
     let(:signature_one) { FactoryGirl.create(:validated_signature, :petition => petition) }
     let(:signature_two) { FactoryGirl.create(:validated_signature, :petition => petition) }
-    let(:mail) { PetitionMailer.double_signature_confirmation([signature_one, signature_two]) }
+    let(:mail) { PetitionMailer.double_signature_confirmation(signature_one, signature_two) }
 
     it "has an appropriate header for the email" do
       expect(mail.subject).to eq("#{subject_prefix}: Signatures already confirmed")

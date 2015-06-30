@@ -1,0 +1,10 @@
+en-GB:
+  delayed/web:
+    flashes:
+      jobs:
+        queued:
+          alert: 'Job cannot be queued because it is already %{status}'
+          notice: 'Job queued'
+        destroyed:
+          alert: 'Job cannot be deleted because it is already %{status}'
+          notice: 'Job destroyed'

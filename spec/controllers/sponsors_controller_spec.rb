@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
+  include ActiveJob::TestHelper
+
   context 'GET show' do
     let(:petition) { FactoryGirl.create(:petition) }
 
@@ -131,7 +133,10 @@ RSpec.describe SponsorsController, type: :controller do
         move: 'next'
       }.merge(options)
       stub_constituency(params[:signature][:postcode], constituency)
-      patch :update, params
+
+      perform_enqueued_jobs do
+        patch :update, params
+      end
     end
 
     let(:signature) { petition.signatures.for_email('s.ponsor@example.com').first }

@@ -1,4 +1,5 @@
 require 'bcrypt'
+require 'uri'
 
 class Site < ActiveRecord::Base
   class ServiceUnavailable < StandardError; end
@@ -24,8 +25,20 @@ class Site < ActiveRecord::Base
       instance.enabled?
     end
 
+    def host
+      instance.host
+    end
+
+    def host_with_port
+      instance.host_with_port
+    end
+
     def petition_closed_at(time = Time.current)
       instance.petition_closed_at(time)
+    end
+
+    def port
+      instance.port
     end
 
     def protected?
@@ -147,11 +160,23 @@ class Site < ActiveRecord::Base
   end
 
   def email_protocol
-    URI.parse(url).scheme
+    uri.scheme
+  end
+
+  def host
+    uri.host
+  end
+
+  def host_with_port
+    "#{host}#{port_string}"
   end
 
   def password_digest
     BCrypt::Password.new(super)
+  end
+
+  def port
+    uri.port
   end
 
   def password=(new_password)
@@ -182,5 +207,30 @@ class Site < ActiveRecord::Base
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
+  end
+
+  private
+
+  def port_string
+    standard_port? ? '' : ":#{port}"
+  end
+
+  def protocol
+    "#{uri.scheme}://"
+  end
+
+  def standard_port
+    case protocol
+      when 'https://' then 443
+      else 80
+    end
+  end
+
+  def standard_port?
+    port == standard_port
+  end
+
+  def uri
+    @uri ||= URI.parse(url)
   end
 end

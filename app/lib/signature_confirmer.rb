@@ -23,28 +23,28 @@ class SignatureConfirmer
   private
 
   def send_no_signature_for_petition_email
-    @mailer.no_signature_for_petition(@petition, @email).deliver_now
+    @mailer.no_signature_for_petition(@petition, @email).deliver_later
   end
 
   def resend_confirmation_email_or_notify_already_confirmed(signatures)
     if signatures.first.pending?
-      @mailer.email_confirmation_for_signer(signatures.first).deliver_now
+      @mailer.email_confirmation_for_signer(signatures.first).deliver_later
     else
-      @mailer.email_already_confirmed_for_signature(signatures.first).deliver_now
+      @mailer.email_already_confirmed_for_signature(signatures.first).deliver_later
     end
   end
 
   def email_multiple_signees(signatures)
     if all_signatures_are_pending?(signatures)
-      @mailer.two_pending_signatures(*signatures).deliver_now
+      @mailer.two_pending_signatures(*signatures).deliver_later
     else
       pending_signature   = signatures.detect(&:pending?)
       validated_signature = signatures.detect(&:validated?)
 
       if pending_signature
-        @mailer.one_pending_one_validated_signature(pending_signature, validated_signature).deliver_now
+        @mailer.one_pending_one_validated_signature(pending_signature, validated_signature).deliver_later
       else
-        @mailer.double_signature_confirmation(signatures).deliver_now
+        @mailer.double_signature_confirmation(*signatures).deliver_later
       end
     end
   end

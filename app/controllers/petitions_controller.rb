@@ -103,7 +103,7 @@ class PetitionsController < ApplicationController
   end
 
   def send_email_to_gather_sponsors(petition)
-    PetitionMailer.gather_sponsors_for_petition(petition).deliver_now
+    PetitionMailer.gather_sponsors_for_petition(petition).deliver_later
   end
 
   def parse_emails(emails)

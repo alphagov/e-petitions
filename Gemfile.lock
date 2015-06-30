@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/thebestday/delayed-web.git
+  revision: eb3c0da1fbeaebe9b66c9617e4c31c0ba6069286
+  specs:
+    delayed-web (0.0.1)
+      rails (>= 3.2.13, < 4.3.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -271,6 +278,7 @@ DEPENDENCIES
   cucumber-rails
   daemons
   database_cleaner
+  delayed-web!
   delayed_job_active_record
   dotenv-rails
   dynamic_form

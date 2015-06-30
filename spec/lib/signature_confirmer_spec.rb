@@ -1,4 +1,4 @@
-require 'signature_confirmer'
+require 'rails_helper'
 
 RSpec.describe SignatureConfirmer do
   let(:petition) { double }
@@ -34,7 +34,7 @@ RSpec.describe SignatureConfirmer do
   end
 
   context "will send email" do
-    before(:each) { expect(deliverer).to receive(:deliver_now) }
+    before(:each) { expect(deliverer).to receive(:deliver_later) }
 
     context "email has never signed" do
       it "sends 'no signature for petition'" do
@@ -83,7 +83,7 @@ RSpec.describe SignatureConfirmer do
       let(:signatures) { [validated_signature, validated_signature] }
 
       it "sends an email confirming both signatures" do
-        expect(mailer).to receive(:double_signature_confirmation).with(signatures).and_return(deliverer)
+        expect(mailer).to receive(:double_signature_confirmation).with(*signatures).and_return(deliverer)
         subject.confirm!
       end
     end

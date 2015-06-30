@@ -188,7 +188,10 @@ RSpec.describe SignaturesController, type: :controller do
         :petition_id => petition.id
       }.merge(options)
       stub_constituency(params[:signature][:postcode], constituency)
-      post :create, params
+
+      perform_enqueued_jobs do
+        post :create, params
+      end
     end
 
     context 'managing the "move" parameter' do

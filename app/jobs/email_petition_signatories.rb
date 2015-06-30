@@ -52,7 +52,7 @@ class EmailPetitionSignatories
     end
 
     def send_email_to(signature)
-      create_email(petition, signature).deliver_now
+      create_email(petition, signature).deliver_later
       signature.set_email_sent_at_for(timestamp_name, to: petition_timestamp)
     end
 
