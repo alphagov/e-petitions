@@ -1,6 +1,6 @@
 Dear <%= @signature.name %>,
 
-Unfortunately we've had to bring forward the closing date of your petition "<%= @signature.petition.action %>" (available at <%= petition_url(@signature.petition) %>) from  <%= short_date_format @signature.petition.closed_at %> to 31 March 2015
+Unfortunately we've had to bring forward the closing date of your petition "<%= @signature.petition.action %>" (available at <%= petition_url(@signature.petition) %>) from  <%= short_date_format @signature.petition.deadline %> to 31 March 2015
 
 The dissolution of this Parliament has now been scheduled for 30 March 2015, and it’s not possible for petitions to remain open once Parliament has been dissolved.
 

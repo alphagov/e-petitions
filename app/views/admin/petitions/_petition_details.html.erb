@@ -26,7 +26,7 @@
   <dd><%= date_time_format(@petition.created_at) %></dd>
 <% else %>
   <dt>Deadline</dt>
-  <dd><%= date_format_admin(@petition.closed_at) %></dd>
+  <dd><%= date_format_admin(@petition.deadline) %></dd>
 
   <dt>Link to petition</dt>
   <dd><%= link_to petition_path(@petition), petition_path(@petition), target: "_blank" %></dd>
