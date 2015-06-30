@@ -48,3 +48,10 @@
     padding-right: 0;
   }
 }
+
+%word-break {
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens:    auto;
+  hyphens:         auto;
+}
