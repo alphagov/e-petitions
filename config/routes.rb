@@ -27,7 +27,6 @@ Rails.application.routes.draw do
     resources :signatures, :only => [:new] do
       post 'new' => 'signatures#create', :as => :sign, :on => :collection
       get 'thank-you', :action => :thank_you, :on => :collection, :as => :thank_you
-      get 'signed', :action => :signed, :on => :member, :as => :signed
     end
   end
 
@@ -35,9 +34,10 @@ Rails.application.routes.draw do
 
   get 'search' => 'search#search', :as => :search
 
-  resources :signatures, :only => [] do
-    get 'verify/:token', :action => :verify, :on => :member, :as => :verify
-    get 'unsubscribe/:unsubscribe_token', :action => :unsubscribe, :on => :member, :as => :unsubscribe
+  scope 'signatures/:id' do
+    get 'verify/:token' => 'signatures#verify', :as => :verify_signature
+    get 'unsubscribe/:unsubscribe_token' => 'signatures#unsubscribe', :as => :unsubscribe_signature
+    get 'signed/:token' => 'signatures#signed', :as => :signed_signature
   end
 
   namespace :archived do

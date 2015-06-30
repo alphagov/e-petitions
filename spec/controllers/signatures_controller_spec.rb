@@ -12,16 +12,10 @@ RSpec.describe SignaturesController, type: :controller do
 
       before { stub_constituency('SW1A 1AA', '1234', 'Cities of London and Westminster') }
 
-      it "responds to /signatures/:id/verify/:token" do
-        expect({:get => "/signatures/#{signature.id}/verify/#{signature.perishable_token}"}).
-          to route_to({:controller => "signatures", :action => "verify", :id => signature.id.to_s, :token => signature.perishable_token})
-        expect(verify_signature_path(signature, signature.perishable_token)).to eq("/signatures/#{signature.id}/verify/#{signature.perishable_token}")
-      end
-
       it "redirects to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{signature.petition_id}/signatures/#{signature.perishable_token}/signed")
+        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed/#{signature.perishable_token}")
       end
 
       it "does not set petition state to validated" do
@@ -108,18 +102,42 @@ RSpec.describe SignaturesController, type: :controller do
 
   describe "signed" do
     let(:petition) { FactoryGirl.create(:petition) }
-    let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
 
-    it "redirects to the signature verify page if unvalidated" do
-      get :signed, :petition_id => petition.id, :id => signature.perishable_token
-      expect(assigns[:signature]).to eq(signature)
-      expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
+    context 'for validated signatures' do
+      let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+
+      it 'renders the signed template' do
+        get :signed, id: signature.to_param, token: signature.perishable_token
+        expect(response).to be_success
+        expect(response).to render_template('signatures/signed')
+      end
+
+      it 'exposes the signature and its petition' do
+        get :signed, id: signature.to_param, token: signature.perishable_token
+        expect(assigns['signature']).to eq signature
+        expect(assigns['petition']).to eq petition
+      end
+
+      it "raises exception if token does not match the signature" do
+        expect do
+          get :signed, id: signature.to_param, token: "#{signature.perishable_token}a"
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
 
-    it "raises exception if token not found" do
-      expect do
-        get :signed, :petition_id => petition.id, :id => "#{signature.perishable_token}a"
-      end.to raise_error(ActiveRecord::RecordNotFound)
+    context 'for unvalidated signatures' do
+      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+
+      it "redirects to the signature verify page" do
+        get :signed, id: signature.to_param, token: signature.perishable_token
+        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
+      end
+
+      it "raises exception if token does not match" do
+        expect do
+          get :signed, id: signature.to_param, token: "#{signature.perishable_token}a"
+        end.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 

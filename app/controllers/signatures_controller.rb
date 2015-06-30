@@ -2,7 +2,7 @@ class SignaturesController < ApplicationController
   include ManagingMoveParameter
 
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you]
-  before_filter :retrieve_signature, :only => [:verify, :unsubscribe]
+  before_filter :retrieve_signature, :only => [:verify, :unsubscribe, :signed]
 
   respond_to :html
 
@@ -22,9 +22,13 @@ class SignaturesController < ApplicationController
   end
 
   def signed
-    @signature = Signature.find_by!(perishable_token: params[:id])
-    redirect_to(verify_signature_url(@signature, @signature.perishable_token)) and return unless @signature.validated?
-    @petition = @signature.petition
+    verify_token
+
+    if @signature.validated?
+      @petition = @signature.petition
+    else
+      redirect_to(verify_signature_url(@signature, @signature.perishable_token))
+    end
   end
 
   def verify
@@ -129,7 +133,7 @@ class SignaturesController < ApplicationController
     else
       @signature.validate!
     end
-    redirect_to signed_petition_signature_url(@signature.petition, @signature.perishable_token)
+    redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
   end
 end
 
