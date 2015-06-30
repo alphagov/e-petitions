@@ -4,10 +4,6 @@ Given /^a set of petitions$/ do
   end
 end
 
-Then /^I am taken to a landing page$/ do
-  expect(page).to have_content("Thank you")
-end
-
 Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
