@@ -1022,12 +1022,11 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#deadline' do
-    subject(:petition) { FactoryGirl.create(:petition) }
     let(:now) { Time.current }
 
     context 'for closed petitions' do
       let(:closed_at) { now + 1.day }
-      before { petition.close!(closed_at) }
+      subject(:petition) { FactoryGirl.build(:closed_petition, closed_at: closed_at) }
 
       it 'returns the closed_at timestamp' do
         expect(petition.closed_at).to eq closed_at
@@ -1036,7 +1035,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context 'for open petitions' do
-      before { petition.publish!(now) }
+      subject(:petition) { FactoryGirl.build(:open_petition, open_at: now) }
       let(:duration) { Site.petition_duration.months }
       let(:closing_date) { (now + duration).end_of_day }
 
@@ -1045,9 +1044,17 @@ RSpec.describe Petition, type: :model do
         expect(petition.deadline).to eq closing_date
       end
 
-      it "ignores any closed_at stamp that has been set" do
+      it "prefers any closed_at stamp that has been set" do
         petition.closed_at = now + 1.day
-        expect(petition.deadline).not_to eq petition.closed_at
+        expect(petition.deadline).not_to eq closing_date
+        expect(petition.deadline).to eq petition.closed_at
+      end
+    end
+
+    context 'for petitions in other states without an open_at' do
+      subject(:petition) { FactoryGirl.build(:petition, open_at: nil) }
+      it 'is nil' do
+        expect(petition.deadline).to be_nil
       end
     end
   end

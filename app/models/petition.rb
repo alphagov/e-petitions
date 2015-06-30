@@ -244,11 +244,7 @@ class Petition < ActiveRecord::Base
   end
 
   def deadline
-    if closed?
-      closed_at
-    else
-      Site.closed_at_for_opening(open_at)
-    end
+    open_at && (closed_at || Site.closed_at_for_opening(open_at))
   end
 
   def rejection_reason

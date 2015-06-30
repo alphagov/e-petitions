@@ -104,6 +104,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of closing date change" do
+    before { petition.publish! }
     let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
 
