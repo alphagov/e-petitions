@@ -426,6 +426,20 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe ".closed_at_for_opening" do
+    let(:site) { double(:site) }
+    let(:closed_at) { 3.months.from_now.end_of_day }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    it "delegates opened_at_for_closing to the instance" do
+      expect(site).to receive(:closed_at_for_opening).and_return(closed_at)
+      expect(Site.closed_at_for_opening).to eq(closed_at)
+    end
+  end
+
   describe ".reload" do
     let(:site) { double(:site) }
 
@@ -535,7 +549,6 @@ RSpec.describe Site, type: :model do
     end
   end
 
-
   describe "#formatted_threshold_for_moderation" do
     subject :site do
       described_class.create!(threshold_for_moderation: 5000)
@@ -615,6 +628,16 @@ RSpec.describe Site, type: :model do
 
     it "returns the opening date at petition_duration months ago" do
       expect(site.opened_at_for_closing).to eq(3.months.ago.end_of_day)
+    end
+  end
+
+  describe "#closed_at_for_opening" do
+    subject :site do
+      described_class.create!(petition_duration: 3)
+    end
+
+    it "returns the closing date at petition_duration months in the future" do
+      expect(site.closed_at_for_opening).to eq(3.months.from_now.end_of_day)
     end
   end
 end

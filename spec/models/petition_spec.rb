@@ -1021,6 +1021,37 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe '#deadline' do
+    subject(:petition) { FactoryGirl.create(:petition) }
+    let(:now) { Time.current }
+
+    context 'for closed petitions' do
+      let(:closed_at) { now + 1.day }
+      before { petition.close!(closed_at) }
+
+      it 'returns the closed_at timestamp' do
+        expect(petition.closed_at).to eq closed_at
+        expect(petition.deadline).to eq petition.closed_at
+      end
+    end
+
+    context 'for open petitions' do
+      before { petition.publish!(now) }
+      let(:duration) { Site.petition_duration.months }
+      let(:closing_date) { (now + duration).end_of_day }
+
+      it "returns the end of the day, #{Site.petition_duration.months} months after the open_at" do
+        expect(petition.open_at).to eq now
+        expect(petition.deadline).to eq closing_date
+      end
+
+      it "ignores any closed_at stamp that has been set" do
+        petition.closed_at = now + 1.day
+        expect(petition.deadline).not_to eq petition.closed_at
+      end
+    end
+  end
+
   describe "#update_state_after_new_validated_sponsor!" do
     context "with sufficient sponsor count" do
       let(:petition){ FactoryGirl.create(:validated_petition, sponsors_signed: true) }
