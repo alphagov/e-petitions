@@ -14,8 +14,8 @@
 
   <ol class="list-number">
     <li>Anyone can <%= link_to "create a petition", check_petitions_path %> (as long as they are a British citizen or UK resident)</li>
-    <li>If the petition gets <%= number_with_delimiter Site.threshold_for_response %> signatures, the government will reply</li>
-    <li>If the petition gets <%= number_with_delimiter Site.threshold_for_debate %> signatures, the petition will be considered for debate in Parliament</li>
+    <li>If the petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will reply</li>
+    <li>If the petition gets <%= Site.formatted_threshold_for_debate %> signatures, the petition will be considered for debate in Parliament</li>
   </ol>
 
   <!-- <p>You can see the debates and government responses that petitions have caused</p> -->

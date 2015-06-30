@@ -1,8 +1,11 @@
 require 'bcrypt'
 require 'uri'
+require 'active_support/number_helper'
 
 class Site < ActiveRecord::Base
   class ServiceUnavailable < StandardError; end
+
+  include ActiveSupport::NumberHelper
 
   class << self
     def before_remove_const
@@ -23,6 +26,18 @@ class Site < ActiveRecord::Base
 
     def enabled?
       instance.enabled?
+    end
+
+    def formatted_threshold_for_moderation
+      instance.formatted_threshold_for_moderation
+    end
+
+    def formatted_threshold_for_response
+      instance.formatted_threshold_for_response
+    end
+
+    def formatted_threshold_for_debate
+      instance.formatted_threshold_for_debate
     end
 
     def host
@@ -161,6 +176,18 @@ class Site < ActiveRecord::Base
 
   def email_protocol
     uri.scheme
+  end
+
+  def formatted_threshold_for_moderation
+    number_to_delimited(threshold_for_moderation)
+  end
+
+  def formatted_threshold_for_response
+    number_to_delimited(threshold_for_response)
+  end
+
+  def formatted_threshold_for_debate
+    number_to_delimited(threshold_for_debate)
   end
 
   def host
