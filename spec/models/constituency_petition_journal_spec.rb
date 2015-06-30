@@ -95,6 +95,21 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
         subject.reload
         expect(subject.signature_count).not_to eq old_signature_count
       end
+
+      it "increments the signature_count in the DB properly" do
+        first_signature_count = subject.signature_count
+        other_copy = described_class.for(petition, constituency_id)
+        other_copy.record_new_signature
+        second_signature_count = other_copy.reload.signature_count
+        subject.record_new_signature
+        expect(subject.reload.signature_count).to eq(second_signature_count + 1)
+      end
+
+      it 'only executes the update SQL query' do
+        expect {
+          subject.record_new_signature
+        }.not_to exceed_query_limit(1)
+      end
     end
 
     context 'on a new instance' do

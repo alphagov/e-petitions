@@ -30,7 +30,9 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
       signature_count_field = self.class.connection.quote_column_name('signature_count')
       changes = "#{signature_count_field} = #{signature_count_field} + 1, updated_at = :updated_at"
       self.class.unscoped.where(id: id).update_all([changes, updated_at: at])
-      reload
+      # NOTE: even though we don't assume +1 is ok for the SQL update, we
+      # want to avoid an extra SQL select from .reload so +1 is ok here
+      raw_write_attribute(:signature_count, signature_count+1)
     end
   end
 end
