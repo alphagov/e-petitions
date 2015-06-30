@@ -131,14 +131,29 @@ RSpec.describe Site, type: :model do
       expect(Site.threshold_for_moderation).to eq(5)
     end
 
+    it "delegates formatted_threshold_for_moderation to the instance" do
+      expect(site).to receive(:formatted_threshold_for_moderation).and_return("5,000")
+      expect(Site.formatted_threshold_for_moderation).to eq("5,000")
+    end
+
     it "delegates threshold_for_response to the instance" do
       expect(site).to receive(:threshold_for_response).and_return(10)
       expect(Site.threshold_for_response).to eq(10)
     end
 
+    it "delegates formatted_threshold_for_response to the instance" do
+      expect(site).to receive(:formatted_threshold_for_response).and_return("10,000")
+      expect(Site.formatted_threshold_for_response).to eq("10,000")
+    end
+
     it "delegates threshold_for_debate to the instance" do
       expect(site).to receive(:threshold_for_debate).and_return(100)
       expect(Site.threshold_for_debate).to eq(100)
+    end
+
+    it "delegates formatted_threshold_for_debate to the instance" do
+      expect(site).to receive(:formatted_threshold_for_debate).and_return("100,000")
+      expect(Site.formatted_threshold_for_debate).to eq("100,000")
     end
 
     it "delegates last_checked_at to the instance" do
@@ -517,6 +532,37 @@ RSpec.describe Site, type: :model do
 
     it "the protocol of the url" do
       expect(site.email_protocol).to eq("https")
+    end
+  end
+
+
+  describe "#formatted_threshold_for_moderation" do
+    subject :site do
+      described_class.create!(threshold_for_moderation: 5000)
+    end
+
+    it "returns a formatted number" do
+      expect(site.formatted_threshold_for_moderation).to eq("5,000")
+    end
+  end
+
+  describe "#formatted_threshold_for_response" do
+    subject :site do
+      described_class.create!(threshold_for_response: 10000)
+    end
+
+    it "returns a formatted number" do
+      expect(site.formatted_threshold_for_response).to eq("10,000")
+    end
+  end
+
+  describe "#formatted_threshold_for_debate" do
+    subject :site do
+      described_class.create!(threshold_for_debate: 100000)
+    end
+
+    it "returns a formatted number" do
+      expect(site.formatted_threshold_for_debate).to eq("100,000")
     end
   end
 
