@@ -124,10 +124,12 @@ en-GB:
       with_response_explanation:
         html:
           zero: "There aren't any petitions with a government response yet"
+          one: "Petitions with a government response (%{formatted_count})"
           other: "Petitions with a government response (%{formatted_count})"
       with_debate_outcome_explanation:
         html:
           zero: There aren't any petitions that have been debated in parliament yet
+          one: "Petitions debated in parliament (%{formatted_count})"
           other: "Petitions debated in parliament (%{formatted_count})"
 
     action_counts:
