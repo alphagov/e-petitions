@@ -1,8 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe ClosePetitionsJob, type: :job do
-  context "when a petition is in the open state and closed_at has not passed" do
-    let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.from_now) }
+  let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+  context "when a petition is in the open state and closing date has not passed" do
+    let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
 
     it "does not close the petition" do
       expect{
@@ -14,7 +16,7 @@ RSpec.describe ClosePetitionsJob, type: :job do
   end
 
   context "when a petition is in the open state and closed_at has passed" do
-    let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.ago) }
+    let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
 
     it "does close the petition" do
       expect{

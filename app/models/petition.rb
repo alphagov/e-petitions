@@ -57,7 +57,7 @@ class Petition < ActiveRecord::Base
   # = Validations =
   include Staged::Validations::PetitionDetails
   validates :response_summary, length: { maximum: 500, message: 'Response summary is too long.' }
-  validates_presence_of :open_at, :closed_at, :if => :open?
+  validates_presence_of :open_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
   validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
   # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
@@ -106,11 +106,11 @@ class Petition < ActiveRecord::Base
     end
 
     def close_petitions!(time = Time.current)
-      in_need_of_closing(time).update_all(state: CLOSED_STATE, updated_at: time)
+      in_need_of_closing(time).update_all(state: CLOSED_STATE, closed_at: time, updated_at: time)
     end
 
     def in_need_of_closing(time = Time.current)
-      where(state: OPEN_STATE).where(arel_table[:closed_at].lt(time))
+      where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
     end
 
     def with_invalid_signature_counts
@@ -174,8 +174,8 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def publish!
-    update!(state: OPEN_STATE, open_at: Time.current, closed_at: Site.petition_closed_at)
+  def publish!(time = Time.current)
+    update!(state: OPEN_STATE, open_at: time)
   end
 
   def reject(attributes)
@@ -188,6 +188,10 @@ class Petition < ActiveRecord::Base
     end
 
     save
+  end
+
+  def close!(time = Time.current)
+    update!(state: CLOSED_STATE, closed_at: time)
   end
 
   def validate_creator_signature!
@@ -217,10 +221,7 @@ class Petition < ActiveRecord::Base
   def open?
     state == OPEN_STATE
   end
-
-  def can_be_signed?
-    state == OPEN_STATE && closed_at > Time.current
-  end
+  alias_method :can_be_signed?, :open?
 
   def rejected?
     state == REJECTED_STATE
@@ -230,8 +231,8 @@ class Petition < ActiveRecord::Base
     state == HIDDEN_STATE
   end
 
-  def closed?(time = Time.current)
-    state == CLOSED_STATE || state == OPEN_STATE && closed_at <= time
+  def closed?
+    state == CLOSED_STATE
   end
 
   def can_have_debate_added?

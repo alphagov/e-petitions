@@ -102,7 +102,6 @@ FactoryGirl.define do
   factory :open_petition, :parent => :petition do
     state      Petition::OPEN_STATE
     open_at    { Time.current }
-    closed_at  { open_at + 1.day }
   end
 
   factory :closed_petition, :parent => :petition do

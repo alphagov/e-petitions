@@ -60,7 +60,7 @@ Given /^the petition I want to sign is (validated|sponsored|open|hidden|rejected
 end
 
 Given /^the petition I want to sign has been closed$/ do
-  @sponsor_petition = FactoryGirl.create(:open_petition, closed_at: 1.day.ago)
+  @sponsor_petition = FactoryGirl.create(:closed_petition, closed_at: 1.day.ago)
 end
 
 Then(/^I am redirected to the petition closed page$/) do

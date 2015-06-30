@@ -33,8 +33,8 @@ class Site < ActiveRecord::Base
       instance.host_with_port
     end
 
-    def petition_closed_at(time = Time.current)
-      instance.petition_closed_at(time)
+    def opened_at_for_closing(time = Time.current)
+      instance.opened_at_for_closing(time)
     end
 
     def port
@@ -189,8 +189,8 @@ class Site < ActiveRecord::Base
     end
   end
 
-  def petition_closed_at(time = Time.current)
-    time.end_of_day + petition_duration.months
+  def opened_at_for_closing(time = Time.current)
+    time.end_of_day - petition_duration.months
   end
 
   validates :title, presence: true, length: { maximum: 50 }

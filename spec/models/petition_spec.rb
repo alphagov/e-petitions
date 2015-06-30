@@ -96,14 +96,8 @@ RSpec.describe Petition, type: :model do
         expect(petition.errors[:open_at]).not_to be_empty
       end
 
-      it "checks petition is invalid if no closed_at date" do
-        expect(petition).not_to be_valid
-        expect(petition.errors[:closed_at]).not_to be_empty
-      end
-
-      it "checks petition is valid if there is a open_at and closed_at date" do
+      it "checks petition is valid if there is an open_at date" do
         petition.open_at = Time.current
-        petition.closed_at = Time.current
         expect(petition).to be_valid
       end
     end
@@ -474,28 +468,23 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "can_be_signed?" do
-    def petition(state = Petition::OPEN_STATE)
-      FactoryGirl.build(:petition, :state => state)
+  describe "#can_be_signed?" do
+    context "when the petition is in the open state" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
+
+      it "is true" do
+        expect(petition.can_be_signed?).to be_truthy
+      end
     end
 
-    it "is true if and only if the petition is OPEN and the closed_at date is in the future" do
-      petition = FactoryGirl.build(:open_petition, :closed_at => 1.year.from_now)
-      expect(petition.can_be_signed?).to be_truthy
-    end
+    (Petition::STATES - [Petition::OPEN_STATE]).each do |state|
+      context "when the petition is in the #{state} state" do
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-    it "is false if the petition is OPEN and the closed_at date is in the past" do
-      petition = FactoryGirl.build(:open_petition, :closed_at => 2.minutes.ago)
-      expect(petition.can_be_signed?).to be_falsey
-    end
-
-    it "is false otherwise" do
-      expect(petition(Petition::PENDING_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::HIDDEN_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::REJECTED_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::VALIDATED_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::SPONSORED_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::CLOSED_STATE).can_be_signed?).to be_falsey
+        it "is false" do
+          expect(petition.can_be_signed?).to be_falsey
+        end
+      end
     end
   end
 
@@ -520,28 +509,20 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#closed?" do
-    context "when the closed_at has passed but the state is still open" do
-      let(:petition) { FactoryGirl.build(:petition, state: Petition::CLOSED_STATE, closed_at: 3.days.ago) }
+    context "when the state is closed" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::CLOSED_STATE) }
 
-      it "return true" do
-        expect(petition.closed?).to be_truthy
-      end
-    end
-
-    context "when the closed_at has not passed but the state is closed" do
-      let(:petition) { FactoryGirl.build(:petition, state: Petition::CLOSED_STATE, closed_at: 3.days.from_now) }
-
-      it "return true" do
+      it "returns true" do
         expect(petition.closed?).to be_truthy
       end
     end
 
     context "for other states" do
       (Petition::STATES - [Petition::CLOSED_STATE]).each do |state|
-        let(:petition) { FactoryGirl.build(:petition, state: state, closed_at: 6.months.from_now) }
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-        it "is not closed when state is #{state}" do
-          expect(petition.closed?).to be_falsey
+        it "is not open when state is #{state}" do
+          expect(petition.open?).to be_falsey
         end
       end
     end
@@ -724,8 +705,9 @@ RSpec.describe Petition, type: :model do
   end
 
   describe ".close_petitions!" do
-    context "when a petition is in the open state and closed_at has not passed" do
-      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.from_now) }
+    context "when a petition is in the open state and the closing date has not passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does not close the petition" do
         expect{
@@ -735,7 +717,8 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and closed_at has passed" do
-      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.ago) }
+      let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does close the petition" do
         expect{
@@ -746,32 +729,26 @@ RSpec.describe Petition, type: :model do
   end
 
   describe ".in_need_of_closing" do
-    context "when a petition is in the closed state and closed_at has not passed" do
-      let!(:petition) { FactoryGirl.create(:closed_petition, closed_at: 3.days.from_now) }
+    context "when a petition is in the closed state" do
+      let!(:petition) { FactoryGirl.create(:closed_petition) }
 
       it "does not find the petition" do
         expect(described_class.in_need_of_closing.to_a).not_to include(petition)
       end
     end
 
-    context "when a petition is in the closed state and closed_at has passed" do
-      let!(:petition) { FactoryGirl.create(:closed_petition, closed_at: 3.days.ago) }
+    context "when a petition is in the open state and the closing date has not passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does not find the petition" do
         expect(described_class.in_need_of_closing.to_a).not_to include(petition)
       end
     end
 
-    context "when a petition is in the open state and closed_at has not passed" do
-      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.from_now) }
-
-      it "does not find the petition" do
-        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
-      end
-    end
-
-    context "when a petition is in the open state and closed_at has passed" do
-      let!(:petition) { FactoryGirl.create(:open_petition, closed_at: 3.days.ago) }
+    context "when a petition is in the open state and the closing date has passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does not find the petition" do
         expect(described_class.in_need_of_closing.to_a).to include(petition)
@@ -987,10 +964,6 @@ RSpec.describe Petition, type: :model do
     it "sets the open date to now" do
       expect(petition.open_at).to be_within(1.second).of(now)
     end
-
-    it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-      expect(petition.closed_at).to be_within(1.second).of(closing_date)
-    end
   end
 
   describe "#reject" do
@@ -1026,6 +999,25 @@ RSpec.describe Petition, type: :model do
           expect(petition.state).to eq("hidden")
         end
       end
+    end
+  end
+
+  describe '#close!' do
+    subject(:petition) { FactoryGirl.create(:petition) }
+    let(:now) { Time.current }
+    let(:duration) { Site.petition_duration.months }
+    let(:closing_date) { (now + duration).end_of_day }
+
+    before do
+      petition.close!
+    end
+
+    it "sets the state to CLOSED" do
+      expect(petition.state).to eq(Petition::CLOSED_STATE)
+    end
+
+    it "sets the closing date to now" do
+      expect(petition.closed_at).to be_within(1.second).of(now)
     end
   end
 

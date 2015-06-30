@@ -40,8 +40,8 @@ class ArchivedPetition < ActiveRecord::Base
     state == OPEN_STATE
   end
 
-  def closed?(time = Time.current)
-    state.in?([OPEN_STATE, CLOSED_STATE]) && closed_at <= time
+  def closed?
+    state == CLOSED_STATE
   end
 
   def rejected?
