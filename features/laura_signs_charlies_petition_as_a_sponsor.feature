@@ -16,7 +16,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Then I should have a pending signature on the petition as a sponsor
     And I should receive an email explaining the petition I am sponsoring
     When I confirm my email address
-    Then I am taken to a landing page
+    Then I should see a heading called "Thanks"
     And I should have fully signed the petition as a sponsor
 
   Scenario: Laura wants to sign the petition that is already published
@@ -91,9 +91,9 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
   Scenario: Laura sees notice that she has already signed when she validates more than once
     When I have sponsored a petition
     When I confirm my email address
-    Then I am taken to a landing page
+    Then I should see a heading called "Thanks"
     And I should have fully signed the petition as a sponsor
     When I confirm my email address
-    Then I am taken to a landing page
+    Then I should see a heading called "Thanks"
     And I should see "You have already sponsored this petition."
-    And I should see "This petition is waiting for more sponsors"
+    And I should see /This petition needs [0-9]+ supporters to go live/
