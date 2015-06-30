@@ -96,14 +96,8 @@ RSpec.describe Petition, type: :model do
         expect(petition.errors[:open_at]).not_to be_empty
       end
 
-      it "checks petition is invalid if no closed_at date" do
-        expect(petition).not_to be_valid
-        expect(petition.errors[:closed_at]).not_to be_empty
-      end
-
-      it "checks petition is valid if there is a open_at and closed_at date" do
+      it "checks petition is valid if there is an open_at date" do
         petition.open_at = Time.current
-        petition.closed_at = Time.current
         expect(petition).to be_valid
       end
     end
@@ -216,7 +210,7 @@ RSpec.describe Petition, type: :model do
         @p3 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)
         @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
         @p5 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
-        @p6 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
+        @p6 = FactoryGirl.create(:closed_petition, :closed_at => 1.day.ago)
         @p7 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
       end
 
@@ -341,7 +335,7 @@ RSpec.describe Petition, type: :model do
 
         @selectable_petition_1 = FactoryGirl.create(:open_petition)
         @selectable_petition_2 = FactoryGirl.create(:rejected_petition)
-        @selectable_petition_3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
+        @selectable_petition_3 = FactoryGirl.create(:closed_petition, :closed_at => 1.day.ago)
         @selectable_petition_4 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
       end
 
@@ -398,7 +392,7 @@ RSpec.describe Petition, type: :model do
     end
 
     it 'excludes closed petitions with signatures from the supplied constituency_id' do
-      petition_1.update_column(:closed_at, 3.days.ago)
+      petition_1.update_columns(state: 'closed', closed_at: 3.days.ago)
       popular = Petition.popular_in_constituency(constituency_1, 4)
       expect(popular).not_to include(petition_1)
     end
@@ -474,117 +468,165 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "can_be_signed?" do
-    def petition(state = Petition::OPEN_STATE)
-      FactoryGirl.build(:petition, :state => state)
+  describe "#can_be_signed?" do
+    context "when the petition is in the open state" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
+
+      it "is true" do
+        expect(petition.can_be_signed?).to be_truthy
+      end
     end
 
-    it "is true if and only if the petition is OPEN and the closed_at date is in the future" do
-      petition = FactoryGirl.build(:open_petition, :closed_at => 1.year.from_now)
-      expect(petition.can_be_signed?).to be_truthy
-    end
+    (Petition::STATES - [Petition::OPEN_STATE]).each do |state|
+      context "when the petition is in the #{state} state" do
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-    it "is false if the petition is OPEN and the closed_at date is in the past" do
-      petition = FactoryGirl.build(:open_petition, :closed_at => 2.minutes.ago)
-      expect(petition.can_be_signed?).to be_falsey
-    end
-
-    it "is false otherwise" do
-      expect(petition(Petition::PENDING_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::HIDDEN_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::REJECTED_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::VALIDATED_STATE).can_be_signed?).to be_falsey
-      expect(petition(Petition::SPONSORED_STATE).can_be_signed?).to be_falsey
+        it "is false" do
+          expect(petition.can_be_signed?).to be_falsey
+        end
+      end
     end
   end
 
   describe "open?" do
-    it "is open when state is open" do
-      expect(FactoryGirl.build(:petition, :state => Petition::OPEN_STATE).open?).to  be_truthy
+    context "when the state is open" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
+
+      it "returns true" do
+        expect(petition.open?).to be_truthy
+      end
     end
 
-    it "is not open when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::REJECTED_STATE, Petition::HIDDEN_STATE].each do |state|
-        expect(FactoryGirl.build(:petition, :state => state).open?).to be_falsey
+    context "for other states" do
+      (Petition::STATES - [Petition::OPEN_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not open when state is #{state}" do
+          expect(petition.open?).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe "#closed?" do
+    context "when the state is closed" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::CLOSED_STATE) }
+
+      it "returns true" do
+        expect(petition.closed?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::CLOSED_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not open when state is #{state}" do
+          expect(petition.open?).to be_falsey
+        end
       end
     end
   end
 
   describe "rejected?" do
-    it "is rejected when state is rejected" do
-      expect(FactoryGirl.build(:petition, :state => Petition::REJECTED_STATE).rejected?).to be_truthy
+    context "when the state is rejected" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
+
+      it "returns true" do
+        expect(petition.rejected?).to be_truthy
+      end
     end
 
-    it "is not rejected when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::HIDDEN_STATE].each do |state|
-        expect(FactoryGirl.build(:petition, :state => state).rejected?).to be_falsey
+    context "for other states" do
+      (Petition::STATES - [Petition::REJECTED_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not rejected when state is #{state}" do
+          expect(petition.rejected?).to be_falsey
+        end
       end
     end
   end
 
   describe "hidden?" do
-    it "is hidden when state is hidden" do
-      expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
+    context "when the state is hidden" do
+      it "returns true" do
+        expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
+      end
     end
 
-    it "is not hidden when state is anything else" do
-      [Petition::PENDING_STATE, Petition::VALIDATED_STATE, Petition::SPONSORED_STATE, Petition::OPEN_STATE, Petition::REJECTED_STATE].each do |state|
-        expect(FactoryGirl.build(:petition, :state => state).hidden?).to be_falsey
+    context "for other states" do
+      (Petition::STATES - [Petition::HIDDEN_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not hidden when state is #{state}" do
+          expect(petition.hidden?).to be_falsey
+        end
       end
     end
   end
 
   describe "#in_moderation?" do
-    it "is in moderation when the state is sponsored" do
-      expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_moderation?).to be_truthy
+    context "when the state is sponsored" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::SPONSORED_STATE) }
+
+      it "returns true" do
+        expect(petition.in_moderation?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::SPONSORED_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not in moderation when state is #{state}" do
+          expect(petition.in_moderation?).to be_falsey
+        end
+      end
     end
   end
 
   describe "#moderated?" do
-    context "when the petition is hidden" do
-      subject { FactoryGirl.create(:hidden_petition) }
+    context "for moderated states" do
+      Petition::MODERATED_STATES.each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-      it "returns true" do
-        expect(subject.moderated?).to eq(true)
+        it "is moderated when state is #{state}" do
+          expect(petition.moderated?).to be_truthy
+        end
       end
     end
 
-    context "when the petition is rejected" do
-      subject { FactoryGirl.create(:rejected_petition) }
+    context "for other states" do
+      (Petition::STATES - Petition::MODERATED_STATES).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-      it "returns true" do
-        expect(subject.moderated?).to eq(true)
-      end
-    end
-
-    context "when the petition is open" do
-      subject { FactoryGirl.create(:open_petition) }
-
-      it "returns true" do
-        expect(subject.moderated?).to eq(true)
-      end
-    end
-
-    context "when the petition is closed" do
-      subject { FactoryGirl.create(:closed_petition) }
-
-      it "returns true" do
-        expect(subject.moderated?).to eq(true)
+        it "is not moderated when state is #{state}" do
+          expect(petition.moderated?).to be_falsey
+        end
       end
     end
   end
 
   describe "#in_todo_list?" do
-    it "is in todo list when the state is sponsored" do
-      expect(FactoryGirl.build(:petition, :state => Petition::SPONSORED_STATE).in_todo_list?).to be_truthy
+    context "for todo list states" do
+      Petition::TODO_LIST_STATES.each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is in todo list when the state is #{state}" do
+          expect(petition.in_todo_list?).to be_truthy
+        end
+      end
     end
 
-    it "is in todo list when the state is validated" do
-      expect(FactoryGirl.build(:petition, :state => Petition::VALIDATED_STATE).in_todo_list?).to be_truthy
-    end
+    context "for other states" do
+      (Petition::STATES - Petition::TODO_LIST_STATES).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-    it "is in todo list when the state is pending" do
-      expect(FactoryGirl.build(:petition, :state => Petition::PENDING_STATE).in_todo_list?).to be_truthy
+        it "is not in todo list when the state is #{state}" do
+          expect(petition.in_todo_list?).to be_falsey
+        end
+      end
     end
   end
 
@@ -659,6 +701,58 @@ RSpec.describe Petition, type: :model do
     it "allows editing of the response summary by sysadmins" do
       allow(user).to receive_messages(:is_a_sysadmin? => true)
       expect(petition.response_summary_editable_by?(user)).to be_truthy
+    end
+  end
+
+  describe ".close_petitions!" do
+    context "when a petition is in the open state and the closing date has not passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+      it "does not close the petition" do
+        expect{
+          described_class.close_petitions!
+        }.not_to change{ petition.reload.state }
+      end
+    end
+
+    context "when a petition is in the open state and closed_at has passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+      it "does close the petition" do
+        expect{
+          described_class.close_petitions!
+        }.to change{ petition.reload.state }.from('open').to('closed')
+      end
+    end
+  end
+
+  describe ".in_need_of_closing" do
+    context "when a petition is in the closed state" do
+      let!(:petition) { FactoryGirl.create(:closed_petition) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is in the open state and the closing date has not passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is in the open state and the closing date has passed" do
+      let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_closing.to_a).to include(petition)
+      end
     end
   end
 
@@ -870,10 +964,6 @@ RSpec.describe Petition, type: :model do
     it "sets the open date to now" do
       expect(petition.open_at).to be_within(1.second).of(now)
     end
-
-    it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-      expect(petition.closed_at).to be_within(1.second).of(closing_date)
-    end
   end
 
   describe "#reject" do
@@ -909,6 +999,25 @@ RSpec.describe Petition, type: :model do
           expect(petition.state).to eq("hidden")
         end
       end
+    end
+  end
+
+  describe '#close!' do
+    subject(:petition) { FactoryGirl.create(:petition) }
+    let(:now) { Time.current }
+    let(:duration) { Site.petition_duration.months }
+    let(:closing_date) { (now + duration).end_of_day }
+
+    before do
+      petition.close!
+    end
+
+    it "sets the state to CLOSED" do
+      expect(petition.state).to eq(Petition::CLOSED_STATE)
+    end
+
+    it "sets the closing date to now" do
+      expect(petition.closed_at).to be_within(1.second).of(now)
     end
   end
 

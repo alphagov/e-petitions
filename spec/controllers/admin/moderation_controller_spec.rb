@@ -42,10 +42,6 @@ RSpec.describe Admin::ModerationController, type: :controller do
           expect(petition.open_at).to be_within(1.second).of(now)
         end
 
-        it "sets the closed date to the end of the day on the date #{Site.petition_duration} months from now" do
-          expect(petition.closed_at).to be_within(1.second).of(closing_date)
-        end
-
         it "redirects to the admin show page for the petition page" do
           expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
         end

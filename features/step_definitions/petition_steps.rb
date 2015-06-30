@@ -110,7 +110,7 @@ And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |petition_action,
 end
 
 Given /^a petition "([^"]*)" has been closed$/ do |petition_action|
-  @petition = FactoryGirl.create(:open_petition, :action => petition_action, :closed_at => 1.day.ago)
+  @petition = FactoryGirl.create(:closed_petition, :action => petition_action)
 end
 
 Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_action, reason_or_not, reason|
@@ -330,7 +330,7 @@ Then /^I expand "([^"]*)"/ do |text|
 end
 
 Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |state, petition_action|
-  petition_closed_at = state == 'closed' ? 1.day.ago : 1.day.from_now
+  petition_closed_at = state == 'closed' ? 1.day.ago : nil
   petition_state = state == 'closed' ? 'open' : state
   petition_args = {
     action: petition_action,

@@ -113,6 +113,17 @@ module Browseable
       results.to_a
     end
 
+    def inspect
+      [].tap do |parts|
+        parts << "#<#{self.class.name}:#{object_id}"
+        parts << " class: #{klass.klass.to_s.inspect}"
+        parts << " scope: #{scope.to_s.inspect}" if scoped?
+        parts << " query: #{query.inspect}" if search?
+        parts << " size: #{total_entries}"
+        parts << ">"
+      end.join
+    end
+
     private
 
     def results

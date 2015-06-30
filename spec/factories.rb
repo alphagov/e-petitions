@@ -20,9 +20,11 @@ FactoryGirl.define do
 
   factory :archived_petition do
     sequence(:title) { |n| "Petition #{n}" }
+    state "closed"
     description "Petition description"
     signature_count 0
     opened_at { 2.years.ago }
+    closed_at { 1.year.ago }
 
     trait :response do
       response "Petition response"
@@ -35,12 +37,13 @@ FactoryGirl.define do
     trait :open do
       state "open"
       signature_count 100
+      closed_at { 6.month.from_now }
     end
 
     trait :closed do
-      state "open"
+      state "closed"
       signature_count 100
-      closed_at { 1.year.ago }
+      closed_at { 6.months.ago }
     end
 
     trait :rejected do
@@ -99,11 +102,10 @@ FactoryGirl.define do
   factory :open_petition, :parent => :petition do
     state      Petition::OPEN_STATE
     open_at    { Time.current }
-    closed_at  { open_at + 1.day }
   end
 
   factory :closed_petition, :parent => :petition do
-    state      Petition::OPEN_STATE
+    state      Petition::CLOSED_STATE
     open_at    { 10.days.ago }
     closed_at  { 1.day.ago }
   end
