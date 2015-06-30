@@ -102,6 +102,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
         other_copy.record_new_signature
         second_signature_count = other_copy.reload.signature_count
         subject.record_new_signature
+        expect(subject.signature_count).to eq(second_signature_count)
         expect(subject.reload.signature_count).to eq(second_signature_count + 1)
       end
 
