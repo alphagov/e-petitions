@@ -11,10 +11,6 @@ When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
   step %{I press "Search"}
 end
 
-Then(/^I should not be able to search via free text$/) do
-  expect(page).to have_no_css("form[action=search]")
-end
-
 Then(/^I should( not)? see an? "([^"]*)" petition count of (\d+)$/) do |see_or_not, state, count|
   have_petition_count_for_state = have_css(%{#other-search-lists a:contains("#{state.capitalize}")}, :text => count.to_s)
   if see_or_not.blank?
