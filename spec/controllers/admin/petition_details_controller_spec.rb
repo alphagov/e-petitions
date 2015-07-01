@@ -85,7 +85,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_column(:state, Petition::REJECTED_STATE) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
         it_behaves_like 'trying to view a petition in the wrong state'
       end
 

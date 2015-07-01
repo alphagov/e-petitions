@@ -3,6 +3,7 @@ class Admin::TakeDownController < Admin::AdminController
   respond_to :html
 
   def show
+    render 'admin/petitions/show'
   end
 
   def update
@@ -11,7 +12,7 @@ class Admin::TakeDownController < Admin::AdminController
       redirect_to [:admin, @petition]
     else
       @petition.state = @petition.state_was
-      render 'show'
+      render 'admin/petitions/show'
     end
   end
 

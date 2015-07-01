@@ -50,10 +50,10 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           expect(assigns(:petition)).to eq petition
         end
 
-        it 'responds successfully and renders the government_response/show template' do
+        it 'responds successfully and renders the petitions/show template' do
           get :show, petition_id: petition.id
           expect(response).to be_success
-          expect(response).to render_template('government_response/show')
+          expect(response).to render_template('petitions/show')
         end
       end
 
@@ -256,10 +256,10 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
       describe 'using invalid params to add a government response' do
         before { government_response_attributes[:response_summary] = 'a' * 501 }
 
-        it 're-renders the government_response/show template' do
+        it 're-renders the petitions/show template' do
           do_patch
           expect(response).to be_success
-          expect(response).to render_template('government_response/show')
+          expect(response).to render_template('petitions/show')
         end
 
         it 'leaves the in-memory instance with errors' do

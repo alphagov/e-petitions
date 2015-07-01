@@ -1,9 +1,5 @@
-<%= form_for @petition.debate_outcome, url: admin_petition_debate_outcome_path(@petition), method: :patch do |f| -%>
-
-  <%= render 'admin/petitions/petition_details', f: f %>
-
-  <h2>Debate Outcome</h2>
-
+<h2 class="petition-action-heading">Debate Outcome</h2>
+<%= form_for petition.debate_outcome, url: admin_petition_debate_outcome_path(petition), method: :patch do |f| -%>
   <%= form_row :for => [f.object, :debated_on] do %>
     <%= f.label :debated_on, class: 'form-label' %>
     <%= error_messages_for_field f.object, :debated_on %>
@@ -29,6 +25,6 @@
   <% end %>
 
   <%= form_row do %>
-    <%= email_signatures_with_count_submit_button(f, @petition) %>
+    <%= email_signatures_with_count_submit_button(f, petition) %>
   <% end %>
 <% end -%>

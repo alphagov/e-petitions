@@ -243,10 +243,6 @@ class Petition < ActiveRecord::Base
     TODO_LIST_STATES.include? state
   end
 
-  def state_label
-    closed? ? CLOSED_STATE : state
-  end
-
   def rejection_reason
     I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.titles")
   end

@@ -8,7 +8,7 @@ Feature: Providing debate outcome information
     And I am logged in as a sysadmin
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Debate outcomes"
+    And I follow "Debate outcome"
     Then I should be on the admin debate outcomes form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Email 6 signatures"

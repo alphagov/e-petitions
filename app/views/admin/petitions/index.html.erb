@@ -24,7 +24,7 @@
         <td class="petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
         <td><%= petition.creator_signature.name %><br/>
         <%= mail_to petition.creator_signature.email %></td>
-        <td><%= petition.state_label %></td>
+        <td><%= petition.state %></td>
         <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
         <td><%= date_format_admin(petition.closed_at) %></td>
       </tr>

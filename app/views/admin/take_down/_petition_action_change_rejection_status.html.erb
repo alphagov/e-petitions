@@ -1,0 +1,9 @@
+<h2 class="petition-action-heading">Change rejection status</h2>
+<p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
+<%= form_for petition, url: admin_petition_take_down_path(petition), method: :patch do |f| -%>
+  <%= render 'admin/petitions/reject', f: f %>
+
+  <%= form_row do %>
+    <%= f.submit "Email petition creator", class: 'button' %>
+  <% end %>
+<% end -%>

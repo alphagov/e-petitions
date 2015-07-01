@@ -68,10 +68,10 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
           end
         end
 
-        it 'responds successfully and renders the debate_outcomes/show template' do
+        it 'responds successfully and renders the petitions/show template' do
           get :show, petition_id: petition.id
           expect(response).to be_success
-          expect(response).to render_template('debate_outcomes/show')
+          expect(response).to render_template('petitions/show')
         end
       end
 
@@ -99,7 +99,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_column(:state, Petition::REJECTED_STATE) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
         it_behaves_like 'trying to view debate outcomes for a petition in the wrong state'
       end
 
@@ -225,10 +225,10 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
         describe 'with invalid params' do
           before { debate_outcome_attributes.delete(:debated_on) }
 
-          it 're-renders the debate_outcomes/show template' do
+          it 're-renders the petitions/show template' do
             do_patch
             expect(response).to be_success
-            expect(response).to render_template('debate_outcomes/show')
+            expect(response).to render_template('petitions/show')
           end
 
           it 'leaves the in-memory instance with errors' do
@@ -275,7 +275,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_column(:state, Petition::REJECTED_STATE) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
         it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
       end
 

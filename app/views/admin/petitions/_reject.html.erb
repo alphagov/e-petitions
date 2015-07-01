@@ -17,12 +17,11 @@
     });
   <% end -%>
   <%= f.label :rejection_code, 'Rejection reason' %><br />
-  <%= f.select :rejection_code, rejection_reasons, { include_blank: "-- Select a rejection code --" } %>
+  <%= f.select :rejection_code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
   <%= error_messages_for_field @petition, :rejection_code %>
   <div id="rejection_preview" class="flash-notice" style="display:none">
-    <h3>Preview of the standard text that will be sent to the petition creator:</h3>
+    <h3>We'll send this standard text to the petition creator:</h3>
     <div class="content"></div>
   </div>
-  <%= f.text_area :rejection_text, rows: 8, cols: 70 %>
-  <% if local_assigns[:button_label] %><%= submit_tag button_label %><% end %>
+  <%= f.text_area :rejection_text, rows: 8, cols: 70, class: 'form-control' %>
 </div>

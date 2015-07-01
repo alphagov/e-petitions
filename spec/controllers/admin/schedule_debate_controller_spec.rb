@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::NotesController, type: :controller do
+RSpec.describe Admin::ScheduleDebateController, type: :controller do
 
   let!(:petition) { FactoryGirl.create(:open_petition) }
 
@@ -44,7 +44,7 @@ RSpec.describe Admin::NotesController, type: :controller do
     before { login_as(user) }
 
     describe 'GET /show' do
-      shared_examples_for 'viewing notes for a petition' do
+      shared_examples_for 'viewing scheduled debate date' do
         it 'fetches the requested petition' do
           get :show, petition_id: petition.id
           expect(assigns(:petition)).to eq petition
@@ -58,63 +58,138 @@ RSpec.describe Admin::NotesController, type: :controller do
       end
 
       describe 'for an open petition' do
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a pending petition' do
         before { petition.update_column(:state, Petition::PENDING_STATE) }
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a validated petition' do
         before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a sponsored petition' do
         before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'viewing notes for a petition'
+        it_behaves_like 'viewing scheduled debate date'
       end
     end
 
     describe 'PATCH /update' do
-      let(:notes_attributes) do
+      let(:scheduled_debate_date_attributes) do
         {
-          admin_notes: 'This seems fine, just need to get legal to give it the once over before letting it through.'
+          scheduled_debate_date: '2014-12-01',
         }
       end
 
       def do_patch(overrides = {})
-        params = { petition_id: petition.id, petition: notes_attributes }
+        params = { petition_id: petition.id, petition: scheduled_debate_date_attributes }
         patch :update, params.merge(overrides)
       end
 
-      shared_examples_for 'updating notes for a petition' do
+      describe 'scheduling a debate date for a petition' do
         it 'fetches the requested petition' do
           do_patch
           expect(assigns(:petition)).to eq petition
         end
 
-        context 'with valid params' do
+        describe 'with valid params' do
           it 'redirects to the petition show page' do
             do_patch
             expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
           end
 
-          it 'stores the supplied notes in the db' do
+          it 'tells the moderator that their email will be sent overnight' do
+            do_patch
+            expect(flash[:notice]).to eq 'Email will be sent overnight'
+          end
+
+          it 'stores the supplied scheduled debate date against the petition in the db' do
             do_patch
             petition.reload
-            expect(petition.admin_notes).to eq notes_attributes[:admin_notes]
+            expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+          end
+
+          context "emails out debate outcomes response" do
+            include ActiveJob::TestHelper
+
+            before do
+              3.times do |i|
+                attributes = {
+                  name: "Laura #{i}",
+                  email: "laura_#{i}@example.com",
+                  notify_by_email: true,
+                  petition: petition
+                }
+                s = FactoryGirl.create(:pending_signature, attributes)
+                s.validate!
+              end
+              2.times do |i|
+                attributes = {
+                  name: "Sarah #{i}",
+                  email: "sarah_#{i}@example.com",
+                  notify_by_email: false,
+                  petition: petition
+                }
+
+                s = FactoryGirl.create(:pending_signature, attributes)
+                s.validate!
+              end
+              2.times do |i|
+                attributes = {
+                  name: "Brian #{i}",
+                  email: "brian_#{i}@example.com",
+                  notify_by_email: true,
+                  petition: petition
+                }
+                FactoryGirl.create(:pending_signature, attributes)
+              end
+              petition.reload
+            end
+
+            it "queues a job to process the emails" do
+              assert_enqueued_jobs 1 do
+                do_patch
+              end
+            end
+
+            it "stamps the 'debate_outcome' email sent receipt on each signature when the job runs" do
+              perform_enqueued_jobs do
+                do_patch
+                petition.reload
+                petition_timestamp = petition.get_email_requested_at_for('debate_scheduled')
+                expect(petition_timestamp).not_to be_nil
+                petition.signatures.validated.notify_by_email.each do |signature|
+                  expect(signature.get_email_sent_at_for('debate_scheduled')).to eq(petition_timestamp)
+                end
+              end
+            end
+
+            it "should email out to the validated signees who have opted in when the delayed job runs" do
+              ActionMailer::Base.deliveries.clear
+              perform_enqueued_jobs do
+                do_patch
+                expect(ActionMailer::Base.deliveries.length).to eq 4
+                expect(ActionMailer::Base.deliveries.map(&:to)).to eq([
+                  [petition.creator_signature.email],
+                  ['laura_0@example.com'],
+                  ['laura_1@example.com'],
+                  ['laura_2@example.com']
+                ])
+              end
+            end
           end
         end
 
@@ -135,45 +210,57 @@ RSpec.describe Admin::NotesController, type: :controller do
 
           it 'leaves the in-memory instance with errors' do
             do_patch
-            expect(assigns(:petition)).to be_present
-            expect(assigns(:petition).errors).not_to be_empty
+            expect(assigns(:petition).errors).to be_present
           end
 
-          it 'does not stores the supplied notes in the db' do
+          it 'does not stores the supplied debate outcome details in the db' do
             do_patch
             petition.reload
-            expect(petition.admin_notes).to be_nil
+            expect(petition.scheduled_debate_date).to be_nil
           end
         end
       end
 
+      shared_examples_for 'scheduling a debate date' do
+        it 'fetches the requested petition' do
+          do_patch
+          expect(assigns(:petition)).to eq petition
+        end
+
+        it 'stores the supplied schedule date on the petition' do
+          do_patch
+          petition.reload
+          expect(petition.scheduled_debate_date).to eq Date.parse('2014-12-01')
+        end
+      end
+
       describe 'for an open petition' do
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
 
       describe 'for a pending petition' do
         before { petition.update_column(:state, Petition::PENDING_STATE) }
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
 
       describe 'for a validated petition' do
         before { petition.update_column(:state, Petition::VALIDATED_STATE) }
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
 
       describe 'for a sponsored petition' do
         before { petition.update_column(:state, Petition::SPONSORED_STATE) }
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'updating notes for a petition'
+        it_behaves_like 'scheduling a debate date'
       end
     end
   end

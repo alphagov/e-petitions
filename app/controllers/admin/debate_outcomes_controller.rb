@@ -4,6 +4,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def show
     fetch_debate_outcome
+    render 'admin/petitions/show'
   end
 
   def update
@@ -12,7 +13,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
       EmailDebateOutcomesJob.run_later_tonight(@petition)
       redirect_to [:admin, @petition], notice: 'Email will be sent overnight'
     else
-      render :show
+      render 'admin/petitions/show'
     end
   end
 

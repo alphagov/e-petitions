@@ -50,10 +50,10 @@ RSpec.describe Admin::TakeDownController, type: :controller do
           expect(assigns(:petition)).to eq petition
         end
 
-        it 'responds successfully and renders the take_down/show template' do
+        it 'responds successfully and renders the petitions/show template' do
           get :show, petition_id: petition.id
           expect(response).to be_success
-          expect(response).to render_template('take_down/show')
+          expect(response).to render_template('petitions/show')
         end
       end
 
@@ -215,10 +215,10 @@ RSpec.describe Admin::TakeDownController, type: :controller do
             expect(assigns(:petition).state).to eq(Petition::OPEN_STATE)
           end
 
-          it "renders the take_down/show template" do
+          it "renders the petitions/show template" do
             do_patch
             expect(response).to be_success
-            expect(response).to render_template 'take_down/show'
+            expect(response).to render_template 'petitions/show'
           end
         end
       end

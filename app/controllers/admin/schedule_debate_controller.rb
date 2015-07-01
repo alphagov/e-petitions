@@ -1,4 +1,4 @@
-class Admin::NotesController < Admin::AdminController
+class Admin::ScheduleDebateController < Admin::AdminController
   respond_to :html
   before_action :fetch_petition
 
@@ -8,7 +8,8 @@ class Admin::NotesController < Admin::AdminController
 
   def update
     if @petition.update_attributes(params_for_update)
-      redirect_to [:admin, @petition]
+      EmailDebateScheduledJob.run_later_tonight(@petition)
+      redirect_to [:admin, @petition], notice: "Email will be sent overnight"
     else
       render 'admin/petitions/show'
     end
@@ -22,6 +23,6 @@ class Admin::NotesController < Admin::AdminController
   def params_for_update
     params.
       require(:petition).
-      permit(:admin_notes)
+      permit(:scheduled_debate_date)
   end
 end

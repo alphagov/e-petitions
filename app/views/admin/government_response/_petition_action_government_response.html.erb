@@ -1,7 +1,5 @@
-<%= render 'admin/petitions/petition_details' %>
-<%= render 'admin/petitions/published_petition_details' %>
-
-<%= form_for [:admin, @petition ], :url => admin_petition_government_response_path(@petition), method: :put do |f| -%>
+<h2 class="petition-action-heading">Government response</h2>
+<%= form_for [:admin, petition ], :url => admin_petition_government_response_path(petition), method: :put do |f| -%>
   <%= form_row :for => [f.object, :response_summary] do %>
     <%= f.label :response_summary, 'Summary quote', class: 'form-label' %>
     <%= error_messages_for_field f.object, :response_summary %>
@@ -15,6 +13,6 @@
   <% end %>
 
   <%= form_row do %>
-    <%= email_signatures_with_count_submit_button(f, @petition) %>
+    <%= email_signatures_with_count_submit_button(f, petition) %>
   <% end %>
 <% end -%>

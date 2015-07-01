@@ -4,6 +4,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
   before_action :avoid_no_op_updates, only: :update
 
   def show
+    render 'admin/petitions/show'
   end
 
   def update
@@ -12,7 +13,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
       EmailThresholdResponseJob.run_later_tonight(@petition)
       redirect_to [:admin, @petition], notice: 'Email will be sent overnight'
     else
-      render :show
+      render 'admin/petitions/show'
     end
   end
 

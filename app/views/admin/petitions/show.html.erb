@@ -1,41 +1,14 @@
-<div class="petition">
-  <%= render 'admin/petitions/petition_details' %>
-  <% if @petition.in_todo_list? %>
-    <div class="row">
-      <%= link_to 'Edit petition content', admin_petition_petition_details_path(@petition) %>
-    </div>
-  <% else %>
-    <%= render 'admin/petitions/published_petition_details' %>
-    <div class="row">
-      <label>Public Response:</label>
-      <p class="text_block"><%= @petition.response || raw('&nbsp;') %></p>
-    </div>
-  <% end %>
-</div>
+<!-- Back to X list -->
 
-<nav class="actions" role="navigation">
-  <ul>
-    <% if @petition.in_todo_list? %>
-      <li>
-        <div>
-          <h2>Moderate this petition</h2>
-          <div>
-            <%= render 'admin/moderation/form', petition: @petition %>
-          </div>
-        </div>
-      </li>
-    <% else %>
-      <li><%= link_to 'Government response', admin_petition_government_response_path(@petition) %></li>
-      <% if @petition.can_have_debate_added? %>
-        <li><%= link_to 'Debate outcomes', admin_petition_debate_outcome_path(@petition) %></li>
-        <li><%= link_to("Publish Debate Schedule", edit_scheduled_debate_date_admin_petition_path(@petition)) %></li>
-      <% end %>
-      <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
-        <li><%= link_to 'Take this petition down', admin_petition_take_down_path(@petition) %></li>
-      <% elsif @petition.rejected? -%>
-        <li><%= link_to 'Change rejection status', admin_petition_take_down_path(@petition) %></li>
-      <% end -%>
-    <% end %>
-    <li><%= link_to 'Notes', admin_petition_notes_path(@petition) %></li>
-  </ul>
-</nav>
+<div class="grid-row">
+
+  <div class="column-two-thirds extra-gutter">
+    <%= render 'admin/petitions/petition_content' %>
+    <%= render 'admin/petitions/petition_actions' %>
+  </div>
+
+  <div class="petition-meta column-third">
+    <%= render 'admin/petitions/petition_details' %>
+  </div>
+
+</div>
