@@ -3,7 +3,7 @@
 .petition-share {
   $icon-size: 19px;
   @extend %contain-floats;
-  @extend %outdent-to-full-width;
+  @extend %mobile-outdent;
   border-bottom: 1px solid $panel-colour;
   li {
     float: left;
@@ -36,9 +36,6 @@
     background-position: center left;
   }
   @include media(tablet) {
-    margin-left: 0;
-    margin-right: 0;
-
     li {
       width: 25%;
       border-left: 1px solid $panel-colour;

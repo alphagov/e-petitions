@@ -58,18 +58,16 @@ input.back-page {
 // Section panel
 // =================
 .section-panel {
-  @extend %outdent-to-full-width;
-  border-bottom: 1px solid $panel-colour;
+  @extend %mobile-outdent-and-pad;
   margin-top: $gutter-half;
   margin-bottom: $gutter-half;
-  padding: 0 $gutter-half $gutter-half;
-
-  @include media(tablet){
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: 0;
-    margin-right: 0;
-  }
+  padding-bottom: $gutter-half;
+  border-bottom: 1px solid $panel-colour;
+}
+.section-panel-borderless {
+  @extend .section-panel;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 // Notifications
@@ -178,18 +176,6 @@ input.back-page {
 
     @include media(tablet) {
       margin: em(5, 19) 0;
-    }
-  }
-  blockquote {
-    p {
-      @include core-24;
-      margin-top: em(5, 18);
-      margin-bottom: em(10, 18);
-
-      @include media(tablet) {
-        margin-top: em(5, 24);
-        margin-bottom: em(10, 24);
-      }
     }
   }
 }
