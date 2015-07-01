@@ -99,7 +99,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_column(:state, Petition::REJECTED_STATE) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
         it_behaves_like 'trying to view debate outcomes for a petition in the wrong state'
       end
 
@@ -275,7 +275,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_column(:state, Petition::REJECTED_STATE) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
         it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
       end
 
