@@ -15,7 +15,7 @@ When(/^I reject the petition with a reason code "([^"]*)"$/) do |reason_code|
 end
 
 When(/^I change the rejection status of the petition with a reason code "([^"]*)"$/) do |reason_code|
-  click_on 'Change rejection status'
+  click_on 'Change rejection reason'
   select reason_code, :from => :petition_rejection_code
   click_button "Email petition creator"
 end

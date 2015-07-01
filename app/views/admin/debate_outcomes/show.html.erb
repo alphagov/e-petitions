@@ -4,38 +4,7 @@
 
   <div class="column-two-thirds extra-gutter">
     <%= render 'admin/petitions/petition_content' %>
-    <%= form_for @petition.debate_outcome, url: admin_petition_debate_outcome_path(@petition), method: :patch do |f| -%>
-
-      <h2>Debate Outcome</h2>
-
-      <%= form_row :for => [f.object, :debated_on] do %>
-        <%= f.label :debated_on, class: 'form-label' %>
-        <%= error_messages_for_field f.object, :debated_on %>
-        <%= f.date_field :debated_on, tabindex: increment, class: 'form-control' %>
-      <% end %>
-
-      <%= form_row for: [f.object, :overview] do %>
-        <%= f.label :overview, class: 'form-label' %>
-        <%= error_messages_for_field f.object, :overview %>
-        <%= f.text_area :overview, tabindex: increment, class: 'form-control' %>
-      <% end %>
-
-      <%= form_row for: [f.object, :transcript_url] do %>
-        <%= f.label :transcript_url, 'Transcript URL', class: 'form-label' %>
-        <%= error_messages_for_field f.object, :transcript_url %>
-        <%= f.url_field :transcript_url, tabindex: increment, class: 'form-control' %>
-      <% end %>
-
-      <%= form_row for: [f.object, :video_url] do %>
-        <%= f.label :video_url, 'Video URL', class: 'form-label' %>
-        <%= error_messages_for_field f.object, :video_url %>
-        <%= f.url_field :video_url, tabindex: increment, class: 'form-control' %>
-      <% end %>
-
-      <%= form_row do %>
-        <%= email_signatures_with_count_submit_button(f, @petition) %>
-      <% end %>
-    <% end -%>
+    <%= render 'admin/petitions/petition_actions' %>
   </div>
 
   <div class="admin-petition-meta column-third">

@@ -4,42 +4,41 @@
     <%# If petition is awaiting moderation %>
     <% if @petition.in_todo_list? %>
       <li class="action">
-        <h2 class="action-heading">Moderate this petition</h2>
-        <%= render 'admin/moderation/form', petition: @petition %>
+        <%= render 'petition_action_moderation', petition: @petition %>
       </li>
 
       <li class="action">
-        <%= link_to 'Notes', admin_petition_notes_path(@petition), class: 'action-heading' %>
+        <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
     <%# If petition has already been moderated %>
     <% else %>
       <li class="action">
-        <%= link_to 'Notes', admin_petition_notes_path(@petition), class: 'action-heading' %>
+        <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
       <li class="action">
-        <%= link_to 'Government response', admin_petition_government_response_path(@petition), class: 'action-heading' %>
+        <%= render 'petition_action_government_response', petition: @petition %>
       </li>
 
       <% if @petition.can_have_debate_added? %>
         <li class="action">
-          <%= link_to 'Debate outcome', admin_petition_debate_outcome_path(@petition), class: 'action-heading' %>
+          <%= render 'petition_action_debate_outcome', petition: @petition %>
         </li>
 
         <li class="action">
-          <%= link_to 'Proposed debate date', edit_scheduled_debate_date_admin_petition_path(@petition), class: 'action-heading' %>
+          <%= render 'petition_action_debate_date', petition: @petition %>
         </li>
       <% end %>
 
       <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
         <li class="action">
-          <%= link_to 'Take this petition down', admin_petition_take_down_path(@petition), class: 'action-heading' %>
+          <%= render 'petition_action_take_down', petition: @petition %>
         </li>
 
       <% elsif @petition.rejected? -%>
         <li class="action">
-          <%= link_to 'Change rejection reason', admin_petition_take_down_path(@petition), class: 'action-heading' %>
+          <%= render 'petition_action_change_rejection_status', petition: @petition %>
         </li>
       <% end -%>
 

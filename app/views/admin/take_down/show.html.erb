@@ -4,20 +4,7 @@
 
   <div class="column-two-thirds extra-gutter">
     <%= render 'admin/petitions/petition_content' %>
-    <%= form_for @petition, url: admin_petition_take_down_path(@petition), method: :patch do |f| -%>
-
-      <% if @petition.rejected? %>
-        <h2>Change rejection status</h2>
-        <p>Changing the rejected state of this petition will affect if it can be seen on the website or not.</p>
-      <% else %>
-        <h2>Take this petition down</h2>
-      <% end %>
-      <%= render 'admin/petitions/reject', f: f %>
-
-      <%= form_row do %>
-        <%= f.submit "Email petition creator" %>
-      <% end %>
-    <% end -%>
+    <%= render 'admin/petitions/petition_actions' %>
   </div>
 
   <div class="admin-petition-meta column-third">
