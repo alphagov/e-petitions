@@ -1,6 +1,15 @@
-Given(/^there are (\d+) petitions debated in parliament$/) do |debated_count|
+Given(/^there are (\d+) petitions debated in parliament(.+)?$/) do |debated_count, links_command|
+  video_url, transcript_url = nil, nil
+  if links_command == " with a transcript url" 
+    video_url = "http://www.example.com/?video=test"
+  elsif links_command == " with a video url"  
+    transcript_url = "http://www.example.com/?video=test"
+  elsif links_command == " with both video and transcript urls"  
+    video_url = "http://www.example.com/?video=test"
+    transcript_url = "http://www.example.com/?video=test"
+  end
   debated_count.times do |count|
-    petition = FactoryGirl.create(:debated_petition, :action => "Petition #{count}")
+    petition = FactoryGirl.create(:debated_petition, action: "Petition #{count}", video_url: video_url, transcript_url: transcript_url)
   end
 end
 
@@ -10,40 +19,66 @@ Given(/^there are (\d+) petitions with a government response$/) do |response_cou
   end
 end
 
-Then(/^I should not see the actioned petitions section$/) do
+Then(/^I should not see the actioned petitions totals section$/) do
   expect(page).to_not have_css(".actioned-petitions")
 end
 
-Then(/^I should see there are (.*?) petitions with a government response$/) do |response_count|
+Then(/^I should see a total showing (.*?) petitions with a government response$/) do |response_count|
   expect(page).to have_css(".actioned-petitions ul li:first-child .count", :text => response_count)
 end
 
-Then(/^I should see there are (.*?) petitions debated in parliament$/) do |debated_count|
+Then(/^I should see a total showing (.*?) petitions debated in parliament$/) do |debated_count|
   expect(page).to have_css(".actioned-petitions ul li:last-child .count", :text => debated_count)
 end
 
 Then(/^I should see an empty government response threshold section$/) do
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_response)}']")
+    expect(page).to have_content("This Government has not responded to any petitions yet")
   end
 end
 
 Then(/^I should see an empty debate threshold section$/) do
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_debate_outcome)}']")
+    expect(page).to have_content("This Parliament has not debated any petitions yet")
   end
 end
 
-Then(/^I should see the government response threshold section with a count of (\d+)$/) do |response_petitions_count|
+Then(/^I should see (\d+) petitions counted in the response threshold section$/) do |count|
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
-    link_text = "Petitions with a government response (#{response_petitions_count})"
+    link_text = "Petitions with a government response (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_response))
   end
 end
 
-Then(/^I should see the debate threshold section with a count of (\d+)$/) do |debate_petitions_count|
+Then(/^I should see (\d+) petitions listed in the response threshold section$/) do |count|
+  within(:css, "section[aria-labelledby=response-threshold-heading]") do
+    expect(page).to have_css(".threshold-petition", :count => count)
+  end
+end
+
+Then(/^I should see (\d+) petitions counted in the debate threshold section$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    link_text = "Petitions debated in parliament (#{debate_petitions_count})"
+    link_text = "Petitions debated in parliament (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_debate_outcome))
+  end
+end
+
+Then(/^I should see (\d+) petitions listed in the debate threshold section$/) do |count|
+  within(:css, "section[aria-labelledby=debate-threshold-heading]") do
+    expect(page).to have_css(".threshold-petition", :count => count)
+  end
+end
+
+Then (/^I should see (\d+) debated petition video links$/) do |count|
+  within(:css, "section[aria-labelledby=debate-threshold-heading]") do
+    expect(page).to have_content("Watch the debate", count: count)
+  end
+end
+
+Then (/^I should see (\d+) debated petition transcript links$/) do |count|
+  within(:css, "section[aria-labelledby=debate-threshold-heading]") do
+    expect(page).to have_content("Read the transcript", count: count)
   end
 end

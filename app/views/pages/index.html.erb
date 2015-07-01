@@ -1,11 +1,11 @@
 <h1 class="visuallyhidden">Petitions - what do you want us to do?</h1>
 
-<% actioned_petition_counts do |counts| %>
+<% actioned_petitions do |actions| %>
   <div class="section-panel actioned-petitions">
     <ul>
-      <% counts.each do |state, count| %>
+      <% actions.each do |state, action| %>
         <li>
-          <%= link_to petition_count(state, count), petitions_url(state: state) %>
+          <%= link_to petition_count(state, action[:count]), petitions_url(state: state) %>
         </li>
       <% end %>
     </ul>
@@ -26,7 +26,7 @@
   <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
 </div>
 
-<% explanation_petition_counts do |counts| %>
+<% explanation_petitions do |actioned| %>
   <section aria-labelledby="response-threshold-heading">
     <div class="threshold-panel">
       <span class="graphic graphic-crown-white"></span>
@@ -34,7 +34,7 @@
       <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
     </div>
     <div class="section-panel-borderless">
-      <%= link_to_unless counts[:with_response].zero?, petition_count(:with_response_explanation, counts[:with_response]), petitions_path(state: :with_response) %>
+      <%= render "home_responded_petitions", actioned: actioned %>
     </div>
   </section>
 
@@ -45,7 +45,7 @@
       <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
     </div>
     <div class="section-panel">
-      <%= link_to_unless counts[:with_debate_outcome].zero?, petition_count(:with_debate_outcome_explanation, counts[:with_debate_outcome]), petitions_path(state: :with_debate_outcome) %>
+      <%= render "home_debated_petitions", actioned: actioned %>
     </div>
   </section>
 <% end %>
