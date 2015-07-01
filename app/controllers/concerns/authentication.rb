@@ -42,7 +42,7 @@ module Authentication
   end
   
   def redirect_to_target_or_default
-    redirect_to(session[:return_to] || admin_petitions_path)
+    redirect_to(session[:return_to] || admin_root_path)
     session[:return_to] = nil
   end
   
