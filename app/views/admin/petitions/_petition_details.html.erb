@@ -1,33 +1,35 @@
-<h2>Status</h2>
-<p class="admin-petition-state"><%= @petition.state.capitalize %></p>
+<dl>
+  <dt>Status</dt>
+  <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
 <% if @petition.rejected? or @petition.hidden? -%>
-  <h2>Rejection reason</h2>
-  <p><%= @petition.rejection_reason %>&nbsp;</p>
+  <dt>Rejection reason</dt>
+  <dd><p><%= @petition.rejection_reason %>&nbsp;</dd>
 
-  <h2>Rejection text</h2>
-  <p><%= @petition.rejection_text %>&nbsp;</p>
+  <dt>Rejection text</dt>
+  <dd><%= @petition.rejection_text %>&nbsp;</dd>
 <% end -%>
 
 <% unless @petition.in_todo_list? %>
-  <h2>Signatures</h2>
-  <p class="admin-signature-count"><%= number_with_delimiter(@petition.signature_count) %>&nbsp;</p>
+  <dt>Signatures</dt>
+  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %>&nbsp;</dd>
 <% end %>
 
-<h2>Creator</h2>
-<p>
+<dt>Creator</dt>
+<dd>
   <%=  @petition.creator_signature.name %><br />
   <%= auto_link(@petition.creator_signature.email) %>
-</p>
+</dd>
 
 <% if @petition.in_todo_list? %>
-  <h2>Created on</h2>
-  <p><%= date_time_format(@petition.created_at) %></p>
+  <dt>Created on</dt>
+  <dd><%= date_time_format(@petition.created_at) %></dd>
 <% else %>
-  <h2>Deadline</h2>
-  <p><%= date_format_admin(@petition.closed_at) %></p>
+  <dt>Deadline</dt>
+  <dd><%= date_format_admin(@petition.closed_at) %></dd>
 
-  <h2>Link to petition</h2>
-  <p><%= link_to petition_path(@petition), petition_path(@petition), :target => "_blank" %></p>
+  <dt>Link to petition</dt>
+  <dd><%= link_to petition_path(@petition), petition_path(@petition), target: "_blank" %></dd>
 
 <% end %>
+</dl>

@@ -1,7 +1,23 @@
-.admin-petition-meta {
-  padding-top: $gutter-two-thirds;
+.admin {
+  .petition-meta {
+    padding-top: $gutter-two-thirds;
 
-  .admin-petition-state, .admin-signature-count {
+    dl {
+      dt {
+        @include bold-19();
+      }
+
+      dd {
+        margin-bottom: em(15, 16);
+
+        @include media(tablet) {
+          margin-bottom: em(15);
+        }
+      }
+    }
+  }
+  .petition-meta-state, .petition-metaa-signature-count {
     @include core-48;
   }
+
 }
