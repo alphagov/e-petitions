@@ -87,14 +87,14 @@ namespace :data do
         @signature_count = Site.threshold_for_response + 1 if @should_create_response
 
         @signature_count.to_i.times do
-          petition.signatures.create!(
+          signature = petition.signatures.create!(
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email("#{Faker::Lorem.characters(rand(10..40))}-#{rand(1..999999)}"),
             country: 'United Kingdom',
-            state: 'validated',
             postcode: POSTCODES.sample
           )
+          signature.validate!
         end
 
         # Add responses on random petitions when 10,000 signatures
