@@ -35,3 +35,10 @@ Feature: Freya searches petitions by constituency
     When I search for petitions local to me in "BH20 6HH"
     Then the markup should be valid
     But I should see an explanation that my constituency couldn't be found
+
+  Scenario: Searching for local petitions when the no-one in my constituency is engaged
+    Given a constituency "South Northamptonshire" is found by postcode "NN13 5QD"
+    And I am on the home page
+    When I search for petitions local to me in "NN13 5QD"
+    Then the markup should be valid
+    But I should see an explanation that there are no petitions popular in my constituency

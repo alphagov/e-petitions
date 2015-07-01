@@ -1,5 +1,5 @@
 <h1 class="page-title">
-  <% if @petitions.present? %>
+  <% if @constituency.present? %>
     Popular petitions in the constituency of <%= @constituency.name %>
   <% elsif @postcode.present? %>
     Sorry!
@@ -8,11 +8,11 @@
   <% end %>
 </h1>
 
-<% if @constituency && @constituency.mp %>
-  <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url, rel: 'external' %></p>
-<% end %>
+<% if @constituency.present? %>
 
-<% if @petitions.present? %>
+  <% if @constituency.mp %>
+    <p>Your MP is <%= link_to @constituency.mp.name, @constituency.mp.url, rel: 'external' %></p>
+  <% end %>
 
   <div class="section-panel local-petitions">
     <% if @petitions.any? %>
