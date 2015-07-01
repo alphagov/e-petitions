@@ -115,7 +115,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
         it 'redirects to the show page' do
           do_patch
-          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}/government-response"
+          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
         end
 
         it 'tells the moderator that their email will be sent overnight' do
