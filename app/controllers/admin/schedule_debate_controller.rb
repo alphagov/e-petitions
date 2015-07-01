@@ -3,6 +3,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
   before_action :fetch_petition
 
   def show
+    render 'admin/petitions/show'
   end
 
   def update
@@ -10,7 +11,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
       EmailDebateScheduledJob.run_later_tonight(@petition)
       redirect_to [:admin, @petition], notice: "Email will be sent overnight"
     else
-      render :show
+      render 'admin/petitions/show'
     end
   end
 

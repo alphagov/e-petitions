@@ -3,13 +3,14 @@ class Admin::NotesController < Admin::AdminController
   before_action :fetch_petition
 
   def show
+    render 'admin/petitions/show'
   end
 
   def update
     if @petition.update_attributes(params_for_update)
       redirect_to [:admin, @petition]
     else
-      render :show
+      render 'admin/petitions/show'
     end
   end
 

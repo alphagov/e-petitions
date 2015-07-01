@@ -50,10 +50,10 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller do
           expect(assigns(:petition)).to eq petition
         end
 
-        it 'responds successfully and renders the schedule_debate/show template' do
+        it 'responds successfully and renders the petitions/show template' do
           get :show, petition_id: petition.id
           expect(response).to be_success
-          expect(response).to render_template('schedule_debate/show')
+          expect(response).to render_template('petitions/show')
         end
       end
 
@@ -202,10 +202,10 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller do
             end
           end
 
-          it 're-renders the schedule_debate/show template' do
+          it 're-renders the petitions/show template' do
             do_patch
             expect(response).to be_success
-            expect(response).to render_template('schedule_debate/show')
+            expect(response).to render_template('petitions/show')
           end
 
           it 'leaves the in-memory instance with errors' do
