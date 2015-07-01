@@ -28,12 +28,4 @@ RSpec.describe "routes for admin petitions", type: :routing do
   it "doesn't route DELETE /admin/petitions/1" do
     expect(delete("/admin/petitions/1")).not_to be_routable
   end
-
-  it "routes GET /admin/petitions/1/edit_scheduled_debate_date to admin/petitions#edit_scheduled_debate_date" do
-    expect(get("/admin/petitions/1/edit_scheduled_debate_date")).to route_to('admin/petitions#edit_scheduled_debate_date', id: '1')
-  end
-
-  it "routes PATCH /admin/petitions/1/update_scheduled_debate_date to admin/petitions#update_scheduled_debate_date" do
-    expect(patch("/admin/petitions/1/update_scheduled_debate_date")).to route_to('admin/petitions#update_scheduled_debate_date', id: '1')
-  end
 end

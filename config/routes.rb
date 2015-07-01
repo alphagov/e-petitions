@@ -53,17 +53,13 @@ Rails.application.routes.draw do
 
     resources :admin_users
     resources :petitions, :only => [:show, :index] do
-      member do
-        get   :edit_scheduled_debate_date
-        patch :update_scheduled_debate_date
-        patch :take_down
-      end
       resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
       resource :petition_details, :only => [:show, :update]
       resource :moderation, :only => [:update], controller: :moderation
       resource :notes, :only => [:show, :update]
       resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
       resource 'government-response', :only => [:show, :update], as: :government_response, controller: :government_response
+      resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
     end
     resources :profile, :only => [:edit, :update]
     resources :user_sessions, :only => [:create]
