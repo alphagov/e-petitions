@@ -1,9 +1,7 @@
 <%= form_for petition, url: admin_petition_schedule_debate_path(petition), method: :patch do |f| %>
 
-  <h2>Scheduled Debate Date</h2>
-
   <%= form_row :for => [f.object, :scheduled_debate_date] do %>
-    <%= f.label :scheduled_debate_date, class: 'form-label' %>
+    <%= f.label :scheduled_debate_date, class: 'form-label action-heading' %>
     <%= error_messages_for_field f.object, :debated_on %>
     <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control' %>
   <% end %>

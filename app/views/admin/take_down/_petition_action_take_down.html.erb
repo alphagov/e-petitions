@@ -1,8 +1,8 @@
+<h2 class="action-heading">Take this petition down</h2>
 <%= form_for petition, url: admin_petition_take_down_path(petition), method: :patch do |f| -%>
-  <h2>Take this petition down</h2>
   <%= render 'admin/petitions/reject', f: f %>
 
   <%= form_row do %>
-    <%= f.submit "Email petition creator" %>
+    <%= f.submit "Email petition creator", class: 'button' %>
   <% end %>
 <% end -%>
