@@ -14,7 +14,7 @@ Feature: Restricted access to the admin console
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
     And I press "Log in"
-    Then I should be on the admin all petitions page
+    Then I should be on the admin home page
     And I should be connected to the server via an ssl connection
     And the markup should be valid
     And I should see "Users"
@@ -28,7 +28,7 @@ Feature: Restricted access to the admin console
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
     And I press "Log in"
-    Then I should be on the admin all petitions page
+    Then I should be on the admin home page
     And I should see "John Moderator"
     And I should not see "Users"
     And I follow "Logout"
@@ -59,7 +59,7 @@ Feature: Restricted access to the admin console
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
     And I press "Log in"
-    Then I should be on the admin all petitions page
+    Then I should be on the admin home page
 
   Scenario: Login as a user who hasn't changed their password for over 9 months
     Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!", password_changed_at: "10 months ago"
