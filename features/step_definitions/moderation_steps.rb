@@ -123,6 +123,7 @@ end
 Given(/^a moderator responds to the petition$/) do
   steps %Q(
     Given I am logged in as a moderator
+    And I follow "All petitions"
     And I follow "#{@petition.action}"
     And I follow "Government response"
     And I fill in "Summary quote" with "Get ready"
