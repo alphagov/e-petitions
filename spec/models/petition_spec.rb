@@ -653,57 +653,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "permissions" do
-    let(:petition) { FactoryGirl.build(:petition) }
-    let(:user) { AdminUser.new }
-
-    it "is editable by a moderator user" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it "is editable by a sys admin" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it 'is editable by a normal admin user' do
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it 'is not editable by non admin users' do
-      expect(petition.editable_by?(double)).to be_falsey
-    end
-
-    it "doesn't allow editing of response generally" do
-      expect(petition.response_editable_by?(user)).to be_falsey
-    end
-
-    it "allows editing of the response by moderator users" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.response_editable_by?(user)).to be_truthy
-    end
-
-    it "allows editing of the response by sysadmins" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.response_editable_by?(user)).to be_truthy
-    end
-
-    it "doesn't allow editing of response summary generally" do
-      expect(petition.response_summary_editable_by?(user)).to be_falsey
-    end
-
-    it "allows editing of the response summary by moderator users" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.response_summary_editable_by?(user)).to be_truthy
-    end
-
-    it "allows editing of the response summary by sysadmins" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.response_summary_editable_by?(user)).to be_truthy
-    end
-  end
-
   describe ".close_petitions!" do
     context "when a petition is in the open state and the closing date has not passed" do
       let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }

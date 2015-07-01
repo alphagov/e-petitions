@@ -11,7 +11,6 @@ class Petition < ActiveRecord::Base
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
 
-
   STATES            = %w[pending validated sponsored open closed rejected hidden]
   VISIBLE_STATES    = %w[open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
@@ -253,23 +252,6 @@ class Petition < ActiveRecord::Base
 
   def rejection_description
     I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.descriptions").strip.html_safe
-  end
-
-  def editable_by?(user)
-    # NOTE: we can probably just return true here? or refactor this method
-    # out of existence
-    return true if user.is_a? AdminUser
-    return false
-  end
-
-  def response_editable_by?(user)
-    return true if user.is_a_moderator? || user.is_a_sysadmin?
-    return false
-  end
-
-  def response_summary_editable_by?(user)
-    return true if user.is_a_moderator? || user.is_a_sysadmin?
-    return false
   end
 
   # need this callback since the relationship is circular
