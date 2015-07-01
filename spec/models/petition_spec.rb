@@ -245,18 +245,18 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context 'awaiting_debate_date' do
+    context "awaiting_debate_date" do
       before do
         @p1 = FactoryGirl.create(:open_petition)
         @p2 = FactoryGirl.create(:awaiting_debate_petition)
         @p3 = FactoryGirl.create(:debated_petition)
       end
 
-      it 'returns only petitions that reached the debate threshold' do
+      it "returns only petitions that reached the debate threshold" do
         expect(Petition.awaiting_debate_date).to include(@p2)
       end
 
-      it 'doesn\'t include petitions that has the debate date' do
+      it "doesn't include petitions that has the debate date" do
         expect(Petition.awaiting_debate_date).not_to include(@p3)
       end
     end

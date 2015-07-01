@@ -3,4 +3,8 @@ class DebateOutcome < ActiveRecord::Base
 
   validates :petition, :debated_on, presence: true
   validates :transcript_url, :video_url, length: { maximum: 500 }
+
+  after_create do
+    petition.touch(:debate_outcome_at)
+  end
 end

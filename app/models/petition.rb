@@ -12,6 +12,7 @@ class Petition < ActiveRecord::Base
   HIDDEN_STATE      = 'hidden'
 
   STATES            = %w[pending validated sponsored open closed rejected hidden]
+  DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
@@ -106,6 +107,10 @@ class Petition < ActiveRecord::Base
 
     def awaiting_response
       response_threshold_reached.not_responded
+    end
+
+    def debateable
+      where(state: DEBATABLE_STATES)
     end
 
     def not_responded
