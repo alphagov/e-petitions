@@ -26,7 +26,7 @@
         <%= mail_to petition.creator_signature.email %></td>
         <td><%= petition.state %></td>
         <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
-        <td><%= date_format_admin(petition.closed_at) %></td>
+        <td><%= date_format_admin(petition.deadline) %></td>
       </tr>
     <% end -%>
   </tbody>

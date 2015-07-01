@@ -60,9 +60,9 @@ namespace :data do
         # Update to specified state requested
         case PETITION_STATE
         when 'open'
-          petition.update_attributes(state: 'open', open_at: Time.now, closed_at: Time.now + 1.year)
+          petition.update_attributes(state: 'open', open_at: Time.now)
         when 'closed'
-          petition.update_attributes(state: 'open', open_at: Time.now - 1.year, closed_at: Time.now - 1.day)
+          petition.update_attributes(state: 'closed', open_at: Time.now - 1.year, closed_at: Time.now - 1.day)
         when 'rejected'
           petition.update_attributes(
             state: 'rejected',

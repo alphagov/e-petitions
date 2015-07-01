@@ -243,6 +243,10 @@ class Petition < ActiveRecord::Base
     TODO_LIST_STATES.include? state
   end
 
+  def deadline
+    open_at && (closed_at || Site.closed_at_for_opening(open_at))
+  end
+
   def rejection_reason
     I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.titles")
   end
