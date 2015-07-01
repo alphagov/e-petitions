@@ -46,16 +46,15 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
 
     context "when there is no journal for the requested petition and constituency" do
-      it "creates a new instance in the DB" do
-        expect {
-          described_class.for(petition, constituency_id)
-        }.to change(described_class, :count).by(1)
-      end
-
-      it "returns the newly created instance" do
+      it "returns the newly initialized instance" do
         fetched = described_class.for(petition, constituency_id)
         expect(fetched).to be_a described_class
-        expect(fetched).to be_persisted
+      end
+
+      it "does not persist the new instance in the DB" do
+        expect {
+          described_class.for(petition, constituency_id)
+        }.to change(described_class, :count).by(0)
       end
 
       it "sets the petition of the new instance to the supplied petition" do
@@ -81,17 +80,49 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
 
     subject { described_class.for(petition, constituency_id) }
 
-    it "increments signature_count by 1" do
-      expect {
+    context 'on a saved instance' do
+      before { subject.update_attribute(:signature_count, 20) }
+
+      it "increments signature_count by 1" do
+        expect {
+          subject.record_new_signature
+        }.to change(subject, :signature_count).by(1)
+      end
+
+      it "persists the change" do
+        old_signature_count = subject.signature_count
         subject.record_new_signature
-      }.to change(subject, :signature_count).by(1)
+        subject.reload
+        expect(subject.signature_count).not_to eq old_signature_count
+      end
+
+      it "increments the signature_count in the DB properly" do
+        first_signature_count = subject.signature_count
+        other_copy = described_class.for(petition, constituency_id)
+        other_copy.record_new_signature
+        second_signature_count = other_copy.reload.signature_count
+        subject.record_new_signature
+        expect(subject.signature_count).to eq(second_signature_count)
+        expect(subject.reload.signature_count).to eq(second_signature_count + 1)
+      end
+
+      it 'only executes the update SQL query' do
+        expect {
+          subject.record_new_signature
+        }.not_to exceed_query_limit(1)
+      end
     end
 
-    it "persists the change" do
-      old_signature_count = subject.signature_count
-      subject.record_new_signature
-      subject.reload
-      expect(subject.signature_count).not_to eq old_signature_count
+    context 'on a new instance' do
+      it "sets the signature_count to 1" do
+        subject.record_new_signature
+        expect(subject.signature_count).to eq 1
+      end
+
+      it "saves the instance to the DB" do
+        subject.record_new_signature
+        expect(subject).to be_persisted
+      end
     end
   end
 
@@ -136,7 +167,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
 
     it "increments the signature_count of the existing instance by 1" do
       existing = described_class.for(signature.petition, signature.constituency_id)
-      existing.update_column(:signature_count, 20)
+      existing.update_attribute(:signature_count, 20)
 
       described_class.record_new_signature_for(signature)
 
