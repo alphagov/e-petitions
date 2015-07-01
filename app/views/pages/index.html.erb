@@ -30,8 +30,8 @@
   <section aria-labelledby="response-threshold-heading">
     <div class="threshold-panel">
       <span class="graphic graphic-crown-white"></span>
-      <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %> <span>signatures</span></h2>
-      <p>If a petition gets <%= Site.formatted_threshold_for_response %>, the government will respond</p>
+      <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+      <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
     </div>
     <div class="section-panel-borderless">
       <%= link_to_unless counts[:with_response].zero?, petition_count(:with_response_explanation, counts[:with_response]), petitions_path(state: :with_response) %>
@@ -41,7 +41,7 @@
   <section aria-labelledby="debate-threshold-heading">
     <div class="threshold-panel">
       <span class="graphic graphic-portcullis-white"></span>
-      <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %> <span>signatures</span></h2>
+      <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
       <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
     </div>
     <div class="section-panel">
