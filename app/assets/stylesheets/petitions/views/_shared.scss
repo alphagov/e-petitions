@@ -178,18 +178,6 @@ input.back-page {
       margin: em(5, 19) 0;
     }
   }
-  blockquote {
-    p {
-      @include core-24;
-      margin-top: em(5, 18);
-      margin-bottom: em(10, 18);
-
-      @include media(tablet) {
-        margin-top: em(5, 24);
-        margin-bottom: em(10, 24);
-      }
-    }
-  }
 }
 
 .about-item-scheduled-debate-date {
