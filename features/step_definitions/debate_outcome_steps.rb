@@ -6,6 +6,7 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
     transcript_url: 'http://transcripts.parliament.example.com/2.html',
     video_url: 'http://videos.parliament.example.com/2.avi'
   )
+  @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
 
 Then(/^I should see the date of the debate is (\d+) days ago$/) do |debated_days_ago|

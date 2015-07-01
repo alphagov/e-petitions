@@ -13,9 +13,9 @@ Feature: Maggie searches for petitions by keyword
     And a petition "p4" exists with action: "Petition about something else", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
     When I search for petitions with keyword "benefits"
     Then I should see the following list of petitions:
-          | Raise benefits    |
-          | Help the poor     |
           | Help the homeless |
+          | Help the poor     |
+          | Raise benefits    |
 
   Scenario: When searching for keyword, it returns all petitions no matter what petition state
     Given an open petition exists with action: "My open petition about benefits"
@@ -25,10 +25,10 @@ Feature: Maggie searches for petitions by keyword
     And an open petition exists with action: "My open petition about something else"
     When I search for petitions with keyword "benefits"
     Then I should see the following list of petitions:
-          | My open petition about benefits     |
-          | My closed petition about benefits   |
-          | My rejected petition about benefits |
           | My hidden petition about benefits   |
+          | My rejected petition about benefits |
+          | My closed petition about benefits   |
+          | My open petition about benefits     |
 
   Scenario: A user can search by keyword from the admin hub
     Given a petition "p1" exists with action: "Raise benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
@@ -37,6 +37,6 @@ Feature: Maggie searches for petitions by keyword
     And a petition "p4" exists with action: "Petition about something else", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
     When I search for petitions with keyword "benefits" from the admin hub
     Then I should see the following list of petitions:
-          | Raise benefits    |
-          | Help the poor     |
           | Help the homeless |
+          | Help the poor     |
+          | Raise benefits    |

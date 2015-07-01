@@ -37,23 +37,23 @@ Feature: A moderator user views all petitions
 
     When I view all petitions
     Then I should see the following list of petitions:
-     | My pending petition                           |
-     | My validated petition                         |
-     | My sponsored petition                         |
-     | My open petition                              |
-     | My closed petition                            |
-     | My rejected petition                          |
-     | My hidden petition                            |
-     | My open petition with debate outcome          |
-     | My open petition awaiting debate date         |
-     | My open petition with government response     |
-     | My open petition awaiting government response |
      | My open petition with scheduled debate date   |
+     | My open petition awaiting government response |
+     | My open petition with government response     |
+     | My open petition awaiting debate date         |
+     | My open petition with debate outcome          |
+     | My hidden petition                            |
+     | My rejected petition                          |
+     | My closed petition                            |
+     | My open petition                              |
+     | My sponsored petition                         |
+     | My validated petition                         |
+     | My pending petition                           |
 
     And I filter the list to show "Collecting sponsors" petitions
     Then I should see the following list of petitions:
-     | My pending petition                           |
      | My validated petition                         |
+     | My pending petition                           |
 
     And I filter the list to show "Awaiting moderation" petitions
     Then I should see the following list of petitions:
@@ -61,12 +61,12 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:
-     | My open petition                              |
-     | My open petition with debate outcome          |
-     | My open petition awaiting debate date         |
-     | My open petition with government response     |
-     | My open petition awaiting government response |
      | My open petition with scheduled debate date   |
+     | My open petition awaiting government response |
+     | My open petition with government response     |
+     | My open petition awaiting debate date         |
+     | My open petition with debate outcome          |
+     | My open petition                              |
 
     And I filter the list to show "Closed" petitions
     Then I should see the following list of petitions:
