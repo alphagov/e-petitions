@@ -111,12 +111,23 @@ FactoryGirl.define do
   end
 
   factory :rejected_petition, :parent => :petition do
-    state  Petition::REJECTED_STATE
-    rejection_code "duplicate"
+    state Petition::REJECTED_STATE
+
+    transient do
+      rejection_code { "duplicate" }
+      rejection_details { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_rejection! do |r|
+        r.code = evaluator.rejection_code
+        r.details = evaluator.rejection_details
+      end
+    end
   end
 
   factory :hidden_petition, :parent => :petition do
-    state      Petition::HIDDEN_STATE
+    state Petition::HIDDEN_STATE
   end
 
   factory :awaiting_petition, :parent => :open_petition do
@@ -231,6 +242,11 @@ FactoryGirl.define do
     association :petition, factory: :awaiting_petition
     details "Government Response Details"
     summary "Government Response Summary"
+  end
+
+  factory :rejection do
+    association :petition, factory: :validated_petition
+    code "duplicate"
   end
 
   factory :email_requested_receipt do

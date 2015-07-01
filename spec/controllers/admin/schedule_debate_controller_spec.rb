@@ -77,7 +77,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'viewing scheduled debate date'
       end
 
@@ -254,7 +254,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'scheduling a debate date'
       end
 

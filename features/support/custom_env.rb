@@ -23,6 +23,14 @@ Capybara.server do |app, port|
   Epets::SSLServer.build(app, port)
 end
 
+module CucumberI18n
+  def t(*args)
+    I18n.t(*args)
+  end
+end
+
+World(CucumberI18n)
+World(RejectionHelper)
 World(BeValidAsset)
 
 BeValidAsset::Configuration.markup_validator_host = 'validator.unboxedconsulting.com'

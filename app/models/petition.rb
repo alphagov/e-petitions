@@ -14,14 +14,12 @@ class Petition < ActiveRecord::Base
   STATES            = %w[pending validated sponsored open closed rejected hidden]
   VISIBLE_STATES    = %w[open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
+  PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
   TODO_LIST_STATES           = %w[pending sponsored validated]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
-
-  REJECTION_CODES = %w[no-action duplicate libellous offensive irrelevant honours]
-  HIDDEN_REJECTION_CODES = %w[libellous offensive]
 
   has_perishable_token called: 'sponsor_token'
 
@@ -34,13 +32,13 @@ class Petition < ActiveRecord::Base
   facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
   facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
-  facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
   facet :hidden, -> { for_state(HIDDEN_STATE).reorder(created_at: :desc) }
   facet :all, -> { reorder(signature_count: :desc) }
   facet :collecting_sponsors, -> { collecting_sponsors }
   facet :in_moderation, -> { in_moderation.reorder(created_at: :desc) }
   facet :in_debate_queue, -> { in_debate_queue }
 
+  facet :rejected,             -> { rejected_state.by_most_recent}
   facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
   facet :with_response,        -> { with_response.by_most_recent_response }
 
@@ -48,8 +46,9 @@ class Petition < ActiveRecord::Base
   belongs_to :creator_signature, class_name: 'Signature'
   accepts_nested_attributes_for :creator_signature
 
-  has_one :government_response, dependent: :destroy
   has_one :debate_outcome, dependent: :destroy
+  has_one :government_response, dependent: :destroy
+  has_one :rejection, dependent: :destroy
 
   has_many :signatures
   has_many :sponsors
@@ -59,8 +58,6 @@ class Petition < ActiveRecord::Base
   # = Validations =
   include Staged::Validations::PetitionDetails
   validates_presence_of :open_at, :if => :open?
-  validates_presence_of :rejection_code, :if => :rejected?
-  validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
   # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
   # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
   validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
@@ -90,12 +87,20 @@ class Petition < ActiveRecord::Base
   end
 
   class << self
+    def by_most_recent
+      reorder(created_at: :desc)
+    end
+
     def by_most_recent_response
       reorder(government_response_at: :desc)
     end
 
     def by_waiting_for_response_longest
       reorder(response_threshold_reached_at: :asc)
+    end
+
+    def rejected_state
+      where(state: REJECTED_STATE)
     end
 
     def awaiting_response
@@ -197,20 +202,41 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def publish!(time = Time.current)
-    update!(state: OPEN_STATE, open_at: time)
+  def approve?
+    moderation == 'approve'
+  end
+
+  def reject?
+    moderation == 'reject'
+  end
+
+  def moderation
+    @moderation
+  end
+
+  def moderation=(value)
+    @moderation = value if value.in?(%w[approve reject])
+  end
+
+  def moderate(params)
+    self.moderation = params[:moderation]
+
+    if approve?
+      publish
+    elsif reject?
+      reject(params[:rejection])
+    else
+      errors.add :moderation, :blank
+      false
+    end
+  end
+
+  def publish(time = Time.current)
+    update(state: OPEN_STATE, open_at: time)
   end
 
   def reject(attributes)
-    assign_attributes(attributes)
-
-    if rejection_code.in?(HIDDEN_REJECTION_CODES)
-      self.state = HIDDEN_STATE
-    else
-      self.state = REJECTED_STATE
-    end
-
-    save
+    build_rejection(attributes) && rejection.save
   end
 
   def close!(time = Time.current)
@@ -258,6 +284,10 @@ class Petition < ActiveRecord::Base
     state == CLOSED_STATE
   end
 
+  def published?
+    state.in?(PUBLISHED_STATES)
+  end
+
   def government_responsed?
     government_response_at?
   end
@@ -272,14 +302,6 @@ class Petition < ActiveRecord::Base
 
   def deadline
     open_at && (closed_at || Site.closed_at_for_opening(open_at))
-  end
-
-  def rejection_reason
-    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.titles")
-  end
-
-  def rejection_description
-    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.descriptions").strip.html_safe
   end
 
   # need this callback since the relationship is circular

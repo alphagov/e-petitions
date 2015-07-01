@@ -1,11 +1,12 @@
 <%= form_for petition, url: admin_petition_moderation_path(petition), method: :patch do |f| -%>
   <%= form_row class: 'inline' do %>
-    <%= label_tag :moderation_approve, nil, class: 'block-label' do %>
-      <%= radio_button_tag :moderation, 'approve', params[:moderation] == 'approve' %> Approve
+    <%= f.label :moderation_approve, nil, class: 'block-label' do %>
+      <%= f.radio_button :moderation, 'approve' %> Approve
     <% end %>
-    <%= label_tag :moderation_reject, nil, class: 'block-label' do %>
-      <%= radio_button_tag :moderation, 'reject', params[:moderation] == 'reject' %> Reject
+    <%= f.label :moderation_reject, nil, class: 'block-label' do %>
+      <%= f.radio_button :moderation, 'reject' %> Reject
     <% end %>
+    <%= error_messages_for_field petition, :moderation %>
   <% end %>
 
   <%= render 'admin/petitions/reject', f: f %>
@@ -17,8 +18,8 @@
   <%= javascript_tag do %>
     $().ready(function() {
       var $rejection_controls = $('.petition-rejection-controls'),
-          $reject_control = $('#moderation_reject'),
-          $both_controls = $('input[name=moderation][type=radio]');
+          $reject_control = $('#petition_moderation_reject'),
+          $both_controls = $('input[name="petition[moderation]"][type=radio]');
       <% unless f.object.errors.any? %>
       // Hide it straight away if there were no errors to display
       $rejection_controls.hide();

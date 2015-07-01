@@ -111,11 +111,10 @@ end
 
 Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
-  @petition = FactoryGirl.create(:petition,
+  @petition = FactoryGirl.create(:rejected_petition,
     :action => petition_action,
-    :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
-    :rejection_text => reason_text)
+    :rejection_details => reason_text)
 end
 
 Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |title, reason_for_rejection|
@@ -199,7 +198,7 @@ Then /^I should see the reason for rejection$/ do
   if @petition.is_a?(ArchivedPetition)
     expect(page).to have_content(@petition.reason_for_rejection)
   else
-    expect(page).to have_content(@petition.rejection_text)
+    expect(page).to have_content(@petition.rejection.details)
   end
 end
 

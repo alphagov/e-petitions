@@ -16,12 +16,15 @@
       });
     });
   <% end -%>
-  <%= f.label :rejection_code, 'Rejection reason' %><br />
-  <%= f.select :rejection_code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
-  <%= error_messages_for_field @petition, :rejection_code %>
-  <div id="rejection_preview" class="flash-notice" style="display:none">
-    <h3>We'll send this standard text to the petition creator:</h3>
-    <div class="content"></div>
-  </div>
-  <%= f.text_area :rejection_text, rows: 8, cols: 70, class: 'form-control' %>
+
+  <%= f.fields_for :rejection do |r| %>
+    <%= r.label :code, 'Rejection reason' %><br />
+    <%= r.select :code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
+    <%= error_messages_for_field @petition.rejection, :code %>
+    <div id="rejection_preview" class="flash-notice" style="display:none">
+      <h3>We'll send this standard text to the petition creator:</h3>
+      <div class="content"></div>
+    </div>
+    <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
+  <% end %>
 </div>

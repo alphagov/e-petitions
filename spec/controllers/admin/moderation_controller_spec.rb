@@ -12,12 +12,12 @@ RSpec.describe Admin::ModerationController, type: :controller do
       let(:patch_options) { {} }
 
       def do_patch(options = patch_options)
-        params = { petition_id: petition.id }.merge(options)
+        params = { petition_id: petition.id }.merge(petition: options)
         patch :update, params
       end
 
       it "is unsuccessful for a petition that is not validated" do
-        petition.publish!
+        petition.publish
         expect {
           do_patch
         }.to raise_error(ActiveRecord::RecordNotFound)
@@ -56,7 +56,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
         let(:patch_options) do
           {
             moderation: 'reject',
-            petition: { rejection_code: rejection_code }
+            rejection: { code: rejection_code }
           }
         end
         let(:email) { ActionMailer::Base.deliveries.last }
@@ -70,7 +70,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
           it 'sets the rejection code to the supplied code' do
             do_patch
             petition.reload
-            expect(petition.rejection_code).to eq(rejection_code)
+            expect(petition.rejection.code).to eq(rejection_code)
           end
           it 'redirects to the admin show page for the petition' do
             do_patch
@@ -110,7 +110,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
           it 'sets the rejection code to the supplied code' do
             do_patch
             petition.reload
-            expect(petition.rejection_code).to eq(rejection_code)
+            expect(petition.rejection.code).to eq(rejection_code)
           end
           it 'redirects to the admin show page for the petition' do
             do_patch

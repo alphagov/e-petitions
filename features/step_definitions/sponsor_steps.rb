@@ -56,7 +56,11 @@ Given(/^I have enough support from sponsors for my petition$/) do
 end
 
 Given /^the petition I want to sign is (validated|sponsored|open|hidden|rejected)?$/ do |state|
-  @sponsor_petition = FactoryGirl.create(:open_petition, state: state, :rejection_code => "irrelevant")
+  if state == "rejected"
+    @sponsor_petition = FactoryGirl.create(:rejected_petition, rejection_code: "irrelevant")
+  else
+    @sponsor_petition = FactoryGirl.create(:open_petition, state: state)
+  end
 end
 
 Given /^the petition I want to sign has been closed$/ do

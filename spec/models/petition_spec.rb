@@ -77,20 +77,6 @@ RSpec.describe Petition, type: :model do
         expect(petition).to be_valid
       end
     end
-
-    context "when state is rejected" do
-      let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
-
-      it "checks petition is invalid if no rejection code" do
-        expect(petition).not_to be_valid
-        expect(petition.errors[:rejection_code]).not_to be_empty
-      end
-
-      it "checks there is a rejection code" do
-        petition.rejection_code = 'libellous'
-        expect(petition).to be_valid
-      end
-    end
   end
 
   context "scopes" do
@@ -578,20 +564,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "rejection_reason" do
-    it "gives rejection reason from the locale file" do
-      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_reason).to eq('Duplicate of an existing petition')
-    end
-  end
-
-  describe "rejection_description" do
-    it "gives rejection description from the locale file" do
-      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_description).to eq('<p>There is already a petition about this issue.</p>')
-    end
-  end
-
   describe "counting validated signatures" do
     let(:petition) { FactoryGirl.build(:petition) }
 
@@ -844,14 +816,14 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe '#publish!' do
+  describe '#publish' do
     subject(:petition) { FactoryGirl.create(:petition) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
 
     before do
-      petition.publish!
+      petition.publish
     end
 
     it "sets the state to OPEN" do
@@ -866,14 +838,15 @@ RSpec.describe Petition, type: :model do
   describe "#reject" do
     subject(:petition) { FactoryGirl.create(:petition) }
 
-    %w[no-action duplicate irrelevant honours].each do |rejection_code|
+    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(rejection_code: rejection_code)
+          petition.reject(code: rejection_code)
+          petition.reload
         end
 
-        it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(petition.rejection_code).to eq(rejection_code)
+        it "sets rejection.code to '#{rejection_code}'" do
+          expect(petition.rejection.code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'rejected'" do
@@ -882,14 +855,15 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    %w[libellous offensive].each do |rejection_code|
+    Rejection::HIDDEN_CODES.each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(rejection_code: rejection_code)
+          petition.reject(code: rejection_code)
+          petition.reload
         end
 
-        it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(petition.rejection_code).to eq(rejection_code)
+        it "sets rejection.code to '#{rejection_code}'" do
+          expect(petition.rejection.code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'hidden'" do

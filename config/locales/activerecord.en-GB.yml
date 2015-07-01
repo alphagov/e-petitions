@@ -1,0 +1,8 @@
+en-GB:
+  activerecord:
+    errors:
+      models:
+        petition:
+          attributes:
+            moderation:
+              blank: "You must choose to approve or reject"

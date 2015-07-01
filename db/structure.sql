@@ -333,11 +333,9 @@ CREATE TABLE petitions (
     creator_signature_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    rejection_text text,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
     admin_notes text,
-    rejection_code character varying(50),
     notified_by_email boolean DEFAULT false,
     background character varying(200),
     sponsor_token character varying(255),
@@ -345,7 +343,8 @@ CREATE TABLE petitions (
     scheduled_debate_date date,
     last_signed_at timestamp without time zone,
     response_threshold_reached_at timestamp without time zone,
-    debate_threshold_reached_at timestamp without time zone
+    debate_threshold_reached_at timestamp without time zone,
+    rejected_at timestamp without time zone
 );
 
 
@@ -366,6 +365,39 @@ CREATE SEQUENCE petitions_id_seq
 --
 
 ALTER SEQUENCE petitions_id_seq OWNED BY petitions.id;
+
+
+--
+-- Name: rejections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE rejections (
+    id integer NOT NULL,
+    petition_id integer,
+    code character varying(50) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rejections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE rejections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rejections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE rejections_id_seq OWNED BY rejections.id;
 
 
 --
@@ -564,6 +596,13 @@ ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY rejections ALTER COLUMN id SET DEFAULT nextval('rejections_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY signatures ALTER COLUMN id SET DEFAULT nextval('signatures_id_seq'::regclass);
 
 
@@ -651,6 +690,14 @@ ALTER TABLE ONLY government_responses
 
 ALTER TABLE ONLY petitions
     ADD CONSTRAINT petitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rejections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY rejections
+    ADD CONSTRAINT rejections_pkey PRIMARY KEY (id);
 
 
 --
@@ -832,6 +879,13 @@ CREATE INDEX index_petitions_on_signature_count_and_state ON petitions USING btr
 
 
 --
+-- Name: index_rejections_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_rejections_on_petition_id ON rejections USING btree (petition_id);
+
+
+--
 -- Name: index_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -911,6 +965,14 @@ ALTER TABLE ONLY constituency_petition_journals
 
 ALTER TABLE ONLY petitions
     ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_82ffb00060; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY rejections
+    ADD CONSTRAINT fk_rails_82ffb00060 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -1012,4 +1074,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150701111544');
 INSERT INTO schema_migrations (version) VALUES ('20150701145201');
 
 INSERT INTO schema_migrations (version) VALUES ('20150701145202');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701151007');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701151008');
 

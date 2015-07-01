@@ -85,7 +85,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'viewing government response for a petition'
       end
 
@@ -340,7 +340,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'adding a government response to a petition'
       end
 
