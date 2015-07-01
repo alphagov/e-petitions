@@ -74,7 +74,3 @@
 .column-two-thirds {
   @include grid-column(2/3);
 }
-
-.extra-gutter {
-  padding: 0 $gutter*1.5 0 $gutter-half;
-}
