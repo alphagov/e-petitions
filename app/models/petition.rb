@@ -56,7 +56,7 @@ class Petition < ActiveRecord::Base
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  validates :response_summary, length: { maximum: 500, message: 'Response summary is too long.' }
+  validates :response_summary, length: { maximum: 500, message: 'Response summary is too long' }
   validates_presence_of :open_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
   validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
