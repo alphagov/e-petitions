@@ -20,7 +20,7 @@ en-GB:
       open: "Open petitions (%{quantity})"
       closed: "Closed petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
-      awaiting_response: "Awaiting a government response (%{quantity})"
+      awaiting_response: "Awaiting government response (%{quantity})"
       with_response: "Government responses (%{quantity})"
       with_debate_outcome: "Petitions debated in Parliament (%{quantity})"
       awaiting_debate_date: "Petitions waiting for a debate in Parliament (%{quantity})"

@@ -68,7 +68,7 @@ Feature: Suzy Singer searches by free text
       | The Wombles will rock Glasto | 1 signature          |
 
   Scenario: Search for petitions awaiting a goverment response
-    When I search for "Awaiting a government response" with "Monday"
+    When I search for "Awaiting government response" with "Monday"
     Then I should see the following search results:
       | Make every monday bank holiday | 1 signature |
 

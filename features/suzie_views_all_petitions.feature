@@ -40,7 +40,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
     Given a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
     When I view all petitions from the home page
-    And I follow "Awaiting a government response"
+    And I follow "Awaiting government response"
     Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
