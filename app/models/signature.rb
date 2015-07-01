@@ -64,18 +64,8 @@ class Signature < ActiveRecord::Base
   # = Methods =
   attr_accessor :uk_citizenship
 
-  def self.signature_number(petition_id, validated_at)
-    where('petition_id = ? AND validated_at < ?', petition_id, validated_at).count + 1
-  end
-
   def email=(value)
     super(value.to_s.downcase)
-  end
-
-  def number
-    if validated_at?
-      @number ||= self.class.signature_number(petition_id, validated_at)
-    end
   end
 
   def postcode=(value)
@@ -108,10 +98,12 @@ class Signature < ActiveRecord::Base
 
       Petition.transaction do
         self.update_columns(
+          number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: Time.current,
           updated_at:   Time.current
         )
+
         ConstituencyPetitionJournal.record_new_signature_for(self)
         petition.increment_signature_count!
       end
