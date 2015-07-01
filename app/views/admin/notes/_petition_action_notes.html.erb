@@ -1,7 +1,7 @@
 <%= form_for petition, url: admin_petition_notes_path(petition), method: :patch do |f| -%>
 
   <%= form_row :for => [f.object, :admin_notes] do %>
-    <%= f.label :admin_notes, 'Notes', class: 'form-label action-heading' %>
+    <%= f.label :admin_notes, 'Notes', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :admin_notes %>
     <%= f.text_area :admin_notes, tabindex: increment, class: 'form-control' %>
   <% end %>

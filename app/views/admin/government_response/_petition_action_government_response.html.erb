@@ -1,4 +1,4 @@
-<h2 class="action-heading">Government response</h2>
+<h2 class="petition-action-heading">Government response</h2>
 <%= form_for [:admin, petition ], :url => admin_petition_government_response_path(petition), method: :put do |f| -%>
   <%= form_row :for => [f.object, :response_summary] do %>
     <%= f.label :response_summary, 'Summary quote', class: 'form-label' %>

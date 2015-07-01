@@ -1,43 +1,43 @@
-<nav class="actions" role="navigation">
+<nav class="petition-actions" role="navigation">
   <ul>
 
     <%# If petition is awaiting moderation %>
     <% if @petition.in_todo_list? %>
-      <li class="action">
+      <li class="petition-action">
         <%= render 'petition_action_moderation', petition: @petition %>
       </li>
 
-      <li class="action">
+      <li class="petition-action">
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
     <%# If petition has already been moderated %>
     <% else %>
-      <li class="action">
+      <li class="petition-action">
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
-      <li class="action">
+      <li class="petition-action">
         <%= render 'petition_action_government_response', petition: @petition %>
       </li>
 
       <% if @petition.can_have_debate_added? %>
-        <li class="action">
+        <li class="petition-action">
           <%= render 'petition_action_debate_outcome', petition: @petition %>
         </li>
 
-        <li class="action">
+        <li class="petition-action">
           <%= render 'petition_action_debate_date', petition: @petition %>
         </li>
       <% end %>
 
       <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
-        <li class="action">
+        <li class="petition-action">
           <%= render 'petition_action_take_down', petition: @petition %>
         </li>
 
       <% elsif @petition.rejected? -%>
-        <li class="action">
+        <li class="petition-action">
           <%= render 'petition_action_change_rejection_status', petition: @petition %>
         </li>
       <% end -%>

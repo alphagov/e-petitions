@@ -1,4 +1,4 @@
-<h2 class="action-heading">Debate Outcome</h2>
+<h2 class="petition-action-heading">Debate Outcome</h2>
 <%= form_for petition.debate_outcome, url: admin_petition_debate_outcome_path(petition), method: :patch do |f| -%>
   <%= form_row :for => [f.object, :debated_on] do %>
     <%= f.label :debated_on, class: 'form-label' %>
