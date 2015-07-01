@@ -48,6 +48,7 @@ class Petition < ActiveRecord::Base
 
   has_one :debate_outcome, dependent: :destroy
   has_one :government_response, dependent: :destroy
+  has_one :note, dependent: :destroy
   has_one :rejection, dependent: :destroy
 
   has_many :signatures

@@ -321,6 +321,38 @@ ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
 
 
 --
+-- Name: notes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE notes (
+    id integer NOT NULL,
+    petition_id integer,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
+
+
+--
 -- Name: petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -335,7 +367,6 @@ CREATE TABLE petitions (
     updated_at timestamp without time zone,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
-    admin_notes text,
     notified_by_email boolean DEFAULT false,
     background character varying(200),
     sponsor_token character varying(255),
@@ -589,6 +620,13 @@ ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('gover
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq'::regclass);
 
 
@@ -682,6 +720,14 @@ ALTER TABLE ONLY email_sent_receipts
 
 ALTER TABLE ONLY government_responses
     ADD CONSTRAINT government_responses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY notes
+    ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
 
 
 --
@@ -813,6 +859,13 @@ CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts US
 --
 
 CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_responses USING btree (petition_id);
+
+
+--
+-- Name: index_notes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notes_on_petition_id ON notes USING btree (petition_id);
 
 
 --
@@ -952,6 +1005,14 @@ ALTER TABLE ONLY signatures
 
 
 --
+-- Name: fk_rails_3e3a2f376e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notes
+    ADD CONSTRAINT fk_rails_3e3a2f376e FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_5186723bbd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1078,4 +1139,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150701145202');
 INSERT INTO schema_migrations (version) VALUES ('20150701151007');
 
 INSERT INTO schema_migrations (version) VALUES ('20150701151008');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701165424');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701165425');
 

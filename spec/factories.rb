@@ -54,13 +54,16 @@ FactoryGirl.define do
 
   factory :petition do
     transient do
+      admin_notes { nil }
       creator_signature_attributes { {} }
       sponsors_signed false
       sponsor_count { Site.minimum_number_of_sponsors }
     end
+
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
+
     after(:build) do |petition, evaluator|
       evaluator.sponsor_count.times do
         petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
@@ -68,6 +71,10 @@ FactoryGirl.define do
 
       if petition.signature_count.zero?
         petition.signature_count += 1 if petition.creator_signature.validated?
+      end
+
+      if evaluator.admin_notes
+        petition.build_note details: evaluator.admin_notes
       end
     end
 
@@ -242,6 +249,11 @@ FactoryGirl.define do
     association :petition, factory: :awaiting_petition
     details "Government Response Details"
     summary "Government Response Summary"
+  end
+
+  factory :note do
+    association :petition, factory: :petition
+    details "Petition notes"
   end
 
   factory :rejection do
