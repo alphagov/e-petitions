@@ -124,8 +124,19 @@ FactoryGirl.define do
   end
 
   factory :responded_petition, :parent => :awaiting_petition do
-    response          "Government Response"
-    response_summary  "Government Response Summary"
+    government_response_at { 1.week.ago }
+
+    transient do
+      response_summary { "Response Summary" }
+      response_details { "Response Details" }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_government_response! do |r|
+        r.summary = evaluator.response_summary
+        r.details = evaluator.response_details
+      end
+    end
   end
 
   factory :awaiting_debate_petition, :parent => :open_petition do
@@ -214,6 +225,12 @@ FactoryGirl.define do
       }
 
     end
+  end
+
+  factory :government_response do
+    association :petition, factory: :awaiting_petition
+    details "Government Response Details"
+    summary "Government Response Summary"
   end
 
   factory :email_requested_receipt do

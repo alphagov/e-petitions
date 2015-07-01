@@ -15,28 +15,9 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  context "callbacks" do
-    context "stamp_government_response_at" do
-      it "does not stamp the timestamp if no response and no response_summary is present" do
-        petition = FactoryGirl.create(:open_petition)
-        expect(petition.government_response_at).to be_nil
-      end
-      it "does not stamp the timestamp if either response_summary or response is missing" do
-        petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
-        expect(petition.government_response_at).to be_nil
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary')
-        expect(petition.government_response_at).to be_nil
-      end
-      it "stamps the timestamp if setting the response for the first time" do
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
-        expect(petition.government_response_at).not_to be_nil
-      end
-
-      it "does not change the timestamp with subsequent response updates" do
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
-        expect { petition.update(response: 'Sorry, promised too much') }.to_not change { petition.government_response_at }
-      end
-    end
+  describe "associations" do
+    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
+    it { is_expected.to have_one(:government_response).dependent(:destroy) }
   end
 
   context "validations" do
@@ -57,11 +38,6 @@ RSpec.describe Petition, type: :model do
     it "should validate the length of :additional_details to within 800 characters" do
       expect(FactoryGirl.build(:petition, :additional_details => 'x' * 800)).to be_valid
       expect(FactoryGirl.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
-    end
-
-    it "validates the length of :response_summary to within 500 characters" do
-      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 500)).to be_valid
-      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 501)).not_to be_valid
     end
 
     it "does not allow a blank state" do
@@ -113,34 +89,6 @@ RSpec.describe Petition, type: :model do
       it "checks there is a rejection code" do
         petition.rejection_code = 'libellous'
         expect(petition).to be_valid
-      end
-    end
-
-    context "response" do
-      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi') }
-
-      it "is valid if response and response_summary are nil" do
-        petition.response_summary = nil
-        petition.response = nil
-        expect(petition).to be_valid
-      end
-
-      it "is valid if response is nil" do
-        petition.response = nil
-        expect(petition).to be_valid
-      end
-
-      it "is valid if response_summary are nil" do
-        petition.response_summary = nil
-        expect(petition).to be_valid
-      end
-
-      it "is invalid if response_summary is too long (500 chars)" do
-        petition.response_summary = 'a' * 500
-        expect(petition).to be_valid
-        petition.response_summary += 'a'
-        expect(petition).not_to be_valid
-        expect(petition.errors[:response_summary]).not_to be_empty
       end
     end
   end
@@ -283,14 +231,14 @@ RSpec.describe Petition, type: :model do
 
     context "with_response" do
       before do
-        @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
-        @p2 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response_summary => "summary", :response => "govt response")
-        @p3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response => "govt response")
-        @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
+        @p1 = FactoryGirl.create(:responded_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:responded_petition)
+        @p4 = FactoryGirl.create(:open_petition)
       end
 
-      it "returns only the petitions which have governments response; both summary and the whole response" do
-        expect(Petition.with_response).to match_array([@p1, @p2])
+      it "returns only the petitions have a government response timestamp" do
+        expect(Petition.with_response).to match_array([@p1, @p3])
       end
     end
 
@@ -1186,10 +1134,6 @@ RSpec.describe Petition, type: :model do
       sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
-  end
-
-  describe 'debate outcomes' do
-    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
   end
 
   describe 'email requested receipts' do

@@ -7,7 +7,7 @@ end
 Then /^the response summary to "([^"]*)" should be publicly viewable on the petition page$/ do |petition_action|
   petition = Petition.find_by(action: petition_action)
   visit petition_path(petition)
-  expect(page).to have_content(petition.response_summary)
+  expect(page).to have_content(petition.response.summary)
 end
 
 Then(/^the petition signatories of "([^"]*)" should not receive a response notification email$/) do |petition_action|

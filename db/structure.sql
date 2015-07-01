@@ -288,6 +288,39 @@ ALTER SEQUENCE email_sent_receipts_id_seq OWNED BY email_sent_receipts.id;
 
 
 --
+-- Name: government_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE government_responses (
+    id integer NOT NULL,
+    petition_id integer,
+    summary character varying(500) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: government_responses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE government_responses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: government_responses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
+
+
+--
 -- Name: petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -295,7 +328,6 @@ CREATE TABLE petitions (
     id integer NOT NULL,
     action character varying(255) NOT NULL,
     additional_details text,
-    response text,
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     open_at timestamp without time zone,
     creator_signature_id integer NOT NULL,
@@ -309,7 +341,6 @@ CREATE TABLE petitions (
     notified_by_email boolean DEFAULT false,
     background character varying(200),
     sponsor_token character varying(255),
-    response_summary character varying(500),
     government_response_at timestamp without time zone,
     scheduled_debate_date date,
     last_signed_at timestamp without time zone,
@@ -519,6 +550,13 @@ ALTER TABLE ONLY email_sent_receipts ALTER COLUMN id SET DEFAULT nextval('email_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('government_responses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq'::regclass);
 
 
@@ -597,6 +635,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 ALTER TABLE ONLY email_sent_receipts
     ADD CONSTRAINT email_sent_receipts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: government_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY government_responses
+    ADD CONSTRAINT government_responses_pkey PRIMARY KEY (id);
 
 
 --
@@ -716,6 +762,13 @@ CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts US
 
 
 --
+-- Name: index_government_responses_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_responses USING btree (petition_id);
+
+
+--
 -- Name: index_petitions_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -818,6 +871,14 @@ CREATE INDEX index_signatures_on_validated_at ON signatures USING btree (validat
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+
+
+--
+-- Name: fk_rails_0af6bc4d41; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY government_responses
+    ADD CONSTRAINT fk_rails_0af6bc4d41 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -947,4 +1008,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150622140322');
 INSERT INTO schema_migrations (version) VALUES ('20150630105949');
 
 INSERT INTO schema_migrations (version) VALUES ('20150701111544');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701145201');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701145202');
 

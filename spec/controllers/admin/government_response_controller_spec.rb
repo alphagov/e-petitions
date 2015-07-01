@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::GovernmentResponseController, type: :controller do
-
   let!(:petition) { FactoryGirl.create(:open_petition) }
+  let(:government_response) { petition.government_response }
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -101,13 +101,13 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
       let(:government_response_attributes) do
         {
-          response_summary: 'The government agrees',
-          response: 'Your petition is brilliant and we will do our utmost to make it law.'
+          summary: 'The government agrees',
+          details: 'Your petition is brilliant and we will do our utmost to make it law.'
         }
       end
 
       def do_patch(overrides = {})
-        params = { petition_id: petition.id, petition: government_response_attributes }
+        params = { petition_id: petition.id, government_response: government_response_attributes }
         patch :update, params.merge(overrides)
       end
 
@@ -126,8 +126,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
         it 'stores the supplied government response in the db' do
           do_patch
           petition.reload
-          expect(petition.response_summary).to eq government_response_attributes[:response_summary]
-          expect(petition.response).to eq government_response_attributes[:response]
+          expect(government_response.summary).to eq government_response_attributes[:summary]
+          expect(government_response.details).to eq government_response_attributes[:details]
         end
 
         it 'stamps the current time on the government_response_at timestamp in the db' do
@@ -223,8 +223,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
       describe 'using no params to add a government response' do
         before do
-          government_response_attributes[:response_summary] = nil
-          government_response_attributes[:response] = nil
+          government_response_attributes[:summary] = nil
+          government_response_attributes[:details] = nil
         end
 
         it 'does not tell the moderator that their email will be sent overnight' do
@@ -247,14 +247,15 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
           end
         end
 
-        it 'redirects to the show page' do
+        it 're-renders the admin/petitions/show template' do
           do_patch
-          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}/government-response"
+          expect(response).to be_success
+          expect(response).to render_template('admin/petitions/show')
         end
       end
 
       describe 'using invalid params to add a government response' do
-        before { government_response_attributes[:response_summary] = 'a' * 501 }
+        before { government_response_attributes[:summary] = 'a' * 501 }
 
         it 're-renders the petitions/show template' do
           do_patch
@@ -264,14 +265,13 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
         it 'leaves the in-memory instance with errors' do
           do_patch
-          expect(assigns(:petition).errors).not_to be_empty
+          expect(assigns(:government_response).errors).not_to be_empty
         end
 
         it 'does not store the supplied government response in the db' do
           do_patch
           petition.reload
-          expect(petition.response_summary).to be_nil
-          expect(petition.response).to be_nil
+          expect(government_response).to be_nil
         end
 
         it 'does not stamp the government_response_at timestamp in the db' do
@@ -301,8 +301,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
         it 'stores the supplied response on the petition in the db' do
           do_patch
           petition.reload
-          expect(petition.response_summary).to eq government_response_attributes[:response_summary]
-          expect(petition.response).to eq government_response_attributes[:response]
+          expect(government_response.summary).to eq government_response_attributes[:summary]
+          expect(government_response.details).to eq government_response_attributes[:details]
         end
       end
 
@@ -316,8 +316,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
         it 'does not store the supplied response on the petition in the db' do
           suppress(ActiveRecord::RecordNotFound) { do_patch }
           petition.reload
-          expect(petition.response_summary).not_to eq government_response_attributes[:response_summary]
-          expect(petition.response).not_to eq government_response_attributes[:response]
+          expect(government_response).to be_nil
         end
       end
 

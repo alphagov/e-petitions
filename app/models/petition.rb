@@ -25,7 +25,6 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
-  before_save :stamp_government_response_at, if: -> { response_summary.present? && response.present? && government_response_at.nil? }
   after_create :set_petition_on_creator_signature
 
   extend Searchable(:action, :background, :additional_details)
@@ -34,8 +33,6 @@ class Petition < ActiveRecord::Base
   facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
   facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
   facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
-  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
-  facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
   facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
   facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
   facet :hidden, -> { for_state(HIDDEN_STATE).reorder(created_at: :desc) }
@@ -44,18 +41,23 @@ class Petition < ActiveRecord::Base
   facet :in_moderation, -> { in_moderation.reorder(created_at: :desc) }
   facet :in_debate_queue, -> { in_debate_queue }
 
+  facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
+  facet :with_response,        -> { with_response.by_most_recent_response }
+
   # = Relationships =
-  belongs_to :creator_signature, :class_name => 'Signature'
+  belongs_to :creator_signature, class_name: 'Signature'
   accepts_nested_attributes_for :creator_signature
+
+  has_one :government_response, dependent: :destroy
+  has_one :debate_outcome, dependent: :destroy
+
   has_many :signatures
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
   has_many :constituency_petition_journals, :dependent => :destroy
-  has_one :debate_outcome, dependent: :destroy
 
   # = Validations =
   include Staged::Validations::PetitionDetails
-  validates :response_summary, length: { maximum: 500, message: 'Response summary is too long' }
   validates_presence_of :open_at, :if => :open?
   validates_presence_of :rejection_code, :if => :rejected?
   validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
@@ -75,7 +77,6 @@ class Petition < ActiveRecord::Base
   scope :todo_list, -> { where(state: TODO_LIST_STATES) }
   scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }
   scope :by_oldest, -> { order(created_at: :asc) }
-  scope :with_response, -> { where.not(response_summary: nil, response: nil) }
   scope :with_debate_outcome, -> { joins(:debate_outcome) }
   scope :without_debate_outcome, -> { where.not(id: DebateOutcome.select(:petition_id).uniq) }
   scope :awaiting_debate_date, ->  { where.not(debate_threshold_reached_at: nil) }
@@ -88,10 +89,33 @@ class Petition < ActiveRecord::Base
     )
   end
 
-
   class << self
+    def by_most_recent_response
+      reorder(government_response_at: :desc)
+    end
+
+    def by_waiting_for_response_longest
+      reorder(response_threshold_reached_at: :asc)
+    end
+
     def awaiting_response
-      where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
+      response_threshold_reached.not_responded
+    end
+
+    def not_responded
+      where(government_response_at: nil)
+    end
+
+    def respondable
+      where(state: RESPONDABLE_STATES)
+    end
+
+    def response_threshold_reached
+      where.not(response_threshold_reached_at: nil)
+    end
+
+    def with_response
+      where.not(government_response_at: nil)
     end
 
     def trending(since = 1.hour.ago, limit = 3)
@@ -234,6 +258,10 @@ class Petition < ActiveRecord::Base
     state == CLOSED_STATE
   end
 
+  def government_responsed?
+    government_response_at?
+  end
+
   def can_have_debate_added?
     self.open? || self.closed?
   end
@@ -297,10 +325,6 @@ class Petition < ActiveRecord::Base
 
   def stop_collecting_sponsors_states
     state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
-  end
-
-  def stamp_government_response_at
-    self.government_response_at = Time.current
   end
 
   def update_all(updates)

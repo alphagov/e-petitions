@@ -7,5 +7,5 @@
   </td>
   <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
   <td><%= date_format_admin(petition.deadline) %></td>
-  <td class="center"><%= petition.response.present? ? image_tag('admin/tick.gif') : '' %></td>
+  <td class="center"><%= petition.government_responded? ? image_tag('admin/tick.gif') : '' %></td>
 </tr>
