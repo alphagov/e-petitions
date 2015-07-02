@@ -9,11 +9,16 @@ class Site < ActiveRecord::Base
 
   class << self
     def before_remove_const
-      Thread.current[:__site__] = nil
+      reset
     end
 
     def instance
-      Thread.current[:__site__] ||= first_or_create(defaults)
+      Thread.current[:__site__] ||= cache{ first_or_create(defaults) }
+    end
+
+    def reset
+      Rails.cache.delete('__site__')
+      Thread.current[:__site__] = nil
     end
 
     def authenticate(username, password)
@@ -92,6 +97,10 @@ class Site < ActiveRecord::Base
     end
 
     private
+
+    def cache(&block)
+      Rails.cache.fetch('__site__', { expires_in: 5.minutes }, &block)
+    end
 
     def default_title
       ENV.fetch('SITE_TITLE', 'Petition parliament')

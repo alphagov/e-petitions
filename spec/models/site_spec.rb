@@ -456,8 +456,36 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe ".reset" do
+    let(:site) { Site.first_or_create(Site.defaults) }
+
+    context "when it is cached in Thread.current" do
+      before do
+        Thread.current[:__site__] = site
+      end
+
+      it "clears the cached instance in Thread.current" do
+        expect{ Site.reset }.to change {
+          Thread.current[:__site__]
+        }.from(site).to(nil)
+      end
+    end
+
+    context "when it is cached in Rails.cache" do
+      before do
+        Rails.cache.fetch('__site__') { site }
+      end
+
+      it "clears the cached instance in Thread.current" do
+        expect{ Site.reset }.to change {
+          Rails.cache.fetch('__site__')
+        }.from(site).to(nil)
+      end
+    end
+  end
+
   describe ".touch" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     before do
       expect(Site).to receive(:first_or_create).and_return(site)
@@ -475,7 +503,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".instance" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     context "when it isn't cached in Thread.current" do
       before do
@@ -490,6 +518,17 @@ RSpec.describe Site, type: :model do
       it "caches it in Thread.current" do
         expect(Site).to receive(:first_or_create).and_return(site)
         expect(Site.instance).to equal(Thread.current[:__site__])
+      end
+
+      context "when it is cached in Rails.cache" do
+        before do
+          Rails.cache.fetch('__site__') { site }
+        end
+
+        it "returns the cached instance" do
+          expect(Site).not_to receive(:first_or_create)
+          expect(Site.instance).to eq(site)
+        end
       end
     end
 
@@ -506,7 +545,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".before_remove_const" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     context "when it is cached in Thread.current" do
       before do
@@ -516,6 +555,18 @@ RSpec.describe Site, type: :model do
       it "clears the cached instance in Thread.current" do
         expect{ Site.before_remove_const }.to change {
           Thread.current[:__site__]
+        }.from(site).to(nil)
+      end
+    end
+
+    context "when it is cached in Rails.cache" do
+      before do
+        Rails.cache.fetch('__site__') { site }
+      end
+
+      it "clears the cached instance in Rails.cache" do
+        expect{ Site.before_remove_const }.to change {
+          Rails.cache.fetch('__site__')
         }.from(site).to(nil)
       end
     end

@@ -9,5 +9,5 @@ Before do
 end
 
 After do
-  Site.reload
+  Site.reset
 end
