@@ -29,10 +29,7 @@ Feature: Suzy Singer searches by free text
     Given a petition "Leave EU" has been debated 18 days ago
 
   Scenario: Search for open petitions
-    When I go to the petitions page
-    And I follow "Open petitions"
-    And I fill in "Wombles" as my search term
-    And I press "Search"
+    When I search for "Open petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
     And I should see "4 results"
     And I should not see "Wombles are great"
@@ -68,7 +65,7 @@ Feature: Suzy Singer searches by free text
       | The Wombles will rock Glasto | 1 signature          |
 
   Scenario: Search for petitions awaiting a goverment response
-    When I search for "Awaiting a government response" with "Monday"
+    When I search for "Awaiting government response" with "Monday"
     Then I should see the following search results:
       | Make every monday bank holiday | 1 signature |
 

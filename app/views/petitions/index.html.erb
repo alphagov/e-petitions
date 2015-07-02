@@ -1,4 +1,17 @@
-<a class="lists-of-petitions" href="#other-search-lists">Lists of petitions</a>
+<details class="lists-of-petitions">
+  <summary><span class="summary">Petition types</span></summary>
+  <div>
+    <ul>
+    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
+      <li>
+        <%= link_to petitions_url(state: facet) do %>
+          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+</details>
 
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
