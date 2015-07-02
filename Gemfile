@@ -30,6 +30,8 @@ gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
 gem 'delayed-web', github: 'thebestday/delayed-web'
+gem 'dalli'
+gem 'connection_pool'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -42,12 +44,12 @@ group :test do
   gem 'nokogiri'
   gem 'shoulda'
   gem 'pickle'
-  gem 'cucumber-rails', :require => false
+  gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'capybara'
   gem 'poltergeist'
   gem 'factory_girl_rails'
-  gem 'be_valid_asset', :require => false
+  gem 'be_valid_asset', require: false
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'

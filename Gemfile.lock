@@ -69,6 +69,7 @@ GEM
     chronic (0.10.2)
     cliver (0.3.2)
     coderay (1.1.0)
+    connection_pool (0.9.3)
     crack (0.4.2)
       safe_yaml (~> 1.0.0)
     cucumber (1.3.19)
@@ -84,6 +85,7 @@ GEM
       nokogiri (~> 1.5)
       rails (>= 3, < 5)
     daemons (1.2.2)
+    dalli (2.7.4)
     database_cleaner (1.4.1)
     delayed_job (4.0.6)
       activesupport (>= 3.0, < 5.0)
@@ -275,8 +277,10 @@ DEPENDENCIES
   bcrypt
   be_valid_asset
   capybara
+  connection_pool
   cucumber-rails
   daemons
+  dalli
   database_cleaner
   delayed-web!
   delayed_job_active_record
