@@ -127,11 +127,11 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from
-      ENV.fetch('EPETITIONS_FROM', "no-reply@#{default_host}")
+      ENV.fetch('EPETITIONS_FROM', "Petitions: UK Government and Parliament <no-reply@#{default_host}>")
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', "feedback@#{default_host}")
+      ENV.fetch('EPETITIONS_FEEDBACK', "Petitions: UK Government and Parliament  <feedback@#{default_host}>")
     end
 
     def default_username
