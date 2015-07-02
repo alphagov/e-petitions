@@ -106,6 +106,10 @@ FactoryGirl.define do
     state  Petition::SPONSORED_STATE
   end
 
+  factory :flagged_petition, :parent => :petition do
+    state  Petition::FLAGGED_STATE
+  end
+
   factory :open_petition, :parent => :petition do
     state      Petition::OPEN_STATE
     open_at    { Time.current }

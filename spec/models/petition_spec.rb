@@ -54,7 +54,7 @@ RSpec.describe Petition, type: :model do
       expect(petition.errors[:state]).not_to be_empty
     end
 
-    %w(pending validated open rejected hidden).each do |state|
+    %w(pending validated sponsored flagged open rejected hidden).each do |state|
       it "allows state: #{state}" do
         petition = FactoryGirl.build(:"#{state}_petition")
 
@@ -146,6 +146,7 @@ RSpec.describe Petition, type: :model do
         @p5 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
         @p6 = FactoryGirl.create(:closed_petition, :closed_at => 1.day.ago)
         @p7 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
+        @p8 = FactoryGirl.create(:petition, :state => Petition::FLAGGED_STATE)
       end
 
       it "returns 2 pending petitions" do
@@ -154,9 +155,10 @@ RSpec.describe Petition, type: :model do
         expect(petitions).to include(@p1, @p3)
       end
 
-      it "returns 1 validated, sponsored, open, closed and hidden petitions" do
+      it "returns 1 validated, sponsored, flagged, open, closed and hidden petitions" do
         [[Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE, @p4],
-         [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6], [Petition::SPONSORED_STATE, @p7]].each do |state_and_petition|
+         [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6],
+         [Petition::SPONSORED_STATE, @p7], [Petition::FLAGGED_STATE, @p8]].each do |state_and_petition|
           petitions = Petition.for_state(state_and_petition[0])
           expect(petitions.size).to eq(1)
           expect(petitions).to eq([state_and_petition[1]])
@@ -170,6 +172,7 @@ RSpec.describe Petition, type: :model do
         @hidden_petition_2 = FactoryGirl.create(:petition, :state => Petition::VALIDATED_STATE)
         @hidden_petition_3 = FactoryGirl.create(:petition, :state => Petition::HIDDEN_STATE)
         @hidden_petition_4 = FactoryGirl.create(:petition, :state => Petition::SPONSORED_STATE)
+        @hidden_petition_5 = FactoryGirl.create(:petition, :state => Petition::FLAGGED_STATE)
         @visible_petition_1 = FactoryGirl.create(:open_petition)
         @visible_petition_2 = FactoryGirl.create(:rejected_petition)
         @visible_petition_3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago)
@@ -501,16 +504,18 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#in_moderation?" do
-    context "when the state is sponsored" do
-      let(:petition) { FactoryGirl.build(:petition, state: Petition::SPONSORED_STATE) }
+    context "for in moderation states" do
+      Petition::IN_MODERATION_STATES.each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
 
-      it "returns true" do
-        expect(petition.in_moderation?).to be_truthy
+        it "is in moderation when state is #{state}" do
+          expect(petition.in_moderation?).to be_truthy
+        end
       end
     end
 
     context "for other states" do
-      (Petition::STATES - [Petition::SPONSORED_STATE]).each do |state|
+      (Petition::STATES - Petition::IN_MODERATION_STATES).each do |state|
         let(:petition) { FactoryGirl.build(:petition, state: state) }
 
         it "is not in moderation when state is #{state}" do
@@ -1079,19 +1084,29 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#has_maximum_sponsors?' do
+    it 'is true when flagged petition has reached maximum amount of sponsors' do
+      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors)
+      expect(flagged_petition.has_maximum_sponsors?).to be_truthy
+    end
+
     it 'is true when sponsored petition has reached maximum amount of sponsors' do
       sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
       expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
     end
 
     it 'is true when validated petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
+      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
+      expect(validated_petition.has_maximum_sponsors?).to be_truthy
     end
 
     it 'is true when pending petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
+      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
+      expect(pending_petition.has_maximum_sponsors?).to be_truthy
+    end
+
+    it 'is false when flagged petition has not reached maximum amount of sponsors' do
+      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
+      expect(flagged_petition.has_maximum_sponsors?).to be_falsey
     end
 
     it 'is false when sponsored petition has not reached maximum amount of sponsors' do
@@ -1100,13 +1115,13 @@ RSpec.describe Petition, type: :model do
     end
 
     it 'is false when validated petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
+      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
+      expect(validated_petition.has_maximum_sponsors?).to be_falsey
     end
 
     it 'is false when validated petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
+      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
+      expect(pending_petition.has_maximum_sponsors?).to be_falsey
     end
   end
 
