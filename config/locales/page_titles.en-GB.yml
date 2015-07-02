@@ -1,6 +1,6 @@
 en-GB:
   page_titles:
-    default: "Petition parliament"
+    default: "Petitions - UK Government and Parliament"
     archived_petitions:
       index: "View archived petitions - Petitions"
       show: "%{petition} - Petitions"
@@ -29,5 +29,6 @@ en-GB:
       sponsored: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
-      index: "Petition parliament"
-      help: "Help"
+      index: "Petitions - UK Government and Parliament"
+      help: "How petitions work"
+      privacy: "Privacy and cookies"

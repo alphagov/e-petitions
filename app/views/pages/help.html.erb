@@ -1,210 +1,43 @@
 <div class="text-page">
 
-<h1>Help</h1>
+ <h1>How petitions work</h1>
 
-<ol class="list-number">
-  <li><a href="#how-petitions-work">How petitions work</a></li>
-  <li><a href="#creating-a-petition">Creating a petition</a></li>
-  <li><a href="#your-personal-information">Your personal information</a></li>
-  <li><a href="#cookies">Cookies</a></li>
-</ol>
+ <ol>
+  <li>You create a petition. Only British citizens and UK residents can create or sign a petition.</li>
+  <li>You get 5 people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
+  <li>We check your petition, then publish it. We only reject petitions that don’t meet the standards for petitions.</li>
+  <li>At 10,000 signatures you get a response from the government.</li>
+  <li>At 100,000 signatures your petition is considered for a debate in Parliament.</li>
+ </ol>
 
-<section id="how-petitions-work" aria-labelledby="how-petitions-work-heading">
-  <h2 id="how-petitions-work-heading">How petitions work</h2>
+ <h2>Debates</h2>
 
-  <ol class="list-number">
-    <li>Anyone can <%= link_to "create a petition", check_petitions_path %> (as long as they are a British citizen or UK resident)</li>
-    <li>If the petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will reply</li>
-    <li>If the petition gets <%= Site.formatted_threshold_for_debate %> signatures, the petition will be considered for debate in Parliament</li>
-  </ol>
+ <p>Petitions which reach 100,000 signatures are almost always debated. But we may decide not to put a petition forward for debate because it doesn’t fit with parliamentary business (for example, because the issue has already been debated recently - or there’s a debate scheduled for the near future).</p>
 
-  <!-- <p>You can see the debates and government responses that petitions have caused</p> -->
+ <p>If we think it’s something that Parliament should discuss, we’ll consider your petition for a debate before it reaches 100,000 signatures.</p>
 
-<h2 id="your-personal-information">Your personal information</h2>
-  <p>When you create or sign a petition, you must provide your name, email address and postcode.</p>
+ <p>We may contact you about the issue covered by your petition. For example, we sometimes invite people who create petitions to take part in a discussion with MPs or government ministers, or to give evidence to a select committee.</p>
 
-  <ul class="list-bullet">
-    <li>We use this information to make sure you haven&apos;t signed the petition already and you&apos;re a real person, not a robot</li>
-    <li>We won&apos;t sell your information</li>
-    <li>We will email you about the petitions you sign, and nothing else. You can unsubscribe from these emails at any time</li>
-    <li>We won&apos;t publish your details when you sign a petition</li>
-    <li>When you create a petition, you will be named as the petition creator. We won&apos;t publish your email or postcode</li>
-    <li>We keep web-server logs to help prevent attacks on this website.</li>
-  </ul>
+ <h2 id="standards">Standards for petitions</h2>
 
+ <p>We’ll only reject your petition if it’s:</p>
 
-  <h3>Email</h3>
-
-  <p>We&apos;ll email you to confirm your email address when you sign or create a petition.</p>
-  <p>We&apos;ll also email you to provide updates about the petition, for example, if the petition gets a response from the government or a debate in parliament.</p>
-  <p>You can unsubscribe from these emails at any time.</p>
-
-  <details>
-    <summary><span class="summary">Data protection</span></summary>
-    <div class="panel-indent">
-      <p>If you wish to see the personal data that we hold about you, send a <a href="https://ico.org.uk/for-organisations/guide-to-data-protection/principle-6-rights/subject-access-request/" rel="external">Subject Access Request</a> to <a href="mailto:foiteam@cabinet-office.x.gsi.gov.uk">foiteam@cabinet-office.x.gsi.gov.uk</a>.</p>
-      <p>You must include the email address you used to create or sign a petition. Our response will be sent to this email address to protect your privacy.</p>
-      <p>We reserve the right to charge a fee for providing your data.</p>
-    </div>
-  </details>
-
-</section>
-
-
-<section id="creating-a-petition" aria-labelledby="creating-a-petition-heading">
-  <h2 id="creating-a-petition-heading">Creating a petition</h2>
-  <p>Anyone can <%= link_to "create a petition", check_petitions_path %> (as long as they are a British citizen or UK resident).</p>
-
-  <h3>You need 5 supporters</h3>
-  <p>Every petition needs the support of 5 people to get started. Once you&apos;ve created the petition, we&apos;ll email you the text of your petition to forward to your potential supporters.</p>
-
-  <p>If your petition gets the support of 5 people, we&apos;ll take a look at it to check it meets our guidelines. This takes up to 7 days.</p>
-
-  <h3>Meeting our guidelines</h3>
-  <p>If your petition meets our guidelines (below), we&apos;ll publish it for anyone to sign. We&apos;ll email you to let you know.</p>
-
-  <p>If your petition doesn&apos;t meet our guidelines, we&apos;ll email you to help you meet them.</p>
-
-  <p>If we reject your petition, we&apos;ll email you to explain why. We publish the full text of all rejected petitions, unless the content is illegal or offensive.</p>
-
-  <h3>Guidelines for new petitions</h3>
-  <p>New petitions must call for specific action from the government.</p>
-
-  <p>A petition may freely disagree with the government or call for changes of policy. We won&apos;t exclude critical views.</p>
-
-  <h3>Reasons a petition will be rejected</h3>
-
-  <p>We will reject petitions which are:</p>
-  <ul class="list-bullet">
-    <li>Abusive, obscene or hate speech</li>
-    <li>Deceptive or misleading</li>
-    <li>In violation of any intellectual property rights</li>
-    <li>In violation of any law or regulation</li>
-    <li>Advertising or spam</li>
-    <li>About honours or appointments &ndash; find out how to submit nominations for honours at: <a href="https://www.gov.uk/honours/" rel="external">www.gov.uk/honours</a></li>
-  </ul>
-
-  <details>
-    <summary><span class="summary">More detail</span></summary>
-    <div class="panel-indent">
-      <p>We will reject petitions which include:</p>
-      <ul class="list-bullet">
-        <li>Confidential, libellous, false or defamatory statements</li>
-        <li>Information which may be protected by an injunction or court order</li>
-        <li>Material which is potentially confidential, commercially sensitive, or which may cause personal distress or loss</li>
-        <li>Names of individuals if they have been accused of a crime or information that may identify them</li>
-        <li>Names of individual officials of public bodies, unless they are part of the senior management of those organisations</li>
-        <li>Names of family members of elected representatives, eg MPs, or officials of public bodies</li>
-        <li>Offensive, joke or nonsense petitions</li>
-        <li>Hate speech</li>
-        <li>Wording that is impossible to understand</li>
-        <li>Statements that amount to advertisements</li>
-        <li>Joke or nonsense content</li>
-        <li>Matters which are not the responsibility of HM Government</li>
-        <li>Party political material</li>
-        <li>Commercial endorsements including the promotion of any product, service or publication</li>
-        <li>Issues that are dealt with by devolved bodies, eg The Scottish Parliament</li>
-        <li>Correspondence on personal issues</li>
-        <li>Freedom of Information requests</li>
-        <li>Matters relating to honours or appointments</li>
-      </ul>
-    </div>
-  </details>
-
-  <p>We can&apos;t alter a rejected petition or correspond with you regarding rejected petitions. Rejection of a petition does not stop you from creating a new petition.</p>
-
-  <h3>Paper based Parliamentary Petitions</h3>
-
-  <p>The petitions system is not intended to replace the <a href="http://www.parliament.uk/get-involved/have-your-say/petitioning/" rel="external">paper-based system of public petitions</a> in the House of Commons</p>
-
-</section>
-
-
-<section id="cookies" aria-labelledby="cookies-heading">
-  <h2 id="cookies-heading">Cookies</h2>
-
-  <p>This website puts small files (known as &lsquo;cookies&rsquo;) onto your computer to collect information about how you browse the site.</p>
-
-  <p>Cookies are used to:</p>
-
-  <ul class="list-bullet">
-    <li>measure how you use the petitions service so it can be updated and improved based on your needs</li>
-    <li>remember the notifications you&apos;ve seen so that we don&apos;t show them to you again</li>
-  </ul>
-
-  <p>These cookies aren&apos;t used to identify you personally.</p>
-
-  <p>Find out more about <a href="http://www.aboutcookies.org/" rel="external">how to manage cookies.</a></p>
-
-  <h3>Google Analytics cookies</h3>
-
-  <p>We use Google Analytics to collect information about how you use the service. This information helps us to improve the service.</p>
-  <p>The Google analytics cookie collects and stores information about:</p>
-
-  <ul class="list-bullet">
-      <li>the pages you visit - how long you spend on each page</li>
-      <li>how you got to the service</li>
-      <li>what you click on while you&apos;re using the service</li>
-  </ul>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Purpose</th>
-        <th>Expires</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>_utma</td>
-        <td>This lets us know if you&apos;ve visited before, so we can count how many of our visitors are new to the petitions service or to a certain page</td>
-        <td>2 years</td>
-      </tr>
-      <tr>
-        <td>_utmb</td>
-        <td>This works with _utmc to calculate the average length of time you spend on the petitions service</td>
-        <td>30 minutes</td>
-      </tr>
-      <tr>
-        <td>_utmc</td>
-        <td>This works with _utmb to calculate when you close your browser</td>
-        <td>When you close your browser</td>
-      </tr>
-      <tr>
-        <td>_utmt</td>
-        <td>This tells us about events as you use the service</td>
-        <td>10 minutes</td>
-      </tr>
-      <tr>
-        <td>_utmz</td>
-        <td>This tells us how you reached the petitions service (like from another website or a search engine)</td>
-        <td>6 months</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <p>Google isn&apos;t allowed to use or share our analytics data with anyone, but you can opt out of Google Analytics cookies.</p>
-
-  <h3>Session cookies</h3>
-  <p>We store a session cookie on your computer to help keep your information secure while you use the service.</p>
-
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Purpose</th>
-        <th>Expires</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>_epets_session</td>
-        <td>This keeps your information secure while you use the petitions service</td>
-        <td>When you close your browser</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+ <ul>
+  <li>about something that the UK government or Parliament is not responsible for</li>
+  <li>about something that’s the responsibility of a devolved body (eg the Scottish Parliament)</li>
+  <li>about a purely personal issue</li>
+  <li>abusive, obscene or contains hate speech</li>
+  <li>deceptive or misleading</li>
+  <li>advertising or spam</li>
+  <li>nonsensical, or a joke</li>
+  <li>party political</li>
+  <li>about honours or appointments - there’s a different way to <a href="https://www.gov.uk/</honours">nominate someone for an honour</a></li>
+  <li>breaks the law or violates intellectual property rights</li>
+  <li>covered by a court order, injunction or is about a court case that can’t be discussed publicly</li>
+  <li>potentially confidential, commercially sensitive or might cause someone distress or financial loss</li>
+  <li>names people working in public bodies (except for senior management)</li>
+  <li>names family members of elected officials or people working in public bodies</li>
+ </ul>
+ <p>If we reject your petition, we’ll tell you why. We publish the text of petitions that we reject, as long as they’re not obscene or illegal.</p>
 
 </div>

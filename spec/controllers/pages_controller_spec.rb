@@ -14,4 +14,11 @@ RSpec.describe PagesController, type: :controller do
       expect(help_path).to eq "/help"
     end
   end
+
+  describe "privacy" do
+    it "should respond to /privacy" do
+      expect({:get => "/privacy"}).to route_to({:controller => "pages", :action => "privacy"})
+      expect(privacy_path).to eq "/privacy"
+    end
+  end
 end
