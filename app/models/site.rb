@@ -253,6 +253,10 @@ class Site < ActiveRecord::Base
     errors.add(:password, :blank) unless password_digest?
   end
 
+  # Force early definition of attribute methods
+  # so that cached versions get properly built
+  define_attribute_methods
+
   private
 
   def port_string
