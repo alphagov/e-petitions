@@ -3,6 +3,8 @@ language: ruby
 cache: bundler
 rvm:
 - 2.2.2
+services:
+  - memcached
 before_install:
 - gem install bundler
 before_script:

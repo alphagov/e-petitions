@@ -26,8 +26,16 @@ module Epets
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
+    # Configure the cache store
+    config.cache_store = :dalli_store, nil, {
+      namespace: 'epets', expires_in: 1.day, compress: true,
+      pool_size: ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i
+    }
+
+    # Configure Active Job queue adapter
     config.active_job.queue_adapter = :delayed_job
 
+    # Remove the error wrapper from around the form element
     config.action_view.field_error_proc = -> (html_tag, instance) { html_tag }
 
     # Add 503 Service Unavailable to the rescue response

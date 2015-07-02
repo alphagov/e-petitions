@@ -8,10 +8,12 @@ end
 
 Given(/^the site is disabled$/) do
   Site.instance.update! enabled: false
+  Site.reset
 end
 
 Given(/^the site is protected$/) do
   Site.instance.update! protected: true, username: "username", password: "password"
+  Site.reset
 end
 
 Given(/^the request is not local$/) do
