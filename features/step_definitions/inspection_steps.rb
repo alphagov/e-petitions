@@ -60,11 +60,6 @@ Then /^the "([^\"]*)" radio button should be selected$/ do |label|
   expect(find_field(label)['checked']).to be_truthy
 end
 
-Then /^the "([^"]*)" row should display as invalid$/ do |field_label|
-  row_node = page.find("//label[.='#{field_label}']/ancestor::*[contains(@class, 'row')] | //*[contains(@class, 'label')][.='#{field_label}']/ancestor::*[contains(@class, 'row')]")
-  expect(row_node["class"]).to include("invalid_row")
-end
-
 ### Tables...
 
 Then(/^I should see the following search results:$/) do |values_table|
@@ -127,5 +122,5 @@ Then /^I should (not |)see a link called "([^\"]*)" linking to "([^\"]*)"$/ do |
 end
 
 Then /^"([^"]*)" should show as "([^"]*)"$/ do |node_text, node_class_name|
-  expect(page).to have_xpath("//*[.='#{node_text}'][contains(@class, '#{node_class_name}')]")
+  expect(page).to have_xpath("//*[.='#{node_text}']#{XPathHelpers.class_matching(node_lcass_name)}")
 end

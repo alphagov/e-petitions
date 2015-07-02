@@ -4,18 +4,12 @@ module SectionHelpers
 
     # Non site-specific based
     when /"([^\"]*)" fieldset/
-      "#{prefix}fieldset[contains(@class, '#{$1.downcase.gsub(/\s/, '_')}')]"
+      "#{prefix}fieldset#{XPathHelpers.class_matching($1.downcase.gsub(/\s/, '_'))}"
 
     # Sitewide
     when /^single h1$/
       expect(page).to have_xpath("//h1", :count => 1)
       "#{prefix}h1"
-
-    when 'search results table'
-      "#{prefix}div[contains(@class, 'petition_list')]//table"
-
-    when 'admin report table'
-      "#{prefix}table[contains(@class, 'admin_report')]"
 
     else
       raise "Can't find mapping from \"#{section_name}\" to a section."
