@@ -6,7 +6,7 @@
   <%= submit_tag "Go", name: nil %>
 <% end -%>
 
-<table class="admin_index">
+<table class="petition-list">
   <thead>
     <tr>
       <th>Id</th>
@@ -19,9 +19,9 @@
   </thead>
   <tbody>
     <% @petitions.each do |petition| -%>
-      <tr>
-        <td class="petition_id"><%= petition.id %></td>
-        <td class="petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
+      <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
+        <td><%= petition.id %></td>
+        <td class="petition-list-petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
         <td><%= petition.creator_signature.name %><br/>
         <%= mail_to petition.creator_signature.email %></td>
         <td><%= petition.state %></td>
