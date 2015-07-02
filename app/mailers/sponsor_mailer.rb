@@ -24,7 +24,7 @@ class SponsorMailer < ApplicationMailer
     @petition = sponsor.petition
     @signature = sponsor.signature
     mail(
-      subject: "Parliament petitions - Validate your support for #{@petition.creator_signature.name}'s petition #{@petition.action}",
+      subject: "Please confirm your email address",
       to: @signature.email
     )
   end
