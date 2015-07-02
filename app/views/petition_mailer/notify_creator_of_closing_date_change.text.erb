@@ -1,13 +1,15 @@
-Dear <%= @signature.name %>,
+Hi <%= @signature.name %>,
 
-Unfortunately we've had to bring forward the closing date of your petition "<%= @signature.petition.action %>" (available at <%= petition_url(@signature.petition) %>) from  <%= short_date_format @signature.petition.deadline %> to 31 March 2015
+Unfortunately we’re closing all petitions on 31 March 2015, including your petition "<%= @signature.petition.action %>":
+<%= petition_url(@signature.petition) %>
 
-The dissolution of this Parliament has now been scheduled for 30 March 2015, and it’s not possible for petitions to remain open once Parliament has been dissolved.
+Parliament will be dissolved on 30 March 2015 and it’s not possible for petitions to remain open once Parliament has been dissolved.
 
-I'm sorry you won't have as long to collect signatures as you expected. If you have any questions about this change, please contact us at https://submissions.epetitions.direct.gov.uk/feedback
+Sorry you won't have as long to collect signatures as you expected.
 
-(Please don't reply to this message as it's not an email address we monitor)
+If you want to give feedback, please contact us at:
+<%= feedback_url %>
 
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>

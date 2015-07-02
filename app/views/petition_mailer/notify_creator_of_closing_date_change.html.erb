@@ -1,13 +1,15 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>Unfortunately we've had to bring forward the closing date of your petition <%= link_to @signature.petition.action, petition_url(@signature.petition) %> from  <%= short_date_format @signature.petition.deadline %> to 30 March 2015</p>
+<p>Unfortunately we’re closing all petitions on 31 March 2015, including your petition "<%= @signature.petition.action %>":<br />
+<%= petition_url(@signature.petition) %></p>
 
-<p>The dissolution of this Parliament has now been scheduled for 30 March 2015, and it’s not possible for petitions to remain open once Parliament has been dissolved.</p>
+<p>Parliament will be dissolved on 30 March 2015 and it’s not possible for petitions to remain open once Parliament has been dissolved.</p>
 
-<p>I'm sorry you won't have as long to collect signatures as you expected. If you have any questions about this change, please <%= link_to 'contact us', 'https://submissions.epetitions.direct.gov.uk/feedback' %> at https://submissions.epetitions.direct.gov.uk/feedback</p>
+<p>Sorry you won't have as long to collect signatures as you expected.</p>
 
-<p>(Please don't reply to this message as it's not an email address we monitor)</p>
+<p>If you want to give feedback, please contact us at:<br />
+<%= link_to nil, feedback_url %></p>
 
-<p>Thanks,</p>
-
-<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to home_url, home_url %></p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>

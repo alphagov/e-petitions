@@ -1,11 +1,11 @@
-Dear <%= @signature.name %>,
+Hi <%= @signature.name %>,
 
-We notice that you signed the "<%= @signature.petition.action %>" petition recently, but haven't yet validated your email address.  In order to add your signature to this petition, we need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:
+We noticed that you tried to sign the petition "<%= @signature.petition.action %>" but haven't confirmed your email address.
+
+Click this link to sign the petition:
 
 <%= verify_signature_url(@signature, @signature.perishable_token) %>
 
-If you no longer want to sign this petition or believe this message was received in error, please ignore this email.
-
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>
