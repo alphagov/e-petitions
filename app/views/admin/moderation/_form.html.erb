@@ -14,4 +14,29 @@
     <%= f.submit 'Email petition creator', :class => 'button', :tabindex => increment %>
   <% end %>
 
+  <%= javascript_tag do %>
+    $().ready(function() {
+      var $rejection_controls = $('.petition-rejection-controls'),
+          $reject_control = $('#moderation_reject'),
+          $both_controls = $('input[name=moderation][type=radio]');
+      <% unless f.object.errors.any? %>
+      // Hide it straight away if there were no errors to display
+      $rejection_controls.hide();
+      <% end %>
+
+      // Ensure that we get the onchange event when the users uses the keyboard
+      // Details: http://bit.ly/iZx9nh
+      $both_controls.keyup(function() {
+        this.blur();
+        this.focus();
+      }).change(function() {
+        if ($reject_control.is(':checked')) {
+          $rejection_controls.show();
+        } else {
+          $rejection_controls.hide();
+        }
+      });
+    });
+  <% end -%>
+
 <% end -%>
