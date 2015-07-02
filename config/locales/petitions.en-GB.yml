@@ -76,18 +76,18 @@ en-GB:
           We published your petition "%{action}"
         petition_rejected: |-
           We rejected your petition "%{action}"
+
+        # Re-send confirmation emails
+        double_signature_confirmation: |-
+          You've already signed the petition "%{action}"
         email_already_confirmed_for_signature: |-
           You've already signed the petition "%{action}"
         no_signature_for_petition: |-
           Re-send failed: Petition "%{action}"
         one_pending_one_validated_signature: |-
           Please confirm your email address
-        double_signature_confirmation: |-
-          You've already signed the petition "%{action}"
         two_pending_signatures: |-
           Please confirm your email address
-
-        # Emails we send manually
         special_resend_of_email_confirmation_for_signer: |-
           Please confirm your email address
         notify_creator_of_closing_date_change: |-

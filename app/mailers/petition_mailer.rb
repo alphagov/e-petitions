@@ -30,6 +30,7 @@ class PetitionMailer < ApplicationMailer
 
   def no_signature_for_petition(petition, email)
     @petition = petition
+    @email = email
     mail to: email, subject: subject_for(:no_signature_for_petition)
   end
 
