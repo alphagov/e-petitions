@@ -33,12 +33,9 @@
     height: 34px;
   }
 
-  .strap-line {
-    font-size: 24px;
-    line-height: 35/24;
-    padding-left: $text-indent;
-    margin-bottom: $gutter-half;
+  .strapline {
     color: $white;
+    margin: $gutter-one-third $text-indent;
   }
 }
 
