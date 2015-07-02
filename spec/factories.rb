@@ -54,13 +54,16 @@ FactoryGirl.define do
 
   factory :petition do
     transient do
+      admin_notes { nil }
       creator_signature_attributes { {} }
       sponsors_signed false
       sponsor_count { Site.minimum_number_of_sponsors }
     end
+
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
+
     after(:build) do |petition, evaluator|
       evaluator.sponsor_count.times do
         petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
@@ -68,6 +71,10 @@ FactoryGirl.define do
 
       if petition.signature_count.zero?
         petition.signature_count += 1 if petition.creator_signature.validated?
+      end
+
+      if evaluator.admin_notes
+        petition.build_note details: evaluator.admin_notes
       end
     end
 
@@ -111,12 +118,23 @@ FactoryGirl.define do
   end
 
   factory :rejected_petition, :parent => :petition do
-    state  Petition::REJECTED_STATE
-    rejection_code "duplicate"
+    state Petition::REJECTED_STATE
+
+    transient do
+      rejection_code { "duplicate" }
+      rejection_details { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_rejection! do |r|
+        r.code = evaluator.rejection_code
+        r.details = evaluator.rejection_details
+      end
+    end
   end
 
   factory :hidden_petition, :parent => :petition do
-    state      Petition::HIDDEN_STATE
+    state Petition::HIDDEN_STATE
   end
 
   factory :awaiting_petition, :parent => :open_petition do
@@ -124,8 +142,19 @@ FactoryGirl.define do
   end
 
   factory :responded_petition, :parent => :awaiting_petition do
-    response          "Government Response"
-    response_summary  "Government Response Summary"
+    government_response_at { 1.week.ago }
+
+    transient do
+      response_summary { "Response Summary" }
+      response_details { "Response Details" }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_government_response! do |r|
+        r.summary = evaluator.response_summary
+        r.details = evaluator.response_details
+      end
+    end
   end
 
   factory :awaiting_debate_petition, :parent => :open_petition do
@@ -214,6 +243,22 @@ FactoryGirl.define do
       }
 
     end
+  end
+
+  factory :government_response do
+    association :petition, factory: :awaiting_petition
+    details "Government Response Details"
+    summary "Government Response Summary"
+  end
+
+  factory :note do
+    association :petition, factory: :petition
+    details "Petition notes"
+  end
+
+  factory :rejection do
+    association :petition, factory: :validated_petition
+    code "duplicate"
   end
 
   factory :email_requested_receipt do

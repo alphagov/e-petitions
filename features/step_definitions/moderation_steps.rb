@@ -23,7 +23,7 @@ end
 When(/^I reject the petition with a reason code "([^"]*)" and some explanatory text$/) do |reason_code|
   choose "Reject"
   select reason_code, :from => :petition_rejection_code
-  fill_in :petition_rejection_text, :with => "See guidelines at http://direct.gov.uk"
+  fill_in :petition_rejection_details, :with => "See guidelines at http://direct.gov.uk"
   click_button "Email petition creator"
 end
 
@@ -78,7 +78,7 @@ Then /^the creator should receive a (libel\/profanity )?rejection notification e
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
     Then they should see "hasn't been accepted" in the email body
-    And they should see "#{@petition.rejection_description.gsub(/<.*?>/,' ').split.last}" in the email body
+    And they should see "#{rejection_description(@petition.rejection.code).gsub(/<.*?>/,' ').split.last}" in the email body
   )
   if petition_is_libellous
     step %{they should not see "#{petition_url(@petition)}" in the email body}

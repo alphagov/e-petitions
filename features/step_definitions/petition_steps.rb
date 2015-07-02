@@ -46,8 +46,8 @@ Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |petiti
     @petition.update_attribute(:signature_count, count)
 end
 
-Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, response, response_summary|
-  @petition = FactoryGirl.create(:open_petition, action: petition_action, response: response, response_summary: response_summary)
+Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, details, summary|
+  @petition = FactoryGirl.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
 Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/ do |state, petition_action, parliament_response_days_ago |
@@ -55,10 +55,10 @@ Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
     action: petition_action,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
     response_summary: 'Response Summary',
-    response: 'Government Response',
+    response_details: 'Government Response',
     government_response_at: parliament_response_days_ago.to_i.days.ago
   }
-  FactoryGirl.create(:open_petition, petition_attributes)
+  FactoryGirl.create(:responded_petition, petition_attributes)
 end
 
 Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
@@ -111,11 +111,10 @@ end
 
 Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
-  @petition = FactoryGirl.create(:petition,
+  @petition = FactoryGirl.create(:rejected_petition,
     :action => petition_action,
-    :state => Petition::REJECTED_STATE,
     :rejection_code => "irrelevant",
-    :rejection_text => reason_text)
+    :rejection_details => reason_text)
 end
 
 Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |title, reason_for_rejection|
@@ -199,7 +198,7 @@ Then /^I should see the reason for rejection$/ do
   if @petition.is_a?(ArchivedPetition)
     expect(page).to have_content(@petition.reason_for_rejection)
   else
-    expect(page).to have_content(@petition.rejection_text)
+    expect(page).to have_content(@petition.rejection.details)
   end
 end
 

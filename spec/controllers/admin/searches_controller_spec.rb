@@ -25,7 +25,7 @@ RSpec.describe Admin::SearchesController, type: :controller do
       end
 
       context "searching for petition by id" do
-        let(:petition) { double(:id => 123, :to_param => '123', :editable_by? => false, :response_editable_by? => false) }
+        let(:petition) { double(:id => 123, :to_param => '123') }
 
         before do
           allow(Petition).to receive_messages(:find => petition)

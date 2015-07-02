@@ -14,9 +14,9 @@
 <p class="flash-notice">This petition was rejected</p>
 
 <h2>Reasons for rejection</h2>
-<%= petition.rejection_description.html_safe %>
-<% if petition.rejection_text.present? %>
-  <p><%= petition.rejection_text %></p>
+<%= rejection_description(petition.rejection.code) %>
+<% if petition.rejection.details? %>
+  <p><%= petition.rejection.details %></p>
 <% end %>
 
 <ul class="petition-meta">

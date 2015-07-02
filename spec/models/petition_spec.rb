@@ -15,28 +15,9 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  context "callbacks" do
-    context "stamp_government_response_at" do
-      it "does not stamp the timestamp if no response and no response_summary is present" do
-        petition = FactoryGirl.create(:open_petition)
-        expect(petition.government_response_at).to be_nil
-      end
-      it "does not stamp the timestamp if either response_summary or response is missing" do
-        petition = FactoryGirl.create(:open_petition, response: 'YEAH lets do it!')
-        expect(petition.government_response_at).to be_nil
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary')
-        expect(petition.government_response_at).to be_nil
-      end
-      it "stamps the timestamp if setting the response for the first time" do
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
-        expect(petition.government_response_at).not_to be_nil
-      end
-
-      it "does not change the timestamp with subsequent response updates" do
-        petition = FactoryGirl.create(:open_petition, response_summary: 'Summary', response: 'YEAH lets do it!')
-        expect { petition.update(response: 'Sorry, promised too much') }.to_not change { petition.government_response_at }
-      end
-    end
+  describe "associations" do
+    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
+    it { is_expected.to have_one(:government_response).dependent(:destroy) }
   end
 
   context "validations" do
@@ -57,11 +38,6 @@ RSpec.describe Petition, type: :model do
     it "should validate the length of :additional_details to within 800 characters" do
       expect(FactoryGirl.build(:petition, :additional_details => 'x' * 800)).to be_valid
       expect(FactoryGirl.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
-    end
-
-    it "validates the length of :response_summary to within 500 characters" do
-      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 500)).to be_valid
-      expect(FactoryGirl.build(:petition, :response_summary => 'x' * 501)).not_to be_valid
     end
 
     it "does not allow a blank state" do
@@ -99,48 +75,6 @@ RSpec.describe Petition, type: :model do
       it "checks petition is valid if there is an open_at date" do
         petition.open_at = Time.current
         expect(petition).to be_valid
-      end
-    end
-
-    context "when state is rejected" do
-      let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
-
-      it "checks petition is invalid if no rejection code" do
-        expect(petition).not_to be_valid
-        expect(petition.errors[:rejection_code]).not_to be_empty
-      end
-
-      it "checks there is a rejection code" do
-        petition.rejection_code = 'libellous'
-        expect(petition).to be_valid
-      end
-    end
-
-    context "response" do
-      let(:petition) { FactoryGirl.build(:petition, response: 'Hello', response_summary: 'Hi') }
-
-      it "is valid if response and response_summary are nil" do
-        petition.response_summary = nil
-        petition.response = nil
-        expect(petition).to be_valid
-      end
-
-      it "is valid if response is nil" do
-        petition.response = nil
-        expect(petition).to be_valid
-      end
-
-      it "is valid if response_summary are nil" do
-        petition.response_summary = nil
-        expect(petition).to be_valid
-      end
-
-      it "is invalid if response_summary is too long (500 chars)" do
-        petition.response_summary = 'a' * 500
-        expect(petition).to be_valid
-        petition.response_summary += 'a'
-        expect(petition).not_to be_valid
-        expect(petition.errors[:response_summary]).not_to be_empty
       end
     end
   end
@@ -283,14 +217,14 @@ RSpec.describe Petition, type: :model do
 
     context "with_response" do
       before do
-        @p1 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now, :response_summary => "summary", :response => "govt response")
-        @p2 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response_summary => "summary", :response => "govt response")
-        @p3 = FactoryGirl.create(:open_petition, :closed_at => 1.day.ago, :response => "govt response")
-        @p4 = FactoryGirl.create(:open_petition, :closed_at => 1.day.from_now)
+        @p1 = FactoryGirl.create(:responded_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:responded_petition)
+        @p4 = FactoryGirl.create(:open_petition)
       end
 
-      it "returns only the petitions which have governments response; both summary and the whole response" do
-        expect(Petition.with_response).to match_array([@p1, @p2])
+      it "returns only the petitions have a government response timestamp" do
+        expect(Petition.with_response).to match_array([@p1, @p3])
       end
     end
 
@@ -311,18 +245,18 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context 'awaiting_debate_date' do
+    context "awaiting_debate_date" do
       before do
         @p1 = FactoryGirl.create(:open_petition)
         @p2 = FactoryGirl.create(:awaiting_debate_petition)
         @p3 = FactoryGirl.create(:debated_petition)
       end
 
-      it 'returns only petitions that reached the debate threshold' do
+      it "returns only petitions that reached the debate threshold" do
         expect(Petition.awaiting_debate_date).to include(@p2)
       end
 
-      it 'doesn\'t include petitions that has the debate date' do
+      it "doesn't include petitions that has the debate date" do
         expect(Petition.awaiting_debate_date).not_to include(@p3)
       end
     end
@@ -630,77 +564,12 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "rejection_reason" do
-    it "gives rejection reason from the locale file" do
-      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_reason).to eq('Duplicate of an existing petition')
-    end
-  end
-
-  describe "rejection_description" do
-    it "gives rejection description from the locale file" do
-      petition = FactoryGirl.build(:rejected_petition, :rejection_code => 'duplicate')
-      expect(petition.rejection_description).to eq('<p>There is already a petition about this issue.</p>')
-    end
-  end
-
   describe "counting validated signatures" do
     let(:petition) { FactoryGirl.build(:petition) }
 
     it "only counts validated signtatures" do
       expect(petition.signatures).to receive(:validated).and_return(double(:valid_signatures, :count => 123))
       expect(petition.count_validated_signatures).to eq(123)
-    end
-  end
-
-  describe "permissions" do
-    let(:petition) { FactoryGirl.build(:petition) }
-    let(:user) { AdminUser.new }
-
-    it "is editable by a moderator user" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it "is editable by a sys admin" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it 'is editable by a normal admin user' do
-      expect(petition.editable_by?(user)).to be_truthy
-    end
-
-    it 'is not editable by non admin users' do
-      expect(petition.editable_by?(double)).to be_falsey
-    end
-
-    it "doesn't allow editing of response generally" do
-      expect(petition.response_editable_by?(user)).to be_falsey
-    end
-
-    it "allows editing of the response by moderator users" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.response_editable_by?(user)).to be_truthy
-    end
-
-    it "allows editing of the response by sysadmins" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.response_editable_by?(user)).to be_truthy
-    end
-
-    it "doesn't allow editing of response summary generally" do
-      expect(petition.response_summary_editable_by?(user)).to be_falsey
-    end
-
-    it "allows editing of the response summary by moderator users" do
-      allow(user).to receive_messages(:is_a_moderator? => true)
-      expect(petition.response_summary_editable_by?(user)).to be_truthy
-    end
-
-    it "allows editing of the response summary by sysadmins" do
-      allow(user).to receive_messages(:is_a_sysadmin? => true)
-      expect(petition.response_summary_editable_by?(user)).to be_truthy
     end
   end
 
@@ -947,14 +816,14 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe '#publish!' do
+  describe '#publish' do
     subject(:petition) { FactoryGirl.create(:petition) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
 
     before do
-      petition.publish!
+      petition.publish
     end
 
     it "sets the state to OPEN" do
@@ -969,14 +838,15 @@ RSpec.describe Petition, type: :model do
   describe "#reject" do
     subject(:petition) { FactoryGirl.create(:petition) }
 
-    %w[no-action duplicate irrelevant honours].each do |rejection_code|
+    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(rejection_code: rejection_code)
+          petition.reject(code: rejection_code)
+          petition.reload
         end
 
-        it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(petition.rejection_code).to eq(rejection_code)
+        it "sets rejection.code to '#{rejection_code}'" do
+          expect(petition.rejection.code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'rejected'" do
@@ -985,14 +855,15 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    %w[libellous offensive].each do |rejection_code|
+    Rejection::HIDDEN_CODES.each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(rejection_code: rejection_code)
+          petition.reject(code: rejection_code)
+          petition.reload
         end
 
-        it "sets Petition#rejection_code to '#{rejection_code}'" do
-          expect(petition.rejection_code).to eq(rejection_code)
+        it "sets rejection.code to '#{rejection_code}'" do
+          expect(petition.rejection.code).to eq(rejection_code)
         end
 
         it "sets Petition#state to 'hidden'" do
@@ -1237,10 +1108,6 @@ RSpec.describe Petition, type: :model do
       sponsored_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
       expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
     end
-  end
-
-  describe 'debate outcomes' do
-    it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
   end
 
   describe 'email requested receipts' do

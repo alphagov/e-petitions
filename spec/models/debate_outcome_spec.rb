@@ -22,4 +22,20 @@ RSpec.describe DebateOutcome, type: :model do
     it { is_expected.to validate_length_of(:transcript_url).is_at_most(500) }
     it { is_expected.to validate_length_of(:video_url).is_at_most(500) }
   end
+
+  describe "callbacks" do
+    describe "when the debate outcome is created" do
+      let(:petition) { FactoryGirl.create(:awaiting_debate_petition) }
+      let(:debate_outcome) { FactoryGirl.build(:debate_outcome, petition: petition) }
+      let(:now) { Time.current }
+
+      it "updates the debate_outcome_at timestamp" do
+        expect {
+          debate_outcome.save!
+        }.to change {
+          petition.reload.debate_outcome_at
+        }.from(nil).to(be_within(1.second).of(now))
+      end
+    end
+  end
 end

@@ -82,7 +82,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'viewing take down UI for a petition'
       end
 
@@ -94,13 +94,10 @@ RSpec.describe Admin::TakeDownController, type: :controller do
 
     describe 'PATCH /update' do
       let(:rejection_code) { 'duplicate' }
-      let(:take_down_attributes) do
-        {
-          rejection_code: rejection_code,
-          rejection_text: 'bad things'
-        }
-      end
       let(:email) { ActionMailer::Base.deliveries.last }
+      let(:take_down_attributes) do
+        { rejection: { code: rejection_code, details: 'bad things' } }
+      end
 
       def do_patch(overrides = {})
         params = { petition_id: petition.id, petition: take_down_attributes }
@@ -118,8 +115,8 @@ RSpec.describe Admin::TakeDownController, type: :controller do
           it 'sets the rejection code and description to the supplied params' do
             do_patch
             petition.reload
-            expect(petition.rejection_code).to eq(rejection_code)
-            expect(petition.rejection_text).to eq take_down_attributes[:rejection_text]
+            expect(petition.rejection.code).to eq(rejection_code)
+            expect(petition.rejection.details).to eq("bad things")
           end
 
           it 'redirects to the admin show page for the petition' do
@@ -164,7 +161,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
           it 'sets the rejection code to the supplied code' do
             do_patch
             petition.reload
-            expect(petition.rejection_code).to eq(rejection_code)
+            expect(petition.rejection.code).to eq(rejection_code)
           end
 
           it 'redirects to the admin show page for the petition' do
@@ -233,8 +230,8 @@ RSpec.describe Admin::TakeDownController, type: :controller do
           do_patch
           petition.reload
           expect(petition.state).to eq Petition::REJECTED_STATE
-          expect(petition.rejection_code).to eq take_down_attributes[:rejection_code]
-          expect(petition.rejection_text).to eq take_down_attributes[:rejection_text]
+          expect(petition.rejection.code).to eq(take_down_attributes[:rejection][:code])
+          expect(petition.rejection.details).to eq(take_down_attributes[:rejection][:details])
         end
       end
 
@@ -263,7 +260,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'taking down a petition'
       end
 

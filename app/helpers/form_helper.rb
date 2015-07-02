@@ -236,7 +236,7 @@ module FormHelper
   end
 
   def error_messages_for_field(object, field_name, options = {})
-    if errors = object.errors[field_name].presence
+    if errors = object && object.errors[field_name].presence
       content_tag :span, errors.join(' '), { class: 'error-message' }.merge(options)
     end
   end

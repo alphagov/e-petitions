@@ -11,88 +11,182 @@ class Petition < ActiveRecord::Base
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
 
-
   STATES            = %w[pending validated sponsored open closed rejected hidden]
+  DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
+  PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
   TODO_LIST_STATES           = %w[pending sponsored validated]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
-
-  REJECTION_CODES = %w[no-action duplicate libellous offensive irrelevant honours]
-  HIDDEN_REJECTION_CODES = %w[libellous offensive]
+  STOP_COLLECTING_STATES     = %w[pending sponsored validated]
 
   has_perishable_token called: 'sponsor_token'
 
-  before_save :stamp_government_response_at, if: -> { response_summary.present? && response.present? && government_response_at.nil? }
   after_create :set_petition_on_creator_signature
 
   extend Searchable(:action, :background, :additional_details)
   include Browseable
 
-  facet :open, -> { for_state(OPEN_STATE).reorder(signature_count: :desc) }
-  facet :with_debate_outcome, -> { preload(:debate_outcome).where(state: OPEN_STATE).with_debate_outcome.reorder("debate_outcomes.debated_on desc") }
-  facet :awaiting_debate_date, -> { where(state: OPEN_STATE).awaiting_debate_date.without_debate_outcome.reorder(debate_threshold_reached_at: :asc) }
-  facet :with_response, -> { where(state: OPEN_STATE).with_response.reorder(government_response_at: :desc) }
-  facet :awaiting_response, -> { awaiting_response.reorder(response_threshold_reached_at: :asc) }
-  facet :closed, -> { for_state(CLOSED_STATE).reorder(signature_count: :desc) }
-  facet :rejected, -> { for_state(REJECTED_STATE).reorder(created_at: :desc) }
-  facet :hidden, -> { for_state(HIDDEN_STATE).reorder(created_at: :desc) }
-  facet :all, -> { reorder(signature_count: :desc) }
-  facet :collecting_sponsors, -> { collecting_sponsors }
-  facet :in_moderation, -> { in_moderation.reorder(created_at: :desc) }
-  facet :in_debate_queue, -> { in_debate_queue }
+  facet :all,      -> { by_most_popular }
+  facet :open,     -> { open_state.by_most_popular }
+  facet :rejected, -> { rejected_state.by_most_recent }
+  facet :closed,   -> { closed_state.by_most_popular }
+  facet :hidden,   -> { hidden_state.by_most_recent }
 
-  # = Relationships =
-  belongs_to :creator_signature, :class_name => 'Signature'
-  accepts_nested_attributes_for :creator_signature
+  facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
+  facet :with_response,        -> { with_response.by_most_recent_response }
+
+  facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
+  facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
+
+  facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
+  facet :in_moderation,        -> { in_moderation.by_most_recent }
+  facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
+
+  belongs_to :creator_signature, class_name: 'Signature'
+  accepts_nested_attributes_for :creator_signature, update_only: true
+
+  has_one :debate_outcome, dependent: :destroy
+  has_one :government_response, dependent: :destroy
+  has_one :note, dependent: :destroy
+  has_one :rejection, dependent: :destroy
+
   has_many :signatures
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
   has_many :constituency_petition_journals, :dependent => :destroy
-  has_one :debate_outcome, dependent: :destroy
 
-  # = Validations =
   include Staged::Validations::PetitionDetails
-  validates :response_summary, length: { maximum: 500, message: 'Response summary is too long' }
-  validates_presence_of :open_at, :if => :open?
-  validates_presence_of :rejection_code, :if => :rejected?
-  validates_inclusion_of :rejection_code, :in => REJECTION_CODES, :if => :rejected?
-  # Note: we only validate creator_signature on create since if we always load creator_signature on validation then
-  # when we save a petition, the after_update on the creator_signature gets fired. An overhead that is unecesssary.
-  validates_presence_of :creator_signature, :message => "%{attribute} must be completed", :on => :create
-  validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
-
-  # = Finders =
-  scope :threshold, -> { where('signature_count >= ?', Site.threshold_for_debate) }
-  scope :for_state, ->(state) { where(state: state) }
-  scope :not_hidden, -> { where.not(state: HIDDEN_STATE) }
-  scope :visible, -> { where(state: VISIBLE_STATES) }
-  scope :moderated, -> { where(state: MODERATED_STATES) }
-  scope :selectable, -> { where(state: SELECTABLE_STATES) }
-  scope :in_moderation, -> { where(state: SPONSORED_STATE) }
-  scope :todo_list, -> { where(state: TODO_LIST_STATES) }
-  scope :collecting_sponsors, -> { where(state: COLLECTING_SPONSORS_STATES) }
-  scope :by_oldest, -> { order(created_at: :asc) }
-  scope :with_response, -> { where.not(response_summary: nil, response: nil) }
-  scope :with_debate_outcome, -> { joins(:debate_outcome) }
-  scope :without_debate_outcome, -> { where.not(id: DebateOutcome.select(:petition_id).uniq) }
-  scope :awaiting_debate_date, ->  { where.not(debate_threshold_reached_at: nil) }
-  scope :in_debate_queue, -> do
-    where(
-      arel_table['debate_threshold_reached_at'].not_eq(nil).
-      or(
-        arel_table['scheduled_debate_date'].not_eq(nil)
-      )
-    )
-  end
-
+  validates_presence_of :open_at, if: :open?
+  validates_presence_of :creator_signature, on: :create
+  validates_inclusion_of :state, in: STATES
 
   class << self
+    def by_most_popular
+      reorder(signature_count: :desc, created_at: :desc)
+    end
+
+    def by_most_recent
+      reorder(created_at: :desc)
+    end
+
+    def by_most_recent_debate_outcome
+      reorder(debate_outcome_at: :desc, created_at: :desc)
+    end
+
+    def by_most_recent_response
+      reorder(government_response_at: :desc, created_at: :desc)
+    end
+
+    def by_oldest
+      reorder(created_at: :asc)
+    end
+
+    def by_waiting_for_debate_longest
+      reorder(debate_threshold_reached_at: :asc, created_at: :desc)
+    end
+
+    def by_waiting_for_response_longest
+      reorder(response_threshold_reached_at: :asc, created_at: :desc)
+    end
+
+    def open_state
+      where(state: OPEN_STATE)
+    end
+
+    def closed_state
+      where(state: CLOSED_STATE)
+    end
+
+    def hidden_state
+      where(state: HIDDEN_STATE)
+    end
+
+    def rejected_state
+      where(state: REJECTED_STATE)
+    end
+
+    def awaiting_debate_date
+      debate_threshold_reached.not_scheduled
+    end
+
     def awaiting_response
-      where(state: OPEN_STATE, response: nil, response_summary: nil).where.not(response_threshold_reached_at: nil)
+      response_threshold_reached.not_responded
+    end
+
+    def collecting_sponsors
+      where(state: COLLECTING_SPONSORS_STATES)
+    end
+
+    def debate_threshold_reached
+      where.not(debate_threshold_reached_at: nil)
+    end
+
+    def debateable
+      where(state: DEBATABLE_STATES)
+    end
+
+    def for_state(state)
+      where(state: state)
+    end
+
+    def in_debate_queue
+      where(threshold_for_debate_reached.or(scheduled_for_debate))
+    end
+
+    def in_moderation
+      where(state: SPONSORED_STATE)
+    end
+
+    def moderated
+      where(state: MODERATED_STATES)
+    end
+
+    def not_hidden
+      where.not(state: HIDDEN_STATE)
+    end
+
+    def not_responded
+      where(government_response_at: nil)
+    end
+
+    def not_scheduled
+      where(scheduled_debate_date: nil)
+    end
+
+    def respondable
+      where(state: RESPONDABLE_STATES)
+    end
+
+    def response_threshold_reached
+      where.not(response_threshold_reached_at: nil)
+    end
+
+    def selectable
+      where(state: SELECTABLE_STATES)
+    end
+
+    def threshold
+      where(arel_table[:signature_count].gteq(Site.threshold_for_debate))
+    end
+
+    def todo_list
+      where(state: TODO_LIST_STATES)
+    end
+
+    def visible
+      where(state: VISIBLE_STATES)
+    end
+
+    def with_debate_outcome
+      where.not(debate_outcome_at: nil)
+    end
+
+    def with_response
+      where.not(government_response_at: nil)
     end
 
     def trending(since = 1.hour.ago, limit = 3)
@@ -102,7 +196,7 @@ class Petition < ActiveRecord::Base
       where('petitions.last_signed_at > ?', since).
       where('signatures.validated_at > ?', since).
       group('petitions.id').order('signature_count_in_period DESC').
-      limit(3)
+      limit(limit)
     end
 
     def close_petitions!(time = Time.current)
@@ -111,10 +205,6 @@ class Petition < ActiveRecord::Base
 
     def in_need_of_closing(time = Time.current)
       where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
-    end
-
-    def with_invalid_signature_counts
-      where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
     end
 
     def with_invalid_signature_counts
@@ -131,6 +221,16 @@ class Petition < ActiveRecord::Base
         merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
         limit(how_many).
         to_a
+    end
+
+    private
+
+    def threshold_for_debate_reached
+      arel_table[:debate_threshold_reached_at].not_eq(nil)
+    end
+
+    def scheduled_for_debate
+      arel_table[:scheduled_debate_date].not_eq(nil)
     end
   end
 
@@ -174,20 +274,41 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def publish!(time = Time.current)
-    update!(state: OPEN_STATE, open_at: time)
+  def approve?
+    moderation == 'approve'
+  end
+
+  def reject?
+    moderation == 'reject'
+  end
+
+  def moderation
+    @moderation
+  end
+
+  def moderation=(value)
+    @moderation = value if value.in?(%w[approve reject])
+  end
+
+  def moderate(params)
+    self.moderation = params[:moderation]
+
+    if approve?
+      publish
+    elsif reject?
+      reject(params[:rejection])
+    else
+      errors.add :moderation, :blank
+      false
+    end
+  end
+
+  def publish(time = Time.current)
+    update(state: OPEN_STATE, open_at: time)
   end
 
   def reject(attributes)
-    assign_attributes(attributes)
-
-    if rejection_code.in?(HIDDEN_REJECTION_CODES)
-      self.state = HIDDEN_STATE
-    else
-      self.state = REJECTED_STATE
-    end
-
-    save
+    build_rejection(attributes) && rejection.save
   end
 
   def close!(time = Time.current)
@@ -215,7 +336,7 @@ class Petition < ActiveRecord::Base
   end
 
   def moderated?
-    MODERATED_STATES.include?(state)
+    state.in?(MODERATED_STATES)
   end
 
   def open?
@@ -235,41 +356,20 @@ class Petition < ActiveRecord::Base
     state == CLOSED_STATE
   end
 
+  def published?
+    state.in?(PUBLISHED_STATES)
+  end
+
   def can_have_debate_added?
-    self.open? || self.closed?
+    state.in?(DEBATABLE_STATES)
   end
 
   def in_todo_list?
-    TODO_LIST_STATES.include? state
+    state.in?(TODO_LIST_STATES)
   end
 
   def deadline
     open_at && (closed_at || Site.closed_at_for_opening(open_at))
-  end
-
-  def rejection_reason
-    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.titles")
-  end
-
-  def rejection_description
-    I18n.t(rejection_code.to_sym, scope: :"petitions.rejection_reasons.descriptions").strip.html_safe
-  end
-
-  def editable_by?(user)
-    # NOTE: we can probably just return true here? or refactor this method
-    # out of existence
-    return true if user.is_a? AdminUser
-    return false
-  end
-
-  def response_editable_by?(user)
-    return true if user.is_a_moderator? || user.is_a_sysadmin?
-    return false
-  end
-
-  def response_summary_editable_by?(user)
-    return true if user.is_a_moderator? || user.is_a_sysadmin?
-    return false
   end
 
   # need this callback since the relationship is circular
@@ -310,15 +410,7 @@ class Petition < ActiveRecord::Base
   end
 
   def has_maximum_sponsors?
-    sponsors.count >= Site.maximum_number_of_sponsors && stop_collecting_sponsors_states
-  end
-
-  def stop_collecting_sponsors_states
-    state == SPONSORED_STATE || state == VALIDATED_STATE || state == PENDING_STATE
-  end
-
-  def stamp_government_response_at
-    self.government_response_at = Time.current
+    sponsors.count >= Site.maximum_number_of_sponsors && state.in?(STOP_COLLECTING_STATES)
   end
 
   def update_all(updates)

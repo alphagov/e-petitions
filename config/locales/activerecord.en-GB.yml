@@ -1,0 +1,12 @@
+en-GB:
+  activerecord:
+    errors:
+      models:
+        petition:
+          attributes:
+            moderation:
+              blank: "You must choose to approve or reject"
+            creator_signature:
+              blank: "%{attribute} must be completed"
+            state:
+              inclusion: "'%{value}' not recognised"

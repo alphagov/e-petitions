@@ -1,12 +1,12 @@
 <p>Petition "<%= @petition.action %>" hasn't been accepted.</p>
 
-<%= @petition.rejection_description.html_safe %>
+<%= rejection_description(@rejection.code) %>
 
-<% if @petition.rejection_text.present? %>
-<p><%= auto_link(h(@petition.rejection_text)) %></p>
+<% if @rejection.details? %>
+<p><%= auto_link(h(@rejection.details)) %></p>
 <% end %>
 
-<% if @petition.state != Petition::HIDDEN_STATE -%>
+<% unless @petition.hidden? -%>
   <p><%= link_to 'View your rejected petition', petition_url(@petition) %></p>
 <% end -%>
 

@@ -288,6 +288,71 @@ ALTER SEQUENCE email_sent_receipts_id_seq OWNED BY email_sent_receipts.id;
 
 
 --
+-- Name: government_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE government_responses (
+    id integer NOT NULL,
+    petition_id integer,
+    summary character varying(500) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: government_responses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE government_responses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: government_responses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
+
+
+--
+-- Name: notes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE notes (
+    id integer NOT NULL,
+    petition_id integer,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
+
+
+--
 -- Name: petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -295,26 +360,23 @@ CREATE TABLE petitions (
     id integer NOT NULL,
     action character varying(255) NOT NULL,
     additional_details text,
-    response text,
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     open_at timestamp without time zone,
     creator_signature_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    rejection_text text,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
-    admin_notes text,
-    rejection_code character varying(50),
     notified_by_email boolean DEFAULT false,
     background character varying(200),
     sponsor_token character varying(255),
-    response_summary character varying(500),
     government_response_at timestamp without time zone,
     scheduled_debate_date date,
     last_signed_at timestamp without time zone,
     response_threshold_reached_at timestamp without time zone,
-    debate_threshold_reached_at timestamp without time zone
+    debate_threshold_reached_at timestamp without time zone,
+    rejected_at timestamp without time zone,
+    debate_outcome_at timestamp without time zone
 );
 
 
@@ -335,6 +397,39 @@ CREATE SEQUENCE petitions_id_seq
 --
 
 ALTER SEQUENCE petitions_id_seq OWNED BY petitions.id;
+
+
+--
+-- Name: rejections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE rejections (
+    id integer NOT NULL,
+    petition_id integer,
+    code character varying(50) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rejections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE rejections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rejections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE rejections_id_seq OWNED BY rejections.id;
 
 
 --
@@ -519,7 +614,28 @@ ALTER TABLE ONLY email_sent_receipts ALTER COLUMN id SET DEFAULT nextval('email_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('government_responses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY rejections ALTER COLUMN id SET DEFAULT nextval('rejections_id_seq'::regclass);
 
 
 --
@@ -600,11 +716,35 @@ ALTER TABLE ONLY email_sent_receipts
 
 
 --
+-- Name: government_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY government_responses
+    ADD CONSTRAINT government_responses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY notes
+    ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: petitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY petitions
     ADD CONSTRAINT petitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rejections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY rejections
+    ADD CONSTRAINT rejections_pkey PRIMARY KEY (id);
 
 
 --
@@ -716,6 +856,20 @@ CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts US
 
 
 --
+-- Name: index_government_responses_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_responses USING btree (petition_id);
+
+
+--
+-- Name: index_notes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notes_on_petition_id ON notes USING btree (petition_id);
+
+
+--
 -- Name: index_petitions_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -779,6 +933,13 @@ CREATE INDEX index_petitions_on_signature_count_and_state ON petitions USING btr
 
 
 --
+-- Name: index_rejections_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_rejections_on_petition_id ON rejections USING btree (petition_id);
+
+
+--
 -- Name: index_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -821,6 +982,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (v
 
 
 --
+-- Name: fk_rails_0af6bc4d41; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY government_responses
+    ADD CONSTRAINT fk_rails_0af6bc4d41 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_38c9c83a88; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -837,6 +1006,14 @@ ALTER TABLE ONLY signatures
 
 
 --
+-- Name: fk_rails_3e3a2f376e; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY notes
+    ADD CONSTRAINT fk_rails_3e3a2f376e FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_5186723bbd; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -850,6 +1027,14 @@ ALTER TABLE ONLY constituency_petition_journals
 
 ALTER TABLE ONLY petitions
     ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_82ffb00060; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY rejections
+    ADD CONSTRAINT fk_rails_82ffb00060 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -947,4 +1132,18 @@ INSERT INTO schema_migrations (version) VALUES ('20150622140322');
 INSERT INTO schema_migrations (version) VALUES ('20150630105949');
 
 INSERT INTO schema_migrations (version) VALUES ('20150701111544');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701145201');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701145202');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701151007');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701151008');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701165424');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701165425');
+
+INSERT INTO schema_migrations (version) VALUES ('20150701174136');
 

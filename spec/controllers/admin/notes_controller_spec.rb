@@ -77,7 +77,7 @@ RSpec.describe Admin::NotesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'viewing notes for a petition'
       end
 
@@ -90,12 +90,12 @@ RSpec.describe Admin::NotesController, type: :controller do
     describe 'PATCH /update' do
       let(:notes_attributes) do
         {
-          admin_notes: 'This seems fine, just need to get legal to give it the once over before letting it through.'
+          details: 'This seems fine, just need to get legal to give it the once over before letting it through.'
         }
       end
 
       def do_patch(overrides = {})
-        params = { petition_id: petition.id, petition: notes_attributes }
+        params = { petition_id: petition.id, note: notes_attributes }
         patch :update, params.merge(overrides)
       end
 
@@ -114,35 +114,27 @@ RSpec.describe Admin::NotesController, type: :controller do
           it 'stores the supplied notes in the db' do
             do_patch
             petition.reload
-            expect(petition.admin_notes).to eq notes_attributes[:admin_notes]
+            expect(petition.note.details).to eq notes_attributes[:details]
           end
         end
 
         describe 'with invalid params' do
-          before do
-            # NOTE this can't fail as there's no validation
-            allow_any_instance_of(Petition).to receive(:valid?) do |receiver|
-              receiver.errors.add(:base, 'this is all messed up')
-              false
-            end
-          end
-
-          it 're-renders the petitions/show template' do
-            do_patch
+          it 're-renders the notes/show template' do
+            do_patch(note: { details: "" })
             expect(response).to be_success
             expect(response).to render_template('petitions/show')
           end
 
           it 'leaves the in-memory instance with errors' do
-            do_patch
-            expect(assigns(:petition)).to be_present
-            expect(assigns(:petition).errors).not_to be_empty
+            do_patch(note: { details: "" })
+            expect(assigns(:note)).to be_present
+            expect(assigns(:note).errors).not_to be_empty
           end
 
           it 'does not stores the supplied notes in the db' do
-            do_patch
+            do_patch(note: { details: "" })
             petition.reload
-            expect(petition.admin_notes).to be_nil
+            expect(petition.note).to be_nil
           end
         end
       end
@@ -167,7 +159,7 @@ RSpec.describe Admin::NotesController, type: :controller do
       end
 
       describe 'for a rejected petition' do
-        before { petition.update_columns(state: Petition::REJECTED_STATE, rejection_code: Petition::REJECTION_CODES.first) }
+        before { petition.update_columns(state: Petition::REJECTED_STATE) }
         it_behaves_like 'updating notes for a petition'
       end
 

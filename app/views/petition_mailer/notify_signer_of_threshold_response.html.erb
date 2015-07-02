@@ -2,7 +2,7 @@
 
 <p>The petition '<%= @petition.action %>' signed by you recently reached <%= number_with_delimiter Site.threshold_for_response %> signatures and a response has been made to it.</p>
 
-<p><%= @petition.response %></p>
+<p><%= @petition.government_response.details %></p>
 
 <p><%= link_to "View the response to the petition", petition_url(@signature.petition) %></p>
 

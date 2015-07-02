@@ -351,10 +351,10 @@ RSpec.describe Signature, type: :model do
 
     before do
       petition.signatures.each { |s| s.validate! }
-      petition.publish!
+      petition.publish
 
       other_petition.signatures.each { |s| s.validate! }
-      other_petition.publish!
+      other_petition.publish
     end
 
     it "returns the signature number" do
