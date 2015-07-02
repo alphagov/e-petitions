@@ -276,6 +276,7 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  private
   def approve?
     moderation == 'approve'
   end
@@ -284,12 +285,17 @@ class Petition < ActiveRecord::Base
     moderation == 'reject'
   end
 
-  def moderation
-    @moderation
+  def flag?
+    moderation == 'flag'
   end
 
   def moderation=(value)
-    @moderation = value if value.in?(%w[approve reject])
+    @moderation = value if value.in?(%w[approve reject flag])
+  end
+  public
+
+  def moderation
+    @moderation
   end
 
   def moderate(params)
@@ -299,6 +305,8 @@ class Petition < ActiveRecord::Base
       publish
     elsif reject?
       reject(params[:rejection])
+    elsif flag?
+      flag
     else
       errors.add :moderation, :blank
       false
@@ -311,6 +319,10 @@ class Petition < ActiveRecord::Base
 
   def reject(attributes)
     build_rejection(attributes) && rejection.save
+  end
+
+  def flag
+    update(state: FLAGGED_STATE)
   end
 
   def close!(time = Time.current)

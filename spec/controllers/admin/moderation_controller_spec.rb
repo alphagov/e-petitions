@@ -9,6 +9,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
     let(:petition) { FactoryGirl.create(:pending_petition) }
 
     context "update" do
+      before { ActionMailer::Base.deliveries.clear }
       let(:patch_options) { {} }
 
       def do_patch(options = patch_options)
@@ -162,6 +163,27 @@ RSpec.describe Admin::ModerationController, type: :controller do
             expect(response).to be_success
             expect(response).to render_template 'admin/petitions/show'
           end
+        end
+      end
+
+      context "when moderation param is 'flag'" do
+        let(:email) { ActionMailer::Base.deliveries.last }
+
+        before do
+          do_patch moderation: 'flag'
+          petition.reload
+        end
+
+        it "flags the petition" do
+          expect(petition.state).to eq(Petition::FLAGGED_STATE)
+        end
+
+        it "redirects to the admin show page for the petition page" do
+          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+        end
+
+        it "does not send an email to the petition creator" do
+          expect(email).to be_nil
         end
       end
     end

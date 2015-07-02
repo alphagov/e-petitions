@@ -897,6 +897,18 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe '#flag' do
+    subject(:petition) { FactoryGirl.create(:petition) }
+
+    before do
+      petition.flag
+    end
+
+    it "sets the state to FLAGGED" do
+      expect(petition.state).to eq(Petition::FLAGGED_STATE)
+    end
+  end
+
   describe '#deadline' do
     let(:now) { Time.current }
 
