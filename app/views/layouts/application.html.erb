@@ -11,11 +11,9 @@
     <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
     <meta name="viewport" content="width = device-width"/>
-    <% cache :head do %>
-      <%= render 'application/os' %>
-      <%= render 'application/social_meta' %>
-      <%= render 'application/analytics' %>
-    <% end %>
+    <%= render 'application/os' %>
+    <%= render 'application/social_meta' %>
+    <%= render 'application/analytics' %>
   </head>
   <body>
     <% if show_cookie_message? %>
@@ -24,21 +22,17 @@
       </div>
     <% end %>
 
-    <% cache :header do %>
-      <%= render 'application/header' %>
-    <% end %>
+    <%= render 'application/header' %>
 
     <main id="content" role="main">
       <%= render 'application/messages' %>
       <%= yield %>
     </main>
 
-    <% cache [:footer, create_petition_page?] do %>
-      <%= render 'application/footer' %>
-      <%= javascript_include_tag 'application' %>
-      <% if create_petition_page? %>
-        <%= javascript_include_tag 'create-petition' %>
-      <% end %>
+    <%= render 'application/footer' %>
+    <%= javascript_include_tag 'application' %>
+    <% if create_petition_page? %>
+      <%= javascript_include_tag 'create-petition' %>
     <% end %>
   </body>
 </html>
