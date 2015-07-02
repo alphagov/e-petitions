@@ -145,7 +145,7 @@ end
 
 When /^I check for similar petitions$/ do
   fill_in "q", :with => "Rioters should loose benefits"
-  click_button("Check for similar petitions")
+  click_button("Continue")
 end
 
 When /^I choose to create a petition anyway$/ do

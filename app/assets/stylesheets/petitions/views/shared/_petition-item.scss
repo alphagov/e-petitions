@@ -2,7 +2,7 @@
 // =============
 .petition-item {
   color: $secondary-text-colour;
-  margin-bottom: em(19);
+  margin: $gutter 0;
   a {
     font-weight: bold;
     display: block;

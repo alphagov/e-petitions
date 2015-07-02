@@ -17,6 +17,7 @@
 
   @include media(tablet) {
     width: inherit;
+    margin-right: $gutter-half;
   }
 }
 

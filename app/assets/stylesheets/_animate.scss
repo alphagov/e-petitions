@@ -25,6 +25,8 @@ scss usage:
   animation-duration: 1s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
 }
 
 @-webkit-keyframes bounce {

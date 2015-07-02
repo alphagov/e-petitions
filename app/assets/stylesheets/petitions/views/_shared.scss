@@ -77,7 +77,7 @@ input.back-page {
   color: $white;
   padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
   position: relative;
-  margin-bottom: $gutter-half;
+  margin-bottom: $gutter;
   @extend %animated;
   @extend %bounce;
 

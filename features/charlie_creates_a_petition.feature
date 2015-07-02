@@ -19,7 +19,7 @@ Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
   When I follow "Start a petition" within ".//main"
   Then I fill in "q" with "'onmouseover='alert(1)'"
-  When I press "Check for similar petitions"
+  When I press "Continue"
   Then the markup should be valid
 
 Scenario: Charlie creates a petition
