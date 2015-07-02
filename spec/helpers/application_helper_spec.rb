@@ -70,4 +70,64 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#back_url" do
+    let(:headers) { helper.request.env }
+
+    before do
+      headers["HTTP_HOST"]   = "petition.parliament.test"
+      headers["HTTPS"]       = "on"
+      headers["SERVER_PORT"] = 443
+    end
+
+    context "when the referer is an internal url" do
+      before do
+        headers["HTTP_REFERER"] = "https://petition.parliament.test/petitions/new"
+      end
+
+      it "returns the referer url" do
+        expect(helper.back_url).to eq("https://petition.parliament.test/petitions/new")
+      end
+    end
+
+    context "when the referer is invalid" do
+      before do
+        headers["HTTP_REFERER"] = "javascript:alert('Hello, World!')"
+      end
+
+      it "returns 'javascript:history.back()'" do
+        expect(helper.back_url).to eq("javascript:history.back()")
+      end
+    end
+
+    context "when the scheme doesn't match" do
+      before do
+        headers["HTTP_REFERER"] = "http://petition.parliament.test/petitions/new"
+      end
+
+      it "returns 'javascript:history.back()'" do
+        expect(helper.back_url).to eq("javascript:history.back()")
+      end
+    end
+
+    context "when the host doesn't match" do
+      before do
+        headers["HTTP_REFERER"] = "https://petition.gov.uk"
+      end
+
+      it "returns 'javascript:history.back()'" do
+        expect(helper.back_url).to eq("javascript:history.back()")
+      end
+    end
+
+    context "when the port doesn't match" do
+      before do
+        headers["HTTP_REFERER"] = "http://petition.parliament.test:8443/petitions/new"
+      end
+
+      it "returns 'javascript:history.back()'" do
+        expect(helper.back_url).to eq("javascript:history.back()")
+      end
+    end
+  end
 end
