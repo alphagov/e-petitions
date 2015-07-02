@@ -1,15 +1,17 @@
-Dear <%= @signature.name %>,
+Hi <%= @signature.name %>,
 
-The petition '<%= @petition.action %>' signed by you recently reached <%= number_with_delimiter Site.threshold_for_response %> signatures and a response has been made to it.
+The Government has responded to the petition you signed – "<%= @petition.action %>".
 
-<%= @petition.government_response.details %>
+Government responded:
 
-View the response to the petition here:
+<%= h(@petition.government_response.details) %>
+
+Click this link to view the response online:
 
 <%= petition_url(@signature.petition) %>
 
 Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>
 
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
-
-Don't want to receive any more emails regarding this petition? Unsubscribe by clicking this link: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+You’re receiving this email because you signed this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

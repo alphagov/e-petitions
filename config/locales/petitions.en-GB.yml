@@ -59,16 +59,20 @@ en-GB:
 
     emails:
       subjects:
+        # Emails to people who sign petitions
         email_confirmation_for_signer: |-
-          HM Government & Parliament Petitions: Email address confirmation
-        special_resend_of_email_confirmation_for_signer: |-
-          HM Government & Parliament Petitions: Email address confirmation
+          Please confirm your email address
+        notify_signer_of_debate_outcome: |-
+          Parliament debated your petition
+        notify_signer_of_debate_scheduled: |-
+          Parliament will debate your petition
+        notify_signer_of_threshold_response: |-
+          Government responded to your petition
+
         notify_creator_that_petition_is_published: |-
           HM Government & Parliament Petitions: Your petition has been published
         petition_rejected: |-
           HM Government & Parliament Petitions: petition has been rejected
-        notify_signer_of_threshold_response: |-
-          HM Government & Parliament Petitions: The petition '%{action}' has reached %{formatted_count} signatures"
         no_signature_for_petition: |-
           HM Government & Parliament Petitions: a confirmation email has been requested
         email_already_confirmed_for_signature: |-
@@ -79,15 +83,13 @@ en-GB:
           HM Government & Parliament Petitions: Signature confirmation
         double_signature_confirmation: |-
           HM Government & Parliament Petitions: Signatures already confirmed
+        special_resend_of_email_confirmation_for_signer: |-
+          Please confirm your email address
         notify_creator_of_closing_date_change: |-
           HM Government & Parliament Petitions: change to your petition closing date
         gather_sponsors_for_petition: |-
           Parliament petitions - It's time to get sponsors to support your petition
-        notify_signer_of_debate_outcome: |-
-          Parliament petitions - The petition '%{action}' has been debated
-        notify_signer_of_debate_scheduled: |-
-          HM Government & Parliament Petitions: A debate has been scheduled for the petition '%{action}' you've supported.
-      signoff_prefix: "HM Government & Parliament Petitions"
+      signoff_prefix: "The Petitions team"
 
     waiting_for_in_words:
       zero: "Waiting for less than a day"

@@ -1,11 +1,7 @@
-Dear <%= @signature.name %>,
-
-Before your signature is added to the petition "<%= @signature.petition.action %>" you need to confirm your email address by clicking on the link below. You can also copy and paste this link into your browser:
+Click this link to sign the petition "<%= @signature.petition.action %>"
 
 <%= verify_signature_url(@signature, @signature.perishable_token) %>
 
-If you don't want to sign this petition or believe this message was sent in error, please ignore this email.
-
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>
