@@ -99,6 +99,7 @@ Feature: Moderator respond to petition
     Then the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
+  @javascript
   Scenario: Moderator flags petition
     Given I am logged in as a moderator
     When I look at the next petition on my list
