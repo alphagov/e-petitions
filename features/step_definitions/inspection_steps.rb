@@ -67,12 +67,7 @@ end
 
 ### Tables...
 
-Then /^I should see the following admin index table:$/ do |values_table|
-  actual_table = find(:css, 'table').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
-  values_table.diff!(actual_table)
-end
-
-Then /^I should see the following search results:$/ do |values_table|
+Then(/^I should see the following search results:$/) do |values_table|
   values_table.raw.each do |row|
     row.each do |column|
       expect(page).to have_content(column)
@@ -114,10 +109,6 @@ end
 
 Then /^the row with the name "([^\"]*)" is not listed$/ do |name|
   expect(page.body).not_to match(/#{name}/)
-end
-
-Then /^I should see (\d+) rows? in the admin index table$/ do |number|
-  expect(page).to have_xpath( "//table[@class='admin_index' and count(tr)=#{number.to_i + 1}]" )
 end
 
 Then /^I should see (\d+) petitions?$/ do |number|

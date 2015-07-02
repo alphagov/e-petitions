@@ -14,9 +14,6 @@ module SectionHelpers
     when 'search results table'
       "#{prefix}div[contains(@class, 'petition_list')]//table"
 
-    when 'admin index table'
-      "#{prefix}table[contains(@class, 'admin_index')]"
-
     when 'admin report table'
       "#{prefix}table[contains(@class, 'admin_report')]"
 
