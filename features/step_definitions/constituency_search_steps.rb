@@ -48,8 +48,8 @@ Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_
   petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.id).count
-  within :css, '.local-petitions ol' do
-    within ".//li[a[.='#{petition_action}']]" do
+  within :css, '.local-petitions' do
+    within ".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]" do
       expect(page).to have_text("#{local_signature_count} signatures from #{@my_constituency.name}")
       expect(page).to have_text("#{all_signature_count} signatures total")
     end
@@ -57,8 +57,8 @@ Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_
 end
 
 Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petition_action|
-  within :css, '.local-petitions ol' do |list|
-    expect(list).not_to have_selector(".//li[a[.='#{petition_action}']]")
+  within :css, '.local-petitions' do |list|
+    expect(list).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
   end
 end
 
@@ -67,14 +67,21 @@ Given(/^the constituency api is down$/) do
 end
 
 Then(/^I should see an explanation that my constituency couldn't be found$/) do
-  expect(page).not_to have_selector(:css, '.local-petitions ol')
+  expect(page).not_to have_selector(:css, '.local-petitions .petition-item')
   expect(page).to have_content('We could not find your constituency from the postcode you provided')
+end
+
+Then(/^I should see an explanation that there are no petitions popular in my constituency$/) do
+  within(:css, '.local-petitions') do
+    expect(page).not_to have_selector(:css, '.petition-item')
+    expect(page).to have_content('No petitions are popular in your constituency')
+  end
 end
 
 Then(/^the petitions I see should be ordered by my fellow constituents level of support$/) do
   within :css, '.local-petitions ol' do
-    list_elements = page.all(:css, 'li')
-    my_constituents_signature_counts = list_elements.map { |li| Integer(li.text.match(/(\d+) signatures? from/)[1]) }
+    petitions = page.all(:css, '.petition-item')
+    my_constituents_signature_counts = petitions.map { |petition| Integer(petition.text.match(/(\d+) signatures? from/)[1]) }
     expect(my_constituents_signature_counts).to eq my_constituents_signature_counts.sort.reverse
   end
 end
