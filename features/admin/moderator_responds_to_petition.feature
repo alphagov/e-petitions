@@ -96,5 +96,14 @@ Feature: Moderator respond to petition
     And a petition "actually libellous" has been rejected with the reason "duplicate"
     When I go to the admin petition page for "actually libellous"
     And I change the rejection status of the petition with a reason code "Confidential, libellous, false or defamatory statements (will be hidden)"
-    And the petition is not available for searching or viewing
+    Then the petition is not available for searching or viewing
+    But the petition will still show up in the back-end reporting
+
+  Scenario: Moderator flags petition
+    Given I am logged in as a moderator
+    When I look at the next petition on my list
+    And I flag the petition
+    Then the petition is not available for searching or viewing
+    And the creator should not receive a notification email
+    And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting

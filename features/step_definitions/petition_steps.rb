@@ -4,7 +4,7 @@ Given /^a set of petitions$/ do
   end
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
+Given(/^a(n)? ?(pending|validated|sponsored|flagged|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
     :closed_at => 1.day.from_now,
