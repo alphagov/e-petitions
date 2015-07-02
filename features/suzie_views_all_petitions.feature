@@ -11,11 +11,11 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses open petitions
     Given a petition "Free the wombles" exists with a signature count of 500
-    Given a petition "Force supermarkets to give unsold food to charities" exists with a signature count of 500000
-    Given a petition "Make every monday bank holiday" exists with a signature count of 1000
+    And a petition "Force supermarkets to give unsold food to charities" exists with a signature count of 500000
+    And a petition "Make every monday bank holiday" exists with a signature count of 1000
     When I view all petitions from the home page
     Then I should see "3 petitions"
-    Then I should see the following ordered list of petitions:
+    And I should see the following ordered list of petitions:
      | Force supermarkets to give unsold food to charities |
      | Make every monday bank holiday                      |
      | Free the wombles                                    |
@@ -23,12 +23,11 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses rejected petitions
     Given a petition "Free the wombles" has been rejected
-    Given a petition "Force supermarkets to give unsold food to charities" has been rejected
-    Given a petition "Make every monday bank holiday" has been rejected
-    When I view all petitions from the home page
-    And I follow "Rejected"
+    And a petition "Force supermarkets to give unsold food to charities" has been rejected
+    And a petition "Make every monday bank holiday" has been rejected
+    When I browse to see only "Rejected" petitions
     Then I should see "3 petitions"
-    Then I should see the following ordered list of petitions:
+    And I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
      | Free the wombles                                    |
@@ -36,13 +35,12 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses petitions awaiting a goverment response
     Given a petition "Abolish bank holidays" exists and hasn't passed the threshold for a response
-    Given a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
-    Given a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
-    Given a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
-    When I view all petitions from the home page
-    And I follow "Awaiting government response"
+    And a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
+    And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
+    And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
+    When I browse to see only "Awaiting government response" petitions
     Then I should see "3 petitions"
-    Then I should see the following ordered list of petitions:
+    And I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
      | Free the wombles                                    |
@@ -50,12 +48,11 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses petitions with a goverment response
     Given a closed petition "Free the wombles" exists and has received a government response 100 days ago
-    Given a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
-    Given a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
-    When I view all petitions from the home page
-    And I follow "Government responses"
+    And a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
+    And a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
+    When I browse to see only "Government responses" petitions
     Then I should see "3 petitions"
-    Then I should see the following ordered list of petitions:
+    And I should see the following ordered list of petitions:
      | Make every monday bank holiday                      |
      | Force supermarkets to give unsold food to charities |
      | Free the wombles                                    |
@@ -63,11 +60,10 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses petitions which have been debated
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
-    Given a petition "Spend more money on Defence" has been debated 18 days ago
-    Given a petition "Force supermarkets to give unsold food to charities" has been debated 234 days ago
-    Given a petition "Make every monday bank holiday" exists
-    When I view all petitions from the home page
-    And I follow "Petitions debated in Parliament"
+    And a petition "Spend more money on Defence" has been debated 18 days ago
+    And a petition "Force supermarkets to give unsold food to charities" has been debated 234 days ago
+    And a petition "Make every monday bank holiday" exists
+    When I browse to see only "Petitions debated in Parliament" petitions
     Then I should see "3 petitions"
     Then I should see the following ordered list of petitions:
      | Ban Badger Baiting                                  |
@@ -77,10 +73,9 @@ Feature: Suzy Signer views all petitions
 
   Scenario: Suzie browses petitions awaiting a debate in Parliament
     Given a petition "Save the planet" exists and hasn't passed the threshold for a debate
-    Given a petition "Conquer the Moon" passed the threshold for a debate less than a day ago and has no debate date set
-    Given a petition "Free the wombles" passed the threshold for a debate 10 days ago and has no debate date set
-    When I view all petitions from the home page
-    And I follow "Petitions waiting for a debate in Parliament"
+    And a petition "Conquer the Moon" passed the threshold for a debate less than a day ago and has no debate date set
+    And a petition "Free the wombles" passed the threshold for a debate 10 days ago and has no debate date set
+    When I browse to see only "Petitions waiting for a debate in Parliament" petitions
     Then I should see the following ordered list of petitions:
       | Free the wombles |
       | Conquer the Moon |

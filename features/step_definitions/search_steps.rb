@@ -1,11 +1,17 @@
-When /^I search for "([^"]*)"? with "([^"]*)"$/ do |facet, term|
+When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
   step "I go to the petitions page"
-  step "I follow \"#{facet}\""
-  step "I fill in \"#{term}\" as my search term"
-  step "I press \"Search\""
+  within :css, '#other-search-lists' do
+    click_on facet
+  end
 end
 
-Then /^I should not be able to search via free text$/ do
+When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
+  step %{I browse to see only "#{facet}" petitions}
+  step %{I fill in "#{term}" as my search term}
+  step %{I press "Search"}
+end
+
+Then(/^I should not be able to search via free text$/) do
   expect(page).to have_no_css("form[action=search]")
 end
 
