@@ -1,17 +1,24 @@
-Petition "<%= @petition.action %>" hasn't been accepted.
+Hi <%= @signature.name %>,
+
+We rejected the petition you created – "<%= @petition.action %>".
 
 <%= strip_tags(rejection_description(@rejection.code)) %>
+<% if @rejection.details? -%>
 
-<%= @rejection.details if @rejection.details? %>
-
-<% unless @petition.hidden? -%>
-Copy and paste the link below into your browser to view your rejected petition:
-
-<%= petition_url(@petition) %>
-
+<%= @rejection.details %>
 <% end -%>
-If you'd like to submit a new petition, please read the site's terms and conditions which explain the rules in detail.
+<% unless @petition.hidden? -%>
+
+Click this link to see your rejected petition:
+<%= petition_url(@petition) %>
+<% end -%>
+
+We only reject petitions that don’t meet the petition standards:
+<%= help_url(anchor: 'creating-a-petition') %>
+
+If you want to try again, click here to start a petition:
+<%= check_petitions_url %>
 
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>

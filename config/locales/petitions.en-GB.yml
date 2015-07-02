@@ -69,16 +69,19 @@ en-GB:
         notify_signer_of_threshold_response: |-
           Government responded to your petition
 
+        # Emails to people who start a petition
+        gather_sponsors_for_petition: |-
+          Action required: Petition "%{action}"
         notify_creator_that_petition_is_published: |-
-          HM Government & Parliament Petitions: Your petition has been published
+          We published your petition "%{action}"
         petition_rejected: |-
-          HM Government & Parliament Petitions: petition has been rejected
-        no_signature_for_petition: |-
-          HM Government & Parliament Petitions: a confirmation email has been requested
+          We rejected your petition "%{action}"
         email_already_confirmed_for_signature: |-
           HM Government & Parliament Petitions: Signature already confirmed
         two_pending_signatures: |-
           HM Government & Parliament Petitions: Signature confirmations
+        no_signature_for_petition: |-
+          Re-send failed: Petition "%{action}"
         one_pending_one_validated_signature: |-
           HM Government & Parliament Petitions: Signature confirmation
         double_signature_confirmation: |-
@@ -87,8 +90,6 @@ en-GB:
           Please confirm your email address
         notify_creator_of_closing_date_change: |-
           HM Government & Parliament Petitions: change to your petition closing date
-        gather_sponsors_for_petition: |-
-          Parliament petitions - It's time to get sponsors to support your petition
       signoff_prefix: "The Petitions team"
 
     waiting_for_in_words:

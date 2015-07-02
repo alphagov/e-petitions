@@ -5,7 +5,7 @@ class SponsorMailer < ApplicationMailer
     @supporting_sponsors_count = petition.supporting_sponsors_count
     @moderation_threshold = Site.threshold_for_moderation
     mail(
-      subject: "Parliament Petitions - #{@petition.action} has received support from a sponsor",
+      subject: "#{@sponsor.signature.name} supported your petition",
       to: @petition.creator_signature.email
     )
   end
@@ -15,7 +15,7 @@ class SponsorMailer < ApplicationMailer
     @sponsor = sponsor
     @moderation_threshold = Site.threshold_for_moderation
     mail(
-      subject: "Parliament Petitions - #{@petition.action} has received support from a sponsor",
+      subject: "We’re checking your petition",
       to: @petition.creator_signature.email
     )
   end

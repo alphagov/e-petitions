@@ -1,17 +1,24 @@
-<p>Petition "<%= @petition.action %>" hasn't been accepted.</p>
+<p>Hi <%= @signature.name %>,</p>
+
+<p>We rejected the petition you created &ndash; &ldquo;<%= @petition.action %>&rdquo;.
 
 <%= rejection_description(@rejection.code) %>
+<% if @rejection.details? -%>
 
-<% if @rejection.details? %>
 <p><%= auto_link(h(@rejection.details)) %></p>
-<% end %>
-
+<% end -%>
 <% unless @petition.hidden? -%>
-  <p><%= link_to 'View your rejected petition', petition_url(@petition) %></p>
+
+<p>Click this link to see your rejected petition:<br />
+<%= link_to 'View your rejected petition', petition_url(@petition) %></p>
 <% end -%>
 
-<p>If you'd like to submit a new petition, please read the site's terms and conditions which explain the rules in detail.</p>
+<p>We only reject petitions that don&apos;t meet the petition standards:<br />
+<%= link_to nil, help_url(anchor: 'creating-a-petition') %></p>
 
-<p>Thanks,</p>
+<p>If you want to try again, click here to start a petition:<br />
+<%= link_to nil, check_petitions_url %></p>
 
-<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to home_url, home_url %></p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>

@@ -1,11 +1,10 @@
-Dear <%= @signature.name %>
+Hi <%= @signature.name %>,
 
-Your petition "<%= @signature.petition.action %>" has now been published. You can view your petition by copying the following link and pasting it into your browser:
+We published the petition you created – "<%= @signature.petition.action %>".
 
+Click this link to see your petition and start sharing it:
 <%= petition_url(@signature.petition) %>
 
-You can also share this URL to promote your petition or use the social network links available on your petition's page.
-
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>

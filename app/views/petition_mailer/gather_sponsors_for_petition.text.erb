@@ -1,21 +1,35 @@
-Dear <%= @creator.name %>,
+Hi <%= @creator.name %>,
 
-Before your petition is passed to parliament for moderation review you must gather support from at least <%= Site.threshold_for_moderation %> sponsors.
+You’re not done yet!
 
-To gather sponsors give out this url to people you think might want to support your petition:
+Forward the email below to your potential supporters.
 
-<%= petition_sponsor_url(@petition, token: @petition.sponsor_token) %>
-
-When they visit this url they will be asked to fill in their details and sign the petition as a sponsor.
-
-You will be notified when people sign as a sponsor and kept up-to-date with your progress towards gathering the <%= Site.threshold_for_moderation %> sponsors you need to go into moderation review.
-
-You should consider sending your chosen sponsors the full text of the petition so they can review it and be sure they agree with you before signing it as a sponsor.
-
-Action: <%= @petition.action %>
-Background: <%= @petition.background %>
-Additional details: <%= @petition.additional_details %>
+<%= Site.threshold_for_moderation %> people need to click the link and confirm their support for us to publish your petition.
 
 Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>
 
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+--
+
+Hi,
+
+I've made a petition – will you sign it?
+
+Click this link to sign the petition:
+<%= petition_sponsor_url(@petition, token: @petition.sponsor_token) %>
+
+My petition:
+
+<%= @petition.action %>
+
+<%= @petition.background %>
+<% unless petition.additional_details.blank? %>
+
+  <%= @petition.additional_details %>
+<% end %>
+
+--
+
+Click this link to sign the petition:
+<%= petition_sponsor_url(@petition, token: @petition.sponsor_token) %>
