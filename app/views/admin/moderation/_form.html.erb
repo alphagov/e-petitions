@@ -25,10 +25,10 @@
           $flag_control = $('#petition_moderation_flag'),
           $submit_button = $('input[type=submit]'),
           $all_controls = $('input[name="petition[moderation]"][type=radio]');
-      <% unless f.object.errors.any? %>
-      // Hide it straight away if there were no errors to display
-      $rejection_controls.hide();
-      <% end %>
+      // Hide it straight away if there were no errors displayed
+      if ($rejection_controls.find('.error-message').size() === 0) {
+        $rejection_controls.hide();
+      }
 
       // Ensure that we get the onchange event when the users uses the keyboard
       // Details: http://bit.ly/iZx9nh
