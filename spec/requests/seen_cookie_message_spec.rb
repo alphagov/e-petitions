@@ -1,11 +1,17 @@
 require 'rails_helper'
 
 RSpec.describe 'seen_cookie_message cookie', type: :request do
+  include ActiveSupport::Testing::TimeHelpers
+
   subject { response.header["Set-Cookie"] }
-  let(:one_year_from_now) { 1.year.from_now.getutc.rfc2822 }
+  let(:the_past) { Time.utc(2014, 7, 2, 10, 9, 9) }
 
   before do
     get "/"
+  end
+
+  around do |example|
+    travel_to(the_past) { example.run }
   end
 
   it "should set the secure option" do
@@ -17,6 +23,6 @@ RSpec.describe 'seen_cookie_message cookie', type: :request do
   end
 
   it "should set the expiry to 1 year from now" do
-    expect(subject).to match(/; expires=#{one_year_from_now}/)
+    expect(subject).to match(/; expires=Thu, 02 Jul 2015 10:09:09 -0000/)
   end
 end
