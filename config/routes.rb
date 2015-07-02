@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   get '/' => 'pages#index', :as => :home
   get 'help' => 'pages#help', :as => :help
+  get 'privacy' => 'pages#privacy', :as => :privacy
+
   get 'ping' => 'ping#ping'
 
   get 'feedback' => 'feedback#index', :as => 'feedback'
@@ -73,7 +75,7 @@ Rails.application.routes.draw do
   get '/api/petitions',         to: redirect('/')
   get '/api/petitions/:id',     to: redirect('/')
 
-  get '/privacy-policy',       to: redirect('/help')
+  get '/privacy-policy',       to: redirect('/privacy')
   get '/accessibility',        to: redirect('/help')
   get '/terms-and-conditions', to: redirect('/help')
   get '/how-it-works',         to: redirect('/help')

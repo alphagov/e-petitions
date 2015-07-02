@@ -13,9 +13,9 @@ RSpec.describe 'redirect for old pages', type: :request do
     expect(response.status).to eq 301
   end
 
-  it 'redirects to help page if trying to access old /privacy-policy page' do
+  it 'redirects to privacy page if trying to access old /privacy-policy page' do
     get '/privacy-policy'
-    expect(response).to redirect_to('https://petition.parliament.uk/help')
+    expect(response).to redirect_to('https://petition.parliament.uk/privacy')
     expect(response.status).to eq 301
   end
 

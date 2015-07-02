@@ -14,6 +14,9 @@ module NavigationHelpers
     when /^the help page$/
       help_path
 
+    when /^the privacy page$/
+      privacy_path
+
     when /^the feedback page$/
       feedback_path
 
