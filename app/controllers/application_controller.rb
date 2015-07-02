@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_seen_cookie_message
-    cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now }
+    cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now, httponly: true }
   end
 
   def show_cookie_message?
