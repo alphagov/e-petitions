@@ -5,7 +5,7 @@
     <ul>
       <% actions.each do |state, action| %>
         <li>
-          <%= link_to petition_count(state, action[:count]), petitions_url(state: state) %>
+          <%= link_to petition_count(state, action[:count]), home_path(anchor: 'petitions-' + state.to_s.dasherize) %>
         </li>
       <% end %>
     </ul>
@@ -27,7 +27,7 @@
 </div>
 
 <% explanation_petitions do |actioned| %>
-  <section aria-labelledby="response-threshold-heading">
+  <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
     <div class="threshold-panel">
       <span class="graphic graphic-crown-white"></span>
       <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
@@ -38,7 +38,7 @@
     </div>
   </section>
 
-  <section aria-labelledby="debate-threshold-heading">
+  <section aria-labelledby="debate-threshold-heading" id="petitions-with-debate-outcome">
     <div class="threshold-panel">
       <span class="graphic graphic-portcullis-white"></span>
       <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
