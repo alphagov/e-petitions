@@ -1,18 +1,19 @@
 <% if actioned[:with_debate_outcome][:count].zero? %>
   <p>This Parliament has not debated any petitions yet.</p>
 <% else %>
-  <ol class="threshold-petitions">
+  <h2>Most recently debated in Parliament</h2>
+  <ol class="threshold-petitions debate-petitions-list">
     <% actioned[:with_debate_outcome][:list].each do |petition| %>
-      <li class="threshold-petition">
-        <span class="threshold-petition-title"><%= link_to petition.action, petition_path(petition) %></span>
+      <li class="petition-item">
+        <h3><%= link_to petition.action, petition_path(petition) %></h3>
         <% if petition.debate_outcome.video_url.present? %>
-          <%= link_to "Watch the debate", petition.debate_outcome.video_url, rel: "external" %>
+          <p>Watch the debate on <%= link_to "parliamentlive.tv", petition.debate_outcome.video_url, rel: "external" %></p>
         <% end %>
         <% if petition.debate_outcome.transcript_url.present? %>
-          <%= link_to "Read the transcript", petition.debate_outcome.transcript_url, rel: "external" %>
+          <p>Read the transcript at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %></p>
         <% end %>
       </li>
     <% end -%>
   </ol>
-  <%= link_to petition_count(:with_debate_outcome_explanation, actioned[:with_debate_outcome][:count]), petitions_path(state: :with_debate_outcome), class: "view-all" %>
+  <p><%= link_to petition_count(:with_debate_outcome_explanation, actioned[:with_debate_outcome][:count]), petitions_path(state: :with_debate_outcome), class: "view-all" %></p>
 <% end %>
