@@ -128,7 +128,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
             do_patch
             expect(email.from).to eq(["no-reply@test.epetitions.website"])
             expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/petition has been rejected/)
+            expect(email.subject).to match(/We rejected your petition/)
           end
 
           it "sends an email to validated petition sponsors" do
@@ -173,7 +173,7 @@ RSpec.describe Admin::TakeDownController, type: :controller do
             do_patch
             expect(email.from).to eq(["no-reply@test.epetitions.website"])
             expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/petition has been rejected/)
+            expect(email.subject).to match(/We rejected your petition/)
           end
 
           it "sends an email to validated petition sponsors" do

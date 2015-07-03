@@ -1,9 +1,12 @@
 Hi <%= @petition.creator_signature.name %>,
 
-One of the sponsors you nominated for your petition "<%= @petition.action %>", <%= @sponsor.signature.name %>, has signed it to show their support.
+<%= @sponsor.signature.name %> supported your petition – "<%= @petition.action %>".
 
-You have support from <%= @supporting_sponsors_count %> of your nominated sponsors; you still need <%= @moderation_threshold - @supporting_sponsors_count %> more before you have enough support to pass the petition to parliament for moderation review.
+You have <%= @supporting_sponsors_count %> supporters so far. If <%= @moderation_threshold %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.
+
+Find out how we check petitions before we publish them:
+<%= help_url(anchor: 'creating-a-petition') %>
 
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>

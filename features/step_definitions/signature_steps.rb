@@ -17,12 +17,12 @@ Then /^I am told to check my inbox to complete signing$/ do
 end
 
 Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
-  expect(find_email(address, with_text: "confirm your email address")).to be_present
+  expect(find_email(address, with_subject: "Please confirm your email address")).to be_present
 end
 
-When /^I confirm my email address$/ do
+When(/^I confirm my email address$/) do
   steps %Q(
-    And I open the email with text "confirm your email address"
+    And I open the email with subject "Please confirm your email address"
     When I click the first link in the email
   )
 end

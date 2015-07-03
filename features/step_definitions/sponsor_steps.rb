@@ -24,7 +24,7 @@ When(/^a sponsor supports my petition$/) do
     And I select "United Kingdom" from "Location"
     And I try to sign
     And I say I am happy with my email address
-    And "#{sponsor_email}" opens the email with text "confirm your email address"
+    And "#{sponsor_email}" opens the email with subject "Please confirm your email address"
     And they click the first link in the email
   }
   signature = @sponsor_petition.signatures.for_email(sponsor_email).first
@@ -35,27 +35,19 @@ end
 Given(/^I only need one more sponsor to support my petition$/) do
   before_threshold = Site.threshold_for_moderation - 1
   while (@sponsor_petition.supporting_sponsors_count < before_threshold) do
-    steps %Q{
-      And a sponsor supports my petition
-    }
+    step %{a sponsor supports my petition}
   end
-  steps %Q{
-    And "charlie.the.creator@example.com" has read all their email
-  }
+  step %{"charlie.the.creator@example.com" has read all their email}
 end
 
 Given(/^I have enough support from sponsors for my petition$/) do
   while (@sponsor_petition.supporting_sponsors_count < Site.threshold_for_moderation) do
-    steps %Q{
-      And a sponsor supports my petition
-    }
+    step %{a sponsor supports my petition}
   end
-  steps %Q{
-    And "charlie.the.creator@example.com" has read all their email
-  }
+  step %{"charlie.the.creator@example.com" has read all their email}
 end
 
-Given /^the petition I want to sign is (validated|sponsored|open|hidden|rejected)?$/ do |state|
+Given(/^the petition I want to sign is (validated|sponsored|open|hidden|rejected)$/) do |state|
   if state == "rejected"
     @sponsor_petition = FactoryGirl.create(:rejected_petition, rejection_code: "irrelevant")
   else
@@ -63,7 +55,7 @@ Given /^the petition I want to sign is (validated|sponsored|open|hidden|rejected
   end
 end
 
-Given /^the petition I want to sign has been closed$/ do
+Given(/^the petition I want to sign has been closed$/) do
   @sponsor_petition = FactoryGirl.create(:closed_petition, closed_at: 1.day.ago)
 end
 
@@ -93,19 +85,17 @@ end
 
 When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_address|
   email_address ||= 'laura.the.sponsor@example.com'
-  steps %Q(
+  steps %{
     When I fill in "Name" with "Laura The Sponsor"
     And I fill in "Email" with "#{email_address}"
     And I check "Yes, I am a British citizen or UK resident"
     And I fill in my postcode with "AB10 1AA"
     And I select "United Kingdom" from "Location"
-  )
+  }
 end
 
 When(/^I don't fill in my details correctly as a sponsor$/) do
-  steps %Q(
-    When I fill in "Name" with ""
-  )
+  step %{I fill in "Name" with ""}
 end
 
 Then(/^I should have fully signed the petition as a sponsor$/) do
@@ -133,8 +123,8 @@ Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponso
   address = address || 'laura.the.sponsor@example.com'
   expect(unread_emails_for(address).size).to eq 1
   open_last_email_for(address)
-  steps %Q{
-    Then they should see "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.action}" in the email subject
+  steps %{
+    Then they should see "Please confirm your email address" in the email subject
     And they should see "#{@sponsor_petition.action}" in the email body
     And they should see "#{@sponsor_petition.background}" in the email body
     And they should see "#{@sponsor_petition.additional_details}" in the email body
@@ -142,19 +132,20 @@ Then(/^(?:I|"(.*?)") should receive an email explaining the petition I am sponso
 end
 
 Then(/^(?:I|"(.*?)") should not have received an email explaining the petition I am sponsoring$/) do |address|
-  step %Q{#{address.blank? ? "\"#{address}\"" : "I"} should receive no email with subject "Parliament petitions - Validate your support for #{@sponsor_petition.creator_signature.name}'s petition #{@sponsor_petition.action}"}
+  address = address.blank? ? address : "I"
+  expect(unread_emails_for(address).select { |m| m.default_part_body.to_s =~ Regexp.new(@sponsor_petition.action) }.size).to eq 0
 end
 
 Then(/^(I|they|".*?") should be emailed a link for gathering support from sponsors$/) do |address|
-  steps %Q{
-    Then #{address} should receive an email with subject "Parliament petitions - It's time to get sponsors to support your petition"
-    When they open the email with subject "Parliament petitions - It's time to get sponsors to support your petition"
+  steps %{
+    Then #{address} should receive an email with subject "Action required: Petition"
+    When they open the email with subject "Action required: Petition"
     Then they should see /\/petitions\/\\d+\/sponsors\/[A-Za-z0-9]+/ in the email body
   }
 end
 
 When(/^I have sponsored a petition$/) do
-  steps %Q{
+  steps %{
     When I visit the "sponsor this petition" url I was given
     And I should be connected to the server via an ssl connection
     When I fill in my details as a sponsor
@@ -164,6 +155,5 @@ When(/^I have sponsored a petition$/) do
     When I say I am happy with my email address
     Then I should have a pending signature on the petition as a sponsor
     And I should receive an email explaining the petition I am sponsoring
-}
+  }
 end
-

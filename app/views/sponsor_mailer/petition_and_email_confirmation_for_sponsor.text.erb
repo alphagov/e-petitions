@@ -1,17 +1,20 @@
-Dear <%= @signature.name %>,
+Click this link to sign the petition "<%= @petition.action %>"
 
-To confirm your support for <%= @petition.creator_signature.name %>'s petition "<%= @petition.action %>" you should:
+<%= verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>
 
-1. Review the details of the petition to make sure you agree with it:
-   Action: <%= @petition.action  %>
-   Background: <%= @petition.background  %>
-   Additional details: <%= @petition.additional_details  %>
+--
 
-2. Click the link below to confirm your email address:
-   <%= verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>
+<%= @petition.creator_signature.name %>'s petition:
 
-If you don't want to sponsor this petition or believe this message was sent in error, please ignore this email.
+<%= @petition.action %>
 
-Thanks,
+<%= @petition.background %>
+<% unless @petition.additional_details.blank? %>
 
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+  <%= @petition.additional_details %>
+<% end %>
+
+--
+
+Click this link to sign the petition:
+<%= verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %>

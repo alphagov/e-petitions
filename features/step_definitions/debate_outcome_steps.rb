@@ -55,8 +55,8 @@ Then(/^the petition creator should have been emailed about the debate$/) do
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
-    Then they should see "The petition '#{@petition.action}' you've supported has been debated by parliament. Please read the outcome of the debate:" in the email body
-    When they click the first link in the email
+    Then they should see "Parliament debated the petition you signed" in the email body
+    When they follow "#{petition_url(@petition)}" in the email
     Then I should be on the petition page for "#{@petition.action}"
   )
 end
@@ -67,8 +67,8 @@ Then(/^all the signatories of the petition should have been emailed about the de
     steps %Q(
       Then "#{signatory.email}" should receive an email
       When they open the email
-      Then they should see "The petition '#{@petition.action}' you've supported has been debated by parliament. Please read the outcome of the debate:" in the email body
-      When they click the first link in the email
+      Then they should see "Parliament debated the petition you signed" in the email body
+      When they follow "#{petition_url(@petition)}" in the email
       Then I should be on the petition page for "#{@petition.action}"
     )
   end

@@ -1,13 +1,14 @@
-<p>Dear Sir/Madam,</p>
+<p>Hi,</p>
 
-<p>A request has been made to re-send a confirmation email to this address to complete the signing process for the petition '<%= @petition.action %>'.</p>
+<p>We don&apos;t think anyone has signed the petition using this email address: <%= @email %>.</p>
 
-<p>This email address has not been used to sign this petition. If you want to sign the petition you can do so at the following address:</p>
+<p>Maybe you used a different email address?</p>
 
-<p><%= link_to nil, petition_url(@petition) %></p>
+<p>If you still want to sign the petition &ldquo;<%= @petition.action %>&rdquo;, click this link:<br />
+<%= link_to nil, petition_url(@petition) %></p>
 
-<p>If you don't want to sign this petition or believe this message was sent in error, please ignore this email.</p>
+<p>Ignore this email if you think it was sent to you by mistake.</p>
 
-<p>Thanks,</p>
-
-<p><%= t("petitions.emails.signoff_prefix") %> <%= home_url %></p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>

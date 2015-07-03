@@ -47,7 +47,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
         end
 
         it "sends an email to the petition creator" do
-          expect(email.subject).to match(/Your petition has been published/)
+          expect(email.subject).to match(/We published your petition/)
         end
       end
 
@@ -78,9 +78,9 @@ RSpec.describe Admin::ModerationController, type: :controller do
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(["no-reply@test.epetitions.website"])
+            expect(email.from).to eq(['no-reply@test.epetitions.website'])
             expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/petition has been rejected/)
+            expect(email.subject).to match(/We rejected your petition/)
           end
           it "sends an email to validated petition sponsors" do
             validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
@@ -118,9 +118,9 @@ RSpec.describe Admin::ModerationController, type: :controller do
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(["no-reply@test.epetitions.website"])
+            expect(email.from).to eq(['no-reply@test.epetitions.website'])
             expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/petition has been rejected/)
+            expect(email.subject).to match(/We rejected your petition/)
           end
           it "sends an email to validated petition sponsors" do
             validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)

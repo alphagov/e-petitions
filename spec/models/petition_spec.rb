@@ -1037,7 +1037,7 @@ RSpec.describe Petition, type: :model do
           email = ActionMailer::Base.deliveries.last
           expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq([subject.creator_signature.email])
-          expect(email.subject).to match(/has received support from a sponsor/)
+          expect(email.subject).to match(/supported your petition/)
         end
       end
     end
@@ -1052,7 +1052,7 @@ RSpec.describe Petition, type: :model do
           email = ActionMailer::Base.deliveries.last
           expect(email.from).to eq(["no-reply@test.epetitions.website"])
           expect(email.to).to eq([subject.creator_signature.email])
-          expect(email.subject).to match(/has received support from a sponsor/)
+          expect(email.subject).to match(/We’re checking your petition/)
         end
       end
 

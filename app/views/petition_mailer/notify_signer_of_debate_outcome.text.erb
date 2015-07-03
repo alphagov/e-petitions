@@ -1,11 +1,24 @@
-Dear <%= @signature.name %>,
+Hi <%= @signature.name %>,
 
-The petition '<%= @petition.action %>' you've supported has been debated by parliament. Please read the outcome of the debate:
+Parliament debated the petition you signed – "<%= @petition.action %>"
 
-<%= petition_url(@signature.petition) %>
+<% unless @petition.debate_outcome.video_url.blank? %>
+  Watch the debate: <%= @petition.debate_outcome.video_url %>
 
+<% end %>
+<% unless @petition.debate_outcome.transcript_url.blank? %>
+  Read the transcript: <%= @petition.debate_outcome.transcript_url %>
+
+<% end %>
+<% if @petition.debate_outcome.transcript_url.blank? && @petition.debate_outcome.video_url.blank? %>
+  <%= petition_url(@signature.petition) %>
+
+<% else %>
+  The petition: <%= petition_url(@signature.petition) %>
+
+<% end %>
 Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>
 
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
-
-Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+You’re receiving this email because you signed this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

@@ -1,11 +1,24 @@
-<p>Dear <%= @signature.name %>,</p>
+<p>Hi <%= @signature.name %>,</p>
 
-<p>The petition '<%= @petition.action %>' you've supported has been debated by parliament. Please read the outcome of the debate:</p>
+<p>Parliament debated the petition you signed &ndash; &ldquo;<%= @petition.action %>&rdquo;</p>
+<% unless @petition.debate_outcome.video_url.blank? %>
 
-<p><%= link_to nil, petition_url(@signature.petition) %></p>
+  <p>Watch the debate: <%= auto_link(@petition.debate_outcome.video_url) %></p>
+<% end %>
+<% unless @petition.debate_outcome.transcript_url.blank? %>
 
-<p>Thanks,</p>
+  <p>Read the transcript: <%= auto_link(@petition.debate_outcome.transcript_url) %></p>
+<% end %>
+<% if @petition.debate_outcome.transcript_url.blank? && @petition.debate_outcome.video_url.blank? %>
 
-<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to nil, home_url %></p>
+  <p><%= link_to nil, petition_url(@signature.petition) %></p>
+<% else %>
 
-<p>Don't want to receive any more emails regarding this petition? Unsubscribe by clicking <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></p>
+  <p>The petition: <%= link_to nil, petition_url(@signature.petition) %></p>
+<% end %>
+
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>
+
+<p><small>You&apos;re receiving this email because you signed this petition. Unsubscribe: <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>

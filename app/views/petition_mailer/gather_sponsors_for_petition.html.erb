@@ -1,21 +1,35 @@
-<p>Dear <%= @creator.name %>,</p>
+<p>Hi <%= @creator.name %>,</p>
 
-<p>Before your petition is passed to parliament for moderation review you must gather support from at least <%= Site.threshold_for_moderation %> sponsors.</p>
+<p>You&apos;re not done yet!</p>
 
-<p>To gather sponsors give out this url to people you think might want to support your petition:</p>
+<p>Forward the email below to your potential supporters.</p>
 
-<%= link_to nil, petition_sponsor_url(@petition, token: @petition.sponsor_token) %>
+<p><%= Site.threshold_for_moderation %> people need to click the link and confirm their support for us to publish your petition.</p>
 
-<p>When they visit this url they will be asked to fill in their details and sign the petition as a sponsor.</p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>
 
-<p>You will be notified when people sign as a sponsor and kept up-to-date with your progress towards gathering the <%= Site.threshold_for_moderation %> sponsors you need to go into moderation review.</p>
+<hr />
 
-<p>You should consider sending your chosen sponsors the full text of the petition so they can review it and be sure they agree with you before signing it as a sponsor.</p>
+<p>Hi,</p>
 
-<p><b>Action</b>: <%= @petition.action %></p>
-<p><b>Background</b>: <%= @petition.background %></p>
-<p><b>Additional details</b>: <%= @petition.additional_details %></p>
+<p>I&apos;ve made a petition &ndash; will you sign it?</p>
 
-<p>Thanks,</p>
+<p>Click this link to sign the petition:<br />
+<%= link_to nil, petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
 
-<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to nil, home_url %></p>
+<p>My petition:</p>
+
+<p><%= @petition.action %></p>
+
+<p><%= @petition.background %></p>
+<% unless @petition.additional_details.blank? %>
+
+  <p><%= @petition.additional_details %></p>
+<% end %>
+
+<hr />
+
+<p>Click this link to sign the petition:<br />
+<%= link_to nil, petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>

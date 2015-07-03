@@ -1,9 +1,12 @@
 <p>Hi <%= @petition.creator_signature.name %>,</p>
 
-<p>One of the sponsors you nominated for your petition "<%= @petition.action %>", <%= @sponsor.signature.name %>, has signed it to show their support.</p>
+<p><%= @sponsor.signature.name %> supported your petition &ndash; &ldquo;<%= @petition.action %>&rdquo;.</p>
 
-<p>You have support from <%= @supporting_sponsors_count %> of your nominated sponsors; you still need <%= @moderation_threshold - @supporting_sponsors_count %> more before you have enough support to pass the petition to parliament for moderation review.</p>
+<p>You have <%= @supporting_sponsors_count %> supporter so far. If <%= @moderation_threshold %> people support your petition we&apos;ll check it to make sure it meets the petition standards. If it does, we&apos;ll publish it.</p>
 
-<p>Thanks,</p>
+<p>Find out how we check petitions before we publish them:<br />
+<%= link_to 'petition guidelines', help_url(anchor: 'creating-a-petition') %></p>
 
-<p><%= t("petitions.emails.signoff_prefix") %> <%= link_to nil, home_url %></p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>

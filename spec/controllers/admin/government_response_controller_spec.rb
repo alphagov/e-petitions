@@ -212,10 +212,10 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
                 ['laura_1@example.com'],
                 ['laura_2@example.com']
               ])
-              expect(ActionMailer::Base.deliveries[0].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-              expect(ActionMailer::Base.deliveries[1].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-              expect(ActionMailer::Base.deliveries[2].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
-              expect(ActionMailer::Base.deliveries[3].subject).to match(/The petition '#{petition.action}' has reached 6 signatures/)
+              expect(ActionMailer::Base.deliveries[0].subject).to match(/Government responded to your petition/)
+              expect(ActionMailer::Base.deliveries[1].subject).to match(/Government responded to your petition/)
+              expect(ActionMailer::Base.deliveries[2].subject).to match(/Government responded to your petition/)
+              expect(ActionMailer::Base.deliveries[3].subject).to match(/Government responded to your petition/)
             end
           end
         end

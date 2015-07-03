@@ -1,7 +1,9 @@
-<p>Dear <%= @signature_one.name %> and <%= @signature_two.name %>,</p>
+<p>Hi <%= @signature_one.name %> and <%= @signature_two.name %>,</p>
 
-<p>Your signatures have already been added to the petition "<%= @signature_one.petition.action %>"</p>
+<p>You’ve both already signed the petition &ldquo;<%= @signature_one.petition.action %>&rdquo;</p>
 
-<p>Thanks,</p>
+<p>You can’t sign a second time.</p>
 
-<p><%= t("petitions.emails.signoff_prefix") %> <%= home_url %></p>
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= link_to nil, home_url %></p>

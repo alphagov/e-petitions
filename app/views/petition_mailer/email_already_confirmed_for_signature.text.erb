@@ -1,7 +1,9 @@
-Dear <%= @signature.name %>,
+Hi <%= @signature.name %>,
 
-Your signature has already been added to the petition "<%= @signature.petition.action %>"
+You’ve already signed the petition "<%= @signature.petition.action %>"
+
+You can’t sign a second time.
 
 Thanks,
-
-<%= t("petitions.emails.signoff_prefix") %> <%= home_url %>
+<%= t("petitions.emails.signoff_prefix") %>
+<%= home_url %>

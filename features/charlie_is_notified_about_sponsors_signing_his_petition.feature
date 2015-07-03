@@ -14,8 +14,9 @@ Feature: Charlie is notified to get an MP
   Scenario: Charlie is emailed about moderation upon hitting the sponsor support threshold
     Given I only need one more sponsor to support my petition
     When a sponsor supports my petition
-    Then I should receive a sponsor support notification email
-    And the sponsor support notification email should tell me about my petition going into moderation
+    Then I should not receive a sponsor support notification email
+    But I should receive a sponsor threshold notification email
+    And the sponsor threshold notification email should tell me about my petition going into moderation
 
   Scenario: Charlie is no longer emailed about sponsor support after passing the threshold
     Given I have enough support from sponsors for my petition
