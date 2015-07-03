@@ -53,6 +53,22 @@ class Site < ActiveRecord::Base
       instance.host_with_port
     end
 
+    def constraints_for_public
+      instance.constraints_for_public
+    end
+
+    def moderate_host
+      instance.moderate_host
+    end
+
+    def moderate_host_with_port
+      instance.moderate_host_with_port
+    end
+
+    def constraints_for_moderation
+      instance.constraints_for_moderation
+    end
+
     def opened_at_for_closing(time = Time.current)
       instance.opened_at_for_closing(time)
     end
@@ -209,6 +225,22 @@ class Site < ActiveRecord::Base
 
   def host_with_port
     "#{host}#{port_string}"
+  end
+
+  def constraints_for_public
+    { protocol: protocol, host: host, port: port }
+  end
+
+  def moderate_host
+    @moderate_host ||= Rails.env.development? ? host : "moderate.#{host}"
+  end
+
+  def moderate_host_with_port
+    "moderate.#{host}#{port_string}"
+  end
+
+  def constraints_for_moderation
+    { protocol: protocol, host: moderate_host, port: port }
   end
 
   def password_digest
