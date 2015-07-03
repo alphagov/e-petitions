@@ -22,7 +22,7 @@ RSpec.describe SponsorMailer, type: :mailer do
     subject(:mail) { described_class.petition_and_email_confirmation_for_sponsor(sponsor) }
 
     it "has the correct subject" do
-      expect(mail.subject).to eq("Parliament petitions - Validate your support for Barry Butler's petition Allow organic vegetable vans to use red diesel")
+      expect(mail.subject).to eq("Please confirm your email address")
     end
 
     it "sends it only to the sponsor" do

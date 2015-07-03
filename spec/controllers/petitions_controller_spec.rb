@@ -119,7 +119,7 @@ RSpec.describe PetitionsController, type: :controller do
       it "should send gather sponsors email to petition's creator" do
         ActionMailer::Base.deliveries.clear
         do_post
-        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /get sponsors to support your petition/ }
+        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Action required: Petition/ }
         expect(email).to be_present
         expect(email.from).to eq(["no-reply@test.epetitions.website"])
         expect(email.to).to eq(["john@example.com"])
