@@ -75,7 +75,7 @@ Feature: Suzy Singer searches by free text
       | Save the city foxes            | 1 signature |
 
   Scenario: Search for petitions debated in Parliament
-    When I search for "Petitions debated in Parliament" with "EU"
+    When I search for "Debated in Parliament" with "EU"
     Then I should see the following search results:
       | Leave EU                        | 1 signature |
 
