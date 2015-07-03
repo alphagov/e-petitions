@@ -24,7 +24,7 @@ My petition:
 <%= @petition.action %>
 
 <%= @petition.background %>
-<% unless petition.additional_details.blank? %>
+<% unless @petition.additional_details.blank? %>
 
   <%= @petition.additional_details %>
 <% end %>

@@ -9,7 +9,7 @@
 <p><%= @petition.action %></p>
 
 <p><%= @petition.background %></p>
-<% unless petition.additional_details.blank? %>
+<% unless @petition.additional_details.blank? %>
 
   <p><%= @petition.additional_details %></p>
 <% end %>

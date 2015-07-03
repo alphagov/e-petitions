@@ -36,7 +36,7 @@ class PetitionMailer < ApplicationMailer
 
   def email_already_confirmed_for_signature(signature)
     @signature = signature
-    mail to: @signature.email, subject: subject_for(:email_already_confirmed_for_signature)
+    mail to: @signature.email, subject: subject_for(:email_already_confirmed_for_signature, action: @signature.petition.action)
   end
 
   def two_pending_signatures(signature_one, signature_two)
@@ -51,7 +51,7 @@ class PetitionMailer < ApplicationMailer
 
   def double_signature_confirmation(*signatures)
     @signature_one, @signature_two = signatures.first, signatures.second
-    mail to: @signature_one.email, subject: subject_for(:double_signature_confirmation)
+    mail to: @signature_one.email, subject: subject_for(:double_signature_confirmation, action: @signature_one.petition.action)
   end
 
   def notify_creator_of_closing_date_change(signature)

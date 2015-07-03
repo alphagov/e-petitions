@@ -4,10 +4,10 @@
 
 <p><%= @sponsor.signature.name %> supported your petition &ndash; &ldquo;<%= @petition.action %>&rdquo;.</p>
 
-<p><%= @supporting_sponsors_count %> people have supported your petition so far. We&apos;re checking your petition to make sure it meets the petition standards. If it does, we&apos;ll publish it.</p>
+<p><%= @moderation_threshold %> people have supported your petition so far. We&apos;re checking your petition to make sure it meets the petition standards. If it does, we&apos;ll publish it.</p>
 
 <p>Find out how we check petitions before we publish them:<br />
-<%= link_to 'petition guidelines', help_path(anchor: 'creating-a-petition') %></p>
+<%= link_to 'petition guidelines', help_url(anchor: 'creating-a-petition') %></p>
 
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
