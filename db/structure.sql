@@ -368,7 +368,7 @@ CREATE TABLE petitions (
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
     notified_by_email boolean DEFAULT false,
-    background character varying(200),
+    background character varying(300),
     sponsor_token character varying(255),
     government_response_at timestamp without time zone,
     scheduled_debate_date date,
@@ -1148,4 +1148,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150701165425');
 INSERT INTO schema_migrations (version) VALUES ('20150701174136');
 
 INSERT INTO schema_migrations (version) VALUES ('20150703100716');
+
+INSERT INTO schema_migrations (version) VALUES ('20150703165930');
 

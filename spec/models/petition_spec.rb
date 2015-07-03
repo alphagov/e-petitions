@@ -25,6 +25,10 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
 
+    it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
+    it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 300, null: true) }
+    it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
+
     it "should validate the length of :action to within 80 characters" do
       expect(FactoryGirl.build(:petition, :action => 'x' * 80)).to be_valid
       expect(FactoryGirl.build(:petition, :action => 'x' * 81)).not_to be_valid
