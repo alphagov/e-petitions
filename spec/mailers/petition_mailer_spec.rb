@@ -22,12 +22,12 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.no_signature_for_petition(petition, 'wibble@example.com') }
 
     it "has an appropriate subject for the email" do
-      expect(mail.subject).to eq(%{Re-send failed: Petition "Allow organic vegetable vans to use red diesel"})
+      expect(mail).to have_subject(%{Re-send failed: Petition "Allow organic vegetable vans to use red diesel"})
     end
 
     it "informs them there is no signature for that email address on the petition" do
-      expect(mail.body.encoded).to match("We don=E2=80=99t think anyone has signed the petition using this email")
-      expect(mail.body.encoded).to have_css("a", "/petitions/#{petition.id}")
+      expect(mail).to have_body_text("We don’t think anyone has signed the petition using this email")
+      expect(mail).to have_body_text(%r[<a href="[^"]+">https://petition.parliament.uk/petitions/#{petition.id}</a>])
     end
   end
 
@@ -36,11 +36,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.email_already_confirmed_for_signature(signature) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq(%{You've already signed the petition "Allow organic vegetable vans to use red diesel"})
+      expect(mail).to have_subject(%{You've already signed the petition "Allow organic vegetable vans to use red diesel"})
     end
 
     it "informs the user they've already signed the petition" do
-      expect(mail.body.encoded).to match("You=E2=80=99ve already signed the petition")
+      expect(mail).to have_body_text("You’ve already signed the petition")
     end
   end
 
@@ -50,16 +50,16 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.two_pending_signatures(signature_one, signature_two) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("Please confirm your email address")
+      expect(mail).to have_subject("Please confirm your email address")
     end
 
     it "is addressed to both signees" do
-      expect(mail.body.encoded).to match("Hi #{signature_one.name} and #{signature_two.name},")
+      expect(mail).to have_body_text("Hi #{signature_one.name} and #{signature_two.name},")
     end
 
     it "provides links to confirm both signatures" do
-      expect(mail.body.encoded).to have_css("a", :text => "/signatures/#{signature_one.id}/verify/#{signature_one.perishable_token}")
-      expect(mail.body.encoded).to have_css("a", :text => "/signatures/#{signature_two.id}/verify/#{signature_two.perishable_token}")
+      expect(mail).to have_body_text(%r[<a href="[^"]+">https://petition.parliament.uk/signatures/#{signature_one.id}/verify/#{signature_one.perishable_token}</a>])
+      expect(mail).to have_body_text(%r[<a href="[^"]+">https://petition.parliament.uk/signatures/#{signature_two.id}/verify/#{signature_two.perishable_token}</a>])
     end
   end
 
@@ -69,19 +69,19 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.one_pending_one_validated_signature(pending_signature, validated_signature) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq("Please confirm your email address")
+      expect(mail).to have_subject("Please confirm your email address")
     end
 
     it "is addressed to the pending signee" do
-      expect(mail.body.encoded).to match("Hi #{pending_signature.name}")
+      expect(mail).to have_body_text("Hi #{pending_signature.name}")
     end
 
     it "provides a link to confirm the pending signature" do
-      expect(mail.body.encoded).to have_css("a", :text => "/signatures/#{pending_signature.id}/verify/#{pending_signature.perishable_token}")
+      expect(mail).to have_body_text(%r[<a href="[^"]+">https://petition.parliament.uk/signatures/#{pending_signature.id}/verify/#{pending_signature.perishable_token}</a>])
     end
 
     it "awknowledges one petition has been validated" do
-      expect(mail.body.encoded).to match("#{validated_signature.name} has already signed this petition")
+      expect(mail).to have_body_text("#{validated_signature.name} has already signed this petition")
     end
   end
 
@@ -91,15 +91,15 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.double_signature_confirmation(signature_one, signature_two) }
 
     it "has an appropriate header for the email" do
-      expect(mail.subject).to eq(%{You've already signed the petition "Allow organic vegetable vans to use red diesel"})
+      expect(mail).to have_subject(%{You've already signed the petition "Allow organic vegetable vans to use red diesel"})
     end
 
     it "is addressed to both signees" do
-      expect(mail.body.encoded).to match("Hi #{signature_one.name} and #{signature_two.name},")
+      expect(mail).to have_body_text("Hi #{signature_one.name} and #{signature_two.name},")
     end
 
     it "Informs the signees that their signatures have both been confirmed" do
-      expect(mail.body.encoded).to match("You=E2=80=99ve both already signed the petition")
+      expect(mail).to have_body_text("You’ve both already signed the petition")
     end
   end
 
@@ -109,15 +109,15 @@ RSpec.describe PetitionMailer, type: :mailer do
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
 
     it 'has an appropriate subject heading' do
-      expect(mail.subject).to eq("We’re closing your petition early")
+      expect(mail).to have_subject("We’re closing your petition early")
     end
 
     it 'is addressed to the creator' do
-      expect(mail.body.encoded).to match("Hi #{signature.name}")
+      expect(mail).to have_body_text("Hi #{signature.name}")
     end
 
     it "informs the creator of the change" do
-      expect(mail.body.encoded).to match("Unfortunately we=E2=80=99re closing all petitions")
+      expect(mail).to have_body_text("Unfortunately we’re closing all petitions")
     end
   end
 
@@ -125,11 +125,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 
     it "has the correct subject" do
-      expect(mail.subject).to eq(%{Action required: Petition "Allow organic vegetable vans to use red diesel"})
+      expect(mail).to have_subject(%{Action required: Petition "Allow organic vegetable vans to use red diesel"})
     end
 
     it "has the addresses the creator by name" do
-      expect(mail.body.encoded).to match(/Hi Barry Butler\,/)
+      expect(mail).to have_body_text(/Hi Barry Butler\,/)
     end
 
     it "sends it only to the petition creator" do
@@ -139,19 +139,19 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "includes a link to pass on to potential sponsors to have them support the petition" do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}])
     end
 
     it "includes the petition action" do
-      expect(mail.body.encoded).to match(%r[Allow organic vegetable vans to use red diesel])
+      expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
     end
 
     it "includes the petition background" do
-      expect(mail.body.encoded).to match(%r[Add vans to permitted users of red diesel])
+      expect(mail).to have_body_text(%r[Add vans to permitted users of red diesel])
     end
 
     it "includes the petition additional details" do
-      expect(mail.body.encoded).to match(%r[To promote organic vegetables])
+      expect(mail).to have_body_text(%r[To promote organic vegetables])
     end
   end
 
@@ -161,11 +161,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.notify_signer_of_debate_outcome(petition, signature) }
 
     it "has the correct subject" do
-      expect(mail.subject).to eq("Parliament debated your petition")
+      expect(mail).to have_subject("Parliament debated your petition")
     end
 
     it "addresses the signatory by name" do
-      expect(mail.body.encoded).to match(/Hi Laura Palmer\,/)
+      expect(mail).to have_body_text(/Hi Laura Palmer\,/)
     end
 
     it "sends it only to the signatory" do
@@ -175,15 +175,15 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "includes a link to the petition page" do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
     end
 
     it "includes the petition action" do
-      expect(mail.body.encoded).to match(%r[Allow organic vegetable vans to use red diesel])
+      expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
     end
 
     it 'includes an unsubscribe link' do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
     end
   end
 
@@ -193,11 +193,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.notify_signer_of_debate_scheduled(petition, signature) }
 
     it "has the correct subject" do
-      expect(mail.subject).to eq("Parliament will debate your petition")
+      expect(mail).to have_subject("Parliament will debate your petition")
     end
 
     it "addresses the signatory by name" do
-      expect(mail.body.encoded).to match(/Hi Laura Palmer\,/)
+      expect(mail).to have_body_text(/Hi Laura Palmer\,/)
     end
 
     it "sends it only to the signatory" do

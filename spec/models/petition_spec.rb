@@ -1118,7 +1118,7 @@ RSpec.describe Petition, type: :model do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@test.epetitions.website"])
+          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/supported your petition/)
         end
@@ -1133,7 +1133,7 @@ RSpec.describe Petition, type: :model do
         perform_enqueued_jobs do
           subject.notify_creator_about_sponsor_support(sponsor)
           email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@test.epetitions.website"])
+          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
           expect(email.to).to eq([subject.creator_signature.email])
           expect(email.subject).to match(/We’re checking your petition/)
         end
