@@ -2,13 +2,16 @@
 // =============
 .petition-item {
   color: $secondary-text-colour;
-  margin: $gutter 0;
-  a {
-    font-weight: bold;
-    display: block;
+  margin: $gutter-two-thirds 0 $gutter;
+  h3, p {
+    margin-bottom: em(5, 16);
+    @include media(tablet) {
+      margin-bottom: em(5, 19);
+    }
   }
   .count {
-    @include core-36();
+    font-size: 24px;
+    line-height: 30/24;
   }
   .additional-details {
     color: $text-colour;

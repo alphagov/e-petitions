@@ -49,7 +49,7 @@ Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_
   all_signature_count = petition.signatures.validated.count
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.id).count
   within :css, '.local-petitions' do
-    within ".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]" do
+    within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
       expect(page).to have_text("#{local_signature_count} signatures from #{@my_constituency.name}")
       expect(page).to have_text("#{all_signature_count} signatures total")
     end

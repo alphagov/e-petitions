@@ -15,8 +15,8 @@
     <ol>
       <% @petitions.each do |petition| %>
         <li class="petition-item petition">
-          <%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %>
-          <%= 'Rejected' if petition.rejected? %>
+          <h3><%= link_to petition.title, archived_petition_path(petition), :class => 'text_link' %></h3>
+          <% if petition.rejected? %><p>Rejected</p><% end %>
           <p><%= signature_count(:default, petition.signature_count) unless petition.rejected? %></p>
         </li>
       <% end %>

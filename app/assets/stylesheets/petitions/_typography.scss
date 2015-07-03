@@ -4,6 +4,8 @@
 @import "../govuk_frontend_toolkit/colours";
 @import "helpers";
 
+$text-indent: 50px;
+
 html, body, button, input, table, td, th, main {
   @include core-19;
   -webkit-font-smoothing: antialiased;
@@ -43,6 +45,7 @@ h2, h3, h4 {
 
   @include media(tablet) {
     margin-top: em(30, 19);
+    margin-bottom: em(10, 19);
   }
 
 }
