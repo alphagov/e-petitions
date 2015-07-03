@@ -1,6 +1,6 @@
 <p>Hi <%= @petition.creator_signature.name %>,</p>
 
-<p>We rejected the petition you created &ndash; &ldquo;<%= @petition.action %>&rdquo;.
+<p>We rejected the petition you created – “<%= @petition.action %>”.
 
 <%= rejection_description(@rejection.code) %>
 <% if @rejection.details? -%>
@@ -13,7 +13,7 @@
 <%= link_to 'View your rejected petition', petition_url(@petition) %></p>
 <% end -%>
 
-<p>We only reject petitions that don&apos;t meet the petition standards:<br />
+<p>We only reject petitions that don’t meet the petition standards:<br />
 <%= link_to nil, help_url(anchor: 'creating-a-petition') %></p>
 
 <p>If you want to try again, click here to start a petition:<br />

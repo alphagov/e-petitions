@@ -1,10 +1,10 @@
-<p>Click this link to sign the petition &ldquo;<%= @petition.action %>&rdquo;</p>
+<p>Click this link to sign the petition “<%= @petition.action %>”</p>
 
 <p><%= link_to nil, verify_signature_url(@signature, @signature.perishable_token, protocol: 'https') %></p>
 
 <hr />
 
-<p><%= @petition.creator_signature.name %>&qpos;s petition:</p>
+<p><%= @petition.creator_signature.name %>’s petition:</p>
 
 <p><%= @petition.action %></p>
 
