@@ -108,3 +108,4 @@ Feature: Moderator respond to petition
     And the creator should not receive a notification email
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
+    And the petition can no longer be flagged

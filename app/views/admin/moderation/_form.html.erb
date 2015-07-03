@@ -6,8 +6,10 @@
     <%= f.label :moderation_reject, nil, class: 'block-label' do %>
       <%= f.radio_button :moderation, 'reject' %> Reject
     <% end %>
-    <%= f.label :moderation_flag, nil, class: 'block-label' do %>
-      <%= f.radio_button :moderation, 'flag' %> Flag
+    <% unless f.object.flagged? %>
+      <%= f.label :moderation_flag, nil, class: 'block-label' do %>
+        <%= f.radio_button :moderation, 'flag' %> Flag
+      <% end %>
     <% end %>
     <%= error_messages_for_field petition, :moderation %>
   <% end %>
