@@ -1,6 +1,4 @@
 #global-header {
-  $text-indent: 50px;
-
   background-color: $petitions-header-colour;
   padding-top: $gutter-half;
   margin-top: -1px;
@@ -36,6 +34,8 @@
   .strapline {
     color: $white;
     margin: $gutter-one-third $text-indent;
+    font-size: 19px;
+    line-height: 25/19;
   }
 }
 

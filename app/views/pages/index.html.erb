@@ -24,14 +24,14 @@
     </section>
   <% end %>
   <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
+  <%# link_to petition_count(:with_response_explanation, actioned[:with_response][:count]), petitions_path(state: :with_response), class: "view-all" %>
 </div>
 
 <% explanation_petitions do |actioned| %>
   <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
-    <div class="threshold-panel">
-      <span class="graphic graphic-crown-white"></span>
+    <div class="threshold-panel response-threshold">
       <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-      <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+      <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will&nbsp;respond</p>
     </div>
     <div class="section-panel-borderless">
       <%= render "home_responded_petitions", actioned: actioned %>
@@ -39,10 +39,9 @@
   </section>
 
   <section aria-labelledby="debate-threshold-heading" id="petitions-with-debate-outcome">
-    <div class="threshold-panel">
-      <span class="graphic graphic-portcullis-white"></span>
+    <div class="threshold-panel debate-threshold">
       <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-      <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+      <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
     </div>
     <div class="section-panel">
       <%= render "home_debated_petitions", actioned: actioned %>
@@ -56,8 +55,8 @@
   <%= render 'local_search' %>
 </section>
 
-<section class="section-panel" aria-labelledby="start-new-petition-heading">
-  <h2 id="start-new-petition-heading">Start a petition</h2>
+<section class="section-panel section-panel-final" aria-labelledby="start-a-petition-heading">
+  <h2 id="start-a-petition-heading">Start a petition</h2>
   <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
   <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
 </section>

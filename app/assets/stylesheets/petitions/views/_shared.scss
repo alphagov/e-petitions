@@ -60,13 +60,17 @@ input.back-page {
 .section-panel {
   @extend %mobile-outdent-and-pad;
   margin-top: $gutter-half;
+  padding-bottom: $gutter-half*2;
   margin-bottom: $gutter-half;
-  padding-bottom: $gutter-half;
   border-bottom: 1px solid $panel-colour;
 }
 .section-panel-borderless {
   @extend .section-panel;
   border-bottom: none;
+  padding-bottom: 0;
+}
+.section-panel-final {
+  border: 0;
   padding-bottom: 0;
 }
 
@@ -182,4 +186,30 @@ input.back-page {
 
 .about-item-scheduled-debate-date {
   @include bold-19;
+}
+
+// Pull-quote
+.pull-quote {
+  quotes: "“" "”" "‘" "’";
+}
+@include media(tablet) {
+  .pull-quote:before {
+    content: open-quote;
+    font-size: 48px;
+    line-height: 50/48;
+    float: left;
+    margin-left: $gutter * -1;
+    margin-top: $gutter-one-third * -1;
+  }
+}
+
+.pull-quote p {
+  @include core-24;
+  margin-top: em(5, 18);
+  margin-bottom: em(15, 18);
+
+  @include media(tablet) {
+    margin-top: em(5, 24);
+    margin-bottom: em(15, 24);
+  }
 }

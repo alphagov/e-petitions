@@ -1,65 +1,81 @@
-.trending {
-  h2 {
-    margin-top: $gutter-half;
-    margin-bottom: $gutter-half;
-  }
-}
-.view-all {
-  margin-top: $gutter-half;
-  text-decoration: underline;
-}
-
 .actioned-petitions {
   @extend %contain-floats;
   li {
     float: left;
     width: 50%;
     @include box-sizing(border-box);
+    @include media(tablet) {
+      padding-right: $gutter*3;
+    }
   }
   li:first-child {
     padding-right: $gutter-half;
   }
   .count {
-    @include bold-48();
+    font-size: 36px;
+    line-height: 40/36;
+    font-weight: 700;
     display: block;
   }
+}
+
+.trending {
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+.view-all {
+  margin-top: $gutter-half;
+  text-decoration: underline;
 }
 
 .threshold-panel {
   @extend %outdent-to-full-width;
-  background-color: $petitions-header-colour;
+  background-color: $petitions-panel-colour;
   color: $white;
-  padding: $gutter-half;
-  margin-bottom: $gutter-half;
+  padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
+  margin: $gutter*1.5 $gutter-half*-1 $gutter;
 
   h2 {
-    @include bold-36;
-    margin: em(15, 24) 0;
+    font-size: 24px;
+    line-height: 30/24;
+    margin-top: 0;
+    padding-left: $text-indent;
+  }
 
-    @include media(tablet) {
-      margin: em(15, 36) 0;
-    }
-  }
-}
-.threshold-petitions {
-  .threshold-petition {
-    margin-bottom: em(20, 16);
-  }
-  a {
-    display: block;
-    margin-bottom: em(6, 16);
-
-    @include media(tablet) {
-      margin-bottom: em(6, 19);
-    }
-  }
-  .threshold-petition-title {
-    @include bold-19;
+  p {
+    margin: 0;
   }
 }
 
-@include media(tablet) {
-  .local-to-you input.form-control {
-    @include calc(width, "65% - 53px");
+.response-threshold, .debate-threshold {
+  background-position: 15px 15px;
+  background-repeat: no-repeat;
+  @include device-pixel-ratio() {
+    background-size: 100%;
   }
+}
+.response-threshold {
+  background-image: image-url("graphics/graphic_crown-white.png");
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_crown-white-2x.png");
+  }
+}
+.debate-threshold {
+  background-position: 15px 12px;
+  background-image: image-url("graphics/graphic_portcullis-white.png");
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_portcullis-white-2x.png");
+  }
+}
+
+
+// .response-petitions-list .petition-item .pull-quote p {
+//   font-size: 24px;
+//   line-height: 35/24;
+// }
+
+#local-to-you-heading, #start-a-petition-heading {
+  @include bold-24;
 }
