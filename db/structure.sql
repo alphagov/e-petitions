@@ -492,7 +492,7 @@ CREATE TABLE sites (
     id integer NOT NULL,
     title character varying(50) DEFAULT 'Petition parliament'::character varying NOT NULL,
     url character varying(50) DEFAULT 'https://petition.parliament.uk'::character varying NOT NULL,
-    email_from character varying(50) DEFAULT 'no-reply@petition.parliament.uk'::character varying NOT NULL,
+    email_from character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <no-reply@petition.parliament.uk>'::character varying NOT NULL,
     username character varying(30),
     password_digest character varying(60),
     enabled boolean DEFAULT true NOT NULL,
@@ -506,7 +506,7 @@ CREATE TABLE sites (
     last_checked_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    feedback_email character varying(100) DEFAULT 'feedback@petition.parliament.uk'::character varying NOT NULL
+    feedback_email character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>'::character varying NOT NULL
 );
 
 
@@ -1146,4 +1146,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150701165424');
 INSERT INTO schema_migrations (version) VALUES ('20150701165425');
 
 INSERT INTO schema_migrations (version) VALUES ('20150701174136');
+
+INSERT INTO schema_migrations (version) VALUES ('20150703100716');
 

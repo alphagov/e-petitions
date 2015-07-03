@@ -1,4 +1,4 @@
-Then /^I should be able to submit feedback$/ do
+Then(/^I should be able to submit feedback$/) do
 
   @feedback = Feedback.new(:name => "Joe Public", :email => "foo@example.com",
     :comment => "I can't submit a petition for some reason", :petition_link_or_title => 'link')
@@ -11,9 +11,9 @@ Then /^I should be able to submit feedback$/ do
   expect(page).to have_content("Thank")
 end
 
-Then /^the site owners should be notified$/ do
+Then(/^the site owners should be notified$/) do
   steps %Q(
-    Then "#{Site.feedback_email}" should receive an email
+    Then "#{Mail::Address.new(Site.feedback_email).address}" should receive an email
     When they open the email
     Then they should see "#{@feedback.email}" in the email body
     Then they should see "#{@feedback.petition_link_or_title}" in the email body
@@ -21,8 +21,8 @@ Then /^the site owners should be notified$/ do
   )
 end
 
-Then /^I cannot submit feedback without filling in the required fields$/ do
+Then(/^I cannot submit feedback without filling in the required fields$/) do
   click_button("Send feedback")
   expect(page).to have_content("must be completed")
-  step %{"#{Site.feedback_email}" should have no emails}
+  step %{"#{Mail::Address.new(Site.feedback_email).address}" should have no emails}
 end

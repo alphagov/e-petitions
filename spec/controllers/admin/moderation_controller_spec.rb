@@ -78,7 +78,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq("Petitions: UK Government and Parliament <no-reply@test.epetitions.website>")
+            expect(email.from).to eq(['no-reply@test.epetitions.website'])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/petition has been rejected/)
           end
@@ -118,7 +118,7 @@ RSpec.describe Admin::ModerationController, type: :controller do
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq("Petitions: UK Government and Parliament <no-reply@test.epetitions.website>")
+            expect(email.from).to eq(['no-reply@test.epetitions.website'])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/petition has been rejected/)
           end
