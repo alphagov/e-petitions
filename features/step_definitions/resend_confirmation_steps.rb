@@ -1,6 +1,6 @@
 When(/^I ask for my confirmation email to be resent$/) do
   visit petition_path(@petition)
-  page.find("//details[contains(@class, 'confirmation-resend')]/summary").click
+  page.find("//details#{XPathHelpers.class_matching('confirmation-resend')}/summary").click
   fill_in "confirmation_email", with: 'suzie@example.com'
   click_button "Resend"
 end
@@ -53,7 +53,7 @@ end
 
 When(/^I ask for my confirmation email to be resent with an invalid address$/) do
   visit petition_path(@petition)
-  page.find("//details[contains(@class, 'confirmation-resend')]/summary").click
+  page.find("//details#{XPathHelpers.class_matching('confirmation-resend')}/summary").click
   fill_in "confirmation_email", with: 'garbage email address'
   click_button "Resend"
 end

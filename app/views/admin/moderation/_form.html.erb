@@ -6,6 +6,9 @@
     <%= f.label :moderation_reject, nil, class: 'block-label' do %>
       <%= f.radio_button :moderation, 'reject' %> Reject
     <% end %>
+    <%= f.label :moderation_flag, nil, class: 'block-label' do %>
+      <%= f.radio_button :moderation, 'flag' %> Flag
+    <% end %>
     <%= error_messages_for_field petition, :moderation %>
   <% end %>
 
@@ -19,15 +22,17 @@
     $().ready(function() {
       var $rejection_controls = $('.petition-rejection-controls'),
           $reject_control = $('#petition_moderation_reject'),
-          $both_controls = $('input[name="petition[moderation]"][type=radio]');
-      <% unless f.object.errors.any? %>
-      // Hide it straight away if there were no errors to display
-      $rejection_controls.hide();
-      <% end %>
+          $flag_control = $('#petition_moderation_flag'),
+          $submit_button = $('input[type=submit]'),
+          $all_controls = $('input[name="petition[moderation]"][type=radio]');
+      // Hide it straight away if there were no errors displayed
+      if ($rejection_controls.find('.error-message').size() === 0) {
+        $rejection_controls.hide();
+      }
 
       // Ensure that we get the onchange event when the users uses the keyboard
       // Details: http://bit.ly/iZx9nh
-      $both_controls.keyup(function() {
+      $all_controls.keyup(function() {
         this.blur();
         this.focus();
       }).change(function() {
@@ -35,6 +40,11 @@
           $rejection_controls.show();
         } else {
           $rejection_controls.hide();
+        }
+        if ($flag_control.is(':checked')) {
+          $submit_button.attr('value', 'Save without emailing petition creator');
+        } else {
+          $submit_button.attr('value', 'Email petition creator');
         }
       });
     });

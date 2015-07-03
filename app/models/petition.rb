@@ -6,12 +6,13 @@ class Petition < ActiveRecord::Base
   PENDING_STATE     = 'pending'
   VALIDATED_STATE   = 'validated'
   SPONSORED_STATE   = 'sponsored'
+  FLAGGED_STATE     = 'flagged'
   OPEN_STATE        = 'open'
   CLOSED_STATE      = 'closed'
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
 
-  STATES            = %w[pending validated sponsored open closed rejected hidden]
+  STATES            = %w[pending validated sponsored flagged open closed rejected hidden]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
@@ -19,9 +20,10 @@ class Petition < ActiveRecord::Base
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
 
-  TODO_LIST_STATES           = %w[pending sponsored validated]
+  IN_MODERATION_STATES       = %w[sponsored flagged]
+  TODO_LIST_STATES           = %w[pending validated sponsored flagged]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
-  STOP_COLLECTING_STATES     = %w[pending sponsored validated]
+  STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged]
 
   has_perishable_token called: 'sponsor_token'
 
@@ -138,7 +140,7 @@ class Petition < ActiveRecord::Base
     end
 
     def in_moderation
-      where(state: SPONSORED_STATE)
+      where(state: IN_MODERATION_STATES)
     end
 
     def moderated
@@ -274,6 +276,7 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  private
   def approve?
     moderation == 'approve'
   end
@@ -282,12 +285,17 @@ class Petition < ActiveRecord::Base
     moderation == 'reject'
   end
 
-  def moderation
-    @moderation
+  def flag?
+    moderation == 'flag'
   end
 
   def moderation=(value)
-    @moderation = value if value.in?(%w[approve reject])
+    @moderation = value if value.in?(%w[approve reject flag])
+  end
+  public
+
+  def moderation
+    @moderation
   end
 
   def moderate(params)
@@ -297,6 +305,8 @@ class Petition < ActiveRecord::Base
       publish
     elsif reject?
       reject(params[:rejection])
+    elsif flag?
+      flag
     else
       errors.add :moderation, :blank
       false
@@ -309,6 +319,10 @@ class Petition < ActiveRecord::Base
 
   def reject(attributes)
     build_rejection(attributes) && rejection.save
+  end
+
+  def flag
+    update(state: FLAGGED_STATE)
   end
 
   def close!(time = Time.current)
@@ -332,7 +346,7 @@ class Petition < ActiveRecord::Base
   end
 
   def in_moderation?
-    state == SPONSORED_STATE
+    state.in?(IN_MODERATION_STATES)
   end
 
   def moderated?

@@ -60,19 +60,9 @@ Then /^the "([^\"]*)" radio button should be selected$/ do |label|
   expect(find_field(label)['checked']).to be_truthy
 end
 
-Then /^the "([^"]*)" row should display as invalid$/ do |field_label|
-  row_node = page.find("//label[.='#{field_label}']/ancestor::*[contains(@class, 'row')] | //*[contains(@class, 'label')][.='#{field_label}']/ancestor::*[contains(@class, 'row')]")
-  expect(row_node["class"]).to include("invalid_row")
-end
-
 ### Tables...
 
-Then /^I should see the following admin index table:$/ do |values_table|
-  actual_table = find(:css, 'table').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
-  values_table.diff!(actual_table)
-end
-
-Then /^I should see the following search results:$/ do |values_table|
+Then(/^I should see the following search results:$/) do |values_table|
   values_table.raw.each do |row|
     row.each do |column|
       expect(page).to have_content(column)
@@ -88,10 +78,10 @@ end
 
 Then(/^I should see the following list of petitions:$/) do |table|
   expected_petitions = table.raw.flatten
-  expect(page).to have_selector(:css, '.petition-action', count: expected_petitions.size)
+  expect(page).to have_selector(:css, '.petition-list-petition', count: expected_petitions.size)
 
   expected_petitions.each.with_index do |expected_petition, idx|
-    expect(page).to have_selector(:css, "tr:nth-child(#{idx+1}) .petition-action", text: expected_petition)
+    expect(page).to have_selector(:css, ".petition-list-petition:nth-child(#{idx+1}) .petition-list-petition-action", text: expected_petition)
   end
 end
 
@@ -116,10 +106,6 @@ Then /^the row with the name "([^\"]*)" is not listed$/ do |name|
   expect(page.body).not_to match(/#{name}/)
 end
 
-Then /^I should see (\d+) rows? in the admin index table$/ do |number|
-  expect(page).to have_xpath( "//table[@class='admin_index' and count(tr)=#{number.to_i + 1}]" )
-end
-
 Then /^I should see (\d+) petitions?$/ do |number|
   expect(page).to have_xpath( "//ol[count(li)=#{number.to_i}]" )
 end
@@ -136,5 +122,5 @@ Then /^I should (not |)see a link called "([^\"]*)" linking to "([^\"]*)"$/ do |
 end
 
 Then /^"([^"]*)" should show as "([^"]*)"$/ do |node_text, node_class_name|
-  expect(page).to have_xpath("//*[.='#{node_text}'][contains(@class, '#{node_class_name}')]")
+  expect(page).to have_xpath("//*[.='#{node_text}']#{XPathHelpers.class_matching(node_lcass_name)}")
 end

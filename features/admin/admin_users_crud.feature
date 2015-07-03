@@ -16,7 +16,7 @@ Feature: Admin users index and crud
     Given a moderator user exists with email: "derek@example.com", first_name: "Derek", last_name: "Jacobi"
     And a moderator user exists with email: "helen@example.com", first_name: "Helen", last_name: "Hunt", failed_login_count: 5
     When I go to the admin users index page
-    Then I should see the following admin index table:
+    Then I should see the following admin user table:
       | Name            | Email             | Role      | Disabled |
       | Admin, Sys      | muddy@fox.com     | sysadmin  |          |
       | Campbell, Naomi | naomi@example.com | moderator |          |
@@ -28,9 +28,9 @@ Feature: Admin users index and crud
     Given 50 moderator users exist
     When I go to the admin users index page
     And I follow "Next"
-    Then I should see 2 rows in the admin index table
+    Then I should see 2 rows in the admin user table
     And I follow "Previous"
-    Then I should see 50 rows in the admin index table
+    Then I should see 50 rows in the admin user table
 
   Scenario: Inspecting the new user form
     When I go to the admin users index page

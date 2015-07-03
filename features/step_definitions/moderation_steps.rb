@@ -37,6 +37,11 @@ When(/^I publish the petition$/) do
   click_button "Email petition creator"
 end
 
+When(/^I flag the petition$/) do
+  choose "Flag"
+  click_button "Save without emailing petition creator"
+end
+
 Then /^the petition is still available for searching or viewing$/ do
   step %{I search for "Rejected petitions" with "#{@petition.action}"}
   step %{I should see the petition "#{@petition.action}"}
@@ -64,27 +69,37 @@ Then /^the petition should be visible on the site for signing$/ do
   expect(page).to have_css("a", :text => "Sign")
 end
 
-Then /^the creator should receive a notification email$/ do
+Then(/^the creator should receive a notification email$/) do
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
     Then they should see "published" in the email body
+    And they should see /We published your petition/ in the email subject
   )
 end
 
-Then /^the creator should receive a (libel\/profanity )?rejection notification email$/ do |petition_is_libellous|
+Then(/^the creator should not receive a notification email$/) do
+  step %{"#{@petition.creator_signature.email}" should receive no email with subject "We published your petition"}
+end
+
+Then(/^the creator should receive a (libel\/profanity )?rejection notification email$/) do |petition_is_libellous|
   @petition.reload
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
     Then they should see "We rejected the petition you created" in the email body
     And they should see "#{rejection_description(@petition.rejection.code).gsub(/<.*?>/,' ').split.last}" in the email body
+    And they should see /We rejected your petition/ in the email subject
   )
   if petition_is_libellous
     step %{they should not see "#{petition_url(@petition)}" in the email body}
   else
     step %{they should see "#{petition_url(@petition)}" in the email body}
   end
+end
+
+Then(/^the creator should not receive a rejection notification email$/) do
+  step %{"#{@petition.creator_signature.email}" should receive no email with subject "We rejected your petition"}
 end
 
 When(/^I view all petitions$/) do

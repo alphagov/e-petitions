@@ -1,6 +1,6 @@
 <p class="links"><%= link_to 'New user', new_admin_admin_user_path %></p>
 
-<table class="admin_index">
+<table class="user-list">
   <tr>
     <th>Name</th>
     <th>Email</th>
@@ -9,7 +9,7 @@
     <th></th>
   </tr>
   <%- @users.each do |user| -%>
-    <tr>
+    <tr class="user-list-user">
       <td><%= link_to user.name, edit_admin_admin_user_path(user) %></td>
       <td><%= mail_to user.email %></td>
       <td><%= user.role %></td>

@@ -22,6 +22,7 @@ Feature: A moderator user views all petitions
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
     And a sponsored petition "My sponsored petition"
+    And a flagged petition "My flagged petition"
 
     And an open petition exists with action: "My open petition"
     And a closed petition exists with action: "My closed petition"
@@ -46,6 +47,7 @@ Feature: A moderator user views all petitions
      | My rejected petition                          |
      | My closed petition                            |
      | My open petition                              |
+     | My flagged petition                           |
      | My sponsored petition                         |
      | My validated petition                         |
      | My pending petition                           |
@@ -57,6 +59,7 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Awaiting moderation" petitions
     Then I should see the following list of petitions:
+     | My flagged petition    |
      | My sponsored petition  |
 
     And I filter the list to show "Open" petitions
