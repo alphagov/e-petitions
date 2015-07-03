@@ -1,5 +1,5 @@
 <%= form_tag [:admin, :search], class: 'search-inline', method: 'get' do %>
   <%= label_tag :q, "Search all petitions" %>
-  <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search', placeholder:"Keywords, email address, petition ID or [tag]" %>
+  <%= search_field_tag 'q', query, class: 'form-control', id: 'search', placeholder:"Keywords, email address, petition ID or [tag]" %>
   <%= submit_tag 'Search', class: 'inline-submit' %>
 <% end %>
