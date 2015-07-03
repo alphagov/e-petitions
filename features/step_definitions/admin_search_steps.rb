@@ -35,6 +35,16 @@ When(/^I search for petitions with keyword "([^"]*)"( from the admin hub)?$/) do
   click_button 'Search'
 end
 
+When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |tag, from_the_hub|
+  if from_the_hub.blank?
+    visit admin_petitions_path
+  else
+    visit admin_root_path
+  end
+  fill_in "Search", :with => "[#{tag}]"
+  click_button 'Search'
+end
+
 When(/^I view the petition through the admin interface$/) do
   visit admin_petitions_path
   fill_in "Search", :with => @petition.id
