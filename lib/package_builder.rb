@@ -482,7 +482,10 @@ class PackageBuilder
       su - deploy -c 'mv -Tf /home/deploy/epetitions/current_#{release} /home/deploy/epetitions/current'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle install --without development test --deployment --quiet'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec rake db:migrate'
-      su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec whenever -w'
+
+      # Run cron jobs only on workers, as webservers autoscale up and down.
+      # ${SERVER_TYPE} is pre-populated for the deploy user by the build scripts
+      su - deploy -c 'if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi'
     SCRIPT
   end
 
