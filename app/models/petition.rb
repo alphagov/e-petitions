@@ -225,7 +225,16 @@ class Petition < ActiveRecord::Base
         to_a
     end
 
+    def tagged_with(tag)
+      joins(:note).
+      where(Note.arel_table['details'].matches(sanitized_tag(tag)))
+    end
+
     private
+
+    def sanitized_tag(tag)
+      "%[#{tag.gsub(/[\[\]%]/,'')}]%"
+    end
 
     def threshold_for_debate_reached
       arel_table[:debate_threshold_reached_at].not_eq(nil)
