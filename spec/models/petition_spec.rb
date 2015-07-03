@@ -503,6 +503,26 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "flagged?" do
+    context "when the state is flagged" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::FLAGGED_STATE) }
+
+      it "returns true" do
+        expect(petition.flagged?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::FLAGGED_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not open when state is #{state}" do
+          expect(petition.flagged?).to be_falsey
+        end
+      end
+    end
+  end
+
   describe "#in_moderation?" do
     context "for in moderation states" do
       Petition::IN_MODERATION_STATES.each do |state|

@@ -370,6 +370,10 @@ class Petition < ActiveRecord::Base
     state == CLOSED_STATE
   end
 
+  def flagged?
+    state == FLAGGED_STATE
+  end
+
   def published?
     state.in?(PUBLISHED_STATES)
   end

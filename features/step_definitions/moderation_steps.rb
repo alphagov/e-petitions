@@ -69,6 +69,11 @@ Then /^the petition should be visible on the site for signing$/ do
   expect(page).to have_css("a", :text => "Sign")
 end
 
+Then(/^the petition can no longer be flagged$/) do
+  visit admin_petition_path(@petition)
+  expect(page).to have_no_field('Flag')
+end
+
 Then(/^the creator should receive a notification email$/) do
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
