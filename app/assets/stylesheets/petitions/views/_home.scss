@@ -6,6 +6,7 @@
 }
 .view-all {
   margin-top: $gutter-half;
+  text-decoration: underline;
 }
 
 .actioned-petitions {
@@ -38,6 +39,22 @@
     @include media(tablet) {
       margin: em(15, 36) 0;
     }
+  }
+}
+.threshold-petitions {
+  .threshold-petition {
+    margin-bottom: em(20, 16);
+  }
+  a {
+    display: block;
+    margin-bottom: em(6, 16);
+
+    @include media(tablet) {
+      margin-bottom: em(6, 19);
+    }
+  }
+  .threshold-petition-title {
+    @include bold-19;
   }
 }
 

@@ -1,0 +1,18 @@
+<% if actioned[:with_debate_outcome][:count].zero? %>
+  <p>This Parliament has not debated any petitions yet.</p>
+<% else %>
+  <ol class="threshold-petitions">
+    <% actioned[:with_debate_outcome][:list].each do |petition| %>
+      <li class="threshold-petition">
+        <span class="threshold-petition-title"><%= link_to petition.action, petition_path(petition) %></span>
+        <% if petition.debate_outcome.video_url.present? %>
+          <%= link_to "Watch the debate", petition.debate_outcome.video_url, rel: "external" %>
+        <% end %>
+        <% if petition.debate_outcome.transcript_url.present? %>
+          <%= link_to "Read the transcript", petition.debate_outcome.transcript_url, rel: "external" %>
+        <% end %>
+      </li>
+    <% end -%>
+  </ol>
+  <%= link_to petition_count(:with_debate_outcome_explanation, actioned[:with_debate_outcome][:count]), petitions_path(state: :with_debate_outcome), class: "view-all" %>
+<% end %>

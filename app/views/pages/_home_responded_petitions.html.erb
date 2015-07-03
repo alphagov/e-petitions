@@ -1,0 +1,13 @@
+<% if actioned[:with_response][:count].zero? %>
+  <p>This Government has not responded to any petitions yet.</p>
+<% else %>
+  <ol class="threshold-petitions">
+    <% actioned[:with_response][:list].each do |petition| %>
+      <li class="threshold-petition">
+        <%= link_to petition.action, petition_path(petition), class: "threshold-petition-title" %>
+        <%= link_to "Read the government response", petition_path(petition) %>
+      </li>
+    <% end -%>
+  </ol>
+  <%= link_to petition_count(:with_response_explanation, actioned[:with_response][:count]), petitions_path(state: :with_response), class: "view-all" %>
+<% end %>

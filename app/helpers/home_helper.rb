@@ -1,42 +1,44 @@
 module HomeHelper
-  class PetitionCountsDecorator
-    delegate :each, to: :counts
+  class ActionedPetitionsDecorator
+    delegate :each, to: :actioned
 
     def empty?
-      counts.all? { |_, count| count.zero? }
+      actioned.all? { |_, actioned| actioned[:count].zero? }
     end
 
     def [](state)
-      counts.fetch(state, 0)
+      actioned.fetch(state, 0)
     end
 
     private
 
-    def counts
-      @counts ||= generate_counts
+    def actioned
+      @actioned ||= generate_actioned
     end
 
-    def generate_counts
-      scope, counts = Petition.visible, {}
-      counts[:with_response] = scope.with_response.count
-      counts[:with_debate_outcome] = scope.with_debate_outcome.count
-      counts
+    def generate_actioned
+      scope, actioned = Petition.visible, {}
+      with_response = scope.with_response.by_most_recent_response
+      with_debate_outcome = scope.with_debate_outcome.by_most_recent_debate_outcome
+      actioned[:with_response] = { count: with_response.count, list: with_response.limit(3) }
+      actioned[:with_debate_outcome] = { count: with_debate_outcome.count, list: with_debate_outcome.preload(:debate_outcome).limit(3) }
+      actioned
     end
   end
 
-  def actioned_petition_counts(&block)
-    counts = petition_count_decorator
-    yield counts unless counts.empty?
+  def actioned_petitions(&block)
+    actioned = actioned_petitions_decorator
+    yield actioned unless actioned.empty?
   end
 
-  def explanation_petition_counts(&block)
-    yield petition_count_decorator
+  def explanation_petitions(&block)
+    yield actioned_petitions_decorator
   end
 
-  def petition_count_decorator
-    @_petition_count_decorator ||= PetitionCountsDecorator.new
+  def actioned_petitions_decorator
+    @_actioned_petitions_decorator ||= ActionedPetitionsDecorator.new
   end
-  private :petition_count_decorator
+  private :actioned_petitions_decorator
 
   def petition_count(key, count)
     t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
