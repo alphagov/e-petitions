@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require 'webrick'
+require 'webrick/httpproxy'
+
+class EpetsProxyServer < WEBrick::HTTPProxyServer
+  def do_CONNECT(req, res)
+    if req.unparsed_uri =~ /petition.parliament.uk/
+      req.instance_variable_set(:@unparsed_uri, '127.0.0.1:3443')
+    end
+
+    super(req, res)
+  end
+end
+
+proxy = EpetsProxyServer.new(BindAddress: '127.0.0.1', Port: 8443)
+
+trap 'INT'  do proxy.shutdown end
+trap 'TERM' do proxy.shutdown end
+
+proxy.start

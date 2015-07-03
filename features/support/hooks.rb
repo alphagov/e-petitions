@@ -11,3 +11,13 @@ end
 After do
   Site.reset
 end
+
+Before('@admin') do
+  Capybara.app_host = 'https://moderate.petition.parliament.uk'
+  Capybara.default_host = 'https://moderate.petition.parliament.uk'
+end
+
+Before('~@admin') do
+  Capybara.app_host = 'https://petition.parliament.uk'
+  Capybara.default_host = 'https://petition.parliament.uk'
+end
