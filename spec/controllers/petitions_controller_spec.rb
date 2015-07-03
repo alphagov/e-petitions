@@ -2,11 +2,6 @@ require 'rails_helper'
 
 RSpec.describe PetitionsController, type: :controller do
   describe "new" do
-    it "should respond to /petitions/new" do
-      expect({:get => "/petitions/new"}).to route_to({:controller => "petitions", :action => "new"})
-      expect(new_petition_path).to eq '/petitions/new'
-    end
-
     it "should assign a new stage_manager with a petition" do
       get :new
       expect(assigns[:stage_manager]).not_to be_nil
@@ -57,11 +52,6 @@ RSpec.describe PetitionsController, type: :controller do
       perform_enqueued_jobs do
         post :create, params
       end
-    end
-
-    it "should respond to posts to /petitions/new" do
-      expect({:post => "/petitions/new"}).to route_to({:controller => "petitions", :action => "create"})
-      expect(create_petition_path).to eq('/petitions/new')
     end
 
     context 'managing the "move" parameter' do

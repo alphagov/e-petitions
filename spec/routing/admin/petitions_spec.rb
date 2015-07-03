@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "routes for admin petitions", type: :routing do
+RSpec.describe "routes for admin petitions", type: :routes, admin: true do
   it "routes GET /admin/petitions/ to admin/petitions#index" do
     expect(get("/admin/petitions")).to route_to('admin/petitions#index')
   end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "routes for admin petition government response", type: :routing do
+RSpec.describe "routes for admin petition government response", type: :routes, admin: true do
   it "doesn't route GET /admin/petitions/1/government-response/new" do
     expect(get("/admin/petitions/1/government-response/new")).not_to be_routable
   end
