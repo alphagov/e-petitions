@@ -29,7 +29,7 @@
   <dd><%= date_format_admin(@petition.deadline) %></dd>
 
   <dt>Link to petition</dt>
-  <dd><%= link_to petition_path(@petition), petition_path(@petition), target: "_blank" %></dd>
+  <dd><%= link_to nil, petition_url(@petition), target: "_blank" %></dd>
 
 <% end %>
 </dl>

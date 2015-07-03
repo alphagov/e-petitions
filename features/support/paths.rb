@@ -5,53 +5,53 @@ module NavigationHelpers
   #
   # step definition in web_steps.rb
   #
-  def path_to(page_name)
+  def url_to(page_name)
     case page_name
 
     when /^the home\s?page$/
-      '/'
+      home_url
 
     when /^the help page$/
-      help_path
+      help_url
 
     when /^the privacy page$/
-      privacy_path
+      privacy_url
 
     when /^the feedback page$/
-      feedback_path
+      feedback_url
 
     when /^the new petition page$/
-      new_petition_path
+      new_petition_url
 
     when /^the petition page for "([^\"]*)"$/
-      petition_path(Petition.find_by(action: $1))
+      petition_url(Petition.find_by(action: $1))
 
     when /^the archived petitions page$/
-      archived_petitions_path
+      archived_petitions_url
 
     when /^the archived petitions search results page$/
-      search_archived_petitions_path
+      search_archived_petitions_url
 
     when /^the archived petition page for "([^\"]*)"$/
-      archived_petition_path(ArchivedPetition.find_by(title: $1))
+      archived_petition_url(ArchivedPetition.find_by(title: $1))
 
     when /^the new signature page for "([^\"]*)"$/
-      new_petition_signature_path(Petition.find_by(action: $1))
+      new_petition_signature_url(Petition.find_by(action: $1))
 
     when /^the search results page$/
-      search_path
+      search_url
 
     when /^the Admin (.*)$/i
-      admin_path($1)
+      admin_url($1)
 
     when /^the local petitions results page$/
-      local_petitions_path
+      local_petitions_url
 
     else
       begin
         page_name =~ /^the (.*) page$/
         path_components = $1.split(/\s+/)
-        self.send(path_components.push('path').join('_').to_sym)
+        self.send(path_components.push('url').join('_').to_sym)
       rescue NoMethodError, ArgumentError
         raise "Can't find mapping from \"#{page_name}\" to a path.\n" +
           "Now, go and add a mapping in #{__FILE__}"
@@ -59,41 +59,44 @@ module NavigationHelpers
     end
   end
 
-  def admin_path(admin_page)
+  def admin_url(admin_page)
     case admin_page
 
     when /^login page$/
-      admin_login_path
+      admin_login_url
 
     when /^home ?page$/
-      admin_root_path
+      admin_root_url
 
     when /^petition page for "([^\"]*)"$/
-      admin_petition_path(Petition.find_by(action: $1))
+      admin_petition_url(Petition.find_by(action: $1))
 
     when /^all petitions page$/
-      admin_petitions_path
+      admin_petitions_url
+
+    when /^in moderation petitions page$/
+      admin_petitions_url(state: 'in_moderation')
 
     when /^users index page$/
-      admin_admin_users_path
+      admin_admin_users_url
 
     when /^new user page$/
-      new_admin_admin_user_path
+      new_admin_admin_user_url
 
     when /^edit profile page$/
-      edit_admin_profile_path(@user)
+      edit_admin_profile_url(@user)
 
     when /^edit profile page for "([^\"]*)"$/
-      edit_admin_profile_path(AdminUser.find_by(email: $1))
+      edit_admin_profile_url(AdminUser.find_by(email: $1))
 
     when /^debate outcomes form page for "([^\"]*)"$/
-      admin_petition_debate_outcome_path(Petition.find_by(action: $1))
+      admin_petition_debate_outcome_url(Petition.find_by(action: $1))
 
     when /^government response page for "([^\"]*)"$/
-      admin_petition_government_response_path(Petition.find_by(action: $1))
+      admin_petition_government_response_url(Petition.find_by(action: $1))
 
     when /^petition edit details page for "([^\"]*)"$/
-      admin_petition_petition_details_path(Petition.find_by(action: $1))
+      admin_petition_petition_details_url(Petition.find_by(action: $1))
 
     else
       raise "Can't find mapping from \"#{admin_page}\" to an Admin path.\n" +

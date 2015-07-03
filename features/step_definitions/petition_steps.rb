@@ -123,22 +123,22 @@ end
 
 When /^I view the petition$/ do
   if @petition.is_a?(ArchivedPetition)
-    visit archived_petition_path(@petition)
+    visit archived_petition_url(@petition)
   else
-    visit petition_path(@petition)
+    visit petition_url(@petition)
   end
 end
 
 When(/^I view the petition at the old url$/) do
-  visit petition_path(@petition)
+  visit petition_url(@petition)
 end
 
 Then(/^I should be redirected to the archived url$/) do
   expect(current_path).to eq(archived_petition_path(@petition))
 end
 
-When(/^I view all petitions from the home page$/) do
-  visit home_path
+When /^I view all petitions from the home page$/ do
+  visit home_url
   click_link "View all"
 end
 

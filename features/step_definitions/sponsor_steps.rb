@@ -80,7 +80,7 @@ Then(/^I am redirected to the petition moderation info page$/) do
 end
 
 When(/^I visit the \"sponsor this petition\" url I was given$/) do
-  visit petition_sponsor_path(@sponsor_petition, token: @sponsor_petition.sponsor_token)
+  visit petition_sponsor_url(@sponsor_petition, token: @sponsor_petition.sponsor_token)
 end
 
 When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_address|

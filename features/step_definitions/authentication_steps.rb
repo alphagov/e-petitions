@@ -25,7 +25,7 @@ Given /^I am logged in as a sysadmin with the email "([^\"]*)", first_name "([^\
 end
 
 Given /^the admin user is logged in$/ do
-  visit admin_login_path
+  visit admin_login_url
   fill_in("Email", :with => @user.email)
   fill_in("Password", :with => "Letmein1!")
   click_button("Log in")
