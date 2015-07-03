@@ -52,14 +52,12 @@
 .response-threshold, .debate-threshold {
   background-position: 15px 15px;
   background-repeat: no-repeat;
-  @include device-pixel-ratio() {
-    background-size: 100%;
-  }
 }
 .response-threshold {
   background-image: image-url("graphics/graphic_crown-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
+    background-size: 36px;
   }
 }
 .debate-threshold {
@@ -67,6 +65,7 @@
   background-image: image-url("graphics/graphic_portcullis-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-white-2x.png");
+    background-size: 26px;
   }
 }
 
