@@ -1,10 +1,10 @@
 Given(/^there are (\d+) petitions debated in parliament(.+)?$/) do |debated_count, links_command|
   video_url, transcript_url = nil, nil
-  if links_command == " with a transcript url" 
+  if links_command == " with a transcript url"
     video_url = "http://www.example.com/?video=test"
-  elsif links_command == " with a video url"  
+  elsif links_command == " with a video url"
     transcript_url = "http://www.example.com/?video=test"
-  elsif links_command == " with both video and transcript urls"  
+  elsif links_command == " with both video and transcript urls"
     video_url = "http://www.example.com/?video=test"
     transcript_url = "http://www.example.com/?video=test"
   end
@@ -47,27 +47,27 @@ end
 
 Then(/^I should see (\d+) petitions counted in the response threshold section$/) do |count|
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
-    link_text = "Petitions with a government response (#{count})"
+    link_text = "See all petitions with a government response (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_response))
   end
 end
 
 Then(/^I should see (\d+) petitions listed in the response threshold section$/) do |count|
-  within(:css, "section[aria-labelledby=response-threshold-heading]") do
-    expect(page).to have_css(".threshold-petition", :count => count)
+  within(:css, "section[aria-labelledby=response-threshold-heading] .threshold-petitions") do
+    expect(page).to have_css(".petition-item", :count => count)
   end
 end
 
 Then(/^I should see (\d+) petitions counted in the debate threshold section$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    link_text = "Petitions debated in parliament (#{count})"
+    link_text = "See all petitions debated in parliament (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_debate_outcome))
   end
 end
 
 Then(/^I should see (\d+) petitions listed in the debate threshold section$/) do |count|
-  within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    expect(page).to have_css(".threshold-petition", :count => count)
+  within(:css, "section[aria-labelledby=debate-threshold-heading] .threshold-petitions") do
+    expect(page).to have_css(".petition-item", :count => count)
   end
 end
 
