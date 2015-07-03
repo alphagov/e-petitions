@@ -8,14 +8,14 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to edit profile page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -108,7 +108,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
         context 'with valid params' do
           it 'redirects to the petition show page' do
             do_patch
-            expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
+            expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}"
           end
 
           it 'stores the supplied notes in the db' do

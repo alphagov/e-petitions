@@ -259,7 +259,7 @@ RSpec.describe Site, type: :model do
       end
 
       it "allows overriding via the EPETITIONS_FROM environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM", %{"Petitions: UK Government and Parliament" <no-reply@test.epetitions.website>}).and_return("no-reply@downingstreet.gov.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM", %{"Petitions: UK Government and Parliament" <no-reply@petition.parliament.uk>}).and_return("no-reply@downingstreet.gov.uk")
         expect(defaults[:email_from]).to eq("no-reply@downingstreet.gov.uk")
       end
     end
@@ -282,7 +282,7 @@ RSpec.describe Site, type: :model do
       end
 
       it "allows overriding via the EPETITIONS_FEEDBACK environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", %{"Petitions: UK Government and Parliament" <feedback@test.epetitions.website>}).and_return("petitions@downingstreet.gov.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", %{"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>}).and_return("petitions@downingstreet.gov.uk")
         expect(defaults[:feedback_email]).to eq("petitions@downingstreet.gov.uk")
       end
     end

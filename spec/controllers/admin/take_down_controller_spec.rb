@@ -8,14 +8,14 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to edit profile page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -121,12 +121,12 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
           it 'redirects to the admin show page for the petition' do
             do_patch
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(["no-reply@test.epetitions.website"])
+            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition/)
           end
@@ -166,12 +166,12 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
           it 'redirects to the admin show page for the petition' do
             do_patch
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(["no-reply@test.epetitions.website"])
+            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition/)
           end

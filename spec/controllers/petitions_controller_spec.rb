@@ -111,7 +111,7 @@ RSpec.describe PetitionsController, type: :controller do
         do_post
         email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Action required: Petition/ }
         expect(email).to be_present
-        expect(email.from).to eq(["no-reply@test.epetitions.website"])
+        expect(email.from).to eq(["no-reply@petition.parliament.uk"])
         expect(email.to).to eq(["john@example.com"])
       end
 

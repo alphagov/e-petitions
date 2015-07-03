@@ -207,11 +207,11 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "includes a link to the petition page" do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/petitions/#{petition.id}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
     end
 
     it 'includes an unsubscribe link' do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
     end
   end
 end

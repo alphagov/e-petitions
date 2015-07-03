@@ -33,7 +33,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
 
         it "redirects to a petition if the id exists" do
           get :show, q: '123'
-          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
         context "when petition not found" do
@@ -43,7 +43,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
 
           it "renders the form with an error" do
             get :show, q: '123'
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions")
           end
 
           it "sets the flash error" do
@@ -56,7 +56,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
       context "searching by keyword" do
         it "redirects to the all petitions page for a keyword" do
           get :show, q: 'example_keyword'
-          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions?q=example_keyword")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=example_keyword")
         end
       end
 

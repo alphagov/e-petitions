@@ -10,14 +10,14 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
     describe "GET 'index'" do
       it "redirects to the login page" do
         get :index
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
 
     describe "GET 'show'" do
       it "redirects to the login page" do
         get :show, :id => petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
   end
@@ -31,7 +31,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
     it "redirects to edit profile page" do
       expect(@user.has_to_change_password?).to be_truthy
       get :show, :id => petition.id
-      expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{@user.id}/edit")
+      expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{@user.id}/edit")
     end
   end
 

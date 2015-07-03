@@ -44,7 +44,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         end
 
         it "redirects to the admin show page for the petition page" do
-          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
         it "sends an email to the petition creator" do
@@ -75,11 +75,11 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           end
           it 'redirects to the admin show page for the petition' do
             do_patch
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(['no-reply@test.epetitions.website'])
+            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition/)
           end
@@ -115,11 +115,11 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           end
           it 'redirects to the admin show page for the petition' do
             do_patch
-            expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
           it "sends an email to the petition creator" do
             do_patch
-            expect(email.from).to eq(['no-reply@test.epetitions.website'])
+            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition/)
           end
@@ -179,7 +179,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         end
 
         it "redirects to the admin show page for the petition page" do
-          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions/#{petition.id}")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
         it "does not send an email to the petition creator" do
