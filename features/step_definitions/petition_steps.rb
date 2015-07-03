@@ -27,30 +27,30 @@ Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
   @petition = FactoryGirl.create(:archived_petition, :rejected, title: title)
 end
 
-Given /^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/ do |petition_action, no_validated, no_pending|
+Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
   petition = Petition.find_by(action: petition_action)
   (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
   no_pending.times { FactoryGirl.create(:pending_signature, petition: petition) }
   petition.reload
 end
 
-Given /^(\d+) petitions exist with a signature count of (\d+)$/ do |number, count|
+Given(/^(\d+) petitions exist with a signature count of (\d+)$/) do |number, count|
   number.times do
     p = FactoryGirl.create(:open_petition)
     p.update_attribute(:signature_count, count)
   end
 end
 
-Given /^a petition "([^"]*)" exists with a signature count of (\d+)$/ do |petition_action, count|
-    @petition = FactoryGirl.create(:open_petition, action: petition_action)
-    @petition.update_attribute(:signature_count, count)
+Given(/^a petition "([^"]*)" exists with a signature count of (\d+)$/) do |petition_action, count|
+  @petition = FactoryGirl.create(:open_petition, action: petition_action)
+  @petition.update_attribute(:signature_count, count)
 end
 
 Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, details, summary|
   @petition = FactoryGirl.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
-Given /^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/ do |state, petition_action, parliament_response_days_ago |
+Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
   petition_attributes = {
     action: petition_action,
     closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
@@ -83,33 +83,33 @@ Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and
   petition.debate_outcome = nil
 end
 
-Given /^I have created a petition$/ do
+Given(/^I have created a petition$/) do
   @petition = FactoryGirl.create(:open_petition)
   reset_mailer
 end
 
-Given /^the petition "([^"]*)" has (\d+) validated signatures$/ do |petition_action, no_validated|
+Given(/^the petition "([^"]*)" has (\d+) validated signatures$/) do |petition_action, no_validated|
   petition = Petition.find_by(action: petition_action)
   (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
   petition.reload
   @petition.reload if @petition
 end
 
-And (/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |petition_action|
+And(/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |petition_action|
   petition = Petition.find_by(action: petition_action)
   Site.maximum_number_of_sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
 end
 
-And (/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |petition_action, sponsors|
+And(/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |petition_action, sponsors|
   petition = Petition.find_by(action: petition_action)
   sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
 end
 
-Given /^a petition "([^"]*)" has been closed$/ do |petition_action|
+Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryGirl.create(:closed_petition, :action => petition_action)
 end
 
-Given /^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/ do |petition_action, reason_or_not, reason|
+Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:rejected_petition,
     :action => petition_action,
@@ -137,25 +137,25 @@ Then(/^I should be redirected to the archived url$/) do
   expect(current_path).to eq(archived_petition_path(@petition))
 end
 
-When /^I view all petitions from the home page$/ do
+When(/^I view all petitions from the home page$/) do
   visit home_path
   click_link "View all"
 end
 
-When /^I check for similar petitions$/ do
+When(/^I check for similar petitions$/) do
   fill_in "q", :with => "Rioters should loose benefits"
   click_button("Continue")
 end
 
-When /^I choose to create a petition anyway$/ do
+When(/^I choose to create a petition anyway$/) do
   click_link_or_button "My petition is different"
 end
 
-Then /^I should see all petitions$/ do
+Then(/^I should see all petitions$/) do
   expect(page).to have_css("ol li", :count => 3)
 end
 
-Then /^I should see the petition details$/ do
+Then(/^I should see the petition details$/) do
   if @petition.is_a?(ArchivedPetition)
     expect(page).to have_content(@petition.title)
     expect(page).to have_content(@petition.description)
@@ -166,7 +166,7 @@ Then /^I should see the petition details$/ do
   end
 end
 
-Then /^I should see the vote count, closed and open dates$/ do
+Then(/^I should see the vote count, closed and open dates$/) do
   @petition.reload
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
@@ -178,12 +178,12 @@ Then /^I should see the vote count, closed and open dates$/ do
   end
 end
 
-Then /^I should not see the vote count$/ do
+Then(/^I should not see the vote count$/) do
   @petition.reload
   expect(page).to_not have_css("p.signature-count-number", :text => @petition.signature_count.to_s + " signatures")
 end
 
-Then /^I should see submitted date$/ do
+Then(/^I should see submitted date$/) do
   @petition.reload
   expect(page).to have_css("li", :text =>  "Date submitted " + @petition.created_at.strftime("%e %B %Y").squish)
 end
@@ -192,7 +192,7 @@ Then(/^I should not see the petition creator$/) do
   expect(page).not_to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
 end
 
-Then /^I should see the reason for rejection$/ do
+Then(/^I should see the reason for rejection$/) do
   @petition.reload
 
   if @petition.is_a?(ArchivedPetition)
@@ -202,28 +202,28 @@ Then /^I should see the reason for rejection$/ do
   end
 end
 
-Then /^I should be asked to search for a new petition$/ do
+Then(/^I should be asked to search for a new petition$/) do
   expect(page).to have_content("What do you want us to do?")
   expect(page).to have_css("form textarea[name=q]")
 end
 
-Then /^I should see a list of existing petitions I can sign$/ do
+Then(/^I should see a list of existing petitions I can sign$/) do
   expect(page).to have_content(@petition.action)
 end
 
-Then /^I should see a list of (\d+) petitions$/ do |petition_count|
+Then(/^I should see a list of (\d+) petitions$/) do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
-Then /^I should see my search query already filled in as the action of the petition$/ do
+Then(/^I should see my search query already filled in as the action of the petition$/) do
   expect(page).to have_field("What do you want us to do?", "#{@petition.action}")
 end
 
-Then /^I can click on a link to return to the petition$/ do
+Then(/^I can click on a link to return to the petition$/) do
   expect(page).to have_css("a[href*='/petitions/#{@petition.id}']")
 end
 
-Then /^I should receive an email telling me how to get an MP on board$/ do
+Then(/^I should receive an email telling me how to get an MP on board$/) do
   expect(unread_emails_for(@petition.creator_signature.email).size).to eq 1
   open_email(@petition.creator_signature.email)
   expect(current_email.default_part_body.to_s).to include("MP")
@@ -249,7 +249,7 @@ Then(/^the petition with action: "(.*?)" should not have requested a government 
   expect(email_requested_at).to be_nil
 end
 
-When /^I start a new petition/ do
+When(/^I start a new petition/) do
   steps %Q(
     Given I am on the new petition page
     Then I should see "Start a petition - Petitions" in the browser page title
@@ -257,7 +257,7 @@ When /^I start a new petition/ do
   )
 end
 
-When /^I fill in the petition details/ do
+When(/^I fill in the petition details/) do
   steps %Q(
     When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
     And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
@@ -265,11 +265,11 @@ When /^I fill in the petition details/ do
   )
 end
 
-Then /^I should see my constituency "([^"]*)"/ do |constituency|
+Then(/^I should see my constituency "([^"]*)"/) do |constituency|
   expect(page).to have_text(constituency)
 end
 
-Then /^I should see my MP/ do
+Then(/^I should see my MP/) do
   signature = Signature.find_by(email: "womboidian@wimbledon.com",
                                  postcode: "N11TY",
                                  name: "Womboid Wibbledon",
@@ -277,7 +277,7 @@ Then /^I should see my MP/ do
   expect(page).to have_text(signature.constituency.mp.name)
 end
 
-Then /^I can click on a link to visit my MP$/ do
+Then(/^I can click on a link to visit my MP$/) do
   signature = Signature.find_by(email: "womboidian@wimbledon.com",
                                  postcode: "N11TY",
                                  name: "Womboid Wibbledon",
@@ -285,7 +285,7 @@ Then /^I can click on a link to visit my MP$/ do
   expect(page).to have_css("a[href*='#{signature.constituency.mp.url}']")
 end
 
-Then /^I should not see the text "([^"]*)"/ do |text|
+Then(/^I should not see the text "([^"]*)"/) do |text|
   expect(page).to_not have_text(text)
 end
 
@@ -322,7 +322,7 @@ Then(/^I can share it via (.+)$/) do |service|
   end
 end
 
-Then /^I expand "([^"]*)"/ do |text|
+Then(/^I expand "([^"]*)"/) do |text|
   page.find("//details/summary[contains(., '#{text}')]").click
 end
 
@@ -363,6 +363,10 @@ end
 
 Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
   @petition = FactoryGirl.create(:awaiting_petition, action: action)
+end
+
+Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
+  @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
 end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
