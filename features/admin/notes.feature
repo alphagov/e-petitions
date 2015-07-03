@@ -1,3 +1,4 @@
+@admin
 Feature: A moderator user updates records notes
   In order to record thoughts about a petition that are not for public consumption
   As any moderator user

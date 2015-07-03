@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::ModerationController, type: :controller do
+RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
   describe "logged in" do
     let(:user) { FactoryGirl.create(:moderator_user) }

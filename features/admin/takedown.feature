@@ -1,3 +1,4 @@
+@admin
 Feature: Terry (or Sheila) takes down a petition
   In order to remove petitions that have been published by mistake
   As Terry or Sheila

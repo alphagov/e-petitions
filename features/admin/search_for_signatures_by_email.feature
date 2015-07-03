@@ -1,3 +1,4 @@
+@admin
 Feature: Searching for signatures as Terry
   In order to easily find out if someone's signed a petition
   As Terry

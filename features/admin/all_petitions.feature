@@ -1,4 +1,4 @@
-@javascript
+@javascript @admin
 Feature: A moderator user views all petitions
   In order to see a full list of all the petitions
   As any moderator user

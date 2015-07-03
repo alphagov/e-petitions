@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::GovernmentResponseController, type: :controller do
+RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: true do
   let!(:petition) { FactoryGirl.create(:open_petition) }
   let(:government_response) { petition.government_response }
 

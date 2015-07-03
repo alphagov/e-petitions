@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::SearchesController, type: :controller do
+RSpec.describe Admin::SearchesController, type: :controller, admin: true do
 
   describe "logged in as moderator user" do
     before :each do

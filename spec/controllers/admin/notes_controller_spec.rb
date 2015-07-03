@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::NotesController, type: :controller do
+RSpec.describe Admin::NotesController, type: :controller, admin: true do
 
   let!(:petition) { FactoryGirl.create(:open_petition) }
 
