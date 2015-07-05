@@ -1,7 +1,9 @@
-<% if @petition.rejected? %>
-  <%= render 'rejected_petition_show', petition: @petition %>
-<% elsif @petition.closed? %>
-  <%= render 'closed_petition_show', petition: @petition %>
-<% else %>
-  <%= render 'open_petition_show', petition: @petition %>
+<%= cache [@petition, :show], expires_in: 5.minutes do %>
+  <% if @petition.rejected? %>
+    <%= render 'rejected_petition_show', petition: @petition %>
+  <% elsif @petition.closed? %>
+    <%= render 'closed_petition_show', petition: @petition %>
+  <% else %>
+    <%= render 'open_petition_show', petition: @petition %>
+  <% end %>
 <% end %>
