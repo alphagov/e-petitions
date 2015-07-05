@@ -35,7 +35,6 @@ class PackageBuilder
 
     Dir.chdir archive_path do
       package_gems unless skip_gems?
-      precompile_assets
       create_revision_file
       remove_artifacts
     end
@@ -220,15 +219,6 @@ class PackageBuilder
 
   def package_path
     File.join('pkg', package_name)
-  end
-
-  def precompile_assets
-    args = %w[bundle exec rake assets:precompile]
-
-    info "Precompiling assets ..."
-    Bundler.with_clean_env do
-      Kernel.system *args
-    end
   end
 
   def profile
@@ -478,10 +468,12 @@ class PackageBuilder
 
       su - deploy -c 'ln -nfs /home/deploy/epetitions/shared/log /home/deploy/epetitions/releases/#{release}/log'
       su - deploy -c 'ln -nfs /home/deploy/epetitions/shared/bundle /home/deploy/epetitions/releases/#{release}/vendor/bundle'
+      su - deploy -c 'ln -nfs /home/deploy/epetitions/shared/assets /home/deploy/epetitions/releases/#{release}/public/assets'
       su - deploy -c 'ln -s /home/deploy/epetitions/releases/#{release} /home/deploy/epetitions/current_#{release}'
       su - deploy -c 'mv -Tf /home/deploy/epetitions/current_#{release} /home/deploy/epetitions/current'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle install --without development test --deployment --quiet'
       su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec rake db:migrate'
+      su - deploy -c 'cd /home/deploy/epetitions/current && bundle exec rake assets:precompile'
 
       # Run cron jobs only on workers, as webservers autoscale up and down.
       # ${SERVER_TYPE} is pre-populated for the deploy user by the build scripts
