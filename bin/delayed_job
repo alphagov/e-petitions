@@ -3,7 +3,4 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 require 'delayed/command'
 
-# Manually start NewRelic agent
-NewRelic::Agent.manual_start if defined? NewRelic
-
 Delayed::Command.new(ARGV).daemonize

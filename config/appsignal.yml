@@ -1,0 +1,33 @@
+default: &defaults
+  # Your push api key, it is possible to set this dynamically using ERB:
+  # push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+  push_api_key: "<%= ENV['APPSIGNAL_PUSH_API_KEY'] %>"
+
+  # Your app's name
+  name: "<%= ENV['APPSIGNAL_APP_NAME'] %>"
+
+  # The cuttoff point in ms above which a request is considered slow, default is 200
+  # slow_request_threshold: 200
+
+  # Actions that should not be monitored by AppSignal
+  ignore_actions:
+    - PingController#ping
+
+  # Exceptions that should not be recorded by AppSignal
+  ignore_exceptions:
+    - ActiveRecord::RecordNotFound
+    - ActionController::RoutingError
+
+# Configuration per environment, leave out an environment or set active
+# to false to not push metrics for that environment.
+development:
+  <<: *defaults
+  active: false
+
+test:
+  <<: *defaults
+  active: false
+
+production:
+  <<: *defaults
+  active: true
