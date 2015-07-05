@@ -2,18 +2,20 @@
 <html lang="en-GB">
   <head>
     <title><%= page_title %></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <%= cache :head, expires_in: 5.minutes do %>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-    <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
-    <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
-    <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
+      <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
+      <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
+      <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
 
-    <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
+      <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
-    <meta name="viewport" content="width = device-width"/>
-    <%= render 'application/os' %>
-    <%= render 'application/social_meta' %>
-    <%= render 'application/analytics' %>
+      <meta name="viewport" content="width = device-width"/>
+      <%= render 'application/os' %>
+      <%= render 'application/social_meta' %>
+      <%= render 'application/analytics' %>
+    <% end %>
   </head>
   <body>
     <% if show_cookie_message? %>
@@ -22,17 +24,21 @@
       </div>
     <% end %>
 
-    <%= render 'application/header' %>
+    <%= cache :header, expires_in: 5.minutes do %>
+      <%= render 'application/header' %>
+    <% end %>
 
     <main id="content" role="main">
       <%= render 'application/messages' %>
       <%= yield %>
     </main>
 
-    <%= render 'application/footer' %>
-    <%= javascript_include_tag 'application' %>
-    <% if create_petition_page? %>
-      <%= javascript_include_tag 'create-petition' %>
+    <%= cache [:footer, create_petition_page?], expires_in: 5.minutes do %>
+      <%= render 'application/footer' %>
+      <%= javascript_include_tag 'application' %>
+      <% if create_petition_page? %>
+        <%= javascript_include_tag 'create-petition' %>
+      <% end %>
     <% end %>
   </body>
 </html>
