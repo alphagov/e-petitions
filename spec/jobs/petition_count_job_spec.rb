@@ -20,8 +20,8 @@ RSpec.describe PetitionCountJob, type: :job do
       }.not_to change{ petition.reload.updated_at }
     end
 
-    it "doesn't notify NewRelic" do
-      expect(NewRelic::Agent).not_to receive(:notice_error)
+    it "doesn't notify AppSignal" do
+      expect(Appsignal).not_to receive(:send_exception)
 
       perform_enqueued_jobs {
         described_class.perform_later
@@ -31,6 +31,7 @@ RSpec.describe PetitionCountJob, type: :job do
 
   context "when there are petitions with invalid signature counts" do
     let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 100) }
+    let(:exception_class) { PetitionCountJob::InvalidSignatureCounts }
 
     it "updates the signature count" do
       expect{
@@ -48,10 +49,8 @@ RSpec.describe PetitionCountJob, type: :job do
       }.to change{ petition.reload.updated_at }.to(be_within(1.second).of(Time.current))
     end
 
-    it "notifies NewRelic" do
-      expect(NewRelic::Agent).to receive(:notice_error).with <<-MSG.strip
-        There was 1 petition with id: #{petition.id} that had an invalid signature count
-      MSG
+    it "notifies AppSignal" do
+      expect(Appsignal).to receive(:send_exception).with(an_instance_of(exception_class))
 
       perform_enqueued_jobs {
         described_class.perform_later

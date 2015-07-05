@@ -16,7 +16,7 @@ class AuditLogger < Logger
       exception = RuntimeError.new("#{@error_class}: #{msg}")
       exception.set_backtrace msg
     end
-    NewRelic::Agent.notice_error(exception)
+    Appsignal.send_exception(exception)
 
     add(ERROR, nil, msg)
   end
