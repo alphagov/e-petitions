@@ -1,7 +1,7 @@
 <div class="about-petitions">
   <%-
     order = ['response_threshold', 'debate_threshold']
-    order.reverse! if petition.debate_outcome.present? or petition.scheduled_debate_date.present?
+    order.reverse! if petition.debate_outcome? or petition.scheduled_debate_date?
   -%>
   <% order.each do |partial_name| -%>
     <%= render "petitions/#{partial_name}", petition: petition %>
