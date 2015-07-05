@@ -1,7 +1,7 @@
 <section class="about-item about-item-count-response" aria-labelledby="response-threshold-heading">
   <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
   <%# Has response #%>
-  <% if government_response = petition.government_response -%>
+  <% if government_response = petition.government_response? -%>
     <h3>The government responded</h3>
     <blockquote class="pull-quote">
       <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
