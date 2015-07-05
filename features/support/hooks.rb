@@ -9,7 +9,7 @@ Before do
 end
 
 After do
-  Site.reset
+  Site.reload
 end
 
 Before('@admin') do
