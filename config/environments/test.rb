@@ -26,6 +26,9 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Set the HSTS headers to include subdomains
+  config.ssl_options[:hsts] = { expires: 365.days, subdomains: true }
+
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
 
