@@ -44,6 +44,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
+    appsignal (0.11.12)
+      rack
+      thread_safe
     arel (6.0.0)
     authlogic (3.4.5)
       activerecord (>= 3.2)
@@ -156,7 +159,6 @@ GEM
     multi_json (1.11.1)
     multi_test (0.1.2)
     multipart-post (2.0.0)
-    newrelic_rpm (3.12.0.288)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     pg (0.18.2)
@@ -281,6 +283,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  appsignal
   authlogic
   aws-sdk
   bcrypt
@@ -306,7 +309,6 @@ DEPENDENCIES
   launchy
   lograge
   logstash-logger
-  newrelic_rpm
   nokogiri
   pg
   phantomjs (~> 1.9.7.0)

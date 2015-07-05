@@ -125,7 +125,7 @@ class PackageBuilder
     info "Deployment created."
 
     track_progress(response.deployment_id) do |deployment_info|
-      notify_new_relic
+      notify_app_signal
       notify_slack
     end
   end
@@ -231,21 +231,25 @@ class PackageBuilder
     ENV.fetch('RELEASE', '1').to_i.nonzero?
   end
 
-  def notify_new_relic
-    if new_relic_license_key
-      args = %w[newrelic deployments]
-      args.concat ['-a', application_name]
-      args.concat ['-e', 'production']
-      args.concat ['-r', revision]
-      args.concat ['-l', new_relic_license_key]
+  def notify_app_signal
+    if app_signal_push_api_key
+      args = %w[appsignal notify_of_deploy]
+      args << %[--revision=#{revision}]
+      args << %[--user=#{username}]
+      args << %[--environment=production]
+      args << %[--name=#{application_name}]
 
-      info "Notifying New Relic of deployment ..."
+      info "Notifying AppSignal of deployment ..."
       Kernel.system *args
     end
   end
 
-  def new_relic_license_key
-    ENV.fetch('NEW_RELIC_LICENSE_KEY', nil)
+  def app_signal_push_api_key
+    ENV.fetch('APP_SIGNAL_PUSH_API_KEY', nil)
+  end
+
+  def username
+    ENV['USER'] || ENV['USERNAME'] || 'unknown'
   end
 
   def notify_slack
