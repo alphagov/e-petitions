@@ -1,4 +1,4 @@
-<p class="links"><%= link_to 'New user', new_admin_admin_user_path %></p>
+<%= link_to 'New user', new_admin_admin_user_path, class: "button" %>
 
 <table class="user-list">
   <tr>
@@ -14,7 +14,7 @@
       <td><%= mail_to user.email %></td>
       <td><%= user.role %></td>
       <td><%= user.account_disabled ? 'Yes' : '' %></td>
-      <td><%= cms_delete_link user, :url => admin_admin_user_path(user) %></td>
+      <td class="action last"><%= cms_delete_link user, :url => admin_admin_user_path(user) %></td>
     </tr>
   <%- end -%>
   <%= will_paginate(@users) if @users.any? %>
