@@ -1,10 +1,20 @@
-<%= render 'admin/searches/form', query: @query %>
+<h1>Petitions</h1>
 
-<%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
-  <%= label_tag :state, "Filter by status:" %>
-  <%= select_tag :state, admin_petition_facets_for_select(params[:state]), data: {autosubmit: true} %>
-  <%= submit_tag "Go", name: nil %>
-<% end -%>
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= render 'admin/searches/form', query: @query %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-half">
+    <%= form_tag admin_petitions_path, :method => :get do -%>
+      <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
+      <%= select_tag :state, admin_petition_facets_for_select(params[:state]), class: "form-control", data: {autosubmit: true} %>
+      <%= submit_tag "Go", name: nil, class: "button" %>
+    <% end -%>
+  </div>
+</div>
 
 <table class="petition-list">
   <thead>
