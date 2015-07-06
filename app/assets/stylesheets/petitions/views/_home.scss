@@ -30,10 +30,13 @@
   text-decoration: underline;
 }
 
+// Threshold panel links
 .threshold-panel {
   display: block;
   @extend %outdent-to-full-width;
   background-color: $petitions-panel-colour;
+  background-position: 15px 15px;
+  background-repeat: no-repeat;
   padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
   margin: $gutter*1.5 $gutter-half*-1 $gutter;
 
@@ -52,28 +55,35 @@
     margin: 0;
   }
 }
-
 .threshold-panel:hover, .threshold-panel:focus {
   background-color: darken($petitions-panel-colour, 5%);
 }
-
-.response-threshold, .debate-threshold {
-  background-position: 15px 15px;
-  background-repeat: no-repeat;
-}
-.response-threshold {
+.threshold-panel-response {
   background-image: image-url("graphics/graphic_crown-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
     background-size: 36px;
   }
 }
-.debate-threshold {
+.threshold-panel-debate {
   background-position: 15px 12px;
   background-image: image-url("graphics/graphic_portcullis-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_portcullis-white-2x.png");
     background-size: 26px;
+  }
+}
+
+// Threshold petitions
+.threshold-petitions {
+  .response-intro {
+    margin-top: 10px;
+  }
+  .pull-quote {
+    margin-top: 5px;
+  }
+  .pull-quote:before, .pull-quote p {
+    color: $black;
   }
 }
 
