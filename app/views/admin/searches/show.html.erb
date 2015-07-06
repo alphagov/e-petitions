@@ -1,6 +1,10 @@
 <h1>Search results</h1>
 
-<%= render 'form', query: @query %>
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= render 'form', query: @query %>
+  </div>
+</div>
 
 <% if @signatures.present? %>
 
@@ -25,7 +29,7 @@
 
 <% else %>
   <p>
-    No Signatures found for email address
+    No signatures found for email address
     <%= mail_to @query %>
   </p>
 <% end %>
