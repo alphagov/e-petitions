@@ -33,9 +33,7 @@
 
   .strapline {
     color: $white;
-    margin: $gutter-one-third $text-indent;
-    font-size: 19px;
-    line-height: 25/19;
+    margin: $gutter-one-third -5px 5px $text-indent;
   }
 }
 
