@@ -125,7 +125,7 @@ class PackageBuilder
     info "Deployment created."
 
     track_progress(response.deployment_id) do |deployment_info|
-      notify_app_signal
+      notify_appsignal
       notify_slack
     end
   end
@@ -231,8 +231,8 @@ class PackageBuilder
     ENV.fetch('RELEASE', '1').to_i.nonzero?
   end
 
-  def notify_app_signal
-    if app_signal_push_api_key
+  def notify_appsignal
+    if appsignal_push_api_key
       args = %w[appsignal notify_of_deploy]
       args << %[--revision=#{revision}]
       args << %[--user=#{username}]
@@ -244,8 +244,8 @@ class PackageBuilder
     end
   end
 
-  def app_signal_push_api_key
-    ENV.fetch('APP_SIGNAL_PUSH_API_KEY', nil)
+  def appsignal_push_api_key
+    ENV.fetch('APPSIGNAL_PUSH_API_KEY', nil)
   end
 
   def username
