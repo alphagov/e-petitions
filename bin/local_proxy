@@ -1,5 +1,9 @@
 #!/usr/bin/env ruby
 
+# This proxy reflects requests to the live domains back to the Cabybara
+# server for tests run via phantomjs which doesn't have a mechanism for
+# emulating a specific host unlike Rack::Test.
+
 require 'webrick'
 require 'webrick/httpproxy'
 
