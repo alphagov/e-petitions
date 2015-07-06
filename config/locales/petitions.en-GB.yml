@@ -15,6 +15,18 @@ en-GB:
       with_debate_outcome: "Petitions debated in Parliament"
       awaiting_debate_date: "Petitions waiting for a debate in Parliament"
 
+    share_title: "%{petition} - Petitions"
+
+    sharing:
+      facebook:
+        html: <span class="icon icon-share-facebook"></span> Facebook
+      email:
+        html: <span class="icon icon-share-email"></span> Email
+      twitter:
+        html: <span class="icon icon-share-twitter"></span> Twitter
+      whatsapp:
+        html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+
     lists:
       all: "All petitions (%{quantity})"
       open: "Open petitions (%{quantity})"

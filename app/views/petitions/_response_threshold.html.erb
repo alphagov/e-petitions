@@ -2,7 +2,7 @@
   <span class="graphic graphic-crown"></span>
   <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
   <%# Has response #%>
-  <% if government_response = petition.government_response -%>
+  <% if government_response = petition.government_response? -%>
     <h3>The government responded</h3>
     <blockquote>
       <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' }) %>
