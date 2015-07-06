@@ -31,11 +31,15 @@
 }
 
 .threshold-panel {
+  display: block;
   @extend %outdent-to-full-width;
   background-color: $petitions-panel-colour;
-  color: $white;
   padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
   margin: $gutter*1.5 $gutter-half*-1 $gutter;
+
+  h2, p {
+    color: $white;
+  }
 
   h2 {
     font-size: 24px;
@@ -47,6 +51,10 @@
   p {
     margin: 0;
   }
+}
+
+.threshold-panel:hover, .threshold-panel:focus {
+  background-color: darken($petitions-panel-colour, 5%);
 }
 
 .response-threshold, .debate-threshold {

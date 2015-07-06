@@ -29,20 +29,34 @@
 
 <% explanation_petitions do |actioned| %>
   <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
-    <div class="threshold-panel response-threshold">
-      <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-      <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will&nbsp;respond</p>
-    </div>
+    <% if actioned[:with_response][:count].zero? %>
+      <div class="threshold-panel response-threshold">
+        <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will&nbsp;respond</p>
+      </div>
+    <% else %>
+      <%= link_to( petitions_path(state: :with_response), class: "threshold-panel response-threshold" ) do %>
+        <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will&nbsp;respond</p>
+      <% end %>
+    <% end %>
     <div class="section-panel-borderless">
       <%= render "home_responded_petitions", actioned: actioned %>
     </div>
   </section>
 
   <section aria-labelledby="debate-threshold-heading" id="petitions-with-debate-outcome">
-    <div class="threshold-panel debate-threshold">
-      <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-      <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
-    </div>
+    <% if actioned[:with_debate_outcome][:count].zero? %>
+      <div class="threshold-panel debate-threshold">
+        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
+      </div>
+    <% else %>
+      <%= link_to( petitions_path(state: :with_debate_outcome), class: "threshold-panel debate-threshold" ) do %>
+        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
+      <% end %>
+    <% end %>
     <div class="section-panel">
       <%= render "home_debated_petitions", actioned: actioned %>
     </div>
