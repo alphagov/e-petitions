@@ -5,6 +5,8 @@ class Admin::SearchesController < Admin::AdminController
       find_petition_by_id
     elsif query_is_email?
       find_signatures_by_email
+    elsif query_is_tag?
+      find_petitions_by_tag
     else
       find_petitions_by_keyword
     end
@@ -13,6 +15,10 @@ class Admin::SearchesController < Admin::AdminController
   private
   def query
     @query ||= params.fetch(:q, '')
+  end
+
+  def tag
+    @tag ||= @query.gsub(/\A\[|\]\Z/, '')
   end
 
   def find_petition_by_id
@@ -33,11 +39,19 @@ class Admin::SearchesController < Admin::AdminController
     redirect_to(controller: 'admin/petitions', action: 'index', q: query)
   end
 
+  def find_petitions_by_tag
+    redirect_to(controller: 'admin/petitions', action: 'index', t: tag)
+  end
+
   def query_is_number?
     /^\d+$/ =~ query
   end
 
   def query_is_email?
     query.include?('@')
+  end
+
+  def query_is_tag?
+    query.starts_with?('[') && query.ends_with?(']')
   end
 end

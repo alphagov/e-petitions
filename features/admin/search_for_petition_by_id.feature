@@ -1,6 +1,6 @@
 Feature: Maggie searches for a petition by id
   In order to quickly find a petition and view the contents
-  As Maggie
+  As Maggie, a petition moderator
   I want to enter an id and be taken to the petition for that id, or shown an error if it doesn't exist
 
   Scenario: A user sees the show page if the petition needs moderation
