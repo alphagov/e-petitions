@@ -4,9 +4,11 @@
 // Common page title
 // =================
 .page-title {
-  margin-top: em(40, 36);
-  margin-bottom: 1em;
   position: relative;
+  margin: em(25, 24) 0;
+  @include media(tablet) {
+    margin: em(35, 36) 0;
+  }
 
   .icon {
     background-position: left center;
@@ -16,7 +18,7 @@
     height: 25px;
 
     @include media(tablet) {
-      top: em(5, 36);
+      top: em(10, 36);
     }
 
   }
@@ -99,9 +101,12 @@ input.back-page {
   color: $white;
   background: $grey-1;
   margin: $gutter-half 0;
-  padding: em(15, 24) em(15, 24);
-  @include bold-24();
   text-align: center;
+  @include bold-24();
+  padding: em(15, 18) em(30, 18);
+  @include media(tablet) {
+    padding: em(15, 24) em(30, 24);
+  }
   span {
     @include bold-19();
     display: block;

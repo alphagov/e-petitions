@@ -2,12 +2,13 @@
   @include bold-48();
   display: block;
 }
-
 .uk-citizen p {
   margin-bottom: 0;
 }
-
-.signed-petition-title {
+.signed-petition-intro, .signed-petition-link {
   padding-left: $text-indent;
+  margin-bottom: $gutter-one-third;
+}
+.signed-petition-link {
   margin-bottom: $gutter * 1.3;
 }
