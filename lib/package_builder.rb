@@ -60,6 +60,8 @@ class PackageBuilder
   end
 
   def deploy!
+    WebMock.allow_net_connect! if defined? WebMock
+
     if ci? && !deploy_build?
       info "Skipping deployment ..."
     else
