@@ -30,5 +30,8 @@
     background-repeat: no-repeat;
     background-position: 45% 50%;
     @include background-image("icons/icon_search-white", 18px, 18px);
+    &:hover, &:focus {
+      background-color: darken($petitions-panel-colour, 5%);
+    }
   }
 }
