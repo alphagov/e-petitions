@@ -3,6 +3,7 @@ class SignaturesController < ApplicationController
 
   before_filter :retrieve_petition, :only => [:new, :create, :thank_you]
   before_filter :retrieve_signature, :only => [:verify, :unsubscribe, :signed]
+  before_action :do_not_cache
 
   respond_to :html
 

@@ -1,8 +1,11 @@
 class Admin::AdminController < ApplicationController
   include Authentication
 
-  before_filter :require_admin_and_check_for_password_change
+  before_action :require_admin_and_check_for_password_change
+  before_action :do_not_cache
+
   layout 'admin'
+
   helper_method :admin_petition_facets
 
   def index

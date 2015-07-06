@@ -2,14 +2,23 @@ require 'rails_helper'
 
 RSpec.describe ApplicationController, type: :controller do
   controller do
+    before_action :do_not_cache
+
     def index
       render text: 'OK'
     end
   end
 
+  let(:cache_control) { response.headers['Cache-Control'] }
+
   it "reloads the site instance on every request" do
     expect(Site).to receive(:reload)
     get :index
+  end
+
+  it "sets cache control headers when asked" do
+    get :index
+    expect(cache_control).to eq('no-store, no-cache')
   end
 
   context "when the site is disabled" do
