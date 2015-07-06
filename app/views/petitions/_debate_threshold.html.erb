@@ -1,5 +1,4 @@
 <section class="about-item about-item-count-debate" aria-labelledby="debate-threshold-heading">
-  <span class="graphic graphic-portcullis"></span>
   <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
   <%# Has debate outcome details #%>
   <% if petition.debate_outcome.present? -%>
@@ -17,12 +16,12 @@
     </section>
   <% elsif petition.scheduled_debate_date.present? %>
     <p class="about-item-scheduled-debate-date">
-      This petition will be debated on <%= short_date_format(petition.scheduled_debate_date) %>.
+      Parliament will debate this petition on <%= short_date_format(petition.scheduled_debate_date) %>.
     </p>
     <p>
       You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
     </p>
   <% else -%>
-    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
   <% end -%>
 </section>

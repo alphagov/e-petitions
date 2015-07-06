@@ -153,6 +153,9 @@ input.back-page {
 
 .about-item {
   padding: $gutter-two-thirds 0 0 0;
+  &:first-child {
+    margin-top: $gutter-two-thirds *-1;
+  }
 
   p {
     margin: em(5, 16) 0;
@@ -163,12 +166,12 @@ input.back-page {
   }
 
   h2 {
-    @include bold-36;
-    span { @include bold-19; }
-    margin: em(5, 24) 0;
+    font-size: 24px;
+    line-height: 30/24;
+    margin: em(5, 24) 0 em(5, 24) $text-indent;
 
     @include media(tablet) {
-      margin: em(10, 36) 0;
+      margin: em(10, 36) 0 em(10, 36) $text-indent;
     }
   }
   h3 {
@@ -179,7 +182,25 @@ input.back-page {
     }
   }
 }
-
+.about-item-count-response, .about-item-count-debate {
+  background-repeat: no-repeat;
+}
+.about-item-count-response {
+  background-position: 0 26px;
+  background-image: image-url("graphics/graphic_crown.png");
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_crown-2x.png");
+    background-size: 36px;
+  }
+}
+.about-item-count-debate {
+  background-position: 4px 20px;
+  background-image: image-url("graphics/graphic_portcullis.png");
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_portcullis-2x.png");
+    background-size: 26px;
+  }
+}
 .about-item-scheduled-debate-date {
   @include bold-19;
 }
