@@ -1,14 +1,14 @@
 <h1 class="page-title page-title-with-icon">
   <span class="icon icon-confirmation-tick"></span>
-  You are signature <span class="signature-number"><%= number_with_delimiter(@signature.number) %></span>
+  <span class="signature-number"><%= number_with_delimiter(@signature.number) %></span> signatures
 </h1>
 
-<p class="signed-petition-title"><%= link_to @petition.action, petition_path(@petition) %></p>
+<p class="signed-petition-intro">We've added your signature to the petition:</p>
+<p class="signed-petition-link"><%= link_to @petition.action, petition_path(@petition) %></p>
 
 <%= render 'share_petition', petition: @petition %>
 
 <section class="section-panel" aria-labelledby="whats-next-heading">
-  <h2 id="whats-next-heading">What's next</h2>
   <%= render "petitions/threshold_details", petition: @petition %>
 </section>
 
