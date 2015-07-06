@@ -2,4 +2,32 @@
   .search-petitions {
     margin-bottom: $gutter-half;
   }
+
+  // Pagination
+  .pagination {
+    margin: $gutter-half 0;
+    text-align: right;
+    .icon {
+      display: none;
+    }
+    .disabled {
+      color: $panel-colour;
+    }
+    .current {
+      background-color: $panel-colour;
+      padding: 1px 0.2em;
+    }
+    a {
+      padding: 1px 0.1em;
+    }
+    a:visited {
+      color: $link-colour;
+    }
+    .previous_page {
+      margin-right: 5px;
+    }
+    .next_page {
+      margin-left: 5px;
+    }
+  }
 }

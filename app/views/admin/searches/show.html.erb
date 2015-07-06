@@ -1,11 +1,11 @@
+<h1>Search results</h1>
 
 <%= render 'form', query: @query %>
-
-<p>Search Results</p>
 
 <% if @signatures.present? %>
 
   <%= will_paginate @signatures %>
+
   <table class="petition-list">
     <thead>
       <tr>
@@ -20,6 +20,8 @@
       <%= render @signatures -%>
     </tbody>
   </table>
+
+  <%= will_paginate @signatures %>
 
 <% else %>
   <p>

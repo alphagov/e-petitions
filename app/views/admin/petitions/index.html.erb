@@ -16,6 +16,8 @@
   </div>
 </div>
 
+<%= will_paginate(@petitions) if @petitions.any? %>
+
 <table class="petition-list">
   <thead>
     <tr>
@@ -38,5 +40,6 @@
     <% end -%>
   </tbody>
 
-  <%= will_paginate(@petitions) if @petitions.any? %>
 </table>
+
+<%= will_paginate(@petitions) if @petitions.any? %>
