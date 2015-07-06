@@ -190,7 +190,7 @@ input.back-page {
 
 // Pull-quote
 .pull-quote {
-  quotes: "“" "”" "‘" "’";
+  quotes: "“" "”";
 }
 @include media(tablet) {
   .pull-quote:before {
