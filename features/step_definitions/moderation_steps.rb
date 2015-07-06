@@ -70,7 +70,7 @@ Then /^the petition should be visible on the site for signing$/ do
 end
 
 Then(/^the petition can no longer be flagged$/) do
-  visit admin_petition_path(@petition)
+  visit admin_petition_url(@petition)
   expect(page).to have_no_field('Flag')
 end
 

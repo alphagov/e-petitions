@@ -63,7 +63,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
       context "searching by tag" do
         it "redirects to the all petitions page for a tag" do
           get :show, q: '[a tag]'
-          expect(response).to redirect_to("https://petition.parliament.uk/admin/petitions?t=a+tag")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?t=a+tag")
         end
       end
     end

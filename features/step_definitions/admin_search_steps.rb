@@ -37,9 +37,9 @@ end
 
 When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |tag, from_the_hub|
   if from_the_hub.blank?
-    visit admin_petitions_path
+    visit admin_petitions_url
   else
-    visit admin_root_path
+    visit admin_root_url
   end
   fill_in "Search", :with => "[#{tag}]"
   click_button 'Search'
