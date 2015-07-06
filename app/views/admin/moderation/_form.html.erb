@@ -16,9 +16,7 @@
 
   <%= render 'admin/petitions/reject', f: f %>
 
-  <%= form_row do %>
-    <%= f.submit 'Email petition creator', :class => 'button', :tabindex => increment %>
-  <% end %>
+  <%= f.submit 'Email petition creator', :class => 'button', :tabindex => increment %>
 
   <%= javascript_tag do %>
     $().ready(function() {

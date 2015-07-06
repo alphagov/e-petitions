@@ -19,7 +19,5 @@
     <%= f.password_field :password_confirmation, tabindex: increment, class: 'form-control', autocomplete: 'off' %>
   <% end %>
 
-  <%= form_row do %>
-    <%= f.submit 'Save' %>
-  <% end %>
+  <%= f.submit 'Save', class: "button" %>
 <% end -%>
