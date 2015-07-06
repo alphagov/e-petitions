@@ -118,7 +118,7 @@ class SignaturesController < ApplicationController
 
   def validate_sponsor
     if @signature.validated?
-      flash[:notice] = "Thank you. You have already sponsored this petition."
+      flash[:notice] = "You've already supported this petition."
     else
       @signature.validate!
       send_sponsor_support_notification_email_to_petition_owner(@signature.petition, @signature)
@@ -129,7 +129,7 @@ class SignaturesController < ApplicationController
 
   def validate_signature
     if @signature.validated?
-      flash[:notice] = "Thank you. Your signature has already been added to the petition."
+      flash[:notice] = "You've already signed this petition"
     else
       @signature.validate!
     end

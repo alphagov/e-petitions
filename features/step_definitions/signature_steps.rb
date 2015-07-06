@@ -86,7 +86,7 @@ When /^I fill in my details and sign a petition$/ do
 end
 
 Then /^I should see that I have already signed the petition$/ do
-  expect(page).to have_text("Thank you. Your signature has already been added to the petition.")
+  expect(page).to have_text("You've already signed this petition")
 end
 
 Then(/^I am asked to review my email address$/) do
