@@ -4,6 +4,8 @@
 
 <h1 class="page-title">Start a petition</h1>
 
+<p class="form-hint petition-standards">Remember, your petition must meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
+
 <%= render 'petitions/create/error_summary', f: f %>
 
 <%= form_row :for => [petition, :action] do %>
