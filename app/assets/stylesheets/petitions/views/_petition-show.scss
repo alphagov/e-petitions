@@ -4,14 +4,17 @@
   @extend %contain-floats;
 
   .signature-count-number {
-    font-size: 36px;
-    line-height: 40/36;
+    @include bold-48();
     font-weight: 700;
     margin-top: em(15, 36);
     margin-bottom: em(10, 36);
+    @include media(tablet) {
+      margin-top: em(25, 48);
+      margin-bottom: em(10, 48);
+    }
 
     span {
-      font-size: 24px;
+      @include bold-27();
     }
   }
 
