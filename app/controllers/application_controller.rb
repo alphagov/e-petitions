@@ -43,4 +43,8 @@ class ApplicationController < ActionController::Base
   def public_petition_facets
     I18n.t('public', scope: :"petitions.facets")
   end
+
+  def do_not_cache
+    response.headers['Cache-Control'] = 'no-store, no-cache'
+  end
 end
