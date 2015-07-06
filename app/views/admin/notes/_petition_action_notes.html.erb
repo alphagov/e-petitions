@@ -4,6 +4,17 @@
     <%= f.label :details, 'Notes', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :admin_notes %>
     <%= f.text_area :details, tabindex: increment, class: 'form-control' %>
+    <div class="form-group-help">
+      <details>
+        <summary class="summary">How to use tags</summary>
+        <div class="panel-indent">
+          <p>You can add tags to this petition by including them anywhere in the notes field.</p>
+          <p>You can add as many tags as you need, for example:<br/>
+            [tag goes here] [HMRC] [Prime Minister]
+          </p>
+        </div>
+      </details>
+    </div>
   <% end %>
 
   <%= f.submit 'Save notes', class: 'button' %>
