@@ -5,6 +5,7 @@ class SponsorsController < ApplicationController
   before_action :redirect_to_petition_url, if: :moderated?
   before_action :redirect_to_moderation_info_url, if: :has_maximum_sponsors?
   before_action :validate_creator_signature, only: %i[show]
+  before_action :do_not_cache
 
   respond_to :html
 

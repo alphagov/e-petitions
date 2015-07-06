@@ -1,6 +1,8 @@
 class PetitionsController < ApplicationController
   include ManagingMoveParameter
+
   before_action :avoid_unknown_state_filters, only: :index
+  before_action :do_not_cache, except: %i[index show]
 
   respond_to :html
 
