@@ -32,6 +32,8 @@ gem 'jquery-rails'
 gem 'delayed-web', github: 'thebestday/delayed-web'
 gem 'dalli'
 gem 'connection_pool'
+gem 'lograge'
+gem 'logstash-logger'
 
 group :development, :test do
   gem 'rspec-rails'
