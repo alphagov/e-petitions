@@ -1,9 +1,9 @@
 <h1>Petition admin</h1>
 
-<%= render 'admin/searches/form', query: '' %>
-
 <div class="grid-row">
   <div class="column-two-thirds">
+    <%= render 'admin/searches/form', query: '' %>
+
     <% action_counts do |counts| %>
       <ul class="hub-actions grid-row">
         <% counts.each do |state, count| %>
