@@ -1,8 +1,8 @@
 <p>Hi <%= @petition.creator_signature.name %>,</p>
 
-<p><%= @sponsor.signature.name %> supported your petition &ndash; &ldquo;<%= @petition.action %>&rdquo;.</p>
+<p><%= @sponsor.signature.name %> supported your petition – “<%= @petition.action %>”.</p>
 
-<p>You have <%= @supporting_sponsors_count %> supporter so far. If <%= @moderation_threshold %> people support your petition we&apos;ll check it to make sure it meets the petition standards. If it does, we&apos;ll publish it.</p>
+<p>You have <%= @supporting_sponsors_count %> supporter so far. If <%= @moderation_threshold %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.</p>
 
 <p>Find out how we check petitions before we publish them:<br />
 <%= link_to 'petition guidelines', help_url(anchor: 'creating-a-petition') %></p>

@@ -1,3 +1,4 @@
+@admin
 Feature: Admin users index and crud
   As a sysadmin
   I can see the admin users index and crud admin users

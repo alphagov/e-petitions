@@ -1,3 +1,4 @@
+@admin
 Feature: Moderator users password change
   As a an moderator
   I can change my password

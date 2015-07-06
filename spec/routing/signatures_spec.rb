@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "routes for signatures", type: :routing do
+RSpec.describe "routes for signatures", type: :routes do
   # Routes nested to /petition/:petition_id
   it "doesn't route GET /petitions/1/signatures" do
     expect(get("/petitions/1/signatures")).not_to be_routable

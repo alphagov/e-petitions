@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::AdminController, type: :controller do
+RSpec.describe Admin::AdminController, type: :controller, admin: true do
   context '#admin_petition_facets' do
     it 'extracts the list of admin facets from the locale file' do
       expect(controller.send(:admin_petition_facets)).to eq I18n.t(:"petitions.facets.admin")

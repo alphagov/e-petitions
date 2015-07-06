@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+# This proxy reflects requests to the live domains back to the Cabybara
+# server for tests run via phantomjs which doesn't have a mechanism for
+# emulating a specific host unlike Rack::Test.
+
+require 'webrick'
+require 'webrick/httpproxy'
+
+class EpetsProxyServer < WEBrick::HTTPProxyServer
+  def do_CONNECT(req, res)
+    if req.unparsed_uri =~ /petition.parliament.uk/
+      req.instance_variable_set(:@unparsed_uri, '127.0.0.1:3443')
+    end
+
+    super(req, res)
+  end
+end
+
+proxy = EpetsProxyServer.new(BindAddress: '127.0.0.1', Port: 8443)
+
+trap 'INT'  do proxy.shutdown end
+trap 'TERM' do proxy.shutdown end
+
+proxy.start

@@ -1,3 +1,4 @@
+@admin
 Feature: Moderator respond to petition
   In order to allow or prevent the signing of petitions
   As a moderator

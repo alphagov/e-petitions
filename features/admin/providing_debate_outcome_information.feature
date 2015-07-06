@@ -1,3 +1,4 @@
+@admin
 Feature: Providing debate outcome information
   In order to keep petition supporters up-to-date on what parliament said about their petition
   As an admin user

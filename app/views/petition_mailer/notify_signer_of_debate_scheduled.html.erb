@@ -1,15 +1,15 @@
 <p>Hi <%= @signature.name %>,</p>
 
-<p>Parliament are going to debate the petition you signed &ndash; &ldquo;<%= @petition.action %>&rdquo;.</p>
+<p>Parliament are going to debate the petition you signed – “<%= @petition.action %>”.</p>
 
 <p><%= link_to nil, petition_url(@signature.petition) %></p>
 
 <p>The debate is scheduled for <%= short_date_format(@signature.petition.scheduled_debate_date) %>.</p>
 
-<p>Once the debate has happened, we&apos;ll email you a video and transcript.</p>
+<p>Once the debate has happened, we’ll email you a video and transcript.</p>
 
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
 <%= link_to nil, home_url %></p>
 
-<p><small>You&apos;re receiving this email because you signed this petition. Unsubscribe: <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>
+<p><small>You’re receiving this email because you signed this petition. Unsubscribe: <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>

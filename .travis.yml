@@ -10,6 +10,7 @@ before_install:
 before_script:
 - bundle install
 - psql -c 'create database epets_test;' -U postgres
+- bundle exec rake db:structure:load
 script: bundle exec rake
 after_success: RAILS_ENV=development bundle exec rake deploy:preview
 env:

@@ -6,11 +6,11 @@ RSpec.describe FeedbackMailer, type: :mailer do
     let(:mail) { FeedbackMailer.send_feedback(feedback) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Feedback from the Petitions service")
+      expect(mail).to have_subject("Feedback from the Petitions service")
     end
 
     it "renders the body" do
-      expect(mail.body.encoded).to match(feedback.comment)
+      expect(mail).to have_body_text(feedback.comment)
     end
 
     it "sets the reply-to to be the email address" do

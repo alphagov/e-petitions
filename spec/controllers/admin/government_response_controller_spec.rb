@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::GovernmentResponseController, type: :controller do
+RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: true do
   let!(:petition) { FactoryGirl.create(:open_petition) }
   let(:government_response) { petition.government_response }
 
@@ -8,14 +8,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
     describe 'GET /show' do
       it 'redirects to edit profile page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -115,7 +115,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller do
 
         it 'redirects to the show page' do
           do_patch
-          expect(response).to redirect_to "https://petition.parliament.uk/admin/petitions/#{petition.id}"
+          expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}"
         end
 
         it 'tells the moderator that their email will be sent overnight' do

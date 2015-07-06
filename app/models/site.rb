@@ -8,6 +8,10 @@ class Site < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   class << self
+    def table_exists?
+      @table_exists ||= connection.table_exists?(table_name)
+    end
+
     def before_remove_const
       reset
     end
@@ -51,6 +55,30 @@ class Site < ActiveRecord::Base
 
     def host_with_port
       instance.host_with_port
+    end
+
+    def constraints_for_public
+      if table_exists?
+        instance.constraints_for_public
+      else
+        default_constraints_for_public
+      end
+    end
+
+    def moderate_host
+      instance.moderate_host
+    end
+
+    def moderate_host_with_port
+      instance.moderate_host_with_port
+    end
+
+    def constraints_for_moderation
+      if table_exists?
+        instance.constraints_for_moderation
+      else
+        default_constraints_for_moderation
+      end
     end
 
     def opened_at_for_closing(time = Time.current)
@@ -106,6 +134,14 @@ class Site < ActiveRecord::Base
       ENV.fetch('SITE_TITLE', 'Petition parliament')
     end
 
+    def default_scheme
+      ENV.fetch('EPETITIONS_PROTOCOL', 'https')
+    end
+
+    def default_protocol
+      "#{default_scheme}://"
+    end
+
     def default_url
       if ENV.fetch('EPETITIONS_PROTOCOL', 'https') == 'https'
         URI::HTTPS.build(default_url_components).to_s
@@ -120,6 +156,10 @@ class Site < ActiveRecord::Base
 
     def default_host
       ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uk')
+    end
+
+    def default_moderate_host
+      Rails.env.development? ? default_host : "moderate.#{default_host}"
     end
 
     def default_port
@@ -173,11 +213,21 @@ class Site < ActiveRecord::Base
     def default_threshold_for_debate
       ENV.fetch('THRESHOLD_FOR_DEBATE', '100000').to_i
     end
+
+    def default_constraints_for_public
+      { protocol: default_protocol, host: default_host, port: default_port }
+    end
+
+    def default_constraints_for_moderation
+      { protocol: default_protocol, host: default_moderate_host, port: default_port }
+    end
   end
 
-  column_names.map(&:to_sym).each do |column|
-    define_singleton_method(column) do |*args, &block|
-      instance.public_send(column, *args, &block)
+  if table_exists?
+    column_names.map(&:to_sym).each do |column|
+      define_singleton_method(column) do |*args, &block|
+        instance.public_send(column, *args, &block)
+      end
     end
   end
 
@@ -209,6 +259,22 @@ class Site < ActiveRecord::Base
 
   def host_with_port
     "#{host}#{port_string}"
+  end
+
+  def constraints_for_public
+    { protocol: protocol, host: host, port: port }
+  end
+
+  def moderate_host
+    @moderate_host ||= Rails.env.development? ? host : "moderate.#{host}"
+  end
+
+  def moderate_host_with_port
+    "moderate.#{host}#{port_string}"
+  end
+
+  def constraints_for_moderation
+    { protocol: protocol, host: moderate_host, port: port }
   end
 
   def password_digest
@@ -256,7 +322,7 @@ class Site < ActiveRecord::Base
 
   # Force early definition of attribute methods
   # so that cached versions get properly built
-  define_attribute_methods
+  define_attribute_methods if table_exists?
 
   private
 

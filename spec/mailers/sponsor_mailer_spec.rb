@@ -32,23 +32,23 @@ RSpec.describe SponsorMailer, type: :mailer do
     end
 
     it "includes the creator's name in the body" do
-      expect(mail.body.encoded).to match(%r[Barry Butler])
+      expect(mail).to have_body_text(%r[Barry Butler])
     end
 
     it "includes the verification url for the sponsor's signature" do
-      expect(mail.body.encoded).to match(%r[https://www.example.com/signatures/#{sponsor.signature.id}/verify/#{sponsor.signature.perishable_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{sponsor.signature.id}/verify/#{sponsor.signature.perishable_token}])
     end
 
     it "includes the petition action" do
-      expect(mail.body.encoded).to match(%r[Allow organic vegetable vans to use red diesel])
+      expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
     end
 
     it "includes the petition background" do
-      expect(mail.body.encoded).to match(%r[Add vans to permitted users of red diesel])
+      expect(mail).to have_body_text(%r[Add vans to permitted users of red diesel])
     end
 
     it "includes the petition additional details" do
-      expect(mail.body.encoded).to match(%r[To promote organic vegetables])
+      expect(mail).to have_body_text(%r[To promote organic vegetables])
     end
   end
 end

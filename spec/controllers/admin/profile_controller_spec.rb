@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::ProfileController, type: :controller do
+RSpec.describe Admin::ProfileController, type: :controller, admin: true do
   before :each do
     @user = FactoryGirl.create(:sysadmin_user, :password => 'Letmein1!',
                            :password_confirmation => 'Letmein1!', :force_password_reset => true)
@@ -10,7 +10,7 @@ RSpec.describe Admin::ProfileController, type: :controller do
     describe "GET 'edit'" do
       it "should redirect to the login page" do
         get 'edit', :id => @user.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
   end
@@ -71,7 +71,7 @@ RSpec.describe Admin::ProfileController, type: :controller do
 
         it "should redirect" do
           do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
-          expect(response).to redirect_to("https://petition.parliament.uk/admin")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
         end
       end
 

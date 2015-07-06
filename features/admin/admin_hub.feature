@@ -1,3 +1,4 @@
+@admin
 Feature: Admin hub page
   In order to help administrators see the next actions they need to take
   As any moderator user
@@ -18,7 +19,6 @@ Feature: Admin hub page
     And I should see "40 All petitions"
     And I should be connected to the server via an ssl connection
     And the markup should be valid
-
 
   Scenario: I can click through to see lists of matching petitions
     Given 12 petitions exist with state: "sponsored"

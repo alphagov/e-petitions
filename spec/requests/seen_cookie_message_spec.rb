@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'seen_cookie_message cookie', type: :request do
+RSpec.describe 'seen_cookie_message cookie', type: :request, show_exceptions: true do
   include ActiveSupport::Testing::TimeHelpers
 
   subject { response.header["Set-Cookie"] }

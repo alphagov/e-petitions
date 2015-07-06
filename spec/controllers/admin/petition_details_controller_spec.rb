@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::PetitionDetailsController, type: :controller do
+RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true do
 
   let(:petition) { FactoryGirl.create(:sponsored_petition) }
 
@@ -8,14 +8,14 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller do
     describe 'GET #show' do
       it 'redirects to the login page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH #update' do
       it 'redirects to the login page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to('https://petition.parliament.uk/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller do
     describe 'GET #show' do
       it 'redirects to edit profile page' do
         get :show, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH #update' do
       it 'redirects to edit profile page' do
         patch :update, petition_id: petition.id
-        expect(response).to redirect_to("https://petition.parliament.uk/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -121,7 +121,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller do
           it 'redirects to the edit petition page' do
             do_update
             petition.reload
-            expect(response).to redirect_to"https://petition.parliament.uk/admin/petitions/#{petition.id}"
+            expect(response).to redirect_to"https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}"
           end
 
           it 'updates the petition' do

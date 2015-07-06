@@ -1,3 +1,4 @@
+@admin
 Feature: Maggie searches for petitions by keyword
   In order to find petitions containing a certain keyword
   As Maggie

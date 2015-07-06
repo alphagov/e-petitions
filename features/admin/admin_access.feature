@@ -1,3 +1,4 @@
+@admin
 Feature: Restricted access to the admin console
   In order to prevent unauthorised people accessing the admin area
   I can only access the admin area if I have logged on and my password does not need resetting

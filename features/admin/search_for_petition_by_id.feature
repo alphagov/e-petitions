@@ -1,3 +1,4 @@
+@admin
 Feature: Maggie searches for a petition by id
   In order to quickly find a petition and view the contents
   As Maggie, a petition moderator

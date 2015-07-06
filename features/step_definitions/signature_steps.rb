@@ -3,7 +3,7 @@ Then /^I cannot sign the petition$/ do
 end
 
 When /^I decide to sign the petition$/ do
-  visit petition_path(@petition)
+  visit petition_url(@petition)
   click_link "Sign this petition"
 end
 
@@ -28,7 +28,7 @@ When(/^I confirm my email address$/) do
 end
 
 def should_be_signature_count_of(count)
-  visit petition_path(@petition)
+  visit petition_url(@petition)
   expect(page).to have_css("p.signature-count-number", :text => count.to_s + " signatures")
 end
 

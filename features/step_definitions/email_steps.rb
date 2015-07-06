@@ -31,6 +31,10 @@ module EmailHelpers
     # Note that last_email_address will be reset after each Scenario.
     last_email_address || "example@example.com"
   end
+
+  def text_and_links_in_email(email)
+    email.default_part_body.to_s.scan(%r{<a[^>]+href="([^"]+)"[^>]*>([^<]+)</a>})
+  end
 end
 
 World(EmailHelpers)
@@ -168,11 +172,12 @@ end
 #
 
 When /^(?:I|they) follow "([^"]*?)" in the email$/ do |link|
-  visit_in_email(link)
+  url = text_and_links_in_email(current_email).detect{ |u, l| l == link }.first
+  url ? visit(url) : visit_in_email(link)
 end
 
 When /^(?:I|they) click the first link in the email$/ do
-  click_first_link_in_email
+  visit links_in_email(current_email).first
 end
 
 #

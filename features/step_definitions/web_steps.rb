@@ -18,11 +18,11 @@ end
 World(WithinHelpers)
 
 Given /^(?:|I )am on (.+)$/ do |page_name|
-  visit path_to(page_name)
+  visit url_to(page_name)
 end
 
 When /^(?:|I )go to (.+)$/ do |page_name|
-  visit path_to(page_name)
+  visit url_to(page_name)
 end
 
 When /^(?:|I )press "([^"]*)"(?: within "([^"]*)")?$/ do |button, selector|
@@ -162,8 +162,9 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
 end
 
 Then /^(?:|I )should be on (.+)$/ do |page_name|
-  current_path = URI.parse(current_url).path
-  expect(current_path).to eq path_to(page_name)
+  url = URI.parse(current_url)
+  url.query = nil
+  expect(url.to_s).to eq url_to(page_name)
 end
 
 Then /^(?:|I )should have the following query string:$/ do |expected_pairs|

@@ -1,3 +1,4 @@
+@admin
 Feature: Moderator updates petition scheduled debate date
 
   Scenario: Updating petition scheduled debate date
