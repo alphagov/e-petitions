@@ -9,6 +9,11 @@
         <% counts.each do |state, count| %>
           <li class="column-half action-<%= state.to_s.dasherize %>">
             <%= link_to admin_petitions_url(state: state) do %>
+              <% if state == :awaiting_response %>
+                <span class="graphic graphic-crest-large-white"></span>
+              <% elsif state == :in_debate_queue %>
+                <span class="graphic graphic-portcullis-large-white"></span>
+              <% end %>
               <%= action_count(state, count) %>
             <% end %>
           </li>
