@@ -8,6 +8,11 @@
 select.form-control {
   height: 40px;
   -webkit-appearance: menulist;
+  background-color: $panel-colour;
+  border: 1px solid $border-colour;
+}
+select.form-control:hover {
+  border-color: $black;
 }
 
 .form-control.small {
