@@ -56,11 +56,11 @@ RSpec.describe Site, type: :model do
   end
 
   describe "singleton methods" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
     let(:now) { Time.current }
 
     before do
-      expect(Site).to receive(:first_or_create).and_return(site)
+      allow(Site).to receive(:first_or_create).and_return(site)
     end
 
     it "delegates title to the instance" do
@@ -419,7 +419,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".authenticate" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     before do
       expect(Site).to receive(:first_or_create).and_return(site)
@@ -432,7 +432,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".email_protocol" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     before do
       expect(Site).to receive(:first_or_create).and_return(site)
@@ -445,7 +445,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".opened_at_for_closing" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
     let(:opened_at) { 3.months.ago.end_of_day }
 
     before do
@@ -459,7 +459,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".closed_at_for_opening" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
     let(:closed_at) { 3.months.from_now.end_of_day }
 
     before do
@@ -473,7 +473,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".reload" do
-    let(:site) { double(:site) }
+    let(:site) { Site.first_or_create(Site.defaults) }
 
     context "when it is cached in Thread.current" do
       before do
