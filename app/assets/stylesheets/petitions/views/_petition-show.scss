@@ -21,7 +21,7 @@
   .signature-count-goal {
     color: $secondary-text-colour;
     text-align: right;
-    margin: 10px 0 0;
+    margin: $gutter-one-third 0 $gutter *-1;
   }
 
   .signature-count-graph {

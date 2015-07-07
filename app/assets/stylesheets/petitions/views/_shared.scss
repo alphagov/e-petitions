@@ -148,14 +148,11 @@ input.back-page {
 // About petitions
 // ==========
 .about-petitions {
-  margin-bottom: $gutter;
+  margin: $gutter-half 0 $gutter;
 }
 
 .about-item {
   padding: $gutter-two-thirds 0 0 0;
-  &:first-child {
-    margin-top: $gutter-two-thirds *-1;
-  }
 
   p {
     margin: em(5, 16) 0;
