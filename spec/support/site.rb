@@ -5,7 +5,7 @@ RSpec.configure do |config|
     Site.reset
   end
 
-  config.before(:each) do |example|
+  config.after(:each) do |example|
     Site.destroy_all
     Site.reset
   end
