@@ -4,7 +4,9 @@
 
 <p>Government responded:</p>
 
-<blockquote><%= auto_link(simple_format(h(@petition.government_response.details))) %></blockquote>
+<blockquote><%= auto_link(simple_format(h(@petition.government_response.summary))) %></blockquote>
+
+<%= auto_link(simple_format(h(@petition.government_response.details))) %>
 
 <p>Click this link to view the response online: <%= link_to nil, petition_url(@signature.petition) %></p>
 
