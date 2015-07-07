@@ -99,7 +99,7 @@ When(/^I change my email address to "(.*?)"$/) do |email_address|
 end
 
 When(/^I say I am happy with my email address$/) do
-  click_on "Yes - this is my email address"
+  click_on "Yes – this is my email address"
 end
 
 And "I have already signed the petition with an uppercase email" do
