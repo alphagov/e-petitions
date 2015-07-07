@@ -19,6 +19,6 @@ Parliament debated the petition you signed – "<%= @petition.action %>"
 <% end %>
 Thanks,
 <%= t("petitions.emails.signoff_prefix") %>
-<%= home_url %>
+<%= t("petitions.emails.signoff_suffix") %>
 
 You’re receiving this email because you signed this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
