@@ -21,7 +21,7 @@
     <%= r.label :code, 'Rejection reason' %><br />
     <%= r.select :code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
     <%= error_messages_for_field r.object, :code %>
-    <div id="rejection_preview" class="flash-notice" style="display:none">
+    <div id="rejection_preview" class="reject-flash-notice" style="display:none">
       <h3>We'll send this standard text to the petition creator:</h3>
       <div class="content"></div>
     </div>
