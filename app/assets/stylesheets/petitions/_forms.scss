@@ -38,14 +38,11 @@ select.form-control {
 
 .character-count {
   color: $secondary-text-colour;
-  text-align: right;
+  float: right;
+  padding-left: $gutter;
 }
 .character-count.too-many-characters {
   color: $error-colour;
-}
-
-.form-hint {
-  margin-top: em(10, 19);
 }
 
 .form-label {
@@ -58,5 +55,11 @@ select.form-control {
 }
 
 .form-group-help {
-  margin-bottom: 0;
+  margin: 5px 0 0;
+}
+
+.form-hint {
+  @include media (tablet) {
+    margin-top: 5px;
+  }
 }
