@@ -4,12 +4,12 @@
 
 // Graphics
 // .graphic .graphic-portcullis
-// .graphic .graphic-portcullis
 // .graphic .graphic-portcullis-white
+// .graphic .graphic-portcullis-large-white
 // .graphic .graphic-portcullis-large-grey
 // .graphic .graphic-crown
-// .graphic .graphic-crown-grey
 // .graphic .graphic-crown-white
+// .graphic .graphic-crest-large-white
 // .graphic .graphic-crest-large-grey
 // .graphic .graphic-pen
 // .graphic .graphic-open-government-licence
@@ -54,6 +54,16 @@
     background-size: 100%;
   }
 }
+.graphic-portcullis-large-white {
+  width: 52px;
+  height: 64px;
+  background-image: image-url("graphics/graphic_portcullis-large-white.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_portcullis-large-white-2x.png");
+    background-size: 100%;
+  }
+}
 .graphic-portcullis-large-grey {
   width: 52px;
   height: 64px;
@@ -74,16 +84,6 @@
     background-size: 100%;
   }
 }
-.graphic-crown-grey {
-  width: 36px;
-  height: 25px;
-  background-image: image-url("graphics/graphic_crown-grey.png");
-
-  @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crown-grey-2x.png");
-    background-size: 100%;
-  }
-}
 .graphic-crown-white {
   width: 36px;
   height: 25px;
@@ -91,6 +91,16 @@
 
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
+    background-size: 100%;
+  }
+}
+.graphic-crest-large-white {
+  width: 80px;
+  height: 64px;
+  background-image: image-url("graphics/graphic_crest-large-white.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_crest-large-white-2x.png");
     background-size: 100%;
   }
 }

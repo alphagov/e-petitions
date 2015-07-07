@@ -24,9 +24,7 @@
         <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
       <% end %>
 
-      <%= form_row do %>
-        <%= f.submit 'Save', class: 'button' %>
-      <% end %>
+      <%= f.submit 'Save', class: 'button' %>
 
       <%= link_to 'Cancel', admin_petition_path(@petition) %>
 

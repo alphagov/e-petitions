@@ -14,7 +14,7 @@ Feature: Restricted access to the admin console
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should be on the admin home page
     And I should be connected to the server via an ssl connection
     And the markup should be valid
@@ -28,7 +28,7 @@ Feature: Restricted access to the admin console
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should be on the admin home page
     And I should see "John Moderator"
     And I should not see "Users"
@@ -39,7 +39,7 @@ Feature: Restricted access to the admin console
     Given I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "letmein1"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should see "Invalid email/password combination"
     And should not see "Logout"
 
@@ -49,7 +49,7 @@ Feature: Restricted access to the admin console
     And I try the password "wrong trousers" 5 times in a row
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "wrong trousers"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should see "Consecutive failed logins limit exceeded, account has been temporarily disabled."
     And should not see "Logout"
 
@@ -59,7 +59,7 @@ Feature: Restricted access to the admin console
     And I try the password "wrong trousers" 5 times in a row for the email "admin%"
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should be on the admin home page
 
   Scenario: Login as a user who hasn't changed their password for over 9 months
@@ -67,7 +67,7 @@ Feature: Restricted access to the admin console
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should be on the admin edit profile page for "admin@example.com"
     And I should be connected to the server via an ssl connection
     And I fill in "Current password" with "Letmein1!"
@@ -81,7 +81,7 @@ Feature: Restricted access to the admin console
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"
-    And I press "Log in"
+    And I press "Sign in"
     Then I should be on the admin edit profile page for "admin@example.com"
     And I fill in "Current password" with "Letmein1!"
     And I fill in "New password" with "Letmeout1!"

@@ -28,5 +28,5 @@ Given /^the admin user is logged in$/ do
   visit admin_login_url
   fill_in("Email", :with => @user.email)
   fill_in("Password", :with => "Letmein1!")
-  click_button("Log in")
+  click_button("Sign in")
 end

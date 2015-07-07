@@ -2,7 +2,5 @@
 <%= form_for petition, url: admin_petition_take_down_path(petition), method: :patch do |f| -%>
   <%= render 'admin/petitions/reject', f: f %>
 
-  <%= form_row do %>
-    <%= f.submit "Email petition creator", class: 'button' %>
-  <% end %>
+  <%= f.submit "Email petition creator", class: 'button' %>
 <% end -%>

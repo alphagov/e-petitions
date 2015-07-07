@@ -1,34 +1,45 @@
-<%= render 'admin/searches/form', query: @query %>
+<h1>Petitions</h1>
 
-<%= form_tag admin_petitions_path, :method => :get, :class => "filter" do -%>
-  <%= label_tag :state, "Filter by status:" %>
-  <%= select_tag :state, admin_petition_facets_for_select(params[:state]), data: {autosubmit: true} %>
-  <%= submit_tag "Go", name: nil %>
-<% end -%>
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= render 'admin/searches/form', query: @query %>
+  </div>
+</div>
+
+<div class="grid-row">
+  <div class="column-half">
+    <%= form_tag admin_petitions_path, :method => :get do -%>
+      <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
+      <%= select_tag :state, admin_petition_facets_for_select(params[:state]), class: "form-control", data: {autosubmit: true} %>
+      <%= submit_tag "Go", name: nil, class: "button" %>
+    <% end -%>
+  </div>
+</div>
+
+<%= will_paginate(@petitions) if @petitions.any? %>
 
 <table class="petition-list">
   <thead>
     <tr>
-      <th>Id</th>
       <th>Action</th>
       <th>Creator</th>
       <th>State</th>
-      <th>Count</th>
-      <th>Closing date</th>
+      <th class="numeric">Count</th>
+      <th class="date last">Closing</th>
     </tr>
   </thead>
   <tbody>
     <% @petitions.each do |petition| -%>
       <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
-        <td><%= petition.id %></td>
         <td class="petition-list-petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
         <td><%= mail_to petition.creator_signature.email, petition.creator_signature.name %></td>
-        <td><%= petition.state %></td>
-        <td class="count"><%= number_with_delimiter(petition.signature_count) %></td>
-        <td><%= date_format_admin(petition.deadline) %></td>
+        <td><%= petition.state.humanize %></td>
+        <td class="numeric"><%= number_with_delimiter(petition.signature_count) %></td>
+        <td class="date last"><%= date_format(petition.deadline) %></td>
       </tr>
     <% end -%>
   </tbody>
 
-  <%= will_paginate(@petitions) if @petitions.any? %>
 </table>
+
+<%= will_paginate(@petitions) if @petitions.any? %>

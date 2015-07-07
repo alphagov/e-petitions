@@ -12,14 +12,14 @@
 // https://github.com/alphagov/govuk_elements
 // @import "govuk_elements/reset";
 // @import "govuk_elements/buttons";
-// @import "govuk_elements/details";
+@import "govuk_elements/details";
 // @import "govuk_elements/elements-typography";
 @import "govuk_elements/forms";
 // @import "govuk_elements/helpers";
 // @import "govuk_elements/icons";
 // @import "govuk_elements/layout";
 // @import "govuk_elements/lists";
-// @import "govuk_elements/panels";
+@import "govuk_elements/panels";
 @import "govuk_elements/tables";
 
 // Petitions styles
@@ -40,10 +40,13 @@
 @import "petitions/search-inline";
 
 @import "petitions/admin/layout";
+@import "petitions/admin/colours";
 @import "petitions/admin/header";
 @import "petitions/admin/meta";
 @import "petitions/admin/actions";
 @import "petitions/admin/list";
+@import "petitions/admin/tables";
 
 // Petition admin views
+@import "petitions/admin/views/shared";
 @import "petitions/admin/views/hub";

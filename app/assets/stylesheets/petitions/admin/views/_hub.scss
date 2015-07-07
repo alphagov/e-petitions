@@ -3,6 +3,7 @@
     margin-bottom: $gutter;
   }
   a {
+    position: relative;
     display: block;
     @include box-sizing(border-box);
     width: 100%;
@@ -16,6 +17,12 @@
       @include bold-48;
       display: block;
       margin-bottom: $gutter * 2;
+    }
+
+    .graphic {
+      position: absolute;
+      top: $gutter-half;
+      right: $gutter-half;
     }
   }
 }
