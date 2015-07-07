@@ -59,6 +59,17 @@ select.form-control:hover {
   }
 }
 
+.block-label {
+  box-sizing: border-box;
+  border: 1px solid $border-colour;
+  padding: ($gutter-one-third $gutter $gutter-one-third $text-indent);
+
+  input {
+    top: 12px;
+    left: $gutter-one-third;
+  }
+}
+
 .form-group-help {
   margin: 5px 0 0;
 }
