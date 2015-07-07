@@ -93,6 +93,7 @@ en-GB:
         notify_creator_of_closing_date_change: |-
           We’re closing your petition early
       signoff_prefix: "The Petitions team"
+      signoff_suffix: "UK Government and Parliament"
 
     waiting_for_in_words:
       zero: "Waiting for less than a day"
