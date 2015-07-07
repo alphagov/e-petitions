@@ -274,7 +274,9 @@ class Site < ActiveRecord::Base
   end
 
   def constraints_for_public
-    { protocol: protocol, host: host, port: port }
+    unless database_migrating?
+      { protocol: protocol, host: host, port: port }
+    end
   end
 
   def moderate_host
@@ -294,7 +296,9 @@ class Site < ActiveRecord::Base
   end
 
   def constraints_for_moderation
-    { protocol: moderate_protocol, host: moderate_host, port: moderate_port }
+    unless database_migrating?
+      { protocol: moderate_protocol, host: moderate_host, port: moderate_port }
+    end
   end
 
   def password_digest
@@ -337,6 +341,10 @@ class Site < ActiveRecord::Base
   end
 
   private
+
+  def database_migrating?
+    ARGV.any?{ |arg| arg =~ /db:migrate/ }
+  end
 
   def port_string(uri)
     standard_port?(uri) ? '' : ":#{uri.port}"
