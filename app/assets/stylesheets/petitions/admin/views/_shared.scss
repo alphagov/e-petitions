@@ -10,6 +10,12 @@
     @include bold-19;
   }
 
+  .reject-flash-notice {
+    background-color: $flash-blue;
+    padding: $gutter-half;
+    margin: 5px 0;
+  }
+
   .search-petitions {
     margin-bottom: $gutter-half;
   }

@@ -25,6 +25,7 @@
       <h3>We'll send this standard text to the petition creator:</h3>
       <div class="content"></div>
     </div>
+    <p>Additional details (optional)</p>
     <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
     <%= error_messages_for_field r.object, :details %>
   <% end %>
