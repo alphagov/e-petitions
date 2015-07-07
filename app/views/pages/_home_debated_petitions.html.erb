@@ -1,8 +1,7 @@
 <% if actioned[:with_debate_outcome][:count].zero? %>
   <p>This Parliament has not debated any petitions yet.</p>
 <% else %>
-  <h2>Most recently debated in Parliament</h2>
-  <ol class="threshold-petitions debate-petitions-list">
+  <ol class="threshold-petitions">
     <% actioned[:with_debate_outcome][:list].each do |petition| %>
       <li class="petition-item">
         <h3><%= link_to petition.action, petition_path(petition) %></h3>
