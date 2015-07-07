@@ -2,7 +2,7 @@
   <% if @constituency.present? %>
     Popular petitions in the constituency of <%= @constituency.name %>
   <% elsif @postcode.present? %>
-    Sorry!
+    We couldn't find that postcode
   <% else %>
     Local to you
   <% end %>
@@ -35,14 +35,7 @@
   <% if @postcode.blank? %>
     <p>Find petitions about local issues</p>
   <% else %>
-    <p>
-      We could not find your constituency from the postcode you provided:
-      <q><%= params[:postcode] %></q>.
-    </p>
-    <p>
-      It's possible that the API we use is down, or that your postcode wasn't
-      recognised. Why not try again?
-    </p>
+    <p>We couldn't find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
   <% end %>
 
   <%= render 'local_search' %>

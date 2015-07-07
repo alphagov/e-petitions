@@ -31,7 +31,7 @@ Scenario: Charlie creates a petition
   When I press "Sign this petition"
   Then the markup should be valid
   And I am asked to review my email address
-  When I press "Yes - this is my email address"
+  When I press "Yes – this is my email address"
   Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
@@ -110,10 +110,10 @@ Scenario: Charlie tries to submit an invalid petition
   Then I should see a heading called "Make sure this is right"
 
   When I fill in "Email" with ""
-  And I press "Yes - this is my email address"
+  And I press "Yes – this is my email address"
   Then I should see "Email must be completed"
   When I fill in "Email" with "womboid@wimbledon.com"
-  And I press "Yes - this is my email address"
+  And I press "Yes – this is my email address"
 
   Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"

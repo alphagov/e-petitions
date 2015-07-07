@@ -68,7 +68,7 @@ end
 
 Then(/^I should see an explanation that my constituency couldn't be found$/) do
   expect(page).not_to have_selector(:css, '.local-petitions .petition-item')
-  expect(page).to have_content('We could not find your constituency from the postcode you provided')
+  expect(page).to have_content("We couldn't find the postcode")
 end
 
 Then(/^I should see an explanation that there are no petitions popular in my constituency$/) do

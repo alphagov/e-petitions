@@ -38,7 +38,7 @@ end
 
 When /^I fill in my non\-UK details$/ do
   step "I fill in my details"
-  uncheck "Yes, I am a British citizen or UK resident"
+  uncheck "I am a British citizen or UK resident"
 end
 
 When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
@@ -46,7 +46,7 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "#{email_address}"
-    And I check "Yes, I am a British citizen or UK resident"
+    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
   )
@@ -56,7 +56,7 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
-    And I check "Yes, I am a British citizen or UK resident"
+    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "#{postcode}"
     And I select "United Kingdom" from "Location"
   )
@@ -86,7 +86,7 @@ When /^I fill in my details and sign a petition$/ do
 end
 
 Then /^I should see that I have already signed the petition$/ do
-  expect(page).to have_text("Thank you. Your signature has already been added to the petition.")
+  expect(page).to have_text("You've already signed this petition")
 end
 
 Then(/^I am asked to review my email address$/) do
@@ -99,7 +99,7 @@ When(/^I change my email address to "(.*?)"$/) do |email_address|
 end
 
 When(/^I say I am happy with my email address$/) do
-  click_on "Yes - this is my email address"
+  click_on "Yes – this is my email address"
 end
 
 And "I have already signed the petition with an uppercase email" do

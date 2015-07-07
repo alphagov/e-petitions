@@ -10,14 +10,23 @@ module PetitionHelper
     petition_search.facets.slice(*public_petition_facets)
   end
 
-  def signatures_threshold_percentage(petition)
-    if petition.signature_count < Site.threshold_for_response
-      number_to_percentage(petition.signature_count / Site.threshold_for_response.to_f * 100)
-    elsif petition.signature_count < Site.threshold_for_debate
-      number_to_percentage(petition.signature_count / Site.threshold_for_debate.to_f * 100)
+  def current_threshold(petition)
+    if petition.response_threshold_reached_at? || petition.government_response_at?
+      Site.threshold_for_debate
     else
-      "100%"
+      Site.threshold_for_response
     end
+  end
+
+  def signatures_threshold_percentage(petition)
+    threshold = current_threshold(petition).to_f
+    percentage = petition.signature_count / threshold * 100
+    if percentage > 100
+      percentage = 100
+    elsif percentage < 1
+      percentage = 1
+    end
+    number_to_percentage(percentage, precision: 2)
   end
 
   private
