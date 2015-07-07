@@ -105,11 +105,11 @@ RSpec.describe Site, type: :model do
 
     it "delegates constraints_for_moderation to the instance" do
       expect(site).to receive(:constraints_for_moderation).and_return(
-        protocol: "https://", host: "petition.parliament.test", port: 443
+        protocol: "https://", host: "moderate.petition.parliament.test", port: 443
       )
 
       expect(Site.constraints_for_moderation).to eq(
-        protocol: "https://", host: "petition.parliament.test", port: 443
+        protocol: "https://", host: "moderate.petition.parliament.test", port: 443
       )
     end
 
@@ -124,8 +124,8 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates moderate_host to the instance" do
-      expect(site).to receive(:moderate_host).and_return("petition.parliament.test")
-      expect(Site.moderate_host).to eq("petition.parliament.test")
+      expect(site).to receive(:moderate_host).and_return("moderate.petition.parliament.test")
+      expect(Site.moderate_host).to eq("moderate.petition.parliament.test")
     end
 
     it "delegates moderate_host_with_port to the instance" do
@@ -238,6 +238,24 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
 
         expect(defaults[:url]).to eq("http://localhost:3000")
+      end
+    end
+
+    describe "for moderate_url" do
+      it "defaults to 'https://moderate.petition.parliament.uk'" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
+        allow(ENV).to receive(:fetch).with("MODERATE_HOST", "moderate.petition.parliament.uk").and_return("moderate.petition.parliament.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
+
+        expect(defaults[:moderate_url]).to eq("https://moderate.petition.parliament.uk")
+      end
+
+      it "allows overriding via environment variables" do
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("http")
+        allow(ENV).to receive(:fetch).with("MODERATE_HOST", "moderate.petition.parliament.uk").and_return("localhost")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
+
+        expect(defaults[:moderate_url]).to eq("http://localhost:3000")
       end
     end
 
@@ -625,7 +643,7 @@ RSpec.describe Site, type: :model do
 
   describe "#constraints_for_moderation" do
     subject :site do
-      described_class.create!(url: "https://petition.parliament.test")
+      described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
     end
 
     it "a hash of routing constraints" do
@@ -669,7 +687,7 @@ RSpec.describe Site, type: :model do
 
   describe "#moderate_host" do
     subject :site do
-      described_class.create!(url: "https://petition.parliament.test")
+      described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
     end
 
     it "the moderation host of the url" do
@@ -680,7 +698,7 @@ RSpec.describe Site, type: :model do
   describe "#moderate_host_with_port" do
     context "when the port is the default port" do
       subject :site do
-        described_class.create!(url: "https://petition.parliament.test")
+        described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
       end
 
       it "the moderation host without the port of the url" do
@@ -690,7 +708,7 @@ RSpec.describe Site, type: :model do
 
     context "when the port is not the default port" do
       subject :site do
-        described_class.create!(url: "https://petition.parliament.test:8443")
+        described_class.create!(moderate_url: "https://moderate.petition.parliament.test:8443")
       end
 
       it "the moderation host with the port of the url" do
