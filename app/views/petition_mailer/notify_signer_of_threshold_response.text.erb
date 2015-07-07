@@ -4,6 +4,8 @@ The Government has responded to the petition you signed – "<%= @petition.actio
 
 Government responded:
 
+<%= h(@petition.government_response.summary) %>
+
 <%= h(@petition.government_response.details) %>
 
 Click this link to view the response online:
