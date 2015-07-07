@@ -1,28 +1,15 @@
 <h2>Share this petition</h2>
-<% share_title = petition.action + " - Petitions" -%>
 <ul class="petition-share">
   <li>
-    <%= link_to "http://www.facebook.com/sharer.php?t=#{URI.escape(share_title)}&u=#{URI.escape(petition_url(petition))}", rel: 'external' do %>
-      <span class="icon icon-share-facebook"></span>
-      Facebook
-    <% end %>
+    <%= share_via_facebook(petition, rel: 'external') %>
   </li>
   <li>
-    <%= link_to "mailto:?subject=#{URI.escape(share_title)}&body=#{URI.escape(petition_url(petition))}", rel: 'external' do %>
-      <span class="icon icon-share-email"></span>
-      Email
-    <% end %>
+    <%= share_via_email(petition, rel: 'external') %>
   </li>
   <li>
-    <%= link_to "http://twitter.com/share?text=#{URI.escape(share_title)}&url=#{URI.escape(petition_url(petition))}", rel: 'external' do %>
-      <span class="icon icon-share-twitter"></span>
-      Twitter
-    <% end %>
+    <%= share_via_twitter(petition, rel: 'external') %>
   </li>
   <li class="petition-share-whatsapp">
-    <%= link_to "whatsapp://send?text=#{URI.escape(share_title + "\n" + petition_url(petition))}", rel: 'external' do %>
-      <span class="icon icon-share-whatsapp"></span>
-      Whatsapp
-    <% end %>
+    <%= share_via_whatsapp(petition, rel: 'external') %>
   </li>
 </ul>

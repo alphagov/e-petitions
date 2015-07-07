@@ -4,7 +4,7 @@ cache: bundler
 rvm:
 - 2.2.2
 services:
-  - memcached
+- memcached
 before_install:
 - gem install bundler
 before_script:
@@ -15,7 +15,7 @@ script: bundle exec rake
 after_success: bundle exec rake deploy:preview
 env:
   global:
-  - secure: bqjqhceSOQYekPv5swVtYTjKG9A689j3xRFRqBxbzYEpYy+pujIQK+jIFARWtQqUULI/ZFc0ERZMpFHfWG9IwTvMwKti5L/hT5n/uGT7XlAMp0pH+mA9D+/3sHQyN+66uRfAHyz6fdd2pz/nDYq5KJtpkN/GTBhXQgO5KHTggMQ=
-  - secure: cmxFOfbwZv58O6HIN3SPdIC7EyC9EK2OiCJylnIw4aG5yP7zN7TPz+JukXv684szIxYnskYEyZx2wUY2oSl7J7bTtMKDxJ4BzM+UrTQExgtcm2s/0ZZEzh8u54Bx2aPUhuedEkSuyFst2dY/3GjxHHJ8PhtDvWdL4Fa74WN9cuE=
-  - secure: s+TrZenxB1PxnPy8wgMBfTdlPLe1rgVxa+lW4FB45L+MVTm1VqfDv+rU+i9CMXC9kLKjhCHJoZlFFOTMtgBCoLybkloTRkLULjeOA9BmFs26pUBBmajfwnmu7Vix3zwzjBqq6xYWjZ10eIea3OCqB/0sQRoLaJylodOzVWGi9Ts=
-  - secure: gDyAoPkiNpH7xdv1iAkj2phjlCBCofre5EU+bv8EMaAiddDi14QndEaTEyHgo2F18Rjeub4nagqFUtk9SUmf42tztS2X5cU7LyRRKpYCkYceZ/ex9t8k1i3JoNH3JaNQmmfCoVcw9rTarbbngk6gyFXmw35EB0Z0C6wlaOv4tCs=
+  - secure: hQTk4ylIIdlGDl2fJTfbnzfjO0GZlWczkXxall0Af3NLIWlQ8ILyigsopJJMdOOhHk+uTkfmdYTShNcpyXi81HiTjf6uVySvJJm6zwTz9EYGM4qpu+Xlo+2JYCMYWxGlnu3dHcn59s4hf+zh5Ok7BjYRqQA2d0q0wcrtVD2WqSc=
+  - secure: f32DRInVTE/8FS/5Q9PlKyxEosL4AUE/MsfMwFeQ+fZ2sjQm14QWDjwmCiah+iIT8QpzWbQDSZnEaqoJyOtwmcJCSBFhzNuqA7CK4mmWW9L0LGojfCDpPSMHsoFdbkKxs83vrCx9dsAQ6lTqWgARoJqwyL80ppXPDu2Soa7WVvo=
+  - secure: o+ShV9oLB4vVUbKk4FuNAJDFGywyCgsDcPbFdu9wpF/R7hhEV+CYCyeRM8JpobJ6Ubnl+ilL0eoDseG1BJQrHN+dO/t/FurIeWr74Vh2xf0M6DObtOOP4FIwqQqIlHAZnmNxCb3wzMJHBMUMOyu08ocz8iJRjiS92cDRAnPEop8=
+  - secure: N2NnZf2vA9kfPw5JDXndWb2tJ26CwHka4+UO++MRKkvtNtPLsaBZ2lA44woJCqZugLoZcFEDkNc0ff3oOSiAxD/CcQt5budHglYi35BLvuisXmMmezAS/TLo5D+rt5lESl2w8S5MV7Cv73erGIkVs4BMBzNU67t0ZJCy0Vlvdos=

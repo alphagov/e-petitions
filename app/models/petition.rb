@@ -395,6 +395,14 @@ class Petition < ActiveRecord::Base
     state.in?(TODO_LIST_STATES)
   end
 
+  def government_response?
+    government_response_at? && government_response
+  end
+
+  def debate_outcome?
+    debate_outcome_at? && debate_outcome
+  end
+
   def deadline
     open_at && (closed_at || Site.closed_at_for_opening(open_at))
   end

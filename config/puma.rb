@@ -18,9 +18,6 @@ threads(concurrency[:min_threads], concurrency[:max_threads])
 preload_app!
 
 on_worker_boot do
-  # Manually start NewRelic agent as Puma detects already running threads during boot
-  NewRelic::Agent.manual_start if defined? NewRelic
-
   # Reset the connection to the cache if we can
   Rails.cache.reset if Rails.cache.respond_to?(:reset)
 

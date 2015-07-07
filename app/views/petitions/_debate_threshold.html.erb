@@ -1,20 +1,20 @@
 <section class="about-item about-item-count-debate" aria-labelledby="debate-threshold-heading">
   <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
   <%# Has debate outcome details #%>
-  <% if petition.debate_outcome.present? -%>
+  <% if debate_outcome = petition.debate_outcome? -%>
     <section class="debate-outcome">
-      <p>This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
-      <% if petition.debate_outcome.video_url? -%>
-        <p><%= link_to 'Watch the debate', petition.debate_outcome.video_url, rel: 'external' %></p>
+      <p>This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
+      <% if debate_outcome.video_url? -%>
+        <p><%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %></p>
       <% end -%>
-      <% if petition.debate_outcome.transcript_url? -%>
-        <p><%= link_to 'Read the transcript', petition.debate_outcome.transcript_url, rel: 'external' %></p>
+      <% if debate_outcome.transcript_url? -%>
+        <p><%= link_to 'Read the transcript', debate_outcome.transcript_url, rel: 'external' %></p>
       <% end -%>
-      <% if petition.debate_outcome.overview? -%>
-        <%= auto_link(simple_format(h(petition.debate_outcome.overview)), html: { rel: 'nofollow' }) %>
+      <% if debate_outcome.overview? -%>
+        <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
       <% end -%>
     </section>
-  <% elsif petition.scheduled_debate_date.present? %>
+  <% elsif petition.scheduled_debate_date? %>
     <p class="about-item-scheduled-debate-date">
       Parliament will debate this petition on <%= short_date_format(petition.scheduled_debate_date) %>.
     </p>

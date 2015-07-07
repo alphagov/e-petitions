@@ -62,6 +62,8 @@ Rails.application.routes.draw do
   end
 
   constraints Site.constraints_for_moderation do
+    get '/', to: redirect('/admin')
+
     namespace :admin do
       root :to => 'admin#index'
 

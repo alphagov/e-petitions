@@ -125,7 +125,7 @@ class PackageBuilder
     info "Deployment created."
 
     track_progress(response.deployment_id) do |deployment_info|
-      notify_new_relic
+      notify_appsignal
       notify_slack
     end
   end
@@ -231,21 +231,25 @@ class PackageBuilder
     ENV.fetch('RELEASE', '1').to_i.nonzero?
   end
 
-  def notify_new_relic
-    if new_relic_license_key
-      args = %w[newrelic deployments]
-      args.concat ['-a', application_name]
-      args.concat ['-e', 'production']
-      args.concat ['-r', revision]
-      args.concat ['-l', new_relic_license_key]
+  def notify_appsignal
+    if appsignal_push_api_key
+      args = %w[appsignal notify_of_deploy]
+      args << %[--revision=#{revision}]
+      args << %[--user=#{username}]
+      args << %[--environment=production]
+      args << %[--name=#{application_name}]
 
-      info "Notifying New Relic of deployment ..."
+      info "Notifying AppSignal of deployment ..."
       Kernel.system *args
     end
   end
 
-  def new_relic_license_key
-    ENV.fetch('NEW_RELIC_LICENSE_KEY', nil)
+  def appsignal_push_api_key
+    ENV.fetch('APPSIGNAL_PUSH_API_KEY', nil)
+  end
+
+  def username
+    ENV['USER'] || ENV['USERNAME'] || 'unknown'
   end
 
   def notify_slack
@@ -276,7 +280,7 @@ class PackageBuilder
   end
 
   def release_bucket
-    "ubxd-epetitions-#{environment}-releases"
+    "epetitions-#{environment}-releases"
   end
 
   def release_key

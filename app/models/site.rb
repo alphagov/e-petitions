@@ -13,16 +13,11 @@ class Site < ActiveRecord::Base
     end
 
     def before_remove_const
-      reset
+      Thread.current[:__site__] = nil
     end
 
     def instance
-      Thread.current[:__site__] ||= cache{ first_or_create(defaults) }
-    end
-
-    def reset
-      Rails.cache.delete('__site__')
-      Thread.current[:__site__] = nil
+      Thread.current[:__site__] ||= first_or_create(defaults)
     end
 
     def authenticate(username, password)
@@ -109,6 +104,7 @@ class Site < ActiveRecord::Base
       {
         title:                      default_title,
         url:                        default_url,
+        moderate_url:               default_moderate_url,
         email_from:                 default_email_from,
         feedback_email:             default_feedback_email,
         username:                   default_username,
@@ -125,10 +121,6 @@ class Site < ActiveRecord::Base
     end
 
     private
-
-    def cache(&block)
-      Rails.cache.fetch('__site__', { expires_in: 5.minutes }, &block)
-    end
 
     def default_title
       ENV.fetch('SITE_TITLE', 'Petition parliament')
@@ -158,8 +150,20 @@ class Site < ActiveRecord::Base
       ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uk')
     end
 
+    def default_moderate_url
+      if ENV.fetch('EPETITIONS_PROTOCOL', 'https') == 'https'
+        URI::HTTPS.build(default_moderate_url_components).to_s
+      else
+        URI::HTTP.build(default_moderate_url_components).to_s
+      end
+    end
+
+    def default_moderate_url_components
+      [nil, default_moderate_host, default_port, nil, nil, nil]
+    end
+
     def default_moderate_host
-      Rails.env.development? ? default_host : "moderate.#{default_host}"
+      ENV.fetch('MODERATE_HOST', 'moderate.petition.parliament.uk')
     end
 
     def default_port
@@ -258,31 +262,47 @@ class Site < ActiveRecord::Base
   end
 
   def host_with_port
-    "#{host}#{port_string}"
-  end
-
-  def constraints_for_public
-    { protocol: protocol, host: host, port: port }
-  end
-
-  def moderate_host
-    @moderate_host ||= Rails.env.development? ? host : "moderate.#{host}"
-  end
-
-  def moderate_host_with_port
-    "moderate.#{host}#{port_string}"
-  end
-
-  def constraints_for_moderation
-    { protocol: protocol, host: moderate_host, port: port }
-  end
-
-  def password_digest
-    BCrypt::Password.new(super)
+    "#{host}#{port_string(uri)}"
   end
 
   def port
     uri.port
+  end
+
+  def protocol
+    "#{uri.scheme}://"
+  end
+
+  def constraints_for_public
+    unless database_migrating?
+      { protocol: protocol, host: host, port: port }
+    end
+  end
+
+  def moderate_host
+    moderate_uri.host
+  end
+
+  def moderate_host_with_port
+    "#{moderate_host}#{port_string(moderate_uri)}"
+  end
+
+  def moderate_port
+    moderate_uri.port
+  end
+
+  def moderate_protocol
+    "#{moderate_uri.scheme}://"
+  end
+
+  def constraints_for_moderation
+    unless database_migrating?
+      { protocol: moderate_protocol, host: moderate_host, port: moderate_port }
+    end
+  end
+
+  def password_digest
+    BCrypt::Password.new(super)
   end
 
   def password=(new_password)
@@ -320,32 +340,32 @@ class Site < ActiveRecord::Base
     errors.add(:password, :blank) unless password_digest?
   end
 
-  # Force early definition of attribute methods
-  # so that cached versions get properly built
-  define_attribute_methods if table_exists?
-
   private
 
-  def port_string
-    standard_port? ? '' : ":#{port}"
+  def database_migrating?
+    ARGV.any?{ |arg| arg =~ /db:migrate/ }
   end
 
-  def protocol
-    "#{uri.scheme}://"
+  def port_string(uri)
+    standard_port?(uri) ? '' : ":#{uri.port}"
   end
 
-  def standard_port
-    case protocol
-      when 'https://' then 443
+  def standard_port(uri)
+    case uri.scheme
+      when 'https' then 443
       else 80
     end
   end
 
-  def standard_port?
-    port == standard_port
+  def standard_port?(uri)
+    uri.port == standard_port(uri)
   end
 
   def uri
     @uri ||= URI.parse(url)
+  end
+
+  def moderate_uri
+    @moderate_uri ||= URI.parse(moderate_url)
   end
 end
