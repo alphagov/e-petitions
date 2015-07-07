@@ -189,19 +189,11 @@ input.back-page {
 }
 .about-item-count-response {
   background-position: 0 26px;
-  background-image: image-url("graphics/graphic_crown.png");
-  @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_crown-2x.png");
-    background-size: 36px;
-  }
+  @include background-image("graphics/graphic_crown", 36px, 25px);
 }
 .about-item-count-debate {
   background-position: 4px 20px;
-  background-image: image-url("graphics/graphic_portcullis.png");
-  @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_portcullis-2x.png");
-    background-size: 26px;
-  }
+  @include background-image("graphics/graphic_portcullis", 26px, 32px);
 }
 .about-item-scheduled-debate-date {
   @include bold-19;
