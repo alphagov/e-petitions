@@ -280,7 +280,7 @@ class PackageBuilder
   end
 
   def release_bucket
-    "ubxd-epetitions-#{environment}-releases"
+    "epetitions-#{environment}-releases"
   end
 
   def release_key
