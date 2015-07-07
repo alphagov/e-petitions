@@ -3,6 +3,13 @@
     margin-top: $gutter-half;
   }
 
+  .flash_error,
+  .flash-notice {
+    background-color: $flash-green;
+    padding: $gutter-half;
+    @include bold-19;
+  }
+
   .search-petitions {
     margin-bottom: $gutter-half;
   }
