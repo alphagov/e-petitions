@@ -22,7 +22,7 @@
   }
 }
 .page-title-with-icon {
-  padding-left: $gutter * 1.5;
+  padding-left: ($text-indent)-3px;
 }
 .page-subtitle {
   @include bold-27();

@@ -4,13 +4,12 @@
 @import "../govuk_frontend_toolkit/colours";
 @import "helpers";
 
-$text-indent: 50px;
-
 html, body, button, input, table, td, th, main {
   @include core-19;
   -webkit-font-smoothing: antialiased;
 }
 
+$text-indent: 50px;
 
 // Common heading sizes
 // Using the bold-xx mixins from the govuk_toolkit _typography.scss file
