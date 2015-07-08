@@ -2,7 +2,7 @@
 <html lang="en-GB">
   <head>
     <title><%= page_title %></title>
-    <%= cache :head, expires_in: 5.minutes do %>
+    <%= cache_for :head do %>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
       <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
@@ -24,7 +24,7 @@
       </div>
     <% end %>
 
-    <%= cache :header, expires_in: 5.minutes do %>
+    <%= cache_for :header do %>
       <%= render 'application/header' %>
     <% end %>
 
@@ -33,7 +33,7 @@
       <%= yield %>
     </main>
 
-    <%= cache [:footer, create_petition_page?], expires_in: 5.minutes do %>
+    <%= cache_for :footer do %>
       <%= render 'application/footer' %>
       <%= javascript_include_tag 'application' %>
       <% if create_petition_page? %>
