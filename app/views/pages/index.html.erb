@@ -1,6 +1,14 @@
 <%= cache [:home_page, last_signature_at], expires_in: 5.minutes do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
+  <% no_petitions_yet = Petition.visible.none? %>
+  <% if no_petitions_yet %>
+    <div class="section-panel-borderless no-petitions-yet">
+      <p class="lede">The new Petitions service launched&nbsp;today</p>
+      <p class="lede">We're expecting the first petitions to go live in the next few&nbsp;hours</p>
+    </div>
+  <% end %>
+
   <% actioned_petitions do |actions| %>
     <div class="section-panel actioned-petitions">
       <ul>
@@ -13,20 +21,21 @@
     </div>
   <% end %>
 
-  <div class="section-panel-borderless">
-    <% trending_petitions do |petitions| %>
-      <section class="trending" aria-labelledby="trending-heading">
-        <h2 id="trending-heading">Popular petitions</h2>
-        <ul>
-          <% petitions.each do |petition| %>
-            <%= render 'petitions/trending_petition', :trending_petition => petition %>
-          <% end -%>
-        </ul>
-      </section>
-    <% end %>
-    <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
-    <%# link_to petition_count(:with_response_explanation, actioned[:with_response][:count]), petitions_path(state: :with_response), class: "view-all" %>
-  </div>
+  <% unless no_petitions_yet %>
+    <div class="section-panel-borderless">
+      <% trending_petitions do |petitions| %>
+        <section class="trending" aria-labelledby="trending-heading">
+          <h2 id="trending-heading">Popular petitions</h2>
+          <ul>
+            <% petitions.each do |petition| %>
+              <%= render 'petitions/trending_petition', :trending_petition => petition %>
+            <% end -%>
+          </ul>
+        </section>
+      <% end %>
+      <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
+    </div>
+  <% end %>
 
   <% explanation_petitions do |actioned| %>
     <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
@@ -64,11 +73,13 @@
     </section>
   <% end %>
 
-  <section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
-    <h2 id="local-to-you-heading">Local to you</h2>
-    <p>Find petitions about local issues</p>
-    <%= render 'local_search' %>
-  </section>
+  <% unless no_petitions_yet %>
+    <section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
+      <h2 id="local-to-you-heading">Local to you</h2>
+      <p>Find petitions about local issues</p>
+      <%= render 'local_search' %>
+    </section>
+  <% end %>
 
   <section class="section-panel-borderless start-petition" aria-labelledby="start-a-petition-heading">
     <h2 id="start-a-petition-heading">Start a petition</h2>
