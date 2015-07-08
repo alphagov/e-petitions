@@ -25,6 +25,30 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
   end
 
+  describe "#petition_page?" do
+    context "when on the show petition page" do
+      before do
+        params[:controller] = "petitions"
+        params[:action] = "show"
+      end
+
+      it "returns true" do
+        expect(helper.petition_page?).to eq(true)
+      end
+    end
+
+    context "when not on the show petition page" do
+      before do
+        params[:controller] = "pages"
+        params[:action] = "index"
+      end
+
+      it "returns false" do
+        expect(helper.petition_page?).to eq(false)
+      end
+    end
+  end
+
   describe "#create_petition_page?" do
     context "when on the check petition page" do
       before do
