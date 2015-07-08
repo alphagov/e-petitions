@@ -1,0 +1,10 @@
+en-GB:
+  metadata:
+    open_graph:
+      site_name: "Petitions - UK Government and Parliament"
+      default_title: "Petitions - UK Government and Parliament"
+      title: "Petition: %{petition}"
+
+    twitter:
+      default_title: "Petitions - UK Government and Parliament"
+      title: "Petition: %{petition}"

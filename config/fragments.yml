@@ -2,6 +2,7 @@ head:
   keys:
     - :site_updated_at
     - :last_signature_at
+    - :petition_page
     - :petition
   options:
     expires_in: 300

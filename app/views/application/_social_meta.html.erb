@@ -1,23 +1,24 @@
-<!-- Dublin core -->
-<meta name="dcterms.spatial" xml:lang="en" lang="en" content="UK"/>
-<meta name="dcterms.creator" content="Government Digital Service"/>
-<%# <meta name="dcterms.modified" content="19072011"/>
-  Ideally, this should show the activity date on a per-page basis :( %>
-<meta name="dc.language" xml:lang="en" lang="en" content="en"/>
-<meta name="dcterms.publisher" content="Government Digital Service"/>
-<meta name="dcterms.subject" xml:lang="en" lang="en" content="petitions"/>
-<meta name="dcterms.title" content="<%= @title %>">
-
 <!-- Open Graph -->
-<meta property="og:title" content="<%= @title %>" />
-<meta property="og:type" content="article" />
-<meta property="og:image" content="<%= path_to_image('os-social/opengraph-image.png') %>" />
-<meta property="og:url" content="<%= @path %>" />
-<meta property="og:site_name" content="Petitions" />
-<meta property="og:description" content="<%= @action %>" />
+<%= open_graph_tag 'site_name', :site_name %>
+<%= open_graph_tag 'image', 'os-social/opengraph-image.png' %>
+<% if petition_page? %>
+<%= open_graph_tag 'url', petition_url(@petition) %>
+<%= open_graph_tag 'type', 'article' %>
+<%= open_graph_tag 'title', :title, petition: @petition.action %>
+<%= open_graph_tag 'description', @petition.background %>
+<% else %>
+<%= open_graph_tag 'url', home_url %>
+<%= open_graph_tag 'type', 'website' %>
+<%= open_graph_tag 'title', :default_title %>
+<% end %>
 
 <!-- Twitter -->
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="<%= @title %>">
-<meta name="twitter:description" content="<%= @action %>">
-<meta name="twitter:image" content="<%= path_to_image('os-social/opengraph-image.png') %>">
+<%= twitter_card_tag 'card', 'summary' %>
+<%= twitter_card_tag 'site', '@hocpetitions' %>
+<%= twitter_card_tag 'image', 'os-social/opengraph-image.png' %>
+<% if petition_page? %>
+<%= twitter_card_tag 'title', :title, petition: @petition.action %>
+<%= twitter_card_tag 'description', @petition.background %>
+<% else %>
+<%= twitter_card_tag 'title', :default_title %>
+<% end %>
