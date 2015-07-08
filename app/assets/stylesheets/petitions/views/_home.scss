@@ -59,7 +59,7 @@
     margin: 0;
   }
 }
-.threshold-panel:hover, .threshold-panel:focus {
+a.threshold-panel:hover, a.threshold-panel:focus {
   background-color: darken($petitions-panel-colour, 5%);
 }
 .threshold-panel-response {
