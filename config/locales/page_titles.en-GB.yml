@@ -25,7 +25,8 @@ en-GB:
       thank_you: "Thank you - Petitions"
       unsubscribe: "Successfully unsubscribed"
     sponsors:
-      show: "%{petition} - Support this petition - Petitions"
+      show: "Support petition - Petitions"
+      # Ideally "Support %{petition.creator_signature.name}'s petition - Petitions"
       sponsored: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
