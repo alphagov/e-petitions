@@ -26,6 +26,9 @@ RSpec.describe PageTitleHelper, type: :helper do
         petitions: {
           default: "Voir toutes les pétitions",
           show: "%{petition} - Pétitions"
+        },
+        sponsors: {
+          show: "La pétition de soutien %{creator} - Pétitions"
     }}}
   end
 
@@ -64,16 +67,31 @@ RSpec.describe PageTitleHelper, type: :helper do
     end
 
     context "when there is a petition assigned" do
-      let(:petition) { double(:petition, action: "Ban devoirs pour les enfants de l'école primaire") }
+      let(:creator_signature) { double(:signature, name: "Jacques Cousteau") }
+
+      let(:petition) do
+        double(:petition,
+          creator_signature: creator_signature,
+          action: "Ban devoirs pour les enfants de l'école primaire"
+        )
+      end
 
       before do
-        params[:controller] = "petitions"
-        params[:action] = "show"
         assign("petition", petition)
       end
 
       it "the petition action is available for interpolation" do
+        params[:controller] = "petitions"
+        params[:action] = "show"
+
         expect(helper.page_title).to eq("Ban devoirs pour les enfants de l'école primaire - Pétitions")
+      end
+
+      it "the petition creator is available for interpolation" do
+        params[:controller] = "sponsors"
+        params[:action] = "show"
+
+        expect(helper.page_title).to eq("La pétition de soutien Jacques Cousteau - Pétitions")
       end
     end
 
