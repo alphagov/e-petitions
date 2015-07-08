@@ -139,7 +139,7 @@ end
 
 When /^I view all petitions from the home page$/ do
   visit home_url
-  click_link "View all"
+  click_link "All petitions"
 end
 
 When(/^I check for similar petitions$/) do

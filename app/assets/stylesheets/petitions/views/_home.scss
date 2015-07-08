@@ -1,3 +1,7 @@
+.no-petitions-yet {
+  padding-top: $gutter-half;
+}
+
 .actioned-petitions {
   @extend %contain-floats;
   li {
@@ -89,5 +93,13 @@
 
 .local-to-you h2,
 .start-petition h2 {
-  @include bold-24;
+  @include bold-24();
+
+  margin-top: em(40, 20);
+  margin-bottom: em(10, 20);
+
+  @include media(tablet) {
+    margin-top: em(60, 24);
+    margin-bottom: em(20, 24);
+  }
 }

@@ -1,5 +1,5 @@
 <% if actioned[:with_debate_outcome][:count].zero? %>
-  <p>This Parliament has not debated any petitions yet.</p>
+  <p>There haven’t been any petitions with over 100,000 signatures yet</p>
 <% else %>
   <ol class="threshold-petitions">
     <% actioned[:with_debate_outcome][:list].each do |petition| %>
