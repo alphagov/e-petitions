@@ -1,35 +1,37 @@
-<h1>
-  <span class="heading-secondary">Closed petition</span>
-  <%= petition.action %>
-</h1>
+<%= cache_for :petition do %>
+  <h1>
+    <span class="heading-secondary">Closed petition</span>
+    <%= petition.action %>
+  </h1>
 
-<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-<% unless petition.additional_details.blank? %>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-  </details>
-<% end %>
+  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+  <% unless petition.additional_details.blank? %>
+    <details>
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
 
-<p class="flash-notice">
-  This petition is closed
-  <span>All petitions run for 6 months</span>
-</p>
-
-<div class="signature-count">
-  <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
-  <div class="signature-count-graph" aria-hidden="true">
-    <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
-  </div>
-  <p class="signature-count-goal">
-    <%= number_with_delimiter(current_threshold(petition)) %>
+  <p class="flash-notice">
+    This petition is closed
+    <span>All petitions run for 6 months</span>
   </p>
-</div>
 
-<%= render 'threshold_details', petition: petition %>
+  <div class="signature-count">
+    <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
+    <div class="signature-count-graph" aria-hidden="true">
+      <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
+    </div>
+    <p class="signature-count-goal">
+      <%= number_with_delimiter(current_threshold(petition)) %>
+    </p>
+  </div>
 
-<ul class="petition-meta">
-  <li>
-    <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
-  </li>
-</ul>
+  <%= render 'threshold_details', petition: petition %>
+
+  <ul class="petition-meta">
+    <li>
+      <span class="label">Date closed</span> <%= short_date_format petition.closed_at %>
+    </li>
+  </ul>
+<% end %>

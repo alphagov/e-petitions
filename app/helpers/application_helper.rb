@@ -14,6 +14,10 @@ module ApplicationHelper
     params[:controller] == 'petitions' && params[:action].in?(%w[check create new])
   end
 
+  def petition_page?
+    params.values_at(:controller, :action) == %w[petitions show]
+  end
+
   def back_url
     referer_url || 'javascript:history.back()'
   end

@@ -1,0 +1,30 @@
+head:
+  keys:
+    - :site_updated_at
+    - :last_signature_at
+    - :petition_page
+    - :petition
+  options:
+    expires_in: 300
+
+header:
+  options:
+    expires_in: 300
+
+footer:
+  keys:
+    - :create_petition_page
+  options:
+    expires_in: 300
+
+home_page:
+  keys:
+    - :last_signature_at
+  options:
+    expires_in: 300
+
+petition:
+  keys:
+    - :petition
+  options:
+    expires_in: 300

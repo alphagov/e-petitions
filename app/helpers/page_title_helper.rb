@@ -39,8 +39,15 @@ module PageTitleHelper
       {}.tap do |opts|
         opts[:scope]        = :page_titles
         opts[:default]      = [:"#{controller}.default", :default]
-        opts[:petition]     = petition.action if petition?
         opts[:constituency] = constituency.name if constituency?
+
+        if petition?
+          opts[:petition] = petition.action
+
+          unless petition.is_a?(ArchivedPetition)
+            opts[:creator] = petition.creator_signature.name
+          end
+        end
       end
     end
 

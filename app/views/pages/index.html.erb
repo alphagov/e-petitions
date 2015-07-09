@@ -1,4 +1,4 @@
-<%= cache [:home_page, last_signature_at], expires_in: 5.minutes do %>
+<%= cache_for :home_page do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
   <% no_petitions_yet = Petition.visible.none? %>

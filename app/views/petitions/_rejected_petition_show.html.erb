@@ -1,26 +1,28 @@
-<h1>
-  <span class="heading-secondary">Rejected petition</span>
-  <%= petition.action %>
-</h1>
+<%= cache_for :petition do %>
+  <h1>
+    <span class="heading-secondary">Rejected petition</span>
+    <%= petition.action %>
+  </h1>
 
-<div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-<% unless petition.additional_details.blank? %>
-  <details>
-    <summary><span class="summary">More details</span></summary>
-    <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-  </details>
+  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
+  <% unless petition.additional_details.blank? %>
+    <details>
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
+
+  <p class="flash-notice">This petition was rejected</p>
+
+  <h2>Reasons for rejection</h2>
+  <%= rejection_description(petition.rejection.code) %>
+  <% if petition.rejection.details? %>
+    <p><%= petition.rejection.details %></p>
+  <% end %>
+
+  <ul class="petition-meta">
+    <li>
+      <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
+    </li>
+  </ul>
 <% end %>
-
-<p class="flash-notice">This petition was rejected</p>
-
-<h2>Reasons for rejection</h2>
-<%= rejection_description(petition.rejection.code) %>
-<% if petition.rejection.details? %>
-  <p><%= petition.rejection.details %></p>
-<% end %>
-
-<ul class="petition-meta">
-  <li>
-    <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
-  </li>
-</ul>
