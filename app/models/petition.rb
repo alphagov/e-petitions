@@ -15,6 +15,7 @@ class Petition < ActiveRecord::Base
   STATES            = %w[pending validated sponsored flagged open closed rejected hidden]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
+  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
@@ -169,6 +170,10 @@ class Petition < ActiveRecord::Base
 
     def selectable
       where(state: SELECTABLE_STATES)
+    end
+
+    def show
+      where(state: SHOW_STATES)
     end
 
     def threshold

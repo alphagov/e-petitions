@@ -216,7 +216,10 @@ RSpec.describe PetitionsController, type: :controller do
   describe "show" do
     let(:petition) { double }
     it "assigns the given petition" do
-      allow(Petition).to receive_message_chain(:visible, :find => petition)
+      allow(petition).to receive(:in_moderation?).and_return(false)
+      allow(petition).to receive(:moderated?).and_return(true)
+      allow(Petition).to receive_message_chain(:show, :find => petition)
+
       get :show, :id => 1
       expect(assigns(:petition)).to eq(petition)
     end

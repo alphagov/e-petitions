@@ -4,6 +4,10 @@ class PetitionsController < ApplicationController
   before_action :avoid_unknown_state_filters, only: :index
   before_action :do_not_cache, except: %i[index show]
 
+  before_action :retrieve_petition, only: [:show, :moderation_info]
+  before_action :redirect_to_moderation_info_url, if: :not_moderated?, only: :show
+  before_action :redirect_to_petition_url, if: :moderated?, only: :moderation_info
+
   respond_to :html
 
   def index
@@ -11,15 +15,7 @@ class PetitionsController < ApplicationController
   end
 
   def show
-    begin
-      respond_with @petition = Petition.visible.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      if @petition = ArchivedPetition.find_by_id(params[:id])
-        redirect_to archived_petition_url(@petition)
-      else
-        raise e
-      end
-    end
+    respond_with @petition
   end
 
   def new
@@ -55,9 +51,35 @@ class PetitionsController < ApplicationController
 
   protected
 
+  def retrieve_petition
+    @petition = Petition.show.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+    if @petition = ArchivedPetition.find_by_id(params[:id])
+      redirect_to archived_petition_url(@petition)
+    else
+      raise e
+    end
+  end
+
   def avoid_unknown_state_filters
     return if params[:state].blank?
     redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
+  end
+
+  def not_moderated?
+    !@petition.moderated?
+  end
+
+  def redirect_to_moderation_info_url
+    redirect_to moderation_info_petition_url(@petition)
+  end
+
+  def moderated?
+    @petition.moderated?
+  end
+
+  def redirect_to_petition_url
+    redirect_to petition_url(@petition)
   end
 
   def parse_emails(emails)
