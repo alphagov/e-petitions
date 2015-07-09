@@ -1,10 +1,10 @@
-<h1 class="page-title page-title-with-icon">
-  <span class="icon icon-confirmation-tick"></span>
-  <span class="signature-number"><%= number_with_delimiter(@signature.number) %></span> signatures
-</h1>
+<h1 class="visuallyhidden"><%= number_with_delimiter(@signature.number) %> signatures</h1>
 
-<p class="signed-petition-intro">We've added your signature to the petition:</p>
-<p class="signed-petition-link"><%= link_to @petition.action, petition_path(@petition) %></p>
+<div class="signature-confirmation">
+  <%= render 'signature_confirmation' %>
+  <p>We've added your signature to the petition:</p>
+  <p><%= link_to @petition.action, petition_path(@petition) %></p>
+</div>
 
 <%= render 'share_petition', petition: @petition %>
 
