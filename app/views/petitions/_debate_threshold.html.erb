@@ -1,7 +1,7 @@
 <section class="about-item about-item-count-debate" aria-labelledby="debate-threshold-heading">
-  <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
   <%# Has debate outcome details #%>
   <% if debate_outcome = petition.debate_outcome? -%>
+    <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
     <section class="debate-outcome">
       <p>This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
       <% if debate_outcome.video_url? -%>
@@ -14,14 +14,41 @@
         <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
       <% end -%>
     </section>
-  <% elsif petition.scheduled_debate_date? %>
-    <p class="about-item-scheduled-debate-date">
-      Parliament will debate this petition on <%= short_date_format(petition.scheduled_debate_date) %>.
-    </p>
-    <p>
-      You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
-    </p>
+
+  <%# Has a debate date #%>
+  <% elsif petition.scheduled_debate_date? -%>
+
+    <%# Waiting for a debate outcome #%>
+    <% if petition.scheduled_debate_date.past? %>
+      <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
+      <p class="about-item-scheduled-debate-date">
+        Parliament debated this petition on <%= short_date_format(petition.scheduled_debate_date) %>
+      </p>
+      <p>
+        You'll be able to watch the debate online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+      </p>
+      <p class="secondary"><%= waiting_for_in_words(petition.scheduled_debate_date) %> for Parliament to publish the debate outcome</p>
+
+    <%# Debate is still to come #%>
+    <% else %>
+      <h2 id="debate-threshold-heading">Parliament will debate this petition</h2>
+      <p class="about-item-scheduled-debate-date">
+        Parliament will debate this petition on <%= short_date_format(petition.scheduled_debate_date) %>.
+      </p>
+      <p>
+        You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+      </p>
+    <% end %>
+
+  <%# Waiting for a government response #%>
+  <% elsif petition.debate_threshold_reached_at? -%>
+    <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
+    <p>Parliament considers all petitions that get more than <%= Site.formatted_threshold_for_debate %> signatures for a debate</p>
+    <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> for a debate date</p>
+
+  <%# Needs more signatures #%>
   <% else -%>
-    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in&nbsp;Parliament</p>
+    <h2 id="debate-threshold-heading">At <%= Site.formatted_threshold_for_debate %> signatures...</h2>
+    <p>At <%= Site.formatted_threshold_for_debate %> signatures, this petition will be considered for debate in&nbsp;Parliament</p>
   <% end -%>
 </section>
