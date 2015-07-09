@@ -51,4 +51,28 @@ RSpec.describe SponsorMailer, type: :mailer do
       expect(mail).to have_body_text(%r[To promote organic vegetables])
     end
   end
+
+  describe "#sponsor_signed_email_below_threshold" do
+    subject(:mail) { described_class.sponsor_signed_email_below_threshold(petition, sponsor) }
+
+    context "when the number of supporters is 1" do
+      before do
+        allow(petition).to receive(:supporting_sponsors_count).and_return(1)
+      end
+
+      it "pluralizes supporters correctly" do
+        expect(mail).to have_body_text(%r[You have 1 supporter so far])
+      end
+    end
+
+    context "when the number of supporters is more than 1" do
+      before do
+        allow(petition).to receive(:supporting_sponsors_count).and_return(2)
+      end
+
+      it "pluralizes supporters correctly" do
+        expect(mail).to have_body_text(%r[You have 2 supporters so far])
+      end
+    end
+  end
 end
