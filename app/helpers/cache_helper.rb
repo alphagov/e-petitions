@@ -38,7 +38,7 @@ module CacheHelper
       end
 
       def petition
-        assigns[:petition] if petition_page?
+        assigns['petition'] if petition_page?
       end
 
       def petition_page
@@ -54,8 +54,8 @@ module CacheHelper
       end
 
       def method_missing(name, *args, &block)
-        if assigns.key?(name)
-          assigns[name]
+        if assigns.key?(name.to_s)
+          assigns[name.to_s]
         else
           super
         end

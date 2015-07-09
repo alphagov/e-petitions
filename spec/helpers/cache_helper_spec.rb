@@ -71,7 +71,7 @@ RSpec.describe CacheHelper, type: :helper do
         let(:petition) { double(:petition) }
 
         before do
-          assign(:petition, petition)
+          assign('petition', petition)
           expect(helper).to receive(:petition_page?).and_return(true)
         end
 
@@ -92,7 +92,7 @@ RSpec.describe CacheHelper, type: :helper do
 
     describe "#method_missing" do
       it "returns an assigned variable in the template context" do
-        assign(:signature_count, 32)
+        assign('signature_count', 32)
         expect(keys.signature_count).to eq(32)
       end
     end
@@ -101,12 +101,12 @@ RSpec.describe CacheHelper, type: :helper do
       let(:last_signature_at) { "2015-07-08 09:00:00".in_time_zone }
 
       it "returns an array of key-value pairs" do
-        assign(:signature_count, 32)
+        assign('signature_count', 32)
         expect(keys.for([:signature_count])).to eq([[:signature_count, "32"]])
       end
 
       it "expands array values" do
-        assign(:signature_counts, [1, 2, 3])
+        assign('signature_counts', [1, 2, 3])
         expect(keys.for([:signature_counts])).to eq([[:signature_counts, "1/2/3"]])
       end
 
@@ -116,12 +116,12 @@ RSpec.describe CacheHelper, type: :helper do
       end
 
       it "expands value that respond to cache_key" do
-        assign(:signature, double(:signature, cache_key: "signature/1-20150708090000000000000"))
+        assign('signature', double(:signature, cache_key: "signature/1-20150708090000000000000"))
         expect(keys.for([:signature])).to eq([[:signature, "signature/1-20150708090000000000000"]])
       end
 
       it "calls to_param otherwise" do
-        assign(:message, { foo: "bar" })
+        assign('message', { foo: "bar" })
         expect(keys.for([:message])).to eq([[:message, "foo=bar"]])
       end
     end
