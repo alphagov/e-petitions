@@ -5,9 +5,6 @@
 
 <%= form_for @feedback, url: feedback_path, html: {class: "wizard_form new_petition_form"} do |f| %>
 
-  <p>We can't forward your feedback to the people who started a petition.</p>
-  <p>We can't comment on the ideas raised in a specific petition.</p>
-
   <%= form_row for: [@feedback, :comment] do %>
     <%= f.label :comment, "Comments", class: "form-label" %>
     <%= error_messages_for_field @feedback, :comment %>
@@ -30,10 +27,11 @@
     <%= f.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
   <% end %>
 
+  <%= submit_tag "Send feedback", class: "button", tabindex: increment %>
+
   <section class="inline-terms">
     <p>We'll only use your email to reply to your message</p>
+    <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
   </section>
-
-  <%= submit_tag "Send feedback", class: "button", tabindex: increment %>
 
 <% end -%>
