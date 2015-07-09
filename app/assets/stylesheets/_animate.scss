@@ -8,14 +8,9 @@ Copyright (c) 2015 Daniel Eden
 */
 
 /*
-scss usage:
-.thing-you-want-to-animate-once {
+// Usage
+.thing-you-want-to-animate {
   @extend %animated;
-  @extend %fadeInLeft;
-}
-.thing-you-want-to-animate-once {
-  @extend %animated;
-  @extend %infinite;
   @extend %fadeInLeft;
 }
 */
