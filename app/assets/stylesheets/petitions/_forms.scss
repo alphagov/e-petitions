@@ -31,6 +31,8 @@ select.form-control:hover {
   @extend %outdent-to-full-width;
 
   @include media(tablet) {
+    margin-left: -$gutter;
+    margin-right: -$gutter;
     padding-left: $gutter - 5px;
     padding-right: $gutter;
   }
