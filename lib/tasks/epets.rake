@@ -9,11 +9,6 @@ namespace :epets do
      end
   end
 
-  desc "Email admin users with a list of validated petitions"
-  task :admin_email_reminder => :environment do
-    EmailReminder.admin_email_reminder
-  end
-
   desc "Email threshold users with a list of threshold petitions"
   task :threshold_email_reminder => :environment do
     EmailReminder.threshold_email_reminder

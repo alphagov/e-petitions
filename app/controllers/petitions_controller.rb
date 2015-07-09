@@ -49,11 +49,6 @@ class PetitionsController < ApplicationController
     @petitions = Petition.visible.search(params.merge(count: 3))
   end
 
-  def resend_confirmation_email
-    @petition = Petition.visible.find(params[:id])
-    SignatureConfirmer.new(@petition, params[:confirmation_email], PetitionMailer, EMAIL_REGEX).confirm!
-  end
-
   def moderation_info
     @petition = Petition.find(params[:id])
   end

@@ -29,32 +29,6 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_signer_of_threshold_response)
   end
 
-  def no_signature_for_petition(petition, email)
-    @petition = petition
-    @email = email
-    mail to: email, subject: subject_for(:no_signature_for_petition)
-  end
-
-  def email_already_confirmed_for_signature(signature)
-    @signature = signature
-    mail to: @signature.email, subject: subject_for(:email_already_confirmed_for_signature, action: @signature.petition.action)
-  end
-
-  def two_pending_signatures(signature_one, signature_two)
-    @signature_one, @signature_two = signature_one, signature_two
-    mail to: @signature_one.email, subject: subject_for(:two_pending_signatures)
-  end
-
-  def one_pending_one_validated_signature(pending_signature, validated_signature)
-    @pending_signature, @validated_signature = pending_signature, validated_signature
-    mail to: @pending_signature.email, subject: subject_for(:one_pending_one_validated_signature)
-  end
-
-  def double_signature_confirmation(*signatures)
-    @signature_one, @signature_two = signatures.first, signatures.second
-    mail to: @signature_one.email, subject: subject_for(:double_signature_confirmation, action: @signature_one.petition.action)
-  end
-
   def notify_creator_of_closing_date_change(signature)
     @signature = signature
     mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change)

@@ -37,16 +37,3 @@
     </li>
   </ul>
 <% end %>
-
-<details class="confirmation-resend">
-  <summary><span class="summary">Not received your confirmation email?</span></summary>
-  <div class="panel-indent">
-    <%= form_tag [:resend_confirmation_email, petition] do %>
-        <div class="form-group">
-          <%= label_tag :confirmation_email, "If you have already signed this petition, but didn't receive an email to confirm your signature, you can request a confirmation to be resent by providing your email address below.", :class => 'form-label' %>
-          <%= text_field_tag :confirmation_email, "", :class => 'form-control' %>
-        </div>
-        <%= submit_tag 'Resend', :class => 'button' %>
-    <% end %>
-  </div>
-</details>
