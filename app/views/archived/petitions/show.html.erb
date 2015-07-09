@@ -7,7 +7,7 @@
 
 <div class="flash-notice">
   <p>This petition has been archived</p>
-  <p class="flash-notice-description">It was submitted during the 2010-2015 Conservative - Liberal Democrat coalition government</p>
+  <p class="flash-notice-description">It was submitted during the 2010–2015 Conservative – Liberal Democrat coalition government</p>
 </div>
 
 <% if @petition.rejected? %>
@@ -21,7 +21,9 @@
 <% end -%>
 
 <% unless @petition.rejected? %>
-  <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
+  <div class="signature-count">
+    <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
+  </div>
 
   <ul class="petition-meta">
     <li class="meta-deadline">
