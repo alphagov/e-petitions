@@ -376,7 +376,8 @@ CREATE TABLE petitions (
     response_threshold_reached_at timestamp without time zone,
     debate_threshold_reached_at timestamp without time zone,
     rejected_at timestamp without time zone,
-    debate_outcome_at timestamp without time zone
+    debate_outcome_at timestamp without time zone,
+    moderation_threshold_reached_at timestamp without time zone
 );
 
 
@@ -1148,4 +1149,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150703165930');
 INSERT INTO schema_migrations (version) VALUES ('20150705114811');
 
 INSERT INTO schema_migrations (version) VALUES ('20150707094523');
+
+INSERT INTO schema_migrations (version) VALUES ('20150709152530');
 

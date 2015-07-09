@@ -762,6 +762,53 @@ RSpec.describe Petition, type: :model do
       expect(petition.updated_at).to be_within(1.second).of(Time.current)
     end
 
+    context "when the petition is first sponsored" do
+      let(:petition) do
+        FactoryGirl.create(:pending_petition, {
+          signature_count: 0,
+          last_signed_at: nil,
+          updated_at: 2.days.ago
+        })
+      end
+
+      it "records changes the state from 'pending' to 'validated'" do
+        expect {
+          petition.increment_signature_count!
+        }.to change{
+          petition.state
+        }.from(Petition::PENDING_STATE).to(Petition::VALIDATED_STATE)
+      end
+    end
+
+    context "when the signature count crosses the threshold for moderation" do
+      let(:signature_count) { 4 }
+
+      let(:petition) do
+        FactoryGirl.create(:validated_petition, {
+          signature_count: signature_count,
+          last_signed_at: 2.days.ago,
+          updated_at: 2.days.ago
+        })
+      end
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(5)
+      end
+
+      it "records the time it happened" do
+        petition.increment_signature_count!
+        expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "records changes the state from 'validated' to 'sponsored'" do
+        expect {
+          petition.increment_signature_count!
+        }.to change{
+          petition.state
+        }.from(Petition::VALIDATED_STATE).to(Petition::SPONSORED_STATE)
+      end
+    end
+
     context "when the signature count crosses the threshold for a response" do
       let(:signature_count) { 9 }
 
@@ -776,10 +823,10 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the signature count crosses the threshold for a debate" do
-      let(:signature_count) { 9 }
+      let(:signature_count) { 99 }
 
       before do
-        expect(Site).to receive(:threshold_for_debate).and_return(10)
+        expect(Site).to receive(:threshold_for_debate).and_return(100)
       end
 
       it "records the time it happened" do
@@ -1013,36 +1060,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#update_state_after_new_validated_sponsor!" do
-    context "with sufficient sponsor count" do
-      let(:petition){ FactoryGirl.create(:validated_petition, sponsors_signed: true) }
-
-      it "sets state to sponsored" do
-        expect{petition.update_state_after_new_validated_sponsor!}.to change{petition.state}
-                                                                       .from(Petition::VALIDATED_STATE)
-                                                                       .to(Petition::SPONSORED_STATE)
-      end
-    end
-    context "with insufficient sponsor count" do
-      let(:petition){ FactoryGirl.create(:validated_petition) }
-
-      it "leaves state unchanged" do
-        expect{petition.update_state_after_new_validated_sponsor!}.to_not change{petition.state}
-      end
-    end
-    context "with first validated sponsor" do
-      let(:petition){ FactoryGirl.create(:pending_petition) }
-      let(:sponsor){ FactoryGirl.create(:sponsor, :validated, petition: petition) }
-
-      it "changes state to validated" do
-        sponsor.reload
-        expect{petition.update_state_after_new_validated_sponsor!}.to change{petition.state}
-                                                                       .from(Petition::PENDING_STATE)
-                                                                       .to(Petition::VALIDATED_STATE)
-      end
-    end
-  end
-
   describe "#validate_creator_signature!" do
     let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
     let(:signature) { petition.creator_signature }
@@ -1090,65 +1107,6 @@ RSpec.describe Petition, type: :model do
 
       it "returns false" do
         expect(petition.validated_creator_signature?).to eq(true)
-      end
-    end
-  end
-
-  describe "#notify_creator_about_sponsor_support", immediate_delayed_job_work_off: true do
-    subject { FactoryGirl.create(:petition, sponsor_count: Site.threshold_for_moderation) }
-    before { ActionMailer::Base.deliveries.clear }
-
-    it 'breaks if the provided sponsor does not belong to the petition' do
-      expect {
-        subject.notify_creator_about_sponsor_support(FactoryGirl.create(:sponsor))
-      }.to raise_error(ArgumentError)
-    end
-
-    it 'breaks if the provided sponsor does belong to the petition, but is not a supporting sponsor' do
-      expect {
-        subject.notify_creator_about_sponsor_support(subject.sponsors.first)
-      }.to raise_error(ArgumentError)
-    end
-
-    context 'when the petition is below the sponsor moderation threshold' do
-      let(:sponsor) { subject.sponsors.first }
-      before { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
-
-      it 'sends an email to the petition creator telling them about the sponsor' do
-        perform_enqueued_jobs do
-          subject.notify_creator_about_sponsor_support(sponsor)
-          email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-          expect(email.to).to eq([subject.creator_signature.email])
-          expect(email.subject).to match(/supported your petition/)
-        end
-      end
-    end
-
-    context 'when the petition is on the sponsor moderation threshold' do
-      let(:sponsor) { subject.sponsors.first }
-      subject { FactoryGirl.create(:validated_petition, sponsors_signed: true) }
-
-      it 'sends an email to the petition creator telling them about the sponsor' do
-        perform_enqueued_jobs do
-          subject.notify_creator_about_sponsor_support(sponsor)
-          email = ActionMailer::Base.deliveries.last
-          expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-          expect(email.to).to eq([subject.creator_signature.email])
-          expect(email.subject).to match(/We’re checking your petition/)
-        end
-      end
-
-    end
-
-    context 'when the petition is above the sponsor moderation threshold' do
-      subject { FactoryGirl.create(:validated_petition, sponsor_count: 6, sponsors_signed: true) }
-      let(:sponsor) { subject.sponsors.last }
-
-      it 'does not send an email to the petition creator telling them about the sponsor' do
-        subject.notify_creator_about_sponsor_support(sponsor)
-        email = ActionMailer::Base.deliveries.last
-        expect(email).to be_nil
       end
     end
   end

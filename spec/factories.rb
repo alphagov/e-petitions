@@ -66,7 +66,7 @@ FactoryGirl.define do
 
     after(:build) do |petition, evaluator|
       evaluator.sponsor_count.times do
-        petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
+        sponsor = petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
       end
 
       if petition.signature_count.zero?
@@ -103,6 +103,7 @@ FactoryGirl.define do
   end
 
   factory :sponsored_petition, :parent => :petition do
+    moderation_threshold_reached_at { Time.current }
     state  Petition::SPONSORED_STATE
   end
 
@@ -110,9 +111,9 @@ FactoryGirl.define do
     state  Petition::FLAGGED_STATE
   end
 
-  factory :open_petition, :parent => :petition do
-    state      Petition::OPEN_STATE
-    open_at    { Time.current }
+  factory :open_petition, :parent => :sponsored_petition do
+    state  Petition::OPEN_STATE
+    open_at { Time.current }
   end
 
   factory :closed_petition, :parent => :petition do

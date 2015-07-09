@@ -18,11 +18,6 @@ RSpec.describe SignaturesController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed/#{signature.perishable_token}")
       end
 
-      it "does not set petition state to validated" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
-        expect(petition.reload.state).to eq(Petition::PENDING_STATE)
-      end
-
       it "raises exception if id not found" do
         expect do
           get :verify, :id => signature.id + 1, :token => signature.perishable_token
@@ -70,19 +65,9 @@ RSpec.describe SignaturesController, type: :controller do
         end
       end
 
-      it 'doesn\'t send email notification to the petition creator if the petition is already in moderation' do
-        petition_in_moderation = FactoryGirl.create(:petition, state: 'sponsored')
-        sponsor = FactoryGirl.create(:sponsor, petition: petition_in_moderation)
-        signature = sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition_in_moderation))
-        assert_no_performed_jobs do
-          get :verify, :id => signature.id, :token => signature.perishable_token
-        end
-      end
-
       it 'updates petition sponsored state' do
         allow(Signature).to receive(:find).with(signature.to_param).and_return signature
         allow(signature).to receive(:petition).and_return petition
-        expect(petition).to receive(:update_state_after_new_validated_sponsor!)
         get :verify, :id => signature.id, :token => signature.perishable_token
       end
 
