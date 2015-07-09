@@ -275,30 +275,4 @@ RSpec.describe PetitionsController, type: :controller do
       expect(response).to be_success
     end
   end
-
-  describe "POST #resend_confirmation_email" do
-    let!(:petition){ FactoryGirl.create(:open_petition) }
-    let!(:email) { 'suzie@example.com' }
-
-    before(:each) do
-      allow(Petition).to receive_message_chain(:visible, :find).and_return(petition)
-    end
-
-    it "finds the petition" do
-      expect(Petition.visible).to receive(:find).with(petition.id.to_s)
-      post :resend_confirmation_email, :id => petition.id, :confirmation_email => email
-    end
-
-    it "renders the email resent view" do
-      post :resend_confirmation_email, :id => petition.id, :confirmation_email => email
-      expect(response).to render_template :resend_confirmation_email
-    end
-
-    let(:confirmer) { double }
-    it "asks the petition to resend the confirmation email" do
-      expect(SignatureConfirmer).to receive(:new).with(petition, email, PetitionMailer, EMAIL_REGEX).and_return(confirmer)
-      expect(confirmer).to receive(:confirm!)
-      post :resend_confirmation_email, :id => petition.id, :confirmation_email => email
-    end
-  end
 end

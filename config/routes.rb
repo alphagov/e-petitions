@@ -17,7 +17,6 @@ Rails.application.routes.draw do
       end
 
       member do
-        post 'resend_confirmation_email'
         get  'thank-you', :action => :thank_you, :as => :thank_you
         get  'moderation-info', :action => :moderation_info, :as => :moderation_info
       end
