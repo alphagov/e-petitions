@@ -4,7 +4,7 @@ module SharingHelper
   end
 
   def share_via_facebook_url(petition)
-    "http://www.facebook.com/sharer.php?#{share_via_facebook_params(petition)}"
+    "https://www.facebook.com/sharer/sharer.php?#{share_via_facebook_params(petition)}"
   end
 
   def share_via_email(petition, options = {})
@@ -20,7 +20,7 @@ module SharingHelper
   end
 
   def share_via_twitter_url(petition)
-    "http://twitter.com/share?#{share_via_twitter_params(petition)}"
+    "https://twitter.com/intent/tweet?#{share_via_twitter_params(petition)}"
   end
 
   def share_via_whatsapp(petition, options = {})
