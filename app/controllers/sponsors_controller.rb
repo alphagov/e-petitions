@@ -2,8 +2,8 @@ class SponsorsController < ApplicationController
   include ManagingMoveParameter
 
   before_action :retrieve_petition
-  before_action :redirect_to_petition_url, if: :moderated?
-  before_action :redirect_to_moderation_info_url, if: :has_maximum_sponsors?
+  before_action :redirect_to_petition_url, if: :moderated?, except: [:sponsored, :thank_you]
+  before_action :redirect_to_moderation_info_url, if: :has_maximum_sponsors?, except: [:sponsored, :thank_you]
   before_action :validate_creator_signature, only: %i[show]
   before_action :do_not_cache
 
