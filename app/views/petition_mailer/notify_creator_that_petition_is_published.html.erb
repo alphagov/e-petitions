@@ -3,10 +3,7 @@
 <p>We published the petition you created – “<%= @signature.petition.action %>”</p>
 
 <p>Click this link to see your petition and start sharing it:<br />
-<%=
-  url = petition_url(@signature.petition)
-  link_to url, url
-%></p>
+<%= link_to nil, petition_url(@signature.petition) %></p>
 
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
