@@ -75,7 +75,7 @@ input.back-page {
 // Notifications
 // =============
 .notification {
-  background-color: lighten($purple, 10%);
+  background-color: $link-colour;
   color: $white;
   padding: $gutter-half $gutter-half 1px (25px + $gutter-half * 2);
   position: relative;

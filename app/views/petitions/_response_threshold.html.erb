@@ -1,8 +1,7 @@
 <section class="about-item about-item-count-response" aria-labelledby="response-threshold-heading">
-  <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-  <%# Has response #%>
+  <%# Has a government response #%>
   <% if government_response = petition.government_response? -%>
-    <h3>The government responded</h3>
+    <h2 id="response-threshold-heading">Government responded</h2>
     <blockquote class="pull-quote">
       <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
     </blockquote>
@@ -15,7 +14,16 @@
         </div>
       </details>
     <% end -%>
+
+  <%# Waiting for a government response #%>
+  <% elsif petition.response_threshold_reached_at? -%>
+    <h2 id="response-threshold-heading">Government will respond</h2>
+    <p>Government responds to all petitions that get more than <%= Site.formatted_threshold_for_response %>&nbsp;signatures</p>
+    <p class="secondary"><%= waiting_for_in_words(petition.response_threshold_reached_at) %> for a government response</p>
+
+  <%# Needs more signatures #%>
   <% else -%>
-    <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+    <h2 id="response-threshold-heading">At <%= Site.formatted_threshold_for_response %> signatures...</h2>
+    <p>At <%= Site.formatted_threshold_for_response %> signatures, government will respond to this petition</p>
   <% end -%>
 </section>

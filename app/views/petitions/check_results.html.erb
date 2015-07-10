@@ -11,9 +11,9 @@
   <h1 class="page-title">We found some similar petitions</h1>
   <p>If one of these petitions matches yours, sign it and share it instead</p>
   <p>You’re more likely to get to <%= Site.formatted_threshold_for_response %> and <%= Site.formatted_threshold_for_debate %> signatures that way.</p>
+  <%= render 'notification', text: "If there’s already a petition on the same topic, your petition is likely to be rejected" %>
   <%= render 'petitions/search/results_for_pre_create_petition', petitions: @petitions %>
   <% create_button_text = "My petition is different" -%>
-  <%= render 'notification', text: "If there’s already a petition on the same topic, your petition is likely to be rejected" %>
 
 <% end %>
 <%= link_to create_button_text, new_petition_path(:petition_action => @petitions.query.first(255)),
