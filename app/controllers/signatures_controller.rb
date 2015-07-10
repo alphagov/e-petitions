@@ -93,7 +93,7 @@ class SignaturesController < ApplicationController
 
     if petition.in_moderation?
       SponsorMailer.sponsor_signed_email_on_threshold(petition, sponsor).deliver_later
-    else
+    elsif petition.collecting_sponsors?
       SponsorMailer.sponsor_signed_email_below_threshold(petition, sponsor).deliver_later
     end
   end

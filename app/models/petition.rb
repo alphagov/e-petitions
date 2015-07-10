@@ -370,6 +370,10 @@ class Petition < ActiveRecord::Base
     signatures.validated.count
   end
 
+  def collecting_sponsors?
+    state.in?(COLLECTING_SPONSORS_STATES)
+  end
+
   def awaiting_moderation?
     state == VALIDATED_STATE
   end
