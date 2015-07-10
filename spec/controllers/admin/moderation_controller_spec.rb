@@ -34,11 +34,14 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
       context "when moderation param is 'approve'" do
         let(:now) { Time.current }
-        let(:creator_email) { ActionMailer::Base.deliveries.first }
-        let(:sponsor_email) { ActionMailer::Base.deliveries.last }
+        let(:deliveries) { ActionMailer::Base.deliveries }
+        let(:creator_email) { deliveries.detect{ |m| m.to == %w[bazbutler@gmail.com] } }
+        let(:sponsor_email) { deliveries.detect{ |m| m.to == %w[laurapalmer@gmail.com] } }
+        let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
         let(:duration) { Site.petition_duration.months }
         let(:closing_date) { (now + duration).end_of_day }
-        let(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "laurapalmer@gmail.com") }
+        let!(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "laurapalmer@gmail.com") }
+        let!(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
         before do
           perform_enqueued_jobs do
@@ -65,9 +68,13 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(creator_email).to have_subject(/We published your petition/)
         end
 
-        it "sends an email to the petition sponsors" do
+        it "sends an email to validated petition sponsors" do
           expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
           expect(sponsor_email).to have_subject(/We published the petition "[^"]+" that you supported/)
+        end
+
+        it "doesn't send an email to pending petition sponsors" do
+          expect(pending_email).to be_nil
         end
       end
 

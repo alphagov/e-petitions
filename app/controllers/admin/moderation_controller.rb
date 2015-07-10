@@ -30,6 +30,7 @@ class Admin::ModerationController < Admin::AdminController
     PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_later
 
     @petition.sponsor_signatures.each do |signature|
+      next unless signature.validated?
       PetitionMailer.notify_sponsor_that_petition_is_published(signature).deliver_later
     end
   end
