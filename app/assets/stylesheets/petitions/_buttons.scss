@@ -15,7 +15,7 @@
   text-align: center;
   width: 100%;
 
-  @include media(tablet) {
+  @include media($min-width: 360px) {
     width: inherit;
     margin-right: $gutter-half;
   }
