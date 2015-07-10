@@ -1,0 +1,10 @@
+Hi <%= @signature.name %>,
+
+We published the petition you supported – "<%= @signature.petition.action %>".
+
+Click this link to see the petition and start sharing it:
+<%= petition_url(@signature.petition) %>
+
+Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= t("petitions.emails.signoff_suffix") %>

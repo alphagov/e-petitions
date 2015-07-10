@@ -17,5 +17,4 @@ RSpec.describe FeedbackMailer, type: :mailer do
       expect(mail.reply_to).to eq([feedback.email])
     end
   end
-
 end

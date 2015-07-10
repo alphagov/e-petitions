@@ -6,7 +6,15 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
     let(:user) { FactoryGirl.create(:moderator_user) }
     before { login_as(user) }
 
-    let(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:petition) do
+      FactoryGirl.create(:pending_petition,
+        creator_signature_attributes: {
+          name: "Barry Butler",
+          email: "bazbutler@gmail.com"
+        },
+        sponsor_count: 0
+      )
+    end
 
     context "update" do
       before { ActionMailer::Base.deliveries.clear }
@@ -26,13 +34,18 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
       context "when moderation param is 'approve'" do
         let(:now) { Time.current }
-        let(:email) { ActionMailer::Base.deliveries.last }
+        let(:creator_email) { ActionMailer::Base.deliveries.first }
+        let(:sponsor_email) { ActionMailer::Base.deliveries.last }
         let(:duration) { Site.petition_duration.months }
         let(:closing_date) { (now + duration).end_of_day }
+        let(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "laurapalmer@gmail.com") }
 
         before do
-          do_patch moderation: 'approve'
-          petition.reload
+          perform_enqueued_jobs do
+            sponsor.signature.validate!
+            do_patch moderation: 'approve'
+            petition.reload
+          end
         end
 
         it "opens the petition" do
@@ -48,7 +61,13 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         end
 
         it "sends an email to the petition creator" do
-          expect(email.subject).to match(/We published your petition/)
+          expect(creator_email).to deliver_to("bazbutler@gmail.com")
+          expect(creator_email).to have_subject(/We published your petition/)
+        end
+
+        it "sends an email to the petition sponsors" do
+          expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
+          expect(sponsor_email).to have_subject(/We published the petition "[^"]+" that you supported/)
         end
       end
 
