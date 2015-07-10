@@ -1,15 +1,21 @@
 <!-- Open Graph -->
 <%= open_graph_tag 'site_name', :site_name %>
+<%= open_graph_tag 'locale', 'en_GB' %>
 <%= open_graph_tag 'image', 'os-social/opengraph-image.png' %>
-<% if petition_page? %>
+<% if petition_page? || archived_petition_page? %>
 <%= open_graph_tag 'url', petition_url(@petition) %>
 <%= open_graph_tag 'type', 'article' %>
+<% if petition_page? %>
 <%= open_graph_tag 'title', :title, petition: @petition.action %>
 <%= open_graph_tag 'description', @petition.background %>
+<% else %> <%# archived_petition_page? %>
+<%= open_graph_tag 'title', :title, petition: @petition.title %>
+<%= open_graph_tag 'description', @petition.description %>
+<% end %>
 <% else %>
-<%= open_graph_tag 'url', home_url %>
+<%= open_graph_tag 'url', request.original_url %>
 <%= open_graph_tag 'type', 'website' %>
-<%= open_graph_tag 'title', :default_title %>
+<%= open_graph_tag 'title', page_title %>
 <% end %>
 
 <!-- Twitter -->
@@ -20,5 +26,5 @@
 <%= twitter_card_tag 'title', :title, petition: @petition.action %>
 <%= twitter_card_tag 'description', @petition.background %>
 <% else %>
-<%= twitter_card_tag 'title', :default_title %>
+<%= twitter_card_tag 'title', page_title %>
 <% end %>

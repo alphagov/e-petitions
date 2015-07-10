@@ -18,6 +18,10 @@ module ApplicationHelper
     params.values_at(:controller, :action) == %w[petitions show]
   end
 
+  def archived_petition_page?
+    params[:controller] == 'archived/petitions' && params[:action] == 'show'
+  end
+
   def back_url
     referer_url || 'javascript:history.back()'
   end
