@@ -89,7 +89,13 @@ class SignaturesController < ApplicationController
   end
 
   def send_sponsor_support_notification_email_to_petition_owner(petition, signature)
-    petition.notify_creator_about_sponsor_support(petition.sponsors.for(signature)) unless petition.in_moderation?
+    sponsor = petition.sponsors.for(signature)
+
+    if petition.in_moderation?
+      SponsorMailer.sponsor_signed_email_on_threshold(petition, sponsor).deliver_later
+    else
+      SponsorMailer.sponsor_signed_email_below_threshold(petition, sponsor).deliver_later
+    end
   end
 
   def find_existing_pending_signatures
@@ -123,7 +129,6 @@ class SignaturesController < ApplicationController
     else
       @signature.validate!
       send_sponsor_support_notification_email_to_petition_owner(@signature.petition, @signature)
-      @signature.petition.update_state_after_new_validated_sponsor!
     end
     redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
   end

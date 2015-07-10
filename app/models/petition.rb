@@ -15,6 +15,7 @@ class Petition < ActiveRecord::Base
   STATES            = %w[pending validated sponsored flagged open closed rejected hidden]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
+  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
@@ -171,6 +172,10 @@ class Petition < ActiveRecord::Base
       where(state: SELECTABLE_STATES)
     end
 
+    def show
+      where(state: SHOW_STATES)
+    end
+
     def threshold
       where(arel_table[:signature_count].gteq(Site.threshold_for_debate))
     end
@@ -260,6 +265,15 @@ class Petition < ActiveRecord::Base
     updates << "last_signed_at = :now"
     updates << "updated_at = :now"
 
+    if pending?
+      updates << "state = 'validated'"
+    end
+
+    if at_threshold_for_moderation?
+      updates << "moderation_threshold_reached_at = :now"
+      updates << "state = 'sponsored'"
+    end
+
     if at_threshold_for_response?
       updates << "response_threshold_reached_at = :now"
     end
@@ -270,6 +284,12 @@ class Petition < ActiveRecord::Base
 
     if update_all([updates.join(", "), now: time]) > 0
       self.reload
+    end
+  end
+
+  def at_threshold_for_moderation?
+    unless moderation_threshold_reached_at?
+      signature_count >= Site.threshold_for_moderation - 1
     end
   end
 
@@ -383,6 +403,10 @@ class Petition < ActiveRecord::Base
     state == FLAGGED_STATE
   end
 
+  def pending?
+    state == PENDING_STATE
+  end
+
   def published?
     state.in?(PUBLISHED_STATES)
   end
@@ -414,34 +438,6 @@ class Petition < ActiveRecord::Base
 
   def supporting_sponsors_count
     sponsors.supporting_the_petition.count
-  end
-
-  def notify_creator_about_sponsor_support(sponsor)
-    raise ArgumentError, 'Not my sponsor' unless sponsors.exists?(sponsor.id)
-    raise ArgumentError, 'Not a supporting sponsor' unless sponsor.supports_the_petition?
-    if below_sponsor_moderation_threshold?
-      SponsorMailer.sponsor_signed_email_below_threshold(self, sponsor).deliver_later
-    elsif on_sponsor_moderation_threshold?
-      SponsorMailer.sponsor_signed_email_on_threshold(self, sponsor).deliver_later
-    end
-  end
-
-  def on_sponsor_moderation_threshold?
-    supporting_sponsors_count == Site.threshold_for_moderation
-  end
-
-  def below_sponsor_moderation_threshold?
-    supporting_sponsors_count < Site.threshold_for_moderation
-  end
-
-  def update_state_after_new_validated_sponsor!
-    if state == PENDING_STATE
-      update_attribute(:state, VALIDATED_STATE)
-    end
-
-    if on_sponsor_moderation_threshold?
-      update_attribute(:state, SPONSORED_STATE)
-    end
   end
 
   def has_maximum_sponsors?

@@ -13,6 +13,7 @@ class SponsorMailer < ApplicationMailer
   def sponsor_signed_email_on_threshold(petition, sponsor)
     @petition = petition
     @sponsor = sponsor
+    @supporting_sponsors_count = petition.supporting_sponsors_count
     @moderation_threshold = Site.threshold_for_moderation
     mail(
       subject: "We’re checking your petition",
