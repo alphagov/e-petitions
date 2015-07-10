@@ -33,12 +33,18 @@ RSpec.describe SocialMetaHelper, type: :helper do
     end
 
     context "when using a image path for content" do
+      before do
+        headers["HTTP_HOST"]   = "petition.parliament.uk"
+        headers["HTTPS"]       = "on"
+        headers["SERVER_PORT"] = 443
+      end
+
       subject do
         helper.open_graph_tag("image", "os-social/opengraph-image.png")
       end
 
       it "generates a meta tag with the correct asset image path" do
-        expect(subject).to match(%r{<meta property="og:image" content="/assets/os-social/opengraph-image.png" /})
+        expect(subject).to match(%r{<meta property="og:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" /})
       end
     end
   end
@@ -75,12 +81,18 @@ RSpec.describe SocialMetaHelper, type: :helper do
     end
 
     context "when using a image path for content" do
+      before do
+        headers["HTTP_HOST"]   = "petition.parliament.uk"
+        headers["HTTPS"]       = "on"
+        headers["SERVER_PORT"] = 443
+      end
+
       subject do
         helper.twitter_card_tag("image", "os-social/opengraph-image.png")
       end
 
       it "generates a meta tag with the correct asset image path" do
-        expect(subject).to match(%r{<meta name="twitter:image" content="/assets/os-social/opengraph-image.png" /})
+        expect(subject).to match(%r{<meta name="twitter:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" /})
       end
     end
   end
