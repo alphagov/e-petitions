@@ -34,7 +34,7 @@ module SharingHelper
   private
 
   def share_via_facebook_params(petition)
-    { t: share_title(petition), u: petition_url(petition) }.to_query
+    { u: petition_url(petition), ref: "responsive" }.to_query
   end
 
   def share_via_email_params(petition)
