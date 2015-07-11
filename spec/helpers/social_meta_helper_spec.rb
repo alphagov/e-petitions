@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe SocialMetaHelper, type: :helper do
+  let(:headers) { helper.request.env }
+
   describe "#open_graph_tag" do
     context "when using a string for content" do
       subject do
