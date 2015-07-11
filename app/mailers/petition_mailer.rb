@@ -17,6 +17,12 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_creator_that_petition_is_published)
   end
 
+  def notify_sponsor_that_petition_is_published(signature)
+    @petition = signature.petition
+    @signature = signature
+    mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_is_published)
+  end
+
   def petition_rejected(petition)
     @petition, @rejection = petition, petition.rejection
     to = @petition.creator_signature.email

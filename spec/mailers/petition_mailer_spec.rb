@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe PetitionMailer, type: :mailer do
-
   let :creator do
     FactoryGirl.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
   end
@@ -14,21 +13,89 @@ RSpec.describe PetitionMailer, type: :mailer do
       additional_details: "To promote organic vegetables"
     )
   end
-  let(:pending_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
-  let(:validated_signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
+
+  let(:pending_signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+  let(:validated_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
 
+  describe "notifying creator of publication" do
+    let(:mail) { PetitionMailer.notify_creator_that_petition_is_published(creator) }
+
+    before do
+      petition.publish
+    end
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it 'has an appropriate subject heading' do
+      expect(mail).to have_subject('We published your petition "Allow organic vegetable vans to use red diesel"')
+    end
+
+    it 'is addressed to the creator' do
+      expect(mail).to have_body_text("Hi Barry Butler,")
+    end
+
+    it "informs the creator of the publication" do
+      expect(mail).to have_body_text("We published the petition you created")
+    end
+  end
+
+  describe "notifying sponsor of publication" do
+    let(:mail) { PetitionMailer.notify_sponsor_that_petition_is_published(sponsor) }
+    let(:sponsor) do
+      FactoryGirl.create(:validated_signature,
+        name: "Laura Palmer",
+        email: "laura@red-room.example.com",
+        petition: petition
+      )
+    end
+
+    before do
+      petition.publish
+    end
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[laura@red-room.example.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it 'has an appropriate subject heading' do
+      expect(mail).to have_subject('We published the petition "Allow organic vegetable vans to use red diesel" that you supported')
+    end
+
+    it 'is addressed to the sponsor' do
+      expect(mail).to have_body_text("Hi Laura Palmer,")
+    end
+
+    it "informs the sponsor of the publication" do
+      expect(mail).to have_body_text("We published the petition you supported")
+    end
+  end
+
   describe "notifying creator of closing date change" do
-    before { petition.publish }
-    let(:signature) { FactoryGirl.create(:validated_signature, :petition => petition) }
-    let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(signature) }
+    let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(creator) }
+
+    before do
+      petition.publish
+    end
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
 
     it 'has an appropriate subject heading' do
       expect(mail).to have_subject("We’re closing your petition early")
     end
 
     it 'is addressed to the creator' do
-      expect(mail).to have_body_text("Hi #{signature.name}")
+      expect(mail).to have_body_text("Hi Barry Butler,")
     end
 
     it "informs the creator of the change" do
@@ -44,7 +111,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "has the addresses the creator by name" do
-      expect(mail).to have_body_text(/Hi Barry Butler\,/)
+      expect(mail).to have_body_text("Hi Barry Butler,")
     end
 
     it "sends it only to the petition creator" do
@@ -80,7 +147,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "addresses the signatory by name" do
-      expect(mail).to have_body_text(/Hi Laura Palmer\,/)
+      expect(mail).to have_body_text("Hi Laura Palmer,")
     end
 
     it "sends it only to the signatory" do
@@ -112,7 +179,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "addresses the signatory by name" do
-      expect(mail).to have_body_text(/Hi Laura Palmer\,/)
+      expect(mail).to have_body_text("Hi Laura Palmer,")
     end
 
     it "sends it only to the signatory" do

@@ -317,6 +317,15 @@ RSpec.describe SponsorsController, type: :controller do
       get :thank_you, petition_id: petition, token: petition.sponsor_token
       expect(response).to render_template :thank_you
     end
+
+    context "when the petition has the maximum number of sponsors" do
+      let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
+
+      it "does not redirect to the moderation page" do
+        get :thank_you, petition_id: petition, token: petition.sponsor_token
+        expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+      end
+    end
   end
 
   context 'GET sponsored' do
@@ -350,6 +359,15 @@ RSpec.describe SponsorsController, type: :controller do
     it 'renders the view' do
       get :sponsored, petition_id: petition, token: petition.sponsor_token
       expect(response).to render_template :sponsored
+    end
+
+    context "when the petition has the maximum number of sponsors" do
+      let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
+
+      it "does not redirect to the moderation page" do
+        get :sponsored, petition_id: petition, token: petition.sponsor_token
+        expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+      end
     end
   end
 end

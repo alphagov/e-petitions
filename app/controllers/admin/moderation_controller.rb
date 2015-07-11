@@ -27,7 +27,12 @@ class Admin::ModerationController < Admin::AdminController
   end
 
   def send_published_email
-    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_now
+    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_later
+
+    @petition.sponsor_signatures.each do |signature|
+      next unless signature.validated?
+      PetitionMailer.notify_sponsor_that_petition_is_published(signature).deliver_later
+    end
   end
 
   def send_rejected_email

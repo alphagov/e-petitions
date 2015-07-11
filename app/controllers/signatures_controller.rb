@@ -93,7 +93,7 @@ class SignaturesController < ApplicationController
 
     if petition.in_moderation?
       SponsorMailer.sponsor_signed_email_on_threshold(petition, sponsor).deliver_later
-    else
+    elsif petition.collecting_sponsors?
       SponsorMailer.sponsor_signed_email_below_threshold(petition, sponsor).deliver_later
     end
   end
@@ -126,11 +126,17 @@ class SignaturesController < ApplicationController
   def validate_sponsor
     if @signature.validated?
       flash[:notice] = "You've already supported this petition."
+      redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
     else
       @signature.validate!
       send_sponsor_support_notification_email_to_petition_owner(@signature.petition, @signature)
+
+      if @signature.petition.open?
+        redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
+      else
+        redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
+      end
     end
-    redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
   end
 
   def validate_signature

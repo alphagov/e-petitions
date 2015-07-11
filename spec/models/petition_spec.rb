@@ -809,6 +809,33 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "when the signature count is higher than the threshold for moderation" do
+      let(:signature_count) { 100 }
+
+      context "and moderation_threshold_reached_at is nil" do
+        let(:petition) do
+          FactoryGirl.create(:open_petition, {
+            signature_count: signature_count,
+            last_signed_at: 2.days.ago,
+            updated_at: 2.days.ago,
+            moderation_threshold_reached_at: nil
+          })
+        end
+
+        it "doesn't change the state to sponsored" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change{ petition.state }
+        end
+
+        it "doesn't update the moderation_threshold_reached_at column" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change{ petition.moderation_threshold_reached_at }
+        end
+      end
+    end
+
     context "when the signature count crosses the threshold for a response" do
       let(:signature_count) { 9 }
 

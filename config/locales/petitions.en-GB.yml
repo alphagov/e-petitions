@@ -81,25 +81,17 @@ en-GB:
         notify_signer_of_threshold_response: |-
           Government responded to your petition
 
-        # Emails to people who start a petition
+        # Emails to people who support a petition
         gather_sponsors_for_petition: |-
           Action required: Petition "%{action}"
         notify_creator_that_petition_is_published: |-
           We published your petition "%{action}"
+        notify_sponsor_that_petition_is_published: |-
+          We published the petition "%{action}" that you supported
         petition_rejected: |-
           We rejected your petition "%{action}"
 
         # Re-send confirmation emails
-        double_signature_confirmation: |-
-          You've already signed the petition "%{action}"
-        email_already_confirmed_for_signature: |-
-          You've already signed the petition "%{action}"
-        no_signature_for_petition: |-
-          Re-send failed: Petition "%{action}"
-        one_pending_one_validated_signature: |-
-          Please confirm your email address
-        two_pending_signatures: |-
-          Please confirm your email address
         special_resend_of_email_confirmation_for_signer: |-
           Please confirm your email address
         notify_creator_of_closing_date_change: |-

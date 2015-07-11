@@ -269,7 +269,7 @@ class Petition < ActiveRecord::Base
       updates << "state = 'validated'"
     end
 
-    if at_threshold_for_moderation?
+    if at_threshold_for_moderation? && collecting_sponsors?
       updates << "moderation_threshold_reached_at = :now"
       updates << "state = 'sponsored'"
     end
@@ -368,6 +368,10 @@ class Petition < ActiveRecord::Base
 
   def count_validated_signatures
     signatures.validated.count
+  end
+
+  def collecting_sponsors?
+    state.in?(COLLECTING_SPONSORS_STATES)
   end
 
   def awaiting_moderation?

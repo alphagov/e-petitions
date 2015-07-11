@@ -82,6 +82,27 @@ RSpec.describe SignaturesController, type: :controller do
           get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
+
+      context "and the petition is published" do
+        before do
+          petition.publish
+          petition.reload
+          ActionMailer::Base.deliveries.clear
+        end
+
+        it "redirects to the petition signed page" do
+          get :verify, :id => signature.id, :token => signature.perishable_token
+          expect(assigns[:signature]).to eq(signature)
+          expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed/#{signature.perishable_token}")
+        end
+
+        it "does not send an email to the creator" do
+          perform_enqueued_jobs do
+            get :verify, :id => signature.id, :token => signature.perishable_token
+            expect(ActionMailer::Base.deliveries).to be_empty
+          end
+        end
+      end
     end
   end
 
