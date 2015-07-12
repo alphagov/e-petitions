@@ -781,7 +781,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the signature count crosses the threshold for moderation" do
-      let(:signature_count) { 4 }
+      let(:signature_count) { 5 }
 
       let(:petition) do
         FactoryGirl.create(:validated_petition, {
@@ -859,6 +859,52 @@ RSpec.describe Petition, type: :model do
       it "records the time it happened" do
         petition.increment_signature_count!
         expect(petition.debate_threshold_reached_at).to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "at_threshold_for_moderation?" do
+    context "when moderation_threshold_reached_at is not present" do
+      let(:petition) { FactoryGirl.create(:validated_petition, signature_count: signature_count) }
+
+      before do
+        expect(Site).to receive(:threshold_for_moderation).and_return(5)
+      end
+
+      context "and the signature count is less than the threshold" do
+        let(:signature_count) { 4 }
+
+        it "is falsey" do
+          expect(petition.at_threshold_for_moderation?).to be_falsey
+        end
+      end
+
+      context "and the signature count is equal than the threshold" do
+        let(:signature_count) { 5 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_moderation?).to be_truthy
+        end
+      end
+
+      context "and the signature count is more than the threshold" do
+        let(:signature_count) { 6 }
+
+        it "is truthy" do
+          expect(petition.at_threshold_for_moderation?).to be_truthy
+        end
+      end
+    end
+
+    context "when moderation_threshold_reached_at is present" do
+      let(:petition) { FactoryGirl.create(:sponsored_petition) }
+
+      before do
+        expect(Site).not_to receive(:threshold_for_response)
+      end
+
+      it "is falsey" do
+        expect(petition.at_threshold_for_moderation?).to be_falsey
       end
     end
   end
