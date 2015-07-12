@@ -289,7 +289,7 @@ class Petition < ActiveRecord::Base
 
   def at_threshold_for_moderation?
     unless moderation_threshold_reached_at?
-      signature_count >= Site.threshold_for_moderation - 1
+      signature_count >= Site.threshold_for_moderation
     end
   end
 
