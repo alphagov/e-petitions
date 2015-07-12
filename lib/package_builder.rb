@@ -1,6 +1,7 @@
 require 'tmpdir'
 require 'active_support/core_ext/string/strip'
 require 'aws-sdk'
+require 'faraday'
 require 'slack-notifier'
 
 class PackageBuilder
@@ -233,14 +234,31 @@ class PackageBuilder
 
   def notify_appsignal
     if appsignal_push_api_key
-      args = %w[appsignal notify_of_deploy]
-      args << %[--revision=#{revision}]
-      args << %[--user=#{username}]
-      args << %[--environment=production]
-      args << %[--name=#{application_name}]
+      conn = Faraday.new(url: "https://push.appsignal.com")
 
-      info "Notifying AppSignal of deployment ..."
-      Kernel.system *args
+      response = conn.post do |request|
+        request.url '/1/markers'
+
+        request.headers['Content-Type'] = 'application/json'
+
+        request.params = {
+          api_key: appsignal_push_api_key,
+          name: application_name,
+          environment: 'production'
+        }
+
+        request.body = <<-JSON.strip_heredoc
+          {
+            "revision": "#{revision}",
+            "repository": "master",
+            "user": "#{username}"
+          }
+        JSON
+      end
+
+      if response.success?
+        info "Notified AppSignal of deployment of #{revision}"
+      end
     end
   end
 
