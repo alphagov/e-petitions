@@ -3,11 +3,7 @@ Rails.application.routes.draw do
     get '/' => 'pages#index', :as => :home
     get 'help' => 'pages#help', :as => :help
     get 'privacy' => 'pages#privacy', :as => :privacy
-
-
-    get 'feedback' => 'feedback#index', :as => 'feedback'
-    get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
-    post 'feedback' => 'feedback#create', :as => nil
+    get 'contact' => 'pages#contact', :as => :contact
 
     resources :petitions, :only => [:new, :show, :index] do
       collection do

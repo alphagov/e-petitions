@@ -13,6 +13,10 @@ RSpec.describe "pages", type: :routes do
     it "should respond to /privacy" do
       expect({:get => "/privacy"}).to route_to({:controller => "pages", :action => "privacy"})
     end
+
+    it "should respond to /contact" do
+      expect({:get => "/contact"}).to route_to({:controller => "pages", :action => "contact"})
+    end
   end
 
   describe "helpers" do
