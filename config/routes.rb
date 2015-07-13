@@ -5,11 +5,6 @@ Rails.application.routes.draw do
     get 'privacy' => 'pages#privacy', :as => :privacy
     get 'contact' => 'pages#contact', :as => :contact
 
-
-    get 'feedback' => 'feedback#index', :as => 'feedback'
-    get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
-    post 'feedback' => 'feedback#create', :as => nil
-
     resources :petitions, :only => [:new, :show, :index] do
       collection do
         get 'check'

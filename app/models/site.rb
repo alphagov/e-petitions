@@ -106,7 +106,6 @@ class Site < ActiveRecord::Base
         url:                        default_url,
         moderate_url:               default_moderate_url,
         email_from:                 default_email_from,
-        feedback_email:             default_feedback_email,
         username:                   default_username,
         password:                   default_password,
         enabled:                    default_enabled,
@@ -172,10 +171,6 @@ class Site < ActiveRecord::Base
 
     def default_email_from
       ENV.fetch('EPETITIONS_FROM', %{"Petitions: UK Government and Parliament" <no-reply@#{default_host}>})
-    end
-
-    def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: UK Government and Parliament" <feedback@#{default_host}>})
     end
 
     def default_username
@@ -326,7 +321,6 @@ class Site < ActiveRecord::Base
   validates :title, presence: true, length: { maximum: 50 }
   validates :url, presence: true, length: { maximum: 50 }
   validates :email_from, presence: true, length: { maximum: 100 }
-  validates :feedback_email, presence: true, length: { maximum: 100 }
   validates :petition_duration, presence: true, numericality: { only_integer: true }
   validates :minimum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :maximum_number_of_sponsors, presence: true, numericality: { only_integer: true }

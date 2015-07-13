@@ -17,9 +17,6 @@ module NavigationHelpers
     when /^the privacy page$/
       privacy_url
 
-    when /^the feedback page$/
-      feedback_url
-
     when /^the new petition page$/
       new_petition_url
 

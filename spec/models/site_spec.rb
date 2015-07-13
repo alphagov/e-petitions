@@ -18,7 +18,6 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
-    it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>') }
   end
 
   describe "validations" do
@@ -35,7 +34,6 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_length_of(:title).is_at_most(50) }
     it { is_expected.to validate_length_of(:url).is_at_most(50) }
     it { is_expected.to validate_length_of(:email_from).is_at_most(100) }
-    it { is_expected.to validate_length_of(:feedback_email).is_at_most(100) }
 
     it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
     it { is_expected.to validate_numericality_of(:minimum_number_of_sponsors).only_integer }
@@ -279,29 +277,6 @@ RSpec.describe Site, type: :model do
       it "allows overriding via the EPETITIONS_FROM environment variables" do
         allow(ENV).to receive(:fetch).with("EPETITIONS_FROM", %{"Petitions: UK Government and Parliament" <no-reply@petition.parliament.uk>}).and_return("no-reply@downingstreet.gov.uk")
         expect(defaults[:email_from]).to eq("no-reply@downingstreet.gov.uk")
-      end
-    end
-
-    describe "for feedback_email" do
-      it "defaults to 'feedback@petition.parliament.uk'" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
-        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("petition.parliament.uk")
-        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
-
-        expect(defaults[:feedback_email]).to eq(%{"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>})
-      end
-
-      it "allows overriding via the url environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("http")
-        allow(ENV).to receive(:fetch).with("EPETITIONS_HOST", "petition.parliament.uk").and_return("localhost")
-        allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
-
-        expect(defaults[:feedback_email]).to eq(%{"Petitions: UK Government and Parliament" <feedback@localhost>})
-      end
-
-      it "allows overriding via the EPETITIONS_FEEDBACK environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", %{"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>}).and_return("petitions@downingstreet.gov.uk")
-        expect(defaults[:feedback_email]).to eq("petitions@downingstreet.gov.uk")
       end
     end
 
