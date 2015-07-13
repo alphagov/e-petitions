@@ -21,7 +21,7 @@ RSpec.describe SharingHelper, type: :helper do
   describe "#share_via_email_url" do
     it "generates a share via email url" do
       expect(helper.share_via_email_url(petition)).to eq <<-URL.strip
-        mailto:?body=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000&subject=Petition%3A+Do+something
+        mailto:?body=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000&subject=Petition%3A%20Do%20something
       URL
     end
   end
@@ -29,7 +29,7 @@ RSpec.describe SharingHelper, type: :helper do
   describe "#share_via_twitter_url" do
     it "generates a share via Twitter url" do
       expect(helper.share_via_twitter_url(petition)).to eq <<-URL.strip
-        https://twitter.com/intent/tweet?text=Petition%3A+Do+something&url=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
+        https://twitter.com/intent/tweet?text=Petition%3A%20Do%20something&url=https%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
       URL
     end
   end
@@ -37,7 +37,7 @@ RSpec.describe SharingHelper, type: :helper do
   describe "#share_via_whatsapp_url" do
     it "generates a share via Whatsapp url" do
       expect(helper.share_via_whatsapp_url(petition)).to eq <<-URL.strip
-        whatsapp://send?text=Petition%3A+Do+something%0Ahttps%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
+        whatsapp://send?text=Petition%3A%20Do%20something%0Ahttps%3A%2F%2Fpetition.parliament.uk%2Fpetitions%2F100000
       URL
     end
   end
