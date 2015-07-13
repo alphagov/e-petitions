@@ -3,25 +3,17 @@ module Staged
     module SignerDetails
       extend ActiveSupport::Concern
 
+      POSTCODE_REGEX = /\A(([A-Z]{1,2}[0-9][0-9A-Z]?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO?(C\/O)?[0-9]{1,4})|(GIR0AA))\Z/i
+
       included do
-        validates :name,
-          presence: { message: 'Name must be completed' },
-          length: { maximum: 255 }
+        validates :name, presence: true, length: { maximum: 255 }
+        validates :country, presence: true
+        validates :postcode, presence: true, format: { with: POSTCODE_REGEX }, if: :united_kingdom?
+        validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
+      end
 
-        validates :country, presence: { message: 'Country must be completed' }
-
-        validates :postcode,
-          presence: { message: 'Postcode must be completed' },
-          format: {
-            with: /\A(([A-Z]{1,2}[0-9][0-9A-Z]?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO?(C\/O)?[0-9]{1,4})|(GIR0AA))\Z/i,
-            message: 'Postcode not recognised'
-          },
-          if: ->(cd) { cd.country == 'United Kingdom' }
-
-        with_options unless: :persisted? do |creator|
-          creator.validates :uk_citizenship,
-            acceptance: { allow_nil: false, message: 'You must be a British citizen or normally live in the UK to create or sign petitions' }
-        end
+      def united_kingdom?
+        country == 'United Kingdom'
       end
     end
   end

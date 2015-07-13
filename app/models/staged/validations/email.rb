@@ -4,13 +4,7 @@ module Staged
       extend ActiveSupport::Concern
 
       included do
-        validates :email,
-          presence: { message: "Email must be completed" },
-          format: {
-            with: EMAIL_REGEX,
-            unless: -> (e) { e.email.blank? },
-            message: "Email '%{value}' not recognised."
-          }
+        validates :email, presence: true, format: { with: EMAIL_REGEX, allow_blank: true }
       end
     end
   end

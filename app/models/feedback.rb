@@ -2,8 +2,8 @@ class Feedback
   include ActiveModel::Validations
   include ActiveModel::Conversion
 
-  validates_presence_of :comment, :message => "%{attribute} must be completed"
-  validates_format_of :email, :with => EMAIL_REGEX, :unless => 'email.blank?', :message => "Email not recognised."
+  validates_presence_of :comment
+  validates_format_of :email, with: EMAIL_REGEX, allow_blank: true
 
   attr_accessor :email, :petition_link_or_title, :comment
 
