@@ -19,7 +19,8 @@ class Signature < ActiveRecord::Base
   include Staged::Validations::Email
   include Staged::Validations::SignerDetails
   include Staged::Validations::MultipleSigners
-  validates_inclusion_of :state, :in => STATES, :message => "'%{value}' not recognised"
+
+  validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
 
   # = Finders =

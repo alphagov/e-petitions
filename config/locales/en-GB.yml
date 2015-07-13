@@ -97,35 +97,35 @@ en-GB:
       second: Seconds
       year: Year
   errors:
-    format: "%{attribute} %{message}"
+    format: "%{message}"
     messages:
-      accepted: must be accepted
-      blank: can't be blank
-      confirmation: doesn't match %{attribute}
-      empty: can't be empty
-      equal_to: must be equal to %{count}
-      even: must be even
-      exclusion: is reserved
-      greater_than: must be greater than %{count}
-      greater_than_or_equal_to: must be greater than or equal to %{count}
-      inclusion: is not included in the list
-      invalid: is invalid
-      less_than: must be less than %{count}
-      less_than_or_equal_to: must be less than or equal to %{count}
-      not_a_number: is not a number
-      not_an_integer: must be an integer
-      odd: must be odd
+      accepted: "%{attribute} must be accepted"
+      blank: "%{attribute} can't be blank"
+      confirmation: "%{attribute} doesn't match %{attribute}"
+      empty: "%{attribute} can't be empty"
+      equal_to: "%{attribute} must be equal to %{count}"
+      even: "%{attribute} must be even"
+      exclusion: "%{attribute} is reserved"
+      greater_than: "%{attribute} must be greater than %{count}"
+      greater_than_or_equal_to: "%{attribute} must be greater than or equal to %{count}"
+      inclusion: "%{attribute} is not included in the list"
+      invalid: "%{attribute} is invalid"
+      less_than: "%{attribute} must be less than %{count}"
+      less_than_or_equal_to: "%{attribute} must be less than or equal to %{count}"
+      not_a_number: "%{attribute} is not a number"
+      not_an_integer: "%{attribute} must be an integer"
+      odd: "%{attribute} must be odd"
       record_invalid: 'Validation failed: %{errors}'
-      taken: has already been taken
+      taken: "%{attribute} has already been taken"
       too_long:
-        one: is too long (maximum is 1 character)
-        other: is too long (maximum is %{count} characters)
+        one: "%{attribute} is too long (maximum is 1 character)"
+        other: "%{attribute} is too long (maximum is %{count} characters)"
       too_short:
-        one: is too short (minimum is 1 character)
-        other: is too short (minimum is %{count} characters)
+        one: "%{attribute} is too short (minimum is 1 character)"
+        other: "%{attribute} is too short (minimum is %{count} characters)"
       wrong_length:
-        one: is the wrong length (should be 1 character)
-        other: is the wrong length (should be %{count} characters)
+        one: "%{attribute} is the wrong length (should be 1 character)"
+        other: "%{attribute} is the wrong length (should be %{count} characters)"
   activerecord:
     errors:
       template:

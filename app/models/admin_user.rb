@@ -2,6 +2,8 @@ class AdminUser < ActiveRecord::Base
   DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'
   MODERATOR_ROLE = 'moderator'
+  ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE]
+  PASSWORD_REGEX = /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/
 
   acts_as_authentic do |config|
     config.merge_validates_length_of_password_field_options :minimum => 8
@@ -16,15 +18,10 @@ class AdminUser < ActiveRecord::Base
   end
 
   # = Validations =
-  validates_presence_of :password, :on => :create
   validates_presence_of :email, :first_name, :last_name
-  # password must have at least one digit, one alphabetical lower and upcase case character and one special character
-  # see http://www.zorched.net/2009/05/08/password-strength-validation-with-regular-expressions/
-  validates_format_of :password, :with => /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/,
-                      :message => 'must contain at least one digit, a lower and upper case letter and a special character',
-                      :allow_blank => true
-  ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE]
-  validates_inclusion_of :role, :in => ROLES, :message => "'%{value}' is invalid"
+  validates_presence_of :password, on: :create
+  validates_format_of :password, with: PASSWORD_REGEX, allow_blank: true
+  validates_inclusion_of :role, in: ROLES
 
   # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }

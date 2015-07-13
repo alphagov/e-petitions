@@ -5,7 +5,7 @@ class Sponsor < ActiveRecord::Base
   belongs_to :signature
 
   # = Validations =
-  validates_presence_of :petition, message: "Needs a petition"
+  validates_presence_of :petition
 
   def self.supporting_the_petition
     joins(:signature).merge(Signature.validated)

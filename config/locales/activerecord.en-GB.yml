@@ -1,7 +1,24 @@
 en-GB:
+  activemodel:
+    errors:
+      models:
+        feedback:
+          attributes:
+            comment:
+              blank: "Comment must be completed"
+            email:
+              invalid: "Email not recognised."
+
   activerecord:
     errors:
       models:
+        admin_user:
+          attributes:
+            password:
+              invalid: "Password must contain at least one digit, a lower and upper case letter and a special character"
+            role:
+              inclusion: "Role '%{value}' is invalid"
+
         petition:
           attributes:
             moderation:
@@ -9,4 +26,37 @@ en-GB:
             creator_signature:
               blank: "%{attribute} must be completed"
             state:
-              inclusion: "'%{value}' not recognised"
+              inclusion: "State '%{value}' not recognised"
+
+        signature:
+          attributes:
+            state:
+              inclusion: "State '%{value}' not recognised"
+
+        sponsor:
+          attributes:
+            petition:
+              blank: "Needs a petition"
+
+  errors:
+    attributes:
+      email:
+        blank: "Email must be completed"
+        invalid: "Email '%{value}' not recognised."
+      action:
+        blank: "Action must be completed"
+        too_long: "Action is too long"
+      background:
+        blank: "Background must be completed"
+        too_long: "Background is too long"
+      additional_details:
+        too_long: "Additional details is too long"
+      name:
+        blank: "Name must be completed"
+      country:
+        blank: "Country must be completed"
+      postcode:
+        blank: "Postcode must be completed"
+        invalid: "Postcode not recognised"
+      uk_citizenship:
+        accepted: "You must be a British citizen or normally live in the UK to create or sign petitions"
