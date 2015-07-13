@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     get '/' => 'pages#index', :as => :home
     get 'help' => 'pages#help', :as => :help
     get 'privacy' => 'pages#privacy', :as => :privacy
+    get 'contact' => 'pages#contact', :as => :contact
 
 
     get 'feedback' => 'feedback#index', :as => 'feedback'
