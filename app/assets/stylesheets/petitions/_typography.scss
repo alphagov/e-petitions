@@ -49,6 +49,19 @@ h2, h3, h4 {
 
 }
 
+// More heading hierarchy for .text-page
+.text-page h2 {
+  @include bold-24();
+
+  margin-top: em(40, 20);
+  margin-bottom: em(10, 20);
+
+  @include media(tablet) {
+    margin-top: em(60, 24);
+    margin-bottom: em(20, 24);
+  }
+}
+
 p {
   @extend %word-break;
   margin-top: em(5, 16);
@@ -93,19 +106,6 @@ a:hover {
 
 a:active {
   color: $link-colour;
-}
-
-// More heading hierarchy for .text-page
-.text-page h2 {
-  @include bold-24();
-
-  margin-top: em(40, 20);
-  margin-bottom: em(10, 20);
-
-  @include media(tablet) {
-    margin-top: em(60, 24);
-    margin-bottom: em(20, 24);
-  }
 }
 
 .secondary, .inline-terms {
