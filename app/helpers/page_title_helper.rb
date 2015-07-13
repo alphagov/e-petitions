@@ -40,6 +40,11 @@ module PageTitleHelper
         opts[:scope]        = :page_titles
         opts[:default]      = [:"#{controller}.default", :default]
         opts[:constituency] = constituency.name if constituency?
+        opts[:postcode]     = formatted_postcode if postcode?
+
+        if postcode?
+          opts[:count] = constituency? ? 1 : 0
+        end
 
         if petition?
           opts[:petition] = petition.action
@@ -51,7 +56,7 @@ module PageTitleHelper
       end
     end
 
-    %w[constituency petition].each do |object|
+    %w[constituency petition postcode].each do |object|
       define_method :"#{object}?" do
         send(:"#{object}").present?
       end
@@ -59,6 +64,10 @@ module PageTitleHelper
       define_method :"#{object}" do
         send(:[], object)
       end
+    end
+
+    def formatted_postcode
+      postcode.gsub(/\A(.+)(.{3})\z/, '\1 \2')
     end
   end
 

@@ -21,7 +21,10 @@ RSpec.describe PageTitleHelper, type: :helper do
           index: "Une pétition au Parlement - vers le bas avec ce genre de chose"
         },
         local_petitions: {
-          index: "Pétitions à %{constituency}"
+          index: {
+            zero: "Pétitions à %{postcode}",
+            one: "Pétitions à %{constituency}"
+          }
         },
         petitions: {
           default: "Voir toutes les pétitions",
@@ -95,12 +98,28 @@ RSpec.describe PageTitleHelper, type: :helper do
       end
     end
 
+    context "when there is a postcode assigned but not a constituency" do
+      let(:postcode) { "XM45HQ" }
+
+      before do
+        params[:controller] = "local_petitions"
+        params[:action] = "index"
+        assign('postcode', postcode)
+      end
+
+      it "the formatted postcode is available for interpolation" do
+        expect(helper.page_title).to eq("Pétitions à XM4 5HQ")
+      end
+    end
+
     context "when there is a constituency assigned" do
+      let(:postcode) { "75008" }
       let(:constituency) { double(:constituency, name: "Paris") }
 
       before do
         params[:controller] = "local_petitions"
         params[:action] = "index"
+        assign('postcode', postcode)
         assign('constituency', constituency)
       end
 
