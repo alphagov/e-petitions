@@ -1,6 +1,10 @@
 en-GB:
   petitions:
     errors:
+      prompt:
+        one: "Please fix the following error:"
+        other: "Please fix the following errors:"
+
       invalid_signature_counts:
         one: "There was 1 petition with id: %{id} that had an invalid signature count"
         other: "There were %{count} petitions with ids: %{ids} that had invalid signature counts"
