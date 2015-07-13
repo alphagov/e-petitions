@@ -15,7 +15,7 @@ en-GB:
       with_debate_outcome: "Petitions debated in Parliament"
       awaiting_debate_date: "Petitions waiting for a debate in Parliament"
 
-    share_title: "%{petition} - Petitions"
+    share_title: "Petition: %{petition}"
 
     sharing:
       facebook:

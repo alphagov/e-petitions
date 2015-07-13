@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe SocialMetaHelper, type: :helper do
+  let(:headers) { helper.request.env }
+
   describe "#open_graph_tag" do
     context "when using a string for content" do
       subject do
@@ -8,7 +10,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the content" do
-        expect(subject).to match(%r{<meta property="og:type" content="article" /})
+        expect(subject).to match(%r{<meta property="og:type" content="article" />})
       end
     end
 
@@ -18,7 +20,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - UK Government and Parliament" /})
+        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - UK Government and Parliament" />})
       end
     end
 
@@ -28,17 +30,23 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta property="og:title" content="Petition: Show us the money" /})
+        expect(subject).to match(%r{<meta property="og:title" content="Petition: Show us the money" />})
       end
     end
 
     context "when using a image path for content" do
+      before do
+        headers["HTTP_HOST"]   = "petition.parliament.uk"
+        headers["HTTPS"]       = "on"
+        headers["SERVER_PORT"] = 443
+      end
+
       subject do
         helper.open_graph_tag("image", "os-social/opengraph-image.png")
       end
 
-      it "generates a meta tag with the correct asset image path" do
-        expect(subject).to match(%r{<meta property="og:image" content="/assets/os-social/opengraph-image.png" /})
+      it "generates a meta tag with the correct asset image url" do
+        expect(subject).to match(%r{<meta property="og:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" />})
       end
     end
   end
@@ -50,7 +58,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the content" do
-        expect(subject).to match(%r{<meta name="twitter:site" content="@hocpetitions" /})
+        expect(subject).to match(%r{<meta name="twitter:site" content="@hocpetitions" />})
       end
     end
 
@@ -60,7 +68,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - UK Government and Parliament" /})
+        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - UK Government and Parliament" />})
       end
     end
 
@@ -70,17 +78,23 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta name="twitter:title" content="Petition: Show us the money" /})
+        expect(subject).to match(%r{<meta name="twitter:title" content="Petition: Show us the money" />})
       end
     end
 
     context "when using a image path for content" do
+      before do
+        headers["HTTP_HOST"]   = "petition.parliament.uk"
+        headers["HTTPS"]       = "on"
+        headers["SERVER_PORT"] = 443
+      end
+
       subject do
         helper.twitter_card_tag("image", "os-social/opengraph-image.png")
       end
 
-      it "generates a meta tag with the correct asset image path" do
-        expect(subject).to match(%r{<meta name="twitter:image" content="/assets/os-social/opengraph-image.png" /})
+      it "generates a meta tag with the correct asset image url" do
+        expect(subject).to match(%r{<meta name="twitter:image" content="https://petition.parliament.uk/assets/os-social/opengraph-image.png" />})
       end
     end
   end
