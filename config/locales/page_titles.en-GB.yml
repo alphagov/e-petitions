@@ -8,7 +8,9 @@ en-GB:
       index: "Send feedback - Petitions"
       thanks: "Thank you - Petitions"
     local_petitions:
-      index: "Petitions in %{constituency}"
+      index:
+        zero: "Petitions in %{postcode}"
+        one: "Petitions in %{constituency}"
     petitions:
       index: "View all petitions - Petitions"
       check: "Start a petition - Petitions"
