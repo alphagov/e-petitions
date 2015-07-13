@@ -34,23 +34,27 @@ module SharingHelper
   private
 
   def share_via_facebook_params(petition)
-    { u: petition_url(petition), ref: "responsive" }.to_query
+    share_params(u: petition_url(petition), ref: "responsive")
   end
 
   def share_via_email_params(petition)
-    { subject: share_title(petition), body: petition_url(petition) }.to_query
+    share_params(subject: share_title(petition), body: petition_url(petition))
   end
 
   def share_via_twitter_params(petition)
-    { text: share_title(petition), url: petition_url(petition) }.to_query
+    share_params(text: share_title(petition), url: petition_url(petition))
   end
 
   def share_via_whatsapp_params(petition)
-    { text: "#{share_title(petition)}\n#{petition_url(petition)}" }.to_query
+    share_params(text: "#{share_title(petition)}\n#{petition_url(petition)}")
   end
 
   def share_title(petition)
     t(:share_title, scope: :petitions, petition: petition.action)
+  end
+
+  def share_params(hash)
+    hash.to_query.gsub('+', '%20')
   end
 
   def share_button(service)
