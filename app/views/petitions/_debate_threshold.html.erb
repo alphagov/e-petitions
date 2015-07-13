@@ -5,6 +5,7 @@
     <section class="debate-outcome">
       <p>This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
       <% if debate_outcome.video_url? -%>
+        <%= debate_video_tag(debate_outcome.video_url) %>
         <p><%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %></p>
       <% end -%>
       <% if debate_outcome.transcript_url? -%>
