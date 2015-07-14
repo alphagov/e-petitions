@@ -8,12 +8,15 @@ head:
     expires_in: 300
 
 header:
+  keys:
+    - :home_page
   options:
     expires_in: 300
 
 footer:
   keys:
     - :create_petition_page
+    - :home_page
   options:
     expires_in: 300
 
