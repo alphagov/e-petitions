@@ -1021,7 +1021,7 @@ ALTER TABLE ONLY constituency_petition_journals
 --
 
 ALTER TABLE ONLY petitions
-    ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE RESTRICT;
 
 
 --
@@ -1151,4 +1151,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150705114811');
 INSERT INTO schema_migrations (version) VALUES ('20150707094523');
 
 INSERT INTO schema_migrations (version) VALUES ('20150709152530');
+
+INSERT INTO schema_migrations (version) VALUES ('20150714140659');
 
