@@ -1,7 +1,7 @@
 <%= link_to 'Back to current petitions', petitions_path, class: 'lists-of-petitions' %>
 
 <h1 class="page-title">Archived petitions</h1>
-<p class="text-secondary">Petitions from the 2010–2015 Conservative – Liberal Democrat coalition&nbsp;government</p>
+<p class="text-secondary">Petitions from the 2010–2015 Conservative – Liberal Democrat coalition government</p>
 
 <%= form_tag archived_petitions_path, class: 'search-inline', method: 'get' do %>
   <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>

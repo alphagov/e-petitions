@@ -1,9 +1,9 @@
 <%= form_row :for => [signature, :uk_citizenship], :class => 'uk-citizen' do %>
   <span class="form-label">
     <% if context == 'create-petition' %>
-      Only British citizens or UK residents have the right to create and sign&nbsp;petitions
+      Only British citizens or UK residents have the right to create and sign petitions
     <% else %>
-      Only British citizens or UK residents have the right to&nbsp;sign
+      Only British citizens or UK residents have the right to sign
     <% end %>
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
