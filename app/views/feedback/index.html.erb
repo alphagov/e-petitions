@@ -1,7 +1,11 @@
 <% # set tab index to start at 5
  increment(5) %>
 
-<h1 class="page-title">Feedback</h1>
+<div class="text-page">
+
+<h1 class="page-title">Feedback and contact</h1>
+
+<h2>Feedback</h2>
 
 <%= form_for @feedback, url: feedback_path, html: {class: "wizard_form new_petition_form"} do |f| %>
 
@@ -19,7 +23,7 @@
     <%= f.text_field :petition_link_or_title, tabindex: increment, class: "form-control" %>
   <% end %>
 
-  <h2>Do you want a reply?</h2>
+  <h3>Do you want a reply?</h3>
 
   <%= form_row for: [@feedback, :email] do %>
     <%= f.label :email, "Email address", class: "form-label" %>
@@ -33,5 +37,30 @@
     <p>We'll only use your email to reply to your message</p>
     <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
   </section>
+
+<h2>Contact</h2>
+
+<h3>Email</h3>
+
+<p>You can email the <%= link_to 'Petitions Committee', help_url(anchor: 'petitions-committee') %> directly.</p>
+
+<p>They can help with some technical problems using this service. They can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+
+<p>Email: <a href="mailto:petitionscommittee@parliament.uk">petitionscommittee@parliament.uk</a></p>
+
+<h3>Phone</h3>
+
+<p>Phone calls are handled by the House of Commons switchboard.</p>
+
+<p>They can help you to understand how Parliament handles petitions, but can’t help with any technical problems with this service.</p>
+
+<ul>
+  <li>Telephone: <a href="tel:+442072194272">020 7219 4272</a></li>
+  <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
+  <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
+</ul>
+
+</div>
+
 
 <% end -%>
