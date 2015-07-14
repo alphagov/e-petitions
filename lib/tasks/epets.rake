@@ -1,5 +1,5 @@
 namespace :epets do
-  desc 'Add sysadmin user'
+  desc "Add sysadmin user"
   task :add_sysadmin_user => :environment do
     if AdminUser.find_by(email: 'admin@example.com').nil?
        admin = AdminUser.new(:first_name => 'Cool', :last_name => 'Admin', :email => 'admin@example.com')
@@ -44,6 +44,35 @@ namespace :epets do
     desc "Unlock all delayed jobs (to be used after a restart)"
     task :unlock_all => :environment do
       Delayed::Job.update_all("locked_by = NULL, locked_at = NULL")
+    end
+  end
+
+  namespace :site do
+    desc "Enable the website"
+    task :enable => :environment do
+      Site.instance.update! enabled: true
+    end
+
+    desc "Disable the website"
+    task :disable => :environment do
+      Site.instance.update! enabled: false
+    end
+
+    desc "Protect the website"
+    task :protect => :environment do
+      Site.instance.update! protected: true, username: ENV.fetch('SITE_USERNAME'), password: ENV.fetch('SITE_PASSWORD')
+    end
+
+    desc "Unprotect the website"
+    task :unprotect => :environment do
+      Site.instance.update! protected: false
+    end
+  end
+
+  namespace :cache do
+    desc "Clear the cache"
+    task :clear => :environment do
+      Rails.cache.clear
     end
   end
 end
