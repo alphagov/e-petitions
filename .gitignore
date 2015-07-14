@@ -14,6 +14,13 @@
 # Ignore precompiled assets
 /public/assets
 
+# Ignore generated error files
+/public/404.html
+/public/422.html
+/public/500.html
+/public/503.html
+/public/error.css
+
 # Ignore deployment packages
 /pkg
 
