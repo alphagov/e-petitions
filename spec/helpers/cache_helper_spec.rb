@@ -40,6 +40,13 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#home_page" do
+      it "delegates to the template context" do
+        expect(helper).to receive(:home_page?).and_return(true)
+        expect(keys.home_page).to eq(true)
+      end
+    end
+
     describe "#last_signature_at" do
       let(:now) { Time.current }
 

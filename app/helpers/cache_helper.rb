@@ -26,6 +26,7 @@ module CacheHelper
 
       delegate :assigns, to: :template
       delegate :create_petition_page?, to: :template
+      delegate :home_page?, to: :template
       delegate :last_signature_at, to: :template
       delegate :petition_page?, to: :template
 
@@ -35,6 +36,10 @@ module CacheHelper
 
       def create_petition_page
         create_petition_page?
+      end
+
+      def home_page
+        home_page?
       end
 
       def petition
