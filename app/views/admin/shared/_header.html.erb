@@ -1,7 +1,7 @@
 <header role="banner" id="global-header">
   <div class="wrapper">
-    <%= link_to(admin_root_path, :title => 'Go to the petitions admin hub', :tabindex => 1) do %>
-      <span class="graphic graphic-portcullis-white" aria-hidden="true"></span> Petitions Admin
+    <%= link_to(admin_root_path, title: 'Go to the petitions admin hub', tabindex: 1, class: 'proposition') do %>
+      <span class="graphic graphic-portcullis-white"></span> Petitions Admin
     <% end %>
     <%= render 'admin/shared/header_user_actions' %>
   </div>
