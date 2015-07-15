@@ -15,7 +15,7 @@
   text-align: center;
   width: 100%;
 
-  @include media($min-width: 360px) {
+  @include media($min-width: 420px) {
     width: inherit;
     margin-right: $gutter-half;
   }
