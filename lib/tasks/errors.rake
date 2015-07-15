@@ -19,6 +19,10 @@ namespace :errors do
       def asset_data(path)
         File.read(Rails.root.join('app', 'assets', 'images', path))
       end
+
+      def home_page?
+        false
+      end
     end
 
     %w[404 422 500 503].each do |status|
