@@ -241,12 +241,12 @@ a:focus {
 .graphic-portcullis-white {
   width: 26px;
   height: 32px;
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAgCAMAAAA7dZg3AAAAM1BMVEUAAAD///////////////////////////////////////////////////////////////+3leKCAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAPRJREFUeAGFkeHK7CAMRMfY7aZRm/P+T3vp+mO79xM6MIYYOAyJpkxScfBSZvNVmhQleolNJTVlzSQRscM44WjO/FY2xd5Pwoe5l9GC7LuXQN5eHK9OKVX9lFlhvA72cOkc0cwJ7294N3fcIvpZpFdW44De4XoTZ6u5S1InIrkpj6DPjADjvemj7d0A6uwOwnSTBXHVJEsm/LokKeps/3dFnzH69fwWEivrM/4LnLDKakRFbKyAbI8xFsDnGCvgc4wl8DnGOvxzjPOOO3+2sR1wBMRVt/tRmgysQr2q2u0oJvUhjctdsu82XNK+fy0XdUIXSvIfZxoew8hNWloAAAAASUVORK5CYII=);
+  background-image: url(<%= data_uri('graphics/graphic_portcullis-white.png') %>);
 }
 @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
-    .graphic-portcullis-white {
+  .graphic-portcullis-white {
     background-size: 100%;
-    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADQAAABACAMAAABiFaQOAAAAM1BMVEUAAAD///////////////////////////////////////////////////////////////+3leKCAAAAEHRSTlMAECAwQFBgcICPn6+/z9/vIxqCigAAAmBJREFUeAHFllGS4ygQRBMKYSQKKu9/2kWgZjYsa4b1x+z7yY5wPlqgsix8xCVjw5LDHwluKC3ESJPxd8MFPKH7cA8AkYwtjtHe9VmidInZASTgMrskvEnJT+loigskczJLmWRwTTum5FOPrSqmZK6wnFI5yKOcUmFxxl+dup1FbkBsctp2sprWo3mAKtCMo6pVct/SVSP1lABQwEGrv4rDkODKq6kcQHqVCiFPXcFXKOwr+NPxpD/D9x5LeBHKDSAF2BmgZIi9yCa4s5jJfC3g2BeIgVQE7gCcaSZZ0SikAkYZlxQgtL7tgkYlmdUcGi/W4DaN3oF9zUqRMUYirPBswPmomwuVL3QKQ9+EjbWi+GjsWPQSx3VY32JgwSCQcUjKB3RIkQzojE17eBf5SHStcB3OwBvJooUTveBgfmwek8RJPV7BYeLC66icJPzC1cvYBR+Q/edzh3+xsaEbHtmUjbeCsgT8llCouJCsmgXCBeSnnanKDDAldn6T+GmrAmaqK5KqGU5jSgtMKdOsX14D+FNebclmWRal0fbX93pVGu3vpHl5C8z22NryfRptVRHVVelqn0KXFhjNKS0dxPfSX50ImTeXC9wmYuXIZ9uPf7gkzYGdB7HAbSJWj1zk+5v7l6TvDkL++5HLVzf3uzHy3zzClr8a//9EsBo79p6Vz1I42Dnec+PjRGQIO/Ke0KdnhHmgsFHu6Z+eEalFZCPeE+nzr0Y9wxlp7p5w9eNEBJwc5PEpsX2aiIyOkHLLjt4nwjwGqp8T3t4nwiVcxHjPQXJXe758rHG1rxeXRUb7HwjSbv3YQNYoAAAAAElFTkSuQmCC);
+    background-image: url(<%= data_uri('graphics/graphic_portcullis-white-2x.png') %>);
   }
 }
 .wrapper {
@@ -316,6 +316,10 @@ a:focus {
   width: 28px;
   height: 34px;
 }
+#global-header .strapline {
+  color: #ffffff;
+  margin: 10px -5px 5px 50px;
+}
 #footer {
   border-top: 10px solid #080;
   background-color: #dee0e2;
@@ -341,4 +345,101 @@ a:focus {
     font-size: 14px;
     line-height: 1.42857;
   }
+}
+#footer .open-government-licence {
+	clear: left;
+	position: relative;
+}
+#footer .open-government-licence .logo {
+	margin-bottom: 1em;
+	padding-top: 0;
+}
+#footer .open-government-licence .logo a {
+	display: block;
+	width: 41px;
+	height: 17px;
+	overflow: hidden;
+	text-indent: -999em;
+	background-image: url(<%= data_uri('graphics/graphic_open-government-licence.png') %>);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+	#footer .open-government-licence .logo a {
+		background-image: url(<%= data_uri('graphics/graphic_open-government-licence-2x.png') %>);
+		background-size: 41px 17px;
+	}
+}
+#footer .open-government-licence p {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.25;
+	font-weight: 400;
+	text-transform: none;
+	margin: 0;
+	padding-top: 0.1em;
+}
+@media (max-width: 640px) {
+	#footer .open-government-licence p {
+		font-size: 14px;
+		line-height: 1.42857;
+	}
+}
+@media (min-width: 641px) {
+	#footer .wrapper { position: relative; }
+}
+.graphic-portcullis-large-grey {
+	width: 52px;
+	height: 64px;
+	background-image: url(<%= data_uri('graphics/graphic_portcullis-large-grey.png') %>);
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+	.graphic-portcullis-large-grey {
+		background-image: url(<%= data_uri('graphics/graphic_portcullis-large-grey-2x.png') %>);
+		background-size: 100%;
+	}
+}
+.graphic-crest-large-grey {
+	width: 80px;
+	height: 64px;
+	background-image: url(<%= data_uri('graphics/graphic_crest-large-grey.png') %>);
+}
+@media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
+	.graphic-crest-large-grey {
+		background-image: url(<%= data_uri('graphics/graphic_crest-large-grey-2x.png') %>);
+		background-size: 100%;
+	}
+}
+.copyright {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 16px;
+	line-height: 1.25;
+	font-weight: 400;
+	text-transform: none;
+	margin: 45px 0 0 0;
+	width: 100%;
+	display: block;
+	text-align: center;
+}
+@media (max-width: 640px) {
+	.copyright {
+		font-size: 14px;
+		line-height: 1.42857;
+	}
+}
+@media (min-width: 641px) {
+	.copyright {
+		max-width: 200px;
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin-top: 0;
+		text-align: right;
+	}
+}
+.copyright .graphic-portcullis-large-grey { margin-right: 45px; }
+.copyright a {
+	display: block;
+	text-decoration: none;
+	margin-top: 15px;
 }
