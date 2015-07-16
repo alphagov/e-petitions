@@ -2,13 +2,13 @@
 <%= form_for @government_response, :url => admin_petition_government_response_path(petition), method: :put do |f| -%>
   <%= form_row :for => [f.object, :summary] do %>
     <%= f.label :summary, 'Summary quote', class: 'form-label' %>
-    <%= error_messages_for_field f.object, :response_summary %>
+    <%= error_messages_for_field f.object, :summary %>
     <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, class: 'form-control' %>
   <% end %>
 
   <%= form_row :for => [f.object, :details] do %>
     <%= f.label :details, 'Response in full', class: 'form-label' %>
-    <%= error_messages_for_field f.object, :response %>
+    <%= error_messages_for_field f.object, :details %>
     <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
   <% end %>
 
