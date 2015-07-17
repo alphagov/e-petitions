@@ -13,6 +13,7 @@
       margin-left: $gutter-one-third;
       a {
         @include core-19();
+        color: $white;
         display: inline;
         padding: 0;
       }
