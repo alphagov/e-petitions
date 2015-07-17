@@ -57,4 +57,26 @@ module PetitionHelper
       render('/petitions/create/replay_email_ui', petition: stage_manager.stage_object, f: form)
     end
   end
+
+  def debate_video_tag(video_url)
+    options = {
+      src: debate_video_embed_url(video_url),
+      id: 'UKPPlayer',
+      name: 'UKPPlayer',
+      title: 'UK Parliament Player',
+      seamless: true,
+      frameborder: 0,
+      allowfullscreen: true
+    }
+
+    content_tag(:div, class: 'video-wrapper') do
+      concat(content_tag(:iframe, '', options))
+    end
+  end
+
+  def debate_video_embed_url(video_url)
+    video_id = File.basename(URI.parse(video_url).path)
+    params = { audioOnly: "False", autoStart: "False", statsEnabled: "True" }.to_query
+    URI::HTTP.build([nil, 'videoplayback.parliamentlive.tv', 80, "/Player/Index/#{video_id}", params, nil]).to_s
+  end
 end
