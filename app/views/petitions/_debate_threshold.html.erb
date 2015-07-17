@@ -3,12 +3,26 @@
   <% if debate_outcome = petition.debate_outcome? -%>
     <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
     <section class="debate-outcome">
-      <p>This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
+      <p class="secondary">This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
       <% if debate_outcome.video_url? -%>
-        <p><%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %></p>
+        <%= link_to debate_outcome.video_url, rel: 'external' do %>
+          <span class="debate-video graphic graphic-house-of-commons" aria-hidden>
+            <span class="play-button icon icon-play-white" aria-hidden></span>
+          </span>
+        <% end -%>
       <% end -%>
-      <% if debate_outcome.transcript_url? -%>
-        <p><%= link_to 'Read the transcript', debate_outcome.transcript_url, rel: 'external' %></p>
+      <% if debate_outcome.video_url? || debate_outcome.transcript_url? -%>
+        <p>
+        <% if debate_outcome.video_url? -%>
+          <%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %>
+        <% end -%>
+        <% if debate_outcome.video_url? && debate_outcome.transcript_url? -%>
+          &bull;
+        <% end -%>
+        <% if debate_outcome.transcript_url? -%>
+          <%= link_to 'Read the transcript', debate_outcome.transcript_url, rel: 'external' %>
+        <% end -%>
+        </p>
       <% end -%>
       <% if debate_outcome.overview? -%>
         <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
