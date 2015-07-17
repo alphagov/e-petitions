@@ -24,12 +24,16 @@
 <% if @petition.in_todo_list? %>
   <dt>Created on</dt>
   <dd><%= date_time_format(@petition.created_at) %></dd>
+
 <% else %>
   <dt>Deadline</dt>
   <dd><%= date_format_admin(@petition.deadline) %></dd>
 
   <dt>Link to petition</dt>
   <dd><%= link_to nil, petition_url(@petition), target: "_blank" %></dd>
+
+  <dt>ID</dt>
+  <dd><%= @petition.id %></dd>
 
 <% end %>
 </dl>
