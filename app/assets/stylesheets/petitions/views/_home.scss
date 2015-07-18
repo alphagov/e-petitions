@@ -42,7 +42,7 @@
   background-position: 15px 15px;
   background-repeat: no-repeat;
   padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
-  margin: $gutter*1.5 $gutter-half*-1 $gutter;
+  margin: $gutter*1.5 0 $gutter;
 
   h2, p {
     color: $white;
@@ -80,8 +80,8 @@ a.threshold-panel:hover, a.threshold-panel:focus {
 
 // Threshold petitions
 .threshold-petitions {
-  .response-intro {
-    margin-top: 10px;
+  .intro {
+    margin: 10px 0;
   }
   .pull-quote {
     margin-top: 5px;

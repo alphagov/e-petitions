@@ -1,4 +1,5 @@
 .hub-actions {
+  margin-top: $gutter;
   li {
     margin-bottom: $gutter;
   }
@@ -8,7 +9,7 @@
     @include box-sizing(border-box);
     width: 100%;
     height: 200px;
-    background-color: $house-of-commons-green;
+  background-color: $house-of-commons-green;
     padding: $gutter-half;
     color: $white;
     @include bold-27;
@@ -22,7 +23,7 @@
     .graphic {
       position: absolute;
       top: $gutter-half;
-      right: $gutter-half;
+      right: $gutter-two-thirds;
     }
   }
 }

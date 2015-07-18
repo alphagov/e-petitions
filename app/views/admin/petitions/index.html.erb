@@ -1,7 +1,7 @@
 <h1>Petitions</h1>
 
 <div class="grid-row">
-  <div class="column-two-thirds">
+  <div class="column-half">
     <%= render 'admin/searches/form', query: @query %>
   </div>
 </div>
@@ -21,21 +21,23 @@
 <table class="petition-list">
   <thead>
     <tr>
-      <th>Action</th>
-      <th>Creator</th>
+      <th class="petition-list-petition-action">Action</th>
+      <th class="petition-list-petition-creator">Creator</th>
+      <th class="petition-list-petition-id">Id</th>
       <th>State</th>
-      <th class="numeric">Count</th>
-      <th class="date last">Closing</th>
+      <th class="date">Closing</th>
+      <th class="numeric last">Signatures</th>
     </tr>
   </thead>
   <tbody>
     <% @petitions.each do |petition| -%>
       <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
         <td class="petition-list-petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
-        <td><%= mail_to petition.creator_signature.email, petition.creator_signature.name %></td>
+        <td class="petition-list-petition-creator"><%= mail_to petition.creator_signature.email, petition.creator_signature.name %></td>
+        <td class="petition-list-petition-id"><%= petition.id %></td>
         <td><%= petition.state.humanize %></td>
-        <td class="numeric"><%= number_with_delimiter(petition.signature_count) %></td>
-        <td class="date last"><%= date_format(petition.deadline) %></td>
+        <td class="date"><%= date_format(petition.deadline) %></td>
+        <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
     <% end -%>
   </tbody>

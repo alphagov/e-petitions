@@ -129,8 +129,8 @@ en-GB:
     counts:
       with_response:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the&nbsp;Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the&nbsp;Government"
+          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
       with_debate_outcome:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"

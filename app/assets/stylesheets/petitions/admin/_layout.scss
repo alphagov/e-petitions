@@ -1,5 +1,5 @@
 .admin {
-  $site-width: 960px;
+  $site-width: 1160px;
   .wrapper {
     @include site-width-container($site-width);
   }
