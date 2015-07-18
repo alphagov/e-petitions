@@ -29,18 +29,18 @@
 // Adapted from https://github.com/HubSpot/odometer
 
 .tumble {
-  display: inline-block;
+  @include inline-block;
   position: relative;
 }
 
 .tumble-digit {
-  display: inline-block;
+  @include inline-block;
   position: relative;
   margin-right: -0.25em;
 }
 
 .tumble-digit-spacer {
-  display: inline-block;
+  @include inline-block;
   visibility: hidden;
 }
 
