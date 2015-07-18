@@ -42,28 +42,6 @@
   }
 }
 
-// Video panel thing
-
-.debate-video {
-  position: relative;
-  &:hover, &:focus {
-    opacity: 0.9;
-  }
-
-  .play-button {
-    background-color: $petitions-brand;
-    width: $gutter * 3;
-    height: $gutter * 2;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    background-position: 50% 50%;
-    &:hover, &:focus {
-      background-color: darken($petitions-panel-colour, 5%);
-    }
-  }
-}
-
 // Petition meta
 
 .petition-meta {

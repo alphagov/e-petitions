@@ -42,7 +42,10 @@
   background-position: 15px 15px;
   background-repeat: no-repeat;
   padding: $gutter-half $gutter*2 $gutter-two-thirds $gutter-half;
-  margin: $gutter*1.5 0 $gutter;
+  margin: $gutter*1.5 $gutter-half*-1 $gutter;
+  @include media(tablet) {
+    margin: $gutter*1.5 0 $gutter;
+  }
 
   h2, p {
     color: $white;
