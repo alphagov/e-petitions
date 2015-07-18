@@ -224,3 +224,38 @@ input.back-page {
     margin-bottom: em(15, 24);
   }
 }
+
+// Video panel thing
+
+.debate-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; // 16:9
+  background-size: 100%;
+  @include inline-block;
+  background-image: image-url("graphics/graphic_house-of-commons.jpg");
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic_house-of-commons-2x.jpg");
+  }
+  &:hover, &:focus {
+    opacity: 0.9;
+  }
+
+  .play-button {
+    background-color: $petitions-brand;
+    width: $gutter * 2.5;
+    height: $gutter * 2;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-position: 50% 50%;
+    &:hover, &:focus {
+      background-color: darken($petitions-panel-colour, 5%);
+    }
+    @include media(tablet) {
+      width: $gutter * 3;
+      height: $gutter * 2;
+    }
+  }
+}
+

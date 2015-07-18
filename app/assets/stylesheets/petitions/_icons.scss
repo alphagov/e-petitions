@@ -134,16 +134,6 @@
     background-size: 100%;
   }
 }
-.graphic-house-of-commons {
-  width: 630px;
-  height: 354px;
-  background-image: image-url("graphics/graphic_house-of-commons.jpg");
-
-  @include device-pixel-ratio() {
-    background-image: image-url("graphics/graphic_house-of-commons-2x.jpg");
-    background-size: 100%;
-  }
-}
 .icon-share-facebook {
   width: 7px;
   height: 16px;
