@@ -14,10 +14,10 @@ en-GB:
       open: "Open petitions"
       closed: "Closed petitions"
       rejected: "Rejected petitions"
-      awaiting_response: "Petitions waiting for a Government response"
-      with_response: "Petitions with a Government response"
-      with_debate_outcome: "Petitions debated in Parliament"
-      awaiting_debate_date: "Petitions waiting for a debate in Parliament"
+      awaiting_response: "Petitions waiting for a Government response"
+      with_response: "Petitions with a Government response"
+      with_debate_outcome: "Petitions debated in Parliament"
+      awaiting_debate_date: "Petitions waiting for a debate in Parliament"
 
     share_title: "Petition: %{petition}"
 
@@ -32,14 +32,14 @@ en-GB:
         html: <span class="icon icon-share-whatsapp"></span> Whatsapp
 
     lists:
-      all: "All petitions (%{quantity})"
-      open: "Open petitions (%{quantity})"
-      closed: "Closed petitions (%{quantity})"
-      rejected: "Rejected petitions (%{quantity})"
-      awaiting_response: "Awaiting government response (%{quantity})"
-      with_response: "Government responses (%{quantity})"
-      with_debate_outcome: "Debated in Parliament (%{quantity})"
-      awaiting_debate_date: "Awaiting a debate in Parliament (%{quantity})"
+      all: "All petitions (%{quantity})"
+      open: "Open petitions (%{quantity})"
+      closed: "Closed petitions (%{quantity})"
+      rejected: "Rejected petitions (%{quantity})"
+      awaiting_response: "Awaiting government response (%{quantity})"
+      with_response: "Government responses (%{quantity})"
+      with_debate_outcome: "Debated in Parliament (%{quantity})"
+      awaiting_debate_date: "Awaiting a debate in Parliament (%{quantity})"
 
     facets:
       public:
@@ -129,22 +129,22 @@ en-GB:
     counts:
       with_response:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
+          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
       with_debate_outcome:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
+          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
       with_response_explanation:
         html:
-          zero: "There aren't any petitions with a government response yet"
-          one: "See all petitions with a government response (%{formatted_count})"
-          other: "See all petitions with a government response (%{formatted_count})"
+          zero: "There aren't any petitions with a government response yet"
+          one: "See all petitions with a government response (%{formatted_count})"
+          other: "See all petitions with a government response (%{formatted_count})"
       with_debate_outcome_explanation:
         html:
-          zero: There aren't any petitions that have been debated in parliament yet
-          one: "See all petitions debated in parliament (%{formatted_count})"
-          other: "See all petitions debated in parliament (%{formatted_count})"
+          zero: There aren't any petitions that have been debated in parliament yet
+          one: "See all petitions debated in parliament (%{formatted_count})"
+          other: "See all petitions debated in parliament (%{formatted_count})"
 
     action_counts:
       in_moderation:

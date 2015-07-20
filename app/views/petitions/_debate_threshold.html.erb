@@ -1,7 +1,7 @@
 <section class="about-item about-item-count-debate" aria-labelledby="debate-threshold-heading">
   <%# Has debate outcome details #%>
   <% if debate_outcome = petition.debate_outcome? -%>
-    <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
+    <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
     <section class="debate-outcome">
       <p class="secondary">This topic was debated on <%= short_date_format debate_outcome.debated_on %></p>
       <% if debate_outcome.video_url? -%>
@@ -63,6 +63,6 @@
   <%# Needs more signatures #%>
   <% else -%>
     <h2 id="debate-threshold-heading">At <%= Site.formatted_threshold_for_debate %> signatures...</h2>
-    <p>At <%= Site.formatted_threshold_for_debate %> signatures, this petition will be considered for debate in Parliament</p>
+    <p>At <%= Site.formatted_threshold_for_debate %> signatures, this petition will be considered for debate in Parliament</p>
   <% end -%>
 </section>

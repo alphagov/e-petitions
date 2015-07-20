@@ -48,6 +48,9 @@ select.form-control:hover {
   color: $secondary-text-colour;
   float: right;
   padding-left: $gutter;
+  @include media(tablet) {
+    padding-left: $gutter *2;
+  }
 }
 .character-count.too-many-characters {
   color: $error-colour;

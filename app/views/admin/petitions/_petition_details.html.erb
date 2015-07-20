@@ -4,15 +4,15 @@
 
 <% if @petition.rejected? or @petition.hidden? -%>
   <dt>Rejection reason</dt>
-  <dd><p><%= rejection_reason(@petition.rejection.code) %>&nbsp;</dd>
+  <dd><p><%= rejection_reason(@petition.rejection.code) %> </dd>
 
   <dt>Rejection text</dt>
-  <dd><%= @petition.rejection.details %>&nbsp;</dd>
+  <dd><%= @petition.rejection.details %> </dd>
 <% end -%>
 
 <% unless @petition.in_todo_list? %>
   <dt>Signatures</dt>
-  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %>&nbsp;</dd>
+  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>
 <% end %>
 
 <dt>Creator</dt>

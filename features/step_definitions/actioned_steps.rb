@@ -34,20 +34,20 @@ end
 Then(/^I should see an empty government response threshold section$/) do
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_response)}']")
-    expect(page).to have_content("There haven’t been any petitions with over 10,000 signatures yet")
+    expect(page).to have_content("There haven’t been any petitions with over 10,000 signatures yet")
   end
 end
 
 Then(/^I should see an empty debate threshold section$/) do
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_debate_outcome)}']")
-    expect(page).to have_content("There haven’t been any petitions with over 100,000 signatures yet")
+    expect(page).to have_content("There haven’t been any petitions with over 100,000 signatures yet")
   end
 end
 
 Then(/^I should see (\d+) petitions counted in the response threshold section$/) do |count|
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
-    link_text = "See all petitions with a government response (#{count})"
+    link_text = "See all petitions with a government response (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_response))
   end
 end
@@ -60,7 +60,7 @@ end
 
 Then(/^I should see (\d+) petitions counted in the debate threshold section$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    link_text = "See all petitions debated in parliament (#{count})"
+    link_text = "See all petitions debated in parliament (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :with_debate_outcome))
   end
 end
