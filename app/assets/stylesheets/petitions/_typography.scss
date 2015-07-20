@@ -63,7 +63,6 @@ h2, h3, h4 {
 }
 
 p {
-  @extend %word-break;
   margin-top: em(5, 16);
   margin-bottom: em(15, 16);
 
