@@ -532,6 +532,10 @@ RSpec.describe Site, type: :model do
         Thread.current[:__site__] = nil
       end
 
+      after do
+        Site.reload
+      end
+
       it "finds the first record or creates it" do
         expect(Site).to receive(:first_or_create).and_return(site)
         expect(Site.instance).to equal(site)
@@ -546,6 +550,10 @@ RSpec.describe Site, type: :model do
     context "when it is cached in Thread.current" do
       before do
         Thread.current[:__site__] = site
+      end
+
+      after do
+        Site.reload
       end
 
       it "returns the cached instance" do
