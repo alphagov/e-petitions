@@ -1,7 +1,7 @@
 module AdminHelper
 
   def mandatory_field
-    content_tag :span, raw('&nbsp;*'), class: 'mandatory'
+    content_tag :span, raw(' *'), class: 'mandatory'
   end
 
   def cms_delete_link(model, options = {})
