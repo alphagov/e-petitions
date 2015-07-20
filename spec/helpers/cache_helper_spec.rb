@@ -33,6 +33,13 @@ RSpec.describe CacheHelper, type: :helper do
     let(:klass) { CacheHelper::CacheKey::Keys }
     let(:keys) { klass.new(helper) }
 
+    describe "#archived_petition_page" do
+      it "delegates to the template context" do
+        expect(helper).to receive(:archived_petition_page?).and_return(true)
+        expect(keys.archived_petition_page).to eq(true)
+      end
+    end
+
     describe "#create_petition_page" do
       it "delegates to the template context" do
         expect(helper).to receive(:create_petition_page?).and_return(true)
@@ -53,6 +60,13 @@ RSpec.describe CacheHelper, type: :helper do
       it "delegates to the template context" do
         expect(helper).to receive(:last_signature_at).and_return(now)
         expect(keys.last_signature_at).to eq(now)
+      end
+    end
+
+    describe "#page_title" do
+      it "delegates to the template context" do
+        expect(helper).to receive(:page_title).and_return("Petitions")
+        expect(keys.page_title).to eq("Petitions")
       end
     end
 

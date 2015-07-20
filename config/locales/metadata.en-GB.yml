@@ -4,7 +4,9 @@ en-GB:
       site_name: "Petitions - UK Government and Parliament"
       default_title: "Petitions - UK Government and Parliament"
       title: "Petition: %{petition}"
+      archived_title: "Archived Petition: %{petition}"
 
     twitter:
       default_title: "Petitions - UK Government and Parliament"
       title: "Petition: %{petition}"
+      archived_title: "Archived Petition: %{petition}"
