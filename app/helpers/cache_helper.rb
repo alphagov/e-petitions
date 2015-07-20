@@ -25,13 +25,19 @@ module CacheHelper
       attr_reader :template
 
       delegate :assigns, to: :template
+      delegate :archived_petition_page?, to: :template
       delegate :create_petition_page?, to: :template
       delegate :home_page?, to: :template
       delegate :last_signature_at, to: :template
       delegate :petition_page?, to: :template
+      delegate :page_title, to: :template
 
       def initialize(template)
         @template = template
+      end
+
+      def archived_petition_page
+        archived_petition_page?
       end
 
       def create_petition_page
