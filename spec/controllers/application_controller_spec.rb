@@ -10,6 +10,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   let(:cache_control) { response.headers['Cache-Control'] }
+  let(:x_ua_compatible) { response.headers['X-UA-Compatible'] }
 
   it "reloads the site instance on every request" do
     expect(Site).to receive(:reload)
@@ -19,6 +20,11 @@ RSpec.describe ApplicationController, type: :controller do
   it "sets cache control headers when asked" do
     get :index
     expect(cache_control).to eq('no-store, no-cache')
+  end
+
+  it "sets X-UA-Compatible control headers" do
+    get :index
+    expect(x_ua_compatible).to eq('IE=edge')
   end
 
   context "when the site is disabled" do

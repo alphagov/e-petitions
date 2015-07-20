@@ -42,5 +42,7 @@ module Epets
     config.action_dispatch.rescue_responses.merge!(
       'Site::ServiceUnavailable' => :service_unavailable
     )
+
+    config.action_dispatch.default_headers.merge!('X-UA-Compatible' => 'IE=edge')
   end
 end
