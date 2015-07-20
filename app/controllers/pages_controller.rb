@@ -4,4 +4,13 @@ class PagesController < ApplicationController
 
   def help
   end
+
+  def privacy
+  end
+
+  def browserconfig
+  end
+
+  def manifest
+  end
 end

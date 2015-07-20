@@ -132,6 +132,9 @@ GEM
       phantomjs (>= 1.9)
       railties (>= 3.2.0)
       sprockets-rails
+    jbuilder (2.3.1)
+      activesupport (>= 3.0.0, < 5)
+      multi_json (~> 1.2)
     jmespath (1.0.2)
       multi_json (~> 1.0)
     jquery-rails (4.0.4)
@@ -305,6 +308,7 @@ DEPENDENCIES
   faraday
   faraday_middleware
   jasmine-rails
+  jbuilder
   jquery-rails
   json
   launchy
