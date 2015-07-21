@@ -15,10 +15,8 @@
 /public/assets
 
 # Ignore generated error files
-/public/404.html
-/public/422.html
-/public/500.html
-/public/503.html
+/public/4*.html
+/public/5*.html
 /public/error.css
 
 # Ignore deployment packages
