@@ -34,14 +34,14 @@ end
 Then(/^I should see an empty government response threshold section$/) do
   within(:css, "section[aria-labelledby=response-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_response)}']")
-    expect(page).to have_content("There haven’t been any petitions with over 10,000 signatures yet")
+    expect(page).to have_content("The government hasn’t responded to any petitions yet")
   end
 end
 
 Then(/^I should see an empty debate threshold section$/) do
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
     expect(page).to have_no_css("a[href='#{petitions_path(state: :with_debate_outcome)}']")
-    expect(page).to have_content("There haven’t been any petitions with over 100,000 signatures yet")
+    expect(page).to have_content("Parliament hasn’t debated any petitions yet")
   end
 end
 
