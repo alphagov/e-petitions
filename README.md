@@ -1,7 +1,7 @@
 Petitions
 ===========
 
-This is the code base for the UK Government's petitions service (http://epetitions.direct.gov.uk).
+This is the code base for the UK Government's petitions service (https://petition.parliament.uk).
 We have open sourced the code for you to use under the terms of licence contained in this repository.
 
 We hope you enjoy it!
@@ -30,7 +30,6 @@ A few things to know:
 
 ### Auxiliary
 
-* If you want to seed your database with sample petitions, use `$ rake data:generate`
 * If you want jobs (like emails) to be run, use `$ rake jobs:work`
 * For setting up a sysadmin user
 	* `rake epets:add_sysadmin_user` - to set up an admin user with email 'admin@example.com' and password 'Letmein1!'
