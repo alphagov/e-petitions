@@ -3,7 +3,8 @@ Rails.application.routes.draw do
     get '/' => 'pages#index', :as => :home
     get 'help' => 'pages#help', :as => :help
     get 'privacy' => 'pages#privacy', :as => :privacy
-
+    get 'browserconfig' => 'pages#browserconfig', format: 'xml'
+    get 'manifest' => 'pages#manifest', format: 'json'
 
     get 'feedback' => 'feedback#index', :as => 'feedback'
     get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'

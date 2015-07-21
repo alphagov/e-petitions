@@ -34,6 +34,7 @@ gem 'dalli'
 gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
+gem 'jbuilder'
 
 group :development, :test do
   gem 'rspec-rails'
