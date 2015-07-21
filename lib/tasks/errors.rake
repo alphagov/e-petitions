@@ -25,7 +25,7 @@ namespace :errors do
       end
     end
 
-    %w[404 422 500 503].each do |status|
+    %w[400 404 406 422 500 503].each do |status|
       context = context_class.new('app/views', { status: status }, controller_class.new)
       File.open(Rails.public_path.join("#{status}.html"), 'wb') do |f|
         f.write context.render(template: "errors/#{status}", layout: 'errors/layout')
