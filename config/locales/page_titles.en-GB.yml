@@ -25,7 +25,7 @@ en-GB:
       new: "%{petition} - Sign this petition - Petitions"
       signed: "Thank you - Petitions"
       thank_you: "Thank you - Petitions"
-      unsubscribe: "Successfully unsubscribed"
+      unsubscribe: "Unsubscribe from %{petition} email updates - Petitions"
     sponsors:
       show: "Support %{creator}’s petition - Petitions"
       sponsored: "Thank you - Petitions"

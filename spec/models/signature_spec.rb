@@ -523,6 +523,92 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "#unsubscribe" do
+    let(:signature) { FactoryGirl.create(:validated_signature, notify_by_email: subscribed) }
+    let(:unsubscribe_token) { signature.unsubscribe_token }
+
+    before do
+      signature.unsubscribe!(unsubscribe_token)
+    end
+
+    context "when subcribed" do
+      let(:subscribed) { true }
+
+      it "changes the subscription status" do
+        expect(signature.notify_by_email).to be_falsey
+      end
+
+      it "doesn't add an error to the :base attribute" do
+        expect(signature.errors[:base]).to be_empty
+      end
+    end
+
+    context "when already unsubcribed" do
+      let(:subscribed) { false }
+
+      it "doesn't change the subscription status" do
+        expect(signature.notify_by_email).to be_falsey
+      end
+
+      it "adds an error to the :base attribute" do
+        expect(signature.errors[:base]).to include("Already Unsubscribed")
+      end
+    end
+
+    context "when token is invalid" do
+      let(:subscribed) { true }
+      let(:unsubscribe_token) { "invalid token" }
+
+      it "doesn't change the subscription status" do
+        expect(signature.notify_by_email).to be_truthy
+      end
+
+      it "adds an error to the :base attribute" do
+        expect(signature.errors[:base]).to include("Invalid Unsubscribe Token")
+      end
+    end
+  end
+
+  describe "#already_unsubscribed?" do
+    let(:signature) { FactoryGirl.create(:validated_signature) }
+
+    context "when there is no error on the :base attribute" do
+      it "returns false" do
+        expect(signature.already_unsubscribed?).to be_falsey
+      end
+    end
+
+    context "when there is an error on the :base attribute" do
+      before do
+        signature.errors.add(:base, "Already Unsubscribed")
+      end
+
+      it "returns true" do
+        expect(signature.already_unsubscribed?).to be_truthy
+      end
+    end
+  end
+
+  describe "#invalid_unsubscribe_token?" do
+    let(:signature) { FactoryGirl.create(:validated_signature) }
+
+    context "when there is no error on the :base attribute" do
+      it "returns false" do
+        expect(signature.invalid_unsubscribe_token?).to be_falsey
+      end
+    end
+
+    context "when there is an error on the :base attribute" do
+      before do
+        signature.errors.add(:base, "Invalid Unsubscribe Token")
+      end
+
+      it "returns true" do
+        expect(signature.invalid_unsubscribe_token?).to be_truthy
+      end
+    end
+  end
+
   include ConstituencyApiHelpers::ApiLevel
   describe "#constituency" do
     let(:constituency1) { ConstituencyApi::Constituency.new('1234', "Shoreditch") }

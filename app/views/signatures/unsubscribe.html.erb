@@ -1,0 +1,12 @@
+<% if @signature.already_unsubscribed? %>
+  <h1>Already unsubscribed</h1>
+  <p>You have already unsubscribed for future email updates on the petition.</p>
+<% elsif @signature.invalid_unsubscribe_token? %>
+  <h1>Failed to unsubscribe</h1>
+  <p>Failed to unsubscribe. Your unsubscription token is invalid.</p>
+<% else %>
+  <h1>Successfully unsubscribed</h1>
+  <p>You have now unsubscribed for future email updates on the petition.</p>
+<% end %>
+
+<%= link_to "Return to home page", home_path %>
