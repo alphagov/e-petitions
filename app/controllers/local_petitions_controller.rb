@@ -22,9 +22,7 @@ class LocalPetitionsController < ApplicationController
   end
 
   def find_constituency
-    @constituency = ConstituencyApi::Client.constituency(@postcode)
-  rescue ConstituencyApi::Error => e
-    Rails.logger.error("Failed to fetch constituency - #{e}")
+    @constituency = ConstituencyApi.constituency(@postcode)
   end
 
   def constituency?

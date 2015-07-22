@@ -1,8 +1,8 @@
+require 'faraday'
+require 'nokogiri'
 require 'postcode_sanitizer'
 
 module ConstituencyApi
-  class Error < RuntimeError; end
-
   class Constituency
     attr_reader :id, :name, :mp
 
@@ -18,73 +18,121 @@ module ConstituencyApi
 
   class Mp
     attr_reader :id, :name, :start_date
-    URL = "http://www.parliament.uk/biographies/commons"
+    URL = "http://www.parliament.uk/biographies/commons/%{name}/%{id}"
 
     def initialize(id, name, start_date)
       @id, @name, @start_date = id, name, start_date.to_date
     end
 
     def url
-      "#{URL}/#{name.parameterize}/#{id}"
+      URL % { name: name.parameterize, id: id }
     end
 
     def ==(other)
-      other.is_a?(self.class) && id == other.id && name == other.name && start_date && other.start_date
+      other.is_a?(self.class) && id == other.id && name == other.name && start_date == other.start_date
     end
     alias_method :eql?, :==
   end
 
   class Client
-    include Faraday
-    URL = 'http://data.parliament.uk/membersdataplatform/services/mnis/Constituencies'
+    API_HOST = 'http://data.parliament.uk'
+    API_ENDPOINT = '/membersdataplatform/services/mnis/Constituencies/%{postcode}/'
     TIMEOUT = 5
 
-    def self.constituency(postcode)
-      constituencies(postcode).first
-    end
-
-    def self.constituencies(postcode)
-      response = call_api(postcode)
-      parse_constituencies(response)
-    end
-
-    def self.parse_constituencies(response)
-      return [] unless response["Constituencies"]
-      constituencies = response["Constituencies"]["Constituency"]
-      Array.wrap(constituencies).map { |c| Constituency.new(c["Constituency_Id"], c["Name"], last_mp(c)) }
-    end
-
-    def self.call_api(postcode)
-      sanitized_postcode = PostcodeSanitizer.call(postcode)
-      response = Faraday.new(URL).get("#{sanitized_postcode}/") do |req|
-        req.options[:timeout] = TIMEOUT
-        req.options[:open_timeout] = TIMEOUT
+    def call(postcode)
+      faraday.get(path(postcode)) do |request|
+        request.options[:timeout] = TIMEOUT
+        request.options[:open_timeout] = TIMEOUT
       end
-      unless response.status == 200
-        raise Error.new("Unexpected response from API:"\
-                        "status #{response.status}"\
-                        "body #{response.body}"\
-                        "request #{URL}/#{sanitized_postcode}/")
+    end
+
+    private
+
+    def faraday
+      Faraday.new(API_HOST) do |f|
+        f.response :follow_redirects
+        f.response :raise_error
+        f.adapter Faraday.default_adapter
       end
-      Hash.from_xml(response.body)
-    rescue Faraday::Error::TimeoutError
-      raise Error.new("Timeout after #{TIMEOUT} seconds")
+    end
+
+    def path(postcode)
+      API_ENDPOINT % { postcode: escape_path(postcode) }
+    end
+
+    def escape_path(value)
+      Rack::Utils.escape_path(value)
+    end
+  end
+
+  class Query
+    CONSTITUENCIES    = '//Constituencies/Constituency'
+    CONSTITUENCY_ID   = './Constituency_Id'
+    CONSTITUENCY_NAME = './Name'
+
+    CURRENT_MP = './RepresentingMembers/RepresentingMember[1]'
+    MP_ID      = './Member_Id'
+    MP_NAME    = './Member'
+    MP_DATE    = './StartDate'
+
+    def initialize(postcode)
+      @postcode = postcode
+    end
+
+    def fetch
+      response = client.call(postcode)
+
+      if response.success?
+        parse(response.body)
+      else
+        []
+      end
+    rescue Faraday::Error::ResourceNotFound => e
+      return []
     rescue Faraday::Error => e
-      raise Error.new("Network error - #{e}")
+      Appsignal.send_exception(e) if defined?(Appsignal)
+      return []
     end
 
-    def self.last_mp(constituency_hash)
-      mps = parse_mps(constituency_hash)
-      mps.select(&:start_date).sort_by(&:start_date).last
+    private
+
+    def client
+      @client ||= Client.new
     end
 
-    def self.parse_mps(response)
-      return [] unless response["RepresentingMembers"]
-      mps = response["RepresentingMembers"]["RepresentingMember"]
-      Array.wrap(mps).map { |m| Mp.new(m["Member_Id"], m["Member"], m["StartDate"]) }
+    def postcode
+      PostcodeSanitizer.call(@postcode)
     end
 
-    private_class_method :parse_constituencies, :call_api, :parse_mps, :last_mp
+    def parse(body)
+      xml = Nokogiri::XML(body)
+
+      xml.xpath(CONSTITUENCIES).map do |node|
+        id   = node.xpath(CONSTITUENCY_ID).text
+        name = node.xpath(CONSTITUENCY_NAME).text
+
+        if mp = node.at_xpath(CURRENT_MP)
+          Constituency.new(id, name, parse_mp(mp))
+        else
+          Constituency.new(id, name)
+        end
+      end
+    end
+
+    def parse_mp(node)
+      id   = node.xpath(MP_ID).text
+      name = node.xpath(MP_NAME).text
+      date = node.xpath(MP_DATE).text
+
+      Mp.new(id, name, date)
+    end
+  end
+
+  def self.constituency(postcode)
+    constituencies(postcode).first
+  end
+
+  def self.constituencies(postcode)
+    Query.new(postcode).fetch
   end
 end
-

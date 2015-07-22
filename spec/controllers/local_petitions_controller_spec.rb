@@ -68,7 +68,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     shared_examples_for 'a local petitions controller that does not try to lookup a constituency' do
       it 'does not communicate with the API' do
-        expect(ConstituencyApi::Client).not_to receive(:constituency)
+        expect(ConstituencyApi).not_to receive(:constituency)
         get :index, params
       end
 

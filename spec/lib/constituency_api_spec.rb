@@ -14,13 +14,13 @@ RSpec.describe ConstituencyApi do
       let(:mp) { ConstituencyApi::Mp.new("1536", "Emily Thornberry MP", Date.new(2015, 5, 7)) }
 
       it "returns the URL for the mp" do
-        expect(mp.url).to eq "#{ConstituencyApi::Mp::URL}/emily-thornberry-mp/1536"
+        expect(mp.url).to eq "http://www.parliament.uk/biographies/commons/emily-thornberry-mp/1536"
       end
     end
   end
 
   describe "query methods" do
-    let(:api) { ConstituencyApi::Client }
+    let(:api) { ConstituencyApi }
     let(:url) { "http://data.parliament.uk" }
     let(:endpoint) { "#{url}/membersdataplatform/services/mnis/Constituencies" }
 
@@ -162,8 +162,8 @@ RSpec.describe ConstituencyApi do
           stub_request(:get, /.*data.parliament.uk.*/).to_timeout
         end
 
-        it "raises a ConstituencyApi::Error" do
-          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        it "returns an empty array" do
+          expect(api.constituencies("N1")).to eq([])
         end
       end
 
@@ -172,8 +172,8 @@ RSpec.describe ConstituencyApi do
           stub_request(:get, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ConnectionFailed)
         end
 
-        it "raises a ConstituencyApi::Error" do
-          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        it "returns an empty array" do
+          expect(api.constituencies("N1")).to eq([])
         end
       end
 
@@ -182,8 +182,8 @@ RSpec.describe ConstituencyApi do
           stub_request(:get, /.*data.parliament.uk.*/).to_raise(Faraday::Error::ResourceNotFound)
         end
 
-        it "raises a ConstituencyApi::Error" do
-          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        it "returns an empty array" do
+          expect(api.constituencies("N1")).to eq([])
         end
       end
 
@@ -192,8 +192,8 @@ RSpec.describe ConstituencyApi do
           stub_request(:get, /.*data.parliament.uk.*/).to_return(status: 500, body: "<Constituencies/>")
         end
 
-        it "raises a ConstituencyApi::Error" do
-          expect{ api.constituencies("N1") }.to raise_error(ConstituencyApi::Error)
+        it "returns an empty array" do
+          expect(api.constituencies("N1")).to eq([])
         end
       end
     end

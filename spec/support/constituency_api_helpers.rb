@@ -9,37 +9,48 @@ module ConstituencyApiHelpers
         else
           ConstituencyApi::Constituency.new(*constituency_params)
         end
-      allow(ConstituencyApi::Client).to receive(:constituencies).
-                                        with(PostcodeSanitizer.call(postcode)).
-                                        and_return([constituency])
+      allow(ConstituencyApi).to receive(:constituencies).
+                                  with(PostcodeSanitizer.call(postcode)).
+                                  and_return([constituency])
     end
 
     def stub_constituencies(partial_postcode, *constituencies)
-      allow(ConstituencyApi::Client).to receive(:constituencies).
-                                        with(PostcodeSanitizer.call(partial_postcode)).
-                                        and_return(constituencies)
+      allow(ConstituencyApi).to receive(:constituencies).
+                                  with(PostcodeSanitizer.call(partial_postcode)).
+                                  and_return(constituencies)
 
     end
 
     def stub_no_constituencies(postcode)
-      allow(ConstituencyApi::Client).to receive(:constituencies).
-                                        with(PostcodeSanitizer.call(postcode)).
-                                        and_return([])
+      allow(ConstituencyApi).to receive(:constituencies).
+                                  with(PostcodeSanitizer.call(postcode)).
+                                  and_return([])
     end
 
     def stub_broken_api
-      allow(ConstituencyApi::Client).to receive(:constituencies).
-                                        and_raise(ConstituencyApi::Error)
+      allow(ConstituencyApi).to receive(:constituencies).and_return([])
     end
   end
 
   module NetworkLevel
-    def api_url
-      ConstituencyApi::Client::URL
+    def api_host
+      ConstituencyApi::Client::API_HOST
+    end
+
+    def api_endpoint
+      ConstituencyApi::Client::API_ENDPOINT
+    end
+
+    def api_url(postcode)
+      "#{api_host}#{api_endpoint}" % { postcode: sanitize_and_escape_postcode(postcode) }
+    end
+
+    def sanitize_and_escape_postcode(postcode)
+      Rack::Utils.escape_path(PostcodeSanitizer.call(postcode))
     end
 
     def stub_constituency_from_file(postcode, filename)
-      stub_request(:get, "#{ api_url }/#{PostcodeSanitizer.call(postcode)}/").to_return(status: 200, body: IO.read(filename))
+      stub_request(:get, api_url(postcode)).to_return(status: 200, body: IO.read(filename))
     end
 
     def stub_constituency(postcode, constituency_id, constituency_name, mp_id: '0001', mp_name: 'A. N. Other MP', mp_start_date: '2015-05-07T00:00:00')
@@ -61,7 +72,7 @@ module ConstituencyApiHelpers
           </Constituencies>
         RESPONSE
 
-      stub_request(:get, "#{ api_url }/#{PostcodeSanitizer.call(postcode)}/").to_return(status: 200, body: api_response)
+      stub_request(:get, api_url(postcode)).to_return(status: 200, body: api_response)
     end
 
     def stub_no_constituencies(postcode)
@@ -69,7 +80,7 @@ module ConstituencyApiHelpers
     end
 
     def stub_broken_api
-      stub_request(:get, %r[#{ Regexp.escape(api_url) }/*]).to_return(status: 500)
+      stub_request(:get, %r[#{api_host}/*]).to_return(status: 500)
     end
   end
 end
