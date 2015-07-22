@@ -3,7 +3,8 @@
   <%= form_row :for => [f.object, :summary] do %>
     <%= f.label :summary, 'Summary quote', class: 'form-label' %>
     <%= error_messages_for_field f.object, :summary %>
-    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, class: 'form-control' %>
+    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, 'data-max-length': 200, class: 'form-control' %>
+    <p class="character-count">200 characters max</p>
   <% end %>
 
   <%= form_row :for => [f.object, :details] do %>
@@ -14,3 +15,5 @@
 
   <%= email_signatures_with_count_submit_button(f, petition) %>
 <% end -%>
+
+<%= javascript_include_tag 'character-counter' %>

@@ -15,7 +15,7 @@ Rails.application.config.assets.precompile += %w(
   delayed/web/application.css
   ie.js
   admin.js
-  create-petition.js
+  character-counter.js
 )
 
 # Compress JavaScript assets.
