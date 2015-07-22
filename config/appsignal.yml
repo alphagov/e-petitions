@@ -15,6 +15,7 @@ default: &defaults
 
   # Exceptions that should not be recorded by AppSignal
   ignore_exceptions:
+    - ActionDispatch::ParamsParser::ParseError
     - ActionController::InvalidAuthenticityToken
     - ActionController::RoutingError
     - ActiveRecord::RecordNotFound
