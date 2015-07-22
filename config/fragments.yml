@@ -9,6 +9,10 @@ head:
   options:
     expires_in: 300
 
+header:
+  options:
+    expires_in: 300
+
 footer:
   keys:
     - :create_petition_page
