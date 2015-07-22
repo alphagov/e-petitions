@@ -36,9 +36,6 @@
     <%= cache_for :footer do %>
       <%= render 'application/footer' %>
       <%= javascript_include_tag 'application' %>
-      <% if home_page? %>
-        <%= javascript_include_tag 'homepage' %>
-      <% end %>
       <% if create_petition_page? %>
         <%= javascript_include_tag 'create-petition' %>
       <% end %>

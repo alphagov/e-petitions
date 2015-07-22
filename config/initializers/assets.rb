@@ -15,7 +15,6 @@ Rails.application.config.assets.precompile += %w(
   delayed/web/application.css
   ie.js
   admin.js
-  homepage.js
   create-petition.js
 )
 
