@@ -111,8 +111,22 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  def unsubscribe!
-    self.update(notify_by_email: false)
+  def unsubscribe!(token)
+    if unsubscribed?
+      errors.add(:base, "Already Unsubscribed")
+    elsif unsubscribe_token != token
+      errors.add(:base, "Invalid Unsubscribe Token")
+    else
+      update(notify_by_email: false)
+    end
+  end
+
+  def already_unsubscribed?
+    errors[:base].include?("Already Unsubscribed")
+  end
+
+  def invalid_unsubscribe_token?
+    errors[:base].include?("Invalid Unsubscribe Token")
   end
 
   def constituency

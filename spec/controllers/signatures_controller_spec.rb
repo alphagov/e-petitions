@@ -377,65 +377,19 @@ RSpec.describe SignaturesController, type: :controller do
   end
 
   describe '#unsubscribe' do
+    let(:signature) { double(:signature) }
+    let(:petition) { double(:petition) }
+
     before do
-      @petition = FactoryGirl.create(:petition)
-      @signature = FactoryGirl.create(:signature, :petition => @petition)
+      expect(Signature).to receive(:find).with("1").and_return(signature)
+      expect(signature).to receive(:petition).and_return(petition)
+      expect(signature).to receive(:unsubscribe!).with("token")
+
+      get :unsubscribe, id: "1", unsubscribe_token: "token"
     end
 
-    context "with valid unsubscription token" do
-      before do
-        get :unsubscribe, :id => @signature.id, :unsubscribe_token => @signature.unsubscribe_token
-        @signature.reload
-      end
-
-      it 'unsubscribes signer' do
-        expect(@signature.notify_by_email).to be_falsey
-      end
-
-      it 'renders a view stating that unsubscribing was successfull' do
-        expect(response).to render_template(:successfully_unsubscribed)
-      end
-    end
-
-    context "with invalid parameters" do
-      context "with invalid unsubscription token" do
-        before do
-          get :unsubscribe, :id => @signature.id, :unsubscribe_token => 'INVALID_TOKEN'
-        end
-
-        it 'does not unsubscribe signer' do
-          expect(@signature.notify_by_email).to be_truthy
-        end
-
-        it 'renders a template that indicates that unsubscription failed' do
-          expect(response.body).to render_template(:failed_to_unsubscribe)
-        end
-      end
-
-      context "with non-matching signature id and unsubscription token" do
-        before do
-          anohter_signature = FactoryGirl.create(:signature, :petition => @petition)
-          get :unsubscribe, :id => @signature.id, :unsubscribe_token =>  anohter_signature.unsubscribe_token
-        end
-
-        it 'does not unsubscribe signer' do
-          expect(@signature.notify_by_email).to be_truthy
-        end
-
-        it 'renders a template that indicates that unsubscription failed' do
-          expect(response.body).to render_template(:failed_to_unsubscribe)
-        end
-      end
-
-      context "with already unsubscribed signer" do
-        it 'renders a template stating that the signer has already unsubscribed' do
-          @signature.notify_by_email = false
-          @signature.save
-
-          get :unsubscribe, :id => @signature.id, :unsubscribe_token => @signature.unsubscribe_token
-          expect(response.body).to render_template(:already_unsubscribed)
-        end
-      end
+    it "renders the action template" do
+      expect(response.body).to render_template(:unsubscribe)
     end
   end
 end
