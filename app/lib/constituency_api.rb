@@ -87,7 +87,7 @@ module ConstituencyApi
       else
         []
       end
-    rescue Faraday::Error::ResourceNotFound => e
+    rescue Faraday::ResourceNotFound, Faraday::ClientError => e
       return []
     rescue Faraday::Error => e
       Appsignal.send_exception(e) if defined?(Appsignal)
