@@ -45,40 +45,40 @@ RSpec.describe DateTimeHelper, type: :helper do
     context "when the date is today" do
       let(:date) { 2.hours.ago(now) }
 
-      it "returns 'Waiting less than a day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting less than a day")
+      it "returns 'Waiting for less than a day'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for less than a day")
       end
     end
 
     context "when the date is yesterday" do
       let(:date) { 1.day.ago(now) }
 
-      it "returns 'Waiting 1 day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1 day")
+      it "returns 'Waiting for 1 day'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 1 day")
       end
     end
 
     context "when the date is last week" do
       let(:date) { 7.days.ago(now) }
 
-      it "returns 'Waiting 7 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 7 days")
+      it "returns 'Waiting for 7 days'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 7 days")
       end
     end
 
     context "when the response threshold was reached last month" do
       let(:date) { 30.days.ago(now) }
 
-      it "returns 'Waiting 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+      it "returns 'Waiting for 30 days'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
       end
     end
 
     context "when the response threshold was reached 3 years ago" do
       let(:date) { 1095.days.ago(now) }
 
-      it "returns 'Waiting 1,095 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1,095 days")
+      it "returns 'Waiting for 1,095 days'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 1,095 days")
       end
     end
   end
