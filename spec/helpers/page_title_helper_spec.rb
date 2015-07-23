@@ -23,7 +23,8 @@ RSpec.describe PageTitleHelper, type: :helper do
         local_petitions: {
           index: {
             zero: "Pétitions à %{postcode}",
-            one: "Pétitions à %{constituency}"
+            one: "Pétitions à %{constituency}",
+            other: "Local pour vous - Pétitions"
           }
         },
         petitions: {
@@ -95,6 +96,17 @@ RSpec.describe PageTitleHelper, type: :helper do
         params[:action] = "show"
 
         expect(helper.page_title).to eq("La pétition de soutien Jacques Cousteau - Pétitions")
+      end
+    end
+
+    context "when on the local petitions page without a postcode" do
+      before do
+        params[:controller] = "local_petitions"
+        params[:action] = "index"
+      end
+
+      it "uses the :other option from the translation" do
+        expect(helper.page_title).to eq("Local pour vous - Pétitions")
       end
     end
 
