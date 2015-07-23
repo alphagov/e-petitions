@@ -95,7 +95,7 @@ class Signature < ActiveRecord::Base
 
   def validate!
     if pending?
-      petition.creator_signature.validate! unless creator?
+      petition.validate_creator_signature! unless creator?
 
       Petition.transaction do
         self.update_columns(
