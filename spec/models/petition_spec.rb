@@ -1164,26 +1164,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#validated_creator_signature?" do
-    context "when the creator signature is not validated" do
-      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
-      let(:signature) { FactoryGirl.create(:pending_signature) }
-
-      it "returns false" do
-        expect(petition.validated_creator_signature?).to eq(false)
-      end
-    end
-
-    context "when the creator signature is validated" do
-      let(:petition) { FactoryGirl.create(:pending_petition, creator_signature: signature) }
-      let(:signature) { FactoryGirl.create(:validated_signature) }
-
-      it "returns false" do
-        expect(petition.validated_creator_signature?).to eq(true)
-      end
-    end
-  end
-
   describe "#id" do
     let(:petition){ FactoryGirl.create(:petition) }
 
