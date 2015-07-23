@@ -361,7 +361,7 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(petition.signature_count).to eq(7)
+      expect(signature.petition.signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 
@@ -372,10 +372,10 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(other_petition.signature_count).to eq(7)
+      expect(other_signature.petition.signature_count).to eq(7)
       expect(other_signature.number).to eq(7)
 
-      expect(petition.signature_count).to eq(7)
+      expect(signature.petition.signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 
@@ -496,7 +496,7 @@ RSpec.describe Signature, type: :model do
 
       it 'does not talk to the constituency petition journal if the signature is not pending' do
         expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.state = Signature::VALIDATED_STATE
+        signature.update_columns(state: Signature::VALIDATED_STATE)
         signature.validate!
       end
     end
@@ -517,7 +517,7 @@ RSpec.describe Signature, type: :model do
 
       it 'does not talk to the constituency petition journal if the signature is not pending' do
         expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.state = Signature::VALIDATED_STATE
+        signature.update_columns(state: Signature::VALIDATED_STATE)
         signature.validate!
       end
     end
