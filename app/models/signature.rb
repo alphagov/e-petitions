@@ -94,11 +94,11 @@ class Signature < ActiveRecord::Base
   end
 
   def validate!
-    if pending?
-      petition.creator_signature.validate! unless creator?
+    with_lock do
+      if pending?
+        petition.validate_creator_signature! unless creator?
 
-      Petition.transaction do
-        self.update_columns(
+        update_columns(
           number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: Time.current,

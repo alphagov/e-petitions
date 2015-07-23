@@ -359,11 +359,9 @@ class Petition < ActiveRecord::Base
   end
 
   def validate_creator_signature!
-    creator_signature && creator_signature.validate! && reload
-  end
-
-  def validated_creator_signature?
-    creator_signature && creator_signature.validated?
+    if pending?
+      creator_signature && creator_signature.validate! && reload
+    end
   end
 
   def count_validated_signatures
