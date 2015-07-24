@@ -399,7 +399,15 @@ class PackageBuilder
   end
 
   def treeish
-    ENV['TAG'] || ENV['BRANCH'] || 'HEAD'
+    if environment == :production
+      ENV.fetch('TAG')
+    else
+      ENV['TAG'] || ENV['BRANCH'] || 'HEAD'
+    end
+  rescue KeyError => e
+    info "Please specify a tag when deploying to production"
+    info "e.g. rake deploy:production TAG=1.0.0"
+    abort
   end
 
   def write_appspec
