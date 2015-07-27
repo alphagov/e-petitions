@@ -44,5 +44,8 @@ module Epets
     )
 
     config.action_dispatch.default_headers.merge!('X-UA-Compatible' => 'IE=edge')
+
+    # Load the job concerns
+    config.eager_load_paths += %W(#{config.root}/app/jobs/**/*)
   end
 end
