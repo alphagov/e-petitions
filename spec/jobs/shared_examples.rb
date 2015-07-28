@@ -72,6 +72,20 @@ RSpec.shared_examples_for "a job to send an signatory email" do
       expect { perform_job }.to change(EmailSentReceipt, :count).by(1)
     end
 
+    context "an email has already been sent for the petition to this signatory" do
+      before do
+        signature.set_email_sent_at_for timestamp_name, to: petition.get_email_requested_at_for(timestamp_name)
+      end
+
+      it "does not send any email" do
+        expect { perform_job }.not_to change(ActionMailer::Base.deliveries, :size)
+      end
+
+      it "does not record any email being sent" do
+        expect { perform_job }.not_to change(signature.email_sent_receipt.reload, :updated_at)
+      end
+    end
+
     context "email sending fails" do
       shared_examples_for 'catching errors during individual email sending' do
         before do

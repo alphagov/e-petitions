@@ -19,7 +19,7 @@ module EmailDeliveryJobs
       @timestamp_name = timestamp_name
       @logger = logger
 
-      if petition_has_not_been_updated?
+      if can_send_email?
         send_email
         record_email_sent
       end
@@ -28,6 +28,10 @@ module EmailDeliveryJobs
     private
 
     attr_reader :mailer, :signature, :timestamp_name, :petition, :requested_at
+
+    def can_send_email?
+      petition_has_not_been_updated? && email_not_previously_sent?
+    end
 
     def send_email
       create_email.deliver_now
@@ -64,6 +68,15 @@ module EmailDeliveryJobs
     # As email sending is enqueued straight after a petition has been updated
     def petition_has_not_been_updated?
       petition_timestamp.to_i == requested_at.to_i
+    end
+
+    #
+    # Have we already sent an email for this petition version?
+    # If we have then the timestamp for the signature will match the timestamp for the petition
+    #
+    def email_not_previously_sent?
+      # check that the signature is still in the list of signatures
+      petition.signatures_to_email_for(timestamp_name).where(id: signature.id).exists?
     end
   end
 end
