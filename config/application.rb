@@ -44,5 +44,8 @@ module Epets
     )
 
     config.action_dispatch.default_headers.merge!('X-UA-Compatible' => 'IE=edge')
+
+    # Needed as Rails does not eager load app/jobs/concerns by default
+    config.eager_load_paths += [Rails.root.join('app/jobs/concerns')]
   end
 end

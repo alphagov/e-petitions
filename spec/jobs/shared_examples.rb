@@ -1,0 +1,206 @@
+RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
+  include ActiveSupport::Testing::TimeHelpers
+
+  def do_work(requested_at = email_requested_at)
+    @requested_at = requested_at.getutc.iso8601(6)
+    subject.perform(petition, requested_at)
+  end
+
+  #
+  # Annoyingly Rails TimeHelper sets usec to 0 for all stubbed times
+  # But we need usec accuracy so the #travel_to method is copied here with the usec kept
+  #
+  # See https://github.com/rails/rails/blob/master/activesupport/lib/active_support/testing/time_helpers.rb#L95-L113
+  #
+  def travel_to(date_or_time)
+    if date_or_time.is_a?(Date) && !date_or_time.is_a?(DateTime)
+      now = date_or_time.midnight.to_time
+    else
+      now = date_or_time.to_time
+    end
+
+    simple_stubs.stub_object(Time, :now, now)
+    simple_stubs.stub_object(Date, :today, now.to_date)
+
+    if block_given?
+      begin
+        yield
+      ensure
+        travel_back
+      end
+    end
+  end
+
+  describe '.run_later_tonight' do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:requested_at) { Time.current }
+
+    def global_id_job_arg_for(object)
+      { "_aj_globalid" => object.to_global_id.to_s }
+    end
+
+    def timestamp_job_arg_for(timestamp)
+      timestamp.getutc.iso8601(6)
+    end
+
+    it 'queues up a job' do
+      described_class.run_later_tonight(petition)
+      expect(enqueued_jobs.size).to eq 1
+      expect(enqueued_jobs.first[:job]).to eq described_class
+    end
+
+    it 'sets the job to run between midnight and 4am tomorrow' do
+      described_class.run_later_tonight(petition)
+      queued_at = enqueued_jobs.first[:at]
+      expect(queued_at).to satisfy { |at| at >= (1.day.from_now.midnight.to_i) }
+      expect(queued_at).to satisfy { |at| at <= (1.day.from_now.midnight + 4.hours).to_i }
+    end
+
+    it 'queues up the job to run with the petition and timestamp supplied as args' do
+      travel_to requested_at do
+        described_class.run_later_tonight(petition)
+        queued_args = enqueued_jobs.first[:args]
+        expect(queued_args[0]).to eq global_id_job_arg_for(petition)
+        expect(queued_args[1]).to eq timestamp_job_arg_for(requested_at)
+      end
+    end
+  end
+
+  context "when the petition has not been updated" do
+    it "enqueues a job to send an email to each signatory" do
+      do_work
+      expect(enqueued_jobs.size).to eq(1)
+    end
+
+    it "the job is the correct type for the type of notification" do
+      do_work
+      job = enqueued_jobs.first
+      expect(job[:job]).to eq(subject.email_delivery_job_class)
+    end
+
+    it "the job has the expected arguments" do
+      do_work
+      args = enqueued_jobs.first[:args].first
+
+      expect(args["timestamp_name"]).to eq(subject.timestamp_name)
+      expect(args["requested_at_as_string"]).to eq(@requested_at)
+    end
+  end
+
+  context "when the petition has been updated" do
+    before do
+      petition.set_email_requested_at_for(subject.timestamp_name, to: Time.current + 5.minutes )
+    end
+
+    it "does not enqueue any jobs to send emails" do
+      do_work
+      expect(enqueued_jobs).to be_empty
+    end
+  end
+end
+
+RSpec.shared_examples_for "a job to send an signatory email" do
+  def perform_job
+    @requested_at_as_string = email_requested_at.getutc.iso8601(6)
+    subject.perform(
+      signature: signature,
+      timestamp_name: timestamp_name,
+      petition: petition,
+      requested_at_as_string: @requested_at_as_string,
+      logger: logger
+    )
+  end
+
+  let(:logger) { double("Logger").as_null_object }
+
+  context "when the petition has not been updated" do
+    it "uses the correct mailer to generate the email" do
+      expect(subject).to receive(:create_email).and_call_original
+      perform_job
+    end
+
+    it "delivers the rendered email supplied by #create_email" do
+      rendered_email = double("Rendered email")
+      expect(rendered_email).to receive(:deliver_now)
+      allow(subject).to receive(:create_email).and_return rendered_email
+      perform_job
+    end
+
+    it "does sends the email" do
+      expect { perform_job }.to change(ActionMailer::Base.deliveries, :size).by(1)
+    end
+
+    it "records the email being sent" do
+      expect { perform_job }.to change(EmailSentReceipt, :count).by(1)
+    end
+
+    context "an email has already been sent for the petition to this signatory" do
+      before do
+        signature.set_email_sent_at_for timestamp_name, to: petition.get_email_requested_at_for(timestamp_name)
+      end
+
+      it "does not send any email" do
+        expect { perform_job }.not_to change(ActionMailer::Base.deliveries, :size)
+      end
+
+      it "does not record any email being sent" do
+        expect { perform_job }.not_to change(signature.email_sent_receipt.reload, :updated_at)
+      end
+    end
+
+    context "email sending fails" do
+      shared_examples_for 'catching errors during individual email sending' do
+        before do
+          allow(subject).to receive(:create_email).and_raise(exception_class)
+        end
+
+        it "captures the error and reraises it" do
+          expect { perform_job }.to raise_error(exception_class)
+        end
+
+        it 'logs the email sending error as information' do
+          expect(logger).to receive(:info).with(/#{Regexp.escape(exception_class.name)}/)
+          suppress(exception_class) { perform_job }
+        end
+
+        it "does not mark the signature" do
+          suppress(exception_class) { perform_job }
+          signature.reload
+          expect(signature.get_email_sent_at_for(timestamp_name)).not_to be_usec_precise_with email_requested_at
+        end
+      end
+
+      context "with connection refused" do
+        let(:exception_class) { Errno::ECONNREFUSED }
+
+        it_behaves_like 'catching errors during individual email sending'
+      end
+
+      context "with an SMTPError" do
+        let(:exception_class) { Net::SMTPFatalError }
+
+        it_behaves_like 'catching errors during individual email sending'
+      end
+
+      context 'with a timeout' do
+        let(:exception_class) { Errno::ETIMEDOUT }
+
+        it_behaves_like 'catching errors during individual email sending'
+      end
+    end
+  end
+
+  context "when the petition has been updated" do
+    before do
+      petition.set_email_requested_at_for(timestamp_name, to: Time.current + 5.minutes )
+    end
+
+    it "does not send any email" do
+      expect { perform_job }.not_to change(ActionMailer::Base.deliveries, :size)
+    end
+
+    it "does not record any email being sent" do
+      expect { perform_job }.not_to change(EmailSentReceipt, :count)
+    end
+  end
+end
