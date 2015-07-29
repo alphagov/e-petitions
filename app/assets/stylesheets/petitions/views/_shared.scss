@@ -153,7 +153,7 @@ input.back-page {
 // About petitions
 // ==========
 .about-petitions {
-  margin: $gutter-half 0 $gutter;
+  margin: $gutter 0;
 }
 
 .about-item {
@@ -170,10 +170,10 @@ input.back-page {
   h2 {
     font-size: 24px;
     line-height: 30/24;
-    margin: em(5, 24) 0 em(5, 24) $text-indent;
+    margin: em(5, 24) 0 em(10, 24) $text-indent;
 
     @include media(tablet) {
-      margin: em(10, 36) 0 em(10, 36) $text-indent;
+      margin: em(5, 24) 0 em(10, 24) $text-indent;
     }
   }
   h3 {
