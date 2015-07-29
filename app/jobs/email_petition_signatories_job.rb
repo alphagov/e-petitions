@@ -1,9 +1,13 @@
 class EmailPetitionSignatoriesJob < ActiveJob::Base
   queue_as :default
 
-  def self.run_later_tonight(petition, requested_at, *extra_args)
+  def self.run_later_tonight(petition)
+    requested_at = Time.current
+
+    petition.set_email_requested_at_for(new.timestamp_name, to: requested_at)
+
     set(wait_until: later_tonight).
-      perform_later(petition, requested_at.getutc.iso8601, *extra_args)
+      perform_later(petition, requested_at.getutc.iso8601)
   end
 
   def self.later_tonight
@@ -11,6 +15,9 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
   end
   private_class_method :later_tonight
 
+  def timestamp_name
+    raise NotImplementedError.new "Extending classes must implement #timestamp_name"
+  end
 
   def perform(petition, requested_at_string)
     @petition = petition
@@ -70,10 +77,6 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
   # The job class that handles the actual email sending for this job type
   def email_delivery_job_class
     raise NotImplementedError.new "Extending classes must implement email_delivery_job_class"
-  end
-
-  def timestamp_name
-    raise NotImplementedError.new "Extending classes must implement timestamp_name"
   end
 end
 
