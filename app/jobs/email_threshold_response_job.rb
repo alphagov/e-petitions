@@ -1,6 +1,6 @@
 class EmailThresholdResponseJob < EmailPetitionSignatories::Job
-  def self.run_later_tonight(petition)
-    petition.set_email_requested_at_for('government_response', to: Time.current)
+  def self.run_later_tonight(petition, requested_at = Time.current)
+    petition.set_email_requested_at_for('government_response', to: requested_at)
     super(petition, petition.get_email_requested_at_for('government_response'))
   end
 
