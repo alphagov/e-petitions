@@ -1,7 +1,34 @@
 RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
+  include ActiveSupport::Testing::TimeHelpers
+
   def do_work(requested_at = email_requested_at)
-    @requested_at = requested_at.getutc.iso8601
+    @requested_at = requested_at.getutc.iso8601(6)
     subject.perform(petition, requested_at)
+  end
+
+  #
+  # Annoyingly Rails TimeHelper sets usec to 0 for all stubbed times
+  # But we need usec accuracy so the #travel_to method is copied here with the usec kept
+  #
+  # See https://github.com/rails/rails/blob/master/activesupport/lib/active_support/testing/time_helpers.rb#L95-L113
+  #
+  def travel_to(date_or_time)
+    if date_or_time.is_a?(Date) && !date_or_time.is_a?(DateTime)
+      now = date_or_time.midnight.to_time
+    else
+      now = date_or_time.to_time
+    end
+
+    simple_stubs.stub_object(Time, :now, now)
+    simple_stubs.stub_object(Date, :today, now.to_date)
+
+    if block_given?
+      begin
+        yield
+      ensure
+        travel_back
+      end
+    end
   end
 
   describe '.run_later_tonight' do
@@ -13,7 +40,7 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
     end
 
     def timestamp_job_arg_for(timestamp)
-      timestamp.getutc.iso8601
+      timestamp.getutc.iso8601(6)
     end
 
     it 'queues up a job' do
@@ -30,10 +57,12 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
     end
 
     it 'queues up the job to run with the petition and timestamp supplied as args' do
-      described_class.run_later_tonight(petition)
-      queued_args = enqueued_jobs.first[:args]
-      expect(queued_args[0]).to eq global_id_job_arg_for(petition)
-      expect(queued_args[1]).to eq timestamp_job_arg_for(requested_at)
+      travel_to requested_at do
+        described_class.run_later_tonight(petition)
+        queued_args = enqueued_jobs.first[:args]
+        expect(queued_args[0]).to eq global_id_job_arg_for(petition)
+        expect(queued_args[1]).to eq timestamp_job_arg_for(requested_at)
+      end
     end
   end
 
@@ -72,7 +101,7 @@ end
 
 RSpec.shared_examples_for "a job to send an signatory email" do
   def perform_job
-    @requested_at_as_string = email_requested_at.getutc.iso8601
+    @requested_at_as_string = email_requested_at.getutc.iso8601(6)
     subject.perform(
       signature: signature,
       timestamp_name: timestamp_name,

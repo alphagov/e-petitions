@@ -1,28 +1,40 @@
-class EmailPetitionSignatoriesJob < ActiveJob::Base
-  queue_as :default
+module EmailAllPetitionSignatories
+  extend ActiveSupport::Concern
 
-  def self.run_later_tonight(petition)
-    requested_at = Time.current
+  #
+  # Concern to add shared functionality to ActiveJob classes that are responsible
+  # for enqueuing send email jobs
+  #
 
-    petition.set_email_requested_at_for(new.timestamp_name, to: requested_at)
+  included do
+    queue_as :default
 
-    set(wait_until: later_tonight).
-      perform_later(petition, requested_at.getutc.iso8601)
+    def self.run_later_tonight(petition)
+      requested_at = Time.current
+
+      petition.set_email_requested_at_for(new.timestamp_name, to: requested_at)
+
+      set(wait_until: later_tonight).
+        perform_later(petition, requested_at.getutc.iso8601(6))
+    end
+
+    def self.later_tonight
+      1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
+    end
+    private_class_method :later_tonight
+
   end
 
-  def self.later_tonight
-    1.day.from_now.at_midnight + rand(240).minutes + rand(60).seconds
-  end
-  private_class_method :later_tonight
 
-  def timestamp_name
-    raise NotImplementedError.new "Extending classes must implement #timestamp_name"
-  end
 
   def perform(petition, requested_at_string)
     @petition = petition
     @requested_at = requested_at_string.in_time_zone
     do_work!
+  end
+
+  def timestamp_name
+    raise NotImplementedError.new "Including classes must implement #timestamp_name method"
   end
 
   private
@@ -36,9 +48,6 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
     enqueue_send_email_jobs
     logger.info("Finished #{self.class.name} for petition '#{petition.action}'")
 
-    # TODO: removed check_all_assignees recieved email
-    # as email is not sent from here.
-    # Do we need to check that at all here?
   end
 
   #
@@ -51,7 +60,7 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
         signature:                    signature,
         timestamp_name:               timestamp_name,
         petition:                     petition,
-        requested_at_as_string:       requested_at.getutc.iso8601
+        requested_at_as_string:       requested_at.getutc.iso8601(6)
       )
     end
   end
@@ -60,10 +69,7 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
   # ask we enqueues a new job to send out emails with a new timestamp
   # we want to execute only the latest job enqueued
   def petition_has_been_updated?
-    # NOTE: to_i comparison is used to cater for precision differences
-    # between DB timestamp (petition_timestamp precise to fractional
-    # seconds) and job timestamp (requested_at - only seconds precise)
-    petition_timestamp.to_i != requested_at.to_i
+    (petition_timestamp - requested_at).abs > 1
   end
 
   def petition_timestamp
@@ -76,7 +82,7 @@ class EmailPetitionSignatoriesJob < ActiveJob::Base
 
   # The job class that handles the actual email sending for this job type
   def email_delivery_job_class
-    raise NotImplementedError.new "Extending classes must implement email_delivery_job_class"
+    raise NotImplementedError.new "Including classes must implement #email_delivery_job_class method"
   end
 end
 

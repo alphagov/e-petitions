@@ -1,6 +1,8 @@
-class EmailDebateOutcomesJob < EmailPetitionSignatoriesJob
+class EmailDebateOutcomesJob < ActiveJob::Base
+  include EmailAllPetitionSignatories
+
   def email_delivery_job_class
-    EmailDeliveryJobs::DebateOutcome
+    DeliverDebateOutcomeEmailJob
   end
 
   def timestamp_name
