@@ -193,8 +193,9 @@ FactoryGirl.define do
     state                Signature::VALIDATED_STATE
 
     after(:create) do |signature, evaluator|
-      if signature.petition
-        signature.petition.increment!(:signature_count) if signature.validated?
+      if signature.petition && signature.validated?
+        signature.petition.increment!(:signature_count)
+        signature.increment!(:number)
       end
     end
   end
@@ -204,8 +205,9 @@ FactoryGirl.define do
   end
 
   factory :validated_signature, :parent => :signature do
-    state          Signature::VALIDATED_STATE
-    validated_at { Time.current }
+    state                         Signature::VALIDATED_STATE
+    validated_at                  { Time.current }
+    seen_signed_confirmation_page true
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }

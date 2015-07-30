@@ -46,3 +46,8 @@ Then /^debugger$/ do
   binding.pry
   :debugger
 end
+
+When(/^I click the shared link$/) do
+  expect(@shared_link).not_to be_blank
+  visit @shared_link
+end

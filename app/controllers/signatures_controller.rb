@@ -26,7 +26,14 @@ class SignaturesController < ApplicationController
     verify_token
 
     if @signature.validated?
-      @petition = @signature.petition
+
+      if @signature.seen_signed_confirmation_page?
+        redirect_to petition_url @signature.petition
+      else
+        @signature.mark_seen_signed_confirmation_page!
+        @petition = @signature.petition
+      end
+
     else
       redirect_to(verify_signature_url(@signature, @signature.perishable_token))
     end

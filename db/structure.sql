@@ -462,7 +462,8 @@ CREATE TABLE signatures (
     unsubscribe_token character varying,
     constituency_id character varying,
     validated_at timestamp without time zone,
-    number integer
+    number integer,
+    seen_signed_confirmation_page boolean DEFAULT false NOT NULL
 );
 
 
@@ -1153,4 +1154,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150707094523');
 INSERT INTO schema_migrations (version) VALUES ('20150709152530');
 
 INSERT INTO schema_migrations (version) VALUES ('20150714140659');
+
+INSERT INTO schema_migrations (version) VALUES ('20150730110838');
 

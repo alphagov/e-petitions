@@ -127,6 +127,15 @@ Given /^I have signed the petition with a second name$/ do
          :postcode => "SW14 9RQ", :name => "Sam Wibbledon")
 end
 
+Given(/^Suzie has already signed the petition and validated her email$/) do
+  @suzies_signature = FactoryGirl.create(:validated_signature, :petition => @petition, :email => "womboid@wimbledon.com",
+         :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+end
+
+When(/^Suzie shares the signatory confirmation link with Eric$/) do
+  @shared_link = signed_signature_url(@suzies_signature, token: @suzies_signature.perishable_token)
+end
+
 When /^I try to sign the petition with the same email address and a different name$/ do
   steps %Q{
     When I decide to sign the petition
