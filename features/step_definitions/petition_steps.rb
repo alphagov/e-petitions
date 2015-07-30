@@ -121,7 +121,7 @@ Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*
   @petition = FactoryGirl.create(:archived_petition, :rejected, title: title, reason_for_rejection: reason_for_rejection)
 end
 
-When /^I view the petition$/ do
+When(/^[I|they] view the petition$/) do
   if @petition.is_a?(ArchivedPetition)
     visit archived_petition_url(@petition)
   else

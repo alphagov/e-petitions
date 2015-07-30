@@ -103,3 +103,9 @@ Feature: Suzie signs a petition
     And I should see "2 signatures"
     And I can click on a link to return to the petition
     Then I should see that I have already signed the petition
+
+  Scenario: Eric clicks the link shared to him by Suzie
+    When Suzie has already signed the petition and validated her email
+    And Suzie shares the signatory confirmation link with Eric
+    And I click the shared link
+    Then I view the petition

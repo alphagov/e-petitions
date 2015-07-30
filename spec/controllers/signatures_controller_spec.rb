@@ -109,25 +109,53 @@ RSpec.describe SignaturesController, type: :controller do
   describe "signed" do
     let(:petition) { FactoryGirl.create(:petition) }
 
+    def make_signed_request(token = nil)
+      get :signed, id: signature.to_param, token: (token || signature.perishable_token)
+    end
+
     context 'for validated signatures' do
       let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
 
-      it 'renders the signed template' do
-        get :signed, id: signature.to_param, token: signature.perishable_token
-        expect(response).to be_success
-        expect(response).to render_template('signatures/signed')
-      end
-
-      it 'exposes the signature and its petition' do
-        get :signed, id: signature.to_param, token: signature.perishable_token
-        expect(assigns['signature']).to eq signature
-        expect(assigns['petition']).to eq petition
-      end
-
       it "raises exception if token does not match the signature" do
-        expect do
-          get :signed, id: signature.to_param, token: "#{signature.perishable_token}a"
-        end.to raise_error(ActiveRecord::RecordNotFound)
+        expect { make_signed_request "not_a_valid_token" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      context 'signer has not seen the signed page before' do
+        before do
+          signature.update! seen_signed_confirmation_page: false
+        end
+
+        it 'exposes the signature and its petition' do
+          make_signed_request
+          expect(assigns['signature']).to eq signature
+          expect(assigns['petition']).to eq petition
+        end
+
+        it 'marks the signature as the signer having seen the confirmation page' do
+          make_signed_request
+          expect(signature.reload.seen_signed_confirmation_page).to be_truthy
+        end
+
+        it 'renders the signed template' do
+          make_signed_request
+          expect(response).to be_success
+          expect(response).to render_template('signatures/signed')
+        end
+      end
+
+      context 'signer has already seen the signed page (clicking link in the email again)' do
+        before do
+          signature.mark_seen_signed_confirmation_page!
+        end
+
+        it 'keeps the signature as the signer having seen the confirmation page' do
+          expect { make_signed_request }.not_to change(signature.reload, :seen_signed_confirmation_page)
+        end
+
+        it 'redirects to the petition show page' do
+          make_signed_request
+          expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}"
+        end
       end
     end
 
@@ -135,14 +163,12 @@ RSpec.describe SignaturesController, type: :controller do
       let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
 
       it "redirects to the signature verify page" do
-        get :signed, id: signature.to_param, token: signature.perishable_token
+        make_signed_request
         expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
       end
 
       it "raises exception if token does not match" do
-        expect do
-          get :signed, id: signature.to_param, token: "#{signature.perishable_token}a"
-        end.to raise_error(ActiveRecord::RecordNotFound)
+        expect { make_signed_request "not_a_valid_token" }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

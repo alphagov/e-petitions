@@ -111,6 +111,10 @@ class Signature < ActiveRecord::Base
     end
   end
 
+  def mark_seen_signed_confirmation_page!
+    update seen_signed_confirmation_page: true
+  end
+
   def unsubscribe!(token)
     if unsubscribed?
       errors.add(:base, "Already Unsubscribed")
