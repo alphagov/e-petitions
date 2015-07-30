@@ -127,24 +127,30 @@ en-GB:
           other: "%{formatted_count} signatures total"
 
     counts:
+      awaiting_response:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting for a response from the Government"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting for responses from the Government"
       with_response:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
           other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
+      awaiting_debate_date:
+        html:
+          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
       with_debate_outcome:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
+      awaiting_response_explanation:
+        html: "See all petitions waiting for a government response (%{formatted_count})"
       with_response_explanation:
-        html:
-          zero: "There aren't any petitions with a government response yet"
-          one: "See all petitions with a government response (%{formatted_count})"
-          other: "See all petitions with a government response (%{formatted_count})"
+        html: "See all petitions with a government response (%{formatted_count})"
+      awaiting_debate_date_explanation:
+        html: "See all petitions waiting for a debate date (%{formatted_count})"
       with_debate_outcome_explanation:
-        html:
-          zero: There aren't any petitions that have been debated in parliament yet
-          one: "See all petitions debated in parliament (%{formatted_count})"
-          other: "See all petitions debated in parliament (%{formatted_count})"
+        html: "See all petitions debated in parliament (%{formatted_count})"
 
     action_counts:
       in_moderation:
