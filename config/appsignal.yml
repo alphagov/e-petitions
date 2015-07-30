@@ -19,6 +19,7 @@ default: &defaults
     - ActionController::BadRequest
     - ActionController::InvalidAuthenticityToken
     - ActionController::RoutingError
+    - ActionController::UnknownFormat
     - ActiveRecord::RecordNotFound
 
 # Configuration per environment, leave out an environment or set active
