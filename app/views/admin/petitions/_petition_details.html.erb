@@ -2,14 +2,6 @@
   <dt>Status</dt>
   <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
-<% if @petition.rejected? or @petition.hidden? -%>
-  <dt>Rejection reason</dt>
-  <dd><p><%= rejection_reason(@petition.rejection.code) %> </dd>
-
-  <dt>Rejection text</dt>
-  <dd><%= @petition.rejection.details %> </dd>
-<% end -%>
-
 <% unless @petition.in_todo_list? %>
   <dt>Signatures</dt>
   <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>

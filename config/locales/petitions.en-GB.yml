@@ -104,9 +104,9 @@ en-GB:
       signoff_suffix: "UK Government and Parliament"
 
     waiting_for_in_words:
-      zero: "Waiting less than a day"
-      one: "Waiting 1 day"
-      other: "Waiting %{formatted_count} days"
+      zero: "Waiting for less than a day"
+      one: "Waiting for 1 day"
+      other: "Waiting for %{formatted_count} days"
 
     signature_counts:
       default:

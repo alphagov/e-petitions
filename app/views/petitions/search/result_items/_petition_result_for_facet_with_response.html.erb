@@ -1,3 +1,4 @@
 <h3><%= link_to petition.action, petition_path(petition) %></h3>
+<p>Government responded – <%= short_date_format(petition.government_response_at) %></p>
+<p><%= petition.government_response.summary %></p>
 <p><%= signature_count(:default, petition.signature_count) %></p>
-<p>Responded <%= short_date_format(petition.government_response_at) %></p>

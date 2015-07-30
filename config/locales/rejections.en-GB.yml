@@ -14,7 +14,7 @@ en-GB:
         <p>There is already a petition about this issue.</p>
       libellous: |-
         <p>Petitions will not be accepted if they:</p>
-        <ul>
+        <ul class="list-bullet">
           <li>contain information which may be protected by an injunction or court order</li>
           <li>contain material that is potentially confidential, commercially sensitive or which may cause personal distress or loss</li>
           <li>include the names of individuals if they have been accused of a crime or information that may identify them</li>
@@ -23,7 +23,7 @@ en-GB:
         </ul>
       offensive: |-
         <p>Petitions will not be accepted if they:</p>
-        <ul>
+        <ul class="list-bullet">
           <li>contain offensive, joke or nonsense content</li>
           <li>use language which may cause offence, is provocative or extreme in its views</li>
           <li>use wording that is impossible to understand</li>
@@ -31,7 +31,7 @@ en-GB:
         </ul>
       irrelevant: |-
         <p>Petitions cannot be used to request action on issues that are outside the responsibility of the government. This includes:</p>
-        <ul>
+        <ul class="list-bullet">
           <li>party political material</li>
           <li>commercial endorsements including the promotion of any product, service or publication</li>
           <li>issues that are dealt with by devolved bodies, eg The Scottish Parliament</li>

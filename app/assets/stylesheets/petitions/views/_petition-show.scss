@@ -51,9 +51,13 @@
     @include bold-24;
     margin-bottom: $gutter-two-thirds;
   }
-  .label {
+  .label, .note {
     display: block;
     @include core-16;
     margin-bottom: 5px;
+  }
+  .note {
+    color: $secondary-text-colour;
+    margin-top: 10px;
   }
 }

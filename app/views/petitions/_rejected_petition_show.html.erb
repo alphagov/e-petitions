@@ -17,7 +17,7 @@
   <h2>Reasons for rejection</h2>
   <%= rejection_description(petition.rejection.code) %>
   <% if petition.rejection.details? %>
-    <p><%= petition.rejection.details %></p>
+    <p><%= auto_link(simple_format(petition.rejection.details)) %></p>
   <% end %>
 
   <ul class="petition-meta">

@@ -29,11 +29,12 @@
   <%= render 'share_petition', petition: petition %>
 
   <ul class="petition-meta">
-    <li class="meta-deadline">
-      <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
-    </li>
     <li class="meta-created-by">
       <span class="label">Created by</span> <%= petition.creator_signature.name %>
+    </li>
+    <li class="meta-deadline">
+      <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
+      <span class="note">All petitions run for 6 months</span>
     </li>
   </ul>
 <% end %>
