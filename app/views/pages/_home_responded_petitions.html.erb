@@ -1,4 +1,4 @@
-<% if actioned[:with_response][:count].zero? %>
+<% if actioned[:awaiting_response][:count].zero? && actioned[:with_response][:count].zero? %>
   <p>The government hasn’t responded to any petitions yet</p>
 <% else %>
   <ol class="threshold-petitions">
@@ -12,4 +12,5 @@
     <% end -%>
   </ol>
   <p><%= link_to petition_count(:with_response_explanation, actioned[:with_response][:count]), petitions_path(state: :with_response), class: "view-all" %></p>
+  <p><%= link_to petition_count(:awaiting_response_explanation, actioned[:awaiting_response][:count]), petitions_path(state: :awaiting_response), class: "view-all" %></p>
 <% end %>
