@@ -1,5 +1,4 @@
-// Edited version of govuk_frontend_toolkit
-// https://github.com/alphagov/govuk_frontend_toolkit/
+// From https://github.com/alphagov/govuk_frontend_toolkit/ (edited)
 @import "govuk_frontend_toolkit/conditionals";
 @import "govuk_frontend_toolkit/shims";
 @import "govuk_frontend_toolkit/css3";
@@ -8,28 +7,12 @@
 @import "govuk_frontend_toolkit/grid_layout";
 @import "govuk_frontend_toolkit/design-patterns/buttons";
 
-// Edited version of govuk_template repo
-// https://github.com/alphagov/govuk_template
-// @import "govuk_template/basic";
-// @import "govuk_template/accessibility";
-// @import "govuk_template/header";
-// @import "govuk_template/footer";
-
-// Edited version of govuk_elements repo
-// https://github.com/alphagov/govuk_elements
-// @import "govuk_elements/reset";
-// @import "govuk_elements/buttons";
-// @import "govuk_elements/details";
-// @import "govuk_elements/elements-typography";
+// From https://github.com/alphagov/govuk_elements/ (edited)
 @import "govuk_elements/forms";
-// @import "govuk_elements/helpers";
-// @import "govuk_elements/icons";
-// @import "govuk_elements/layout";
 @import "govuk_elements/lists";
-// @import "govuk_elements/panels";
 @import "govuk_elements/tables";
 
-// Edited version of github.com/daneden/animate.css
+// From github.com/daneden/animate.css (edited)
 @import "animate"; // See this file for usage instructions (simple)
 
 // Petitions styles

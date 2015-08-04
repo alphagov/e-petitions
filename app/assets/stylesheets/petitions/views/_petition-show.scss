@@ -22,6 +22,7 @@
     color: $secondary-text-colour;
     text-align: right;
     margin: $gutter-one-third 0 $gutter *-1;
+    @extend %contain-floats;
   }
 
   .signature-count-graph {

@@ -1,4 +1,4 @@
-<section class="about-item about-item-count-response" aria-labelledby="response-threshold-heading">
+<section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
   <%# Has a government response #%>
   <% if government_response = petition.government_response? -%>
     <h2 id="response-threshold-heading">Government responded</h2>
@@ -7,12 +7,16 @@
     </blockquote>
 
     <% if government_response.details? -%>
+      <% unless params["reveal_response"] == "yes" -%>
       <details>
         <summary><span class="summary">Read the response in full</span></summary>
         <div class="panel-indent panel-no-border">
-          <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+      <% end -%>
+      <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+      <% unless params["reveal_response"] == "yes" -%>
         </div>
       </details>
+      <% end -%>
     <% end -%>
 
   <%# Waiting for a government response #%>
