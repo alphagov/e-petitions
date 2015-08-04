@@ -135,10 +135,10 @@ end
 
 Then /^I see relevant reason descriptions when I browse different reason codes$/ do
   choose "Reject"
-  select "Duplicate of an existing petition", :from => :petition_rejection_code
+  select "Duplicate petition", :from => :petition_rejection_code
   expect(page).to have_content "already a petition"
-  select "Confidential, libellous, false or defamatory statements", :from => :petition_rejection_code
-  expect(page).to have_content "injunction or court order"
+  select "Confidential, libellous, false or defamatory", :from => :petition_rejection_code
+  expect(page).to have_content "It included confidential, libellous, false or defamatory information."
 end
 
 Given(/^a moderator responds to the petition$/) do

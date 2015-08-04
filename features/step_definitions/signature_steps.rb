@@ -8,7 +8,7 @@ When /^I decide to sign the petition$/ do
 end
 
 When /^I try to sign$/ do
-  click_button "Sign this petition"
+  click_button "Continue"
 end
 
 Then /^I am told to check my inbox to complete signing$/ do

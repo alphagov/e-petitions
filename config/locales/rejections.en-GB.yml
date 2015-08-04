@@ -1,43 +1,26 @@
 en-GB:
   rejections:
     titles:
-      no-action: "Does not include a request for action"
-      duplicate: "Duplicate of an existing petition"
-      libellous: "Confidential, libellous, false or defamatory statements"
-      offensive: "Offensive, joke or nonsense petitions"
-      irrelevant: "Matters which are not the responsibility of HM Government"
-      honours: "Matters relating to honours or appointments"
+      no-action: "Action unclear"
+      duplicate: "Duplicate petition"
+      libellous: "Confidential, libellous, false or defamatory"
+      offensive: "Offensive, joke or nonsense"
+      irrelevant: "Not the government’s responsibility"
+      honours: "Honours or appointments"
+      fake-name: "Fake name"
     descriptions:
       no-action: |-
-        <p>It did not have a clear statement explaining what action you want the government to take.</p>
+        <p>It’s not clear what action the petition is asking for.</p>
       duplicate: |-
-        <p>There is already a petition about this issue.</p>
+        <p>There’s already a petition about this issue.</p>
+      fake-name: |-
+        <p>It was created using a fake name.</p>
       libellous: |-
-        <p>Petitions will not be accepted if they:</p>
-        <ul class="list-bullet">
-          <li>contain information which may be protected by an injunction or court order</li>
-          <li>contain material that is potentially confidential, commercially sensitive or which may cause personal distress or loss</li>
-          <li>include the names of individuals if they have been accused of a crime or information that may identify them</li>
-          <li>include the names of individual officials who work for public bodies, unless they are part of the senior management of those organisations</li>
-          <li>include the names of family members of elected representatives, eg MPs, or officials who work for public bodies</li>
-        </ul>
+        <p>It included confidential, libellous, false or defamatory information.</p>
       offensive: |-
-        <p>Petitions will not be accepted if they:</p>
-        <ul class="list-bullet">
-          <li>contain offensive, joke or nonsense content</li>
-          <li>use language which may cause offence, is provocative or extreme in its views</li>
-          <li>use wording that is impossible to understand</li>
-          <li>include statements that amount to advertisements</li>
-        </ul>
+        <p>It’s offensive, nonsense or a joke</p>
       irrelevant: |-
-        <p>Petitions cannot be used to request action on issues that are outside the responsibility of the government. This includes:</p>
-        <ul class="list-bullet">
-          <li>party political material</li>
-          <li>commercial endorsements including the promotion of any product, service or publication</li>
-          <li>issues that are dealt with by devolved bodies, eg The Scottish Parliament</li>
-          <li>correspondence on personal issues</li>
-        </ul>
-        <p>Petitions cannot be used for freedom of information requests.</p>
+        <p>It’s about something that the UK Government or Parliament is not responsible for</p>
       honours: |-
-        <p>Petitions cannot include information about honours or appointments.</p>
-        <p>Find information about nominations for honours at: <a href="https://www.gov.uk/honours" rel="external">https://www.gov.uk/honours</a></p>
+        <p>It’s about honours or appointments.</p>
+        <p>There’s a different way to nominate someone for an honour: <a href="https://www.gov.uk/honours" rel="external">https://www.gov.uk/honours</a></p>
