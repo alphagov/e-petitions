@@ -3,7 +3,7 @@
   <%= form_row :for => [f.object, :admin_notes] do %>
     <%= f.label :details, 'Notes', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :admin_notes %>
-    <%= f.text_area :details, tabindex: increment, class: 'form-control' %>
+    <%= f.text_area :details, tabindex: increment, rows: 10, class: 'form-control' %>
     <div class="form-group-help">
       <details>
         <summary class="summary">How to use tags</summary>
