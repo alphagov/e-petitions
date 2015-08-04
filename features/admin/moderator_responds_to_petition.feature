@@ -59,7 +59,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And I reject the petition with a reason code "Matters which are not the responsibility of HM Government"
+    And I reject the petition with a reason code "Not the government’s responsibility"
     Then the petition is not available for signing
     But the petition is still available for searching or viewing
 
@@ -72,14 +72,14 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code and text
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And I reject the petition with a reason code "Duplicate of an existing petition" and some explanatory text
+    And I reject the petition with a reason code "Duplicate petition" and some explanatory text
     Then the explanation is displayed on the petition for viewing by the public
     And the creator should receive a rejection notification email
 
   Scenario: Moderator rejects petition with a reason code which precludes public searching or viewing
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And I reject the petition with a reason code "Confidential, libellous, false or defamatory statements (will be hidden)"
+    And I reject the petition with a reason code "Confidential, libellous, false or defamatory (will be hidden)"
     And the creator should receive a libel/profanity rejection notification email
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
@@ -96,7 +96,7 @@ Feature: Moderator respond to petition
     And I am logged in as a moderator
     And a petition "actually libellous" has been rejected with the reason "duplicate"
     When I go to the admin petition page for "actually libellous"
-    And I change the rejection status of the petition with a reason code "Confidential, libellous, false or defamatory statements (will be hidden)"
+    And I change the rejection status of the petition with a reason code "Confidential, libellous, false or defamatory (will be hidden)"
     Then the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
