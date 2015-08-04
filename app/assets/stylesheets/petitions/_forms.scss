@@ -57,7 +57,7 @@ select.form-control:hover {
 }
 
 .form-label {
-  margin-bottom: em(13, 19);
+  margin-bottom: 10px;
 
   .optional {
     color: $secondary-text-colour;
@@ -81,7 +81,5 @@ select.form-control:hover {
 }
 
 .form-hint {
-  @include media (tablet) {
-    margin-top: 5px;
-  }
+  margin-top: 10px;
 }

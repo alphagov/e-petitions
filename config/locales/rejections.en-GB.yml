@@ -7,11 +7,14 @@ en-GB:
       offensive: "Offensive, joke or nonsense petitions"
       irrelevant: "Matters which are not the responsibility of HM Government"
       honours: "Matters relating to honours or appointments"
+      fake-name: "You must use your real name"
     descriptions:
       no-action: |-
         <p>It did not have a clear statement explaining what action you want the government to take.</p>
       duplicate: |-
         <p>There is already a petition about this issue.</p>
+      fake-name: |-
+        <p>You must use your real name when you create a petition.</p>
       libellous: |-
         <p>Petitions will not be accepted if they:</p>
         <ul class="list-bullet">

@@ -18,6 +18,9 @@
   <%= f.label :name, :class => 'form-label' %>
   <%= error_messages_for_field signature, :name %>
   <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
+  <% if context == 'create-petition' %>
+    <span class="form-hint">You must use your real name</span>
+  <% end %>
 <% end %>
 
 <%= render 'signatures/email', f: f, signature: signature,  hide_label: false %>
