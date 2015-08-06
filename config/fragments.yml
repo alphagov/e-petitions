@@ -24,6 +24,7 @@ footer:
 home_page:
   keys:
     - :last_signature_at
+    - :reveal_response
   options:
     expires_in: 300
 
