@@ -9,7 +9,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
 
   def update
     if @government_response.update_attributes(government_response_params)
-      EmailThresholdResponseJob.run_later_tonight(@petition)
+      EmailThresholdResponseJob.run_later_tonight(petition: @petition)
       redirect_to [:admin, @petition], notice: 'Email will be sent overnight'
     else
       render 'admin/petitions/show'

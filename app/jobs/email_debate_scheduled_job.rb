@@ -1,11 +1,6 @@
 class EmailDebateScheduledJob < ActiveJob::Base
   include EmailAllPetitionSignatories
 
-  def email_delivery_job_class
-    DeliverDebateScheduledEmailJob
-  end
-
-  def timestamp_name
-    'debate_scheduled'
-  end
+  self.email_delivery_job_class = DeliverDebateScheduledEmailJob
+  self.timestamp_name = 'debate_scheduled'
 end

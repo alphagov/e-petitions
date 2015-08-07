@@ -8,7 +8,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
 
   def update
     if @petition.update_attributes(params_for_update)
-      EmailDebateScheduledJob.run_later_tonight(@petition)
+      EmailDebateScheduledJob.run_later_tonight(petition: @petition)
       redirect_to [:admin, @petition], notice: "Email will be sent overnight"
     else
       render 'admin/petitions/show'

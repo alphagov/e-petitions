@@ -19,7 +19,7 @@ RSpec.describe DeliverDebateOutcomeEmailJob, type: :job do
       signature: signature,
       timestamp_name: timestamp_name,
       petition: petition,
-      requested_at_as_string: email_requested_at.getutc.iso8601
+      requested_at: email_requested_at.getutc.iso8601(6)
     )
   end
 end
