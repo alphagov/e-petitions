@@ -3,7 +3,7 @@
   <%= form_row :for => [f.object, :summary] do %>
     <%= f.label :summary, 'Summary quote', class: 'form-label' %>
     <%= error_messages_for_field f.object, :summary %>
-    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, data: { maxlength: 200 }, class: 'form-control' %>
+    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, data: { max_length: 200 }, class: 'form-control' %>
     <p class="character-count">200 characters max</p>
   <% end %>
 
