@@ -76,6 +76,8 @@ en-GB:
     emails:
       subjects:
         # Emails to people who sign petitions
+        email_signer: |-
+          %{subject}
         email_confirmation_for_signer: |-
           Please confirm your email address
         notify_signer_of_debate_outcome: |-

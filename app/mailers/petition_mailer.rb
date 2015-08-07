@@ -6,6 +6,11 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:email_confirmation_for_signer)
   end
 
+  def email_signer(petition, signature, email)
+    @petition, @signature, @email = petition, signature, email
+    mail to: @signature.email, subject: subject_for(:email_signer)
+  end
+
   def special_resend_of_email_confirmation_for_signer(signature)
     @signature = signature
     mail to: @signature.email, subject: subject_for(:special_resend_of_email_confirmation_for_signer)
@@ -77,6 +82,10 @@ class PetitionMailer < ApplicationMailer
         options[:count] = @petition.signature_count
         options[:formatted_count] = number_to_delimited(@petition.signature_count)
         options[:action] = @petition.action
+      end
+
+      if defined?(@email)
+        options[:subject] = @email.subject
       end
     end
   end
