@@ -30,7 +30,7 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
     end
 
     before do
-      described_class.run_later_tonight(petition: petition)
+      described_class.run_later_tonight(**arguments)
     end
 
     it 'queues up a job' do
@@ -82,21 +82,7 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
 end
 
 RSpec.shared_examples_for "a job to send an signatory email" do
-  let(:requested_at) { Time.current.change(usec: 0) }
-  let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
-
-  let :arguments do
-    {
-      signature: signature,
-      timestamp_name: timestamp_name,
-      petition: petition,
-      requested_at: requested_at_as_string
-    }
-  end
-
-  let :job do
-    described_class.new(arguments)
-  end
+  let(:job) { described_class.new(arguments) }
 
   context "when the petition has not been updated" do
     let(:mail_object) { double(:mail_object) }
