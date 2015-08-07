@@ -9,6 +9,7 @@ class PetitionsController < ApplicationController
   before_action :redirect_to_petition_url, if: :moderated?, only: :moderation_info
 
   respond_to :html
+  respond_to :json, only: [:index, :show]
 
   def index
     @petitions = Petition.visible.search(params)

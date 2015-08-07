@@ -7,6 +7,13 @@ class Admin::PetitionsController < Admin::AdminController
     else
       petitions_by_filter_or_keyword_search
     end
+
+    respond_to do |format|
+      format.html
+      format.csv {
+        send_data PetitionsCSVPresenter.new(@petitions), disposition: "attachment; filename=petitions.csv"
+      }
+    end
   end
 
   def show
@@ -28,6 +35,7 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   protected
+
   def filter_by_tag?
     params[:t].present? && !(filter_by_state? || filter_by_keyword?)
   end

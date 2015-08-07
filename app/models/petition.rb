@@ -67,6 +67,13 @@ class Petition < ActiveRecord::Base
   validates_presence_of :creator_signature, on: :create
   validates_inclusion_of :state, in: STATES
 
+  with_options allow_nil: true, prefix: true do
+    delegate :name, :email, to: :creator_signature, prefix: :creator
+    delegate :code, :details, to: :rejection
+    delegate :summary, :details, :created_at, :updated_at, to: :government_response
+    delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
+  end
+
   class << self
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)

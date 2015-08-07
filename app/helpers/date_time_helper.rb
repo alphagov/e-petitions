@@ -34,4 +34,14 @@ module DateTimeHelper
 
     t(key, scope: scope, formatted_count: number_with_delimiter(days))
   end
+
+  def api_date_format(date_time)
+    if date_time
+      if date_time.respond_to?(:getutc)
+        date_time.getutc.iso8601(3)
+      else
+        date_time.strftime("%Y-%m-%d")
+      end
+    end
+  end
 end

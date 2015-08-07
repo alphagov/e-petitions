@@ -40,10 +40,30 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
     before { login_as(user) }
 
     describe "GET 'index'" do
-      it "responds successfully" do
-        get :index
-        expect(response).to be_success
-        expect(response).to render_template('admin/petitions/index')
+
+      describe "a HTML request" do
+        it "responds successfully with HTML" do
+          get :index
+          expect(response).to be_success
+          expect(response).to render_template('admin/petitions/index')
+        end
+      end
+
+      describe "a CSV request" do
+        it "wraps the list of petitions in a PetitionsCSVPresenter" do
+          expect(PetitionsCSVPresenter).to receive(:new).with([]).and_call_original
+          get :index, format: 'csv'
+        end
+
+        it "responds successfully with a CSV file" do
+          csv_presenter = PetitionsCSVPresenter.new([])
+          allow(PetitionsCSVPresenter).to receive(:new).and_return csv_presenter
+
+          expect(controller).to receive(:send_data).with(csv_presenter, disposition: "attachment; filename=petitions.csv").and_call_original
+
+          get :index, format: 'csv'
+          expect(response).to be_success
+        end
       end
 
       describe "when no 'q', 't', or 'state' param is present" do
