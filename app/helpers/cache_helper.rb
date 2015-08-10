@@ -24,7 +24,7 @@ module CacheHelper
     class Keys
       attr_reader :template
 
-      delegate :assigns, to: :template
+      delegate :assigns, :params, to: :template
       delegate :archived_petition_page?, to: :template
       delegate :create_petition_page?, to: :template
       delegate :home_page?, to: :template
@@ -54,6 +54,10 @@ module CacheHelper
 
       def petition_page
         petition_page?
+      end
+
+      def reveal_response
+        params[:reveal_response] == 'yes'
       end
 
       def site_updated_at
