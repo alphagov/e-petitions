@@ -3,9 +3,19 @@ class PetitionMailerPreview < ActionMailer::Preview
   def email_confirmation_for_signer
     PetitionMailer.email_confirmation_for_signer(Signature.last)
   end
+
   def gather_sponsors_for_petition
     PetitionMailer.gather_sponsors_for_petition(Petition.last)
   end
+
+  def email_signer
+    email = Petition::Email.last
+    petition = email.petition
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.email_signer(petition, signature, email)
+  end
+
   def notify_signer_of_threshold_response
     petition = Petition.with_response.last
     signature = petition.signatures.validated.last

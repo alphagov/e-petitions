@@ -18,6 +18,8 @@ RSpec.describe Petition, type: :model do
   describe "associations" do
     it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
     it { is_expected.to have_one(:government_response).dependent(:destroy) }
+
+    it { is_expected.to have_many(:emails).dependent(:destroy) }
   end
 
   context "validations" do

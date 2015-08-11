@@ -150,6 +150,10 @@ class Site < ActiveRecord::Base
       ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uk')
     end
 
+    def default_domain(tld_length = 1)
+      ActionDispatch::Http::URL.extract_domain(default_host, tld_length)
+    end
+
     def default_moderate_url
       if ENV.fetch('EPETITIONS_PROTOCOL', 'https') == 'https'
         URI::HTTPS.build(default_moderate_url_components).to_s
@@ -175,7 +179,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: UK Government and Parliament" <feedback@#{default_host}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: UK Government and Parliament" <petitionscommittee@#{default_domain}>})
     end
 
     def default_username

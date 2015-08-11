@@ -263,6 +263,13 @@ FactoryGirl.define do
     details "Petition notes"
   end
 
+  factory :petition_email, class: "Petition::Email" do
+    association :petition, factory: :petition
+    subject "Message Subject"
+    body "Message body"
+    sent_by "Admin User"
+  end
+
   factory :rejection do
     association :petition, factory: :validated_petition
     code "duplicate"

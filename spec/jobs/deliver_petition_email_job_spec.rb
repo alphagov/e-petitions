@@ -1,20 +1,22 @@
 require 'rails_helper'
 require_relative 'shared_examples'
 
-RSpec.describe DeliverThresholdResponseEmailJob, type: :job do
+RSpec.describe DeliverPetitionEmailJob, type: :job do
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
-  let(:petition) { FactoryGirl.create(:responded_petition) }
+  let(:petition) { FactoryGirl.create(:debated_petition) }
   let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
-  let(:timestamp_name) { 'government_response' }
+  let(:email) { FactoryGirl.create(:petition_email, petition: petition) }
+  let(:timestamp_name) { 'petition_email' }
 
   let :arguments do
     {
       signature: signature,
       timestamp_name: timestamp_name,
       petition: petition,
-      requested_at: requested_at_as_string
+      requested_at: requested_at_as_string,
+      email: email
     }
   end
 
@@ -25,7 +27,7 @@ RSpec.describe DeliverThresholdResponseEmailJob, type: :job do
   it_behaves_like "a job to send an signatory email"
 
   it "uses the correct mailer method to generate the email" do
-    expect(subject).to receive_message_chain(:mailer, :notify_signer_of_threshold_response).with(petition, signature).and_return double.as_null_object
+    expect(subject).to receive_message_chain(:mailer, :email_signer).with(petition, signature, email).and_return double.as_null_object
     subject.perform(**arguments)
   end
 end

@@ -31,6 +31,10 @@
         </li>
       <% end %>
 
+      <li class="petition-action">
+        <%= render 'petition_action_email_petitioners', petition: @petition %>
+      </li>
+
       <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
         <li class="petition-action">
           <%= render 'petition_action_take_down', petition: @petition %>

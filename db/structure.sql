@@ -230,7 +230,8 @@ CREATE TABLE email_requested_receipts (
     debate_outcome timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    debate_scheduled timestamp without time zone
+    debate_scheduled timestamp without time zone,
+    petition_email timestamp without time zone
 );
 
 
@@ -264,7 +265,8 @@ CREATE TABLE email_sent_receipts (
     debate_outcome timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    debate_scheduled timestamp without time zone
+    debate_scheduled timestamp without time zone,
+    petition_email timestamp without time zone
 );
 
 
@@ -350,6 +352,40 @@ CREATE SEQUENCE notes_id_seq
 --
 
 ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
+
+
+--
+-- Name: petition_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE petition_emails (
+    id integer NOT NULL,
+    petition_id integer,
+    subject character varying NOT NULL,
+    body text,
+    sent_by character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: petition_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE petition_emails_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: petition_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE petition_emails_id_seq OWNED BY petition_emails.id;
 
 
 --
@@ -508,7 +544,7 @@ CREATE TABLE sites (
     last_checked_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    feedback_email character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <feedback@petition.parliament.uk>'::character varying NOT NULL,
+    feedback_email character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>'::character varying NOT NULL,
     moderate_url character varying(50) DEFAULT 'https://moderate.petition.parliament.uk'::character varying NOT NULL
 );
 
@@ -631,6 +667,13 @@ ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY petition_emails ALTER COLUMN id SET DEFAULT nextval('petition_emails_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq'::regclass);
 
 
@@ -732,6 +775,14 @@ ALTER TABLE ONLY government_responses
 
 ALTER TABLE ONLY notes
     ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: petition_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY petition_emails
+    ADD CONSTRAINT petition_emails_pkey PRIMARY KEY (id);
 
 
 --
@@ -870,6 +921,13 @@ CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_resp
 --
 
 CREATE UNIQUE INDEX index_notes_on_petition_id ON notes USING btree (petition_id);
+
+
+--
+-- Name: index_petition_emails_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petition_emails_on_petition_id ON petition_emails USING btree (petition_id);
 
 
 --
@@ -1042,6 +1100,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 
 --
+-- Name: fk_rails_9f55aacb99; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY petition_emails
+    ADD CONSTRAINT fk_rails_9f55aacb99 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_bc381510eb; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1156,4 +1222,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150709152530');
 INSERT INTO schema_migrations (version) VALUES ('20150714140659');
 
 INSERT INTO schema_migrations (version) VALUES ('20150730110838');
+
+INSERT INTO schema_migrations (version) VALUES ('20150805142206');
+
+INSERT INTO schema_migrations (version) VALUES ('20150805142254');
+
+INSERT INTO schema_migrations (version) VALUES ('20150806140552');
 

@@ -61,6 +61,7 @@ class Petition < ActiveRecord::Base
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
   has_many :constituency_petition_journals, :dependent => :destroy
+  has_many :emails, :dependent => :destroy
 
   include Staged::Validations::PetitionDetails
   validates_presence_of :open_at, if: :open?
