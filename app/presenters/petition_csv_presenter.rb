@@ -1,3 +1,5 @@
+require 'csv'
+
 class PetitionCSVPresenter
   include DateTimeHelper
   include Rails.application.routes.url_helpers
@@ -11,7 +13,7 @@ class PetitionCSVPresenter
   end
 
   def to_csv
-    self.class.fields.map {|field| send field }
+    CSV::Row.new(self.class.fields, values).to_s
   end
 
   attr_reader :petition
@@ -37,6 +39,10 @@ class PetitionCSVPresenter
       :debate_threshold_reached_at, :rejected_at, :debate_outcome_at, :moderation_threshold_reached_at,
       :government_response_created_at, :government_response_updated_at
     ]
+  end
+
+  def values
+    self.class.fields.map {|field| send field }
   end
 
   def public_url

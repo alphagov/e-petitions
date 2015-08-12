@@ -10,9 +10,7 @@ class Admin::PetitionsController < Admin::AdminController
 
     respond_to do |format|
       format.html
-      format.csv {
-        send_data PetitionsCSVPresenter.new(@petitions), disposition: "attachment; filename=petitions.csv"
-      }
+      format.csv { render_csv }
     end
   end
 
@@ -35,6 +33,30 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   protected
+
+  def render_csv
+    set_file_headers
+    set_streaming_headers
+
+    #setting the body to an enumerator, rails will iterate this enumerator
+    self.response_body = PetitionsCSVPresenter.new(@petitions).render
+  end
+
+
+  def set_file_headers
+    headers["Content-Type"] = "text/csv"
+    headers["Content-disposition"] = "attachment; filename=petitions.csv"
+  end
+
+
+  def set_streaming_headers
+    #nginx doc: Setting this to "no" will allow unbuffered responses suitable for Comet and HTTP streaming applications
+    headers['X-Accel-Buffering'] = 'no'
+
+    headers["Cache-Control"] ||= "no-cache"
+    headers.delete("Content-Length")
+  end
+
 
   def filter_by_tag?
     params[:t].present? && !(filter_by_state? || filter_by_keyword?)

@@ -50,16 +50,38 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       describe "a CSV request" do
+        describe "response headers" do
+          it "responds with csv file headers" do
+            get :index, format: 'csv'
+            expect(response.headers["Content-Type"]).to eq("text/csv")
+            expect(response.headers["Content-disposition"]).to eq("attachment; filename=petitions.csv")
+          end
+
+          it "responds with steaming file headers" do
+            get :index, format: 'csv'
+            expect(response.headers["X-Accel-Buffering"]).to eq("no")
+            expect(response.headers["Cache-Control"]).to include("no-cache")
+          end
+
+          it "does not set a Content-Length headers" do
+            get :index, format: 'csv'
+            expect(response.headers).not_to have_key("Content-Length")
+          end
+        end
+
         it "wraps the list of petitions in a PetitionsCSVPresenter" do
           expect(PetitionsCSVPresenter).to receive(:new).with([]).and_call_original
           get :index, format: 'csv'
         end
 
-        it "responds successfully with a CSV file" do
+        it "sets the enumerated csv file as the response_body" do
           csv_presenter = PetitionsCSVPresenter.new([])
-          allow(PetitionsCSVPresenter).to receive(:new).and_return csv_presenter
+          enumerator = [].to_enum
 
-          expect(controller).to receive(:send_data).with(csv_presenter, disposition: "attachment; filename=petitions.csv").and_call_original
+          allow(PetitionsCSVPresenter).to receive(:new).and_return csv_presenter
+          allow(csv_presenter).to receive(:render).and_return enumerator
+
+          expect(controller).to receive(:response_body=).with(enumerator).and_call_original
 
           get :index, format: 'csv'
           expect(response).to be_success
