@@ -11,11 +11,16 @@ RSpec.describe PetitionsCSVPresenter do
     end
 
     def to_csv
-      self.class.fields.map {|f| @petition[f] }
+      self.class.fields.map {|f| @petition[f] }.join(",") + "\n"
     end
   end
 
-  subject { described_class.new([{id: 321, name: "Slim Jim"}], presenter_class: DummyPresenterClass) }
+  # Use an array that quacks like the expected Browseable::Search instance
+  class BatchifiedArray < Array
+    alias :in_batches :each
+  end
+
+  subject { described_class.new(BatchifiedArray.new([{id: 321, name: "Slim Jim"}]), presenter_class: DummyPresenterClass) }
 
   describe "#initialize" do
     it "initializes the presenter with default" do
@@ -32,18 +37,18 @@ RSpec.describe PetitionsCSVPresenter do
   end
 
   describe "#render" do
-    it "renders a header row" do
-      expect(subject.render.split("\n")[0]).to eq("id,name")
+    it "returns an enumerator" do
+      expect(subject.render).to be_a Enumerator
     end
 
-    it "renders the fields for each petition" do
-      expect(subject.render.split("\n")[1]).to eq("321,Slim Jim")
+    it "renders a header row as the first enumerator call" do
+      expect(subject.render.next).to eq("id,name\n")
     end
-  end
 
-  describe "#to_s" do
-    it "is an alias to #render" do
-      expect(subject.to_s).to eq("id,name\n321,Slim Jim\n")
+    it "renders the fields for each petition after the header" do
+      enumerator = subject.render
+      enumerator.next
+      expect(enumerator.next).to eq("321,Slim Jim\n")
     end
   end
 end

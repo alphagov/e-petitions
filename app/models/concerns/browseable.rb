@@ -117,6 +117,12 @@ module Browseable
       results.to_a
     end
 
+    def in_batches(&block)
+      execute_search.find_each do |obj|
+        block.call obj
+      end
+    end
+
     def inspect
       [].tap do |parts|
         parts << "#<#{self.class.name}:#{object_id}"
@@ -131,7 +137,11 @@ module Browseable
     private
 
     def results
-      @results ||= execute_search
+      @results ||= execute_search_with_pagination
+    end
+
+    def execute_search_with_pagination
+      execute_search.paginate(page: current_page, per_page: page_size)
     end
 
     def execute_search
@@ -143,8 +153,7 @@ module Browseable
         relation = klass
       end
 
-      relation = relation.instance_exec(&klass.facet_definitions[scope])
-      relation.paginate(page: current_page, per_page: page_size)
+      relation.instance_exec(&klass.facet_definitions[scope])
     end
 
     def star

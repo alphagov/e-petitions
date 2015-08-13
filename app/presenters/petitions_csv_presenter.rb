@@ -8,13 +8,12 @@ class PetitionsCSVPresenter
   end
 
   def render
-    CSV.generate do |csv|
-      csv << presenter_class.fields
+    Enumerator.new do |stream|
+      stream << CSV::Row.new(presenter_class.fields, presenter_class.fields, true).to_s
 
-      petitions.each do |petition|
-        csv << presenter_class.new(petition).to_csv
+      petitions.in_batches do |petition|
+        stream << presenter_class.new(petition).to_csv
       end
     end
   end
-  alias :to_s :render
 end

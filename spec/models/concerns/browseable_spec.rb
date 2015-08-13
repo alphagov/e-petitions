@@ -305,6 +305,32 @@ RSpec.describe Browseable, type: :model do
         end
       end
     end
+
+    describe "#in_batches" do
+      # Use an array that quacks like the expected ActiveRecord::Relation instance
+      class BatchifiedArray < Array
+        alias :find_each :each
+      end
+
+      let(:search_results) { BatchifiedArray.new([1,2,3]) }
+
+      before do
+        allow(search).to receive(:execute_search).and_return search_results
+      end
+
+      it "uses ActiveRecord::Batches#find_each to load the results in batches" do
+        expect(search_results).to receive(:find_each).and_call_original
+        search.in_batches {|a| }
+      end
+
+      it "calls the block with each result" do
+        block = ->(a) { }
+        expect(block).to receive(:call).with(1).once
+        expect(block).to receive(:call).with(2).once
+        expect(block).to receive(:call).with(3).once
+        search.in_batches(&block)
+      end
+    end
   end
 
   describe Browseable::Facets do
