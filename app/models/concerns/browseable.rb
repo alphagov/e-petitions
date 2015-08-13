@@ -85,6 +85,10 @@ module Browseable
       current_page <= 1
     end
 
+    def second_page?
+      current_page == 2
+    end
+
     def last_page?
       current_page >= total_pages
     end

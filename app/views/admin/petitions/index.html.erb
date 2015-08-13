@@ -14,6 +14,9 @@
       <%= submit_tag "Go", name: nil, class: "button" %>
     <% end -%>
   </div>
+  <div class="column-half actions-right">
+    <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
+  </div>
 </div>
 
 <%= will_paginate(@petitions) if @petitions.any? %>

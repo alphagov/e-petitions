@@ -12,4 +12,9 @@
   .extra-gutter {
     padding: 0 $gutter*1.5 0 $gutter-half;
   }
+
+  .actions-right {
+    text-align: right;
+    line-height: 2em;
+  }
 }

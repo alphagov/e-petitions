@@ -176,6 +176,10 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   expect(actual_params).to eq expected_params
 end
 
+Then(/^I should get a download with the filename "([^\"]*)"$/) do |filename|
+  expect(page.response_headers['Content-Disposition']).to include("attachment; filename=#{filename}")
+end
+
 Then /^show me the page$/ do
   save_and_open_page
 end

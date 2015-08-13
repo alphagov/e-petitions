@@ -115,3 +115,9 @@ Feature: A moderator user views all petitions
     And an open petition exists with action: "Simply the best"
     When I view all petitions
     Then I should see "Simply the best"
+
+  Scenario: A moderator can download petitions as CSV
+    Given I am logged in as a moderator
+    When I view all petitions
+    And I follow "Download CSV"
+    Then I should get a download with the filename "petitions.csv"

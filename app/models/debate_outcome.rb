@@ -7,4 +7,8 @@ class DebateOutcome < ActiveRecord::Base
   after_create do
     petition.touch(:debate_outcome_at)
   end
+
+  def date
+    debated_on
+  end
 end
