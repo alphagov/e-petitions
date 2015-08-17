@@ -13,8 +13,10 @@ details {
     position: relative;
     margin-bottom: em(5);
 
-    &:hover {
-      color: $link-hover-colour;
+    @include media(desktop){
+      &:hover {
+        color: $link-hover-colour;
+      }
     }
 
     &:focus {
