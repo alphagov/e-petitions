@@ -96,8 +96,6 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     end
 
     describe 'PATCH /update' do
-      include ActiveSupport::Testing::TimeHelpers
-
       let(:government_response_attributes) do
         {
           summary: 'The government agrees',

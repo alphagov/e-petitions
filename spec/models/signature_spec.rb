@@ -724,8 +724,6 @@ RSpec.describe Signature, type: :model do
     end
 
     describe '#set_email_sent_at_for' do
-      include ActiveSupport::Testing::TimeHelpers
-
       let(:signature) { FactoryGirl.create(:validated_signature) }
       let(:receipt) { signature.email_sent_receipt! }
       let(:the_stored_time) { 6.days.ago }
