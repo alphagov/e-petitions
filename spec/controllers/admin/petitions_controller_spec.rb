@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
-  include ActiveJob::TestHelper
-
   let(:creator_signature) { FactoryGirl.create(:signature, :email => 'john@example.com') }
   let(:petition) { FactoryGirl.create(:sponsored_petition, :creator_signature => creator_signature) }
 

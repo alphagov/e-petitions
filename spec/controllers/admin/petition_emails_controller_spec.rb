@@ -122,8 +122,6 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
           end
 
           context "emails out the petition email" do
-            include ActiveJob::TestHelper
-
             before do
               3.times do |i|
                 attributes = {

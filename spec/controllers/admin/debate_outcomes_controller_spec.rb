@@ -152,8 +152,6 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           end
 
           context "emails out debate outcomes response" do
-            include ActiveJob::TestHelper
-
             before do
               3.times do |i|
                 attributes = {

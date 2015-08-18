@@ -96,7 +96,6 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     end
 
     describe 'PATCH /update' do
-      include ActiveJob::TestHelper
       include ActiveSupport::Testing::TimeHelpers
 
       let(:government_response_attributes) do

@@ -22,7 +22,6 @@ RSpec.describe PetitionsController, type: :controller do
 
   describe "create" do
     include ConstituencyApiHelpers::ApiLevel
-    include ActiveJob::TestHelper
 
     let(:creator_signature_attributes) do
       {

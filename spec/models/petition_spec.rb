@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Petition, type: :model do
-  include ActiveJob::TestHelper
-
   context "defaults" do
     it "has pending as default state" do
       p = Petition.new

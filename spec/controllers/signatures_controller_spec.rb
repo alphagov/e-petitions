@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe SignaturesController, type: :controller do
-  include ActiveJob::TestHelper
-
   describe "verify" do
     include ConstituencyApiHelpers::NetworkLevel
 

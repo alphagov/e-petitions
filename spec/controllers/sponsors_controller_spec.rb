@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
-  include ActiveJob::TestHelper
-
   context 'GET show' do
     let(:petition) { FactoryGirl.create(:petition) }
 
