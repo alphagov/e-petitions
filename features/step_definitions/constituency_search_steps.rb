@@ -1,17 +1,16 @@
 Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"$/) do |constituency_name, mp_name, postcode|
   @constituencies ||= {}
-
   constituency = @constituencies[constituency_name]
+
   if constituency.nil?
     mp_name = mp_name.present? ? mp_name : 'Rye Tonnemem-Burr MP'
-    mp = ConstituencyApi::Mp.new(FactoryGirl.generate(:mp_id), mp_name, 3.years.ago)
-    constituency = ConstituencyApi::Constituency.new(FactoryGirl.generate(:constituency_id), constituency_name, mp)
+    constituency = FactoryGirl.create(:constituency, name: constituency_name, mp_name: mp_name, mp_date: 3.years.ago)
     @constituencies[constituency.name] = constituency
   end
 
   for_postcode = @constituencies[postcode]
+
   if for_postcode.nil?
-    stub_constituency(postcode, constituency.id, constituency.name, mp_id: constituency.mp.id, mp_name: constituency.mp.name, mp_start_date: constituency.mp.start_date )
     @constituencies[postcode] = constituency
   elsif for_postcode == constituency
     # noop
@@ -32,12 +31,39 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
     end
 
   how_many.times do
-    FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.id).validate!
+    FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.external_id).validate!
   end
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
   @my_constituency = @constituencies.fetch(postcode)
+
+  if @constituency_api_down
+    stub_any_api_request.to_return(api_response(:internal_server_error))
+  else
+    sanitized_postcode = PostcodeSanitizer.call(postcode)
+
+    stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
+      <<-XML.strip
+        <Constituencies>
+          <Constituency>
+            <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
+            <Name>#{@my_constituency.name}</Name>
+            <ONSCode>#{@my_constituency.ons_code}</ONSCode>
+            <RepresentingMembers>
+              <RepresentingMember>
+                <Member_Id>#{@my_constituency.mp_id}</Member_Id>
+                <Member>#{@my_constituency.mp_name}</Member>
+                <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
+                <EndDate xsi:nil="true"
+                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+              </RepresentingMember>
+          </Constituency>
+        </Constituencies>
+      XML
+    })
+  end
+
   within :css, '.local-to-you' do
     fill_in "UK postcode", with: postcode
     click_on "Search"
@@ -47,7 +73,7 @@ end
 Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_action|
   petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
-  local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.id).count
+  local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.external_id).count
   within :css, '.local-petitions' do
     within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
       expect(page).to have_text("#{local_signature_count} signatures from #{@my_constituency.name}")
@@ -63,7 +89,7 @@ Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petit
 end
 
 Given(/^the constituency api is down$/) do
-  stub_broken_api
+  @constituency_api_down = true
 end
 
 Then(/^I should see an explanation that my constituency couldn't be found$/) do
@@ -87,5 +113,5 @@ Then(/^the petitions I see should be ordered by my fellow constituents level of 
 end
 
 Then(/^I should see a link to the MP for my constituency$/) do
-  expect(page).to have_link(@my_constituency.mp.name, href: @my_constituency.mp.url)
+  expect(page).to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
 end

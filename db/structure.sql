@@ -113,6 +113,43 @@ ALTER SEQUENCE archived_petitions_id_seq OWNED BY archived_petitions.id;
 
 
 --
+-- Name: constituencies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE constituencies (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    slug character varying(100) NOT NULL,
+    external_id character varying(30) NOT NULL,
+    ons_code character varying(10) NOT NULL,
+    mp_id character varying(30),
+    mp_name character varying(100),
+    mp_date date,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: constituencies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE constituencies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: constituencies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE constituencies_id_seq OWNED BY constituencies.id;
+
+
+--
 -- Name: constituency_petition_journals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -618,6 +655,13 @@ ALTER TABLE ONLY archived_petitions ALTER COLUMN id SET DEFAULT nextval('archive
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY constituencies ALTER COLUMN id SET DEFAULT nextval('constituencies_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY constituency_petition_journals ALTER COLUMN id SET DEFAULT nextval('constituency_petition_journals_id_seq'::regclass);
 
 
@@ -719,6 +763,14 @@ ALTER TABLE ONLY admin_users
 
 ALTER TABLE ONLY archived_petitions
     ADD CONSTRAINT archived_petitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: constituencies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY constituencies
+    ADD CONSTRAINT constituencies_pkey PRIMARY KEY (id);
 
 
 --
@@ -872,6 +924,20 @@ CREATE INDEX index_archived_petitions_on_state_and_closed_at ON archived_petitio
 --
 
 CREATE INDEX index_archived_petitions_on_title ON archived_petitions USING gin (to_tsvector('english'::regconfig, (title)::text));
+
+
+--
+-- Name: index_constituencies_on_external_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_constituencies_on_external_id ON constituencies USING btree (external_id);
+
+
+--
+-- Name: index_constituencies_on_slug; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_constituencies_on_slug ON constituencies USING btree (slug);
 
 
 --
@@ -1228,4 +1294,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150805142206');
 INSERT INTO schema_migrations (version) VALUES ('20150805142254');
 
 INSERT INTO schema_migrations (version) VALUES ('20150806140552');
+
+INSERT INTO schema_migrations (version) VALUES ('20150814111100');
 

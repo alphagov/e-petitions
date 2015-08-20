@@ -64,12 +64,9 @@ end
 
 When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
-
-  if postcode == 'N1 1TY'
-    stub_constituency_from_file(postcode, Rails.root.join("spec", "fixtures", "constituency_api", "single.xml"))
-  else
-    stub_no_constituencies(postcode)
-  end
+  sanitized_postcode = PostcodeSanitizer.call(postcode)
+  fixture_file = sanitized_postcode == "N11TY" ? "single" : "no_results"
+  stub_api_request_for(sanitized_postcode).to_return(api_response(:ok, fixture_file))
 end
 
 When /^I fill in my details and sign a petition$/ do

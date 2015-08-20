@@ -21,8 +21,6 @@ RSpec.describe PetitionsController, type: :controller do
   end
 
   describe "create" do
-    include ConstituencyApiHelpers::ApiLevel
-
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
@@ -38,7 +36,12 @@ RSpec.describe PetitionsController, type: :controller do
         :creator_signature => creator_signature_attributes
       }
     end
-    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'North Creatorshire') }
+
+    let(:constituency) do
+      FactoryGirl.create(
+        :constituency, external_id: '54321', name: 'North Creatorshire'
+      )
+    end
 
     def do_post(options = {})
       params = {
@@ -46,7 +49,8 @@ RSpec.describe PetitionsController, type: :controller do
         :move => 'next',
         :petition => petition_attributes
       }.merge(options)
-      stub_constituency(params[:petition][:creator_signature][:postcode], constituency)
+
+      allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
 
       perform_enqueued_jobs do
         post :create, params
@@ -147,7 +151,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "sets the constituency_id on the creator signature, based on the postcode" do
         do_post
-        expect(Petition.find_by_action!('Save the planet').creator_signature.constituency_id).to eq constituency.id
+        expect(Petition.find_by_action!('Save the planet').creator_signature.constituency_id).to eq("54321")
       end
 
       context "invalid post" do

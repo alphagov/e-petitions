@@ -10,8 +10,8 @@
 
 <% if @constituency.present? %>
 
-  <% if @constituency.mp %>
-    <p class="lede">Your member of parliament is <%= link_to @constituency.mp.name, @constituency.mp.url, rel: 'external' %></p>
+  <% if @constituency.mp_id? %>
+    <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
   <% end %>
 
   <div class="section-panel local-petitions">

@@ -22,7 +22,7 @@ class LocalPetitionsController < ApplicationController
   end
 
   def find_constituency
-    @constituency = ConstituencyApi.constituency(@postcode)
+    @constituency = Constituency.find_by_postcode(@postcode)
   end
 
   def constituency?
@@ -30,6 +30,6 @@ class LocalPetitionsController < ApplicationController
   end
 
   def find_petitions
-    @petitions = Petition.popular_in_constituency(@constituency.id, 50)
+    @petitions = Petition.popular_in_constituency(@constituency.external_id, 50)
   end
 end
