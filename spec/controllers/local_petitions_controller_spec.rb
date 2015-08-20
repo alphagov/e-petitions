@@ -1,14 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe LocalPetitionsController, type: :controller do
-  describe "GET /petitions/local" do
-    let(:constituency) { FactoryGirl.create(:constituency, external_id: "99999") }
-    let(:petitions) { double(:petitions) }
+  let(:constituency) { FactoryGirl.create(:constituency, external_id: "99999", name: "Holborn") }
 
+  describe "GET /petitions/local" do
     context "when the postcode is valid" do
       before do
         expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
-        expect(Petition).to receive(:popular_in_constituency).with("99999", 50).and_return(petitions)
 
         get :index, postcode: "n1 1ty"
       end
@@ -17,20 +15,8 @@ RSpec.describe LocalPetitionsController, type: :controller do
         expect(assigns(:postcode)).to eq("N11TY")
       end
 
-      it "responds successfully" do
-        expect(response).to be_success
-      end
-
-      it "renders the index template" do
-        expect(response).to render_template("local_petitions/index")
-      end
-
-      it "assigns the constituency" do
-        expect(assigns(:constituency)).to eq(constituency)
-      end
-
-      it "assigns the petitions" do
-        expect(assigns(:petitions)).to eq(petitions)
+      it "redirects to the constituency page" do
+        expect(response).to redirect_to("/petitions/local/holborn")
       end
     end
 
@@ -89,6 +75,29 @@ RSpec.describe LocalPetitionsController, type: :controller do
       it "renders the index template" do
         expect(response).to render_template("local_petitions/index")
       end
+    end
+  end
+
+  describe "GET /petitions/local/:id" do
+    let(:petitions) { double(:petitions) }
+
+    before do
+      expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
+      expect(Petition).to receive(:popular_in_constituency).with("99999", 50).and_return(petitions)
+
+      get :show, id: "holborn"
+    end
+
+    it "renders the show template" do
+      expect(response).to render_template("local_petitions/show")
+    end
+
+    it "assigns the constituency" do
+      expect(assigns(:constituency)).to eq(constituency)
+    end
+
+    it "assigns the petitions" do
+      expect(assigns(:petitions)).to eq(petitions)
     end
   end
 end

@@ -43,9 +43,9 @@ module PageTitleHelper
         opts[:postcode]     = formatted_postcode if postcode?
 
         if postcode?
-          opts[:count] = constituency? ? 1 : 0
+          opts[:count] = 1
         else
-          opts[:count] = -1
+          opts[:count] = 0
         end
 
         if petition?

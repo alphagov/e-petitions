@@ -1,42 +1,15 @@
 <h1 class="page-title">
-  <% if @constituency.present? %>
-    Popular petitions in the constituency of <%= @constituency.name %>
-  <% elsif @postcode.present? %>
+  <% if @postcode.present? %>
     We couldn't find that postcode
   <% else %>
     Local to you
   <% end %>
 </h1>
 
-<% if @constituency.present? %>
-
-  <% if @constituency.mp_id? %>
-    <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
-  <% end %>
-
-  <div class="section-panel local-petitions">
-    <% if @petitions.any? %>
-      <ol>
-        <% @petitions.each do |petition| %>
-          <li class="petition-item petition-<%= petition.state %>">
-            <h3><%= link_to petition.action, petition_path(petition) %></h3>
-            <p><%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br/>
-            (<%= signature_count(:in_total, petition.signature_count) %>)</p>
-          </li>
-        <% end -%>
-      </ol>
-    <% else %>
-      <p>No petitions are popular in your constituency.</p>
-    <% end %>
-  </div>
-
+<% if @postcode.blank? %>
+  <p>Find petitions about local issues</p>
 <% else %>
-
-  <% if @postcode.blank? %>
-    <p>Find petitions about local issues</p>
-  <% else %>
-    <p>We couldn't find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
-  <% end %>
-
-  <%= render 'local_search' %>
+  <p>We couldn't find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
 <% end %>
+
+<%= render 'local_search' %>
