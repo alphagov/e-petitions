@@ -1,10 +1,13 @@
 class ConstituencyPetitionJournal < ActiveRecord::Base
   belongs_to :petition
+  belongs_to :constituency, primary_key: :external_id
 
   validates :petition, presence: true
   validates :constituency_id, presence: true, length: { maximum: 255 }
   validates :constituency_id, uniqueness: { scope: [:petition_id] }
   validates :signature_count, presence: true
+
+  delegate :name, :ons_code, :mp_name, to: :constituency
 
   scope :ordered, -> {
     order("#{table_name}.signature_count DESC")

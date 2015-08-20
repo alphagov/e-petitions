@@ -262,6 +262,11 @@ FactoryGirl.define do
     association :petition
   end
 
+  factory :country_petition_journal do
+    country { Faker::Address.country }
+    association :petition
+  end
+
   factory :debate_outcome do
     association :petition, factory: :open_petition
     debated_on { 1.month.from_now.to_date }

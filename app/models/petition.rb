@@ -60,6 +60,7 @@ class Petition < ActiveRecord::Base
   has_many :signatures
   has_many :sponsors
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
+  has_many :country_petition_journals, :dependent => :destroy
   has_many :constituency_petition_journals, :dependent => :destroy
   has_many :emails, :dependent => :destroy
 
@@ -311,6 +312,14 @@ class Petition < ActiveRecord::Base
     unless debate_threshold_reached_at?
       signature_count >= Site.threshold_for_debate - 1
     end
+  end
+
+  def signatures_by_country
+    country_petition_journals.to_a.sort_by(&:country)
+  end
+
+  def signatures_by_constituency
+    constituency_petition_journals.preload(:constituency).to_a.sort_by(&:constituency_id)
   end
 
   private

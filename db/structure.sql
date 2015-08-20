@@ -183,6 +183,39 @@ ALTER SEQUENCE constituency_petition_journals_id_seq OWNED BY constituency_petit
 
 
 --
+-- Name: country_petition_journals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE country_petition_journals (
+    id integer NOT NULL,
+    petition_id integer NOT NULL,
+    country character varying NOT NULL,
+    signature_count integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: country_petition_journals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE country_petition_journals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: country_petition_journals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE country_petition_journals_id_seq OWNED BY country_petition_journals.id;
+
+
+--
 -- Name: debate_outcomes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -669,6 +702,13 @@ ALTER TABLE ONLY constituency_petition_journals ALTER COLUMN id SET DEFAULT next
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY country_petition_journals ALTER COLUMN id SET DEFAULT nextval('country_petition_journals_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY debate_outcomes ALTER COLUMN id SET DEFAULT nextval('debate_outcomes_id_seq'::regclass);
 
 
@@ -779,6 +819,14 @@ ALTER TABLE ONLY constituencies
 
 ALTER TABLE ONLY constituency_petition_journals
     ADD CONSTRAINT constituency_petition_journals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: country_petition_journals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY country_petition_journals
+    ADD CONSTRAINT country_petition_journals_pkey PRIMARY KEY (id);
 
 
 --
@@ -938,6 +986,13 @@ CREATE UNIQUE INDEX index_constituencies_on_external_id ON constituencies USING 
 --
 
 CREATE UNIQUE INDEX index_constituencies_on_slug ON constituencies USING btree (slug);
+
+
+--
+-- Name: index_country_petition_journals_on_petition_id_and_country; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_country_petition_journals_on_petition_id_and_country ON country_petition_journals USING btree (petition_id, country);
 
 
 --
@@ -1296,4 +1351,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150805142254');
 INSERT INTO schema_migrations (version) VALUES ('20150806140552');
 
 INSERT INTO schema_migrations (version) VALUES ('20150814111100');
+
+INSERT INTO schema_migrations (version) VALUES ('20150820152623');
+
+INSERT INTO schema_migrations (version) VALUES ('20150820155740');
+
+INSERT INTO schema_migrations (version) VALUES ('20150820161504');
 
