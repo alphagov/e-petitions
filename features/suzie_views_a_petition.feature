@@ -69,6 +69,7 @@ Feature: Suzie views a petition
     And I should see a summary of the debate outcome
 
   Scenario: Suzie views a petition which has a scheduled debate date
-    Given an open petition "Spend more money on Defence" with scheduled debate date of "18/08/2019"
+    Given the date is the "01/08/2015"
+    And an open petition "Spend more money on Defence" with scheduled debate date of "18/08/2015"
     When I view the petition
-    Then I should see "Parliament will debate this petition on 18 August 2019. You'll be able to watch online at parliamentlive.tv"
+    Then I should see "Parliament will debate this petition on 18 August 2015. You'll be able to watch online at parliamentlive.tv"
