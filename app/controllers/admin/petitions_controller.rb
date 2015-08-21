@@ -42,12 +42,10 @@ class Admin::PetitionsController < Admin::AdminController
     self.response_body = PetitionsCSVPresenter.new(@petitions).render
   end
 
-
   def set_file_headers
     headers["Content-Type"] = "text/csv"
-    headers["Content-disposition"] = "attachment; filename=petitions.csv"
+    headers["Content-disposition"] = "attachment; filename=#{csv_filename}"
   end
-
 
   def set_streaming_headers
     #nginx doc: Setting this to "no" will allow unbuffered responses suitable for Comet and HTTP streaming applications
@@ -57,6 +55,9 @@ class Admin::PetitionsController < Admin::AdminController
     headers.delete("Content-Length")
   end
 
+  def csv_filename
+    "#{@petitions.scope.to_s.dasherize}-petitions-#{Time.current.to_s(:number)}.csv"
+  end
 
   def filter_by_tag?
     params[:t].present? && !(filter_by_state? || filter_by_keyword?)

@@ -50,9 +50,11 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       describe "a CSV request" do
         describe "response headers" do
           it "responds with csv file headers" do
-            get :index, format: 'csv'
-            expect(response.headers["Content-Type"]).to eq("text/csv")
-            expect(response.headers["Content-disposition"]).to eq("attachment; filename=petitions.csv")
+            travel_to "2015-08-21 05:00:00 UTC" do
+              get :index, format: 'csv'
+              expect(response.headers["Content-Type"]).to eq("text/csv")
+              expect(response.headers["Content-disposition"]).to eq("attachment; filename=all-petitions-20150821060000.csv")
+            end
           end
 
           it "responds with steaming file headers" do
