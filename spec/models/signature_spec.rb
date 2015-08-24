@@ -499,6 +499,17 @@ RSpec.describe Signature, type: :model do
         signature.update_columns(state: Signature::VALIDATED_STATE)
         signature.validate!
       end
+
+      it 'tells the relevant country petition journal to record a new signature' do
+        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
+        signature.validate!
+      end
+
+      it 'does not talk to the country petition journal if the signature is not pending' do
+        expect(CountryPetitionJournal).not_to receive(:record_new_signature_for)
+        signature.update_columns(state: Signature::VALIDATED_STATE)
+        signature.validate!
+      end
     end
 
     context "when the petition is pending" do
@@ -517,6 +528,18 @@ RSpec.describe Signature, type: :model do
 
       it 'does not talk to the constituency petition journal if the signature is not pending' do
         expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
+        signature.update_columns(state: Signature::VALIDATED_STATE)
+        signature.validate!
+      end
+
+      it 'tells the relevant country petition journal to record a new signature' do
+        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
+        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
+        signature.validate!
+      end
+
+      it 'does not talk to the country petition journal if the signature is not pending' do
+        expect(CountryPetitionJournal).not_to receive(:record_new_signature_for)
         signature.update_columns(state: Signature::VALIDATED_STATE)
         signature.validate!
       end
@@ -609,79 +632,72 @@ RSpec.describe Signature, type: :model do
     end
   end
 
-  include ConstituencyApiHelpers::ApiLevel
   describe "#constituency" do
-    let(:constituency1) { ConstituencyApi::Constituency.new('1234', "Shoreditch") }
-    let(:constituency2) { ConstituencyApi::Constituency.new('1235', "Lambeth") }
-
     it "returns a constituency object from the API return array" do
-      stub_constituency('N1 1TY', constituency1)
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
       signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to eq(constituency1)
+      expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3550'))
     end
 
     it "returns the first object for multiple results" do
-      stub_constituencies('N1', constituency1, constituency2)
+      stub_api_request_for("N1").to_return(api_response(:ok, "multiple"))
       signature = FactoryGirl.build(:signature, postcode: 'N1')
-      expect(signature.constituency).to eq(constituency1)
+      expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3506'))
     end
 
     it "returns nil for invalid postcode" do
-      stub_no_constituencies('SW149RQ')
+      stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
       signature = FactoryGirl.build(:signature, postcode: 'SW14 9RQ')
       expect(signature.constituency).to be_nil
     end
 
     it "returns nil for unexpected API response" do
-      stub_broken_api
+      stub_api_request_for("N1").to_timeout
       signature = FactoryGirl.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
     end
   end
 
   describe 'set_constituency_id' do
-    let(:signature) { FactoryGirl.build(:signature, postcode: 'SW1 1AA')}
+    let(:signature) { FactoryGirl.build(:signature, postcode: 'N1 1TY') }
 
     it 'sets the constituency_id based on the id of the constituency' do
-      stub_constituency('SW1 1AA', '12345', 'North Idshire')
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
       signature.set_constituency_id
-      expect(signature.constituency_id).to eq '12345'
+      expect(signature.constituency_id).to eq '3550'
     end
 
     it 'does not raise if the api fails' do
-      stub_broken_api
+      stub_api_request_for("N11TY").to_timeout
       expect { signature.set_constituency_id }.not_to raise_error
       expect(signature.constituency_id).to be_nil
     end
 
     it 'leaves it blank if there are no constituencies found' do
-      stub_no_constituencies('SW1 1AA')
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "no_results"))
       signature.set_constituency_id
       expect(signature.constituency_id).to be_nil
     end
 
     it 'chooses the first one if multiple constituencies are found' do
-      constituency1 = ConstituencyApi::Constituency.new('1234', "Shoreditch")
-      constituency2 = ConstituencyApi::Constituency.new('1235', "Lambeth")
-
-      stub_constituencies('SW1 1AA', constituency2, constituency1)
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "multiple"))
       signature.set_constituency_id
-      expect(signature.constituency_id).to eq '1235'
+      expect(signature.constituency_id).to eq '3506'
     end
   end
 
   describe 'store_constituency_id' do
-    let(:signature) { FactoryGirl.build(:signature, postcode: 'SW1 1AA')}
+    let(:signature) { FactoryGirl.build(:signature, postcode: 'N1 1TY')}
 
     it 'saves the instance and sets the constituency id' do
-      stub_constituency('SW1 1AA', '12345', 'North Idshire')
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
       signature.store_constituency_id
-      expect(signature.constituency_id).to eq '12345'
+      expect(signature.constituency_id).to eq '3550'
       expect(signature).to be_persisted
     end
 
     it 'does not save the instance if it did not set a constituency id' do
-      stub_no_constituencies('SW1 1AA')
+      stub_api_request_for("N11TY").to_return(api_response(:ok, "no_results"))
       signature.store_constituency_id
       expect(signature.constituency_id).to be_nil
       expect(signature).not_to be_persisted
@@ -724,8 +740,6 @@ RSpec.describe Signature, type: :model do
     end
 
     describe '#set_email_sent_at_for' do
-      include ActiveSupport::Testing::TimeHelpers
-
       let(:signature) { FactoryGirl.create(:validated_signature) }
       let(:receipt) { signature.email_sent_receipt! }
       let(:the_stored_time) { 6.days.ago }

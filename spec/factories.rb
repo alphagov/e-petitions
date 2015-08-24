@@ -230,9 +230,40 @@ FactoryGirl.define do
 
   sequence(:constituency_id) { |n| (1234 + n).to_s }
   sequence(:mp_id) { |n| (4321 + n).to_s }
+  sequence(:ons_code) { |n| '%08d' % n }
+
+  factory :constituency do
+    trait(:england) do
+      ons_code{ "E#{generate(:ons_code)}" }
+    end
+
+    trait(:scotland) do
+      ons_code{ "S#{generate(:ons_code)}" }
+    end
+
+    trait(:wales) do
+      ons_code{ "W#{generate(:ons_code)}" }
+    end
+
+    trait(:northern_ireland) do
+      ons_code{ "N#{generate(:ons_code)}" }
+    end
+
+    england
+
+    name { Faker::Address.county }
+    external_id { generate(:constituency_id) }
+    mp_name { "#{Faker::Name.name} MP" }
+    mp_id { generate(:mp_id) }
+  end
 
   factory :constituency_petition_journal do
     constituency_id { generate(:constituency_id) }
+    association :petition
+  end
+
+  factory :country_petition_journal do
+    country { Faker::Address.country }
     association :petition
   end
 

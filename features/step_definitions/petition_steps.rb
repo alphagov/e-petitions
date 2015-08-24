@@ -274,7 +274,7 @@ Then(/^I should see my MP/) do
                                  postcode: "N11TY",
                                  name: "Womboid Wibbledon",
                                  petition_id: @petition.id)
-  expect(page).to have_text(signature.constituency.mp.name)
+  expect(page).to have_text(signature.constituency.mp_name)
 end
 
 Then(/^I can click on a link to visit my MP$/) do
@@ -282,7 +282,7 @@ Then(/^I can click on a link to visit my MP$/) do
                                  postcode: "N11TY",
                                  name: "Womboid Wibbledon",
                                  petition_id: @petition.id)
-  expect(page).to have_css("a[href*='#{signature.constituency.mp.url}']")
+  expect(page).to have_css("a[href*='#{signature.constituency.mp_url}']")
 end
 
 Then(/^I should not see the text "([^"]*)"/) do |text|

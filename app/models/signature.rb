@@ -106,6 +106,7 @@ class Signature < ActiveRecord::Base
         )
 
         ConstituencyPetitionJournal.record_new_signature_for(self)
+        CountryPetitionJournal.record_new_signature_for(self)
         petition.increment_signature_count!
       end
     end
@@ -134,11 +135,11 @@ class Signature < ActiveRecord::Base
   end
 
   def constituency
-    @constituency ||= ConstituencyApi.constituency(postcode)
+    @constituency ||= Constituency.find_by_postcode(postcode)
   end
 
   def set_constituency_id
-    self.constituency_id = constituency.try(:id)
+    self.constituency_id = constituency.try(:external_id)
   end
 
   def store_constituency_id

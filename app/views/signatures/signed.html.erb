@@ -16,9 +16,9 @@
   <div class="section-panel" aria-labelledby="contact-your-mp-heading">
     <h2 id="contact-your-mp-heading">Contact your MP</h2>
     <p>Your constituency is <%= @signature.constituency.name %></p>
-    <% if @signature.constituency.mp %>
-      <p>Your local MP is <%= @signature.constituency.mp.name %></p>
-      <p><%= link_to "Contact your MP to let them know you have signed this petition", @signature.constituency.mp.url, rel: "external" %></p>
+    <% if @signature.constituency.mp_id? %>
+      <p>Your local MP is <%= @signature.constituency.mp_name %></p>
+      <p><%= link_to "Contact your MP to let them know you have signed this petition", @signature.constituency.mp_url, rel: "external" %></p>
     <% end %>
   </div>
 <% end %>

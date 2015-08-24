@@ -45,7 +45,7 @@ module NavigationHelpers
       admin_url($1)
 
     when /^the local petitions results page$/
-      local_petitions_url
+      local_petition_url(@my_constituency.slug)
 
     else
       begin

@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
-  include ActiveJob::TestHelper
-
   context 'GET show' do
     let(:petition) { FactoryGirl.create(:petition) }
 
@@ -108,8 +106,6 @@ RSpec.describe SponsorsController, type: :controller do
   end
 
   context 'PATCH update' do
-    include ConstituencyApiHelpers::ApiLevel
-
     let(:petition) { FactoryGirl.create(:petition) }
     let(:signature_params) {
       {
@@ -122,7 +118,11 @@ RSpec.describe SponsorsController, type: :controller do
       }
     }
 
-    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'Sponsor-upon-petition')}
+    let(:constituency) do
+      FactoryGirl.create(
+        :constituency, external_id: '54321', name: 'Sponsor-upon-petition'
+      )
+    end
 
     def do_patch(options = {})
       params = {
@@ -132,7 +132,8 @@ RSpec.describe SponsorsController, type: :controller do
         stage: 'replay-email',
         move: 'next'
       }.merge(options)
-      stub_constituency(params[:signature][:postcode], constituency)
+
+      allow(Constituency).to receive(:find_by_postcode).with("SP11NR").and_return(constituency)
 
       perform_enqueued_jobs do
         patch :update, params
@@ -208,7 +209,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "sets the constituency_id on the creator signature, based on the postcode" do
         do_patch
-        expect(signature.constituency_id).to eq constituency.id
+        expect(signature.constituency_id).to eq("54321")
       end
 
       it 'redirects to the thank you page' do

@@ -1,94 +1,103 @@
 require 'rails_helper'
 
 RSpec.describe LocalPetitionsController, type: :controller do
-  describe 'GET :index' do
-    include ConstituencyApiHelpers::NetworkLevel
+  let(:constituency) { FactoryGirl.create(:constituency, external_id: "99999", name: "Holborn") }
 
-    context 'when a postcode is supplied' do
-      let(:postcode) { 'SW1A 1aa' }
-      let(:params) { { postcode: postcode } }
+  describe "GET /petitions/local" do
+    context "when the postcode is valid" do
+      before do
+        expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
 
-      context 'that can be found on the API' do
-        let(:constituency_id) { FactoryGirl.generate(:constituency_id) }
-        let(:constituency_name) { 'Cities of London and Westminster' }
-        let(:mp_id) { FactoryGirl.generate(:mp_id) }
-        let(:mp) { ConstituencyApi::Mp.new(mp_id, 'Emma Pee MP', 3.years.ago.to_date) }
-        before { stub_constituency(postcode, constituency_id, constituency_name, mp_id: mp.id, mp_name: mp.name, mp_start_date: mp.start_date) }
-
-        it 'exposes a constituency object for the postcode' do
-          get :index, params
-          constituency = assigns(:constituency)
-          expect(constituency).to be_present
-          expect(constituency).to eq ConstituencyApi::Constituency.new(constituency_id, constituency_name, mp)
-        end
-
-        it 'exposes the 50 most popular petitions in the constituency' do
-          petitions = double
-          expect(Petition).to receive(:popular_in_constituency).with(constituency_id, 50).and_return petitions
-
-          get :index, params
-
-          petitions = assigns(:petitions)
-          expect(petitions).to be_present
-          expect(petitions).to eq petitions
-        end
-
-        it 'responds successfully and renders the index template' do
-          get :index, params
-          expect(response).to be_success
-          expect(response).to render_template 'local_petitions/index'
-        end
+        get :index, postcode: "n1 1ty"
       end
 
-      shared_examples_for 'a local petitions controller that failed to lookup a constituency' do
-        it 'exposes no constituency object' do
-          get :index, params
-          constituency = assigns(:constituency)
-          expect(constituency).to be_nil
-        end
-
-        it 'responds successfully and renders the error template' do
-          get :index, params
-          expect(response).to be_success
-          expect(response).to render_template 'local_petitions/index'
-        end
+      it "assigns the sanitized postcode" do
+        expect(assigns(:postcode)).to eq("N11TY")
       end
 
-      context 'that cannot be found on the API' do
-        before { stub_no_constituencies(postcode) }
-        it_behaves_like 'a local petitions controller that failed to lookup a constituency'
-      end
-
-      context 'but the API is down' do
-        before { stub_broken_api }
-
-        it_behaves_like 'a local petitions controller that failed to lookup a constituency'
+      it "redirects to the constituency page" do
+        expect(response).to redirect_to("/petitions/local/holborn")
       end
     end
 
-    shared_examples_for 'a local petitions controller that does not try to lookup a constituency' do
-      it 'does not communicate with the API' do
-        expect(ConstituencyApi).not_to receive(:constituency)
-        get :index, params
+    context "when the postcode is invalid" do
+      before do
+        expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(nil)
+        get :index, postcode: "sw1a 1aa"
       end
 
-      it 'responds successfully and renders the blank postcode template' do
-        get :index, params
+      it "assigns the sanitized postcode" do
+        expect(assigns(:postcode)).to eq("SW1A1AA")
+      end
+
+      it "responds successfully" do
         expect(response).to be_success
-        expect(response).to render_template 'local_petitions/index'
+      end
+
+      it "renders the index template" do
+        expect(response).to render_template("local_petitions/index")
+      end
+
+      it "doesn't assign the constituency" do
+        expect(assigns(:constituency)).to be_nil
+      end
+
+      it "doesn't assign the petitions" do
+        expect(assigns(:petitions)).to be_nil
       end
     end
 
-    context 'when no postcode is supplied' do
-      let(:params) { {} }
+    context "when the postcode is blank" do
+      before do
+        expect(Constituency).not_to receive(:find_by_postcode)
+        get :index, postcode: ""
+      end
 
-      it_behaves_like 'a local petitions controller that does not try to lookup a constituency'
+      it "responds successfully" do
+        expect(response).to be_success
+      end
+
+      it "renders the index template" do
+        expect(response).to render_template("local_petitions/index")
+      end
     end
 
-    context 'when a blank postcode is supplied' do
-      let(:params) { {postcode: ' '} }
+    context "when the postcode is not set" do
+      before do
+        expect(Constituency).not_to receive(:find_by_postcode)
+        get :index
+      end
 
-      it_behaves_like 'a local petitions controller that does not try to lookup a constituency'
+      it "responds successfully" do
+        expect(response).to be_success
+      end
+
+      it "renders the index template" do
+        expect(response).to render_template("local_petitions/index")
+      end
+    end
+  end
+
+  describe "GET /petitions/local/:id" do
+    let(:petitions) { double(:petitions) }
+
+    before do
+      expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
+      expect(Petition).to receive(:popular_in_constituency).with("99999", 50).and_return(petitions)
+
+      get :show, id: "holborn"
+    end
+
+    it "renders the show template" do
+      expect(response).to render_template("local_petitions/show")
+    end
+
+    it "assigns the constituency" do
+      expect(assigns(:constituency)).to eq(constituency)
+    end
+
+    it "assigns the petitions" do
+      expect(assigns(:petitions)).to eq(petitions)
     end
   end
 end

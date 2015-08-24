@@ -10,11 +10,15 @@ Rails.application.routes.draw do
     get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
     post 'feedback' => 'feedback#create', :as => nil
 
+    scope 'petitions' do
+      get 'local' => 'local_petitions#index', as: 'local_petitions'
+      get 'local/:id' => 'local_petitions#show', as: 'local_petition'
+    end
+
     resources :petitions, :only => [:new, :show, :index] do
       collection do
         get 'check'
         get 'check_results'
-        get 'local' => 'local_petitions#index'
       end
 
       member do

@@ -1,6 +1,4 @@
 RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
-  include ActiveSupport::Testing::TimeHelpers
-
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 

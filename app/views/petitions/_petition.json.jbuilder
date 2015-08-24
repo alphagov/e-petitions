@@ -59,4 +59,18 @@ json.attributes do
   else
     json.debate nil
   end
+
+  if petition_page?
+    json.signatures_by_country petition.signatures_by_country do |country|
+      json.name country.name
+      json.signature_count country.signature_count
+    end
+
+    json.signatures_by_constituency petition.signatures_by_constituency do |constituency|
+      json.name constituency.name
+      json.ons_code constituency.ons_code
+      json.mp constituency.mp_name
+      json.signature_count constituency.signature_count
+    end
+  end
 end

@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Petition, type: :model do
-  include ActiveJob::TestHelper
-
   context "defaults" do
     it "has pending as default state" do
       p = Petition.new
@@ -1252,8 +1250,6 @@ RSpec.describe Petition, type: :model do
     end
 
     describe '#set_email_requested_at_for' do
-      include ActiveSupport::Testing::TimeHelpers
-
       let(:petition) { FactoryGirl.create(:open_petition) }
       let(:receipt) { petition.email_requested_receipt! }
       let(:the_stored_time) { 6.days.ago }

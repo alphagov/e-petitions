@@ -118,6 +118,7 @@ Feature: A moderator user views all petitions
 
   Scenario: A moderator can download petitions as CSV
     Given I am logged in as a moderator
+    And the time is "2015-08-21 06:00:00"
     When I view all petitions
     And I follow "Download CSV"
-    Then I should get a download with the filename "petitions.csv"
+    Then I should get a download with the filename "all-petitions-20150821060000.csv"

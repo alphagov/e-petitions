@@ -1,16 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe SignaturesController, type: :controller do
-  include ActiveJob::TestHelper
-
   describe "verify" do
-    include ConstituencyApiHelpers::NetworkLevel
-
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
 
-      before { stub_constituency('SW1A 1AA', '1234', 'Cities of London and Westminster') }
+      let(:constituency) do
+        FactoryGirl.create(
+          :constituency, external_id: '1234', name: 'Cities of London and Westminster'
+        )
+      end
+
+      before do
+        allow(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(constituency)
+      end
 
       it "redirects to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
@@ -214,8 +218,6 @@ RSpec.describe SignaturesController, type: :controller do
   end
 
   describe "#create" do
-    include ConstituencyApiHelpers::ApiLevel
-
     let!(:petition) { FactoryGirl.create(:open_petition) }
 
     let(:signature_params) do
@@ -228,7 +230,11 @@ RSpec.describe SignaturesController, type: :controller do
       }
     end
 
-    let(:constituency) { ConstituencyApi::Constituency.new('54321', 'Greater Signatureton')}
+    let(:constituency) do
+      FactoryGirl.create(
+        :constituency, external_id: '54321', name: 'Greater Signatureton'
+      )
+    end
 
     def do_post(options = {})
       params = {
@@ -237,7 +243,8 @@ RSpec.describe SignaturesController, type: :controller do
         :signature => signature_params,
         :petition_id => petition.id
       }.merge(options)
-      stub_constituency(params[:signature][:postcode], constituency)
+
+      allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
 
       perform_enqueued_jobs do
         post :create, params
@@ -304,7 +311,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "sets the constituency_id on the signature, based on the postcode" do
         do_post
-        expect(assigns(:stage_manager).signature.constituency_id).to eq constituency.id
+        expect(assigns(:stage_manager).signature.constituency_id).to eq "54321"
       end
 
       it "redirects to a thank you page" do
