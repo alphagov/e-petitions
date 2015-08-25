@@ -1,7 +1,7 @@
 module Staged
   module PetitionSigner
-    def self.manage(params, petition, stage, move)
-      Manager.new(params, petition, stage, move, self::Stages)
+    def self.manage(params, request, petition, stage, move)
+      Manager.new(params, request, petition, stage, move, self::Stages)
     end
 
     def self.stages
@@ -9,8 +9,9 @@ module Staged
     end
 
     class Manager
-      def initialize(params, petition, stage, move, stages)
+      def initialize(params, request, petition, stage, move, stages)
         @params = params
+        @request = request
         @petition = petition
         @previous_stage = stage
         @move = move
@@ -51,7 +52,9 @@ module Staged
       end
 
       def build_signature
-        @petition.signatures.build(@params)
+        @petition.signatures.build(@params) do |signature|
+          signature.ip_address = @request.remote_ip
+        end
       end
     end
   end

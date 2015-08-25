@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Staged::PetitionSigner, type: :model do
   let(:signature_params) { {} }
+  let(:request) { double(remote_ip: '192.168.0.1') }
   let(:move) { '' }
   let(:stage) { '' }
   let(:petition) { FactoryGirl.create(:open_petition) }
-  subject { described_class.manage(signature_params, petition, stage, move) }
+  subject { described_class.manage(signature_params, request, petition, stage, move) }
   let(:signature) { subject.signature }
 
   describe '#create_signature' do
@@ -31,6 +32,12 @@ RSpec.describe Staged::PetitionSigner, type: :model do
       it 'returns false if the signature object can not be saved' do
         allow(signature).to receive(:save).and_return false
         expect(subject.create_signature).to eq false
+      end
+
+      it 'assigns the remote_ip of the request to the ip_address of the signature' do
+        allow(signature).to receive(:save).and_return true
+        expect(subject.create_signature).to eq true
+        expect(signature.ip_address).to eq '192.168.0.1'
       end
     end
 
