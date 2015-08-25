@@ -12,13 +12,13 @@ class SponsorsController < ApplicationController
   def show
     assign_stage
     @sponsor = @petition.sponsors.build
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
   end
 
   def update
     assign_move
     assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, @petition, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, request, @petition, params[:stage], params[:move])
     if @stage_manager.create_signature
       @signature = @stage_manager.signature
       @signature.store_constituency_id

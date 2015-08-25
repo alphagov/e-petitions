@@ -9,7 +9,7 @@ class SignaturesController < ApplicationController
 
   def new
     assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, @petition, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
     respond_with @stage_manager.stage_object
   end
 
@@ -114,7 +114,7 @@ class SignaturesController < ApplicationController
   def handle_new_signature(petition)
     assign_move
     assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, petition, params[:stage], params[:move])
+    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, request, petition, params[:stage], params[:move])
     if @stage_manager.create_signature
       @stage_manager.signature.store_constituency_id
       send_email_to_petition_signer(@stage_manager.signature)
