@@ -27,10 +27,14 @@ class Constituency < ActiveRecord::Base
       return []
     end
 
+    def self.before_remove_const
+      Thread.current[:__api_client__] = nil
+    end
+
     private
 
     def client
-      @client ||= ApiClient.new
+      Thread.current[:__api_client__] ||= ApiClient.new
     end
 
     def parse(body)
