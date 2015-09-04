@@ -9,12 +9,18 @@ class ApplicationController < ActionController::Base
   before_action :set_seen_cookie_message, if: :show_cookie_message?
   helper_method :show_cookie_message?, :public_petition_facets
 
+  before_action :set_cors_headers, if: :json_request?
+
   protected
 
   def authenticate
     authenticate_or_request_with_http_basic(Site.name) do |username, password|
       Site.authenticate(username, password)
     end
+  end
+
+  def json_request?
+    request.format.symbol == :json
   end
 
   def unknown_format?
@@ -49,6 +55,12 @@ class ApplicationController < ActionController::Base
 
   def set_seen_cookie_message
     cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now, httponly: true }
+  end
+
+  def set_cors_headers
+    headers['Access-Control-Allow-Origin'] = '*'
+    headers['Access-Control-Allow-Methods'] = 'GET'
+    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
   end
 
   def show_cookie_message?
