@@ -11,8 +11,12 @@ Capybara.app_host = "https://127.0.0.1:3443"
 Capybara.default_host = "https://petition.parliament.uk"
 Capybara.default_selector = :xpath
 
+# Force downloading of local phantomjs
+Phantomjs.path
+
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app,
+    :phantomjs => Phantomjs.path,
     :phantomjs_options => [
       '--ignore-ssl-errors=yes',
       '--local-to-remote-url-access=yes',
