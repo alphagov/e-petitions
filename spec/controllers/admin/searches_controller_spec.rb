@@ -48,7 +48,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
 
           it "sets the flash error" do
             get :show, q: '123'
-            expect(flash[:error]).to match(/123/)
+            expect(flash[:alert]).to match(/123/)
           end
         end
       end

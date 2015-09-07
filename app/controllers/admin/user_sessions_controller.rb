@@ -13,10 +13,10 @@ class Admin::UserSessionsController < Admin::AdminController
     # if failed logins are above the specified level, then authlogic disables account
     # so we need to display appropriate error message
     elsif  @user_session.errors[:base].size > 0
-      flash.now[:error] = @user_session.errors[:base][0]
+      flash.now[:alert] = @user_session.errors[:base][0]
       render :new
     else
-      flash.now[:error] = "Invalid email/password combination"
+      flash.now[:alert] = "Invalid email/password combination"
       render :new
     end
   end

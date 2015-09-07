@@ -23,6 +23,14 @@ class Signature < ActiveRecord::Base
   validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
 
+  before_destroy do
+    !creator?
+  end
+
+  after_destroy do
+    petition.update_signature_count!
+  end
+
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
   scope :pending, -> { where(state: PENDING_STATE) }

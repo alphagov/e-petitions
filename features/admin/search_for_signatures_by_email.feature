@@ -15,3 +15,26 @@ Feature: Searching for signatures as Terry
     And I am logged in as a moderator
     When I search for petitions signed by "bob@example.com" from the admin hub
     Then I should see 2 petitions associated with the email address
+
+  Scenario: Deleting a signature
+    Given 1 petition signed by "bob@example.com"
+    And I am logged in as a moderator
+    When I search for petitions signed by "bob@example.com" from the admin hub
+    Then I should see 1 petition associated with the email address
+    When I click the delete button
+    Then I should see 0 petitions associated with the email address
+
+  Scenario: Deleting a signature when the person has signed more than one petition
+    Given 2 petitions signed by "bob@example.com"
+    And I am logged in as a moderator
+    When I search for petitions signed by "bob@example.com" from the admin hub
+    Then I should see 2 petitions associated with the email address
+    When I click the first delete button
+    Then I should see 1 petitions associated with the email address
+
+  Scenario: The creator’s signature can’t be deleted
+    Given an open petition "More money for charities" with some signatures
+    And I am logged in as a moderator
+    When I search for the petition creator from the admin hub
+    Then I should see 1 petition associated with the email address
+    And I should not see the delete button
