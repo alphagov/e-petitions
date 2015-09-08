@@ -1,5 +1,5 @@
-Delayed::Worker.max_attempts = 100
-Delayed::Worker.max_run_time = 1.week
+Delayed::Worker.max_attempts = 15
+Delayed::Worker.max_run_time = 6.hours
 
 require 'active_job/queue_adapters/delayed_job_adapter'
 
