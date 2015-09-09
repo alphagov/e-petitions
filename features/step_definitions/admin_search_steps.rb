@@ -1,4 +1,4 @@
-Given(/^(\d+) petitions signed by "([^"]*)"$/) do |petition_count, email|
+Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, email|
   petition_count.times do
     FactoryGirl.create(:signature, :petition => FactoryGirl.create(:open_petition), :email => email)
   end
@@ -45,17 +45,37 @@ When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |ta
   click_button 'Search'
 end
 
+When(/^I search for the petition creator from the admin hub$/) do
+  visit admin_petitions_url
+  fill_in "Search", :with => @petition.creator_signature.email
+  click_button 'Search'
+end
+
 When(/^I view the petition through the admin interface$/) do
   visit admin_petitions_url
   fill_in "Search", :with => @petition.id
   click_button 'Search'
 end
 
-Then(/^I should see (\d+) petitions associated with the email address$/) do |petition_count|
+Then(/^I should see (\d+) petitions? associated with the email address$/) do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
 Then(/^I should be taken back to the id search form with an error$/) do
-  expect(page).to have_css(".flash_error")
+  expect(page).to have_css(".flash-alert")
   expect(page).to have_css("form")
+end
+
+When(/^I click the delete button$/) do
+  click_button "Delete"
+end
+
+When(/^I click the first delete button$/) do
+  within :css, "tbody tr:first" do
+    click_button "Delete"
+  end
+end
+
+Then(/^I should not see the delete button$/) do
+  expect(page).not_to have_button "Delete"
 end

@@ -3,5 +3,11 @@
   <td><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
   <td><%= signature.state %></td>
   <td><%= date_time_format(signature.updated_at) %></td>
-  <td><%= signature.creator? ? "Yes" : "No" %></td>
+  <% if signature.creator? %>
+    <td>Yes</td>
+    <td>&nbsp;</td>
+  <% else %>
+    <td>No</td>
+    <td><%= button_to 'Delete', admin_signature_path(signature), method: :delete, class: 'button', data: { confirm: 'Delete signature?' } %></td>
+  <% end %>
 </tr>

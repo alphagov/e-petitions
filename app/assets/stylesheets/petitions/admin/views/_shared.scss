@@ -3,9 +3,16 @@
     margin-top: $gutter-half;
   }
 
-  .flash_error,
   .flash-notice {
     background-color: $flash-green;
+    padding: $gutter-half;
+    @include bold-19;
+  }
+
+  .flash-error,
+  .flash-alert {
+    background-color: $flash-red;
+    color: $white;
     padding: $gutter-half;
     @include bold-19;
   }
@@ -54,5 +61,14 @@
 
   .login {
     margin-top: $gutter;
+  }
+
+  .button_to {
+    input[type=submit] {
+      margin: 0;
+      font-size: 12px;
+      padding: 2px 8px;
+      line-height: 16px;
+    }
   }
 }

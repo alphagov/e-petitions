@@ -61,6 +61,45 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "callbacks" do
+    context "when the signature is destroyed" do
+      let(:attributes) { FactoryGirl.attributes_for(:petition) }
+      let(:creator) { FactoryGirl.create(:pending_signature) }
+      let(:petition) do
+        Petition.create(attributes) do |petition|
+          petition.creator_signature = creator
+
+          5.times do
+            petition.signatures << FactoryGirl.create(:pending_signature)
+          end
+        end
+      end
+
+      before do
+        petition.signatures.each { |s| s.validate! }
+        petition.publish
+      end
+
+      context "when the signature is the creator" do
+        it "cancels the destroy" do
+          expect(creator.destroy).to eq(false)
+        end
+      end
+
+      context "when the signature is not the creator" do
+        it "updates the petition signature count" do
+          signature = FactoryGirl.create(:pending_signature, petition: petition)
+          signature.validate!
+
+          petition.reload
+
+          expect(petition.signature_count).to eq(7)
+          expect{ signature.destroy }.to change{ petition.reload.signature_count }.by(-1)
+        end
+      end
+    end
+  end
+
   context "validations" do
     it { is_expected.to validate_presence_of(:name).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }

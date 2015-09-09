@@ -23,11 +23,9 @@ class Admin::SearchesController < Admin::AdminController
 
   def find_petition_by_id
     begin
-      petition = Petition.find(query.to_i)
-      redirect_to admin_petition_url(petition)
+      redirect_to admin_petition_url(Petition.find(query.to_i))
     rescue ActiveRecord::RecordNotFound
-      flash[:error] = "Cannot find petition with id: #{query}"
-      redirect_to admin_petitions_url
+      redirect_to admin_petitions_url, alert: "Cannot find petition with id: #{query}"
     end
   end
 
