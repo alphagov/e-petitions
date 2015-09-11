@@ -1,5 +1,6 @@
 class DeliverPetitionEmailJob < ActiveJob::Base
   include EmailDelivery
+  queue_as :deliver_petition_email
 
   attr_reader :email
 

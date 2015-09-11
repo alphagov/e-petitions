@@ -69,7 +69,7 @@ class SignaturesController < ApplicationController
   end
 
   def send_email_to_petition_signer(signature)
-    PetitionMailer.email_confirmation_for_signer(signature).deliver_later
+    DeliverConfirmationEmailJob.perform_later(signature)
   end
 
   def assign_stage

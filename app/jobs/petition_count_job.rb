@@ -1,6 +1,8 @@
 class PetitionCountJob < ActiveJob::Base
   class InvalidSignatureCounts < RuntimeError; end
 
+  queue_as :petition_count
+
   def perform
     petitions = Petition.with_invalid_signature_counts
 

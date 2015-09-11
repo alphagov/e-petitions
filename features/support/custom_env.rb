@@ -47,5 +47,6 @@ BeValidAsset::Configuration.cache_path = File.join(Rails.root.to_s, %w(tmp be_va
 BeValidAsset::Configuration.display_invalid_lines = true
 
 # run background jobs inline with delayed job
-ActiveJob::Base.queue_adapter = :delayed_job
-Delayed::Worker.delay_jobs = false
+ActiveJob::Base.queue_adapter = :sidekiq
+require 'sidekiq/testing'
+Sidekiq::Testing.inline!

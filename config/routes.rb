@@ -1,3 +1,21 @@
+class SidekiqConstraint
+  # based on https://github.com/mperham/sidekiq/wiki/Monitoring#authlogic
+
+  def matches?(request)
+    # check that an Authlogic session is present
+    return false unless request.cookie_jar['admin_user_credentials'].present?
+
+    # check that the admin user has the sysadmin role
+    AdminUser.where(persistence_token: persistance_token(request), role: AdminUser::SYSADMIN_ROLE).exists?
+  end
+
+  private
+
+  def persistance_token(request)
+    request.cookie_jar['admin_user_credentials'].split(':')[0]
+  end
+end
+
 Rails.application.routes.draw do
   constraints Site.constraints_for_public do
     get '/' => 'pages#index', :as => :home
@@ -71,7 +89,8 @@ Rails.application.routes.draw do
     namespace :admin do
       root :to => 'admin#index'
 
-      mount Delayed::Web::Engine, at: '/delayed'
+      require 'sidekiq/web'
+      mount Sidekiq::Web => '/sidekiq', constraints: SidekiqConstraint.new
 
       resource :search, :only => [:show]
 
