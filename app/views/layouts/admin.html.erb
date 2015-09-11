@@ -7,7 +7,8 @@
   <%= csrf_meta_tag %>
   <link rel="shortcut icon" type="image/x-icon" href="/favicon-admin.ico" />
   <%= yield :js %>
-  <meta name="viewport" content="width = device-width"/>
+  <meta name="viewport" content="width = device-width" />
+  <meta name="robots" content="noindex" />
 </head>
 <body class="admin">
   <%= render '/admin/shared/header' %>
