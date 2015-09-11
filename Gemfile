@@ -34,6 +34,7 @@ gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
 gem 'sidekiq'
+gem 'sinatra', :require => nil
 
 group :development, :test do
   gem 'rspec-rails'
