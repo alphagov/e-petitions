@@ -38,8 +38,6 @@ Rails.application.routes.draw do
 
     post 'petitions/new' => 'petitions#create', :as => :create_petition
 
-    get 'search' => 'search#search', :as => :search
-
     scope 'signatures/:id' do
       get 'verify/:token' => 'signatures#verify', :as => :verify_signature
       get 'unsubscribe/:unsubscribe_token' => 'signatures#unsubscribe', :as => :unsubscribe_signature
