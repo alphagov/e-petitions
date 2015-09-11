@@ -33,7 +33,7 @@ module Epets
     }
 
     # Configure Active Job queue adapter
-    config.active_job.queue_adapter = :delayed_job
+    config.active_job.queue_adapter = :sidekiq
 
     # Remove the error wrapper from around the form element
     config.action_view.field_error_proc = -> (html_tag, instance) { html_tag }

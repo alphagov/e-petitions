@@ -71,7 +71,7 @@ Rails.application.routes.draw do
     namespace :admin do
       root :to => 'admin#index'
 
-      mount Delayed::Web::Engine, at: '/delayed'
+      # mount Delayed::Web::Engine, at: '/delayed'
 
       resource :search, :only => [:show]
 
