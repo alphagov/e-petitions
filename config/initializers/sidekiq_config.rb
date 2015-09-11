@@ -6,6 +6,8 @@ Sidekiq.configure_server do |config|
   end
 end
 
+Sidekiq.default_worker_options = { "retry" => 15, "backtrace" => true }
+
 require 'active_job/queue_adapters/sidekiq_adapter'
 
 # We patch in the display_name method to the Delayed Job queue adapter
