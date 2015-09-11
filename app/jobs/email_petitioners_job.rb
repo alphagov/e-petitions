@@ -1,6 +1,8 @@
 class EmailPetitionersJob < ActiveJob::Base
   include EmailAllPetitionSignatories
 
+  queue_as :email_petitioners
+
   self.email_delivery_job_class = DeliverPetitionEmailJob
   self.timestamp_name = 'petition_email'
 
