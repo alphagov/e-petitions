@@ -1,5 +1,10 @@
-# Delayed::Worker.max_attempts = 15
-# Delayed::Worker.max_run_time = 6.hours
+Sidekiq.configure_server do |config|
+  # runs after your app has finished initializing but before any jobs are dispatched.
+  config.on(:startup) do
+    # Restart the AppSignal thread that we stopped in the initializer
+    Appsignal.agent.start_thread if defined?(Appsignal) && Appsignal.config.active?
+  end
+end
 
 require 'active_job/queue_adapters/sidekiq_adapter'
 
