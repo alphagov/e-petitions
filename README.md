@@ -13,18 +13,21 @@ A few things to know:
 
 ### Setting your development environment
 
-* clone the repo to your local machine
-* install postgres. Easiest with homebrew using `$ brew install postgres`
+* Clone the repo to your local machine
+* Install PostgreSQL. Easiest with homebrew using `$ brew install postgres`
 	* If you like you can add postgres to your LaunchAgent. Follow instructions at end of console output
+* Install Memcached: `brew install memcached` - again, follow instructions at end of console output.
+* Run `bundle install`
 * Set up your dev and test databases
 	* `$ psql postgres`
+	* `# CREATE ROLE epets; ALTER ROLE epets WITH LOGIN;`
 	* `# CREATE DATABASE epets_development;`
 	* `# CREATE DATABASE epets_test;`
 	* `# GRANT all privileges ON database epets_development TO epets;`
 	* `# GRANT all privileges ON database epets_test TO epets;`
 	* `# ALTER USER epets WITH PASSWORD 'replace_me';`
 	* `# \q` to quit
-* You will need to set up the `config/database.yml`. Copy what is in `config/database.example.yml` and add the password you used earlier for the `epets` postgres user
+* You will need to set up the `config/database.yml`. Add the password you used earlier for the `epets` postgres user, e.g. `username: epets` & `password: replace_me`
 * `$ rake db:structure:load` - load the sql structure into your new databases
 * `$ rails s` - boot the app
 
