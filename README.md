@@ -30,7 +30,7 @@ A few things to know:
 
 ### Auxiliary
 
-* If you want jobs (like emails) to be run, use `$ rake jobs:work`
+* If you want jobs (like emails) to be run, use `$ sidekiq`
 * For setting up a sysadmin user
 	* `rake epets:add_sysadmin_user` - to set up an admin user with email 'admin@example.com' and password 'Letmein1!'
 	* go to `/admin` and log in. You will be asked to change your password. Remember, the password must contain a mix of upper and lower case letters, numbers and special characters.
