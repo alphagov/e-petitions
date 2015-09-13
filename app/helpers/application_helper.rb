@@ -9,6 +9,7 @@ module ApplicationHelper
     %w[local_petitions show],
     %w[petitions index],
     %w[petitions show],
+    %w[petitions new],
     %w[archived/petitions index],
     %w[archived/petitions show]
   ]
