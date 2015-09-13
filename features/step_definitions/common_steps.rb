@@ -51,3 +51,11 @@ When(/^I click the shared link$/) do
   expect(@shared_link).not_to be_blank
   visit @shared_link
 end
+
+Then(/^I should not index the page$/) do
+  expect(page).to have_css('meta[name=robots]', visible: false)
+end
+
+Then(/^I should index the page$/) do
+  expect(page).not_to have_css('meta[name=robots]', visible: false)
+end

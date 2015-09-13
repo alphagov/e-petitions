@@ -154,4 +154,28 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#noindex_page?" do
+    context "when on a page that should not be indexed by search engines" do
+      before do
+        params[:controller] = "signatures"
+        params[:action] = "new"
+      end
+
+      it "returns true" do
+        expect(helper.noindex_page?).to eq(true)
+      end
+    end
+
+    context "when on a page that should be indexed by search engines" do
+      before do
+        params[:controller] = "petitions"
+        params[:action] = "show"
+      end
+
+      it "returns false" do
+        expect(helper.noindex_page?).to eq(false)
+      end
+    end
+  end
 end
