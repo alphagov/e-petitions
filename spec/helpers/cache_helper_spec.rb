@@ -54,6 +54,15 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#last_petition_created_at" do
+      let(:now) { Time.current }
+
+      it "delegates to the Site instance" do
+        expect(Site).to receive(:last_petition_created_at).and_return(now)
+        expect(keys.last_petition_created_at).to eq(now)
+      end
+    end
+
     describe "#last_signature_at" do
       let(:now) { Time.current }
 

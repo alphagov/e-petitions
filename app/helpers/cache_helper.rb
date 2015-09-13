@@ -48,6 +48,10 @@ module CacheHelper
         home_page?
       end
 
+      def last_petition_created_at
+        Site.last_petition_created_at
+      end
+
       def petition
         assigns['petition'] if petition_page?
       end

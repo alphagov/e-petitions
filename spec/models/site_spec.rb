@@ -19,6 +19,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>') }
+    it { is_expected.to have_db_column(:last_petition_created_at).of_type(:datetime).with_options(null: true, default: nil) }
   end
 
   describe "validations" do
@@ -201,6 +202,11 @@ RSpec.describe Site, type: :model do
     it "delegates updated_at to the instance" do
       expect(site).to receive(:updated_at).and_return(now)
       expect(Site.updated_at).to eq(now)
+    end
+
+    it "delegates last_petition_created_at to the instance" do
+      expect(site).to receive(:last_petition_created_at).and_return(now)
+      expect(Site.last_petition_created_at).to eq(now)
     end
   end
 

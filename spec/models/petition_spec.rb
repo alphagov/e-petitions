@@ -20,6 +20,24 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_many(:emails).dependent(:destroy) }
   end
 
+  describe "callbacks" do
+    context "when creating a petition" do
+      let(:now) { Time.current }
+
+      before do
+        Site.update_all(last_petition_created_at: nil)
+      end
+
+      it "updates the site's last_petition_created_at column" do
+        expect {
+          FactoryGirl.create(:petition)
+        }.to change {
+          Site.last_petition_created_at
+        }.from(nil).to(be_within(1.second).of(now))
+      end
+    end
+  end
+
   context "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
