@@ -29,12 +29,12 @@ RSpec.describe FeedbackController, type: :controller do
     context "with invalid input" do
       it "does not send an email" do
         expect {
-          do_post
+          do_post comment: ""
         }.not_to change{ ActionMailer::Base.deliveries.size }
       end
 
       it "returns the user to the form" do
-        do_post
+        do_post comment: ""
         expect(response).to render_template("feedback/index")
       end
     end
