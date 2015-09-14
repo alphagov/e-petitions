@@ -19,4 +19,14 @@ RSpec.configure do |config|
 
     https!
   end
+
+  config.before(:each, type: :feature) do
+    Capybara.app_host     = Site.url
+    Capybara.default_host = Site.url
+  end
+
+  config.before(:each, type: :feature, admin: true) do
+    Capybara.app_host     = Site.moderate_url
+    Capybara.default_host = Site.moderate_url
+  end
 end
