@@ -16,6 +16,9 @@
       <%= render 'application/social_meta' %>
       <%= render 'application/analytics' %>
     <% end %>
+    <% if noindex_page? %>
+      <meta name="robots" content="noindex" />
+    <% end %>
   </head>
   <body>
     <% if show_cookie_message? %>

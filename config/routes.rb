@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get 'privacy' => 'pages#privacy', :as => :privacy
     get 'browserconfig' => 'pages#browserconfig', format: 'xml'
     get 'manifest' => 'pages#manifest', format: 'json'
+    get 'robots' => 'pages#robots', format: 'txt'
 
     get 'feedback' => 'feedback#index', :as => 'feedback'
     get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
@@ -37,8 +38,6 @@ Rails.application.routes.draw do
     end
 
     post 'petitions/new' => 'petitions#create', :as => :create_petition
-
-    get 'search' => 'search#search', :as => :search
 
     scope 'signatures/:id' do
       get 'verify/:token' => 'signatures#verify', :as => :verify_signature

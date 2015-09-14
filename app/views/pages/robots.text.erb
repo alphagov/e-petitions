@@ -1,0 +1,24 @@
+# See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
+#
+# To ban all spiders from the entire site uncomment the next two lines:
+# User-agent: *
+# Disallow: /
+User-agent: *
+Disallow: /admin
+Disallow: /admin/
+Disallow: /browserconfig.xml
+Disallow: /feedback/thanks
+Disallow: /health-check
+Disallow: /manifest.json
+Disallow: /petition/check
+Disallow: /petition/check_results
+<%= cache_for :robots do -%>
+<% Petition.ids.each do |petition_id| -%>
+Disallow: /petitions/<%= petition_id %>/thank-you
+Disallow: /petitions/<%= petition_id %>/moderation-info
+Disallow: /petitions/<%= petition_id %>/sponsors/
+Disallow: /petitions/<%= petition_id %>/signatures/
+<% end -%>
+<% end -%>
+Disallow: /ping
+Disallow: /signatures/

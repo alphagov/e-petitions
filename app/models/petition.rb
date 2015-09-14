@@ -29,6 +29,7 @@ class Petition < ActiveRecord::Base
   has_perishable_token called: 'sponsor_token'
 
   after_create :set_petition_on_creator_signature
+  after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
   include Browseable
@@ -453,6 +454,10 @@ class Petition < ActiveRecord::Base
   # need this callback since the relationship is circular
   def set_petition_on_creator_signature
     creator_signature.update_attribute(:petition_id, id)
+  end
+
+  def update_last_petition_created_at
+    Site.touch(:last_petition_created_at)
   end
 
   def supporting_sponsors_count

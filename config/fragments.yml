@@ -33,3 +33,9 @@ petition:
     - :reveal_response
   options:
     expires_in: 300
+
+robots:
+  keys:
+    - :last_petition_created_at
+  options:
+    expires_in: 86400
