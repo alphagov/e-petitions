@@ -12,6 +12,10 @@ RSpec.describe ApplicationController, type: :controller do
   let(:cache_control) { response.headers['Cache-Control'] }
   let(:x_ua_compatible) { response.headers['X-UA-Compatible'] }
 
+  let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
+  let(:access_control_allow_methods) { response.headers['Access-Control-Allow-Methods'] }
+  let(:access_control_allow_headers) { response.headers['Access-Control-Allow-Headers'] }
+
   it "reloads the site instance on every request" do
     expect(Site).to receive(:reload)
     get :index
@@ -25,6 +29,14 @@ RSpec.describe ApplicationController, type: :controller do
   it "sets X-UA-Compatible control headers" do
     get :index
     expect(x_ua_compatible).to eq('IE=edge')
+  end
+
+  it "sets CORS headers for json requests" do
+    request.env["HTTP_ACCEPT"] = 'application/json'
+    get :index
+    expect(access_control_allow_origin).to eq('*')
+    expect(access_control_allow_methods).to eq('GET')
+    expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
   end
 
   context "when the site is disabled" do
