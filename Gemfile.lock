@@ -163,6 +163,7 @@ GEM
     multi_json (1.11.2)
     multi_test (0.1.2)
     multipart-post (2.0.0)
+    net-http-persistent (2.9.4)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
     pg (0.18.2)
@@ -314,6 +315,7 @@ DEPENDENCIES
   launchy
   lograge
   logstash-logger
+  net-http-persistent
   nokogiri
   pg
   phantomjs (~> 1.9.7.0)
@@ -334,3 +336,6 @@ DEPENDENCIES
   webmock
   whenever
   will_paginate
+
+BUNDLED WITH
+   1.10.6

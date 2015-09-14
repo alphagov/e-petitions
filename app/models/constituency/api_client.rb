@@ -20,7 +20,7 @@ class Constituency < ActiveRecord::Base
       @faraday ||= Faraday.new(HOST) do |f|
         f.response :follow_redirects
         f.response :raise_error
-        f.adapter Faraday.default_adapter
+        f.adapter  :net_http_persistent
       end
     end
 
