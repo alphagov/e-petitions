@@ -36,8 +36,8 @@ class PetitionCSVPresenter
   def self.timestamps
     [
       :created_at, :updated_at, :open_at, :closed_at, :government_response_at, :scheduled_debate_date,
-      :debate_threshold_reached_at, :rejected_at, :debate_outcome_at, :moderation_threshold_reached_at,
-      :government_response_created_at, :government_response_updated_at
+      :response_threshold_reached_at, :debate_threshold_reached_at, :rejected_at, :debate_outcome_at,
+      :moderation_threshold_reached_at, :government_response_created_at, :government_response_updated_at
     ]
   end
 

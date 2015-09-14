@@ -22,6 +22,7 @@ json.attributes do
   json.rejected_at api_date_format(petition.rejected_at)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)
   json.moderation_threshold_reached_at api_date_format(petition.moderation_threshold_reached_at)
+  json.response_threshold_reached_at api_date_format(petition.response_threshold_reached_at)
 
   if petition.open?
     json.creator_name petition.creator_name

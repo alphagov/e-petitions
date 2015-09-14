@@ -54,6 +54,7 @@ RSpec.describe PetitionCSVPresenter do
       timestampify(petition.closed_at),
       timestampify(petition.government_response_at),
       datestampify(petition.scheduled_debate_date),
+      timestampify(petition.response_threshold_reached_at),
       timestampify(petition.debate_threshold_reached_at),
       timestampify(petition.rejected_at),
       timestampify(petition.debate_outcome_at),
