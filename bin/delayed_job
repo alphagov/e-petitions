@@ -3,7 +3,4 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'config', 'environment'))
 require 'delayed/command'
 
-# Restart the AppSignal thread that we stopped in the initializer
-Appsignal.agent.start_thread if defined?(Appsignal) && Appsignal.config.active?
-
 Delayed::Command.new(ARGV).daemonize
