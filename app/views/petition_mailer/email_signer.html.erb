@@ -10,4 +10,4 @@
 <%= t("petitions.emails.signoff_prefix") %><br />
 <%= t("petitions.emails.signoff_suffix") %></p>
 
-<p><small>You’re receiving this email because you signed this petition. Unsubscribe: <%= link_to 'unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>
+<p><small>You’re receiving this email because you signed this petition. <%= link_to 'Unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>
