@@ -11,12 +11,6 @@ module NavigationHelpers
     when /^the home\s?page$/
       home_url
 
-    when /^the help page$/
-      help_url
-
-    when /^the privacy page$/
-      privacy_url
-
     when /^the feedback page$/
       feedback_url
 
