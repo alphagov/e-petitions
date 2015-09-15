@@ -62,4 +62,5 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   config.include Requests::JsonHelpers, type: :request
+  config.include Page::Sanitizer, type: :feature
 end
