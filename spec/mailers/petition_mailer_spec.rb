@@ -36,7 +36,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "is addressed to the creator" do
-      expect(mail).to have_body_text("Hi Barry Butler,")
+      expect(mail).to have_body_text("Dear Barry Butler,")
     end
 
     it "informs the creator of the publication" do
@@ -69,7 +69,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "is addressed to the sponsor" do
-      expect(mail).to have_body_text("Hi Laura Palmer,")
+      expect(mail).to have_body_text("Dear Laura Palmer,")
     end
 
     it "informs the sponsor of the publication" do
@@ -95,7 +95,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "is addressed to the creator" do
-      expect(mail).to have_body_text("Hi Barry Butler,")
+      expect(mail).to have_body_text("Dear Barry Butler,")
     end
 
     it "informs the creator of the change" do
@@ -111,7 +111,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "has the addresses the creator by name" do
-      expect(mail).to have_body_text("Hi Barry Butler,")
+      expect(mail).to have_body_text("Dear Barry Butler,")
     end
 
     it "sends it only to the petition creator" do
@@ -147,7 +147,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "addresses the signatory by name" do
-      expect(mail).to have_body_text("Hi Laura Palmer,")
+      expect(mail).to have_body_text("Dear Laura Palmer,")
     end
 
     it "sends it only to the signatory" do
@@ -179,7 +179,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "addresses the signatory by name" do
-      expect(mail).to have_body_text("Hi Laura Palmer,")
+      expect(mail).to have_body_text("Dear Laura Palmer,")
     end
 
     it "sends it only to the signatory" do
@@ -208,7 +208,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "addresses the signatory by name" do
-      expect(mail).to have_body_text("Hi Laura Palmer,")
+      expect(mail).to have_body_text("Dear Laura Palmer,")
     end
 
     it "sends it only to the signatory" do
