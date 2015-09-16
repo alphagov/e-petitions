@@ -513,7 +513,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".touch" do
-    let(:site) { double(:site) }
+    let(:site) { described_class.create! }
 
     before do
       expect(Site).to receive(:first_or_create).and_return(site)
@@ -531,7 +531,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".instance" do
-    let(:site) { double(:site) }
+    let(:site) { described_class.create! }
 
     context "when it isn't cached in Thread.current" do
       before do
@@ -570,7 +570,7 @@ RSpec.describe Site, type: :model do
   end
 
   describe ".before_remove_const" do
-    let(:site) { double(:site) }
+    let(:site) { described_class.create! }
 
     context "when it is cached in Thread.current" do
       before do
