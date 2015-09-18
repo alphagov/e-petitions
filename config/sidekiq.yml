@@ -1,0 +1,16 @@
+---
+:concurrency: 5
+production:
+  :concurrency: 20
+:queues:
+  - [deliver_confirmation_email, 10]
+  - [petition_count, 10]
+  - [email_debate_outcomes, 2]
+  - [email_debate_scheduled, 2]
+  - [email_petitioners, 2]
+  - [email_threshold_response, 2]
+  - [close_petitions, 2]
+  - [deliver_debate_outcome_email, 1]
+  - [deliver_debate_scheduled_email, 1]
+  - [deliver_petition_email, 1]
+  - [deliver_threshold_response_email, 1]
