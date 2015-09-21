@@ -1,26 +1,32 @@
 en-GB:
   rejections:
     titles:
-      no-action: "Action unclear"
       duplicate: "Duplicate petition"
-      libellous: "Confidential, libellous, false or defamatory"
-      offensive: "Offensive, joke or nonsense"
-      irrelevant: "Not the government’s responsibility"
+      irrelevant: "Not the Government/Parliament’s responsibility"
+      no-action: "Action unclear"
       honours: "Honours or appointments"
       fake-name: "Fake name"
+      foi: "FOI request"
+      libellous: "Confidential, libellous, false, defamatory or references a court case"
+      offensive: "Offensive, joke, nonsense or advert"
     descriptions:
-      no-action: |-
-        <p>It’s not clear what action the petition is asking for.</p>
       duplicate: |-
-        <p>There’s already a petition about this issue.</p>
-      fake-name: |-
-        <p>It was created using a fake name.</p>
-      libellous: |-
-        <p>It included confidential, libellous, false or defamatory information.</p>
-      offensive: |-
-        <p>It’s offensive, nonsense or a joke</p>
+        <p>There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue.</p>
+        <p>You are more likely to get action on this issue if you sign and share a single petition.</p>
       irrelevant: |-
-        <p>It’s about something that the UK Government or Parliament is not responsible for</p>
+        <p>It’s about something that the UK Government or Parliament is not responsible for.</p>
+      no-action: |-
+        <p>It’s not clear what the petition is asking the UK Government or Parliament to do.</p>
       honours: |-
         <p>It’s about honours or appointments.</p>
-        <p>There’s a different way to nominate someone for an honour: <a href="https://www.gov.uk/honours" rel="external">https://www.gov.uk/honours</a></p>
+      fake-name: |-
+        <p>It was created using a fake or incomplete name.</p>
+        <p>The text of your petition meets our terms and conditions.</p>
+        <p>However, people who create petitions are required to give their full, real name. Sorry if this wasn’t clear to you.</p>
+        <p>We are rejecting your petition for that reason, but if you resubmit your petition using your full name, we’ll be able to approve it.</p>
+      foi: |-
+        <p>It’s an FOI request.</p>
+      libellous: |-
+        <p>It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.</p>
+      offensive: |-
+        <p>It’s offensive, nonsense, a joke, or an advert.</p>
