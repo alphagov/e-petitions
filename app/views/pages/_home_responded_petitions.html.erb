@@ -4,7 +4,7 @@
   <ol class="threshold-petitions">
     <% actioned[:with_response][:list].each do |petition| %>
       <li class="petition-item">
-        <h3><%= link_to petition.action, petition_path(petition), class: "threshold-petition-title" %></h3>
+        <h3><%= link_to petition.action, petition_path(petition, reveal_response: "yes", anchor: 'response-threshold'), class: "threshold-petition-title" %></h3>
         <p class="intro">The government responded</p>
         <blockquote class="pull-quote"><%= simple_format(petition.government_response.summary) %></blockquote>
         <p><%= link_to "Read the response in full", petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') %></p>
