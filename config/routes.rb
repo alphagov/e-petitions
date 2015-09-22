@@ -5,7 +5,6 @@ Rails.application.routes.draw do
     get 'privacy' => 'pages#privacy', :as => :privacy
     get 'browserconfig' => 'pages#browserconfig', format: 'xml'
     get 'manifest' => 'pages#manifest', format: 'json'
-    get 'robots' => 'pages#robots', format: 'txt'
 
     get 'feedback' => 'feedback#index', :as => 'feedback'
     get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
