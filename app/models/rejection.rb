@@ -1,5 +1,5 @@
 class Rejection < ActiveRecord::Base
-  CODES = %w[no-action duplicate libellous offensive irrelevant honours fake-name]
+  CODES = %w[duplicate irrelevant no-action honours fake-name foi libellous offensive]
   HIDDEN_CODES = %w[libellous offensive]
 
   belongs_to :petition, touch: true

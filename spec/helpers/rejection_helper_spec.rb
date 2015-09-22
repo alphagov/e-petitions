@@ -11,7 +11,8 @@ RSpec.describe RejectionHelper, type: :helper do
 
   describe "#rejection_description" do
     it "gives rejection description from the locale file" do
-      expect(helper.rejection_description(code)).to eq('<p>There’s already a petition about this issue.</p>')
+      expect(helper.rejection_description(code)).to eq('<p>There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue.</p>
+<p>You are more likely to get action on this issue if you sign and share a single petition.</p>')
     end
 
     it "is HTML safe" do
