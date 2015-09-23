@@ -1,4 +1,4 @@
-<h2 class="petition-action-heading">Email petitioners</h2>
+<h2 class="petition-action-heading">Add an item of parliamentary business</h2>
 <%= form_for @email, url: admin_petition_emails_path(petition), method: :post do |f| -%>
   <%= form_row :for => [f.object, :subject] do %>
     <%= f.label :subject, 'Subject', class: 'form-label' %>

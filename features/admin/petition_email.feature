@@ -9,7 +9,7 @@ Feature: Emailing petitioner supporters
     And I am logged in as a sysadmin with the email "admin@example.com", first_name "Admin", last_name "User"
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
-    And I follow "Email petitioners"
+    And I follow "Add an item of parliamentary business"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Email 6 signatures"
