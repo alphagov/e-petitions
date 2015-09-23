@@ -156,6 +156,15 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#url" do
+      let(:request) { double(:request, original_url: "/petitions/123") }
+
+      it "delegates to the request's original_url method" do
+        expect(helper).to receive(:request).and_return(request)
+        expect(keys.url).to eq("/petitions/123")
+      end
+    end
+
     describe "#method_missing" do
       it "returns an assigned variable in the template context" do
         assign('signature_count', 32)

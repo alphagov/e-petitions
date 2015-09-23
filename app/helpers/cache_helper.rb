@@ -31,6 +31,7 @@ module CacheHelper
       delegate :last_signature_at, to: :template
       delegate :petition_page?, to: :template
       delegate :page_title, to: :template
+      delegate :request, to: :template
 
       def initialize(template)
         @template = template
@@ -66,6 +67,10 @@ module CacheHelper
 
       def site_updated_at
         Site.updated_at
+      end
+
+      def url
+        request.original_url
       end
 
       def for(keys)
