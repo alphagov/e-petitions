@@ -1,11 +1,7 @@
 head:
   keys:
     - :site_updated_at
-    - :last_signature_at
-    - :petition_page
-    - :archived_petition_page
-    - :page_title
-    - :petition
+    - :url
   options:
     expires_in: 300
 
