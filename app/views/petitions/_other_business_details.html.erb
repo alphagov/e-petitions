@@ -1,0 +1,14 @@
+<% unless petition.emails.empty? %>
+  <section aria-labelledby="other-business-heading">
+    <h2 id="other-business-heading">Other parliamentary business</h2>
+
+    <% petition.emails.each do |email| %>
+      <details>
+        <summary><span class="summary"><%= email.subject %></span></summary>
+        <div class="panel-indent panel-no-border">
+          <%= auto_link(simple_format(h(email.body)), html: { rel: 'nofollow' }) %>
+        </div>
+      </details>
+    <% end %>
+  </section>
+<% end %>
