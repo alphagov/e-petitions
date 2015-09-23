@@ -1,10 +1,9 @@
 <p>Dear <%= @signature.name %>,</p>
 
+<p>You recently signed the petition "<%= @petition.action %>":<br />
+<%= link_to nil, petition_url(@petition) %></p>
+
 <%= auto_link(simple_format(h(@email.body))) %>
-
-<p>Click this link to view the petition "<%= @petition.action %>":</p>
-
-<p><%= link_to nil, petition_url(@petition) %></p>
 
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
