@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /admin
+Disallow: /admin/
+Disallow: /browserconfig.xml
+Disallow: /feedback/thanks
+Disallow: /health-check
+Disallow: /manifest.json
+Disallow: /petitions/check
+Disallow: /petitions/check_results
+Disallow: /petitions/*/thank-you
+Disallow: /petitions/*/moderation-info
+Disallow: /petitions/*/sponsors/
+Disallow: /petitions/*/signatures/
+Disallow: /ping
+Disallow: /signatures/
