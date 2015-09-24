@@ -1,16 +1,16 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>The Government has responded to the petition you signed – “<%= link_to @petition.action, petition_url(@signature.petition) %>”.</p>
+<p>The Government has responded to the petition you signed – “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
 
 <p>Government responded:</p>
 
-<blockquote><%= auto_link(simple_format(h(@petition.government_response.summary))) %></blockquote>
+<blockquote><%= auto_link(simple_format(h(@government_response.summary))) %></blockquote>
 
-<blockquote><%= auto_link(simple_format(h(@petition.government_response.details))) %></blockquote>
+<blockquote><%= auto_link(simple_format(h(@government_response.details))) %></blockquote>
 
 <p>Click this link to view the response online:</p>
 
-<p><%= link_to nil, petition_url(@signature.petition, reveal_response: "yes") %></p>
+<p><%= link_to nil, petition_url(@petition, reveal_response: "yes") %></p>
 
 <% if @petition.signature_count < Site.threshold_for_debate %>
 <p>The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= Site.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.</p>

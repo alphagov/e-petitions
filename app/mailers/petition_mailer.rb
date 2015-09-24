@@ -2,7 +2,7 @@ class PetitionMailer < ApplicationMailer
   include ActiveSupport::NumberHelper
 
   def email_confirmation_for_signer(signature)
-    @signature = signature
+    @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:email_confirmation_for_signer)
   end
 
@@ -12,36 +12,33 @@ class PetitionMailer < ApplicationMailer
   end
 
   def special_resend_of_email_confirmation_for_signer(signature)
-    @signature = signature
+    @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:special_resend_of_email_confirmation_for_signer)
   end
 
   def notify_creator_that_petition_is_published(signature)
-    @petition = signature.petition
-    @signature = signature
+    @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:notify_creator_that_petition_is_published)
   end
 
   def notify_sponsor_that_petition_is_published(signature)
-    @petition = signature.petition
-    @signature = signature
+    @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_is_published)
   end
 
   def petition_rejected(petition)
-    @petition, @rejection = petition, petition.rejection
-    to = @petition.creator_signature.email
+    @petition, @rejection, @creator = petition, petition.rejection, petition.creator_signature
     bcc = @petition.sponsor_signatures.validated.map(&:email)
-    mail to: to, bcc: bcc, subject: subject_for(:petition_rejected)
+    mail to: @creator.email, bcc: bcc, subject: subject_for(:petition_rejected)
   end
 
   def notify_signer_of_threshold_response(petition, signature)
-    @petition, @signature = petition, signature
+    @petition, @signature, @government_response = petition, signature, petition.government_response
     mail to: @signature.email, subject: subject_for(:notify_signer_of_threshold_response)
   end
 
   def notify_creator_of_closing_date_change(signature)
-    @signature = signature
+    @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change)
   end
 

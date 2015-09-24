@@ -2,9 +2,9 @@ Dear <%= @signature.name %>,
 
 Parliament is going to debate the petition you signed – "<%= @petition.action %>".
 
-<%= petition_url(@signature.petition) %>
+<%= petition_url(@petition) %>
 
-The debate is scheduled for <%= short_date_format(@signature.petition.scheduled_debate_date) %>.
+The debate is scheduled for <%= short_date_format(@petition.scheduled_debate_date) %>.
 
 Once the debate has happened, we’ll email you a video and transcript.
 
