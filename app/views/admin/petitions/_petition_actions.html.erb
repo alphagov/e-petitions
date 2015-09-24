@@ -23,11 +23,11 @@
 
       <% if @petition.can_have_debate_added? %>
         <li class="petition-action">
-          <%= render 'petition_action_debate_outcome', petition: @petition %>
+          <%= render 'petition_action_debate_date', petition: @petition %>
         </li>
 
         <li class="petition-action">
-          <%= render 'petition_action_debate_date', petition: @petition %>
+          <%= render 'petition_action_debate_outcome', petition: @petition %>
         </li>
       <% end %>
 
