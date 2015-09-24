@@ -14,7 +14,7 @@
   <% end %>
 
   <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
-  <%= email_signatures_with_count_submit_button(f, petition) %>
+  <%= email_petitioners_with_count_submit_button(f, petition) %>
 <% end -%>
 
 <%= javascript_include_tag 'character-counter' %>
