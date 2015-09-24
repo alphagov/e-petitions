@@ -2,19 +2,23 @@ Dear <%= @signature.name %>,
 
 Parliament debated the petition you signed – "<%= @petition.action %>"
 
-<% unless @petition.debate_outcome.video_url.blank? %>
-  Watch the debate: <%= @petition.debate_outcome.video_url %>
+<% if @debate_outcome.overview? %>
+<%= @debate_outcome.overview %>
 
 <% end %>
-<% unless @petition.debate_outcome.transcript_url.blank? %>
-  Read the transcript: <%= @petition.debate_outcome.transcript_url %>
+<% if @debate_outcome.video_url? %>
+  Watch the debate: <%= @debate_outcome.video_url %>
 
 <% end %>
-<% if @petition.debate_outcome.transcript_url.blank? && @petition.debate_outcome.video_url.blank? %>
-  <%= petition_url(@signature.petition) %>
+<% if @debate_outcome.transcript_url? %>
+  Read the transcript: <%= @debate_outcome.transcript_url %>
+
+<% end %>
+<% if @debate_outcome.transcript_url.blank? && @debate_outcome.video_url.blank? %>
+  <%= petition_url(@petition) %>
 
 <% else %>
-  The petition: <%= petition_url(@signature.petition) %>
+  The petition: <%= petition_url(@petition) %>
 
 <% end %>
 Thanks,

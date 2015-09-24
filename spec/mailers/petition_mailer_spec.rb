@@ -139,33 +139,68 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   describe "notifying signature of debate outcome" do
     let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
-    before { FactoryGirl.create(:debate_outcome, petition: petition) }
     subject(:mail) { described_class.notify_signer_of_debate_outcome(petition, signature) }
 
-    it "has the correct subject" do
-      expect(mail).to have_subject("Parliament debated your petition")
+    shared_examples_for "a debate outcome email" do
+      it "has the correct subject" do
+        expect(mail).to have_subject("Parliament debated your petition")
+      end
+
+      it "addresses the signatory by name" do
+        expect(mail).to have_body_text("Dear Laura Palmer,")
+      end
+
+      it "sends it only to the signatory" do
+        expect(mail.to).to eq(%w[laura@red-room.example.com])
+        expect(mail.cc).to be_blank
+        expect(mail.bcc).to be_blank
+      end
+
+      it "includes a link to the petition page" do
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
+      end
+
+      it "includes the petition action" do
+        expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
+      end
+
+      it "includes an unsubscribe link" do
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+      end
     end
 
-    it "addresses the signatory by name" do
-      expect(mail).to have_body_text("Dear Laura Palmer,")
+    context "when the debate outcome is not filled out" do
+      before do
+        FactoryGirl.create(:debate_outcome, petition: petition)
+      end
+
+      it_behaves_like "a debate outcome email"
     end
 
-    it "sends it only to the signatory" do
-      expect(mail.to).to eq(%w[laura@red-room.example.com])
-      expect(mail.cc).to be_blank
-      expect(mail.bcc).to be_blank
-    end
+    context "when the debate outcome is filled out" do
+      before do
+        FactoryGirl.create(:debate_outcome,
+          debated_on: "2015-09-24",
+          overview: "Discussion of the 2015 Christmas Adjournment",
+          transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+          video_url: "http://parliamentlive.tv/event/index/20150924000001",
+          petition: petition
+        )
+      end
 
-    it "includes a link to the petition page" do
-      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
-    end
+      it_behaves_like "a debate outcome email"
 
-    it "includes the petition action" do
-      expect(mail).to have_body_text(%r[Allow organic vegetable vans to use red diesel])
-    end
+      it "includes the debate outcome overview" do
+        expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+      end
 
-    it "includes an unsubscribe link" do
-      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+      it "includes a link to the transcript of the debate" do
+        expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+      end
+
+      it "includes a link to the video of the debate" do
+        expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+      end
     end
   end
 

@@ -51,21 +51,13 @@ class PetitionMailer < ApplicationMailer
   end
 
   def notify_signer_of_debate_outcome(petition, signature)
-    @petition = petition
-    @signature = signature
-    mail(
-      subject: subject_for(:notify_signer_of_debate_outcome),
-      to: @signature.email
-    )
+    @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+    mail to: @signature.email, subject: subject_for(:notify_signer_of_debate_outcome)
   end
 
   def notify_signer_of_debate_scheduled(petition, signature)
-    @petition = petition
-    @signature = signature
-    mail(
-      subject: subject_for(:notify_signer_of_debate_scheduled),
-      to: @signature.email
-    )
+    @petition, @signature = petition, signature
+    mail to: @signature.email, subject: subject_for(:notify_signer_of_debate_scheduled)
   end
 
   private
