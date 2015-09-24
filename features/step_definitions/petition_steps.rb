@@ -381,3 +381,19 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
+Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
+  @petition = FactoryGirl.create(:open_petition, action: petition_action)
+  @email = FactoryGirl.create(:petition_email,
+    petition: @petition,
+    subject: "Committee to discuss #{petition_action}",
+    body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
+  )
+end
+
+Then(/^I should see the other business items$/) do
+  steps %Q(
+    Then I should see "Other parliamentary business"
+    And I should see "Committee to discuss #{@petition.action}"
+    And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
+  )
+end
