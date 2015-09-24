@@ -38,6 +38,7 @@
     <%= error_messages_for_field petition, :debated %>
   <% end %>
 
+  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
   <%= email_signatures_with_count_submit_button(f, petition) %>
 <% end -%>
 
