@@ -222,12 +222,13 @@ ALTER SEQUENCE country_petition_journals_id_seq OWNED BY country_petition_journa
 CREATE TABLE debate_outcomes (
     id integer NOT NULL,
     petition_id integer NOT NULL,
-    debated_on date NOT NULL,
+    debated_on date,
     transcript_url character varying(500),
     video_url character varying(500),
     overview text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    debated boolean DEFAULT true NOT NULL
 );
 
 
@@ -1371,4 +1372,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150820161504');
 INSERT INTO schema_migrations (version) VALUES ('20150913073343');
 
 INSERT INTO schema_migrations (version) VALUES ('20150913074747');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924082835');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924082944');
 

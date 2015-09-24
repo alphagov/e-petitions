@@ -28,7 +28,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def debate_outcome_params
     params.require(:debate_outcome).permit(
-      :debated_on, :overview, :transcript_url, :video_url
+      :debated_on, :overview, :transcript_url, :video_url, :debated
     )
   end
 end

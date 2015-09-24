@@ -17,10 +17,21 @@ RSpec.describe DebateOutcome, type: :model do
   describe "validations" do
     subject { FactoryGirl.build(:debate_outcome) }
 
-    it { is_expected.to validate_presence_of(:debated_on) }
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_length_of(:transcript_url).is_at_most(500) }
     it { is_expected.to validate_length_of(:video_url).is_at_most(500) }
+
+    context "when then petition was debated" do
+      subject { described_class.new(debated: true) }
+
+      it { is_expected.to validate_presence_of(:debated_on) }
+    end
+
+    context "when then petition was not debated" do
+      subject { described_class.new(debated: false) }
+
+      it { is_expected.not_to validate_presence_of(:debated_on) }
+    end
   end
 
   describe "callbacks" do

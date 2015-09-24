@@ -270,6 +270,7 @@ FactoryGirl.define do
   factory :debate_outcome do
     association :petition, factory: :open_petition
     debated_on { 1.month.from_now.to_date }
+    debated true
 
     trait :fully_specified do
       overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
@@ -279,7 +280,6 @@ FactoryGirl.define do
       video_url {
         "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
       }
-
     end
   end
 

@@ -16,4 +16,9 @@
       margin-top: 0;
     }
   }
+
+  .petition-action-subheading {
+    @include bold-19;
+    margin-top: 0;
+  }
 }
