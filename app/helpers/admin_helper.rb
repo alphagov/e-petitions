@@ -24,6 +24,6 @@ module AdminHelper
 
   def email_signatures_with_count_submit_button(form, petition)
     counted_signatures = "#{number_with_delimiter(petition.signature_count)} #{'signature'.pluralize}"
-    form.submit "Email #{counted_signatures}", class: 'button', data: { confirm: "Are you sure you want to do this and email all #{counted_signatures}?" }
+    form.submit "Email #{counted_signatures}", name: 'save_and_email', class: 'button', data: { confirm: "Are you sure you want to do this and email all #{counted_signatures}?" }
   end
 end
