@@ -469,6 +469,148 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "updating the scheduled debate date" do
+    context "when the petition is open" do
+      context "and the debate date is changed to nil" do
+        subject(:petition) {
+          FactoryGirl.create(:open_petition,
+            scheduled_debate_date: 2.days.from_now,
+            debate_state: "awaiting"
+          )
+        }
+
+        it "sets the debate state to 'pending'" do
+          expect {
+            petition.update(scheduled_debate_date: nil)
+          }.to change {
+            petition.debate_state
+          }.from("awaiting").to("pending")
+        end
+      end
+
+      context "when the debate date is in the future" do
+        subject(:petition) {
+          FactoryGirl.create(:open_petition,
+            scheduled_debate_date: nil,
+            debate_state: "pending"
+          )
+        }
+
+        it "sets the debate state to 'awaiting'" do
+          expect {
+            petition.update(scheduled_debate_date: 2.days.from_now)
+          }.to change {
+            petition.debate_state
+          }.from("pending").to("awaiting")
+        end
+      end
+
+      context "when the debate date is in the past" do
+        subject(:petition) {
+          FactoryGirl.create(:open_petition,
+            scheduled_debate_date: nil,
+            debate_state: "pending"
+          )
+        }
+
+        it "sets the debate state to 'debated'" do
+          expect {
+            petition.update(scheduled_debate_date: 2.days.ago)
+          }.to change {
+            petition.debate_state
+          }.from("pending").to("debated")
+        end
+      end
+
+      context "when the debate date is not changed" do
+        subject(:petition) {
+          FactoryGirl.create(:open_petition,
+            scheduled_debate_date: Date.yesterday,
+            debate_state: "awaiting"
+          )
+        }
+
+        it "does not change the debate state" do
+          expect {
+            petition.update(open_at: 5.days.ago)
+          }.not_to change {
+            petition.debate_state
+          }
+        end
+      end
+    end
+
+    context "when the petition is closed" do
+      context "and the debate date is changed to nil" do
+        subject(:petition) {
+          FactoryGirl.create(:closed_petition,
+            scheduled_debate_date: 2.days.from_now,
+            debate_state: "awaiting"
+          )
+        }
+
+        it "sets the debate state to 'closed'" do
+          expect {
+            petition.update(scheduled_debate_date: nil)
+          }.to change {
+            petition.debate_state
+          }.from("awaiting").to("closed")
+        end
+      end
+
+      context "when the debate date is in the future" do
+        subject(:petition) {
+          FactoryGirl.create(:closed_petition,
+            scheduled_debate_date: nil,
+            debate_state: "closed"
+          )
+        }
+
+        it "sets the debate state to 'awaiting'" do
+          expect {
+            petition.update(scheduled_debate_date: 2.days.from_now)
+          }.to change {
+            petition.debate_state
+          }.from("closed").to("awaiting")
+        end
+      end
+
+      context "when the debate date is in the past" do
+        subject(:petition) {
+          FactoryGirl.create(:closed_petition,
+            scheduled_debate_date: nil,
+            debate_state: "pending"
+          )
+        }
+
+        it "sets the debate state to 'debated'" do
+          expect {
+            petition.update(scheduled_debate_date: 2.days.ago)
+          }.to change {
+            petition.debate_state
+          }.from("pending").to("debated")
+        end
+      end
+
+      context "when the debate date is not changed" do
+        subject(:petition) {
+          FactoryGirl.create(:closed_petition,
+            scheduled_debate_date: Date.yesterday,
+            debate_state: "awaiting"
+          )
+        }
+
+        it "does not change the debate state" do
+          expect {
+            petition.update(open_at: 5.days.ago)
+          }.not_to change {
+            petition.debate_state
+          }
+        end
+      end
+    end
+  end
+
   describe "#can_be_signed?" do
     context "when the petition is in the open state" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
@@ -708,8 +850,118 @@ RSpec.describe Petition, type: :model do
       let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
       let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
-      it "does not find the petition" do
+      it "finds the petition" do
         expect(described_class.in_need_of_closing.to_a).to include(petition)
+      end
+    end
+  end
+
+  describe ".in_need_of_marking_as_debated" do
+    context "when a petition is not in the the 'awaiting' debate state" do
+      let!(:petition) { FactoryGirl.create(:open_petition) }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_marking_as_debated.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is awaiting a debate date" do
+      let!(:petition) {
+        FactoryGirl.create(:open_petition,
+          debate_state: 'awaiting',
+          scheduled_debate_date: nil
+        )
+      }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_marking_as_debated.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition is awaiting a debate" do
+      let!(:petition) {
+        FactoryGirl.create(:open_petition,
+          debate_state: 'awaiting',
+          scheduled_debate_date: 2.days.from_now
+        )
+      }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_marking_as_debated.to_a).not_to include(petition)
+      end
+    end
+
+    context "when a petition debate date has passed but is still marked as 'awaiting'" do
+      let(:petition) {
+        FactoryGirl.build(:open_petition,
+          debate_state: 'awaiting',
+          scheduled_debate_date: Date.tomorrow
+        )
+      }
+
+      before do
+        travel_to(2.days.ago) do
+          petition.save
+        end
+      end
+
+      it "finds the petition" do
+        expect(described_class.in_need_of_marking_as_debated.to_a).to include(petition)
+      end
+    end
+
+    context "when a petition debate date has passed and it marked as 'debated'" do
+      let!(:petition) {
+        FactoryGirl.create(:open_petition,
+          debate_state: 'debated',
+          scheduled_debate_date: 2.days.ago
+        )
+      }
+
+      it "does not find the petition" do
+        expect(described_class.in_need_of_marking_as_debated.to_a).not_to include(petition)
+      end
+    end
+  end
+
+  describe ".mark_petitions_as_debated!" do
+    context "when a petition is in the awaiting debate state and the debate date has passed" do
+      let(:petition) {
+        FactoryGirl.build(:open_petition,
+          debate_state: 'awaiting',
+          scheduled_debate_date: Date.tomorrow
+        )
+      }
+
+      before do
+        travel_to(2.days.ago) do
+          petition.save
+        end
+      end
+
+      it "marks the petition as debated" do
+        expect{
+          described_class.mark_petitions_as_debated!
+        }.to change{ petition.reload.debate_state }.from('awaiting').to('debated')
+      end
+    end
+
+    context "when a petition is in the awaiting debate state and the debate date has not passed" do
+      let(:petition) {
+        FactoryGirl.build(:open_petition,
+          debate_state: 'awaiting',
+          scheduled_debate_date: Date.tomorrow
+        )
+      }
+
+      before do
+        petition.save
+      end
+
+      it "does not mark the petition as debated" do
+        expect{
+          described_class.mark_petitions_as_debated!
+        }.not_to change{ petition.reload.debate_state }
       end
     end
   end
@@ -1083,10 +1335,11 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#close!' do
-    subject(:petition) { FactoryGirl.create(:petition) }
+    subject(:petition) { FactoryGirl.create(:petition, debate_state: debate_state) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
+    let(:debate_state) { 'pending' }
 
     before do
       petition.close!
@@ -1098,6 +1351,22 @@ RSpec.describe Petition, type: :model do
 
     it "sets the closing date to now" do
       expect(petition.closed_at).to be_within(1.second).of(now)
+    end
+
+    context "when the debate state is 'pending'" do
+      it "sets the debate state to 'closed'" do
+        expect(petition.debate_state).to eq("closed")
+      end
+    end
+
+    %w[awaiting debated none].each do |state|
+      context "when the debate state is '#{state}'" do
+        let(:debate_state) { state }
+
+        it "doesn't change the debate state" do
+          expect(petition.debate_state).to eq(state)
+        end
+      end
     end
   end
 

@@ -26,8 +26,11 @@ class Petition < ActiveRecord::Base
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged]
 
+  DEBATE_STATES = %w[pending awaiting debated none closed]
+
   has_perishable_token called: 'sponsor_token'
 
+  before_save :update_debate_state, if: :scheduled_debate_date_changed?
   after_create :set_petition_on_creator_signature
   after_create :update_last_petition_created_at
 
@@ -54,6 +57,7 @@ class Petition < ActiveRecord::Base
   accepts_nested_attributes_for :creator_signature, update_only: true
 
   has_one :debate_outcome, dependent: :destroy
+  has_one :email_requested_receipt, dependent: :destroy
   has_one :government_response, dependent: :destroy
   has_one :note, dependent: :destroy
   has_one :rejection, dependent: :destroy
@@ -249,6 +253,14 @@ class Petition < ActiveRecord::Base
       "[#{tag.gsub(/[\[\]%]/,'')}]"
     end
 
+    def in_need_of_marking_as_debated
+      where(awaiting_debate_state.and(debate_date_in_the_past))
+    end
+
+    def mark_petitions_as_debated!
+      in_need_of_marking_as_debated.update_all(debate_state: 'debated')
+    end
+
     private
 
     def threshold_for_debate_reached
@@ -257,6 +269,14 @@ class Petition < ActiveRecord::Base
 
     def scheduled_for_debate
       arel_table[:scheduled_debate_date].not_eq(nil)
+    end
+
+    def awaiting_debate_state
+      arel_table[:debate_state].eq('awaiting')
+    end
+
+    def debate_date_in_the_past
+      arel_table[:scheduled_debate_date].lt(Date.current)
     end
   end
 
@@ -323,7 +343,6 @@ class Petition < ActiveRecord::Base
     constituency_petition_journals.preload(:constituency).to_a.sort_by(&:constituency_id)
   end
 
-  private
   def approve?
     moderation == 'approve'
   end
@@ -339,7 +358,6 @@ class Petition < ActiveRecord::Base
   def moderation=(value)
     @moderation = value if value.in?(%w[approve reject flag])
   end
-  public
 
   def moderation
     @moderation
@@ -373,7 +391,7 @@ class Petition < ActiveRecord::Base
   end
 
   def close!(time = Time.current)
-    update!(state: CLOSED_STATE, closed_at: time)
+    update!(state: CLOSED_STATE, debate_state: closing_debate_state, closed_at: time)
   end
 
   def validate_creator_signature!
@@ -472,9 +490,14 @@ class Petition < ActiveRecord::Base
     self.class.unscoped.where(id: id).update_all(updates)
   end
 
+  def email_requested_receipt!
+    email_requested_receipt || create_email_requested_receipt
+  end
+
   def get_email_requested_at_for(name)
     email_requested_receipt!.get(name)
   end
+
   def set_email_requested_at_for(name, to: Time.current)
     email_requested_receipt!.set(name, to)
   end
@@ -485,8 +508,31 @@ class Petition < ActiveRecord::Base
     signatures.need_emailing_for(name, since: timestamp)
   end
 
-  has_one :email_requested_receipt, dependent: :destroy
-  def email_requested_receipt!
-    email_requested_receipt || create_email_requested_receipt
+  def awaiting_debate?
+    debate_state == 'awaiting'
+  end
+
+  def debated?
+    debate_state == 'debated'
+  end
+
+  def no_debate?
+    debate_state == 'none'
+  end
+
+  def closing_debate_state
+    debate_state == 'pending' ? 'closed' : debate_state
+  end
+
+  def update_debate_state
+    self.debate_state = evaluate_debate_state
+  end
+
+  def evaluate_debate_state
+    if scheduled_debate_date?
+      scheduled_debate_date > Date.current ? 'awaiting' : 'debated'
+    else
+      closed? ? 'closed' : 'pending'
+    end
   end
 end

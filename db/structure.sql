@@ -484,7 +484,8 @@ CREATE TABLE petitions (
     debate_threshold_reached_at timestamp without time zone,
     rejected_at timestamp without time zone,
     debate_outcome_at timestamp without time zone,
-    moderation_threshold_reached_at timestamp without time zone
+    moderation_threshold_reached_at timestamp without time zone,
+    debate_state character varying(30) DEFAULT 'pending'::character varying
 );
 
 
@@ -1089,6 +1090,13 @@ CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING b
 
 
 --
+-- Name: index_petitions_on_debate_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_debate_state ON petitions USING btree (debate_state);
+
+
+--
 -- Name: index_petitions_on_debate_threshold_reached_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1376,4 +1384,10 @@ INSERT INTO schema_migrations (version) VALUES ('20150913074747');
 INSERT INTO schema_migrations (version) VALUES ('20150924082835');
 
 INSERT INTO schema_migrations (version) VALUES ('20150924082944');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924090755');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924091057');
+
+INSERT INTO schema_migrations (version) VALUES ('20150928162418');
 

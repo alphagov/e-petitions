@@ -9,7 +9,17 @@ class DebateOutcome < ActiveRecord::Base
     petition.touch(:debate_outcome_at)
   end
 
+  after_save do
+    petition.update_columns(debate_state: debate_state)
+  end
+
   def date
     debated_on
+  end
+
+  private
+
+  def debate_state
+    debated? ? 'debated' : 'none'
   end
 end

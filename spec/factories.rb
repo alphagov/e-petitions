@@ -164,6 +164,7 @@ FactoryGirl.define do
 
   factory :awaiting_debate_petition, :parent => :open_petition do
     debate_threshold_reached_at { 1.week.ago }
+    debate_state 'awaiting'
   end
 
   factory :debated_petition, :parent => :open_petition do

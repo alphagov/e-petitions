@@ -47,6 +47,41 @@ RSpec.describe DebateOutcome, type: :model do
           petition.reload.debate_outcome_at
         }.from(nil).to(be_within(1.second).of(now))
       end
+
+      it "updates the debate state" do
+        expect {
+          debate_outcome.save!
+        }.to change {
+          petition.reload.debate_state
+        }.from("awaiting").to("debated")
+      end
+    end
+
+    describe "when the debate outcome is updated" do
+      let(:petition) { FactoryGirl.create(:awaiting_debate_petition) }
+      let(:debate_outcome) { FactoryGirl.build(:debate_outcome, petition: petition) }
+
+      before do
+        travel_to 2.days.ago do
+          debate_outcome.save!
+        end
+      end
+
+      it "does not update the debate_outcome_at timestamp" do
+        expect {
+          debate_outcome.update!(debated: false)
+        }.not_to change {
+          petition.reload.debate_outcome_at
+        }
+      end
+
+      it "updates the debate state" do
+        expect {
+          debate_outcome.update!(debated: false)
+        }.to change {
+          petition.reload.debate_state
+        }.from("debated").to("none")
+      end
     end
   end
 end
