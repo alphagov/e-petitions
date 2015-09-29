@@ -270,6 +270,44 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "awaiting_debate" do
+      before do
+        @p1 = FactoryGirl.create(:open_petition)
+        @p2 = FactoryGirl.create(:awaiting_debate_petition)
+        @p3 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 2.days.from_now)
+        @p4 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 2.days.ago)
+      end
+
+      it "doesn't return petitions that have aren't eligible" do
+        expect(Petition.awaiting_debate).not_to include(@p1)
+      end
+
+      it "returns petitions that have reached the debate threshold" do
+        expect(Petition.awaiting_debate).to include(@p2)
+      end
+
+      it "returns petitions that have a scheduled debate date in the future" do
+        expect(Petition.awaiting_debate).to include(@p3)
+      end
+
+      it "doesn't return petitions that have been debated" do
+        expect(Petition.awaiting_debate).not_to include(@p4)
+      end
+    end
+
+    context "by_most_relevant_debate_date" do
+      before do
+        @p1 = FactoryGirl.create(:awaiting_debate_petition, debate_threshold_reached_at: 2.weeks.ago)
+        @p2 = FactoryGirl.create(:awaiting_debate_petition, debate_threshold_reached_at: 4.weeks.ago)
+        @p3 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 4.days.from_now)
+        @p4 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 2.days.from_now)
+      end
+
+      it "returns the petitions in the correct order" do
+        expect(Petition.by_most_relevant_debate_date.to_a).to eq([@p4, @p3, @p2, @p1])
+      end
+    end
+
     context "not_debated" do
       before do
         @p1 = FactoryGirl.create(:open_petition)

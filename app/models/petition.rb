@@ -46,6 +46,7 @@ class Petition < ActiveRecord::Base
   facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
   facet :with_response,        -> { with_response.by_most_recent_response }
 
+  facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
   facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
   facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
   facet :not_debated,          -> { not_debated.by_most_recent_debate_outcome }
@@ -99,6 +100,10 @@ class Petition < ActiveRecord::Base
       reorder(government_response_at: :desc, created_at: :desc)
     end
 
+    def by_most_relevant_debate_date
+      reorder('scheduled_debate_date ASC NULLS LAST, debate_threshold_reached_at ASC NULLS FIRST')
+    end
+
     def by_oldest
       reorder(created_at: :asc)
     end
@@ -125,6 +130,10 @@ class Petition < ActiveRecord::Base
 
     def rejected_state
       where(state: REJECTED_STATE)
+    end
+
+    def awaiting_debate
+      where(debate_state: 'awaiting')
     end
 
     def awaiting_debate_date
