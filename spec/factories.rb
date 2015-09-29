@@ -184,6 +184,12 @@ FactoryGirl.define do
     end
   end
 
+  factory :not_debated_petition, :parent => :open_petition do
+    after(:create) do |petition, evaluator|
+      petition.create_debate_outcome(debated: false)
+    end
+  end
+
   factory :signature do
     sequence(:name) {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }

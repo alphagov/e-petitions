@@ -270,6 +270,36 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "not_debated" do
+      before do
+        @p1 = FactoryGirl.create(:open_petition)
+        @p2 = FactoryGirl.create(:awaiting_debate_petition)
+        @p3 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 2.days.from_now)
+        @p4 = FactoryGirl.create(:awaiting_debate_petition, scheduled_debate_date: 2.days.ago)
+        @p5 = FactoryGirl.create(:not_debated_petition)
+      end
+
+      it "doesn't return petitions that have aren't eligible" do
+        expect(Petition.not_debated).not_to include(@p1)
+      end
+
+      it "doesn't return petitions that have reached the debate threshold" do
+        expect(Petition.not_debated).not_to include(@p2)
+      end
+
+      it "doesn't return petitions that have a scheduled debate date in the future" do
+        expect(Petition.not_debated).not_to include(@p3)
+      end
+
+      it "doesn't return petitions that have been debated" do
+        expect(Petition.not_debated).not_to include(@p4)
+      end
+
+      it "returns petitions that have been rejected for a debate" do
+        expect(Petition.not_debated).to include(@p5)
+      end
+    end
+
     context "awaiting_debate_date" do
       before do
         @p1 = FactoryGirl.create(:open_petition)
