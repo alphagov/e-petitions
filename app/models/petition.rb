@@ -49,6 +49,7 @@ class Petition < ActiveRecord::Base
   facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
   facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
   facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
+  facet :debated,              -> { debated.by_most_recent_debate_outcome }
   facet :not_debated,          -> { not_debated.by_most_recent_debate_outcome }
 
   facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
@@ -154,6 +155,10 @@ class Petition < ActiveRecord::Base
 
     def debateable
       where(state: DEBATABLE_STATES)
+    end
+
+    def debated
+      where(debate_state: 'debated')
     end
 
     def for_state(state)
