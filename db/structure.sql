@@ -1013,6 +1013,13 @@ CREATE INDEX index_debate_outcomes_on_petition_id_and_debated_on ON debate_outco
 
 
 --
+-- Name: index_debate_outcomes_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_debate_outcomes_on_updated_at ON debate_outcomes USING btree (updated_at);
+
+
+--
 -- Name: index_delayed_jobs_on_priority_and_run_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1038,6 +1045,13 @@ CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts US
 --
 
 CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_responses USING btree (petition_id);
+
+
+--
+-- Name: index_government_responses_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_government_responses_on_updated_at ON government_responses USING btree (updated_at);
 
 
 --
@@ -1390,4 +1404,8 @@ INSERT INTO schema_migrations (version) VALUES ('20150924090755');
 INSERT INTO schema_migrations (version) VALUES ('20150924091057');
 
 INSERT INTO schema_migrations (version) VALUES ('20150928162418');
+
+INSERT INTO schema_migrations (version) VALUES ('20151014152915');
+
+INSERT INTO schema_migrations (version) VALUES ('20151014152929');
 

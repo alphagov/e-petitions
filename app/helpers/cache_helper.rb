@@ -29,6 +29,8 @@ module CacheHelper
       delegate :create_petition_page?, to: :template
       delegate :home_page?, to: :template
       delegate :last_signature_at, to: :template
+      delegate :last_government_response_updated_at, to: :template
+      delegate :last_debate_outcome_updated_at, to: :template
       delegate :petition_page?, to: :template
       delegate :page_title, to: :template
       delegate :request, to: :template
@@ -192,5 +194,13 @@ module CacheHelper
 
   def last_signature_at
     @_last_signature_at ||= Petition.maximum(:last_signed_at)
+  end
+
+  def last_government_response_updated_at
+    @_last_government_response_updated_at ||= GovernmentResponse.maximum(:updated_at)
+  end
+
+  def last_debate_outcome_updated_at
+    @_last_debate_outcome_updated_at ||= DebateOutcome.maximum(:updated_at)
   end
 end

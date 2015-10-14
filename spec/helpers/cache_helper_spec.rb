@@ -72,6 +72,24 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#last_government_response_updated_at" do
+      let(:now) { Time.current }
+
+      it "delegates to the template context" do
+        expect(helper).to receive(:last_government_response_updated_at).and_return(now)
+        expect(keys.last_government_response_updated_at).to eq(now)
+      end
+    end
+
+    describe "#last_debate_outcome_updated_at" do
+      let(:now) { Time.current }
+
+      it "delegates to the template context" do
+        expect(helper).to receive(:last_debate_outcome_updated_at).and_return(now)
+        expect(keys.last_debate_outcome_updated_at).to eq(now)
+      end
+    end
+
     describe "#page_title" do
       it "delegates to the template context" do
         expect(helper).to receive(:page_title).and_return("Petitions")

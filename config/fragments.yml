@@ -20,6 +20,8 @@ footer:
 home_page:
   keys:
     - :last_signature_at
+    - :last_government_response_updated_at
+    - :last_debate_outcome_updated_at
   options:
     expires_in: 300
 
