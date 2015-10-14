@@ -43,6 +43,9 @@ en-GB:
       not_debated: "Not debated in Parliament (%{quantity})"
       awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
 
+    list_headers:
+      not_debated: "The Petitions Committee decided not to debate these petition"
+
     facets:
       public:
         - :all

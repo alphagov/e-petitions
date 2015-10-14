@@ -15,6 +15,10 @@
 
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
+<% if petition_list_header? %>
+  <p class="text-secondary"><%= petition_list_header %></p>
+<% end %>
+
 <%= form_tag petitions_path, class: 'search-inline', method: 'get' do %>
   <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
   <%= hidden_field_tag 'state', @petitions.scope %>

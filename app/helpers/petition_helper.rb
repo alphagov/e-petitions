@@ -29,6 +29,14 @@ module PetitionHelper
     number_to_percentage(percentage, precision: 2)
   end
 
+  def petition_list_header
+    @_petition_list_header ||= t(@petitions.scope, scope: :"petitions.list_headers", default: "")
+  end
+
+  def petition_list_header?
+    petition_list_header.present?
+  end
+
   private
 
   def render_petition_hidden_details(stage_manager, form)
