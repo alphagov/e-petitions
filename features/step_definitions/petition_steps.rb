@@ -74,12 +74,17 @@ Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) 
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
-  petition = FactoryGirl.create(:open_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
+  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
   petition.debate_outcome = nil
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and has no debate date set$/) do |action, amount|
-  petition = FactoryGirl.create(:open_petition, action: action, debate_threshold_reached_at: amount.days.ago)
+  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: amount.days.ago)
+  petition.debate_outcome = nil
+end
+
+Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and has a debate in (\d+) days$/) do |action, threshold, debate|
+  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: threshold.days.ago, scheduled_debate_date: debate.days.from_now)
   petition.debate_outcome = nil
 end
 

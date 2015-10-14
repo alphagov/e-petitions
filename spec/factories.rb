@@ -174,6 +174,7 @@ FactoryGirl.define do
       transcript_url { nil }
       video_url { nil }
     end
+    debate_state 'debated'
     after(:build) do |petition, evaluator|
       debate_outcome_attributes = {petition: petition}
       debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?

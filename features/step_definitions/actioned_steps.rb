@@ -61,7 +61,7 @@ end
 Then(/^I should see (\d+) petitions counted in the debate threshold section$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
     link_text = "See all petitions debated in parliament (#{count})"
-    expect(page).to have_link(link_text, href: petitions_path(state: :with_debate_outcome))
+    expect(page).to have_link(link_text, href: petitions_path(state: :debated))
   end
 end
 
