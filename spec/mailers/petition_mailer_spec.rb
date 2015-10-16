@@ -142,10 +142,6 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.notify_signer_of_debate_outcome(petition, signature) }
 
     shared_examples_for "a debate outcome email" do
-      it "has the correct subject" do
-        expect(mail).to have_subject("Parliament debated the petition you signed")
-      end
-
       it "addresses the signatory by name" do
         expect(mail).to have_body_text("Dear Laura Palmer,")
       end
@@ -169,37 +165,89 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
     end
 
-    context "when the debate outcome is not filled out" do
-      before do
-        FactoryGirl.create(:debate_outcome, petition: petition)
+    shared_examples_for "a positive debate outcome email" do
+      it "has the correct subject" do
+        expect(mail).to have_subject("Parliament debated the petition you signed")
       end
 
-      it_behaves_like "a debate outcome email"
+      it "has the positive message in the body" do
+        expect(mail).to have_body_text("Parliament debated the petition you signed")
+      end
     end
 
-    context "when the debate outcome is filled out" do
-      before do
-        FactoryGirl.create(:debate_outcome,
-          debated_on: "2015-09-24",
-          overview: "Discussion of the 2015 Christmas Adjournment",
-          transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
-          video_url: "http://parliamentlive.tv/event/index/20150924000001",
-          petition: petition
-        )
+    shared_examples_for "a negative debate outcome email" do
+      it "has the correct subject" do
+        expect(mail).to have_subject("Parliament didn't debate the petition you signed")
       end
 
-      it_behaves_like "a debate outcome email"
+      it "has the negative message in the body" do
+        expect(mail).to have_body_text("The Petitions Committee decided not to debate the petition you signed")
+      end
+    end
 
-      it "includes the debate outcome overview" do
-        expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+    context "when the debate outcome is positive" do
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryGirl.create(:debate_outcome, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
       end
 
-      it "includes a link to the transcript of the debate" do
-        expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryGirl.create(:debate_outcome,
+            debated_on: "2015-09-24",
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
+            video_url: "http://parliamentlive.tv/event/index/20150924000001",
+            petition: petition
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a positive debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
+
+        it "includes a link to the transcript of the debate" do
+          expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+        end
+
+        it "includes a link to the video of the debate" do
+          expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+        end
+      end
+    end
+
+    context "when the debate outcome is negative" do
+      context "when the debate outcome is not filled out" do
+        before do
+          FactoryGirl.create(:debate_outcome, debated: false, petition: petition)
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
       end
 
-      it "includes a link to the video of the debate" do
-        expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+      context "when the debate outcome is filled out" do
+        before do
+          FactoryGirl.create(:debate_outcome,
+            debated: false,
+            overview: "Discussion of the 2015 Christmas Adjournment",
+            petition: petition
+          )
+        end
+
+        it_behaves_like "a debate outcome email"
+        it_behaves_like "a negative debate outcome email"
+
+        it "includes the debate outcome overview" do
+          expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+        end
       end
     end
   end

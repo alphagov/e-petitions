@@ -49,7 +49,12 @@ class PetitionMailer < ApplicationMailer
 
   def notify_signer_of_debate_outcome(petition, signature)
     @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
-    mail to: @signature.email, subject: subject_for(:notify_signer_of_debate_outcome)
+
+    if @debate_outcome.debated?
+      mail to: @signature.email, subject: subject_for(:notify_signer_of_positive_debate_outcome)
+    else
+      mail to: @signature.email, subject: subject_for(:notify_signer_of_negative_debate_outcome)
+    end
   end
 
   def notify_signer_of_debate_scheduled(petition, signature)

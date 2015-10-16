@@ -1,5 +1,6 @@
 Dear <%= @signature.name %>,
 
+<% if @debate_outcome.debated? %>
 Parliament debated the petition you signed – "<%= @petition.action %>"
 
 <% if @debate_outcome.overview? %>
@@ -7,18 +8,25 @@ Parliament debated the petition you signed – "<%= @petition.action %>"
 
 <% end %>
 <% if @debate_outcome.video_url? %>
-  Watch the debate: <%= @debate_outcome.video_url %>
+Watch the debate: <%= @debate_outcome.video_url %>
 
 <% end %>
 <% if @debate_outcome.transcript_url? %>
-  Read the transcript: <%= @debate_outcome.transcript_url %>
+Read the transcript: <%= @debate_outcome.transcript_url %>
 
 <% end %>
-<% if @debate_outcome.transcript_url.blank? && @debate_outcome.video_url.blank? %>
-  <%= petition_url(@petition) %>
+The petition: <%= petition_url(@petition) %>
 
 <% else %>
-  The petition: <%= petition_url(@petition) %>
+The Petitions Committee decided not to debate the petition you signed – "<%= @petition.action %>"
+
+<% if @debate_outcome.overview? %>
+<%= @debate_outcome.overview %>
+
+<% end %>
+The petition: <%= petition_url(@petition) %>
+
+Find out more about the Petitions Committee: <%= help_url(anchor: "petitions-committee") %>
 
 <% end %>
 Thanks,

@@ -86,8 +86,10 @@ en-GB:
           %{subject}
         email_confirmation_for_signer: |-
           Please confirm your email address
-        notify_signer_of_debate_outcome: |-
+        notify_signer_of_positive_debate_outcome: |-
           Parliament debated the petition you signed
+        notify_signer_of_negative_debate_outcome: |-
+          Parliament didn't debate the petition you signed
         notify_signer_of_debate_scheduled: |-
           Parliament will debate the petition you signed
         notify_signer_of_threshold_response: |-
