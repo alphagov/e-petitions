@@ -143,7 +143,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     shared_examples_for "a debate outcome email" do
       it "has the correct subject" do
-        expect(mail).to have_subject("Parliament debated your petition")
+        expect(mail).to have_subject("Parliament debated the petition you signed")
       end
 
       it "addresses the signatory by name" do
@@ -210,7 +210,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.notify_signer_of_debate_scheduled(petition, signature) }
 
     it "has the correct subject" do
-      expect(mail).to have_subject("Parliament will debate your petition")
+      expect(mail).to have_subject("Parliament will debate the petition you signed")
     end
 
     it "addresses the signatory by name" do
