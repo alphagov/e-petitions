@@ -13,8 +13,8 @@
     <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
   <% end %>
 
-  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
   <%= email_petitioners_with_count_submit_button(f, petition) %>
+  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
 <% end -%>
 
 <%= javascript_include_tag 'character-counter' %>
