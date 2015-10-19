@@ -56,13 +56,13 @@
     </section>
 
     <section aria-labelledby="debate-threshold-heading" id="petitions-with-debate-outcome">
-      <% if actioned[:with_debate_outcome][:count].zero? %>
+      <% if actioned[:debated][:count].zero? %>
         <div class="threshold-panel threshold-panel-debate">
           <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
           <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
         </div>
       <% else %>
-        <%= link_to( petitions_path(state: :with_debate_outcome), class: "threshold-panel threshold-panel-debate" ) do %>
+        <%= link_to( petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
           <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
           <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
         <% end %>

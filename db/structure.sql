@@ -222,12 +222,13 @@ ALTER SEQUENCE country_petition_journals_id_seq OWNED BY country_petition_journa
 CREATE TABLE debate_outcomes (
     id integer NOT NULL,
     petition_id integer NOT NULL,
-    debated_on date NOT NULL,
+    debated_on date,
     transcript_url character varying(500),
     video_url character varying(500),
     overview text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    debated boolean DEFAULT true NOT NULL
 );
 
 
@@ -483,7 +484,8 @@ CREATE TABLE petitions (
     debate_threshold_reached_at timestamp without time zone,
     rejected_at timestamp without time zone,
     debate_outcome_at timestamp without time zone,
-    moderation_threshold_reached_at timestamp without time zone
+    moderation_threshold_reached_at timestamp without time zone,
+    debate_state character varying(30) DEFAULT 'pending'::character varying
 );
 
 
@@ -1011,6 +1013,13 @@ CREATE INDEX index_debate_outcomes_on_petition_id_and_debated_on ON debate_outco
 
 
 --
+-- Name: index_debate_outcomes_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_debate_outcomes_on_updated_at ON debate_outcomes USING btree (updated_at);
+
+
+--
 -- Name: index_delayed_jobs_on_priority_and_run_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1036,6 +1045,13 @@ CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts US
 --
 
 CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_responses USING btree (petition_id);
+
+
+--
+-- Name: index_government_responses_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_government_responses_on_updated_at ON government_responses USING btree (updated_at);
 
 
 --
@@ -1085,6 +1101,13 @@ CREATE INDEX index_petitions_on_created_at_and_state ON petitions USING btree (c
 --
 
 CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING btree (creator_signature_id);
+
+
+--
+-- Name: index_petitions_on_debate_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_debate_state ON petitions USING btree (debate_state);
 
 
 --
@@ -1371,4 +1394,18 @@ INSERT INTO schema_migrations (version) VALUES ('20150820161504');
 INSERT INTO schema_migrations (version) VALUES ('20150913073343');
 
 INSERT INTO schema_migrations (version) VALUES ('20150913074747');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924082835');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924082944');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924090755');
+
+INSERT INTO schema_migrations (version) VALUES ('20150924091057');
+
+INSERT INTO schema_migrations (version) VALUES ('20150928162418');
+
+INSERT INTO schema_migrations (version) VALUES ('20151014152915');
+
+INSERT INTO schema_migrations (version) VALUES ('20151014152929');
 

@@ -1,8 +1,8 @@
-<% if actioned[:awaiting_debate_date][:count].zero? && actioned[:with_debate_outcome][:count].zero? %>
+<% if actioned[:awaiting_debate][:count].zero? && actioned[:debated][:count].zero? %>
   <p>Parliament hasn’t debated any petitions yet</p>
 <% else %>
   <ol class="threshold-petitions">
-    <% actioned[:with_debate_outcome][:list].each.with_index do |petition, index| %>
+    <% actioned[:debated][:list].each.with_index do |petition, index| %>
       <li class="petition-item">
         <h3><%= link_to petition.action, petition_path(petition) %></h3>
         <p class="intro">This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
@@ -22,6 +22,7 @@
       </li>
     <% end -%>
   </ol>
-  <p><%= link_to petition_count(:with_debate_outcome_explanation, actioned[:with_debate_outcome][:count]), petitions_path(state: :with_debate_outcome), class: "view-all" %></p>
-  <p><%= link_to petition_count(:awaiting_debate_date_explanation, actioned[:awaiting_debate_date][:count]), petitions_path(state: :awaiting_debate_date), class: "view-all" %></p>
+  <p><%= link_to petition_count(:debated_explanation, actioned[:debated][:count]), petitions_path(state: :debated), class: "view-all" %></p>
+  <p><%= link_to petition_count(:awaiting_debate_explanation, actioned[:awaiting_debate][:count]), petitions_path(state: :awaiting_debate), class: "view-all" %></p>
+  <p><%= link_to petition_count(:not_debated_explanation, actioned[:not_debated][:count]), petitions_path(state: :not_debated), class: "view-all" %></p>
 <% end %>

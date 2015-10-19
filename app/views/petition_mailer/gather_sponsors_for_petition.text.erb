@@ -22,7 +22,7 @@ My petition:
 <%= @petition.action %>
 
 <%= @petition.background %>
-<% unless @petition.additional_details.blank? %>
+<% if @petition.additional_details? %>
 
   <%= @petition.additional_details %>
 <% end %>

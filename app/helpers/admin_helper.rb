@@ -22,8 +22,17 @@ module AdminHelper
     )
   end
 
-  def email_signatures_with_count_submit_button(form, petition)
-    counted_signatures = "#{number_with_delimiter(petition.signature_count)} #{'signature'.pluralize}"
-    form.submit "Email #{counted_signatures}", class: 'button', data: { confirm: "Are you sure you want to do this and email all #{counted_signatures}?" }
+  def email_petitioners_with_count_submit_button(form, petition)
+    i18n_options = {
+      scope: :admin, count: petition.signature_count,
+      formatted_count: number_with_delimiter(petition.signature_count)
+    }
+
+    html_options = {
+      name: 'save_and_email', class: 'button',
+      data: { confirm: t(:email_confirm, i18n_options) }
+    }
+
+    form.submit(t(:email_button, i18n_options), html_options)
   end
 end

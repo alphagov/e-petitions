@@ -16,6 +16,21 @@ class Admin::DebateOutcomesController < Admin::AdminController
     end
   end
 
+  def update
+    if @debate_outcome.update(debate_outcome_params)
+      if send_email_to_petitioners?
+        EmailDebateOutcomesJob.run_later_tonight(petition: @petition)
+        message = 'Email will be sent overnight'
+      else
+        message = 'Updated debate outcome successfully'
+      end
+
+      redirect_to [:admin, @petition], notice: message
+    else
+      render 'admin/petitions/show'
+    end
+  end
+
   private
 
   def fetch_petition
@@ -28,7 +43,11 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def debate_outcome_params
     params.require(:debate_outcome).permit(
-      :debated_on, :overview, :transcript_url, :video_url
+      :debated_on, :overview, :transcript_url, :video_url, :debated
     )
+  end
+
+  def send_email_to_petitioners?
+    params.key?(:save_and_email)
   end
 end

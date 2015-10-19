@@ -2,9 +2,9 @@
 
 <p>Parliament is going to debate the petition you signed – “<%= @petition.action %>”.</p>
 
-<p><%= link_to nil, petition_url(@signature.petition) %></p>
+<p><%= link_to nil, petition_url(@petition) %></p>
 
-<p>The debate is scheduled for <%= short_date_format(@signature.petition.scheduled_debate_date) %>.</p>
+<p>The debate is scheduled for <%= short_date_format(@petition.scheduled_debate_date) %>.</p>
 
 <p>Once the debate has happened, we’ll email you a video and transcript.</p>
 

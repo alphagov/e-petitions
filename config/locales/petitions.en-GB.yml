@@ -16,8 +16,9 @@ en-GB:
       rejected: "Rejected petitions"
       awaiting_response: "Petitions waiting for a Government response"
       with_response: "Petitions with a Government response"
-      with_debate_outcome: "Petitions debated in Parliament"
-      awaiting_debate_date: "Petitions waiting for a debate in Parliament"
+      debated: "Petitions debated in Parliament"
+      not_debated: "Petitions not debated in Parliament"
+      awaiting_debate: "Petitions waiting for a debate in Parliament"
 
     share_title: "Petition: %{petition}"
 
@@ -38,8 +39,12 @@ en-GB:
       rejected: "Rejected petitions (%{quantity})"
       awaiting_response: "Awaiting government response (%{quantity})"
       with_response: "Government responses (%{quantity})"
-      with_debate_outcome: "Debated in Parliament (%{quantity})"
-      awaiting_debate_date: "Awaiting a debate in Parliament (%{quantity})"
+      debated: "Debated in Parliament (%{quantity})"
+      not_debated: "Not debated in Parliament (%{quantity})"
+      awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
+
+    list_headers:
+      not_debated: "The Petitions Committee decided not to debate these petition"
 
     facets:
       public:
@@ -49,8 +54,9 @@ en-GB:
         - :rejected
         - :awaiting_response
         - :with_response
-        - :awaiting_debate_date
-        - :with_debate_outcome
+        - :awaiting_debate
+        - :debated
+        - :not_debated
       admin:
         - :all
         - :collecting_sponsors
@@ -80,12 +86,14 @@ en-GB:
           %{subject}
         email_confirmation_for_signer: |-
           Please confirm your email address
-        notify_signer_of_debate_outcome: |-
-          Parliament debated your petition
+        notify_signer_of_positive_debate_outcome: |-
+          Parliament debated the petition you signed
+        notify_signer_of_negative_debate_outcome: |-
+          Parliament didn't debate the petition you signed
         notify_signer_of_debate_scheduled: |-
-          Parliament will debate your petition
+          Parliament will debate the petition you signed
         notify_signer_of_threshold_response: |-
-          Government responded to your petition
+          Government responded to the petition you signed
 
         # Emails to people who support a petition
         gather_sponsors_for_petition: |-
@@ -137,11 +145,11 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
           other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
-      awaiting_debate_date:
+      awaiting_debate:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
           other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
-      with_debate_outcome:
+      debated:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
@@ -149,10 +157,12 @@ en-GB:
         html: "See all petitions waiting for a government response (%{formatted_count})"
       with_response_explanation:
         html: "See all petitions with a government response (%{formatted_count})"
-      awaiting_debate_date_explanation:
-        html: "See all petitions waiting for a debate date (%{formatted_count})"
-      with_debate_outcome_explanation:
+      awaiting_debate_explanation:
+        html: "See all petitions waiting for a debate (%{formatted_count})"
+      debated_explanation:
         html: "See all petitions debated in parliament (%{formatted_count})"
+      not_debated_explanation:
+        html: "See all petitions not debated in parliament (%{formatted_count})"
 
     action_counts:
       in_moderation:

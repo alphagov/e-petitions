@@ -1,9 +1,9 @@
 Dear <%= @signature.name %>,
 
-We published the petition you created – "<%= @signature.petition.action %>".
+We published the petition you created – "<%= @petition.action %>".
 
 Click this link to see your petition and start sharing it:
-<%= petition_url(@signature.petition) %>
+<%= petition_url(@petition) %>
 
 Thanks,
 <%= t("petitions.emails.signoff_prefix") %>

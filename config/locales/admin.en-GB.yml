@@ -1,0 +1,8 @@
+en-GB:
+  admin:
+    email_button:
+      one: "Email %{formatted_count} petitioner"
+      other: "Email %{formatted_count} petitioners"
+    email_confirm:
+      one: "Are you sure you want to do this and email the petitioner?"
+      other: "Are you sure you want to do this and email all %{formatted_count} petitioners?"

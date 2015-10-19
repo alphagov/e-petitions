@@ -22,4 +22,18 @@ class PetitionMailerPreview < ActionMailer::Preview
 
     PetitionMailer.notify_signer_of_threshold_response(petition, signature)
   end
+
+  def debated_petition_notification
+    petition = Petition.debated.last
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+  end
+
+  def not_debated_petition_notification
+    petition = Petition.not_debated.last
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+  end
 end

@@ -4,13 +4,13 @@ The Government has responded to the petition you signed – "<%= @petition.actio
 
 Government responded:
 
-<%= h(@petition.government_response.summary) %>
+<%= h(@government_response.summary) %>
 
-<%= h(@petition.government_response.details) %>
+<%= h(@government_response.details) %>
 
 Click this link to view the response online:
 
-<%= petition_url(@signature.petition, reveal_response: "yes") %>
+<%= petition_url(@petition, reveal_response: "yes") %>
 
 <% if @petition.signature_count < Site.threshold_for_debate %>
 The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= Site.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.

@@ -164,6 +164,7 @@ FactoryGirl.define do
 
   factory :awaiting_debate_petition, :parent => :open_petition do
     debate_threshold_reached_at { 1.week.ago }
+    debate_state 'awaiting'
   end
 
   factory :debated_petition, :parent => :open_petition do
@@ -173,6 +174,7 @@ FactoryGirl.define do
       transcript_url { nil }
       video_url { nil }
     end
+    debate_state 'debated'
     after(:build) do |petition, evaluator|
       debate_outcome_attributes = {petition: petition}
       debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
@@ -180,6 +182,12 @@ FactoryGirl.define do
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
       petition.create_debate_outcome(debate_outcome_attributes)
+    end
+  end
+
+  factory :not_debated_petition, :parent => :open_petition do
+    after(:create) do |petition, evaluator|
+      petition.create_debate_outcome(debated: false)
     end
   end
 
@@ -270,6 +278,7 @@ FactoryGirl.define do
   factory :debate_outcome do
     association :petition, factory: :open_petition
     debated_on { 1.month.from_now.to_date }
+    debated true
 
     trait :fully_specified do
       overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
@@ -279,7 +288,6 @@ FactoryGirl.define do
       video_url {
         "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
       }
-
     end
   end
 
