@@ -85,7 +85,9 @@ Rails.application.routes.draw do
         resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
       end
       resources :profile, :only => [:edit, :update]
-      resources :signatures, :only => [:destroy]
+      resources :signatures, :only => [:destroy] do
+        post :validate, :on => :member
+      end
       resources :user_sessions, :only => [:create]
       get 'logout' => 'user_sessions#destroy', :as => :logout
       get 'login' => 'user_sessions#new', :as => :login

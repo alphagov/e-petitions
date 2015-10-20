@@ -30,6 +30,41 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
     before { login_as(user) }
     before { expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature) }
 
+    describe "POST /admin/signatures/:id/validate" do
+      context "when the signature is validated" do
+        before do
+          expect(signature).to receive(:validate!).and_return(true)
+          post :validate, id: signature.id
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Signature validated successfully")
+        end
+      end
+
+      context "when the signature is not validated" do
+        let(:exception) { ActiveRecord::StatementInvalid.new("Invalid SQL") }
+
+        before do
+          expect(signature).to receive(:validate!).and_raise(exception)
+          expect(Appsignal).to receive(:send_exception).with(exception)
+          post :validate, id: signature.id
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Signature could not be validated - please contact support")
+        end
+      end
+    end
+
     describe "DELETE /admin/signatures/:id" do
       context "when the signature is destroyed" do
         before do

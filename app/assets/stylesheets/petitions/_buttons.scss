@@ -44,6 +44,10 @@
   outline: none;
 }
 
-.button-secondary{
+.button-secondary {
   @include button-override($panel-colour);
+}
+
+.button-warning{
+  @include button-override($red);
 }
