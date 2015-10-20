@@ -117,6 +117,12 @@ RSpec.describe Signature, type: :model do
       expect(s).not_to have_valid(:email)
     end
 
+    it "does not allow emails from disposable addresses" do
+      signature = FactoryGirl.build(:signature, email: 'foobar@10minutemail.com')
+      expect(signature).not_to have_valid(:email)
+      expect(signature.errors.full_messages).to include("Email must not be disposable")
+    end
+
     describe "uniqueness of email" do
       let(:petition) { FactoryGirl.create(:open_petition) }
       let(:other_petition) { FactoryGirl.create(:open_petition) }

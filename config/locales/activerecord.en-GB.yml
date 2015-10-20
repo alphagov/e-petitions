@@ -42,7 +42,8 @@ en-GB:
     attributes:
       email:
         blank: "Email must be completed"
-        invalid: "Email '%{value}' not recognised."
+        invalid: "Email '%{value}' not recognised"
+        disposable: "Email must not be disposable"
       action:
         blank: "Action must be completed"
         too_long: "Action is too long"
