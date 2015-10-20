@@ -1,0 +1,35 @@
+<p>Dear <%= @signature.name %>,</p>
+
+<% if @debate_outcome.debated? %>
+<p>Parliament debated your petition – “<%= @petition.action %>”</p>
+<% if @debate_outcome.overview? %>
+
+<blockquote><%= auto_link(simple_format(h(@debate_outcome.overview))) %></blockquote>
+<% end %>
+<% if @debate_outcome.video_url? %>
+
+<p>Watch the debate: <%= auto_link(@debate_outcome.video_url) %></p>
+<% end %>
+<% if @debate_outcome.transcript_url? %>
+
+<p>Read the transcript: <%= auto_link(@debate_outcome.transcript_url) %></p>
+<% end %>
+
+<p>The petition: <%= link_to nil, petition_url(@petition) %></p>
+<% else %>
+<p>The Petitions Committee decided not to debate your petition – “<%= @petition.action %>”</p>
+<% if @debate_outcome.overview? %>
+
+<blockquote><%= auto_link(simple_format(h(@debate_outcome.overview))) %></blockquote>
+<% end %>
+
+<p>The petition: <%= link_to nil, petition_url(@petition) %></p>
+
+<p>Find out more about the Petitions Committee: <%= link_to nil, help_url(anchor: "petitions-committee") %></p>
+<% end %>
+
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= t("petitions.emails.signoff_suffix") %></p>
+
+<p><small>You’re receiving this email because you created this petition. <%= link_to 'Unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>

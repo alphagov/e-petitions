@@ -1,0 +1,15 @@
+Dear <%= @signature.name %>,
+
+Parliament is going to debate your petition – "<%= @petition.action %>".
+
+<%= petition_url(@petition) %>
+
+The debate is scheduled for <%= short_date_format(@petition.scheduled_debate_date) %>.
+
+Once the debate has happened, we’ll email you a video and transcript.
+
+Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= t("petitions.emails.signoff_suffix") %>
+
+You’re receiving this email because you created this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

@@ -9,6 +9,10 @@ class DeliverPetitionEmailJob < ActiveJob::Base
   end
 
   def create_email
-    mailer.email_signer petition, signature, email
+    if signature.creator?
+      mailer.email_creator petition, signature, email
+    else
+      mailer.email_signer petition, signature, email
+    end
   end
 end

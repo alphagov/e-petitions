@@ -16,6 +16,14 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.email_signer(petition, signature, email)
   end
 
+  def email_creator
+    email = Petition::Email.last
+    petition = email.petition
+    signature = petition.creator_signature
+
+    PetitionMailer.email_creator(petition, signature, email)
+  end
+
   def notify_signer_of_threshold_response
     petition = Petition.with_response.last
     signature = petition.signatures.validated.last
@@ -23,17 +31,38 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_signer_of_threshold_response(petition, signature)
   end
 
-  def debated_petition_notification
+  def notify_creator_of_threshold_response
+    petition = Petition.with_response.last
+    signature = petition.creator_signature
+
+    PetitionMailer.notify_creator_of_threshold_response(petition, signature)
+  end
+
+  def debated_petition_signer_notification
     petition = Petition.debated.last
     signature = petition.signatures.validated.last
 
     PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
   end
 
-  def not_debated_petition_notification
+  def debated_petition_creator_notification
+    petition = Petition.debated.last
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
+  end
+
+  def not_debated_petition_signer_notification
     petition = Petition.not_debated.last
     signature = petition.signatures.validated.last
 
     PetitionMailer.notify_signer_of_debate_outcome(petition, signature)
+  end
+
+  def not_debated_petition_creator_notification
+    petition = Petition.not_debated.last
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
   end
 end

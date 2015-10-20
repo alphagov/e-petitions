@@ -1,0 +1,27 @@
+Dear <%= @signature.name %>,
+
+The Government has responded to your petition – "<%= @petition.action %>".
+
+Government responded:
+
+<%= h(@government_response.summary) %>
+
+<%= h(@government_response.details) %>
+
+Click this link to view the response online:
+
+<%= petition_url(@petition, reveal_response: "yes") %>
+
+<% if @petition.signature_count < Site.threshold_for_debate %>
+The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= Site.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.
+<% else %>
+This petition has over <%= Site.formatted_threshold_for_debate %> signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.
+<% end %>
+
+The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= help_url(anchor: 'petitions-committee') %>
+
+Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= t("petitions.emails.signoff_suffix") %>
+
+You’re receiving this email because you created this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

@@ -214,7 +214,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   ['laura_1@example.com'],
                   ['laura_2@example.com']
                 ])
-                expect(ActionMailer::Base.deliveries[0].subject).to match(/Government responded to the petition you signed/)
+                expect(ActionMailer::Base.deliveries[0].subject).to match(/Government responded to your petition/)
                 expect(ActionMailer::Base.deliveries[1].subject).to match(/Government responded to the petition you signed/)
                 expect(ActionMailer::Base.deliveries[2].subject).to match(/Government responded to the petition you signed/)
                 expect(ActionMailer::Base.deliveries[3].subject).to match(/Government responded to the petition you signed/)

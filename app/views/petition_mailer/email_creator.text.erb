@@ -1,0 +1,12 @@
+Dear <%= @signature.name %>,
+
+You recently created the petition "<%= @petition.action %>":
+<%= petition_url(@petition) %>
+
+<%= @email.body %>
+
+Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= t("petitions.emails.signoff_suffix") %>
+
+You’re receiving this email because you created this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

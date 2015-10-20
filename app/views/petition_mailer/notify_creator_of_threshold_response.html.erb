@@ -1,0 +1,27 @@
+<p>Dear <%= @signature.name %>,</p>
+
+<p>The Government has responded to your petition – “<%= link_to @petition.action, petition_url(@petition) %>”.</p>
+
+<p>Government responded:</p>
+
+<blockquote><%= auto_link(simple_format(h(@government_response.summary))) %></blockquote>
+
+<blockquote><%= auto_link(simple_format(h(@government_response.details))) %></blockquote>
+
+<p>Click this link to view the response online:</p>
+
+<p><%= link_to nil, petition_url(@petition, reveal_response: "yes") %></p>
+
+<% if @petition.signature_count < Site.threshold_for_debate %>
+<p>The Petitions Committee will take a look at this petition and its response. They can press the government for action and gather evidence. If this petition reaches <%= Site.formatted_threshold_for_debate %> signatures, the Committee will consider it for a debate.</p>
+<% else %>
+<p>This petition has over <%= Site.formatted_threshold_for_debate %> signatures. The Petitions Committee will consider it for a debate. They can also gather further evidence and press the government for action.</p>
+<% end %>
+
+<p>The Committee is made up of 11 MPs, from political parties in government and in opposition. It is entirely independent of the Government. Find out more about the Committee: <%= link_to nil, help_url(anchor: 'petitions-committee') %></p>
+
+<p>Thanks,<br />
+<%= t("petitions.emails.signoff_prefix") %><br />
+<%= t("petitions.emails.signoff_suffix") %></p>
+
+<p><small>You’re receiving this email because you created this petition. <%= link_to 'Unsubscribe', unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>
