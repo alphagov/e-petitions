@@ -26,8 +26,25 @@ RSpec.describe DeliverPetitionEmailJob, type: :job do
 
   it_behaves_like "a job to send an signatory email"
 
-  it "uses the correct mailer method to generate the email" do
-    expect(subject).to receive_message_chain(:mailer, :email_signer).with(petition, signature, email).and_return double.as_null_object
-    subject.perform(**arguments)
+  context "when the signature is the creator" do
+    before do
+      allow(signature).to receive(:creator?).and_return(true)
+    end
+
+    it "uses the correct mailer method to generate the email" do
+      expect(subject).to receive_message_chain(:mailer, :email_creator).with(petition, signature, email).and_return double.as_null_object
+      subject.perform(**arguments)
+    end
+  end
+
+  context "when the signature is not the creator" do
+    before do
+      allow(signature).to receive(:creator?).and_return(false)
+    end
+
+    it "uses the correct mailer method to generate the email" do
+      expect(subject).to receive_message_chain(:mailer, :email_signer).with(petition, signature, email).and_return double.as_null_object
+      subject.perform(**arguments)
+    end
   end
 end

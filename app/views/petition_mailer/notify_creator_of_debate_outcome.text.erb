@@ -1,0 +1,36 @@
+Dear <%= @signature.name %>,
+
+<% if @debate_outcome.debated? %>
+Parliament debated your petition – "<%= @petition.action %>"
+
+<% if @debate_outcome.overview? %>
+<%= @debate_outcome.overview %>
+
+<% end %>
+<% if @debate_outcome.video_url? %>
+Watch the debate: <%= @debate_outcome.video_url %>
+
+<% end %>
+<% if @debate_outcome.transcript_url? %>
+Read the transcript: <%= @debate_outcome.transcript_url %>
+
+<% end %>
+The petition: <%= petition_url(@petition) %>
+
+<% else %>
+The Petitions Committee decided not to debate your petition – "<%= @petition.action %>"
+
+<% if @debate_outcome.overview? %>
+<%= @debate_outcome.overview %>
+
+<% end %>
+The petition: <%= petition_url(@petition) %>
+
+Find out more about the Petitions Committee: <%= help_url(anchor: "petitions-committee") %>
+
+<% end %>
+Thanks,
+<%= t("petitions.emails.signoff_prefix") %>
+<%= t("petitions.emails.signoff_suffix") %>
+
+You’re receiving this email because you created this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>

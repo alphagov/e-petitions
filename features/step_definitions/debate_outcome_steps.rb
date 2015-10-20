@@ -55,7 +55,7 @@ Then(/^the petition creator should have been emailed about the debate$/) do
   steps %Q(
     Then "#{@petition.creator_signature.email}" should receive an email
     When they open the email
-    Then they should see "Parliament debated the petition you signed" in the email body
+    Then they should see "Parliament debated your petition" in the email body
     When they follow "#{petition_url(@petition)}" in the email
     Then I should be on the petition page for "#{@petition.action}"
   )
