@@ -7,10 +7,10 @@ module Staged
       def initialize(petition)
         @petition = petition
       end
-      delegate :id, :to_param, :model_name, :to_key,
-               :name, :email, :uk_citizenship,
-               :postcode, :country, :constituency,
-               to: :creator_signature
+
+      delegate :id, :to_param, :model_name, :to_key, :name,
+               :email, :email?, :uk_citizenship, :postcode,
+               :country, :constituency, to: :creator_signature
 
       def validation_context
         :create
