@@ -64,6 +64,8 @@
   }
 
   .button_to {
+    display: inline-block;
+
     input[type=submit] {
       margin: 0;
       font-size: 12px;

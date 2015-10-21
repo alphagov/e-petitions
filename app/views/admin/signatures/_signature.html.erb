@@ -5,9 +5,21 @@
   <td><%= date_time_format(signature.updated_at) %></td>
   <% if signature.creator? %>
     <td>Yes</td>
-    <td>&nbsp;</td>
+    <td>
+      <% if signature.pending? %>
+        <%= button_to 'Validate', validate_admin_signature_path(signature), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
+      <% else %>
+        &nbsp;
+      <% end %>
+    </td>
   <% else %>
     <td>No</td>
-    <td><%= button_to 'Delete', admin_signature_path(signature), method: :delete, class: 'button', data: { confirm: 'Delete signature?' } %></td>
+    <td>
+      <% if signature.pending? %>
+        <%= button_to 'Validate', validate_admin_signature_path(signature), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
+      <% else %>
+        <%= button_to 'Delete', admin_signature_path(signature), method: :delete, class: 'button-warning', data: { confirm: 'Delete signature?' } %>
+      <% end %>
+    </td>
   <% end %>
 </tr>

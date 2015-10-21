@@ -4,6 +4,12 @@ Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, email|
   end
 end
 
+Given(/^(\d+) petitions? with a pending signature by "([^"]*)"$/) do |petition_count, email|
+  petition_count.times do
+    FactoryGirl.create(:pending_signature, :petition => FactoryGirl.create(:open_petition), :email => email)
+  end
+end
+
 When(/^I search for petitions signed by "([^"]*)"( from the admin hub)?$/) do |email, from_the_hub|
   if from_the_hub.blank?
     visit admin_petitions_url
@@ -64,6 +70,19 @@ end
 Then(/^I should be taken back to the id search form with an error$/) do
   expect(page).to have_css(".flash-alert")
   expect(page).to have_css("form")
+end
+
+Then(/^I should see the email address is pending$/) do
+  expect(page).to have_button "Validate"
+end
+
+When(/^I click the validate button$/) do
+  click_button "Validate"
+end
+
+Then(/^I should see the email address is validated$/) do
+  expect(page).not_to have_button "Validate"
+  expect(page).to have_button "Delete"
 end
 
 When(/^I click the delete button$/) do
