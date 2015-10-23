@@ -19,7 +19,7 @@
   <%= error_messages_for_field signature, :name %>
   <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
   <% if context == 'create-petition' %>
-    <span class="form-hint">You must use your real name</span>
+    <span class="form-hint">You must use your full name</span>
   <% end %>
 <% end %>
 
