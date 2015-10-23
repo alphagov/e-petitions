@@ -184,14 +184,14 @@ input.back-page {
     }
   }
 }
-.about-item-count-response, .about-item-count-debate {
+.about-item-count-response, .about-item-count-debate, .about-item-other-business {
   background-repeat: no-repeat;
 }
 .about-item-count-response {
   background-position: 0 26px;
   @include background-image("graphics/graphic_crown", 36px, 25px);
 }
-.about-item-count-debate {
+.about-item-count-debate, .about-item-other-business {
   background-position: 4px 20px;
   @include background-image("graphics/graphic_portcullis", 26px, 32px);
 }
