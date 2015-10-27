@@ -45,3 +45,10 @@ Feature: Suzie sees actioned petitions
     And I should see 2 debated petition transcript links
     And I should see 3 petitions counted in the debate threshold section
     And I should see 3 petitions listed in the debate threshold section
+
+  Scenario: There was a petition debated without any debate outcome
+    Given a petition "Free the wombles" has been debated yesterday
+    And a petition "Ban Badger Baiting" has been debated 12 days ago
+    And I am on the home page
+    Then I should see "Ban Badger Baiting"
+    And I should not see "Free the wombles"

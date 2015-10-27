@@ -9,6 +9,14 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
   @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
 
+Given(/^a petition "(.*?)" has been debated yesterday$/) do |petition_action|
+  @petition = FactoryGirl.create(:open_petition,
+    action: petition_action,
+    scheduled_debate_date: 1.day.ago,
+    debate_state: 'debated'
+  )
+end
+
 Then(/^I should see the date of the debate is (\d+) days ago$/) do |debated_days_ago|
   within :css, '.debate-outcome' do
     expect(page).to have_content("This topic was debated on #{debated_days_ago.days.ago.to_date.strftime('%-d %B %Y')}")

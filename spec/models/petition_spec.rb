@@ -270,6 +270,24 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "with_debated_outcome" do
+      before do
+        @p1 = FactoryGirl.create(:debated_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:not_debated_petition)
+        @p4 = FactoryGirl.create(:closed_petition)
+        @p5 = FactoryGirl.create(:rejected_petition)
+        @p6 = FactoryGirl.create(:sponsored_petition)
+        @p7 = FactoryGirl.create(:pending_petition)
+        @p8 = FactoryGirl.create(:validated_petition)
+        @p9 = FactoryGirl.create(:open_petition, scheduled_debate_date: 1.day.ago, debate_state: 'debated')
+      end
+
+      it "returns only the petitions which have a positive debate outcome" do
+        expect(Petition.with_debated_outcome).to match_array([@p1])
+      end
+    end
+
     context "awaiting_debate" do
       before do
         @p1 = FactoryGirl.create(:open_petition)

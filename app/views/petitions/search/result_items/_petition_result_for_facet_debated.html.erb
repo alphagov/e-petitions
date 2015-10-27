@@ -1,3 +1,7 @@
 <h3><%= link_to petition.action, petition_path(petition) %></h3>
 <p><%= signature_count(:default, petition.signature_count) %></p>
-<p>Debated <%= short_date_format(petition.debate_outcome.debated_on) %></p>
+<% if debate_outcome = petition.debate_outcome %>
+<p>Debated <%= short_date_format(debate_outcome.debated_on) %></p>
+<% else %>
+<p>Debated <%= short_date_format(petition.scheduled_debate_date) %></p>
+<% end %>

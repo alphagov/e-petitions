@@ -4,7 +4,7 @@ module HomeHelper
       :awaiting_response,
       :with_response,
       :awaiting_debate,
-      :debated,
+      :with_debated_outcome,
       :not_debated
     ]
 
@@ -19,7 +19,7 @@ module HomeHelper
     end
 
     def with_result
-      {:with_response => actioned[:with_response], :debated => actioned[:debated]}
+      {:with_response => actioned[:with_response], :with_debated_outcome => actioned[:with_debated_outcome]}
     end
 
     private
