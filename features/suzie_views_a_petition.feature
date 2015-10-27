@@ -88,3 +88,10 @@ Feature: Suzie views a petition
     Given a petition "Spend more money on Defence" with a negative debate outcome
     When I view the petition
     Then I should see "The Petitions Committee decided not to debate this petition"
+
+  Scenario: Suzie views a petition which was debated yesterday
+    Given the date is the "27/10/2015"
+    And a petition "Free the wombles" has been debated yesterday
+    When I view the petition
+    Then I should see "Parliament debated this petition on 26 October 2015"
+    And I should see "Waiting for 1 day for Parliament to publish the debate outcome"

@@ -161,7 +161,7 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
           other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
-      debated:
+      with_debated_outcome:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"

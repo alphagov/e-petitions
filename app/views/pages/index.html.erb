@@ -56,7 +56,7 @@
     </section>
 
     <section aria-labelledby="debate-threshold-heading" id="petitions-with-debate-outcome">
-      <% if actioned[:debated][:count].zero? %>
+      <% if actioned[:with_debated_outcome][:count].zero? %>
         <div class="threshold-panel threshold-panel-debate">
           <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
           <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
