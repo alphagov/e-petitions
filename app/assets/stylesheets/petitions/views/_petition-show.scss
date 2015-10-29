@@ -18,10 +18,21 @@
     }
   }
 
+  .signatures-on-a-map, .signature-count-goal {
+    margin: $gutter-half 0 $gutter-half *-1;
+    @include media(desktop) {
+      margin-bottom: $gutter-half 0 $gutter-one-third *-1;
+    }
+  }
+  .signatures-on-a-map {
+    float: left;
+    @extend %contain-floats;
+  }
   .signature-count-goal {
-    color: $secondary-text-colour;
+    width: 30%;
+    float: right;
     text-align: right;
-    margin: $gutter-one-third 0 $gutter *-1;
+    color: $secondary-text-colour;
     @extend %contain-floats;
   }
 
