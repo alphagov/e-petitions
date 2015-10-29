@@ -25,5 +25,8 @@
     <li>
       <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
     </li>
+    <li class="meta-json">
+      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
+    </li>
   </ul>
 <% end %>

@@ -36,5 +36,8 @@
       <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
       <span class="note">All petitions run for 6 months</span>
     </li>
+    <li class="meta-json">
+      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
+    </li>
   </ul>
 <% end %>
