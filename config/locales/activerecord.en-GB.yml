@@ -43,7 +43,7 @@ en-GB:
       email:
         blank: "Email must be completed"
         invalid: "Email '%{value}' not recognised"
-        disposable: "Email must not be disposable"
+        disposable: "You can’t use a disposable email address"
       action:
         blank: "Action must be completed"
         too_long: "Action is too long"
