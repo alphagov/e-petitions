@@ -10,5 +10,6 @@
       <% end -%>
     </ol>
     <%= render 'petitions/search/result_list_footer', petitions: @petitions %>
+    <p><%= link_to "Get this data (json format)", petitions_path(:json, params.slice(:page, :state)) %></p>
   <% end %>
 </div>
