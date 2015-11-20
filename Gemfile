@@ -46,7 +46,7 @@ end
 
 group :test do
   gem 'nokogiri'
-  gem 'shoulda'
+  gem 'shoulda-matchers'
   gem 'pickle'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'

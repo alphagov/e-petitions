@@ -38,12 +38,23 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_length_of(:email_from).is_at_most(100) }
     it { is_expected.to validate_length_of(:feedback_email).is_at_most(100) }
 
-    it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
-    it { is_expected.to validate_numericality_of(:minimum_number_of_sponsors).only_integer }
-    it { is_expected.to validate_numericality_of(:maximum_number_of_sponsors).only_integer }
-    it { is_expected.to validate_numericality_of(:threshold_for_moderation).only_integer }
-    it { is_expected.to validate_numericality_of(:threshold_for_response).only_integer }
-    it { is_expected.to validate_numericality_of(:threshold_for_debate).only_integer }
+    %w[
+      petition_duration minimum_number_of_sponsors maximum_number_of_sponsors
+      threshold_for_moderation threshold_for_response threshold_for_debate
+    ].each do |attribute|
+      describe attribute do
+        let(:errors) { subject.errors[attribute] }
+        let(:message) { "#{attribute.humanize} must be an integer" }
+
+        before do
+          subject.update(attribute => '0.1')
+        end
+
+        it "only accepts integers" do
+          expect(errors).to include(message)
+        end
+      end
+    end
 
     context "when protected" do
       subject { described_class.new(protected: true) }
