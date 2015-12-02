@@ -9,15 +9,6 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def update
     if @debate_outcome.update(debate_outcome_params)
-      EmailDebateOutcomesJob.run_later_tonight(petition: @petition)
-      redirect_to [:admin, @petition], notice: 'Email will be sent overnight'
-    else
-      render 'admin/petitions/show'
-    end
-  end
-
-  def update
-    if @debate_outcome.update(debate_outcome_params)
       if send_email_to_petitioners?
         EmailDebateOutcomesJob.run_later_tonight(petition: @petition)
         message = 'Email will be sent overnight'
