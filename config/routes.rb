@@ -76,7 +76,7 @@ Rails.application.routes.draw do
       resources :admin_users
       resources :petitions, :only => [:show, :index] do
         resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
-        resources :emails, only: [:new, :create], controller: :petition_emails
+        resources :emails, only: [:new, :create, :edit, :update, :destroy], controller: :petition_emails
         resource :petition_details, :only => [:show, :update]
         resource :moderation, :only => [:update], controller: :moderation
         resource :notes, :only => [:show, :update]

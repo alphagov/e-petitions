@@ -3,6 +3,10 @@ When(/^I fill in the email details$/) do
   fill_in "Body", :with => "Petition email body"
 end
 
+Given(/^it has an existing petition email "(.*?)"$/) do |subject|
+  @email = FactoryGirl.create(:petition_email, petition: @petition, subject: subject)
+end
+
 Then(/^the petition should not have any emails$/) do
   @petition.reload
   expect(@petition.emails).to be_empty
@@ -27,6 +31,13 @@ Then(/^the petition creator should have been emailed with the update$/) do
   )
 end
 
+Then(/^the petition creator should not have been emailed with the update$/) do
+  @petition.reload
+  steps %Q(
+    Then "#{@petition.creator_signature.email}" should receive no emails
+  )
+end
+
 Then(/^all the signatories of the petition should have been emailed with the update$/) do
   @petition.reload
   @petition.signatures.notify_by_email.validated.where.not(id: @petition.creator_signature.id).each do |signatory|
@@ -40,6 +51,15 @@ Then(/^all the signatories of the petition should have been emailed with the upd
   end
 end
 
+Then(/^all the signatories of the petition should not have been emailed with the update$/) do
+  @petition.reload
+  @petition.signatures.notify_by_email.validated.where.not(id: @petition.creator_signature.id).each do |signatory|
+    steps %Q(
+      Then "#{signatory.email}" should receive no emails
+    )
+  end
+end
+
 Then(/^the feedback email address should have been emailed a copy$/) do
   signatory = FeedbackSignature.new(@petition)
   steps %Q(
@@ -48,5 +68,12 @@ Then(/^the feedback email address should have been emailed a copy$/) do
     Then they should see "Petition email body" in the email body
     When they follow "#{petition_url(@petition)}" in the email
     Then I should be on the petition page for "#{@petition.action}"
+  )
+end
+
+Then(/^the feedback email address should not have been emailed a copy$/) do
+  signatory = FeedbackSignature.new(@petition)
+  steps %Q(
+    Then "#{signatory.email}" should receive no emails
   )
 end

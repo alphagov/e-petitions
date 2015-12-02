@@ -1,7 +1,11 @@
 .admin {
-  .petition-list th, .petition-list td {
-    width: 12.5%;
-    text-align: right;
+  .petition-list {
+    margin-bottom: em(24, 16);
+
+    th, td {
+      width: 12.5%;
+      text-align: right;
+    }
   }
 
   th.petition-list-petition-action, td.petition-list-petition-action {
@@ -20,5 +24,11 @@
 
   th:last-child, td:last-child {
     padding-right: 0;
+  }
+
+  .petition-emails {
+    th:first-child, td:first-child {
+      text-align: left;
+    }
   }
 }
