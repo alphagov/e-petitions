@@ -105,7 +105,20 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
       end
 
       describe 'allowed params' do
-        it { should permit(:action, :background, :additional_details).for(:update, params: { petition_id: petition.id }) }
+        let(:params) do
+          {
+            petition_id: petition.id,
+            petition: {
+              action: 'New action',
+              background: 'New background',
+              additional_details: 'New additional_details'
+            }
+          }
+        end
+
+        it "are limited to action, background and additional_details" do
+          is_expected.to permit(:action, :background, :additional_details).for(:update, params: params).on(:petition)
+        end
       end
 
       describe 'with valid params' do

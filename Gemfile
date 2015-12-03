@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
-gem 'rails', '4.2.4'
+gem 'rails', '4.2.5'
 
 # Legacy Rails feature gems - will no longer be supported in Rails 5.0
 gem 'responders'
@@ -30,7 +30,7 @@ gem 'faker'
 gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
-gem 'delayed-web', github: 'thebestday/delayed-web'
+gem 'delayed-web'
 gem 'dalli'
 gem 'connection_pool'
 gem 'lograge'
@@ -46,7 +46,7 @@ end
 
 group :test do
   gem 'nokogiri'
-  gem 'shoulda'
+  gem 'shoulda-matchers'
   gem 'pickle'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'

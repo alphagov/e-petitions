@@ -5,7 +5,7 @@ require 'capybara/poltergeist'
 require 'webrick/httpproxy'
 
 Capybara.javascript_driver = :poltergeist
-Capybara.default_wait_time = 5
+Capybara.default_max_wait_time = 5
 Capybara.server_port = 3443
 Capybara.app_host = "https://127.0.0.1:3443"
 Capybara.default_host = "https://petition.parliament.uk"
