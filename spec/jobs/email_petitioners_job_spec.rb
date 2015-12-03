@@ -15,4 +15,30 @@ RSpec.describe EmailPetitionersJob, type: :job do
 
   it_behaves_like "job to enqueue signatory mailing jobs"
 
+  context "when the petition email has been deleted" do
+    before do
+      email.destroy
+    end
+
+    it "enqueues a job" do
+      described_class.run_later_tonight(**arguments)
+      expect(enqueued_jobs.size).to eq(1)
+    end
+
+    it "doesn't raise an error" do
+      expect {
+        perform_enqueued_jobs {
+          described_class.run_later_tonight(**arguments)
+        }
+      }.not_to raise_error
+    end
+
+    it "doesn't send any email" do
+      expect {
+        perform_enqueued_jobs {
+          described_class.run_later_tonight(**arguments)
+        }
+      }.not_to change { deliveries.size }
+    end
+  end
 end

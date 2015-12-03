@@ -1,4 +1,27 @@
-<h2 class="petition-action-heading">Add an item of parliamentary business</h2>
+<h2 class="petition-action-heading">Other parliamentary business</h2>
+
+<% if petition.emails.any?(&:persisted?) %>
+  <table class="petition-list petition-emails">
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% petition.emails.select(&:persisted?).each do |email| %>
+        <tr>
+          <td><%= email.subject %></td>
+          <td>
+            <%= button_to 'Edit', edit_admin_petition_email_path(petition, email), method: :get, class: 'button' %>
+            <%= button_to 'Delete', admin_petition_email_path(petition, email), method: :delete, class: 'button-warning', data: { confirm: 'Delete other parliamentary business?' } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <%= form_for @email, url: admin_petition_emails_path(petition), method: :post do |f| -%>
   <%= form_row :for => [f.object, :subject] do %>
     <%= f.label :subject, 'Subject', class: 'form-label' %>
@@ -15,6 +38,7 @@
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
+  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
 <% end -%>
 
 <%= javascript_include_tag 'character-counter' %>
