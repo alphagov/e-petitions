@@ -102,8 +102,11 @@ class Signature < ActiveRecord::Base
   end
 
   def validate!
+    update_signature_counts = false
+
     with_lock do
       if pending?
+        update_signature_counts = true
         petition.validate_creator_signature! unless creator?
 
         update_columns(
@@ -112,11 +115,13 @@ class Signature < ActiveRecord::Base
           validated_at: Time.current,
           updated_at:   Time.current
         )
-
-        #ConstituencyPetitionJournal.record_new_signature_for(self)
-        #CountryPetitionJournal.record_new_signature_for(self)
-        petition.increment_signature_count!
       end
+    end
+
+    if update_signature_counts
+      #ConstituencyPetitionJournal.record_new_signature_for(self)
+      #CountryPetitionJournal.record_new_signature_for(self)
+      petition.increment_signature_count!
     end
   end
 
