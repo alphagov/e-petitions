@@ -31,10 +31,10 @@ every 30.minutes do
   runner "PetitionCountJob.perform_later"
 end
 
-every :weekday, at: '0.00am' do
+every :day, at: '0.00am' do
   runner "ClosePetitionsJob.perform_later"
 end
 
-every :weekday, at: '0.00am' do
+every :day, at: '0.00am' do
   runner "DebatedPetitionsJob.perform_later"
 end
