@@ -16,6 +16,7 @@ Feature: Freya searches petitions by constituency
     And many constituents in "Rochester and Strood" support "Build more quirky theme parks"
     And a constituent in "South Dorset" supports "What about other primates?"
 
+  @disabled
   Scenario: Searching for local petitions
     Given I am on the home page
     When I search for petitions local to me in "BH20 6HH"

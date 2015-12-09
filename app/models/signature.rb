@@ -113,8 +113,8 @@ class Signature < ActiveRecord::Base
           updated_at:   Time.current
         )
 
-        ConstituencyPetitionJournal.record_new_signature_for(self)
-        CountryPetitionJournal.record_new_signature_for(self)
+        #ConstituencyPetitionJournal.record_new_signature_for(self)
+        #CountryPetitionJournal.record_new_signature_for(self)
         petition.increment_signature_count!
       end
     end
