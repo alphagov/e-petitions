@@ -175,4 +175,45 @@ RSpec.describe CountryPetitionJournal, type: :model do
       expect(existing.signature_count).to eq 21
     end
   end
+
+  describe ".reset!" do
+    let(:petition_1) { FactoryGirl.create(:petition, creator_signature_attributes: {country: country_1}) }
+    let(:country_1) { "United Kingdom" }
+    let(:petition_2) { FactoryGirl.create(:petition, creator_signature_attributes: {country: country_1}) }
+    let(:country_2) { "British Antarctic Territory" }
+
+    before do
+      described_class.for(petition_1, country_1).update_attribute(:signature_count, 20)
+      described_class.for(petition_1, country_2).update_attribute(:signature_count, 10)
+      described_class.for(petition_2, country_2).update_attribute(:signature_count, 1)
+    end
+
+    context 'when there are no signatures' do
+      it 'resets all the counts to 0 or 1 for the creator' do
+        described_class.reset!
+        expect(described_class.for(petition_1, country_1).signature_count).to eq 1
+        expect(described_class.for(petition_1, country_2).signature_count).to eq 0
+        expect(described_class.for(petition_2, country_1).signature_count).to eq 1
+        expect(described_class.for(petition_2, country_2).signature_count).to eq 0
+      end
+    end
+
+    context 'when there are signatures' do
+      before do
+        4.times { FactoryGirl.create(:validated_signature, petition: petition_1, country: country_1) }
+        2.times { FactoryGirl.create(:pending_signature, petition: petition_1, country: country_1) }
+        3.times { FactoryGirl.create(:validated_signature, petition: petition_1, country: country_2) }
+        2.times { FactoryGirl.create(:validated_signature, petition: petition_2, country: country_1) }
+        5.times { FactoryGirl.create(:pending_signature, petition: petition_2, country: country_2) }
+      end
+
+      it 'resets the counts to that of the validated signatures for the petition and country' do
+        described_class.reset!
+        expect(described_class.for(petition_1, country_1).signature_count).to eq 5 # +1 for the creator
+        expect(described_class.for(petition_1, country_2).signature_count).to eq 3
+        expect(described_class.for(petition_2, country_1).signature_count).to eq 3 # +1 for the creator
+        expect(described_class.for(petition_2, country_2).signature_count).to eq 0
+      end
+    end
+  end
 end

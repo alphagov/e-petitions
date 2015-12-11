@@ -75,4 +75,15 @@ namespace :epets do
       Rails.cache.clear
     end
   end
+
+  namespace :journals do
+    desc 'Reset the countries journal'
+    task :reset_countries => :environment do
+      CountryPetitionJournal.reset!
+    end
+
+    task :reset_constituencies => :environment do
+      ConstituencyPetitionJournal.reset!
+    end
+  end
 end
