@@ -534,7 +534,7 @@ RSpec.describe Signature, type: :model do
         expect{ signature.validate! }.to change{ petition.reload.signature_count }.by(0)
       end
 
-      xit 'tells the relevant constituency petition journal to record a new signature' do
+      it 'tells the relevant constituency petition journal to record a new signature' do
         expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
         signature.validate!
       end
@@ -545,7 +545,7 @@ RSpec.describe Signature, type: :model do
         signature.validate!
       end
 
-      xit 'tells the relevant country petition journal to record a new signature' do
+      it 'tells the relevant country petition journal to record a new signature' do
         expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
         signature.validate!
       end
@@ -565,7 +565,7 @@ RSpec.describe Signature, type: :model do
         expect{ signature.validate! }.to change{ creator_signature.reload.validated? }.from(false).to(true)
       end
 
-      xit 'tells the relevant constituency petition journal to record a new signature' do
+      it 'tells the relevant constituency petition journal to record a new signature' do
         expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
         expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
         signature.validate!
@@ -577,7 +577,7 @@ RSpec.describe Signature, type: :model do
         signature.validate!
       end
 
-      xit 'tells the relevant country petition journal to record a new signature' do
+      it 'tells the relevant country petition journal to record a new signature' do
         expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
         expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
         signature.validate!

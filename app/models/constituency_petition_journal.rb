@@ -38,4 +38,19 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
       raw_write_attribute(:signature_count, signature_count+1)
     end
   end
+
+  def self.reset!
+    connection.execute "TRUNCATE TABLE #{self.table_name}"
+    connection.execute <<-SQL.strip_heredoc
+      INSERT INTO #{self.table_name}
+        (petition_id, constituency_id, signature_count, created_at, updated_at)
+      SELECT
+        petition_id, constituency_id, COUNT(*) AS signature_count,
+        timezone('utc', now()), timezone('utc', now())
+      FROM signatures
+      WHERE state = 'validated'
+      GROUP BY petition_id, constituency_id
+    SQL
+  end
+
 end
