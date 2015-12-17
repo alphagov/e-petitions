@@ -1,0 +1,48 @@
+postgres:
+  image: postgres:9.4.6
+  ports:
+    - "5432:5432"
+  volumes:
+    - ./docker/postgres:/docker-entrypoint-initdb.d
+
+memcached:
+  image: memcached:1.4.25
+  ports:
+    - "11211:11211"
+
+mailcatcher:
+  build: docker/mailcatcher
+  ports:
+    - "1025:1025"
+    - "1080:1080"
+
+gems:
+  image: busybox
+  volumes:
+    - /gems
+
+worker:
+  build: docker/worker
+  env_file: .env.docker
+  links:
+    - mailcatcher:mailcatcher.local
+    - memcached:memcached.local
+    - postgres:postgres.local
+  volumes:
+    - .:/app
+  volumes_from:
+    - gems
+
+webserver:
+  build: docker/webserver
+  env_file: .env.docker
+  links:
+    - mailcatcher:mailcatcher.local
+    - memcached:memcached.local
+    - postgres:postgres.local
+  ports:
+    - "3000:3000"
+  volumes:
+    - .:/app
+  volumes_from:
+    - gems

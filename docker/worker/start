@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo 'Waiting for worker connection with postgres...'
+
+while ! psql --host=postgres.local --username=postgres > /dev/null 2>&1; do
+  sleep 1;
+done;
+
+echo 'Connected to postgres...'
+
+bundle config --global frozen 1
+
+bundle check || bundle install
+bundle exec rake db:migrate
+bundle exec rake jobs:work
