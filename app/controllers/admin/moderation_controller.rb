@@ -27,11 +27,11 @@ class Admin::ModerationController < Admin::AdminController
   end
 
   def send_published_email
-    PetitionMailer.notify_creator_that_petition_is_published(@petition.creator_signature).deliver_later
+    NotifyCreatorThatPetitionIsPublishedEmailJob.perform_later(@petition.creator_signature)
 
     @petition.sponsor_signatures.each do |signature|
       next unless signature.validated?
-      PetitionMailer.notify_sponsor_that_petition_is_published(signature).deliver_later
+      NotifySponsorThatPetitionIsPublishedEmailJob.perform_later(signature)
     end
   end
 

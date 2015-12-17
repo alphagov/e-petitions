@@ -69,7 +69,7 @@ class SignaturesController < ApplicationController
   end
 
   def send_email_to_petition_signer(signature)
-    PetitionMailer.email_confirmation_for_signer(signature).deliver_later
+    EmailConfirmationForSignerEmailJob.perform_later(signature)
   end
 
   def assign_stage
@@ -93,9 +93,9 @@ class SignaturesController < ApplicationController
     sponsor = petition.sponsors.for(signature)
 
     if petition.in_moderation?
-      SponsorMailer.sponsor_signed_email_on_threshold(petition, sponsor).deliver_later
+      SponsorSignedEmailOnThresholdEmailJob.perform_later(petition, sponsor)
     elsif petition.collecting_sponsors?
-      SponsorMailer.sponsor_signed_email_below_threshold(petition, sponsor).deliver_later
+      SponsorSignedEmailBelowThresholdEmailJob.perform_later(petition, sponsor)
     end
   end
 
