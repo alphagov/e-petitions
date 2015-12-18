@@ -22,13 +22,13 @@ class Constituency < ActiveRecord::Base
       results = query.fetch(postcode)
 
       if attributes = results.first
-        find_or_initialize_by(external_id: attributes[:external_id]) do |constituency|
-          constituency.attributes = attributes
-
-          if constituency.changed? || constituency.new_record?
-            constituency.save!
-          end
+        constituency = find_or_initialize_by(external_id: attributes[:external_id])
+        constituency.attributes = attributes
+        if constituency.changed? || constituency.new_record?
+          constituency.save!
         end
+
+        constituency
       end
     end
 
