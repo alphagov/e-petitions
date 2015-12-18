@@ -115,6 +115,29 @@ RSpec.describe Constituency, type: :model do
         expect(constituency).to be_nil
       end
     end
+
+    context "when the API returns updated results" do
+      let(:constituency) do
+        Constituency.find_by_postcode('OL90LS')
+      end
+
+      before do
+        FactoryGirl.create(:constituency, {
+          name: "Oldham West and Royton", external_id: "3671", ons_code: "E14000871",
+          mp_id: "454", mp_name: "Mr Michael Meacher", mp_date: "2015-05-07T00:00:00"
+        })
+
+        stub_api_request_for("OL90LS").to_return(api_response(:ok, "updated"))
+      end
+
+      it "updates the existing constituency" do
+        expect(constituency.mp_name).to eq("Jim McMahon MP")
+      end
+
+      it "persists the changes to the database" do
+        expect(constituency.reload.mp_name).to eq("Jim McMahon MP")
+      end
+    end
   end
 
   describe "#mp_url" do
