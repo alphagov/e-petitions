@@ -10,7 +10,7 @@ module EmailAllPetitionSignatories
 
     attr_reader :petition, :requested_at
 
-    queue_as :default
+    queue_as :high_priority
   end
 
   module ClassMethods
