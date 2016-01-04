@@ -14,6 +14,14 @@ class Domain < ActiveRecord::Base
       where(arel_table[:current_rate].gt(rate))
     end
 
+    def find_or_create_by_email(email)
+      begin
+        find_or_create_by!(name: parse_domain_from_email(email))
+      rescue ActiveRecord::RecordNotUnique => e
+        retry
+      end
+    end
+
     def unresolved
       where(resolved_at: nil)
     end
@@ -30,6 +38,16 @@ class Domain < ActiveRecord::Base
 
     def watchlist(rate: 0, limit: nil)
       unresolved.exceeding(rate).by_current_rate.limit(limit)
+    end
+
+    private
+
+    def parse_domain_from_email(email)
+      begin
+        Mail::Address.new(email).domain || 'localhost'
+      rescue Mail::Field::ParseError
+        'localhost'
+      end
     end
   end
 

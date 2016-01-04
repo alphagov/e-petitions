@@ -40,6 +40,7 @@ RSpec.describe Domain, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_length_of(:name).is_at_most(255) }
+    it { is_expected.to allow_value("localhost").for(:name) }
     it { is_expected.to allow_value("foo-bar.com").for(:name) }
     it { is_expected.not_to allow_value("foo_bar.com").for(:name) }
     it { is_expected.to validate_numericality_of(:current_rate).is_greater_than_or_equal_to(0) }
@@ -102,6 +103,88 @@ RSpec.describe Domain, type: :model do
   end
 
   describe "class methods" do
+    describe ".find_or_create_by_email" do
+      let(:domain) { described_class.find_or_create_by_email(email) }
+
+      before do
+        FactoryGirl.create(:domain, :blocked, name: "localhost")
+        FactoryGirl.create(:domain, :allowed, name: "gmail.com")
+        FactoryGirl.create(:domain, :blocked, name: "hushmail.com")
+      end
+
+      context "when the email is invalid" do
+        let(:email) { "foo" }
+
+        it "returns the localhost domain" do
+          expect(domain.name).to eq("localhost")
+        end
+
+        it "is blocked" do
+          expect(domain.blocked?).to eq(true)
+        end
+      end
+
+      context "when the email is nil" do
+        let(:email) { nil }
+
+        it "returns the localhost domain" do
+          expect(domain.name).to eq("localhost")
+        end
+
+        it "is blocked" do
+          expect(domain.blocked?).to eq(true)
+        end
+      end
+
+      context "when the email is ''" do
+        let(:email) { "" }
+
+        it "returns the localhost domain" do
+          expect(domain.name).to eq("localhost")
+        end
+
+        it "is blocked" do
+          expect(domain.blocked?).to eq(true)
+        end
+      end
+
+      context "when the email domain is blacklisted" do
+        let(:email) { "foo@hushmail.com" }
+
+        it "returns the domain" do
+          expect(domain.name).to eq("hushmail.com")
+        end
+
+        it "is blocked" do
+          expect(domain.blocked?).to eq(true)
+        end
+      end
+
+      context "when the email domain is whitelisted" do
+        let(:email) { "foo@gmail.com" }
+
+        it "returns the domain" do
+          expect(domain.name).to eq("gmail.com")
+        end
+
+        it "is allowed" do
+          expect(domain.allowed?).to eq(true)
+        end
+      end
+
+      context "when the email domain doesn't exist" do
+        let(:email) { "foo@example.com" }
+
+        it "creates the domain" do
+          expect(domain.name).to eq("example.com")
+        end
+
+        it "is allowed" do
+          expect(domain.allowed?).to eq(true)
+        end
+      end
+    end
+
     describe ".update_rate" do
       def domain
         described_class.find_by(name: "foo.com")

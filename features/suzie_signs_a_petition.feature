@@ -147,3 +147,12 @@ Feature: Suzie signs a petition
     Then I should be on the petition page
     And I should see "This petition is closed"
     And I should see "1 signature"
+
+  Scenario: Suzie cannot sign with a blacklisted domain
+    Given a blacklisted domain "hushmail.com"
+    When I decide to sign the petition
+    And I fill in my details with email "suzie@hushmail.com"
+    And I try to sign
+    And I say I am happy with my email address
+    Then I should see "One more step…"
+    And "suzie@hushmail.com" should receive no emails

@@ -172,7 +172,15 @@ class Signature < ActiveRecord::Base
     email_sent_receipt || create_email_sent_receipt
   end
 
+  def domain_allowed?
+    domain && domain.allowed?
+  end
+
   private
+
+  def domain
+    @domain ||= Domain.find_or_create_by_email(email)
+  end
 
   def retry_lock
     retried = false
