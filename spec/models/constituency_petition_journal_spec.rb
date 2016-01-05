@@ -51,10 +51,10 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
         expect(fetched).to be_a described_class
       end
 
-      it "does not persist the new instance in the DB" do
+      it "persists the new instance in the DB" do
         expect {
           described_class.for(petition, constituency_id)
-        }.to change(described_class, :count).by(0)
+        }.to change(described_class, :count).by(1)
       end
 
       it "sets the petition of the new instance to the supplied petition" do

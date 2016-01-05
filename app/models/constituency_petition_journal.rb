@@ -18,7 +18,11 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   }
 
   def self.for(petition, constituency_id)
-    find_or_initialize_by(petition: petition, constituency_id: constituency_id)
+    begin
+      find_or_create_by(petition: petition, constituency_id: constituency_id)
+    rescue ActiveRecord::RecordNotUnique => e
+      retry
+    end
   end
 
   def self.record_new_signature_for(signature)
@@ -27,14 +31,6 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   end
 
   def record_new_signature(at = Time.current)
-    if self.new_record?
-      begin
-        update_attributes(signature_count: 0)
-      rescue ActiveRecord::RecordNotUnique => e
-        # Another thread or process beat us to it
-      end
-    end
-
     signature_count_field = self.class.connection.quote_column_name('signature_count')
     changes = "#{signature_count_field} = #{signature_count_field} + 1, updated_at = :updated_at"
     self.class.unscoped.where(id: id).update_all([changes, updated_at: at])
