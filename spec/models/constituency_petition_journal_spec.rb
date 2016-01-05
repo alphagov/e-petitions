@@ -6,7 +6,6 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   end
 
   describe "defaults" do
-    subject { described_class.new }
     it "has 0 for initial signature_count" do
       expect(subject.signature_count).to eq 0
     end
@@ -17,12 +16,9 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:constituency_petition_journal) }
-
     it { is_expected.to validate_presence_of(:constituency_id) }
     it { is_expected.to validate_length_of(:constituency_id).is_at_most(255) }
     it { is_expected.to validate_presence_of(:petition) }
-    it { is_expected.to validate_uniqueness_of(:constituency_id).scoped_to(:petition_id) }
     it { is_expected.to validate_presence_of(:signature_count) }
   end
 
@@ -41,87 +37,31 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
 
       it "fetches the instance from the DB" do
         fetched = described_class.for(petition, constituency_id)
-        expect(fetched).to eq existing_record
+        expect(fetched).to eq(existing_record)
       end
     end
 
     context "when there is no journal for the requested petition and constituency" do
-      it "returns the newly initialized instance" do
-        fetched = described_class.for(petition, constituency_id)
-        expect(fetched).to be_a described_class
+      let!(:journal) { described_class.for(petition, constituency_id) }
+
+      it "returns a newly created instance" do
+        expect(journal).to be_an_instance_of(described_class)
       end
 
       it "persists the new instance in the DB" do
-        expect {
-          described_class.for(petition, constituency_id)
-        }.to change(described_class, :count).by(1)
+        expect(journal).to be_persisted
       end
 
       it "sets the petition of the new instance to the supplied petition" do
-        fetched = described_class.for(petition, constituency_id)
-        expect(fetched.petition).to eq petition
+        expect(journal.petition).to eq(petition)
       end
 
-      it "sets the constituency_id of the new instance to the supplied petition" do
-        fetched = described_class.for(petition, constituency_id)
-        expect(fetched.constituency_id).to eq constituency_id
+      it "sets the constituency_id of the new instance to the supplied constituency_id" do
+        expect(journal.constituency_id).to eq(constituency_id)
       end
 
       it "has 0 for a signature count" do
-        fetched = described_class.for(petition, constituency_id)
-        expect(fetched.signature_count).to eq 0
-      end
-    end
-  end
-
-  describe "#record_new_signature" do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:constituency_id) { FactoryGirl.generate(:constituency_id) }
-
-    subject { described_class.for(petition, constituency_id) }
-
-    context 'on a saved instance' do
-      before { subject.update_attribute(:signature_count, 20) }
-
-      it "increments signature_count by 1" do
-        expect {
-          subject.record_new_signature
-        }.to change(subject, :signature_count).by(1)
-      end
-
-      it "persists the change" do
-        old_signature_count = subject.signature_count
-        subject.record_new_signature
-        subject.reload
-        expect(subject.signature_count).not_to eq old_signature_count
-      end
-
-      it "increments the signature_count in the DB properly" do
-        first_signature_count = subject.signature_count
-        other_copy = described_class.for(petition, constituency_id)
-        other_copy.record_new_signature
-        second_signature_count = other_copy.reload.signature_count
-        subject.record_new_signature
-        expect(subject.signature_count).to eq(second_signature_count)
-        expect(subject.reload.signature_count).to eq(second_signature_count + 1)
-      end
-
-      it 'only executes the update SQL query' do
-        expect {
-          subject.record_new_signature
-        }.not_to exceed_query_limit(1)
-      end
-    end
-
-    context 'on a new instance' do
-      it "sets the signature_count to 1" do
-        subject.record_new_signature
-        expect(subject.signature_count).to eq 1
-      end
-
-      it "saves the instance to the DB" do
-        subject.record_new_signature
-        expect(subject).to be_persisted
+        expect(journal.signature_count).to eq(0)
       end
     end
   end
@@ -129,50 +69,76 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   describe ".record_new_signature_for" do
     let(:petition) { FactoryGirl.create(:open_petition) }
     let(:constituency_id) { FactoryGirl.generate(:constituency_id) }
-    let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
 
-    it "does nothing if the supplied signature is nil" do
-      expect {
-        described_class.record_new_signature_for(nil)
-      }.not_to change(described_class, :count)
+    def journal
+      described_class.for(petition, constituency_id)
     end
 
-    it "does nothing if the supplied signature has no petition" do
-      signature.petition = nil
-      expect {
-        described_class.record_new_signature_for(signature)
-      }.not_to change(described_class, :count)
+    context "when the supplied signature is valid" do
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
+      let(:now) { 1.hour.from_now.change(usec: 0) }
+
+      it "increments the signature_count by 1" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.to change { journal.signature_count }.by(1)
+      end
+
+      it "updates the updated_at timestamp" do
+        expect {
+          described_class.record_new_signature_for(signature, now)
+        }.to change { journal.updated_at }.to(now)
+      end
     end
 
-    it "does nothing if the supplied signature has no constituency_id" do
-      signature.constituency_id = nil
-      expect {
-        described_class.record_new_signature_for(signature)
-      }.not_to change(described_class, :count)
+    context "when the supplied signature is niL" do
+      let(:signature) { nil }
+
+      it "does nothing" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.not_to change { journal.signature_count }
+      end
     end
 
-    it "does nothing if the supplied signature is not validated?" do
-      signature.state = Signature::PENDING_STATE
-      expect {
-        described_class.record_new_signature_for(signature)
-      }.not_to change(described_class, :count)
+    context "when the supplied signature has no petition" do
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: nil, constituency_id: constituency_id) }
+
+      it "does nothing" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.not_to change { journal.signature_count }
+      end
     end
 
-    it "creates a new instance and sets the count to 1 if nothing exists already" do
-      expect {
-        described_class.record_new_signature_for(signature)
-      }.to change(described_class, :count).by(1)
-      expect(described_class.for(petition, constituency_id).signature_count).to eq 1
+    context "when the supplied signature has no constituency_id" do
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, constituency_id: nil) }
+
+      it "does nothing" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.not_to change { journal.signature_count }
+      end
     end
 
-    it "increments the signature_count of the existing instance by 1" do
-      existing = described_class.for(signature.petition, signature.constituency_id)
-      existing.update_attribute(:signature_count, 20)
+    context "when the supplied signature is not validated" do
+      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, constituency_id: constituency_id) }
 
-      described_class.record_new_signature_for(signature)
+      it "does nothing" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.not_to change { journal.signature_count }
+      end
+    end
 
-      existing.reload
-      expect(existing.signature_count).to eq 21
+    context "when no journal exists" do
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
+
+      it "creates a new journal" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.to change(described_class, :count).by(1)
+      end
     end
   end
 
