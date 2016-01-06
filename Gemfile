@@ -22,7 +22,6 @@ gem 'faraday'
 gem 'faraday_middleware'
 gem 'net-http-persistent'
 gem 'sass-rails', '~> 5.0'
-gem 'aws-sdk'
 gem 'textacular'
 gem 'uglifier'
 gem 'bcrypt'
@@ -36,6 +35,13 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
+gem 'paperclip'
+
+# Two AWS libraries:
+#   - aws-sdk v2 for CodeDeploy, which neither Fog nor aws-sdk v1 support
+#   - fog for image uploads, as Paperclip doesn't support aws-sdk v2
+gem 'aws-sdk'
+gem 'fog-aws'
 
 group :development, :test do
   gem 'rspec-rails'

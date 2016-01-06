@@ -36,6 +36,12 @@
       <%= error_messages_for_field f.object, :video_url %>
       <%= f.url_field :video_url, tabindex: increment, class: 'form-control' %>
     <% end %>
+
+    <%= form_row for: [f.object, :commons_image] do %>
+      <%= f.label :commons_image, 'Commons Image', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :commons_image %>
+      <%= f.file_field :commons_image, tabindex: increment, class: 'form-control' %>
+    <% end %>
   </div>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
