@@ -9,10 +9,11 @@ before_install:
 - gem install bundler
 before_script:
 - bundle install
+- cd lib/package_builder ; bundle install
 - psql -c 'create database epets_test;' -U postgres
 - RAILS_ENV=test bundle exec rake db:structure:load
 script: bundle exec rake
-after_success: bundle exec rake deploy:preview
+after_success: BUNDLE_GEMFILE=lib/package_builder/Gemfile bundle exec rake -f lib/package_builder/deploy.rake deploy:preview
 env:
   global:
   - secure: hQTk4ylIIdlGDl2fJTfbnzfjO0GZlWczkXxall0Af3NLIWlQ8ILyigsopJJMdOOhHk+uTkfmdYTShNcpyXi81HiTjf6uVySvJJm6zwTz9EYGM4qpu+Xlo+2JYCMYWxGlnu3dHcn59s4hf+zh5Ok7BjYRqQA2d0q0wcrtVD2WqSc=

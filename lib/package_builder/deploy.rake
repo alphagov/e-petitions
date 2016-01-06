@@ -1,4 +1,20 @@
-require 'package_builder'
+# Note that this should not be run with 'bundle exec', as we require
+# a different version of aws-sdk to the base app. This is because
+# paperclip doesn't yet support aws-sdk > 2.0, while PackageBuilder
+# does
+
+# Once Paperclip reaches version 5.0 this can be reverted, and deploy.rake
+# can go back into the lib/tasks directory and have the bundler/inline
+# changes reverted
+
+require 'tmpdir'
+require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext/time/calculations'
+require 'aws-sdk'
+require 'faraday'
+require 'slack-notifier'
+
+require_relative 'package_builder'
 
 namespace :deploy do
   desc "Build an application package"
