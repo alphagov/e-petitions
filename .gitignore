@@ -19,6 +19,9 @@
 /public/5*.html
 /public/error.css
 
+# Ignore uploaded files
+/public/system/debate_outcomes
+
 # Ignore deployment packages
 /pkg
 

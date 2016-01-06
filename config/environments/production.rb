@@ -87,6 +87,13 @@ Rails.application.configure do
     enable_starttls_auto: true
   }
 
+  # In production we don't store our images on the local filesystem, instead
+  # we store them in an S3 bucket
+  config.paperclip_defaults = {
+    storage: :s3,
+    bucket: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET')
+  }
+
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
   config.i18n.fallbacks = true

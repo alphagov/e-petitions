@@ -9,6 +9,10 @@
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, rel: 'external' do %>
             <span class="debate-video" aria-hidden>
+              <%= image_tag petition.debate_outcome.commons_image.url('2x'),
+                  srcset: "#{petition.debate_outcome.commons_image.url('1x')} 1x, #{petition.debate_outcome.commons_image.url('2x')} 2x",
+                  'aria-hidden': ''
+                  %>
               <span class="play-button icon icon-play-white" aria-hidden></span>
             </span>
           <% end -%>

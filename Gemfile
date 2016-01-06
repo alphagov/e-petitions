@@ -36,6 +36,7 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
+gem 'paperclip', '~> 4.3'
 
 group :development, :test do
   gem 'rspec-rails'
