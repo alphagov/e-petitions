@@ -228,7 +228,11 @@ CREATE TABLE debate_outcomes (
     overview text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    debated boolean DEFAULT true NOT NULL
+    debated boolean DEFAULT true NOT NULL,
+    commons_image_file_name character varying,
+    commons_image_content_type character varying,
+    commons_image_file_size integer,
+    commons_image_updated_at timestamp without time zone
 );
 
 
@@ -1408,4 +1412,6 @@ INSERT INTO schema_migrations (version) VALUES ('20150928162418');
 INSERT INTO schema_migrations (version) VALUES ('20151014152915');
 
 INSERT INTO schema_migrations (version) VALUES ('20151014152929');
+
+INSERT INTO schema_migrations (version) VALUES ('20160104144458');
 

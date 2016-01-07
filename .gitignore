@@ -19,8 +19,12 @@
 /public/5*.html
 /public/error.css
 
+# Ignore uploaded files
+/public/system/debate_outcomes
+
 # Ignore deployment packages
 /pkg
+/lib/package_builder/pkg
 
 # Dotenv 2.0 uses a .env.local for local overrides
 .env.local

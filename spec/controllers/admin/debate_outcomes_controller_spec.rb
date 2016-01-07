@@ -226,9 +226,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
             end
           end
 
-          describe 'with invalid params' do
-            before { debate_outcome_attributes.delete(:debated_on) }
-
+          shared_examples_for 'a debate_outcome with invalid parameters' do
             it 're-renders the petitions/show template' do
               do_patch
               expect(response).to be_success
@@ -245,6 +243,45 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               do_patch
               petition.reload
               expect(petition.debate_outcome).to be_nil
+            end
+          end
+
+          describe 'with invalid params' do
+            before { debate_outcome_attributes.delete(:debated_on) }
+            it_behaves_like 'a debate_outcome with invalid parameters'
+          end
+
+          describe 'image handling' do
+            def patch_and_reload
+              do_patch
+              petition.reload
+            end
+
+            describe 'with no supplied image' do
+              before { patch_and_reload }
+              it 'returns the default image url' do
+                expect(petition.debate_outcome.commons_image.url).to eq commons_default_image_url
+              end
+            end
+
+            describe 'a valid image' do
+
+              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file, 'image/jpeg') }
+              before { patch_and_reload }
+
+              it 'does not return the default image url' do
+                expect(petition.debate_outcome.commons_image.url).to_not eq commons_default_image_url
+              end
+            end
+
+            describe 'a small image' do
+              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file_too_small, 'image/jpeg') }
+              it_behaves_like 'a debate_outcome with invalid parameters'
+            end
+
+            describe 'an image in the wrong ratio' do
+              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file_wrong_ratio, 'image/jpeg') }
+              it_behaves_like 'a debate_outcome with invalid parameters'
             end
           end
         end
