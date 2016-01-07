@@ -10,7 +10,9 @@ class DebateOutcome < ActiveRecord::Base
   validates :transcript_url, :video_url, length: { maximum: 500 }
 
   has_attached_file :commons_image,
-    default_url: ActionController::Base.helpers.image_url("graphics/graphic_house-of-commons.jpg"),
+    # default_url needs to be a proc - this way the generated image url will
+    # include any asset-digest
+    default_url: Proc.new { ActionController::Base.helpers.image_url("graphics/graphic_house-of-commons.jpg") },
     styles: {
       "1x": "#{(COMMONS_IMAGE_SIZE[:w]/2).to_i}x#{(COMMONS_IMAGE_SIZE[:h]/2).to_i}",
       "2x": "#{COMMONS_IMAGE_SIZE[:w]}x#{COMMONS_IMAGE_SIZE[:h]}"
