@@ -105,7 +105,7 @@ Rails.application.configure do
   # certificate, so instead we proxy requests from the frontend webservers for
   # any url that starts with /attachments/ to the S3 bucket
 
-  Paperclip::Attachment.default_options.merge!(
+  config.paperclip_defaults = {
     storage: :fog,
     fog_directory: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET'),
     fog_credentials: {
@@ -116,5 +116,5 @@ Rails.application.configure do
     },
     # Proxied to S3 via the webserver
     fog_host: '/attachments'
-  )
+  }
 end
