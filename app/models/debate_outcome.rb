@@ -19,9 +19,7 @@ class DebateOutcome < ActiveRecord::Base
     }
 
   validates_attachment_content_type :commons_image, content_type: /\Aimage\/.*\Z/
-  validate :validate_commons_image_dimensions, unless: Proc.new { |a|
-    a.commons_image.blank? || !commons_image.queued_for_write[:original]
-  }
+  validate :validate_commons_image_dimensions, unless: :no_commons_image_queued
 
   after_create do
     petition.touch(:debate_outcome_at)
@@ -45,15 +43,23 @@ class DebateOutcome < ActiveRecord::Base
     (width.to_f / height.to_f).round(2)
   end
 
+  def no_commons_image_queued
+    commons_image.blank? || !commons_image.queued_for_write[:original]
+  end
+
   def validate_commons_image_dimensions
     # This should be tuned if the images start looking badly scaled
     max_ratio_delta = 0.1
 
     dimensions = Paperclip::Geometry.from_file(commons_image.queued_for_write[:original].path)
 
-    # Too big:
-    errors.add(:commons_image, "Width must be at least #{COMMONS_IMAGE_SIZE[:w]}px (is #{dimensions.width}px)") unless dimensions.width >= COMMONS_IMAGE_SIZE[:w]
-    errors.add(:commons_image, "Height must be #{COMMONS_IMAGE_SIZE[:h]}px (is #{dimensions.height}px)") unless dimensions.height >= COMMONS_IMAGE_SIZE[:h]
+    if dimensions.width < COMMONS_IMAGE_SIZE[:w]
+      errors.add(:commons_image, :too_narrow, width: dimensions.width, min_width: COMMONS_IMAGE_SIZE[:w])
+    end
+
+    if dimensions.height < COMMONS_IMAGE_SIZE[:h]
+      errors.add(:commons_image, :too_short, height: dimensions.height, min_height: COMMONS_IMAGE_SIZE[:h])
+    end
 
     expected_ratio = image_ratio(COMMONS_IMAGE_SIZE[:w], COMMONS_IMAGE_SIZE[:h])
     actual_ratio = image_ratio(dimensions.width, dimensions.height)
@@ -61,7 +67,7 @@ class DebateOutcome < ActiveRecord::Base
     min_ratio = (expected_ratio - max_ratio_delta).round(2)
     max_ratio = (expected_ratio + max_ratio_delta).round(2)
     unless (min_ratio..max_ratio).include? actual_ratio
-      errors.add(:commons_image, "Width and height ratio of uploaded image is #{actual_ratio} - should be between #{min_ratio} and #{max_ratio}")
+      errors.add(:commons_image, :incorrect_ratio, ratio: actual_ratio, min_ratio: min_ratio, max_ratio: max_ratio)
     end
   end
 end

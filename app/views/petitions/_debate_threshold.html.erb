@@ -8,10 +8,7 @@
         <% if debate_outcome.video_url? -%>
           <%= link_to debate_outcome.video_url, rel: 'external' do %>
             <span class="debate-video graphic graphic-house-of-commons" aria-hidden>
-              <%= image_tag debate_outcome.commons_image.url('2x'),
-                  srcset: "#{debate_outcome.commons_image.url('1x')} 1x, #{debate_outcome.commons_image.url('2x')} 2x",
-                  'aria-hidden': ''
-                  %>
+              <%= debate_outcome_image(debate_outcome) %>
               <span class="play-button icon icon-play-white" aria-hidden></span>
             </span>
           <% end -%>

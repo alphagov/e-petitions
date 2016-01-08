@@ -68,7 +68,7 @@ RSpec.describe DebateOutcome, type: :model do
         expect(debate_outcome.errors).to include(:commons_image)
         expect(debate_outcome.errors[:commons_image].size).to eq 2
         expect(debate_outcome.errors[:commons_image]).to include("Width must be at least 1260.0px (is 500.0px)")
-        expect(debate_outcome.errors[:commons_image]).to include("Height must be 710.0px (is 282.0px)")
+        expect(debate_outcome.errors[:commons_image]).to include("Height must be at least 710.0px (is 282.0px)")
       end
     end
 

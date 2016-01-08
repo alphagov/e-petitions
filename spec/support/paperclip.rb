@@ -1,4 +1,6 @@
-module Helpers
+require 'paperclip/matchers'
+
+module PaperclipHelpers
   def commons_image_fixture_path(filename)
     Rails.root.join('spec', 'fixtures', 'images', 'debate_outcome', filename)
   end
@@ -18,4 +20,9 @@ module Helpers
   def commons_image_file_wrong_ratio
     commons_image_fixture_path 'commons_image-wrong-ratio.jpg'
   end
+end
+
+RSpec.configure do |config|
+  config.include PaperclipHelpers
+  config.include Paperclip::Shoulda::Matchers
 end
