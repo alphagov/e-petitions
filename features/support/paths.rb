@@ -80,6 +80,12 @@ module NavigationHelpers
     when /^all petitions page$/
       admin_petitions_url
 
+    when /^domains index page$/
+      admin_domains_url
+
+    when /^domain search results page$/
+      search_admin_domains_url
+
     when /^in moderation petitions page$/
       admin_petitions_url(state: 'in_moderation')
 

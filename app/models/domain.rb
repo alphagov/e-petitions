@@ -40,6 +40,10 @@ class Domain < ActiveRecord::Base
       update_all(current_rate: 0)
     end
 
+    def search(name, limit: nil)
+      where(name: name).limit(limit)
+    end
+
     def unresolved
       where(resolved_at: nil)
     end
