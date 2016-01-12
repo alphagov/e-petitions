@@ -360,4 +360,8 @@ FactoryGirl.define do
       resolved_at { Time.current }
     end
   end
+
+  factory :domain_log, class: "Domain::Log" do
+    name { Faker::Internet.domain_name }
+  end
 end

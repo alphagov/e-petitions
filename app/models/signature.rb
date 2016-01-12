@@ -23,6 +23,10 @@ class Signature < ActiveRecord::Base
   validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
 
+  after_create do
+    Domain.log(email)
+  end
+
   before_destroy do
     !creator?
   end

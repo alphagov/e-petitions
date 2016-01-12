@@ -103,6 +103,38 @@ RSpec.describe Domain, type: :model do
   end
 
   describe "class methods" do
+    describe ".cleanup_logs" do
+      before do
+        FactoryGirl.create(:domain_log, created_at: 2.hours.ago)
+        FactoryGirl.create(:domain_log, created_at: 10.minutes.ago)
+        FactoryGirl.create(:domain_log, created_at: 5.minutes.ago)
+      end
+
+      it "removes domain logs created before the specified time" do
+        expect {
+          described_class.cleanup_logs(1.hour.ago)
+        }.to change { Domain::Log.count }.by(-1)
+      end
+    end
+
+    describe ".current_rates" do
+      let(:current_rates) do
+        { "gmail.com" => 24, "hotmail.com" => 12, "com" => 36 }
+      end
+
+      before do
+        travel_to 2.minutes.ago do
+          FactoryGirl.create(:domain_log, name: "gmail.com")
+          FactoryGirl.create(:domain_log, name: "hotmail.com")
+          FactoryGirl.create(:domain_log, name: "gmail.com")
+        end
+      end
+
+      it "returns a hash of the current signature rates per hour per domain" do
+        expect(described_class.current_rates).to match(current_rates)
+      end
+    end
+
     describe ".find_or_create_by_email" do
       let(:domain) { described_class.find_or_create_by_email(email) }
 
@@ -185,6 +217,48 @@ RSpec.describe Domain, type: :model do
       end
     end
 
+    describe ".log" do
+      let(:email) { "foo@example.com" }
+
+      it "logs the domain of the email address" do
+        expect {
+          described_class.log(email)
+        }.to change {
+          Domain::Log.where(name: "example.com").count
+        }.by(1)
+      end
+
+      it "logs the parent domain of the email address" do
+        expect {
+          described_class.log(email)
+        }.to change {
+          Domain::Log.where(name: "com").count
+        }.by(1)
+      end
+    end
+
+    describe ".reset_rates" do
+      let!(:domain_1) { FactoryGirl.create(:domain, name: "foo.com", current_rate: 10, maximum_rate: 20) }
+      let!(:domain_2) { FactoryGirl.create(:domain, name: "bar.com", current_rate: 20, maximum_rate: 40) }
+      let!(:domain_3) { FactoryGirl.create(:domain, name: "baz.com", current_rate: 5, maximum_rate: 50) }
+
+      def current_rates
+        [
+          domain_1.reload.current_rate,
+          domain_2.reload.current_rate,
+          domain_3.reload.current_rate
+        ]
+      end
+
+      it "resets the current rate of of all domains to 0" do
+        expect {
+          described_class.reset_rates
+        }.to change {
+          current_rates
+        }.from([10, 20, 5]).to([0, 0, 0])
+      end
+    end
+
     describe ".update_rate" do
       def domain
         described_class.find_by(name: "foo.com")
@@ -250,6 +324,36 @@ RSpec.describe Domain, type: :model do
             }.to change { domain.maximum_rate }.from(20).to(25)
           end
         end
+      end
+    end
+
+    describe ".update_rates" do
+      let!(:domain_1) { FactoryGirl.create(:domain, name: "foo.com", current_rate: 10, maximum_rate: 20) }
+      let!(:domain_2) { FactoryGirl.create(:domain, name: "bar.com", current_rate: 20, maximum_rate: 40) }
+      let!(:domain_3) { FactoryGirl.create(:domain, name: "baz.com", current_rate: 5, maximum_rate: 50) }
+
+      def current_rates
+        [
+          domain_1.reload.current_rate,
+          domain_2.reload.current_rate,
+          domain_3.reload.current_rate
+        ]
+      end
+
+      before do
+        travel_to 2.minutes.ago do
+          FactoryGirl.create(:domain_log, name: "foo.com")
+          FactoryGirl.create(:domain_log, name: "bar.com")
+          FactoryGirl.create(:domain_log, name: "foo.com")
+        end
+      end
+
+      it "updates the current rates for the domains" do
+        expect {
+          described_class.update_rates
+        }.to change {
+          current_rates
+        }.from([10, 20, 5]).to([24, 12, 0])
       end
     end
   end

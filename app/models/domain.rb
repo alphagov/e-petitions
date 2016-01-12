@@ -1,3 +1,5 @@
+require_dependency 'domain/log'
+
 class Domain < ActiveRecord::Base
   validates_presence_of :name
   validates_length_of :name, maximum: 255
@@ -8,6 +10,14 @@ class Domain < ActiveRecord::Base
   class << self
     def by_current_rate
       order(current_rate: :desc)
+    end
+
+    def cleanup_logs(at = 1.hour.ago.beginning_of_hour)
+      Log.stale(at).delete_all
+    end
+
+    def current_rates(at = 1.minute.ago.beginning_of_minute, size = 5.minutes)
+      Hash[Log.current(at, size).count.map{ |k, v| [k, v * 3600 / size] }]
     end
 
     def exceeding(rate)
@@ -22,6 +32,14 @@ class Domain < ActiveRecord::Base
       end
     end
 
+    def log(email)
+      Log.create(name: parse_domain_from_email(email))
+    end
+
+    def reset_rates
+      update_all(current_rate: 0)
+    end
+
     def unresolved
       where(resolved_at: nil)
     end
@@ -34,6 +52,16 @@ class Domain < ActiveRecord::Base
       end
 
       domain.update_rate(rate)
+    end
+
+    def update_rates(at = 1.minute.ago.beginning_of_minute, size = 5.minutes)
+      transaction do
+        reset_rates
+
+        current_rates(at, size).each do |domain, rate|
+          update_rate(domain, rate)
+        end
+      end
     end
 
     def watchlist(rate: 0, limit: nil)
@@ -95,7 +123,7 @@ class Domain < ActiveRecord::Base
 
   def parent_domain
     begin
-      Domain.find_or_create_by!(name: parent_name)
+      self.class.find_or_create_by!(name: parent_name)
     rescue ActiveRecord::RecordNotUnique => e
       retry
     end

@@ -62,6 +62,26 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "callbacks" do
+    context "when the signature is created" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo@example.com") }
+
+      it "logs the domain of the email address" do
+        expect {
+          signature.save
+        }.to change {
+          Domain::Log.where(name: "example.com").count
+        }.by(1)
+      end
+
+      it "logs the parent domain of the email address" do
+        expect {
+          signature.save
+        }.to change {
+          Domain::Log.where(name: "com").count
+        }.by(1)
+      end
+    end
+
     context "when the signature is destroyed" do
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
       let(:creator) { FactoryGirl.create(:pending_signature) }

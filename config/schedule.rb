@@ -42,3 +42,11 @@ end
 every :day, at: '0.00am' do
   runner "DebatedPetitionsJob.perform_later"
 end
+
+every 5.minutes do
+  runner "Domain.update_rates"
+end
+
+every 1.bour do
+  runner "Domain.cleanup_logs"
+end
