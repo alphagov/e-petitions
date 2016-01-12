@@ -12,11 +12,11 @@ class Domain < ActiveRecord::Base
       order(current_rate: :desc)
     end
 
-    def cleanup_logs(at = 1.hour.ago.beginning_of_hour)
+    def cleanup_logs(at = 1.hour.ago)
       Log.stale(at).delete_all
     end
 
-    def current_rates(at = 1.minute.ago.beginning_of_minute, size = 5.minutes)
+    def current_rates(at = 1.minute.ago, size = 5.minutes)
       Hash[Log.current(at, size).count.map{ |k, v| [k, v * 3600 / size] }]
     end
 
@@ -54,7 +54,7 @@ class Domain < ActiveRecord::Base
       domain.update_rate(rate)
     end
 
-    def update_rates(at = 1.minute.ago.beginning_of_minute, size = 5.minutes)
+    def update_rates(at = 1.minute.ago, size = 5.minutes)
       transaction do
         reset_rates
 

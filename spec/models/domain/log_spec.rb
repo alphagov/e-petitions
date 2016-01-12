@@ -44,7 +44,7 @@ RSpec.describe Domain::Log, type: :model do
   describe "scopes" do
     describe ".current" do
       let(:window) do
-        [1.minute.ago.beginning_of_minute, 5.minutes]
+        [1.minute.ago, 5.minutes]
       end
 
       before do
