@@ -758,7 +758,7 @@ RSpec.describe Site, type: :model do
     end
 
     it "returns the opening date at petition_duration months ago" do
-      expect(site.opened_at_for_closing).to eq(3.months.ago.end_of_day)
+      expect(site.opened_at_for_closing).to eq(3.months.ago.beginning_of_day)
     end
   end
 
