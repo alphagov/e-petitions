@@ -26,6 +26,10 @@ select.form-control:hover {
 .form-group {
   margin-bottom: $gutter;
   clear: both;
+
+  input[type=file] {
+    line-height: 1ex;
+  }
 }
 
 .form-group.error {
