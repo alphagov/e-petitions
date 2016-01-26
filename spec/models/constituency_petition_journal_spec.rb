@@ -180,6 +180,12 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
         expect(described_class.for(petition_2, constituency_1).signature_count).to eq 3 # +1 for the creator
         expect(described_class.for(petition_2, constituency_2).signature_count).to eq 0
       end
+
+      it 'does not attempt to journal signatures without constituencies' do
+        FactoryGirl.create(:validated_signature, petition: petition_1, constituency_id: nil)
+        expect { described_class.reset! }.not_to raise_error
+        expect(described_class.find_by(petition: petition_1, constituency_id: nil)).to be_nil
+      end
     end
   end
 end

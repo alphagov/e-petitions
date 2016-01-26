@@ -180,6 +180,15 @@ RSpec.describe CountryPetitionJournal, type: :model do
         expect(described_class.for(petition_2, country_1).signature_count).to eq 3 # +1 for the creator
         expect(described_class.for(petition_2, country_2).signature_count).to eq 0
       end
+
+      it 'does not attempt to journal signatures without countries' do
+        # The schema allows for nil countries, but our validations don't - update_column lets us get around that (!)
+        FactoryGirl.create(:validated_signature, petition: petition_1, country: 'About to disappear').update_column(:country, nil)
+        FactoryGirl.create(:validated_signature, petition: petition_1, country: 'About to disappear').update_column(:country, '')
+        expect { described_class.reset! }.not_to raise_error
+        expect(described_class.find_by(petition: petition_1, country: nil)).to be_nil
+        expect(described_class.find_by(petition: petition_1, country: '')).to be_nil
+      end
     end
   end
 end

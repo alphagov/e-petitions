@@ -39,6 +39,7 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
           timezone('utc', now()), timezone('utc', now())
         FROM signatures
         WHERE state = 'validated'
+        AND constituency_id IS NOT NULL
         GROUP BY petition_id, constituency_id
       SQL
     end
