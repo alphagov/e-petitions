@@ -22,7 +22,7 @@ module EmailDelivery
 
   included do
     attr_reader :signature, :timestamp_name, :petition, :requested_at
-    queue_as :default
+    queue_as :low_priority
 
     rescue_from *PERMANENT_FAILURES do |exception|
       log_exception(exception)

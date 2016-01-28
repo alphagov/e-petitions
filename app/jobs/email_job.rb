@@ -16,7 +16,7 @@ class EmailJob < ActiveJob::Base
     Timeout::Error
   ]
 
-  queue_as :default
+  queue_as :high_priority
 
   rescue_from *PERMANENT_FAILURES do |exception|
     log_exception(exception)
