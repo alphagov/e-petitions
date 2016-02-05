@@ -23,6 +23,9 @@ module NavigationHelpers
     when /^the new petition page$/
       new_petition_url
 
+    when /^the petition page$/
+      petition_url(@petition.id)
+
     when /^the petition page for "([^\"]*)"$/
       petition_url(Petition.find_by(action: $1))
 
@@ -34,6 +37,9 @@ module NavigationHelpers
 
     when /^the archived petition page for "([^\"]*)"$/
       archived_petition_url(ArchivedPetition.find_by(title: $1))
+
+    when /^the new signature page$/
+      new_petition_signature_url(@petition.id)
 
     when /^the new signature page for "([^\"]*)"$/
       new_petition_signature_url(Petition.find_by(action: $1))

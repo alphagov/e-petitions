@@ -193,4 +193,3 @@ Then /^the signature count (?:stays at|goes up to) (\d+)$/ do |number|
   signatures = @petition.signatures
   expect(signatures.count).to eq number
 end
-

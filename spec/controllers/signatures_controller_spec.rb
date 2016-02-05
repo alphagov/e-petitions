@@ -108,6 +108,16 @@ RSpec.describe SignaturesController, type: :controller do
         end
       end
     end
+
+    context "when the petition is closed" do
+      let(:petition) { FactoryGirl.build(:closed_petition) }
+      let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+
+      it "redirects to the petition page" do
+        get :verify, id: signature.id, token: signature.perishable_token
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}")
+      end
+    end
   end
 
   describe "signed" do
@@ -183,6 +193,7 @@ RSpec.describe SignaturesController, type: :controller do
     before do
       allow(Petition).to receive_messages(:visible => Petition)
       allow(Petition).to receive(:find).with('1').and_return(petition)
+      allow(petition).to receive(:id).and_return(1)
     end
 
     it "assigns a new signature with the given petition" do
@@ -214,6 +225,15 @@ RSpec.describe SignaturesController, type: :controller do
     it 'sets the stage to "signer"' do
       get :new, :petition_id => 1
       expect(assigns(:stage_manager).stage).to eq 'signer'
+    end
+
+    context "when the petition is closed" do
+      let(:petition) { FactoryGirl.create(:closed_petition) }
+
+      it "redirects to the petition page" do
+        get :new, petition_id: 1
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/1")
+      end
     end
   end
 
@@ -405,6 +425,15 @@ RSpec.describe SignaturesController, type: :controller do
           do_post
           expect(response).to render_template(:new)
         end
+      end
+    end
+
+    context "when the petition is closed" do
+      let!(:petition) { FactoryGirl.create(:closed_petition) }
+
+      it "redirects to the petition page" do
+        do_post
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}")
       end
     end
   end
