@@ -1,8 +1,9 @@
 class SignaturesController < ApplicationController
   include ManagingMoveParameter
 
-  before_filter :retrieve_petition, :only => [:new, :create, :thank_you]
-  before_filter :retrieve_signature, :only => [:verify, :unsubscribe, :signed]
+  before_action :retrieve_petition, only: [:new, :create, :thank_you]
+  before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+  before_action :redirect_to_petition_page, if: :petition_closed?, only: [:new, :create, :verify]
   before_action :do_not_cache
 
   respond_to :html
@@ -66,6 +67,14 @@ class SignaturesController < ApplicationController
   def retrieve_signature
     @signature = Signature.find(params[:id])
     @petition = @signature.petition
+  end
+
+  def redirect_to_petition_page
+    redirect_to petition_url(@petition)
+  end
+
+  def petition_closed?
+    @petition && @petition.closed?
   end
 
   def send_email_to_petition_signer(signature)

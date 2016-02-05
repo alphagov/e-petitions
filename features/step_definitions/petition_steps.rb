@@ -119,6 +119,10 @@ Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryGirl.create(:closed_petition, :action => petition_action)
 end
 
+Given(/^the petition has closed$/) do
+  @petition.close!
+end
+
 Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:rejected_petition,
