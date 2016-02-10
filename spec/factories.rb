@@ -167,6 +167,11 @@ FactoryGirl.define do
     debate_state 'awaiting'
   end
 
+  factory :scheduled_debate_petition, :parent => :open_petition do
+    debate_threshold_reached_at { 1.week.ago }
+    debate_state 'scheduled'
+  end
+
   factory :debated_petition, :parent => :open_petition do
     transient do
       debated_on { 1.day.ago }

@@ -26,7 +26,7 @@ class Petition < ActiveRecord::Base
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged]
 
-  DEBATE_STATES = %w[pending awaiting debated none closed]
+  DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
   has_perishable_token called: 'sponsor_token'
 
@@ -135,7 +135,7 @@ class Petition < ActiveRecord::Base
     end
 
     def awaiting_debate
-      where(debate_state: 'awaiting')
+      where(debate_state: %w[awaiting scheduled])
     end
 
     def awaiting_debate_date
@@ -179,7 +179,7 @@ class Petition < ActiveRecord::Base
     end
 
     def not_debated
-      where(debate_state: 'none')
+      where(debate_state: 'not_debated')
     end
 
     def not_hidden
@@ -278,7 +278,7 @@ class Petition < ActiveRecord::Base
     end
 
     def in_need_of_marking_as_debated
-      where(awaiting_debate_state.and(debate_date_in_the_past))
+      where(scheduled_debate_state.and(debate_date_in_the_past))
     end
 
     def mark_petitions_as_debated!
@@ -301,6 +301,10 @@ class Petition < ActiveRecord::Base
 
     def debate_date_in_the_past
       arel_table[:scheduled_debate_date].lt(Date.current)
+    end
+
+    def scheduled_debate_state
+      arel_table[:debate_state].eq('scheduled')
     end
   end
 
@@ -334,6 +338,7 @@ class Petition < ActiveRecord::Base
 
     if at_threshold_for_debate?
       updates << "debate_threshold_reached_at = :now"
+      updates << "debate_state = 'awaiting'"
     end
 
     if update_all([updates.join(", "), now: time]) > 0
@@ -415,7 +420,7 @@ class Petition < ActiveRecord::Base
   end
 
   def close!(time = Time.current)
-    update!(state: CLOSED_STATE, debate_state: closing_debate_state, closed_at: time)
+    update!(state: CLOSED_STATE, closed_at: time)
   end
 
   def validate_creator_signature!
@@ -533,19 +538,15 @@ class Petition < ActiveRecord::Base
   end
 
   def awaiting_debate?
-    debate_state == 'awaiting'
+    debate_state.in?(%w[awaiting scheduled])
   end
 
   def debated?
     debate_state == 'debated'
   end
 
-  def no_debate?
-    debate_state == 'none'
-  end
-
-  def closing_debate_state
-    debate_state == 'pending' ? 'closed' : debate_state
+  def not_debated?
+    debate_state == 'not_debated'
   end
 
   def update_debate_state
@@ -554,9 +555,9 @@ class Petition < ActiveRecord::Base
 
   def evaluate_debate_state
     if scheduled_debate_date?
-      scheduled_debate_date > Date.current ? 'awaiting' : 'debated'
+      scheduled_debate_date > Date.current ? 'scheduled' : 'debated'
     else
-      closed? ? 'closed' : 'pending'
+      'awaiting'
     end
   end
 end

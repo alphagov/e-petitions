@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe DebatedPetitionsJob, type: :job do
-  context "when a petition is in the awaiting debate state and the debate date has not passed" do
+  context "when a petition is in the scheduled debate state and the debate date has not passed" do
     let(:petition) {
       FactoryGirl.build(:open_petition,
-        debate_state: 'awaiting',
+        debate_state: 'scheduled',
         scheduled_debate_date: Date.tomorrow
       )
     }
@@ -22,10 +22,10 @@ RSpec.describe DebatedPetitionsJob, type: :job do
     end
   end
 
-  context "when a petition is in the awaiting debate state and the debate date has passed" do
+  context "when a petition is in the scheduled debate state and the debate date has passed" do
     let(:petition) {
       FactoryGirl.build(:open_petition,
-        debate_state: 'awaiting',
+        debate_state: 'scheduled',
         scheduled_debate_date: Date.tomorrow
       )
     }
@@ -41,7 +41,7 @@ RSpec.describe DebatedPetitionsJob, type: :job do
         perform_enqueued_jobs {
           described_class.perform_later
         }
-      }.to change{ petition.reload.debate_state }.from("awaiting").to("debated")
+      }.to change{ petition.reload.debate_state }.from("scheduled").to("debated")
     end
   end
 end
