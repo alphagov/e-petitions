@@ -144,8 +144,8 @@ RSpec.describe CountryPetitionJournal, type: :model do
   end
 
   describe ".reset!" do
-    let!(:location_1) { FactoryGirl.create(:location) }
-    let!(:location_2) { FactoryGirl.create(:location) }
+    let!(:location_1) { FactoryGirl.create(:location, code: "AA", name: "Country 1") }
+    let!(:location_2) { FactoryGirl.create(:location, code: "ZZ", name: "Country 2") }
     let!(:location_code_1) { location_1.code }
     let!(:location_code_2) { location_2.code }
     let!(:petition_1) { FactoryGirl.create(:petition, creator_signature_attributes: {location_code: location_code_1}) }
