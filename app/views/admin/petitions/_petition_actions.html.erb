@@ -1,10 +1,5 @@
 <nav class="petition-actions" role="navigation">
   <ul>
-
-    <li class="petition-action">
-      <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition), class: 'petition-action-heading'  %>
-    </li>
-
     <%# If petition is awaiting moderation %>
     <% if @petition.in_todo_list? %>
       <li class="petition-action">
