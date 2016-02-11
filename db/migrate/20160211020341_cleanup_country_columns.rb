@@ -44,7 +44,7 @@ class CleanupCountryColumns < ActiveRecord::Migration
     execute "UPDATE signatures SET location_code = 'KY' WHERE country = 'Cayman Islands'"
     execute "UPDATE signatures SET location_code = 'CF' WHERE country = 'Central African Republic'"
     execute "UPDATE signatures SET location_code = 'TD' WHERE country = 'Chad'"
-    execute "UPDATE signatures SET location_code = 'XC' WHERE country = 'Channel Islands'"
+    execute "UPDATE signatures SET location_code = NULL WHERE country = 'Channel Islands'"
     execute "UPDATE signatures SET location_code = 'CL' WHERE country = 'Chile'"
     execute "UPDATE signatures SET location_code = 'CN' WHERE country = 'China'"
     execute "UPDATE signatures SET location_code = 'CO' WHERE country = 'Colombia'"
