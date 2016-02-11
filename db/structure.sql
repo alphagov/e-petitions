@@ -189,6 +189,7 @@ ALTER SEQUENCE constituency_petition_journals_id_seq OWNED BY constituency_petit
 CREATE TABLE country_petition_journals (
     id integer NOT NULL,
     petition_id integer NOT NULL,
+    country character varying,
     signature_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -598,6 +599,7 @@ CREATE TABLE signatures (
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     perishable_token character varying(255),
     postcode character varying(255),
+    country character varying(255),
     ip_address character varying(20),
     petition_id integer,
     created_at timestamp without time zone,
@@ -1052,6 +1054,13 @@ CREATE UNIQUE INDEX index_country_petition_journals_on_petition_and_location ON 
 
 
 --
+-- Name: index_country_petition_journals_on_petition_id_and_country; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_country_petition_journals_on_petition_id_and_country ON country_petition_journals USING btree (petition_id, country);
+
+
+--
 -- Name: index_debate_outcomes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1494,6 +1503,4 @@ INSERT INTO schema_migrations (version) VALUES ('20160210195916');
 INSERT INTO schema_migrations (version) VALUES ('20160211002731');
 
 INSERT INTO schema_migrations (version) VALUES ('20160211003703');
-
-INSERT INTO schema_migrations (version) VALUES ('20160211020341');
 
