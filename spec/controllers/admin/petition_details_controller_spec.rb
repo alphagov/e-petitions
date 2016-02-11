@@ -71,27 +71,19 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
         it_behaves_like 'viewing a petition in the correct state'
       end
 
-      shared_examples_for 'trying to view a petition in the wrong state' do
-        it 'raises a 404 error' do
-          expect {
-            get :show, petition_id: petition.id
-          }.to raise_error ActiveRecord::RecordNotFound
-        end
-      end
-
       describe 'for an open petition' do
         before { petition.update_column(:state, Petition::OPEN_STATE) }
-        it_behaves_like 'trying to view a petition in the wrong state'
+        it_behaves_like 'viewing a petition in the correct state'
       end
 
       describe 'for a rejected petition' do
         before { petition.update_columns(state: Petition::REJECTED_STATE) }
-        it_behaves_like 'trying to view a petition in the wrong state'
+        it_behaves_like 'viewing a petition in the correct state'
       end
 
       describe 'for a hidden petition' do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
-        it_behaves_like 'trying to view a petition in the wrong state'
+        it_behaves_like 'viewing a petition in the correct state'
       end
     end
 
