@@ -137,7 +137,7 @@ RSpec.describe DebateOutcome, type: :model do
           debate_outcome.update!(debated: false)
         }.to change {
           petition.reload.debate_state
-        }.from("debated").to("none")
+        }.from("debated").to("not_debated")
       end
     end
   end

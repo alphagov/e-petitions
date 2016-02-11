@@ -36,7 +36,7 @@ class DebateOutcome < ActiveRecord::Base
   private
 
   def debate_state
-    debated? ? 'debated' : 'none'
+    debated? ? 'debated' : 'not_debated'
   end
 
   def image_ratio(width, height)
