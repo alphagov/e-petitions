@@ -13,6 +13,7 @@ class ImportInitialLocations < ActiveRecord::Migration
     Location.create!(code: "IO", name: "British Indian Ocean Territory")
     Location.create!(code: "VG", name: "British Virgin Islands")
     Location.create!(code: "KY", name: "Cayman Islands")
+    Location.create!(code: "XC", name: "Channel Islands", end_date: "2016-02-11")
     Location.create!(code: "FK", name: "Falkland Islands")
     Location.create!(code: "GF", name: "French Guiana")
     Location.create!(code: "PF", name: "French Polynesia")
