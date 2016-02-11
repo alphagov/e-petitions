@@ -1,5 +1,4 @@
-Petitions
-===========
+# Petitions
 
 This is the code base for the UK Government's petitions service (https://petition.parliament.uk).
 We have open sourced the code for you to use under the terms of licence contained in this repository.
@@ -11,10 +10,10 @@ A few things to know:
 * You will need `ruby 2.2.2`
 * You will need PostgreSQL and Memcached
 
-### Setting your development environment
+## Set up your development environment
 
-* clone the repo to your local machine
-* install postgres. Easiest with homebrew using `$ brew install postgres`
+* Clone the repo to your local machine
+* Install postgres. Easiest with homebrew using `brew install postgres`
 	* If you like you can add postgres to your LaunchAgent. Follow instructions at end of console output
 * Set up your dev and test databases
 	* `$ psql postgres`
@@ -26,9 +25,12 @@ A few things to know:
 	* `# \q` to quit
 * You will need to set up the `config/database.yml`. Copy what is in `config/database.example.yml` and add the password you used earlier for the `epets` postgres user
 * `$ rake db:structure:load` - load the sql structure into your new databases
-* `$ rails s` - boot the app
 
-### Auxiliary
+## Run the app
+
+* `rails s`
+
+## Other info
 
 * If you want jobs (like emails) to be run, use `$ rake jobs:work`
 * For setting up a sysadmin user

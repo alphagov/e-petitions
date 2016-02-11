@@ -3,7 +3,8 @@
 <div class="grid-row">
 
   <div class="column-two-thirds extra-gutter">
-    <h2>Edit petition</h2>
+    <h2 class="petition-action-heading">Edit petition</h2>
+
     <%= form_for @petition, url: admin_petition_petition_details_path(@petition), method: :patch do |f| %>
 
       <%= form_row for: [f.object, :action] do %>

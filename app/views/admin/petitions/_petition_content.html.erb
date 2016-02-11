@@ -6,17 +6,20 @@
   <% unless @petition.additional_details.blank? %>
     <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
   <% end %>
-  <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition) %>
 
 <% else %>
   <% unless @petition.additional_details.blank? %>
     <details>
-      <summary><span class="summary">More details</span></summary>
+      <summary><span>More details</span></summary>
       <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
   <% end %>
 <% end %>
 
+<p class="edit-petition-link">
+  <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition) %>
+</p>
+ 
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>
   <p><%= rejection_reason(@petition.rejection.code) %></p>
