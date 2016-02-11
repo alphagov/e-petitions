@@ -18,7 +18,6 @@ class Admin::PetitionDetailsController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:petition_id])
-    #raise ActiveRecord::RecordNotFound unless @petition.in_todo_list?
   end
 
   def petition_params
