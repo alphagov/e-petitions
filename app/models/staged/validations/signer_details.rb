@@ -7,13 +7,13 @@ module Staged
 
       included do
         validates :name, presence: true, length: { maximum: 255 }
-        validates :country, presence: true
+        validates :location_code, presence: true
         validates :postcode, presence: true, format: { with: POSTCODE_REGEX }, if: :united_kingdom?
         validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
       end
 
       def united_kingdom?
-        country == 'United Kingdom'
+        location_code == 'GB'
       end
     end
   end

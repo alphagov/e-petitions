@@ -103,7 +103,7 @@ RSpec.describe Signature, type: :model do
   context "validations" do
     it { is_expected.to validate_presence_of(:name).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:country).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:location_code).with_message(/must be completed/) }
     it { is_expected.to validate_length_of(:name).is_at_most(255) }
     it { is_expected.to validate_length_of(:constituency_id).is_at_most(255) }
 
@@ -223,8 +223,8 @@ RSpec.describe Signature, type: :model do
         expect(FactoryGirl.build(:signature, :postcode => '')).not_to be_valid
       end
       it "does not require a postcode for non-UK addresses" do
-        expect(FactoryGirl.build(:signature, :country => "United Kingdom", :postcode => '')).not_to be_valid
-        expect(FactoryGirl.build(:signature, :country => "United States", :postcode => '')).to be_valid
+        expect(FactoryGirl.build(:signature, :location_code => "GB", :postcode => '')).not_to be_valid
+        expect(FactoryGirl.build(:signature, :location_code => "US", :postcode => '')).to be_valid
       end
       it "checks the format of postcode" do
         s = FactoryGirl.build(:signature, :postcode => 'SW1A1AA')

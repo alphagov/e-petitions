@@ -8,6 +8,10 @@ Before do
   default_url_options[:protocol] = 'https'
 end
 
+Before do
+  Location.create!(code: 'GB', name: 'United Kingdom')
+end
+
 After do
   Site.reload
 end

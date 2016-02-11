@@ -72,13 +72,13 @@ class SponsorsController < ApplicationController
   end
 
   def signature_params_for_new
-    {country: 'United Kingdom'}
+    {location_code: 'GB'}
   end
 
   def signature_params_for_create
     params.
       require(:signature).
-      permit(:name, :email, :postcode, :country, :uk_citizenship)
+      permit(:name, :email, :postcode, :location_code, :uk_citizenship)
   end
 
   def send_email_to_sponsor(sponsor)

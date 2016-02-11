@@ -59,7 +59,7 @@ RSpec.describe Staged::PetitionSigner, type: :model do
     let(:signature_params) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
-        :postcode => 'SE3 4LL', :country => 'United Kingdom',
+        :postcode => 'SE3 4LL', :location_code => 'GB',
         :uk_citizenship => '1'
       }
     end

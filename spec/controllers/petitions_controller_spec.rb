@@ -24,7 +24,7 @@ RSpec.describe PetitionsController, type: :controller do
     let(:creator_signature_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
-        :postcode => 'SE3 4LL', :country => 'United Kingdom',
+        :postcode => 'SE3 4LL', :location_code => 'GB',
         :uk_citizenship => '1'
       }
     end
@@ -193,7 +193,7 @@ RSpec.describe PetitionsController, type: :controller do
           expect(assigns[:stage_manager].stage).to eq 'creator'
           do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:postcode => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:country => ''))
+          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:location_code => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
         end
 

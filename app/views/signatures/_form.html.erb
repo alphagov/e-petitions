@@ -25,10 +25,10 @@
 
 <%= render 'signatures/email', f: f, signature: signature,  hide_label: false %>
 
-<%= form_row :for => [signature, :country] do %>
-  <%= f.label :country, 'Location', :class => 'form-label' %>
-  <%= error_messages_for_field signature, :country %>
-  <%= f.select :country, countries_for_select, {}, :tabindex => increment, :class => 'form-control' %>
+<%= form_row :for => [signature, :location_code] do %>
+  <%= f.label :location_code, 'Location', :class => 'form-label' %>
+  <%= error_messages_for_field signature, :location_code %>
+  <%= f.select :location_code, countries_for_select, {}, :tabindex => increment, :class => 'form-control' %>
 <% end %>
 
 <%= form_row :for => [signature, :postcode] do %>
