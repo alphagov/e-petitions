@@ -365,7 +365,7 @@ class Petition < ActiveRecord::Base
   end
 
   def signatures_by_country
-    country_petition_journals.to_a.sort_by(&:country)
+    country_petition_journals.joins(:location).preload(:location).to_a.sort_by(&:name)
   end
 
   def signatures_by_constituency

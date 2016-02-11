@@ -197,13 +197,13 @@ FactoryGirl.define do
   end
 
   factory :signature do
-    sequence(:name) {|n| "Jo Public #{n}" }
+    sequence(:name)  {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
-    postcode            "SW1A 1AA"
-    country             "United Kingdom"
-    uk_citizenship       '1'
-    notify_by_email      '1'
-    state                Signature::VALIDATED_STATE
+    postcode              "SW1A 1AA"
+    location_code         "GB"
+    uk_citizenship        "1"
+    notify_by_email       "1"
+    state                 Signature::VALIDATED_STATE
 
     after(:create) do |signature, evaluator|
       if signature.petition && signature.validated?
@@ -276,7 +276,7 @@ FactoryGirl.define do
   end
 
   factory :country_petition_journal do
-    country { Faker::Address.country }
+    association :location
     association :petition
   end
 
@@ -325,5 +325,18 @@ FactoryGirl.define do
 
   factory :email_sent_receipt do
     association :signature, factory: :validated_signature
+  end
+
+  factory :location do
+    code { Faker::Address.country_code }
+    name { Faker::Address.country }
+
+    trait :pending do
+      start_date { 3.months.from_now }
+    end
+
+    trait :expired do
+      end_date { 2.years.ago }
+    end
   end
 end

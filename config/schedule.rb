@@ -27,6 +27,10 @@ every :weekday, at: '6.30am' do
   rake "epets:threshold_email_reminder", output: nil
 end
 
+every :day, at: '1.15am' do
+  runner "FetchCountryRegisterJob.perform_later"
+end
+
 every :day, at: '2.30am' do
   runner "PetitionCountJob.perform_later"
 end

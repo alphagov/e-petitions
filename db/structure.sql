@@ -189,10 +189,10 @@ ALTER SEQUENCE constituency_petition_journals_id_seq OWNED BY constituency_petit
 CREATE TABLE country_petition_journals (
     id integer NOT NULL,
     petition_id integer NOT NULL,
-    country character varying NOT NULL,
     signature_count integer DEFAULT 0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    location_code character varying(30)
 );
 
 
@@ -398,6 +398,40 @@ ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
 
 
 --
+-- Name: locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE locations (
+    id integer NOT NULL,
+    code character varying(30) NOT NULL,
+    name character varying(100) NOT NULL,
+    start_date date,
+    end_date date,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE locations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: locations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE locations_id_seq OWNED BY locations.id;
+
+
+--
 -- Name: notes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -564,7 +598,6 @@ CREATE TABLE signatures (
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     perishable_token character varying(255),
     postcode character varying(255),
-    country character varying(255),
     ip_address character varying(20),
     petition_id integer,
     created_at timestamp without time zone,
@@ -575,7 +608,8 @@ CREATE TABLE signatures (
     constituency_id character varying,
     validated_at timestamp without time zone,
     number integer,
-    seen_signed_confirmation_page boolean DEFAULT false NOT NULL
+    seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
+    location_code character varying(30)
 );
 
 
@@ -751,6 +785,13 @@ ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('gover
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regclass);
 
 
@@ -877,6 +918,14 @@ ALTER TABLE ONLY government_responses
 
 
 --
+-- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY locations
+    ADD CONSTRAINT locations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -996,10 +1045,10 @@ CREATE UNIQUE INDEX index_constituencies_on_slug ON constituencies USING btree (
 
 
 --
--- Name: index_country_petition_journals_on_petition_id_and_country; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_country_petition_journals_on_petition_and_location; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE UNIQUE INDEX index_country_petition_journals_on_petition_id_and_country ON country_petition_journals USING btree (petition_id, country);
+CREATE UNIQUE INDEX index_country_petition_journals_on_petition_and_location ON country_petition_journals USING btree (petition_id, location_code);
 
 
 --
@@ -1056,6 +1105,27 @@ CREATE UNIQUE INDEX index_government_responses_on_petition_id ON government_resp
 --
 
 CREATE INDEX index_government_responses_on_updated_at ON government_responses USING btree (updated_at);
+
+
+--
+-- Name: index_locations_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_locations_on_code ON locations USING btree (code);
+
+
+--
+-- Name: index_locations_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_locations_on_name ON locations USING btree (name);
+
+
+--
+-- Name: index_locations_on_start_date_and_end_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_locations_on_start_date_and_end_date ON locations USING btree (start_date, end_date);
 
 
 --
@@ -1416,4 +1486,14 @@ INSERT INTO schema_migrations (version) VALUES ('20151014152929');
 INSERT INTO schema_migrations (version) VALUES ('20160104144458');
 
 INSERT INTO schema_migrations (version) VALUES ('20160210001632');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210174624');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210195916');
+
+INSERT INTO schema_migrations (version) VALUES ('20160211002731');
+
+INSERT INTO schema_migrations (version) VALUES ('20160211003703');
+
+INSERT INTO schema_migrations (version) VALUES ('20160211020341');
 

@@ -87,7 +87,7 @@ class SignaturesController < ApplicationController
   end
 
   def signature_params_for_new
-    {country: 'United Kingdom'}
+    {location_code: 'GB'}
   end
 
   def signature_params_for_create
@@ -95,7 +95,7 @@ class SignaturesController < ApplicationController
       params.
         require(:signature).
         permit(:name, :email, :email_confirmation,
-               :postcode, :country, :uk_citizenship)
+               :postcode, :location_code, :uk_citizenship)
   end
 
   def send_sponsor_support_notification_email_to_petition_owner(petition, signature)

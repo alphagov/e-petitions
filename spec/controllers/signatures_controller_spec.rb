@@ -201,9 +201,9 @@ RSpec.describe SignaturesController, type: :controller do
       expect(assigns(:stage_manager).signature.petition).to eq(petition)
     end
 
-    it "sets the country to be UK" do
+    it "sets the location code to be GB" do
       get :new, :petition_id => 1
-      expect(assigns(:stage_manager).signature.country).to eq 'United Kingdom'
+      expect(assigns(:stage_manager).signature.location_code).to eq 'GB'
     end
 
     it "finds the given petition" do
@@ -246,7 +246,7 @@ RSpec.describe SignaturesController, type: :controller do
         :email => 'john@example.com',
         :uk_citizenship => "1",
         :postcode => 'SE3 4LL',
-        :country => 'United Kingdom'
+        :location_code => 'GB'
       }
     end
 
@@ -359,7 +359,7 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:stage_manager].stage).to eq 'signer'
         do_post :signature => signature_params.merge(:postcode => '')
         expect(assigns[:stage_manager].stage).to eq 'signer'
-        do_post :signature => signature_params.merge(:country => '')
+        do_post :signature => signature_params.merge(:location_code => '')
         expect(assigns[:stage_manager].stage).to eq 'signer'
       end
 
@@ -385,7 +385,7 @@ RSpec.describe SignaturesController, type: :controller do
           email: 'jb@example.com',
           postcode: 'SE3 4LL',
           uk_citizenship: '1',
-          country: 'United Kingdom'
+          location_code: 'GB'
         }
       end
 

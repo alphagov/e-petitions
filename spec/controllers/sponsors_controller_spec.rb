@@ -112,7 +112,7 @@ RSpec.describe SponsorsController, type: :controller do
         name: 'S. Ponsor',
         email: 's.ponsor@example.com',
         postcode: 'SP11NR',
-        country: 'United Kingdom',
+        location_code: 'GB',
         uk_citizenship: '1',
         notify_by_email: '0'
       }
@@ -196,7 +196,7 @@ RSpec.describe SponsorsController, type: :controller do
         expect(signature).to be_sponsor
         expect(signature.name).to eq signature_params[:name]
         expect(signature.postcode).to eq signature_params[:postcode]
-        expect(signature.country).to eq signature_params[:country]
+        expect(signature.location_code).to eq signature_params[:location_code]
         expect(signature.notify_by_email).to eq true
         expect(petition.sponsors.for(signature)).to be_present
       end
@@ -266,7 +266,7 @@ RSpec.describe SponsorsController, type: :controller do
         expect(assigns[:stage_manager].stage).to eq 'signer'
         do_patch signature: signature_params.merge(:postcode => '')
         expect(assigns[:stage_manager].stage).to eq 'signer'
-        do_patch signature: signature_params.merge(:country => '')
+        do_patch signature: signature_params.merge(:location_code => '')
         expect(assigns[:stage_manager].stage).to eq 'signer'
       end
 
