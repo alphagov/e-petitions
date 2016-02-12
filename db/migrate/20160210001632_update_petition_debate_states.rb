@@ -19,13 +19,13 @@ class UpdatePetitionDebateStates < ActiveRecord::Migration
     execute <<-SQL
       UPDATE petitions SET debate_state = 'debated'
       WHERE debate_outcome_at IS NOT NULL
-      AND id IN (SELECT id FROM debate_outcomes WHERE debated = 't')
+      AND id IN (SELECT petition_id FROM debate_outcomes WHERE debated = 't')
     SQL
 
     execute <<-SQL
       UPDATE petitions SET debate_state = 'not_debated'
       WHERE debate_outcome_at IS NOT NULL
-      AND id IN (SELECT id FROM debate_outcomes WHERE debated = 'f')
+      AND id IN (SELECT petition_id FROM debate_outcomes WHERE debated = 'f')
     SQL
 
     execute <<-SQL
@@ -54,13 +54,13 @@ class UpdatePetitionDebateStates < ActiveRecord::Migration
     execute <<-SQL
       UPDATE petitions SET debate_state = 'debated'
       WHERE debate_outcome_at IS NOT NULL
-      AND id IN (SELECT id FROM debate_outcomes WHERE debated = 't')
+      AND id IN (SELECT petition_id FROM debate_outcomes WHERE debated = 't')
     SQL
 
     execute <<-SQL
       UPDATE petitions SET debate_state = 'none'
       WHERE debate_outcome_at IS NOT NULL
-      AND id IN (SELECT id FROM debate_outcomes WHERE debated = 'f')
+      AND id IN (SELECT petition_id FROM debate_outcomes WHERE debated = 'f')
     SQL
 
     execute <<-SQL
