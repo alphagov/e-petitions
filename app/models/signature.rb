@@ -104,7 +104,7 @@ class Signature < ActiveRecord::Base
   def validate!
     update_signature_counts = false
 
-    with_lock do
+    retry_lock do
       if pending?
         update_signature_counts = true
         petition.validate_creator_signature! unless creator?
@@ -170,5 +170,23 @@ class Signature < ActiveRecord::Base
   has_one :email_sent_receipt, dependent: :destroy
   def email_sent_receipt!
     email_sent_receipt || create_email_sent_receipt
+  end
+
+  private
+
+  def retry_lock
+    retried = false
+
+    begin
+      with_lock { yield }
+    rescue PG::InFailedSqlTransaction => e
+      if retried
+        raise e
+      else
+        retried = true
+        self.class.connection.clear_cache!
+        retry
+      end
+    end
   end
 end

@@ -555,6 +555,20 @@ RSpec.describe Signature, type: :model do
         signature.update_columns(state: Signature::VALIDATED_STATE)
         signature.validate!
       end
+
+      it "retries if the schema has changed" do
+        expect(signature).to receive(:lock!).once.and_raise(PG::InFailedSqlTransaction)
+        expect(signature).to receive(:lock!).once.and_call_original
+        expect(signature.class.connection).to receive(:clear_cache!).once
+
+        signature.validate!
+        expect(signature).to be_validated
+      end
+
+      it "raises PG::InFailedSqlTransaction if it fails twice" do
+        expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
+        expect{ signature.validate! }.to raise_error(PG::InFailedSqlTransaction)
+      end
     end
 
     context "when the petition is pending" do
