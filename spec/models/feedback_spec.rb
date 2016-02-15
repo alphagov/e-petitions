@@ -1,40 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe Feedback, type: :model do
-  it "can be constructed without params" do
-    expect(Feedback.new.comment).to be_nil
+  it "has a valid factory" do
+    expect(FactoryGirl.build(:feedback)).to be_valid
   end
 
-  it "has an email" do
-    expect(Feedback.new(:email => 'foo').email).to eq('foo')
+  describe "schema" do
+    it { is_expected.to have_db_column(:comment).of_type(:string).with_options(limit: 32768, null: false) }
+    it { is_expected.to have_db_column(:petition_link_or_title).of_type(:string) }
+    it { is_expected.to have_db_column(:email).of_type(:string) }
+    it { is_expected.to have_db_column(:user_agent).of_type(:string) }
   end
 
-  it "has a petition link or title" do
-    expect(Feedback.new(:petition_link_or_title => 'foo').petition_link_or_title).to eq('foo')
-  end
-
-  it "has a comment" do
-    expect(Feedback.new(:comment => 'foo').comment).to eq('foo')
-  end
-
-  def valid_attributes
-    { :email => "foo@example.com",
-      :comment => "I can't submit a petition for some reason",
-      :petition_link_or_title => 'link' }
-  end
-
-  describe "valid?" do
-    it "is valid when all attributes are in place" do
-      expect(Feedback.new(valid_attributes)).to be_valid
+  describe "validations" do
+    it "is invalid by default" do
+      expect(subject).not_to be_valid
     end
 
-    it "is not valid when a required attribute is missing" do
-      expect(Feedback.new(valid_attributes.except(:comment))).not_to be_valid
-    end
-
-    it "is not valid when the email format is wrong" do
-      expect(Feedback.new(valid_attributes.merge(:email => 'foo'))).not_to be_valid
-    end
+    it { is_expected.to validate_presence_of(:comment) }
+    it { is_expected.to validate_length_of(:comment).is_at_most(32768) }
+    it { is_expected.to validate_length_of(:petition_link_or_title).is_at_most(255) }
+    it { is_expected.to validate_length_of(:email).is_at_most(255) }
+    it { is_expected.to allow_value("foo@example.com").for(:email) }
+    it { is_expected.not_to allow_value("foo@example").for(:email) }
+    it { is_expected.not_to allow_value("foo").for(:email) }
   end
-
 end

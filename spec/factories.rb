@@ -339,4 +339,11 @@ FactoryGirl.define do
       end_date { 2.years.ago }
     end
   end
+
+  factory :feedback do
+    comment "This thing is wrong"
+    petition_link_or_title "Do stuff"
+    email "foo@example.com"
+    user_agent "Mozilla/5.0"
+  end
 end

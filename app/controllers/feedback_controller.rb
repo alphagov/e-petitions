@@ -1,25 +1,28 @@
 class FeedbackController < ApplicationController
   respond_to :html
 
+  before_action :build_feedback, only: [:new, :create]
+
   def index
-    respond_with @feedback = Feedback.new
+    respond_with @feedback
   end
 
-  # TODO: We should use deliver_later but serializing the feedback model is tricky.
   def create
-    @feedback = Feedback.new(feedback_params)
-    if @feedback.valid?
-      FeedbackMailer.send_feedback(@feedback).deliver_now
-      redirect_to thanks_feedback_url
-    else
-      render 'index'
+    if @feedback.save
+      FeedbackEmailJob.perform_later(@feedback)
     end
+
+    respond_with @feedback, location: thanks_feedback_url
   end
 
   def thanks
   end
 
   private
+
+  def build_feedback
+    @feedback = Feedback.new(params.key?(:feedback) ? feedback_params : {})
+  end
 
   def feedback_params
     params.require(:feedback).permit(*feedback_attributes).merge(user_agent)

@@ -59,6 +59,8 @@ en-GB:
         too_long: "Background is too long"
       additional_details:
         too_long: "Additional details is too long"
+      comment:
+        blank: "Comments must be completed"
       name:
         blank: "Name must be completed"
       location_code:
