@@ -42,3 +42,11 @@ Feature: Freya searches petitions by constituency
     When I search for petitions local to me in "NN13 5QD"
     Then the markup should be valid
     But I should see an explanation that there are no petitions popular in my constituency
+
+  Scenario: Searching for local petitions when the mp has passed away
+    Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And the MP has passed away
+    When I am on the home page
+    And I search for petitions local to me in "S4 8AA"
+    Then the markup should be valid
+    And I should not see a link to the MP for my constituency

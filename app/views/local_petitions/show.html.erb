@@ -2,7 +2,7 @@
   Popular petitions in the constituency of <%= @constituency.name %>
 </h1>
 
-<% if @constituency.mp_id? %>
+<% if @constituency.sitting_mp? %>
   <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
 <% end %>
 

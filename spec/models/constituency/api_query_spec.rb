@@ -88,6 +88,19 @@ RSpec.describe Constituency::ApiQuery, type: :model do
           }])
         end
       end
+
+      context "when the current MP has passed away" do
+        before do
+          stub_api_request_for("S48AA").to_return(api_response(:ok, "vacant"))
+        end
+
+        it "sets the MP details to nil" do
+          expect(query.fetch("S48AA")).to eq([{
+            name: "Sheffield, Brightside and Hillsborough", external_id: "3724",
+            ons_code: "E14000921", mp_id: nil, mp_name: nil, mp_date: nil
+          }])
+        end
+      end
     end
 
     context "when the request is unsuccessful" do

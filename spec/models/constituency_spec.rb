@@ -138,6 +138,47 @@ RSpec.describe Constituency, type: :model do
         expect(constituency.reload.mp_name).to eq("Jim McMahon MP")
       end
     end
+
+    context "when the MP has passed away" do
+      let(:constituency) do
+        Constituency.find_by_postcode('S48AA')
+      end
+
+      before do
+        FactoryGirl.create(:constituency, {
+          name: "Sheffield, Brightside and Hillsborough", external_id: "3724", ons_code: "E14000921",
+          mp_id: "4477", mp_name: "Harry Harpham", mp_date: "2015-05-07T00:00:00"
+        })
+
+        stub_api_request_for("S48AA").to_return(api_response(:ok, "vacant"))
+      end
+
+      it "updates the existing constituency" do
+        expect(constituency.mp_name).to eq(nil)
+      end
+
+      it "persists the changes to the database" do
+        expect(constituency.reload.mp_name).to eq(nil)
+      end
+    end
+  end
+
+  describe "#sitting_mp?" do
+    context "when the MP details are available" do
+      let(:constituency) { FactoryGirl.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }
+
+      it "returns true" do
+        expect(constituency.sitting_mp?).to be true
+      end
+    end
+
+    context "when the MP details are not available" do
+      let(:constituency) { FactoryGirl.build(:constituency, mp_id: nil, mp_name: nil) }
+
+      it "returns false" do
+        expect(constituency.sitting_mp?).to be false
+      end
+    end
   end
 
   describe "#mp_url" do
