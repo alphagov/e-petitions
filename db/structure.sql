@@ -1241,6 +1241,13 @@ CREATE INDEX index_signatures_on_petition_id ON signatures USING btree (petition
 
 
 --
+-- Name: index_signatures_on_petition_id_and_location_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_petition_id_and_location_code ON signatures USING btree (petition_id, location_code);
+
+
+--
 -- Name: index_signatures_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1496,4 +1503,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160211002731');
 INSERT INTO schema_migrations (version) VALUES ('20160211003703');
 
 INSERT INTO schema_migrations (version) VALUES ('20160211020341');
+
+INSERT INTO schema_migrations (version) VALUES ('20160217192016');
 
