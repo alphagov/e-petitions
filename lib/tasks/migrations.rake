@@ -239,7 +239,20 @@ namespace :epets do
         signature.save(validate: false)
       end
 
-      CountryPetitionJournal.reset!
+      Petition.find_each do |petition|
+        locations = petition.signatures.validated.distinct.pluck(:location_code).compact
+
+        locations.each do |location|
+          journal = CountryPetitionJournal.for(petition, location)
+
+          journal.with_lock do
+            signature_count = petition.signatures.validated.where(location_code: location).count
+            journal.update(signature_count: signature_count)
+          end
+        end
+
+        petition.touch
+      end
     end
   end
 end
