@@ -1,8 +1,7 @@
 <%= cache_for :home_page do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
-  <% no_petitions_yet = Petition.visible.none? %>
-  <% if no_petitions_yet %>
+  <% if no_petitions_yet? %>
     <div class="section-panel-borderless no-petitions-yet">
       <p class="lede">The new Petitions service launched today</p>
       <p class="lede">We're expecting the first petitions to go live in the next few hours</p>
@@ -21,7 +20,7 @@
     </div>
   <% end %>
 
-  <% unless no_petitions_yet %>
+  <% unless no_petitions_yet? %>
     <div class="section-panel-borderless">
       <% trending_petitions do |petitions| %>
         <section class="trending" aria-labelledby="trending-heading">
@@ -73,7 +72,7 @@
     </section>
   <% end %>
 
-  <% unless no_petitions_yet %>
+  <% unless no_petitions_yet? %>
     <section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
       <h2 id="local-to-you-heading">Local to you</h2>
       <p>Find petitions being signed by people near you</p>
