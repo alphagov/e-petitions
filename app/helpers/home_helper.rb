@@ -52,6 +52,10 @@ module HomeHelper
   end
   private :actioned_petitions_decorator
 
+  def no_petitions_yet?
+    @_no_petitions_yet ||= Petition.visible.empty?
+  end
+
   def petition_count(key, count)
     t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
   end
