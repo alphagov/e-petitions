@@ -6,9 +6,9 @@ Rails.application.routes.draw do
     get 'browserconfig' => 'pages#browserconfig', format: 'xml'
     get 'manifest' => 'pages#manifest', format: 'json'
 
-    get 'feedback' => 'feedback#index', :as => 'feedback'
-    get 'feedback/thanks' => 'feedback#thanks', :as => 'thanks_feedback'
-    post 'feedback' => 'feedback#create', :as => nil
+    get  'feedback', to: 'feedback#new', as: 'feedback'
+    post 'feedback', to: 'feedback#create', as: nil
+    get  'feedback/thanks', to: 'feedback#thanks', as: 'thanks_feedback'
 
     scope 'petitions' do
       get 'local' => 'local_petitions#index', as: 'local_petitions'

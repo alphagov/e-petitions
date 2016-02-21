@@ -365,6 +365,38 @@ ALTER SEQUENCE email_sent_receipts_id_seq OWNED BY email_sent_receipts.id;
 
 
 --
+-- Name: feedback; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE feedback (
+    id integer NOT NULL,
+    comment character varying(32768) NOT NULL,
+    petition_link_or_title character varying,
+    email character varying,
+    user_agent character varying
+);
+
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE feedback_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: feedback_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE feedback_id_seq OWNED BY feedback.id;
+
+
+--
 -- Name: government_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -778,6 +810,13 @@ ALTER TABLE ONLY email_sent_receipts ALTER COLUMN id SET DEFAULT nextval('email_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY feedback ALTER COLUMN id SET DEFAULT nextval('feedback_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('government_responses_id_seq'::regclass);
 
 
@@ -907,6 +946,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 ALTER TABLE ONLY email_sent_receipts
     ADD CONSTRAINT email_sent_receipts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: feedback_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY feedback
+    ADD CONSTRAINT feedback_pkey PRIMARY KEY (id);
 
 
 --
@@ -1503,6 +1550,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160211002731');
 INSERT INTO schema_migrations (version) VALUES ('20160211003703');
 
 INSERT INTO schema_migrations (version) VALUES ('20160211020341');
+
+INSERT INTO schema_migrations (version) VALUES ('20160214233414');
 
 INSERT INTO schema_migrations (version) VALUES ('20160217192016');
 

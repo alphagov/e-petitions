@@ -202,3 +202,16 @@ RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
     end
   end
 end
+
+RSpec.describe FeedbackEmailJob, type: :job do
+  let(:feedback) { FactoryGirl.create(:feedback) }
+
+  it "sends the FeedbackMailer#send_feedback email" do
+    expect(FeedbackMailer).to receive(:send_feedback).with(feedback).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(feedback)
+    end
+  end
+end
+

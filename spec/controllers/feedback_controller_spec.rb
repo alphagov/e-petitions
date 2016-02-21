@@ -3,14 +3,16 @@ require 'rails_helper'
 RSpec.describe FeedbackController, type: :controller do
   describe "GET /feedback" do
     it "is successful" do
-      get :index
+      get :new
       expect(response).to be_success
     end
   end
 
   describe "POST /feedback" do
     def do_post(attributes = {})
-      post :create, feedback: attributes
+      perform_enqueued_jobs do
+        post :create, feedback: attributes
+      end
     end
 
     context "with valid input" do
@@ -35,7 +37,7 @@ RSpec.describe FeedbackController, type: :controller do
 
       it "returns the user to the form" do
         do_post comment: ""
-        expect(response).to render_template("feedback/index")
+        expect(response).to render_template("feedback/new")
       end
     end
   end
