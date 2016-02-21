@@ -19,6 +19,10 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
   end
 end
 
+Given(/^the MP has passed away$/) do
+  @mp_passed_away = true
+end
+
 Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_action|
   petition = Petition.find_by!(action: petition_action)
   constituency = @constituencies.fetch(constituency)
@@ -43,25 +47,46 @@ When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
   else
     sanitized_postcode = PostcodeSanitizer.call(postcode)
 
-    stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
-      <<-XML.strip
-        <Constituencies>
-          <Constituency>
-            <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
-            <Name>#{@my_constituency.name}</Name>
-            <ONSCode>#{@my_constituency.ons_code}</ONSCode>
-            <RepresentingMembers>
-              <RepresentingMember>
-                <Member_Id>#{@my_constituency.mp_id}</Member_Id>
-                <Member>#{@my_constituency.mp_name}</Member>
-                <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
-                <EndDate xsi:nil="true"
-                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-              </RepresentingMember>
-          </Constituency>
-        </Constituencies>
-      XML
-    })
+    if @mp_passed_away
+      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
+        <<-XML.strip
+          <Constituencies>
+            <Constituency>
+              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
+              <Name>#{@my_constituency.name}</Name>
+              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
+              <RepresentingMembers>
+                <RepresentingMember>
+                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
+                  <Member>#{@my_constituency.mp_name}</Member>
+                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
+                  <EndDate>#{1.day.ago.iso8601}</EndDate>
+                </RepresentingMember>
+            </Constituency>
+          </Constituencies>
+        XML
+      })
+    else
+      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
+        <<-XML.strip
+          <Constituencies>
+            <Constituency>
+              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
+              <Name>#{@my_constituency.name}</Name>
+              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
+              <RepresentingMembers>
+                <RepresentingMember>
+                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
+                  <Member>#{@my_constituency.mp_name}</Member>
+                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
+                  <EndDate xsi:nil="true"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+                </RepresentingMember>
+            </Constituency>
+          </Constituencies>
+        XML
+      })
+    end
   end
 
   within :css, '.local-to-you' do
@@ -114,4 +139,8 @@ end
 
 Then(/^I should see a link to the MP for my constituency$/) do
   expect(page).to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
+end
+
+Then(/^I should not see a link to the MP for my constituency$/) do
+  expect(page).not_to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
 end

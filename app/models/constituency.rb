@@ -39,6 +39,10 @@ class Constituency < ActiveRecord::Base
     end
   end
 
+  def sitting_mp?
+    mp_id?
+  end
+
   def mp_url
     "#{MP_URL}/#{mp_name.parameterize}/#{mp_id}"
   end

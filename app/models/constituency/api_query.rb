@@ -10,7 +10,8 @@ class Constituency < ActiveRecord::Base
     CURRENT_MP = './RepresentingMembers/RepresentingMember[1]'
     MP_ID      = './Member_Id'
     MP_NAME    = './Member'
-    MP_DATE    = './StartDate'
+    MP_START   = './StartDate'
+    MP_END     = './EndDate'
 
     def fetch(postcode)
       response = client.call(postcode)
@@ -47,9 +48,13 @@ class Constituency < ActiveRecord::Base
           attrs[:ons_code]    = node.xpath(CONSTITUENCY_CODE).text
 
           if mp = node.at_xpath(CURRENT_MP)
-            attrs[:mp_id] = mp.xpath(MP_ID).text
-            attrs[:mp_name] = mp.xpath(MP_NAME).text
-            attrs[:mp_date] = mp.xpath(MP_DATE).text
+            if mp.at_xpath(MP_END).text.present?
+              attrs.merge!(mp_id: nil, mp_name: nil, mp_date: nil)
+            else
+              attrs[:mp_id] = mp.xpath(MP_ID).text
+              attrs[:mp_name] = mp.xpath(MP_NAME).text
+              attrs[:mp_date] = mp.xpath(MP_START).text
+            end
           end
         end
       end
