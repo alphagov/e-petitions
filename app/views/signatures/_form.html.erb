@@ -8,7 +8,6 @@
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
   <%= f.label :uk_citizenship,  :class => 'block-label', :for => nil do  %>
-    <%# Don't use rails' checkbox helper when nesting because it creates two checkboxes, which is not valid markup inside the label %>
     <%= f.check_box :uk_citizenship, :tabindex => increment %>
     I am a British citizen or UK resident
   <% end %>
