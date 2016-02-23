@@ -59,7 +59,6 @@ group :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'factory_girl_rails'
-  gem 'be_valid_asset', require: false
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'
