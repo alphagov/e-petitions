@@ -6,8 +6,6 @@ Feature: User views static pages
     When I go to the home page
     Then I should see "Petitions - UK Government and Parliament" in the browser page title
     And the markup should be valid
-    # css is not entirely valid but useful to run to see any real no-nos
-    # And the css files should be valid
 
   Scenario: I navigate to Help
     When I go to the home page
