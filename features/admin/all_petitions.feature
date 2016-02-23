@@ -1,4 +1,4 @@
-@javascript @admin
+@admin
 Feature: A moderator user views all petitions
   In order to see a full list of all the petitions
   As any moderator user
@@ -18,6 +18,7 @@ Feature: A moderator user views all petitions
     And I view the petition
     Then I should see the petition details
 
+  @javascript
   Scenario: Filter list by state
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
