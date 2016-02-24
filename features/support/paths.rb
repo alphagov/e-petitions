@@ -74,6 +74,9 @@ module NavigationHelpers
     when /^home ?page$/
       admin_root_url
 
+    when /^delayed job page$/
+      admin_delayed_web_url
+
     when /^petition page for "([^\"]*)"$/
       admin_petition_url(Petition.find_by(action: $1))
 

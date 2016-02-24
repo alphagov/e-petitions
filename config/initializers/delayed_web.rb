@@ -8,7 +8,7 @@ Delayed::Web::ApplicationController.class_eval do
   include Authentication
   before_filter :require_admin_and_check_for_password_change
 
-  def admin_login_path
-    main_app.admin_login_path
+  def admin_login_url
+    main_app.admin_login_url
   end
 end
