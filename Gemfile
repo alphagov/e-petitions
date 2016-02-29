@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
-gem 'rails', '4.2.5.1'
+gem 'rails', '4.2.5.2'
 
 # Legacy Rails feature gems - will no longer be supported in Rails 5.0
 gem 'responders'
