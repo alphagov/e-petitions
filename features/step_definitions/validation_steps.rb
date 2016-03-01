@@ -1,4 +1,8 @@
 Then /^the markup should be valid$/ do
-  document = Nokogiri::XML(page.source)
-  expect(document.errors).to be_empty
+  tags = %w[header nav main details summary section footer]
+  pattern = /\ATag (?:#{tags.join('|')}) invalid\z/
+  filter = -> (error){ error.message =~ pattern }
+
+  document = Nokogiri::HTML(page.source)
+  expect(document.errors.reject(&filter)).to be_empty
 end
