@@ -4,7 +4,13 @@ Feature: Restricted access to the admin console
   I can only access the admin area if I have logged on and my password does not need resetting
 
   Scenario: Accessing admin when not logged in
-    When I go to the Admin home page
+    When I go to the admin home page
+    Then I should be on the admin login page
+    And I should be connected to the server via an ssl connection
+    And the markup should be valid
+
+  Scenario: Accessing the job admin when not logged in
+    When I go to the admin delayed job page
     Then I should be on the admin login page
     And I should be connected to the server via an ssl connection
     And the markup should be valid
