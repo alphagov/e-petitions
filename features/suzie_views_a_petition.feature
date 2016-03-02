@@ -18,8 +18,7 @@ Feature: Suzie views a petition
   Scenario: Suzie views a petition containing urls, email addresses and html tags
     Given an open petition exists with action: "Defence review", additional_details: "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I go to the petition page for "Defence review"
-    # Cannot test for validity due to iframe attribute required for IE7
-    # Then the markup should be valid
+    Then the markup should be valid
     And I should see "<i>We<i>"
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"

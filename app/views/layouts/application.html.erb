@@ -3,7 +3,7 @@
   <head>
     <title><%= page_title %></title>
     <%= cache_for :head do %>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
       <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
       <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
@@ -11,7 +11,7 @@
 
       <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
 
-      <meta name="viewport" content="width = device-width"/>
+      <meta name="viewport" content="width = device-width" />
       <%= render 'application/os' %>
       <%= render 'application/social_meta' %>
       <%= render 'application/analytics' %>
