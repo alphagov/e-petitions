@@ -74,6 +74,32 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
     end
 
+    context "when the time span crosses the spring DST boundary" do
+      let(:now) { Time.utc(2016, 4, 11, 11, 0, 0).in_time_zone }
+      let(:date) { 30.days.ago(now) }
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "returns 'Waiting for 30 days'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
+      end
+    end
+
+    context "when the time span crosses the autumn DST boundary" do
+      let(:now) { Time.utc(2016, 11, 11, 12, 0, 0).in_time_zone }
+      let(:date) { 30.days.ago(now) }
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "returns 'Waiting for 30 days'" do
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
+      end
+    end
+
     context "when the response threshold was reached 3 years ago" do
       let(:date) { 1095.days.ago(now) }
 

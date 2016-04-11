@@ -29,7 +29,7 @@ module DateTimeHelper
     return unless date.present?
 
     scope = :"petitions.waiting_for_in_words"
-    days  = ((now.end_of_day - date.end_of_day) / 86400.0).floor
+    days  = ((now.end_of_day - date.end_of_day) / 86400.0).round
     key   = WAITING_FOR_KEYS[days]
 
     t(key, scope: scope, formatted_count: number_with_delimiter(days))
