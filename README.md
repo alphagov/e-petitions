@@ -19,6 +19,7 @@ A few things to know:
 	* `$ psql postgres`
 	* `# CREATE DATABASE epets_development;`
 	* `# CREATE DATABASE epets_test;`
+	* `# CREATE USER epets;`
 	* `# GRANT all privileges ON database epets_development TO epets;`
 	* `# GRANT all privileges ON database epets_test TO epets;`
 	* `# ALTER USER epets WITH PASSWORD 'replace_me';`
