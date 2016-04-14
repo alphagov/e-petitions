@@ -44,4 +44,13 @@ module DateTimeHelper
       end
     end
   end
+
+  def to_be_debated_on_in_words(date)
+    return unless date.present?
+
+    scope = :"petitions.to_be_debated_on_in_words"
+    key   = :all
+
+    t(key, scope: scope, formatted_date: short_date_format(date))
+  end
 end
