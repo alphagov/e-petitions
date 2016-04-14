@@ -46,7 +46,7 @@ module DateTimeHelper
     end
   end
 
-  def to_be_debated_on_in_words(date, today = Date.today)
+  def to_be_debated_on_in_words(date, today = Date.current)
     return unless date.present?
 
     scope = :"petitions.to_be_debated_on_in_words"

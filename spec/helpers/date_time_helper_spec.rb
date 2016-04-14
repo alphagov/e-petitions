@@ -119,7 +119,7 @@ RSpec.describe DateTimeHelper, type: :helper do
     end
 
     context "when the date is today" do
-      let(:date) { Date.today }
+      let(:date) { Date.current }
 
       it "returns 'To be debated today'" do
         expect(helper.to_be_debated_on_in_words(date)).to eq("To be debated today")
