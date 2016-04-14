@@ -26,7 +26,12 @@ class FetchCountryRegisterJob < ActiveJob::Base
   private
 
   def countries
-    fetch_register.body.map{ |r| r['entry'] }
+    items = fetch_register.body
+    if items.is_a?(Array)
+      items.map { |r| r['entry'] }
+    else
+      items.values
+    end
   end
 
   def faraday
@@ -34,7 +39,7 @@ class FetchCountryRegisterJob < ActiveJob::Base
       f.response :follow_redirects
       f.response :json
       f.response :raise_error
-      f.adapter  :net_http_persistent
+      f.adapter :net_http_persistent
     end
   end
 
