@@ -110,17 +110,27 @@ RSpec.describe DateTimeHelper, type: :helper do
   end
 
   describe "#to_be_debated_on_in_words" do
-    context "when the date is nil" do
-      it "returns nil" do
-        expect(helper.to_be_debated_on_in_words(nil)).to be_nil
-      end
-    end
-
     context "when the date is today" do
       let(:date) { Date.parse("11/11/2016") }
 
       it "returns 'To be debated on 11 November 2016'" do
         expect(helper.to_be_debated_on_in_words(date)).to eq("To be debated on 11 November 2016")
+      end
+    end
+
+    context "when the date is today" do
+      let(:date) { Date.today }
+
+      it "returns 'To be debated today'" do
+        expect(helper.to_be_debated_on_in_words(date)).to eq("To be debated today")
+      end
+    end
+
+    context "when the date is tomorrow" do
+      let(:date) { Date.tomorrow }
+
+      it "returns 'To be debated tomorrow'" do
+        expect(helper.to_be_debated_on_in_words(date)).to eq("To be debated tomorrow")
       end
     end
   end

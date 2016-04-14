@@ -131,7 +131,9 @@ en-GB:
       other: "Waiting for %{formatted_count} days"
 
     to_be_debated_on_in_words:
-      all: "To be debated on %{formatted_date}"
+      today: "To be debated today"
+      tomorrow: "To be debated tomorrow"
+      other: "To be debated on %{formatted_date}"
 
     signature_counts:
       default:
