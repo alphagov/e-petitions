@@ -1,5 +1,6 @@
 module DateTimeHelper
   WAITING_FOR_KEYS = Hash.new(:other).merge(0 => :zero, 1 => :one)
+  TO_BE_DEBATED_KEYS = Hash.new(:other).merge(0 => :today, 1 => :tomorrow)
 
   def short_date_format(date_time)
     date_time && date_time.strftime("%-d %B %Y")
@@ -43,5 +44,13 @@ module DateTimeHelper
         date_time.strftime("%Y-%m-%d")
       end
     end
+  end
+
+  def to_be_debated_on_in_words(date, today = Date.current)
+    scope = :"petitions.to_be_debated_on_in_words"
+    days  = (date - today).to_i
+    key   = TO_BE_DEBATED_KEYS[days]
+
+    t(key, scope: scope, formatted_date: short_date_format(date))
   end
 end
