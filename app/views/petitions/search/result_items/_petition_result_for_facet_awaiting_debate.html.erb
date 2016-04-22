@@ -2,5 +2,5 @@
 <p><%= signature_count(:default, petition.signature_count) %></p>
 <p><%= waiting_for_in_words(petition.debate_threshold_reached_at) %></p>
 <% if petition.scheduled_debate_date? %>
-  <p><%= to_be_debated_on_in_words(petition.scheduled_debate_date) %></p>
+  <p><%= scheduled_for_debate_in_words(petition.scheduled_debate_date) %></p>
 <% end %>
