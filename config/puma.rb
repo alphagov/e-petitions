@@ -24,7 +24,4 @@ on_worker_boot do
   # Worker specific setup for Rails 4.1+
   # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
   ActiveRecord::Base.establish_connection
-
-  # Let AppSignal know that a worker process has been forked
-  Appsignal.agent.forked! if defined?(Appsignal) && Appsignal.config.active?
 end
