@@ -46,11 +46,15 @@ Rails.application.configure do
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 
+  # Disable asset digests so that test values don't change.
+  config.assets.digest = false
+
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
   # Use webmock to disable net connections except for localhost and exceptions
   WebMock.disable_net_connect!(allow_localhost: true,
                                allow: %w{validator.unboxedconsulting.com})
+
   config.active_job.queue_adapter = :test
 end
