@@ -35,6 +35,10 @@ module EmailHelpers
   def text_and_links_in_email(email)
     email.default_part_body.to_s.scan(%r{<a[^>]+href="([^"]+)"[^>]*>([^<]+)</a>})
   end
+
+  def links_in_email(email)
+    text_and_links_in_email(email).map(&:first)
+  end
 end
 
 World(EmailHelpers)
