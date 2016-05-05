@@ -33,7 +33,8 @@ module EmailHelpers
   end
 
   def text_and_links_in_email(email)
-    email.default_part_body.to_s.scan(%r{<a[^>]+href="([^"]+)"[^>]*>([^<]+)</a>})
+    html = Nokogiri::HTML(email.default_part_body.to_s)
+    html.xpath("//a").map{ |node| [node["href"], node.text] }
   end
 
   def links_in_email(email)
