@@ -1,3 +1,7 @@
+You’re receiving this email because you created this petition.
+To unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+--
+
 Dear <%= @signature.name %>,
 
 <% if @debate_outcome.debated? %>
@@ -33,4 +37,6 @@ Thanks,
 <%= t("petitions.emails.signoff_prefix") %>
 <%= t("petitions.emails.signoff_suffix") %>
 
-You’re receiving this email because you created this petition. Unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+--
+You’re receiving this email because you created this petition.
+To unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
