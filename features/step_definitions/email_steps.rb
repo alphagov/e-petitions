@@ -184,6 +184,10 @@ When /^(?:I|they) click the first link in the email$/ do
   visit links_in_email(current_email).first
 end
 
+When /^(?:I|they) click the second link in the email$/ do
+  visit links_in_email(current_email).second
+end
+
 #
 # Debugging
 # These only work with Rails and OSx ATM since EmailViewer uses RAILS_ROOT and OSx's 'open' command.
