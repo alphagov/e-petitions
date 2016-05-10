@@ -1,10 +1,10 @@
-You’re receiving this email because you signed this petition.
-To unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+You’re receiving this email because you signed this petition: “<%= @petition.action %>”.
+To unsubscribe from this petition: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
 --
 
 Dear <%= @signature.name %>,
 
-Parliament is going to debate the petition you signed – "<%= @petition.action %>".
+Parliament is going to debate the petition you signed – “<%= @petition.action %>”.
 
 <%= petition_url(@petition) %>
 
@@ -17,5 +17,5 @@ Thanks,
 <%= t("petitions.emails.signoff_suffix") %>
 
 --
-You’re receiving this email because you signed this petition.
-To unsubscribe: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
+You’re receiving this email because you signed this petition: “<%= @petition.action %>”.
+To unsubscribe from this petition: <%= unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %>
