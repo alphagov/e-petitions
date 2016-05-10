@@ -32,7 +32,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "has an appropriate subject heading" do
-      expect(mail).to have_subject('We published your petition "Allow organic vegetable vans to use red diesel"')
+      expect(mail).to have_subject('We published your petition “Allow organic vegetable vans to use red diesel”')
     end
 
     it "is addressed to the creator" do
@@ -65,7 +65,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "has an appropriate subject heading" do
-      expect(mail).to have_subject('We published the petition "Allow organic vegetable vans to use red diesel" that you supported')
+      expect(mail).to have_subject('We published the petition “Allow organic vegetable vans to use red diesel” that you supported')
     end
 
     it "is addressed to the sponsor" do
@@ -107,7 +107,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 
     it "has the correct subject" do
-      expect(mail).to have_subject(%{Action required: Petition "Allow organic vegetable vans to use red diesel"})
+      expect(mail).to have_subject(%{Action required: Petition “Allow organic vegetable vans to use red diesel”})
     end
 
     it "has the addresses the creator by name" do
@@ -168,7 +168,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a positive debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament debated your petition")
+          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the positive message in the body" do
@@ -178,7 +178,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a negative debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament didn't debate your petition")
+          expect(mail).to have_subject('Parliament didn’t debate “Allow organic vegetable vans to use red diesel”')
         end
 
         it "has the negative message in the body" do
@@ -283,7 +283,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a positive debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament debated the petition you signed")
+          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the positive message in the body" do
@@ -293,7 +293,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a negative debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament didn't debate the petition you signed")
+          expect(mail).to have_subject("Parliament didn’t debate “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the negative message in the body" do
@@ -399,7 +399,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       it_behaves_like "a debate scheduled email"
 
       it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate your petition")
+        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
       end
 
       it "identifies them as the creator" do
@@ -414,7 +414,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       it_behaves_like "a debate scheduled email"
 
       it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate the petition you signed")
+        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
       end
 
       it "identifies them as a ordinary signature" do
