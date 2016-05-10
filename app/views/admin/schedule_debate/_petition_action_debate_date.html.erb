@@ -6,6 +6,5 @@
     <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control' %>
   <% end %>
 
-  <%= email_petitioners_with_count_submit_button(f, petition) %>
-  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
+  <%= f.submit "Save", name: 'save', class: 'button' %>
 <% end %>
