@@ -334,7 +334,7 @@ class PackageBuilder
   end
 
   def website_url
-    if environment == :production
+    if environment == "production"
       "https://petition.parliament.uk/"
     else
       "https://#{environment}.epetitions.website/"
