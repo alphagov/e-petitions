@@ -109,16 +109,12 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition “[^"]+”/)
           end
-          it "sends an email to validated petition sponsors" do
-            validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
+          it "does not sends any emails to petition sponsors" do
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+            FactoryGirl.create(:sponsor, :pending, petition: petition)
             do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
-          end
-          it "does not send an email to pending petition sponsors" do
-            pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
-            do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(email.bcc).to be_blank
           end
         end
 
@@ -149,16 +145,12 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
             expect(email.to).to eq([petition.creator_signature.email])
             expect(email.subject).to match(/We rejected your petition “[^"]+”/)
           end
-          it "sends an email to validated petition sponsors" do
-            validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
+          it "does not sends any emails to petition sponsors" do
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+            FactoryGirl.create(:sponsor, :pending, petition: petition)
             do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
-          end
-          it "does not send an email to pending petition sponsors" do
-            pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
-            do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(email.bcc).to be_blank
           end
         end
 
