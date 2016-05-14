@@ -45,20 +45,24 @@ class SignaturesController < ApplicationController
   end
 
   def unsubscribe
-    @signature.unsubscribe!(params[:token])
+    @signature.unsubscribe!(token_param)
   end
 
   private
 
+  def token_param
+    @token_param ||= (params[:token] || params[:legacy_token]).to_s
+  end
+
   def verify_token
-    unless @signature.perishable_token == params[:token]
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: #{params[:token].inspect}"
+    unless @signature.perishable_token == token_param
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: token_param.inspect}"
     end
   end
 
   def verify_unsubscribe_token
-    unless @signature.unsubscribe_token == params[:token]
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with unsubscribe token: #{params[:token].inspect}"
+    unless @signature.unsubscribe_token == token_param
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with unsubscribe token: #{token_param.inspect}"
     end
   end
 
