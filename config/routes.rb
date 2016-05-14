@@ -39,9 +39,9 @@ Rails.application.routes.draw do
     post 'petitions/new' => 'petitions#create', :as => :create_petition
 
     scope 'signatures/:id' do
-      get 'verify/:token' => 'signatures#verify', :as => :verify_signature
-      get 'unsubscribe/:unsubscribe_token' => 'signatures#unsubscribe', :as => :unsubscribe_signature
-      get 'signed/:token' => 'signatures#signed', :as => :signed_signature
+      get 'verify' => 'signatures#verify', :as => :verify_signature
+      get 'unsubscribe' => 'signatures#unsubscribe', :as => :unsubscribe_signature
+      get 'signed' => 'signatures#signed', :as => :signed_signature
     end
 
     namespace :archived do

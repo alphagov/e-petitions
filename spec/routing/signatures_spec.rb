@@ -40,24 +40,24 @@ RSpec.describe "routes for signatures", type: :routes do
 
   # un-nested routes
   it "routes GET /signatures/:id/verify/:token to signatures#verify" do
-    expect({:get => "/signatures/1/verify/abcdef1234567890"}).
+    expect({:get => "/signatures/1/verify?token=abcdef1234567890"}).
       to route_to("signatures#verify", id: '1', token: 'abcdef1234567890')
 
-    expect(verify_signature_path('1', 'abcdef1234567890')).to eq('/signatures/1/verify/abcdef1234567890')
+    expect(verify_signature_path('1', token: 'abcdef1234567890')).to eq('/signatures/1/verify?token=abcdef1234567890')
   end
 
   it "routes GET /signatures/:id/unsubscribe/:token to signatures#unsubscribe" do
-    expect({:get => "/signatures/1/unsubscribe/abcdef1234567890"}).
-      to route_to("signatures#unsubscribe", id: '1', unsubscribe_token: 'abcdef1234567890')
+    expect({:get => "/signatures/1/unsubscribe?token=abcdef1234567890"}).
+      to route_to("signatures#unsubscribe", id: '1', token: 'abcdef1234567890')
 
-    expect(unsubscribe_signature_path('1', 'abcdef1234567890')).to eq('/signatures/1/unsubscribe/abcdef1234567890')
+    expect(unsubscribe_signature_path('1', token: 'abcdef1234567890')).to eq('/signatures/1/unsubscribe?token=abcdef1234567890')
   end
 
   it "routes GET /signatures/:id/signed/:token to signatures#signed" do
-    expect({:get => "/signatures/1/signed/abcdef1234567890"}).
+    expect({:get => "/signatures/1/signed?token=abcdef1234567890"}).
       to route_to("signatures#signed", id: '1', token: 'abcdef1234567890')
 
-    expect(signed_signature_path('1', 'abcdef1234567890')).to eq('/signatures/1/signed/abcdef1234567890')
+    expect(signed_signature_path('1', token: 'abcdef1234567890')).to eq('/signatures/1/signed?token=abcdef1234567890')
   end
 
   it "doesn't route GET /signatures" do

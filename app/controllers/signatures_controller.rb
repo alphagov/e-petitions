@@ -3,7 +3,10 @@ class SignaturesController < ApplicationController
 
   before_action :retrieve_petition, only: [:new, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+  before_action :verify_token, only: [:verify, :signed]
+  before_action :verify_unsubscribe_token, only: [:unsubscribe]
   before_action :redirect_to_petition_page, if: :petition_closed?, only: [:new, :create, :verify]
+  before_action :redirect_to_verify_page, unless: :signature_validated?, only: [:signed]
   before_action :do_not_cache
 
   respond_to :html
@@ -16,6 +19,7 @@ class SignaturesController < ApplicationController
 
   def create
     matching_signatures = find_existing_pending_signatures
+
     if matching_signatures.any?
       handle_existing_signatures(matching_signatures, @petition)
     else
@@ -24,25 +28,15 @@ class SignaturesController < ApplicationController
   end
 
   def signed
-    verify_token
-
-    if @signature.validated?
-
-      if @signature.seen_signed_confirmation_page?
-        redirect_to petition_url @signature.petition
-      else
-        @signature.mark_seen_signed_confirmation_page!
-        @petition = @signature.petition
-      end
-
+    if @signature.seen_signed_confirmation_page?
+      redirect_to petition_url @signature.petition
     else
-      redirect_to(verify_signature_url(@signature, @signature.perishable_token))
+      @signature.mark_seen_signed_confirmation_page!
+      @petition = @signature.petition
     end
   end
 
   def verify
-    verify_token
-
     if @signature.sponsor?
       validate_sponsor
     else
@@ -51,13 +45,21 @@ class SignaturesController < ApplicationController
   end
 
   def unsubscribe
-    @signature.unsubscribe!(params[:unsubscribe_token])
+    @signature.unsubscribe!(params[:token])
   end
 
   private
 
   def verify_token
-    raise ActiveRecord::RecordNotFound unless @signature.perishable_token == params[:token]
+    unless @signature.perishable_token == params[:token]
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: #{params[:token].inspect}"
+    end
+  end
+
+  def verify_unsubscribe_token
+    unless @signature.unsubscribe_token == params[:token]
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with unsubscribe token: #{params[:token].inspect}"
+    end
   end
 
   def retrieve_petition
@@ -73,8 +75,16 @@ class SignaturesController < ApplicationController
     redirect_to petition_url(@petition)
   end
 
+  def redirect_to_verify_page
+    redirect_to verify_signature_url(@signature, token: @signature.perishable_token)
+  end
+
   def petition_closed?
     @petition && @petition.closed?
+  end
+
+  def signature_validated?
+    @signature && @signature.validated?
   end
 
   def send_email_to_petition_signer(signature)

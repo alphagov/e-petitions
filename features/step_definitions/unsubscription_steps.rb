@@ -1,7 +1,7 @@
 Then /^Suzie should have received a petition response email with an unsubscription link$/ do
   expect(unread_emails_for(@suzies_signature.email).size).to eq 1
   open_email(@suzies_signature.email)
-  unsubscription_url = unsubscribe_signature_url(@suzies_signature, @suzies_signature.unsubscribe_token)
+  unsubscription_url = unsubscribe_signature_url(@suzies_signature, token: @suzies_signature.unsubscribe_token)
   expect(current_email.default_part_body.to_s).to include(unsubscription_url)
 end
 

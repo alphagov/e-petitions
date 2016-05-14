@@ -4,7 +4,7 @@ We noticed that you tried to sign the petition "<%= @petition.action %>" but hav
 
 Click this link to sign the petition:
 
-<%= verify_signature_url(@signature, @signature.perishable_token) %>
+<%= verify_signature_url(@signature, token: @signature.perishable_token) %>
 
 Thanks,
 <%= t("petitions.emails.signoff_prefix") %>
