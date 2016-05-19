@@ -49,7 +49,7 @@ World(EmailHelpers)
 # This is done automatically before each scenario.
 #
 
-Given /^(?:a clear email queue)$/ do
+Given /^(?:a clear email queue|no emails have been sent)$/ do
   reset_mailer
 end
 
@@ -71,10 +71,6 @@ end
 
 Then /^(?:I|they|"([^"]*?)") should receive an email with the following body:$/ do |address, expected_body|
   open_email(address, :with_text => expected_body)
-end
-
-Then(/^no emails have been sent$/) do
-  expect(all_emails).to be_empty
 end
 
 #

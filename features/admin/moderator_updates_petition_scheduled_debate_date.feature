@@ -7,8 +7,8 @@ Feature: Moderator updates petition scheduled debate date
     When I view all petitions
     And I follow "More money for charities"
     And I follow "Scheduled debate date"
-    Then I should not see "Email 6 petitioners"
-    When I fill in "Scheduled debate date" with "06/12/2015"
-    And I press "Save"
-    Then I should see "Updated the scheduled debate date successfully"
-    And no emails have been sent
+    And I fill in "Scheduled debate date" with "06/12/2015"
+    And I press "Email 6 petitioners"
+    Then I should see "Email will be sent overnight"
+    And the petition creator should have been emailed about the scheduled debate
+    And all the signatories of the petition should have been emailed about the scheduled debate
