@@ -77,16 +77,6 @@ class PetitionMailer < ApplicationMailer
     end
   end
 
-  def notify_signer_of_debate_scheduled(petition, signature)
-    @petition, @signature = petition, signature
-    mail to: @signature.email, subject: subject_for(:notify_signer_of_debate_scheduled)
-  end
-
-  def notify_creator_of_debate_scheduled(petition, signature)
-    @petition, @signature = petition, signature
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_debate_scheduled)
-  end
-
   private
 
   def subject_for(key, options = {})
