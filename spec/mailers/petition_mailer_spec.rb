@@ -369,60 +369,6 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
   end
 
-  describe "notifying signature of debate scheduled" do
-    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_signature_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
-
-    shared_examples_for "a debate scheduled email" do
-      it "addresses the signatory by name" do
-        expect(mail).to have_body_text("Dear #{signature.name},")
-      end
-
-      it "sends it only to the signatory" do
-        expect(mail.to).to eq([signature.email])
-        expect(mail.cc).to be_blank
-        expect(mail.bcc).to be_blank
-      end
-
-      it "includes a link to the petition page" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}])
-      end
-
-      it "includes an unsubscribe link" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
-      end
-    end
-
-    context "when the signature is the creator" do
-      let(:signature) { petition.creator_signature }
-      subject(:mail) { described_class.notify_creator_of_debate_scheduled(petition, signature) }
-
-      it_behaves_like "a debate scheduled email"
-
-      it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
-      end
-
-      it "identifies them as the creator" do
-        expect(mail).to have_body_text(%[Parliament is going to debate your petition])
-      end
-    end
-
-    context "when the signature is not the creator" do
-      let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
-      subject(:mail) { described_class.notify_signer_of_debate_scheduled(petition, signature) }
-
-      it_behaves_like "a debate scheduled email"
-
-      it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
-      end
-
-      it "identifies them as a ordinary signature" do
-        expect(mail).to have_body_text(%[Parliament is going to debate the petition you signed])
-      end
-    end
-  end
-
   describe "emailing a signature" do
     let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_signature_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
     let(:email) { FactoryGirl.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
