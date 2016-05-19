@@ -19,7 +19,7 @@ RSpec.describe SignaturesController, type: :controller do
       it "redirects to the petition signed page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
-        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed/#{signature.perishable_token}")
+        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed?token=#{signature.perishable_token}")
       end
 
       it "raises exception if id not found" do
@@ -97,7 +97,7 @@ RSpec.describe SignaturesController, type: :controller do
         it "redirects to the petition signed page" do
           get :verify, :id => signature.id, :token => signature.perishable_token
           expect(assigns[:signature]).to eq(signature)
-          expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed/#{signature.perishable_token}")
+          expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed?token=#{signature.perishable_token}")
         end
 
         it "does not send an email to the creator" do
@@ -178,7 +178,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "redirects to the signature verify page" do
         make_signed_request
-        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify/#{signature.perishable_token}")
+        expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.id}/verify?token=#{signature.perishable_token}")
       end
 
       it "raises exception if token does not match" do
@@ -439,7 +439,7 @@ RSpec.describe SignaturesController, type: :controller do
   end
 
   describe '#unsubscribe' do
-    let(:signature) { double(:signature) }
+    let(:signature) { double(:signature, id: 1, unsubscribe_token: "token") }
     let(:petition) { double(:petition) }
 
     before do
@@ -447,7 +447,7 @@ RSpec.describe SignaturesController, type: :controller do
       expect(signature).to receive(:petition).and_return(petition)
       expect(signature).to receive(:unsubscribe!).with("token")
 
-      get :unsubscribe, id: "1", unsubscribe_token: "token"
+      get :unsubscribe, id: "1", token: "token"
     end
 
     it "renders the action template" do

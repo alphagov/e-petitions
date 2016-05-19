@@ -162,7 +162,7 @@ RSpec.describe PetitionMailer, type: :mailer do
         end
 
         it "includes an unsubscribe link" do
-          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
         end
       end
 
@@ -277,7 +277,7 @@ RSpec.describe PetitionMailer, type: :mailer do
         end
 
         it "includes an unsubscribe link" do
-          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+          expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
         end
       end
 
@@ -388,7 +388,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
 
       it "includes an unsubscribe link" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
       end
     end
 
@@ -447,7 +447,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
 
       it "includes an unsubscribe link" do
-        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe/#{signature.unsubscribe_token}])
+        expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{signature.id}/unsubscribe\?token=#{signature.unsubscribe_token}])
       end
 
       it "includes the message body" do

@@ -221,6 +221,10 @@ FactoryGirl.define do
     state                         Signature::VALIDATED_STATE
     validated_at                  { Time.current }
     seen_signed_confirmation_page true
+
+    trait :just_signed do
+      seen_signed_confirmation_page false
+    end
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }

@@ -1,6 +1,6 @@
 Click this link to sign the petition "<%= @petition.action %>"
 
-<%= verify_signature_url(@signature, @signature.perishable_token) %>
+<%= verify_signature_url(@signature, token: @signature.perishable_token) %>
 
 --
 
@@ -17,4 +17,4 @@ Click this link to sign the petition "<%= @petition.action %>"
 --
 
 Click this link to sign the petition:
-<%= verify_signature_url(@signature, @signature.perishable_token) %>
+<%= verify_signature_url(@signature, token: @signature.perishable_token) %>
