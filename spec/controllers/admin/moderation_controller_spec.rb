@@ -103,22 +103,24 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
             do_patch
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
-          it "sends an email to the petition creator" do
+          it "sends an email to the petition creator via Bcc: and not To:" do
             do_patch
             expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-            expect(email.to).to eq([petition.creator_signature.email])
+            expect(email.to).to be_blank
+            expect(email.bcc).to include(petition.creator_signature.email)
             expect(email.subject).to match(/We rejected your petition “[^"]+”/)
           end
           it "sends an email to validated petition sponsors" do
             validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
             validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
             do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
+            expect(email.bcc).to include(validated_sponsor_1.signature.email)
+            expect(email.bcc).to include(validated_sponsor_2.signature.email)
           end
           it "does not send an email to pending petition sponsors" do
             pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
             do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(email.bcc).not_to include(pending_sponsor.signature.email)
           end
         end
 
@@ -143,22 +145,24 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
             do_patch
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
-          it "sends an email to the petition creator" do
+          it "sends an email to the petition creator via Bcc: and not To:" do
             do_patch
             expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-            expect(email.to).to eq([petition.creator_signature.email])
+            expect(email.to).to be_blank
+            expect(email.bcc).to include(petition.creator_signature.email)
             expect(email.subject).to match(/We rejected your petition “[^"]+”/)
           end
           it "sends an email to validated petition sponsors" do
             validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
             validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
             do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
+            expect(email.bcc).to include(validated_sponsor_1.signature.email)
+            expect(email.bcc).to include(validated_sponsor_2.signature.email)
           end
           it "does not send an email to pending petition sponsors" do
             pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
             do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(email.bcc).not_to include(pending_sponsor.signature.email)
           end
         end
 
