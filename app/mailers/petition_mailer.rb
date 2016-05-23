@@ -33,8 +33,7 @@ class PetitionMailer < ApplicationMailer
 
   def petition_rejected(petition)
     @petition, @rejection, @creator = petition, petition.rejection, petition.creator_signature
-    bcc = @petition.sponsor_signatures.validated.map(&:email)
-    mail to: @creator.email, bcc: bcc, subject: subject_for(:petition_rejected)
+    mail to: @creator.email, subject: subject_for(:petition_rejected)
   end
 
   def notify_signer_of_threshold_response(petition, signature)
