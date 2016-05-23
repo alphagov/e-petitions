@@ -114,8 +114,10 @@ en-GB:
           We published your petition “%{action}”
         notify_sponsor_that_petition_is_published: |-
           We published the petition “%{action}” that you supported
-        petition_rejected: |-
+        notify_creator_that_petition_was_rejected: |-
           We rejected your petition “%{action}”
+        notify_sponsor_that_petition_was_rejected: |-
+          We rejected the petition “%{action}” that you supported
 
         # Re-send confirmation emails
         special_resend_of_email_confirmation_for_signer: |-

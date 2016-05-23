@@ -31,10 +31,14 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_is_published)
   end
 
-  def petition_rejected(petition)
-    @petition, @rejection, @creator = petition, petition.rejection, petition.creator_signature
-    bcc = @petition.sponsor_signatures.validated.map(&:email)
-    mail to: @creator.email, bcc: bcc, subject: subject_for(:petition_rejected)
+  def notify_creator_that_petition_was_rejected(signature)
+    @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
+    mail to: @signature.email, subject: subject_for(:notify_creator_that_petition_was_rejected)
+  end
+
+  def notify_sponsor_that_petition_was_rejected(signature)
+    @signature, @petition, @rejection = signature, signature.petition, signature.petition.rejection
+    mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_was_rejected)
   end
 
   def notify_signer_of_threshold_response(petition, signature)

@@ -164,6 +164,32 @@ RSpec.describe NotifySponsorThatPetitionIsPublishedEmailJob, type: :job do
   end
 end
 
+RSpec.describe NotifyCreatorThatPetitionWasRejectedEmailJob, type: :job do
+  let(:petition) { FactoryGirl.create(:rejected_petition) }
+  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+  it "sends the PetitionMailer#notify_creator_that_petition_was_rejected email" do
+    expect(PetitionMailer).to receive(:notify_creator_that_petition_was_rejected).with(signature).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(signature)
+    end
+  end
+end
+
+RSpec.describe NotifySponsorThatPetitionWasRejectedEmailJob, type: :job do
+  let(:petition) { FactoryGirl.create(:rejected_petition) }
+  let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+
+  it "sends the PetitionMailer#notify_sponsor_that_petition_was_rejected email" do
+    expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_rejected).with(signature).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(signature)
+    end
+  end
+end
+
 RSpec.describe PetitionAndEmailConfirmationForSponsorEmailJob, type: :job do
   let(:petition) { FactoryGirl.create(:petition) }
   let(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition) }

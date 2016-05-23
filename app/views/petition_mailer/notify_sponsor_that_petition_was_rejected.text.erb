@@ -1,6 +1,6 @@
-Dear <%= @creator.name %>,
+Dear <%= @signature.name %>,
 
-We rejected the petition you created – "<%= @petition.action %>".
+We rejected the petition you supported – "<%= @petition.action %>".
 
 <%= strip_tags(rejection_description(@rejection.code)) %>
 <% if @rejection.details? -%>
@@ -9,15 +9,12 @@ We rejected the petition you created – "<%= @petition.action %>".
 <% end -%>
 <% unless @petition.hidden? -%>
 
-Click this link to see your rejected petition:
+Click this link to see the rejected petition:
 <%= petition_url(@petition) %>
 <% end -%>
 
 We only reject petitions that don’t meet the petition standards:
 <%= help_url(anchor: 'standards') %>
-
-If you want to try again, click here to start a petition:
-<%= check_petitions_url %>
 
 Thanks,
 <%= t("petitions.emails.signoff_prefix") %>

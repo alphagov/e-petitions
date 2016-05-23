@@ -8,7 +8,7 @@ class Admin::TakeDownController < Admin::AdminController
 
   def update
     if @petition.reject(rejection_params[:rejection])
-      send_rejection_email
+      send_notifications
       redirect_to [:admin, @petition]
     else
       render 'admin/petitions/show'
@@ -25,7 +25,7 @@ class Admin::TakeDownController < Admin::AdminController
     params.require(:petition).permit(rejection: [:code, :details])
   end
 
-  def send_rejection_email
-    PetitionMailer.petition_rejected(@petition).deliver_now
+  def send_notifications
+    NotifyEveryoneOfModerationDecisionJob.perform_later(@petition)
   end
 end

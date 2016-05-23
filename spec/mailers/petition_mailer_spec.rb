@@ -77,6 +77,109 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
   end
 
+  describe "notifying creator of rejection" do
+    let(:mail) { PetitionMailer.notify_creator_that_petition_was_rejected(creator) }
+
+    context "when rejecting for normal reasons" do
+      before do
+        petition.reject(code: "duplicate")
+      end
+
+      it "is sent to the right address" do
+        expect(mail.to).to eq(%w[bazbutler@gmail.com])
+        expect(mail.cc).to be_blank
+        expect(mail.bcc).to be_blank
+      end
+
+      it "has an appropriate subject heading" do
+        expect(mail).to have_subject('We rejected your petition “Allow organic vegetable vans to use red diesel”')
+      end
+
+      it "is addressed to the creator" do
+        expect(mail).to have_body_text("Dear Barry Butler,")
+      end
+
+      it "informs the creator of the rejection" do
+        expect(mail).to have_body_text("We rejected the petition you created")
+      end
+    end
+
+    context "when there are further details" do
+      before do
+        petition.reject(code: "irrelevant", details: "Please stop trolling us" )
+      end
+
+      it "includes those details in the email" do
+        expect(mail).to have_body_text("Please stop trolling us")
+      end
+    end
+
+    context "when rejecting for reason that cause the petition to be hidden" do
+      before do
+        petition.reject(code: "offensive")
+      end
+
+      it "doesn't include a link to the petition" do
+        expect(mail).not_to have_body_text("Click this link to see the rejected petition")
+      end
+    end
+  end
+
+  describe "notifying sponsor of rejection" do
+    let(:mail) { PetitionMailer.notify_sponsor_that_petition_was_rejected(sponsor) }
+    let(:sponsor) do
+      FactoryGirl.create(:validated_signature,
+        name: "Laura Palmer",
+        email: "laura@red-room.example.com",
+        petition: petition
+      )
+    end
+
+    context "when rejecting for normal reasons" do
+      before do
+        petition.reject(code: "duplicate")
+      end
+
+      it "is sent to the right address" do
+        expect(mail.to).to eq(%w[laura@red-room.example.com])
+        expect(mail.cc).to be_blank
+        expect(mail.bcc).to be_blank
+      end
+
+      it "has an appropriate subject heading" do
+        expect(mail).to have_subject('We rejected the petition “Allow organic vegetable vans to use red diesel” that you supported')
+      end
+
+      it "is addressed to the sponsor" do
+        expect(mail).to have_body_text("Dear Laura Palmer,")
+      end
+
+      it "informs the sponsor of the publication" do
+        expect(mail).to have_body_text("We rejected the petition you supported")
+      end
+    end
+
+    context "when there are further details" do
+      before do
+        petition.reject(code: "irrelevant", details: "Please stop trolling us" )
+      end
+
+      it "includes those details in the email" do
+        expect(mail).to have_body_text("Please stop trolling us")
+      end
+    end
+
+    context "when rejecting for reason that cause the petition to be hidden" do
+      before do
+        petition.reject(code: "offensive")
+      end
+
+      it "doesn't include a link to the petition" do
+        expect(mail).not_to have_body_text("Click this link to see the rejected petition")
+      end
+    end
+  end
+
   describe "notifying creator of closing date change" do
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(creator) }
 
