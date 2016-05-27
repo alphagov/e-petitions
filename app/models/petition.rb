@@ -54,7 +54,7 @@ class Petition < ActiveRecord::Base
   facet :not_debated,          -> { not_debated.by_most_recent_debate_outcome }
 
   facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
-  facet :in_moderation,        -> { in_moderation.by_most_recent }
+  facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
   facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
 
   belongs_to :creator_signature, class_name: 'Signature'
@@ -96,6 +96,10 @@ class Petition < ActiveRecord::Base
 
     def by_most_recent_debate_outcome
       reorder(debate_outcome_at: :desc, created_at: :desc)
+    end
+
+    def by_most_recent_moderation_threshold_reached
+      reorder(moderation_threshold_reached_at: :desc, created_at: :desc)
     end
 
     def by_most_recent_response

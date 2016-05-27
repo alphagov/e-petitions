@@ -13,10 +13,13 @@ Given(/^a(n)? ?(pending|validated|sponsored|flagged|open)? petition "([^"]*)"$/)
   @petition = FactoryGirl.create(:open_petition, petition_args)
 end
 
+Given(/^a (sponsored|flagged) petition "(.*?)" reached threshold (\d+) days? ago$/) do |state, action, age|
+  @petition = FactoryGirl.create(:petition, action: action, state: state, moderation_threshold_reached_at: age.days.ago)
+end
+
 Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
   @petition = FactoryGirl.create(:not_debated_petition, action: action)
 end
-
 
 Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
   step "an #{state} petition \"#{petition_title}\""

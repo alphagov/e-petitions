@@ -22,8 +22,9 @@ Feature: A moderator user views all petitions
   Scenario: Filter list by state
     Given a pending petition "My pending petition"
     And a validated petition "My validated petition"
-    And a sponsored petition "My sponsored petition"
-    And a flagged petition "My flagged petition"
+    And a sponsored petition "My sponsored petition" reached threshold 2 days ago
+    And a sponsored petition "My other sponsored petition" reached threshold 1 day ago
+    And a flagged petition "My flagged petition" reached threshold 3 days ago
 
     And an open petition exists with action: "My open petition"
     And a closed petition exists with action: "My closed petition"
@@ -34,7 +35,6 @@ Feature: A moderator user views all petitions
     And a petition "My open petition awaiting debate date" exists awaiting debate date
     And a petition "My open petition with government response" exists with government response
     And a petition "My open petition awaiting government response" exists awaiting government response
-
     And a petition "My open petition with scheduled debate date" with scheduled debate date of "23/10/2010"
 
     When I view all petitions
@@ -49,6 +49,7 @@ Feature: A moderator user views all petitions
      | My closed petition                            |
      | My open petition                              |
      | My flagged petition                           |
+     | My other sponsored petition                   |
      | My sponsored petition                         |
      | My validated petition                         |
      | My pending petition                           |
@@ -60,8 +61,9 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Awaiting moderation" petitions
     Then I should see the following list of petitions:
-     | My flagged petition    |
-     | My sponsored petition  |
+     | My other sponsored petition |
+     | My sponsored petition       |
+     | My flagged petition         |
 
     And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:

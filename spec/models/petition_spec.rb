@@ -313,6 +313,15 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "by_most_recent_moderation_threshold_reached" do
+      let!(:p1) { FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: 2.days.ago) }
+      let!(:p2) { FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: 1.day.ago) }
+
+      it "returns the petitions in the correct order" do
+        expect(Petition.by_most_recent_moderation_threshold_reached.to_a).to eq([p2, p1])
+      end
+    end
+
     context "by_most_relevant_debate_date" do
       before do
         @p1 = FactoryGirl.create(:awaiting_debate_petition, debate_threshold_reached_at: 2.weeks.ago)
