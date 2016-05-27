@@ -35,7 +35,7 @@ class Signature < ActiveRecord::Base
   scope :validated, -> { where(state: VALIDATED_STATE) }
   scope :pending, -> { where(state: PENDING_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
-  scope :for_email, ->(email) { where(email: email) }
+  scope :for_email, ->(email) { where(email: email.downcase) }
   def self.need_emailing_for(name, since:)
     receipts_table = EmailSentReceipt.arel_table
     validated.

@@ -332,6 +332,12 @@ RSpec.describe Signature, type: :model do
           [signature3, other_signature]
         )
       end
+
+      it "searches case-insensitively" do
+        expect(Signature.for_email("Person3@example.com")).to match_array(
+          [signature3, other_signature]
+        )
+      end
     end
 
     describe "checking whether the signature is the creator" do
