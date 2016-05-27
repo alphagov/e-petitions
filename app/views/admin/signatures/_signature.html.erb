@@ -1,6 +1,7 @@
 <tr>
   <td class="petition_id"><%= signature.petition.id %></td>
   <td><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
+  <td><%= mail_to signature.email, signature.name %></td>
   <td><%= signature.state %></td>
   <td><%= date_time_format(signature.updated_at) %></td>
   <% if signature.creator? %>
