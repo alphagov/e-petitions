@@ -25,6 +25,14 @@
         <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
       <% end %>
 
+      <%= form_row for: [f.object, :creator_signature_name] do %>
+        <%= f.fields_for :creator_signature do |c| %>
+          <%= c.label :name, "Creator", class: 'form-label' %>
+          <%= error_messages_for_field @petition.creator_signature, :name %>
+          <%= c.text_field :name, tabindex: increment, rows: 8, class: 'form-control' %>
+        <% end %>
+      <% end %>
+
       <%= f.submit 'Save', class: 'button' %>
 
       <%= link_to 'Cancel', admin_petition_path(@petition) %>
