@@ -27,7 +27,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     let(:petition) { FactoryGirl.create(:petition) }
 
     context "when there is a journal for the requested petition and country" do
-      let!(:existing_record) { FactoryGirl.create(:country_petition_journal, petition: petition, location_code: location_code, signature_count: 30) }
+      let!(:existing_record) { FactoryGirl.create(:country_petition_journal, petition: petition, location: location, signature_count: 30) }
 
       it "doesn't create a new record" do
         expect {
