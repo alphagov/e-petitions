@@ -10,7 +10,7 @@
   <div class="column-half">
     <%= form_tag admin_petitions_path, :method => :get do -%>
       <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
-      <%= select_tag :state, admin_petition_facets_for_select(params[:state]), class: "form-control", data: {autosubmit: true} %>
+      <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control", data: {autosubmit: true} %>
       <%= submit_tag "Go", name: nil, class: "button" %>
     <% end -%>
   </div>

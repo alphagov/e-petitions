@@ -112,17 +112,13 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
       describe "when a 't' param is present" do
         let(:petition_scope) { Petition.none }
-        it "avoids search entirely" do
-          expect(Petition).not_to receive(:search)
-          get :index, t: 'a tag'
-        end
         it "uses the t param to find tagged petitions" do
           expect(Petition).to receive(:tagged_with).with('a tag').and_return petition_scope
           get :index, t: 'a tag'
         end
         it "passes on pagination params" do
           allow(Petition).to receive(:tagged_with).and_return petition_scope
-          expect(petition_scope).to receive(:paginate).with(page: '3', per_page: 50).and_return petition_scope
+          expect(petition_scope).to receive(:search).with(page: '3', per_page: 50).and_return petition_scope
           get :index, t: 'a tag', page: '3'
         end
         context 'and `q` is also present' do

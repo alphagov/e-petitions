@@ -13,13 +13,12 @@ module AdminHelper
                       }
   end
 
-  def admin_petition_facets_for_select(selected)
-    options_for_select(
-      admin_petition_facets.map do |facet|
-        [I18n.t(facet,  scope: :"petitions.facets.names.admin", default: facet.to_s.humanize), facet]
-      end,
-      selected
-    )
+  def admin_petition_facets_for_select(facets, selected)
+    options = admin_petition_facets.map do |facet|
+      [I18n.t(facet,  scope: :"petitions.facets.names.admin", quantity: facets[facet]), facet]
+    end
+
+    options_for_select(options, selected)
   end
 
   def email_petitioners_with_count_submit_button(form, petition)
@@ -34,5 +33,11 @@ module AdminHelper
     }
 
     form.submit(t(:email_button, i18n_options), html_options)
+  end
+
+  private
+
+  def admin_petition_facets
+    I18n.t(:admin, scope: :"petitions.facets")
   end
 end

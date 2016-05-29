@@ -13,8 +13,8 @@ Feature: Maggie searches for petitions by tag
     And a petition "Petition about something else" exists with notes "this is not about benefits"
     When I search for petitions with tag "benefits"
     Then I should see the following list of petitions:
-          | Raise benefits    |
           | Help the poor     |
+          | Raise benefits    |
     When I search for petitions with tag "home less"
     Then I should see the following list of petitions:
           | Help the homeless |
@@ -26,5 +26,5 @@ Feature: Maggie searches for petitions by tag
     And a petition "Petition about something else" exists with notes "this is not about benefits"
     When I search for petitions with tag "benefits" from the admin hub
     Then I should see the following list of petitions:
-          | Raise benefits    |
           | Help the poor     |
+          | Raise benefits    |
