@@ -23,7 +23,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
   describe ".for" do
     let!(:location) { FactoryGirl.create(:location) }
-    let!(:location_code) { location.code }
+    let(:location_code) { location.code }
     let(:petition) { FactoryGirl.create(:petition) }
 
     context "when there is a journal for the requested petition and country" do
