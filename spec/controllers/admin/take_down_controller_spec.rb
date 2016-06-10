@@ -1,8 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
-
-  let!(:petition) { FactoryGirl.create(:open_petition) }
+  let(:petition) do
+    FactoryGirl.create(:open_petition,
+      creator_signature_attributes: {
+        name: "Barry Butler",
+        email: "bazbutler@gmail.com"
+      },
+      sponsor_count: 0
+    )
+  end
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -94,10 +101,17 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
     describe 'PATCH /update' do
       let(:rejection_code) { 'duplicate' }
-      let(:email) { ActionMailer::Base.deliveries.last }
+      let(:emails) { ActionMailer::Base.deliveries.map{ |email| email.to.first } }
       let(:take_down_attributes) do
         { rejection: { code: rejection_code, details: 'bad things' } }
       end
+
+      let(:deliveries) { ActionMailer::Base.deliveries }
+      let(:creator_email) { deliveries.detect{ |m| m.to == %w[bazbutler@gmail.com] } }
+      let(:sponsor_email) { deliveries.detect{ |m| m.to == %w[laurapalmer@gmail.com] } }
+      let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
+      let!(:sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition, email: "laurapalmer@gmail.com") }
+      let!(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
       def do_patch(overrides = {})
         params = { petition_id: petition.id, petition: take_down_attributes }
@@ -106,42 +120,38 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
       context 'using valid take down params' do
         shared_examples_for 'rejecting a petition' do
+          before do
+            perform_enqueued_jobs do
+              do_patch
+              petition.reload
+            end
+          end
+
           it 'sets the petition state to "rejected"' do
-            do_patch
-            petition.reload
             expect(petition.state).to eq(Petition::REJECTED_STATE)
           end
 
           it 'sets the rejection code and description to the supplied params' do
-            do_patch
-            petition.reload
             expect(petition.rejection.code).to eq(rejection_code)
             expect(petition.rejection.details).to eq("bad things")
           end
 
           it 'redirects to the admin show page for the petition' do
-            do_patch
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do
-            do_patch
-            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-            expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/We rejected your petition/)
+            expect(creator_email).to deliver_to("bazbutler@gmail.com")
+            expect(creator_email.subject).to match(/We rejected your petition “[^"]+”/)
           end
 
           it "sends an email to validated petition sponsors" do
-            validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
+            expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
+            expect(sponsor_email.subject).to match(/We rejected the petition “[^"]+” that you supported/)
           end
 
           it "does not send an email to pending petition sponsors" do
-            pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
-            do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(pending_email).to be_nil
           end
         end
 
@@ -152,41 +162,37 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
         end
 
         shared_examples_for 'hiding a petition' do
+          before do
+            perform_enqueued_jobs do
+              do_patch
+              petition.reload
+            end
+          end
+
           it 'sets the petition state to "hidden"' do
-            do_patch
-            petition.reload
             expect(petition.state).to eq(Petition::HIDDEN_STATE)
           end
 
           it 'sets the rejection code to the supplied code' do
-            do_patch
-            petition.reload
             expect(petition.rejection.code).to eq(rejection_code)
           end
 
           it 'redirects to the admin show page for the petition' do
-            do_patch
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do
-            do_patch
-            expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-            expect(email.to).to eq([petition.creator_signature.email])
-            expect(email.subject).to match(/We rejected your petition/)
+            expect(creator_email).to deliver_to("bazbutler@gmail.com")
+            expect(creator_email.subject).to match(/We rejected your petition “[^"]+”/)
           end
 
           it "sends an email to validated petition sponsors" do
-            validated_sponsor_1  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            validated_sponsor_2  = FactoryGirl.create(:sponsor, :validated, petition: petition)
-            do_patch
-            expect(email.bcc).to match_array([validated_sponsor_1.signature.email, validated_sponsor_2.signature.email])
+            expect(sponsor_email).to deliver_to("laurapalmer@gmail.com")
+            expect(sponsor_email.subject).to match(/We rejected the petition “[^"]+” that you supported/)
           end
 
           it "does not send an email to pending petition sponsors" do
-            pending_sponsor = FactoryGirl.create(:sponsor, :pending, petition: petition)
-            do_patch
-            expect(email.bcc).not_to include([pending_sponsor.signature.email])
+            expect(pending_email).to be_nil
           end
         end
 
@@ -205,15 +211,19 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
         context 'with no rejection code' do
           let(:rejection_code) { '' }
 
+          before do
+            perform_enqueued_jobs do
+              do_patch
+              petition.reload
+            end
+          end
+
           it "leaves the state alone in the DB, and in-memory" do
-            do_patch
-            petition.reload
             expect(petition.state).to eq(Petition::OPEN_STATE)
             expect(assigns(:petition).state).to eq(Petition::OPEN_STATE)
           end
 
           it "renders the petitions/show template" do
-            do_patch
             expect(response).to be_success
             expect(response).to render_template 'petitions/show'
           end
@@ -221,14 +231,18 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
       end
 
       shared_examples_for 'taking down a petition' do
+        before do
+          perform_enqueued_jobs do
+            do_patch
+            petition.reload
+          end
+        end
+
         it 'fetches the requested petition' do
-          do_patch
           expect(assigns(:petition)).to eq petition
         end
 
         it 'performs the requested take down on the petition' do
-          do_patch
-          petition.reload
           expect(petition.state).to eq Petition::REJECTED_STATE
           expect(petition.rejection.code).to eq(take_down_attributes[:rejection][:code])
           expect(petition.rejection.details).to eq(take_down_attributes[:rejection][:details])
