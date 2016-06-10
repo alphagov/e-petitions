@@ -1281,6 +1281,13 @@ CREATE UNIQUE INDEX index_signatures_on_email_and_petition_id_and_name ON signat
 
 
 --
+-- Name: index_signatures_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_name ON signatures USING btree (lower((name)::text));
+
+
+--
 -- Name: index_signatures_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1554,4 +1561,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160214133749');
 INSERT INTO schema_migrations (version) VALUES ('20160214233414');
 
 INSERT INTO schema_migrations (version) VALUES ('20160217192016');
+
+INSERT INTO schema_migrations (version) VALUES ('20160527112417');
 

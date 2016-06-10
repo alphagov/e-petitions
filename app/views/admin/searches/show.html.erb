@@ -15,9 +15,10 @@
       <tr>
         <th>Petition Id</th>
         <th>Petition Action</th>
-        <th>Signature Status</th>
-        <th>Signature Last Updated</th>
-        <th>Petition Creator?</th>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Last Updated</th>
+        <th>Creator?</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -30,7 +31,10 @@
 
 <% else %>
   <p>
-    No signatures found for email address
-    <%= mail_to @query %>
+    <% if @name %>
+      No signatures found for name <%= @query %>
+    <% else %>
+      No signatures found for email address <%= mail_to @query %>
+    <% end %>
   </p>
 <% end %>
