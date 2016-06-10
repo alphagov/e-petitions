@@ -77,7 +77,7 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def petitions_by_tag
-    @petitions = Petition.tagged_with(params[:t]).paginate(page: params[:page], per_page: 50)
+    @petitions = Petition.tagged_with(params[:t]).search(page: params[:page], per_page: 50)
     @query = Petition.sanitized_tag(params[:t])
   end
 
