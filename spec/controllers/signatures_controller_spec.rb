@@ -436,6 +436,22 @@ RSpec.describe SignaturesController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}")
       end
     end
+
+    context "signature is using a blacklisted domain" do
+      before do
+        FactoryGirl.create(:domain, :blocked, name: "example.com")
+      end
+
+      it "doesn't emails the signer" do
+        do_post
+        expect(deliveries).to be_empty
+      end
+
+      it "redirects to a thank you page" do
+        do_post
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signatures/thank-you")
+      end
+    end
   end
 
   describe '#unsubscribe' do

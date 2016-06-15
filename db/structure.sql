@@ -295,6 +295,71 @@ ALTER SEQUENCE delayed_jobs_id_seq OWNED BY delayed_jobs.id;
 
 
 --
+-- Name: domain_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE domain_logs (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: domain_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE domain_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: domain_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE domain_logs_id_seq OWNED BY domain_logs.id;
+
+
+--
+-- Name: domains; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE domains (
+    id integer NOT NULL,
+    name character varying NOT NULL,
+    current_rate integer DEFAULT 0 NOT NULL,
+    maximum_rate integer DEFAULT 0 NOT NULL,
+    resolved_at timestamp without time zone,
+    state character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: domains_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE domains_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: domains_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE domains_id_seq OWNED BY domains.id;
+
+
+--
 -- Name: email_requested_receipts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -796,6 +861,20 @@ ALTER TABLE ONLY delayed_jobs ALTER COLUMN id SET DEFAULT nextval('delayed_jobs_
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY domain_logs ALTER COLUMN id SET DEFAULT nextval('domain_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY domains ALTER COLUMN id SET DEFAULT nextval('domains_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY email_requested_receipts ALTER COLUMN id SET DEFAULT nextval('email_requested_receipts_id_seq'::regclass);
 
 
@@ -930,6 +1009,22 @@ ALTER TABLE ONLY debate_outcomes
 
 ALTER TABLE ONLY delayed_jobs
     ADD CONSTRAINT delayed_jobs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: domain_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY domain_logs
+    ADD CONSTRAINT domain_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: domains_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY domains
+    ADD CONSTRAINT domains_pkey PRIMARY KEY (id);
 
 
 --
@@ -1124,6 +1219,48 @@ CREATE INDEX index_debate_outcomes_on_updated_at ON debate_outcomes USING btree 
 --
 
 CREATE INDEX index_delayed_jobs_on_priority_and_run_at ON delayed_jobs USING btree (priority, run_at);
+
+
+--
+-- Name: index_domain_logs_on_created_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_domain_logs_on_created_at ON domain_logs USING btree (created_at);
+
+
+--
+-- Name: index_domain_logs_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_domain_logs_on_name ON domain_logs USING btree (name);
+
+
+--
+-- Name: index_domains_on_current_rate; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_domains_on_current_rate ON domains USING btree (current_rate);
+
+
+--
+-- Name: index_domains_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_domains_on_name ON domains USING btree (name);
+
+
+--
+-- Name: index_domains_on_resolved_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_domains_on_resolved_at ON domains USING btree (resolved_at);
+
+
+--
+-- Name: index_domains_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_domains_on_state ON domains USING btree (state);
 
 
 --
@@ -1544,7 +1681,17 @@ INSERT INTO schema_migrations (version) VALUES ('20151014152915');
 
 INSERT INTO schema_migrations (version) VALUES ('20151014152929');
 
+INSERT INTO schema_migrations (version) VALUES ('20160104091109');
+
 INSERT INTO schema_migrations (version) VALUES ('20160104144458');
+
+INSERT INTO schema_migrations (version) VALUES ('20160104190716');
+
+INSERT INTO schema_migrations (version) VALUES ('20160104192322');
+
+INSERT INTO schema_migrations (version) VALUES ('20160104194542');
+
+INSERT INTO schema_migrations (version) VALUES ('20160111165901');
 
 INSERT INTO schema_migrations (version) VALUES ('20160210001632');
 

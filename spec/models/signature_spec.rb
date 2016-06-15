@@ -62,6 +62,26 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "callbacks" do
+    context "when the signature is created" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo@example.com") }
+
+      it "logs the domain of the email address" do
+        expect {
+          signature.save
+        }.to change {
+          Domain::Log.where(name: "example.com").count
+        }.by(1)
+      end
+
+      it "logs the parent domain of the email address" do
+        expect {
+          signature.save
+        }.to change {
+          Domain::Log.where(name: "com").count
+        }.by(1)
+      end
+    end
+
     context "when the signature is destroyed" do
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
       let(:creator) { FactoryGirl.create(:pending_signature) }
@@ -115,12 +135,6 @@ RSpec.describe Signature, type: :model do
     it "does not allow invalid email" do
       s = FactoryGirl.build(:signature, :email => 'not an email')
       expect(s).not_to have_valid(:email)
-    end
-
-    it "does not allow emails from disposable addresses" do
-      signature = FactoryGirl.build(:signature, email: 'foobar@10minutemail.com')
-      expect(signature).not_to have_valid(:email)
-      expect(signature.errors.full_messages).to include("You can’t use a disposable email address")
     end
 
     describe "uniqueness of email" do
@@ -861,5 +875,60 @@ RSpec.describe Signature, type: :model do
       end
     end
   end
-end
 
+  describe "#domain_allowed?" do
+    before do
+      FactoryGirl.create(:domain, :blocked, name: "localhost")
+      FactoryGirl.create(:domain, :allowed, name: "gmail.com")
+      FactoryGirl.create(:domain, :blocked, name: "hushmail.com")
+    end
+
+    context "when the email address is invalid" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo") }
+
+      it "returns false" do
+        expect(signature.domain_allowed?).to eq(false)
+      end
+    end
+
+    context "when the email address is nil" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: nil) }
+
+      it "returns false" do
+        expect(signature.domain_allowed?).to eq(false)
+      end
+    end
+
+    context "when the email address is ''" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "") }
+
+      it "returns false" do
+        expect(signature.domain_allowed?).to eq(false)
+      end
+    end
+
+    context "when the email domain is blacklisted" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo@hushmail.com") }
+
+      it "returns false" do
+        expect(signature.domain_allowed?).to eq(false)
+      end
+    end
+
+    context "when the email domain is whitelisted" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo@gmail.com") }
+
+      it "returns true" do
+        expect(signature.domain_allowed?).to eq(true)
+      end
+    end
+
+    context "when the email domain doesn't exist" do
+      let(:signature) { FactoryGirl.build(:pending_signature, email: "foo@example.com") }
+
+      it "returns true" do
+        expect(signature.domain_allowed?).to eq(true)
+      end
+    end
+  end
+end

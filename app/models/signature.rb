@@ -23,6 +23,10 @@ class Signature < ActiveRecord::Base
   validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
 
+  after_create do
+    Domain.log(email)
+  end
+
   before_destroy do
     !creator?
   end
@@ -174,7 +178,15 @@ class Signature < ActiveRecord::Base
     email_sent_receipt || create_email_sent_receipt
   end
 
+  def domain_allowed?
+    domain && domain.allowed?
+  end
+
   private
+
+  def domain
+    @domain ||= Domain.find_or_create_by_email(email)
+  end
 
   def retry_lock
     retried = false

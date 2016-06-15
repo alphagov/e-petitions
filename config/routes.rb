@@ -73,6 +73,11 @@ Rails.application.routes.draw do
 
       resource :search, :only => [:show]
 
+      resources :domains, only: [:index, :create] do
+        get :search, on: :collection
+        post :allow, :block, on: :member
+      end
+
       resources :admin_users
       resources :petitions, :only => [:show, :index] do
         resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes

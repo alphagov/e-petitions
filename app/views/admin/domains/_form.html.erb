@@ -1,0 +1,9 @@
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= form_tag [:search, :admin, :domains], class: 'search-inline search-domains', method: 'get' do %>
+      <%= label_tag :q, "Search all domains", class: "visuallyhidden" %>
+      <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter domain name" %>
+      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    <% end %>
+  </div>
+</div>

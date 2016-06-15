@@ -350,4 +350,22 @@ FactoryGirl.define do
     email "foo@example.com"
     user_agent "Mozilla/5.0"
   end
+
+  factory :domain do
+    name { Faker::Internet.domain_name }
+
+    trait :allowed do
+      state 'allow'
+      resolved_at { Time.current }
+    end
+
+    trait :blocked do
+      state 'block'
+      resolved_at { Time.current }
+    end
+  end
+
+  factory :domain_log, class: "Domain::Log" do
+    name { Faker::Internet.domain_name }
+  end
 end

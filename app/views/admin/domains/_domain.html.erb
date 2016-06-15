@@ -1,0 +1,17 @@
+<tr>
+  <td class="petition_id"><%= domain.name %></td>
+  <td><%= domain.current_rate %></td>
+  <td><%= domain.maximum_rate %></td>
+  <td>
+    <% if domain.resolved? %>
+      <% if domain.blocked? %>
+        <%= button_to 'Allow', allow_admin_domain_path(domain), method: :post, class: 'button', data: { confirm: 'Unblock domain?' } %>
+      <% else %>
+        <%= button_to 'Block', block_admin_domain_path(domain), method: :post, class: 'button-warning', data: { confirm: 'Block domain?' } %>
+      <% end %>
+    <% else %>
+      <%= button_to 'Allow', allow_admin_domain_path(domain), method: :post, class: 'button', data: { confirm: 'Whitelist domain?' } %>
+      <%= button_to 'Block', block_admin_domain_path(domain), method: :post, class: 'button-warning', data: { confirm: 'Block domain?' } %>
+    <% end %>
+  </td>
+</tr>

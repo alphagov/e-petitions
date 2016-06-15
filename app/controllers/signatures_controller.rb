@@ -92,7 +92,9 @@ class SignaturesController < ApplicationController
   end
 
   def send_email_to_petition_signer(signature)
-    EmailConfirmationForSignerEmailJob.perform_later(signature)
+    if signature.domain_allowed?
+      EmailConfirmationForSignerEmailJob.perform_later(signature)
+    end
   end
 
   def assign_stage

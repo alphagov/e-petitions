@@ -3,6 +3,7 @@
     <li><%= link_to current_user.pretty_name, edit_admin_profile_path(current_user) %></li>
     <% if current_user.is_a_sysadmin? %>
       <li><%= link_to "Users", admin_admin_users_path %></li>
+      <li><%= link_to "Domains", admin_domains_path %></li>
     <% end %>
     <li><%= link_to "Logout", admin_logout_path %></li>
   </ul>

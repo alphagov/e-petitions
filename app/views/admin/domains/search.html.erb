@@ -1,0 +1,27 @@
+<h1>Domain admin</h1>
+
+<%= render 'form' %>
+
+<% if @domains.present? %>
+  <table class="domain-list">
+    <thead>
+      <tr>
+        <th>Domain Name</th>
+        <th title="Current signature rate per hour">Current</th>
+        <th title="Maximum signature rate per hour">Maximum</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @domains %>
+    </tbody>
+  </table>
+<% else %>
+  <%= form_tag [:admin, :domains], method: :post do %>
+    <%= hidden_field_tag :name, params[:q] %>
+    <p>
+      No domains found
+    </p>
+    <%= button_tag "Create domain", name: nil, class: 'button', data: { confirm: 'Create domain?' } %>
+  <% end %>
+<% end %>
