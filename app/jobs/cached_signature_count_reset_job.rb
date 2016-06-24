@@ -10,6 +10,6 @@ class CachedSignatureCountResetJob < ActiveJob::Base
   private
 
   def timestamp
-    Site.signature_count_updated_since_window.ago
+    Site.signature_count_updated_since_window.ago - 1.minute
   end
 end

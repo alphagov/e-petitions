@@ -89,7 +89,7 @@ class Site < ActiveRecord::Base
     end
 
     def signature_count_updated_since_window
-      5.minutes
+      15.minutes
     end
 
     def port
