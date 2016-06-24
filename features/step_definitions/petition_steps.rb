@@ -399,6 +399,10 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
+Given(/^the site is showing trending petitions$/) do
+  allow(Site).to receive(:show_trending_petitions?).and_return(true)
+end
+
 Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
   @petition = FactoryGirl.create(:open_petition, action: petition_action)
   @email = FactoryGirl.create(:petition_email,
