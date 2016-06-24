@@ -39,7 +39,7 @@ RSpec.describe PetitionCSVPresenter do
       petition.state,
       petition.creator_name,
       petition.creator_email,
-      petition.signature_count,
+      petition.cached_signature_count,
       petition.rejection_code,
       petition.rejection_details,
       petition.government_response_summary,

@@ -3,7 +3,7 @@
     <li class="petition-item petition-item-existing panel-indent">
       <h3><%= link_to petition.action, petition_path(petition) %></h3>
       <% unless petition.rejected? -%>
-        <p><%= signature_count(:default, petition.signature_count) %></p>
+        <p><%= signature_count(:default, petition.cached_signature_count) %></p>
       <% end %>
       <p><%= petition.background %></p>
     </li>

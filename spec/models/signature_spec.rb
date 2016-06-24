@@ -93,8 +93,8 @@ RSpec.describe Signature, type: :model do
 
           petition.reload
 
-          expect(petition.signature_count).to eq(7)
-          expect{ signature.destroy }.to change{ petition.reload.signature_count }.by(-1)
+          expect(petition.cached_signature_count).to eq(7)
+          expect{ signature.destroy }.to change{ petition.reload.cached_signature_count }.by(-1)
         end
       end
     end
@@ -406,7 +406,7 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(signature.petition.signature_count).to eq(7)
+      expect(signature.petition.cached_signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 
@@ -417,10 +417,10 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(other_signature.petition.signature_count).to eq(7)
+      expect(other_signature.petition.cached_signature_count).to eq(7)
       expect(other_signature.number).to eq(7)
 
-      expect(signature.petition.signature_count).to eq(7)
+      expect(signature.petition.cached_signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 
@@ -516,7 +516,7 @@ RSpec.describe Signature, type: :model do
       end
 
       it "increments the petition count" do
-        expect{ signature.validate! }.to change{ petition.reload.signature_count }.by(1)
+        expect{ signature.validate! }.to change{ petition.reload.cached_signature_count }.by(1)
       end
 
       it "updates the petition to say it was updated just now" do
@@ -531,7 +531,7 @@ RSpec.describe Signature, type: :model do
 
       it "doesn't increment the petition count twice" do
         signature.validate!
-        expect{ signature.validate! }.to change{ petition.reload.signature_count }.by(0)
+        expect{ signature.validate! }.to change{ petition.reload.cached_signature_count }.by(0)
       end
 
       it 'tells the relevant constituency petition journal to record a new signature' do

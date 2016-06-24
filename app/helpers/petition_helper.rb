@@ -20,7 +20,7 @@ module PetitionHelper
 
   def signatures_threshold_percentage(petition)
     threshold = current_threshold(petition).to_f
-    percentage = petition.signature_count / threshold * 100
+    percentage = petition.cached_signature_count / threshold * 100
     if percentage > 100
       percentage = 100
     elsif percentage < 1

@@ -1,5 +1,5 @@
 <h3><%= link_to petition.action, petition_path(petition) %></h3>
-<p><%= signature_count(:default, petition.signature_count) %></p>
+<p><%= signature_count(:default, petition.cached_signature_count) %></p>
 <p><%= waiting_for_in_words(petition.debate_threshold_reached_at) %></p>
 <% if petition.scheduled_debate_date? %>
   <p><%= scheduled_for_debate_in_words(petition.scheduled_debate_date) %></p>

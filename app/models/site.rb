@@ -84,6 +84,10 @@ class Site < ActiveRecord::Base
       instance.closed_at_for_opening(time)
     end
 
+    def signature_count_updated_since_window
+      5.minutes
+    end
+
     def port
       instance.port
     end

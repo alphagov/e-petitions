@@ -16,7 +16,7 @@
 
   <div class="signature-count">
     <p class="signature-count-number">
-      <%= signature_count(:default, petition.signature_count) %>
+      <%= signature_count(:default, petition.cached_signature_count) %>
     </p>
     <div class="signature-count-graph" aria-hidden="true">
       <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
