@@ -350,7 +350,7 @@ class Petition < ActiveRecord::Base
   end
 
   def update_timestamps?
-    signature_count < 10000 || last_signed_at && last_signed_at > 10.seconds.ago
+    signature_count < 10000 #|| last_signed_at && last_signed_at > 10.seconds.ago
   end
 
   def increment_signature_count!(time = Time.current)
