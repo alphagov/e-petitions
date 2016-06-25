@@ -182,11 +182,12 @@ end
 
 Then(/^I should see the vote count, closed and open dates$/) do
   @petition.reload
-  expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
   if @petition.is_a?(ArchivedPetition)
+    expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
   else
+    expect(page).to have_css("p.signature-count-number", :text => "#{@petition.cached_signature_count} #{'signature'.pluralize(@petition.cached_signature_count)}")
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
     expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
   end
@@ -194,7 +195,7 @@ end
 
 Then(/^I should not see the vote count$/) do
   @petition.reload
-  expect(page).to_not have_css("p.signature-count-number", :text => @petition.signature_count.to_s + " signatures")
+  expect(page).to_not have_css("p.signature-count-number", :text => @petition.cached_signature_count.to_s + " signatures")
 end
 
 Then(/^I should see submitted date$/) do
@@ -350,7 +351,10 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
     state: petition_state
   }
   @petition = FactoryGirl.create(:open_petition, petition_args)
-  5.times { FactoryGirl.create(:validated_signature, petition: @petition) }
+  5.times do
+    signature = FactoryGirl.create(:pending_signature, petition: @petition)
+    signature.validate!
+  end
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
@@ -393,6 +397,10 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   debate_threshold_petitions_count.times do |count|
     FactoryGirl.create(:awaiting_debate_petition, action: "Petition #{count}")
   end
+end
+
+Given(/^the site is showing trending petitions$/) do
+  allow(Site).to receive(:show_trending_petitions?).and_return(true)
 end
 
 Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|

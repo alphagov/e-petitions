@@ -19,6 +19,10 @@
 
 # Learn more: http://github.com/javan/whenever
 
+every 15.minutes do
+  runner "CachedSignatureCountResetJob.perform_now"
+end
+
 every :weekday, at: '7am' do
   rake "epets:admin_email_reminder", output: nil
 end

@@ -10,7 +10,7 @@ json.attributes do
   json.background petition.background
   json.additional_details petition.additional_details
   json.state petition.state
-  json.signature_count petition.signature_count
+  json.signature_count petition.cached_signature_count
 
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)

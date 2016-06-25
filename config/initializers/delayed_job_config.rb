@@ -46,7 +46,7 @@ module Delayed
   module Backend
     module ActiveRecord
       class Job < ::ActiveRecord::Base
-        QUEUE_PRIORITIES = { "high_priority" => 0, "low_priority" => 50 }
+        QUEUE_PRIORITIES = { "highest_priority" => -10, "high_priority" => 0, "low_priority" => 50 }
         QUEUE_PRIORITIES.default = 25
 
         before_create do

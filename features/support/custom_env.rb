@@ -1,5 +1,6 @@
 require 'email_spec/cucumber'
 require 'rspec/core/pending'
+require 'cucumber/rspec/doubles'
 require 'capybara/poltergeist'
 require 'webrick/httpproxy'
 

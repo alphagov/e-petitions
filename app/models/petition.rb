@@ -218,6 +218,10 @@ class Petition < ActiveRecord::Base
       where(state: TODO_LIST_STATES)
     end
 
+    def updated_since(time)
+      where(arel_table[:updated_at].gt(time))
+    end
+
     def visible
       where(state: VISIBLE_STATES)
     end
@@ -315,11 +319,38 @@ class Petition < ActiveRecord::Base
 
     if update_all([sql, query, Time.current]) > 0
       self.reload
+      Rails.cache.write(cached_signature_count_key, signature_count)
     end
   end
 
+  def save_cached_signature_count
+    update_columns(signature_count: cached_signature_count)
+  end
+
+  def cached_signature_count
+    persisted? ? fetch_cached_signature_count : signature_count
+  end
+
+  after_create do
+    Rails.cache.write(cached_signature_count_key, signature_count, raw: true)
+  end
+
+  def fetch_cached_signature_count
+    @signature_count ||= Rails.cache.fetch(cached_signature_count_key, raw: true) { signature_count }.to_i
+  end
+  private :fetch_cached_signature_count
+
+  def cached_signature_count_key
+    @cached_signature_count_key ||= "signature_counts/#{id}"
+  end
+
+  def reload
+    @signature_count = nil
+    super
+  end
+
   def increment_signature_count!(time = Time.current)
-    updates = ["signature_count = signature_count + 1"]
+    updates = []
     updates << "last_signed_at = :now"
     updates << "updated_at = :now"
 
@@ -342,25 +373,26 @@ class Petition < ActiveRecord::Base
     end
 
     if update_all([updates.join(", "), now: time]) > 0
+      Rails.cache.increment(cached_signature_count_key)
       self.reload
     end
   end
 
   def at_threshold_for_moderation?
     unless moderation_threshold_reached_at?
-      signature_count >= Site.threshold_for_moderation
+      cached_signature_count >= Site.threshold_for_moderation
     end
   end
 
   def at_threshold_for_response?
     unless response_threshold_reached_at?
-      signature_count >= Site.threshold_for_response - 1
+      cached_signature_count >= Site.threshold_for_response - 1
     end
   end
 
   def at_threshold_for_debate?
     unless debate_threshold_reached_at?
-      signature_count >= Site.threshold_for_debate - 1
+      cached_signature_count >= Site.threshold_for_debate - 1
     end
   end
 

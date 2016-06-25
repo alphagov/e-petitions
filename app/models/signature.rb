@@ -110,7 +110,7 @@ class Signature < ActiveRecord::Base
         petition.validate_creator_signature! unless creator?
 
         update_columns(
-          number:       petition.signature_count + 1,
+          number:       petition.cached_signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: Time.current,
           updated_at:   Time.current

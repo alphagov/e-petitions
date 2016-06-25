@@ -52,7 +52,7 @@ module ApiRequestHelpers
       expect(attributes["background"]).to eq(petition.background)
       expect(attributes["additional_details"]).to eq(petition.additional_details)
       expect(attributes["state"]).to eq(petition.state)
-      expect(attributes["signature_count"]).to eq(petition.signature_count)
+      expect(attributes["signature_count"]).to eq(petition.cached_signature_count)
 
       # timestamps
       expect(attributes["created_at"]).to eq(timestampify petition.created_at)

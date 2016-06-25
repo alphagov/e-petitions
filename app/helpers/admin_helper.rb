@@ -24,8 +24,8 @@ module AdminHelper
 
   def email_petitioners_with_count_submit_button(form, petition)
     i18n_options = {
-      scope: :admin, count: petition.signature_count,
-      formatted_count: number_with_delimiter(petition.signature_count)
+      scope: :admin, count: petition.cached_signature_count,
+      formatted_count: number_with_delimiter(petition.cached_signature_count)
     }
 
     html_options = {

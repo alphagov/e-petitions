@@ -110,23 +110,29 @@ And "I have already signed the petition but not validated my email" do
 end
 
 Given /^Suzie has already signed the petition$/ do
-  @suzies_signature = FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  @suzies_signature = FactoryGirl.create(:pending_signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+  @suzies_signature.validate!
 end
 
 Given /^Eric has already signed the petition with Suzies email$/ do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  signature = FactoryGirl.create(:pending_signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Eric Wibbledon")
+  signature.validate!
 end
 
 Given /^I have signed the petition with a second name$/ do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  signature = FactoryGirl.create(:pending_signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Sam Wibbledon")
+  signature.validate!
 end
 
 Given(/^Suzie has already signed the petition and validated her email$/) do
-  @suzies_signature = FactoryGirl.create(:validated_signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+
+  @suzies_signature = FactoryGirl.create(:pending_signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+  @suzies_signature.validate!
 end
 
 When(/^Suzie shares the signatory confirmation link with Eric$/) do

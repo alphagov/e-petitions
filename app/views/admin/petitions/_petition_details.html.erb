@@ -4,7 +4,7 @@
 
 <% unless @petition.in_todo_list? %>
   <dt>Signatures</dt>
-  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>
+  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.cached_signature_count) %> </dd>
 <% end %>
 
 <dt>Creator</dt>

@@ -152,7 +152,8 @@ RSpec.describe Petition, type: :model do
         @p4.update_attribute(:signature_count, 200000)
       end
 
-      it "returns 4 petitions over the threshold" do
+      it "returns 3 petitions over the threshold" do
+
         petitions = Petition.threshold
         expect(petitions.size).to eq(3)
         expect(petitions).to include(@p1, @p2, @p4)
@@ -185,6 +186,21 @@ RSpec.describe Petition, type: :model do
           expect(petitions.size).to eq(1)
           expect(petitions).to eq([state_and_petition[1]])
         end
+      end
+    end
+
+    context "updated_since" do
+      before do
+        @p1 = FactoryGirl.create(:open_petition, updated_at: 10.minutes.ago)
+        @p2 = FactoryGirl.create(:open_petition, updated_at: 2.minutes.ago)
+      end
+
+      it "returns petitions updated in the last time period" do
+        expect(Petition.updated_since(5.minutes.ago)).to include(@p2)
+      end
+
+      it "doesn't return petitions updated outside last time period" do
+        expect(Petition.updated_since(5.minutes.ago)).not_to include(@p1)
       end
     end
 
@@ -551,17 +567,17 @@ RSpec.describe Petition, type: :model do
     end
 
     it "returns 1 (the creator) for a new petition" do
-      expect(petition.signature_count).to eq(1)
+      expect(petition.cached_signature_count).to eq(1)
     end
 
     it "still returns 1 with a new signature" do
       signature && petition.reload
-      expect(petition.signature_count).to eq(1)
+      expect(petition.cached_signature_count).to eq(1)
     end
 
     it "returns 2 when signature is validated" do
       signature.validate! && petition.reload
-      expect(petition.signature_count).to eq(2)
+      expect(petition.cached_signature_count).to eq(2)
     end
   end
 
@@ -1135,7 +1151,7 @@ RSpec.describe Petition, type: :model do
     it "increases the signature count by 1" do
       expect{
         petition.increment_signature_count!
-      }.to change{ petition.signature_count }.by(1)
+      }.to change{ petition.cached_signature_count }.by(1)
     end
 
     it "updates the last_signed_at timestamp" do
@@ -1552,7 +1568,7 @@ RSpec.describe Petition, type: :model do
     it "increments the signature count" do
       expect {
         petition.validate_creator_signature!
-      }.to change { petition.signature_count }.by(1)
+      }.to change { petition.cached_signature_count }.by(1)
     end
 
     it "timestamps the petition to say it was updated just now" do
@@ -1717,6 +1733,48 @@ RSpec.describe Petition, type: :model do
         creator_signature.email_sent_receipt!.update_column('government_response', nil)
         expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
       end
+    end
+  end
+
+  describe "#cached_signature_count" do
+    let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 1000) }
+
+    context "with no cached signature count" do
+      before do
+        Rails.cache.delete("signature_counts/#{petition.id}")
+      end
+
+      it "initializes the value from the signature_count column" do
+        expect(petition).to receive(:signature_count).and_return(1000)
+        expect(petition.cached_signature_count).to eq(1000)
+      end
+    end
+
+    context "with a cached signature count" do
+      before do
+        Rails.cache.write("signature_counts/#{petition.id}", 2000, raw: true)
+      end
+
+      it "uses the cached value" do
+        expect(petition).not_to receive(:signature_count)
+        expect(petition.cached_signature_count).to eq(2000)
+      end
+    end
+  end
+
+  describe "#save_cached_signature_count" do
+    let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 1000) }
+
+    before do
+      allow(Rails.cache).to receive(:fetch).with("signature_counts/#{petition.id}", raw: true).and_return("2000")
+    end
+
+    it "updates the signature_count column in the database" do
+      expect {
+        petition.save_cached_signature_count
+      }.to change {
+        petition.reload.signature_count
+      }.from(1000).to(2000)
     end
   end
 end

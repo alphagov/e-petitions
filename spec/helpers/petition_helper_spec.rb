@@ -42,7 +42,7 @@ RSpec.describe PetitionHelper, type: :helper do
 
   describe "#current_threshold" do
 
-    context "when the response threshold has never been reached" do 
+    context "when the response threshold has never been reached" do
       let(:petition) { FactoryGirl.create(:petition) }
 
       it "returns the response threshold" do
@@ -77,7 +77,6 @@ RSpec.describe PetitionHelper, type: :helper do
   end
 
   describe "#signatures_threshold_percentage" do
-
     context "when the signature count is less than the response threshold" do
       let(:petition) { FactoryGirl.create(:petition, signature_count: 239) }
 
