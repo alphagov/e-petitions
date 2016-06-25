@@ -1148,6 +1148,11 @@ RSpec.describe Petition, type: :model do
       })
     end
 
+    describe 'writes to the db are throttled' do
+      it 'never if the petition has 10,000 signatures or less'
+      it 'never if the petition was last signed more than 10 seconds ago'
+    end
+
     it "increases the signature count by 1" do
       expect{
         petition.increment_signature_count!
