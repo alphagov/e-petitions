@@ -76,6 +76,8 @@ FactoryGirl.define do
       if evaluator.admin_notes
         petition.build_note details: evaluator.admin_notes
       end
+
+      petition.last_signed_at = petition.signatures.maximum(:validated_at) unless petition.last_signed_at.present?
     end
 
     trait :with_additional_details do

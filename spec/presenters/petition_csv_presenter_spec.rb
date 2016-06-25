@@ -49,7 +49,7 @@ RSpec.describe PetitionCSVPresenter do
       petition.debate_video_url,
       petition.debate_overview,
       timestampify(petition.created_at),
-      timestampify(petition.updated_at),
+      timestampify(petition.cached_updated_at),
       timestampify(petition.open_at),
       timestampify(petition.closed_at),
       timestampify(petition.government_response_at),

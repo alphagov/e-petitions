@@ -317,14 +317,12 @@ class Petition < ActiveRecord::Base
     count = Signature.arel_table[Arel.star].count
     query = Signature.validated.where(petition_id: id).select(count)
 
-    if update_all([sql, query, Time.current]) > 0
+    now = Time.current
+    if update_all([sql, query, now]) > 0
       self.reload
       Rails.cache.write(cached_signature_count_key, signature_count, raw: true)
+      Rails.cache.write(cached_updated_at_key, now)
     end
-  end
-
-  def save_cached_signature_count
-    update_columns(signature_count: cached_signature_count)
   end
 
   def cached_signature_count
@@ -344,8 +342,69 @@ class Petition < ActiveRecord::Base
     @cached_signature_count_key ||= "signature_counts/#{id}"
   end
 
+  def cached_updated_at_key
+    @cached_updated_at_key ||= "petition_updated_at_timestamps/#{id}"
+  end
+
+  def cached_last_signed_at_key
+    @cached_last_signed_at_key ||= "petition_last_signed_at_timestamps/#{id}"
+  end
+
+  after_save do
+    Rails.cache.write(cached_updated_at_key, updated_at)
+  end
+
+  def save_cached_values_to_db
+    update_columns(
+      signature_count: cached_signature_count,
+      updated_at: cached_updated_at,
+      last_signed_at: cached_last_signed_at
+    )
+  end
+
+  def cached_updated_at
+    persisted? ? fetch_cached_updated_at : updated_at
+  end
+
+  def fetch_cached_updated_at
+    @cached_updated_at ||= Rails.cache.fetch(cached_updated_at_key) { updated_at }
+  end
+  private :fetch_cached_updated_at
+
+  def cached_last_signed_at
+    persisted? ? fetch_cached_last_signed_at : last_signed_at
+  end
+
+  def fetch_cached_last_signed_at
+    @cached_last_signed_at ||= Rails.cache.fetch(cached_last_signed_at_key) { last_signed_at }
+  end
+  private :fetch_cached_last_signed_at
+
+  def cache_key(*timestamp_names)
+    return super(*timestamp_names) if timestamp_names.any?
+    case
+    when new_record?
+      "#{model_name.cache_key}/new"
+    when timestamp = max_updated_at_cache_key_timestamp
+      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      "#{model_name.cache_key}/#{id}-#{timestamp}"
+    else
+      "#{model_name.cache_key}/#{id}"
+    end
+  end
+
+  def max_updated_at_cache_key_timestamp
+    [cached_updated_at, updated_at]
+      .compact
+      .map(&:to_time)
+      .max
+  end
+  private :max_updated_at_cache_key_timestamp
+
   def reload
     @signature_count = nil
+    @cached_updated_at = nil
+    @cached_last_signed_at = nil
     super
   end
 
@@ -374,14 +433,13 @@ class Petition < ActiveRecord::Base
       updates << "debate_state = 'awaiting'"
     end
 
-    if updates.size > 0 || update_timestamps?
+    if (updates.size > 0) || update_timestamps?
       updates << "last_signed_at = :now"
       updates << "updated_at = :now"
-    end
-
-    if updates.size > 0
       update_all([updates.join(", "), now: time])
     end
+    Rails.cache.write(cached_updated_at_key, time)
+    Rails.cache.write(cached_last_signed_at_key, time)
 
     Rails.cache.increment(cached_signature_count_key)
     self.reload

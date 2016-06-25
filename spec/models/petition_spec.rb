@@ -36,6 +36,17 @@ RSpec.describe Petition, type: :model do
         }.from(nil).to(be_within(1.second).of(now))
       end
     end
+
+    context 'when saving a petition' do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+
+      it "updates the cached updated_at timestamp" do
+        Rails.cache.write(petition.cached_updated_at_key, 10.days.ago)
+        expect{
+          petition.save
+        }.to change{ petition.reload.cached_updated_at }.to(be_within(1.second).of(Time.current))
+      end
+    end
   end
 
   context "validations" do
@@ -1135,6 +1146,40 @@ RSpec.describe Petition, type: :model do
           petition.update_signature_count!
         }.to change{ petition.reload.updated_at }.to(be_within(1.second).of(Time.current))
       end
+
+      it "updates the cached updated_at timestamp" do
+        Rails.cache.write(petition.cached_updated_at_key, 10.days.ago)
+        expect{
+          petition.update_signature_count!
+        }.to change{ petition.reload.cached_updated_at }.to(be_within(1.second).of(Time.current))
+      end
+    end
+  end
+
+  describe '#cache_key' do
+    let(:updated_at) { 2.days.ago.change(nsec: 0) }
+    let(:newer_cached_updated_at) { 1.hour.ago.change(nsec: 0) }
+    let(:older_cached_updated_at) { 6.months.ago.change(nsec: 0) }
+    let(:petition) do
+      FactoryGirl.create(:open_petition, updated_at: updated_at)
+    end
+
+    it 'uses updated_at' do
+      expect(petition.cache_key).to eq "petitions/#{petition.id}-#{to_cache_key_time(updated_at)}"
+    end
+
+    it 'uses cached updated_at if that is newer' do
+      Rails.cache.write(petition.cached_updated_at_key, newer_cached_updated_at)
+      expect(petition.reload.cache_key).to eq "petitions/#{petition.id}-#{to_cache_key_time(newer_cached_updated_at)}"
+    end
+
+    it 'uses updated_at if that is newer than cached version' do
+      Rails.cache.write(petition.cached_updated_at_key, older_cached_updated_at)
+      expect(petition.reload.cache_key).to eq "petitions/#{petition.id}-#{to_cache_key_time(updated_at)}"
+    end
+
+    def to_cache_key_time(time)
+      time.utc.to_s(petition.cache_timestamp_format)
     end
   end
 
@@ -1164,9 +1209,21 @@ RSpec.describe Petition, type: :model do
       expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
     end
 
+    it "updates the cached updated_at timestamp" do
+      Rails.cache.write(petition.cached_last_signed_at_key, 4.days.ago)
+      petition.increment_signature_count!
+      expect(petition.reload.cached_last_signed_at).to be_within(1.second).of(Time.current)
+    end
+
     it "updates the updated_at timestamp" do
       petition.increment_signature_count!
       expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "updates the cached updated_at timestamp" do
+      Rails.cache.write(petition.cached_updated_at_key, 4.days.ago)
+      petition.increment_signature_count!
+      expect(petition.reload.cached_updated_at).to be_within(1.second).of(Time.current)
     end
 
     context "when the petition is first sponsored" do
@@ -1767,19 +1824,41 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#save_cached_signature_count" do
-    let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 1000) }
+  describe "#save_cached_values_to_db" do
+    let(:db_updated_at) { 10.days.ago.change(nsec: 0) }
+    let(:cached_updated_at) { 1.day.ago.change(nsec: 0) }
+    let(:db_last_signed_at) { 12.days.ago.change(nsec: 0) }
+    let(:cached_last_signed_at) { 2.days.ago.change(nsec: 0) }
+    let(:petition) { FactoryGirl.create(:open_petition, signature_count: 1000, updated_at: db_updated_at, last_signed_at: db_last_signed_at) }
 
     before do
       allow(Rails.cache).to receive(:fetch).with("signature_counts/#{petition.id}", raw: true).and_return("2000")
+      allow(Rails.cache).to receive(:fetch).with("petition_updated_at_timestamps/#{petition.id}").and_return(cached_updated_at)
+      allow(Rails.cache).to receive(:fetch).with("petition_last_signed_at_timestamps/#{petition.id}").and_return(cached_last_signed_at)
     end
 
     it "updates the signature_count column in the database" do
       expect {
-        petition.save_cached_signature_count
+        petition.save_cached_values_to_db
       }.to change {
         petition.reload.signature_count
       }.from(1000).to(2000)
+    end
+
+    it "updates the updated_at column in the database" do
+      expect {
+        petition.save_cached_values_to_db
+      }.to change {
+        petition.reload.updated_at
+      }.from(db_updated_at).to(cached_updated_at)
+    end
+
+    it "updates the last_signed_at column in the database" do
+      expect {
+        petition.save_cached_values_to_db
+      }.to change {
+        petition.reload.last_signed_at
+      }.from(db_last_signed_at).to(cached_last_signed_at)
     end
   end
 end

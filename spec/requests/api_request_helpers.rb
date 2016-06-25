@@ -56,7 +56,8 @@ module ApiRequestHelpers
 
       # timestamps
       expect(attributes["created_at"]).to eq(timestampify petition.created_at)
-      expect(attributes["updated_at"]).to eq(timestampify petition.updated_at)
+      expect(attributes["updated_at"]).to eq(timestampify petition.cached_updated_at)
+      expect(attributes["last_signed_at"]).to eq(timestampify petition.cached_last_signed_at)
       expect(attributes["open_at"]).to eq(timestampify petition.open_at)
       expect(attributes["closed_at"]).to eq(timestampify petition.closed_at)
       expect(attributes["government_response_at"]).to eq(timestampify petition.government_response_at)

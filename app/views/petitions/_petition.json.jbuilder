@@ -13,7 +13,8 @@ json.attributes do
   json.signature_count petition.cached_signature_count
 
   json.created_at api_date_format(petition.created_at)
-  json.updated_at api_date_format(petition.updated_at)
+  json.updated_at api_date_format(petition.cached_updated_at)
+  json.last_signed_at api_date_format(petition.cached_last_signed_at)
   json.open_at api_date_format(petition.open_at)
   json.closed_at api_date_format(petition.closed_at)
   json.government_response_at api_date_format(petition.government_response_at)
