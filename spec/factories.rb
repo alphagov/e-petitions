@@ -338,6 +338,28 @@ FactoryGirl.define do
     trait :expired do
       end_date { 2.years.ago }
     end
+
+    trait :non_gb do
+      code do
+        country_code = Faker::Address.country_code
+        until country_code != 'GB'
+          country_code = Faker::Address.country_code
+        end
+        country_code
+      end
+      name do
+        country_name = Faker::Address.country
+        until country_name != 'United Kingdom'
+          country_name = Faker::Address.country
+        end
+        country_name
+      end
+    end
+
+    trait :gb do
+      code { 'GB' }
+      name { 'United Kingdom' }
+    end
   end
 
   factory :feedback do
