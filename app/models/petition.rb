@@ -222,6 +222,10 @@ class Petition < ActiveRecord::Base
       where(arel_table[:updated_at].gt(time))
     end
 
+    def with_signatures_updated_since(time)
+      where(id: Signature.select(:petition_id).validated.updated_since(time))
+    end
+
     def visible
       where(state: VISIBLE_STATES)
     end

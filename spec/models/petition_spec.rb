@@ -215,6 +215,26 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "with_signatures_updated_since" do
+      before do
+        @p1 = FactoryGirl.create(:petition).tap { |p| p.creator_signature.update_column(:updated_at, 10.minutes.ago) }
+        @p2 = FactoryGirl.create(:petition).tap { |p| p.creator_signature.update_column(:updated_at, 2.minutes.ago) }
+      end
+
+      it "returns petition with a signature that was updated in the provided time period" do
+        expect(Petition.with_signatures_updated_since(5.minutes.ago)).to include(@p2)
+      end
+
+      it "doesn't return petitions with a signature that was updated outside provided time period" do
+        expect(Petition.with_signatures_updated_since(5.minutes.ago)).not_to include(@p1)
+      end
+
+      it "doesn't return petitions if the signature that was updated in the time period is not validated" do
+        FactoryGirl.create(:pending_signature, petition: @p1, updated_at: 1.minute.ago)
+        expect(Petition.with_signatures_updated_since(5.minutes.ago)).not_to include(@p1)
+      end
+    end
+
     context "visible" do
       before :each do
         @hidden_petition_1 = FactoryGirl.create(:petition, :state => Petition::PENDING_STATE)

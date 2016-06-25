@@ -1,8 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe CachedPetitionValuesResetJob, type: :job do
-  context "when there are no petitions updated in the last time period" do
-    let!(:petition) { FactoryGirl.create(:petition, signature_count: 1000, updated_at: 30.minutes.ago) }
+  context "when there are no petitions with updated signatures in the last time period" do
+    let(:petition) {
+      FactoryGirl.create(:petition,
+        signature_count: 1000,
+        updated_at: 3.minutes.ago,
+        last_signed_at: 12.minutes.ago
+      ).tap do |p|
+        p.creator_signature.update_column(:updated_at, 30.minutes.ago)
+      end
+    }
+
+    before do
+      Rails.cache.write("petition_updated_at_timestamps/#{petition.id}", 1.minute.ago)
+      Rails.cache.write("petition_last_signed_at_timestamps/#{petition.id}", 2.minutes.ago)
+      Rails.cache.write("signature_counts/#{petition.id}", 2000, raw: true)
+    end
 
     it "doesn't update the signature count" do
       expect{
@@ -30,11 +44,19 @@ RSpec.describe CachedPetitionValuesResetJob, type: :job do
   end
 
   context "when there are are petitions updated in the last time period" do
-    let(:db_updated_at) { 5.minutes.ago.change(nsec: 0) }
+    let(:db_updated_at) { 25.minutes.ago.change(nsec: 0) }
     let(:cached_updated_at) { 1.minute.ago.change(nsec: 0) }
     let(:db_last_signed_at) { 6.minutes.ago.change(nsec: 0) }
     let(:cached_last_signed_at) { 2.minutes.ago.change(nsec: 0) }
-    let(:petition) { FactoryGirl.create(:petition, signature_count: 1000, updated_at: db_updated_at, last_signed_at: db_last_signed_at) }
+    let(:petition) {
+      FactoryGirl.create(:petition,
+        signature_count: 1000,
+        updated_at: db_updated_at,
+        last_signed_at: db_last_signed_at
+      ).tap do |p|
+        p.creator_signature.update_column(:updated_at, 1.minute.ago)
+      end
+    }
 
     before do
       travel_to Time.current
@@ -88,11 +110,19 @@ RSpec.describe CachedPetitionValuesResetJob, type: :job do
   end
 
   context "when there are are petitions updated just outside last time period" do
-    let(:db_updated_at) { 930.seconds.ago.change(nsec: 0) }
+    let(:db_updated_at) { 25.minutes.ago.change(nsec: 0) }
     let(:cached_updated_at) { 1.minute.ago.change(nsec: 0) }
     let(:db_last_signed_at) { 6.minutes.ago.change(nsec: 0) }
     let(:cached_last_signed_at) { 2.minutes.ago.change(nsec: 0) }
-    let(:petition) { FactoryGirl.create(:petition, signature_count: 1000, updated_at: db_updated_at, last_signed_at: db_last_signed_at) }
+    let(:petition) {
+      FactoryGirl.create(:petition,
+        signature_count: 1000,
+        updated_at: db_updated_at,
+        last_signed_at: db_last_signed_at
+      ).tap do |p|
+        p.creator_signature.update_column(:updated_at, 930.seconds.ago)
+      end
+    }
 
     before do
       travel_to Time.current

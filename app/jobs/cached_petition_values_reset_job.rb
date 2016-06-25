@@ -2,7 +2,7 @@ class CachedPetitionValuesResetJob < ActiveJob::Base
   queue_as :highest_priority
 
   def perform
-    Petition.updated_since(timestamp).each do |petition|
+    Petition.with_signatures_updated_since(timestamp).each do |petition|
       petition.save_cached_values_to_db
     end
   end
