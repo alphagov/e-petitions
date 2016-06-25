@@ -45,7 +45,7 @@ class CountryPetitionJournal < ActiveRecord::Base
     private
 
     def unrecordable?(signature)
-      signature.nil? || signature.petition.nil? || signature.location_code.blank? || !signature.validated?
+      signature.nil? || signature.petition.nil? || signature.location_code.blank? || !signature.validated? || signature.location_code == 'GB'
     end
   end
 end

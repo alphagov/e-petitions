@@ -319,7 +319,7 @@ class Petition < ActiveRecord::Base
 
     if update_all([sql, query, Time.current]) > 0
       self.reload
-      Rails.cache.write(cached_signature_count_key, signature_count)
+      Rails.cache.write(cached_signature_count_key, signature_count, raw: true)
     end
   end
 
@@ -349,10 +349,12 @@ class Petition < ActiveRecord::Base
     super
   end
 
+  def update_timestamps?
+    signature_count < 10000 #|| last_signed_at && last_signed_at > 10.seconds.ago
+  end
+
   def increment_signature_count!(time = Time.current)
     updates = []
-    updates << "last_signed_at = :now"
-    updates << "updated_at = :now"
 
     if pending?
       updates << "state = 'validated'"
@@ -372,10 +374,17 @@ class Petition < ActiveRecord::Base
       updates << "debate_state = 'awaiting'"
     end
 
-    if update_all([updates.join(", "), now: time]) > 0
-      Rails.cache.increment(cached_signature_count_key)
-      self.reload
+    if updates.size > 0 || update_timestamps?
+      updates << "last_signed_at = :now"
+      updates << "updated_at = :now"
     end
+
+    if updates.size > 0
+      update_all([updates.join(", "), now: time])
+    end
+
+    Rails.cache.increment(cached_signature_count_key)
+    self.reload
   end
 
   def at_threshold_for_moderation?

@@ -67,9 +67,9 @@ RSpec.describe CountryPetitionJournal, type: :model do
   end
 
   describe ".record_new_signature_for" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
-    let!(:location) { FactoryGirl.create(:location) }
-    let!(:location_code) { location.code }
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:location) { FactoryGirl.create(:location, :non_gb) }
+    let(:location_code) { location.code }
 
     def journal
       described_class.for(petition, location_code)
@@ -114,6 +114,17 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
     context "when the supplied signature has no country" do
       let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: nil) }
+
+      it "does nothing" do
+        expect {
+          described_class.record_new_signature_for(signature)
+        }.not_to change { journal.signature_count }
+      end
+    end
+
+    context "when the supplied signature is from the UK" do
+      let(:location) { FactoryGirl.create(:location, :gb) }
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: location_code) }
 
       it "does nothing" do
         expect {
