@@ -319,7 +319,7 @@ class Petition < ActiveRecord::Base
 
     if update_all([sql, query, Time.current]) > 0
       self.reload
-      Rails.cache.write(cached_signature_count_key, signature_count)
+      Rails.cache.write(cached_signature_count_key, signature_count, raw: true)
     end
   end
 
