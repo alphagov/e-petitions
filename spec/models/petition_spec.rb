@@ -1184,29 +1184,54 @@ RSpec.describe Petition, type: :model do
     context "when the signature count crosses the threshold for moderation" do
       let(:signature_count) { 5 }
 
-      let(:petition) do
-        FactoryGirl.create(:validated_petition, {
-          signature_count: signature_count,
-          last_signed_at: 2.days.ago,
-          updated_at: 2.days.ago
-        })
-      end
-
       before do
         expect(Site).to receive(:threshold_for_response).and_return(5)
       end
 
-      it "records the time it happened" do
-        petition.increment_signature_count!
-        expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+      context 'having already been validated by the creator' do
+        let(:petition) do
+          FactoryGirl.create(:validated_petition, {
+            signature_count: signature_count,
+            last_signed_at: 2.days.ago,
+            updated_at: 2.days.ago
+          })
+        end
+
+        it "records the time it happened" do
+          petition.increment_signature_count!
+          expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+        end
+
+        it "records changes the state from 'validated' to 'sponsored'" do
+          expect {
+            petition.increment_signature_count!
+          }.to change{
+            petition.state
+          }.from(Petition::VALIDATED_STATE).to(Petition::SPONSORED_STATE)
+        end
       end
 
-      it "records changes the state from 'validated' to 'sponsored'" do
-        expect {
+      context 'without having been validated by the creator yet' do
+        let(:petition) do
+          FactoryGirl.create(:pending_petition, {
+            signature_count: signature_count,
+            last_signed_at: 2.days.ago,
+            updated_at: 2.days.ago
+          })
+        end
+
+        it "records the time it happened" do
           petition.increment_signature_count!
-        }.to change{
-          petition.state
-        }.from(Petition::VALIDATED_STATE).to(Petition::SPONSORED_STATE)
+          expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+        end
+
+        it "records changes the state from 'validated' to 'sponsored'" do
+          expect {
+            petition.increment_signature_count!
+          }.to change{
+            petition.state
+          }.from(Petition::PENDING_STATE).to(Petition::SPONSORED_STATE)
+        end
       end
     end
 
