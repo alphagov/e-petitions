@@ -357,12 +357,14 @@ class Petition < ActiveRecord::Base
     updates = []
 
     if pending?
-      updates << "state = 'validated'"
+      updates = ["state = '#{VALIDATED_STATE}'"]
     end
 
     if at_threshold_for_moderation? && collecting_sponsors?
-      updates << "moderation_threshold_reached_at = :now"
-      updates << "state = 'sponsored'"
+      updates = [
+        "moderation_threshold_reached_at = :now",
+        "state = '#{Petition::SPONSORED_STATE}'"
+      ]
     end
 
     if at_threshold_for_response?
