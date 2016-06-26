@@ -9,6 +9,10 @@ RSpec.describe 'API request to show a petition', type: :request, show_exceptions
     expect(response).to be_success
   end
 
+  before do
+    FactoryGirl.create(:location, :gb)
+  end
+
   let(:petition) { FactoryGirl.create :open_petition }
 
   describe "format" do
@@ -78,6 +82,29 @@ RSpec.describe 'API request to show a petition', type: :request, show_exceptions
       make_successful_request debated_petition
 
       assert_serialized_debate debated_petition, json["data"]["attributes"]
+    end
+
+    it 'includes signatures_by_country' do
+      FactoryGirl.create(:location, code: 'FR')
+      FactoryGirl.create(:location, code: 'DE')
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'FR').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'DE').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'GB').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'GB').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'FR').validate!
+
+      make_successful_request petition
+
+
+      assert_serialized_signatures_by_country petition, json['data']['attributes']
+      fr_data = json['data']['attributes']['signatures_by_country'].detect { |sigs| sigs['code'] == 'FR' }
+      expect(fr_data['signature_count']).to eq 2
+
+      de_data = json['data']['attributes']['signatures_by_country'].detect { |sigs| sigs['code'] == 'DE' }
+      expect(de_data['signature_count']).to eq 1
+
+      gb_data = json['data']['attributes']['signatures_by_country'].detect { |sigs| sigs['code'] == 'GB' }
+      expect(gb_data['signature_count']).to eq 3
     end
   end
 end

@@ -151,6 +151,21 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
 
       assert_serialized_debate petition, json["data"][0]["attributes"]
     end
+
+    it 'does not include signatures_by_country' do
+      fr = FactoryGirl.create(:location, code: 'FR')
+      de = FactoryGirl.create(:location, code: 'DE')
+      gb = FactoryGirl.create(:location, :gb)
+      petition = FactoryGirl.create(:open_petition)
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'FR').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'DE').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'GB').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'GB').validate!
+      FactoryGirl.create(:pending_signature, petition: petition, location_code: 'FR').validate!
+      make_successful_request
+
+      expect(json['data'][0]['attributes']).not_to have_key('signatures_by_country')
+    end
   end
 end
 
