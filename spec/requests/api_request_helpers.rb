@@ -40,6 +40,21 @@ module ApiRequestHelpers
     end
   end
 
+  def assert_serialized_signatures_by_country(petition, attributes)
+    expect(attributes["signatures_by_country"]).to be_a Array
+    attributes["signatures_by_country"].each do |signatures_by_country|
+      expect(signatures_by_country).to be_a Hash
+      expect(signatures_by_country['code']).to be_in(petition.signatures_by_country.map(&:code) + ['GB'])
+      if signatures_by_country['code'] != 'GB'
+        petition_signatures_by_country = petition.signatures_by_country.detect { |country| country.name == signatures_by_country['name']}
+        expect(signatures_by_country['name']).to eq petition_signatures_by_country.name
+        expect(signatures_by_country['signature_count']).to eq petition_signatures_by_country.signature_count
+      else
+        calculated_gb_count = petition.cached_signature_count - petition.signatures_by_country.reject { |country| country.code == 'GB'}.reduce(0) { |sum, country| sum + country.signature_count }
+        expect(signatures_by_country['signature_count']).to eq calculated_gb_count
+      end
+    end
+  end
 
   def assert_serialized_petition(petition, serialized)
     # petition attributes

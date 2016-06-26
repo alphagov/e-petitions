@@ -37,6 +37,19 @@ module PetitionHelper
     petition_list_header.present?
   end
 
+  def api_signatures_by_country(petition)
+    signatures_by_country = petition.signatures_by_country
+    # remove 'GB' if it's there
+    signatures_without_gb = signatures_by_country.reject { |country| country.code == 'GB' }
+    signatures_without_gb + [
+      CountryPetitionJournal.new(
+        petition: petition,
+        location_code: 'GB',
+        signature_count: petition.cached_signature_count - signatures_without_gb.reduce(0) { |sum, country| sum + country.signature_count }
+      )
+    ]
+  end
+
   private
 
   def render_petition_hidden_details(stage_manager, form)
