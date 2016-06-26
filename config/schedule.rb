@@ -20,7 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 
 every 15.minutes do
-  runner "CachedSignatureCountResetJob.perform_now"
+  runner "CachedPetitionValuesResetJob.perform_now"
 end
 
 every :weekday, at: '7am' do

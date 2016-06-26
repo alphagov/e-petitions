@@ -345,6 +345,21 @@ RSpec.describe Signature, type: :model do
         expect(signature).not_to be_creator
       end
     end
+
+    context "updated_since" do
+      before do
+        @sig1 = FactoryGirl.create(:signature, updated_at: 10.minutes.ago)
+        @sig2 = FactoryGirl.create(:signature, updated_at: 2.minutes.ago)
+      end
+
+      it "returns signatures updated in the provided time period" do
+        expect(described_class.updated_since(5.minutes.ago)).to include(@sig2)
+      end
+
+      it "doesn't return signatures updated outside provided time period" do
+        expect(described_class.updated_since(5.minutes.ago)).not_to include(@sig1)
+      end
+    end
   end
 
   describe ".petition_ids_with_invalid_signature_counts" do

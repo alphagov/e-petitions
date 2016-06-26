@@ -70,6 +70,10 @@ class Signature < ActiveRecord::Base
                                          name: signature.name,
                                          petition_id: signature.petition_id) }
 
+  def self.updated_since(time)
+    where(arel_table[:updated_at].gt(time))
+  end
+
   # = Methods =
   attr_accessor :uk_citizenship
 

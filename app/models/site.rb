@@ -88,7 +88,7 @@ class Site < ActiveRecord::Base
       false
     end
 
-    def signature_count_updated_since_window
+    def petition_caches_updated_since_window
       15.minutes
     end
 

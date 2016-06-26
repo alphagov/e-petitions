@@ -32,17 +32,14 @@ RSpec.describe 'API request to show a petition', type: :request, show_exceptions
 
   describe "data" do
     it "includes the creator_name field for open petitions" do
-      petition = FactoryGirl.create :open_petition
-
       make_successful_request petition
 
       expect(json["data"]["attributes"]).to include("creator_name" => petition.creator_signature.name)
     end
 
     (Petition::VISIBLE_STATES - Array(Petition::OPEN_STATE)).each do |state_name|
-      let!(:petition) { FactoryGirl.create "#{state_name}_petition".to_sym }
-
       it "does not include the creator_name field for #{state_name} petitions" do
+        petition = FactoryGirl.create "#{state_name}_petition".to_sym
         make_successful_request petition
 
         expect(json["data"]["attributes"]).not_to include("creator_name" => petition.creator_signature.name)

@@ -20,6 +20,15 @@ RSpec.describe PetitionCountJob, type: :job do
       }.not_to change{ petition.reload.updated_at }
     end
 
+    it "doesn't change the cached updated_at timestamp" do
+      Rails.cache.write(petition.cached_updated_at_key, 10.days.ago)
+      expect{
+        perform_enqueued_jobs {
+          described_class.perform_later
+        }
+      }.not_to change{ petition.reload.cached_updated_at }
+    end
+
     it "doesn't notify AppSignal" do
       expect(Appsignal).not_to receive(:send_exception)
 
@@ -47,6 +56,15 @@ RSpec.describe PetitionCountJob, type: :job do
           described_class.perform_later
         }
       }.to change{ petition.reload.updated_at }.to(be_within(1.second).of(Time.current))
+    end
+
+    it "updates the cached updated_at timestamp" do
+      Rails.cache.write(petition.cached_updated_at_key, 10.days.ago)
+      expect{
+        perform_enqueued_jobs {
+          described_class.perform_later
+        }
+      }.to change{ petition.reload.cached_updated_at }.to(be_within(1.second).of(Time.current))
     end
 
     it "notifies AppSignal" do
