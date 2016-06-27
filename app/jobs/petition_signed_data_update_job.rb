@@ -1,5 +1,5 @@
 class PetitionSignedDataUpdateJob < ActiveJob::Base
-  queue_as :high_priority
+  queue_as :highest_priority
 
   def perform(signature)
     ConstituencyPetitionJournal.record_new_signature_for(signature)
