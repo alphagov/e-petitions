@@ -112,16 +112,6 @@ class SignaturesController < ApplicationController
                :postcode, :location_code, :uk_citizenship)
   end
 
-  def send_sponsor_support_notification_email_to_petition_owner(petition, signature)
-    sponsor = petition.sponsors.for(signature)
-
-    if petition.in_moderation?
-      SponsorSignedEmailOnThresholdEmailJob.perform_later(petition, sponsor)
-    elsif petition.collecting_sponsors?
-      SponsorSignedEmailBelowThresholdEmailJob.perform_later(petition, sponsor)
-    end
-  end
-
   def find_existing_pending_signatures
     @signature = Signature.new(signature_params_for_create)
     @signature.email.strip!
@@ -153,7 +143,6 @@ class SignaturesController < ApplicationController
       redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
     else
       @signature.validate!
-      send_sponsor_support_notification_email_to_petition_owner(@signature.petition, @signature)
 
       if @signature.petition.open?
         redirect_to signed_signature_url(@signature, token: @signature.perishable_token)

@@ -555,6 +555,12 @@ RSpec.describe Petition, type: :model do
     let(:petition) { FactoryGirl.create(:pending_petition) }
     let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
 
+    around do |example|
+      perform_enqueued_jobs do
+        example.run
+      end
+    end
+
     before do
       petition.validate_creator_signature!
     end
@@ -1547,6 +1553,12 @@ RSpec.describe Petition, type: :model do
   describe "#validate_creator_signature!" do
     let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
     let(:signature) { petition.creator_signature }
+
+    around do |example|
+      perform_enqueued_jobs do
+        example.run
+      end
+    end
 
     let(:attributes) do
       { created_at: 2.days.ago, updated_at: 2.days.ago }

@@ -35,7 +35,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
       context "when moderation param is 'approve'" do
         let(:now) { Time.current }
         let(:deliveries) { ActionMailer::Base.deliveries }
-        let(:creator_email) { deliveries.detect{ |m| m.to == %w[bazbutler@gmail.com] } }
+        let(:creator_email) { deliveries.select{ |m| m.to == %w[bazbutler@gmail.com] }.last }
         let(:sponsor_email) { deliveries.detect{ |m| m.to == %w[laurapalmer@gmail.com] } }
         let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
         let(:duration) { Site.petition_duration.months }
