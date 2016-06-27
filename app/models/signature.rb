@@ -88,7 +88,8 @@ class Signature < ActiveRecord::Base
   end
 
   def sponsor?
-    petition.sponsor_signatures.exists? self.id
+    # avoid loading the object just to check if it's there
+    association(:sponsor).scope.exists? # petition.sponsor_signatures.exists? self.id
   end
 
   def pending?
