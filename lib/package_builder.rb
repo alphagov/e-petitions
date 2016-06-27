@@ -501,7 +501,7 @@ class PackageBuilder
 
       # Run cron jobs only on workers, as webservers autoscale up and down.
       # ${SERVER_TYPE} is pre-populated for the deploy user by the build scripts
-      su - deploy -c 'if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi'
+      # su - deploy -c 'if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi'
     SCRIPT
   end
 
