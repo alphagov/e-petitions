@@ -5,6 +5,12 @@ RSpec.describe Signature, type: :model do
     expect(FactoryGirl.build(:signature)).to be_valid
   end
 
+  around do |example|
+    perform_enqueued_jobs do
+      example.call
+    end
+  end
+
   context "defaults" do
     it "has pending as default state" do
       s = Signature.new
@@ -418,7 +424,7 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(signature.petition.signature_count).to eq(7)
+      expect(signature.petition.reload.signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 
@@ -429,10 +435,10 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.create(:pending_signature, petition: petition)
       signature.validate!
 
-      expect(other_signature.petition.signature_count).to eq(7)
+      expect(other_signature.petition.reload.signature_count).to eq(7)
       expect(other_signature.number).to eq(7)
 
-      expect(signature.petition.signature_count).to eq(7)
+      expect(signature.petition.reload.signature_count).to eq(7)
       expect(signature.number).to eq(7)
     end
 

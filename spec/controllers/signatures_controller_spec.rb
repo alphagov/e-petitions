@@ -40,6 +40,12 @@ RSpec.describe SignaturesController, type: :controller do
       let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
       let(:signature) { sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition)) }
 
+      around do |example|
+        perform_enqueued_jobs do
+          example.call
+        end
+      end
+
       it "redirects to the petition sponsored page" do
         get :verify, :id => signature.id, :token => signature.perishable_token
         expect(assigns[:signature]).to eq(signature)
@@ -62,11 +68,9 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it 'sends email notification to the petition creator' do
-        perform_enqueued_jobs do
-          get :verify, :id => signature.id, :token => signature.perishable_token
-          email = ActionMailer::Base.deliveries.last
-          expect(email.to).to eq([petition.creator_signature.email])
-        end
+        get :verify, :id => signature.id, :token => signature.perishable_token
+        email = ActionMailer::Base.deliveries.last
+        expect(email.to).to eq([petition.creator_signature.email])
       end
 
       it 'updates petition sponsored state' do

@@ -88,7 +88,8 @@ class Signature < ActiveRecord::Base
   end
 
   def sponsor?
-    petition.sponsor_signatures.exists? self.id
+    # avoid loading the object just to check if it's there
+    association(:sponsor).scope.exists? # petition.sponsor_signatures.exists? self.id
   end
 
   def pending?
@@ -121,9 +122,7 @@ class Signature < ActiveRecord::Base
     end
 
     if update_signature_counts
-      ConstituencyPetitionJournal.record_new_signature_for(self)
-      CountryPetitionJournal.record_new_signature_for(self)
-      petition.increment_signature_count!
+      PetitionSignedDataUpdateJob.perform_later(self)
     end
   end
 
