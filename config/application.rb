@@ -27,7 +27,7 @@ module Epets
     config.active_record.raise_in_transactional_callbacks = true
 
     # Configure the cache store
-    config.cache_store = :dalli_store, nil, {
+    config.cache_store = :atomic_dalli_store, nil, {
       namespace: 'epets', expires_in: 1.day, compress: true,
       pool_size: ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i
     }
