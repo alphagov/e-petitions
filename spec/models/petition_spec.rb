@@ -1764,5 +1764,22 @@ RSpec.describe Petition, type: :model do
         expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
       end
     end
+
+    describe "#cache_key" do
+      let(:petition) { FactoryGirl.create(:petition, last_signed_at: "2016-06-28 00:00:17 UTC", open_at: "2016-06-28 00:00:07 UTC") }
+      let(:now) { "2016-06-29 00:00:07 UTC".in_time_zone }
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "rounds down to the nearest 5 seconds" do
+        expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000000")
+      end
+
+      it "can use other columns" do
+        expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000000")
+      end
+    end
   end
 end
