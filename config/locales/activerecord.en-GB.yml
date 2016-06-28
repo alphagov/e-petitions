@@ -51,7 +51,7 @@ en-GB:
         blank: "Email must be completed"
         invalid: "Email '%{value}' not recognised"
         disposable: "You can’t use a disposable email address"
-        plus_address: "You can't use 'plus addressing' in your email address"
+        plus_address: "You can’t use ‘plus addressing’ in your email address"
       action:
         blank: "Action must be completed"
         too_long: "Action is too long"
