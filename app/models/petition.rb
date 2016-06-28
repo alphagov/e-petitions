@@ -507,6 +507,24 @@ class Petition < ActiveRecord::Base
     creator_signature.update_attribute(:petition_id, id)
   end
 
+  def cache_key(*timestamp_names)
+    case
+    when new_record?
+      "petitions/new"
+    when timestamp_names.any?
+      timestamp = max_updated_column_timestamp(timestamp_names)
+      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
+      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      "petitions/#{id}-#{timestamp}"
+    when timestamp = max_updated_column_timestamp
+      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
+      timestamp = timestamp.utc.to_s(cache_timestamp_format)
+      "petitions/#{id}-#{timestamp}"
+    else
+      "petitions/#{id}"
+    end
+  end
+
   def update_last_petition_created_at
     Site.touch(:last_petition_created_at)
   end
