@@ -34,13 +34,11 @@ module ActiveSupport
       def write(name, value, options = nil)
         expiry = (options && options[:expires_in]) || 0
         options[:expires_in] = expiry + 20 unless expiry.zero?
-        ttl_set(ttl_key(name, options), expiry)
-        super
+        ttl_set(ttl_key(name, options), expiry) && super
       end
 
       def delete(name, options = nil)
-        ttl_delete(ttl_key(name, options))
-        super
+        ttl_delete(ttl_key(name, options)) && super
       end
 
       private
@@ -56,18 +54,34 @@ module ActiveSupport
 
       def ttl_get(key)
         with { |c| c.get(key, raw: true) }
+      rescue Dalli::DalliError => e
+        logger.error("DalliError: #{e.message}") if logger
+        raise if raise_errors?
+        nil
       end
 
       def ttl_add(key)
         with { |c| c.add(key, "", 10, raw: true) }
+      rescue Dalli::DalliError => e
+        logger.error("DalliError: #{e.message}") if logger
+        raise if raise_errors?
+        false
       end
 
       def ttl_set(key, expiry)
         with { |c| c.set(key, "", expiry, raw: true) }
+      rescue Dalli::DalliError => e
+        logger.error("DalliError: #{e.message}") if logger
+        raise if raise_errors?
+        false
       end
 
       def ttl_delete(key)
         with { |c| c.delete(key) }
+      rescue Dalli::DalliError => e
+        logger.error("DalliError: #{e.message}") if logger
+        raise if raise_errors?
+        false
       end
     end
   end
