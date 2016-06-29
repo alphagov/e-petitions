@@ -1,6 +1,10 @@
 class PetitionSignedDataUpdateJob < ActiveJob::Base
   queue_as :highest_priority
 
+  rescue_from(ActiveJob::DeserializationError) do |exception|
+    Appsignal.send_exception exception
+  end
+
   def perform(signature)
     ConstituencyPetitionJournal.record_new_signature_for(signature)
     CountryPetitionJournal.record_new_signature_for(signature)
