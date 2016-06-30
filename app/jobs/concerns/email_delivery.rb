@@ -17,7 +17,8 @@ module EmailDelivery
     Errno::ECONNRESET,
     Errno::ECONNREFUSED,
     Errno::ETIMEDOUT,
-    Timeout::Error
+    Timeout::Error,
+    EOFError
   ]
 
   included do
