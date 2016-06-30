@@ -3,7 +3,7 @@ class FeedbackController < ApplicationController
 
   before_action :build_feedback, only: [:new, :create]
 
-  def index
+  def new
     respond_with @feedback
   end
 
@@ -16,6 +16,9 @@ class FeedbackController < ApplicationController
   end
 
   def thanks
+    respond_to do |format|
+      format.html
+    end
   end
 
   private
