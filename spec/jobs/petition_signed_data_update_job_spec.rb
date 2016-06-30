@@ -23,9 +23,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
     end
 
     it 'does not raise the deserialization problem (which would cause the worker to requeue the job)' do
-      expect {
-        running_the_job
-      }.not_to raise_error(ActiveJob::DeserializationError)
+      expect { running_the_job }.not_to raise_error
     end
   end
 
