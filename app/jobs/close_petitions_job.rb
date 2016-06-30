@@ -1,7 +1,7 @@
 class ClosePetitionsJob < ActiveJob::Base
   queue_as :high_priority
 
-  def perform
-    Petition.close_petitions!
+  def perform(time)
+    Petition.close_petitions!(time.in_time_zone)
   end
 end

@@ -1,29 +1,75 @@
 require 'rails_helper'
 
 RSpec.describe ClosePetitionsJob, type: :job do
-  let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+  context "for a petition opened in the winter" do
+    let!(:petition) {
+      FactoryGirl.create(:open_petition, open_at: "2015-12-29T10:00:00Z")
+    }
 
-  context "when a petition is in the open state and closing date has not passed" do
-    let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
+    around do |example|
+      travel_to(now)
+      example.run
+      travel_back
+    end
 
-    it "does not close the petition" do
-      expect{
-        perform_enqueued_jobs {
-          described_class.perform_later
-        }
-      }.not_to change{ petition.reload.state }
+    context "and the closing date has not passed" do
+      let(:now) { "2016-06-28T07:00:00Z".in_time_zone }
+
+      it "does not change the petition state" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.perform_later(Date.tomorrow.beginning_of_day.iso8601)
+          }
+        }.not_to change{ petition.reload.state }
+      end
+    end
+
+    context "and the closing date has passed" do
+      let(:now) { "2016-06-29T07:00:00Z".in_time_zone }
+
+      it "does change the petition debate state" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.perform_later(Date.tomorrow.beginning_of_day.iso8601)
+          }
+        }.to change{ petition.reload.state }.from("open").to("closed")
+      end
     end
   end
 
-  context "when a petition is in the open state and closed_at has passed" do
-    let(:open_at) { Site.opened_at_for_closing(1.day.ago) }
+  context "for a petition opened in the summer" do
+    let!(:petition) {
+      FactoryGirl.create(:open_petition, open_at: "2016-06-29T10:00:00Z")
+    }
 
-    it "does close the petition" do
-      expect{
-        perform_enqueued_jobs {
-          described_class.perform_later
-        }
-      }.to change{ petition.reload.state }.from('open').to('closed')
+    around do |example|
+      travel_to(now)
+      example.run
+      travel_back
+    end
+
+    context "and the debate date has not passed" do
+      let(:now) { "2016-12-28T07:00:00Z".in_time_zone }
+
+      it "does not change the petition state" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.perform_later(Date.tomorrow.beginning_of_day.iso8601)
+          }
+        }.not_to change{ petition.reload.state }
+      end
+    end
+
+    context "and the debate date has passed" do
+      let(:now) { "2016-12-29T07:00:00Z".in_time_zone }
+
+      it "does change the petition state" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.perform_later(Date.tomorrow.beginning_of_day.iso8601)
+          }
+        }.to change{ petition.reload.state }.from("open").to("closed")
+      end
     end
   end
 end

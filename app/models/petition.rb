@@ -281,12 +281,12 @@ class Petition < ActiveRecord::Base
       "[#{tag.gsub(/[\[\]%]/,'')}]"
     end
 
-    def in_need_of_marking_as_debated
-      where(scheduled_debate_state.and(debate_date_in_the_past))
+    def in_need_of_marking_as_debated(date = Date.current)
+      where(scheduled_debate_state.and(debate_date_in_the_past(date)))
     end
 
-    def mark_petitions_as_debated!
-      in_need_of_marking_as_debated.update_all(debate_state: 'debated')
+    def mark_petitions_as_debated!(date = Date.current)
+      in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
     end
 
     private
@@ -303,8 +303,8 @@ class Petition < ActiveRecord::Base
       arel_table[:debate_state].eq('awaiting')
     end
 
-    def debate_date_in_the_past
-      arel_table[:scheduled_debate_date].lt(Date.current)
+    def debate_date_in_the_past(date)
+      arel_table[:scheduled_debate_date].lt(date)
     end
 
     def scheduled_debate_state
