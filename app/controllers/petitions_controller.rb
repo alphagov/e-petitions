@@ -13,6 +13,7 @@ class PetitionsController < ApplicationController
 
   def index
     @petitions = Petition.visible.search(params)
+    respond_with @petitions
   end
 
   def show
@@ -35,19 +36,36 @@ class PetitionsController < ApplicationController
       send_email_to_gather_sponsors(@stage_manager.petition)
       redirect_to thank_you_petition_url(@stage_manager.petition)
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
   end
 
   def check
+    respond_to do |format|
+      format.html
+    end
   end
 
   def check_results
     @petitions = Petition.visible.search(params.merge(count: 3))
+    respond_to do |format|
+      format.html
+    end
   end
 
   def moderation_info
     @petition = Petition.find(params[:id])
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def thank_you
+    respond_to do |format|
+      format.html
+    end
   end
 
   protected

@@ -3,8 +3,8 @@ Rails.application.routes.draw do
     get '/' => 'pages#index', :as => :home
     get 'help' => 'pages#help', :as => :help
     get 'privacy' => 'pages#privacy', :as => :privacy
-    get 'browserconfig' => 'pages#browserconfig', format: 'xml'
-    get 'manifest' => 'pages#manifest', format: 'json'
+    get 'browserconfig' => 'pages#browserconfig', format: true, constraints: { format: 'xml' }
+    get 'manifest' => 'pages#manifest', format: true, constraints: { format: 'json' }
 
     get  'feedback', to: 'feedback#new', as: 'feedback'
     post 'feedback', to: 'feedback#create', as: nil

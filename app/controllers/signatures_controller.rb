@@ -33,6 +33,9 @@ class SignaturesController < ApplicationController
     else
       @signature.mark_seen_signed_confirmation_page!
       @petition = @signature.petition
+      respond_to do |format|
+        format.html
+      end
     end
   end
 
@@ -46,6 +49,15 @@ class SignaturesController < ApplicationController
 
   def unsubscribe
     @signature.unsubscribe!(token_param)
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def thank_you
+    respond_to do |format|
+      format.html
+    end
   end
 
   private
@@ -133,7 +145,9 @@ class SignaturesController < ApplicationController
       send_email_to_petition_signer(@stage_manager.signature)
       respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
   end
 

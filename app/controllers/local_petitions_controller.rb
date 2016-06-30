@@ -10,6 +10,9 @@ class LocalPetitionsController < ApplicationController
   before_action :redirect_to_constituency, if: :constituency?, only: :index
 
   def index
+    respond_to do |format|
+      format.html
+    end
   end
 
   def show

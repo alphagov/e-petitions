@@ -10,6 +10,25 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
   end
   alias_method :run_the_job, :running_the_job
 
+  context 'when the signature has gone away' do
+    let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+
+    before do
+      Signature.delete(signature)
+    end
+
+    it 'notifies appsignal of the deserialization problem' do
+      expect(Appsignal).to receive(:send_exception).with(an_instance_of(ActiveJob::DeserializationError))
+      run_the_job
+    end
+
+    it 'does not raise the deserialization problem (which would cause the worker to requeue the job)' do
+      expect {
+        running_the_job
+      }.not_to raise_error(ActiveJob::DeserializationError)
+    end
+  end
+
   context "when the petition is open" do
     let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 

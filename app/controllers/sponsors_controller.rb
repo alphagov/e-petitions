@@ -13,6 +13,7 @@ class SponsorsController < ApplicationController
     assign_stage
     @sponsor = @petition.sponsors.build
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
+    respond_with @sponsor
   end
 
   def update
@@ -26,14 +27,22 @@ class SponsorsController < ApplicationController
       send_email_to_sponsor(@sponsor)
       redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
-      render :show
+      respond_to do |format|
+        format.html { render :show }
+      end
     end
   end
 
   def thank_you
+    respond_to do |format|
+      format.html
+    end
   end
 
   def sponsored
+    respond_to do |format|
+      format.html
+    end
   end
 
   private

@@ -16,7 +16,7 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
 
     it "does not respond to XML" do
       get petitions_url(format: 'xml')
-      expect(response.status).to eq(500)
+      expect(response.status).to eq(406)
     end
   end
 
