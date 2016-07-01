@@ -149,6 +149,8 @@ class SignaturesController < ApplicationController
         format.html { render :new }
       end
     end
+  rescue ActiveRecord::RecordNotUnique => e
+    redirect_to thank_you_petition_signatures_url(petition)
   end
 
   def validate_sponsor
