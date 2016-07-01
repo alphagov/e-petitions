@@ -430,6 +430,19 @@ RSpec.describe SignaturesController, type: :controller do
           expect(response).to render_template(:new)
         end
       end
+
+      context "when a race condition occurs" do
+        let(:exception) { ActiveRecord::RecordNotUnique.new("PG::UniqueViolation") }
+        before do
+          FactoryGirl.create(:validated_signature, signature_params.merge(petition_id: petition.id))
+          allow_any_instance_of(Signature).to receive(:save).and_raise(exception)
+        end
+
+        it "redirects to the thank you page" do
+          do_post(stage: 'done')
+          expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signatures/thank-you")
+        end
+      end
     end
 
     context "when the petition is closed" do
