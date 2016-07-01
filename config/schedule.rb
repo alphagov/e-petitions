@@ -35,10 +35,10 @@ every :day, at: '2.30am' do
   runner "PetitionCountJob.perform_later"
 end
 
-every :day, at: '0.00am' do
-  runner "ClosePetitionsJob.perform_later"
+every :day, at: '7.00am' do
+  rake "epets:petitions:close", output: nil
 end
 
-every :day, at: '0.00am' do
-  runner "DebatedPetitionsJob.perform_later"
+every :day, at: '7.15am' do
+  rake "epets:petitions:debated", output: nil
 end

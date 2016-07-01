@@ -1,7 +1,7 @@
 class DebatedPetitionsJob < ActiveJob::Base
   queue_as :high_priority
 
-  def perform
-    Petition.mark_petitions_as_debated!
+  def perform(date)
+    Petition.mark_petitions_as_debated!(date.to_date)
   end
 end
