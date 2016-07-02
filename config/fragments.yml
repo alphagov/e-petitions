@@ -14,6 +14,7 @@ header:
 footer:
   keys:
     - :create_petition_page
+    - :open_petition_page
   options:
     expires_in: 300
 
