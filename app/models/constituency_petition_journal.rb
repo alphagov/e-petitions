@@ -29,6 +29,14 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
       end
     end
 
+    def invalidate_signature_for(signature, now = Time.current)
+      unless unrecordable?(signature)
+        journal = self.for(signature.petition, signature.constituency_id)
+        updates = "signature_count = greatest(signature_count - 1, 0), updated_at = :now"
+        unscoped.where(id: journal.id).update_all([updates, now: now])
+      end
+    end
+
     def reset!
       connection.execute "TRUNCATE TABLE #{self.table_name}"
       connection.execute <<-SQL.strip_heredoc
@@ -51,7 +59,7 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     private
 
     def unrecordable?(signature)
-      signature.nil? || signature.petition.nil? || signature.constituency_id.blank? || !signature.validated?
+      signature.nil? || signature.petition.nil? || signature.constituency_id.blank? || !signature.validated_at?
     end
   end
 end

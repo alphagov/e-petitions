@@ -1,0 +1,72 @@
+<h2>Reasons for this invalidation</h2>
+
+<%= form_row for: [form.object, :summary] do %>
+  <%= form.label :summary, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :summary %>
+  <%= form.text_field :summary, tabindex: increment, maxlength: 255, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :details] do %>
+  <%= form.label :details, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :details %>
+  <%= form.text_area :details, tabindex: increment, rows: 5, class: 'form-control' %>
+<% end %>
+
+<h2>Conditions for matching signatures</h2>
+
+<%= form_row for: [form.object, :petition_id] do %>
+  <%= form.label :petition_id, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :petition_id %>
+  <%= form.text_field :petition_id, tabindex: increment, maxlength: 20, class: 'form-control', placeholder: 'The ID of the petition' %>
+<% end %>
+
+<%= form_row for: [form.object, :name] do %>
+  <%= form.label :name, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :name %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 255, class: 'form-control', placeholder: 'The name used when signing - the use of % wildcards is allowed' %>
+<% end %>
+
+<%= form_row for: [form.object, :email] do %>
+  <%= form.label :email, "Email address", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :email %>
+  <%= form.text_field :email, tabindex: increment, maxlength: 255, class: 'form-control', placeholder: 'The email address used when signing - the use of % wildcards is allowed' %>
+<% end %>
+
+<%= form_row for: [form.object, :postcode] do %>
+  <%= form.label :postcode, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :postcode %>
+  <%= form.text_field :postcode, tabindex: increment, maxlength: 255, class: 'form-control', placeholder: 'The postcode used when signing - all caps with spaces removed' %>
+<% end %>
+
+<%= form_row for: [form.object, :ip_address] do %>
+  <%= form.label :ip_address, "IP address", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :ip_address %>
+  <%= form.text_field :ip_address, tabindex: increment, maxlength: 20, class: 'form-control', placeholder: 'The IP address used when signing - should look like 123.134.156.167' %>
+<% end %>
+
+<%= form_row for: [form.object, :constituency_id] do %>
+  <%= form.label :constituency_id, class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :constituency_id %>
+  <%= form.text_field :constituency_id, tabindex: increment, maxlength: 30, class: 'form-control', placeholder: 'The constituency ID returned by the parliament API for the postcode' %>
+<% end %>
+
+<%= form_row for: [form.object, :location_code] do %>
+  <%= form.label :location_code, "Location", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :location_code %>
+  <%= form.text_field :location_code, tabindex: increment, maxlength: 30, class: 'form-control', placeholder: 'The location code used when signing - typically it would be GB' %>
+<% end %>
+
+<%= form_row for: [form.object, :created_after] do %>
+  <%= form.label :created_after, "Starting at", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :created_after %>
+  <%= form.datetime_select :created_after, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+<% end %>
+
+<%= form_row for: [form.object, :created_before] do %>
+  <%= form.label :created_before, "Finishing at", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :created_before %>
+  <%= form.datetime_select :created_before, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_invalidations_path, class: 'button-secondary' %>

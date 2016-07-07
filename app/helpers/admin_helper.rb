@@ -21,6 +21,14 @@ module AdminHelper
     options_for_select(options, selected)
   end
 
+  def admin_invalidation_facets_for_select(facets, selected)
+    options = admin_invalidation_facets.map do |facet|
+      [I18n.t(facet,  scope: :"admin.invalidations.facets.labels", quantity: facets[facet]), facet]
+    end
+
+    options_for_select(options, selected)
+  end
+
   def email_petitioners_with_count_submit_button(form, petition)
     i18n_options = {
       scope: :admin, count: petition.signature_count,
@@ -39,5 +47,9 @@ module AdminHelper
 
   def admin_petition_facets
     I18n.t(:admin, scope: :"petitions.facets")
+  end
+
+  def admin_invalidation_facets
+    I18n.t(:keys, scope: :"admin.invalidations.facets")
   end
 end

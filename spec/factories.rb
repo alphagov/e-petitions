@@ -217,6 +217,10 @@ FactoryGirl.define do
     state      Signature::PENDING_STATE
   end
 
+  factory :fraudulent_signature, :parent => :signature do
+    state      Signature::FRAUDULENT_STATE
+  end
+
   factory :validated_signature, :parent => :signature do
     state                         Signature::VALIDATED_STATE
     validated_at                  { Time.current }
@@ -225,6 +229,11 @@ FactoryGirl.define do
     trait :just_signed do
       seen_signed_confirmation_page false
     end
+  end
+
+  factory :invalidated_signature, :parent => :validated_signature do
+    state                         Signature::INVALIDATED_STATE
+    invalidated_at                { Time.current }
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
@@ -349,5 +358,22 @@ FactoryGirl.define do
     petition_link_or_title "Do stuff"
     email "foo@example.com"
     user_agent "Mozilla/5.0"
+  end
+
+  factory :invalidation do
+    summary "Invalidation summary"
+    details "Reasons for invalidation"
+
+    trait :cancelled do
+      cancelled_at { Time.current }
+    end
+
+    trait :completed do
+      completed_at { Time.current }
+    end
+
+    trait :started do
+      started_at { Time.current }
+    end
   end
 end

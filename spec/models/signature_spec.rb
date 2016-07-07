@@ -67,6 +67,11 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "associations" do
+    it { is_expected.to belong_to(:petition) }
+    it { is_expected.to belong_to(:invalidation) }
+  end
+
   describe "callbacks" do
     context "when the signature is destroyed" do
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
@@ -93,14 +98,71 @@ RSpec.describe Signature, type: :model do
       end
 
       context "when the signature is not the creator" do
-        it "updates the petition signature count" do
-          signature = FactoryGirl.create(:pending_signature, petition: petition)
+        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
+        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+
+        let!(:signature) {
+          FactoryGirl.create(
+            :pending_signature,
+            petition: petition,
+            constituency_id: constituency_journal.constituency_id,
+            location_code: country_journal.location_code
+          )
+        }
+
+        before do
           signature.validate!
-
           petition.reload
+        end
 
+        it "decrements the petition signature count" do
           expect(petition.signature_count).to eq(7)
           expect{ signature.destroy }.to change{ petition.reload.signature_count }.by(-1)
+        end
+
+        it "decrements the country journal signature count" do
+          expect(petition.signature_count).to eq(7)
+          expect{ signature.destroy }.to change{ country_journal.reload.signature_count }.by(-1)
+        end
+
+        it "decrements the constituency journal signature count" do
+          expect(petition.signature_count).to eq(7)
+          expect{ signature.destroy }.to change{ constituency_journal.reload.signature_count }.by(-1)
+        end
+      end
+
+      context "when the signature is invalidated" do
+        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
+        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+
+        let!(:signature) {
+          FactoryGirl.create(
+            :pending_signature,
+            petition: petition,
+            constituency_id: constituency_journal.constituency_id,
+            location_code: country_journal.location_code
+          )
+        }
+
+        before do
+          signature.validate!
+          signature.invalidate!
+          petition.reload
+        end
+
+        it "doesn't decrement the petition signature count" do
+          expect(petition.signature_count).to eq(6)
+          expect{ signature.destroy }.not_to change{ petition.reload.signature_count }
+        end
+
+        it "decrements the country journal signature count" do
+          expect(petition.signature_count).to eq(6)
+          expect{ signature.destroy }.not_to change{ country_journal.reload.signature_count }
+        end
+
+        it "decrements the constituency journal signature count" do
+          expect(petition.signature_count).to eq(6)
+          expect{ signature.destroy }.not_to change{ constituency_journal.reload.signature_count }
         end
       end
     end
@@ -465,9 +527,25 @@ RSpec.describe Signature, type: :model do
       expect(signature.pending?).to be_truthy
     end
 
-    it "returns false if the signature is validated state" do
-      signature = FactoryGirl.build(:validated_signature)
-      expect(signature.pending?).to be_falsey
+    (Signature::STATES - [Signature::PENDING_STATE]).each do |state|
+      it "returns false if the signature is #{state} state" do
+        signature = FactoryGirl.build(:"#{state}_signature")
+        expect(signature.pending?).to be_falsey
+      end
+    end
+  end
+
+  describe "#fraudulent?" do
+    it "returns true if the signature has a fraudulent state" do
+      signature = FactoryGirl.build(:fraudulent_signature)
+      expect(signature.fraudulent?).to be_truthy
+    end
+
+    (Signature::STATES - [Signature::FRAUDULENT_STATE]).each do |state|
+      it "returns false if the signature is #{state} state" do
+        signature = FactoryGirl.build(:"#{state}_signature")
+        expect(signature.fraudulent?).to be_falsey
+      end
     end
   end
 
@@ -477,9 +555,25 @@ RSpec.describe Signature, type: :model do
       expect(signature.validated?).to be_truthy
     end
 
-    it "returns false if the signature is pending state" do
-      signature = FactoryGirl.build(:pending_signature)
-      expect(signature.validated?).to be_falsey
+    (Signature::STATES - [Signature::VALIDATED_STATE]).each do |state|
+      it "returns false if the signature is #{state} state" do
+        signature = FactoryGirl.build(:"#{state}_signature")
+        expect(signature.validated?).to be_falsey
+      end
+    end
+  end
+
+  describe "#invalidated?" do
+    it "returns true if the signature has an invalidated state" do
+      signature = FactoryGirl.build(:invalidated_signature)
+      expect(signature.invalidated?).to be_truthy
+    end
+
+    (Signature::STATES - [Signature::INVALIDATED_STATE]).each do |state|
+      it "returns false if the signature is #{state} state" do
+        signature = FactoryGirl.build(:"#{state}_signature")
+        expect(signature.invalidated?).to be_falsey
+      end
     end
   end
 
@@ -588,38 +682,84 @@ RSpec.describe Signature, type: :model do
         expect{ signature.validate! }.to raise_error(PG::InFailedSqlTransaction)
       end
     end
+  end
 
-    context "when the petition is pending" do
-      let(:petition) { FactoryGirl.create(:pending_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
-      let(:creator_signature) { petition.creator_signature }
+  describe '#invalidate!' do
+    let!(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:now) { Time.current }
 
-      it "transitions the creator signature to the validated state" do
-        expect{ signature.validate! }.to change{ creator_signature.reload.validated? }.from(false).to(true)
-      end
+    it "transitions the signature to the validated state" do
+      signature.invalidate!
+      expect(signature).to be_invalidated
+    end
 
-      it 'tells the relevant constituency petition journal to record a new signature' do
-        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
-        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
-        signature.validate!
-      end
+    it "timestamps the signature to say it was updated just now" do
+      signature.invalidate!
+      expect(signature.updated_at).to be_within(1.second).of(Time.current)
+    end
 
-      it 'does not talk to the constituency petition journal if the signature is not pending' do
-        expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.update_columns(state: Signature::VALIDATED_STATE)
-        signature.validate!
-      end
+    it "sets notify_by_email to false" do
+      expect {
+        signature.invalidate!
+      }.to change {
+        signature.reload.notify_by_email?
+      }.from(true).to(false)
+    end
 
-      it 'tells the relevant country petition journal to record a new signature' do
-        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(creator_signature)
-        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
-        signature.validate!
-      end
+    it "timestamps the signature to say it was invalidated just now" do
+      signature.invalidate!
+      expect(signature.invalidated_at).to be_within(1.second).of(Time.current)
+    end
 
-      it 'does not talk to the country petition journal if the signature is not pending' do
-        expect(CountryPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.update_columns(state: Signature::VALIDATED_STATE)
-        signature.validate!
-      end
+    it "decrements the petition count" do
+      expect{ signature.invalidate! }.to change{ petition.reload.signature_count }.by(-1)
+    end
+
+    it "updates the petition to say it was updated just now" do
+      signature.invalidate!
+      expect(petition.reload.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    it "doesn't decrement the petition count twice" do
+      signature.invalidate!
+      expect{ signature.invalidate! }.to change{ petition.reload.signature_count }.by(0)
+    end
+
+    it 'tells the relevant constituency petition journal to invalidate the signature' do
+      expect(ConstituencyPetitionJournal).to receive(:invalidate_signature_for).with(signature, now)
+      signature.invalidate!(now)
+    end
+
+    it 'does not talk to the constituency petition journal if the signature is not validated' do
+      expect(ConstituencyPetitionJournal).not_to receive(:invalidate_signature_for)
+      signature.update_columns(state: Signature::INVALIDATED_STATE)
+      signature.invalidate!
+    end
+
+    it 'tells the relevant country petition journal to invalidate the signature' do
+      expect(CountryPetitionJournal).to receive(:invalidate_signature_for).with(signature, now)
+      signature.invalidate!(now)
+    end
+
+    it 'does not talk to the country petition journal if the signature is not validated' do
+      expect(CountryPetitionJournal).not_to receive(:invalidate_signature_for)
+      signature.update_columns(state: Signature::INVALIDATED_STATE)
+      signature.invalidate!
+    end
+
+    it "retries if the schema has changed" do
+      expect(signature).to receive(:lock!).once.and_raise(PG::InFailedSqlTransaction)
+      expect(signature).to receive(:lock!).once.and_call_original
+      expect(signature.class.connection).to receive(:clear_cache!).once
+
+      signature.invalidate!
+      expect(signature).to be_invalidated
+    end
+
+    it "raises PG::InFailedSqlTransaction if it fails twice" do
+      expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
+      expect{ signature.invalidate! }.to raise_error(PG::InFailedSqlTransaction)
     end
   end
 

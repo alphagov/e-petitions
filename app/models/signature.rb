@@ -1,18 +1,24 @@
 require 'postcode_sanitizer'
 
 class Signature < ActiveRecord::Base
-
   include PerishableTokenGenerator
 
   has_perishable_token
   has_perishable_token called: 'unsubscribe_token'
 
   PENDING_STATE = 'pending'
+  FRAUDULENT_STATE = 'fraudulent'
   VALIDATED_STATE = 'validated'
-  STATES = [PENDING_STATE, VALIDATED_STATE]
+  INVALIDATED_STATE = 'invalidated'
+
+  STATES = [
+    PENDING_STATE, FRAUDULENT_STATE,
+    VALIDATED_STATE, INVALIDATED_STATE
+  ]
 
   # = Relationships =
   belongs_to :petition
+  belongs_to :invalidation
   has_one :sponsor
 
   # = Validations =
@@ -28,7 +34,12 @@ class Signature < ActiveRecord::Base
   end
 
   after_destroy do
-    petition.update_signature_count!
+    if validated?
+      now = Time.current
+      ConstituencyPetitionJournal.invalidate_signature_for(self, now)
+      CountryPetitionJournal.invalidate_signature_for(self, now)
+      petition.decrement_signature_count!(now)
+    end
   end
 
   # = Finders =
@@ -96,15 +107,23 @@ class Signature < ActiveRecord::Base
     state == PENDING_STATE
   end
 
+  def fraudulent?
+    state == FRAUDULENT_STATE
+  end
+
   def validated?
     state == VALIDATED_STATE
+  end
+
+  def invalidated?
+    state == INVALIDATED_STATE
   end
 
   def unsubscribed?
     notify_by_email == false
   end
 
-  def validate!
+  def validate!(now = Time.current)
     update_signature_counts = false
 
     retry_lock do
@@ -115,14 +134,38 @@ class Signature < ActiveRecord::Base
         update_columns(
           number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
-          validated_at: Time.current,
-          updated_at:   Time.current
+          validated_at: now,
+          updated_at:   now
         )
       end
     end
 
     if update_signature_counts
       PetitionSignedDataUpdateJob.perform_later(self)
+    end
+  end
+
+  def invalidate!(now = Time.current, invalidation_id = nil)
+    update_signature_counts = false
+
+    retry_lock do
+      if validated?
+        update_signature_counts = true
+      end
+
+      update_columns(
+        state:           INVALIDATED_STATE,
+        notify_by_email: false,
+        invalidation_id: invalidation_id,
+        invalidated_at:  now,
+        updated_at:      now
+      )
+    end
+
+    if update_signature_counts
+      ConstituencyPetitionJournal.invalidate_signature_for(self, now)
+      CountryPetitionJournal.invalidate_signature_for(self, now)
+      petition.decrement_signature_count!(now)
     end
   end
 

@@ -1,7 +1,7 @@
 .search-inline {
   @extend %contain-floats;
 
-  .form-control {
+  input.form-control {
     @include appearance(none);
     @include box-sizing(content-box);
     float: left;
@@ -33,5 +33,13 @@
     &:hover, &:focus {
       background-color: darken($petitions-panel-colour, 5%);
     }
+  }
+
+  .inline-button {
+    @include bold-19;
+    width: auto;
+    height: 40px;
+    line-height: 40px;
+    padding: 0px em(19, 24);
   }
 }

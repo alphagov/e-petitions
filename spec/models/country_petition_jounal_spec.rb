@@ -92,7 +92,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
       end
     end
 
-    context "when the supplied signature is niL" do
+    context "when the supplied signature is nil" do
       let(:signature) { nil }
 
       it "does nothing" do
@@ -138,6 +138,96 @@ RSpec.describe CountryPetitionJournal, type: :model do
       it "creates a new journal" do
         expect {
           described_class.record_new_signature_for(signature)
+        }.to change(described_class, :count).by(1)
+      end
+    end
+  end
+
+  describe ".invalidate_signature_for" do
+    let!(:petition) { FactoryGirl.create(:open_petition) }
+    let!(:location) { FactoryGirl.create(:location) }
+    let!(:location_code) { location.code }
+    let!(:journal) { FactoryGirl.create(:country_petition_journal, petition: petition, location: location, signature_count: signature_count) }
+    let(:signature_count) { 1 }
+
+    context "when the supplied signature is valid" do
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+      let(:now) { 1.hour.from_now.change(usec: 0) }
+
+      it "decrements the signature_count by 1" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.to change { journal.reload.signature_count }.by(-1)
+      end
+
+      it "updates the updated_at timestamp" do
+        expect {
+          described_class.invalidate_signature_for(signature, now)
+        }.to change { journal.reload.updated_at }.to(now)
+      end
+    end
+
+    context "when the supplied signature is nil" do
+      let(:signature) { nil }
+
+      it "does nothing" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.not_to change { journal.reload.signature_count }
+      end
+    end
+
+    context "when the supplied signature has no petition" do
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: nil, location_code: location_code) }
+
+      it "does nothing" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.not_to change { journal.reload.signature_count }
+      end
+    end
+
+    context "when the supplied signature has no country" do
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: nil) }
+
+      it "does nothing" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.not_to change { journal.reload.signature_count }
+      end
+    end
+
+    context "when the supplied signature is not validated" do
+      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, location_code: location_code) }
+
+      it "does nothing" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.not_to change { journal.reload.signature_count }
+      end
+    end
+
+    context "when the signature count is already zero" do
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+      let(:signature_count) { 0 }
+
+      it "does nothing" do
+        expect {
+          described_class.invalidate_signature_for(signature)
+        }.not_to change { journal.reload.signature_count }
+      end
+    end
+
+    context "when no journal exists" do
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+
+      before do
+        described_class.delete_all
+      end
+
+      it "creates a new journal" do
+        expect {
+          described_class.invalidate_signature_for(signature)
         }.to change(described_class, :count).by(1)
       end
     end

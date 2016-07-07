@@ -74,6 +74,13 @@ Rails.application.routes.draw do
       resource :search, :only => [:show]
 
       resources :admin_users
+      resources :profile, :only => [:edit, :update]
+      resources :user_sessions, :only => [:create]
+
+      resources :invalidations, :except => [:show] do
+        post :cancel, :count, :start, :on => :member
+      end
+
       resources :petitions, :only => [:show, :index] do
         resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
         resources :emails, only: [:new, :create, :edit, :update, :destroy], controller: :petition_emails
@@ -84,11 +91,11 @@ Rails.application.routes.draw do
         resource 'government-response', :only => [:show, :update], as: :government_response, controller: :government_response
         resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
       end
-      resources :profile, :only => [:edit, :update]
+
       resources :signatures, :only => [:destroy] do
-        post :validate, :on => :member
+        post :validate, :invalidate, :on => :member
       end
-      resources :user_sessions, :only => [:create]
+
       get 'logout' => 'user_sessions#destroy', :as => :logout
       get 'login' => 'user_sessions#new', :as => :login
     end

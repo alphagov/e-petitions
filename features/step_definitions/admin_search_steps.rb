@@ -11,9 +11,9 @@ Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, name_or_emai
   end
 end
 
-Given(/^(\d+) petitions? with a pending signature by "([^"]*)"$/) do |petition_count, email|
+Given(/^(\d+) petitions? with a (pending|validated) signature by "([^"]*)"$/) do |petition_count, state, email|
   petition_count.times do
-    FactoryGirl.create(:pending_signature, :petition => FactoryGirl.create(:open_petition), :email => email)
+    FactoryGirl.create(:"#{state}_signature", :petition => FactoryGirl.create(:open_petition), :email => email)
   end
 end
 
@@ -90,12 +90,19 @@ Then(/^I should see the email address is pending$/) do
   expect(page).to have_button "Validate"
 end
 
-When(/^I click the validate button$/) do
-  click_button "Validate"
+When(/^I click the (validate|invalidate) button$/) do |button|
+  click_button button.titleize
 end
 
 Then(/^I should see the email address is validated$/) do
   expect(page).not_to have_button "Validate"
+  expect(page).to have_button "Invalidate"
+  expect(page).to have_button "Delete"
+end
+
+Then(/^I should see the email address is invalidated$/) do
+  expect(page).not_to have_button "Validate"
+  expect(page).not_to have_button "Invalidate"
   expect(page).to have_button "Delete"
 end
 

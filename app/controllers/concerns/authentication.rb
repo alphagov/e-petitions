@@ -66,7 +66,12 @@ module Authentication
   def require_sysadmin
     unless current_user && current_user.is_a_sysadmin?
       flash[:error] = "You must be logged in as a system administrator to view this page."
-      redirect_to admin_login_url
+
+      if current_user.is_a_moderator?
+        redirect_to admin_root_url
+      else
+        redirect_to admin_login_url
+      end
     end
   end
 

@@ -18,6 +18,7 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_one(:government_response).dependent(:destroy) }
 
     it { is_expected.to have_many(:emails).dependent(:destroy) }
+    it { is_expected.to have_many(:invalidations) }
   end
 
   describe "callbacks" do
@@ -1290,6 +1291,38 @@ RSpec.describe Petition, type: :model do
       it "sets the debate_state to 'awaiting'" do
         petition.increment_signature_count!
         expect(petition.debate_state).to eq("awaiting")
+      end
+    end
+  end
+
+  describe "#decrement_signature_count!" do
+    let(:signature_count) { 8 }
+    let(:petition) do
+      FactoryGirl.create(:open_petition, {
+        signature_count: signature_count,
+        last_signed_at: 2.days.ago,
+        updated_at: 2.days.ago
+      })
+    end
+
+    it "decreases the signature count by 1" do
+      expect{
+        petition.decrement_signature_count!
+      }.to change{ petition.signature_count }.by(-1)
+    end
+
+    it "updates the updated_at timestamp" do
+      petition.decrement_signature_count!
+      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    end
+
+    context "when the signature count is 1" do
+      let(:signature_count) { 1 }
+
+      it "does nothing" do
+        expect{
+          petition.decrement_signature_count!
+        }.not_to change{ petition.signature_count }
       end
     end
   end

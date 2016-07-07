@@ -71,4 +71,46 @@ RSpec.describe AdminHelper, type: :helper do
       expect(subject).to have_css("option[value='open'][selected]")
     end
   end
+
+  describe "#admin_invalidation_facets_for_select" do
+    let(:selected) { "running" }
+
+    let(:facets) do
+      { all: 1, completed: 2, cancelled: 3, enqueued: 4, pending: 5, running: 6 }
+    end
+
+    subject { helper.admin_invalidation_facets_for_select(facets, selected) }
+
+    it "generates the correct number of options" do
+      expect(subject).to have_css("option", count: 6)
+    end
+
+    it "generates the correct option for 'all'" do
+      expect(subject).to have_css("option:nth-of-type(1)[value='all']", text: "All invalidations (1)")
+    end
+
+    it "generates the correct option for 'completed'" do
+      expect(subject).to have_css("option:nth-of-type(2)[value='completed']", text: "Completed invalidations (2)")
+    end
+
+    it "generates the correct option for 'cancelled'" do
+      expect(subject).to have_css("option:nth-of-type(3)[value='cancelled']", text: "Cancelled invalidations (3)")
+    end
+
+    it "generates the correct option for 'pending'" do
+      expect(subject).to have_css("option:nth-of-type(5)[value='pending']", text: "Pending invalidations (5)")
+    end
+
+    it "generates the correct option for 'enqueued'" do
+      expect(subject).to have_css("option:nth-of-type(4)[value='enqueued']", text: "Enqueued invalidations (4)")
+    end
+
+    it "generates the correct option for 'running'" do
+      expect(subject).to have_css("option:nth-of-type(6)[value='running']", text: "Running invalidations (6)")
+    end
+
+    it "marks the correct option as selected" do
+      expect(subject).to have_css("option[value='running'][selected]")
+    end
+  end
 end

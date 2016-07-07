@@ -1,0 +1,44 @@
+<h1>Signature invalidations</h1>
+
+<div class="grid-row">
+  <%= form_tag admin_invalidations_path, method: :get, class: 'search-inline search-invalidations' do -%>
+    <div class="column-third">
+      <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
+      <%= select_tag :state, admin_invalidation_facets_for_select(@invalidations.facets, params[:state]), class: "form-control" %>
+    </div>
+    <div class="column-third">
+      <%= label_tag :q, "Search invalidations", class: "visuallyhidden" %>
+      <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
+      <%= submit_tag 'Search', class: 'inline-submit' %>
+    </div>
+    <div class="column-third actions-right">
+      <%= link_to "New Invalidation", new_admin_invalidation_path, class: 'button inline-button' %>
+    </div>
+  <% end -%>
+</div>
+
+<%= will_paginate @invalidations %>
+
+<table class="invalidation-list">
+  <thead>
+    <tr>
+      <th>Summary</th>
+      <th>Status</th>
+      <th>Matching</th>
+      <th>Invalidated</th>
+      <th nowrap="true">% Complete</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @invalidations.present? %>
+      <%= render @invalidations.to_a %>
+    <% else %>
+      <tr>
+        <td colspan="6">No matching invalidations</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate @invalidations %>

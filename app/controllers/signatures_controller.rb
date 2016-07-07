@@ -85,6 +85,10 @@ class SignaturesController < ApplicationController
   def retrieve_signature
     @signature = Signature.find(params[:id])
     @petition = @signature.petition
+
+    if @signature.invalidated? || @signature.fraudulent?
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+    end
   end
 
   def redirect_to_petition_page

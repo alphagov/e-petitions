@@ -6,3 +6,20 @@ en-GB:
     email_confirm:
       one: "Are you sure you want to do this and email the petitioner?"
       other: "Are you sure you want to do this and email all %{formatted_count} petitioners?"
+
+    invalidations:
+      facets:
+        keys:
+          - :all
+          - :completed
+          - :cancelled
+          - :enqueued
+          - :pending
+          - :running
+        labels:
+          all: "All invalidations (%{quantity})"
+          completed: "Completed invalidations (%{quantity})"
+          cancelled: "Cancelled invalidations (%{quantity})"
+          enqueued: "Enqueued invalidations (%{quantity})"
+          pending: "Pending invalidations (%{quantity})"
+          running: "Running invalidations (%{quantity})"

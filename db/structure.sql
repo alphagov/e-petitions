@@ -430,6 +430,54 @@ ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
 
 
 --
+-- Name: invalidations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE invalidations (
+    id integer NOT NULL,
+    summary character varying(255) NOT NULL,
+    details character varying(10000),
+    petition_id integer,
+    name character varying(255),
+    postcode character varying(255),
+    ip_address character varying(20),
+    email character varying(255),
+    created_after timestamp without time zone,
+    created_before timestamp without time zone,
+    constituency_id character varying(30),
+    location_code character varying(30),
+    matching_count integer DEFAULT 0 NOT NULL,
+    invalidated_count integer DEFAULT 0 NOT NULL,
+    enqueued_at timestamp without time zone,
+    started_at timestamp without time zone,
+    cancelled_at timestamp without time zone,
+    completed_at timestamp without time zone,
+    counted_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: invalidations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE invalidations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: invalidations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE invalidations_id_seq OWNED BY invalidations.id;
+
+
+--
 -- Name: locations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -627,7 +675,7 @@ CREATE TABLE schema_migrations (
 CREATE TABLE signatures (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
-    state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
+    state character varying(20) DEFAULT 'pending'::character varying NOT NULL,
     perishable_token character varying(255),
     postcode character varying(255),
     ip_address character varying(20),
@@ -641,7 +689,9 @@ CREATE TABLE signatures (
     validated_at timestamp without time zone,
     number integer,
     seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
-    location_code character varying(30)
+    location_code character varying(30),
+    invalidated_at timestamp without time zone,
+    invalidation_id integer
 );
 
 
@@ -824,6 +874,13 @@ ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('gover
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY invalidations ALTER COLUMN id SET DEFAULT nextval('invalidations_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY locations ALTER COLUMN id SET DEFAULT nextval('locations_id_seq'::regclass);
 
 
@@ -965,6 +1022,14 @@ ALTER TABLE ONLY government_responses
 
 
 --
+-- Name: invalidations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY invalidations
+    ADD CONSTRAINT invalidations_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: locations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1026,6 +1091,34 @@ ALTER TABLE ONLY sites
 
 ALTER TABLE ONLY sponsors
     ADD CONSTRAINT sponsors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ft_index_invalidations_on_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX ft_index_invalidations_on_details ON invalidations USING gin (to_tsvector('english'::regconfig, (details)::text));
+
+
+--
+-- Name: ft_index_invalidations_on_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX ft_index_invalidations_on_id ON invalidations USING gin (to_tsvector('english'::regconfig, (id)::text));
+
+
+--
+-- Name: ft_index_invalidations_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX ft_index_invalidations_on_petition_id ON invalidations USING gin (to_tsvector('english'::regconfig, (petition_id)::text));
+
+
+--
+-- Name: ft_index_invalidations_on_summary; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX ft_index_invalidations_on_summary ON invalidations USING gin (to_tsvector('english'::regconfig, (summary)::text));
 
 
 --
@@ -1155,6 +1248,34 @@ CREATE INDEX index_government_responses_on_updated_at ON government_responses US
 
 
 --
+-- Name: index_invalidations_on_cancelled_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_invalidations_on_cancelled_at ON invalidations USING btree (cancelled_at);
+
+
+--
+-- Name: index_invalidations_on_completed_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_invalidations_on_completed_at ON invalidations USING btree (completed_at);
+
+
+--
+-- Name: index_invalidations_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_invalidations_on_petition_id ON invalidations USING btree (petition_id);
+
+
+--
+-- Name: index_invalidations_on_started_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_invalidations_on_started_at ON invalidations USING btree (started_at);
+
+
+--
 -- Name: index_locations_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1278,6 +1399,13 @@ CREATE INDEX index_signatures_on_constituency_id ON signatures USING btree (cons
 --
 
 CREATE UNIQUE INDEX index_signatures_on_email_and_petition_id_and_name ON signatures USING btree (email, petition_id, name);
+
+
+--
+-- Name: index_signatures_on_invalidation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_invalidation_id ON signatures USING btree (invalidation_id);
 
 
 --
@@ -1563,4 +1691,12 @@ INSERT INTO schema_migrations (version) VALUES ('20160214233414');
 INSERT INTO schema_migrations (version) VALUES ('20160217192016');
 
 INSERT INTO schema_migrations (version) VALUES ('20160527112417');
+
+INSERT INTO schema_migrations (version) VALUES ('20160704152204');
+
+INSERT INTO schema_migrations (version) VALUES ('20160704162920');
+
+INSERT INTO schema_migrations (version) VALUES ('20160704185825');
+
+INSERT INTO schema_migrations (version) VALUES ('20160706060256');
 

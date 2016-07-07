@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe SignaturesController, type: :controller do
-  describe "verify" do
+  describe "#verify" do
     context "signature of user who is not the petition's creator" do
       let(:petition) { FactoryGirl.create(:petition) }
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
@@ -122,9 +122,31 @@ RSpec.describe SignaturesController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}")
       end
     end
+
+    context "when the signature is fraudulent" do
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
-  describe "signed" do
+  describe "#signed" do
     let(:petition) { FactoryGirl.create(:petition) }
 
     def make_signed_request(token = nil)
@@ -187,6 +209,28 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises exception if token does not match" do
         expect { make_signed_request "not_a_valid_token" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:petition) { FactoryGirl.create(:petition) }
+      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -462,13 +506,44 @@ RSpec.describe SignaturesController, type: :controller do
     before do
       expect(Signature).to receive(:find).with("1").and_return(signature)
       expect(signature).to receive(:petition).and_return(petition)
-      expect(signature).to receive(:unsubscribe!).with("token")
-
-      get :unsubscribe, id: "1", token: "token"
+      allow(signature).to receive(:fraudulent?).and_return(false)
+      allow(signature).to receive(:invalidated?).and_return(false)
     end
 
-    it "renders the action template" do
-      expect(response.body).to render_template(:unsubscribe)
+
+    context "when the signature is validated" do
+      before do
+        expect(signature).to receive(:unsubscribe!).with("token")
+      end
+
+      it "renders the action template" do
+        get :unsubscribe, id: "1", token: "token"
+        expect(response.body).to render_template(:unsubscribe)
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      before do
+        expect(signature).to receive(:fraudulent?).and_return(true)
+      end
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          get :unsubscribe, id: "1", token: "token"
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      before do
+        expect(signature).to receive(:invalidated?).and_return(true)
+      end
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          get :unsubscribe, id: "1", token: "token"
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
     end
   end
 end
