@@ -19,6 +19,8 @@
 
 # Learn more: http://github.com/javan/whenever
 
+env :PATH, env['PATH']
+
 every :weekday, at: '7am' do
   rake "epets:admin_email_reminder", output: nil
 end
