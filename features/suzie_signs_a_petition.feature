@@ -93,13 +93,6 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario:
-    When I decide to sign the petition
-    And I fill in my details with email "suzie@10minutemail.com"
-    And I try to sign
-    Then I should see an error
-    And I should see "You can’t use a disposable email address"
-
   Scenario: Suzie sees notice that she has already signed when she validates more than once
     When I fill in my details and sign a petition
     And I confirm my email address
