@@ -44,7 +44,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       describe "#{method} #{path}" do
         before { process action, method, params }
 
-        it "redirects to the login page" do
+        it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
         end
       end

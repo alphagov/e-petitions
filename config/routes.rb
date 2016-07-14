@@ -92,6 +92,8 @@ Rails.application.routes.draw do
         resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
       end
 
+      resource :rate_limits, :only => [:edit, :update], :path => 'rate-limits'
+
       resources :signatures, :only => [:destroy] do
         post :validate, :invalidate, :on => :member
       end
