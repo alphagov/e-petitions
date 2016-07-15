@@ -32,10 +32,13 @@
   function fetch_count() {
     $.get(JSON_URL, function(data) {
       if (data && data.data && data.data.attributes) {
-        var sigs = data.data.attributes.signature_count,
-            current = parseInt($('.signature-count-number .count').text());
+        var $count = $('.signature-count-number .count');
+        var sigs = data.data.attributes.signature_count;
+        var current = parseInt($('.signature-count-number .count').data('count'));
+
         if (sigs && sigs != current) {
-          $('.signature-count-number .count').countTo({
+          $count.data('count', sigs);
+          $count.countTo({
             from: current,
             to: sigs,
             refreshInterval: 50,

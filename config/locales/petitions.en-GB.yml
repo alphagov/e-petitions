@@ -146,8 +146,8 @@ en-GB:
     signature_counts:
       default:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> <span class=\"text\">signature</span>"
-          other: "<span class=\"count\">%{formatted_count}</span> <span class=\"text\">signatures</span>"
+          one: "<span class=\"count\" data-count=\"%{count}\">%{formatted_count}</span> <span class=\"text\">signature</span>"
+          other: "<span class=\"count\" data-count=\"%{count}\">%{formatted_count}</span> <span class=\"text\">signatures</span>"
       trending:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> signature in the last hour"
