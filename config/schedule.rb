@@ -30,11 +30,11 @@ every :weekday, at: '6.30am' do
 end
 
 every :day, at: '1.15am' do
-  runner "FetchCountryRegisterJob.perform_later"
+  rake "epets:countries:fetch", output: nil
 end
 
 every :day, at: '2.30am' do
-  runner "PetitionCountJob.perform_later"
+  rake "epets:petitions:count", output: nil
 end
 
 every :day, at: '7.00am' do
