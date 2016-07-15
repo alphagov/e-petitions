@@ -5,7 +5,7 @@
 (function ($) {
   'use strict';
 
-  var JSON_URL = $('.meta-json a').attr('href'),
+  var JSON_URL = window.location.pathname + '/count.json',
       THRESHOLD_RESPONSE = 10000,
       THRESHOLD_DEBATE = 100000,
       TIMEOUT = 10000;
@@ -31,16 +31,15 @@
 
   function fetch_count() {
     $.get(JSON_URL, function(data) {
-      if (data && data.data && data.data.attributes) {
+      if (data && data.signature_count) {
         var $count = $('.signature-count-number .count');
-        var sigs = data.data.attributes.signature_count;
-        var current = parseInt($('.signature-count-number .count').data('count'));
+        var current = parseInt($count.data('count'));
 
-        if (sigs && sigs != current) {
-          $count.data('count', sigs);
+        if (data.signature_count != current) {
+          $count.data('count', data.signature_count);
           $count.countTo({
             from: current,
-            to: sigs,
+            to: data.signature_count,
             refreshInterval: 50,
             formatter: add_commas,
             onUpdate: update_progress_bar,
