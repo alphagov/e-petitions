@@ -12,7 +12,7 @@ namespace :epets do
   desc "Email threshold users with a list of threshold petitions"
   task :threshold_email_reminder => :environment do
     Task.run("epets:threshold_email_reminder") do
-      EmailReminder.threshold_email_reminder
+      EmailThresholdReminderJob.perform_later
     end
   end
 
