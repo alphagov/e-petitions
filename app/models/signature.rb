@@ -16,6 +16,13 @@ class Signature < ActiveRecord::Base
     VALIDATED_STATE, INVALIDATED_STATE
   ]
 
+  TIMESTAMPS = {
+    'government_response' => :government_response_email_at,
+    'debate_scheduled'    => :debate_scheduled_email_at,
+    'debate_outcome'      => :debate_outcome_email_at,
+    'petition_email'      => :petition_email_at
+  }
+
   # = Relationships =
   belongs_to :petition
   belongs_to :invalidation
@@ -49,33 +56,26 @@ class Signature < ActiveRecord::Base
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
 
-  def self.need_emailing_for(name, since:)
-    receipts_table = EmailSentReceipt.arel_table
-    validated.
-      notify_by_email.
-      joins(arel_join_onto_sent_receipts).
-      where(
-        receipts_table['id'].eq(nil).or(
-          receipts_table[name].eq(nil).or(
-            receipts_table[name].lt(since)
-          )
-        )
-      )
+  def self.for_timestamp(timestamp, since:)
+    column = arel_table[column_name_for(timestamp)]
+    where(column.eq(nil).or(column.lt(since)))
   end
 
-  def self.arel_join_onto_sent_receipts
-    receipts = EmailSentReceipt.arel_table
-    sigs = self.arel_table
-    join_on = sigs.create_on(sigs[:id].eq(receipts[:signature_id]))
-    sigs.create_join(receipts, join_on, Arel::Nodes::OuterJoin)
+  def self.need_emailing_for(timestamp, since:)
+    validated.notify_by_email.for_timestamp(timestamp, since: since)
   end
-  private_class_method :arel_join_onto_sent_receipts
 
   def self.petition_ids_with_invalid_signature_counts
     validated.joins(:petition).
       group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
       having(arel_table[Arel.star].count.not_eq(Petition.arel_table[:signature_count])).
       pluck(:petition_id)
+  end
+
+  def self.column_name_for(timestamp)
+    TIMESTAMPS.fetch(timestamp)
+  rescue
+    raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
   end
 
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
@@ -212,16 +212,12 @@ class Signature < ActiveRecord::Base
     save if constituency_id_changed?
   end
 
-  def get_email_sent_at_for(name)
-    email_sent_receipt!.get(name)
-  end
-  def set_email_sent_at_for(name, to: Time.current)
-    email_sent_receipt!.set(name, to)
+  def get_email_sent_at_for(timestamp)
+    self[column_name_for(timestamp)]
   end
 
-  has_one :email_sent_receipt, dependent: :destroy
-  def email_sent_receipt!
-    email_sent_receipt || create_email_sent_receipt
+  def set_email_sent_at_for(timestamp, to: Time.current)
+    update_column(column_name_for(timestamp), to)
   end
 
   def domain
@@ -236,6 +232,10 @@ class Signature < ActiveRecord::Base
   end
 
   private
+
+  def column_name_for(timestamp)
+    self.class.column_name_for(timestamp)
+  end
 
   def retry_lock
     retried = false

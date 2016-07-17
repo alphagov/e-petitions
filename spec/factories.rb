@@ -356,10 +356,6 @@ FactoryGirl.define do
     association :petition, factory: :open_petition
   end
 
-  factory :email_sent_receipt do
-    association :signature, factory: :validated_signature
-  end
-
   factory :location do
     code { Faker::Address.country_code }
     name { Faker::Address.country }

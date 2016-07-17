@@ -915,56 +915,68 @@ RSpec.describe Signature, type: :model do
     end
   end
 
-  describe 'email sent receipts' do
-    it { is_expected.to have_one(:email_sent_receipt).dependent(:destroy) }
-
-    describe '#email_sent_receipt!' do
-      let(:signature) { FactoryGirl.create(:signature) }
-
-      it 'returns the existing db object if one exists' do
-        existing = signature.create_email_sent_receipt
-        expect(signature.email_sent_receipt!).to eq existing
-      end
-
-      it 'returns a newly created instance if does not already exist' do
-        instance = signature.email_sent_receipt!
-        expect(instance).to be_present
-        expect(instance).to be_a(EmailSentReceipt)
-        expect(instance.signature).to eq signature
-        expect(instance.signature).to be_persisted
-      end
-    end
-
+  describe 'email sent timestamps' do
     describe '#get_email_sent_at_for' do
       let(:signature) { FactoryGirl.create(:validated_signature) }
-      let(:receipt) { signature.email_sent_receipt! }
       let(:the_stored_time) { 6.days.ago }
 
-      it 'returns nil when nothing has been stamped for the supplied name' do
-        expect(signature.get_email_sent_at_for('government_response')).to be_nil
-      end
+      [
+        %w[government_response government_response_email_at],
+        %w[debate_scheduled debate_scheduled_email_at],
+        %w[debate_outcome debate_outcome_email_at],
+        %w[petition_email petition_email_at]
+      ].each do |timestamp, column|
 
-      it 'returns the stored timestamp for the supplied name' do
-        receipt.update_column('government_response', the_stored_time)
-        expect(signature.get_email_sent_at_for('government_response')).to eq the_stored_time
+        context "when the timestamp '#{timestamp}' is not set" do
+          it "returns nil" do
+            expect(signature.get_email_sent_at_for(timestamp)).to be_nil
+          end
+        end
+
+        context "when the timestamp '#{timestamp}' is set" do
+          before do
+            signature.update_column(column, the_stored_time)
+          end
+
+          it "returns the stored timestamp" do
+            expect(signature.get_email_sent_at_for(timestamp)).to eq(the_stored_time)
+          end
+        end
+
       end
     end
 
     describe '#set_email_sent_at_for' do
       let(:signature) { FactoryGirl.create(:validated_signature) }
-      let(:receipt) { signature.email_sent_receipt! }
       let(:the_stored_time) { 6.days.ago }
 
-      it 'sets the stored timestamp for the supplied name to the supplied time' do
-        signature.set_email_sent_at_for('government_response', to: the_stored_time)
-        expect(receipt.government_response).to eq the_stored_time
-      end
+      [
+        %w[government_response government_response_email_at],
+        %w[debate_scheduled debate_scheduled_email_at],
+        %w[debate_outcome debate_outcome_email_at],
+        %w[petition_email petition_email_at]
+      ].each do |timestamp, column|
 
-      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
-        travel_to the_stored_time do
-          signature.set_email_sent_at_for('government_response')
-          expect(receipt.government_response).to eq Time.current
+        context "when a time is supplied for timestamp '#{timestamp}'" do
+          it "sets the column to the supplied time" do
+            expect {
+              signature.set_email_sent_at_for(timestamp, to: the_stored_time)
+            }.to change {
+              signature.reload[column]
+            }.from(nil).to(be_within(0.001.second).of(the_stored_time))
+          end
         end
+
+        context "when a time is not supplied for timestamp '#{timestamp}'" do
+          it "sets the column to the current time" do
+            expect {
+              signature.set_email_sent_at_for(timestamp)
+            }.to change {
+              signature.reload[column]
+            }.from(nil).to(be_within(1.second).of(Time.current))
+          end
+        end
+
       end
     end
 
@@ -980,29 +992,28 @@ RSpec.describe Signature, type: :model do
         expect(subject).not_to include a_signature
       end
 
-      it 'does not return unvalidated signatures' do
+      it "does not return unvalidated signatures" do
         another_signature.update_column(:state, Signature::PENDING_STATE)
         expect(subject).not_to include another_signature
       end
 
-      it 'does not return signatures that have a sent receipt newer than the petitions requested receipt' do
+      it "does not return signatures that have a sent timestamp newer than the petitions requested receipt" do
         another_signature.set_email_sent_at_for('government_response', to: since_timestamp + 1.day)
         expect(subject).not_to include another_signature
       end
 
-      it 'does not return signatures that have a sent receipt equal to the petitions requested receipt' do
+      it "does not return signatures that have a sent timestamp equal to the petitions requested receipt" do
         another_signature.set_email_sent_at_for('government_response', to: since_timestamp)
         expect(subject).not_to include another_signature
       end
 
-      it 'does return signatures that have a sent receipt older than the petitions requested receipt' do
+      it "does return signatures that have a sent timestamp older than the petitions requested receipt" do
         another_signature.set_email_sent_at_for('government_response', to: since_timestamp - 1.day)
         expect(subject).to include another_signature
       end
 
-      it 'returns signatures that have no sent receipt, or null for the requested timestamp in their receipt' do
-        another_signature.email_sent_receipt!.destroy && another_signature.reload
-        a_signature.email_sent_receipt!.update_column('government_response', nil)
+      it "returns signatures that have null for the requested timestamp" do
+        a_signature.update_column(:government_response_email_at, nil)
         expect(subject).to match_array [a_signature, another_signature]
       end
     end
