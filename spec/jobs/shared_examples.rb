@@ -101,7 +101,11 @@ RSpec.shared_examples_for "a job to send an signatory email" do
     end
 
     it "records the email being sent" do
-      expect { job.perform_now }.to change(EmailSentReceipt, :count).by(1)
+      expect {
+        job.perform_now
+      }.to change {
+        signature.reload.get_email_sent_at_for(timestamp_name)
+      }.from(nil).to(requested_at)
     end
 
     context "an email has already been sent for the petition to this signatory" do
@@ -114,7 +118,11 @@ RSpec.shared_examples_for "a job to send an signatory email" do
       end
 
       it "does not record any email being sent" do
-        expect { job.perform_now }.not_to change(signature.email_sent_receipt.reload, :updated_at)
+        expect {
+          job.perform_now
+        }.not_to change {
+          signature.reload.get_email_sent_at_for(timestamp_name)
+        }
       end
     end
 
@@ -233,7 +241,11 @@ RSpec.shared_examples_for "a job to send an signatory email" do
     end
 
     it "does not record any email being sent" do
-      expect { job.perform_now }.not_to change(EmailSentReceipt, :count)
+      expect {
+        job.perform_now
+      }.not_to change {
+        signature.reload.get_email_sent_at_for(timestamp_name)
+      }
     end
   end
 end

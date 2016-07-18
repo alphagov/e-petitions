@@ -191,7 +191,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
               end
             end
 
-            it "stamps the 'government_response' email sent receipt on each signature when the job runs" do
+            it "stamps the 'government_response' email sent timestamp on each signature when the job runs" do
               perform_enqueued_jobs do
                 do_patch
                 petition.reload

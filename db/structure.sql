@@ -727,7 +727,11 @@ CREATE TABLE signatures (
     seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
     location_code character varying(30),
     invalidated_at timestamp without time zone,
-    invalidation_id integer
+    invalidation_id integer,
+    government_response_email_at timestamp without time zone,
+    debate_scheduled_email_at timestamp without time zone,
+    debate_outcome_email_at timestamp without time zone,
+    petition_email_at timestamp without time zone
 );
 
 
@@ -1816,4 +1820,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160713124623');
 INSERT INTO schema_migrations (version) VALUES ('20160713130452');
 
 INSERT INTO schema_migrations (version) VALUES ('20160715092819');
+
+INSERT INTO schema_migrations (version) VALUES ('20160716164929');
 

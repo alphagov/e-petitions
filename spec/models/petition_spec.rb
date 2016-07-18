@@ -1776,24 +1776,22 @@ RSpec.describe Petition, type: :model do
         expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
       end
 
-      it 'does not return signatures that have a sent receipt newer than the petitions requested receipt' do
+      it 'does not return signatures that have a sent timestamp newer than the petitions requested receipt' do
         other_signature.set_email_sent_at_for('government_response', to: petition_timestamp + 1.day)
         expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
       end
 
-      it 'does not return signatures that have a sent receipt equal to the petitions requested receipt' do
+      it 'does not return signatures that have a sent timestamp equal to the petitions requested receipt' do
         other_signature.set_email_sent_at_for('government_response', to: petition_timestamp)
         expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
       end
 
-      it 'does return signatures that have a sent receipt older than the petitions requested receipt' do
+      it 'does return signatures that have a sent timestamp older than the petitions requested receipt' do
         other_signature.set_email_sent_at_for('government_response', to: petition_timestamp - 1.day)
         expect(petition.signatures_to_email_for('government_response')).to include other_signature
       end
 
-      it 'returns signatures that have no sent receipt, or null for the requested timestamp in their receipt' do
-        other_signature.email_sent_receipt!.destroy && other_signature.reload
-        creator_signature.email_sent_receipt!.update_column('government_response', nil)
+      it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
         expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
       end
     end

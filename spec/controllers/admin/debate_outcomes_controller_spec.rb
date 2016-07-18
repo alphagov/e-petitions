@@ -198,7 +198,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
                 end
               end
 
-              it "stamps the 'debate_outcome' email sent receipt on each signature when the job runs" do
+              it "stamps the 'debate_outcome' email sent timestamp on each signature when the job runs" do
                 perform_enqueued_jobs do
                   do_patch
                   petition.reload

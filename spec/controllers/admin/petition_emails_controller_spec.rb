@@ -213,7 +213,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                 end
               end
 
-              it "stamps the 'petition_email' email sent receipt on each signature when the job runs" do
+              it "stamps the 'petition_email' email sent timestamp on each signature when the job runs" do
                 perform_enqueued_jobs do
                   do_post
                   petition.reload
@@ -587,7 +587,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                 end
               end
 
-              it "stamps the 'petition_email' email sent receipt on each signature when the job runs" do
+              it "stamps the 'petition_email' email sent timestamp on each signature when the job runs" do
                 perform_enqueued_jobs do
                   do_patch
                   petition.reload
