@@ -11,7 +11,9 @@ namespace :epets do
 
   desc "Email threshold users with a list of threshold petitions"
   task :threshold_email_reminder => :environment do
-    EmailReminder.threshold_email_reminder
+    Task.run("epets:threshold_email_reminder") do
+      EmailThresholdReminderJob.perform_later
+    end
   end
 
   desc "Special resend of signature email validation"

@@ -1,5 +1,5 @@
 
-<p><%= @petitions.length %> <%= @petitions.length == 1 ? 'petition requires action' : 'petitions require action' %></p>
+<p><%= t(:threshold_reminder, scope: :admin, count: @petitions.length) %></p>
 
 <p>Please go here <%= link_to nil, admin_petitions_url(state: :awaiting_debate_date) %></p>
 

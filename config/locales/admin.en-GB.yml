@@ -7,6 +7,10 @@ en-GB:
       one: "Are you sure you want to do this and email the petitioner?"
       other: "Are you sure you want to do this and email all %{formatted_count} petitioners?"
 
+    threshold_reminder:
+      one: "%{count} petition requires action"
+      other: "%{count} petitions require action"
+
     invalidations:
       facets:
         keys:

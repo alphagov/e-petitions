@@ -830,6 +830,37 @@ ALTER SEQUENCE sponsors_id_seq OWNED BY sponsors.id;
 
 
 --
+-- Name: tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tasks (
+    id integer NOT NULL,
+    name character varying(60) NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tasks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tasks_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -974,6 +1005,13 @@ ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regcl
 --
 
 ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regclass);
 
 
 --
@@ -1142,6 +1180,14 @@ ALTER TABLE ONLY sites
 
 ALTER TABLE ONLY sponsors
     ADD CONSTRAINT sponsors_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tasks
+    ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
 
 
 --
@@ -1502,6 +1548,13 @@ CREATE INDEX index_signatures_on_validated_at ON signatures USING btree (validat
 
 
 --
+-- Name: index_tasks_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tasks_on_name ON tasks USING btree (name);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1761,4 +1814,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160706060256');
 INSERT INTO schema_migrations (version) VALUES ('20160713124623');
 
 INSERT INTO schema_migrations (version) VALUES ('20160713130452');
+
+INSERT INTO schema_migrations (version) VALUES ('20160715092819');
 
