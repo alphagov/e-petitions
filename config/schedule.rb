@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-env :PATH, env['PATH']
+env :PATH, ENV['PATH']
 
 every :weekday, at: '6.30am' do
   rake "epets:threshold_email_reminder", output: nil
