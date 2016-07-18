@@ -546,10 +546,10 @@ class PackageBuilder
       DEBUG=true
 
       # Number of times to check for a resouce to be in the desired state.
-      WAITER_ATTEMPTS=60
+      WAITER_ATTEMPTS=100
 
       # Number of seconds to wait between attempts for resource to be in a state.
-      WAITER_INTERVAL=1
+      WAITER_INTERVAL=3
 
       # AutoScaling Standby features at minimum require this version to work.
       MIN_CLI_VERSION='1.3.25'
