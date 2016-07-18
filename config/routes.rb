@@ -22,9 +22,11 @@ Rails.application.routes.draw do
       end
 
       member do
-        get  'thank-you', :action => :thank_you, :as => :thank_you
-        get  'moderation-info', :action => :moderation_info, :as => :moderation_info
+        get 'count', :action => :count, :as => :count
+        get 'thank-you', :action => :thank_you, :as => :thank_you
+        get 'moderation-info', :action => :moderation_info, :as => :moderation_info
       end
+
       resources :sponsors, only: [:show, :update], param: :token do
         get 'thank-you', on: :member
         get 'sponsored', on: :member

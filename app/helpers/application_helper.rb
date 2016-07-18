@@ -31,6 +31,10 @@ module ApplicationHelper
     params.values_at(:controller, :action) == %w[petitions show]
   end
 
+  def open_petition_page?
+    petition_page? && @petition.open?
+  end
+
   def archived_petition_page?
     params[:controller] == 'archived/petitions' && params[:action] == 'show'
   end

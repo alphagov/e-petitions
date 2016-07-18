@@ -4,7 +4,7 @@ class PetitionsController < ApplicationController
   before_action :avoid_unknown_state_filters, only: :index
   before_action :do_not_cache, except: %i[index show]
 
-  before_action :retrieve_petition, only: [:show, :moderation_info]
+  before_action :retrieve_petition, only: [:show, :count, :moderation_info]
   before_action :redirect_to_moderation_info_url, if: :not_moderated?, only: :show
   before_action :redirect_to_petition_url, if: :moderated?, only: :moderation_info
 
@@ -18,6 +18,10 @@ class PetitionsController < ApplicationController
 
   def show
     respond_with @petition
+  end
+
+  def count
+    respond_to { |f| f.json }
   end
 
   def new

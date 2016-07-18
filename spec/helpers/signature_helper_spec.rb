@@ -9,19 +9,19 @@ RSpec.describe SignatureHelper, type: :helper do
 
       context "when the signature count is 1" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:default, 1)).to eq("1 <span>signature</span>")
+          expect(helper.signature_count(:default, 1)).to eq("<span class=\"count\" data-count=\"1\">1</span> <span class=\"text\">signature</span>")
         end
       end
 
       context "when the signature count is 100" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:default, 100)).to eq("100 <span>signatures</span>")
+          expect(helper.signature_count(:default, 100)).to eq("<span class=\"count\" data-count=\"100\">100</span> <span class=\"text\">signatures</span>")
         end
       end
 
       context "when the signature count is 1000" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:default, 1000)).to eq("1,000 <span>signatures</span>")
+          expect(helper.signature_count(:default, 1000)).to eq("<span class=\"count\" data-count=\"1000\">1,000</span> <span class=\"text\">signatures</span>")
         end
       end
     end

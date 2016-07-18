@@ -39,6 +39,9 @@
     <%= cache_for :footer do %>
       <%= render 'application/footer' %>
       <%= javascript_include_tag 'application' %>
+      <% if open_petition_page? %>
+        <%= javascript_include_tag 'auto-updater' %>
+      <% end %>
       <% if create_petition_page? %>
         <%= javascript_include_tag 'character-counter' %>
       <% end %>
