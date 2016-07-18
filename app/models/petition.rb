@@ -72,6 +72,7 @@ class Petition < ActiveRecord::Base
   has_many :country_petition_journals, :dependent => :destroy
   has_many :constituency_petition_journals, :dependent => :destroy
   has_many :emails, :dependent => :destroy
+  has_many :invalidations
 
   include Staged::Validations::PetitionDetails
   validates_presence_of :open_at, if: :open?
@@ -347,6 +348,17 @@ class Petition < ActiveRecord::Base
 
     updates << "signature_count = signature_count + 1"
     updates << "last_signed_at = :now"
+    updates << "updated_at = :now"
+
+    if update_all([updates.join(", "), now: time]) > 0
+      self.reload
+    end
+  end
+
+  def decrement_signature_count!(time = Time.current)
+    updates = []
+
+    updates << "signature_count = greatest(signature_count - 1, 1)"
     updates << "updated_at = :now"
 
     if update_all([updates.join(", "), now: time]) > 0

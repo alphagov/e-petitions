@@ -8,7 +8,7 @@
     <td>Yes</td>
     <td>
       <% if signature.pending? %>
-        <%= button_to 'Validate', validate_admin_signature_path(signature), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
+        <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
       <% else %>
         &nbsp;
       <% end %>
@@ -17,10 +17,11 @@
     <td>No</td>
     <td>
       <% if signature.pending? %>
-        <%= button_to 'Validate', validate_admin_signature_path(signature), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
-      <% else %>
-        <%= button_to 'Delete', admin_signature_path(signature), method: :delete, class: 'button-warning', data: { confirm: 'Delete signature?' } %>
+        <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
+      <% elsif signature.validated? %>
+        <%= button_to 'Invalidate', invalidate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button', data: { confirm: 'Invalidate signature?' } %>
       <% end %>
+      <%= button_to 'Delete', admin_signature_path(signature, q: params[:q]), method: :delete, class: 'button-warning', data: { confirm: 'Delete signature?' } %>
     </td>
   <% end %>
 </tr>

@@ -26,7 +26,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     describe "GET 'index'" do
       it "should be unsuccessful" do
         get :index
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
       end
     end
   end

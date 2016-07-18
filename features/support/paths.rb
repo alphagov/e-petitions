@@ -86,6 +86,9 @@ module NavigationHelpers
     when /^in moderation petitions page$/
       admin_petitions_url(state: 'in_moderation')
 
+    when /^invalidations page$/
+      admin_invalidations_url
+
     when /^users index page$/
       admin_admin_users_url
 

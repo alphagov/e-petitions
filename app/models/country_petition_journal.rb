@@ -25,6 +25,14 @@ class CountryPetitionJournal < ActiveRecord::Base
       end
     end
 
+    def invalidate_signature_for(signature, now = Time.current)
+      unless unrecordable?(signature)
+        journal = self.for(signature.petition, signature.location_code)
+        updates = "signature_count = greatest(signature_count - 1, 0), updated_at = :now"
+        unscoped.where(id: journal.id).update_all([updates, now: now])
+      end
+    end
+
     def reset!
       # NOTE: location_code <> '' is the closest we can (performantly) get to rails'
       # String#blank? in SQL
@@ -45,7 +53,7 @@ class CountryPetitionJournal < ActiveRecord::Base
     private
 
     def unrecordable?(signature)
-      signature.nil? || signature.petition.nil? || signature.location_code.blank? || !signature.validated?
+      signature.nil? || signature.petition.nil? || signature.location_code.blank? || !signature.validated_at?
     end
   end
 end

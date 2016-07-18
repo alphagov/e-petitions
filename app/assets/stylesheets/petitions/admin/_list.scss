@@ -31,4 +31,17 @@
       text-align: left;
     }
   }
+
+  .invalidation-list {
+    th, td {
+      text-align: right;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    th:last-child, td:last-child {
+    }
+  }
 }

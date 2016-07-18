@@ -1,0 +1,60 @@
+<tr>
+  <td>
+    <% if invalidation.pending? %>
+      <%= link_to invalidation.summary, edit_admin_invalidation_path(invalidation) %>
+    <% else %>
+      <%= invalidation.summary %>
+    <% end %>
+  </td>
+  <td nowrap="true">
+    <% if invalidation.completed? %>
+      <%= content_tag(:span, "Completed", title: "Completed at #{date_time_format(invalidation.completed_at)}") %>
+    <% elsif invalidation.cancelled? %>
+      <%= content_tag(:span, "Cancelled", title: "Completed at #{date_time_format(invalidation.cancelled_at)}") %>
+    <% elsif invalidation.started? %>
+      <%= content_tag(:span, "Started", title: "Completed at #{date_time_format(invalidation.started_at)}") %>
+    <% elsif invalidation.enqueued? %>
+      <%= content_tag(:span, "Enqueued", title: "Completed at #{date_time_format(invalidation.enqueued_at)}") %>
+    <% else %>
+      <%= content_tag(:span, "Created", title: "Created at #{date_time_format(invalidation.created_at)}") %>
+    <% end %>
+  </td>
+  <td>
+    <% if invalidation.counted_at? %>
+      <span title="<%= date_time_format(invalidation.counted_at) %>">
+        <%= invalidation.matching_count %>
+      </span>
+    <% else %>
+      –
+    <% end %>
+  </td>
+  <td>
+    <% if invalidation.started? %>
+      <%= invalidation.invalidated_count %>
+    <% else %>
+      –
+    <% end %>
+  </td>
+  <td>
+    <% if invalidation.started? %>
+      <%= number_to_percentage(invalidation.percent_completed, precision: 0) %>
+    <% else %>
+      –
+    <% end %>
+  </td>
+  <td nowrap="true">
+    &nbsp;
+    <% unless invalidation.completed? || invalidation.cancelled? %>
+      <%= button_to 'Cancel', cancel_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button-secondary' %>
+    <% end %>
+    <% unless invalidation.started? || invalidation.cancelled? %>
+      <%= button_to 'Count', count_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button-secondary' %>
+    <% end %>
+    <% unless invalidation.enqueued? || invalidation.cancelled? %>
+      <%= button_to 'Start', start_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button' %>
+    <% end %>
+    <% unless invalidation.started? %>
+      <%= button_to 'Delete', admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete invalidation?' } %>
+    <% end %>
+  </td>
+</tr>
