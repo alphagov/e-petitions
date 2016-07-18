@@ -93,13 +93,6 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario:
-    When I decide to sign the petition
-    And I fill in my details with email "suzie@10minutemail.com"
-    And I try to sign
-    Then I should see an error
-    And I should see "You can’t use a disposable email address"
-
   Scenario: Suzie sees notice that she has already signed when she validates more than once
     When I fill in my details and sign a petition
     And I confirm my email address
@@ -154,3 +147,28 @@ Feature: Suzie signs a petition
     Then I should be on the petition page
     And I should see "This petition is closed"
     And I should see "1 signature"
+
+  Scenario: Suzie cannot validate her signature when IP address is rate limited
+    Given the burst rate limit is 1 per minute
+    And there is no IP whitelist
+    And there is a signature already from this IP address
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should have no emails
+
+  Scenario: Suzie can validate her signature when IP address is rate limited but the domain is whitelisted
+    Given the burst rate limit is 1 per minute
+    And there is no IP whitelist
+    And the domain "wimbledon.com" is whitelisted
+    And there is a signature already from this IP address
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email

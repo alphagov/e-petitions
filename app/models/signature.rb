@@ -123,6 +123,14 @@ class Signature < ActiveRecord::Base
     notify_by_email == false
   end
 
+  def fraudulent!(now = Time.current)
+    retry_lock do
+      if pending?
+        update_columns(state: FRAUDULENT_STATE, updated_at: now)
+      end
+    end
+  end
+
   def validate!(now = Time.current)
     update_signature_counts = false
 
@@ -214,6 +222,17 @@ class Signature < ActiveRecord::Base
   has_one :email_sent_receipt, dependent: :destroy
   def email_sent_receipt!
     email_sent_receipt || create_email_sent_receipt
+  end
+
+  def domain
+    Mail::Address.new(email).domain
+  rescue Mail::Field::ParseError
+    nil
+  end
+
+  def rate(window = 5.minutes)
+    period = Range.new(created_at - window, created_at)
+    petition.signatures.where(ip_address: ip_address, created_at: period).count
   end
 
   private

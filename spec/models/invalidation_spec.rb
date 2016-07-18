@@ -673,12 +673,12 @@ RSpec.describe Invalidation, type: :model do
 
       context "when filtering by constituency_id" do
         let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:constituency_1) { FactoryGirl.create(:constituency, external_id: "3314") }
-        let!(:constituency_2) { FactoryGirl.create(:constituency, external_id: "3352") }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, constituency_id: "3314", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, constituency_id: "3352", petition: petition) }
+        let!(:coventry) { FactoryGirl.create(:constituency, :coventry_north_east) }
+        let!(:bethnal) { FactoryGirl.create(:constituency, :bethnal_green_and_bow) }
+        let!(:signature_1) { FactoryGirl.create(:validated_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_2) { FactoryGirl.create(:validated_signature, constituency_id: "3320", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, constituency_id: "3314") }
+        subject { FactoryGirl.create(:invalidation, constituency_id: "3427") }
 
         it "includes signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)

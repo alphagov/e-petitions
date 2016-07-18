@@ -1,0 +1,78 @@
+<h1>Edit Rate Limits</h1>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <p>
+      <% if params[:tab] == "domains" %>
+        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
+        Domain Whitelist |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ips') %>
+      <% elsif params[:tab] == "ips" %>
+        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domains') %> |
+        IP Whitelist
+      <% else %>
+        Rate Limits |
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domains') %> |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ips') %>
+      <% end %>
+    </p>
+
+    <%= form_for @rate_limit, url: admin_rate_limits_path do |form| %>
+
+      <% if params[:tab] == "domains" %>
+        <%= hidden_field_tag :tab, "domains" %>
+
+        <%= form_row for: [form.object, :domain_whitelist] do %>
+          <%= error_messages_for_field @rate_limit, :domain_whitelist %>
+          <%= form.text_area :domain_whitelist, tabindex: increment, rows: 15, class: 'form-control' %>
+          <p><small>use *.example.com or **.example.com for wildcard matching</small><p>
+        <% end %>
+
+      <% elsif params[:tab] == "ips" %>
+        <%= hidden_field_tag :tab, "ips" %>
+
+        <%= form_row for: [form.object, :ip_whitelist] do %>
+          <%= error_messages_for_field @rate_limit, :ip_whitelist %>
+          <%= form.text_area :ip_whitelist, tabindex: increment, rows: 15, class: 'form-control' %>
+          <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
+        <% end %>
+
+      <% else %>
+
+        <h2>Short period signing rate per IP address</h2>
+
+        <%= form_row for: [form.object, :burst_period] do %>
+          <%= form.label :burst_period, "Length of short period in seconds", class: 'form-label' %>
+          <%= error_messages_for_field @rate_limit, :burst_period %>
+          <%= form.text_field :burst_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :burst_rate] do %>
+          <%= form.label :burst_rate, "Number of signatures created per short period", class: 'form-label' %>
+          <%= error_messages_for_field @rate_limit, :burst_rate %>
+          <%= form.text_field :burst_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+        <% end %>
+
+        <h2>Long period signing rate per IP address</h2>
+
+        <%= form_row for: [form.object, :sustained_period] do %>
+          <%= form.label :sustained_period, "Length of long period in seconds", class: 'form-label' %>
+          <%= error_messages_for_field @rate_limit, :sustained_period %>
+          <%= form.text_field :sustained_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :sustained_rate] do %>
+          <%= form.label :sustained_rate, "Number of signatures created per long period", class: 'form-label' %>
+          <%= error_messages_for_field @rate_limit, :sustained_rate %>
+          <%= form.text_field :sustained_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+        <% end %>
+
+      <% end %>
+
+      <%= form.submit 'Save', class: 'button' %>
+      <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
+
+    <% end %>
+  </div>
+</div>

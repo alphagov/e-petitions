@@ -45,12 +45,16 @@ en-GB:
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
               incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
 
+        rate_limit:
+          attributes:
+            ip_whitelist:
+              invalid: "IP whitelist is invalid"
+
   errors:
     attributes:
       email:
         blank: "Email must be completed"
         invalid: "Email '%{value}' not recognised"
-        disposable: "You can’t use a disposable email address"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
       action:
         blank: "Action must be completed"

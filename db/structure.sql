@@ -627,6 +627,42 @@ ALTER SEQUENCE petitions_id_seq OWNED BY petitions.id;
 
 
 --
+-- Name: rate_limits; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE rate_limits (
+    id integer NOT NULL,
+    burst_rate integer DEFAULT 1 NOT NULL,
+    burst_period integer DEFAULT 60 NOT NULL,
+    sustained_rate integer DEFAULT 5 NOT NULL,
+    sustained_period integer DEFAULT 300 NOT NULL,
+    domain_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
+    ip_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: rate_limits_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE rate_limits_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: rate_limits_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE rate_limits_id_seq OWNED BY rate_limits.id;
+
+
+--
 -- Name: rejections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -909,6 +945,13 @@ ALTER TABLE ONLY petitions ALTER COLUMN id SET DEFAULT nextval('petitions_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY rate_limits ALTER COLUMN id SET DEFAULT nextval('rate_limits_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY rejections ALTER COLUMN id SET DEFAULT nextval('rejections_id_seq'::regclass);
 
 
@@ -1059,6 +1102,14 @@ ALTER TABLE ONLY petition_emails
 
 ALTER TABLE ONLY petitions
     ADD CONSTRAINT petitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: rate_limits_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY rate_limits
+    ADD CONSTRAINT rate_limits_pkey PRIMARY KEY (id);
 
 
 --
@@ -1395,6 +1446,13 @@ CREATE INDEX index_signatures_on_constituency_id ON signatures USING btree (cons
 
 
 --
+-- Name: index_signatures_on_created_at_and_ip_address_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_created_at_and_ip_address_and_petition_id ON signatures USING btree (created_at, ip_address, petition_id);
+
+
+--
 -- Name: index_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1699,4 +1757,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160704162920');
 INSERT INTO schema_migrations (version) VALUES ('20160704185825');
 
 INSERT INTO schema_migrations (version) VALUES ('20160706060256');
+
+INSERT INTO schema_migrations (version) VALUES ('20160713124623');
+
+INSERT INTO schema_migrations (version) VALUES ('20160713130452');
 

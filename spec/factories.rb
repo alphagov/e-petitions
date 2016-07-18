@@ -275,6 +275,26 @@ FactoryGirl.define do
       ons_code{ "N#{generate(:ons_code)}" }
     end
 
+    trait(:coventry_north_east) do
+      name "Coventry North East"
+      slug "coventry-north-east"
+      external_id "3427"
+      ons_code "E14000649"
+      mp_id "4378"
+      mp_name "Colleen Fletcher MP"
+      mp_date "2015-05-07"
+    end
+
+    trait(:bethnal_green_and_bow) do
+      name "Bethnal Green and Bow"
+      slug "bethnal-green-and-bow"
+      external_id "3320"
+      ons_code "E14000649"
+      mp_id "4138"
+      mp_name "Rushanara Ali MP"
+      mp_date "2015-05-07"
+    end
+
     england
 
     name { Faker::Address.county }
