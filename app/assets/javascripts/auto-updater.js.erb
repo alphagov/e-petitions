@@ -6,8 +6,8 @@
   'use strict';
 
   var JSON_URL = window.location.pathname + '/count.json',
-      THRESHOLD_RESPONSE = 10000,
-      THRESHOLD_DEBATE = 100000,
+      THRESHOLD_RESPONSE = <%= Site.threshold_for_response %>,
+      THRESHOLD_DEBATE = <%= Site.threshold_for_debate %>,
       TIMEOUT = 10000;
 
   function add_commas(n) {
