@@ -2,6 +2,7 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    before_action :require_admin_and_check_for_password_change
     helper_method :current_user, :logged_in?
   end
 
