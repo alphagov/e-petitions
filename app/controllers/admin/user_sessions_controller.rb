@@ -1,5 +1,6 @@
 class Admin::UserSessionsController < Admin::AdminController
-  skip_before_filter :require_admin_and_check_for_password_change
+  skip_before_filter :require_admin, only: [:new, :create]
+  skip_before_filter :check_for_password_change
 
   def new
     @user_session = AdminUserSession.new

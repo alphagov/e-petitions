@@ -1,6 +1,5 @@
 class Admin::ProfileController < Admin::AdminController
-  skip_before_filter :require_admin_and_check_for_password_change
-  before_filter :require_admin
+  skip_before_filter :check_for_password_change
 
   def edit
 
