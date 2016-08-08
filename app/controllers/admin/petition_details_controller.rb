@@ -7,8 +7,7 @@ class Admin::PetitionDetailsController < Admin::AdminController
 
   def update
     if @petition.update_attributes(petition_params)
-      flash[:notice] = 'Petition has been successfully updated'
-      redirect_to [:admin, @petition]
+      redirect_to [:admin, @petition], notice: "Petition has been successfully updated"
     else
       render :show
     end

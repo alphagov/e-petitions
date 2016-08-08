@@ -12,8 +12,7 @@ class Admin::AdminUsersController < Admin::AdminController
   def create
     @user = AdminUser.create(admin_user_params)
     if @user.save
-      flash[:notice] = "User was successfully created"
-      redirect_to admin_admin_users_url
+      redirect_to admin_admin_users_url, notice: "User was successfully created"
     else
       render :action => 'new'
     end
@@ -26,8 +25,7 @@ class Admin::AdminUsersController < Admin::AdminController
   def update
     @user = AdminUser.find(params[:id])
     if @user.update_attributes(admin_user_params)
-      flash[:notice] = "User was successfully updated"
-      redirect_to admin_admin_users_url
+      redirect_to admin_admin_users_url, notice: "User was successfully updated"
     else
       render :action => 'edit'
     end

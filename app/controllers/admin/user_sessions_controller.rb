@@ -24,8 +24,7 @@ class Admin::UserSessionsController < Admin::AdminController
 
   def destroy
     current_session.destroy if logged_in?
-    flash[:notice] = "You have been logged out."
-    redirect_to admin_login_url
+    redirect_to admin_login_url, notice: "You have been logged out."
   end
 end
 
