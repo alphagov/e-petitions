@@ -38,9 +38,9 @@ class Admin::AdminUsersController < Admin::AdminController
 
     # only destroy if user is not the logged in user and there are at least 2 users
     if @user == current_user
-      flash[:error] = "You are not allowed to delete yourself!"
+      flash[:alert] = "You are not allowed to delete yourself!"
     elsif AdminUser.count < 2
-      flash[:error] = "There needs to be at least 1 admin user"
+      flash[:alert] = "There needs to be at least 1 admin user"
     else
       @user.destroy
     end

@@ -27,24 +27,21 @@ module Authentication
 
   def require_admin
     unless current_user
-      flash[:error] = "You must be logged in as an administrator to view this page."
-      redirect_to admin_login_url
+      redirect_to admin_login_url, alert: "You must be logged in as an administrator to view this page."
     end
   end
 
   def require_admin_and_check_for_password_change
     if current_user.nil?
-      flash[:error] = "You must be logged in as an administrator to view this page."
-      redirect_to admin_login_url
+      redirect_to admin_login_url, alert: "You must be logged in as an administrator to view this page."
     elsif current_user.has_to_change_password?
-      flash[:error] = "Please change your password before continuing"
-      redirect_to edit_admin_profile_url(current_user)
+      redirect_to edit_admin_profile_url(current_user), alert: "Please change your password before continuing"
     end
   end
 
   def require_sysadmin
     unless current_user && current_user.is_a_sysadmin?
-      flash[:error] = "You must be logged in as a system administrator to view this page."
+      flash[:alert] = "You must be logged in as a system administrator to view this page."
 
       if current_user.is_a_moderator?
         redirect_to admin_root_url

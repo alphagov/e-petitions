@@ -210,7 +210,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
         delete :destroy, :id => user.to_param
         expect(AdminUser.exists?(user.id)).to be_truthy
         expect(response).to redirect_to(:action => :index)
-        expect(flash[:error]).to eq "You are not allowed to delete yourself!"
+        expect(flash[:alert]).to eq "You are not allowed to delete yourself!"
       end
     end
   end
