@@ -1,5 +1,5 @@
 class Admin::AdminController < ApplicationController
-  include Authentication
+  include Authentication, FlashI18n, FlashRender
 
   before_action :do_not_cache
 
@@ -7,5 +7,4 @@ class Admin::AdminController < ApplicationController
 
   def index
   end
-
 end

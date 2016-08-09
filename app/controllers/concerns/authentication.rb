@@ -29,19 +29,19 @@ module Authentication
 
   def require_admin
     unless current_user
-      redirect_to admin_login_url, alert: "You must be logged in as an administrator to view this page."
+      redirect_to admin_login_url, alert: :admin_required
     end
   end
 
   def check_for_password_change
     if current_user.has_to_change_password?
-      redirect_to edit_admin_profile_url(current_user), alert: "Please change your password before continuing"
+      redirect_to edit_admin_profile_url(current_user), alert: :change_password
     end
   end
 
   def require_sysadmin
     unless current_user.is_a_sysadmin?
-      redirect_to admin_root_url, alert: "You must be logged in as a system administrator to view this page."
+      redirect_to admin_root_url, alert: :sysadmin_required
     end
   end
 

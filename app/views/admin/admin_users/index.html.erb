@@ -14,7 +14,13 @@
       <td><%= mail_to user.email %></td>
       <td><%= user.role %></td>
       <td><%= user.account_disabled ? 'Yes' : '' %></td>
-      <td class="action last"><%= cms_delete_link user, :url => admin_admin_user_path(user) %></td>
+      <td class="action last">
+        <% if user != current_user %>
+          <%= cms_delete_link user, :url => admin_admin_user_path(user) %>
+        <% else %>
+          &nbsp;
+        <% end %>
+      </td>
     </tr>
   <%- end -%>
   <%= will_paginate(@users) if @users.any? %>

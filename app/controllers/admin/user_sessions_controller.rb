@@ -8,23 +8,20 @@ class Admin::UserSessionsController < Admin::AdminController
 
   def create
     @user_session = AdminUserSession.new(params[:admin_user_session])
+
     if @user_session.save
       redirect_to_target_or_default
-
-    # if failed logins are above the specified level, then authlogic disables account
-    # so we need to display appropriate error message
-    elsif  @user_session.errors[:base].size > 0
-      flash.now[:alert] = @user_session.errors[:base][0]
-      render :new
+    elsif @user_session.last_login_attempt?
+      render :new, alert: :last_login
+    elsif @user_session.being_brute_force_protected?
+      render :new, alert: :disabled_login
     else
-      flash.now[:alert] = "Invalid email/password combination"
-      render :new
+      render :new, alert: :invalid_login
     end
   end
 
   def destroy
     current_session.destroy if logged_in?
-    redirect_to admin_login_url, notice: "You have been logged out."
+    redirect_to admin_login_url, notice: :logged_out
   end
 end
-

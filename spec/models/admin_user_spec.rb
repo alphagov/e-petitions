@@ -1,19 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe AdminUser, type: :model do
-
-  context "behaviours" do
+  describe "behaviours" do
     it { expect(AdminUser.respond_to?(:acts_as_authentic)).to be_truthy }
   end
 
-  context "defaults" do
+  describe "defaults" do
     it "force_password_reset should default to true" do
       u = AdminUser.new
       expect(u.force_password_reset).to be_truthy
     end
   end
 
-  context "validations" do
+  describe "validations" do
     it { is_expected.to validate_presence_of(:password) }
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:first_name) }
@@ -57,31 +56,245 @@ RSpec.describe AdminUser, type: :model do
     end
   end
 
-  context "scopes" do
+  describe "scopes" do
     before :each do
       @user1 = FactoryGirl.create(:sysadmin_user, :first_name => 'Ronald', :last_name => 'Reagan')
       @user2 = FactoryGirl.create(:moderator_user, :first_name => 'Bill', :last_name => 'Clinton')
     end
 
-    context "by_name" do
+    describe ".by_name" do
       it "should return admin users by name" do
         expect(AdminUser.by_name).to eq([@user2, @user1])
       end
     end
 
-    context "by_role" do
+    describe ".by_role" do
       it "should return moderator users" do
-        expect(AdminUser.by_role(AdminUser::MODERATOR_ROLE)).to eq([@user2]) end
+        expect(AdminUser.by_role(AdminUser::MODERATOR_ROLE)).to eq([@user2])
+      end
     end
   end
 
-  context "methods" do
-    it "should return a user's name" do
-      user = FactoryGirl.create(:moderator_user, :first_name => 'Jo', :last_name => 'Public')
-      expect(user.name).to eq('Public, Jo')
+  describe "instance methods" do
+    describe "#update_with_password" do
+      let!(:user) do
+        FactoryGirl.create(
+          :sysadmin_user,
+          password: "Testing!23",
+          password_confirmation: "Testing!23",
+          password_changed_at: nil,
+          force_password_reset: true
+        )
+      end
+
+      let(:params) do
+        {
+          current_password: current_password, password: password,
+          password_confirmation: password_confirmation
+        }
+      end
+
+      let(:current_password) { "Testing!23" }
+      let(:password) { "NewP4ssword!" }
+      let(:password_confirmation) { "NewP4ssword!" }
+
+      context "when the new password is valid" do
+        it "returns true" do
+          expect(user.update_with_password(params)).to be_truthy
+        end
+
+        it "changes the crypted_password field" do
+          expect {
+            user.update_with_password(params)
+          }.to change {
+            user.reload.crypted_password
+          }
+        end
+
+        it "sets the timestamp for when the password was changed" do
+          expect {
+            user.update_with_password(params)
+          }.to change {
+            user.reload.password_changed_at
+          }.from(nil).to(be_within(1.second).of(Time.current))
+        end
+
+        it "clears the force password reset flag" do
+          expect {
+            user.update_with_password(params)
+          }.to change {
+            user.reload.force_password_reset
+          }.from(true).to(false)
+        end
+      end
+
+      context "when the current password is missing" do
+        let(:current_password) { "" }
+
+        it "returns false" do
+          expect(user.update_with_password(params)).to be_falsey
+        end
+
+        it "adds an error" do
+          user.update_with_password(params)
+          expect(user.errors[:current_password]).to eq(["Current password can't be blank"])
+        end
+
+        it "doesn't clear the force password reset flag" do
+          user.update_with_password(params)
+          expect(user.force_password_reset).to be true
+        end
+
+        it "doesn't set the password_changed_at timestamp" do
+          user.update_with_password(params)
+          expect(user.password_changed_at).to be_nil
+        end
+      end
+
+      context "when the current password is incorrect" do
+        let(:current_password) { "L3tme!n" }
+
+        it "returns false" do
+          expect(user.update_with_password(params)).to be_falsey
+        end
+
+        it "adds an error" do
+          user.update_with_password(params)
+          expect(user.errors[:current_password]).to eq(["Current password is incorrect"])
+        end
+
+        it "doesn't clear the force password reset flag" do
+          user.update_with_password(params)
+          expect(user.force_password_reset).to be true
+        end
+
+        it "doesn't set the password_changed_at timestamp" do
+          user.update_with_password(params)
+          expect(user.password_changed_at).to be_nil
+        end
+      end
+
+      context "when the new password is the same as the old password" do
+        let(:password) { current_password }
+        let(:password_confirmation) { current_password }
+
+        it "returns false" do
+          expect(user.update_with_password(params)).to be_falsey
+        end
+
+        it "adds an error" do
+          user.update_with_password(params)
+          expect(user.errors[:password]).to eq(["Password is the same as the current password"])
+        end
+
+        it "doesn't clear the force password reset flag" do
+          user.update_with_password(params)
+          expect(user.force_password_reset).to be true
+        end
+
+        it "doesn't set the password_changed_at timestamp" do
+          user.update_with_password(params)
+          expect(user.password_changed_at).to be_nil
+        end
+      end
+
+      context "when the new password is invalid" do
+        let(:password) { "password" }
+        let(:password_confirmation) { "password" }
+
+        it "returns false" do
+          expect(user.update_with_password(params)).to be_falsey
+        end
+
+        it "adds an error" do
+          user.update_with_password(params)
+          expect(user.errors[:password]).to eq(["Password must contain at least one digit, a lower and upper case letter and a special character"])
+        end
+
+        it "doesn't clear the force password reset flag" do
+          user.update_with_password(params)
+          expect(user.force_password_reset).to be true
+        end
+
+        it "doesn't set the password_changed_at timestamp" do
+          user.update_with_password(params)
+          expect(user.password_changed_at).to be_nil
+        end
+      end
+
+      context "when the new password doesn't match the confirmation" do
+        let(:password) { "L3tme!n1" }
+        let(:password_confirmation) { "L3tme!n2" }
+
+        it "returns false" do
+          expect(user.update_with_password(params)).to be_falsey
+        end
+
+        it "adds an error" do
+          user.update_with_password(params)
+          expect(user.errors[:password_confirmation]).to eq(["Password confirmation doesn't match password"])
+        end
+
+        it "doesn't clear the force password reset flag" do
+          user.update_with_password(params)
+          expect(user.force_password_reset).to be true
+        end
+
+        it "doesn't set the password_changed_at timestamp" do
+          user.update_with_password(params)
+          expect(user.password_changed_at).to be_nil
+        end
+      end
     end
 
-    context "is_a_sysadmin?" do
+    describe "#destroy" do
+      context "when there is no current user and there is more than one" do
+        let!(:user_1) { FactoryGirl.create(:sysadmin_user) }
+        let!(:user_2) { FactoryGirl.create(:sysadmin_user) }
+
+        it "returns true" do
+          expect(user_1.destroy(current_user: nil)).to be_truthy
+        end
+      end
+
+      context "when the user is not current and there is more than one" do
+        let!(:user_1) { FactoryGirl.create(:sysadmin_user) }
+        let!(:user_2) { FactoryGirl.create(:sysadmin_user) }
+
+        it "returns true" do
+          expect(user_1.destroy(current_user: user_2)).to be_truthy
+        end
+      end
+
+      context "when the current user is itself" do
+        let!(:user) { FactoryGirl.create(:sysadmin_user) }
+
+        it "raises an AdminUser::CannotDeleteCurrentUser error" do
+          expect {
+            user.destroy(current_user: user.reload)
+          }.to raise_error(AdminUser::CannotDeleteCurrentUser)
+        end
+      end
+
+      context "when there is only one user left" do
+        let!(:user) { FactoryGirl.create(:sysadmin_user) }
+
+        it "raises an AdminUser::MustBeAtLeastOneAdminUser error" do
+          expect {
+            user.destroy(current_user: nil)
+          }.to raise_error(AdminUser::MustBeAtLeastOneAdminUser)
+        end
+      end
+    end
+
+    describe "#name" do
+      it "should return a user's name" do
+        user = FactoryGirl.create(:moderator_user, :first_name => 'Jo', :last_name => 'Public')
+        expect(user.name).to eq('Public, Jo')
+      end
+    end
+
+    describe "#is_a_sysadmin?" do
       it "should return true when user is a sysadmin" do
         user = FactoryGirl.create(:admin_user, :role => 'sysadmin')
         expect(user.is_a_sysadmin?).to be_truthy
@@ -93,7 +306,7 @@ RSpec.describe AdminUser, type: :model do
       end
     end
 
-    context "is_a_moderator?" do
+    describe "#is_a_moderator?" do
       it "should return true when user is a moderator user" do
         user = FactoryGirl.create(:admin_user, :role => 'moderator')
         expect(user.is_a_moderator?).to be_truthy
@@ -105,7 +318,7 @@ RSpec.describe AdminUser, type: :model do
       end
     end
 
-    context "has_to_change_password?" do
+    describe "#has_to_change_password?" do
       it "should be true when force_reset_password is true" do
         user = FactoryGirl.create(:moderator_user, :force_password_reset => true)
         expect(user.has_to_change_password?).to be_truthy
@@ -127,7 +340,7 @@ RSpec.describe AdminUser, type: :model do
       end
     end
 
-    context "can_take_petitions_down?" do
+    describe "#can_take_petitions_down?" do
       it "is true if the user is a sysadmin" do
         user = FactoryGirl.create(:admin_user, :role => 'sysadmin')
         expect(user.can_take_petitions_down?).to be_truthy
@@ -139,7 +352,7 @@ RSpec.describe AdminUser, type: :model do
       end
     end
 
-    context "account_disabled" do
+    describe "#account_disabled" do
       it "should return true when user has tried to login 5 times unsuccessfully" do
         user = FactoryGirl.create(:moderator_user)
         user.failed_login_count = 5
@@ -159,7 +372,7 @@ RSpec.describe AdminUser, type: :model do
       end
     end
 
-    context "account_disabled=" do
+    describe "#account_disabled=" do
       it "should set the failed login count to 5 when true" do
         u = FactoryGirl.create(:moderator_user)
         u.account_disabled = true

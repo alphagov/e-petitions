@@ -5,16 +5,20 @@ class AdminUser < ActiveRecord::Base
   ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE]
   PASSWORD_REGEX = /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/
 
-  acts_as_authentic do |config|
-    config.merge_validates_length_of_password_field_options :minimum => 8
-    config.ignore_blank_passwords = true
-    config.merge_validates_uniqueness_of_email_field_options :case_sensitive => false
+  class CannotDeleteCurrentUser < RuntimeError; end
+  class MustBeAtLeastOneAdminUser < RuntimeError; end
 
-    # Add conditions to the default validations to tidy up output.
-    config.merge_validates_format_of_email_field_options :unless => Proc.new { |user| user.email.blank? }
-    config.merge_validates_length_of_email_field_options :unless => Proc.new { |user| user.email.blank? }
-    config.merge_validates_length_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
-    config.merge_validates_confirmation_of_password_field_options :unless => Proc.new { |user| user.password.blank? }
+  acts_as_authentic do |config|
+    config.check_passwords_against_database = true
+    config.ignore_blank_passwords = true
+    config.require_password_confirmation = true
+
+    config.merge_validates_length_of_password_field_options minimum: 8
+    config.merge_validates_uniqueness_of_email_field_options case_sensitive: false
+    config.merge_validates_format_of_email_field_options unless: ->(u) { u.email.blank? }
+    config.merge_validates_length_of_email_field_options unless: ->(u) { u.email.blank? }
+    config.merge_validates_length_of_password_field_options unless: ->(u) { u.password.blank? }
+    config.merge_validates_confirmation_of_password_field_options unless: ->(u) { u.password.blank? }
   end
 
   # = Validations =
@@ -23,11 +27,54 @@ class AdminUser < ActiveRecord::Base
   validates_format_of :password, with: PASSWORD_REGEX, allow_blank: true
   validates_inclusion_of :role, in: ROLES
 
+  # = Callbacks =
+  before_update if: :crypted_password_changed? do
+    self.force_password_reset = false
+    self.password_changed_at = Time.current
+  end
+
   # = Finders =
   scope :by_name, -> { order(:last_name, :first_name) }
   scope :by_role, ->(role) { where(role: role).order(:id) }
 
   # = Methods =
+  def current_password
+    defined?(@current_password) ? @current_password : nil
+  end
+
+  def current_password=(value)
+    @current_password = value
+  end
+
+  def update_with_password(attrs)
+    if attrs[:password].blank?
+      attrs.delete(:password)
+      attrs.delete(:password_confirmation) if attrs[:password_confirmation].blank?
+    end
+
+    self.attributes = attrs
+    self.valid?
+
+    if current_password.blank?
+      errors.add(:current_password, :blank)
+    elsif !valid_password?(current_password)
+      errors.add(:current_password, :invalid)
+    elsif current_password == password
+      errors.add(:password, :taken)
+    end
+
+    errors.empty? && save(validate: false)
+  end
+
+  def destroy(current_user: nil)
+    if self == current_user
+      raise CannotDeleteCurrentUser, "Cannot delete current user"
+    elsif self.class.count < 2
+      raise MustBeAtLeastOneAdminUser, "There must be at least one admin user"
+    else
+      super()
+    end
+  end
 
   def name
     "#{last_name}, #{first_name}"

@@ -15,9 +15,9 @@ class Admin::DebateOutcomesController < Admin::AdminController
     if @debate_outcome.update(debate_outcome_params)
       if send_email_to_petitioners?
         EmailDebateOutcomesJob.run_later_tonight(petition: @petition)
-        message = 'Email will be sent overnight'
+        message = :email_sent_overnight
       else
-        message = 'Updated debate outcome successfully'
+        message = :debate_outcome_updated
       end
 
       redirect_to [:admin, @petition], notice: message

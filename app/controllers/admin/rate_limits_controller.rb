@@ -10,7 +10,7 @@ class Admin::RateLimitsController < Admin::AdminController
 
   def update
     if @rate_limit.update(rate_limit_params)
-      redirect_to edit_admin_rate_limits_url, notice: "Rate limits updated successfully"
+      redirect_to edit_admin_rate_limits_url, notice: :rate_limits_updated
     else
       respond_to do |format|
         format.html { render :edit }

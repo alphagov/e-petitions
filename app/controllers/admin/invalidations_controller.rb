@@ -18,7 +18,7 @@ class Admin::InvalidationsController < Admin::AdminController
 
   def create
     if @invalidation.save
-      redirect_to admin_invalidations_url, notice: "Invalidation created successfully"
+      redirect_to admin_invalidations_url, notice: :invalidation_created
     else
       respond_to do |format|
         format.html { render :new }
@@ -32,44 +32,44 @@ class Admin::InvalidationsController < Admin::AdminController
         format.html
       end
     else
-      redirect_to_index_url notice: "Can't edit invalidations that aren't pending"
+      redirect_to_index_url notice: :invalidation_cant_be_edited
     end
   end
 
   def update
     if @invalidation.pending?
       if @invalidation.update(invalidation_params)
-        redirect_to admin_invalidations_url, notice: "Invalidation updated successfully"
+        redirect_to admin_invalidations_url, notice: :invalidation_updated
       else
         respond_to do |format|
           format.html { render :edit }
         end
       end
     else
-      redirect_to_index_url notice: "Can't edit invalidations that aren't pending"
+      redirect_to_index_url notice: :invalidation_cant_be_edited
     end
   end
 
   def destroy
     if @invalidation.started?
-      redirect_to_index_url notice: "Can't remove invalidations that have started"
+      redirect_to_index_url notice: :invalidation_cant_be_removed
     else
       if @invalidation.destroy
-        redirect_to_index_url notice: "Invalidation removed successfully"
+        redirect_to_index_url notice: :invalidation_removed
       else
-        redirect_to_index_url alert: "Invalidation could not be removed - please contact support"
+        redirect_to_index_url alert: :invalidation_not_removed
       end
     end
   end
 
   def cancel
     if @invalidation.completed?
-      redirect_to_index_url notice: "Can't cancel invalidations that have completed"
+      redirect_to_index_url notice: :invalidation_cant_be_cancelled
     else
       if @invalidation.cancel!
-        redirect_to_index_url notice: "Invalidation cancelled successfully"
+        redirect_to_index_url notice: :invalidation_cancelled
       else
-        redirect_to_index_url alert: "Invalidation could not be cancelled - please contact support"
+        redirect_to_index_url alert: :invalidation_not_cancelled
       end
     end
   end
@@ -77,24 +77,24 @@ class Admin::InvalidationsController < Admin::AdminController
   def count
     if @invalidation.pending?
       if @invalidation.count!
-        redirect_to_index_url notice: "Counted the matching signatures for invalidation #{@invalidation.summary.inspect}"
+        redirect_to_index_url notice: [:invalidation_counted, summary: @invalidation.summary.inspect]
       else
-        redirect_to_index_url alert: "Invalidation could not be counted - please contact support"
+        redirect_to_index_url alert: :invalidation_not_counted
       end
     else
-      redirect_to_index_url notice: "Can't count invalidations that aren't pending"
+      redirect_to_index_url notice: :invalidation_cant_be_counted
     end
   end
 
   def start
     if @invalidation.pending?
       if @invalidation.start!
-        redirect_to_index_url notice: "Enqueued the invalidation #{@invalidation.summary.inspect}"
+        redirect_to_index_url notice: [:invalidation_started, summary: @invalidation.summary.inspect]
       else
-        redirect_to_index_url alert: "Invalidation could not be enqueued - please contact support"
+        redirect_to_index_url alert: :invalidation_not_started
       end
     else
-      redirect_to_index_url notice: "Can't start invalidations that aren't pending"
+      redirect_to_index_url notice: :invalidation_cant_be_started
     end
   end
 

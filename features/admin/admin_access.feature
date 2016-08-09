@@ -52,11 +52,16 @@ Feature: Restricted access to the admin console
   Scenario: 5 failed logins disables an account
     Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
     And I go to the admin login page
-    And I try the password "wrong trousers" 5 times in a row
+    And I try the password "wrong trousers" 3 times in a row
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "wrong trousers"
     And I press "Sign in"
-    Then I should see "Consecutive failed logins limit exceeded, account has been temporarily disabled."
+    Then I should see "You have one more attempt before your account is temporarily disabled"
+    And should not see "Logout"
+    And I fill in "Email" with "admin@example.com"
+    And I fill in "Password" with "wrong trousers"
+    And I press "Sign in"
+    Then I should see "Failed login limit exceeded, your account has been temporarily disabled"
     And should not see "Logout"
 
   Scenario: 5 failed logins with an email address containing a wildcard does not disable an account

@@ -42,7 +42,7 @@ class Admin::SearchesController < Admin::AdminController
     begin
       redirect_to admin_petition_url(Petition.find(query.to_i))
     rescue ActiveRecord::RecordNotFound
-      redirect_to admin_petitions_url, alert: "Cannot find petition with id: #{query}"
+      redirect_to admin_petitions_url, alert: [:petition_not_found, query: query.inspect]
     end
   end
 
