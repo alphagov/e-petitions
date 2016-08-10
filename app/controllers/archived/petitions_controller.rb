@@ -4,6 +4,8 @@ class Archived::PetitionsController < ApplicationController
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
+  before_action :set_cors_headers, only: [:index, :show], if: :json_request?
+
   def index
     respond_with(@petitions)
   end

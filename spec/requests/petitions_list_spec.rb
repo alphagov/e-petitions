@@ -9,9 +9,20 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
     expect(response).to be_success
   end
 
+  let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
+  let(:access_control_allow_methods) { response.headers['Access-Control-Allow-Methods'] }
+  let(:access_control_allow_headers) { response.headers['Access-Control-Allow-Headers'] }
+
   describe "format" do
     it "responds to JSON" do
       make_successful_request
+    end
+
+    it "sets CORS headers" do
+      get petitions_url(format: 'json')
+      expect(access_control_allow_origin).to eq('*')
+      expect(access_control_allow_methods).to eq('GET')
+      expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
     end
 
     it "does not respond to XML" do
@@ -153,4 +164,3 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
     end
   end
 end
-

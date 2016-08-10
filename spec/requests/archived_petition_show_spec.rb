@@ -12,9 +12,20 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
   let(:petition) { FactoryGirl.create :archived_petition }
   let(:attributes) { json["data"]["attributes"] }
 
+  let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
+  let(:access_control_allow_methods) { response.headers['Access-Control-Allow-Methods'] }
+  let(:access_control_allow_headers) { response.headers['Access-Control-Allow-Headers'] }
+
   describe "format" do
     it "responds to JSON" do
       make_successful_request petition
+    end
+
+    it "sets CORS headers" do
+      get archived_petition_url(petition, format: 'json')
+      expect(access_control_allow_origin).to eq('*')
+      expect(access_control_allow_methods).to eq('GET')
+      expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
     end
 
     it "does not respond to XML" do
