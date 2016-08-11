@@ -126,7 +126,8 @@ CREATE TABLE constituencies (
     mp_name character varying(100),
     mp_date date,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    example_postcode character varying(30)
 );
 
 
@@ -733,7 +734,8 @@ CREATE TABLE signatures (
     government_response_email_at timestamp without time zone,
     debate_scheduled_email_at timestamp without time zone,
     debate_outcome_email_at timestamp without time zone,
-    petition_email_at timestamp without time zone
+    petition_email_at timestamp without time zone,
+    anonymised_at timestamp without time zone
 );
 
 
@@ -1491,6 +1493,13 @@ CREATE UNIQUE INDEX index_rejections_on_petition_id ON rejections USING btree (p
 
 
 --
+-- Name: index_signatures_on_anonymised_at_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_anonymised_at_and_petition_id ON signatures USING btree (anonymised_at, petition_id);
+
+
+--
 -- Name: index_signatures_on_constituency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1845,6 +1854,10 @@ INSERT INTO schema_migrations (version) VALUES ('20160713130452');
 INSERT INTO schema_migrations (version) VALUES ('20160715092819');
 
 INSERT INTO schema_migrations (version) VALUES ('20160716164929');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811123057');
+
+INSERT INTO schema_migrations (version) VALUES ('20160811143039');
 
 INSERT INTO schema_migrations (version) VALUES ('20160819062044');
 

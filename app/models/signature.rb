@@ -63,6 +63,28 @@ class Signature < ActiveRecord::Base
     where(state: [PENDING_STATE, VALIDATED_STATE])
   end
 
+  def self.not_anonymised
+    where(arel_table[:anonymised_at].eq(nil))
+  end
+
+  def self.created_before(timestamp)
+    where(arel_table[:created_at].lt(timestamp))
+  end
+
+  def self.in_need_of_anonymisation(timestamp)
+    created_before(12.months.ago(timestamp)).not_anonymised
+  end
+
+  def self.anonymise!(timestamp)
+    in_need_of_anonymisation(timestamp).find_each do |signature|
+      begin
+        signature.anonymise!(timestamp)
+      rescue ActiveRecord::RecordInvalid => exception
+        Appsignal.send_exception(exception)
+      end
+    end
+  end
+
   def self.for_timestamp(timestamp, since:)
     column = arel_table[column_name_for(timestamp)]
     where(column.eq(nil).or(column.lt(since)))
@@ -210,6 +232,40 @@ class Signature < ActiveRecord::Base
       CountryPetitionJournal.invalidate_signature_for(self, now)
       petition.decrement_signature_count!(now)
     end
+  end
+
+  def anonymised?
+    anonymised_at?
+  end
+
+  def anonymise!(timestamp)
+    self.name = "Signature #{id}"
+    self.email = "signature-#{id}@example.com"
+    self.ip_address = "192.168.1.1"
+
+    if constituency_id?
+      constituency = Constituency.find_by_external_id(constituency_id)
+    else
+      constituency = nil
+    end
+
+    if constituency
+      self.postcode = constituency.example_postcode
+    else
+      self.postcode = nil
+    end
+
+    if postcode.blank? && united_kingdom?
+      # Validations require a postcode for the UK so use the NHS
+      # 'address not known' pseudo-postcode when we didn't find
+      # an example postcode for the constituency:
+      # https://en.wikipedia.org/wiki/Postcodes_in_the_United_Kingdom#ZZ99
+      self.postcode = "ZZ993WZ"
+    end
+
+    self.anonymised_at = timestamp
+
+    save!
   end
 
   def mark_seen_signed_confirmation_page!
