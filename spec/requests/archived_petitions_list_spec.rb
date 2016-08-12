@@ -1,11 +1,11 @@
 require 'rails_helper'
 require_relative 'api_request_helpers'
 
-RSpec.describe 'API request to list petitions', type: :request, show_exceptions: true do
+RSpec.describe 'API request to list archived petitions', type: :request, show_exceptions: true do
   include ApiRequestHelpers
 
   def make_successful_request(params = {})
-    get petitions_url({format: 'json'}.merge(params))
+    get archived_petitions_url({format: 'json'}.merge(params))
     expect(response).to be_success
   end
 
@@ -19,51 +19,51 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
     end
 
     it "sets CORS headers" do
-      get petitions_url(format: 'json')
+      get archived_petitions_url(format: 'json')
       expect(access_control_allow_origin).to eq('*')
       expect(access_control_allow_methods).to eq('GET')
       expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
     end
 
     it "does not respond to XML" do
-      get petitions_url(format: 'xml')
+      get archived_petitions_url(format: 'xml')
       expect(response.status).to eq(406)
     end
   end
 
   describe "links" do
     before do
-      FactoryGirl.create_list :open_petition, 3
+      FactoryGirl.create_list :archived_petition, 3
     end
 
     it "returns a link to itself" do
       make_successful_request
 
-      expect(json["links"]).to include({"self" => petitions_url(format: 'json')})
+      expect(json["links"]).to include({"self" => archived_petitions_url(format: 'json')})
     end
 
     it "returns a link to the first page of results" do
       make_successful_request count: 2
 
-      expect(json["links"]).to include({"first" => petitions_url(count: 2, format: 'json')})
+      expect(json["links"]).to include({"first" => archived_petitions_url(count: 2, format: 'json')})
     end
 
     it "returns a link to the last page of results" do
       make_successful_request count: 2
 
-      expect(json["links"]).to include({"last" => petitions_url(count: 2, page: 2, format: 'json')})
+      expect(json["links"]).to include({"last" => archived_petitions_url(count: 2, page: 2, format: 'json')})
     end
 
     it "returns a link to the next page of results if there is one" do
       make_successful_request count: 2
 
-      expect(json["links"]).to include({"next" => petitions_url(count: 2 ,page: 2, format: 'json')})
+      expect(json["links"]).to include({"next" => archived_petitions_url(count: 2 ,page: 2, format: 'json')})
     end
 
     it "returns a link to the previous page of results if there is one" do
       make_successful_request count: 2, page: 2
 
-      expect(json["links"]).to include({"prev" => petitions_url(count: 2, format: 'json')})
+      expect(json["links"]).to include({"prev" => archived_petitions_url(count: 2, format: 'json')})
     end
 
     it "returns no link to the previous page of results when on the first page of results" do
@@ -99,68 +99,42 @@ RSpec.describe 'API request to list petitions', type: :request, show_exceptions:
     end
 
     it "returns a list of serialized petitions in the expected order" do
-      FactoryGirl.create_list :open_petition, 3
-
-      # reload petitions to get the expected ordering
-      petitions = Petition.order("signature_count DESC, created_at DESC")
+      petition_1 = FactoryGirl.create :archived_petition, signature_count: 100
+      petition_2 = FactoryGirl.create :archived_petition, signature_count: 300
+      petition_3 = FactoryGirl.create :archived_petition, signature_count: 200
 
       make_successful_request
 
       expect(json["data"].length).to eq(3)
-      assert_serialized_petition petitions.first, json["data"].first
-      assert_serialized_petition petitions.second, json["data"].second
-      assert_serialized_petition petitions.third, json["data"].third
+
+      expect(json["data"][0]["attributes"]["title"]).to eq(petition_2.title)
+      expect(json["data"][1]["attributes"]["title"]).to eq(petition_3.title)
+      expect(json["data"][2]["attributes"]["title"]).to eq(petition_1.title)
     end
 
     it "includes a link to each petitions details" do
-      petition = FactoryGirl.create :open_petition
+      petition = FactoryGirl.create :archived_petition
 
       make_successful_request
 
       expect(json["data"][0]["links"]).to be_a Hash
-      expect(json["data"][0]["links"]).to include("self" => petition_url(petition, format: 'json'))
-    end
-
-    it "includes the creator_name field for open petitions" do
-      petition = FactoryGirl.create :open_petition
-
-      make_successful_request
-
-      expect(json["data"][0]["attributes"]).to include("creator_name" => petition.creator_signature.name)
-    end
-
-    (Petition::VISIBLE_STATES - Array(Petition::OPEN_STATE)).each do |state_name|
-      it "does not include the creator_name field for #{state_name} petitions" do
-        petition = FactoryGirl.create "#{state_name}_petition".to_sym
-
-        make_successful_request
-
-        expect(json["data"][0]["attributes"]).not_to include("creator_name" => petition.creator_signature.name)
-      end
+      expect(json["data"][0]["links"]).to include("self" => archived_petition_url(petition, format: 'json'))
     end
 
     it "includes the rejection section for rejected petitions" do
-      petition = FactoryGirl.create :rejected_petition
+      petition = FactoryGirl.create :archived_petition, :rejected
 
       make_successful_request
 
-      assert_serialized_rejection petition, json["data"][0]["attributes"]
+      expect(json["data"][0]["attributes"]["rejection"]["details"]).to eq(petition.reason_for_rejection)
     end
 
     it "includes the government_response section for petitions with a government_response" do
-      petition = FactoryGirl.create :responded_petition
+      petition = FactoryGirl.create :archived_petition, :response
 
       make_successful_request
 
-      assert_serialized_government_response petition, json["data"][0]["attributes"]
-    end
-
-    it "includes the debate section for petitions that have been debated" do
-      petition = FactoryGirl.create :debated_petition
-
-      make_successful_request
-
-      assert_serialized_debate petition, json["data"][0]["attributes"]
+      expect(json["data"][0]["attributes"]["government_response"]["details"]).to eq(petition.response)
     end
   end
 end

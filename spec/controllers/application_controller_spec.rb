@@ -3,6 +3,7 @@ require 'rails_helper'
 RSpec.describe ApplicationController, type: :controller do
   controller do
     before_action :do_not_cache
+    before_action :set_cors_headers, if: :json_request?
 
     def index
       render text: 'OK'

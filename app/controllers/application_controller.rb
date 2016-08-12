@@ -9,8 +9,6 @@ class ApplicationController < ActionController::Base
   before_action :set_seen_cookie_message, if: :show_cookie_message?
   helper_method :show_cookie_message?, :public_petition_facets
 
-  before_action :set_cors_headers, if: :json_request?
-
   protected
 
   def authenticate

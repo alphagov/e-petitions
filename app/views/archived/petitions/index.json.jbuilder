@@ -1,6 +1,6 @@
 json.links do
   json.self request.url
-  json.merge! ApiPaginationLinksPresenter.new(@petitions).serialize
+  json.merge! ApiPaginationLinksPresenter.new(@petitions, params).serialize
 end
 
 json.data @petitions do |petition|

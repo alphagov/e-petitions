@@ -8,6 +8,8 @@ class PetitionsController < ApplicationController
   before_action :redirect_to_moderation_info_url, if: :not_moderated?, only: :show
   before_action :redirect_to_petition_url, if: :moderated?, only: :moderation_info
 
+  before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
+
   respond_to :html
   respond_to :json, only: [:index, :show]
 

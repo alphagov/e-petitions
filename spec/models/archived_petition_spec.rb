@@ -5,11 +5,11 @@ RSpec.describe ArchivedPetition, type: :model do
 
   describe ".search" do
     let!(:petition_1) do
-      FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago)
+      FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
     end
 
     let!(:petition_2) do
-      FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago)
+      FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
     end
 
     it "searches based upon title" do
@@ -20,8 +20,19 @@ RSpec.describe ArchivedPetition, type: :model do
       expect(ArchivedPetition.search(q: "Wombles")).to include(petition_2)
     end
 
-    it "sorts the results by the created_at timestamp" do
+    it "sorts the results by the highest number of signatures" do
       expect(ArchivedPetition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
+    end
+  end
+
+  describe ".by_created_at" do
+    let!(:petition_1) { FactoryGirl.create(:archived_petition, created_at: 3.years.ago) }
+    let!(:petition_2) { FactoryGirl.create(:archived_petition, created_at: 1.year.ago) }
+    let!(:petition_3) { FactoryGirl.create(:archived_petition, created_at: 2.years.ago) }
+    let(:petitions) { [petition_1, petition_3, petition_2] }
+
+    it 'returns archived petitions ordered by the created_at timestamp' do
+      expect(ArchivedPetition.by_created_at).to eq(petitions)
     end
   end
 

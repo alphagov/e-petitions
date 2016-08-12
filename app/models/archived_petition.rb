@@ -16,11 +16,12 @@ class ArchivedPetition < ActiveRecord::Base
   extend Searchable(:title, :description)
   include Browseable
 
-  facet :all, -> { by_created_at }
-  facet :open, -> { for_state(OPEN_STATE).by_created_at }
-  facet :closed, -> { for_state(CLOSED_STATE).by_created_at }
-  facet :rejected, -> { for_state(REJECTED_STATE).by_created_at }
+  facet :all, -> { by_most_signatures }
+  facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
+  facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
+  facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
   facet :by_most_signatures, -> { by_most_signatures }
+  facet :by_created_at, -> { by_created_at }
 
   class << self
     def for_state(state)

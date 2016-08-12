@@ -3,8 +3,8 @@ class ApiPaginationLinksPresenter
 
   # results should be a Browseable::Search instance that
   # exposes the attributes delegated to it below
-  def initialize(results)
-    @results = results
+  def initialize(results, params)
+    @results, @params = results, params
   end
 
   def serialize
@@ -18,9 +18,9 @@ class ApiPaginationLinksPresenter
 
   private
 
-  attr_reader :results
+  attr_reader :results, :params
 
-  delegate :params, :total_pages, :first_page?, :second_page?, :last_page?, to: :results
+  delegate :total_pages, :first_page?, :second_page?, :last_page?, to: :results
 
   # Sense check that the current page cannot be greater than the total number of pages
   def current_page
