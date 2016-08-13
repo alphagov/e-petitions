@@ -22,7 +22,7 @@ class PackageBuilder
     @revision    = %x[git rev-parse #{treeish}].strip
     @tmpdir      = Dir.mktmpdir
     @timestamp   = Time.now.getutc
-    @release     = @timestamp.strftime('%Y%m%d%H%I%S')
+    @release     = @timestamp.strftime('%Y%m%d%H%M%S')
   end
 
   def build!
