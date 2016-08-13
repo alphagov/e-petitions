@@ -34,7 +34,7 @@ module Delayed
           ::ActiveRecord::Base.establish_connection
 
           # Let AppSignal know that a worker process has been forked
-          ::Appsignal.agent.forked! if defined?(::Appsignal) && ::Appsignal.config.active?
+          ::Appsignal.forked if defined?(::Appsignal) && ::Appsignal.config.active?
         end
       end
     end
