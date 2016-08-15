@@ -29,6 +29,8 @@ class ApplicationController < ActionController::Base
     URI.parse(request.original_url).tap do |uri|
       uri.path = File.join(File.dirname(request.path), File.basename(request.path, '.*'))
     end.to_s
+  rescue URI::InvalidURIError => e
+    home_url
   end
 
   def redirect_to_url_without_format
