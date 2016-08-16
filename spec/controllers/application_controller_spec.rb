@@ -100,4 +100,18 @@ RSpec.describe ApplicationController, type: :controller do
       expect(controller.class.helpers).to respond_to :public_petition_facets
     end
   end
+
+  context "when the url has an invalid format" do
+    let(:exception) { URI::InvalidURIError.new }
+
+    before do
+      allow(request).to receive(:format).and_return(nil)
+      allow(request).to receive(:original_url).and_return("https://petition.parliament.uk/petitions.json]")
+    end
+
+    it "redirects to the home page" do
+      get :index
+      expect(response).to redirect_to("https://petition.parliament.uk/")
+    end
+  end
 end
