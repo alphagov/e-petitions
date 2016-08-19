@@ -27,5 +27,18 @@
   <dt>ID</dt>
   <dd><%= @petition.id %></dd>
 
+  <% if @petition.fraudulent_domains? %>
+    <dt>Fraudulent domains</dt>
+    <dd>
+      <table class="fraudulent-domains">
+        <% @petition.fraudulent_domains.each do |domain, count| %>
+          <tr>
+            <td><%= domain %></td>
+            <td><%= number_with_delimiter(count) %></td>
+          </tr>
+        <% end %>
+      </table>
+    </dd>
+  <% end %>
 <% end %>
 </dl>

@@ -1812,5 +1812,44 @@ RSpec.describe Petition, type: :model do
         expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000000")
       end
     end
+
+    describe "#fraudulent_domains" do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:signatures) { double(:signatures) }
+
+      let(:domains) do
+        { "foo.com" => 2, "bar.com" => 1 }
+      end
+
+      before do
+        allow(petition).to receive(:signatures).and_return(signatures)
+      end
+
+      it "delegates to signatures association and caches the result" do
+        expect(signatures).to receive(:fraudulent_domains).once.and_return(domains)
+        expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
+        expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
+      end
+    end
+
+    describe "#fraudulent_domains?" do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+
+      context "when there no fraudulent signatures" do
+        it "returns false" do
+          expect(petition.fraudulent_domains?).to eq(false)
+        end
+      end
+
+      context "when there are fraudulent signatures" do
+        before do
+          FactoryGirl.create(:fraudulent_signature, email: "alice@foo.com", petition: petition)
+        end
+
+        it "returns true" do
+          expect(petition.fraudulent_domains?).to eq(true)
+        end
+      end
+    end
   end
 end

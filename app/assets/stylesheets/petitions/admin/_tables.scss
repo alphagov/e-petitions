@@ -10,3 +10,17 @@
 .action {
   text-align: right;
 }
+
+.fraudulent-domains {
+  width: 100%;
+
+  td {
+    border-bottom: none;
+    padding: 3px 0px 3px 0px;
+    text-align: right;
+  }
+
+  td:first-child {
+    text-align: left;
+  }
+}
