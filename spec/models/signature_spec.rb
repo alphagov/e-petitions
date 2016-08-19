@@ -329,7 +329,7 @@ RSpec.describe Signature, type: :model do
     end
   end
 
-  context "scopes" do
+  describe "scopes" do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
     let!(:petition) { FactoryGirl.create(:petition) }
@@ -337,7 +337,7 @@ RSpec.describe Signature, type: :model do
     let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
     let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
 
-    context "validated" do
+    describe "validated" do
       it "returns only validated signatures" do
         signatures = Signature.validated
         expect(signatures.size).to eq(3)
@@ -345,7 +345,7 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "notify_by_email" do
+    describe "notify_by_email" do
       it "returns only signatures with notify_by_email: true" do
         signatures = Signature.notify_by_email
         expect(signatures.size).to eq(3)
@@ -353,7 +353,7 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "pending" do
+    describe "pending" do
       it "returns only pending signatures" do
         signatures = Signature.pending
         expect(signatures.size).to eq(1)
@@ -361,7 +361,7 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "matching" do
+    describe "matching" do
       let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE) }
 
       it "returns a signature matching in name, email and petition_id" do
@@ -377,6 +377,34 @@ RSpec.describe Signature, type: :model do
       it "does not return a signature matching in email, petition and different name" do
         signature = FactoryGirl.build(:signature, name: "Josey Public", email: "person1@example.com", petition: petition)
         expect(Signature.matching(signature)).to_not include(signature1)
+      end
+    end
+
+    describe "for_invalidating" do
+      let(:petition) { FactoryGirl.create(:open_petition) }
+
+      subject do
+        described_class.for_invalidating.to_a
+      end
+
+      it "returns pending signatures" do
+        signature = FactoryGirl.create(:pending_signature, petition: petition)
+        expect(subject).to include(signature)
+      end
+
+      it "returns validated signatures" do
+        signature = FactoryGirl.create(:validated_signature, petition: petition)
+        expect(subject).to include(signature)
+      end
+
+      it "doesn't return fraudulent signatures" do
+        signature = FactoryGirl.create(:fraudulent_signature, petition: petition)
+        expect(subject).not_to include(signature)
+      end
+
+      it "doesn't return invalidated signatures" do
+        signature = FactoryGirl.create(:invalidated_signature, petition: petition)
+        expect(subject).not_to include(signature)
       end
     end
 
