@@ -49,6 +49,8 @@ en-GB:
           attributes:
             ip_whitelist:
               invalid: "IP whitelist is invalid"
+            ip_blacklist:
+              invalid: "IP blacklist is invalid"
 
   errors:
     attributes:

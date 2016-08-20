@@ -25,7 +25,7 @@ class Admin::RateLimitsController < Admin::AdminController
   end
 
   def rate_limit_attributes
-    %i[burst_rate burst_period sustained_rate sustained_period domain_whitelist ip_whitelist]
+    %i[burst_rate burst_period sustained_rate sustained_period domain_whitelist ip_whitelist domain_blacklist ip_blacklist]
   end
 
   def find_rate_limit

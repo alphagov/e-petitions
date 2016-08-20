@@ -14,6 +14,8 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_numericality_of(:sustained_period).only_integer.is_greater_than(0) }
     it { is_expected.to validate_length_of(:domain_whitelist).is_at_most(10000) }
     it { is_expected.to validate_length_of(:ip_whitelist).is_at_most(10000) }
+    it { is_expected.to validate_length_of(:domain_blacklist).is_at_most(50000) }
+    it { is_expected.to validate_length_of(:ip_blacklist).is_at_most(50000) }
 
     context "when the sustained rate is less than the burst rate" do
       before do
@@ -58,6 +60,28 @@ RSpec.describe RateLimit, type: :model do
         expect(subject.errors[:ip_whitelist]).to include("IP whitelist is invalid")
       end
     end
+
+    context "when the domain blacklist is invalid" do
+      before do
+        subject.update(domain_blacklist: "(foo")
+      end
+
+      it "adds an error message" do
+        expect(subject.valid?).to eq(false)
+        expect(subject.errors[:domain_blacklist]).to include("Domain blacklist is invalid")
+      end
+    end
+
+    context "when the IP blacklist is invalid" do
+      before do
+        subject.update(ip_blacklist: "foo")
+      end
+
+      it "adds an error message" do
+        expect(subject.valid?).to eq(false)
+        expect(subject.errors[:ip_blacklist]).to include("IP blacklist is invalid")
+      end
+    end
   end
 
   describe "#exceeded?" do
@@ -67,11 +91,15 @@ RSpec.describe RateLimit, type: :model do
     let(:domain_whitelist) { "" }
     let(:ip_whitelist) { "" }
 
+    let(:domain_blacklist) { "" }
+    let(:ip_blacklist) { "" }
+
     subject do
       described_class.create!(
         burst_rate: 10, burst_period: 60,
         sustained_rate: 20, sustained_period: 300,
-        domain_whitelist: domain_whitelist, ip_whitelist: ip_whitelist
+        domain_whitelist: domain_whitelist, ip_whitelist: ip_whitelist,
+        domain_blacklist: domain_blacklist, ip_blacklist: ip_blacklist
       )
     end
 
@@ -99,6 +127,30 @@ RSpec.describe RateLimit, type: :model do
       end
     end
 
+    shared_examples_for "domain blacklisting" do
+      let(:domain_blacklist) { "foo.com\n*.bar.com\n**.baz.com\n" }
+
+      it "returns false when the domain is not blacklisted" do
+        allow(signature).to receive(:domain).and_return("example.com")
+        expect(subject.exceeded?(signature)).to eq(false)
+      end
+
+      it "returns true when the domain is blacklisted" do
+        allow(signature).to receive(:domain).and_return("foo.com")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns true when the domain is blacklisted by a grep pattern" do
+        allow(signature).to receive(:domain).and_return("foo.bar.com")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns true when the domain is blacklisted by a recursive grep pattern" do
+        allow(signature).to receive(:domain).and_return("foo.bar.baz.com")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+    end
+
     shared_examples_for "IP whitelisting" do
       let(:ip_whitelist) { "10.0.1.1\n10.0.1.2/32\n10.0.2.0/28\n" }
 
@@ -123,6 +175,30 @@ RSpec.describe RateLimit, type: :model do
       end
     end
 
+    shared_examples_for "IP blacklisting" do
+      let(:ip_blacklist) { "10.0.1.1\n10.0.1.2/32\n10.0.2.0/28\n" }
+
+      it "returns false when the IP address is not blacklisted" do
+        allow(signature).to receive(:ip_address).and_return("10.1.1.1")
+        expect(subject.exceeded?(signature)).to eq(false)
+      end
+
+      it "returns true when the IP address is blacklisted" do
+        allow(signature).to receive(:ip_address).and_return("10.0.1.1")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns true when the IP address is blacklisted by a CIDR address" do
+        allow(signature).to receive(:ip_address).and_return("10.0.1.2")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns true when the IP address is blacklisted by a CIDR range" do
+        allow(signature).to receive(:ip_address).and_return("10.0.2.7")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+    end
+
     context "when both rates are below the threshold" do
       before do
         allow(signature).to receive(:rate).with(60).and_return(5)
@@ -132,6 +208,9 @@ RSpec.describe RateLimit, type: :model do
       it "returns false" do
         expect(subject.exceeded?(signature)).to eq(false)
       end
+
+      it_behaves_like "domain blacklisting"
+      it_behaves_like "IP blacklisting"
     end
 
     context "when the burst rate is above the threshold" do
@@ -197,7 +276,27 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
-  describe "domains" do
+  describe "#domain_blacklist=" do
+    subject do
+      described_class.new(domain_blacklist: " foo.com\r\nbar.com\r\n")
+    end
+
+    it "normalizes line endings and strips whitespace" do
+      expect(subject.domain_blacklist).to eq("foo.com\nbar.com")
+    end
+  end
+
+  describe "#ip_blacklist=" do
+    subject do
+      described_class.new(ip_blacklist: " 192.168.1.1\r\n10.0.1.1/32\r\n")
+    end
+
+    it "normalizes line endings and strips whitespace" do
+      expect(subject.ip_blacklist).to eq("192.168.1.1\n10.0.1.1/32")
+    end
+  end
+
+  describe "#whitelisted_domains" do
     subject do
       described_class.create!(domain_whitelist: domain_whitelist)
     end
@@ -212,7 +311,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "is is stripped" do
-        expect(subject.domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.whitelisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
       end
     end
 
@@ -227,7 +326,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.whitelisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
       end
     end
 
@@ -243,7 +342,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.whitelisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
       end
     end
 
@@ -258,12 +357,12 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+        expect(subject.whitelisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
       end
     end
   end
 
-  describe "ips" do
+  describe "#whitelist_ips" do
     subject do
       described_class.create!(ip_whitelist: ip_whitelist)
     end
@@ -281,7 +380,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "is is stripped" do
-        expect(subject.ips).to eq([ip_addr_1, ip_addr_2])
+        expect(subject.whitelisted_ips).to eq([ip_addr_1, ip_addr_2])
       end
     end
 
@@ -296,7 +395,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.ips).to eq([ip_addr_1, ip_addr_2])
+        expect(subject.whitelisted_ips).to eq([ip_addr_1, ip_addr_2])
       end
     end
 
@@ -312,7 +411,7 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.ips).to eq([ip_addr_1, ip_addr_2])
+        expect(subject.whitelisted_ips).to eq([ip_addr_1, ip_addr_2])
       end
     end
 
@@ -327,7 +426,142 @@ RSpec.describe RateLimit, type: :model do
       end
 
       it "they are stripped" do
-        expect(subject.ips).to eq([ip_addr_1, ip_addr_2])
+        expect(subject.whitelisted_ips).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+  end
+
+  describe "#blacklisted_domains" do
+    subject do
+      described_class.create!(domain_blacklist: domain_blacklist)
+    end
+
+    context "when there is extra whitespace" do
+      let :domain_blacklist do
+        <<-EOF
+          foo.com
+             bar.com
+
+        EOF
+      end
+
+      it "is is stripped" do
+        expect(subject.blacklisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+      end
+    end
+
+    context "when there are blank lines" do
+      let :domain_blacklist do
+        <<-EOF
+          foo.com
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+      end
+    end
+
+    context "when there are line comments" do
+      let :domain_blacklist do
+        <<-EOF
+          # This is a test
+          foo.com
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+      end
+    end
+
+    context "when there are inline comments" do
+      let :domain_blacklist do
+        <<-EOF
+          foo.com # This is a test
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_domains).to eq([/\Afoo.com\z/, /\Abar.com\z/])
+      end
+    end
+  end
+
+  describe "#blacklist_ips" do
+    subject do
+      described_class.create!(ip_blacklist: ip_blacklist)
+    end
+
+    let(:ip_addr_1) { IPAddr.new("10.0.1.1") }
+    let(:ip_addr_2) { IPAddr.new("192.168.1.0/24") }
+
+    context "when there is extra whitespace" do
+      let :ip_blacklist do
+        <<-EOF
+          10.0.1.1
+             192.168.1.0/24
+
+        EOF
+      end
+
+      it "is is stripped" do
+        expect(subject.blacklisted_ips).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+
+    context "when there are blank lines" do
+      let :ip_blacklist do
+        <<-EOF
+          10.0.1.1
+
+             192.168.1.0/24
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_ips).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+
+    context "when there are line comments" do
+      let :ip_blacklist do
+        <<-EOF
+          # This is a test
+          10.0.1.1
+
+             192.168.1.0/24
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_ips).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+
+    context "when there are inline comments" do
+      let :ip_blacklist do
+        <<-EOF
+          10.0.1.1 # This is a test
+
+             192.168.1.0/24
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.blacklisted_ips).to eq([ip_addr_1, ip_addr_2])
       end
     end
   end
