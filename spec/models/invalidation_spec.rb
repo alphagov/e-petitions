@@ -522,11 +522,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:petition_2) { FactoryGirl.create(:open_petition) }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, petition: petition_1) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, petition: petition_2) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, petition: petition_1) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, petition: petition_1) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, petition: petition_1) }
 
         subject { FactoryGirl.create(:invalidation, petition: petition_1) }
 
-        it "includes signatures for petition 1" do
+        it "includes validated signatures for petition 1" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures for petition 1" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures for petition 1" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures for petition 1" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures for petition 2" do
@@ -538,11 +553,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:petition) { FactoryGirl.create(:open_petition) }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, name: "Joe Public", petition: petition) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, name: "John Doe", petition: petition) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, name: "Joe Public", petition: petition) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, name: "Joe Public", petition: petition) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, name: "Joe Public", petition: petition) }
 
         subject { FactoryGirl.create(:invalidation, name: "Joe Public") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do
@@ -552,8 +582,20 @@ RSpec.describe Invalidation, type: :model do
         context "and the filter includes a LIKE wildcard" do
           subject { FactoryGirl.create(:invalidation, name: "Joe %") }
 
-          it "includes signatures that match" do
+          it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
+          end
+
+          it "includes pending signatures that match" do
+            expect(subject.matching_signatures).to include(signature_3)
+          end
+
+          it "excludes invalidated signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_4)
+          end
+
+          it "excludes fraudulent signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_5)
           end
 
           it "excludes signatures that don't match" do
@@ -566,11 +608,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:petition) { FactoryGirl.create(:open_petition) }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, postcode: "SW1A 0AA", petition: petition) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, postcode: "E1 6PL", petition: petition) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, postcode: "SW1A 0AA", petition: petition) }
 
         subject { FactoryGirl.create(:invalidation, postcode: "SW1A0AA") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do
@@ -582,11 +639,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:petition) { FactoryGirl.create(:open_petition) }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, ip_address: "10.0.1.1", petition: petition) }
 
         subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do
@@ -595,14 +667,32 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by email" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, email: "joe@public.com", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, email: "john@doe.com", petition: petition) }
+        let!(:petition_1) { FactoryGirl.create(:open_petition) }
+        let!(:petition_2) { FactoryGirl.create(:open_petition) }
+        let!(:petition_3) { FactoryGirl.create(:open_petition) }
+        let!(:petition_4) { FactoryGirl.create(:open_petition) }
+        let!(:signature_1) { FactoryGirl.create(:validated_signature, email: "joe@public.com", petition: petition_1) }
+        let!(:signature_2) { FactoryGirl.create(:validated_signature, email: "john@doe.com", petition: petition_1) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, email: "joe@public.com", petition: petition_2) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, email: "joe@public.com", petition: petition_3) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, email: "joe@public.com", petition: petition_4) }
 
         subject { FactoryGirl.create(:invalidation, email: "joe@public.com") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do
@@ -612,8 +702,20 @@ RSpec.describe Invalidation, type: :model do
         context "and the filter includes a LIKE wildcard" do
           subject { FactoryGirl.create(:invalidation, email: "%@public.com") }
 
-          it "includes signatures that match" do
+          it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
+          end
+
+          it "includes pending signatures that match" do
+            expect(subject.matching_signatures).to include(signature_3)
+          end
+
+          it "excludes invalidated signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_4)
+          end
+
+          it "excludes fraudulent signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_5)
           end
 
           it "excludes signatures that don't match" do
@@ -628,11 +730,26 @@ RSpec.describe Invalidation, type: :model do
         context "and just the start date is specified" do
           let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
           let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 2.weeks.ago, petition: petition) }
 
           subject { FactoryGirl.create(:invalidation, created_after: 3.weeks.ago) }
 
-          it "includes signatures that match" do
+          it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
+          end
+
+          it "includes pending signatures that match" do
+            expect(subject.matching_signatures).to include(signature_3)
+          end
+
+          it "excludes invalidated signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_4)
+          end
+
+          it "excludes fraudulent signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_5)
           end
 
           it "excludes signatures that don't match" do
@@ -643,11 +760,26 @@ RSpec.describe Invalidation, type: :model do
         context "and just the end date is specified" do
           let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
           let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
 
           subject { FactoryGirl.create(:invalidation, created_before: 3.weeks.ago) }
 
-          it "includes signatures that match" do
+          it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
+          end
+
+          it "includes pending signatures that match" do
+            expect(subject.matching_signatures).to include(signature_3)
+          end
+
+          it "excludes invalidated signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_4)
+          end
+
+          it "excludes fraudulent signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_5)
           end
 
           it "excludes signatures that don't match" do
@@ -658,11 +790,26 @@ RSpec.describe Invalidation, type: :model do
         context "and both the start date and end date are specified" do
           let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
           let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
 
           subject { FactoryGirl.create(:invalidation, created_before: 3.weeks.ago, created_after: 5.weeks.ago) }
 
-          it "includes signatures that match" do
+          it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
+          end
+
+          it "includes pending signatures that match" do
+            expect(subject.matching_signatures).to include(signature_3)
+          end
+
+          it "excludes invalidated signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_4)
+          end
+
+          it "excludes fraudulent signatures that match" do
+            expect(subject.matching_signatures).not_to include(signature_5)
           end
 
           it "excludes signatures that don't match" do
@@ -677,11 +824,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:bethnal) { FactoryGirl.create(:constituency, :bethnal_green_and_bow) }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, constituency_id: "3427", petition: petition) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, constituency_id: "3320", petition: petition) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, constituency_id: "3427", petition: petition) }
 
         subject { FactoryGirl.create(:invalidation, constituency_id: "3427") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do
@@ -695,11 +857,26 @@ RSpec.describe Invalidation, type: :model do
         let!(:australia) { FactoryGirl.create(:location, code: "AU", name: "Australia") }
         let!(:signature_1) { FactoryGirl.create(:validated_signature, location_code: "GB", petition: petition) }
         let!(:signature_2) { FactoryGirl.create(:validated_signature, location_code: "AU", petition: petition) }
+        let!(:signature_3) { FactoryGirl.create(:pending_signature, location_code: "GB", petition: petition) }
+        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, location_code: "GB", petition: petition) }
+        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, location_code: "GB", petition: petition) }
 
         subject { FactoryGirl.create(:invalidation, location_code: "GB") }
 
-        it "includes signatures that match" do
+        it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
         end
 
         it "excludes signatures that don't match" do

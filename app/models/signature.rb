@@ -56,6 +56,10 @@ class Signature < ActiveRecord::Base
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
 
+  def self.for_invalidating
+    where(state: [PENDING_STATE, VALIDATED_STATE])
+  end
+
   def self.for_timestamp(timestamp, since:)
     column = arel_table[column_name_for(timestamp)]
     where(column.eq(nil).or(column.lt(since)))

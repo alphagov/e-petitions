@@ -144,7 +144,7 @@ class Invalidation < ActiveRecord::Base
   end
 
   def matching_signatures
-    scope = Signature.all
+    scope = Signature.for_invalidating
     scope = petition_scope(scope) if petition_id?
     scope = name_scope(scope) if name?
     scope = postcode_scope(scope) if postcode?
