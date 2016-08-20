@@ -245,6 +245,7 @@ class Petition < ActiveRecord::Base
       where('petitions.state = ?', OPEN_STATE).
       where('petitions.last_signed_at > ?', since).
       where('signatures.validated_at > ?', since).
+      where('signatures.invalidated_at IS NULL').
       group('petitions.id').order('signature_count_in_period DESC').
       limit(limit)
     end
