@@ -1503,6 +1503,13 @@ CREATE INDEX index_signatures_on_created_at_and_ip_address_and_petition_id ON si
 
 
 --
+-- Name: index_signatures_on_domain; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_domain ON signatures USING btree ("substring"((email)::text, ("position"((email)::text, '@'::text) + 1)));
+
+
+--
 -- Name: index_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1535,6 +1542,13 @@ CREATE INDEX index_signatures_on_petition_id ON signatures USING btree (petition
 --
 
 CREATE INDEX index_signatures_on_petition_id_and_location_code ON signatures USING btree (petition_id, location_code);
+
+
+--
+-- Name: index_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_state_and_petition_id ON signatures USING btree (state, petition_id);
 
 
 --
@@ -1822,4 +1836,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160713130452');
 INSERT INTO schema_migrations (version) VALUES ('20160715092819');
 
 INSERT INTO schema_migrations (version) VALUES ('20160716164929');
+
+INSERT INTO schema_migrations (version) VALUES ('20160819062044');
+
+INSERT INTO schema_migrations (version) VALUES ('20160819062058');
 

@@ -598,4 +598,12 @@ class Petition < ActiveRecord::Base
       'awaiting'
     end
   end
+
+  def fraudulent_domains
+    @fraudulent_domains ||= signatures.fraudulent_domains
+  end
+
+  def fraudulent_domains?
+    !fraudulent_domains.empty?
+  end
 end

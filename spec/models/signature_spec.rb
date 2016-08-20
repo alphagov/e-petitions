@@ -471,6 +471,23 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".fraudulent_domains" do
+    subject do
+      described_class.fraudulent_domains
+    end
+
+    before do
+      FactoryGirl.create(:fraudulent_signature, email: "alice@foo.com")
+      FactoryGirl.create(:fraudulent_signature, email: "bob@bar.com")
+      FactoryGirl.create(:fraudulent_signature, email: "charlie@foo.com")
+    end
+
+    it "returns a hash of domains and counts in descending order" do
+      expect(subject).to be_an_instance_of(Hash)
+      expect(subject.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
     let(:creator) { FactoryGirl.create(:pending_signature) }

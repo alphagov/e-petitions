@@ -82,6 +82,14 @@ class Signature < ActiveRecord::Base
     raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
   end
 
+  def self.fraudulent_domains
+    where(state: FRAUDULENT_STATE).
+    select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+    group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+    order("COUNT(*) DESC").
+    count(:all)
+  end
+
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,
