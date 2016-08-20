@@ -8,31 +8,43 @@
         Domain Whitelist |
         <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
         <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
-        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %> |
+        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
       <% elsif params[:tab] == "domain_blacklist" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
         <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
         Domain Blacklist |
         <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
-        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %> |
+        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
       <% elsif params[:tab] == "ip_whitelist" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
         <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
         <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
         IP Whitelist |
-        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %> |
+        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
       <% elsif params[:tab] == "ip_blacklist" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
         <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
         <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
         <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
-        IP Blacklist
+        IP Blacklist |
+        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
+      <% elsif params[:tab] == "countries" %>
+        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
+        <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %> |
+        Countries
       <% else %>
         Rate Limits |
         <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
         <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
         <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
-        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %> |
+        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
       <% end %>
     </p>
 
@@ -72,6 +84,26 @@
           <%= error_messages_for_field @rate_limit, :ip_blacklist %>
           <%= form.text_area :ip_blacklist, tabindex: increment, rows: 15, class: 'form-control' %>
           <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
+        <% end %>
+
+      <% elsif params[:tab] == "countries" %>
+        <%= hidden_field_tag :tab, "countries" %>
+
+        <%= form_row for: [form.object, :countries] do %>
+          <%= error_messages_for_field @rate_limit, :countries %>
+          <%= form.text_area :countries, tabindex: increment, rows: 8, class: 'form-control' %>
+          <p><small>Add countries that are allowed to sign petitions, e.g. United Kingdom</small><p>
+        <% end %>
+
+        <%= form_row for: [form.object, :geoblocking_enabled], class: 'inline' do %>
+          <%= form.label :geoblocking_enabled, "Enable geoblocking of signatures?", class: 'form-label' %>
+          <%= error_messages_for_field @rate_limit, :geoblocking_enabled %>
+          <%= form.label :geoblocking_enabled_true, nil, class: 'block-label' do %>
+            <%= form.radio_button :geoblocking_enabled, true %> Yes
+          <% end %>
+          <%= form.label :geoblocking_enabled_false, nil, class: 'block-label' do %>
+            <%= form.radio_button :geoblocking_enabled, false %> No
+          <% end %>
         <% end %>
 
       <% else %>

@@ -15,6 +15,7 @@ class RateLimit < ActiveRecord::Base
   validates :ip_whitelist, length: { maximum: 10000, allow_blank: true }
   validates :domain_blacklist, length: { maximum: 50000, allow_blank: true }
   validates :ip_blacklist, length: { maximum: 50000, allow_blank: true }
+  validates :countries, length: { maximum: 2000, allow_blank: true }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?
@@ -59,6 +60,7 @@ class RateLimit < ActiveRecord::Base
     return false if ip_whitelisted?(signature.ip_address)
     return true if domain_blacklisted?(signature.domain)
     return true if ip_blacklisted?(signature.ip_address)
+    return true if ip_geoblocked?(signature.ip_address)
 
     burst_rate_exceeded?(signature) || sustained_rate_exceeded?(signature)
   end
@@ -97,6 +99,15 @@ class RateLimit < ActiveRecord::Base
 
   def blacklisted_ips
     @blacklisted_ips ||= build_ip_blacklist
+  end
+
+  def allowed_countries
+    @allowed_countries ||= build_allowed_countries
+  end
+
+  def countries=(value)
+    @allowed_countries = nil
+    super(normalize_lines(value))
   end
 
   private
@@ -151,6 +162,32 @@ class RateLimit < ActiveRecord::Base
 
   def ip_blacklisted?(ip)
     blacklisted_ips.any?{ |i| i.include?(ip) }
+  end
+
+  def build_allowed_countries
+    strip_blank_lines(strip_comments(countries)).map(&:strip)
+  end
+
+  def ip_geoblocked?(ip)
+    geoblocking_enabled? && country_blocked?(ip)
+  end
+
+  def country_blocked?(ip)
+    allowed_countries.exclude?(country_for_ip(ip))
+  end
+
+  def country_for_ip(ip)
+    result = geoip_db.lookup(ip)
+
+    if result.found?
+      result.country.name
+    else
+      "UNKNOWN"
+    end
+  end
+
+  def geoip_db
+    @geoip_db ||= MaxMindDB.new(ENV.fetch('GEOIP_DB_PATH'))
   end
 
   def convert_glob(pattern)

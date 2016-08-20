@@ -36,6 +36,7 @@ gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
 gem 'paperclip'
+gem 'maxminddb'
 
 # Two AWS libraries:
 #   - aws-sdk v2 for CodeDeploy, which neither Fog nor aws-sdk v1 support

@@ -99,9 +99,51 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
+      context "when submitting just the domain blacklist" do
+        let :params do
+          { domain_blacklist: "example.com" }
+        end
+
+        it "redirects to the edit page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Rate limits updated successfully")
+        end
+      end
+
       context "when submitting just the ip whitelist" do
         let :params do
-          { domain_whitelist: "127.0.0.1" }
+          { ip_whitelist: "127.0.0.1" }
+        end
+
+        it "redirects to the edit page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Rate limits updated successfully")
+        end
+      end
+
+      context "when submitting just the ip blacklist" do
+        let :params do
+          { ip_blacklist: "127.0.0.1" }
+        end
+
+        it "redirects to the edit page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Rate limits updated successfully")
+        end
+      end
+
+      context "when submitting just the countries list" do
+        let :params do
+          { countries: "127.0.0.1", geoblocking_enabled: "true" }
         end
 
         it "redirects to the edit page" do

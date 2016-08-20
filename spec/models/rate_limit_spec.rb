@@ -16,6 +16,7 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_length_of(:ip_whitelist).is_at_most(10000) }
     it { is_expected.to validate_length_of(:domain_blacklist).is_at_most(50000) }
     it { is_expected.to validate_length_of(:ip_blacklist).is_at_most(50000) }
+    it { is_expected.to validate_length_of(:countries).is_at_most(2000) }
 
     context "when the sustained rate is less than the burst rate" do
       before do
@@ -94,12 +95,16 @@ RSpec.describe RateLimit, type: :model do
     let(:domain_blacklist) { "" }
     let(:ip_blacklist) { "" }
 
+    let(:countries) { "" }
+    let(:geoblocking_enabled) { false }
+
     subject do
       described_class.create!(
         burst_rate: 10, burst_period: 60,
         sustained_rate: 20, sustained_period: 300,
         domain_whitelist: domain_whitelist, ip_whitelist: ip_whitelist,
-        domain_blacklist: domain_blacklist, ip_blacklist: ip_blacklist
+        domain_blacklist: domain_blacklist, ip_blacklist: ip_blacklist,
+        countries: countries, geoblocking_enabled: geoblocking_enabled
       )
     end
 
@@ -199,6 +204,38 @@ RSpec.describe RateLimit, type: :model do
       end
     end
 
+    shared_examples_for "GeoIP blocking" do
+      let(:geoblocking_enabled) { true }
+      let(:countries) { "United Kingdom" }
+      let(:geoip_db_path) { "/path/to/GeoLite2-Country.mmdb" }
+      let(:geoip_db) { double(:geoip_db) }
+      let(:geoip_result) { double(:geoip_result) }
+      let(:country) { double(:country) }
+
+      before do
+        allow(MaxMindDB).to receive(:new).with(geoip_db_path).and_return(geoip_db)
+        allow(geoip_db).to receive(:lookup).with("12.34.56.78").and_return(geoip_result)
+        allow(signature).to receive(:ip_address).and_return("12.34.56.78")
+        allow(geoip_result).to receive(:found?).and_return(true)
+        allow(geoip_result).to receive(:country).and_return(country)
+      end
+
+      it "returns false when the country is allowed" do
+        allow(country).to receive(:name).and_return("United Kingdom")
+        expect(subject.exceeded?(signature)).to eq(false)
+      end
+
+      it "returns true when the country is not allowed" do
+        allow(country).to receive(:name).and_return("Neverland")
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+
+      it "returns true when a result is not found" do
+        allow(geoip_result).to receive(:found?).and_return(false)
+        expect(subject.exceeded?(signature)).to eq(true)
+      end
+    end
+
     context "when both rates are below the threshold" do
       before do
         allow(signature).to receive(:rate).with(60).and_return(5)
@@ -211,6 +248,7 @@ RSpec.describe RateLimit, type: :model do
 
       it_behaves_like "domain blacklisting"
       it_behaves_like "IP blacklisting"
+      it_behaves_like "GeoIP blocking"
     end
 
     context "when the burst rate is above the threshold" do
@@ -296,6 +334,16 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
+  describe "#countries=" do
+    subject do
+      described_class.new(countries: " United Kingdom\r\nIreland\r\n")
+    end
+
+    it "normalizes line endings and strips whitespace" do
+      expect(subject.countries).to eq("United Kingdom\nIreland")
+    end
+  end
+
   describe "#whitelisted_domains" do
     subject do
       described_class.create!(domain_whitelist: domain_whitelist)
@@ -362,7 +410,7 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
-  describe "#whitelist_ips" do
+  describe "#whitelisted_ips" do
     subject do
       described_class.create!(ip_whitelist: ip_whitelist)
     end
@@ -497,7 +545,7 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
-  describe "#blacklist_ips" do
+  describe "#blacklisted_ips" do
     subject do
       described_class.create!(ip_blacklist: ip_blacklist)
     end
@@ -562,6 +610,75 @@ RSpec.describe RateLimit, type: :model do
 
       it "they are stripped" do
         expect(subject.blacklisted_ips).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+  end
+
+  describe "#allowed_countries" do
+    subject do
+      described_class.create!(countries: countries)
+    end
+
+    let(:country_1) { "United Kingdom" }
+    let(:country_2) { "Ireland" }
+
+    context "when there is extra whitespace" do
+      let :countries do
+        <<-EOF
+          United Kingdom
+             Ireland
+
+        EOF
+      end
+
+      it "is is stripped" do
+        expect(subject.allowed_countries).to eq([country_1, country_2])
+      end
+    end
+
+    context "when there are blank lines" do
+      let :countries do
+        <<-EOF
+          United Kingdom
+
+             Ireland
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.allowed_countries).to eq([country_1, country_2])
+      end
+    end
+
+    context "when there are line comments" do
+      let :countries do
+        <<-EOF
+          # This is a test
+          United Kingdom
+
+             Ireland
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.allowed_countries).to eq([country_1, country_2])
+      end
+    end
+
+    context "when there are inline comments" do
+      let :countries do
+        <<-EOF
+          United Kingdom # This is a test
+
+             Ireland
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.allowed_countries).to eq([country_1, country_2])
       end
     end
   end
