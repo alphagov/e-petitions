@@ -44,7 +44,7 @@
         <%= form_row for: [form.object, :domain_whitelist] do %>
           <%= error_messages_for_field @rate_limit, :domain_whitelist %>
           <%= form.text_area :domain_whitelist, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use *.example.com or **.example.com for wildcard matching</small><p>
+          <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small><p>
         <% end %>
 
       <% elsif params[:tab] == "domain_blacklist" %>
@@ -53,7 +53,7 @@
         <%= form_row for: [form.object, :domain_blacklist] do %>
           <%= error_messages_for_field @rate_limit, :domain_blacklist %>
           <%= form.text_area :domain_blacklist, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use *.example.com or **.example.com for wildcard matching</small><p>
+          <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small><p>
         <% end %>
 
       <% elsif params[:tab] == "ip_whitelist" %>
