@@ -639,7 +639,9 @@ CREATE TABLE rate_limits (
     domain_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
     ip_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    domain_blacklist character varying(50000) DEFAULT ''::character varying NOT NULL,
+    ip_blacklist character varying(50000) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -1840,4 +1842,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160716164929');
 INSERT INTO schema_migrations (version) VALUES ('20160819062044');
 
 INSERT INTO schema_migrations (version) VALUES ('20160819062058');
+
+INSERT INTO schema_migrations (version) VALUES ('20160820132056');
 

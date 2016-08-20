@@ -3,25 +3,43 @@
 <div class="grid-row">
   <div class="column-two-thirds extra-gutter">
     <p>
-      <% if params[:tab] == "domains" %>
+      <% if params[:tab] == "domain_whitelist" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
         Domain Whitelist |
-        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ips') %>
-      <% elsif params[:tab] == "ips" %>
+        <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+      <% elsif params[:tab] == "domain_blacklist" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domains') %> |
-        IP Whitelist
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
+        Domain Blacklist |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+      <% elsif params[:tab] == "ip_whitelist" %>
+        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
+        <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
+        IP Whitelist |
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
+      <% elsif params[:tab] == "ip_blacklist" %>
+        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
+        <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
+        IP Blacklist
       <% else %>
         Rate Limits |
-        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domains') %> |
-        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ips') %>
+        <%= link_to "Domain Whitelist", edit_admin_rate_limits_path(tab: 'domain_whitelist') %> |
+        <%= link_to "Domain Blacklist", edit_admin_rate_limits_path(tab: 'domain_blacklist') %> |
+        <%= link_to "IP Whitelist", edit_admin_rate_limits_path(tab: 'ip_whitelist') %> |
+        <%= link_to "IP Blacklist", edit_admin_rate_limits_path(tab: 'ip_blacklist') %>
       <% end %>
     </p>
 
     <%= form_for @rate_limit, url: admin_rate_limits_path do |form| %>
 
-      <% if params[:tab] == "domains" %>
-        <%= hidden_field_tag :tab, "domains" %>
+      <% if params[:tab] == "domain_whitelist" %>
+        <%= hidden_field_tag :tab, "domain_whitelist" %>
 
         <%= form_row for: [form.object, :domain_whitelist] do %>
           <%= error_messages_for_field @rate_limit, :domain_whitelist %>
@@ -29,12 +47,30 @@
           <p><small>use *.example.com or **.example.com for wildcard matching</small><p>
         <% end %>
 
-      <% elsif params[:tab] == "ips" %>
-        <%= hidden_field_tag :tab, "ips" %>
+      <% elsif params[:tab] == "domain_blacklist" %>
+        <%= hidden_field_tag :tab, "domain_blacklist" %>
+
+        <%= form_row for: [form.object, :domain_blacklist] do %>
+          <%= error_messages_for_field @rate_limit, :domain_blacklist %>
+          <%= form.text_area :domain_blacklist, tabindex: increment, rows: 15, class: 'form-control' %>
+          <p><small>use *.example.com or **.example.com for wildcard matching</small><p>
+        <% end %>
+
+      <% elsif params[:tab] == "ip_whitelist" %>
+        <%= hidden_field_tag :tab, "ip_whitelist" %>
 
         <%= form_row for: [form.object, :ip_whitelist] do %>
           <%= error_messages_for_field @rate_limit, :ip_whitelist %>
           <%= form.text_area :ip_whitelist, tabindex: increment, rows: 15, class: 'form-control' %>
+          <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
+        <% end %>
+
+      <% elsif params[:tab] == "ip_blacklist" %>
+        <%= hidden_field_tag :tab, "ip_blacklist" %>
+
+        <%= form_row for: [form.object, :ip_blacklist] do %>
+          <%= error_messages_for_field @rate_limit, :ip_blacklist %>
+          <%= form.text_area :ip_blacklist, tabindex: increment, rows: 15, class: 'form-control' %>
           <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
         <% end %>
 
