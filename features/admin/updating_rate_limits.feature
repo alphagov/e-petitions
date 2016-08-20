@@ -23,11 +23,25 @@ Feature: Sysadmin updates the rate limits
     And I follow "Rate Limits"
     Then I should see "Edit Rate Limits"
     When I follow "Domain Whitelist"
-    Then I should see "use *.example.com or **.example.com for wildcard matching"
+    Then I should see "use *.example.com to match one subdomain and **.example.com to match nested subdomains"
     When I fill in "rate_limit_domain_whitelist" with "foo("
     And I press "Save"
     Then I should see "Domain whitelist is invalid"
     When I fill in "rate_limit_domain_whitelist" with "example.com"
+    And I press "Save"
+    Then I should see "Rate limits updated successfully"
+
+  Scenario: Sysadmin updates the domain blacklist
+    When I am logged in as a sysadmin
+    And I am on the admin home page
+    And I follow "Rate Limits"
+    Then I should see "Edit Rate Limits"
+    When I follow "Domain Blacklist"
+    Then I should see "use *.example.com to match one subdomain and **.example.com to match nested subdomains"
+    When I fill in "rate_limit_domain_blacklist" with "foo("
+    And I press "Save"
+    Then I should see "Domain blacklist is invalid"
+    When I fill in "rate_limit_domain_blacklist" with "example.com"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
@@ -42,5 +56,19 @@ Feature: Sysadmin updates the rate limits
     And I press "Save"
     Then I should see "IP whitelist is invalid"
     When I fill in "rate_limit_ip_whitelist" with "127.0.0.1/32"
+    And I press "Save"
+    Then I should see "Rate limits updated successfully"
+
+  Scenario: Sysadmin updates the IP whitelist
+    When I am logged in as a sysadmin
+    And I am on the admin home page
+    And I follow "Rate Limits"
+    Then I should see "Edit Rate Limits"
+    When I follow "IP Blacklist"
+    Then I should see "use CIDR addressing to match ranges, e.g. 192.168.0.0/24"
+    When I fill in "rate_limit_ip_blacklist" with "127"
+    And I press "Save"
+    Then I should see "IP blacklist is invalid"
+    When I fill in "rate_limit_ip_blacklist" with "127.0.0.1/32"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
