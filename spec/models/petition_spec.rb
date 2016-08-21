@@ -139,6 +139,16 @@ RSpec.describe Petition, type: :model do
 
         expect(Petition.trending.to_a).not_to include(petition)
       end
+
+      it "excludes signatures that have been invalidated" do
+        petition = Petition.trending.first
+        signature = FactoryGirl.create(:validated_signature, petition: petition)
+
+        expect(Petition.trending.first.signature_count_in_period).to eq(12)
+
+        signature.invalidate!
+        expect(Petition.trending.first.signature_count_in_period).to eq(11)
+      end
     end
 
     context "threshold" do
