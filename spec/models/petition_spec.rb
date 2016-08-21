@@ -1311,7 +1311,10 @@ RSpec.describe Petition, type: :model do
       FactoryGirl.create(:open_petition, {
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
-        updated_at: 2.days.ago
+        updated_at: 2.days.ago,
+        response_threshold_reached_at: 2.days.ago,
+        debate_threshold_reached_at: 2.days.ago,
+        debate_state: 'awaiting'
       })
     end
 
@@ -1333,6 +1336,37 @@ RSpec.describe Petition, type: :model do
         expect{
           petition.decrement_signature_count!
         }.not_to change{ petition.signature_count }
+      end
+    end
+
+    context "when the signature count crosses below the threshold for a response" do
+      let(:signature_count) { 10 }
+
+      before do
+        expect(Site).to receive(:threshold_for_response).and_return(10)
+      end
+
+      it "resets the timestamp" do
+        petition.decrement_signature_count!
+        expect(petition.response_threshold_reached_at).to be_nil
+      end
+    end
+
+    context "when the signature count crosses below the threshold for a debate" do
+      let(:signature_count) { 100 }
+
+      before do
+        expect(Site).to receive(:threshold_for_debate).and_return(100)
+      end
+
+      it "records the time it happened" do
+        petition.decrement_signature_count!
+        expect(petition.debate_threshold_reached_at).to be_nil
+      end
+
+      it "sets the debate_state to 'pending'" do
+        petition.decrement_signature_count!
+        expect(petition.debate_state).to eq("pending")
       end
     end
   end

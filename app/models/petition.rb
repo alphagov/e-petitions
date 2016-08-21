@@ -359,6 +359,15 @@ class Petition < ActiveRecord::Base
   def decrement_signature_count!(time = Time.current)
     updates = []
 
+    if below_threshold_for_debate?
+      updates << "debate_threshold_reached_at = NULL"
+      updates << "debate_state = 'pending'"
+    end
+
+    if below_threshold_for_response?
+      updates << "response_threshold_reached_at = NULL"
+    end
+
     updates << "signature_count = greatest(signature_count - 1, 1)"
     updates << "updated_at = :now"
 
@@ -382,6 +391,18 @@ class Petition < ActiveRecord::Base
   def at_threshold_for_debate?
     unless debate_threshold_reached_at?
       signature_count >= Site.threshold_for_debate - 1
+    end
+  end
+
+  def below_threshold_for_response?
+    if response_threshold_reached_at?
+      signature_count <= Site.threshold_for_response
+    end
+  end
+
+  def below_threshold_for_debate?
+    if debate_threshold_reached_at?
+      signature_count <= Site.threshold_for_debate
     end
   end
 
