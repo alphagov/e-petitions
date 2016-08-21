@@ -166,13 +166,15 @@ class Invalidation < ActiveRecord::Base
       counted_at: Time.current
     )
 
-    matching_signatures.find_in_batches(batch_size: 100) do |signatures|
-      signatures.each do |signature|
-        signature.invalidate!(Time.current, self)
-        increment!(:invalidated_count)
-      end
+    Appsignal.without_instrumentation do
+      matching_signatures.find_in_batches(batch_size: 100) do |signatures|
+        signatures.each do |signature|
+          signature.invalidate!(Time.current, self)
+          increment!(:invalidated_count)
+        end
 
-      reload and return if cancelled?
+        reload and return if cancelled?
+      end
     end
 
     update(completed_at: Time.current)
