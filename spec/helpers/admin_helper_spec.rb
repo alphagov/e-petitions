@@ -113,4 +113,206 @@ RSpec.describe AdminHelper, type: :helper do
       expect(subject).to have_css("option[value='running'][selected]")
     end
   end
+
+  describe "#trending_domains" do
+    let(:rate_limit) { double(:rate_limit) }
+    let(:whitelist) { [/\Afoo.com\z/] }
+    let(:now) { Time.current.beginning_of_minute }
+
+    let(:domains) do
+      { "foo.com" => 2, "bar.com" => 1 }
+    end
+
+    before do
+      expect(Signature).to receive(:trending_domains).with(args).and_return(domains)
+      expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
+      expect(rate_limit).to receive(:whitelisted_domains).and_return(whitelist)
+    end
+
+    around do |example|
+      travel_to(now) { example.run }
+    end
+
+    context "with the default arguments" do
+      let(:args) do
+        { since: 1.hour.ago, limit: 40 }
+      end
+
+      subject do
+        helper.trending_domains
+      end
+
+      it "returns non-whitelisted trending domains" do
+        expect(subject).to eq([["bar.com", 1]])
+      end
+    end
+
+    context "when overriding the since argument" do
+      let(:args) do
+        { since: 2.hours.ago, limit: 40 }
+      end
+
+      subject do
+        helper.trending_domains(since: 2.hours.ago)
+      end
+
+      it "returns non-whitelisted trending domains" do
+        expect(subject).to eq([["bar.com", 1]])
+      end
+    end
+
+    context "when overriding the limit argument" do
+      let(:args) do
+        { since: 1.hour.ago, limit: 50 }
+      end
+
+      subject do
+        helper.trending_domains(limit: 20)
+      end
+
+      it "returns non-whitelisted trending domains" do
+        expect(subject).to eq([["bar.com", 1]])
+      end
+    end
+  end
+
+  describe "#trending_domains?" do
+    let(:rate_limit) { double(:rate_limit) }
+    let(:whitelist) { [/\Afoo.com\z/] }
+
+    before do
+      expect(Signature).to receive(:trending_domains).and_return(ips)
+      expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
+      expect(rate_limit).to receive(:whitelisted_domains).and_return(whitelist)
+    end
+
+    context "when there are non-whitelisted trending domains" do
+      let(:ips) do
+        { "foo.com" => 2, "bar.com" => 1 }
+      end
+
+      subject do
+        helper.trending_domains?
+      end
+
+      it "returns true" do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context "when there aren't any non-whitelisted trending IP addresses" do
+      let(:ips) do
+        { "foo.com" => 2 }
+      end
+
+      subject do
+        helper.trending_domains?
+      end
+
+      it "returns false" do
+        expect(subject).to eq(false)
+      end
+    end
+  end
+
+  describe "#trending_ips" do
+    let(:rate_limit) { double(:rate_limit) }
+    let(:whitelist) { [IPAddr.new("192.168.1.1")] }
+    let(:now) { Time.current.beginning_of_minute }
+
+    let(:ips) do
+      { "192.168.1.1" => 2, "10.0.1.1" => 1 }
+    end
+
+    before do
+      expect(Signature).to receive(:trending_ips).with(args).and_return(ips)
+      expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
+      expect(rate_limit).to receive(:whitelisted_ips).and_return(whitelist)
+    end
+
+    around do |example|
+      travel_to(now) { example.run }
+    end
+
+    context "with the default arguments" do
+      let(:args) do
+        { since: 1.hour.ago, limit: 40 }
+      end
+
+      subject do
+        helper.trending_ips
+      end
+
+      it "returns non-whitelisted trending IP addresses" do
+        expect(subject).to eq([["10.0.1.1", 1]])
+      end
+    end
+
+    context "when overriding the since argument" do
+      let(:args) do
+        { since: 2.hours.ago, limit: 40 }
+      end
+
+      subject do
+        helper.trending_ips(since: 2.hours.ago)
+      end
+
+      it "returns non-whitelisted trending IP addresses" do
+        expect(subject).to eq([["10.0.1.1", 1]])
+      end
+    end
+
+    context "when overriding the limit argument" do
+      let(:args) do
+        { since: 1.hour.ago, limit: 50 }
+      end
+
+      subject do
+        helper.trending_ips(limit: 20)
+      end
+
+      it "returns non-whitelisted trending IP addresses" do
+        expect(subject).to eq([["10.0.1.1", 1]])
+      end
+    end
+  end
+
+  describe "#trending_ips?" do
+    let(:rate_limit) { double(:rate_limit) }
+    let(:whitelist) { [IPAddr.new("192.168.1.1")] }
+
+    before do
+      expect(Signature).to receive(:trending_ips).and_return(ips)
+      expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
+      expect(rate_limit).to receive(:whitelisted_ips).and_return(whitelist)
+    end
+
+    context "when there are non-whitelisted trending IP addresses" do
+      let(:ips) do
+        { "192.168.1.1" => 2, "10.0.1.1" => 1 }
+      end
+
+      subject do
+        helper.trending_ips?
+      end
+
+      it "returns true" do
+        expect(subject).to eq(true)
+      end
+    end
+
+    context "when there aren't any non-whitelisted trending IP addresses" do
+      let(:ips) do
+        { "192.168.1.1" => 2 }
+      end
+
+      subject do
+        helper.trending_ips?
+      end
+
+      it "returns false" do
+        expect(subject).to eq(false)
+      end
+    end
+  end
 end

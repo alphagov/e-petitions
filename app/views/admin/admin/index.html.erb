@@ -21,4 +21,36 @@
       </ul>
     <% end %>
   </div>
+
+  <div class="signature-trends column-third">
+    <dl>
+      <% if trending_domains? %>
+        <dt>Trending Domains</dt>
+        <dd>
+          <table class="trending-domains">
+            <% trending_domains.each do |domain, count| %>
+              <tr>
+                <td><%= domain %></td>
+                <td><%= number_with_delimiter(count) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </dd>
+      <% end %>
+
+      <% if trending_ips? %>
+        <dt>Trending IP Addresses</dt>
+        <dd>
+          <table class="trending-ips">
+            <% trending_ips.each do |ip, count| %>
+              <tr>
+                <td><%= ip %></td>
+                <td><%= number_with_delimiter(count) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </dd>
+      <% end %>
+    </dl>
+  </div>
 </div>
