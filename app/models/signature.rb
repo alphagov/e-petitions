@@ -92,6 +92,26 @@ class Signature < ActiveRecord::Base
     count(:all)
   end
 
+  def self.trending_domains(since: 1.hour.ago, limit: 20)
+    select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+    where(arel_table[:validated_at].gt(since)).
+    where(arel_table[:invalidated_at].eq(nil)).
+    group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+    order("COUNT(*) DESC").
+    limit(limit).
+    count(:all)
+  end
+
+  def self.trending_ips(since: 1.hour.ago, limit: 20)
+    select(:ip_address).
+    where(arel_table[:validated_at].gt(since)).
+    where(arel_table[:invalidated_at].eq(nil)).
+    group(:ip_address).
+    order("COUNT(*) DESC").
+    limit(limit).
+    count(:all)
+  end
+
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,

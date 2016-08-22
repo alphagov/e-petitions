@@ -506,6 +506,104 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".trending_domains" do
+    before do
+      FactoryGirl.create(:validated_signature, email: "alice@foo.com", validated_at: 30.minutes.ago)
+      FactoryGirl.create(:validated_signature, email: "bob@bar.com", validated_at: 30.minutes.ago)
+      FactoryGirl.create(:validated_signature, email: "charlie@foo.com", validated_at: 30.minutes.ago)
+    end
+
+    it "returns a hash of domains and counts in descending order" do
+      domains = described_class.trending_domains
+
+      expect(domains).to be_an_instance_of(Hash)
+      expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
+    end
+
+    it "ignores pending signatures" do
+      FactoryGirl.create(:pending_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      domains = described_class.trending_domains
+
+      expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
+    end
+
+    it "ignores invalidated signatures" do
+      FactoryGirl.create(:invalidated_signature, email: "derek@foo.com", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      domains = described_class.trending_domains
+
+      expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
+    end
+
+    it "ignores fraudulent signatures" do
+      FactoryGirl.create(:fraudulent_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      domains = described_class.trending_domains
+
+      expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
+    end
+
+    it "can override the timespan" do
+      FactoryGirl.create(:validated_signature, email: "derek@foo.com", validated_at: 5.minutes.ago)
+      domains = described_class.trending_domains(since: 10.minutes.ago)
+
+      expect(domains.to_a).to eq([["foo.com", 1]])
+    end
+
+    it "can override the number returned" do
+      domains = described_class.trending_domains(limit: 1)
+
+      expect(domains.to_a).to eq([["foo.com", 2]])
+    end
+  end
+
+  describe ".trending_ips" do
+    before do
+      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+      FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", validated_at: 30.minutes.ago)
+      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+    end
+
+    it "returns a hash of domains and counts in descending order" do
+      domains = described_class.trending_ips
+
+      expect(domains).to be_an_instance_of(Hash)
+      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+    end
+
+    it "ignores pending signatures" do
+      FactoryGirl.create(:pending_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      domains = described_class.trending_ips
+
+      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+    end
+
+    it "ignores invalidated signatures" do
+      FactoryGirl.create(:invalidated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      domains = described_class.trending_ips
+
+      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+    end
+
+    it "ignores fraudulent signatures" do
+      FactoryGirl.create(:fraudulent_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      domains = described_class.trending_ips
+
+      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+    end
+
+    it "can override the timespan" do
+      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 5.minutes.ago)
+      domains = described_class.trending_ips(since: 10.minutes.ago)
+
+      expect(domains.to_a).to eq([["10.0.1.1", 1]])
+    end
+
+    it "can override the number returned" do
+      domains = described_class.trending_ips(limit: 1)
+
+      expect(domains.to_a).to eq([["10.0.1.1", 2]])
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
     let(:creator) { FactoryGirl.create(:pending_signature) }

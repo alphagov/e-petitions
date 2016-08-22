@@ -1526,6 +1526,13 @@ CREATE INDEX index_signatures_on_invalidation_id ON signatures USING btree (inva
 
 
 --
+-- Name: index_signatures_on_ip_address_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_ip_address_and_petition_id ON signatures USING btree (ip_address, petition_id);
+
+
+--
 -- Name: index_signatures_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1844,4 +1851,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160819062044');
 INSERT INTO schema_migrations (version) VALUES ('20160819062058');
 
 INSERT INTO schema_migrations (version) VALUES ('20160820132056');
+
+INSERT INTO schema_migrations (version) VALUES ('20160822064645');
 
