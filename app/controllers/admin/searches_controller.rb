@@ -3,6 +3,8 @@ class Admin::SearchesController < Admin::AdminController
   def show
     if query_is_number?
       find_petition_by_id
+    elsif query_is_ip?
+      find_signatures_by_ip
     elsif query_is_email?
       find_signatures_by_email
     elsif query_is_name?
@@ -15,12 +17,21 @@ class Admin::SearchesController < Admin::AdminController
   end
 
   private
+
   def query
     @query ||= params.fetch(:q, '')
   end
 
+  def ip_address
+    @ip_address ||= @query
+  end
+
   def name
     @name ||= @query.gsub(/\A"|"\Z/, '')
+  end
+
+  def email
+    @email ||= @query
   end
 
   def tag
@@ -35,8 +46,12 @@ class Admin::SearchesController < Admin::AdminController
     end
   end
 
+  def find_signatures_by_ip
+    @signatures = Signature.for_ip(ip_address).paginate(page: params[:page], per_page: 50)
+  end
+
   def find_signatures_by_email
-    @signatures = Signature.for_email(query).paginate(page: params[:page], per_page: 50)
+    @signatures = Signature.for_email(email).paginate(page: params[:page], per_page: 50)
   end
 
   def find_signatures_by_name
@@ -53,6 +68,10 @@ class Admin::SearchesController < Admin::AdminController
 
   def query_is_number?
     /^\d+$/ =~ query
+  end
+
+  def query_is_ip?
+    /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
   end
 
   def query_is_email?

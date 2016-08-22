@@ -55,6 +55,7 @@ class Signature < ActiveRecord::Base
   scope :fraudulent, -> { where(state: FRAUDULENT_STATE) }
   scope :invalidated, -> { where(state: INVALIDATED_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
+  scope :for_ip, ->(ip) { where(ip_address: ip) }
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
 

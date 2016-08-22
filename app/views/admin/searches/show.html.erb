@@ -31,10 +31,14 @@
 
 <% else %>
   <p>
-    <% if @name %>
-      No signatures found for name <%= @query %>
+    <% if defined?(@name) %>
+      No signatures found for name <%= @name.inspect %>
+    <% elsif defined?(@ip_address) %>
+      No signatures found for IP address <%= @ip_address.inspect %>
+    <% elsif defined?(@email) %>
+      No signatures found for email address <%= mail_to @email %>
     <% else %>
-      No signatures found for email address <%= mail_to @query %>
+      No signatures found %>
     <% end %>
   </p>
 <% end %>

@@ -11,6 +11,13 @@ Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, name_or_emai
   end
 end
 
+Given(/^(\d+) petitions? signed from "([^"]*)"$/) do |petition_count, ip_address|
+  petition_count.times do
+    petition = FactoryGirl.create(:open_petition)
+    FactoryGirl.create(:signature, ip_address: ip_address, petition: petition)
+  end
+end
+
 Given(/^(\d+) petitions? with a (pending|validated) signature by "([^"]*)"$/) do |petition_count, state, email|
   petition_count.times do
     FactoryGirl.create(:"#{state}_signature", :petition => FactoryGirl.create(:open_petition), :email => email)
@@ -31,6 +38,17 @@ When(/^I search for petitions signed by "([^"]*)"( from the admin hub)?$/) do |n
   end
 
   fill_in "Search", :with => query
+  click_button 'Search'
+end
+
+When(/^I search for petitions signed from "([^"]*)"( from the admin hub)?$/) do |ip_address, from_the_hub|
+  if from_the_hub.blank?
+    visit admin_petitions_url
+  else
+    visit admin_root_url
+  end
+
+  fill_in "Search", with: ip_address
   click_button 'Search'
 end
 
@@ -77,7 +95,7 @@ When(/^I view the petition through the admin interface$/) do
   click_button 'Search'
 end
 
-Then(/^I should see (\d+) petitions? associated with the (?:name|email address)$/) do |petition_count|
+Then(/^I should see (\d+) petitions? associated with the (?:name|email address|IP address)$/) do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
