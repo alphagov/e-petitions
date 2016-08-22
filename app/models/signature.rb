@@ -52,6 +52,8 @@ class Signature < ActiveRecord::Base
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
   scope :pending, -> { where(state: PENDING_STATE) }
+  scope :fraudulent, -> { where(state: FRAUDULENT_STATE) }
+  scope :invalidated, -> { where(state: INVALIDATED_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }

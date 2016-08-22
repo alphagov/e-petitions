@@ -336,6 +336,8 @@ RSpec.describe Signature, type: :model do
     let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
     let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
     let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
+    let!(:signature4) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::INVALIDATED_STATE, :notify_by_email => false) }
+    let!(:signature5) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::FRAUDULENT_STATE, :notify_by_email => false) }
 
     describe "validated" do
       it "returns only validated signatures" do
@@ -358,6 +360,22 @@ RSpec.describe Signature, type: :model do
         signatures = Signature.pending
         expect(signatures.size).to eq(1)
         expect(signatures).to include(signature2)
+      end
+    end
+
+    describe "invalidated" do
+      it "returns only invalidated signatures" do
+        signatures = Signature.invalidated
+        expect(signatures.size).to eq(1)
+        expect(signatures).to include(signature4)
+      end
+    end
+
+    describe "fraudulent" do
+      it "returns only fraudulent signatures" do
+        signatures = Signature.fraudulent
+        expect(signatures.size).to eq(1)
+        expect(signatures).to include(signature5)
       end
     end
 
