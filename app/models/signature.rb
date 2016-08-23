@@ -52,7 +52,10 @@ class Signature < ActiveRecord::Base
   # = Finders =
   scope :validated, -> { where(state: VALIDATED_STATE) }
   scope :pending, -> { where(state: PENDING_STATE) }
+  scope :fraudulent, -> { where(state: FRAUDULENT_STATE) }
+  scope :invalidated, -> { where(state: INVALIDATED_STATE) }
   scope :notify_by_email, -> { where(notify_by_email: true) }
+  scope :for_ip, ->(ip) { where(ip_address: ip) }
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
 
@@ -87,6 +90,26 @@ class Signature < ActiveRecord::Base
     select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
     group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
     order("COUNT(*) DESC").
+    count(:all)
+  end
+
+  def self.trending_domains(since: 1.hour.ago, limit: 20)
+    select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+    where(arel_table[:validated_at].gt(since)).
+    where(arel_table[:invalidated_at].eq(nil)).
+    group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+    order("COUNT(*) DESC").
+    limit(limit).
+    count(:all)
+  end
+
+  def self.trending_ips(since: 1.hour.ago, limit: 20)
+    select(:ip_address).
+    where(arel_table[:validated_at].gt(since)).
+    where(arel_table[:invalidated_at].eq(nil)).
+    group(:ip_address).
+    order("COUNT(*) DESC").
+    limit(limit).
     count(:all)
   end
 
