@@ -343,7 +343,7 @@ Then(/^I expand "([^"]*)"/) do |text|
   page.find("//details/summary[contains(., '#{text}')]").click
 end
 
-Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |state, petition_action|
+Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?signatures$/) do |state, petition_action, signature_state|
   petition_closed_at = state == 'closed' ? 1.day.ago : nil
   petition_state = state == 'closed' ? 'open' : state
   petition_args = {
@@ -353,7 +353,8 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some signatures$/) do |
     state: petition_state
   }
   @petition = FactoryGirl.create(:open_petition, petition_args)
-  5.times { FactoryGirl.create(:validated_signature, petition: @petition) }
+  signature_state ||= "validated"
+  5.times { FactoryGirl.create(:"#{signature_state}_signature", petition: @petition) }
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
