@@ -1,20 +1,20 @@
 <h1>Petitions</h1>
 
 <div class="grid-row">
-  <div class="column-half">
+  <div class="column-two-thirds">
     <%= render 'admin/searches/form', query: @query %>
   </div>
 </div>
 
 <div class="grid-row">
-  <div class="column-half">
+  <div class="column-two-thirds">
     <%= form_tag admin_petitions_path, :method => :get do -%>
       <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
       <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control", data: {autosubmit: true} %>
       <%= submit_tag "Go", name: nil, class: "button" %>
     <% end -%>
   </div>
-  <div class="column-half actions-right">
+  <div class="column-third actions-right">
     <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
   </div>
 </div>
