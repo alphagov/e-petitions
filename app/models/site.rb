@@ -320,7 +320,13 @@ class Site < ActiveRecord::Base
   end
 
   def opened_at_for_closing(time = Time.current)
-    time.beginning_of_day - petition_duration.months
+    opened_at = time.beginning_of_day - petition_duration.months
+
+    if opened_at.day < time.day
+      opened_at + 1.day
+    else
+      opened_at
+    end
   end
 
   def closed_at_for_opening(time = Time.current)

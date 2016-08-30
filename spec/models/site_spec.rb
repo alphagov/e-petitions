@@ -760,6 +760,118 @@ RSpec.describe Site, type: :model do
     it "returns the opening date at petition_duration months ago" do
       expect(site.opened_at_for_closing).to eq(3.months.ago.beginning_of_day)
     end
+
+    describe "special cases" do
+      subject :site do
+        described_class.create!(petition_duration: 6)
+      end
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      context "when the date is 31st January" do
+        let(:now) { Time.utc(2016, 1, 31, 12, 0, 0) }
+
+        it "returns the 31st July" do
+          expect(site.opened_at_for_closing).to eq("2015-07-31T00:00:00".in_time_zone)
+        end
+      end
+
+      context "when the date is 31st March" do
+        let(:now) { Time.utc(2016, 3, 31, 12, 0, 0) }
+
+        it "returns the 1st October" do
+          expect(site.opened_at_for_closing).to eq("2015-10-01T00:00:00".in_time_zone)
+        end
+      end
+
+      context "when the date is 31st May" do
+        let(:now) { Time.utc(2016, 5, 31, 12, 0, 0) }
+
+        it "returns the 1st December" do
+          expect(site.opened_at_for_closing).to eq("2015-12-01T00:00:00".in_time_zone)
+        end
+      end
+
+      context "when the date is 31st July" do
+        let(:now) { Time.utc(2016, 7, 31, 12, 0, 0) }
+
+        it "returns the 31st January" do
+          expect(site.opened_at_for_closing).to eq("2016-01-31T00:00:00".in_time_zone)
+        end
+      end
+
+      context "when the date is 29th August" do
+        context "and it's a leap year" do
+          let(:now) { Time.utc(2016, 8, 29, 12, 0, 0) }
+
+          it "returns the 29th February" do
+            expect(site.opened_at_for_closing).to eq("2016-02-29T00:00:00".in_time_zone)
+          end
+        end
+
+        context "and it's not a leap year" do
+          let(:now) { Time.utc(2017, 8, 29, 12, 0, 0) }
+
+          it "returns the 1st March" do
+            expect(site.opened_at_for_closing).to eq("2017-03-01T00:00:00".in_time_zone)
+          end
+        end
+      end
+
+      context "when the date is 30th August" do
+        context "and it's a leap year" do
+          let(:now) { Time.utc(2016, 8, 30, 12, 0, 0) }
+
+          it "returns the 1st March" do
+            expect(site.opened_at_for_closing).to eq("2016-03-01T00:00:00".in_time_zone)
+          end
+        end
+
+        context "and it's not a leap year" do
+          let(:now) { Time.utc(2017, 8, 30, 12, 0, 0) }
+
+          it "returns the 1st March" do
+            expect(site.opened_at_for_closing).to eq("2017-03-01T00:00:00".in_time_zone)
+          end
+        end
+      end
+
+      context "when the date is 31st August" do
+        context "and it's a leap year" do
+          let(:now) { Time.utc(2016, 8, 31, 12, 0, 0) }
+
+          it "returns the 1st March" do
+            expect(site.opened_at_for_closing).to eq("2016-03-01T00:00:00".in_time_zone)
+          end
+        end
+
+        context "and it's not a leap year" do
+          let(:now) { Time.utc(2017, 8, 31, 12, 0, 0) }
+
+          it "returns the 1st March" do
+            expect(site.opened_at_for_closing).to eq("2017-03-01T00:00:00".in_time_zone)
+          end
+        end
+      end
+
+      context "when the date is 31st October" do
+        let(:now) { Time.utc(2016, 10, 31, 12, 0, 0) }
+
+        it "returns the 1st May" do
+          expect(site.opened_at_for_closing).to eq("2016-05-01T00:00:00".in_time_zone)
+        end
+      end
+
+      context "when the date is 31st December" do
+        let(:now) { Time.utc(2016, 12, 31, 12, 0, 0) }
+
+        it "returns the 1st July" do
+          expect(site.opened_at_for_closing).to eq("2016-07-01T00:00:00".in_time_zone)
+        end
+      end
+    end
   end
 
   describe "#closed_at_for_opening" do
