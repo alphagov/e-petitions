@@ -371,6 +371,10 @@ Given(/^a petition "(.*?)" exists with a debate outcome$/) do |action|
   @petition = FactoryGirl.create(:debated_petition, action: action, debated_on: 1.day.ago)
 end
 
+Given(/^a petition "(.*?)" exists with a debate outcome and with response threshold met$/) do |action|
+  @petition = FactoryGirl.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
+end
+
 Given(/^a petition "(.*?)" exists awaiting debate date$/) do |action|
   @petition = FactoryGirl.create(:awaiting_debate_petition, action: action)
 end
