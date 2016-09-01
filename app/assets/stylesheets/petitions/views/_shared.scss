@@ -140,14 +140,57 @@ input.back-page {
   display: none;
 }
 
-.paginate-previous {
+.previous {
   float: left;
-  padding-left: 10px;
+  text-align: left;
+  margin-top: 5px;
 }
 
-.paginate-next {
+.previous::before {
+  content: " ";
+  float: left;
+  display: block;
+  width: 32px;
+  height: 57px;
+  margin-right: 20px;
+  background-image: image-url("icons/icon_paginate-previous.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("icons/icon_paginate-previous-2x.png");
+    background-size: 32px 57px;
+  }
+}
+
+.next {
   float: right;
-  padding-right: 20px;
+  text-align: right;
+  margin-top: 5px;
+}
+
+.next::before {
+  content: " ";
+  float: right;
+  display: block;
+  width: 32px;
+  height: 57px;
+  margin-left: 20px;
+  background-image: image-url("icons/icon_paginate-next.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("icons/icon_paginate-next-2x.png");
+    background-size: 32px 57px;
+  }
+}
+
+.paginate-label {
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.page-count {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
 }
 
 // About petitions

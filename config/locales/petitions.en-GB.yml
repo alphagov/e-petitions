@@ -202,3 +202,15 @@ en-GB:
       all:
         html:
           "<span class=\"count\">%{formatted_count}</span> All petitions"
+
+    pagination:
+      previous_html: |-
+        <a class="previous" href="%{previous_link}">
+          <span class="paginate-label">Previous</span>
+          <span class="paginate page-count">%{previous_page} of %{total_pages}</span>
+        </a>
+      next_html: |-
+        <a class="next" href="%{next_link}">
+          <span class="paginate-label">Next</span>
+          <span class="paginate page-count">%{next_page} of %{total_pages}</span>
+        </a>

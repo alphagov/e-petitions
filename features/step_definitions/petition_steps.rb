@@ -4,6 +4,16 @@ Given /^a set of petitions$/ do
   end
 end
 
+Given(/^a set of (\d+) petitions$/) do |number|
+  number.times do |x|
+    @petition = FactoryGirl.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
+  end
+end
+
+When(/^I navigate to the next page of petitions$/) do
+  click_link "Next"
+end
+
 Given(/^a(n)? ?(pending|validated|sponsored|flagged|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
