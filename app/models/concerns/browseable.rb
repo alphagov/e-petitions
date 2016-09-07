@@ -101,6 +101,22 @@ module Browseable
       @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
     end
 
+    def previous_params 
+      {}.tap do |params|
+        params[:q] = query if query.present?
+        params[:state] = scope
+        params[:page] = previous_page
+      end
+    end
+
+    def next_params 
+      {}.tap do |params|
+        params[:q] = query if query.present?
+        params[:state] = scope
+        params[:page] = next_page
+      end
+    end
+
     def scope
       @scope ||= facets.keys.detect(-> { :all }){ |key| key.to_s == params[:state] }
     end
