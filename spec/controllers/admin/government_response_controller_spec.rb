@@ -570,6 +570,43 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           it_behaves_like 'adding a government response to a petition'
         end
       end
+
+      context "when two moderators update the response for the first time simultaneously" do
+        let(:government_response) do
+          FactoryGirl.build(:government_response, summary: "", details: "", petition: petition)
+        end
+
+        before do
+          moderated = double(:scope)
+          allow(Petition).to receive(:moderated).and_return(moderated)
+          allow(moderated).to receive(:find).with(petition.id.to_s).and_return(petition)
+        end
+
+        it "doesn't raise an ActiveRecord::RecordNotUnique error" do
+          expect {
+            expect(petition.government_response).to be_nil
+
+            response_attributes = {
+              summary: "summmary 1",
+              details: "details 1"
+            }
+
+            patch :update, petition_id: petition.id, government_response: response_attributes, save: "Save"
+            expect(petition.government_response.summary).to eq("summmary 1")
+
+            allow(petition).to receive(:government_response).and_return(nil, petition.government_response)
+            allow(petition).to receive(:build_government_response).and_return(government_response)
+
+            response_attributes = {
+              summary: "summmary 2",
+              details: "details 2"
+            }
+
+            patch :update, petition_id: petition.id, government_response: response_attributes, save: "Save"
+            expect(petition.government_response(true).summary).to eq("summmary 2")
+          }.not_to raise_error
+        end
+      end
     end
   end
 end

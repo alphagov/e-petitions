@@ -3,12 +3,16 @@ class Admin::GovernmentResponseController < Admin::AdminController
   before_action :fetch_petition
   before_action :fetch_government_response
 
+  rescue_from ActiveRecord::RecordNotUnique do
+    @government_response = @petition.government_response(true) and update
+  end
+
   def show
     render 'admin/petitions/show'
   end
 
   def update
-    if @government_response.update_attributes(government_response_params)
+    if @government_response.update(government_response_params)
       if send_email_to_petitioners?
         EmailThresholdResponseJob.run_later_tonight(petition: @petition)
         message = 'Email will be sent overnight'
