@@ -167,6 +167,29 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
         before { petition.update_column(:state, Petition::HIDDEN_STATE) }
         it_behaves_like 'updating notes for a petition'
       end
+
+      context "when two moderators update the notes for the first time simultaneously" do
+        let(:note) { FactoryGirl.build(:note, details: "", petition: petition) }
+
+        before do
+          allow(Petition).to receive(:find).with(petition.id.to_s).and_return(petition)
+        end
+
+        it "doesn't raise an ActiveRecord::RecordNotUnique error" do
+          expect {
+            expect(petition.note).to be_nil
+
+            patch :update, petition_id: petition.id, note: { details: "update 1" }
+            expect(petition.note.details).to eq("update 1")
+
+            allow(petition).to receive(:note).and_return(nil, petition.note)
+            allow(petition).to receive(:build_note).and_return(note)
+
+            patch :update, petition_id: petition.id, note: { details: "update 2" }
+            expect(petition.note(true).details).to eq("update 2")
+          }.not_to raise_error
+        end
+      end
     end
   end
 end

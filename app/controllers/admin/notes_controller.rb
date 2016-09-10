@@ -3,6 +3,10 @@ class Admin::NotesController < Admin::AdminController
   before_action :fetch_petition
   before_action :fetch_note
 
+  rescue_from ActiveRecord::RecordNotUnique do
+    @note = @petition.note(true) and update
+  end
+
   def show
     render 'admin/petitions/show'
   end
