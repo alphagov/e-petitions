@@ -1570,6 +1570,28 @@ RSpec.describe Petition, type: :model do
         end
       end
     end
+
+    context "when two moderators reject the petition at the same time" do
+      let(:rejection) { petition.reload.rejection }
+
+      it "doesn't raise an ActiveRecord::RecordNotUnique error" do
+        expect {
+          p1 = described_class.find(petition.id)
+          p2 = described_class.find(petition.id)
+
+          expect(p1.rejection).to be_nil
+          expect(p1.association(:rejection)).to be_loaded
+
+          expect(p2.rejection).to be_nil
+          expect(p2.association(:rejection)).to be_loaded
+
+          p1.reject(code: "duplicate")
+          p2.reject(code: "irrelevant")
+
+          expect(rejection.code).to eq("irrelevant")
+        }.not_to raise_error
+      end
+    end
   end
 
   describe '#close!' do
