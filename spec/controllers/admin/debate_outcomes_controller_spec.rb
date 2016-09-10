@@ -469,6 +469,43 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
         end
       end
+
+      context "when two moderators update the debate outcome for the first time simultaneously" do
+        let(:debate_outcome) do
+          FactoryGirl.build(:debate_outcome, overview: "", debated: false, petition: petition)
+        end
+
+        before do
+          debateable = double(:scope)
+          allow(Petition).to receive(:debateable).and_return(debateable)
+          allow(debateable).to receive(:find).with(petition.id.to_s).and_return(petition)
+        end
+
+        it "doesn't raise an ActiveRecord::RecordNotUnique error" do
+          expect {
+            expect(petition.debate_outcome).to be_nil
+
+            outcome_attributes = {
+              overview: "overview 1",
+              debated: false
+            }
+
+            patch :update, petition_id: petition.id, debate_outcome: outcome_attributes, save: "Save"
+            expect(petition.debate_outcome.overview).to eq("overview 1")
+
+            allow(petition).to receive(:debate_outcome).and_return(nil, petition.debate_outcome)
+            allow(petition).to receive(:build_debate_outcome).and_return(debate_outcome)
+
+            outcome_attributes = {
+              overview: "overview 2",
+              debated: false
+            }
+
+            patch :update, petition_id: petition.id, debate_outcome: outcome_attributes, save: "Save"
+            expect(petition.debate_outcome(true).overview).to eq("overview 2")
+          }.not_to raise_error
+        end
+      end
     end
   end
 end

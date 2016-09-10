@@ -3,6 +3,10 @@ class Admin::DebateOutcomesController < Admin::AdminController
   before_action :fetch_petition
   before_action :fetch_debate_outcome
 
+  rescue_from ActiveRecord::RecordNotUnique do
+    @debate_outcome = @petition.debate_outcome(true) and update
+  end
+
   def show
     render 'admin/petitions/show'
   end
