@@ -330,41 +330,6 @@ ALTER SEQUENCE email_requested_receipts_id_seq OWNED BY email_requested_receipts
 
 
 --
--- Name: email_sent_receipts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE email_sent_receipts (
-    id integer NOT NULL,
-    signature_id integer,
-    government_response timestamp without time zone,
-    debate_outcome timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    debate_scheduled timestamp without time zone,
-    petition_email timestamp without time zone
-);
-
-
---
--- Name: email_sent_receipts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE email_sent_receipts_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: email_sent_receipts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE email_sent_receipts_id_seq OWNED BY email_sent_receipts.id;
-
-
---
 -- Name: feedback; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -926,13 +891,6 @@ ALTER TABLE ONLY email_requested_receipts ALTER COLUMN id SET DEFAULT nextval('e
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY email_sent_receipts ALTER COLUMN id SET DEFAULT nextval('email_sent_receipts_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY feedback ALTER COLUMN id SET DEFAULT nextval('feedback_id_seq'::regclass);
 
 
@@ -1082,14 +1040,6 @@ ALTER TABLE ONLY delayed_jobs
 
 ALTER TABLE ONLY email_requested_receipts
     ADD CONSTRAINT email_requested_receipts_pkey PRIMARY KEY (id);
-
-
---
--- Name: email_sent_receipts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY email_sent_receipts
-    ADD CONSTRAINT email_sent_receipts_pkey PRIMARY KEY (id);
 
 
 --
@@ -1327,13 +1277,6 @@ CREATE INDEX index_delayed_jobs_on_priority_and_run_at ON delayed_jobs USING btr
 --
 
 CREATE INDEX index_email_requested_receipts_on_petition_id ON email_requested_receipts USING btree (petition_id);
-
-
---
--- Name: index_email_sent_receipts_on_signature_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_email_sent_receipts_on_signature_id ON email_sent_receipts USING btree (signature_id);
 
 
 --
@@ -1677,14 +1620,6 @@ ALTER TABLE ONLY debate_outcomes
 
 
 --
--- Name: fk_rails_e256832d5d; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY email_sent_receipts
-    ADD CONSTRAINT fk_rails_e256832d5d FOREIGN KEY (signature_id) REFERENCES signatures(id);
-
-
---
 -- PostgreSQL database dump complete
 --
 
@@ -1853,4 +1788,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160819062058');
 INSERT INTO schema_migrations (version) VALUES ('20160820132056');
 
 INSERT INTO schema_migrations (version) VALUES ('20160822064645');
+
+INSERT INTO schema_migrations (version) VALUES ('20160910054223');
 
