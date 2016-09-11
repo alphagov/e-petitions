@@ -254,27 +254,5 @@ namespace :epets do
         petition.touch
       end
     end
-
-    desc "Migrate email sent receipts to signature columns"
-    task :email_sent_receipts_to_signatures => :environment do
-      class EmailSentReceipt < ActiveRecord::Base; end
-
-      EmailSentReceipt.find_each do |receipt|
-        updates = []
-        updates << "government_response_email_at = GREATEST(government_response_email_at, ?)"
-        updates << "debate_scheduled_email_at = GREATEST(debate_scheduled_email_at, ?)"
-        updates << "debate_outcome_email_at = GREATEST(debate_outcome_email_at, ?)"
-        updates << "petition_email_at = GREATEST(petition_email_at, ?)"
-        updates = updates.join(", ")
-
-        params = []
-        params << receipt.government_response
-        params << receipt.debate_scheduled
-        params << receipt.debate_outcome
-        params << receipt.petition_email
-
-        Signature.where(id: receipt.signature_id).update_all([updates] + params)
-      end
-    end
   end
 end
