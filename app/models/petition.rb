@@ -454,7 +454,11 @@ class Petition < ActiveRecord::Base
   end
 
   def reject(attributes)
-    build_rejection(attributes) && rejection.save
+    begin
+      build_rejection(attributes) && rejection.save
+    rescue ActiveRecord::RecordNotUnique => e
+      rejection(true).update(attributes)
+    end
   end
 
   def flag
