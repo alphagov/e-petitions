@@ -284,6 +284,20 @@ RSpec.describe SponsorsController, type: :controller do
         expect(assigns[:stage_manager].stage).to eq 'signer'
       end
     end
+
+    context "when a race condition occurs" do
+      let(:exception) { ActiveRecord::RecordNotUnique.new("PG::UniqueViolation") }
+
+      before do
+        FactoryGirl.create(:sponsor, :validated, petition: petition)
+        allow_any_instance_of(Signature).to receive(:save).and_raise(exception)
+      end
+
+      it "redirects to the thank you page" do
+        do_patch
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/thank-you")
+      end
+    end
   end
 
   context 'GET thank-you' do

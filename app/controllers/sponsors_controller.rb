@@ -31,6 +31,8 @@ class SponsorsController < ApplicationController
         format.html { render :show }
       end
     end
+  rescue ActiveRecord::RecordNotUnique => e
+    redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
   end
 
   def thank_you

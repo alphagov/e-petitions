@@ -477,6 +477,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       context "when a race condition occurs" do
         let(:exception) { ActiveRecord::RecordNotUnique.new("PG::UniqueViolation") }
+
         before do
           FactoryGirl.create(:validated_signature, signature_params.merge(petition_id: petition.id))
           allow_any_instance_of(Signature).to receive(:save).and_raise(exception)
