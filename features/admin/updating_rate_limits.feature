@@ -70,5 +70,14 @@ Feature: Sysadmin updates the rate limits
     And I press "Save"
     Then I should see "IP blacklist is invalid"
     When I fill in "rate_limit_ip_blacklist" with "127.0.0.1/32"
+
+  Scenario: Sysadmin updates the countries
+    When I am logged in as a sysadmin
+    And I am on the admin home page
+    And I follow "Rate Limits"
+    Then I should see "Edit Rate Limits"
+    When I follow "Countries"
+    Then I should see "Add countries that are allowed to sign petitions, e.g. United Kingdom"
+    When I fill in "rate_limit_countries" with "United Kingdom"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
