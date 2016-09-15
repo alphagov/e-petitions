@@ -181,6 +181,16 @@ RSpec.describe CacheHelper, type: :helper do
         expect(helper).to receive(:request).and_return(request)
         expect(keys.url).to eq("/petitions/123")
       end
+
+      context "when the URL isn't encoded properly" do
+        let(:original_url) { "/petitions?utf=✓&q=foo".force_encoding('binary') }
+        let(:request) { double(:request, original_url: original_url) }
+
+        it "forces the encoding to UTF-8" do
+          expect(helper).to receive(:request).and_return(request)
+          expect(keys.url.encoding).to eq(Encoding::UTF_8)
+        end
+      end
     end
 
     describe "#method_missing" do

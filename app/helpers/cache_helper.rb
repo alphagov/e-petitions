@@ -77,7 +77,7 @@ module CacheHelper
       end
 
       def url
-        request.original_url
+        request.original_url.force_encoding('utf-8')
       end
 
       def for(keys)
