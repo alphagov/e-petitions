@@ -47,6 +47,10 @@ module ApplicationHelper
     !params.values_at(:controller, :action).in?(INDEXED_PAGES)
   end
 
+  def original_url
+    request.original_url.force_encoding('utf-8')
+  end
+
   private
 
   def referer_url
