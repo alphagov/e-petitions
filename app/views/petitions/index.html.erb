@@ -19,7 +19,7 @@
   <p class="text-secondary"><%= petition_list_header %></p>
 <% end %>
 
-<%= form_tag petitions_path, class: 'search-inline', method: 'get' do %>
+<%= form_tag petitions_path, class: 'search-inline', method: 'get', enforce_utf8: false do %>
   <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
   <%= hidden_field_tag 'state', @petitions.scope %>
   <%= submit_tag 'Search', class: 'inline-submit' %>
