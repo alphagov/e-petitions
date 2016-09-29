@@ -178,4 +178,23 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
   end
+
+  describe "#original_url" do
+    let(:headers) { helper.request.env }
+
+    before do
+      headers["HTTP_HOST"] = "petition.parliament.uk"
+      headers["HTTP_X_FORWARDED_PROTO"] = "https"
+      headers["PATH_INFO"] = "/petitions"
+      headers["QUERY_STRING"] = "utf8=✓&q=foo".force_encoding('binary')
+    end
+
+    it "returns the original request url" do
+      expect(helper.original_url).to eq("https://petition.parliament.uk/petitions?utf8=✓&q=foo")
+    end
+
+    it "is encoded as UTF-8" do
+      expect(helper.original_url.encoding).to eq(Encoding::UTF_8)
+    end
+  end
 end

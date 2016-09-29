@@ -15,7 +15,7 @@
 <%= open_graph_tag 'title', :title, petition: @petition.action %>
 <%= open_graph_tag 'description', @petition.background %>
 <% else %>
-<%= open_graph_tag 'url', request.original_url %>
+<%= open_graph_tag 'url', original_url %>
 <%= open_graph_tag 'type', 'website' %>
 <%= open_graph_tag 'title', page_title %>
 <% end %>
