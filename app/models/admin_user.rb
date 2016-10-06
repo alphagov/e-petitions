@@ -11,7 +11,7 @@ class AdminUser < ActiveRecord::Base
   acts_as_authentic do |config|
     config.check_passwords_against_database = true
     config.ignore_blank_passwords = true
-    config.logged_in_timeout = 30.minutes
+    config.logged_in_timeout = Site.login_timeout
     config.require_password_confirmation = true
 
     config.merge_validates_length_of_password_field_options minimum: 8

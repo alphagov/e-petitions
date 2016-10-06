@@ -20,6 +20,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>') }
     it { is_expected.to have_db_column(:last_petition_created_at).of_type(:datetime).with_options(null: true, default: nil) }
+    it { is_expected.to have_db_column(:login_timeout).of_type(:integer).with_options(null: false, default: 1800) }
   end
 
   describe "validations" do
@@ -32,6 +33,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_presence_of(:threshold_for_moderation) }
     it { is_expected.to validate_presence_of(:threshold_for_response) }
     it { is_expected.to validate_presence_of(:threshold_for_debate) }
+    it { is_expected.to validate_presence_of(:login_timeout) }
 
     it { is_expected.to validate_length_of(:title).is_at_most(50) }
     it { is_expected.to validate_length_of(:url).is_at_most(50) }
@@ -40,7 +42,7 @@ RSpec.describe Site, type: :model do
 
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors
-      threshold_for_moderation threshold_for_response threshold_for_debate
+      threshold_for_moderation threshold_for_response threshold_for_debate login_timeout
     ].each do |attribute|
       describe attribute do
         let(:errors) { subject.errors[attribute] }
@@ -153,6 +155,11 @@ RSpec.describe Site, type: :model do
     it "delegates protected? to the instance" do
       expect(site).to receive(:protected?).and_return(true)
       expect(Site.protected?).to eq(true)
+    end
+
+    it "delegates login_timeout to the instance" do
+      expect(site).to receive(:login_timeout).and_return(900)
+      expect(Site.login_timeout).to eq(900)
     end
 
     it "delegates petition_duration to the instance" do
@@ -377,6 +384,18 @@ RSpec.describe Site, type: :model do
       it "can be overridden with the SITE_PROTECTED environment variable" do
         allow(ENV).to receive(:fetch).with("SITE_PROTECTED", '0').and_return("1")
         expect(defaults[:protected]).to eq(true)
+      end
+    end
+
+    describe "for login_timeout" do
+      it "defaults to 1800" do
+        allow(ENV).to receive(:fetch).with("SITE_LOGIN_TIMEOUT", '1800').and_return("1800")
+        expect(defaults[:login_timeout]).to eq(1800)
+      end
+
+      it "can be overridden with the SITE_LOGIN_TIMEOUT environment variable" do
+        allow(ENV).to receive(:fetch).with("SITE_LOGIN_TIMEOUT", '1800').and_return("900")
+        expect(defaults[:login_timeout]).to eq(900)
       end
     end
 
