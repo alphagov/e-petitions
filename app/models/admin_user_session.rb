@@ -1,6 +1,7 @@
 class AdminUserSession < Authlogic::Session::Base
   allow_http_basic_auth false
   consecutive_failed_logins_limit AdminUser::DISABLED_LOGIN_COUNT
+  logout_on_timeout true
 
   before_save do
     record.reset_persistence_token!

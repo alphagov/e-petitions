@@ -1,6 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe AdminUser, type: :model do
+  describe "schema" do
+    it { is_expected.to have_db_column(:email).of_type(:string).with_options(null: false) }
+    it { is_expected.to have_db_column(:persistence_token).of_type(:string) }
+    it { is_expected.to have_db_column(:crypted_password).of_type(:string) }
+    it { is_expected.to have_db_column(:password_salt).of_type(:string) }
+    it { is_expected.to have_db_column(:login_count).of_type(:integer).with_options(default: 0) }
+    it { is_expected.to have_db_column(:failed_login_count).of_type(:integer).with_options(default: 0) }
+    it { is_expected.to have_db_column(:current_login_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:last_login_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:current_login_ip).of_type(:string) }
+    it { is_expected.to have_db_column(:last_login_ip).of_type(:string) }
+    it { is_expected.to have_db_column(:role).of_type(:string).with_options(limit: 10, null: false) }
+    it { is_expected.to have_db_column(:force_password_reset).of_type(:boolean).with_options(default: true) }
+    it { is_expected.to have_db_column(:password_changed_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:last_request_at).of_type(:datetime) }
+  end
+
+  describe "indexes" do
+    it { is_expected.to have_db_index([:email]).unique }
+    it { is_expected.to have_db_index([:last_name, :first_name]) }
+  end
+
   describe "behaviours" do
     it { expect(AdminUser.respond_to?(:acts_as_authentic)).to be_truthy }
   end

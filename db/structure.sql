@@ -51,7 +51,8 @@ CREATE TABLE admin_users (
     force_password_reset boolean DEFAULT true,
     password_changed_at timestamp without time zone,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    last_request_at timestamp without time zone
 );
 
 
@@ -1796,4 +1797,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160820165029');
 INSERT INTO schema_migrations (version) VALUES ('20160822064645');
 
 INSERT INTO schema_migrations (version) VALUES ('20160910054223');
+
+INSERT INTO schema_migrations (version) VALUES ('20161006095752');
 
