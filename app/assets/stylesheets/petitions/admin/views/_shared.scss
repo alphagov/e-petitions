@@ -63,6 +63,16 @@
     margin-top: $gutter;
   }
 
+  .mandatory {
+    color: $red-50;
+    font-weight: bold;
+    font-size: 24px;
+  }
+
+  .form-label-inline {
+    display: inline-block;
+  }
+
   .button_to {
     display: inline-block;
 
