@@ -8,7 +8,11 @@ class AdminUserSession < Authlogic::Session::Base
   end
 
   before_destroy do
-    record.reset_persistence_token!
+    if stale?
+      stale_record.reset_persistence_token!
+    else
+      record.reset_persistence_token!
+    end
   end
 
   def last_login_attempt?
