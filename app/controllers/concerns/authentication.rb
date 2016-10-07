@@ -2,6 +2,9 @@ module Authentication
   extend ActiveSupport::Concern
 
   included do
+    before_action :set_login_timeout
+    before_action :logout_stale_session
+
     before_action :require_admin
     before_action :check_for_password_change
 
@@ -49,5 +52,13 @@ module Authentication
 
   def store_target_location
     session[:return_to] = request.fullpath
+  end
+
+  def set_login_timeout
+    AdminUser.logged_in_timeout = Site.login_timeout
+  end
+
+  def logout_stale_session
+    current_session.destroy if current_session && current_session.stale?
   end
 end

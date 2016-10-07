@@ -70,4 +70,35 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       expect(s2.response.headers["Location"]).to eq("https://moderate.petition.parliament.uk/admin/login")
     end
   end
+
+  context "when a session is stale" do
+    before do
+      host! "moderate.petition.parliament.uk"
+      https!
+    end
+
+    it "resets the persistence token" do
+      Site.instance.update(login_timeout: 600)
+
+      travel_to 5.minutes.ago do
+        post "/admin/user_sessions", admin_user_session: login_params
+        expect(response).to redirect_to("/admin")
+      end
+
+      get "/admin"
+      expect(response).to be_successful
+
+      travel_to 15.minutes.from_now do
+        get "/admin"
+        expect(response).to redirect_to("/admin/login")
+      end
+
+      Site.instance.update(login_timeout: 1800)
+
+      travel_to 15.minutes.from_now do
+        get "/admin"
+        expect(response).to redirect_to("/admin/login")
+      end
+    end
+  end
 end
