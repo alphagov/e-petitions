@@ -33,7 +33,7 @@ RSpec.describe "login timeout", type: :request, csrf: false do
     get "/admin"
     expect(response).to be_successful
 
-    travel_to 10.minutes.from_now do
+    travel_to 15.minutes.from_now do
       get "/admin"
       expect(response).to redirect_to("/admin/login")
     end
