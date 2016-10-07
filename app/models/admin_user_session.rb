@@ -19,6 +19,10 @@ class AdminUserSession < Authlogic::Session::Base
     failed_login_count == consecutive_failed_logins_limit - 1
   end
 
+  def time_remaining
+    record ? record.time_remaining : 0
+  end
+
   private
 
   def failed_login_count

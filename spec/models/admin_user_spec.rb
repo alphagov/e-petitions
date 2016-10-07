@@ -410,5 +410,19 @@ RSpec.describe AdminUser, type: :model do
         expect(u.failed_login_count).to eq(0)
       end
     end
+
+    describe "#elapsed_time" do
+      it "returns the number of seconds since the last request" do
+        user = FactoryGirl.build(:admin_user, last_request_at: 60.seconds.ago)
+        expect(user.elapsed_time).to eq(60)
+      end
+    end
+
+    describe "#time_remaining" do
+      it "returns the number of seconds since the last request" do
+        user = FactoryGirl.build(:admin_user, last_request_at: 60.seconds.ago)
+        expect(user.elapsed_time).to eq(60)
+      end
+    end
   end
 end

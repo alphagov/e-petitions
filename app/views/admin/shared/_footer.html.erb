@@ -1,0 +1,19 @@
+<% if logged_in? %>
+  <div id="logout-warning">
+    <div class="logout-warning-modal">
+      <p class="logout-warning-message">
+        You will be logged out automatically in two minutes unless you click continue.
+      </p>
+      <p class="logout-warning-actions">
+        <button id="logout-warning-continue" class="button">Continue</button>
+        <button id="logout-warning-logout" class="button-secondary">Logout</button>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      $("#logout-warning").autoLogout();
+    });
+  </script>
+<% end %>

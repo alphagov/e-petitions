@@ -102,6 +102,9 @@ Rails.application.routes.draw do
 
       get 'logout' => 'user_sessions#destroy', :as => :logout
       get 'login' => 'user_sessions#new', :as => :login
+
+      get 'continue' => 'user_sessions#continue', :as => :continue
+      get 'status' => 'user_sessions#status', :as => :status
     end
   end
 

@@ -112,4 +112,12 @@ class AdminUser < ActiveRecord::Base
   def account_disabled=(flag)
     self.failed_login_count = (flag == "0" or !flag) ? 0 : DISABLED_LOGIN_COUNT
   end
+
+  def elapsed_time(now = Time.current)
+    (now - last_request_at).floor
+  end
+
+  def time_remaining(now = Time.current)
+    [Site.login_timeout - elapsed_time(now), 0].max
+  end
 end

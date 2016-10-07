@@ -8,7 +8,7 @@ module Authentication
     before_action :require_admin
     before_action :check_for_password_change
 
-    helper_method :current_user, :logged_in?
+    helper_method :current_user, :current_session, :logged_in?
   end
 
   def current_session

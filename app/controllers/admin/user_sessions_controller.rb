@@ -1,5 +1,5 @@
 class Admin::UserSessionsController < Admin::AdminController
-  skip_before_filter :require_admin, only: [:new, :create]
+  skip_before_filter :require_admin, only: [:new, :create, :destroy, :status]
   skip_before_filter :check_for_password_change
 
   def new
@@ -23,5 +23,18 @@ class Admin::UserSessionsController < Admin::AdminController
   def destroy
     current_session.destroy if logged_in?
     redirect_to admin_login_url, notice: :logged_out
+  end
+
+  def status
+  end
+
+  def continue
+    current_user.touch(:last_request_at)
+  end
+
+  private
+
+  def last_request_update_allowed?
+    action_name != 'status'
   end
 end
