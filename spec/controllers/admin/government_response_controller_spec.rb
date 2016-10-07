@@ -105,6 +105,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
       context 'when clicking the Email button' do
         def do_patch(overrides = {})
+          login_as(user)
+
           params = {
             petition_id: petition.id,
             government_response: government_response_attributes,
@@ -354,6 +356,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
       context 'when clicking the Save button' do
         def do_patch(overrides = {})
+          login_as(user)
+
           params = {
             petition_id: petition.id,
             government_response: government_response_attributes,
