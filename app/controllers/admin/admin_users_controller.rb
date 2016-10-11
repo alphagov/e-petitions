@@ -1,8 +1,17 @@
 class Admin::AdminUsersController < Admin::AdminController
   before_filter :require_sysadmin
+  before_filter :find_user, only: %i[edit update destroy]
+
+  rescue_from AdminUser::CannotDeleteCurrentUser do
+    redirect_to admin_admin_users_url, alert: :user_is_current_user
+  end
+
+  rescue_from AdminUser::MustBeAtLeastOneAdminUser do
+    redirect_to admin_admin_users_url, alert: :user_count_is_too_low
+  end
 
   def index
-    @users = AdminUser.by_name.paginate(:page => params[:page], :per_page => 50)
+    @users = AdminUser.by_name.paginate(page: params[:page], per_page: 50)
   end
 
   def new
@@ -10,44 +19,39 @@ class Admin::AdminUsersController < Admin::AdminController
   end
 
   def create
-    @user = AdminUser.create(admin_user_params)
+    @user = AdminUser.new(admin_user_params)
+
     if @user.save
-      flash[:notice] = "User was successfully created"
-      redirect_to admin_admin_users_url
+      redirect_to admin_admin_users_url, notice: :user_created
     else
-      render :action => 'new'
+      render :new
     end
   end
 
   def edit
-    @user = AdminUser.find(params[:id])
   end
 
   def update
-    @user = AdminUser.find(params[:id])
-    if @user.update_attributes(admin_user_params)
-      flash[:notice] = "User was successfully updated"
-      redirect_to admin_admin_users_url
+    if @user.update(admin_user_params)
+      redirect_to admin_admin_users_url, notice: :user_updated
     else
-      render :action => 'edit'
+      render :edit
     end
   end
 
   def destroy
-    @user = AdminUser.find(params[:id])
-
-    # only destroy if user is not the logged in user and there are at least 2 users
-    if @user == current_user
-      flash[:error] = "You are not allowed to delete yourself!"
-    elsif AdminUser.count < 2
-      flash[:error] = "There needs to be at least 1 admin user"
+    if @user.destroy(current_user: current_user)
+      redirect_to admin_admin_users_url, notice: :user_deleted
     else
-      @user.destroy
+      redirect_to admin_admin_users_url, alert: :user_not_deleted
     end
-    redirect_to admin_admin_users_url
   end
 
   protected
+
+  def find_user
+    @user = AdminUser.find(params[:id])
+  end
 
   def admin_user_params
     params.

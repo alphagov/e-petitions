@@ -15,9 +15,9 @@ class Admin::GovernmentResponseController < Admin::AdminController
     if @government_response.update(government_response_params)
       if send_email_to_petitioners?
         EmailThresholdResponseJob.run_later_tonight(petition: @petition)
-        message = 'Email will be sent overnight'
+        message = :email_sent_overnight
       else
-        message = 'Updated government response successfully'
+        message = :government_response_updated
       end
 
       redirect_to [:admin, @petition], notice: message

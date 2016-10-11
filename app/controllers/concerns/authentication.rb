@@ -1,22 +1,14 @@
-# This module is included in your application controller which makes
-# several methods available to all controllers and views. Here's a
-# common example you might add to your application layout file.
-#
-#   <% if logged_in? %>
-#     Welcome <%=h current_account.username %>! Not you?
-#     <%= link_to "Log out", logout_path %>
-#   <% else %>
-#     <%= link_to "Sign up", signup_path %> or
-#     <%= link_to "log in", login_path %>.
-#   <% end %>
-#
-# You can also restrict unregistered users from accessing a controller using
-# a before filter. For example.
-#
-#   before_filter :login_required, :except => [:index, :show]
 module Authentication
-  def self.included(controller)
-    controller.send :helper_method, :current_account, :current_user, :logged_in?, :redirect_to_target_or_default, :require_admin
+  extend ActiveSupport::Concern
+
+  included do
+    before_action :set_login_timeout
+    before_action :logout_stale_session
+
+    before_action :require_admin
+    before_action :check_for_password_change
+
+    helper_method :current_user, :current_session, :logged_in?
   end
 
   def current_session
@@ -33,14 +25,6 @@ module Authentication
     current_user
   end
 
-  def login_required
-    unless logged_in?
-      flash[:error] = "You must first log in or sign up before accessing this page."
-      store_target_location
-      redirect_to admin_login_url
-    end
-  end
-
   def redirect_to_target_or_default
     redirect_to(session[:return_to] || admin_root_url)
     session[:return_to] = nil
@@ -48,30 +32,19 @@ module Authentication
 
   def require_admin
     unless current_user
-      flash[:error] = "You must be logged in as an administrator to view this page."
-      redirect_to admin_login_url
+      redirect_to admin_login_url, alert: :admin_required
     end
   end
 
-  def require_admin_and_check_for_password_change
-    if current_user.nil?
-      flash[:error] = "You must be logged in as an administrator to view this page."
-      redirect_to admin_login_url
-    elsif current_user.has_to_change_password?
-      flash[:error] = "Please change your password before continuing"
-      redirect_to edit_admin_profile_url(current_user)
+  def check_for_password_change
+    if current_user.has_to_change_password?
+      redirect_to edit_admin_profile_url(current_user), alert: :change_password
     end
   end
 
   def require_sysadmin
-    unless current_user && current_user.is_a_sysadmin?
-      flash[:error] = "You must be logged in as a system administrator to view this page."
-
-      if current_user.is_a_moderator?
-        redirect_to admin_root_url
-      else
-        redirect_to admin_login_url
-      end
+    unless current_user.is_a_sysadmin?
+      redirect_to admin_root_url, alert: :sysadmin_required
     end
   end
 
@@ -79,5 +52,13 @@ module Authentication
 
   def store_target_location
     session[:return_to] = request.fullpath
+  end
+
+  def set_login_timeout
+    AdminUser.logged_in_timeout = Site.login_timeout
+  end
+
+  def logout_stale_session
+    current_session.destroy if current_session && current_session.stale?
   end
 end

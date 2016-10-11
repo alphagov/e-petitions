@@ -92,6 +92,10 @@ class Site < ActiveRecord::Base
       instance.protected?
     end
 
+    def login_timeout
+      instance.login_timeout
+    end
+
     def reload
       Thread.current[:__site__] = nil
     end
@@ -111,6 +115,7 @@ class Site < ActiveRecord::Base
         password:                   default_password,
         enabled:                    default_enabled,
         protected:                  default_protected,
+        login_timeout:              default_login_timeout,
         petition_duration:          default_petition_duration,
         minimum_number_of_sponsors: default_minimum_number_of_sponsors,
         maximum_number_of_sponsors: default_maximum_number_of_sponsors,
@@ -196,6 +201,10 @@ class Site < ActiveRecord::Base
 
     def default_protected
       !ENV.fetch('SITE_PROTECTED', '0').to_i.zero?
+    end
+
+    def default_login_timeout
+      ENV.fetch('SITE_LOGIN_TIMEOUT', '1800').to_i
     end
 
     def default_petition_duration
@@ -345,6 +354,7 @@ class Site < ActiveRecord::Base
   validates :threshold_for_debate, presence: true, numericality: { only_integer: true }
   validates :username, presence: true, length: { maximum: 30 }, if: :protected?
   validates :password, length: { maximum: 30 }, confirmation: true, if: :protected?
+  validates :login_timeout, presence: true, numericality: { only_integer: true }
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?

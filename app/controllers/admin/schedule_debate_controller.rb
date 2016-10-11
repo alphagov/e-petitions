@@ -10,9 +10,9 @@ class Admin::ScheduleDebateController < Admin::AdminController
     if @petition.update_attributes(params_for_update)
       if send_email_to_petitioners?
         EmailDebateScheduledJob.run_later_tonight(petition: @petition)
-        message = 'Email will be sent overnight'
+        message = :email_sent_overnight
       else
-        message = 'Updated the scheduled debate date successfully'
+        message = :debate_date_updated
       end
 
       redirect_to [:admin, @petition], notice: message

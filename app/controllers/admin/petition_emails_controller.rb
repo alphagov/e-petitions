@@ -12,9 +12,9 @@ class Admin::PetitionEmailsController < Admin::AdminController
     if @email.update(email_params)
       if send_email_to_petitioners?
         schedule_email_petitioners_job
-        message = 'Email will be sent overnight'
+        message = :email_sent_overnight
       else
-        message = 'Created other parliamentary business successfully'
+        message = :petition_email_created
       end
 
       redirect_to [:admin, @petition], notice: message
@@ -30,9 +30,9 @@ class Admin::PetitionEmailsController < Admin::AdminController
     if @email.update(email_params)
       if send_email_to_petitioners?
         schedule_email_petitioners_job
-        message = 'Email will be sent overnight'
+        message = :email_sent_overnight
       else
-        message = 'Updated other parliamentary business successfully'
+        message = :petition_email_updated
       end
 
       redirect_to [:admin, @petition], notice: message
@@ -43,9 +43,9 @@ class Admin::PetitionEmailsController < Admin::AdminController
 
   def destroy
     if @email.destroy
-      message = 'Deleted other parliamentary business successfully'
+      message = :petition_email_deleted
     else
-      message = 'Unable to delete other parliamentary business - please contact support'
+      message = :petition_email_not_deleted
     end
 
     redirect_to [:admin, @petition], notice: message

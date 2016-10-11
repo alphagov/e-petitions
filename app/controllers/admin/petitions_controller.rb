@@ -26,7 +26,7 @@ class Admin::PetitionsController < Admin::AdminController
     fetch_petition_for_scheduled_debate_date
     if @petition.update(update_scheduled_debate_date_params)
       EmailDebateScheduledJob.run_later_tonight(petition: @petition)
-      redirect_to admin_petition_url(@petition), notice: "Email will be sent overnight"
+      redirect_to admin_petition_url(@petition), notice: :email_sent_overnight
     else
       render :edit_scheduled_debate_date
     end

@@ -51,7 +51,8 @@ CREATE TABLE admin_users (
     force_password_reset boolean DEFAULT true,
     password_changed_at timestamp without time zone,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    last_request_at timestamp without time zone
 );
 
 
@@ -747,7 +748,8 @@ CREATE TABLE sites (
     updated_at timestamp without time zone NOT NULL,
     feedback_email character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>'::character varying NOT NULL,
     moderate_url character varying(50) DEFAULT 'https://moderate.petition.parliament.uk'::character varying NOT NULL,
-    last_petition_created_at timestamp without time zone
+    last_petition_created_at timestamp without time zone,
+    login_timeout integer DEFAULT 1800 NOT NULL
 );
 
 
@@ -1796,4 +1798,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160820165029');
 INSERT INTO schema_migrations (version) VALUES ('20160822064645');
 
 INSERT INTO schema_migrations (version) VALUES ('20160910054223');
+
+INSERT INTO schema_migrations (version) VALUES ('20161006095752');
+
+INSERT INTO schema_migrations (version) VALUES ('20161006101123');
 
