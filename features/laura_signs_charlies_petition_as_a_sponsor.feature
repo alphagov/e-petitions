@@ -48,20 +48,8 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     When I visit the "sponsor this petition" url I was given
     And I will see 404 error page
 
-  Scenario: Laura is the 21st sponsor that wants to sign the validated petition
-    Given the petition I want to sign has enough sponsors and is validated
-    When I visit the "sponsor this petition" url I was given
-    Then I should be connected to the server via an ssl connection
-    And I am redirected to the petition moderation info page
-
-  Scenario: Laura is the 21st sponsor that wants to sign the sponsored petition
-    Given the petition I want to sign has enough sponsors and is sponsored
-    When I visit the "sponsor this petition" url I was given
-    Then I should be connected to the server via an ssl connection
-    And I am redirected to the petition moderation info page
-
-  Scenario: Laura is the 21st sponsor that wants to sign the pending petition
-    Given the petition I want to sign has enough sponsors and is pending
+  Scenario: Laura is the 21st sponsor that wants to sign the petition
+    Given the petition I want to sign has enough sponsors
     When I visit the "sponsor this petition" url I was given
     Then I should be connected to the server via an ssl connection
     And I am redirected to the petition moderation info page
