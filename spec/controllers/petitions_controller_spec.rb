@@ -219,6 +219,7 @@ RSpec.describe PetitionsController, type: :controller do
   describe "show" do
     let(:petition) { double }
     it "assigns the given petition" do
+      allow(petition).to receive(:collecting_sponsors?).and_return(false)
       allow(petition).to receive(:in_moderation?).and_return(false)
       allow(petition).to receive(:moderated?).and_return(true)
       allow(Petition).to receive_message_chain(:show, :find => petition)

@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       member do
         get 'count', :action => :count, :as => :count
         get 'thank-you', :action => :thank_you, :as => :thank_you
+        get 'gathering-support', :action => :gathering_support, :as => :gathering_support
         get 'moderation-info', :action => :moderation_info, :as => :moderation_info
       end
 

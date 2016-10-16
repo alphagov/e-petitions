@@ -3,6 +3,18 @@ Feature: Suzie views a petition
   As Suzie the signer
   I want to view a petition of my choice from a list, seeing the vote count, closed and open dates, along with the reason for rejection if applicable
 
+  Scenario: Suzie views a petition gathering sponsors
+    Given a validated petition "Spend more money on Defence"
+    When I view the petition
+    Then I should see "This petition is gathering support"
+    And I should see a link called "petition standards" linking to "/help#standards"
+
+  Scenario: Suzie views a petition waiting to be moderated
+    Given a sponsored petition "Spend more money on Defence"
+    When I view the petition
+    Then I should see "We’re checking this petition"
+    And I should see a link called "petition standards" linking to "/help#standards"
+
   Scenario: Suzie views an open petition
     Given an open petition "Spend more money on Defence"
     When I view the petition
