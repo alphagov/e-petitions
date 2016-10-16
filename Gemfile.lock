@@ -192,7 +192,7 @@ GEM
       mime-types
       mimemagic (= 0.3.0)
     pg (0.18.4)
-    phantomjs (1.9.7.1)
+    phantomjs (2.1.1.0)
     pickle (0.5.1)
       cucumber (>= 0.8)
       rake
@@ -339,7 +339,7 @@ DEPENDENCIES
   nokogiri
   paperclip
   pg
-  phantomjs (~> 1.9.7.0)
+  phantomjs (~> 2.1.1.0)
   pickle
   poltergeist
   pry
@@ -359,4 +359,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.11.2
+   1.13.5
