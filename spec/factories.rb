@@ -92,8 +92,12 @@ FactoryGirl.define do
     state  Petition::VALIDATED_STATE
 
     after(:create) do |petition, evaluator|
-      petition.sponsors.each do |sp|
-        sp.create_signature!(FactoryGirl.attributes_for(:validated_signature)) if evaluator.sponsors_signed
+      if evaluator.sponsors_signed
+        petition.sponsors.each do |sp|
+          sp.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+
+        petition.update_signature_count!
       end
     end
   end
