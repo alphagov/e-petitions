@@ -1,4 +1,4 @@
-class NotifyEveryoneOfModerationDecisionJob < ActiveJob::Base
+class NotifyEveryoneOfModerationDecisionJob < ApplicationJob
   rescue_from StandardError do |exception|
     Appsignal.send_exception exception
   end

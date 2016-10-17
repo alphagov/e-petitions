@@ -1,4 +1,4 @@
-class PetitionSignedDataUpdateJob < ActiveJob::Base
+class PetitionSignedDataUpdateJob < ApplicationJob
   queue_as :highest_priority
 
   rescue_from(ActiveJob::DeserializationError) do |exception|

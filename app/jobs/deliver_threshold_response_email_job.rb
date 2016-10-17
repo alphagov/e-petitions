@@ -1,4 +1,4 @@
-class DeliverThresholdResponseEmailJob < ActiveJob::Base
+class DeliverThresholdResponseEmailJob < ApplicationJob
   include EmailDelivery
 
   def create_email

@@ -1,4 +1,4 @@
-class EmailDebateScheduledJob < ActiveJob::Base
+class EmailDebateScheduledJob < ApplicationJob
   include EmailAllPetitionSignatories
 
   self.email_delivery_job_class = DeliverDebateScheduledEmailJob

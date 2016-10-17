@@ -1,4 +1,4 @@
-class EmailThresholdReminderJob < ActiveJob::Base
+class EmailThresholdReminderJob < ApplicationJob
   queue_as :high_priority
 
   def perform

@@ -1,4 +1,4 @@
-class EmailPetitionersJob < ActiveJob::Base
+class EmailPetitionersJob < ApplicationJob
   include EmailAllPetitionSignatories
 
   self.email_delivery_job_class = DeliverPetitionEmailJob
