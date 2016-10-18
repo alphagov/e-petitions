@@ -1,6 +1,6 @@
 require 'faraday'
 
-class FetchCountryRegisterJob < ActiveJob::Base
+class FetchCountryRegisterJob < ApplicationJob
   HOST = 'https://country.register.gov.uk'
   ENDPOINT = '/records.json?page-size=500'
   TIMEOUT = 5

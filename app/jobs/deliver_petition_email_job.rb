@@ -1,4 +1,4 @@
-class DeliverPetitionEmailJob < ActiveJob::Base
+class DeliverPetitionEmailJob < ApplicationJob
   include EmailDelivery
 
   attr_reader :email

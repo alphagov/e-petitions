@@ -3,9 +3,9 @@
 set -x
 set -e
 
-if [ ! -e /home/travis/.phantomjs/1.9.7/x86_64-linux/bin/phantomjs ]; then
-  mkdir -p /home/travis/.phantomjs/1.9.7/x86_64-linux/bin
+if [ ! -e /home/travis/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs ]; then
+  mkdir -p /home/travis/.phantomjs/2.1.1/x86_64-linux/bin
   pip install --user awscli
-  aws s3 cp s3://epetitions-ci/phantomjs /home/travis/.phantomjs/1.9.7/x86_64-linux/bin/phantomjs
-  chmod ugo+x /home/travis/.phantomjs/1.9.7/x86_64-linux/bin/phantomjs
+  aws s3 cp s3://epetitions-ci/2.1.1/phantomjs /home/travis/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
+  chmod ugo+x /home/travis/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
 fi

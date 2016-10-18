@@ -1,4 +1,4 @@
-class EmailJob < ActiveJob::Base
+class EmailJob < ApplicationJob
   class_attribute :mailer, :email
 
   PERMANENT_FAILURES = [

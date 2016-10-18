@@ -1,4 +1,4 @@
-class DeliverDebateScheduledEmailJob < ActiveJob::Base
+class DeliverDebateScheduledEmailJob < ApplicationJob
   include EmailDelivery
 
   def create_email

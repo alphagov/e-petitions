@@ -4,9 +4,10 @@ class PetitionsController < ApplicationController
   before_action :avoid_unknown_state_filters, only: :index
   before_action :do_not_cache, except: %i[index show]
 
-  before_action :retrieve_petition, only: [:show, :count, :moderation_info]
-  before_action :redirect_to_moderation_info_url, if: :not_moderated?, only: :show
-  before_action :redirect_to_petition_url, if: :moderated?, only: :moderation_info
+  before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
+  before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?, only: [:moderation_info, :show]
+  before_action :redirect_to_moderation_info_url, if: :in_moderation?, only: [:gathering_support, :show]
+  before_action :redirect_to_petition_url, if: :moderated?, only: [:gathering_support, :moderation_info]
 
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
 
@@ -91,8 +92,16 @@ class PetitionsController < ApplicationController
     redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
   end
 
-  def not_moderated?
-    !@petition.moderated?
+  def collecting_sponsors?
+    @petition.collecting_sponsors?
+  end
+
+  def redirect_to_gathering_support_url
+    redirect_to gathering_support_petition_url(@petition)
+  end
+
+  def in_moderation?
+    @petition.in_moderation?
   end
 
   def redirect_to_moderation_info_url

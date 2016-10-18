@@ -1,4 +1,4 @@
-class PetitionCountJob < ActiveJob::Base
+class PetitionCountJob < ApplicationJob
   class InvalidSignatureCounts < RuntimeError; end
 
   queue_as :high_priority

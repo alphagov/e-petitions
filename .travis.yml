@@ -5,7 +5,7 @@ cache:
   directories:
     - /home/travis/.phantomjs
 rvm:
-- 2.2.4
+- 2.2.5
 services:
 - memcached
 before_install:

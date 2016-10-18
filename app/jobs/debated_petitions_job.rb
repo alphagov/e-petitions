@@ -1,4 +1,4 @@
-class DebatedPetitionsJob < ActiveJob::Base
+class DebatedPetitionsJob < ApplicationJob
   queue_as :high_priority
 
   def perform(date)
