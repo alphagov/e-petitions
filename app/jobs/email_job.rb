@@ -14,7 +14,8 @@ class EmailJob < ApplicationJob
     Errno::ECONNREFUSED,
     Errno::ETIMEDOUT,
     Timeout::Error,
-    EOFError
+    EOFError,
+    SocketError
   ]
 
   queue_as :high_priority

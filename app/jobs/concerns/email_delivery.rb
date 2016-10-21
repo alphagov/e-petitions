@@ -18,7 +18,8 @@ module EmailDelivery
     Errno::ECONNREFUSED,
     Errno::ETIMEDOUT,
     Timeout::Error,
-    EOFError
+    EOFError,
+    SocketError
   ]
 
   included do
