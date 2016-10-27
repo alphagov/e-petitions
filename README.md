@@ -24,7 +24,9 @@ A few things to know:
 	* `# GRANT all privileges ON database epets_test TO epets;`
 	* `# ALTER USER epets WITH PASSWORD 'replace_me';`
 	* `# \q` to quit
-* You will need to set up the `config/database.yml`. Copy what is in `config/database.example.yml` and add the password you used earlier for the `epets` postgres user
+* You will need create your local config file, where you can override your all kind of configuraion:
+  * create `.env.local`, which is ignored by GIT, and put there this line, to manage the DB:
+    `DATABASE_URL=postgresql://epets:replace_me@localhost`
 * `$ rake db:structure:load` - load the sql structure into your new databases
 
 ## Run the app
