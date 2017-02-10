@@ -13,6 +13,7 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.to have_db_column(:mp_id).of_type(:string).with_options(null: true, limit: 30) }
     it { is_expected.to have_db_column(:mp_name).of_type(:string).with_options(null: true, limit: 100) }
     it { is_expected.to have_db_column(:mp_date).of_type(:date).with_options(null: true) }
+    it { is_expected.to have_db_column(:example_postcode).of_type(:string).with_options(null: true, limit: 30) }
   end
 
   describe "associations" do
@@ -188,6 +189,48 @@ RSpec.describe Constituency, type: :model do
       expect(constituency.mp_url).to eq <<-URL.strip
         http://www.parliament.uk/biographies/commons/the-rt-hon-duncan-short-mp/2564
       URL
+    end
+  end
+
+  describe "#example_postcode" do
+    context "when the example postcode is not cached" do
+      let!(:constituency) { FactoryGirl.create(:constituency, ons_code: "E14000649") }
+      let!(:area_url) { "https://mapit.mysociety.org/area/E14000649" }
+      let!(:postcode_url) { "https://mapit.mysociety.org/area/65636/example_postcode" }
+
+      let!(:area_response) do
+        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '{"id":65636}' }
+      end
+
+      let!(:postcode_response) do
+        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '"CV2 1PH"' }
+      end
+
+      before do
+        stub_request(:get, area_url).to_return(area_response)
+        stub_request(:get, postcode_url).to_return(postcode_response)
+      end
+
+      it "fetches the example postcode from the Mapit API" do
+        expect(constituency.example_postcode).to eq("CV21PH")
+      end
+
+      it "saves the example postcode in the constituency record" do
+        expect {
+          constituency.example_postcode
+        }.to change {
+          constituency.reload[:example_postcode]
+        }.from(nil).to("CV21PH")
+      end
+    end
+
+    context "when the example postcode is cached" do
+      let!(:constituency) { FactoryGirl.create(:constituency, example_postcode: "CV21PH") }
+
+      it "doesn't make an API request" do
+        expect(WebMock).not_to have_requested(:get, "mapit.mysociety.org")
+        expect(constituency.example_postcode).to eq("CV21PH")
+      end
     end
   end
 end

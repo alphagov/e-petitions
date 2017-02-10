@@ -604,6 +604,133 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".not_anonymised" do
+    subject do
+      described_class.not_anonymised
+    end
+
+    context "when there are no signatures not anonymised" do
+      let!(:signature) { FactoryGirl.create(:signature, anonymised_at: 1.week.ago) }
+
+      it "returns an empty array" do
+        expect(subject.to_a).to eq([])
+      end
+    end
+
+    context "when there are signatures not anonymised" do
+      let!(:signature) { FactoryGirl.create(:signature, anonymised_at: nil) }
+
+      it "returns an array of signatures" do
+        expect(subject.to_a).to eq([signature])
+      end
+    end
+  end
+
+  describe ".created_before" do
+    subject do
+      described_class.created_before(1.month.ago)
+    end
+
+    context "when there are no signatures created before the timestamp" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 1.week.ago) }
+
+      it "returns an empty array" do
+        expect(subject.to_a).to eq([])
+      end
+    end
+
+    context "when there are signatures created before the timestamp" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 6.weeks.ago) }
+
+      it "returns an array of signatures" do
+        expect(subject.to_a).to eq([signature])
+      end
+    end
+  end
+
+  describe ".in_need_of_anonymisation" do
+    subject do
+      described_class.in_need_of_anonymisation(Time.current.beginning_of_day)
+    end
+
+    context "when there are no signatures that need anonymising" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 13.months.ago, anonymised_at: 1.month.ago) }
+
+      it "returns an empty array" do
+        expect(subject.to_a).to eq([])
+      end
+    end
+
+    context "when there are signatures that need anonymising" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 13.months.ago, anonymised_at: nil) }
+
+      it "returns an array of signatures" do
+        expect(subject.to_a).to eq([signature])
+      end
+    end
+  end
+
+  describe ".anonymise!" do
+    let(:timestamp) { Time.current.beginning_of_day }
+
+    context "when the signatures are less than 12 months old" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 11.months.ago, anonymised_at: nil) }
+
+      it "doesn't anonymise the signature" do
+        expect {
+          described_class.anonymise!(timestamp)
+        }.not_to change {
+          signature.reload.anonymised_at
+        }
+      end
+    end
+
+    context "when the signatures are more than 12 months old" do
+      let!(:signature) { FactoryGirl.create(:signature, created_at: 13.months.ago, anonymised_at: nil) }
+
+      it "anonymises the signature" do
+        expect {
+          described_class.anonymise!(timestamp)
+        }.to change {
+          signature.reload.anonymised_at
+        }.from(nil).to(timestamp)
+      end
+    end
+
+    context "when one of the signatures raises an ActiveRecord::RecordInvalid error" do
+      let!(:signature_1) { FactoryGirl.create(:signature, created_at: 13.months.ago, anonymised_at: nil) }
+      let!(:signature_2) { FactoryGirl.create(:signature, created_at: 13.months.ago, anonymised_at: nil) }
+      let!(:exception) { ActiveRecord::RecordInvalid.new(signature_1) }
+      let!(:scope) { double(:scope) }
+
+      before do
+        expect(described_class).to receive(:in_need_of_anonymisation).with(timestamp).and_return(scope)
+        expect(scope).to receive(:find_each).and_yield(signature_1).and_yield(signature_2)
+        expect(signature_1).to receive(:anonymise!).with(timestamp).and_raise(exception)
+      end
+
+      it "notifies Appsignal of the error" do
+        expect(Appsignal).to receive(:send_exception).with(exception)
+
+        expect {
+          described_class.anonymise!(timestamp)
+        }.not_to change {
+          signature_1.anonymised_at
+        }
+      end
+
+      it "continues anonymising" do
+        expect(Appsignal).to receive(:send_exception).with(exception)
+
+        expect {
+          described_class.anonymise!(timestamp)
+        }.to change {
+          signature_2.anonymised_at
+        }.from(nil).to(timestamp)
+      end
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
     let(:creator) { FactoryGirl.create(:pending_signature) }
@@ -915,6 +1042,105 @@ RSpec.describe Signature, type: :model do
     it "raises PG::InFailedSqlTransaction if it fails twice" do
       expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
       expect{ signature.invalidate! }.to raise_error(PG::InFailedSqlTransaction)
+    end
+  end
+
+  describe "#anonymised?" do
+    context "when anonymised_at is nil" do
+      let(:signature) { FactoryGirl.build(:signature, anonymised_at: nil) }
+
+      it "return false" do
+        expect(signature.anonymised?).to eq(false)
+      end
+    end
+
+    context "when anonymised_at is not nil" do
+      let(:signature) { FactoryGirl.build(:signature, anonymised_at: 1.week.ago) }
+
+      it "return true" do
+        expect(signature.anonymised?).to eq(true)
+      end
+    end
+  end
+
+  describe "#anonymise!" do
+    let!(:timestamp) { Time.current.beginning_of_day }
+
+    it "anonymises the name" do
+      signature = FactoryGirl.create(:signature, name: "Jo Public")
+
+      expect {
+        signature.anonymise!(timestamp)
+      }.to change {
+        signature.reload.name
+      }.from("Jo Public").to("Signature #{signature.id}")
+    end
+
+    it "anonymises the email" do
+      signature = FactoryGirl.create(:signature, email: "jo.public@gmail.com")
+
+      expect {
+        signature.anonymise!(timestamp)
+      }.to change {
+        signature.reload.email
+      }.from("jo.public@gmail.com").to("signature-#{signature.id}@example.com")
+    end
+
+    it "anonymises the ip address" do
+      signature = FactoryGirl.create(:signature, ip_address: "12.34.56.78")
+
+      expect {
+        signature.anonymise!(timestamp)
+      }.to change {
+        signature.reload.ip_address
+      }.from("12.34.56.78").to("192.168.1.1")
+    end
+
+    it "sets the anonymised_at timestamp" do
+      signature = FactoryGirl.create(:signature)
+
+      expect {
+        signature.anonymise!(timestamp)
+      }.to change {
+        signature.reload.anonymised_at
+      }.from(nil).to(timestamp)
+    end
+
+    context "when the location is outside the UK" do
+      it "sets the postcode to an empty string" do
+        signature = FactoryGirl.create(:signature, postcode: "12345", location_code: "AU")
+
+        expect {
+          signature.anonymise!(timestamp)
+        }.to change {
+          signature.reload.postcode
+        }.from("12345").to("")
+      end
+    end
+
+    context "when the location is inside the UK" do
+      it "sets the postcode to an example postcode" do
+        signature = FactoryGirl.create(:signature, postcode: "CV66HN", constituency_id: "3427")
+        constituency = FactoryGirl.create(:constituency, :coventry_north_east)
+
+        expect {
+          signature.anonymise!(timestamp)
+        }.to change {
+          signature.reload.postcode
+        }.from("CV66HN").to("CV21PH")
+      end
+    end
+
+    context "when the constituency is missing" do
+      it "sets the postcode to the NHS 'address not known' postcode" do
+        signature = FactoryGirl.create(:signature, postcode: "CV66HN", constituency_id: "3427")
+
+        expect {
+          signature.anonymise!(timestamp)
+        }.to change {
+          signature.reload.postcode
+        }.from("CV66HN").to("ZZ993WZ")
+      end
     end
   end
 
