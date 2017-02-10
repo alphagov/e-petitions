@@ -228,6 +228,13 @@ RSpec.shared_examples_for "a job to send an signatory email" do
         it_behaves_like "catching errors during individual email sending"
         it_behaves_like "retrying the email delivery"
       end
+
+      context "with socket error" do
+        let(:exception_class) { SocketError }
+
+        it_behaves_like "catching errors during individual email sending"
+        it_behaves_like "retrying the email delivery"
+      end
     end
   end
 
