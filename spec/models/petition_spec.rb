@@ -519,6 +519,66 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    describe '.all_popular_in_constituency' do
+      let!(:petition_1) { FactoryGirl.create(:open_petition, signature_count: 10) }
+      let!(:petition_2) { FactoryGirl.create(:open_petition, signature_count: 20) }
+      let!(:petition_3) { FactoryGirl.create(:open_petition, signature_count: 30) }
+      let!(:petition_4) { FactoryGirl.create(:open_petition, signature_count: 40) }
+
+      let!(:constituency_1) { FactoryGirl.generate(:constituency_id) }
+      let!(:constituency_2) { FactoryGirl.generate(:constituency_id) }
+
+      let!(:petition_1_journal_1) { FactoryGirl.create(:constituency_petition_journal, petition: petition_1, constituency_id: constituency_1, signature_count: 6) }
+      let!(:petition_1_journal_2) { FactoryGirl.create(:constituency_petition_journal, petition: petition_1, constituency_id: constituency_2, signature_count: 4) }
+      let!(:petition_2_journal_2) { FactoryGirl.create(:constituency_petition_journal, petition: petition_2, constituency_id: constituency_2, signature_count: 20) }
+      let!(:petition_3_journal_1) { FactoryGirl.create(:constituency_petition_journal, petition: petition_3, constituency_id: constituency_1, signature_count: 30) }
+      let!(:petition_4_journal_1) { FactoryGirl.create(:constituency_petition_journal, petition: petition_4, constituency_id: constituency_1, signature_count: 0) }
+      let!(:petition_4_journal_2) { FactoryGirl.create(:constituency_petition_journal, petition: petition_4, constituency_id: constituency_2, signature_count: 40) }
+
+      it 'excludes petitions that have no journal for the supplied constituency_id' do
+        popular = Petition.all_popular_in_constituency(constituency_1, 4)
+        expect(popular).not_to include(petition_2)
+      end
+
+      it 'excludes petitions that have a journal with 0 votes for the supplied constituency_id' do
+        popular = Petition.all_popular_in_constituency(constituency_1, 4)
+        expect(popular).not_to include(petition_4)
+      end
+
+      it 'includes closed petitions with signatures from the supplied constituency_id' do
+        petition_1.update_columns(state: 'closed', closed_at: 3.days.ago)
+        popular = Petition.all_popular_in_constituency(constituency_1, 4)
+        expect(popular).to include(petition_1)
+      end
+
+      it 'excludes rejected petitions with signatures from the supplied constituency_id' do
+        petition_1.update_column(:state, Petition::REJECTED_STATE)
+        popular = Petition.all_popular_in_constituency(constituency_1, 4)
+        expect(popular).not_to include(petition_1)
+      end
+
+      it 'excludes hidden petitions with signatures from the supplied constituency_id' do
+        petition_1.update_column(:state, Petition::HIDDEN_STATE)
+        popular = Petition.all_popular_in_constituency(constituency_1, 4)
+        expect(popular).not_to include(petition_1)
+      end
+
+      it 'includes open petitions with signatures from the supplied constituency_id ordered by the count of signatures' do
+        popular = Petition.all_popular_in_constituency(constituency_1, 2)
+        expect(popular).to eq [petition_3, petition_1]
+      end
+
+      it 'adds the constituency_signature_count attribute to the retrieved petitions' do
+        most_popular = Petition.all_popular_in_constituency(constituency_1, 1).first
+        expect(most_popular).to respond_to :constituency_signature_count
+        expect(most_popular.constituency_signature_count).to eq 30
+      end
+
+      it 'returns an array, not a scope' do
+        expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an Array
+      end
+    end
+
     describe 'tagged_with' do
       let!(:petition_1) { FactoryGirl.create(:petition, admin_notes: '[foo]') }
       let!(:petition_2) { FactoryGirl.create(:petition, admin_notes: 'foo') }

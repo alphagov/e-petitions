@@ -359,10 +359,9 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   petition_args = {
     action: petition_action,
     open_at: 3.months.ago,
-    closed_at: petition_closed_at,
-    state: petition_state
+    closed_at: petition_closed_at
   }
-  @petition = FactoryGirl.create(:open_petition, petition_args)
+  @petition = FactoryGirl.create(:"#{state}_petition", petition_args)
   signature_state ||= "validated"
   5.times { FactoryGirl.create(:"#{signature_state}_signature", petition: @petition) }
 end

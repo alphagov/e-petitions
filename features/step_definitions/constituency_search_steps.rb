@@ -101,8 +101,8 @@ Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_
   local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.external_id).count
   within :css, '.local-petitions' do
     within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
-      expect(page).to have_text("#{local_signature_count} signatures from #{@my_constituency.name}")
-      expect(page).to have_text("#{all_signature_count} signatures total")
+      expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
+      expect(page).to have_text("#{all_signature_count} #{'signature'.pluralize(all_signature_count)} total")
     end
   end
 end
@@ -143,4 +143,20 @@ end
 
 Then(/^I should not see a link to the MP for my constituency$/) do
   expect(page).not_to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
+end
+
+Then(/^I should see a link to view all local petitions$/) do
+  expect(page).to have_link("View all popular petitions in #{@my_constituency.name}", href: all_local_petition_path(@my_constituency))
+end
+
+Then(/^I should see a link to view open local petitions$/) do
+  expect(page).to have_link("View open popular petitions in #{@my_constituency.name}", href: local_petition_path(@my_constituency))
+end
+
+When(/^I click the view all local petitions$/) do
+  click_on "View all popular petitions in #{@my_constituency.name}"
+end
+
+Then(/^I should see that closed petitions are identified$/) do
+  expect(page).to have_text("now closed")
 end

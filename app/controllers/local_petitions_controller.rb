@@ -5,8 +5,9 @@ class LocalPetitionsController < ApplicationController
 
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
-  before_action :find_by_slug, only: :show
+  before_action :find_by_slug, only: [:show, :all]
   before_action :find_petitions, if: :constituency?, only: :show
+  before_action :find_all_petitions, if: :constituency?, only: :all
   before_action :redirect_to_constituency, if: :constituency?, only: :index
 
   def index
@@ -16,6 +17,10 @@ class LocalPetitionsController < ApplicationController
   end
 
   def show
+    respond_with(@petitions)
+  end
+
+  def all
     respond_with(@petitions)
   end
 
@@ -43,6 +48,10 @@ class LocalPetitionsController < ApplicationController
 
   def find_petitions
     @petitions = Petition.popular_in_constituency(@constituency.external_id, 50)
+  end
+
+  def find_all_petitions
+    @petitions = Petition.all_popular_in_constituency(@constituency.external_id, 50)
   end
 
   def redirect_to_constituency

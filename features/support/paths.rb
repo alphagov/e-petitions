@@ -53,6 +53,9 @@ module NavigationHelpers
     when /^the local petitions results page$/
       local_petition_url(@my_constituency.slug)
 
+    when /^the all local petitions results page$/
+      all_local_petition_url(@my_constituency.slug)
+
     else
       begin
         page_name =~ /^the (.*) page$/
