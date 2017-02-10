@@ -262,16 +262,16 @@ class Petition < ActiveRecord::Base
       where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
     end
 
-    def popular_in_constituency(constituency_id, how_many = 50)
+    def popular_in_constituency(constituency_id, count = 50)
       # NOTE: this query is complex, so we'll flatten it at the end
       # to prevent chaining things off the end that might break it.
-      self.
-        select("#{table_name}.*, #{ConstituencyPetitionJournal.table_name}.signature_count AS constituency_signature_count").
-        for_state(OPEN_STATE).
-        joins(:constituency_petition_journals).
-        merge(ConstituencyPetitionJournal.with_signatures_for(constituency_id).ordered).
-        limit(how_many).
-        to_a
+      popular_in(constituency_id, count).for_state(OPEN_STATE).to_a
+    end
+
+    def all_popular_in_constituency(constituency_id, count = 50)
+      # NOTE: this query is complex, so we'll flatten it at the end
+      # to prevent chaining things off the end that might break it.
+      popular_in(constituency_id, count).for_state(PUBLISHED_STATES).to_a
     end
 
     def tagged_with(tag)
@@ -292,6 +292,17 @@ class Petition < ActiveRecord::Base
     end
 
     private
+
+    def popular_in(constituency_id, count)
+      klass = ConstituencyPetitionJournal
+      constituency_signature_count = klass.arel_table[:signature_count].as('constituency_signature_count')
+      constituency_signatures_for = klass.with_signatures_for(constituency_id).ordered
+
+      select(arel_table[Arel.star], constituency_signature_count).
+      joins(:constituency_petition_journals).
+      merge(constituency_signatures_for).
+      limit(count)
+    end
 
     def threshold_for_debate_reached
       arel_table[:debate_threshold_reached_at].not_eq(nil)

@@ -90,6 +90,16 @@ p {
   }
 }
 
+.heading-link {
+  margin-top: em(-16, 16);
+  margin-bottom: em(24, 16);
+
+  @include media(tablet) {
+    margin-top: em(-19, 19);
+    margin-bottom: em(32, 19);
+  }
+}
+
 // Link styles
 a {
   color: $link-colour;

@@ -22,11 +22,21 @@ Feature: Freya searches petitions by constituency
     Then I should be on the local petitions results page
     And the markup should be valid
     And I should see "Petitions in South Dorset" in the browser page title
+    And I should see "Popular open petitions in the constituency of South Dorset"
+    And I should see a link to view all local petitions
     And I should see a link to the MP for my constituency
     And I should see that my fellow constituents support "Save the monkeys"
     And I should see that my fellow constituents support "Build more quirky theme parks"
     But I should not see that my fellow constituents support "What about other primates?"
     And I should not see that my fellow constituents support "Restore vintage diggers"
+    And the petitions I see should be ordered by my fellow constituents level of support
+    When I click the view all local petitions
+    Then I should be on the all local petitions results page
+    And the markup should be valid
+    And I should see "Popular petitions in the constituency of South Dorset"
+    And I should see a link to view open local petitions
+    And I should see that my fellow constituents support "What about other primates?"
+    And I should see that closed petitions are identified
     And the petitions I see should be ordered by my fellow constituents level of support
 
   Scenario: Searching for local petitions when the api is down

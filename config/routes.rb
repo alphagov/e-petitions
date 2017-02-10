@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     scope 'petitions' do
       get 'local' => 'local_petitions#index', as: 'local_petitions'
       get 'local/:id' => 'local_petitions#show', as: 'local_petition'
+      get 'local/:id/all' => 'local_petitions#all', as: 'all_local_petition'
     end
 
     resources :petitions, :only => [:new, :show, :index] do

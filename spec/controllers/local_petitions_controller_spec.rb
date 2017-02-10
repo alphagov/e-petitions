@@ -100,4 +100,27 @@ RSpec.describe LocalPetitionsController, type: :controller do
       expect(assigns(:petitions)).to eq(petitions)
     end
   end
+
+  describe "GET /petitions/local/:id/all" do
+    let(:petitions) { double(:petitions) }
+
+    before do
+      expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
+      expect(Petition).to receive(:all_popular_in_constituency).with("99999", 50).and_return(petitions)
+
+      get :all, id: "holborn"
+    end
+
+    it "renders the all template" do
+      expect(response).to render_template("local_petitions/all")
+    end
+
+    it "assigns the constituency" do
+      expect(assigns(:constituency)).to eq(constituency)
+    end
+
+    it "assigns the petitions" do
+      expect(assigns(:petitions)).to eq(petitions)
+    end
+  end
 end

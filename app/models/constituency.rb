@@ -46,4 +46,8 @@ class Constituency < ActiveRecord::Base
   def mp_url
     "#{MP_URL}/#{mp_name.parameterize}/#{mp_id}"
   end
+
+  def to_param
+    slug
+  end
 end
