@@ -25,6 +25,18 @@ home_page:
   options:
     expires_in: 300
 
+local_petitions_page:
+  keys:
+    - :constituency
+  options:
+    expires_in: 300
+
+all_local_petitions_page:
+  keys:
+    - :constituency
+  options:
+    expires_in: 300
+
 petition:
   keys:
     - :petition

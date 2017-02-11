@@ -40,6 +40,26 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#constituency" do
+      context "when the @constituency instance variable is not set" do
+        it "returns nil" do
+          expect(keys.constituency).to be_nil
+        end
+      end
+
+      context "when the @constituency instance variable is set" do
+        let(:constituency) { double(:constituency) }
+
+        before do
+          assign('constituency', constituency)
+        end
+
+        it "returns the petition" do
+          expect(keys.constituency).to eq(constituency)
+        end
+      end
+    end
+
     describe "#create_petition_page" do
       it "delegates to the template context" do
         expect(helper).to receive(:create_petition_page?).and_return(true)

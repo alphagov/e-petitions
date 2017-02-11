@@ -44,6 +44,10 @@ module CacheHelper
         archived_petition_page?
       end
 
+      def constituency
+        assigns['constituency']
+      end
+
       def create_petition_page
         create_petition_page?
       end

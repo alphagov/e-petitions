@@ -263,15 +263,11 @@ class Petition < ActiveRecord::Base
     end
 
     def popular_in_constituency(constituency_id, count = 50)
-      # NOTE: this query is complex, so we'll flatten it at the end
-      # to prevent chaining things off the end that might break it.
-      popular_in(constituency_id, count).for_state(OPEN_STATE).to_a
+      popular_in(constituency_id, count).for_state(OPEN_STATE)
     end
 
     def all_popular_in_constituency(constituency_id, count = 50)
-      # NOTE: this query is complex, so we'll flatten it at the end
-      # to prevent chaining things off the end that might break it.
-      popular_in(constituency_id, count).for_state(PUBLISHED_STATES).to_a
+      popular_in(constituency_id, count).for_state(PUBLISHED_STATES)
     end
 
     def tagged_with(tag)
