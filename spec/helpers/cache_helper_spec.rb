@@ -360,4 +360,54 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
   end
+
+  describe "#csv_cache" do
+    after do
+      Rails.cache.delete("csv/foo")
+    end
+
+    context "when caching is not enabled" do
+      before do
+        allow(controller).to receive(:perform_caching).and_return(false)
+      end
+
+      context "and the cache key is not set" do
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+
+      context "and the cache key is set" do
+        before do
+          Rails.cache.write("csv/foo", "bar")
+        end
+
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+    end
+
+    context "when caching is enabled" do
+      before do
+        allow(controller).to receive(:perform_caching).and_return(true)
+      end
+
+      context "and the cache key is not set" do
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+
+      context "and the cache key is set" do
+        before do
+          Rails.cache.write("csv/foo", "bar")
+        end
+
+        it "doesn't call the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.not_to yield_control
+        end
+      end
+    end
+  end
 end

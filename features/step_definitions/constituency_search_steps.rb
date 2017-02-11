@@ -162,9 +162,13 @@ Then(/^I should see that closed petitions are identified$/) do
 end
 
 When(/^I click the JSON link$/) do
-  click_on "Get this data in JSON format"
+  click_on "JSON"
 end
 
 Then(/^the JSON should be valid$/) do
   expect { JSON.parse(page.body) }.not_to raise_error
+end
+
+When(/^I click the CSV link$/) do
+  click_on "CSV"
 end

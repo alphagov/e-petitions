@@ -35,7 +35,7 @@
 
   <ul class="petition-meta">
     <li class="meta-json">
-      <span class="note"><%= link_to 'Get this data in JSON format', all_local_petition_path(@constituency, :json) %></span>
+      <span class="note">Get this data in <%= link_to 'JSON', all_local_petition_path(@constituency, :json) %> or <%= link_to 'CSV', all_local_petition_path(@constituency, :csv) %> format</span>
     </li>
   </ul>
 <% end %>

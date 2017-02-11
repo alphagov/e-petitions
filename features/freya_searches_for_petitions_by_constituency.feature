@@ -60,6 +60,25 @@ Feature: Freya searches petitions by constituency
     Then I should be on the all local petitions JSON page
     And the JSON should be valid
 
+  Scenario: Downloading the CSV data for open local petitions
+    Given I am on the home page
+    When I search for petitions local to me in "BH20 6HH"
+    Then I should be on the local petitions results page
+    And the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "open-popular-petitions-in-south-dorset.csv"
+
+  Scenario: Downloading the CSV data for all local petitions
+    Given I am on the home page
+    When I search for petitions local to me in "BH20 6HH"
+    Then I should be on the local petitions results page
+    And the markup should be valid
+    When I click the view all local petitions
+    Then I should be on the all local petitions results page
+    And the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "all-popular-petitions-in-south-dorset.csv"
+
   Scenario: Searching for local petitions when the api is down
     Given the constituency api is down
     And I am on the home page
