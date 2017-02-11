@@ -39,6 +39,27 @@ Feature: Freya searches petitions by constituency
     And I should see that closed petitions are identified
     And the petitions I see should be ordered by my fellow constituents level of support
 
+  Scenario: Downloading the JSON data for open local petitions
+    Given I am on the home page
+    When I search for petitions local to me in "BH20 6HH"
+    Then I should be on the local petitions results page
+    And the markup should be valid
+    When I click the JSON link
+    Then I should be on the local petitions JSON page
+    And the JSON should be valid
+
+  Scenario: Downloading the JSON data for all local petitions
+    Given I am on the home page
+    When I search for petitions local to me in "BH20 6HH"
+    Then I should be on the local petitions results page
+    And the markup should be valid
+    When I click the view all local petitions
+    Then I should be on the all local petitions results page
+    And the markup should be valid
+    When I click the JSON link
+    Then I should be on the all local petitions JSON page
+    And the JSON should be valid
+
   Scenario: Searching for local petitions when the api is down
     Given the constituency api is down
     And I am on the home page

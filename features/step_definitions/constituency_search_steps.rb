@@ -160,3 +160,11 @@ end
 Then(/^I should see that closed petitions are identified$/) do
   expect(page).to have_text("now closed")
 end
+
+When(/^I click the JSON link$/) do
+  click_on "Get this data in JSON format"
+end
+
+Then(/^the JSON should be valid$/) do
+  expect { JSON.parse(page.body) }.not_to raise_error
+end

@@ -26,4 +26,10 @@
       </ol>
     <% end %>
   </div>
+
+  <ul class="petition-meta">
+    <li class="meta-json">
+      <span class="note"><%= link_to 'Get this data in JSON format', local_petition_path(@constituency, :json) %></span>
+    </li>
+  </ul>
 <% end %>

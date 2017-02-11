@@ -2,6 +2,7 @@ require 'postcode_sanitizer'
 
 class LocalPetitionsController < ApplicationController
   respond_to :html
+  respond_to :json, only: [:show, :all]
 
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index

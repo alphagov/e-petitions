@@ -140,7 +140,15 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:constituency) { FactoryGirl.create(:constituency) }
     let(:params) { {} }
 
-    it_behaves_like 'a route that only supports html formats'
+    it_behaves_like 'a route that supports html and json formats'
+  end
+
+  context 'the petitions/local/all results url' do
+    let(:url) { "/petitions/local/#{constituency.slug}/all" }
+    let(:constituency) { FactoryGirl.create(:constituency) }
+    let(:params) { {} }
+
+    it_behaves_like 'a route that supports html and json formats'
   end
 
   context 'the petitions show url' do
