@@ -1,27 +1,35 @@
-<h1 class="page-title">
-  Popular open petitions in the constituency of <%= @constituency.name %>
-</h1>
+<%= cache_for :local_petitions_page do %>
+  <h1 class="page-title">
+    Popular open petitions in the constituency of <%= @constituency.name %>
+  </h1>
 
-<p class="heading-link">
-  <%= link_to "View all popular petitions in #{@constituency.name}", all_local_petition_path(@constituency), class: 'view-all' %>
-</p>
+  <p class="heading-link">
+    <%= link_to "View all popular petitions in #{@constituency.name}", all_local_petition_path(@constituency), class: 'view-all' %>
+  </p>
 
-<% if @constituency.sitting_mp? %>
-  <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
-<% end %>
-
-<div class="section-panel local-petitions">
-  <% if @petitions.empty? %>
-    <p>No petitions are popular in your constituency.</p>
-  <% else %>
-    <ol>
-      <% @petitions.each do |petition| %>
-        <li class="petition-item petition-<%= petition.state %>">
-          <h3><%= link_to petition.action, petition_path(petition) %></h3>
-          <p><%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br/>
-          (<%= signature_count(:in_total, petition.signature_count) %>)</p>
-        </li>
-      <% end -%>
-    </ol>
+  <% if @constituency.sitting_mp? %>
+    <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
   <% end %>
-</div>
+
+  <div class="section-panel local-petitions">
+    <% if @petitions.empty? %>
+      <p>No petitions are popular in your constituency.</p>
+    <% else %>
+      <ol>
+        <% @petitions.each do |petition| %>
+          <li class="petition-item petition-<%= petition.state %>">
+            <h3><%= link_to petition.action, petition_path(petition) %></h3>
+            <p><%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br/>
+            (<%= signature_count(:in_total, petition.signature_count) %>)</p>
+          </li>
+        <% end -%>
+      </ol>
+    <% end %>
+  </div>
+
+  <ul class="petition-meta">
+    <li class="meta-json">
+      <span class="note">Get this data in <%= link_to 'JSON', local_petition_path(@constituency, :json) %> or <%= link_to 'CSV', local_petition_path(@constituency, :csv) %> format</span>
+    </li>
+  </ul>
+<% end %>

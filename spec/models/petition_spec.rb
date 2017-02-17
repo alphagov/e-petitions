@@ -514,8 +514,8 @@ RSpec.describe Petition, type: :model do
         expect(most_popular.constituency_signature_count).to eq 30
       end
 
-      it 'returns an array, not a scope' do
-        expect(Petition.popular_in_constituency(constituency_1, 1)).to be_an Array
+      it 'returns a scope' do
+        expect(Petition.popular_in_constituency(constituency_1, 1)).to be_an ActiveRecord::Relation
       end
     end
 
@@ -574,8 +574,8 @@ RSpec.describe Petition, type: :model do
         expect(most_popular.constituency_signature_count).to eq 30
       end
 
-      it 'returns an array, not a scope' do
-        expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an Array
+      it 'returns a scope' do
+        expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an ActiveRecord::Relation
       end
     end
 

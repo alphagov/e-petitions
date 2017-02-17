@@ -1,7 +1,9 @@
 require 'postcode_sanitizer'
+require 'csv'
 
 class LocalPetitionsController < ApplicationController
   respond_to :html
+  respond_to :csv, :json, only: [:show, :all]
 
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
@@ -9,6 +11,8 @@ class LocalPetitionsController < ApplicationController
   before_action :find_petitions, if: :constituency?, only: :show
   before_action :find_all_petitions, if: :constituency?, only: :all
   before_action :redirect_to_constituency, if: :constituency?, only: :index
+
+  after_action :set_content_disposition, if: :csv_request?, only: [:show, :all]
 
   def index
     respond_to do |format|
@@ -56,5 +60,21 @@ class LocalPetitionsController < ApplicationController
 
   def redirect_to_constituency
     redirect_to local_petition_url(@constituency.slug)
+  end
+
+  def csv_request?
+    request.format.symbol == :csv
+  end
+
+  def csv_filename
+    if action_name == 'all'
+      "all-popular-petitions-in-#{@constituency.slug}.csv"
+    else
+      "open-popular-petitions-in-#{@constituency.slug}.csv"
+    end
+  end
+
+  def set_content_disposition
+    response.headers['Content-Disposition'] = "attachment; filename=#{csv_filename}"
   end
 end

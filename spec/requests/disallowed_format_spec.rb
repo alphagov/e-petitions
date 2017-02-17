@@ -66,6 +66,50 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     end
   end
 
+  shared_examples 'a route that supports html, json and csv formats' do |headers_only: false|
+    unless headers_only
+      it 'supports json via extension' do
+        get url + '.json', params
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq :json
+      end
+
+      it 'supports csv via extension' do
+        get url + '.csv', params
+        expect(response.status).to eq 200
+        expect(response.content_type).to eq :csv
+      end
+
+      it 'does not support xml via extension' do
+        get url + '.xml', params
+        expect(response.status).to eq 406
+      end
+    end
+
+    it 'supports html' do
+      get url, params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq :html
+    end
+
+    it 'supports json via accepts header' do
+      get url, params, {'Accept' => 'application/json'}
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq :json
+    end
+
+    it 'supports csv via accepts header' do
+      get url, params, {'Accept' => 'text/csv'}
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq :csv
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params,  {'Accept' => 'application/xml'}
+      expect(response.status).to eq 406
+    end
+  end
+
   shared_examples 'a POST route where failure only supports html formats' do
     around do |example|
       begin
@@ -140,7 +184,15 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     let(:constituency) { FactoryGirl.create(:constituency) }
     let(:params) { {} }
 
-    it_behaves_like 'a route that only supports html formats'
+    it_behaves_like 'a route that supports html, json and csv formats'
+  end
+
+  context 'the petitions/local/all results url' do
+    let(:url) { "/petitions/local/#{constituency.slug}/all" }
+    let(:constituency) { FactoryGirl.create(:constituency) }
+    let(:params) { {} }
+
+    it_behaves_like 'a route that supports html, json and csv formats'
   end
 
   context 'the petitions show url' do

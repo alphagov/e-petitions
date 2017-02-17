@@ -40,6 +40,26 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
+    describe "#constituency" do
+      context "when the @constituency instance variable is not set" do
+        it "returns nil" do
+          expect(keys.constituency).to be_nil
+        end
+      end
+
+      context "when the @constituency instance variable is set" do
+        let(:constituency) { double(:constituency) }
+
+        before do
+          assign('constituency', constituency)
+        end
+
+        it "returns the petition" do
+          expect(keys.constituency).to eq(constituency)
+        end
+      end
+    end
+
     describe "#create_petition_page" do
       it "delegates to the template context" do
         expect(helper).to receive(:create_petition_page?).and_return(true)
@@ -337,6 +357,56 @@ RSpec.describe CacheHelper, type: :helper do
 
       it "builds a cache key and options pair" do
         expect(klass.build(helper, :head)).to eq(["head-1/#{digest}", {expires_in: 300}])
+      end
+    end
+  end
+
+  describe "#csv_cache" do
+    after do
+      Rails.cache.delete("csv/foo")
+    end
+
+    context "when caching is not enabled" do
+      before do
+        allow(controller).to receive(:perform_caching).and_return(false)
+      end
+
+      context "and the cache key is not set" do
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+
+      context "and the cache key is set" do
+        before do
+          Rails.cache.write("csv/foo", "bar")
+        end
+
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+    end
+
+    context "when caching is enabled" do
+      before do
+        allow(controller).to receive(:perform_caching).and_return(true)
+      end
+
+      context "and the cache key is not set" do
+        it "calls the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.to yield_control
+        end
+      end
+
+      context "and the cache key is set" do
+        before do
+          Rails.cache.write("csv/foo", "bar")
+        end
+
+        it "doesn't call the block" do
+          expect { |b| helper.csv_cache("foo", nil, &b) }.not_to yield_control
+        end
       end
     end
   end

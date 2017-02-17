@@ -44,6 +44,10 @@ module CacheHelper
         archived_petition_page?
       end
 
+      def constituency
+        assigns['constituency']
+      end
+
       def create_petition_page
         create_petition_page?
       end
@@ -207,5 +211,14 @@ module CacheHelper
 
   def last_debate_outcome_updated_at
     @_last_debate_outcome_updated_at ||= DebateOutcome.maximum(:updated_at)
+  end
+
+  def csv_cache(name, options = nil, &block)
+    if controller.respond_to?(:perform_caching) && controller.perform_caching
+      key = ActiveSupport::Cache.expand_cache_key(name, :csv)
+      Rails.cache.fetch(key, options, &block)
+    else
+      yield
+    end
   end
 end
