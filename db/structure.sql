@@ -836,6 +836,62 @@ ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
 
 
 --
+-- Name: trending_petition_journals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE trending_petition_journals (
+    id integer NOT NULL,
+    petition_id integer NOT NULL,
+    date date NOT NULL,
+    hour_0_signature_count integer DEFAULT 0 NOT NULL,
+    hour_1_signature_count integer DEFAULT 0 NOT NULL,
+    hour_2_signature_count integer DEFAULT 0 NOT NULL,
+    hour_3_signature_count integer DEFAULT 0 NOT NULL,
+    hour_4_signature_count integer DEFAULT 0 NOT NULL,
+    hour_5_signature_count integer DEFAULT 0 NOT NULL,
+    hour_6_signature_count integer DEFAULT 0 NOT NULL,
+    hour_7_signature_count integer DEFAULT 0 NOT NULL,
+    hour_8_signature_count integer DEFAULT 0 NOT NULL,
+    hour_9_signature_count integer DEFAULT 0 NOT NULL,
+    hour_10_signature_count integer DEFAULT 0 NOT NULL,
+    hour_11_signature_count integer DEFAULT 0 NOT NULL,
+    hour_12_signature_count integer DEFAULT 0 NOT NULL,
+    hour_13_signature_count integer DEFAULT 0 NOT NULL,
+    hour_14_signature_count integer DEFAULT 0 NOT NULL,
+    hour_15_signature_count integer DEFAULT 0 NOT NULL,
+    hour_16_signature_count integer DEFAULT 0 NOT NULL,
+    hour_17_signature_count integer DEFAULT 0 NOT NULL,
+    hour_18_signature_count integer DEFAULT 0 NOT NULL,
+    hour_19_signature_count integer DEFAULT 0 NOT NULL,
+    hour_20_signature_count integer DEFAULT 0 NOT NULL,
+    hour_21_signature_count integer DEFAULT 0 NOT NULL,
+    hour_22_signature_count integer DEFAULT 0 NOT NULL,
+    hour_23_signature_count integer DEFAULT 0 NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: trending_petition_journals_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE trending_petition_journals_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: trending_petition_journals_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE trending_petition_journals_id_seq OWNED BY trending_petition_journals.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -980,6 +1036,13 @@ ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq':
 --
 
 ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY trending_petition_journals ALTER COLUMN id SET DEFAULT nextval('trending_petition_journals_id_seq'::regclass);
 
 
 --
@@ -1148,6 +1211,14 @@ ALTER TABLE ONLY sponsors
 
 ALTER TABLE ONLY tasks
     ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trending_petition_journals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY trending_petition_journals
+    ADD CONSTRAINT trending_petition_journals_pkey PRIMARY KEY (id);
 
 
 --
@@ -1529,6 +1600,20 @@ CREATE UNIQUE INDEX index_tasks_on_name ON tasks USING btree (name);
 
 
 --
+-- Name: index_trending_petition_journals_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_trending_petition_journals_on_petition_id ON trending_petition_journals USING btree (petition_id);
+
+
+--
+-- Name: index_trending_petition_journals_on_petition_id_and_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_trending_petition_journals_on_petition_id_and_date ON trending_petition_journals USING btree (petition_id, date);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1802,4 +1887,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160910054223');
 INSERT INTO schema_migrations (version) VALUES ('20161006095752');
 
 INSERT INTO schema_migrations (version) VALUES ('20161006101123');
+
+INSERT INTO schema_migrations (version) VALUES ('20170226133907');
 

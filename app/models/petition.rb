@@ -71,6 +71,7 @@ class Petition < ActiveRecord::Base
   has_many :sponsor_signatures, :through => :sponsors, :source => :signature
   has_many :country_petition_journals, :dependent => :destroy
   has_many :constituency_petition_journals, :dependent => :destroy
+  has_many :trending_petition_journals, :dependent => :destroy
   has_many :emails, :dependent => :destroy
   has_many :invalidations
 

@@ -313,6 +313,11 @@ FactoryGirl.define do
     association :petition
   end
 
+  factory :trending_petition_journal do
+    association :petition
+    date Date.current
+  end
+
   factory :debate_outcome do
     association :petition, factory: :open_petition
     debated_on { 1.month.from_now.to_date }
