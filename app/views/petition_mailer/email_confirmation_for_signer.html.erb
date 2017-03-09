@@ -5,3 +5,13 @@
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
 <%= t("petitions.emails.signoff_suffix") %></p>
+
+<div itemscope itemtype="http://schema.org/EmailMessage">
+  <div itemprop="potentialAction" itemscope itemtype="http://schema.org/ConfirmAction">
+    <meta itemprop="name" content="Sign Petition" />
+    <div itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+      <link itemprop="url" href="<%=verify_signature_url(@signature, token: @signature.perishable_token) %>" />
+    </div>
+  </div>
+  <meta itemprop="description" content="Click to sign the petition '<%= @petition.action %>'" />
+</div>
