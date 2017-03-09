@@ -8,12 +8,17 @@ class PetitionMailer < ApplicationMailer
 
   def email_signer(petition, signature, email)
     @petition, @signature, @email = petition, signature, email
-    mail to: @signature.email, subject: subject_for(:email_signer)
+
+    mail to: @signature.email,
+      subject: subject_for(:email_signer),
+      list_unsubscribe: unsubscribe_url
   end
 
   def email_creator(petition, signature, email)
     @petition, @signature, @email = petition, signature, email
-    mail to: @signature.email, subject: subject_for(:email_creator)
+    mail to: @signature.email,
+      subject: subject_for(:email_creator),
+      list_unsubscribe: unsubscribe_url
   end
 
   def special_resend_of_email_confirmation_for_signer(signature)
@@ -23,7 +28,10 @@ class PetitionMailer < ApplicationMailer
 
   def notify_creator_that_petition_is_published(signature)
     @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:notify_creator_that_petition_is_published)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_that_petition_is_published),
+      list_unsubscribe: unsubscribe_url
   end
 
   def notify_sponsor_that_petition_is_published(signature)
@@ -43,12 +51,18 @@ class PetitionMailer < ApplicationMailer
 
   def notify_signer_of_threshold_response(petition, signature)
     @petition, @signature, @government_response = petition, signature, petition.government_response
-    mail to: @signature.email, subject: subject_for(:notify_signer_of_threshold_response)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_signer_of_threshold_response),
+      list_unsubscribe: unsubscribe_url
   end
 
   def notify_creator_of_threshold_response(petition, signature)
     @petition, @signature, @government_response = petition, signature, petition.government_response
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_threshold_response)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_of_threshold_response),
+      list_unsubscribe: unsubscribe_url
   end
 
   def notify_creator_of_closing_date_change(signature)
@@ -65,30 +79,39 @@ class PetitionMailer < ApplicationMailer
     @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
 
     if @debate_outcome.debated?
-      mail to: @signature.email, subject: subject_for(:notify_signer_of_positive_debate_outcome)
+      subject = subject_for(:notify_signer_of_positive_debate_outcome)
     else
-      mail to: @signature.email, subject: subject_for(:notify_signer_of_negative_debate_outcome)
+      subject = subject_for(:notify_signer_of_negative_debate_outcome)
     end
+
+    mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
   end
 
   def notify_creator_of_debate_outcome(petition, signature)
     @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
 
     if @debate_outcome.debated?
-      mail to: @signature.email, subject: subject_for(:notify_creator_of_positive_debate_outcome)
+      subject = subject_for(:notify_creator_of_positive_debate_outcome)
     else
-      mail to: @signature.email, subject: subject_for(:notify_creator_of_negative_debate_outcome)
+      subject = subject_for(:notify_creator_of_negative_debate_outcome)
     end
+
+    mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
   end
 
   def notify_signer_of_debate_scheduled(petition, signature)
     @petition, @signature = petition, signature
-    mail to: @signature.email, subject: subject_for(:notify_signer_of_debate_scheduled)
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_signer_of_debate_scheduled),
+      list_unsubscribe: unsubscribe_url
   end
 
   def notify_creator_of_debate_scheduled(petition, signature)
     @petition, @signature = petition, signature
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_debate_scheduled)
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_of_debate_scheduled),
+      list_unsubscribe: unsubscribe_url
   end
 
   private
@@ -115,5 +138,9 @@ class PetitionMailer < ApplicationMailer
         options[:subject] = @email.subject
       end
     end
+  end
+
+  def unsubscribe_url
+    "<#{unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token)}>"
   end
 end
