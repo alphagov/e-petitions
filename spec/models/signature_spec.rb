@@ -74,6 +74,8 @@ RSpec.describe Signature, type: :model do
 
   describe "callbacks" do
     context "when the signature is destroyed" do
+      let!(:trending_journal) { FactoryGirl.create(:trending_petition_journal, petition: petition, date: time.to_date) }
+      let(:time) { Time.parse("1 Jan 2017 13:05 UTC") }
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
       let(:creator) { FactoryGirl.create(:pending_signature) }
       let(:petition) do
@@ -89,6 +91,10 @@ RSpec.describe Signature, type: :model do
       before do
         petition.signatures.each { |s| s.validate! }
         petition.publish
+      end
+
+      around do |example|
+        travel_to(time) { example.run }
       end
 
       context "when the signature is the creator" do
@@ -128,6 +134,11 @@ RSpec.describe Signature, type: :model do
         it "decrements the constituency journal signature count" do
           expect(petition.signature_count).to eq(7)
           expect{ signature.destroy }.to change{ constituency_journal.reload.signature_count }.by(-1)
+        end
+
+        it "decrements the trending petition journal signature count" do
+          expect(petition.signature_count).to eq(7)
+          expect{ signature.destroy }.to change{ trending_journal.reload.hour_13_signature_count }.by(-1)
         end
       end
 
@@ -899,6 +910,17 @@ RSpec.describe Signature, type: :model do
 
     it 'does not talk to the country petition journal if the signature is not validated' do
       expect(CountryPetitionJournal).not_to receive(:invalidate_signature_for)
+      signature.update_columns(state: Signature::INVALIDATED_STATE)
+      signature.invalidate!
+    end
+
+    it "tells the relevant trending petition journal to invalidate the signature" do
+      expect(TrendingPetitionJournal).to receive(:invalidate_signature_for).with(signature, now)
+      signature.invalidate!(now)
+    end
+
+    it "does not talk to the trending petition journal if the signature is not validated" do
+      expect(TrendingPetitionJournal).not_to receive(:invalidate_signature_for)
       signature.update_columns(state: Signature::INVALIDATED_STATE)
       signature.invalidate!
     end

@@ -53,6 +53,11 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
       expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
       run_the_job
     end
+
+    it "tells the relevant trending petition journal to record a new signature" do
+      expect(TrendingPetitionJournal).to receive(:record_new_signature_for).with(signature)
+      run_the_job
+    end
   end
 
   context "when the petition is pending" do
@@ -79,6 +84,11 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
 
     it 'tells the relevant country petition journal to record a new signature' do
       expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
+      run_the_job
+    end
+
+    it "tells the relevant trending petition journal to record a new signature" do
+      expect(TrendingPetitionJournal).to receive(:record_new_signature_for).with(signature)
       run_the_job
     end
 
