@@ -89,5 +89,39 @@ RSpec.describe 'API request to show a petition', type: :request, show_exceptions
 
       assert_serialized_debate debated_petition, json["data"]["attributes"]
     end
+
+    context "with trending petition journals" do
+      let(:time) { Time.parse("1 Jan 2017 05:00:00 GMT") }
+      let(:date) { Date.today }
+
+      around do |example|
+        travel_to(time) { example.run }
+      end
+
+      before do
+        FactoryGirl.create(
+          :trending_petition_journal,
+          hour_1_signature_count: 1,
+          hour_4_signature_count: 2,
+          date: date,
+          petition: petition
+        )
+      end
+
+      it "returns the expected signatures by hour" do
+        make_successful_request petition
+
+        expect(json["data"]["attributes"]["signatures_by_hour"]).to eq(
+          [
+            { starts_at: "2017-01-01T00:00:00.000Z", ends_at: "2017-01-01T01:00:00.000Z", signature_count: 0 },
+            { starts_at: "2017-01-01T01:00:00.000Z", ends_at: "2017-01-01T02:00:00.000Z", signature_count: 1 },
+            { starts_at: "2017-01-01T02:00:00.000Z", ends_at: "2017-01-01T03:00:00.000Z", signature_count: 0 },
+            { starts_at: "2017-01-01T03:00:00.000Z", ends_at: "2017-01-01T04:00:00.000Z", signature_count: 0 },
+            { starts_at: "2017-01-01T04:00:00.000Z", ends_at: "2017-01-01T05:00:00.000Z", signature_count: 2 },
+            { starts_at: "2017-01-01T05:00:00.000Z", ends_at: "2017-01-01T06:00:00.000Z", signature_count: 0 }
+          ].map(&:stringify_keys)
+        )
+      end
+    end
   end
 end

@@ -74,5 +74,11 @@ json.attributes do
       json.mp constituency.mp_name
       json.signature_count constituency.signature_count
     end
+
+    json.signatures_by_hour signatures_by_hour(petition) do |signature_interval|
+      json.starts_at api_date_format(signature_interval.starts_at)
+      json.ends_at api_date_format(signature_interval.ends_at)
+      json.signature_count signature_interval.count
+    end
   end
 end

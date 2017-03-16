@@ -11,6 +11,10 @@ module SignatureHelper
     t(:"#{key}.html", options)
   end
 
+  def signatures_by_hour(petition)
+    TrendingSignatureCollection.new(petition).hourly_intervals
+  end
+
   private
 
   def render_signature_hidden_details(stage_manager, form, options)
