@@ -615,6 +615,25 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".validated_dates" do
+    let(:now) { Time.parse("1 Jan 2017 08:30") }
+
+    around do |example|
+      travel_to(now) { example.run }
+    end
+
+    it "returns an ordered array of unique dates based on the validated at timestamp" do
+      FactoryGirl.create(:validated_signature, validated_at: now)
+      FactoryGirl.create(:validated_signature, validated_at: now)
+      FactoryGirl.create(:validated_signature, validated_at: now - 1.day)
+      FactoryGirl.create(:validated_signature, validated_at: now - 3.days)
+      FactoryGirl.create(:invalidated_signature, validated_at: now - 4.days)
+
+      expect(described_class.validated_dates)
+        .to eq [Date.parse("29 Dec 2016"), Date.parse("31 Dec 2016"), Date.parse("1 Jan 2017")]
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
     let(:creator) { FactoryGirl.create(:pending_signature) }

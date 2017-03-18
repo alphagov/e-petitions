@@ -114,6 +114,13 @@ class Signature < ActiveRecord::Base
     count(:all)
   end
 
+  def self.validated_dates
+    validated.
+    where.not(validated_at: nil).
+    order("date").
+    pluck("DISTINCT date(validated_at) as date")
+  end
+
   scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
   scope :matching, ->(signature) { where(email: signature.email,
                                          name: signature.name,

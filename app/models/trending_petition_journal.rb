@@ -34,6 +34,30 @@ class TrendingPetitionJournal < ActiveRecord::Base
       end
     end
 
+    def reset!
+      connection.execute "TRUNCATE TABLE trending_petition_journals"
+
+      Petition.find_each do |petition|
+        petition.signatures.validated_dates.each do |date|
+          journal = self.for(petition, date)
+
+          journal.with_lock do
+            updates = petition
+              .signatures
+              .validated
+              .select("count(petition_id), EXTRACT(hour from validated_at) as hour")
+              .where("date(validated_at) = ?", date)
+              .group("hour")
+              .each_with_object({}) do |interval, updates|
+                updates["hour_#{interval.hour.to_i}_signature_count"] = interval.count
+              end
+
+            journal.update_columns(updates.merge(updated_at: Time.current))
+          end
+        end
+      end
+    end
+
     private
 
     def unrecordable?(signature)

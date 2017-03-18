@@ -210,5 +210,69 @@ RSpec.describe TrendingPetitionJournal, type: :model do
       end
     end
   end
+
+  describe ".reset!" do
+    let(:petition_1) { FactoryGirl.create(:petition) }
+    let(:petition_2) { FactoryGirl.create(:petition) }
+    let(:today) { Time.parse("1 Jan 2017 08:00") }
+    let(:two_hours_ago) { today - 2.hours }
+    let(:two_days_ago) { today - 2.days }
+
+    around do |example|
+      travel_to(today) { example.run }
+    end
+
+    before do
+      described_class.for(petition_1).update_attribute(:hour_8_signature_count, 20)
+      described_class.for(petition_2).update_attribute(:hour_8_signature_count, 100)
+    end
+
+    context "when there are no signatures" do
+      it "resets all the hourly counts to 0 except for 1 for the creator signature" do
+        described_class.reset!
+
+        expect(described_class.for(petition_1).hour_8_signature_count).to eq 1
+        expect(described_class.for(petition_2).hour_8_signature_count).to eq 1
+
+        [*0..7, *9..23].each do |hour|
+          expect(
+            described_class.for(petition_1)
+            .public_send("hour_#{hour}_signature_count")
+          ).to eq 0
+
+          expect(
+            described_class.for(petition_2)
+            .public_send("hour_#{hour}_signature_count")
+          ).to eq 0
+        end
+      end
+    end
+
+    context "when there are signatures" do
+      before do
+        2.times { FactoryGirl.create(:validated_signature, petition: petition_1, validated_at: today) }
+        2.times { FactoryGirl.create(:validated_signature, petition: petition_1, validated_at: two_hours_ago) }
+        3.times { FactoryGirl.create(:validated_signature, petition: petition_1, validated_at: two_days_ago) }
+        2.times { FactoryGirl.create(:pending_signature, petition: petition_1) }
+
+        1.times { FactoryGirl.create(:validated_signature, petition: petition_2, validated_at: today) }
+        1.times { FactoryGirl.create(:validated_signature, petition: petition_2, validated_at: two_hours_ago) }
+        2.times { FactoryGirl.create(:validated_signature, petition: petition_2, validated_at: two_days_ago) }
+        1.times { FactoryGirl.create(:pending_signature, petition: petition_2) }
+      end
+
+      it "resets the counts to that of the validated signatures for the petition, day and hour" do
+        described_class.reset!
+
+        expect(described_class.for(petition_1, today).hour_8_signature_count).to eq 3 # +1 for creator signature
+        expect(described_class.for(petition_1, today).hour_6_signature_count).to eq 2
+        expect(described_class.for(petition_1, two_days_ago).hour_8_signature_count).to eq 3
+
+        expect(described_class.for(petition_2, today).hour_8_signature_count).to eq 2 # +1 for creator signature
+        expect(described_class.for(petition_2, today).hour_6_signature_count).to eq 1
+        expect(described_class.for(petition_2, two_days_ago).hour_8_signature_count).to eq 2
+      end
+    end
+  end
 end
 
