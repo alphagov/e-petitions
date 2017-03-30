@@ -26,7 +26,12 @@ class FetchCountryRegisterJob < ApplicationJob
   private
 
   def countries
-    fetch_register.body.values
+    values = fetch_register.body.values
+    if !values.empty? && values.first.has_key?('item')
+      values.map { |x| x['item'].first }
+    else
+      values
+    end
   end
 
   def faraday
