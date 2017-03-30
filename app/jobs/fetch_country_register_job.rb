@@ -26,12 +26,7 @@ class FetchCountryRegisterJob < ApplicationJob
   private
 
   def countries
-    items = fetch_register.body
-    if items.is_a?(Array)
-      items.map { |r| r['entry'] }
-    else
-      items.values
-    end
+    fetch_register.body.values
   end
 
   def faraday
