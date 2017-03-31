@@ -13,24 +13,26 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
     {status: status, headers: {"Content-Type" => "application/json"}, body: body}
   end
 
-  context "old (array-based) record schema" do
+  context "latest record schema" do
     context "when a country does not exist" do
       before do
         stub_register.to_return json_response <<-JSON
-        [
-            {
-                "serial-number": 6,
-                "hash": "2778fa2a0a97b98728053b4caf7fee918aa0357c",
-                "entry": {
-                    "citizen-names": "Briton;British citizen",
-                    "country": "GB",
-                    "name": "United Kingdom",
-                    "official-name": "The United Kingdom of Great Britain and Northern Ireland",
-                    "start-date": "1707-05-01",
-                    "end-date": "2017-12-31"
-                }
+        {
+            "GB" : {
+              "index-entry-number": "6",
+              "entry-number": "6",
+              "entry-timestamp": "2016-04-05T13:23:05Z",
+              "key": "GB",
+              "item": [{
+                "citizen-names": "Briton;British citizen",
+                "country": "GB",
+                "name": "United Kingdom",
+                "official-name": "The United Kingdom of Great Britain and Northern Ireland",
+                "start-date": "1707-05-01",
+                "end-date": "2017-12-31"
+              }]
             }
-        ]
+        }
         JSON
       end
 
@@ -74,20 +76,22 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
         FactoryGirl.create(:location, code: "GB")
 
         stub_register.to_return json_response <<-JSON
-        [
-            {
-                "serial-number": 6,
-                "hash": "2778fa2a0a97b98728053b4caf7fee918aa0357c",
-                "entry": {
-                    "citizen-names": "Briton;British citizen",
-                    "country": "GB",
-                    "name": "United Kingdom",
-                    "official-name": "The United Kingdom of Great Britain and Northern Ireland",
-                    "start-date": "1707-05-01",
-                    "end-date": "2017-12-31"
-                }
+        {
+            "GB" : {
+              "index-entry-number": "6",
+              "entry-number": "6",
+              "entry-timestamp": "2016-04-05T13:23:05Z",
+              "key": "GB",
+              "item": [{
+                "citizen-names": "Briton;British citizen",
+                "country": "GB",
+                "name": "United Kingdom",
+                "official-name": "The United Kingdom of Great Britain and Northern Ireland",
+                "start-date": "1707-05-01",
+                "end-date": "2017-12-31"
+              }]
             }
-        ]
+        }
         JSON
       end
 
@@ -129,21 +133,22 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
         FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
 
         stub_register.to_return json_response <<-JSON
-        [
-            {
-                "serial-number": 6,
-                "hash": "2778fa2a0a97b98728053b4caf7fee918aa0357c",
-                "entry": {
-                    "citizen-names": "Briton;British citizen",
-                    "country": "GB",
-                    "name": "United Kingdom",
-                    "official-name": "The United Kingdom of Great Britain and Northern Ireland"
-                }
+        {
+            "GB" : {
+              "index-entry-number": "6",
+              "entry-number": "6",
+              "entry-timestamp": "2016-04-05T13:23:05Z",
+              "key": "GB",
+              "item": [{
+                "citizen-names": "Briton;British citizen",
+                "country": "GB",
+                "name": "United Kingdom",
+                "official-name": "The United Kingdom of Great Britain and Northern Ireland"
+              }]
             }
-        ]
+        }
         JSON
       end
-
 
       it "doesn't update an existing record" do
         expect {
@@ -153,9 +158,10 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
         }.not_to change { location.reload.updated_at }
       end
     end
+
   end
 
-  context "new (map-based) record schema" do
+  context "old record schema" do
     context "when a country does not exist" do
       before do
         stub_register.to_return json_response <<-JSON

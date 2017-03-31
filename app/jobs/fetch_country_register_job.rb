@@ -26,11 +26,11 @@ class FetchCountryRegisterJob < ApplicationJob
   private
 
   def countries
-    items = fetch_register.body
-    if items.is_a?(Array)
-      items.map { |r| r['entry'] }
+    values = fetch_register.body.values
+    if !values.empty? && values.first.has_key?('item')
+      values.map { |x| x['item'].first }
     else
-      items.values
+      values
     end
   end
 
