@@ -1655,14 +1655,14 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#close!' do
-    subject(:petition) { FactoryGirl.create(:petition, debate_state: debate_state) }
+    subject(:petition) { FactoryGirl.create(:open_petition, debate_state: debate_state) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
     let(:debate_state) { 'pending' }
 
     before do
-      petition.close!
+      petition.close!(now)
     end
 
     it "sets the state to CLOSED" do
@@ -1680,6 +1680,16 @@ RSpec.describe Petition, type: :model do
         it "doesn't change the debate state" do
           expect(petition.debate_state).to eq(state)
         end
+      end
+    end
+
+    context "when called without an argument" do
+      before do
+        petition.close!
+      end
+
+      it "sets the closing date to the deadline" do
+        expect(petition.closed_at).to be_within(1.second).of(petition.deadline)
       end
     end
   end

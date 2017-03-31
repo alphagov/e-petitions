@@ -251,7 +251,9 @@ class Petition < ActiveRecord::Base
     end
 
     def close_petitions!(time = Time.current)
-      in_need_of_closing(time).update_all(state: CLOSED_STATE, closed_at: time, updated_at: time)
+      in_need_of_closing(time).find_each do |petition|
+        petition.close!
+      end
     end
 
     def in_need_of_closing(time = Time.current)
@@ -472,7 +474,7 @@ class Petition < ActiveRecord::Base
     update(state: FLAGGED_STATE)
   end
 
-  def close!(time = Time.current)
+  def close!(time = deadline)
     update!(state: CLOSED_STATE, closed_at: time)
   end
 
