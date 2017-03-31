@@ -2,10 +2,8 @@ sudo: false
 language: ruby
 cache:
   bundler: true
-  directories:
-    - /home/travis/.phantomjs
 rvm:
-- 2.2.5
+- 2.2.6
 services:
 - memcached
 before_install:
@@ -14,8 +12,7 @@ before_script:
 - bundle install
 - psql -c 'create database epets_test;' -U postgres
 - RAILS_ENV=test bundle exec rake db:structure:load
-- bin/install_phantomjs
-script: bundle exec rake
+script: RAILS_ENV=test bundle exec rake
 after_success: bundle exec rake deploy:preview
 env:
   global:
