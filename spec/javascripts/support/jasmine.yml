@@ -1,4 +1,5 @@
 force_ssl: true
+use_phantom_gem: false
 
 # path to parent directory of src_files
 # relative path from Rails.root

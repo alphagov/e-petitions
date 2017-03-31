@@ -48,7 +48,6 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'jasmine-rails'
   gem 'pry'
-  gem 'phantomjs', '~> 2.1.1.0'
 end
 
 group :test do
