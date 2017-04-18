@@ -1,12 +1,13 @@
 module SearchHelper
   def paginate(petitions)
+    petition_class = petitions.klass.first.class
     options = {
       scope: :"petitions.pagination",
       previous_page: petitions.previous_page,
       next_page: petitions.next_page,
       total_pages: petitions.total_pages,
-      previous_link: petitions_path(petitions.previous_params),
-      next_link: petitions_path(petitions.next_params)
+      previous_link: polymorphic_path(petition_class, petitions.previous_params),
+      next_link: polymorphic_path(petition_class, petitions.next_params)
     }
 
     concat(t :previous_html, options) unless petitions.first_page?

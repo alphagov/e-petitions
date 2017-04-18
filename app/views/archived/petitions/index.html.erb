@@ -24,6 +24,4 @@
   </div>
 <% end %>
 
-<div class="search-pagination">
-  <%= will_paginate @petitions, page_links: false %>
-</div>
+<%= render 'paginated_results' %> 
