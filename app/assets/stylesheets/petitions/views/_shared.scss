@@ -89,6 +89,11 @@ input.back-page {
     left: $gutter-half;
   }
 
+  .header {
+    margin-top: 0px;
+    @include bold-24();
+  }
+
   .content {
     margin-top: 0px;
     @include bold-19();

@@ -22,6 +22,11 @@ RSpec.describe ApplicationController, type: :controller do
     get :index
   end
 
+  it "reloads the parliament instance on every request" do
+    expect(Parliament).to receive(:reload)
+    get :index
+  end
+
   it "sets cache control headers when asked" do
     get :index
     expect(cache_control).to eq('no-store, no-cache')

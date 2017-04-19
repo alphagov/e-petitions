@@ -14,6 +14,10 @@ Given(/^the site is protected$/) do
   Site.instance.update! protected: true, username: "username", password: "password"
 end
 
+Given(/^Parliament is dissolving$/) do
+  Parliament.instance.update! dissolution_at: 2.weeks.from_now, dissolution_message: "Parliament is dissolving"
+end
+
 Given(/^the request is not local$/) do
   page.driver.options[:headers] = { "REMOTE_ADDR" => "192.168.1.128" }
 end

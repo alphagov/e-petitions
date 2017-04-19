@@ -1724,7 +1724,7 @@ RSpec.describe Petition, type: :model do
       let(:duration) { Site.petition_duration.months }
       let(:closing_date) { (now + duration).end_of_day }
 
-      it "returns the end of the day, #{Site.petition_duration.months} months after the open_at" do
+      it "returns the end of the day, #{Site.petition_duration} months after the open_at" do
         expect(petition.open_at).to eq now
         expect(petition.deadline).to eq closing_date
       end
@@ -1740,6 +1740,55 @@ RSpec.describe Petition, type: :model do
       subject(:petition) { FactoryGirl.build(:petition, open_at: nil) }
       it 'is nil' do
         expect(petition.deadline).to be_nil
+      end
+    end
+
+    context "when the dissolution of parliament has been announced" do
+      subject(:petition) { FactoryGirl.build(:open_petition, open_at: open_at) }
+      let(:dissolution_at) { 6.weeks.since(now).end_of_day }
+      let(:duration) { Site.petition_duration.months }
+
+      before do
+        allow(Parliament).to receive(:dissolution_announced?).and_return(true)
+        allow(Parliament).to receive(:dissolution_at).and_return(dissolution_at)
+      end
+
+      context "and the petition is due to close before then" do
+        let(:open_at) { now - duration + 1.month }
+        let(:closing_date) { (open_at + duration).end_of_day }
+
+        it "returns the end of the day, #{Site.petition_duration} months after the open_at" do
+          expect(petition.open_at).to eq(open_at)
+          expect(petition.deadline).to eq(closing_date)
+        end
+
+        it "prefers any closed_at stamp that has been set" do
+          petition.closed_at = now + 1.day
+          expect(petition.deadline).not_to eq(closing_date)
+          expect(petition.deadline).to eq(petition.closed_at)
+        end
+      end
+
+      context "and the petition is due to close after then" do
+        let(:open_at) { now - duration + 2.months }
+        let(:closing_date) { (open_at + duration).end_of_day }
+
+        it "returns the dissolution_at timestamp" do
+          expect(petition.open_at).to eq(open_at)
+          expect(petition.deadline).to eq(dissolution_at)
+        end
+
+        it "prefers closed_at timestamp if before dissolution_at" do
+          petition.closed_at = now + 1.day
+          expect(petition.deadline).not_to eq(closing_date)
+          expect(petition.deadline).to eq(petition.closed_at)
+        end
+
+        it "prefers dissolution_at timestamp if closed_at after dissolution_at" do
+          petition.closed_at = now + 7.weeks
+          expect(petition.deadline).not_to eq(closing_date)
+          expect(petition.deadline).to eq(dissolution_at)
+        end
       end
     end
   end
