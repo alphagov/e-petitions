@@ -7,11 +7,17 @@ RSpec.describe ApplicationJob, type: :job do
     end
   end
 
-  before do
+  it "reloads the site instance" do
     expect(Site).to receive(:reload).and_call_original
+
+    perform_enqueued_jobs {
+      AnApplicationJob.perform_later
+    }
   end
 
-  it "reloads the site instance" do
+  it "reloads the parliament instance" do
+    expect(Parliament).to receive(:reload).and_call_original
+
     perform_enqueued_jobs {
       AnApplicationJob.perform_later
     }

@@ -549,8 +549,8 @@ class Petition < ActiveRecord::Base
     debate_outcome_at? && debate_outcome
   end
 
-  def deadline
-    open_at && (closed_at || Site.closed_at_for_opening(open_at))
+  def deadline(dissolution_at = Parliament.dissolution_at)
+    open_at && [dissolution_at, closed_at, Site.closed_at_for_opening(open_at)].compact.min
   end
 
   # need this callback since the relationship is circular

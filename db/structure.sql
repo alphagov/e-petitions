@@ -510,6 +510,38 @@ ALTER SEQUENCE notes_id_seq OWNED BY notes.id;
 
 
 --
+-- Name: parliaments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE parliaments (
+    id integer NOT NULL,
+    dissolution_at timestamp without time zone,
+    dissolution_message text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: parliaments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE parliaments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: parliaments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE parliaments_id_seq OWNED BY parliaments.id;
+
+
+--
 -- Name: petition_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -930,6 +962,13 @@ ALTER TABLE ONLY notes ALTER COLUMN id SET DEFAULT nextval('notes_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY parliaments ALTER COLUMN id SET DEFAULT nextval('parliaments_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY petition_emails ALTER COLUMN id SET DEFAULT nextval('petition_emails_id_seq'::regclass);
 
 
@@ -1084,6 +1123,14 @@ ALTER TABLE ONLY locations
 
 ALTER TABLE ONLY notes
     ADD CONSTRAINT notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: parliaments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY parliaments
+    ADD CONSTRAINT parliaments_pkey PRIMARY KEY (id);
 
 
 --
@@ -1802,4 +1849,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160910054223');
 INSERT INTO schema_migrations (version) VALUES ('20161006095752');
 
 INSERT INTO schema_migrations (version) VALUES ('20161006101123');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419165419');
 

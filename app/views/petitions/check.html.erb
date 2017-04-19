@@ -1,5 +1,13 @@
 <h1 class="page-title">Start a petition</h1>
 
+<% if Parliament.dissolution_announced? %>
+  <div class="notification">
+    <span class="icon icon-warning-white"></span>
+    <h3 class="header">All petitions will now close on <%= short_date_format(Parliament.dissolution_at) %></h3>
+    <p class="content"><%= Parliament.dissolution_message %></p>
+  </div>
+<% end %>
+
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
     <label for="q" class="form-label">What do you want us to do?</label>

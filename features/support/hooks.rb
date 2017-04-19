@@ -22,6 +22,7 @@ end
 
 After do
   Site.reload
+  Parliament.reload
 end
 
 Before('@admin') do
