@@ -150,6 +150,10 @@ module Browseable
       end.join
     end
 
+    def model
+      klass.klass
+    end
+
     private
 
     def results
