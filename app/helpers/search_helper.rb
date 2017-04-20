@@ -9,8 +9,10 @@ module SearchHelper
       next_link: polymorphic_path(petitions.model, petitions.next_params)
     }
 
-    concat(t :previous_html, options) unless petitions.first_page?
-    concat(t :next_html, options) unless petitions.last_page?
+    capture do
+      concat t(:previous_html, options) unless petitions.first_page?
+      concat t(:next_html, options) unless petitions.last_page?
+    end
   end
 
   def filtered_petition_count(petitions)
