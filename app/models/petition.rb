@@ -257,7 +257,11 @@ class Petition < ActiveRecord::Base
     end
 
     def in_need_of_closing(time = Time.current)
-      where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
+      if Parliament.dissolved?
+        where(state: OPEN_STATE)
+      else
+        where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
+      end
     end
 
     def with_invalid_signature_counts
