@@ -1,15 +1,17 @@
 Dear <%= @signature.name %>,
 
-Unfortunately we’re closing all petitions on 31 March 2015, including your petition "<%= @petition.action %>":
-<%= petition_url(@petition) %>
+Because of the General Election, the closing date for your petition has changed. All petitions now have to close at <%= @closing_time %> on <%= @closing_date %>. This is because Parliament will be dissolved and all parliamentary business – including petitions – must stop until after the election. This means the petitions site will be closed and people will not be able to start or sign petitions.
 
-Parliament will be dissolved on 30 March 2015 and it’s not possible for petitions to remain open once Parliament has been dissolved.
+We’re sorry we weren’t able to give you more notice that this would happen.
 
-Sorry you won't have as long to collect signatures as you expected.
+Your petition will be available for people to read on the site even though it will be closed for signatures. Your petition can't be reopened after the election. You are very welcome to start your petition again when the site reopens after the election, but you will need to collect new signatures. We can't transfer signatures to your new petition.
 
-If you want to give feedback, please contact us at:
-<%= feedback_url %>
+The Government can't respond to petitions during the election period. This means if your petition has over <%= Site.formatted_threshold_for_response %> signatures, it can't receive a response from the current Government after <%= @last_response_date %>. After the election, the new Government will have to decide whether it wants to respond to petitions from before the election.
 
-Thanks,
+The Petitions Committee, the group of MPs who decide whether petitions are debated, won't exist after <%= @closing_date %>. This means that if your petition has over <%= Site.formatted_threshold_for_debate %> signatures, it can't be scheduled for debate. After the election, there will be a new Petitions Committee, and they will be responsible for deciding which petitions are debated.
+
+The petitions site will open again after the election, but at the moment we don't know exactly when. You can follow us on Twitter @HoCPetitions for updates, or check back on the petitions site for news if you prefer.
+
+Many thanks,
 <%= t("petitions.emails.signoff_prefix") %>
 <%= t("petitions.emails.signoff_suffix") %>

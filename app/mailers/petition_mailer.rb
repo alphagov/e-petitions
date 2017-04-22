@@ -65,8 +65,13 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe: unsubscribe_url
   end
 
-  def notify_creator_of_closing_date_change(signature)
+  def notify_creator_of_closing_date_change(signature, dissolution_at = Parliament.dissolution_at)
     @signature, @petition = signature, signature.petition
+
+    @closing_time = dissolution_at.strftime('%H:%M%P')
+    @closing_date = dissolution_at.strftime('%-d %B')
+    @last_response_date = dissolution_at.yesterday.strftime('%-d %B')
+
     mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change)
   end
 

@@ -1058,6 +1058,47 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".open_at_dissolution" do
+    let(:closed_at_dissolution) { Site.opened_at_for_closing(Date.civil(2017, 5, 2).end_of_day) }
+    let(:open_at_dissolution) { Site.opened_at_for_closing(Date.civil(2017, 5, 3).end_of_day) }
+
+    let!(:closed_petition) { FactoryGirl.create(:open_petition, open_at: closed_at_dissolution) }
+    let!(:open_petition) { FactoryGirl.create(:open_petition, open_at: open_at_dissolution) }
+
+    context "when parliament is not dissolving" do
+      before do
+        allow(Parliament).to receive(:dissolution_at).and_return(nil)
+      end
+
+      it "returns an empty relation" do
+        expect(described_class.open_at_dissolution).to be_empty
+      end
+    end
+
+    context "when parliament is dissolving" do
+      let(:dissolution_at) { Time.utc(2017, 5, 2, 23, 1, 0).in_time_zone }
+      let(:now) { Date.civil(2017, 4, 22).noon }
+
+      before do
+        allow(Parliament).to receive(:dissolution_at).and_return(dissolution_at)
+      end
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "includes petitions open after the dissolution" do
+        expect(open_petition.deadline).to eq(Date.civil(2017, 5, 3).end_of_day)
+        expect(described_class.open_at_dissolution).to include(open_petition)
+      end
+
+      it "excludes petitions closed before the dissolution" do
+        expect(closed_petition.deadline).to eq(Date.civil(2017, 5, 2).end_of_day)
+        expect(described_class.open_at_dissolution).not_to include(closed_petition)
+      end
+    end
+  end
+
   describe ".in_need_of_marking_as_debated" do
     context "when a petition is not in the the 'awaiting' debate state" do
       let!(:petition) { FactoryGirl.create(:open_petition) }

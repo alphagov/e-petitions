@@ -9,7 +9,12 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def update
     if @parliament.update(parliament_params)
-      redirect_to admin_root_url, notice: :parliament_updated
+      if email_creators?
+        NotifyCreatorsThatParliamentIsDissolvingJob.perform_later
+        redirect_to admin_root_url, notice: :creators_emailed
+      else
+        redirect_to admin_root_url, notice: :parliament_updated
+      end
     else
       render :show
     end
@@ -23,5 +28,9 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def parliament_params
     params.require(:parliament).permit(:dissolution_at, :dissolution_heading, :dissolution_message)
+  end
+
+  def email_creators?
+    params.key?(:email_creators) && @parliament.dissolution_announced?
   end
 end

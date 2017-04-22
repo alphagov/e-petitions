@@ -260,6 +260,21 @@ class Petition < ActiveRecord::Base
       where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
     end
 
+    def open_at_dissolution(dissolution_at = Parliament.dissolution_at)
+      if dissolution_at
+        opened_at_for_closing = Site.opened_at_for_closing(dissolution_at)
+
+        where(
+          arel_table[:state].eq(OPEN_STATE).
+          and(arel_table[:open_at].gteq(opened_at_for_closing).
+          and(arel_table[:closed_at].eq(nil)).
+          or(arel_table[:closed_at].gteq(dissolution_at)))
+        )
+      else
+        none
+      end
+    end
+
     def with_invalid_signature_counts
       where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
     end

@@ -145,6 +145,40 @@ RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
   end
 end
 
+RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
+  let(:petition) { FactoryGirl.create(:petition) }
+  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+  context "when parliament is not dissolving" do
+    before do
+      allow(Parliament).to receive(:dissolution_announced?).and_return(false)
+    end
+
+    it "does not send the PetitionMailer#notify_creator_that_petition_is_published email" do
+      expect(PetitionMailer).not_to receive(:notify_creator_of_closing_date_change).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+
+  context "when parliament is dissolving" do
+    before do
+      allow(Parliament).to receive(:dissolution_announced?).and_return(true)
+      allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
+    end
+
+    it "sends the PetitionMailer#notify_creator_that_petition_is_published email" do
+      expect(PetitionMailer).to receive(:notify_creator_of_closing_date_change).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+end
+
 RSpec.describe NotifyCreatorThatPetitionIsPublishedEmailJob, type: :job do
   let(:petition) { FactoryGirl.create(:petition) }
   let(:signature) { FactoryGirl.create(:signature, petition: petition) }
