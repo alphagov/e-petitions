@@ -6,6 +6,10 @@ module DateTimeHelper
     date_time && date_time.strftime("%-d %B %Y")
   end
 
+  def short_date_time_format(date_time)
+    date_time && date_time.strftime("%H:%M%P on %-d %B %Y")
+  end
+
   def date_time_format(date_time)
     date_time && date_time.strftime("%d-%m-%Y %H:%M")
   end

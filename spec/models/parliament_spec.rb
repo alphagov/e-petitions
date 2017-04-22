@@ -3,13 +3,55 @@ require 'rails_helper'
 RSpec.describe Parliament, type: :model do
   describe "schema" do
     it { is_expected.to have_db_column(:dissolution_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:dissolution_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolution_message).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
 
+  describe "callbacks" do
+    describe "when the parliament is updated" do
+      let(:parliament) { FactoryGirl.create(:parliament, :dissolving, dissolution_at: 3.weeks.from_now) }
+      let(:site) { Site.instance }
+
+      before do
+        travel_to 2.days.ago do
+          site.touch
+        end
+      end
+
+      it "updates the site timestamp" do
+        expect {
+          parliament.update!(dissolution_at: 2.weeks.from_now)
+        }.to change {
+          site.reload.updated_at
+        }
+      end
+    end
+  end
+
+  describe "validations" do
+    context "when dissolution_at is nil" do
+      subject { Parliament.new }
+
+      it { is_expected.not_to validate_presence_of(:dissolution_heading) }
+      it { is_expected.not_to validate_presence_of(:dissolution_message) }
+      it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
+      it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
+    end
+
+    context "when dissolution_at is not nil" do
+      subject { Parliament.new(dissolution_at: 2.weeks.from_now) }
+
+      it { is_expected.to validate_presence_of(:dissolution_heading) }
+      it { is_expected.to validate_presence_of(:dissolution_message) }
+      it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
+      it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
+    end
+  end
+
   describe "singleton methods" do
-    let(:parliament) { Parliament.create! }
+    let(:parliament) { FactoryGirl.create(:parliament) }
     let(:now) { Time.current }
 
     before do
@@ -23,6 +65,11 @@ RSpec.describe Parliament, type: :model do
     it "delegates dissolution_at to the instance" do
       expect(parliament).to receive(:dissolution_at).and_return(now)
       expect(Parliament.dissolution_at).to eq(now)
+    end
+
+    it "delegates dissolution_heading to the instance" do
+      expect(parliament).to receive(:dissolution_heading).and_return("Parliament is dissolving")
+      expect(Parliament.dissolution_heading).to eq("Parliament is dissolving")
     end
 
     it "delegates dissolution_message to the instance" do
@@ -42,7 +89,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".reload" do
-    let(:parliament) { Parliament.create! }
+    let(:parliament) { FactoryGirl.create(:parliament) }
 
     context "when it is cached in Thread.current" do
       before do
@@ -58,7 +105,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".instance" do
-    let(:parliament) { Parliament.create! }
+    let(:parliament) { FactoryGirl.create(:parliament) }
 
     context "when it isn't cached in Thread.current" do
       before do
@@ -97,7 +144,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".before_remove_const" do
-    let(:parliament) { Parliament.create! }
+    let(:parliament) { FactoryGirl.create(:parliament) }
 
     context "when it is cached in Thread.current" do
       before do
@@ -115,7 +162,7 @@ RSpec.describe Parliament, type: :model do
   describe "#dissolution_announced?" do
     context "when dissolution_at is nil" do
       subject :parliament do
-        Parliament.create!(dissolution_at: nil)
+        FactoryGirl.create(:parliament)
       end
 
       it "returns false" do
@@ -125,7 +172,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is not nil" do
       subject :parliament do
-        Parliament.create!(dissolution_at: 2.weeks.from_now)
+        FactoryGirl.create(:parliament, :dissolving)
       end
 
       it "returns true" do
@@ -137,7 +184,7 @@ RSpec.describe Parliament, type: :model do
   describe "#dissolved?" do
     context "when dissolution_at is nil" do
       subject :parliament do
-        Parliament.create!(dissolution_at: nil)
+        FactoryGirl.create(:parliament)
       end
 
       it "returns false" do
@@ -147,7 +194,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is in the future" do
       subject :parliament do
-        Parliament.create!(dissolution_at: 2.weeks.from_now)
+        FactoryGirl.create(:parliament, :dissolving)
       end
 
       it "returns false" do
@@ -157,7 +204,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is in the past" do
       subject :parliament do
-        Parliament.create!(dissolution_at: 2.weeks.ago)
+        FactoryGirl.create(:parliament, :dissolved)
       end
 
       it "returns false" do

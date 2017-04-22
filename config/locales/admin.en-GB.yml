@@ -55,6 +55,7 @@ en-GB:
       invalid_login: "Invalid email/password combination"
       logged_out: "You have been logged out"
       password_updated: "Password was successfully updated"
+      parliament_updated: "Parliament updated successfully"
       petition_email_created: "Created other parliamentary business successfully"
       petition_email_updated: "Updated other parliamentary business successfully"
       petition_email_deleted: "Deleted other parliamentary business successfully"

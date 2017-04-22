@@ -15,7 +15,9 @@ Given(/^the site is protected$/) do
 end
 
 Given(/^Parliament is dissolving$/) do
-  Parliament.instance.update! dissolution_at: 2.weeks.from_now, dissolution_message: "Parliament is dissolving"
+  Parliament.instance.update! dissolution_at: 2.weeks.from_now,
+    dissolution_heading: "Parliament is dissolving",
+    dissolution_message: "This means all petitions will close in 2 weeks"
 end
 
 Given(/^the request is not local$/) do

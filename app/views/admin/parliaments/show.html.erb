@@ -1,0 +1,33 @@
+<h1>Edit Parliament</h1>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for @parliament, url: admin_parliament_url do |form| %>
+      <h2>Dissolution</h2>
+
+      <%= form_row for: [form.object, :dissolution_at] do %>
+        <%= form.label :dissolution_at, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolution_at %>
+        <%= form.datetime_select :dissolution_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :dissolution_heading] do %>
+        <%= form.label :dissolution_heading, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolution_heading %>
+        <%= form.text_field :dissolution_heading, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :dissolution_message] do %>
+        <%= form.label :dissolution_message, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolution_message %>
+        <%= form.text_area :dissolution_message, tabindex: increment, rows: 5, data: { max_length: 500 }, class: 'form-control' %>
+        <p class="character-count">500 characters max</p>
+      <% end %>
+
+      <%= form.submit 'Save', class: 'button' %>
+      <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_include_tag 'character-counter' %>

@@ -392,4 +392,18 @@ FactoryGirl.define do
       started_at { Time.current }
     end
   end
+
+  factory :parliament do
+    trait :dissolving do
+      dissolution_heading "Parliament is dissolving"
+      dissolution_message "This means all petitions will close in 2 weeks"
+      dissolution_at { 2.weeks.from_now }
+    end
+
+    trait :dissolved do
+      dissolution_heading "Parliament is dissolving"
+      dissolution_message "This means all petitions will close in 2 weeks"
+      dissolution_at { 2.weeks.ago }
+    end
+  end
 end

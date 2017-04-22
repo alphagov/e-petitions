@@ -38,7 +38,11 @@
       <span class="label">Created by</span> <%= petition.creator_signature.name %>
     </li>
     <li class="meta-deadline">
-      <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
+      <% if petition.closing_early_for_dissolution? %>
+        <span class="label">Deadline</span> <%= short_date_time_format Parliament.dissolution_at %>
+      <% else %>
+        <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
+      <% end %>
       <% unless Parliament.dissolution_announced? %>
         <span class="note">All petitions run for 6 months</span>
       <% end %>

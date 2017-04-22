@@ -12,6 +12,10 @@ class Parliament < ActiveRecord::Base
       instance.dissolution_at
     end
 
+    def dissolution_heading
+      instance.dissolution_heading
+    end
+
     def dissolution_message
       instance.dissolution_message
     end
@@ -33,8 +37,14 @@ class Parliament < ActiveRecord::Base
     end
   end
 
+  validates_presence_of :dissolution_heading, :dissolution_message, if: :dissolution_at?
+  validates_length_of :dissolution_heading, maximum: 100
+  validates_length_of :dissolution_message, maximum: 600
+
+  after_save { Site.touch }
+
   def dissolved?(now = Time.current)
-    dissolution_at? && dissolution_at < now
+    dissolution_at? && dissolution_at <= now
   end
 
   def dissolution_announced?
