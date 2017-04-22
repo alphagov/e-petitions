@@ -75,6 +75,7 @@ Rails.application.routes.draw do
 
       mount Delayed::Web::Engine, at: '/delayed'
 
+      resource :parliament, :only => [:show, :update]
       resource :search, :only => [:show]
 
       resources :admin_users

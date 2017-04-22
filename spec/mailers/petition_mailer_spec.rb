@@ -185,6 +185,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     before do
       petition.publish
+      allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
     end
 
     it "is sent to the right address" do
@@ -202,7 +203,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "informs the creator of the change" do
-      expect(mail).to have_body_text("Unfortunately we’re closing all petitions")
+      expect(mail).to have_body_text("the closing date for your petition has changed")
     end
   end
 

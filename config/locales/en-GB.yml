@@ -134,6 +134,11 @@ en-GB:
           one: 1 error prohibited this %{model} from being saved
           other: "%{count} errors prohibited this %{model} from being saved"
   helpers:
+    label:
+      parliament:
+        dissolution_heading: "Heading"
+        dissolution_message: "Message"
+        dissolution_at: "Date and time"
     select:
       prompt: Please select
     submit:

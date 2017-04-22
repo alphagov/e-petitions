@@ -38,6 +38,13 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_creator_of_threshold_response(petition, signature)
   end
 
+  def notify_creator_of_closing_date_change
+    petition = Petition.open_at_dissolution.first
+    signature = petition.creator_signature
+
+    PetitionMailer.notify_creator_of_closing_date_change(signature)
+  end
+
   def debated_petition_signer_notification
     petition = Petition.debated.last
     signature = petition.signatures.validated.last

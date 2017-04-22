@@ -31,6 +31,8 @@ en-GB:
     flash:
       admin_required: "You must be logged in as an administrator to view this page"
       change_password: "Please change your password before continuing"
+      closure_scheduled: "Petitions have been scheduled to close early"
+      creators_emailed: "Petition creators will be notified of the early closing of their petitions"
       debate_date_updated: "Updated the scheduled debate date successfully"
       debate_outcome_updated: "Updated debate outcome successfully"
       email_sent_overnight: "Email will be sent overnight"
@@ -55,6 +57,7 @@ en-GB:
       invalid_login: "Invalid email/password combination"
       logged_out: "You have been logged out"
       password_updated: "Password was successfully updated"
+      parliament_updated: "Parliament updated successfully"
       petition_email_created: "Created other parliamentary business successfully"
       petition_email_updated: "Updated other parliamentary business successfully"
       petition_email_deleted: "Deleted other parliamentary business successfully"

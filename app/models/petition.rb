@@ -256,8 +256,29 @@ class Petition < ActiveRecord::Base
       end
     end
 
+    def close_petitions_early!(time = Parliament.dissolution_at)
+      open_at_dissolution(time).find_each do |petition|
+        petition.close!(time)
+      end
+    end
+
     def in_need_of_closing(time = Time.current)
       where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
+    end
+
+    def open_at_dissolution(dissolution_at = Parliament.dissolution_at)
+      if dissolution_at
+        opened_at_for_closing = Site.opened_at_for_closing(dissolution_at)
+
+        where(
+          arel_table[:state].eq(OPEN_STATE).
+          and(arel_table[:open_at].gteq(opened_at_for_closing).
+          and(arel_table[:closed_at].eq(nil)).
+          or(arel_table[:closed_at].gteq(dissolution_at)))
+        )
+      else
+        none
+      end
     end
 
     def with_invalid_signature_counts
@@ -549,8 +570,12 @@ class Petition < ActiveRecord::Base
     debate_outcome_at? && debate_outcome
   end
 
-  def deadline(dissolution_at = Parliament.dissolution_at)
-    open_at && [dissolution_at, closed_at, Site.closed_at_for_opening(open_at)].compact.min
+  def deadline
+    open_at && (closed_at || Site.closed_at_for_opening(open_at))
+  end
+
+  def closing_early_for_dissolution?(dissolution_at = Parliament.dissolution_at)
+    open_at && dissolution_at ? deadline > dissolution_at : false
   end
 
   # need this callback since the relationship is circular

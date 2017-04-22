@@ -16,12 +16,13 @@ Scenario: Charlie has to search for a petition before creating one
 
 Scenario: Charlie starts to creates a petition when parliament is not dissolving
   Given I am on the check for existing petitions page
-  Then I should not see "All petitions will now close"
+  Then I should not see "Parliament is dissolving"
 
 Scenario: Charlie starts to creates a petition when parliament is dissolving
   Given Parliament is dissolving
   And I am on the check for existing petitions page
-  Then I should see "All petitions will now close"
+  Then I should see "Parliament is dissolving"
+  And I should see "This means all petitions will close in 2 weeks"
 
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
