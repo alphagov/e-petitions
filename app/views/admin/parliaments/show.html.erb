@@ -25,7 +25,8 @@
       <% end %>
 
       <%= form.submit 'Save', class: 'button' %>
-      <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary' %>
+      <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
+      <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
       <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
     <% end %>
   </div>

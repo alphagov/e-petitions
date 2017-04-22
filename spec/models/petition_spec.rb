@@ -1030,6 +1030,24 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".close_petitions_early!" do
+    let(:open_at) { Date.civil(2017, 4, 1).noon }
+    let(:dissolution_at) { Time.utc(2017, 5, 2, 23, 1, 0).in_time_zone }
+    let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+
+    it "closes the petition" do
+      expect{
+        described_class.close_petitions_early!(dissolution_at)
+      }.to change{ petition.reload.state }.from('open').to('closed')
+    end
+
+    it "sets closed_at to the dissolution timestamp" do
+      expect{
+        described_class.close_petitions_early!(dissolution_at)
+      }.to change{ petition.reload.closed_at }.from(nil).to(dissolution_at)
+    end
+  end
+
   describe ".in_need_of_closing" do
     context "when a petition is in the closed state" do
       let!(:petition) { FactoryGirl.create(:closed_petition) }

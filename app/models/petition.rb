@@ -256,6 +256,12 @@ class Petition < ActiveRecord::Base
       end
     end
 
+    def close_petitions_early!(time = Parliament.dissolution_at)
+      open_at_dissolution(time).find_each do |petition|
+        petition.close!(time)
+      end
+    end
+
     def in_need_of_closing(time = Time.current)
       where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
     end

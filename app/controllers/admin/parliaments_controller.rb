@@ -12,6 +12,9 @@ class Admin::ParliamentsController < Admin::AdminController
       if email_creators?
         NotifyCreatorsThatParliamentIsDissolvingJob.perform_later
         redirect_to admin_root_url, notice: :creators_emailed
+      elsif schedule_closure?
+        ClosePetitionsEarlyJob.schedule_for(@parliament.dissolution_at)
+        redirect_to admin_root_url, notice: :closure_scheduled
       else
         redirect_to admin_root_url, notice: :parliament_updated
       end
@@ -32,5 +35,9 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def email_creators?
     params.key?(:email_creators) && @parliament.dissolution_announced?
+  end
+
+  def schedule_closure?
+    params.key?(:schedule_closure) && @parliament.dissolution_announced?
   end
 end

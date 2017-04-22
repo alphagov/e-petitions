@@ -166,6 +166,82 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
         end
       end
+
+      context "when clicking the Schedule Closure button" do
+        before { patch :update, parliament: params, schedule_closure: "Schedule Closure" }
+
+        context "and the params are invalid" do
+          let :params do
+            {
+              dissolution_at: 2.weeks.from_now.iso8601,
+              dissolution_heading: "",
+              dissolution_message: ""
+            }
+          end
+
+          it "returns 200 OK" do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it "renders the :show template" do
+            expect(response).to render_template("admin/parliaments/show")
+          end
+        end
+
+        context "and the params are valid" do
+          let(:dissolution_at) { 2.weeks.from_now.beginning_of_minute }
+          let :params do
+            {
+              dissolution_at: dissolution_at.iso8601,
+              dissolution_heading: "Parliament is dissolving",
+              dissolution_message: "This means all petitions will close in 2 weeks"
+            }
+          end
+
+          let :close_petitions_early_job do
+            {
+              job: ClosePetitionsEarlyJob,
+              args: [dissolution_at.iso8601],
+              queue: "high_priority",
+              at: dissolution_at.to_f
+            }
+          end
+
+          it "redirects to the admin dashboard page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          end
+
+          it "sets the flash notice message" do
+            expect(flash[:notice]).to eq("Petitions have been scheduled to close early")
+          end
+
+          it "enqueues a job to notify creators" do
+            expect(enqueued_jobs).to eq([close_petitions_early_job])
+          end
+        end
+
+        context "and the params are valid but parliament isn't dissolving" do
+          let :params do
+            {
+              dissolution_at: "",
+              dissolution_heading: "",
+              dissolution_message: ""
+            }
+          end
+
+          it "redirects to the admin dashboard page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          end
+
+          it "sets the flash notice message" do
+            expect(flash[:notice]).to eq("Parliament updated successfully")
+          end
+
+          it "doesn't enqueue a job to notify creators" do
+            expect(enqueued_jobs).to eq([])
+          end
+        end
+      end
     end
   end
 end
