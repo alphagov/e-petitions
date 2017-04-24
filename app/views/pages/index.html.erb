@@ -1,6 +1,8 @@
 <%= cache_for :home_page do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
+  <%= render 'parliament_dissolution_warning' %>
+
   <% if no_petitions_yet? %>
     <div class="section-panel-borderless no-petitions-yet">
       <p class="lede">The new Petitions service launched today</p>
