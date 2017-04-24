@@ -21,8 +21,11 @@ Scenario: Charlie starts to creates a petition when parliament is not dissolving
 Scenario: Charlie starts to creates a petition when parliament is dissolving
   Given Parliament is dissolving
   And I am on the check for existing petitions page
-  Then I should see "Parliament is dissolving"
-  And I should see "This means all petitions will close in 2 weeks"
+  Then I should see the Parliament dissolution warning message
+  When I am on the home page
+  Then I should see the Parliament dissolution warning message
+  When I am on the help page
+  Then I should see the Parliament dissolution warning message
 
 @search
 Scenario: Charlie cannot craft an xss attack when searching for petitions

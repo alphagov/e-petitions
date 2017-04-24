@@ -5,6 +5,7 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:dissolution_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:dissolution_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolution_message).of_type(:text).with_options(null: true) }
+    it { is_expected.to have_db_column(:dissolution_faq_url).of_type(:string).with_options(limit: 500, null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
@@ -36,8 +37,10 @@ RSpec.describe Parliament, type: :model do
 
       it { is_expected.not_to validate_presence_of(:dissolution_heading) }
       it { is_expected.not_to validate_presence_of(:dissolution_message) }
+      it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
+      it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
     end
 
     context "when dissolution_at is not nil" do
@@ -45,8 +48,10 @@ RSpec.describe Parliament, type: :model do
 
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
+      it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
+      it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
     end
   end
 
@@ -75,6 +80,16 @@ RSpec.describe Parliament, type: :model do
     it "delegates dissolution_message to the instance" do
       expect(parliament).to receive(:dissolution_message).and_return("Parliament is dissolving")
       expect(Parliament.dissolution_message).to eq("Parliament is dissolving")
+    end
+
+    it "delegates dissolution_faq_url to the instance" do
+      expect(parliament).to receive(:dissolution_faq_url).and_return("https://parliament.example.com/parliament-is-closing")
+      expect(Parliament.dissolution_faq_url).to eq("https://parliament.example.com/parliament-is-closing")
+    end
+
+    it "delegates dissolution_faq_url? to the instance" do
+      expect(parliament).to receive(:dissolution_faq_url?).and_return(true)
+      expect(Parliament.dissolution_faq_url?).to eq(true)
     end
 
     it "delegates dissolution_announced? to the instance" do

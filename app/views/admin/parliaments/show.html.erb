@@ -24,6 +24,12 @@
         <p class="character-count">500 characters max</p>
       <% end %>
 
+      <%= form_row for: [form.object, :dissolution_faq_url] do %>
+        <%= form.label :dissolution_faq_url, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolution_faq_url %>
+        <%= form.text_field :dissolution_faq_url, tabindex: increment, maxlength: 500, class: 'form-control' %>
+      <% end %>
+
       <%= form.submit 'Save', class: 'button' %>
       <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
       <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>

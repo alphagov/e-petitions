@@ -17,7 +17,8 @@ end
 Given(/^Parliament is dissolving$/) do
   Parliament.instance.update! dissolution_at: 2.weeks.from_now,
     dissolution_heading: "Parliament is dissolving",
-    dissolution_message: "This means all petitions will close in 2 weeks"
+    dissolution_message: "This means all petitions will close in 2 weeks",
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
 end
 
 Given(/^the request is not local$/) do
@@ -64,4 +65,12 @@ end
 
 Then(/^I should index the page$/) do
   expect(page).not_to have_css('meta[name=robots]', visible: false)
+end
+
+Then(/^I should see the Parliament dissolution warning message$/) do
+  within(:css, ".notification") do
+    expect(page).to have_content "Parliament is dissolving"
+    expect(page).to have_content "This means all petitions will close in 2 weeks"
+    expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
+  end
 end
