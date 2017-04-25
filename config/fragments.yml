@@ -20,6 +20,7 @@ footer:
 
 home_page:
   keys:
+    - :site_updated_at
     - :last_government_response_updated_at
     - :last_debate_outcome_updated_at
   options:

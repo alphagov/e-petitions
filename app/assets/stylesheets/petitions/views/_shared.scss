@@ -98,6 +98,11 @@ input.back-page {
     margin-top: 0px;
     @include bold-19();
   }
+
+  a {
+    color: $white;
+    text-decoration: underline;
+  }
 }
 
 // Flash messages

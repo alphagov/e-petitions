@@ -65,7 +65,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
-              dissolution_message: ""
+              dissolution_message: "",
+              dissolution_faq_url: ""
             }
           end
 
@@ -83,7 +84,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "Parliament is dissolving",
-              dissolution_message: "This means all petitions will close in 2 weeks"
+              dissolution_message: "This means all petitions will close in 2 weeks",
+              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
             }
           end
 
@@ -105,7 +107,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
-              dissolution_message: ""
+              dissolution_message: "",
+              dissolution_faq_url: ""
             }
           end
 
@@ -123,7 +126,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "Parliament is dissolving",
-              dissolution_message: "This means all petitions will close in 2 weeks"
+              dissolution_message: "This means all petitions will close in 2 weeks",
+              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
             }
           end
 
@@ -149,7 +153,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: "",
               dissolution_heading: "",
-              dissolution_message: ""
+              dissolution_message: "",
+              dissolution_faq_url: ""
             }
           end
 
@@ -175,7 +180,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
-              dissolution_message: ""
+              dissolution_message: "",
+              dissolution_faq_url: ""
             }
           end
 
@@ -194,7 +200,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: dissolution_at.iso8601,
               dissolution_heading: "Parliament is dissolving",
-              dissolution_message: "This means all petitions will close in 2 weeks"
+              dissolution_message: "This means all petitions will close in 2 weeks",
+              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
             }
           end
 
@@ -225,7 +232,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             {
               dissolution_at: "",
               dissolution_heading: "",
-              dissolution_message: ""
+              dissolution_message: "",
+              dissolution_faq_url: ""
             }
           end
 

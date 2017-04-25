@@ -1,12 +1,6 @@
 <h1 class="page-title">Start a petition</h1>
 
-<% if Parliament.dissolution_announced? %>
-  <div class="notification">
-    <span class="icon icon-warning-white"></span>
-    <h3 class="header"><%= Parliament.dissolution_heading %></h3>
-    <p class="content"><%= Parliament.dissolution_message %></p>
-  </div>
-<% end %>
+<%= render 'parliament_dissolution_warning' %>
 
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
