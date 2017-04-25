@@ -735,7 +735,8 @@ CREATE TABLE signatures (
     government_response_email_at timestamp without time zone,
     debate_scheduled_email_at timestamp without time zone,
     debate_outcome_email_at timestamp without time zone,
-    petition_email_at timestamp without time zone
+    petition_email_at timestamp without time zone,
+    email_count integer
 );
 
 
@@ -1853,6 +1854,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161006095752');
 INSERT INTO schema_migrations (version) VALUES ('20161006101123');
 
 INSERT INTO schema_migrations (version) VALUES ('20170419165419');
+
+INSERT INTO schema_migrations (version) VALUES ('20170421153056');
 
 INSERT INTO schema_migrations (version) VALUES ('20170422104143');
 
