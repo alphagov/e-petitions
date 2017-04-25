@@ -451,11 +451,12 @@ RSpec.describe SignaturesController, type: :controller do
           expect{ do_post }.to change(Signature, :count).by(1)
         end
 
-        it "sends email to signer" do
+        it "sends a confirmation email to signer" do
           ActionMailer::Base.deliveries.clear
           do_post
           email = ActionMailer::Base.deliveries.last
           expect(email.to).to eq(["jb@example.com"])
+          expect(email.subject).to eq "Please confirm your email address"
         end
 
         it "sends to thank you page" do
@@ -469,9 +470,17 @@ RSpec.describe SignaturesController, type: :controller do
           FactoryGirl.create(:validated_signature, signature_params.merge(petition_id: petition.id))
         end
 
-        it "sends to :new for same name/email/postcode" do
+        it "sends to thank you page" do
           do_post
-          expect(response).to render_template(:new)
+          expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/signatures/thank-you")
+        end
+
+        it "sends a duplicate signature email to signer" do
+          ActionMailer::Base.deliveries.clear
+          do_post
+          email = ActionMailer::Base.deliveries.last
+          expect(email.to).to eq(["jb@example.com"])
+          expect(email.subject).to eq("Duplicate signature of petition")
         end
       end
 

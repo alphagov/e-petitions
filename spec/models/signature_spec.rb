@@ -217,85 +217,6 @@ RSpec.describe Signature, type: :model do
       expect(signature.errors.full_messages).to include("You can’t use ‘plus addressing’ in your email address")
     end
 
-    describe "uniqueness of email" do
-      let(:petition) { FactoryGirl.create(:open_petition) }
-      let(:other_petition) { FactoryGirl.create(:open_petition) }
-      let(:attributes) do
-        {
-          name:     "Suzy Signer",
-          petition: petition,
-          postcode: "SW1A 1AA",
-          email:    "foo@example.com"
-        }
-      end
-
-      context "when a signature already exists with the same email address" do
-        before do
-          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
-        end
-
-        it "doesn't allow a second signature with the same email address and the same name" do
-          signature = FactoryGirl.build(:signature, attributes)
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "does allow a second signature with the same email address but a different name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer"))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "is scoped to a petition" do
-          signature = FactoryGirl.build(:signature, attributes.merge(petition: other_petition))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "ignores extra whitespace at the end of the name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Suzy Signer "))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "ignores extra whitespace at the beginning of the name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: " Suzy Signer"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "only allows the second email if the postcode is the same" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A 1AB"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "ignores the space on the postcode check" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AA"))
-          expect(signature).to have_valid(:email)
-
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AB"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "does a case insensitive postcode check" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "sw1a 1aa"))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "is case insensitive about the email validation" do
-          signature = FactoryGirl.build(:signature, attributes.merge(email: "FOO@example.com"))
-          expect(signature).not_to have_valid(:email)
-        end
-      end
-
-      context "when two signatures already exist with the same email address" do
-        before do
-          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
-          FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
-        end
-
-        it "doesn't allow a third signature with the same email address" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sarah Signer"))
-          expect(signature).not_to have_valid(:email)
-        end
-      end
-    end
-
     it "does not allow blank or unknown state" do
       s = FactoryGirl.build(:signature, :state => '')
       expect(s).not_to have_valid(:state)
@@ -1462,5 +1383,105 @@ RSpec.describe Signature, type: :model do
       end
     end
   end
-end
 
+  describe "#email_count" do
+    it "returns 0 for new signatures" do
+      signature = FactoryGirl.create(:pending_signature)
+      expect(signature.email_count).to be(0)
+    end
+  end
+
+  describe "#email_threshold_reached?" do
+    let(:email_count_threshold) { 5 }
+
+    it "returns false when the signature hasn't reached the threshold" do
+      signature = FactoryGirl.create(:validated_signature)
+      expect(signature.email_threshold_reached?).to be false
+    end
+
+    it "returns true when the signature is at the email count threshold" do
+      signature = FactoryGirl.create(:validated_signature, email_count: email_count_threshold)
+      expect(signature.email_threshold_reached?).to be true
+    end
+  end
+
+  describe "#duplicate?" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:other_petition) { FactoryGirl.create(:open_petition) }
+    let(:attributes) do
+      {
+        name:     "Suzy Signer",
+        petition: petition,
+        postcode: "SW1A 1AA",
+        email:    "foo@example.com"
+      }
+    end
+
+    context "when a signature already exists with the same email address" do
+      before do
+        FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
+      end
+
+      let(:duplicate_record_exception) { ActiveRecord::RecordNotUnique }
+
+      it "raises an exception if the signature has the same email address and the same name" do
+        expect{ FactoryGirl.create(:signature, attributes) }.to raise_exception(duplicate_record_exception)
+      end
+
+      it "returns false if the signature has the same email address but a different name" do
+        signature = FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
+        expect(signature.duplicate?).to be false
+      end
+
+      it "returns true if the signature has the same email address and the same name with whitespace at the end" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Suzy Signer "))
+        expect(signature.duplicate?).to be true
+      end
+
+      it "returns true if the signature has the same email address and the same name with whitespace at the beginning" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: " Suzy Signer"))
+        expect(signature.duplicate?).to be true
+      end
+
+      it "returns true if the signature has the same email but a different postcode" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A 1AB"))
+        expect(signature.duplicate?).to be true
+      end
+
+      it "returns false if the signature is scoped to another petition" do
+        signature = FactoryGirl.build(:signature, attributes.merge(petition: other_petition))
+        expect(signature.duplicate?).to be false
+      end
+
+      it "ignores the space on the postcode check" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AA"))
+        expect(signature.duplicate?).to be false
+
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AB"))
+        expect(signature.duplicate?).to be true
+      end
+
+      it "does a case insensitive postcode check" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "sw1a 1aa"))
+        expect(signature.duplicate?).to be false
+      end
+
+      it "is case insensitive about the email validation" do
+        signature = FactoryGirl.build(:signature, attributes.merge(email: "FOO@example.com"))
+        expect(signature.duplicate?).to be true
+      end
+    end
+
+    context "when two signatures already exist with the same email address" do
+      before do
+        FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
+        FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
+      end
+
+      it "returns true for a third signature with the same email address" do
+        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sarah Signer"))
+        expect(signature.duplicate?).to be true
+      end
+    end
+  end
+end

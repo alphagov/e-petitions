@@ -1,6 +1,6 @@
-class EmailConfirmationForSignerEmailJob < EmailJob
+class EmailDuplicateSignaturesEmailJob < EmailJob
   self.mailer = PetitionMailer
-  self.email = :email_confirmation_for_signer
+  self.email = :email_duplicate_signatures
 
   rescue_from(ActiveJob::DeserializationError) do |exception|
     Appsignal.send_exception exception

@@ -57,17 +57,23 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario: Suzie cannot sign if she has already signed and validated
+  Scenario: Suzie receives a duplicate signature email if she tries to sign but she has already signed and validated
     When I have already signed the petition with an uppercase email
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
-    Then I should see an error
+    And I say I am happy with my email address
+    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
+
+  Scenario: Suzie receives a duplicate signature email if she changes to her original email but she has already signed and validated
+    When I have already signed the petition with an uppercase email
+    And I decide to sign the petition
+    And I fill in my details
     And I fill in my details with email "womboidian@wimbledon.com"
     And I try to sign
     When I change my email address to "womboid@wimbledon.com"
     And I say I am happy with my email address
-    Then I should see an error
+    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives another email if she has already signed but not validated
     When I have already signed the petition but not validated my email

@@ -32,7 +32,6 @@ class Signature < ActiveRecord::Base
   # = Validations =
   include Staged::Validations::Email
   include Staged::Validations::SignerDetails
-  include Staged::Validations::MultipleSigners
 
   validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
@@ -337,6 +336,22 @@ class Signature < ActiveRecord::Base
 
   def update_uuid
     update_column(:uuid, generate_uuid)
+  end
+
+  def email_threshold_reached?
+    email_count >= 5
+  end
+
+  def duplicate?
+    matcher = Signature.where(email: email, petition_id: petition_id)
+    matcher = matcher.where("signatures.id != ?", id) unless new_record?
+    existing_email_address_count = matcher.count
+    return false if existing_email_address_count == 0
+    return true if existing_email_address_count > 1
+    existing_signature = matcher.first
+    return true if (existing_signature.name.strip.downcase == name.strip.downcase)
+    return true if (existing_signature.postcode.gsub(/\s+/,'').downcase != postcode.gsub(/\s+/,'').downcase)
+    return false
   end
 
   private

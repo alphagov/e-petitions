@@ -123,13 +123,46 @@ end
 RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
   let(:petition) { FactoryGirl.create(:open_petition) }
   let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+  let(:run_jobs_and_reload_signature) do
+    perform_enqueued_jobs do
+      described_class.perform_later(signature)
+    end
+
+    signature.reload
+  end
 
   it "sends the PetitionMailer#email_confirmation_for_signer email" do
     expect(PetitionMailer).to receive(:email_confirmation_for_signer).with(signature).and_call_original
 
+    run_jobs_and_reload_signature
+  end
+
+  it "increments the signature email_count" do
+    expect{ run_jobs_and_reload_signature }.to change{ signature.email_count }.from(0).to(1)
+  end
+end
+
+RSpec.describe EmailDuplicateSignaturesEmailJob, type: :job do
+  let(:petition) { FactoryGirl.create(:open_petition) }
+  let(:original_signature) { petition.signatures.first }
+  let(:duplicated_signature) { original_signature.clone }
+  let(:run_jobs_and_reload_signatures) do
     perform_enqueued_jobs do
-      described_class.perform_later(signature)
+      described_class.perform_later(duplicated_signature)
     end
+
+    duplicated_signature.reload
+    original_signature.reload
+  end
+
+  it "sends the PetitionMailer#email_duplicate_signatures email" do
+    expect(PetitionMailer).to receive(:email_duplicate_signatures).with(duplicated_signature).and_call_original
+
+    run_jobs_and_reload_signatures
+  end
+
+  it "increments the signature email_count" do
+    expect{ run_jobs_and_reload_signatures }.to change{ original_signature.email_count }.from(0).to(1)
   end
 end
 
