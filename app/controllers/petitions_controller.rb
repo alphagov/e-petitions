@@ -4,6 +4,8 @@ class PetitionsController < ApplicationController
   before_action :avoid_unknown_state_filters, only: :index
   before_action :do_not_cache, except: %i[index show]
 
+  before_action :redirect_to_home_page, if: :parliament_dissolved?, only: [:new, :check, :check_results, :create]
+
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
   before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?, only: [:moderation_info, :show]
   before_action :redirect_to_moderation_info_url, if: :in_moderation?, only: [:gathering_support, :show]

@@ -30,6 +30,21 @@
         <%= form.text_field :dissolution_faq_url, tabindex: increment, maxlength: 500, class: 'form-control' %>
       <% end %>
 
+      <h2>Dissolved</h2>
+
+      <%= form_row for: [form.object, :dissolved_heading] do %>
+        <%= form.label :dissolved_heading, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolved_heading %>
+        <%= form.text_field :dissolved_heading, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :dissolved_message] do %>
+        <%= form.label :dissolved_message, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :dissolved_message %>
+        <%= form.text_area :dissolved_message, tabindex: increment, rows: 5, data: { max_length: 500 }, class: 'form-control' %>
+        <p class="character-count">500 characters max</p>
+      <% end %>
+
       <%= form.submit 'Save', class: 'button' %>
       <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
       <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>

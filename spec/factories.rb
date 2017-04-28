@@ -403,6 +403,8 @@ FactoryGirl.define do
     trait :dissolved do
       dissolution_heading "Parliament is dissolving"
       dissolution_message "This means all petitions will close in 2 weeks"
+      dissolved_heading "Parliament is dissolved"
+      dissolved_message "All petitions are now closed"
       dissolution_at { 2.weeks.ago }
     end
   end

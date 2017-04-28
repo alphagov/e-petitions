@@ -520,7 +520,9 @@ CREATE TABLE parliaments (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     dissolution_heading character varying(100),
-    dissolution_faq_url character varying(500)
+    dissolution_faq_url character varying(500),
+    dissolved_heading character varying(100),
+    dissolved_message text
 );
 
 
@@ -1857,4 +1859,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170419165419');
 INSERT INTO schema_migrations (version) VALUES ('20170422104143');
 
 INSERT INTO schema_migrations (version) VALUES ('20170424145119');
+
+INSERT INTO schema_migrations (version) VALUES ('20170428185435');
 
