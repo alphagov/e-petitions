@@ -3,6 +3,12 @@
 
   <%= render 'parliament_dissolution_warning' %>
 
+  <% if Parliament.dissolved? %>
+    <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
+      Register to vote in the General Election
+    </a>
+  <% end %>
+
   <% if no_petitions_yet? %>
     <div class="section-panel-borderless no-petitions-yet">
       <p class="lede">The new Petitions service launched today</p>
@@ -68,7 +74,7 @@
           <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
         <% end %>
       <% end %>
-      <div class="section-panel">
+      <div class="section-panel-borderless">
         <%= render "home_debated_petitions", actioned: actioned %>
       </div>
     </section>
@@ -82,9 +88,11 @@
     </section>
   <% end %>
 
-  <section class="section-panel-borderless start-petition" aria-labelledby="start-a-petition-heading">
-    <h2 id="start-a-petition-heading">Start a petition</h2>
-    <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
-    <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
-  </section>
+  <% unless Parliament.dissolved? %>
+    <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
+      <h2 id="start-a-petition-heading">Start a petition</h2>
+      <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
+      <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
+    </section>
+  <% end %>
 <% end %>

@@ -18,6 +18,17 @@ RSpec.describe PetitionsController, type: :controller do
       get :new, :petition_action => action
       expect(assigns[:stage_manager].petition.action).to eq action
     end
+
+    context "when parliament is dissolved" do
+      before do
+        allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :new
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "create" do
@@ -214,6 +225,17 @@ RSpec.describe PetitionsController, type: :controller do
         end
       end
     end
+
+    context "when parliament is dissolved" do
+      before do
+        allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        post :create, petition: {}
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "show" do
@@ -280,6 +302,35 @@ RSpec.describe PetitionsController, type: :controller do
     it "is successful" do
       get :check
       expect(response).to be_success
+    end
+
+    context "when parliament is dissolved" do
+      before do
+        allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :check
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
+  end
+
+  describe "GET #check_results" do
+    it "is successful" do
+      get :check_results, q: "action"
+      expect(response).to be_success
+    end
+
+    context "when parliament is dissolved" do
+      before do
+        allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :check_results, q: "action"
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
     end
   end
 end

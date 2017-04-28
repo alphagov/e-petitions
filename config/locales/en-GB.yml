@@ -138,6 +138,8 @@ en-GB:
       parliament:
         dissolution_heading: "Heading"
         dissolution_message: "Message"
+        dissolved_heading: "Heading"
+        dissolved_message: "Message"
         dissolution_at: "Date and time"
     select:
       prompt: Please select

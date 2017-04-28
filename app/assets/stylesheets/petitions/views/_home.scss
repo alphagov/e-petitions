@@ -94,6 +94,27 @@ a.threshold-panel:hover, a.threshold-panel:focus {
   }
 }
 
+.register-to-vote {
+  font-weight: bold;
+  margin-top: $gutter-half;
+  display: block;
+  padding: $gutter-one-third;
+  background-color: $panel-colour;
+  @include media(tablet) {
+  margin-top: $gutter;
+    padding: $gutter-one-third $gutter-half;
+  }
+  text-decoration: underline;
+}
+
+.local-to-you,
+.start-petition {
+  border-top: 1px solid #dee0e2;
+  border-bottom: none;
+  margin-top: $gutter;
+  padding-bottom: 0;
+}
+
 .local-to-you h2,
 .start-petition h2 {
   @include bold-24();

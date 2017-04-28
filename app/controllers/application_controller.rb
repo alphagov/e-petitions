@@ -58,6 +58,14 @@ class ApplicationController < ActionController::Base
     Site.protected? unless request.local?
   end
 
+  def parliament_dissolved?
+    Parliament.dissolved?
+  end
+
+  def redirect_to_home_page
+    redirect_to home_url
+  end
+
   def set_seen_cookie_message
     cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now, httponly: true }
   end

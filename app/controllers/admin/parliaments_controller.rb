@@ -30,7 +30,11 @@ class Admin::ParliamentsController < Admin::AdminController
   end
 
   def parliament_params
-    params.require(:parliament).permit(:dissolution_at, :dissolution_heading, :dissolution_message, :dissolution_faq_url)
+    params.require(:parliament).permit(
+      :dissolution_heading, :dissolution_message,
+      :dissolved_heading, :dissolved_message,
+      :dissolution_at, :dissolution_faq_url
+    )
   end
 
   def email_creators?

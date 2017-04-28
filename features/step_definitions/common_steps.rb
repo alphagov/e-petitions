@@ -21,6 +21,15 @@ Given(/^Parliament is dissolving$/) do
     dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
 end
 
+Given(/^Parliament is dissolved$/) do
+  Parliament.instance.update! dissolution_at: 1.day.ago,
+    dissolution_heading: "Parliament is dissolving",
+    dissolution_message: "This means all petitions will close in 2 weeks",
+    dissolved_heading: "Parliament has been dissolved",
+    dissolved_message: "All petitions have been closed",
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+end
+
 Given(/^the request is not local$/) do
   page.driver.options[:headers] = { "REMOTE_ADDR" => "192.168.1.128" }
 end
@@ -71,6 +80,14 @@ Then(/^I should see the Parliament dissolution warning message$/) do
   within(:css, ".notification") do
     expect(page).to have_content "Parliament is dissolving"
     expect(page).to have_content "This means all petitions will close in 2 weeks"
+    expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
+  end
+end
+
+Then(/^I should see the Parliament dissolved warning message$/) do
+  within(:css, ".notification") do
+    expect(page).to have_content "Parliament has been dissolved"
+    expect(page).to have_content "All petitions have been closed"
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
   end
 end
