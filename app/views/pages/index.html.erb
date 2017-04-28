@@ -3,7 +3,7 @@
 
   <%= render 'parliament_dissolution_warning' %>
 
-  <% if Parliament.dissolved? %>
+  <% if Parliament.dissolution_announced? %>
     <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
       Register to vote in the General Election
     </a>
@@ -40,7 +40,9 @@
           </ul>
         </section>
       <% end %>
-      <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
+      <% unless Parliament.dissolved? %>
+        <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
+      <% end %>
     </div>
   <% end %>
 
