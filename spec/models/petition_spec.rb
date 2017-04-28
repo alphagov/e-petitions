@@ -1720,16 +1720,20 @@ RSpec.describe Petition, type: :model do
     let(:closing_date) { (now + duration).end_of_day }
     let(:debate_state) { 'pending' }
 
-    before do
-      petition.close!(now)
-    end
-
     it "sets the state to CLOSED" do
-      expect(petition.state).to eq(Petition::CLOSED_STATE)
+      expect {
+        petition.close!(now)
+      }.to change {
+        petition.state
+      }.from(Petition::OPEN_STATE).to(Petition::CLOSED_STATE)
     end
 
     it "sets the closing date to now" do
-      expect(petition.closed_at).to be_within(1.second).of(now)
+      expect {
+        petition.close!(now)
+      }.to change {
+        petition.closed_at
+      }.from(nil).to(now)
     end
 
     %w[pending awaiting scheduled debated not_debated].each do |state|
@@ -1737,18 +1741,32 @@ RSpec.describe Petition, type: :model do
         let(:debate_state) { state }
 
         it "doesn't change the debate state" do
-          expect(petition.debate_state).to eq(state)
+          expect {
+            petition.close!
+          }.not_to change {
+            petition.debate_state
+          }
         end
       end
     end
 
     context "when called without an argument" do
-      before do
-        petition.close!
-      end
-
       it "sets the closing date to the deadline" do
-        expect(petition.closed_at).to be_within(1.second).of(petition.deadline)
+        expect {
+          petition.close!
+        }.to change {
+          petition.closed_at
+        }.from(nil).to(petition.deadline)
+      end
+    end
+
+    (Petition::STATES - [Petition::OPEN_STATE]).each do |state|
+      context "when called on a #{state} petition" do
+        subject(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises a RuntimeError" do
+          expect { petition.close! }.to raise_error(RuntimeError)
+        end
       end
     end
   end

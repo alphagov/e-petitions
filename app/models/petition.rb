@@ -496,7 +496,11 @@ class Petition < ActiveRecord::Base
   end
 
   def close!(time = deadline)
-    update!(state: CLOSED_STATE, closed_at: time)
+    if open?
+      update!(state: CLOSED_STATE, closed_at: time)
+    else
+      raise RuntimeError, "can't stop a petition that is in the #{state} state"
+    end
   end
 
   def validate_creator_signature!
