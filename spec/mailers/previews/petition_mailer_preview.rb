@@ -45,6 +45,20 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.notify_creator_of_closing_date_change(signature)
   end
 
+  def notify_creator_of_sponsored_petition_being_stopped
+    petition = Petition.where(state: "sponsored").last
+    signature = petition.creator_signature
+
+    PetitionMailer.notify_creator_of_sponsored_petition_being_stopped(signature)
+  end
+
+  def notify_creator_of_validated_petition_being_stopped
+    petition = Petition.where(state: "validated").last
+    signature = petition.creator_signature
+
+    PetitionMailer.notify_creator_of_validated_petition_being_stopped(signature)
+  end
+
   def debated_petition_signer_notification
     petition = Petition.debated.last
     signature = petition.signatures.validated.last

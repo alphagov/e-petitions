@@ -75,6 +75,16 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change)
   end
 
+  def notify_creator_of_sponsored_petition_being_stopped(signature)
+    @signature, @petition = signature, signature.petition
+    mail to: @signature.email, subject: subject_for(:notify_creator_of_sponsored_petition_being_stopped)
+  end
+
+  def notify_creator_of_validated_petition_being_stopped(signature)
+    @signature, @petition = signature, signature.petition
+    mail to: @signature.email, subject: subject_for(:notify_creator_of_validated_petition_being_stopped)
+  end
+
   def gather_sponsors_for_petition(petition)
     @petition, @creator = petition, petition.creator_signature
     mail to: @creator.email, subject: subject_for(:gather_sponsors_for_petition)
