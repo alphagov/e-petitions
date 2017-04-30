@@ -122,6 +122,11 @@ FactoryGirl.define do
     closed_at  { 1.day.ago }
   end
 
+  factory :stopped_petition, :parent => :petition do
+    state  Petition::STOPPED_STATE
+    stopped_at { 1.day.ago }
+  end
+
   factory :rejected_petition, :parent => :petition do
     state Petition::REJECTED_STATE
 
