@@ -284,7 +284,8 @@ class Petition < ActiveRecord::Base
     end
 
     def in_need_of_stopping(time = nil)
-      time ? stoppable.created_after(time) : stoppable
+      scope = preload(:creator_signature)
+      time ? scope.stoppable.created_after(time) : scope.stoppable
     end
 
     def created_after(time)

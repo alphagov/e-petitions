@@ -214,6 +214,15 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
+          let :stop_petitions_early_job do
+            {
+              job: StopPetitionsEarlyJob,
+              args: [dissolution_at.iso8601],
+              queue: "high_priority",
+              at: dissolution_at.to_f
+            }
+          end
+
           it "redirects to the admin dashboard page" do
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
           end
@@ -222,8 +231,12 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             expect(flash[:notice]).to eq("Petitions have been scheduled to close early")
           end
 
-          it "enqueues a job to notify creators" do
-            expect(enqueued_jobs).to eq([close_petitions_early_job])
+          it "enqueues a job to close petitions" do
+            expect(enqueued_jobs).to include(close_petitions_early_job)
+          end
+
+          it "enqueues a job to stop petitions" do
+            expect(enqueued_jobs).to include(stop_petitions_early_job)
           end
         end
 
