@@ -141,6 +141,7 @@ en-GB:
         dissolved_heading: "Heading"
         dissolved_message: "Message"
         dissolution_at: "Date and time"
+        notification_cutoff_at: "Notify unpublished petitions created after"
     select:
       prompt: Please select
     submit:

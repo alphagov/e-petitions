@@ -33,7 +33,8 @@ class Admin::ParliamentsController < Admin::AdminController
     params.require(:parliament).permit(
       :dissolution_heading, :dissolution_message,
       :dissolved_heading, :dissolved_message,
-      :dissolution_at, :dissolution_faq_url
+      :dissolution_at, :dissolution_faq_url,
+      :notification_cutoff_at
     )
   end
 
