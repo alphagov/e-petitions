@@ -14,6 +14,7 @@ class Admin::ParliamentsController < Admin::AdminController
         redirect_to admin_root_url, notice: :creators_emailed
       elsif schedule_closure?
         ClosePetitionsEarlyJob.schedule_for(@parliament.dissolution_at)
+        StopPetitionsEarlyJob.schedule_for(@parliament.dissolution_at)
         redirect_to admin_root_url, notice: :closure_scheduled
       else
         redirect_to admin_root_url, notice: :parliament_updated
@@ -33,7 +34,8 @@ class Admin::ParliamentsController < Admin::AdminController
     params.require(:parliament).permit(
       :dissolution_heading, :dissolution_message,
       :dissolved_heading, :dissolved_message,
-      :dissolution_at, :dissolution_faq_url
+      :dissolution_at, :dissolution_faq_url,
+      :notification_cutoff_at
     )
   end
 

@@ -440,6 +440,24 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "stoppable" do
+      let!(:open_petition) { FactoryGirl.create(:open_petition) }
+      let!(:closed_petition) { FactoryGirl.create(:open_petition) }
+      let!(:rejected_petition) { FactoryGirl.create(:rejected_petition) }
+      let!(:hidden_petition) { FactoryGirl.create(:hidden_petition) }
+
+      let!(:stoppable_1) { FactoryGirl.create(:pending_petition) }
+      let!(:stoppable_2) { FactoryGirl.create(:validated_petition) }
+      let!(:stoppable_3) { FactoryGirl.create(:sponsored_petition) }
+      let!(:stoppable_4) { FactoryGirl.create(:flagged_petition) }
+
+      let(:stoppable_petitions) { [stoppable_1, stoppable_2, stoppable_3, stoppable_4] }
+
+      it "returns only stoppable petitions" do
+        expect(Petition.stoppable).to include(*stoppable_petitions)
+      end
+    end
+
     context 'in_debate_queue' do
       let!(:petition_1) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: 1.day.ago) }
       let!(:petition_2) { FactoryGirl.create(:open_petition, debate_threshold_reached_at: nil) }
@@ -893,6 +911,26 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "stopped?" do
+    context "when the state is stopped" do
+      let(:petition) { FactoryGirl.build(:petition, state: Petition::STOPPED_STATE) }
+
+      it "returns true" do
+        expect(petition.stopped?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::STOPPED_STATE]).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not stopped when state is #{state}" do
+          expect(petition.stopped?).to be_falsey
+        end
+      end
+    end
+  end
+
   describe "hidden?" do
     context "when the state is hidden" do
       it "returns true" do
@@ -1048,6 +1086,23 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".stop_petitions_early!" do
+    let(:dissolution_at) { Time.utc(2017, 5, 2, 23, 1, 0).in_time_zone }
+    let!(:petition) { FactoryGirl.create(:pending_petition) }
+
+    it "stops the petition" do
+      expect{
+        described_class.stop_petitions_early!(dissolution_at)
+      }.to change{ petition.reload.state }.from('pending').to('stopped')
+    end
+
+    it "sets stopped_at to the dissolution timestamp" do
+      expect{
+        described_class.stop_petitions_early!(dissolution_at)
+      }.to change{ petition.reload.stopped_at }.from(nil).to(dissolution_at)
+    end
+  end
+
   describe ".in_need_of_closing" do
     context "when a petition is in the closed state" do
       let!(:petition) { FactoryGirl.create(:closed_petition) }
@@ -1072,6 +1127,38 @@ RSpec.describe Petition, type: :model do
 
       it "finds the petition" do
         expect(described_class.in_need_of_closing.to_a).to include(petition)
+      end
+    end
+  end
+
+  describe ".in_need_of_stopping" do
+    let!(:open_petition) { FactoryGirl.create(:open_petition, created_at: 2.weeks.ago) }
+    let!(:pending_petition) { FactoryGirl.create(:pending_petition, created_at: 6.weeks.ago) }
+    let!(:validated_petition) { FactoryGirl.create(:validated_petition, created_at: 2.weeks.ago) }
+    let!(:sponsored_petition) { FactoryGirl.create(:sponsored_petition, created_at: 6.weeks.ago) }
+    let!(:flagged_petition) { FactoryGirl.create(:flagged_petition, created_at: 2.weeks.ago) }
+    let!(:stoppable_petitions) { [pending_petition, validated_petition, sponsored_petition, flagged_petition] }
+    let!(:recent_petitions) { [validated_petition, flagged_petition] }
+
+    context "when not passing a date" do
+      it "does not find open petitions" do
+        expect(described_class.in_need_of_stopping).not_to include(open_petition)
+      end
+
+      it "includes all stoppable petitions" do
+        expect(described_class.in_need_of_stopping).to include(*stoppable_petitions)
+      end
+    end
+
+    context "when passing a date" do
+      let(:cutoff_date) { 1.month.ago }
+
+      it "does not find open petitions" do
+        expect(described_class.in_need_of_stopping(cutoff_date)).not_to include(open_petition)
+      end
+
+      it "includes only the stoppable petitions created after that date" do
+        expect(described_class.in_need_of_stopping(cutoff_date)).to include(*recent_petitions)
       end
     end
   end
@@ -1720,16 +1807,20 @@ RSpec.describe Petition, type: :model do
     let(:closing_date) { (now + duration).end_of_day }
     let(:debate_state) { 'pending' }
 
-    before do
-      petition.close!(now)
-    end
-
     it "sets the state to CLOSED" do
-      expect(petition.state).to eq(Petition::CLOSED_STATE)
+      expect {
+        petition.close!(now)
+      }.to change {
+        petition.state
+      }.from(Petition::OPEN_STATE).to(Petition::CLOSED_STATE)
     end
 
     it "sets the closing date to now" do
-      expect(petition.closed_at).to be_within(1.second).of(now)
+      expect {
+        petition.close!(now)
+      }.to change {
+        petition.closed_at
+      }.from(nil).to(now)
     end
 
     %w[pending awaiting scheduled debated not_debated].each do |state|
@@ -1737,18 +1828,73 @@ RSpec.describe Petition, type: :model do
         let(:debate_state) { state }
 
         it "doesn't change the debate state" do
-          expect(petition.debate_state).to eq(state)
+          expect {
+            petition.close!
+          }.not_to change {
+            petition.debate_state
+          }
         end
       end
     end
 
     context "when called without an argument" do
-      before do
-        petition.close!
-      end
-
       it "sets the closing date to the deadline" do
-        expect(petition.closed_at).to be_within(1.second).of(petition.deadline)
+        expect {
+          petition.close!
+        }.to change {
+          petition.closed_at
+        }.from(nil).to(petition.deadline)
+      end
+    end
+
+    (Petition::STATES - [Petition::OPEN_STATE]).each do |state|
+      context "when called on a #{state} petition" do
+        subject(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises a RuntimeError" do
+          expect { petition.close! }.to raise_error(RuntimeError)
+        end
+      end
+    end
+  end
+
+  describe '#stop!' do
+    subject(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:dissolution_at) { 1.day.ago }
+
+    it "sets the state to STOPPED" do
+      expect {
+        petition.stop!(dissolution_at)
+      }.to change {
+        petition.state
+      }.from(Petition::PENDING_STATE).to(Petition::STOPPED_STATE)
+    end
+
+    it "sets the stopped date to the dissolution time" do
+      expect {
+        petition.stop!(dissolution_at)
+      }.to change {
+        petition.stopped_at
+      }.from(nil).to(dissolution_at)
+    end
+
+    context "when called without an argument" do
+      it "sets the closing date to current time" do
+        expect {
+          petition.stop!
+        }.to change {
+          petition.stopped_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    Petition::MODERATED_STATES.each do |state|
+      context "when called on a #{state} petition" do
+        subject(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises a RuntimeError" do
+          expect { petition.stop! }.to raise_error(RuntimeError)
+        end
       end
     end
   end

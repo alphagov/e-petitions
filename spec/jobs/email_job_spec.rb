@@ -179,6 +179,72 @@ RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
   end
 end
 
+RSpec.describe NotifyCreatorOfValidatedPetitionBeingStoppedJob, type: :job do
+  let(:petition) { FactoryGirl.create(:validated_petition) }
+  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+  context "when parliament is not dissolved" do
+    before do
+      allow(Parliament).to receive(:dissolved?).and_return(false)
+    end
+
+    it "does not send the PetitionMailer#notify_creator_of_validated_petition_being_stopped email" do
+      expect(PetitionMailer).not_to receive(:notify_creator_of_validated_petition_being_stopped).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+
+  context "when parliament is dissolved" do
+    before do
+      allow(Parliament).to receive(:dissolved?).and_return(true)
+    end
+
+    it "sends the PetitionMailer#notify_creator_of_validated_petition_being_stopped email" do
+      expect(PetitionMailer).to receive(:notify_creator_of_validated_petition_being_stopped).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+end
+
+RSpec.describe NotifyCreatorOfSponsoredPetitionBeingStoppedJob, type: :job do
+  let(:petition) { FactoryGirl.create(:sponsored_petition) }
+  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+
+  context "when parliament is not dissolved" do
+    before do
+      allow(Parliament).to receive(:dissolved?).and_return(false)
+    end
+
+    it "does not send the PetitionMailer#notify_creator_of_sponsored_petition_being_stopped email" do
+      expect(PetitionMailer).not_to receive(:notify_creator_of_sponsored_petition_being_stopped).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+
+  context "when parliament is dissolved" do
+    before do
+      allow(Parliament).to receive(:dissolved?).and_return(true)
+    end
+
+    it "sends the PetitionMailer#notify_creator_of_sponsored_petition_being_stopped email" do
+      expect(PetitionMailer).to receive(:notify_creator_of_sponsored_petition_being_stopped).with(signature).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(signature)
+      end
+    end
+  end
+end
+
 RSpec.describe NotifyCreatorThatPetitionIsPublishedEmailJob, type: :job do
   let(:petition) { FactoryGirl.create(:petition) }
   let(:signature) { FactoryGirl.create(:signature, petition: petition) }

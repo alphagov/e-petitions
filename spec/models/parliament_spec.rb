@@ -8,6 +8,7 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:dissolution_faq_url).of_type(:string).with_options(limit: 500, null: true) }
     it { is_expected.to have_db_column(:dissolved_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolved_message).of_type(:text).with_options(null: true) }
+    it { is_expected.to have_db_column(:notification_cutoff_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
@@ -95,6 +96,11 @@ RSpec.describe Parliament, type: :model do
     it "delegates dissolution_at to the instance" do
       expect(parliament).to receive(:dissolution_at).and_return(now)
       expect(Parliament.dissolution_at).to eq(now)
+    end
+
+    it "delegates notification_cutoff_at to the instance" do
+      expect(parliament).to receive(:notification_cutoff_at).and_return(now)
+      expect(Parliament.notification_cutoff_at).to eq(now)
     end
 
     it "delegates dissolution_heading to the instance" do

@@ -207,6 +207,68 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
   end
 
+  describe "notifying creator of their sponsored petition being stopped" do
+    let! :petition do
+      FactoryGirl.create(:sponsored_petition,
+        creator_signature: creator,
+        action: "Allow organic vegetable vans to use red diesel",
+        background: "Add vans to permitted users of red diesel",
+        additional_details: "To promote organic vegetables"
+      )
+    end
+
+    let(:mail) { PetitionMailer.notify_creator_of_sponsored_petition_being_stopped(creator) }
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "has an appropriate subject heading" do
+      expect(mail).to have_subject("We’ve stopped your petition early")
+    end
+
+    it "is addressed to the creator" do
+      expect(mail).to have_body_text("Dear Barry Butler,")
+    end
+
+    it "informs the creator of the change" do
+      expect(mail).to have_body_text("We’re very sorry that we didn’t have time to check your petition before this happened")
+    end
+  end
+
+  describe "notifying creator of their validated petition being stopped" do
+    let! :petition do
+      FactoryGirl.create(:validated_petition,
+        creator_signature: creator,
+        action: "Allow organic vegetable vans to use red diesel",
+        background: "Add vans to permitted users of red diesel",
+        additional_details: "To promote organic vegetables"
+      )
+    end
+
+    let(:mail) { PetitionMailer.notify_creator_of_validated_petition_being_stopped(creator) }
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "has an appropriate subject heading" do
+      expect(mail).to have_subject("We’ve stopped your petition early")
+    end
+
+    it "is addressed to the creator" do
+      expect(mail).to have_body_text("Dear Barry Butler,")
+    end
+
+    it "informs the creator of the change" do
+      expect(mail).to have_body_text("We’re very sorry that you didn’t have time to collect your five signatures before this happened")
+    end
+  end
+
   describe "gathering sponsors for petition" do
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 

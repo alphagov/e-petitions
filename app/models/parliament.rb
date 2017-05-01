@@ -12,6 +12,10 @@ class Parliament < ActiveRecord::Base
       instance.dissolution_at
     end
 
+    def notification_cutoff_at
+      instance.notification_cutoff_at
+    end
+
     def dissolution_heading
       instance.dissolution_heading
     end

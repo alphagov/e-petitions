@@ -32,6 +32,12 @@
 
       <h2>Dissolved</h2>
 
+      <%= form_row for: [form.object, :notification_cutoff_at] do %>
+        <%= form.label :notification_cutoff_at, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :notification_cutoff_at %>
+        <%= form.datetime_select :notification_cutoff_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+      <% end %>
+
       <%= form_row for: [form.object, :dissolved_heading] do %>
         <%= form.label :dissolved_heading, class: 'form-label' %>
         <%= error_messages_for_field @parliament, :dissolved_heading %>
