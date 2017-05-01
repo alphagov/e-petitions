@@ -1897,6 +1897,31 @@ RSpec.describe Petition, type: :model do
         end
       end
     end
+
+    context "when the creator's signature is now invalid" do
+      let(:creator) { petition.creator_signature }
+
+      before do
+        creator.update_column(:email, "jo+123@public.com")
+        creator.reload
+      end
+
+      it "sets the state to STOPPED" do
+        expect {
+          petition.stop!(dissolution_at)
+        }.to change {
+          petition.state
+        }.from(Petition::PENDING_STATE).to(Petition::STOPPED_STATE)
+      end
+
+      it "sets the stopped date to the dissolution time" do
+        expect {
+          petition.stop!(dissolution_at)
+        }.to change {
+          petition.stopped_at
+        }.from(nil).to(dissolution_at)
+      end
+    end
   end
 
   describe '#flag' do
