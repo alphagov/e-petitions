@@ -108,7 +108,11 @@ class SignaturesController < ApplicationController
   end
 
   def send_email_to_petition_signer(signature)
-    EmailConfirmationForSignerEmailJob.perform_later(signature)
+    EmailConfirmationForSignerEmailJob.perform_later(signature) unless signature.email_threshold_reached?
+  end
+
+  def send_email_to_duplicate_petition_signer(signature)
+    EmailDuplicateSignaturesEmailJob.perform_later(signature) unless signature.email_threshold_reached?
   end
 
   def assign_stage
@@ -145,6 +149,7 @@ class SignaturesController < ApplicationController
     assign_stage
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, request, petition, params[:stage], params[:move])
     if @stage_manager.create_signature
+      return handle_duplicate_signature(petition) if @stage_manager.signature.duplicate?
       @stage_manager.signature.store_constituency_id
       send_email_to_petition_signer(@stage_manager.signature)
       respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
@@ -154,6 +159,12 @@ class SignaturesController < ApplicationController
       end
     end
   rescue ActiveRecord::RecordNotUnique => e
+    handle_duplicate_signature(petition)
+  end
+
+  def handle_duplicate_signature(petition)
+    original_signature = Signature.where(email: @signature.email, petition_id: petition.id).first
+    send_email_to_duplicate_petition_signer(original_signature)
     redirect_to thank_you_petition_signatures_url(petition)
   end
 

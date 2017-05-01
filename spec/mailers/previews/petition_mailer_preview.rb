@@ -4,6 +4,10 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.email_confirmation_for_signer(Signature.last)
   end
 
+  def email_duplicate_signatures
+    PetitionMailer.email_duplicate_signatures(Signature.last)
+  end
+
   def gather_sponsors_for_petition
     PetitionMailer.gather_sponsors_for_petition(Petition.last)
   end

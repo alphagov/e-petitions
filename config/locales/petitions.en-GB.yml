@@ -92,6 +92,8 @@ en-GB:
           %{subject}
         email_confirmation_for_signer: |-
           Please confirm your email address
+        email_duplicate_signatures: |-
+          Duplicate signature of petition
         notify_signer_of_positive_debate_outcome: |-
           Parliament debated “%{action}”
         notify_signer_of_negative_debate_outcome: |-
