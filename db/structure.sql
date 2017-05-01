@@ -739,7 +739,8 @@ CREATE TABLE signatures (
     government_response_email_at timestamp without time zone,
     debate_scheduled_email_at timestamp without time zone,
     debate_outcome_email_at timestamp without time zone,
-    petition_email_at timestamp without time zone
+    petition_email_at timestamp without time zone,
+    uuid uuid
 );
 
 
@@ -1568,6 +1569,13 @@ CREATE INDEX index_signatures_on_updated_at ON signatures USING btree (updated_a
 
 
 --
+-- Name: index_signatures_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_uuid ON signatures USING btree (uuid);
+
+
+--
 -- Name: index_signatures_on_validated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1867,4 +1875,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170428185435');
 INSERT INTO schema_migrations (version) VALUES ('20170428211336');
 
 INSERT INTO schema_migrations (version) VALUES ('20170429023722');
+
+INSERT INTO schema_migrations (version) VALUES ('20170501093620');
 
