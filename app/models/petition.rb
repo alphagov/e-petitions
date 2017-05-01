@@ -146,6 +146,10 @@ class Petition < ActiveRecord::Base
       where(state: SPONSORED_STATE)
     end
 
+    def stopped_state
+      where(state: STOPPED_STATE)
+    end
+
     def awaiting_debate
       where(debate_state: %w[awaiting scheduled])
     end
