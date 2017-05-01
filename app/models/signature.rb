@@ -1,3 +1,4 @@
+require 'active_support/core_ext/digest/uuid'
 require 'postcode_sanitizer'
 
 class Signature < ActiveRecord::Base
@@ -35,6 +36,10 @@ class Signature < ActiveRecord::Base
 
   validates_inclusion_of :state, in: STATES
   validates :constituency_id, length: { maximum: 255 }
+
+  before_save if: :email? do
+    self.uuid = generate_uuid
+  end
 
   before_destroy do
     !creator?
@@ -266,7 +271,15 @@ class Signature < ActiveRecord::Base
     petition.signatures.where(ip_address: ip_address, created_at: period).count
   end
 
+  def update_uuid
+    update_column(:uuid, generate_uuid)
+  end
+
   private
+
+  def generate_uuid
+    Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:#{email}")
+  end
 
   def column_name_for(timestamp)
     self.class.column_name_for(timestamp)

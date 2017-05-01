@@ -166,6 +166,32 @@ RSpec.describe Signature, type: :model do
         end
       end
     end
+
+    context "when the signature is saved" do
+      context "and the email is blank" do
+        subject { FactoryGirl.build(:signature, email: "") }
+
+        it "doesn't set the uuid column" do
+          expect {
+            subject.save
+          }.not_to change {
+            subject.uuid
+          }
+        end
+      end
+
+      context "and the email is set" do
+        subject { FactoryGirl.build(:signature, email: "alice@example.com") }
+
+        it "sets the uuid column" do
+          expect {
+            subject.save
+          }.to change {
+            subject.uuid
+          }.from(nil).to("6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6")
+        end
+      end
+    end
   end
 
   context "validations" do
