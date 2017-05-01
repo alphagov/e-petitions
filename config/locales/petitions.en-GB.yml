@@ -65,6 +65,7 @@ en-GB:
         - :closed
         - :rejected
         - :hidden
+        - :stopped
         - :awaiting_response
         - :with_response
         - :awaiting_debate_date
@@ -79,6 +80,7 @@ en-GB:
           closed: "Closed (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
+          stopped: "Stopped (%{quantity})"
           awaiting_response: "Awaiting a government response (%{quantity})"
           with_response: "With a government response (%{quantity})"
           awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
