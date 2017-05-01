@@ -4,7 +4,7 @@ module Staged
       extend ActiveSupport::Concern
 
       included do
-        validate do |signature|
+        validate on: :create do |signature|
           matcher = ::Signature.where(:email => signature.email, :petition_id => signature.petition_id)
           matcher = matcher.where("signatures.id != ?", signature.id) unless signature.new_record?
           existing_email_address_count = matcher.count
