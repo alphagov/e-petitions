@@ -265,10 +265,6 @@ class Signature < ActiveRecord::Base
     petition.signatures.where(ip_address: ip_address, created_at: period).count
   end
 
-  def email_count
-    super || 0
-  end
-
   def email_threshold_reached?
     email_count >= 5
   end
@@ -281,11 +277,8 @@ class Signature < ActiveRecord::Base
     return true if existing_email_address_count > 1
     existing_signature = matcher.first
     return true if (existing_signature.name.strip.downcase == name.strip.downcase)
-    if (existing_signature.postcode.gsub(/\s+/,'').downcase !=
-        postcode.gsub(/\s+/,'').downcase)
-      return true
-    end
-    false
+    return true if (existing_signature.postcode.gsub(/\s+/,'').downcase != postcode.gsub(/\s+/,'').downcase)
+    return false
   end
 
   private
