@@ -13,15 +13,23 @@ class StopPetitionsEarlyJob < ApplicationJob
 
     Petition.in_need_of_stopping.find_each do |petition|
       if petition.created_at >= cutoff_time
-        case petition.state
-        when Petition::VALIDATED_STATE
-          NotifyCreatorOfValidatedPetitionBeingStoppedJob.perform_later(petition.creator_signature)
-        when Petition::SPONSORED_STATE
-          NotifyCreatorOfSponsoredPetitionBeingStoppedJob.perform_later(petition.creator_signature)
-        end
+        send_notification(petition)
       end
 
       petition.stop!(time)
+    end
+  end
+
+  private
+
+  def send_notification(petition)
+    unless petition.special_consideration?
+      case petition.state
+      when Petition::VALIDATED_STATE
+        NotifyCreatorOfValidatedPetitionBeingStoppedJob.perform_later(petition.creator_signature)
+      when Petition::SPONSORED_STATE
+        NotifyCreatorOfSponsoredPetitionBeingStoppedJob.perform_later(petition.creator_signature)
+      end
     end
   end
 end

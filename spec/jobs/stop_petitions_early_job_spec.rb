@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe StopPetitionsEarlyJob, type: :job do
   let(:state) { Petition::PENDING_STATE }
+  let(:special_consideration) { false }
   let(:created_at) { dissolution_at - 1.month }
   let(:dissolution_at) { "2017-05-02T23:00:01Z".in_time_zone }
   let(:scheduled_at) { dissolution_at - 2.weeks }
@@ -11,7 +12,12 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
   let(:jobs) { Delayed::Job.all.to_a }
   let(:creator) { petition.creator_signature }
 
-  let!(:petition) { FactoryGirl.create(:"#{state}_petition", created_at: created_at) }
+  let!(:petition) do
+    FactoryGirl.create(
+      :"#{state}_petition", created_at: created_at,
+      special_consideration: special_consideration
+    )
+  end
 
   before do
     ActiveJob::Base.queue_adapter = :delayed_job
@@ -173,6 +179,35 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
         }.from("validated").to("stopped")
       end
     end
+
+    context "but is flagged for special consideration" do
+      let(:created_at) { notification_cutoff_at + 1.week }
+      let(:special_consideration) { true }
+
+      before do
+        expect(PetitionMailer).not_to receive(email)
+      end
+
+      it "doesn't send a notification email" do
+        expect {
+          travel_to(dissolution_at) {
+            Delayed::Worker.new.work_off
+          }
+        }.not_to change {
+          deliveries.size
+        }
+      end
+
+      it "stops the petition" do
+        expect {
+          travel_to(dissolution_at) {
+            Delayed::Worker.new.work_off
+          }
+        }.to change {
+          petition.reload.state
+        }.from("validated").to("stopped")
+      end
+    end
   end
 
   context "when the petition is sponsored" do
@@ -218,6 +253,35 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
         }.to change {
           deliveries.size
         }.by(1)
+      end
+
+      it "stops the petition" do
+        expect {
+          travel_to(dissolution_at) {
+            Delayed::Worker.new.work_off
+          }
+        }.to change {
+          petition.reload.state
+        }.from("sponsored").to("stopped")
+      end
+    end
+
+    context "but is flagged for special consideration" do
+      let(:created_at) { notification_cutoff_at + 1.week }
+      let(:special_consideration) { true }
+
+      before do
+        expect(PetitionMailer).not_to receive(email)
+      end
+
+      it "doesn't send a notification email" do
+        expect {
+          travel_to(dissolution_at) {
+            Delayed::Worker.new.work_off
+          }
+        }.not_to change {
+          deliveries.size
+        }
       end
 
       it "stops the petition" do
