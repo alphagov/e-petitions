@@ -33,6 +33,13 @@
         <% end %>
       <% end %>
 
+      <%= form_row for: [f.object, :special_consideration] do %>
+        <%= f.label :special_consideration do %>
+          <%= f.check_box :special_consideration, tabindex: increment %> Special consideration when dealing with this petition
+        <% end %>
+        <%= error_messages_for_field @petition, :special_consideration %>
+      <% end %>
+
       <%= f.submit 'Save', class: 'button' %>
 
       <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
