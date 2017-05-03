@@ -127,7 +127,8 @@ CREATE TABLE constituencies (
     mp_name character varying(100),
     mp_date date,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    example_postcode character varying(30)
 );
 
 
@@ -1880,4 +1881,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170429023722');
 INSERT INTO schema_migrations (version) VALUES ('20170501093620');
 
 INSERT INTO schema_migrations (version) VALUES ('20170502155040');
+
+INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
