@@ -100,3 +100,47 @@ Feature: Freya searches petitions by constituency
     And I search for petitions local to me in "S4 8AA"
     Then the markup should be valid
     And I should not see a link to the MP for my constituency
+
+  Scenario: Downloading the JSON data for open local petitions when the mp has passed away
+    Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And the MP has passed away
+    When I am on the home page
+    And I search for petitions local to me in "S4 8AA"
+    Then the markup should be valid
+    When I click the JSON link
+    Then I should be on the local petitions JSON page
+    And the JSON should be valid
+
+  Scenario: Downloading the JSON data for all local petitions when the mp has passed away
+    Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And the MP has passed away
+    When I am on the home page
+    And I search for petitions local to me in "S4 8AA"
+    Then the markup should be valid
+    When I click the view all local petitions
+    Then I should be on the all local petitions results page
+    And the markup should be valid
+    When I click the JSON link
+    Then I should be on the all local petitions JSON page
+    And the JSON should be valid
+
+  Scenario: Downloading the CSV data for local petitions when the mp has passed away
+    Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And the MP has passed away
+    When I am on the home page
+    And I search for petitions local to me in "S4 8AA"
+    Then the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "open-popular-petitions-in-sheffield-brightside-and-hillsborough.csv"
+
+  Scenario: Downloading the CSV data for local petitions when the mp has passed away
+    Given a constituency "Sheffield, Brightside and Hillsborough" with MP "Harry Harpham" is found by postcode "S4 8AA"
+    And the MP has passed away
+    When I am on the home page
+    And I search for petitions local to me in "S4 8AA"
+    Then the markup should be valid
+    When I click the view all local petitions
+    Then I should be on the all local petitions results page
+    And the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "all-popular-petitions-in-sheffield-brightside-and-hillsborough.csv"

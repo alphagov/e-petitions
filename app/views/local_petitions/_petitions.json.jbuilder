@@ -1,8 +1,10 @@
 json.constituency constituency.name
 
-json.mp do
-  json.name constituency.mp_name
-  json.url constituency.mp_url
+if constituency.sitting_mp?
+  json.mp do
+    json.name constituency.mp_name
+    json.url constituency.mp_url
+  end
 end
 
 json.petitions petitions do |petition|
