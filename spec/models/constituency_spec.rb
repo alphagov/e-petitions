@@ -13,6 +13,7 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.to have_db_column(:mp_id).of_type(:string).with_options(null: true, limit: 30) }
     it { is_expected.to have_db_column(:mp_name).of_type(:string).with_options(null: true, limit: 100) }
     it { is_expected.to have_db_column(:mp_date).of_type(:date).with_options(null: true) }
+    it { is_expected.to have_db_column(:example_postcode).of_type(:string).with_options(null: true, limit: 30) }
   end
 
   describe "associations" do
@@ -163,6 +164,34 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
+  describe ".refresh" do
+    context "when Parliament has dissolved" do
+      let!(:constituency_1) do
+        FactoryGirl.create(:constituency, :coventry_north_east)
+      end
+
+      let!(:constituency_2) do
+        FactoryGirl.create(:constituency, :sheffield_brightside_and_hillsborough)
+      end
+
+      before do
+        stub_api_request_for("CV21PH").to_return(api_response(:ok, "coventry_north_east"))
+        stub_api_request_for("S61AR").to_return(api_response(:ok, "sheffield_brightside_and_hillsborough"))
+      end
+
+      it "updates the existing constituencies" do
+        expect {
+          Constituency.refresh
+        }.to change {
+          [
+            constituency_1.reload.mp_name,
+            constituency_2.reload.mp_name
+          ]
+        }.from(["Colleen Fletcher MP", "Gill Furniss"]).to([nil, nil])
+      end
+    end
+  end
+
   describe "#sitting_mp?" do
     context "when the MP details are available" do
       let(:constituency) { FactoryGirl.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }
@@ -188,6 +217,100 @@ RSpec.describe Constituency, type: :model do
       expect(constituency.mp_url).to eq <<-URL.strip
         http://www.parliament.uk/biographies/commons/the-rt-hon-duncan-short-mp/2564
       URL
+    end
+  end
+
+  describe "#example_postcode" do
+    context "when the example postcode is not cached" do
+      let!(:constituency) { FactoryGirl.create(:constituency, ons_code: "E14000649") }
+      let!(:area_url) { "https://mapit.mysociety.org/area/E14000649" }
+      let!(:postcode_url) { "https://mapit.mysociety.org/area/65636/example_postcode" }
+
+      let!(:area_response) do
+        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '{"id":65636}' }
+      end
+
+      let!(:postcode_response) do
+        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '"CV2 1PH"' }
+      end
+
+      before do
+        stub_request(:get, area_url).to_return(area_response)
+        stub_request(:get, postcode_url).to_return(postcode_response)
+      end
+
+      it "fetches the example postcode from the Mapit API" do
+        expect(constituency.example_postcode).to eq("CV21PH")
+      end
+
+      it "saves the example postcode in the constituency record" do
+        expect {
+          constituency.example_postcode
+        }.to change {
+          constituency.reload[:example_postcode]
+        }.from(nil).to("CV21PH")
+      end
+    end
+
+    context "when the example postcode is cached" do
+      let!(:constituency) { FactoryGirl.create(:constituency, example_postcode: "CV21PH") }
+
+      it "doesn't make an API request" do
+        expect(WebMock).not_to have_requested(:get, "mapit.mysociety.org")
+        expect(constituency.example_postcode).to eq("CV21PH")
+      end
+    end
+  end
+
+  describe "#refresh" do
+    context "when Parliament has dissolved" do
+      let!(:constituency) do
+        FactoryGirl.create(:constituency, :coventry_north_east)
+      end
+
+      before do
+        stub_api_request_for("CV21PH").to_return(api_response(:ok, "coventry_north_east"))
+      end
+
+      it "updates the existing constituency" do
+        expect {
+          constituency.refresh
+        }.to change {
+          constituency.reload.mp_name
+        }.from("Colleen Fletcher MP").to(nil)
+      end
+    end
+
+    context "when there is no example postcode" do
+      let!(:constituency) do
+        FactoryGirl.create(:constituency, :coventry_north_east)
+      end
+
+      before do
+        expect(constituency).to receive(:example_postcode).and_return(nil)
+      end
+
+      it "doesn't update the constituency" do
+        expect {
+          constituency.refresh
+        }.not_to change {
+          constituency.reload.mp_name
+        }
+      end
+    end
+
+    context "when a postcode lookup mismatch occurs" do
+      let!(:constituency) do
+        FactoryGirl.create(:constituency, :coventry_north_east)
+      end
+
+      before do
+        stub_api_request_for("CV21PH").to_return(api_response(:ok, "sheffield_brightside_and_hillsborough"))
+      end
+
+      it "raises a RuntimeError" do
+        expect { constituency.refresh }.to raise_error(RuntimeError)
+      end
     end
   end
 end

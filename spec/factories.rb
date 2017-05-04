@@ -288,16 +288,29 @@ FactoryGirl.define do
       mp_id "4378"
       mp_name "Colleen Fletcher MP"
       mp_date "2015-05-07"
+      example_postcode "CV21PH"
     end
 
     trait(:bethnal_green_and_bow) do
       name "Bethnal Green and Bow"
       slug "bethnal-green-and-bow"
       external_id "3320"
-      ons_code "E14000649"
+      ons_code "E14000555"
       mp_id "4138"
       mp_name "Rushanara Ali MP"
       mp_date "2015-05-07"
+      example_postcode "E27AX"
+    end
+
+    trait(:sheffield_brightside_and_hillsborough) do
+      name "Sheffield, Brightside and Hillsborough"
+      slug "sheffield-brightside-and-hillsborough"
+      external_id "3724"
+      ons_code "E14000921"
+      mp_id "4571"
+      mp_name "Gill Furniss"
+      mp_date "2016-05-05"
+      example_postcode "S61AR"
     end
 
     england

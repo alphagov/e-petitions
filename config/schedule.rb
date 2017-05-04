@@ -29,6 +29,10 @@ every :day, at: '1.15am' do
   rake "epets:countries:fetch", output: nil
 end
 
+every :day, at: '1.45am' do
+  rake "epets:constituencies:refresh", output: nil
+end
+
 every :day, at: '2.30am' do
   rake "epets:petitions:count", output: nil
 end
