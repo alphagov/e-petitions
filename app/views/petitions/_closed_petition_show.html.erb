@@ -12,10 +12,21 @@
     </details>
   <% end %>
 
-  <p class="flash-notice">
-    This petition is closed
-    <span>All petitions run for 6 months</span>
-  </p>
+
+  <% if petition.closed_early_due_to_election? %>
+    <p class="flash-notice">
+      This petition closed early because of a General Election
+
+      <% if Parliament.dissolution_faq_url? %>
+        <span>Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></span>
+      <% end %>
+    </p>
+  <% else %>
+    <p class="flash-notice">
+      This petition is closed
+      <span>All petitions run for 6 months</span>
+    </p>
+  <% end %>
 
   <div class="signature-count">
     <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>

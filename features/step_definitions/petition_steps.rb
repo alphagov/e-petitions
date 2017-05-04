@@ -132,6 +132,20 @@ Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryGirl.create(:closed_petition, :action => petition_action)
 end
 
+Given(/^a petition "([^"]*)" has been closed early because of parliament dissolving$/) do |petition_action|
+  open_at = 3.months.ago
+  closed_at = 1.month.ago
+
+  Parliament.instance.update! dissolution_at: closed_at,
+    dissolution_heading: "Parliament is dissolving",
+    dissolution_message: "This means all petitions will close in 2 weeks",
+    dissolved_heading: "Parliament has been dissolved",
+    dissolved_message: "All petitions have been closed",
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+
+  @petition = FactoryGirl.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
+end
+
 Given(/^the petition has closed$/) do
   @petition.close!
 end

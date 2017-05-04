@@ -2262,5 +2262,51 @@ RSpec.describe Petition, type: :model do
         end
       end
     end
+
+    describe "#closed_early_due_to_election?" do
+      let(:dissolution_at) { "2017-05-03T00:01:00+01:00".in_time_zone }
+
+      before do
+        allow(Parliament).to receive(:dissolution_at).and_return(dissolution_at)
+      end
+
+      context "when the petition was not closed early" do
+        let(:open_at) { "2016-04-01T12:00:00+01:00".in_time_zone }
+        let(:closed_at) { Site.closed_at_for_opening(open_at) }
+
+        subject do
+          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
+        end
+
+        it "returns false" do
+          expect(subject.closed_early_due_to_election?).to eq(false)
+        end
+      end
+
+      context "when the petition was closed early for other reasons" do
+        let(:open_at) { "2016-11-01T12:00:00+00:00".in_time_zone }
+        let(:closed_at) { "2017-03-03T12:00:00+00:00".in_time_zone }
+
+        subject do
+          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
+        end
+
+        it "returns false" do
+          expect(subject.closed_early_due_to_election?).to eq(false)
+        end
+      end
+
+      context "when the petition was closed early because parliament was dissolved" do
+        let(:open_at) { "2017-04-01T12:00:00+01:00".in_time_zone }
+
+        subject do
+          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: dissolution_at)
+        end
+
+        it "returns true" do
+          expect(subject.closed_early_due_to_election?).to eq(true)
+        end
+      end
+    end
   end
 end
