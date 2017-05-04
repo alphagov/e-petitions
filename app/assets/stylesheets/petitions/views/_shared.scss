@@ -122,6 +122,10 @@ input.back-page {
     display: block;
     margin: em(5) 0;
   }
+  a {
+    color: $white;
+    text-decoration: underline;
+  }
 }
 
 .flash-notice-description {

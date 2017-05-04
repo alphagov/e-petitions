@@ -67,6 +67,11 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should see "This petition is closed"
 
+  Scenario: Suzie sees a special 'closed' message when viewing a petition closed early due to parliament being dissolved
+    Given a petition "Spend more money on Defence" has been closed early because of parliament dissolving
+    When I view the petition
+    Then I should see "This petition closed early because of a General Election"
+
   Scenario: Suzie does not see the creator when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition

@@ -712,4 +712,8 @@ class Petition < ActiveRecord::Base
   def fraudulent_domains?
     !fraudulent_domains.empty?
   end
+
+  def closed_early_due_to_election?(dissolution_at = Parliament.dissolution_at)
+    closed_at == dissolution_at
+  end
 end
