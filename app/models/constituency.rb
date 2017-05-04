@@ -36,6 +36,10 @@ class Constituency < ActiveRecord::Base
       end
     end
 
+    def refresh
+      find_each { |c| c.refresh }
+    end
+
     private
 
     def query
@@ -61,6 +65,20 @@ class Constituency < ActiveRecord::Base
 
   def reset_example_postcode
     update(example_postcode: nil)
+  end
+
+  def refresh
+    if example_postcode
+      constituency = self.class.find_by_postcode(example_postcode)
+
+      if external_id != constituency.external_id
+        raise RuntimeError, <<-ERROR.squish
+          mismatched constituencies when refreshing
+          with example postcode #{example_postcode.inspect}
+          - expected: #{external_id}, actual: #{constituency.external_id}
+        ERROR
+      end
+    end
   end
 
   private

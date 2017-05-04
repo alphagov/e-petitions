@@ -302,6 +302,17 @@ FactoryGirl.define do
       example_postcode "E27AX"
     end
 
+    trait(:sheffield_brightside_and_hillsborough) do
+      name "Sheffield, Brightside and Hillsborough"
+      slug "sheffield-brightside-and-hillsborough"
+      external_id "3724"
+      ons_code "E14000921"
+      mp_id "4571"
+      mp_name "Gill Furniss"
+      mp_date "2016-05-05"
+      example_postcode "S61AR"
+    end
+
     england
 
     name { Faker::Address.county }
