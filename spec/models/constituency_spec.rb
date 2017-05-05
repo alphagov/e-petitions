@@ -223,8 +223,8 @@ RSpec.describe Constituency, type: :model do
   describe "#example_postcode" do
     context "when the example postcode is not cached" do
       let!(:constituency) { FactoryGirl.create(:constituency, ons_code: "E14000649") }
-      let!(:area_url) { "https://mapit.mysociety.org/area/E14000649" }
-      let!(:postcode_url) { "https://mapit.mysociety.org/area/65636/example_postcode" }
+      let!(:area_url) { "http://mapit/area/E14000649" }
+      let!(:postcode_url) { "http://mapit/area/65636/example_postcode" }
 
       let!(:area_response) do
         { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '{"id":65636}' }
@@ -256,7 +256,7 @@ RSpec.describe Constituency, type: :model do
       let!(:constituency) { FactoryGirl.create(:constituency, example_postcode: "CV21PH") }
 
       it "doesn't make an API request" do
-        expect(WebMock).not_to have_requested(:get, "mapit.mysociety.org")
+        expect(WebMock).not_to have_requested(:get, "mapit")
         expect(constituency.example_postcode).to eq("CV21PH")
       end
     end
