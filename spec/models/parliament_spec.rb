@@ -89,7 +89,9 @@ RSpec.describe Parliament, type: :model do
       allow(Parliament).to receive(:last_or_create).and_return(parliament)
     end
 
-    after do
+    around do |example|
+      Parliament.reload
+      example.run
       Parliament.reload
     end
 
