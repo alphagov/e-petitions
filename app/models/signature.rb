@@ -90,6 +90,10 @@ class Signature < ActiveRecord::Base
     raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
   end
 
+  def self.batch(id = 0, limit: 1000)
+    where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)
+  end
+
   def self.fraudulent_domains
     where(state: FRAUDULENT_STATE).
     select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
