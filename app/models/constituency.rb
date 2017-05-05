@@ -4,9 +4,9 @@ require_dependency 'constituency/api_query'
 class Constituency < ActiveRecord::Base
   MP_URL = "http://www.parliament.uk/biographies/commons"
 
-  MAPIT_HOST = "https://mapit.mysociety.org"
+  MAPIT_HOST = "http://mapit"
   MAPIT_AREA_URL = "/area/%{ons_code}"
-  MAPIT_POSTCODE_URL = "https://mapit.mysociety.org/area/%{area_id}/example_postcode"
+  MAPIT_POSTCODE_URL = "http://mapit/area/%{area_id}/example_postcode"
 
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
