@@ -313,6 +313,10 @@ FactoryGirl.define do
       example_postcode "S61AR"
     end
 
+    trait(:no_example_postcode) do
+      example_postcode nil
+    end
+
     england
 
     name { Faker::Address.county }
