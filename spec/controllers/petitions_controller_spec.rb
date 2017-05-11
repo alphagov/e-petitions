@@ -241,6 +241,7 @@ RSpec.describe PetitionsController, type: :controller do
   describe "show" do
     let(:petition) { double }
     it "assigns the given petition" do
+      allow(petition).to receive(:stopped?).and_return(false)
       allow(petition).to receive(:collecting_sponsors?).and_return(false)
       allow(petition).to receive(:in_moderation?).and_return(false)
       allow(petition).to receive(:moderated?).and_return(true)
@@ -255,6 +256,17 @@ RSpec.describe PetitionsController, type: :controller do
         allow(Petition).to receive_message_chain(:visible, :find).and_raise ActiveRecord::RecordNotFound
         get :show, :id => 1
       }.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "does not allow stopped petitions to be shown" do
+      allow(petition).to receive(:stopped?).and_return(true)
+      allow(petition).to receive(:collecting_sponsors?).and_return(false)
+      allow(petition).to receive(:in_moderation?).and_return(false)
+      allow(petition).to receive(:moderated?).and_return(false)
+      allow(Petition).to receive_message_chain(:show, find: petition)
+
+      get :show, id: 1
+      expect(response).to redirect_to "https://petition.parliament.uk/"
     end
   end
 
