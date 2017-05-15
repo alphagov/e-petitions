@@ -15,8 +15,21 @@ RSpec.describe LocalPetitionsController, type: :controller do
         expect(assigns(:postcode)).to eq("N11TY")
       end
 
-      it "redirects to the constituency page" do
+      it "redirects to the constituency page for current popular petitions" do
         expect(response).to redirect_to("/petitions/local/holborn")
+      end
+    end
+
+    context "when the postcode is valid but parliament is dissolved" do
+      before do
+        expect(Parliament).to receive(:dissolved?).and_return(true)
+        expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
+
+        get :index, postcode: "n1 1ty"
+      end
+
+      it "redirects to the constituency page for all popular petitions" do
+        expect(response).to redirect_to("/petitions/local/holborn/all")
       end
     end
 

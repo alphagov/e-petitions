@@ -59,7 +59,11 @@ class LocalPetitionsController < ApplicationController
   end
 
   def redirect_to_constituency
-    redirect_to local_petition_url(@constituency.slug)
+    if Parliament.dissolved?
+      redirect_to all_local_petition_url(@constituency.slug)
+    else
+      redirect_to local_petition_url(@constituency.slug)
+    end
   end
 
   def csv_request?
