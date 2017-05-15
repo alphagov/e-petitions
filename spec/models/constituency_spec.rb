@@ -50,6 +50,17 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.to validate_length_of(:mp_name).is_at_most(100) }
 
     it { is_expected.not_to validate_presence_of(:mp_date) }
+
+    it { is_expected.to validate_presence_of(:example_postcode) }
+
+    it "should not allow an :example_postcode that doesn't belong to the constituency" do
+      constituency = FactoryGirl.create(:constituency, :romford)
+      stub_api_request_for("CV66HN").to_return(api_response(:ok, "coventry_north_east"))
+
+      expect {
+        constituency.update!(example_postcode: "CV66HN")
+      }.to raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   describe "callbacks" do
@@ -71,6 +82,58 @@ RSpec.describe Constituency, type: :model do
 
         it "is regenerated from the name" do
           expect(constituency.slug).to eq("coventry-north")
+        end
+      end
+    end
+
+    describe "example_postcode" do
+      context "when creating a constituency" do
+        let(:constituency) do
+          FactoryGirl.create(:constituency, :romford, example_postcode: example_postcode)
+        end
+
+        context "and the example_postcode is nil" do
+          let(:example_postcode) { nil }
+
+          it "is looked up from the ONS code" do
+            expect(constituency.example_postcode).to eq("RM53FZ")
+          end
+        end
+
+        context "and the example_postcode is specified" do
+          let(:example_postcode) { "RM70HD" }
+
+          it "respects the specified value" do
+            expect(constituency.example_postcode).to eq("RM70HD")
+          end
+        end
+      end
+
+      context "when updating a constituency" do
+        let(:constituency) do
+          FactoryGirl.create(:constituency, :romford, example_postcode: "RM53FA")
+        end
+
+        context "and the example_postcode is nil" do
+          before do
+            stub_api_request_for("RM53FZ").to_return(api_response(:ok, "romford"))
+            constituency.update!(example_postcode: nil)
+          end
+
+          it "is looked up from the ONS code" do
+            expect(constituency.example_postcode).to eq("RM53FZ")
+          end
+        end
+
+        context "and the example_postcode is specified" do
+          before do
+            stub_api_request_for("RM70HD").to_return(api_response(:ok, "romford"))
+            constituency.update!(example_postcode: "RM70HD")
+          end
+
+          it "respects the specified value" do
+            expect(constituency.example_postcode).to eq("RM70HD")
+          end
         end
       end
     end
@@ -164,7 +227,7 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
-  describe ".refresh" do
+  describe ".refresh!" do
     context "when Parliament has dissolved" do
       let!(:constituency_1) do
         FactoryGirl.create(:constituency, :coventry_north_east)
@@ -181,7 +244,7 @@ RSpec.describe Constituency, type: :model do
 
       it "updates the existing constituencies" do
         expect {
-          Constituency.refresh
+          Constituency.refresh!
         }.to change {
           [
             constituency_1.reload.mp_name,
@@ -220,49 +283,7 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
-  describe "#example_postcode" do
-    context "when the example postcode is not cached" do
-      let!(:constituency) { FactoryGirl.create(:constituency, ons_code: "E14000649") }
-      let!(:area_url) { "http://mapit/area/E14000649" }
-      let!(:postcode_url) { "http://mapit/area/65636/example_postcode" }
-
-      let!(:area_response) do
-        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '{"id":65636}' }
-      end
-
-      let!(:postcode_response) do
-        { status: 200, headers: { 'Content-Type' => 'application/json' }, body: '"CV2 1PH"' }
-      end
-
-      before do
-        stub_request(:get, area_url).to_return(area_response)
-        stub_request(:get, postcode_url).to_return(postcode_response)
-      end
-
-      it "fetches the example postcode from the Mapit API" do
-        expect(constituency.example_postcode).to eq("CV21PH")
-      end
-
-      it "saves the example postcode in the constituency record" do
-        expect {
-          constituency.example_postcode
-        }.to change {
-          constituency.reload[:example_postcode]
-        }.from(nil).to("CV21PH")
-      end
-    end
-
-    context "when the example postcode is cached" do
-      let!(:constituency) { FactoryGirl.create(:constituency, example_postcode: "CV21PH") }
-
-      it "doesn't make an API request" do
-        expect(WebMock).not_to have_requested(:get, "mapit")
-        expect(constituency.example_postcode).to eq("CV21PH")
-      end
-    end
-  end
-
-  describe "#refresh" do
+  describe "#refresh!" do
     context "when Parliament has dissolved" do
       let!(:constituency) do
         FactoryGirl.create(:constituency, :coventry_north_east)
@@ -274,7 +295,7 @@ RSpec.describe Constituency, type: :model do
 
       it "updates the existing constituency" do
         expect {
-          constituency.refresh
+          constituency.refresh!
         }.to change {
           constituency.reload.mp_name
         }.from("Colleen Fletcher MP").to(nil)
@@ -287,15 +308,30 @@ RSpec.describe Constituency, type: :model do
       end
 
       before do
-        expect(constituency).to receive(:example_postcode).and_return(nil)
+        allow(constituency).to receive(:example_postcode).and_return(nil)
+        allow(constituency).to receive(:example_postcode?).and_return(false)
       end
 
       it "doesn't update the constituency" do
         expect {
-          constituency.refresh
+          constituency.refresh!
         }.not_to change {
           constituency.reload.mp_name
         }
+      end
+    end
+
+    context "when the API returns no results" do
+      let!(:constituency) do
+        FactoryGirl.create(:constituency, :coventry_north_east)
+      end
+
+      before do
+        stub_api_request_for("CV21PH").to_return(api_response(:ok, "no_results"))
+      end
+
+      it "raises a RuntimeError" do
+        expect { constituency.refresh! }.to raise_error(RuntimeError, /empty results/)
       end
     end
 
@@ -309,7 +345,7 @@ RSpec.describe Constituency, type: :model do
       end
 
       it "raises a RuntimeError" do
-        expect { constituency.refresh }.to raise_error(RuntimeError)
+        expect { constituency.refresh! }.to raise_error(RuntimeError, /mismatched constituencies/)
       end
     end
   end
