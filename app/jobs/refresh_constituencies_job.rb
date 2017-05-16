@@ -2,6 +2,6 @@ class RefreshConstituenciesJob < ApplicationJob
   queue_as :low_priority
 
   def perform
-    Constituency.refresh
+    Constituency.refresh!
   end
 end

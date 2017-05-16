@@ -4,10 +4,6 @@ require_dependency 'constituency/api_query'
 class Constituency < ActiveRecord::Base
   MP_URL = "http://www.parliament.uk/biographies/commons"
 
-  MAPIT_HOST = "http://mapit"
-  MAPIT_AREA_URL = "/area/%{ons_code}"
-  MAPIT_POSTCODE_URL = "http://mapit/area/%{area_id}/example_postcode"
-
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
 
@@ -16,9 +12,25 @@ class Constituency < ActiveRecord::Base
   validates :ons_code, presence: true, format: %r[\A(?:E|W|S|N)\d{8}\z]
   validates :mp_id, length: { maximum: 30 }
   validates :mp_name, length: { maximum: 100 }
+  validates :example_postcode, presence: true
+
+  delegate :query, :example_postcodes, to: "self.class"
+
+  before_validation unless: :example_postcode? do
+    self.example_postcode = example_postcodes[ons_code]
+  end
 
   before_validation if: :name_changed? do
     self.slug = name.parameterize
+  end
+
+  validate on: :update, if: :example_postcode_changed? do
+    results = query.fetch(example_postcode)
+    attributes = results.first
+
+    if attributes.nil? || external_id != attributes[:external_id]
+      errors.add :example_postcode, :invalid
+    end
   end
 
   class << self
@@ -36,14 +48,16 @@ class Constituency < ActiveRecord::Base
       end
     end
 
-    def refresh
-      find_each { |c| c.refresh }
+    def refresh!
+      find_each { |c| c.refresh! }
     end
-
-    private
 
     def query
       ApiQuery.new
+    end
+
+    def example_postcodes
+      @example_postcodes ||= YAML.load_file(Rails.root.join("data", "example_postcodes.yml"))
     end
   end
 
@@ -59,82 +73,39 @@ class Constituency < ActiveRecord::Base
     slug
   end
 
-  def example_postcode
-    super || fetch_and_save_example_postcode
-  end
+  def refresh!
+    return unless example_postcode?
 
-  def reset_example_postcode
-    update(example_postcode: nil)
-  end
+    results = query.fetch(example_postcode)
+    attributes = results.first
 
-  def refresh
-    if example_postcode
-      constituency = self.class.find_by_postcode(example_postcode)
+    if attributes.nil?
+      raise empty_results_exception
+    elsif external_id != attributes[:external_id]
+      raise mismatched_results_exception(attributes)
+    else
+      self.mp_id = attributes[:mp_id]
+      self.mp_name = attributes[:mp_name]
+      self.mp_date = attributes[:mp_date]
 
-      if external_id != constituency.external_id
-        raise RuntimeError, <<-ERROR.squish
-          mismatched constituencies when refreshing
-          with example postcode #{example_postcode.inspect}
-          - expected: #{external_id}, actual: #{constituency.external_id}
-        ERROR
-      end
+      save! if changed?
     end
   end
 
   private
 
-  def fetch_and_save_example_postcode
-    area = fetch_area(ons_code)
-
-    if area
-      postcode = fetch_example_postcode(area["id"])
-    else
-      postcode = nil
-    end
-
-    if postcode
-      update(example_postcode: postcode)
-    end
-
-    postcode
-
-  rescue Faraday::Error => e
-    Appsignal.send_exception(e) if defined?(Appsignal)
-    return nil
+  def empty_results_exception
+    RuntimeError.new <<-ERROR.squish
+      empty results from API when refreshing
+      with example_postcode #{example_postcode.inspect}
+    ERROR
   end
 
-  def faraday
-    @faraday ||= Faraday.new(MAPIT_HOST) do |f|
-      f.response :follow_redirects
-      f.response :raise_error
-      f.adapter  :net_http_persistent
-    end
-  end
-
-  def get(path)
-    faraday.get(path) do |request|
-      request.options[:timeout] = 5
-      request.options[:open_timeout] = 5
-    end
-  end
-
-  def fetch_area(ons_code)
-    response = get(MAPIT_AREA_URL % { ons_code: ons_code })
-
-    if response.success?
-      JSON.load(response.body)
-    else
-      nil
-    end
-  end
-
-  def fetch_example_postcode(area_id)
-    response = get(MAPIT_POSTCODE_URL % { area_id: area_id })
-
-    if response.success?
-      PostcodeSanitizer.call(JSON.load(response.body))
-    else
-      nil
-    end
+  def mismatched_results_exception(attributes)
+    RuntimeError.new <<-ERROR.squish
+      mismatched constituencies when refreshing
+      with example postcode #{example_postcode.inspect}
+      - expected: #{external_id}, actual: #{attributes[:external_id]}
+    ERROR
   end
 end

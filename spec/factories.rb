@@ -302,6 +302,17 @@ FactoryGirl.define do
       example_postcode "E27AX"
     end
 
+    trait(:romford) do
+      name "Romford"
+      slug "romford"
+      external_id "3703"
+      ons_code "E14000900"
+      mp_id "1447"
+      mp_name "Andrew Rosindell"
+      mp_date "2015-05-07"
+      example_postcode "RM53FZ"
+    end
+
     trait(:sheffield_brightside_and_hillsborough) do
       name "Sheffield, Brightside and Hillsborough"
       slug "sheffield-brightside-and-hillsborough"
@@ -319,6 +330,7 @@ FactoryGirl.define do
     external_id { generate(:constituency_id) }
     mp_name { "#{Faker::Name.name} MP" }
     mp_id { generate(:mp_id) }
+    example_postcode { Faker::Address.postcode }
   end
 
   factory :constituency_petition_journal do
