@@ -87,6 +87,16 @@ class Parliament < ActiveRecord::Base
     opening_at? && opening_at <= now
   end
 
+  def period
+    if opening_at? && dissolution_at?
+      "#{opening_at.year}–#{dissolution_at.year}"
+    end
+  end
+
+  def period?
+    period.present?
+  end
+
   def dissolved?(now = Time.current)
     dissolution_at? && dissolution_at <= now
   end

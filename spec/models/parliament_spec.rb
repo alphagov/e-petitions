@@ -249,6 +249,90 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
+  describe "#period" do
+    context "when opening_at and dissolution_at are nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when dissolution_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when opening_at and dissolution_at are not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+      end
+
+      it "returns the years of operation" do
+        expect(parliament.period).to eq("2010–2015")
+      end
+    end
+  end
+
+  describe "#period?" do
+    context "when opening_at and dissolution_at are nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when dissolution_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when opening_at and dissolution_at are not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+      end
+
+      it "returns true" do
+        expect(parliament.period?).to eq(true)
+      end
+    end
+  end
+
   describe "#opened?" do
     context "when opening_at is nil" do
       subject :parliament do
