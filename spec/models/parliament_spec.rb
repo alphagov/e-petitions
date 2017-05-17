@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe Parliament, type: :model do
   describe "schema" do
+    it { is_expected.to have_db_column(:government).of_type(:string).with_options(limit: 100, null: true) }
+    it { is_expected.to have_db_column(:opening_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:dissolution_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:dissolution_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolution_message).of_type(:text).with_options(null: true) }
@@ -39,11 +41,14 @@ RSpec.describe Parliament, type: :model do
     context "when dissolution_at is nil" do
       subject { Parliament.new }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
       it { is_expected.not_to validate_presence_of(:dissolution_heading) }
       it { is_expected.not_to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
       it { is_expected.not_to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
@@ -54,11 +59,14 @@ RSpec.describe Parliament, type: :model do
     context "when dissolution_at is not nil" do
       subject { Parliament.new(dissolution_at: 2.weeks.from_now) }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
       it { is_expected.not_to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
@@ -69,11 +77,14 @@ RSpec.describe Parliament, type: :model do
     context "when dissolution_at is in the past" do
       subject { Parliament.new(dissolution_at: 1.day.ago) }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.to validate_presence_of(:dissolved_heading) }
       it { is_expected.to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
@@ -94,6 +105,21 @@ RSpec.describe Parliament, type: :model do
       Parliament.reload
       example.run
       Parliament.reload
+    end
+
+    it "delegates government to the instance" do
+      expect(parliament).to receive(:government).and_return("Conservative – Liberal Democrat coalition")
+      expect(Parliament.government).to eq("Conservative – Liberal Democrat coalition")
+    end
+
+    it "delegates opening_at to the instance" do
+      expect(parliament).to receive(:opening_at).and_return(now)
+      expect(Parliament.opening_at).to eq(now)
+    end
+
+    it "delegates opened? to the instance" do
+      expect(parliament).to receive(:opened?).and_return(true)
+      expect(Parliament.opened?).to eq(true)
     end
 
     it "delegates dissolution_at to the instance" do
@@ -219,6 +245,38 @@ RSpec.describe Parliament, type: :model do
         expect{ Parliament.before_remove_const }.to change {
           Thread.current[:__parliament__]
         }.from(parliament).to(nil)
+      end
+    end
+  end
+
+  describe "#opened?" do
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.opened?).to eq(false)
+      end
+    end
+
+    context "when opening_at is in the future" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, opening_at: 4.weeks.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.opened?).to eq(false)
+      end
+    end
+
+    context "when opening_at is in the past" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, opening_at: 2.years.ago)
+      end
+
+      it "returns true" do
+        expect(parliament.opened?).to eq(true)
       end
     end
   end

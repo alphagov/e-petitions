@@ -10,6 +10,19 @@
         <%= form.datetime_select :registration_closed_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
       <% end %>
 
+      <h2>Government</h2>
+
+      <%= form_row for: [form.object, :government] do %>
+        <%= error_messages_for_field @parliament, :government %>
+        <%= form.text_field :government, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :opening_at] do %>
+        <%= form.label :opening_at, class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :opening_at %>
+        <%= form.datetime_select :opening_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+      <% end %>
+
       <h2>Dissolution</h2>
 
       <%= form_row for: [form.object, :dissolution_at] do %>

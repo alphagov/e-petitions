@@ -424,6 +424,9 @@ FactoryGirl.define do
   end
 
   factory :parliament do
+    government "Conservative"
+    opening_at { "2015-05-18T00:00:00".in_time_zone }
+
     trait :dissolving do
       dissolution_heading "Parliament is dissolving"
       dissolution_message "This means all petitions will close in 2 weeks"

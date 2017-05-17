@@ -525,7 +525,9 @@ CREATE TABLE parliaments (
     dissolved_heading character varying(100),
     dissolved_message text,
     notification_cutoff_at timestamp without time zone,
-    registration_closed_at timestamp without time zone
+    registration_closed_at timestamp without time zone,
+    government character varying(100),
+    opening_at timestamp without time zone
 );
 
 
@@ -1887,3 +1889,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
 
+INSERT INTO schema_migrations (version) VALUES ('20170517115913');

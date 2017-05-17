@@ -8,6 +8,18 @@ class Parliament < ActiveRecord::Base
       Thread.current[:__parliament__] ||= last_or_create
     end
 
+    def government
+      instance.government
+    end
+
+    def opening_at
+      instance.opening_at
+    end
+
+    def opened?(now = Time.current)
+      instance.opened?(now)
+    end
+
     def dissolution_at
       instance.dissolution_at
     end
@@ -61,13 +73,19 @@ class Parliament < ActiveRecord::Base
     end
   end
 
+  validates_presence_of :government, :opening_at
   validates_presence_of :dissolution_heading, :dissolution_message, if: :dissolution_at?
   validates_presence_of :dissolved_heading, :dissolved_message, if: :dissolved?
+  validates_length_of :government, maximum: 100
   validates_length_of :dissolution_heading, :dissolved_heading, maximum: 100
   validates_length_of :dissolution_message, :dissolved_message, maximum: 600
   validates_length_of :dissolution_faq_url, maximum: 500
 
   after_save { Site.touch }
+
+  def opened?(now = Time.current)
+    opening_at? && opening_at <= now
+  end
 
   def dissolved?(now = Time.current)
     dissolution_at? && dissolution_at <= now

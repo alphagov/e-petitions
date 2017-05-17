@@ -63,6 +63,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are invalid" do
           let :params do
             {
+              government: "",
+              opening_at: "",
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
               dissolution_message: "",
@@ -82,6 +84,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid" do
           let :params do
             {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
@@ -105,6 +109,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are invalid" do
           let :params do
             {
+              government: "",
+              opening_at: "",
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
               dissolution_message: "",
@@ -124,6 +130,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid" do
           let :params do
             {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
@@ -151,6 +159,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid but parliament isn't dissolving" do
           let :params do
             {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
               dissolution_at: "",
               dissolution_heading: "",
               dissolution_message: "",
@@ -178,6 +188,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are invalid" do
           let :params do
             {
+              government: "",
+              opening_at: "",
               dissolution_at: 2.weeks.from_now.iso8601,
               dissolution_heading: "",
               dissolution_message: "",
@@ -198,6 +210,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           let(:dissolution_at) { 2.weeks.from_now.beginning_of_minute }
           let :params do
             {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
               dissolution_at: dissolution_at.iso8601,
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
@@ -243,6 +257,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         context "and the params are valid but parliament isn't dissolving" do
           let :params do
             {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
               dissolution_at: "",
               dissolution_heading: "",
               dissolution_message: "",
