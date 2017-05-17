@@ -8,6 +8,14 @@ class Parliament < ActiveRecord::Base
       Thread.current[:__parliament__] ||= last_or_create
     end
 
+    def archived(now = Time.current)
+      where(arel_table[:archived_at].lteq(now)).order(archived_at: :desc)
+    end
+
+    def current
+      where(archived_at: nil).order(created_at: :desc)
+    end
+
     def government
       instance.government
     end
@@ -69,7 +77,7 @@ class Parliament < ActiveRecord::Base
     end
 
     def last_or_create
-      order(created_at: :desc).first_or_create
+      current.first_or_create
     end
   end
 
@@ -107,5 +115,9 @@ class Parliament < ActiveRecord::Base
 
   def registration_closed?(now = Time.current)
     registration_closed_at? && registration_closed_at <= now
+  end
+
+  def archived?(now = Time.current)
+    archived_at? && archived_at <= now
   end
 end

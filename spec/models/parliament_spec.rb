@@ -12,6 +12,7 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:dissolved_message).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:notification_cutoff_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:registration_closed_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:archived_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
@@ -90,6 +91,54 @@ RSpec.describe Parliament, type: :model do
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+    end
+  end
+
+  describe "scopes" do
+    describe "archived" do
+      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+
+      context "when the archive_at timestamp is in the future" do
+        let(:now) { "2017-05-31T00:00:00".in_time_zone }
+
+        it "returns archived parliaments in descending order" do
+          expect(described_class.archived(now)).to eq([coalition])
+        end
+      end
+
+      context "when the archive_at timestamp is in the past" do
+        let(:now) { "2017-06-18T00:00:00".in_time_zone }
+
+        it "returns archived parliaments in descending order" do
+          expect(described_class.archived(now)).to eq([conservatives, coalition])
+        end
+      end
+    end
+
+    describe "current" do
+      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+
+      let(:now) { "2017-05-31T00:00:00".in_time_zone }
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "excludes archived parliaments" do
+        expect(described_class.current).not_to include(coalition)
+      end
+
+      it "excludes parliaments scheduled to be archived" do
+        expect(described_class.current).not_to include(conservatives)
+      end
+
+      it "includes the new parliament" do
+        expect(described_class.current).to include(new_government)
+      end
     end
   end
 
@@ -447,6 +496,38 @@ RSpec.describe Parliament, type: :model do
 
       it "returns true" do
         expect(parliament.registration_closed?).to eq(true)
+      end
+    end
+  end
+
+  describe "#archived?" do
+    context "when archived_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.archived?).to eq(false)
+      end
+    end
+
+    context "when archived_at is in the future" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: 2.weeks.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.archived?).to eq(false)
+      end
+    end
+
+    context "when archived_at is in the past" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: 2.weeks.ago)
+      end
+
+      it "returns true" do
+        expect(parliament.archived?).to eq(true)
       end
     end
   end

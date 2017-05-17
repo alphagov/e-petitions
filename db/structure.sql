@@ -527,7 +527,8 @@ CREATE TABLE parliaments (
     notification_cutoff_at timestamp without time zone,
     registration_closed_at timestamp without time zone,
     government character varying(100),
-    opening_at timestamp without time zone
+    opening_at timestamp without time zone,
+    archived_at timestamp without time zone
 );
 
 
@@ -1887,6 +1888,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
-INSERT INTO schema_migrations (version) VALUES ('20170610132850');
-
 INSERT INTO schema_migrations (version) VALUES ('20170517115913');
+
+INSERT INTO schema_migrations (version) VALUES ('20170517123348');
+
+INSERT INTO schema_migrations (version) VALUES ('20170610132850');
