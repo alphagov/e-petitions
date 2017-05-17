@@ -4,6 +4,10 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   let(:petition) { FactoryGirl.create :open_petition }
 
+  before do
+    FactoryGirl.create(:parliament, :archived)
+  end
+
   shared_examples 'a route that only supports html formats' do |headers_only: false|
     unless headers_only
       it 'does not support json via extension' do

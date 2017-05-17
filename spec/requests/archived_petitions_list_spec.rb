@@ -13,6 +13,10 @@ RSpec.describe 'API request to list archived petitions', type: :request, show_ex
   let(:access_control_allow_methods) { response.headers['Access-Control-Allow-Methods'] }
   let(:access_control_allow_headers) { response.headers['Access-Control-Allow-Headers'] }
 
+  before do
+    FactoryGirl.create(:parliament, :archived)
+  end
+
   describe "format" do
     it "responds to JSON" do
       make_successful_request

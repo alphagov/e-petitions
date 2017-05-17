@@ -8,6 +8,8 @@ class ArchivedPetition < ActiveRecord::Base
 
   alias_attribute :action, :title
 
+  belongs_to :parliament, inverse_of: :petitions, required: true
+
   validates :title, presence: true, length: { maximum: 150 }
   validates :description, presence: true, length: { maximum: 1000 }
   validates :state, presence: true, inclusion: STATES

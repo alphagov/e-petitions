@@ -17,6 +17,10 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
 
+  describe "associations" do
+    it { is_expected.to have_many(:petitions).inverse_of(:parliament).class_name("ArchivedPetition") }
+  end
+
   describe "callbacks" do
     describe "when the parliament is updated" do
       let(:parliament) { FactoryGirl.create(:parliament, :dissolving, dissolution_at: 3.weeks.from_now) }

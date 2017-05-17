@@ -90,7 +90,8 @@ CREATE TABLE archived_petitions (
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    parliament_id integer
 );
 
 
@@ -1267,6 +1268,13 @@ CREATE INDEX index_archived_petitions_on_description ON archived_petitions USING
 
 
 --
+-- Name: index_archived_petitions_on_parliament_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_parliament_id ON archived_petitions USING btree (parliament_id);
+
+
+--
 -- Name: index_archived_petitions_on_signature_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1667,6 +1675,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 
 --
+-- Name: fk_rails_978050318c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_petitions
+    ADD CONSTRAINT fk_rails_978050318c FOREIGN KEY (parliament_id) REFERENCES parliaments(id);
+
+
+--
 -- Name: fk_rails_9f55aacb99; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1891,5 +1907,7 @@ INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 INSERT INTO schema_migrations (version) VALUES ('20170517115913');
 
 INSERT INTO schema_migrations (version) VALUES ('20170517123348');
+
+INSERT INTO schema_migrations (version) VALUES ('20170517131130');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');

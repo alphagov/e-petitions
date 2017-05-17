@@ -1,4 +1,6 @@
 class Parliament < ActiveRecord::Base
+  has_many :petitions, inverse_of: :parliament, class_name: "ArchivedPetition"
+
   class << self
     def before_remove_const
       Thread.current[:__parliament__] = nil

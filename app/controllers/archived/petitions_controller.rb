@@ -1,6 +1,7 @@
 class Archived::PetitionsController < ApplicationController
   respond_to :html, :json
 
+  before_action :fetch_parliament
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
@@ -16,11 +17,15 @@ class Archived::PetitionsController < ApplicationController
 
   private
 
+  def fetch_parliament
+    @parliament = Parliament.archived.first
+  end
+
   def fetch_petitions
-    @petitions = ArchivedPetition.search(params)
+    @petitions = @parliament.petitions.search(params)
   end
 
   def fetch_petition
-    @petition = ArchivedPetition.find(params[:id])
+    @petition = @parliament.petitions.find(params[:id])
   end
 end

@@ -26,6 +26,10 @@ FactoryGirl.define do
     opened_at { 2.years.ago }
     closed_at { 1.year.ago }
 
+    after(:build) do |petition, evaluator|
+      petition.parliament ||= Parliament.archived.first || FactoryGirl.create(:parliament, :archived)
+    end
+
     trait :response do
       response "Petition response"
     end
@@ -466,6 +470,10 @@ FactoryGirl.define do
     trait :new_government do
       government "TBC"
       opening_at { "2017-06-19T00:00:00".in_time_zone }
+    end
+
+    trait :archived do
+      archived_at { 1.month.ago }
     end
   end
 end

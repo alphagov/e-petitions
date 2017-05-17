@@ -3,6 +3,20 @@ require 'rails_helper'
 RSpec.describe ArchivedPetition, type: :model do
   subject(:petition){ described_class.new }
 
+  describe "associations" do
+    describe "parliament" do
+      it { is_expected.to belong_to(:parliament).inverse_of(:petitions) }
+
+      it "is required" do
+        expect {
+          petition.valid?
+        }.to change {
+          petition.errors[:parliament]
+        }.from([]).to(["Parliament can't be blank"])
+      end
+    end
+  end
+
   describe ".search" do
     let!(:petition_1) do
       FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
