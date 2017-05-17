@@ -77,7 +77,7 @@ class Parliament < ActiveRecord::Base
     end
 
     def last_or_create
-      current.first_or_create
+      current.first_or_create(government: "TBC", opening_at: 2.weeks.from_now)
     end
   end
 
