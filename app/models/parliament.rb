@@ -83,13 +83,16 @@ class Parliament < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :government, :opening_at
+  validates_presence_of :government, :opening_at, :petition_duration
   validates_presence_of :dissolution_heading, :dissolution_message, if: :dissolution_at?
   validates_presence_of :dissolved_heading, :dissolved_message, if: :dissolved?
   validates_length_of :government, maximum: 100
   validates_length_of :dissolution_heading, :dissolved_heading, maximum: 100
   validates_length_of :dissolution_message, :dissolved_message, maximum: 600
   validates_length_of :dissolution_faq_url, maximum: 500
+  validates_numericality_of :petition_duration, only_integer: true
+  validates_numericality_of :petition_duration, greater_than_or_equal_to: 1
+  validates_numericality_of :petition_duration, less_than_or_equal_to: 12
 
   after_save { Site.touch }
 

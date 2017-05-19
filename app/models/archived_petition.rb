@@ -27,6 +27,10 @@ class ArchivedPetition < ActiveRecord::Base
   facet :by_most_signatures, -> { by_most_signatures }
   facet :by_created_at, -> { by_created_at }
 
+  default_scope { preload(:parliament) }
+
+  delegate :threshold_for_response, :threshold_for_debate, to: :parliament
+
   class << self
     def for_state(state)
       where(state: state)
@@ -51,5 +55,21 @@ class ArchivedPetition < ActiveRecord::Base
 
   def rejected?
     state == REJECTED_STATE
+  end
+
+  def duration
+    parliament.petition_duration
+  end
+
+  def closed_early_due_to_election?
+    closed_at == parliament.dissolution_at
+  end
+
+  def threshold_for_debate_reached?
+    signature_count >= parliament.threshold_for_debate
+  end
+
+  def threshold_for_response_reached?
+    signature_count >= parliament.threshold_for_response
   end
 end

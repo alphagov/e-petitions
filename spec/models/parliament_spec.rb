@@ -4,6 +4,7 @@ RSpec.describe Parliament, type: :model do
   describe "schema" do
     it { is_expected.to have_db_column(:government).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:opening_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:petition_duration).of_type(:integer).with_options(null: false, default: 6) }
     it { is_expected.to have_db_column(:dissolution_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:dissolution_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolution_message).of_type(:text).with_options(null: true) }
@@ -48,6 +49,7 @@ RSpec.describe Parliament, type: :model do
 
       it { is_expected.to validate_presence_of(:government) }
       it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.not_to validate_presence_of(:dissolution_heading) }
       it { is_expected.not_to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
@@ -59,6 +61,9 @@ RSpec.describe Parliament, type: :model do
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
     end
 
     context "when dissolution_at is not nil" do
@@ -66,6 +71,7 @@ RSpec.describe Parliament, type: :model do
 
       it { is_expected.to validate_presence_of(:government) }
       it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
@@ -77,6 +83,9 @@ RSpec.describe Parliament, type: :model do
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
     end
 
     context "when dissolution_at is in the past" do
@@ -84,6 +93,7 @@ RSpec.describe Parliament, type: :model do
 
       it { is_expected.to validate_presence_of(:government) }
       it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.to validate_presence_of(:dissolved_heading) }
@@ -95,6 +105,9 @@ RSpec.describe Parliament, type: :model do
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
     end
   end
 
