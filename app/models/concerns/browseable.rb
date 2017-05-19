@@ -4,6 +4,9 @@ module Browseable
   included do
     class_attribute :facet_definitions, instance_writer: false
     self.facet_definitions = {}
+
+    class_attribute :filter_definitions, instance_writer: false
+    self.filter_definitions = []
   end
 
   class Facets
@@ -55,6 +58,19 @@ module Browseable
     end
   end
 
+  class Filters
+    attr_reader :klass, :params
+    delegate :filter_definitions, to: :klass
+
+    def initialize(klass, params)
+      @klass, @params = klass, params
+    end
+
+    def to_hash
+      params.slice(*filter_definitions)
+    end
+  end
+
   class Search
     include Enumerable
 
@@ -83,6 +99,10 @@ module Browseable
 
     def facets
       @facets ||= Facets.new(klass)
+    end
+
+    def filters
+      @filters ||= Filters.new(klass, params)
     end
 
     def first_page?
@@ -157,6 +177,7 @@ module Browseable
         params[:q] = query if query.present?
         params[:state] = scope
         params[:page] = page
+        params.merge!(filters)
       end
     end
 
@@ -188,6 +209,10 @@ module Browseable
   module ClassMethods
     def facet(key, scope)
       self.facet_definitions[key] = scope
+    end
+
+    def filter(key)
+      self.filter_definitions << key
     end
 
     def search(params)

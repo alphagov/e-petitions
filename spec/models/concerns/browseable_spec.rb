@@ -21,9 +21,16 @@ RSpec.describe Browseable, type: :model do
   describe ".facet" do
     let(:scope) { ->{ double(:scope) } }
 
-    it "adds a facet scope to the facets class attribute" do
+    it "adds a facet scope to the facet_definitions class attribute" do
       browseable.facet(:open, scope)
       expect(browseable.facet_definitions).to eq({ open: scope })
+    end
+  end
+
+  describe ".filter" do
+    it "adds a filter key to the filter_definitions class attribute" do
+      browseable.filter(:parliament)
+      expect(browseable.filter_definitions).to eq([:parliament])
     end
   end
 
@@ -37,10 +44,11 @@ RSpec.describe Browseable, type: :model do
   end
 
   describe Browseable::Search do
-    let(:scopes) { { all: -> { self }, open: -> { self } } }
-    let(:klass)  { double(:klass, facet_definitions: scopes) }
-    let(:params) { { q: 'search', page: '3'} }
-    let(:search) { described_class.new(klass, params) }
+    let(:scopes)  { { all: -> { self }, open: -> { self } } }
+    let(:filters) { [] }
+    let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters) }
+    let(:params)  { { q: 'search', page: '3'} }
+    let(:search)  { described_class.new(klass, params) }
 
     it "is enumerable" do
       expect(search).to respond_to(:each)
@@ -123,6 +131,92 @@ RSpec.describe Browseable, type: :model do
         it "returns true" do
           expect(search).to receive(:total_pages).and_return(20)
           expect(search.last_page?).to be false
+        end
+      end
+    end
+
+    describe "#previous_params" do
+      let(:arel_table) { double(:arel_table) }
+      let(:petition)   { double(:petition) }
+      let(:petitions)  { [petition] }
+      let(:results)    { double(:results, to_a: petitions) }
+
+      before do
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(arel_table).to receive(:[]).with("*").and_return("*")
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(klass).to receive(:except).with(:select).and_return(klass)
+        allow(klass).to receive(:arel_table).and_return(arel_table)
+        allow(klass).to receive(:select).with("*").and_return(klass)
+        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+        allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:previous_page).and_return(2)
+      end
+
+      context "with default params" do
+        it "returns a hash of params for building the previous page link" do
+          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2 })
+        end
+      end
+
+      context "with a custom state param" do
+        let(:params) { { q: 'search', page: '3', state: 'open' } }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.previous_params).to eq({ q: 'search', state: :open, page: 2 })
+        end
+      end
+
+      context "with a filter param" do
+        let(:params) { { q: 'search', page: '3', parliament: '1' } }
+        let(:filters) { [:parliament] }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, parliament: '1' })
+        end
+      end
+    end
+
+    describe "#next_params" do
+      let(:arel_table) { double(:arel_table) }
+      let(:petition)   { double(:petition) }
+      let(:petitions)  { [petition] }
+      let(:results)    { double(:results, to_a: petitions) }
+
+      before do
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(arel_table).to receive(:[]).with("*").and_return("*")
+        allow(klass).to receive(:basic_search).with('search').and_return(klass)
+        allow(klass).to receive(:except).with(:select).and_return(klass)
+        allow(klass).to receive(:arel_table).and_return(arel_table)
+        allow(klass).to receive(:select).with("*").and_return(klass)
+        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+        allow(results).to receive(:to_a).and_return(petitions)
+        allow(results).to receive(:next_page).and_return(4)
+      end
+
+      context "with default params" do
+        it "returns a hash of params for building the previous page link" do
+          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4 })
+        end
+      end
+
+      context "with a custom state param" do
+        let(:params) { { q: 'search', page: '3', state: 'open' } }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.next_params).to eq({ q: 'search', state: :open, page: 4 })
+        end
+      end
+
+      context "with a filter param" do
+        let(:params) { { q: 'search', page: '3', parliament: '1' } }
+        let(:filters) { [:parliament] }
+
+        it "returns a hash of params for building the previous page link" do
+          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, parliament: '1' })
         end
       end
     end
@@ -411,6 +505,40 @@ RSpec.describe Browseable, type: :model do
 
       it 'does not include unknown keys in the returned hash' do
         expect(facets.slice(:unknown)).to eq({})
+      end
+    end
+  end
+
+  describe Browseable::Filters do
+    let(:klass) { double(:klass, filter_definitions: filter_definitions) }
+    let(:filters) { described_class.new(klass, params) }
+
+    describe "implicit conversion" do
+      let(:filter_definitions) { [] }
+      let(:params) { Hash.new }
+
+      it "can be merged with another hash" do
+        expect{ {}.merge(filters) }.not_to raise_error
+      end
+    end
+
+    describe "#to_hash" do
+      let(:filter_definitions) { [:parliament] }
+
+      context "when the key is not present in the params hash" do
+        let(:params) { Hash.new }
+
+        it "returns a hash without the filter key" do
+          expect(filters.to_hash).to eq({})
+        end
+      end
+
+      context "when the key is present in the params hash" do
+        let(:params) { { parliament: 1 } }
+
+        it "returns a hash with the filter key" do
+          expect(filters.to_hash).to eq({ parliament: 1 })
+        end
       end
     end
   end
