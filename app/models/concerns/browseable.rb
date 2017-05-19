@@ -106,19 +106,11 @@ module Browseable
     end
 
     def previous_params
-      {}.tap do |params|
-        params[:q] = query if query.present?
-        params[:state] = scope
-        params[:page] = previous_page
-      end
+      new_params(previous_page)
     end
 
     def next_params
-      {}.tap do |params|
-        params[:q] = query if query.present?
-        params[:state] = scope
-        params[:page] = next_page
-      end
+      new_params(next_page)
     end
 
     def scope
@@ -159,6 +151,14 @@ module Browseable
     end
 
     private
+
+    def new_params(page)
+      {}.tap do |params|
+        params[:q] = query if query.present?
+        params[:state] = scope
+        params[:page] = page
+      end
+    end
 
     def results
       @results ||= execute_search_with_pagination
