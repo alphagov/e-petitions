@@ -17,8 +17,16 @@ class Archived::PetitionsController < ApplicationController
 
   private
 
+  def parliament_id
+    params[:parliament].to_i
+  end
+
   def fetch_parliament
-    @parliament = Parliament.archived.first
+    if params.key?(:parliament)
+      @parliament = Parliament.archived.find(parliament_id)
+    else
+      @parliament = Parliament.archived.first
+    end
   end
 
   def fetch_petitions
