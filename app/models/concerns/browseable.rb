@@ -2,7 +2,7 @@ module Browseable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :facet_definitions
+    class_attribute :facet_definitions, instance_writer: false
     self.facet_definitions = {}
   end
 
