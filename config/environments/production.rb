@@ -42,7 +42,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  config.force_ssl = !ENV['DISABLE_SSL'].present?
 
   # Set the HSTS headers to include subdomains
   config.ssl_options[:hsts] = { expires: 365.days, subdomains: true }
@@ -78,14 +78,11 @@ Rails.application.configure do
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: ENV.fetch('SMTP_HOSTNAME'),
-    port: ENV.fetch('SMTP_PORT'),
-    user_name: ENV.fetch('SMTP_USERNAME'),
-    password: ENV.fetch('SMTP_PASSWORD'),
-    authentication: :login,
-    enable_starttls_auto: true
-  }
+  config.action_mailer.smtp_settings = { address: ENV.fetch('SMTP_HOSTNAME'), port: ENV.fetch('SMTP_PORT') }
+  config.action_mailer.smtp_settings[:user_name] = ENV['SMTP_USERNAME'] if ENV.key?('SMTP_USERNAME')
+  config.action_mailer.smtp_settings[:password] = ENV['SMTP_PASSWORD'] if ENV.key?('SMTP_PASSWORD')
+  config.action_mailer.smtp_settings[:authentication] = ENV['SMTP_AUTH'].to_sym if ENV.key?('SMTP_AUTH')
+  config.action_mailer.smtp_settings[:enable_starttls_auto] = ENV['SMTP_USERNAME'].present?
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
@@ -105,16 +102,18 @@ Rails.application.configure do
   # certificate, so instead we proxy requests from the frontend webservers for
   # any url that starts with /attachments/ to the S3 bucket
 
-  config.paperclip_defaults = {
-    storage: :fog,
-    fog_directory: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET'),
-    fog_credentials: {
-      use_iam_profile: true,
-      provider: 'AWS',
-      region: 'eu-west-1',
-      scheme: 'https'
-    },
-    # Proxied to S3 via the webserver
-    fog_host: '/attachments'
-  }
+  if ENV.key?('UPLOADED_IMAGES_S3_BUCKET')
+    config.paperclip_defaults = {
+      storage: :fog,
+      fog_directory: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET'),
+      fog_credentials: {
+        use_iam_profile: true,
+        provider: 'AWS',
+        region: 'eu-west-1',
+        scheme: 'https'
+      },
+      # Proxied to S3 via the webserver
+      fog_host: '/attachments'
+    }
+  end
 end

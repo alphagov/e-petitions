@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo 'Waiting for webserver connection with postgres...'
+
+while ! psql --host=postgres.local --username=postgres > /dev/null 2>&1; do
+  sleep 1;
+done;
+
+echo 'Connected to postgres...'
+
+bundle config --global frozen 1
+
+bundle check || bundle install
+bundle exec rake assets:precompile
+bundle exec rails s -b 0.0.0.0
