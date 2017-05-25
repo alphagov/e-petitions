@@ -38,7 +38,8 @@ Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with sched
 end
 
 Given(/^an archived petition "([^"]*)"$/) do |title|
-  @petition = FactoryGirl.create(:archived_petition, :closed, title: title)
+  @parliament = FactoryGirl.create(:parliament, :coalition)
+  @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, title: title)
 end
 
 Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
@@ -212,7 +213,7 @@ Then(/^I should see the vote count, closed and open dates$/) do
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
   if @petition.is_a?(ArchivedPetition)
-    expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
+    expect(page).to have_css("ul.petition-meta", :text => "Date closed " + @petition.closed_at.strftime("%e %B %Y").squish)
   else
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
     expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)

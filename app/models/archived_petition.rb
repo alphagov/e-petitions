@@ -5,6 +5,7 @@ class ArchivedPetition < ActiveRecord::Base
   CLOSED_STATE = 'closed'
   REJECTED_STATE = 'rejected'
   STATES = [OPEN_STATE, CLOSED_STATE, REJECTED_STATE]
+  PUBLISHED_STATES = [OPEN_STATE, CLOSED_STATE]
 
   alias_attribute :action, :title
 
@@ -21,6 +22,7 @@ class ArchivedPetition < ActiveRecord::Base
   filter :parliament
 
   facet :all, -> { by_most_signatures }
+  facet :published, -> { for_state(PUBLISHED_STATES).by_most_signatures }
   facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
   facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
   facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }

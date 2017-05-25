@@ -1,11 +1,14 @@
 class Archived::PetitionsController < ApplicationController
   respond_to :html, :json
 
-  before_action :fetch_parliament
+  before_action :redirect_to_index_page, unless: :valid_state?, only: [:index]
+  before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
   before_action :set_cors_headers, only: [:index, :show], if: :json_request?
+
+  helper_method :archived_petition_facets
 
   def index
     respond_with(@petitions)
@@ -34,6 +37,19 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petition
-    @petition = @parliament.petitions.find(params[:id])
+    @petition = ArchivedPetition.find(params[:id])
+    @parliament = @petition.parliament
+  end
+
+  def redirect_to_index_page
+    redirect_to archived_petitions_url
+  end
+
+  def valid_state?
+    params[:state] ? archived_petition_facets.include?(params[:state].to_sym) : true
+  end
+
+  def archived_petition_facets
+    I18n.t :archived, scope: :"petitions.facets", default: []
   end
 end
