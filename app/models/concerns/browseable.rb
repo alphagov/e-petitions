@@ -77,6 +77,10 @@ module Browseable
       results.each(&block)
     end
 
+    def find_each(&block)
+      execute_search.find_each(&block)
+    end
+
     def facets
       @facets ||= Facets.new(klass)
     end
@@ -101,7 +105,7 @@ module Browseable
       @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
     end
 
-    def previous_params 
+    def previous_params
       {}.tap do |params|
         params[:q] = query if query.present?
         params[:state] = scope
@@ -109,7 +113,7 @@ module Browseable
       end
     end
 
-    def next_params 
+    def next_params
       {}.tap do |params|
         params[:q] = query if query.present?
         params[:state] = scope

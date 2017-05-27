@@ -95,3 +95,19 @@ Feature: Suzy Signer views all petitions
     And I navigate to the next page of petitions
     Then I should see "2 of 3"
 
+  Scenario: Downloading the JSON data for petitions
+    Given a set of petitions
+    And I am on the all petitions page
+    Then I should see all petitions
+    And the markup should be valid
+    When I click the JSON link
+    Then I should be on the all petitions JSON page
+    And the JSON should be valid
+
+  Scenario: Downloading the CSV data for petitions
+    Given a set of petitions
+    And I am on the all petitions page
+    Then I should see all petitions
+    And the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "all-petitions.csv"

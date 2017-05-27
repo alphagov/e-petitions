@@ -18,6 +18,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def csv_request?
+    request.format.symbol == :csv
+  end
+
   def json_request?
     request.format.symbol == :json
   end

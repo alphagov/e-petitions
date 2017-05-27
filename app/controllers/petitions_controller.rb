@@ -1,3 +1,5 @@
+require 'csv'
+
 class PetitionsController < ApplicationController
   include ManagingMoveParameter
 
@@ -13,9 +15,11 @@ class PetitionsController < ApplicationController
   before_action :redirect_to_petition_url, if: :moderated?, only: [:gathering_support, :moderation_info]
 
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
+  after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
   respond_to :html
   respond_to :json, only: [:index, :show]
+  respond_to :csv, only: [:index]
 
   def index
     @petitions = Petition.visible.search(params)
@@ -172,5 +176,13 @@ class PetitionsController < ApplicationController
 
   def parse_emails(emails)
     emails.strip.split(/\r?\n/).map { |e| e.strip }
+  end
+
+  def csv_filename
+    "#{@petitions.scope}-petitions.csv"
+  end
+
+  def set_content_disposition
+    response.headers['Content-Disposition'] = "attachment; filename=#{csv_filename}"
   end
 end
