@@ -167,16 +167,18 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     end
   end
 
-  simple_html_and_json_urls = [
-    'petitions', 'archived/petitions'
-  ]
-  simple_html_and_json_urls.each do |simple_url|
-    context "the #{simple_url} url" do
-      let(:url) { "/#{simple_url}" }
-      let(:params) { {} }
+  context "the petitions url" do
+    let(:url) { "/petitions" }
+    let(:params) { {} }
 
-      it_behaves_like 'a route that supports html and json formats'
-    end
+    it_behaves_like 'a route that supports html, json and csv formats'
+  end
+
+  context "the archived/petitions url" do
+    let(:url) { "/archived/petitions" }
+    let(:params) { {} }
+
+    it_behaves_like 'a route that supports html and json formats'
   end
 
   context 'the petitions/local results url' do

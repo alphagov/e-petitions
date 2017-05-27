@@ -20,6 +20,12 @@ module NavigationHelpers
     when /^the feedback page$/
       feedback_url
 
+    when /^the all petitions page$/
+      petitions_url
+
+    when /^the all petitions JSON page$/
+      petitions_url(:json)
+
     when /^the check for existing petitions page$/
       check_petitions_url
 
@@ -46,9 +52,6 @@ module NavigationHelpers
 
     when /^the new signature page for "([^\"]*)"$/
       new_petition_signature_url(Petition.find_by(action: $1))
-
-    when /^the search results page$/
-      search_url
 
     when /^the Admin (.*)$/i
       admin_url($1)

@@ -66,10 +66,6 @@ class LocalPetitionsController < ApplicationController
     end
   end
 
-  def csv_request?
-    request.format.symbol == :csv
-  end
-
   def csv_filename
     if action_name == 'all'
       "all-popular-petitions-in-#{@constituency.slug}.csv"
