@@ -1,5 +1,8 @@
+require 'csv'
+
 class Archived::PetitionsController < ApplicationController
   respond_to :html, :json
+  respond_to :csv, only: [:index]
 
   before_action :redirect_to_index_page, unless: :valid_state?, only: [:index]
   before_action :fetch_parliament, only: [:index]
@@ -7,6 +10,7 @@ class Archived::PetitionsController < ApplicationController
   before_action :fetch_petition, only: [:show]
 
   before_action :set_cors_headers, only: [:index, :show], if: :json_request?
+  after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
   helper_method :archived_petition_facets
 
@@ -41,6 +45,10 @@ class Archived::PetitionsController < ApplicationController
     @parliament = @petition.parliament
   end
 
+  def csv_filename
+    "#{@petitions.scope}-petitions-#{@parliament.period}.csv"
+  end
+
   def redirect_to_index_page
     redirect_to archived_petitions_url
   end
@@ -51,5 +59,9 @@ class Archived::PetitionsController < ApplicationController
 
   def archived_petition_facets
     I18n.t :archived, scope: :"petitions.facets", default: []
+  end
+
+  def set_content_disposition
+    response.headers['Content-Disposition'] = "attachment; filename=#{csv_filename}"
   end
 end

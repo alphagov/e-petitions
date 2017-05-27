@@ -41,8 +41,8 @@ module NavigationHelpers
     when /^the archived petitions page$/
       archived_petitions_url
 
-    when /^the archived petitions search results page$/
-      search_archived_petitions_url
+    when /^the archived petitions JSON page$/
+      archived_petitions_url(:json)
 
     when /^the archived petition page for "([^\"]*)"$/
       archived_petition_url(ArchivedPetition.find_by(title: $1))

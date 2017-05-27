@@ -443,3 +443,19 @@ Then(/^I should see the other business items$/) do
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )
 end
+
+Given(/^these archived petitions? exist?:?$/) do |table|
+  parliament = FactoryGirl.create(:parliament, :coalition)
+
+  table.raw[1..-1].each do |petition|
+    attributes = {
+      parliament:      parliament,
+      title:           petition[0],
+      state:           petition[1],
+      signature_count: petition[2],
+      created_at:      petition[3]
+    }
+
+    FactoryGirl.create(:archived_petition, attributes)
+  end
+end

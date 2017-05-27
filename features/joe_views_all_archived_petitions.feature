@@ -4,12 +4,12 @@ Feature: Joe views all archived petition
   I want to be able to view all archived petitions
 
   Background:
-    Given the following archived petitions exist:
+    Given these archived petitions exist:
       | title                    | state    | signature_count |  created_at |
-      | Wombles are great        | open     | 835             |  2012-01-01 |
-      | Common People            | open     | 639             |  2014-01-01 |
-      | Save the planet          | open     | 243             |  2014-01-01 |
-      | Wombles to Parliament    | open     | 243             |  2013-01-01 |
+      | Wombles are great        | closed   | 835             |  2012-01-01 |
+      | Common People            | closed   | 639             |  2014-01-01 |
+      | Save the planet          | closed   | 243             |  2014-01-01 |
+      | Wombles to Parliament    | closed   | 243             |  2013-01-01 |
       | Free gig tickets         | rejected |                 |  2013-01-01 |
 
   Scenario:
@@ -36,3 +36,28 @@ Feature: Joe views all archived petition
       | Wombles to Parliament     | 243 signatures |
       | Free gig tickets          | Rejected       |
     And the markup should be valid
+
+  Scenario: Downloading the JSON data for archived petitions
+    Given I am on the archived petitions page
+    Then I should see the following list of archived petitions:
+      | Wombles are great         | 835 signatures |
+      | Common People             | 639 signatures |
+      | Save the planet           | 243 signatures |
+      | Wombles to Parliament     | 243 signatures |
+      | Free gig tickets          | Rejected       |
+    And the markup should be valid
+    When I click the JSON link
+    Then I should be on the archived petitions JSON page
+    And the JSON should be valid
+
+  Scenario: Downloading the CSV data for archived petitions
+    Given I am on the archived petitions page
+    Then I should see the following list of archived petitions:
+      | Wombles are great         | 835 signatures |
+      | Common People             | 639 signatures |
+      | Save the planet           | 243 signatures |
+      | Wombles to Parliament     | 243 signatures |
+      | Free gig tickets          | Rejected       |
+    And the markup should be valid
+    When I click the CSV link
+    Then I should get a download with the filename "all-petitions-2010–2015.csv"
