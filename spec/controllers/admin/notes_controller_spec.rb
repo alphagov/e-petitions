@@ -117,26 +117,6 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
             expect(petition.note.details).to eq notes_attributes[:details]
           end
         end
-
-        describe 'with invalid params' do
-          it 're-renders the notes/show template' do
-            do_patch(note: { details: "" })
-            expect(response).to be_success
-            expect(response).to render_template('petitions/show')
-          end
-
-          it 'leaves the in-memory instance with errors' do
-            do_patch(note: { details: "" })
-            expect(assigns(:note)).to be_present
-            expect(assigns(:note).errors).not_to be_empty
-          end
-
-          it 'does not stores the supplied notes in the db' do
-            do_patch(note: { details: "" })
-            petition.reload
-            expect(petition.note).to be_nil
-          end
-        end
       end
 
       describe 'for an open petition' do

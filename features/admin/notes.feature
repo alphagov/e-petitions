@@ -32,3 +32,19 @@ Feature: A moderator user updates records notes
     Then I should be on the admin petition page for "Solidarity with the Unions"
     And I follow "Notes"
     Then I should see "I think we can debate this, will check with unions select committee first"
+
+  Scenario: Removing notes
+    Given an open petition exists with action: "Solidarity with the Unions"
+    When I am on the admin all petitions page
+    And I follow "Solidarity with the Unions"
+    And I follow "Notes"
+    Then I should see a "Notes" textarea field
+    And the markup should be valid
+    When I fill in "Notes" with "I think we can debate this, will check with unions select committee first"
+    And I press "Save"
+    Then I should be on the admin petition page for "Solidarity with the Unions"
+    And I follow "Notes"
+    Then I should see "I think we can debate this, will check with unions select committee first"
+    When I fill in "Notes" with ""
+    And I press "Save"
+    Then I should be on the admin petition page for "Solidarity with the Unions"

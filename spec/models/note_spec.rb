@@ -17,6 +17,6 @@ RSpec.describe Note, type: :model do
     subject { FactoryGirl.build(:note) }
 
     it { is_expected.to validate_presence_of(:petition) }
-    it { is_expected.to validate_presence_of(:details) }
+    it { is_expected.not_to validate_presence_of(:details) }
   end
 end
