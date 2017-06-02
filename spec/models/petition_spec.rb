@@ -1129,6 +1129,18 @@ RSpec.describe Petition, type: :model do
         expect(described_class.in_need_of_closing.to_a).to include(petition)
       end
     end
+
+    context "when a petition is in the open state and parliament is dissolved" do
+      let!(:petition) { FactoryGirl.create(:open_petition, open_at: 1.month.ago) }
+
+      before do
+        allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "finds the petition" do
+        expect(described_class.in_need_of_closing.to_a).to include(petition)
+      end
+    end
   end
 
   describe ".in_need_of_stopping" do
