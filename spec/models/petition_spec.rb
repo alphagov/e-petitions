@@ -100,6 +100,26 @@ RSpec.describe Petition, type: :model do
         expect(petition).to be_valid
       end
     end
+
+    describe "tag validations" do
+      let(:petition) { FactoryGirl.build(:petition) }
+
+      it "validates tags can be set as an array" do
+        petition.tags = ["hello", "world"]
+        expect(petition).to be_valid
+      end
+
+      it "validates tags can be empty" do
+        expect(FactoryGirl.build(:petition, tags: "")).to be_valid
+      end
+
+      it "validates tags can not be set to nil" do
+        petition = FactoryGirl.build(:petition)
+        expect(petition).to be_valid
+        petition.tags = nil
+        expect(petition).to be_invalid
+      end
+    end
   end
 
   context "scopes" do

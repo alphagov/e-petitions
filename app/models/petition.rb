@@ -81,6 +81,7 @@ class Petition < ActiveRecord::Base
   validates_presence_of :open_at, if: :open?
   validates_presence_of :creator_signature, on: :create
   validates_inclusion_of :state, in: STATES
+  validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array" }
 
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator_signature, prefix: :creator
