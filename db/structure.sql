@@ -43,6 +43,37 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
+-- Name: admin_sites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admin_sites (
+    id integer NOT NULL,
+    petition_tags character varying DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: admin_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_sites_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_sites_id_seq OWNED BY admin_sites.id;
+
+
+--
 -- Name: admin_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1142,6 +1173,13 @@ ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY admin_sites ALTER COLUMN id SET DEFAULT nextval('admin_sites_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY admin_users ALTER COLUMN id SET DEFAULT nextval('admin_users_id_seq'::regclass);
 
 
@@ -1332,6 +1370,14 @@ ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq':
 --
 
 ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regclass);
+
+
+--
+-- Name: admin_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admin_sites
+    ADD CONSTRAINT admin_sites_pkey PRIMARY KEY (id);
 
 
 --
@@ -2482,6 +2528,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
 INSERT INTO schema_migrations (version) VALUES ('20170602154741');
+
+INSERT INTO schema_migrations (version) VALUES ('20170605144924');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
 

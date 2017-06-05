@@ -28,7 +28,7 @@ class Admin::RateLimitsController < Admin::AdminController
     %i[
       burst_rate burst_period sustained_rate sustained_period
       domain_whitelist ip_whitelist domain_blacklist ip_blacklist
-      geoblocking_enabled countries
+      geoblocking_enabled countries petition_tags
     ]
   end
 

@@ -98,6 +98,7 @@ Rails.application.routes.draw do
       end
 
       resource :rate_limits, :only => [:edit, :update], :path => 'rate-limits'
+      resource :site, only: [:edit, :update], controller: "site"
 
       resources :signatures, :only => [:destroy] do
         post :validate, :invalidate, :on => :member

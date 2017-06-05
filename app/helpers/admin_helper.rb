@@ -73,6 +73,10 @@ module AdminHelper
     @rate_limit ||= RateLimit.first_or_create!
   end
 
+  def admin_site_settings
+    @admin_site_settings ||= Admin::Site.first_or_create!
+  end
+
   def build_trending_domains(since, limit)
     all_domains = Signature.trending_domains(since: since, limit: limit + 30)
     whitelist = rate_limit.whitelisted_domains

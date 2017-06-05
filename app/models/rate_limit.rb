@@ -1,6 +1,9 @@
 require 'ipaddr'
+require 'list_processor'
 
 class RateLimit < ActiveRecord::Base
+  include ListProcessor
+
   GLOB_PATTERN = /^(\*\*\.|\*\.)/
   RECURSIVE_GLOB = "**."
   RECURSIVE_PATTERN = "(?:[-a-z0-9]+\\.)+"
@@ -112,14 +115,6 @@ class RateLimit < ActiveRecord::Base
 
   private
 
-  def strip_comments(list)
-    list.gsub(/#.*$/, '')
-  end
-
-  def strip_blank_lines(list)
-    list.each_line.reject(&:blank?)
-  end
-
   def build_domain_whitelist
     whitelist = strip_comments(domain_whitelist)
     whitelist = strip_blank_lines(whitelist)
@@ -198,10 +193,6 @@ class RateLimit < ActiveRecord::Base
         SINGLE_PATTERN
       end
     end
-  end
-
-  def normalize_lines(value)
-    value.to_s.strip.gsub(/\r\n|\r/, "\n")
   end
 
   def burst_rate_exceeded?(signature)
