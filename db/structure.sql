@@ -25,6 +25,19 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: array_lowercase(character varying[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION array_lowercase(character varying[]) RETURNS character varying[]
+    LANGUAGE sql IMMUTABLE
+    AS $_$
+        SELECT array_agg(q.tag) FROM (
+          SELECT btrim(lower(unnest($1)))::varchar AS tag
+        ) AS q;
+      $_$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -230,6 +243,7 @@ CREATE TABLE archived_petitions (
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    tags character varying[] DEFAULT '{}'::character varying[],
     parliament_id integer,
     action character varying(255),
     background character varying(300),
@@ -856,7 +870,8 @@ CREATE TABLE petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30) DEFAULT 'pending'::character varying,
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    tags character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -1544,6 +1559,13 @@ ALTER TABLE ONLY tasks
 
 
 --
+-- Name: archived_petitions_tag_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX archived_petitions_tag_lower ON archived_petitions USING gin (array_lowercase(tags));
+
+
+--
 -- Name: ft_index_invalidations_on_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2104,6 +2126,13 @@ CREATE UNIQUE INDEX index_tasks_on_name ON tasks USING btree (name);
 
 
 --
+-- Name: petitions_tag_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX petitions_tag_lower ON petitions USING gin (array_lowercase(tags));
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2451,6 +2480,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170501093620');
 INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
+
+INSERT INTO schema_migrations (version) VALUES ('20170602154741');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
 
