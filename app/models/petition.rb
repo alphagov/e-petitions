@@ -82,6 +82,7 @@ class Petition < ActiveRecord::Base
   validates_presence_of :creator_signature, on: :create
   validates_inclusion_of :state, in: STATES
   validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array" }
+  validate :tags_must_be_allowed
 
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator_signature, prefix: :creator
@@ -716,5 +717,15 @@ class Petition < ActiveRecord::Base
 
   def closed_early_due_to_election?(dissolution_at = Parliament.dissolution_at)
     closed_at == dissolution_at
+  end
+
+  def admin_site_settings
+    Admin::Site.first_or_create!
+  end
+
+  def tags_must_be_allowed
+    disallowed_tags = (tags || []) - admin_site_settings.allowed_petition_tags
+    disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }
+    errors.add(:tags, "Disallowed tags: #{disallowed_tags_with_quotes.join(', ')}") unless disallowed_tags.empty?
   end
 end

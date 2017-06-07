@@ -101,11 +101,15 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    describe "tag validations" do
+    describe "tags validations" do
       let(:petition) { FactoryGirl.build(:petition) }
 
+      before(:all) do
+        Admin::Site.create(petition_tags: "tag 1\ntag 2")
+      end
+
       it "validates tags can be set as an array" do
-        petition.tags = ["hello", "world"]
+        petition.tags = ["tag 1", "tag 2"]
         expect(petition).to be_valid
       end
 
@@ -118,6 +122,30 @@ RSpec.describe Petition, type: :model do
         expect(petition).to be_valid
         petition.tags = nil
         expect(petition).to be_invalid
+      end
+
+      describe "#tags_must_be_allowed" do
+        context "with allowed tags" do
+          it "petition is valid" do
+            petition.tags << "tag 1"
+            petition.tags << "tag 2"
+            expect(petition).to be_valid
+          end
+        end
+
+        context "with disallowed tags" do
+          it "petition is invalid" do
+            petition.tags << "tag 3"
+            expect(petition).to be_invalid
+          end
+
+          it "displays an error message with the disallowed tags" do
+            petition.tags << "tag 3"
+            petition.tags << "tag 4"
+            petition.valid?
+            expect(petition.errors.messages[:tags]).to include "Disallowed tags: 'tag 3', 'tag 4'"
+          end
+        end
       end
     end
   end
