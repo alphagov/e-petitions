@@ -8,9 +8,13 @@
       <%= hidden_field_tag :tab, "petition_tags" %>
 
       <%= form_row for: [form.object, :petition_tags] do %>
-        <%= error_messages_for_field @rate_limit, :petition_tags %>
         <%= form.text_area :petition_tags, tabindex: increment, rows: 8, class: 'form-control' %>
         <p><small>Add tags that are allowed to be used on petitions.</small></p>
+        <% if @site_settings.errors[:petition_tags].any? %>
+          <% @site_settings.errors[:petition_tags].each do |error| %>
+            <%= content_tag :span, error, { class: 'error-message' } %>
+          <% end %>
+        <% end %>
       <% end %>
 
     <%= form.submit 'Save', class: 'button' %>

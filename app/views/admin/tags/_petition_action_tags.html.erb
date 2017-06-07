@@ -1,8 +1,12 @@
 <%= form_for petition, url: admin_petition_tags_path(petition), method: :patch do |f| %>
-  <%= f.label :tags, 'Tags', class: 'form-label petition-action-heading' %>
-  <%= form_row :for => [f.object, :tags] do %>
+  <div class="form-group">
+    <%= f.label :tags, 'Tags', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :tags %>
-    <%= collection_check_boxes(:petition, :tags, @site_settings.allowed_petition_tags, :itself, :itself) %>
-  <% end %>
+    <% if @site_settings.allowed_petition_tags.any? %>
+      <%= collection_check_boxes(:petition, :tags, @site_settings.allowed_petition_tags, :itself, :itself) %>
+    <% else %>
+      <p><small>No tags have been set by admin.</small></p>
+    <% end %>
+  </div>
   <%= f.submit 'Save tags', class: 'button' %>
 <% end %>

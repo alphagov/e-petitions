@@ -724,7 +724,11 @@ class Petition < ActiveRecord::Base
   end
 
   def tags_must_be_allowed
-    disallowed_tags = (tags || []) - admin_site_settings.allowed_petition_tags
+    # collection_check_boxes submits an empty string along with the tags. I'm removing it here
+    # but would be good to stop the form from submitting it in the first place!
+    clean_tags = tags.reject { |tag| tag.blank? }
+
+    disallowed_tags = (clean_tags || []) - admin_site_settings.allowed_petition_tags
     disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }
     errors.add(:tags, "Disallowed tags: #{disallowed_tags_with_quotes.join(', ')}") unless disallowed_tags.empty?
   end
