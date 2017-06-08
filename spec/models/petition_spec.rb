@@ -646,44 +646,30 @@ RSpec.describe Petition, type: :model do
     end
 
     describe 'tagged_with' do
-      let!(:petition_1) { FactoryGirl.create(:petition, admin_notes: '[foo]') }
-      let!(:petition_2) { FactoryGirl.create(:petition, admin_notes: 'foo') }
-      let!(:petition_3) { FactoryGirl.create(:petition, admin_notes: '[bar]') }
-      let!(:petition_4) { FactoryGirl.create(:petition, admin_notes: '[bar] [foo]') }
-      let!(:petition_5) { FactoryGirl.create(:petition, action: 'foo', background: 'foo', additional_details: 'foo') }
-      let!(:petition_6) { FactoryGirl.create(:petition, action: '[foo]', background: '[foo]', additional_details: '[foo]') }
-      let!(:petition_7) { FactoryGirl.create(:petition, admin_notes: '[bar foo]') }
-
-      it 'fetches petitions with the supplied tag in their notes field wrapped in []' do
-        expect(Petition.tagged_with('foo')).to include(petition_1)
+      before(:all) do
+        Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3\nuppercase tag\ntag 1 tag 2")
       end
 
-      it 'ignores petitions with the supplied tag in their notes field but not wrapped in []' do
-        expect(Petition.tagged_with('foo')).not_to include(petition_2)
+      let!(:petition_1)    { FactoryGirl.create(:petition, tags: ["tag 1", "tag 2", "tag 3"]) }
+      let!(:petition_2)    { FactoryGirl.create(:petition, tags: ["tag 1"]) }
+      let!(:petition_3)    { FactoryGirl.create(:petition, tags: ["tag 2"]) }
+      let!(:petition_4)    { FactoryGirl.create(:petition, tags: ["tag 1", "tag 2", "UpPErCAsE TAG"]) }
+      let!(:petition_5)    { FactoryGirl.create(:petition, tags: ["tag 1 tag 2"]) }
+
+      it 'fetches petitions with the supplied tag in tags array' do
+        found_petitions = Petition.tagged_with("tag 1")
+        expect(found_petitions).to include(petition_1, petition_2, petition_4)
+        expect(found_petitions).not_to include(petition_3)
       end
 
-      it 'ignores petitions with different []-wrapped tags in their notes field' do
-        expect(Petition.tagged_with('foo')).not_to include(petition_3)
-      end
-
-      it 'fetches petitions with multiple tags in their notes field if one matches' do
-        expect(Petition.tagged_with('foo')).to include(petition_4)
-      end
-
-      it 'ignores petitions with tag matches in other fields, even if they are []-wrapped' do
-        expect(Petition.tagged_with('foo')).not_to include(petition_5, petition_6)
-      end
-
-      it 'sanitizes the supplied tag to strip [] and %' do
-        expect(Petition.tagged_with('f%')).to be_empty
-        expect(Petition.tagged_with('[%]')).to be_empty
-        expect(Petition.tagged_with('f[%]oo')).to eq (Petition.tagged_with('foo'))
+      it 'is case-insensitive' do
+        expect(Petition.tagged_with("UPPERCASE TAG")).to include(petition_4)
+        expect(Petition.tagged_with("uppercase tag")).to include(petition_4)
       end
 
       it 'assumes spaces are a single tag with a space in it, not searches for multiple tags' do
-        bar_foo_tagged = Petition.tagged_with('bar foo')
-        expect(bar_foo_tagged).to include petition_7
-        expect(bar_foo_tagged).not_to include petition_4
+        petitions = Petition.tagged_with('tag 1 tag 2')
+        expect(petitions).to include petition_5
       end
     end
   end

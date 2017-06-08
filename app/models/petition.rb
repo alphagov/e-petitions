@@ -326,12 +326,7 @@ class Petition < ActiveRecord::Base
     end
 
     def tagged_with(tag)
-      joins(:note).
-      where(Note.arel_table['details'].matches("%#{sanitized_tag(tag)}%"))
-    end
-
-    def sanitized_tag(tag)
-      "[#{tag.gsub(/[\[\]%]/,'')}]"
+      where("'#{tag.downcase}' = ANY (array_lowercase(tags))")
     end
 
     def in_need_of_marking_as_debated(date = Date.current)
@@ -723,12 +718,12 @@ class Petition < ActiveRecord::Base
     Admin::Site.first_or_create!
   end
 
-  def tags_must_be_allowed
-    # collection_check_boxes submits an empty string along with the tags. I'm removing it here
-    # but would be good to stop the form from submitting it in the first place!
-    clean_tags = tags.reject { |tag| tag.blank? }
+  def tags=(tags)
+    write_attribute(:tags, tags.reject(&:blank?))
+  end
 
-    disallowed_tags = (clean_tags || []) - admin_site_settings.allowed_petition_tags
+  def tags_must_be_allowed
+    disallowed_tags = (tags.map(&:downcase) || []) - admin_site_settings.allowed_petition_tags.map(&:downcase)
     disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }
     errors.add(:tags, "Disallowed tags: #{disallowed_tags_with_quotes.join(', ')}") unless disallowed_tags.empty?
   end
