@@ -674,6 +674,17 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#tags_downcase" do
+    before do
+      Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3")
+    end
+
+    it "returns the petitions tags in lower case" do
+      petition = Petition.create(tags: ["TAG 1", "TaG 2", "tag 3"])
+      expect(petition.tags_downcase).to eq ["tag 1", "tag 2", "tag 3"]
+    end
+  end
+
   describe "signature count" do
     let(:petition) { FactoryGirl.create(:pending_petition) }
     let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }

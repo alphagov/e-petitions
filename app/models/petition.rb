@@ -722,6 +722,10 @@ class Petition < ActiveRecord::Base
     write_attribute(:tags, tags.reject(&:blank?))
   end
 
+  def tags_downcase
+    tags.map(&:downcase)
+  end
+
   def tags_must_be_allowed
     disallowed_tags = (tags.map(&:downcase) || []) - admin_site_settings.allowed_petition_tags.map(&:downcase)
     disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }

@@ -3,7 +3,7 @@
     <%= f.label :tags, 'Tags', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :tags %>
     <% if @site_settings.allowed_petition_tags.any? %>
-      <%= collection_check_boxes(:petition, :tags, @site_settings.allowed_petition_tags, :itself, :itself) %>
+      <%= collection_check_boxes(:petition, :tags_downcase, @site_settings.allowed_petition_tags, :downcase, :itself) %>
     <% else %>
       <p><small>No tags have been set by admin.</small></p>
     <% end %>
