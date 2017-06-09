@@ -81,7 +81,7 @@ class Petition < ActiveRecord::Base
   validates_presence_of :open_at, if: :open?
   validates_presence_of :creator_signature, on: :create
   validates_inclusion_of :state, in: STATES
-  validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array" }
+  validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array or empty string" }, allow_nil: false
   validate :tags_must_be_allowed
 
   with_options allow_nil: true, prefix: true do
@@ -719,15 +719,22 @@ class Petition < ActiveRecord::Base
   end
 
   def tags=(tags)
-    write_attribute(:tags, tags.reject(&:blank?))
+    if tags.kind_of?(String) && !tags.blank?
+      string_tags = tags.each_line.map { |tag| "\"#{tag.strip}\"" }
+      raise TypeError, "All strings are converted to an empty tags array. Are you sure you didn't mean [#{string_tags.join(', ')}]?"
+    end
+
+    tags = tags.reject(&:blank?) unless tags.blank?
+    super
   end
 
-  def tags_downcase
+  def tags_for_comparison
     tags.map(&:downcase)
   end
 
   def tags_must_be_allowed
-    disallowed_tags = (tags.map(&:downcase) || []) - admin_site_settings.allowed_petition_tags.map(&:downcase)
+    return if tags.nil?
+    disallowed_tags = (tags_for_comparison || []) - admin_site_settings.allowed_petition_tags
     disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }
     errors.add(:tags, "Disallowed tags: #{disallowed_tags_with_quotes.join(', ')}") unless disallowed_tags.empty?
   end

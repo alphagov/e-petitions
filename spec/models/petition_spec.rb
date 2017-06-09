@@ -39,6 +39,10 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  def set_site_settings
+    allow(Admin::Site).to receive(:first).and_return site_settings
+  end
+
   context "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
@@ -102,10 +106,11 @@ RSpec.describe Petition, type: :model do
     end
 
     describe "tags validations" do
+      let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2") }
       let(:petition) { FactoryGirl.build(:petition) }
 
-      before(:all) do
-        Admin::Site.create(petition_tags: "tag 1\ntag 2")
+      before do
+        set_site_settings
       end
 
       it "validates tags can be set as an array" do
@@ -117,11 +122,8 @@ RSpec.describe Petition, type: :model do
         expect(FactoryGirl.build(:petition, tags: "")).to be_valid
       end
 
-      it "validates tags can not be set to nil" do
-        petition = FactoryGirl.build(:petition)
-        expect(petition).to be_valid
-        petition.tags = nil
-        expect(petition).to be_invalid
+      it "validates tags can not be nil" do
+        expect(FactoryGirl.build(:petition, tags: nil)).to be_invalid
       end
 
       describe "#tags_must_be_allowed" do
@@ -646,8 +648,10 @@ RSpec.describe Petition, type: :model do
     end
 
     describe 'tagged_with' do
-      before(:all) do
-        Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3\nuppercase tag\ntag 1 tag 2")
+      let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3\nuppercase tag\ntag 1 tag 2") }
+
+      before do
+        set_site_settings
       end
 
       let!(:petition_1)    { FactoryGirl.create(:petition, tags: ["tag 1", "tag 2", "tag 3"]) }
@@ -674,14 +678,52 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#tags_downcase" do
+  describe "#tags=" do
+    let(:petition) { FactoryGirl.create(:petition) }
+    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1") }
+
     before do
-      Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3")
+      set_site_settings
     end
 
-    it "returns the petitions tags in lower case" do
+    context "tags includes empty strings" do
+      it "removes empty strings from the array" do
+        petition.tags = ["", "tag 1"]
+        expect(petition).to be_valid
+        expect(petition.tags).to eq ["tag 1"]
+      end
+    end
+
+    context "tags is a string" do
+      it "raises a TypeError with helpful message" do
+        expect{ petition.tags = "tag 1\ntag 2" }.to raise_error(TypeError)
+          .with_message("All strings are converted to an empty tags array. Are you sure you didn't mean [\"tag 1\", \"tag 2\"]?")
+      end
+
+      context "tags is an empty string" do
+        it "does not attempt to remove empty strings or raise a TypeError" do
+          expect{ petition.tags = "" }.not_to raise_error
+        end
+      end
+    end
+
+    context "tags is nil" do
+      it "does not attempt to remove empty strings" do
+        expect{ petition.tags = nil }.not_to raise_error
+      end
+    end
+  end
+
+  describe "#tags_for_comparison" do
+    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3") }
+
+    before do
+      set_site_settings
+    end
+
+    it "returns the petition tags in lower case so that they can be compared with allowed tags" do
       petition = Petition.create(tags: ["TAG 1", "TaG 2", "tag 3"])
-      expect(petition.tags_downcase).to eq ["tag 1", "tag 2", "tag 3"]
+      expect(petition.tags_for_comparison).to eq ["tag 1", "tag 2", "tag 3"]
     end
   end
 

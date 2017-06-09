@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::TagsController, type: :controller, admin: true do
 
+  let!(:site_settings) { Admin::Site.first_or_create!(petition_tags: "tag 1\ntag 2") }
   let!(:petition) { FactoryGirl.create(:open_petition) }
 
   describe 'not logged in' do
@@ -41,7 +42,6 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
 
   describe "logged in as moderator user" do
     let(:user) { FactoryGirl.create(:moderator_user) }
-    let!(:site_settings) { Admin::Site.create }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -76,13 +76,14 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
       context 'with valid params' do
         it 'updates the tags on the petition' do
           patch :update, petition_id: petition.id, petition: { tags: ["tag 1", "tag 2"]}
-          expect(response).to redirect_to admin_petition_path
+          expect(response).to redirect_to admin_petition_path(petition.id)
         end
       end
 
       context 'with invalid params' do
         it 'renders the admin petitions show template' do
-          patch :update, petition_id: petition.id, petition: { tags: "non-array"}
+          # tag 3 is not an allowed tag
+          patch :update, petition_id: petition.id, petition: { tags: ["tag 3"] }
           expect(response).to render_template 'admin/petitions/show'
         end
       end

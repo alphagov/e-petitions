@@ -78,7 +78,7 @@ class Admin::PetitionsController < Admin::AdminController
 
   def petitions_by_tag
     @petitions = Petition.tagged_with(params[:t]).search(page: params[:page], per_page: 50)
-    @query = "[#{params[:t]}]"
+    @query = params[:t]
   end
 
   def fetch_petition_for_scheduled_debate_date
