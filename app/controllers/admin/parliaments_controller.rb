@@ -35,7 +35,7 @@ class Admin::ParliamentsController < Admin::AdminController
       :dissolution_heading, :dissolution_message,
       :dissolved_heading, :dissolved_message,
       :dissolution_at, :dissolution_faq_url,
-      :notification_cutoff_at
+      :notification_cutoff_at, :registration_closed_at
     )
   end
 

@@ -48,6 +48,10 @@ class Parliament < ActiveRecord::Base
       instance.dissolution_announced?
     end
 
+    def registration_closed?
+      instance.registration_closed?
+    end
+
     def reload
       Thread.current[:__parliament__] = nil
     end
@@ -71,5 +75,9 @@ class Parliament < ActiveRecord::Base
 
   def dissolution_announced?
     dissolution_at?
+  end
+
+  def registration_closed?(now = Time.current)
+    registration_closed_at? && registration_closed_at <= now
   end
 end

@@ -9,6 +9,7 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:dissolved_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolved_message).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:notification_cutoff_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:registration_closed_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
@@ -144,6 +145,11 @@ RSpec.describe Parliament, type: :model do
       expect(parliament).to receive(:dissolved?).and_return(true)
       expect(Parliament.dissolved?).to eq(true)
     end
+
+    it "delegates registration_closed? to the instance" do
+      expect(parliament).to receive(:registration_closed?).and_return(true)
+      expect(Parliament.registration_closed?).to eq(true)
+    end
   end
 
   describe ".reload" do
@@ -267,6 +273,38 @@ RSpec.describe Parliament, type: :model do
 
       it "returns true" do
         expect(parliament.dissolved?).to eq(true)
+      end
+    end
+  end
+
+  describe "#registration_closed?" do
+    context "when registration_closed_at is nil" do
+      subject :parliament do
+        FactoryGirl.create(:parliament)
+      end
+
+      it "returns false" do
+        expect(parliament.registration_closed?).to eq(false)
+      end
+    end
+
+    context "when registration_closed_at is in the future" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, :dissolving, registration_closed_at: 2.weeks.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.registration_closed?).to eq(false)
+      end
+    end
+
+    context "when registration_closed_at is in the past" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, :dissolved, registration_closed_at: 2.weeks.ago)
+      end
+
+      it "returns true" do
+        expect(parliament.registration_closed?).to eq(true)
       end
     end
   end

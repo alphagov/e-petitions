@@ -3,6 +3,13 @@
 <div class="grid-row">
   <div class="column-two-thirds extra-gutter">
     <%= form_for @parliament, url: admin_parliament_url do |form| %>
+      <h2>Voter registration closes at</h2>
+
+      <%= form_row for: [form.object, :registration_closed_at] do %>
+        <%= error_messages_for_field @parliament, :registration_closed_at %>
+        <%= form.datetime_select :registration_closed_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+      <% end %>
+
       <h2>Dissolution</h2>
 
       <%= form_row for: [form.object, :dissolution_at] do %>
