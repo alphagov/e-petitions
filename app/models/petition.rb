@@ -547,10 +547,6 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def count_validated_signatures
-    signatures.validated.count
-  end
-
   def collecting_sponsors?
     state.in?(COLLECTING_SPONSORS_STATES)
   end

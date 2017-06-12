@@ -1035,15 +1035,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "counting validated signatures" do
-    let(:petition) { FactoryGirl.build(:petition) }
-
-    it "only counts validated signtatures" do
-      expect(petition.signatures).to receive(:validated).and_return(double(:valid_signatures, :count => 123))
-      expect(petition.count_validated_signatures).to eq(123)
-    end
-  end
-
   describe ".close_petitions!" do
     context "when a petition is in the open state and the closing date has not passed" do
       let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
