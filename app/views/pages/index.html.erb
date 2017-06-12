@@ -1,12 +1,18 @@
 <%= cache_for :home_page do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
-  <%= render 'parliament_dissolution_warning' %>
-
   <% if Parliament.dissolution_announced? %>
-    <a href="https://www.parliament.uk/get-involved/" class="get-involved">
-      Get involved with the UK Parliament
-    </a>
+    <%= render 'parliament_dissolution_warning' %>
+
+    <% if Parliament.registration_closed? %>
+      <a href="https://www.parliament.uk/get-involved/" class="get-involved">
+        Get involved with the UK Parliament
+      </a>
+    <% else %>
+      <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
+        Register to vote in the General Election
+      </a>
+    <% end %>
   <% end %>
 
   <% if no_petitions_yet? %>
