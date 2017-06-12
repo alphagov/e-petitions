@@ -62,6 +62,7 @@ group :test do
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'
+  gem 'rails-controller-testing'
 end
 
 group :production do
