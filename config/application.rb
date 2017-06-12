@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 
@@ -45,7 +45,5 @@ module Epets
 
     config.action_dispatch.default_headers.merge!('X-UA-Compatible' => 'IE=edge')
 
-    # Needed as Rails does not add app/jobs/concerns to the load path
-    config.paths.add 'app/jobs/concerns', eager_load: true
   end
 end
