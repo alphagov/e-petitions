@@ -99,9 +99,47 @@ input.back-page {
     @include bold-19();
   }
 
+  .link {
+    @include core-16();
+  }
+
   a {
     color: $white;
     text-decoration: underline;
+  }
+
+  details {
+    color: $white;
+  }
+
+  summary {
+    color: $white;
+
+    &:hover {
+      color: $white;
+    }
+
+    &:focus {
+      outline: 3px solid $focus-colour;
+    }
+  }
+
+  .summary {
+    text-decoration: underline;
+  }
+
+  .list-of-parliaments {
+    margin-top: $gutter-half;
+    display: block;
+    @include core-16();
+
+    ul {
+      padding: $gutter/6;
+    }
+
+    li {
+      padding: $gutter/6 0;
+    }
   }
 }
 
@@ -227,10 +265,12 @@ input.back-page {
   h2 {
     font-size: 24px;
     line-height: 30/24;
-    margin: em(5, 24) 0 em(10, 24) $text-indent;
+    margin: 0 0 em(10, 24) 0;
+    padding: em(5, 24) 0 0 $text-indent;
 
     @include media(tablet) {
-      margin: em(5, 24) 0 em(10, 24) $text-indent;
+      margin: 0 0 em(10, 24) 0;
+      padding: em(5, 24) 0 0 $text-indent;
     }
   }
   h3 {
@@ -241,15 +281,15 @@ input.back-page {
     }
   }
 }
-.about-item-count-response, .about-item-count-debate, .about-item-other-business {
+.about-item-count-response h2, .about-item-count-debate h2, .about-item-other-business h2 {
   background-repeat: no-repeat;
 }
-.about-item-count-response {
-  background-position: 0 26px;
+.about-item-count-response h2 {
+  background-position: 0 6px;
   @include background-image("graphics/graphic_crown", 36px, 25px);
 }
-.about-item-count-debate, .about-item-other-business {
-  background-position: 4px 20px;
+.about-item-count-debate h2, .about-item-other-business {
+  background-position: 4px 0;
   @include background-image("graphics/graphic_portcullis", 26px, 32px);
 }
 .about-item-scheduled-debate-date {

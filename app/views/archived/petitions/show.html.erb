@@ -1,33 +1,81 @@
+<div class="notification">
+  <span class="icon icon-warning-white"></span>
+  <p class="content">
+    This petition was submitted during the <%= @parliament.period %>
+    <span style="white-space: nowrap"><%= @parliament.government %></span> government
+  </p>
+
+  <p class="link">
+    <%= link_to "View other petitions from this government", archived_petitions_path(parliament: @parliament) %>
+  </p>
+</div>
+
 <h1>
-  <span class="heading-secondary">Petition</span>
+  <% if @petition.rejected? %>
+    <span class="heading-secondary">Rejected petition</span>
+  <% else %>
+    <span class="heading-secondary">Petition</span>
+  <% end %>
   <%= @petition.title %>
 </h1>
 
 <div><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
 
-<div class="flash-notice">
-  <p>This petition has been archived</p>
-  <p class="flash-notice-description">It was submitted during the 2010–2015 Conservative – Liberal Democrat coalition government</p>
-</div>
-
 <% if @petition.rejected? %>
-  <h2>This petition has been rejected with the following reason given:</h2>
+  <p class="flash-notice">This petition was rejected</p>
+
+  <h2>Why was this petition rejected?</h2>
   <%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %>
-<% end -%>
 
-<% if @petition.response? %>
-  <h2>This petition has received the following response:</h2>
-  <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
-<% end -%>
+  <p>We only reject petitions that don’t meet the <a href="https://petition.parliament.uk/help#standards">petition standards</a>.</p>
+<% else %>
+  <% if @petition.closed_early_due_to_election? %>
+    <p class="flash-notice">
+      This petition closed early because of a General Election
 
-<% unless @petition.rejected? %>
+      <% if @parliament.dissolution_faq_url? %>
+        <span>Find out more on the <%= link_to 'Petitions Committee website', @parliament.dissolution_faq_url %></span>
+      <% end %>
+    </p>
+  <% else %>
+    <p class="flash-notice">
+      This petition is closed
+      <span>This petition ran for <%= @petition.duration %> months</span>
+    </p>
+  <% end %>
+
   <div class="signature-count">
     <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
+    <div class="signature-count-graph" aria-hidden="true">
+      <span class="signature-count-current" style="width: <%= archived_threshold_percentage(@petition) %>"></span>
+    </div>
+    <p class="signature-count-goal">
+      <%= number_with_delimiter(archived_threshold(@petition)) %>
+    </p>
   </div>
 
-  <ul class="petition-meta">
-    <li class="meta-deadline">
-      <span class="label">Deadline</span> <%= short_date_format @petition.closed_at %>
-    </li>
-  </ul>
+  <div class="about-petitions">
+    <% if @petition.response? %>
+      <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
+        <h2 id="response-threshold-heading">Government responded</h2>
+        <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
+      </section>
+    <% end %>
+  </div>
 <% end %>
+
+<ul class="petition-meta">
+  <% if @petition.rejected? %>
+    <li>
+      <span class="label">Date submitted</span> <%= short_date_format @petition.created_at %>
+    </li>
+  <% else %>
+    <li>
+      <span class="label">Date closed</span> <%= short_date_format @petition.closed_at %>
+    </li>
+  <% end %>
+
+  <li class="meta-json">
+    <span class="note"><%= link_to "Get petition data (json format)", archived_petition_path(@petition, :json) %></span>
+  </li>
+</ul>

@@ -3,6 +3,20 @@ require 'rails_helper'
 RSpec.describe ArchivedPetition, type: :model do
   subject(:petition){ described_class.new }
 
+  describe "associations" do
+    describe "parliament" do
+      it { is_expected.to belong_to(:parliament).inverse_of(:petitions) }
+
+      it "is required" do
+        expect {
+          petition.valid?
+        }.to change {
+          petition.errors[:parliament]
+        }.from([]).to(["Parliament can't be blank"])
+      end
+    end
+  end
+
   describe ".search" do
     let!(:petition_1) do
       FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
@@ -180,6 +194,105 @@ RSpec.describe ArchivedPetition, type: :model do
 
       it "returns true" do
         expect(petition.rejected?).to eq(true)
+      end
+    end
+  end
+
+  describe "#duration" do
+    it { is_expected.to delegate_method(:duration).to(:parliament).as(:petition_duration) }
+  end
+
+  describe "#threshold_for_response" do
+    it { is_expected.to delegate_method(:threshold_for_response).to(:parliament) }
+  end
+
+  describe "#threshold_for_debate" do
+    it { is_expected.to delegate_method(:threshold_for_response).to(:parliament) }
+  end
+
+  describe "#closed_early_due_to_election?" do
+    let(:parliament) { FactoryGirl.create(:parliament, :dissolved, :archived, dissolution_at: "2015-05-18T23:59:59") }
+    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, closed_at: closed_at) }
+
+    context "when closed_at is before the dissolution_at timestamp" do
+      let(:closed_at) { "2015-05-01T00:00:00" }
+
+      it "returns false" do
+        expect(petition.closed_early_due_to_election?).to eq(false)
+      end
+    end
+
+    context "when closed_at is equal to the dissolution_at timestamp" do
+      let(:closed_at) { "2015-05-18T23:59:59" }
+
+      it "returns true" do
+        expect(petition.closed_early_due_to_election?).to eq(true)
+      end
+    end
+
+    context "when closed_at is after the dissolution_at timestamp" do
+      let(:closed_at) { "2015-06-01T00:00:00" }
+
+      it "returns false" do
+        expect(petition.closed_early_due_to_election?).to eq(false)
+      end
+    end
+  end
+
+  describe "#threshold_for_response_reached?" do
+    let(:parliament) { FactoryGirl.create(:parliament, threshold_for_response: 500) }
+    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
+
+    context "when the signature count is less than the threshold" do
+      let(:signature_count) { 250 }
+
+      it "returns false" do
+        expect(petition.threshold_for_response_reached?).to eq(false)
+      end
+    end
+
+    context "when the signature count is equal to the threshold" do
+      let(:signature_count) { 500 }
+
+      it "returns true" do
+        expect(petition.threshold_for_response_reached?).to eq(true)
+      end
+    end
+
+    context "when the signature count is greater than the threshold" do
+      let(:signature_count) { 750 }
+
+      it "returns true" do
+        expect(petition.threshold_for_response_reached?).to eq(true)
+      end
+    end
+  end
+
+  describe "#threshold_for_debate_reached?" do
+    let(:parliament) { FactoryGirl.create(:parliament, threshold_for_debate: 5000) }
+    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
+
+    context "when the signature count is less than the threshold" do
+      let(:signature_count) { 2500 }
+
+      it "returns false" do
+        expect(petition.threshold_for_debate_reached?).to eq(false)
+      end
+    end
+
+    context "when the signature count is equal to the threshold" do
+      let(:signature_count) { 5000 }
+
+      it "returns true" do
+        expect(petition.threshold_for_debate_reached?).to eq(true)
+      end
+    end
+
+    context "when the signature count is greater than the threshold" do
+      let(:signature_count) { 7500 }
+
+      it "returns true" do
+        expect(petition.threshold_for_debate_reached?).to eq(true)
       end
     end
   end

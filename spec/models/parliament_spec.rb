@@ -2,6 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Parliament, type: :model do
   describe "schema" do
+    it { is_expected.to have_db_column(:government).of_type(:string).with_options(limit: 100, null: true) }
+    it { is_expected.to have_db_column(:opening_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:petition_duration).of_type(:integer).with_options(null: false, default: 6) }
     it { is_expected.to have_db_column(:dissolution_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:dissolution_heading).of_type(:string).with_options(limit: 100, null: true) }
     it { is_expected.to have_db_column(:dissolution_message).of_type(:text).with_options(null: true) }
@@ -10,8 +13,13 @@ RSpec.describe Parliament, type: :model do
     it { is_expected.to have_db_column(:dissolved_message).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:notification_cutoff_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:registration_closed_at).of_type(:datetime).with_options(null: true) }
+    it { is_expected.to have_db_column(:archived_at).of_type(:datetime).with_options(null: true) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  end
+
+  describe "associations" do
+    it { is_expected.to have_many(:petitions).inverse_of(:parliament).class_name("ArchivedPetition") }
   end
 
   describe "callbacks" do
@@ -39,46 +47,115 @@ RSpec.describe Parliament, type: :model do
     context "when dissolution_at is nil" do
       subject { Parliament.new }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.not_to validate_presence_of(:dissolution_heading) }
       it { is_expected.not_to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
       it { is_expected.not_to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
     end
 
     context "when dissolution_at is not nil" do
       subject { Parliament.new(dissolution_at: 2.weeks.from_now) }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.not_to validate_presence_of(:dissolved_heading) }
       it { is_expected.not_to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
     end
 
     context "when dissolution_at is in the past" do
       subject { Parliament.new(dissolution_at: 1.day.ago) }
 
+      it { is_expected.to validate_presence_of(:government) }
+      it { is_expected.to validate_presence_of(:opening_at) }
+      it { is_expected.to validate_presence_of(:petition_duration) }
       it { is_expected.to validate_presence_of(:dissolution_heading) }
       it { is_expected.to validate_presence_of(:dissolution_message) }
       it { is_expected.to validate_presence_of(:dissolved_heading) }
       it { is_expected.to validate_presence_of(:dissolved_message) }
       it { is_expected.not_to validate_presence_of(:dissolution_faq_url) }
+      it { is_expected.to validate_length_of(:government).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolution_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolved_heading).is_at_most(100) }
       it { is_expected.to validate_length_of(:dissolved_message).is_at_most(600) }
       it { is_expected.to validate_length_of(:dissolution_faq_url).is_at_most(500) }
+      it { is_expected.to validate_numericality_of(:petition_duration).only_integer }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_greater_than_or_equal_to(1) }
+      it { is_expected.to validate_numericality_of(:petition_duration).is_less_than_or_equal_to(12) }
+    end
+  end
+
+  describe "scopes" do
+    describe "archived" do
+      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+
+      context "when the archive_at timestamp is in the future" do
+        let(:now) { "2017-05-31T00:00:00".in_time_zone }
+
+        it "returns archived parliaments in descending order" do
+          expect(described_class.archived(now)).to eq([coalition])
+        end
+      end
+
+      context "when the archive_at timestamp is in the past" do
+        let(:now) { "2017-06-18T00:00:00".in_time_zone }
+
+        it "returns archived parliaments in descending order" do
+          expect(described_class.archived(now)).to eq([conservatives, coalition])
+        end
+      end
+    end
+
+    describe "current" do
+      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+
+      let(:now) { "2017-05-31T00:00:00".in_time_zone }
+
+      around do |example|
+        travel_to(now) { example.run }
+      end
+
+      it "excludes archived parliaments" do
+        expect(described_class.current).not_to include(coalition)
+      end
+
+      it "excludes parliaments scheduled to be archived" do
+        expect(described_class.current).not_to include(conservatives)
+      end
+
+      it "includes the new parliament" do
+        expect(described_class.current).to include(new_government)
+      end
     end
   end
 
@@ -94,6 +171,21 @@ RSpec.describe Parliament, type: :model do
       Parliament.reload
       example.run
       Parliament.reload
+    end
+
+    it "delegates government to the instance" do
+      expect(parliament).to receive(:government).and_return("Conservative – Liberal Democrat coalition")
+      expect(Parliament.government).to eq("Conservative – Liberal Democrat coalition")
+    end
+
+    it "delegates opening_at to the instance" do
+      expect(parliament).to receive(:opening_at).and_return(now)
+      expect(Parliament.opening_at).to eq(now)
+    end
+
+    it "delegates opened? to the instance" do
+      expect(parliament).to receive(:opened?).and_return(true)
+      expect(Parliament.opened?).to eq(true)
     end
 
     it "delegates dissolution_at to the instance" do
@@ -223,6 +315,122 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
+  describe "#period" do
+    context "when opening_at and dissolution_at are nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when dissolution_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+      end
+
+      it "returns nil" do
+        expect(parliament.period).to be_nil
+      end
+    end
+
+    context "when opening_at and dissolution_at are not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+      end
+
+      it "returns the years of operation" do
+        expect(parliament.period).to eq("2010–2015")
+      end
+    end
+  end
+
+  describe "#period?" do
+    context "when opening_at and dissolution_at are nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when dissolution_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.period?).to eq(false)
+      end
+    end
+
+    context "when opening_at and dissolution_at are not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+      end
+
+      it "returns true" do
+        expect(parliament.period?).to eq(true)
+      end
+    end
+  end
+
+  describe "#opened?" do
+    context "when opening_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, opening_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.opened?).to eq(false)
+      end
+    end
+
+    context "when opening_at is in the future" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, opening_at: 4.weeks.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.opened?).to eq(false)
+      end
+    end
+
+    context "when opening_at is in the past" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, opening_at: 2.years.ago)
+      end
+
+      it "returns true" do
+        expect(parliament.opened?).to eq(true)
+      end
+    end
+  end
+
   describe "#dissolution_announced?" do
     context "when dissolution_at is nil" do
       subject :parliament do
@@ -305,6 +513,38 @@ RSpec.describe Parliament, type: :model do
 
       it "returns true" do
         expect(parliament.registration_closed?).to eq(true)
+      end
+    end
+  end
+
+  describe "#archived?" do
+    context "when archived_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.archived?).to eq(false)
+      end
+    end
+
+    context "when archived_at is in the future" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: 2.weeks.from_now)
+      end
+
+      it "returns false" do
+        expect(parliament.archived?).to eq(false)
+      end
+    end
+
+    context "when archived_at is in the past" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archived_at: 2.weeks.ago)
+      end
+
+      it "returns true" do
+        expect(parliament.archived?).to eq(true)
       end
     end
   end

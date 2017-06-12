@@ -90,7 +90,8 @@ CREATE TABLE archived_petitions (
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    parliament_id integer
 );
 
 
@@ -525,7 +526,13 @@ CREATE TABLE parliaments (
     dissolved_heading character varying(100),
     dissolved_message text,
     notification_cutoff_at timestamp without time zone,
-    registration_closed_at timestamp without time zone
+    registration_closed_at timestamp without time zone,
+    government character varying(100),
+    opening_at timestamp without time zone,
+    archived_at timestamp without time zone,
+    threshold_for_response integer DEFAULT 10000 NOT NULL,
+    threshold_for_debate integer DEFAULT 100000 NOT NULL,
+    petition_duration integer DEFAULT 6 NOT NULL
 );
 
 
@@ -1264,6 +1271,13 @@ CREATE INDEX index_archived_petitions_on_description ON archived_petitions USING
 
 
 --
+-- Name: index_archived_petitions_on_parliament_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_parliament_id ON archived_petitions USING btree (parliament_id);
+
+
+--
 -- Name: index_archived_petitions_on_signature_count; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1664,6 +1678,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 
 --
+-- Name: fk_rails_978050318c; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_petitions
+    ADD CONSTRAINT fk_rails_978050318c FOREIGN KEY (parliament_id) REFERENCES parliaments(id);
+
+
+--
 -- Name: fk_rails_9f55aacb99; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1886,4 +1908,14 @@ INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611115913');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611123348');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611131130');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611190354');
+
+INSERT INTO schema_migrations (version) VALUES ('20170612120307');
 

@@ -1,10 +1,44 @@
-<%= link_to 'Back to current petitions', petitions_path, class: 'lists-of-petitions' %>
+<div class="notification">
+  <span class="icon icon-warning-white"></span>
+  <p class="content">
+    These petitions were submitted during the <%= @parliament.period %>
+    <span style="white-space: nowrap"><%= @parliament.government %></span> government
+  </p>
 
-<h1 class="page-title">Archived petitions</h1>
-<p class="text-secondary">Petitions from the 2010–2015 Conservative – Liberal Democrat coalition government</p>
+  <details class="list-of-parliaments">
+    <summary><span class="summary">View petitions from a different government</span></summary>
+    <div>
+      <ul>
+        <% archived_parliaments.each do |parliament| %>
+          <li><%= link_to "#{parliament.period} #{parliament.government} government", archived_petitions_path(parliament: parliament, state: "published") %></li>
+        <% end %>
+        <li><%= link_to "Back to current petitions", petitions_path(state: "open") %></li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+<details class="lists-of-petitions">
+  <summary><span class="summary">Other lists of petitions</span></summary>
+  <div>
+    <ul>
+    <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
+      <li>
+        <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
+          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+</details>
+
+<h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
 
 <%= form_tag archived_petitions_path, class: 'search-inline', method: 'get', enforce_utf8: false do %>
   <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
+  <%= hidden_field_tag 'state', @petitions.scope %>
+  <%= hidden_field_tag 'parliament', @parliament.id %>
   <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
 <% end %>
 
@@ -21,7 +55,24 @@
         </li>
       <% end %>
     </ol>
+    <%= render 'paginated_results' %>
+    <p>Get this data in <%= link_to "JSON", archived_petitions_path(:json, params.slice(:parliament, :q, :page, :state)) %> or <%= link_to 'CSV', archived_petitions_path(:csv, params.slice(:q, :parliament, :state)) %> format</p>
   </div>
 <% end %>
 
-<%= render 'paginated_results' %> 
+
+<nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
+  <h2 id="other-lists-heading">Other lists of petitions</h2>
+  <div class="section-panel">
+    <ul>
+    <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
+      <li>
+        <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
+          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+  <%= link_to 'Current petitions', petitions_path(state: "open") %>
+</nav>

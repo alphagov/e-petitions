@@ -38,7 +38,8 @@ Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with sched
 end
 
 Given(/^an archived petition "([^"]*)"$/) do |title|
-  @petition = FactoryGirl.create(:archived_petition, :closed, title: title)
+  @parliament = FactoryGirl.create(:parliament, :coalition)
+  @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, title: title)
 end
 
 Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
@@ -212,7 +213,7 @@ Then(/^I should see the vote count, closed and open dates$/) do
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
   if @petition.is_a?(ArchivedPetition)
-    expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.closed_at.strftime("%e %B %Y").squish)
+    expect(page).to have_css("ul.petition-meta", :text => "Date closed " + @petition.closed_at.strftime("%e %B %Y").squish)
   else
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
     expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
@@ -441,4 +442,20 @@ Then(/^I should see the other business items$/) do
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )
+end
+
+Given(/^these archived petitions? exist?:?$/) do |table|
+  parliament = FactoryGirl.create(:parliament, :coalition)
+
+  table.raw[1..-1].each do |petition|
+    attributes = {
+      parliament:      parliament,
+      title:           petition[0],
+      state:           petition[1],
+      signature_count: petition[2],
+      created_at:      petition[3]
+    }
+
+    FactoryGirl.create(:archived_petition, attributes)
+  end
 end

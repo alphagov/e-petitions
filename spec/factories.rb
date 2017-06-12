@@ -26,6 +26,10 @@ FactoryGirl.define do
     opened_at { 2.years.ago }
     closed_at { 1.year.ago }
 
+    after(:build) do |petition, evaluator|
+      petition.parliament ||= Parliament.archived.first || FactoryGirl.create(:parliament, :archived)
+    end
+
     trait :response do
       response "Petition response"
     end
@@ -424,6 +428,9 @@ FactoryGirl.define do
   end
 
   factory :parliament do
+    government "Conservative"
+    opening_at { "2015-05-18T00:00:00".in_time_zone }
+
     trait :dissolving do
       dissolution_heading "Parliament is dissolving"
       dissolution_message "This means all petitions will close in 2 weeks"
@@ -436,6 +443,37 @@ FactoryGirl.define do
       dissolved_heading "Parliament is dissolved"
       dissolved_message "All petitions are now closed"
       dissolution_at { 2.weeks.ago }
+    end
+
+    trait :coalition do
+      government "Conservative - Liberal Democrat coalition"
+      opening_at { "2010-05-18T00:00:00".in_time_zone }
+      dissolution_heading "Parliament is dissolving"
+      dissolution_message "This means all petitions will close in 2 weeks"
+      dissolved_heading "Parliament is dissolved"
+      dissolved_message "All petitions are now closed"
+      dissolution_at { "2015-03-30T00:01:00".in_time_zone }
+      archived_at { "2015-07-20T00:00:00" }
+    end
+
+    trait :conservatives do
+      government "Conservative"
+      opening_at { "2015-05-18T00:00:00".in_time_zone }
+      dissolution_heading "Parliament is dissolving"
+      dissolution_message "This means all petitions will close in 2 weeks"
+      dissolved_heading "Parliament is dissolved"
+      dissolved_message "All petitions are now closed"
+      dissolution_at { "2017-05-13T00:01:00" }
+      archived_at { "2017-06-08T00:00:00" }
+    end
+
+    trait :new_government do
+      government "TBC"
+      opening_at { "2017-06-19T00:00:00".in_time_zone }
+    end
+
+    trait :archived do
+      archived_at { 1.month.ago }
     end
   end
 end

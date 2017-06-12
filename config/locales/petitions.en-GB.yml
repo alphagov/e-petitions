@@ -14,6 +14,7 @@ en-GB:
       open: "Open petitions"
       closed: "Closed petitions"
       rejected: "Rejected petitions"
+      published: "Published petitions"
       awaiting_response: "Petitions waiting for a Government response"
       with_response: "Petitions with a Government response"
       debated: "Petitions debated in Parliament"
@@ -36,6 +37,7 @@ en-GB:
       all: "All petitions (%{quantity})"
       open: "Open petitions (%{quantity})"
       closed: "Closed petitions (%{quantity})"
+      published: "Published petitions (%{quantity})"
       rejected: "Rejected petitions (%{quantity})"
       awaiting_response: "Awaiting government response (%{quantity})"
       with_response: "Government responses (%{quantity})"
@@ -47,6 +49,10 @@ en-GB:
       not_debated: "The Petitions Committee decided not to debate these petitions"
 
     facets:
+      archived:
+        - :all
+        - :published
+        - :rejected
       public:
         - :all
         - :open
