@@ -2216,11 +2216,11 @@ RSpec.describe Petition, type: :model do
       end
 
       it "rounds down to the nearest 5 seconds" do
-        expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000000")
+        expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000")
       end
 
       it "can use other columns" do
-        expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000000")
+        expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000")
       end
     end
 
