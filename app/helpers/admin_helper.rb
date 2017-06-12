@@ -59,6 +59,10 @@ module AdminHelper
     !trending_ips(since: since, limit: limit).empty?
   end
 
+  def admin_site_settings
+    @admin_site_settings ||= Admin::Site.first_or_create!
+  end
+
   private
 
   def admin_petition_facets
@@ -71,10 +75,6 @@ module AdminHelper
 
   def rate_limit
     @rate_limit ||= RateLimit.first_or_create!
-  end
-
-  def admin_site_settings
-    @admin_site_settings ||= Admin::Site.first_or_create!
   end
 
   def build_trending_domains(since, limit)

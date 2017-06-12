@@ -1,18 +1,12 @@
 class Admin::SearchesController < Admin::AdminController
 
   def show
-    if query_is_number?
+    if signature_search?
+      perform_signature_search
+    elsif find_petition_by_id?
       find_petition_by_id
-    elsif query_is_ip?
-      find_signatures_by_ip
-    elsif query_is_email?
-      find_signatures_by_email
-    elsif query_is_name?
-      find_signatures_by_name
-    elsif query_is_tag?
-      find_petitions_by_tag
     else
-      find_petitions_by_keyword
+      find_petitions
     end
   end
 
@@ -22,20 +16,12 @@ class Admin::SearchesController < Admin::AdminController
     @query ||= params.fetch(:q, '')
   end
 
-  def ip_address
-    @ip_address ||= @query
+  def search_type
+    @search_type ||= params.fetch(:search_type, "keyword")
   end
 
-  def name
-    @name ||= @query.gsub(/\A"|"\Z/, '')
-  end
-
-  def email
-    @email ||= @query
-  end
-
-  def tag
-    @tag ||= @query.gsub(/\A\[|\]\Z/, '')
+  def tag_filters
+    @tag_filters ||= params.fetch(:tag_filters, [])
   end
 
   def find_petition_by_id
@@ -46,43 +32,30 @@ class Admin::SearchesController < Admin::AdminController
     end
   end
 
-  def find_signatures_by_ip
-    @signatures = Signature.for_ip(ip_address).paginate(page: params[:page], per_page: 50)
+  def find_petition_by_id?
+    search_type == "petition_id"
   end
 
-  def find_signatures_by_email
-    @signatures = Signature.for_email(email).paginate(page: params[:page], per_page: 50)
+  def find_signatures(query_method)
+    @signatures = Signature.send(query_method, query).paginate(page: params[:page], per_page: 50)
   end
 
-  def find_signatures_by_name
-    @signatures = Signature.for_name(name).paginate(page: params[:page], per_page: 50)
+  def find_petitions
+    redirect_to(controller: 'admin/petitions', action: 'index', q: query, tag_filters: tag_filters)
   end
 
-  def find_petitions_by_keyword
-    redirect_to(controller: 'admin/petitions', action: 'index', q: query)
+  def signature_search?
+    search_type == "sig_name" || search_type == "sig_email" || search_type == "ip_address"
   end
 
-  def find_petitions_by_tag
-    redirect_to(controller: 'admin/petitions', action: 'index', t: tag)
-  end
-
-  def query_is_number?
-    /^\d+$/ =~ query
-  end
-
-  def query_is_ip?
-    /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
-  end
-
-  def query_is_email?
-    query.include?('@')
-  end
-
-  def query_is_name?
-    query.starts_with?('"') && query.ends_with?('"')
-  end
-
-  def query_is_tag?
-    query.starts_with?('[') && query.ends_with?(']')
+  def perform_signature_search
+    case search_type
+    when "sig_name"
+      find_signatures(:for_name)
+    when "sig_email"
+      find_signatures(:for_email)
+    when "ip_address"
+      find_signatures(:for_ip)
+    end
   end
 end

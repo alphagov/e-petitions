@@ -7,7 +7,7 @@
   <div class="column-two-thirds search-types">
     <% search_form_search_types.each do |search_type| %>
       <% checked = search_type.first == "Keyword" ? true : false %>
-      <%= radio_button_tag :search_type, search_type.first, checked %><%= search_type.first %>
+      <%= radio_button_tag :search_type, search_type.last, checked %><%= search_type.first %>
     <% end %>
   </div>
   <details class="tag-filters">

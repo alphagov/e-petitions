@@ -20,4 +20,11 @@ module SearchHelper
     noun = petitions.search? ? 'result' : 'petition'
     "#{number_with_delimiter(total_entries)} #{noun.pluralize(total_entries)}"
   end
+
+  def search_form_search_types
+    [
+      ["Keyword", "keyword"], ["Signature Name", "sig_name"], ["Signature Email", "sig_email"],
+      ["IP Address", "ip_address"], ["Petition ID", "petition_id"], ["Tag", "tag"]
+    ]
+  end
 end
