@@ -1907,14 +1907,15 @@ INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
 
-INSERT INTO schema_migrations (version) VALUES ('20170517115913');
-
-INSERT INTO schema_migrations (version) VALUES ('20170517123348');
-
-INSERT INTO schema_migrations (version) VALUES ('20170517131130');
-
-INSERT INTO schema_migrations (version) VALUES ('20170517190354');
-
-INSERT INTO schema_migrations (version) VALUES ('20170518120307');
-
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611115913');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611123348');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611131130');
+
+INSERT INTO schema_migrations (version) VALUES ('20170611190354');
+
+INSERT INTO schema_migrations (version) VALUES ('20170612120307');
+
