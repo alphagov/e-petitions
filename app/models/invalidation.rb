@@ -169,7 +169,7 @@ class Invalidation < ActiveRecord::Base
     Appsignal.without_instrumentation do
       matching_signatures.find_in_batches(batch_size: 100) do |signatures|
         signatures.each do |signature|
-          signature.invalidate!(Time.current, self)
+          signature.invalidate!(Time.current, self.id)
           increment!(:invalidated_count)
         end
 
