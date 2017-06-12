@@ -51,7 +51,7 @@ class Invalidation < ActiveRecord::Base
   end
 
   before_destroy do
-    !started?
+    throw :abort if started?
   end
 
   class << self
