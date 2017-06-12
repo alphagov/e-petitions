@@ -45,7 +45,7 @@ module NavigationHelpers
       archived_petitions_url(:json)
 
     when /^the archived petition page for "([^\"]*)"$/
-      archived_petition_url(ArchivedPetition.find_by(title: $1))
+      archived_petition_url(Archived::Petition.find_by(title: $1))
 
     when /^the new signature page$/
       new_petition_signature_url(@petition.id)

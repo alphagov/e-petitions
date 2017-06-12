@@ -1,5 +1,5 @@
 class Parliament < ActiveRecord::Base
-  has_many :petitions, inverse_of: :parliament, class_name: "ArchivedPetition"
+  has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
 
   class << self
     def before_remove_const

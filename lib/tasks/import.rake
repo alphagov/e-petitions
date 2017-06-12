@@ -29,8 +29,8 @@ namespace :import do
     ]
 
     CSV.foreach(file, headers: true, converters: converters) do |row|
-      if ArchivedPetition::STATES.include?(row['state'])
-        petition = ArchivedPetition.find_or_initialize_by(id: row['id'])
+      if Archived::Petition::STATES.include?(row['state'])
+        petition = Archived::Petition.find_or_initialize_by(id: row['id'])
 
         petition.title              = row['title']
         petition.description        = row['description']

@@ -18,7 +18,7 @@ FactoryGirl.define do
     role "moderator"
   end
 
-  factory :archived_petition do
+  factory :archived_petition, class: "Archived::Petition" do
     sequence(:title) { |n| "Petition #{n}" }
     state "closed"
     description "Petition description"

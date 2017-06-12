@@ -164,7 +164,7 @@ Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*
 end
 
 When(/^I view the petition$/) do
-  if @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(Archived::Petition)
     visit archived_petition_url(@petition)
   else
     visit petition_url(@petition)
@@ -198,7 +198,7 @@ Then(/^I should see all petitions$/) do
 end
 
 Then(/^I should see the petition details$/) do
-  if @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(Archived::Petition)
     expect(page).to have_content(@petition.title)
     expect(page).to have_content(@petition.description)
   else
@@ -212,7 +212,7 @@ Then(/^I should see the vote count, closed and open dates$/) do
   @petition.reload
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
-  if @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(Archived::Petition)
     expect(page).to have_css("ul.petition-meta", :text => "Date closed " + @petition.closed_at.strftime("%e %B %Y").squish)
   else
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
@@ -237,7 +237,7 @@ end
 Then(/^I should see the reason for rejection$/) do
   @petition.reload
 
-  if @petition.is_a?(ArchivedPetition)
+  if @petition.is_a?(Archived::Petition)
     expect(page).to have_content(@petition.reason_for_rejection)
   else
     expect(page).to have_content(@petition.rejection.details)
