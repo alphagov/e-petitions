@@ -42,4 +42,9 @@
     line-height: 40px;
     padding: 0px em(19, 24);
   }
+
+  .search-types {
+    margin-top: 5px;
+    @include core-16();
+  }
 }
