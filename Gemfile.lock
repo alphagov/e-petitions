@@ -202,7 +202,7 @@ GEM
       mimemagic (= 0.3.0)
     pg (0.18.4)
     phantomjs (2.1.1.0)
-    pickle (0.5.1)
+    pickle (0.5.2)
       cucumber (>= 0.8)
       rake
     poltergeist (1.8.0)
