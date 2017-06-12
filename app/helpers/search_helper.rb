@@ -23,8 +23,21 @@ module SearchHelper
 
   def search_form_search_types
     [
-      ["Keyword", "keyword"], ["Signature Name", "sig_name"], ["Signature Email", "sig_email"],
-      ["IP Address", "ip_address"], ["Petition ID", "petition_id"], ["Tag", "tag"]
+      { display_name: "Keyword", value: "keyword" },
+      { display_name: "Signature Name", value: "sig_name" },
+      { display_name: "Signature Email", value: "sig_email" },
+      { display_name: "IP Address", value: "ip_address" },
+      { display_name: "Petition ID", value: "petition_id" },
+      { display_name: "Tag", value: "tag" },
     ]
+  end
+
+  def check_tag_filter?(tags, tag)
+    return false unless tags.kind_of?(Array)
+    tags.include?(tag)
+  end
+
+  def check_search_type?(current_search_type, radio_button_value)
+    current_search_type == radio_button_value || radio_button_value == "keyword" ? true : false
   end
 end

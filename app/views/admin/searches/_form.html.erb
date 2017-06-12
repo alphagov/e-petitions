@@ -6,17 +6,16 @@
   </div>
   <div class="column-two-thirds search-types">
     <% search_form_search_types.each do |search_type| %>
-      <% checked = search_type.first == "Keyword" ? true : false %>
-      <%= radio_button_tag :search_type, search_type.last, checked %><%= search_type.first %>
+      <%= radio_button_tag :search_type, search_type[:value], check_search_type?(@search_type, search_type[:value]) %><%= search_type[:display_name] %>
     <% end %>
   </div>
-  <details class="tag-filters">
+  <details class="tag-filters" <%= "open" if @tag_filters && @tag_filters.any? %>>
     <summary class="summary">Filter by tags</summary>
     <div class="panel-indent">
       <% admin_site_settings.allowed_petition_tags.each do |tag| %>
         <div class="tag-filter-check-box">
           <%= label_tag tag %>
-          <%= check_box_tag "tag_filters[]", tag, false, { id: tag, name: tag, class: "tag-filter-check-box" } %>
+          <%= check_box_tag "tag_filters[]", tag, check_tag_filter?(@tag_filters, tag), { id: tag, class: "tag-filter-check-box" } %>
         </div>
       <% end %>
     </div>

@@ -81,14 +81,3 @@ Feature: Sysadmin updates the rate limits
     When I fill in "rate_limit_countries" with "United Kingdom"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
-
-  Scenario: Sysadmin updates the countries
-    When I am logged in as a sysadmin
-    And I am on the admin home page
-    And I follow "Rate Limits"
-    Then I should see "Edit Rate Limits"
-    When I follow "Petition Tags"
-    Then I should see "Add tags that are allowed to be used on petitions."
-    When I fill in "rate_limit_petition_tags" with "A cool tag"
-    And I press "Save"
-    Then I should see "Rate limits updated successfully"
