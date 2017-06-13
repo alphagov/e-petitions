@@ -76,6 +76,145 @@ ALTER SEQUENCE admin_users_id_seq OWNED BY admin_users.id;
 
 
 --
+-- Name: archived_debate_outcomes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_debate_outcomes (
+    id integer NOT NULL,
+    petition_id integer NOT NULL,
+    debated_on date,
+    transcript_url character varying(500),
+    video_url character varying(500),
+    overview text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    debated boolean DEFAULT true NOT NULL,
+    commons_image_file_name character varying,
+    commons_image_content_type character varying,
+    commons_image_file_size integer,
+    commons_image_updated_at timestamp without time zone
+);
+
+
+--
+-- Name: archived_debate_outcomes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_debate_outcomes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_debate_outcomes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_debate_outcomes_id_seq OWNED BY archived_debate_outcomes.id;
+
+
+--
+-- Name: archived_government_responses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_government_responses (
+    id integer NOT NULL,
+    petition_id integer,
+    summary character varying(500) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: archived_government_responses_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_government_responses_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_government_responses_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_government_responses_id_seq OWNED BY archived_government_responses.id;
+
+
+--
+-- Name: archived_notes; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_notes (
+    id integer NOT NULL,
+    petition_id integer,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: archived_notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_notes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_notes_id_seq OWNED BY archived_notes.id;
+
+
+--
+-- Name: archived_petition_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_petition_emails (
+    id integer NOT NULL,
+    petition_id integer,
+    subject character varying NOT NULL,
+    body text,
+    sent_by character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: archived_petition_emails_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_petition_emails_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_petition_emails_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_petition_emails_id_seq OWNED BY archived_petition_emails.id;
+
+
+--
 -- Name: archived_petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -91,7 +230,21 @@ CREATE TABLE archived_petitions (
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    parliament_id integer
+    parliament_id integer,
+    action character varying(255),
+    background character varying(300),
+    additional_details text,
+    government_response_at timestamp without time zone,
+    scheduled_debate_date date,
+    last_signed_at timestamp without time zone,
+    response_threshold_reached_at timestamp without time zone,
+    debate_threshold_reached_at timestamp without time zone,
+    rejected_at timestamp without time zone,
+    debate_outcome_at timestamp without time zone,
+    moderation_threshold_reached_at timestamp without time zone,
+    debate_state character varying(30),
+    stopped_at timestamp without time zone,
+    special_consideration boolean
 );
 
 
@@ -112,6 +265,92 @@ CREATE SEQUENCE archived_petitions_id_seq
 --
 
 ALTER SEQUENCE archived_petitions_id_seq OWNED BY archived_petitions.id;
+
+
+--
+-- Name: archived_rejections; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_rejections (
+    id integer NOT NULL,
+    petition_id integer,
+    code character varying(50) NOT NULL,
+    details text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: archived_rejections_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_rejections_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_rejections_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_rejections_id_seq OWNED BY archived_rejections.id;
+
+
+--
+-- Name: archived_signatures; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE archived_signatures (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    state character varying(20) DEFAULT 'pending'::character varying NOT NULL,
+    perishable_token character varying(255),
+    postcode character varying(255),
+    ip_address character varying(20),
+    petition_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
+    notify_by_email boolean DEFAULT true,
+    email character varying(255),
+    unsubscribe_token character varying,
+    constituency_id character varying,
+    validated_at timestamp without time zone,
+    number integer,
+    seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
+    location_code character varying(30),
+    invalidated_at timestamp without time zone,
+    invalidation_id integer,
+    government_response_email_at timestamp without time zone,
+    debate_scheduled_email_at timestamp without time zone,
+    debate_outcome_email_at timestamp without time zone,
+    petition_email_at timestamp without time zone,
+    uuid uuid,
+    creator boolean DEFAULT false NOT NULL,
+    sponsor boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: archived_signatures_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE archived_signatures_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: archived_signatures_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE archived_signatures_id_seq OWNED BY archived_signatures.id;
 
 
 --
@@ -895,7 +1134,49 @@ ALTER TABLE ONLY admin_users ALTER COLUMN id SET DEFAULT nextval('admin_users_id
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY archived_debate_outcomes ALTER COLUMN id SET DEFAULT nextval('archived_debate_outcomes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_government_responses ALTER COLUMN id SET DEFAULT nextval('archived_government_responses_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_notes ALTER COLUMN id SET DEFAULT nextval('archived_notes_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_petition_emails ALTER COLUMN id SET DEFAULT nextval('archived_petition_emails_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY archived_petitions ALTER COLUMN id SET DEFAULT nextval('archived_petitions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_rejections ALTER COLUMN id SET DEFAULT nextval('archived_rejections_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_signatures ALTER COLUMN id SET DEFAULT nextval('archived_signatures_id_seq'::regclass);
 
 
 --
@@ -1047,11 +1328,59 @@ ALTER TABLE ONLY admin_users
 
 
 --
+-- Name: archived_debate_outcomes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_debate_outcomes
+    ADD CONSTRAINT archived_debate_outcomes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_government_responses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_government_responses
+    ADD CONSTRAINT archived_government_responses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_notes
+    ADD CONSTRAINT archived_notes_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_petition_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_petition_emails
+    ADD CONSTRAINT archived_petition_emails_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: archived_petitions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
 ALTER TABLE ONLY archived_petitions
     ADD CONSTRAINT archived_petitions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_rejections_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_rejections
+    ADD CONSTRAINT archived_rejections_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_signatures_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY archived_signatures
+    ADD CONSTRAINT archived_signatures_pkey PRIMARY KEY (id);
 
 
 --
@@ -1264,6 +1593,55 @@ CREATE INDEX index_admin_users_on_last_name_and_first_name ON admin_users USING 
 
 
 --
+-- Name: index_archived_debate_outcomes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_archived_debate_outcomes_on_petition_id ON archived_debate_outcomes USING btree (petition_id);
+
+
+--
+-- Name: index_archived_debate_outcomes_on_petition_id_and_debated_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_debate_outcomes_on_petition_id_and_debated_on ON archived_debate_outcomes USING btree (petition_id, debated_on);
+
+
+--
+-- Name: index_archived_debate_outcomes_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_debate_outcomes_on_updated_at ON archived_debate_outcomes USING btree (updated_at);
+
+
+--
+-- Name: index_archived_government_responses_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_archived_government_responses_on_petition_id ON archived_government_responses USING btree (petition_id);
+
+
+--
+-- Name: index_archived_government_responses_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_government_responses_on_updated_at ON archived_government_responses USING btree (updated_at);
+
+
+--
+-- Name: index_archived_notes_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_archived_notes_on_petition_id ON archived_notes USING btree (petition_id);
+
+
+--
+-- Name: index_archived_petition_emails_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petition_emails_on_petition_id ON archived_petition_emails USING btree (petition_id);
+
+
+--
 -- Name: index_archived_petitions_on_description; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1296,6 +1674,104 @@ CREATE INDEX index_archived_petitions_on_state_and_closed_at ON archived_petitio
 --
 
 CREATE INDEX index_archived_petitions_on_title ON archived_petitions USING gin (to_tsvector('english'::regconfig, (title)::text));
+
+
+--
+-- Name: index_archived_rejections_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_archived_rejections_on_petition_id ON archived_rejections USING btree (petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_constituency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_constituency_id ON archived_signatures USING btree (constituency_id);
+
+
+--
+-- Name: index_archived_signatures_on_creation_ip_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_creation_ip_and_petition_id ON archived_signatures USING btree (created_at, ip_address, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_creator_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_creator_and_petition_id ON archived_signatures USING btree (creator, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_archived_signatures_on_email_and_petition_id_and_name ON archived_signatures USING btree (email, petition_id, name);
+
+
+--
+-- Name: index_archived_signatures_on_invalidation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_invalidation_id ON archived_signatures USING btree (invalidation_id);
+
+
+--
+-- Name: index_archived_signatures_on_ip_address_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_ip_address_and_petition_id ON archived_signatures USING btree (ip_address, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_petition_id ON archived_signatures USING btree (petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_petition_id_and_location_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_petition_id_and_location_code ON archived_signatures USING btree (petition_id, location_code);
+
+
+--
+-- Name: index_archived_signatures_on_sponsor_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_sponsor_and_petition_id ON archived_signatures USING btree (sponsor, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_state_and_petition_id ON archived_signatures USING btree (state, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_updated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_updated_at ON archived_signatures USING btree (updated_at);
+
+
+--
+-- Name: index_archived_signatures_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_uuid ON archived_signatures USING btree (uuid);
+
+
+--
+-- Name: index_archived_signatures_on_validated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_validated_at ON archived_signatures USING btree (validated_at);
 
 
 --
@@ -1622,11 +2098,27 @@ ALTER TABLE ONLY government_responses
 
 
 --
+-- Name: fk_rails_388e94fd73; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_petition_emails
+    ADD CONSTRAINT fk_rails_388e94fd73 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_38c9c83a88; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY sponsors
     ADD CONSTRAINT fk_rails_38c9c83a88 FOREIGN KEY (signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_39cbbc815d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_signatures
+    ADD CONSTRAINT fk_rails_39cbbc815d FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -1662,6 +2154,22 @@ ALTER TABLE ONLY petitions
 
 
 --
+-- Name: fk_rails_696590b5b6; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_government_responses
+    ADD CONSTRAINT fk_rails_696590b5b6 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_81c5c409a1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_debate_outcomes
+    ADD CONSTRAINT fk_rails_81c5c409a1 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_82ffb00060; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1678,6 +2186,14 @@ ALTER TABLE ONLY email_requested_receipts
 
 
 --
+-- Name: fk_rails_9621060128; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_notes
+    ADD CONSTRAINT fk_rails_9621060128 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
+
+
+--
 -- Name: fk_rails_978050318c; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -1691,6 +2207,14 @@ ALTER TABLE ONLY archived_petitions
 
 ALTER TABLE ONLY petition_emails
     ADD CONSTRAINT fk_rails_9f55aacb99 FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: fk_rails_b6266f73f1; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY archived_rejections
+    ADD CONSTRAINT fk_rails_b6266f73f1 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -1918,6 +2442,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170611131130');
 INSERT INTO schema_migrations (version) VALUES ('20170611190354');
 
 INSERT INTO schema_migrations (version) VALUES ('20170612120307');
+
+INSERT INTO schema_migrations (version) VALUES ('20170612144648');
 
 INSERT INTO schema_migrations (version) VALUES ('20170615133536');
 
