@@ -108,7 +108,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       describe "when a 'q' param is present" do
-        it "passes in the q param to perform a search for" do
+        it "passes in the q param to perform a search" do
           expect(Petition).to receive(:search).with(hash_including(q: 'lorem')).and_return Petition.none
           get :index, q: 'lorem'
         end
@@ -119,86 +119,24 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       describe "when a 'search_type' param is present" do
-        context "and search_type is tag" do
-          context "but query is empty" do
-            it "fetches all petitions" do
-              expect(Petition).to receive(:search).with(hash_including(count: 50)).and_return Petition.none
-              expect(Petition).not_to receive(:tagged_with)
-              get :index, search_type: 'tag'
-            end
-
-            it "passes in the search_type param when searching all petitions" do
-              expect(Petition).to receive(:search).with(hash_including(search_type: 'tag')).and_return Petition.none
-              get :index, search_type: 'tag'
-            end
-
-            it "passes on pagination params when searching within all petitions" do
-              expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-              get :index, search_type: 'tag', page: '3'
-            end
-
-            it "passes on tag_filters params when searching within all petitions" do
-              expect(Petition).to receive(:search).with(hash_including(tag_filters: ['tag 10'])).and_return Petition.none
-              get :index, search_type: 'tag', tag_filters: ["tag 10"]
-            end
-
-            it "passes on state params when searching within tagged petitions" do
-              expect(Petition).to receive(:search).with(hash_including(state: "open")).and_return Petition.none
-              get :index, search_type: 'tag', state: :open
-            end
-          end
-
-          context "query exists" do
-            let(:tagged_petitions) { double('tagged_petitions_relation') }
-            let(:tag_query) { "tag query" }
-
-            before do
-              allow(Petition).to receive(:tagged_with).with(tag_query).and_return tagged_petitions
-            end
-
-            it "filters all petitions by individual tag" do
-              expect(Petition).to receive(:tagged_with).with(tag_query)
-              allow(tagged_petitions).to receive(:search)
-              get :index, q: tag_query, search_type: 'tag'
-            end
-
-            it "does not pass query param when searching within tagged petitions" do
-              expect(tagged_petitions).to receive(:search).with(hash_not_including(q: tag_query))
-              get :index, q: tag_query, search_type: 'tag'
-            end
-
-            it "passes in the search_type param when searching within tagged petitions" do
-              expect(tagged_petitions).to receive(:search).with(hash_including(search_type: 'tag')).and_return Petition.none
-              get :index, q: tag_query, search_type: 'tag'
-            end
-
-            it "passes on pagination params when searching within tagged petitions" do
-              expect(tagged_petitions).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-              get :index, q: tag_query, search_type: 'tag', page: '3'
-            end
-
-            it "passes on tag_filters params when searching within tagged petitions" do
-              expect(tagged_petitions).to receive(:search).with(hash_including(tag_filters: ['tag 10'])).and_return Petition.none
-              get :index, q: tag_query, search_type: 'tag', tag_filters: ["tag 10"]
-            end
-
-            it "passes on state params when searching within tagged petitions" do
-              expect(tagged_petitions).to receive(:search).with(hash_including(state: "open")).and_return Petition.none
-              get :index, q: tag_query, search_type: 'tag', state: "open"
-            end
-          end
+        it "passes in the search_type param" do
+          expect(Petition).to receive(:search).with(hash_including(search_type: 'tag')).and_return Petition.none
+          get :index, search_type: 'tag'
         end
+        it "passes on pagination params" do
+          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
+          get :index, search_type: 'tag', page: '3'
+        end
+      end
 
-        context "search_type is keyword" do
-          it "passes in the search_type param to perform a search for" do
-            expect(Petition).to receive(:search).with(hash_including(search_type: 'keyword')).and_return Petition.none
-            get :index, search_type: 'keyword'
-          end
-
-          it "passes on pagination params" do
-            expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-            get :index, search_type: 'keyword', page: '3'
-          end
+      describe "when a 'tag_filters' param is present" do
+        it "passes in the tag_filters param" do
+          expect(Petition).to receive(:search).with(hash_including(tag_filters: ['tag'])).and_return Petition.none
+          get :index, tag_filters: ['tag']
+        end
+        it "passes on pagination params" do
+          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
+          get :index, tag_filters: ['tag'], page: '3'
         end
       end
 

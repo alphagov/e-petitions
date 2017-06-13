@@ -1,7 +1,7 @@
 class Admin::SearchesController < Admin::AdminController
-  before_action :set_query, :set_search_type, :set_tag_filters
-
   def show
+    set_search_params
+
     if signature_search?
       perform_signature_search
     elsif find_petition_by_id?
@@ -13,16 +13,10 @@ class Admin::SearchesController < Admin::AdminController
 
   private
 
-  def set_query
-    @query ||= params.fetch(:q, '')
-  end
-
-  def set_search_type
-    @search_type ||= params.fetch(:search_type, "keyword")
-  end
-
-  def set_tag_filters
-    @tag_filters ||= params.fetch(:tag_filters, [])
+  def set_search_params
+    @query = params.fetch(:q, '')
+    @search_type = params.fetch(:search_type, "keyword")
+    @tag_filters = params.fetch(:tag_filters, [])
   end
 
   def find_petition_by_id

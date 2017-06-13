@@ -650,36 +650,6 @@ RSpec.describe Petition, type: :model do
         expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an ActiveRecord::Relation
       end
     end
-
-    describe 'tagged_with' do
-      let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3\nuppercase tag\ntag 1 tag 2") }
-
-      before do
-        set_site_settings
-      end
-
-      let!(:petition_1)    { FactoryGirl.create(:petition, tags: ["tag 1", "tag 2", "tag 3"]) }
-      let!(:petition_2)    { FactoryGirl.create(:petition, tags: ["tag 1"]) }
-      let!(:petition_3)    { FactoryGirl.create(:petition, tags: ["tag 2"]) }
-      let!(:petition_4)    { FactoryGirl.create(:petition, tags: ["tag 1", "tag 2", "UpPErCAsE TAG"]) }
-      let!(:petition_5)    { FactoryGirl.create(:petition, tags: ["tag 1 tag 2"]) }
-
-      it 'fetches petitions with the supplied tag in tags array' do
-        found_petitions = Petition.tagged_with("tag 1")
-        expect(found_petitions).to include(petition_1, petition_2, petition_4)
-        expect(found_petitions).not_to include(petition_3)
-      end
-
-      it 'is case-insensitive' do
-        expect(Petition.tagged_with("UPPERCASE TAG")).to include(petition_4)
-        expect(Petition.tagged_with("uppercase tag")).to include(petition_4)
-      end
-
-      it 'assumes spaces are a single tag with a space in it, not searches for multiple tags' do
-        petitions = Petition.tagged_with('tag 1 tag 2')
-        expect(petitions).to include petition_5
-      end
-    end
   end
 
   describe "#tags=" do

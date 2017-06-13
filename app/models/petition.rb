@@ -326,10 +326,6 @@ class Petition < ActiveRecord::Base
       popular_in(constituency_id, count).for_state(PUBLISHED_STATES)
     end
 
-    def tagged_with(tag)
-      where("'#{tag.downcase}' = ANY (array_lowercase(tags))")
-    end
-
     def in_need_of_marking_as_debated(date = Date.current)
       where(scheduled_debate_state.and(debate_date_in_the_past(date)))
     end

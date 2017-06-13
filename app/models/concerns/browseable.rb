@@ -105,6 +105,10 @@ module Browseable
       @filters ||= Filters.new(klass, params)
     end
 
+    def tag_filter(records)
+      @tag_filter ||= TagFilter.new(records, params)
+    end
+
     def first_page?
       current_page <= 1
     end
@@ -118,7 +122,11 @@ module Browseable
     end
 
     def query
-      @query ||= params[:q].to_s
+      @query ||= params.fetch(:q, '')
+    end
+
+    def search_type
+      @search_type ||= params.fetch(:search_type, 'keyword')
     end
 
     def page_size
@@ -141,8 +149,12 @@ module Browseable
       scope != :all
     end
 
-    def search?
-      query.present?
+    def tag_search?
+      query.present? && search_type == "tag"
+    end
+
+    def keyword_search?
+      query.present? && search_type == "keyword"
     end
 
     def to_a
@@ -170,6 +182,10 @@ module Browseable
       klass.klass
     end
 
+    def relation_is_filterable?(relation)
+      relation.respond_to?(:taggable?) && relation.taggable?
+    end
+
     private
 
     def new_params(page)
@@ -190,7 +206,11 @@ module Browseable
     end
 
     def execute_search
-      if search?
+      if tag_search?
+        relation = klass.with_tag(query)
+        relation = relation.except(:select).select(star)
+        relation = relation.except(:order)
+      elsif keyword_search?
         relation = klass.basic_search(query)
         relation = relation.except(:select).select(star)
         relation = relation.except(:order)
@@ -198,11 +218,34 @@ module Browseable
         relation = klass
       end
 
+      if relation_is_filterable?(relation)
+        relation = tag_filter(relation).by_all_tags
+      end
+
       relation.instance_exec(&klass.facet_definitions[scope])
     end
 
     def star
       klass.arel_table[Arel.star]
+    end
+  end
+
+  class TagFilter
+    class ClassNotFilterableError < RuntimeError; end
+
+    attr_reader :relation, :tag_filters
+
+    def initialize(relation, params)
+      raise ClassNotFilterableError, "#{relation.class} does not implement Taggable." unless relation.respond_to?(:taggable?)
+
+      @relation = relation
+      @tag_filters = params.fetch(:tag_filters, [])
+    end
+
+    def by_all_tags
+      return relation if tag_filters.blank?
+
+      relation.with_all_tags(tag_filters)
     end
   end
 

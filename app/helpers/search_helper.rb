@@ -17,7 +17,7 @@ module SearchHelper
 
   def filtered_petition_count(petitions)
     total_entries = petitions.total_entries
-    noun = petitions.search? ? 'result' : 'petition'
+    noun = petitions.keyword_search? ? 'result' : 'petition'
     "#{number_with_delimiter(total_entries)} #{noun.pluralize(total_entries)}"
   end
 
