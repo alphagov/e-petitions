@@ -9,6 +9,11 @@
     <%= form_tag admin_petitions_path, :method => :get do -%>
       <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
       <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control", data: {autosubmit: true} %>
+      <%= hidden_field_tag :q, @query %>
+      <%= hidden_field_tag :search_type, @search_type %>
+      <% unless @tag_filters.blank? %>
+        <%= hidden_field_tag "tag_filters[]", @tag_filters %>
+      <% end %>
       <%= submit_tag "Go", name: nil, class: "button" %>
     <% end -%>
   </div>

@@ -243,9 +243,15 @@ module Browseable
     end
 
     def by_all_tags
-      return relation if tag_filters.blank?
+      return relation if tag_filters_blank?
 
       relation.with_all_tags(tag_filters)
+    end
+
+    private
+
+    def tag_filters_blank?
+      tag_filters.reject { |tag| tag == "" }.blank?
     end
   end
 
