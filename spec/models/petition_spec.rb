@@ -39,6 +39,10 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  it "is taggable" do
+    expect(Petition.taggable?).to eq true
+  end
+
   def set_site_settings
     allow(Admin::Site).to receive(:first).and_return site_settings
   end
@@ -711,19 +715,6 @@ RSpec.describe Petition, type: :model do
       it "does not attempt to remove empty strings" do
         expect{ petition.tags = nil }.not_to raise_error
       end
-    end
-  end
-
-  describe "#tags_for_comparison" do
-    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2\ntag 3") }
-
-    before do
-      set_site_settings
-    end
-
-    it "returns the petition tags in lower case so that they can be compared with allowed tags" do
-      petition = Petition.create(tags: ["TAG 1", "TaG 2", "tag 3"])
-      expect(petition.tags_for_comparison).to eq ["tag 1", "tag 2", "tag 3"]
     end
   end
 

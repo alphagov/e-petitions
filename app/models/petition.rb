@@ -38,6 +38,7 @@ class Petition < ActiveRecord::Base
 
   extend Searchable(:action, :background, :additional_details)
   include Browseable
+  include Taggable
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -726,10 +727,6 @@ class Petition < ActiveRecord::Base
 
     tags = tags.reject(&:blank?) unless tags.blank?
     super
-  end
-
-  def tags_for_comparison
-    tags.map(&:downcase)
   end
 
   def tags_must_be_allowed
