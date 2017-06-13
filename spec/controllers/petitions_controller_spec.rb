@@ -15,7 +15,7 @@ RSpec.describe PetitionsController, type: :controller do
 
     it "fills in the action if given as petition_action" do
       action = "my fancy new action"
-      get :new, :petition_action => action
+      get :new, params: { petition_action: action }
       expect(assigns[:stage_manager].petition.action).to eq action
     end
 
@@ -64,7 +64,7 @@ RSpec.describe PetitionsController, type: :controller do
       allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
 
       perform_enqueued_jobs do
-        post :create, params
+        post :create, params: params
       end
     end
 
@@ -232,7 +232,7 @@ RSpec.describe PetitionsController, type: :controller do
       end
 
       it "redirects to the home page" do
-        post :create, petition: {}
+        post :create, params: { petition: {} }
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
     end
@@ -247,14 +247,14 @@ RSpec.describe PetitionsController, type: :controller do
       allow(petition).to receive(:moderated?).and_return(true)
       allow(Petition).to receive_message_chain(:show, :find => petition)
 
-      get :show, :id => 1
+      get :show, params: { id: 1 }
       expect(assigns(:petition)).to eq(petition)
     end
 
     it "does not allow hidden petitions to be shown" do
       expect {
         allow(Petition).to receive_message_chain(:visible, :find).and_raise ActiveRecord::RecordNotFound
-        get :show, :id => 1
+        get :show, params: { id: 1 }
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
@@ -265,7 +265,7 @@ RSpec.describe PetitionsController, type: :controller do
       allow(petition).to receive(:moderated?).and_return(false)
       allow(Petition).to receive_message_chain(:show, find: petition)
 
-      get :show, id: 1
+      get :show, params: { id: 1 }
       expect(response).to redirect_to "https://petition.parliament.uk/"
     end
   end
@@ -286,24 +286,24 @@ RSpec.describe PetitionsController, type: :controller do
     context 'when a state param is provided' do
       context 'but it is not a public facet from the locale file' do
         it 'redirects to itself with state=all' do
-          get :index, state: 'awaiting_monkey'
+          get :index, params: {  state: 'awaiting_monkey' }
           expect(response).to redirect_to 'https://petition.parliament.uk/petitions?state=all'
         end
 
         it 'preserves other params when it redirects' do
-          get :index, q: 'what is clocks', state: 'awaiting_monkey'
+          get :index, params: { q: 'what is clocks', state: 'awaiting_monkey' }
           expect(response).to redirect_to 'https://petition.parliament.uk/petitions?q=what+is+clocks&state=all'
         end
       end
 
       context 'and it is a public facet from the locale file' do
         it 'is successful' do
-          get :index, state: 'open'
+          get :index, params: { state: 'open' }
           expect(response).to be_success
         end
 
         it "exposes a search scoped to the state param" do
-          get :index, state: 'open'
+          get :index, params: { state: 'open' }
           expect(assigns(:petitions).scope).to eq :open
         end
       end
@@ -330,7 +330,7 @@ RSpec.describe PetitionsController, type: :controller do
 
   describe "GET #check_results" do
     it "is successful" do
-      get :check_results, q: "action"
+      get :check_results, params: { q: "action" }
       expect(response).to be_success
     end
 
@@ -340,7 +340,7 @@ RSpec.describe PetitionsController, type: :controller do
       end
 
       it "redirects to the home page" do
-        get :check_results, q: "action"
+        get :check_results, params: { q: "action" }
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
     end

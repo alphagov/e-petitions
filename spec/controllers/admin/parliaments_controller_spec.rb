@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
   context "when not logged in" do
     [
-      ["GET", "/admin/parliament", :show, {}],
-      ["PATCH", "/admin/parliament", :update, {}]
-    ].each do |method, path, action, params|
+      ["GET", "/admin/parliament", :show],
+      ["PATCH", "/admin/parliament", :update]
+    ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -23,12 +23,12 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
     before { login_as(moderator) }
 
     [
-      ["GET", "/admin/parliament", :show, {}],
-      ["PATCH", "/admin/parliament", :update, {}]
-    ].each do |method, path, action, params|
+      ["GET", "/admin/parliament", :show],
+      ["PATCH", "/admin/parliament", :update]
+    ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -58,7 +58,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       let(:parliament) { FactoryGirl.create(:parliament) }
 
       context "when clicking the Save button" do
-        before { patch :update, parliament: params, commit: "Save" }
+        before { patch :update, params: { parliament: params, commit: "Save" } }
 
         context "and the params are invalid" do
           let :params do
@@ -104,7 +104,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the Email Creators button" do
-        before { patch :update, parliament: params, email_creators: "Email Creators" }
+        before { patch :update, params: { parliament: params, email_creators: "Email Creators" } }
 
         context "and the params are invalid" do
           let :params do
@@ -183,7 +183,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the Schedule Closure button" do
-        before { patch :update, parliament: params, schedule_closure: "Schedule Closure" }
+        before { patch :update, params: {  parliament: params, schedule_closure: "Schedule Closure" } }
 
         context "and the params are invalid" do
           let :params do

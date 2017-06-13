@@ -14,7 +14,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     describe "GET 'show'" do
       it "redirects to the login page" do
-        get :show, :id => petition.id
+        get :show, params: { id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -28,7 +28,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     it "redirects to edit profile page" do
       expect(@user.has_to_change_password?).to be_truthy
-      get :show, :id => petition.id
+      get :show, params: { id: petition.id }
       expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{@user.id}/edit")
     end
   end
@@ -51,27 +51,27 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         describe "response headers" do
           it "responds with csv file headers" do
             travel_to "2015-08-21 05:00:00 UTC" do
-              get :index, format: 'csv'
+              get :index, params: { format: 'csv' }
               expect(response.headers["Content-Type"]).to eq("text/csv")
               expect(response.headers["Content-disposition"]).to eq("attachment; filename=all-petitions-20150821060000.csv")
             end
           end
 
           it "responds with steaming file headers" do
-            get :index, format: 'csv'
+            get :index, params: { format: 'csv' }
             expect(response.headers["X-Accel-Buffering"]).to eq("no")
             expect(response.headers["Cache-Control"]).to include("no-cache")
           end
 
           it "does not set a Content-Length headers" do
-            get :index, format: 'csv'
+            get :index, params: { format: 'csv' }
             expect(response.headers).not_to have_key("Content-Length")
           end
         end
 
         it "wraps the list of petitions in a PetitionsCSVPresenter" do
           expect(PetitionsCSVPresenter).to receive(:new).with([]).and_call_original
-          get :index, format: 'csv'
+          get :index, params: { format: 'csv' }
         end
 
         it "sets the enumerated csv file as the response_body" do
@@ -83,7 +83,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
           expect(controller).to receive(:response_body=).with(enumerator).and_call_original
 
-          get :index, format: 'csv'
+          get :index, params: { format: 'csv' }
           expect(response).to be_success
         end
       end
@@ -95,18 +95,18 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
         it "passes on pagination params" do
           expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, page: '3'
+          get :index, params: { page: '3' }
         end
       end
 
       describe "when a 'q' param is present" do
         it "passes in the q param to perform a search for" do
           expect(Petition).to receive(:search).with(hash_including(q: 'lorem')).and_return Petition.none
-          get :index, q: 'lorem'
+          get :index, params: { q: 'lorem' }
         end
         it "passes on pagination params" do
           expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, q: 'lorem', page: '3'
+          get :index, params: { q: 'lorem', page: '3' }
         end
       end
 
@@ -114,25 +114,25 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         let(:petition_scope) { Petition.none }
         it "uses the t param to find tagged petitions" do
           expect(Petition).to receive(:tagged_with).with('a tag').and_return petition_scope
-          get :index, t: 'a tag'
+          get :index, params: { t: 'a tag' }
         end
         it "passes on pagination params" do
           allow(Petition).to receive(:tagged_with).and_return petition_scope
           expect(petition_scope).to receive(:search).with(page: '3', per_page: 50).and_return petition_scope
-          get :index, t: 'a tag', page: '3'
+          get :index, params: { t: 'a tag', page: '3' }
         end
         context 'and `q` is also present' do
           it 'does a search, not a tagged filter' do
             expect(Petition).to receive(:search)
             expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', q: 'lorem'
+            get :index, params: { t: 'a tag', q: 'lorem' }
           end
         end
         context 'and `state` is also present' do
           it 'does a search, not a tagged filter' do
             expect(Petition).to receive(:search)
             expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', state: 'open'
+            get :index, params: { t: 'a tag', state: 'open' }
           end
         end
       end
@@ -140,23 +140,23 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       describe 'when a `state` param is present' do
         it "passes in the state param to perform a search for" do
           expect(Petition).to receive(:search).with(hash_including(state: 'open')).and_return Petition.none
-          get :index, state: 'open'
+          get :index, params: { state: 'open' }
         end
         it "passes on pagination params" do
           expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, state: 'open', page: '3'
+          get :index, params: { state: 'open', page: '3' }
         end
       end
     end
 
     describe "GET 'show'" do
       it "assigns petition successfully" do
-        get :show, id: petition.id
+        get :show, params: { id: petition.id }
         expect(assigns(:petition)).to eq(petition)
       end
 
       it "responds successfully" do
-        get :show, id: petition.id
+        get :show, params: { id: petition.id }
         expect(response).to be_success
         expect(response).to render_template('admin/petitions/show')
       end

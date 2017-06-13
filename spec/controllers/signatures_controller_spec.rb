@@ -17,20 +17,20 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "redirects to the petition signed page" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(assigns[:signature]).to eq(signature)
         expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed?token=#{signature.perishable_token}")
       end
 
       it "raises exception if id not found" do
         expect do
-          get :verify, :id => signature.id + 1, :token => signature.perishable_token
+          get :verify, params: { id: signature.id + 1, token: signature.perishable_token }
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "raises exception if token not found" do
         expect do
-          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
+          get :verify, params: { id: signature.id, token: "#{signature.perishable_token}a" }
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -47,28 +47,28 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "redirects to the petition sponsored page" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(assigns[:signature]).to eq(signature)
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/sponsored")
       end
 
       it "sets petition state to validated" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(petition.reload.state).to eq(Petition::VALIDATED_STATE)
       end
 
       it "sets state to validated" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(signature.reload.state).to eq(Signature::VALIDATED_STATE)
       end
 
       it "sets petition creator signature state to validated" do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(petition.creator_signature.reload.state).to eq(Signature::VALIDATED_STATE)
       end
 
       it 'sends email notification to the petition creator' do
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         email = ActionMailer::Base.deliveries.last
         expect(email.to).to eq([petition.creator_signature.email])
       end
@@ -76,18 +76,18 @@ RSpec.describe SignaturesController, type: :controller do
       it 'updates petition sponsored state' do
         allow(Signature).to receive(:find).with(signature.to_param).and_return signature
         allow(signature).to receive(:petition).and_return petition
-        get :verify, :id => signature.id, :token => signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
       end
 
       it "raises exception if id not found" do
         expect do
-          get :verify, :id => signature.id + 1, :token => signature.perishable_token
+          get :verify, params: { id: signature.id + 1, token: signature.perishable_token }
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "raises exception if token not found" do
         expect do
-          get :verify, :id => signature.id, :token => "#{signature.perishable_token}a"
+          get :verify, params: { id: signature.id, token: "#{signature.perishable_token}a" }
         end.to raise_error(ActiveRecord::RecordNotFound)
       end
 
@@ -99,14 +99,14 @@ RSpec.describe SignaturesController, type: :controller do
         end
 
         it "redirects to the petition signed page" do
-          get :verify, :id => signature.id, :token => signature.perishable_token
+          get :verify, params: { id: signature.id, token: signature.perishable_token }
           expect(assigns[:signature]).to eq(signature)
           expect(response).to redirect_to("https://petition.parliament.uk/signatures/#{signature.to_param}/signed?token=#{signature.perishable_token}")
         end
 
         it "does not send an email to the creator" do
           perform_enqueued_jobs do
-            get :verify, :id => signature.id, :token => signature.perishable_token
+            get :verify, params: { id: signature.id, token: signature.perishable_token }
             expect(ActionMailer::Base.deliveries).to be_empty
           end
         end
@@ -118,7 +118,7 @@ RSpec.describe SignaturesController, type: :controller do
       let(:signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
 
       it "redirects to the petition page" do
-        get :verify, id: signature.id, token: signature.perishable_token
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}")
       end
     end
@@ -129,7 +129,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :verify, id: signature.id, token: signature.perishable_token
+          get :verify, params: { id: signature.id, token: signature.perishable_token }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -140,7 +140,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :verify, id: signature.id, token: signature.perishable_token
+          get :verify, params: { id: signature.id, token: signature.perishable_token }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -150,7 +150,7 @@ RSpec.describe SignaturesController, type: :controller do
     let(:petition) { FactoryGirl.create(:petition) }
 
     def make_signed_request(token = nil)
-      get :signed, id: signature.to_param, token: (token || signature.perishable_token)
+      get :signed, params: { id: signature.to_param, token: (token || signature.perishable_token) }
     end
 
     context 'for validated signatures' do
@@ -218,7 +218,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :signed, id: signature.id, token: signature.perishable_token
+          get :signed, params: { id: signature.id, token: signature.perishable_token }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -229,7 +229,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :signed, id: signature.id, token: signature.perishable_token
+          get :signed, params: { id: signature.id, token: signature.perishable_token }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -245,33 +245,33 @@ RSpec.describe SignaturesController, type: :controller do
     end
 
     it "assigns a new signature with the given petition" do
-      get :new, :petition_id => 1
+      get :new, params: { petition_id: 1 }
       expect(assigns(:stage_manager).signature.petition).to eq(petition)
     end
 
     it "sets the location code to be GB" do
-      get :new, :petition_id => 1
+      get :new, params: { petition_id: 1 }
       expect(assigns(:stage_manager).signature.location_code).to eq 'GB'
     end
 
     it "finds the given petition" do
-      get :new, :petition_id => 1
+      get :new, params: { petition_id: 1 }
       expect(assigns(:petition)).to eq petition
     end
 
     it "raises if petition id is not supplied" do
       allow(Petition).to receive(:find).with("").and_raise(ActiveRecord::RecordNotFound)
-      expect { get :new, :petition_id => ""}.to raise_error(ActiveRecord::RecordNotFound)
+      expect { get :new, params: { petition_id: ""} }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "does not show if the petition is not open" do
       allow(Petition).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
       expect(Petition).to receive(:visible).and_return(Petition)
-      expect { get :new, :petition_id => 1 }.to raise_error(ActiveRecord::RecordNotFound)
+      expect { get :new, params: { petition_id: 1 } }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'sets the stage to "signer"' do
-      get :new, :petition_id => 1
+      get :new, params: { petition_id: 1 }
       expect(assigns(:stage_manager).stage).to eq 'signer'
     end
 
@@ -279,7 +279,7 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryGirl.create(:closed_petition) }
 
       it "redirects to the petition page" do
-        get :new, petition_id: 1
+        get :new, params: { petition_id: 1 }
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/1")
       end
     end
@@ -315,7 +315,7 @@ RSpec.describe SignaturesController, type: :controller do
       allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
 
       perform_enqueued_jobs do
-        post :create, params
+        post :create, params: params
       end
     end
 
@@ -518,7 +518,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "renders the action template" do
-        get :unsubscribe, id: "1", token: "token"
+        get :unsubscribe, params: { id: "1", token: "token" }
         expect(response.body).to render_template(:unsubscribe)
       end
     end
@@ -530,7 +530,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound error" do
         expect {
-          get :unsubscribe, id: "1", token: "token"
+          get :unsubscribe, params: { id: "1", token: "token" }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -542,7 +542,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound error" do
         expect {
-          get :unsubscribe, id: "1", token: "token"
+          get :unsubscribe, params: { id: "1", token: "token" }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

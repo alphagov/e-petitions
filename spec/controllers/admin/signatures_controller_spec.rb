@@ -7,7 +7,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
   context "not logged in" do
     describe "DELETE /admin/signatures/:id" do
       it "redirects to the login page" do
-        delete :destroy, id: signature.id
+        delete :destroy, params: { id: signature.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -19,7 +19,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
     describe "DELETE /admin/signatures/:id" do
       it "redirects to edit profile page" do
-        delete :destroy, id: signature.id
+        delete :destroy, params: { id: signature.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -34,7 +34,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
       context "when the signature is validated" do
         before do
           expect(signature).to receive(:validate!).and_return(true)
-          post :validate, id: signature.id, q: "user@example.com"
+          post :validate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -52,7 +52,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(signature).to receive(:validate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :validate, id: signature.id, q: "user@example.com"
+          post :validate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -69,7 +69,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
       context "when the signature is validated" do
         before do
           expect(signature).to receive(:invalidate!).and_return(true)
-          post :invalidate, id: signature.id, q: "user@example.com"
+          post :invalidate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -87,7 +87,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(signature).to receive(:invalidate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :invalidate, id: signature.id, q: "user@example.com"
+          post :invalidate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -104,7 +104,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
       context "when the signature is destroyed" do
         before do
           expect(signature).to receive(:destroy).and_return(true)
-          delete :destroy, id: signature.id, q: "user@example.com"
+          delete :destroy, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -119,7 +119,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
       context "when the signature is not destroyed" do
         before do
           expect(signature).to receive(:destroy).and_return(false)
-          delete :destroy, id: signature.id, q: "user@example.com"
+          delete :destroy, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do

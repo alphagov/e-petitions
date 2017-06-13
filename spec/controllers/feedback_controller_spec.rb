@@ -11,7 +11,7 @@ RSpec.describe FeedbackController, type: :controller do
   describe "POST /feedback" do
     def do_post(attributes = {})
       perform_enqueued_jobs do
-        post :create, feedback: attributes
+        post :create, params: { feedback: attributes }
       end
     end
 
