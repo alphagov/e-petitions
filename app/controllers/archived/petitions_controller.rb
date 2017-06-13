@@ -41,7 +41,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petition
-    @petition = ArchivedPetition.find(params[:id])
+    @petition = Archived::Petition.find(params[:id])
     @parliament = @petition.parliament
   end
 

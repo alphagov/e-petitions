@@ -19,7 +19,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "associations" do
-    it { is_expected.to have_many(:petitions).inverse_of(:parliament).class_name("ArchivedPetition") }
+    it { is_expected.to have_many(:petitions).inverse_of(:parliament).class_name("Archived::Petition") }
   end
 
   describe "callbacks" do

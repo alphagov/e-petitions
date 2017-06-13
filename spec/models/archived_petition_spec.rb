@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ArchivedPetition, type: :model do
+RSpec.describe Archived::Petition, type: :model do
   subject(:petition){ described_class.new }
 
   describe "associations" do
@@ -27,15 +27,15 @@ RSpec.describe ArchivedPetition, type: :model do
     end
 
     it "searches based upon title" do
-      expect(ArchivedPetition.search(q: "Wombles")).to include(petition_1)
+      expect(Archived::Petition.search(q: "Wombles")).to include(petition_1)
     end
 
     it "searches based upon description" do
-      expect(ArchivedPetition.search(q: "Wombles")).to include(petition_2)
+      expect(Archived::Petition.search(q: "Wombles")).to include(petition_2)
     end
 
     it "sorts the results by the highest number of signatures" do
-      expect(ArchivedPetition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
+      expect(Archived::Petition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
     end
   end
 
@@ -46,7 +46,7 @@ RSpec.describe ArchivedPetition, type: :model do
     let(:petitions) { [petition_1, petition_3, petition_2] }
 
     it 'returns archived petitions ordered by the created_at timestamp' do
-      expect(ArchivedPetition.by_created_at).to eq(petitions)
+      expect(Archived::Petition.by_created_at).to eq(petitions)
     end
   end
 
@@ -57,7 +57,7 @@ RSpec.describe ArchivedPetition, type: :model do
     let(:petitions) { [petition_1, petition_3, petition_2] }
 
     it 'returns archived petitions ordered by highest number of signatures' do
-      expect(ArchivedPetition.by_most_signatures).to eq(petitions)
+      expect(Archived::Petition.by_most_signatures).to eq(petitions)
     end
   end
 

@@ -128,7 +128,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
       end
     end
 
-    let(:petitions) { ArchivedPetition.search({}) }
+    let(:petitions) { Archived::Petition.search({}) }
 
     subject { helper.archived_petition_facets_with_counts(petitions) }
 

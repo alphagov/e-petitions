@@ -87,7 +87,7 @@ class PetitionsController < ApplicationController
   def retrieve_petition
     @petition = Petition.show.find(params[:id])
   rescue ActiveRecord::RecordNotFound => e
-    if @petition = ArchivedPetition.find_by_id(params[:id])
+    if @petition = Archived::Petition.find_by_id(params[:id])
       redirect_to archived_petition_url(@petition)
     else
       raise e
