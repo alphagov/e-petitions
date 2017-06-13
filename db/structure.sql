@@ -1642,6 +1642,27 @@ CREATE INDEX index_archived_petition_emails_on_petition_id ON archived_petition_
 
 
 --
+-- Name: index_archived_petitions_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_action ON archived_petitions USING gin (to_tsvector('english'::regconfig, (action)::text));
+
+
+--
+-- Name: index_archived_petitions_on_additional_details; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_additional_details ON archived_petitions USING gin (to_tsvector('english'::regconfig, additional_details));
+
+
+--
+-- Name: index_archived_petitions_on_background; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_background ON archived_petitions USING gin (to_tsvector('english'::regconfig, (background)::text));
+
+
+--
 -- Name: index_archived_petitions_on_description; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2444,6 +2465,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170611190354');
 INSERT INTO schema_migrations (version) VALUES ('20170612120307');
 
 INSERT INTO schema_migrations (version) VALUES ('20170612144648');
+
+INSERT INTO schema_migrations (version) VALUES ('20170613113510');
 
 INSERT INTO schema_migrations (version) VALUES ('20170615133536');
 
