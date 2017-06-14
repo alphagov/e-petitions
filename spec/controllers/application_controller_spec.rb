@@ -6,7 +6,7 @@ RSpec.describe ApplicationController, type: :controller do
     before_action :set_cors_headers, if: :json_request?
 
     def index
-      render text: 'OK'
+      render plain: 'OK'
     end
   end
 
