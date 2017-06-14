@@ -4,13 +4,22 @@ module Archived
   class Petition < ActiveRecord::Base
     OPEN_STATE = 'open'
     CLOSED_STATE = 'closed'
+    HIDDEN_STATE = 'hidden'
     REJECTED_STATE = 'rejected'
-    STATES = [OPEN_STATE, CLOSED_STATE, REJECTED_STATE]
+    STATES = [OPEN_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
     PUBLISHED_STATES = [OPEN_STATE, CLOSED_STATE]
 
-    alias_attribute :action, :title
-
     belongs_to :parliament, inverse_of: :petitions, required: true
+
+    has_one :creator, -> { where(creator: true) }, class_name: "Signature"
+    has_one :debate_outcome, dependent: :destroy
+    has_one :government_response, dependent: :destroy
+    has_one :note, dependent: :destroy
+    has_one :rejection, dependent: :destroy
+
+    has_many :emails, :dependent => :destroy
+    has_many :signatures
+    has_many :sponsors, -> { where(sponsor: true) }, class_name: "Signature"
 
     validates :title, presence: true, length: { maximum: 150 }
     validates :description, presence: true, length: { maximum: 1000 }
@@ -46,6 +55,14 @@ module Archived
       def by_most_signatures
         reorder(signature_count: :desc)
       end
+    end
+
+    def action
+      super || title
+    end
+
+    def action?
+      super || title?
     end
 
     def open?
