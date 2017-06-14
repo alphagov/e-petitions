@@ -47,6 +47,7 @@ RSpec.describe Browseable, type: :model do
     let(:scopes) { { all: -> { self }, open: -> { self } } }
     let(:filters) { [] }
     let(:klass)  { double(:klass, facet_definitions: scopes, taggable?: true, filter_definitions: filters) }
+    let(:relation) { double(:relation, except: self) }
     let(:tag_filters) { ["tag 1", "tag 2"] }
     let(:search_type) { "keyword" }
     let(:params) { { q: 'search', page: '3', tag_filters: tag_filters, search_type: search_type} }
@@ -95,6 +96,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#facets" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       it "returns an instance of Browseable::Facets" do
         expect(search.facets).to be_an_instance_of(Browseable::Facets)
       end
@@ -273,6 +278,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#scope" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       context "when the search scope is valid" do
         let(:params) { { q: 'search', page: '3', state: 'open'} }
 
@@ -299,6 +308,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#scoped?" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       context "when the search scope is valid" do
         let(:params) { { q: 'search', page: '3', state: 'open'} }
 
@@ -543,7 +556,7 @@ RSpec.describe Browseable, type: :model do
 
       it "returns the count for known facets" do
         expect(klass).to receive(:where).with(state: 'open').and_return(query)
-        expect(query).to receive(:count).and_return(999)
+        expect(query).to receive(:count).with(:all).and_return(999)
         expect(facets[:open]).to eq(999)
       end
     end
@@ -575,11 +588,12 @@ RSpec.describe Browseable, type: :model do
 
         open_query = double(:query)
         allow(klass).to receive(:where).with(state: 'open').and_return(open_query)
-        allow(open_query).to receive(:count).and_return(999)
+        allow(open_query).to receive(:count).with(:all).and_return(999)
 
         pending_query = double(:query)
+
         allow(klass).to receive(:where).with(state: 'pending').and_return(pending_query)
-        allow(pending_query).to receive(:count).and_return(20)
+        allow(pending_query).to receive(:count).with(:all).and_return(20)
       end
 
       it 'returns a hash with only the specified keys and their counts' do

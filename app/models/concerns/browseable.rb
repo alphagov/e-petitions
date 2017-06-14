@@ -49,7 +49,7 @@ module Browseable
           raise ArgumentError, "Unsupported facet: #{key.inspect}"
         end
 
-        hash[key] = facet_scope(key).count
+        hash[key] = facet_scope(key).count(:all)
       end
     end
 
@@ -98,7 +98,7 @@ module Browseable
     end
 
     def facets
-      @facets ||= Facets.new(klass)
+      @facets ||= Facets.new(pre_scope_relation)
     end
 
     def filters
@@ -206,6 +206,11 @@ module Browseable
     end
 
     def execute_search
+      relation = pre_scope_relation
+      relation.instance_exec(&klass.facet_definitions[scope])
+    end
+
+    def pre_scope_search
       if tag_search?
         relation = klass.with_tag(query)
         relation = relation.except(:select).select(star)
@@ -222,7 +227,11 @@ module Browseable
         relation = tag_filter(relation).by_all_tags
       end
 
-      relation.instance_exec(&klass.facet_definitions[scope])
+      relation
+    end
+
+    def pre_scope_relation
+      @pre_scope_relation ||= pre_scope_search
     end
 
     def star
