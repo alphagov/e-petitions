@@ -39,12 +39,14 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  it "is taggable" do
-    expect(Petition.taggable?).to eq true
-  end
+  describe "included modules" do
+    it "includes AdminTagsValidation module" do
+      expect(Petition.included_modules).to include(AdminTagsValidation)
+    end
 
-  def set_site_settings
-    allow(Admin::Site).to receive(:first).and_return site_settings
+    it "includes Taggable module" do
+      expect(Petition.included_modules).to include(Taggable)
+    end
   end
 
   context "validations" do
@@ -106,52 +108,6 @@ RSpec.describe Petition, type: :model do
       it "checks petition is valid if there is an open_at date" do
         petition.open_at = Time.current
         expect(petition).to be_valid
-      end
-    end
-
-    describe "tags validations" do
-      let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2") }
-      let(:petition) { FactoryGirl.build(:petition) }
-
-      before do
-        set_site_settings
-      end
-
-      it "validates tags can be set as an array" do
-        petition.tags = ["tag 1", "tag 2"]
-        expect(petition).to be_valid
-      end
-
-      it "validates tags can be empty" do
-        expect(FactoryGirl.build(:petition, tags: "")).to be_valid
-      end
-
-      it "validates tags can not be nil" do
-        expect(FactoryGirl.build(:petition, tags: nil)).to be_invalid
-      end
-
-      describe "#tags_must_be_allowed" do
-        context "with allowed tags" do
-          it "petition is valid" do
-            petition.tags << "tag 1"
-            petition.tags << "tag 2"
-            expect(petition).to be_valid
-          end
-        end
-
-        context "with disallowed tags" do
-          it "petition is invalid" do
-            petition.tags << "tag 3"
-            expect(petition).to be_invalid
-          end
-
-          it "displays an error message with the disallowed tags" do
-            petition.tags << "tag 3"
-            petition.tags << "tag 4"
-            petition.valid?
-            expect(petition.errors.messages[:tags]).to include "Disallowed tags: 'tag 3', 'tag 4'"
-          end
-        end
       end
     end
   end
@@ -648,42 +604,6 @@ RSpec.describe Petition, type: :model do
 
       it 'returns a scope' do
         expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an ActiveRecord::Relation
-      end
-    end
-  end
-
-  describe "#tags=" do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1") }
-
-    before do
-      set_site_settings
-    end
-
-    context "tags includes empty strings" do
-      it "removes empty strings from the array" do
-        petition.tags = ["", "tag 1"]
-        expect(petition).to be_valid
-        expect(petition.tags).to eq ["tag 1"]
-      end
-    end
-
-    context "tags is a string" do
-      it "raises a TypeError with helpful message" do
-        expect{ petition.tags = "tag 1\ntag 2" }.to raise_error(TypeError)
-          .with_message("All strings are converted to an empty tags array. Are you sure you didn't mean [\"tag 1\", \"tag 2\"]?")
-      end
-
-      context "tags is an empty string" do
-        it "does not attempt to remove empty strings or raise a TypeError" do
-          expect{ petition.tags = "" }.not_to raise_error
-        end
-      end
-    end
-
-    context "tags is nil" do
-      it "does not attempt to remove empty strings" do
-        expect{ petition.tags = nil }.not_to raise_error
       end
     end
   end

@@ -2,25 +2,23 @@ module Taggable
   extend ActiveSupport::Concern
 
   included do
-    class_attribute :tag_column
-    self.tag_column = :tags
+    validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array or empty string" }, allow_nil: false
   end
 
   class_methods do
-    def acts_as_taggable_array_on(*tag_def)
-      self.tag_column = tag_def.first
-    end
+    # Assumes that base model implements a 'tags' array column. Being this
+    # opinionated keeps the codebase simpler.
 
     def with_all_tags(tags)
-      where("array_lowercase(#{tag_column}) @> ARRAY[?]::varchar[]", downcase_tags(tags))
+      where("array_lowercase(tags) @> ARRAY[?]::varchar[]", downcase_tags(tags))
     end
 
     def with_tag(tag)
-      where("'#{tag.downcase}' = ANY (array_lowercase(#{tag_column}))")
+      where("'#{tag}' = ANY (array_lowercase(tags))")
     end
 
     def all_tags(options={}, &block)
-      subquery_scope = unscoped.select("unnest(#{table_name}.#{tag_column}) as tag").distinct
+      subquery_scope = unscoped.select("unnest(#{table_name}.tags) as tag").distinct
       subquery_scope = subquery_scope.instance_eval(&block) if block
 
       from(subquery_scope).pluck('tag')
@@ -37,7 +35,13 @@ module Taggable
     end
   end
 
-  def tags_for_comparison
-    tags.map(&:downcase)
+  def tags=(tags)
+    if tags.kind_of?(String) && !tags.blank?
+      string_tags = tags.each_line.map { |tag| "\"#{tag.strip}\"" }
+      raise TypeError, "All strings are converted to an empty tags array. Are you sure you didn't mean [#{string_tags.join(', ')}]?"
+    end
+
+    tags = tags.reject(&:blank?) unless tags.blank?
+    super
   end
 end

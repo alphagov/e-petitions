@@ -28,6 +28,8 @@ module Archived
 
     extend Searchable(:title, :description)
     include Browseable
+    include Taggable
+    include AdminTagsValidation
 
     filter :parliament
 

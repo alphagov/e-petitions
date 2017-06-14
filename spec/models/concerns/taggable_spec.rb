@@ -14,15 +14,6 @@ RSpec.describe Taggable, type: :model do
       self.table_name = "taggable_table"
 
       include Taggable
-      acts_as_taggable_array_on :tags
-    end
-  end
-
-  let(:taggable_default) do
-    Class.new(ActiveRecord::Base) do
-      self.table_name = "taggable_table"
-
-      include Taggable
     end
   end
 
@@ -33,33 +24,22 @@ RSpec.describe Taggable, type: :model do
 
     let(:tags_query) { ["tag 1", "tag 2"] }
 
-    describe "including the module" do
-      it "adds a tag_column class attribute" do
-        expect(taggable).to respond_to(:tag_column)
-      end
-
-      it "defaults tag_column to :tags" do
-        expect(taggable_default.tag_column).to eq :tags
-      end
-    end
-
-    describe ".acts_as_taggable_array_on" do
-      it "sets the tag_column class attribute" do
-        taggable.acts_as_taggable_array_on :categories
-        expect(taggable.tag_column).to eq :categories
-      end
-    end
-
-    describe ".with_all" do
+    describe ".with_all_tags" do
       it "fetches records tagged with all tags in the query" do
         expect(taggable.with_all_tags(tags_query)).to be_an(ActiveRecord::Relation)
-        expect(taggable.with_all_tags(tags_query)).to eq [taggable_record_a, taggable_record_c]
+        expect(taggable.with_all_tags(tags_query)).to match_array [taggable_record_a, taggable_record_c]
       end
     end
 
     describe "all_tags" do
       it "returns all tags being used on taggable records" do
         expect(taggable.all_tags).to match_array ["tag 1", "tag 2", "tag 3"]
+      end
+    end
+
+    describe "with_tag" do
+      it "returns all records tagged with tag" do
+        expect(taggable.with_tag("tag 3")).to match_array [taggable_record_b, taggable_record_c]
       end
     end
 
@@ -71,11 +51,61 @@ RSpec.describe Taggable, type: :model do
   end
 
   describe "instance methods" do
-    let(:taggable_record) { taggable.create(tags: ["TAG 1", "tAg 2", "tAG 3"]) }
+    describe "including the module" do
+      describe "tags validation" do
+        let(:taggable_record) { taggable.create }
 
-    describe "tags_for_comparison" do
-      it "returns the records tags in downcase" do
-        expect(taggable_record.tags_for_comparison).to eq ["tag 1", "tag 2", "tag 3"]
+        it "validates tags can be set as an array" do
+          taggable_record.tags = ["tag 1", "tag 2"]
+          expect(taggable_record).to be_valid
+        end
+
+        it "validates tags can be empty" do
+          taggable_record.tags = ""
+          expect(taggable_record).to be_valid
+        end
+
+        it "validates tags can not be nil" do
+          taggable_record.class.class_eval do
+            def self.model_name
+              ActiveModel::Name.new(self, nil, "temp")
+            end
+          end
+
+          taggable_record.tags = nil
+          expect(taggable_record).to be_invalid
+        end
+      end
+    end
+
+    describe "#tags=" do
+      let(:taggable_record) { taggable.create }
+
+      context "tags includes empty strings" do
+        it "removes empty strings from the array" do
+          taggable_record.tags = ["", "tag 1"]
+          expect(taggable_record).to be_valid
+          expect(taggable_record.tags).to eq ["tag 1"]
+        end
+      end
+
+      context "tags is a string" do
+        it "raises a TypeError with helpful message" do
+          expect{ taggable_record.tags = "tag 1\ntag 2" }.to raise_error(TypeError)
+            .with_message("All strings are converted to an empty tags array. Are you sure you didn't mean [\"tag 1\", \"tag 2\"]?")
+        end
+
+        context "tags is an empty string" do
+          it "does not attempt to remove empty strings or raise a TypeError" do
+            expect{ taggable_record.tags = "" }.not_to raise_error
+          end
+        end
+      end
+
+      context "tags is nil" do
+        it "does not raise an error" do
+          expect{ taggable_record.tags = nil }.not_to raise_error
+        end
       end
     end
   end

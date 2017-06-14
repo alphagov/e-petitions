@@ -39,6 +39,16 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe "included modules" do
+    it "includes AdminTagsValidation module" do
+      expect(Petition.included_modules).to include(AdminTagsValidation)
+    end
+
+    it "includes Taggable module" do
+      expect(Petition.included_modules).to include(Taggable)
+    end
+  end
+
   describe ".by_created_at" do
     let!(:petition_1) { FactoryGirl.create(:archived_petition, created_at: 3.years.ago) }
     let!(:petition_2) { FactoryGirl.create(:archived_petition, created_at: 1.year.ago) }

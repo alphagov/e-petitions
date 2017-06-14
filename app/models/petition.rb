@@ -39,6 +39,7 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action, :background, :additional_details)
   include Browseable
   include Taggable
+  include AdminTagsValidation
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -82,8 +83,6 @@ class Petition < ActiveRecord::Base
   validates_presence_of :open_at, if: :open?
   validates_presence_of :creator_signature, on: :create
   validates_inclusion_of :state, in: STATES
-  validates :tags, format: { with: /\A\[.*\]\z/, message: "must be type of Array or empty string" }, allow_nil: false
-  validate :tags_must_be_allowed
 
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator_signature, prefix: :creator
@@ -709,26 +708,5 @@ class Petition < ActiveRecord::Base
 
   def closed_early_due_to_election?(dissolution_at = Parliament.dissolution_at)
     closed_at == dissolution_at
-  end
-
-  def admin_site_settings
-    Admin::Site.first_or_create!
-  end
-
-  def tags=(tags)
-    if tags.kind_of?(String) && !tags.blank?
-      string_tags = tags.each_line.map { |tag| "\"#{tag.strip}\"" }
-      raise TypeError, "All strings are converted to an empty tags array. Are you sure you didn't mean [#{string_tags.join(', ')}]?"
-    end
-
-    tags = tags.reject(&:blank?) unless tags.blank?
-    super
-  end
-
-  def tags_must_be_allowed
-    return if tags.nil?
-    disallowed_tags = (tags_for_comparison || []) - admin_site_settings.allowed_petition_tags
-    disallowed_tags_with_quotes = disallowed_tags.map { |tag| "'#{tag}'" }
-    errors.add(:tags, "Disallowed tags: #{disallowed_tags_with_quotes.join(', ')}") unless disallowed_tags.empty?
   end
 end

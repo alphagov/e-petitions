@@ -11,13 +11,17 @@ if Rails.env.development?
 
   # Create some petitions
   [:open_petition, :closed_petition, :rejected_petition].each do |petition_type|
-    FactoryGirl.create_list(petition_type, 100)
+    FactoryGirl.create_list(petition_type, 20)
+  end
+
+  [:open, :closed, :rejected].each do |petition_type|
+    FactoryGirl.create_list(:archived_petition, 20, petition_type)
   end
 
   # Create some signatures
   first_id, last_id = Petition.first.id, Petition.last.id
 
-  25.times do
+  10.times do
     rand(first_id..last_id).tap do |petition_id|
       FactoryGirl.create_list(:validated_signature, rand(5..10), petition_id: petition_id)
     end
