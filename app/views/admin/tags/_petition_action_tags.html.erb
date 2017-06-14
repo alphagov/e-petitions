@@ -8,7 +8,7 @@
       <!-- Compares the downcased versions to Petition#tags_for_comparison and selects the check boxes if they match. -->
       <!-- Saves selected check box values as tags on Petition. -->
       <%= collection_check_boxes(:petition, :tags, @site_settings.allowed_petition_tags, :downcase, :itself, { checked: f.object.tags_for_comparison }) do |b| %>
-        <div class="petition-tag"><%= b.label %><%= b.check_box %></div>
+        <div class="tag-filter-check-box"><%= b.label %><%= b.check_box %></div>
       <% end %>
 
     <% else %>

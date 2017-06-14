@@ -15,7 +15,7 @@
       <% admin_site_settings.allowed_petition_tags.each do |tag| %>
         <div class="tag-filter-check-box">
           <%= label_tag tag %>
-          <%= check_box_tag "tag_filters[]", tag, check_tag_filter?(@tag_filters, tag), { id: tag, class: "tag-filter-check-box" } %>
+          <%= check_box_tag "tag_filters[]", tag, check_tag_filter?(@tag_filters, tag), { id: tag } %>
         </div>
       <% end %>
     </div>
