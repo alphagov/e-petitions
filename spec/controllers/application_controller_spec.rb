@@ -58,7 +58,7 @@ RSpec.describe ApplicationController, type: :controller do
   context "when the site is protected" do
     context "and the request is local" do
       before do
-        expect(request).to receive(:local?).and_return(true)
+        request.env['REMOTE_ADDR'] = '127.0.0.1'
         expect(Site).not_to receive(:protected?)
       end
 
@@ -70,7 +70,7 @@ RSpec.describe ApplicationController, type: :controller do
 
     context "and the request is not local" do
       before do
-        expect(request).to receive(:local?).and_return(false)
+        request.env['REMOTE_ADDR'] = '0.0.0.0'
         expect(Site).to receive(:protected?).and_return(true)
       end
 
@@ -84,7 +84,8 @@ RSpec.describe ApplicationController, type: :controller do
       before do
         http_authentication "username", "password"
 
-        expect(request).to receive(:local?).and_return(false)
+        request.env['REMOTE_ADDR'] = '0.0.0.0'
+
         expect(Site).to receive(:protected?).and_return(true)
         expect(Site).to receive(:authenticate).with("username", "password").and_return(true)
       end
@@ -107,16 +108,16 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   context "when the url has an invalid format" do
-    let(:exception) { URI::InvalidURIError.new }
-
-    before do
-      allow(request).to receive(:format).and_return(nil)
-      allow(request).to receive(:original_url).and_return("https://petition.parliament.uk/petitions.json]")
-    end
-
     it "redirects to the home page" do
-      get :index
-      expect(response).to redirect_to("https://petition.parliament.uk/")
+      request.env['HTTPS'] = 'on'
+      request.env['PATH_INFO'] = '/petitions.geojson'
+      request.env['SCRIPT_NAME'] = ''
+      request.env['QUERY_STRING'] = ''
+      request.env['HTTP_HOST'] = 'petition.parliament.uk:443'
+
+      get :index, format: 'geojson'
+
+      expect(response).to redirect_to("https://petition.parliament.uk/petitions")
     end
   end
 end
