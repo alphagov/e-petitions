@@ -85,6 +85,10 @@ Then(/^I should see the following list of petitions:$/) do |table|
   end
 end
 
+Then(/^I should not see any petitions$/) do
+  expect(page).to_not have_selector(:css, ".petition-list-petition .petition-list-petition-action")
+end
+
 Then /^I should see the following list of archived petitions:$/ do |table|
   table.raw.each do |row|
     row.each do |column|

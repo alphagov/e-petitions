@@ -79,8 +79,19 @@ When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |ta
   else
     visit admin_root_url
   end
-  fill_in "Search", :with => "[#{tag}]"
+
+  fill_in "Search", :with => tag
+  choose "search_type_tag"
   click_button 'Search'
+end
+
+When(/^I filter the results by tags "(.*?)"$/) do |tags|
+  tags = tags.split(',').map(&:strip)
+  tags.each do |tag|
+    page.check tag.downcase.gsub(/\s+/,'-')
+  end
+
+  click_button "Search"
 end
 
 When(/^I search for the petition creator from the admin hub$/) do

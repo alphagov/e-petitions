@@ -15,4 +15,8 @@ module FormHelper
       content_tag :span, errors.first, { class: 'error-message' }.merge(options)
     end
   end
+
+  def css_safe(class_or_id)
+    class_or_id.downcase.gsub(/\s+/, '-')
+  end
 end

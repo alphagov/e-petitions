@@ -411,8 +411,20 @@ Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
   @petition = FactoryGirl.create(:awaiting_petition, action: action)
 end
 
-Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
-  @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
+Given(/^a petition "(.*?)" exists with notes (\[[^"]*\])$/) do |action, tags|
+  @petition = FactoryGirl.create(:open_petition, action: action, tags: tags)
+end
+
+Given(/^a petition "(.*?)" exists with tags "([^"]*)"$/) do |action, tags|
+  tags = tags.split(',').map(&:strip)
+  @petition = FactoryGirl.create(:open_petition, action: action, tags: tags)
+end
+
+Given(/^allowed tags in site settings are "([^"]*)"$/) do |allowed_tags|
+  allowed_tags_string = allowed_tags.gsub(/,\s*/, "\n")
+  site_settings = Admin::Site.first_or_create
+  site_settings.update_attributes(petition_tags: allowed_tags_string)
+  @site_settings = site_settings
 end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
