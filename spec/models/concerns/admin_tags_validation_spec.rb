@@ -14,19 +14,23 @@ RSpec.describe AdminTagsValidation, type: :model do
       self.table_name = "admin_tags_validation_table"
 
       include AdminTagsValidation
+
+      def self.model_name
+        ActiveModel::Name.new(self, nil, "base_class")
+      end
     end
   end
 
   let(:admin_tags_validation_record) { admin_tags_validation_class.create }
 
   describe "tags validations" do
-    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\ntag 2") }
+    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\nTAG 2") }
 
     before do
       set_site_settings
     end
 
-    describe "#tags_must_be_allowed" do
+    describe "validating tags" do
       context "with allowed tags" do
         it "record is valid" do
           admin_tags_validation_record.tags << "tag 1"

@@ -11,8 +11,8 @@ class Admin::Site < ActiveRecord::Base
     super(normalize_lines(value))
   end
 
-  def allowed_petition_tags
-    @allowed_petition_tags || petition_tags_map
+  def allowed_petition_tags(for_comparison: false)
+    @allowed_petition_tags || petition_tags_map(petition_tags, for_comparison: for_comparison)
   end
 
   private

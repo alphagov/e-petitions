@@ -1,8 +1,9 @@
 # rake data:generate
-# Petition state    PET_STATE=rejected    default open
-# Petition count    PET_COUNT=20          default 100
-# Signature count   SIG_COUNT=25          default 100
-# Random response   RANDOM_RESP=true      default false
+# Petition state        PET_STATE=rejected                  default open
+# Petition count        PET_COUNT=20                        default 100
+# Signature count       SIG_COUNT=25                        default 100
+# Random response       RANDOM_RESP=true                    default false
+# Use existing tags     USE_EXISTING_TAGS=true              default false
 #                   If true will create 10K sigs for every 5th petition and add response
 
 namespace :data do
@@ -15,14 +16,23 @@ namespace :data do
     HIDDEN_CODES    = ["libellous", "offensive"]
     VALID_STATES    = ['open', 'closed', 'rejected', 'hidden']
 
-    PETITION_STATE  = ENV.fetch('PET_STATE', 'open')
-    PETITION_COUNT  = ENV.fetch('PET_COUNT', '100')
-    SIGNATURE_COUNT = ENV.fetch('SIG_COUNT', '100')
-    RANDOM_RESPONSE = ENV.fetch('RANDOM_RESP', 'false')
-
+    PETITION_STATE    = ENV.fetch('PET_STATE', 'open')
+    PETITION_COUNT    = ENV.fetch('PET_COUNT', '100')
+    SIGNATURE_COUNT   = ENV.fetch('SIG_COUNT', '100')
+    RANDOM_RESPONSE   = ENV.fetch('RANDOM_RESP', 'false')
+    USE_EXISTING_TAGS = ENV.fetch('USE_EXISTING_TAGS', 'false')
 
     if VALID_STATES.exclude?(PETITION_STATE)
       raise "** #{PETITION_STATE} is not a valid state within #{VALID_STATES.inspect} **"
+    end
+
+    admin_site_settings = Admin::Site.first_or_create
+
+    if USE_EXISTING_TAGS == 'true'
+      allowed_petition_tags = admin_site_settings.petition_tags
+    else
+      allowed_petition_tags = String.new.tap { |s| 10.times { s << "#{Faker::Company.buzzword}\n"}}
+      admin_site_settings.update_attributes(petition_tags: allowed_petition_tags)
     end
 
     ActiveRecord::Base.transaction do
@@ -33,17 +43,16 @@ namespace :data do
           action: Faker::Lorem.sentence(rand(3..10)).first(80),
           background: Faker::Lorem.sentence(rand(7..22)).first(200),
           additional_details: Faker::Lorem.paragraph(rand(2..20)).first(500),
+          tags: allowed_petition_tags.split("\n").sample(4),
           creator_signature: Signature.new({
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email,
-            country: 'United Kingdom',
+            location_code: 'GB',
             state: 'validated',
             postcode: POSTCODES.sample
-
           })
         })
-
 
         # Create the sponsor signatures
         5.times do
@@ -51,7 +60,7 @@ namespace :data do
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email("#{Faker::Lorem.characters(rand(10..40))}-#{rand(1..999999)}"),
-            country: 'United Kingdom',
+            location_code: 'GB',
             state: 'validated',
             postcode: POSTCODES.sample
           )
@@ -81,7 +90,6 @@ namespace :data do
           )
         end
 
-
         # Should we create a petition with response and 10K signatures
         @should_create_response = (((idx+1) % 5) == 0 && RANDOM_RESPONSE == 'true')
         @signature_count = Site.threshold_for_response + 1 if @should_create_response
@@ -91,7 +99,7 @@ namespace :data do
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email("#{Faker::Lorem.characters(rand(10..40))}-#{rand(1..999999)}"),
-            country: 'United Kingdom',
+            location_code: 'GB',
             postcode: POSTCODES.sample
           )
           signature.validate!
