@@ -61,7 +61,13 @@ module Archived
     end
 
     def duration
-      parliament.petition_duration
+      if parliament.petition_duration?
+        parliament.petition_duration
+      elsif opened_at?
+        calculate_petition_duration
+      else
+        0
+      end
     end
 
     def closed_early_due_to_election?
@@ -74,6 +80,22 @@ module Archived
 
     def threshold_for_response_reached?
       signature_count >= parliament.threshold_for_response
+    end
+
+    private
+
+    def calculate_petition_duration
+      if opened_at + 3.months == closed_at
+        3
+      elsif opened_at + 6.months == closed_at
+        6
+      elsif opened_at + 9.months == closed_at
+        9
+      elsif opened_at + 12.months == closed_at
+        12
+      else
+        Rational(closed_at - opened_at, 86400 * 30).to_f
+      end
     end
   end
 end

@@ -157,4 +157,42 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
       end
     end
   end
+
+  describe "#petition_duration_to_words" do
+    context "when the duration is an integer" do
+      it "returns the exact number of months as a string" do
+        expect(helper.petition_duration_to_words(3)).to eq("3 months")
+      end
+    end
+
+    context "when the duration is 0 months" do
+      it "pluralizes the string correctly" do
+        expect(helper.petition_duration_to_words(0)).to eq("0 months")
+      end
+    end
+
+    context "when the duration is 1 month" do
+      it "pluralizes the string correctly" do
+        expect(helper.petition_duration_to_words(1)).to eq("1 month")
+      end
+    end
+
+    context "when the duration fraction is less than 0.25" do
+      it "returns an approximate number of months" do
+        expect(helper.petition_duration_to_words(3.2)).to eq("just over 3 months")
+      end
+    end
+
+    context "when the duration fraction is between 0.25 and 0.75" do
+      it "returns an approximate number of months" do
+        expect(helper.petition_duration_to_words(3.5)).to eq("over 3 months")
+      end
+    end
+
+    context "when the duration fraction is greater than 0.75" do
+      it "returns an approximate number of months" do
+        expect(helper.petition_duration_to_words(3.8)).to eq("nearly 4 months")
+      end
+    end
+  end
 end
