@@ -53,7 +53,7 @@ FactoryGirl.define do
   end
 
   factory :archived_petition, class: "Archived::Petition" do
-    sequence(:title) { |n| "Petition #{n}" }
+    sequence(:action) { |n| "Petition #{n}" }
     state "closed"
     description "Petition description"
     signature_count 0

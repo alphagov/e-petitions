@@ -3,7 +3,7 @@ csv_builder = lambda do |csv|
 
   @petitions.find_each do |petition|
     csv << [
-      petition.title,
+      petition.action,
       archived_petition_url(petition),
       petition.state,
       petition.signature_count

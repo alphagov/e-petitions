@@ -37,13 +37,13 @@ Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with sched
   @petition.save
 end
 
-Given(/^an archived petition "([^"]*)"$/) do |title|
+Given(/^an archived petition "([^"]*)"$/) do |action|
   @parliament = FactoryGirl.create(:parliament, :coalition)
-  @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, title: title)
+  @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, action: action)
 end
 
-Given(/^a rejected archived petition exists with title: "(.*?)"$/) do |title|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, title: title)
+Given(/^a rejected archived petition exists with action: "(.*?)"$/) do |action|
+  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
@@ -159,8 +159,8 @@ Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) d
     :rejection_details => reason_text)
 end
 
-Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |title, reason_for_rejection|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, title: title, reason_for_rejection: reason_for_rejection)
+Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, reason_for_rejection|
+  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action, reason_for_rejection: reason_for_rejection)
 end
 
 When(/^I view the petition$/) do
@@ -199,7 +199,7 @@ end
 
 Then(/^I should see the petition details$/) do
   if @petition.is_a?(Archived::Petition)
-    expect(page).to have_content(@petition.title)
+    expect(page).to have_content(@petition.action)
     expect(page).to have_content(@petition.description)
   else
     expect(page).to have_content(@petition.action)
@@ -450,7 +450,7 @@ Given(/^these archived petitions? exist?:?$/) do |table|
   table.raw[1..-1].each do |petition|
     attributes = {
       parliament:      parliament,
-      title:           petition[0],
+      action:          petition[0],
       state:           petition[1],
       signature_count: petition[2],
       created_at:      petition[3]

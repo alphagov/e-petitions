@@ -15,7 +15,7 @@
   <% else %>
     <span class="heading-secondary">Petition</span>
   <% end %>
-  <%= @petition.title %>
+  <%= @petition.action %>
 </h1>
 
 <div><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>

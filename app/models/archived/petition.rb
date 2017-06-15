@@ -2,6 +2,8 @@ require 'textacular/searchable'
 
 module Archived
   class Petition < ActiveRecord::Base
+    include DeprecatedAttributes
+
     OPEN_STATE = 'open'
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
@@ -21,12 +23,12 @@ module Archived
     has_many :signatures
     has_many :sponsors, -> { where(sponsor: true) }, class_name: "Signature"
 
-    validates :title, presence: true, length: { maximum: 150 }
+    validates :action, presence: true, length: { maximum: 150 }
     validates :description, presence: true, length: { maximum: 1000 }
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, unless: :rejected?
 
-    extend Searchable(:title, :description)
+    extend Searchable(:action, :description)
     include Browseable
 
     filter :parliament
@@ -43,6 +45,8 @@ module Archived
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
 
+    deprecate_attribute :title
+
     class << self
       def for_state(state)
         where(state: state)
@@ -55,14 +59,6 @@ module Archived
       def by_most_signatures
         reorder(signature_count: :desc)
       end
-    end
-
-    def action
-      super || title
-    end
-
-    def action?
-      super || title?
     end
 
     def open?

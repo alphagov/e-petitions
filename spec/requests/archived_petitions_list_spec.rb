@@ -111,9 +111,9 @@ RSpec.describe 'API request to list archived petitions', type: :request, show_ex
 
       expect(json["data"].length).to eq(3)
 
-      expect(json["data"][0]["attributes"]["title"]).to eq(petition_2.title)
-      expect(json["data"][1]["attributes"]["title"]).to eq(petition_3.title)
-      expect(json["data"][2]["attributes"]["title"]).to eq(petition_1.title)
+      expect(json["data"][0]["attributes"]["action"]).to eq(petition_2.action)
+      expect(json["data"][1]["attributes"]["action"]).to eq(petition_3.action)
+      expect(json["data"][2]["attributes"]["action"]).to eq(petition_1.action)
     end
 
     it "includes a link to each petitions details" do

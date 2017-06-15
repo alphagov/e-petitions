@@ -19,14 +19,14 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe ".search" do
     let!(:petition_1) do
-      FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
+      FactoryGirl.create(:archived_petition, :closed, action: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
     end
 
     let!(:petition_2) do
       FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
     end
 
-    it "searches based upon title" do
+    it "searches based upon action" do
       expect(Archived::Petition.search(q: "Wombles")).to include(petition_1)
     end
 
@@ -61,13 +61,13 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
-  describe "#title" do
+  describe "#action" do
     it "defaults to nil" do
-      expect(petition.title).to be_nil
+      expect(petition.action).to be_nil
     end
 
-    it { is_expected.to validate_presence_of(:title) }
-    it { is_expected.to validate_length_of(:title).is_at_most(150) }
+    it { is_expected.to validate_presence_of(:action) }
+    it { is_expected.to validate_length_of(:action).is_at_most(150) }
   end
 
   describe "#description" do

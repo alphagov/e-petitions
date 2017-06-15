@@ -47,7 +47,7 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
       make_successful_request petition
 
       expect(json["data"]).to be_a(Hash)
-      expect(attributes["title"]).to eq(petition.title)
+      expect(attributes["action"]).to eq(petition.action)
       expect(attributes["description"]).to eq(petition.description)
       expect(attributes["state"]).to eq(petition.state)
       expect(attributes["signature_count"]).to eq(petition.signature_count)

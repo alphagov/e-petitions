@@ -20,7 +20,7 @@ Feature: Joe views an archived petition
     And I should see "This petition was submitted during the 2010–2015 Conservative - Liberal Democrat coalition government"
 
   Scenario: Joe views an archived petition containing urls, email addresses and html tags
-    Given an archived petition exists with title: "Defence review", description: "<i>We<i> like http://www.google.com and bambi@gmail.com"
+    Given an archived petition exists with action: "Defence review", description: "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I go to the archived petition page for "Defence review"
     And I should see "<i>We<i>"
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"

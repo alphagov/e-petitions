@@ -6,7 +6,7 @@ json.links do
 end if defined?(is_collection)
 
 json.attributes do
-  json.title petition.title
+  json.action petition.action
   json.description petition.description
   json.state petition.state
   json.signature_count petition.signature_count

@@ -5,7 +5,7 @@ Feature: Joe views all archived petition
 
   Background:
     Given these archived petitions exist:
-      | title                    | state    | signature_count |  created_at |
+      | action                   | state    | signature_count |  created_at |
       | Wombles are great        | closed   | 835             |  2012-01-01 |
       | Common People            | closed   | 639             |  2014-01-01 |
       | Save the planet          | closed   | 243             |  2014-01-01 |

@@ -7,7 +7,7 @@
 <% if archived_petition_page? %>
 <%= open_graph_tag 'url', archived_petition_url(@petition) %>
 <%= open_graph_tag 'type', 'article' %>
-<%= open_graph_tag 'title', :archived_title, petition: @petition.title %>
+<%= open_graph_tag 'title', :archived_title, petition: @petition.action %>
 <%= open_graph_tag 'description', @petition.description %>
 <% elsif defined?(@petition) %>
 <%= open_graph_tag 'url', petition_url(@petition) %>
@@ -24,7 +24,7 @@
 <%= twitter_card_tag 'site', '@hocpetitions' %>
 <%= twitter_card_tag 'image', 'os-social/opengraph-image.png' %>
 <% if archived_petition_page? %>
-<%= twitter_card_tag 'title', :title, petition: @petition.title %>
+<%= twitter_card_tag 'title', :title, petition: @petition.action %>
 <%= twitter_card_tag 'description', @petition.description %>
 <% elsif defined?(@petition) %>
 <%= twitter_card_tag 'title', :title, petition: @petition.action %>
