@@ -24,11 +24,12 @@ module Archived
     has_many :sponsors, -> { where(sponsor: true) }, class_name: "Signature"
 
     validates :action, presence: true, length: { maximum: 150 }
-    validates :description, presence: true, length: { maximum: 1000 }
+    validates :background, length: { maximum: 300 }, allow_blank: true
+    validates :additional_details, length: { maximum: 1000 }, allow_blank: true
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, unless: :rejected?
 
-    extend Searchable(:action, :description)
+    extend Searchable(:action, :background, :additional_details)
     include Browseable
 
     filter :parliament
@@ -45,7 +46,7 @@ module Archived
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
 
-    deprecate_attribute :title
+    deprecate_attribute :title, :description
 
     class << self
       def for_state(state)

@@ -198,14 +198,9 @@ Then(/^I should see all petitions$/) do
 end
 
 Then(/^I should see the petition details$/) do
-  if @petition.is_a?(Archived::Petition)
-    expect(page).to have_content(@petition.action)
-    expect(page).to have_content(@petition.description)
-  else
-    expect(page).to have_content(@petition.action)
-    expect(page).to have_content(@petition.additional_details)
-    expect(page).to have_content(@petition.background)
-  end
+  expect(page).to have_content(@petition.action)
+  expect(page).to have_content(@petition.additional_details)
+  expect(page).to have_content(@petition.background) if @petition.background?
 end
 
 Then(/^I should see the vote count, closed and open dates$/) do

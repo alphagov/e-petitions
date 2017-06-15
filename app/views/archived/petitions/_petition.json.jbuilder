@@ -7,7 +7,8 @@ end if defined?(is_collection)
 
 json.attributes do
   json.action petition.action
-  json.description petition.description
+  json.background petition.background
+  json.additional_details petition.additional_details
   json.state petition.state
   json.signature_count petition.signature_count
   json.opened_at api_date_format(petition.opened_at)

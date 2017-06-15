@@ -18,7 +18,22 @@
   <%= @petition.action %>
 </h1>
 
-<div><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
+<% if @petition.background? %>
+  <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
+  <% unless @petition.additional_details.blank? %>
+    <details>
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
+<% else %>
+  <% unless @petition.additional_details.blank? %>
+    <details open="open">
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
+<% end %>
 
 <% if @petition.rejected? %>
   <p class="flash-notice">This petition was rejected</p>

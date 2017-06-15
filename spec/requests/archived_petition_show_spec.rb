@@ -48,7 +48,8 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
 
       expect(json["data"]).to be_a(Hash)
       expect(attributes["action"]).to eq(petition.action)
-      expect(attributes["description"]).to eq(petition.description)
+      expect(attributes["background"]).to eq(petition.background)
+      expect(attributes["additional_details"]).to eq(petition.additional_details)
       expect(attributes["state"]).to eq(petition.state)
       expect(attributes["signature_count"]).to eq(petition.signature_count)
       expect(attributes["opened_at"]).to eq(timestampify petition.opened_at)

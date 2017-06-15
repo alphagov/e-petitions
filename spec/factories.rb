@@ -55,7 +55,7 @@ FactoryGirl.define do
   factory :archived_petition, class: "Archived::Petition" do
     sequence(:action) { |n| "Petition #{n}" }
     state "closed"
-    description "Petition description"
+    background "Petition background"
     signature_count 0
     opened_at { 2.years.ago }
     closed_at { 1.year.ago }
