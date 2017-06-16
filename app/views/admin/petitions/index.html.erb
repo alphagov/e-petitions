@@ -15,7 +15,7 @@
     <% end -%>
   </div>
   <div class="column-third actions-right">
-    <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
+    <%= link_to "Download CSV", url_for(params.permit([:q, :state]).merge(format: 'csv')) %>
   </div>
 </div>
 

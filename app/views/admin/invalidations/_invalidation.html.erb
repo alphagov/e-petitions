@@ -45,16 +45,16 @@
   <td nowrap="true">
     &nbsp;
     <% unless invalidation.completed? || invalidation.cancelled? %>
-      <%= button_to 'Cancel', cancel_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button-secondary' %>
+      <%= button_to 'Cancel', cancel_admin_invalidation_path(invalidation, params.permit(:state, :q)), method: :post, class: 'button-secondary' %>
     <% end %>
     <% unless invalidation.started? || invalidation.cancelled? %>
-      <%= button_to 'Count', count_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button-secondary' %>
+      <%= button_to 'Count', count_admin_invalidation_path(invalidation, params.permit(:state, :q)), method: :post, class: 'button-secondary' %>
     <% end %>
     <% unless invalidation.enqueued? || invalidation.cancelled? %>
-      <%= button_to 'Start', start_admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :post, class: 'button' %>
+      <%= button_to 'Start', start_admin_invalidation_path(invalidation, params.permit(:state, :q)), method: :post, class: 'button' %>
     <% end %>
     <% unless invalidation.started? %>
-      <%= button_to 'Delete', admin_invalidation_path(invalidation, params.slice(:state, :q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete invalidation?' } %>
+      <%= button_to 'Delete', admin_invalidation_path(invalidation, params.permit(:state, :q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete invalidation?' } %>
     <% end %>
   </td>
 </tr>

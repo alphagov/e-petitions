@@ -7,7 +7,7 @@ class Admin::UserSessionsController < Admin::AdminController
   end
 
   def create
-    @user_session = AdminUserSession.new(params[:admin_user_session])
+    @user_session = AdminUserSession.new(admin_user_session_params)
 
     if @user_session.save
       redirect_to_target_or_default
@@ -33,6 +33,10 @@ class Admin::UserSessionsController < Admin::AdminController
   end
 
   private
+
+  def admin_user_session_params
+    params.require(:admin_user_session).permit(:email, :password)
+  end
 
   def last_request_update_allowed?
     action_name != 'status'

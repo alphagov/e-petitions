@@ -37,7 +37,11 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petitions
-    @petitions = @parliament.petitions.search(params)
+    @petitions = @parliament.petitions.search(petition_search_params)
+  end
+
+  def petition_search_params
+    params.permit([:q, :state, :page, :parliament, :count])
   end
 
   def fetch_petition
