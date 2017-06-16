@@ -7,7 +7,7 @@ end
 
 # create n models
 Given(/^(\d+) #{capture_plural_factory} exist(?: with #{capture_fields})?$/) do |count, plural_factory, fields|
-  count.to_i.times { create_model(plural_factory.singularize, fields) }
+  create_models(count, plural_factory.singularize, fields)
 end
 
 # create models from a table
@@ -26,18 +26,23 @@ Then(/^#{capture_model} should not exist(?: with #{capture_fields})?$/) do |name
 end
 
 # find models with a table
-Then(/^the following #{capture_plural_factory} should exists?:?$/) do |plural_factory, table|
+Then(/^the following #{capture_plural_factory} should exist:?$/) do |plural_factory, table|
   expect(find_models_from_table(plural_factory, table)).not_to be_any(&:nil?)
+end
+
+# not find models with a table
+Then(/^the following #{capture_plural_factory} should not exists?:?$/) do |plural_factory, table|
+  find_models_from_table(plural_factory, table).should be_all(&:nil?)
 end
 
 # find exactly n models
 Then(/^(\d+) #{capture_plural_factory} should exist(?: with #{capture_fields})?$/) do |count, plural_factory, fields|
-  expect(find_models(plural_factory.singularize, fields).size).to == count.to_i
+  expect(find_models(plural_factory.singularize, fields).size).to eq(count.to_i)
 end
 
 # assert equality of models
 Then(/^#{capture_model} should be #{capture_model}$/) do |a, b|
-  expect(model!(a)).to eq model!(b)
+  expect(model!(a)).to eq(model!(b))
 end
 
 # assert model is in another model's has_many assoc
@@ -47,17 +52,17 @@ end
 
 # assert model is not in another model's has_many assoc
 Then(/^#{capture_model} should not be (?:in|one of|amongst) #{capture_model}(?:'s)? (\w+)$/) do |target, owner, association|
-  expecT(model!(owner).send(association)).not_to include(model!(target))
+  expect(model!(owner).send(association)).not_to include(model!(target))
 end
 
 # assert model is another model's has_one/belongs_to assoc
 Then(/^#{capture_model} should be #{capture_model}(?:'s)? (\w+)$/) do |target, owner, association|
-  expect(model!(owner).send(association)).to == model!(target)
+  expect(model!(owner).send(association)).to eq(model!(target))
 end
 
 # assert model is not another model's has_one/belongs_to assoc
 Then(/^#{capture_model} should not be #{capture_model}(?:'s)? (\w+)$/) do |target, owner, association|
-  expect(model!(owner).send(association)).not_to == model!(target)
+  expect(model!(owner).send(association)).not_to eq(model!(target))
 end
 
 # assert model.predicate?
@@ -78,23 +83,23 @@ Then(/^#{capture_model} should not (?:be|have) (?:an? )?#{capture_predicate}$/) 
   end
 end
 
-# expect(model.attribute).to eql(value)
-# expect(model.attribute).not_to eql(value)
+# expect(model.attribute).to eq(value)
+# expect(model.attribute).not_to eq(value)
 Then(/^#{capture_model}'s (\w+) (should(?: not)?) be #{capture_value}$/) do |name, attribute, expectation, expected|
   actual_value  = model(name).send(attribute)
-  expectation   = (expectation.include?('not') ? :not_to : :to)
+  expectation   = expectation.gsub("should", "to").gsub(" ", "_")
 
   case expected
   when 'nil', 'true', 'false'
-    expect(actual_value).send(expectation, send("be_#{expected}"))
+    expect(actual_value).send(expectation, eq(eval(expected)))
   when /^[+-]?[0-9_]+(\.\d+)?$/
-    expect(actual_value).send(expectation, eql(expected.to_f))
+    expect(actual_value).send(expectation, eq(expected.to_f))
   else
-    expect(actual_value.to_s).send(expectation, eql(eval(expected)))
+    expect(actual_value.to_s).send(expectation, eq(eval(expected)))
   end
 end
 
 # assert size of association
 Then /^#{capture_model} should have (\d+) (\w+)$/ do |name, size, association|
-  expect(model!(name).send(association).size).to eq size.to_i
+  expect(model!(name).send(association).size).to eq(size.to_i)
 end
