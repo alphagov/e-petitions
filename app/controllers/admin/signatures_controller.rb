@@ -1,5 +1,11 @@
 class Admin::SignaturesController < Admin::AdminController
-  before_action :fetch_signature
+  before_action :fetch_signature, except: :index
+
+  def index
+    @query = params.fetch(:q, '')
+    @search_type = "signature"
+    @signatures = Signature.send(search_query_method, @query).paginate(page: params[:page], per_page: 50)
+  end
 
   def validate
     begin
@@ -33,5 +39,23 @@ class Admin::SignaturesController < Admin::AdminController
 
   def fetch_signature
     @signature = Signature.find(params[:id])
+  end
+
+  def search_query_method
+    if query_is_ip?
+      :for_ip
+    elsif query_is_email?
+      :for_email
+    else
+      :for_name
+    end
+  end
+
+  def query_is_ip?
+    /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ @query
+  end
+
+  def query_is_email?
+    @query.include?('@')
   end
 end

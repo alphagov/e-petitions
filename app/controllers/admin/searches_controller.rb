@@ -1,11 +1,11 @@
 class Admin::SearchesController < Admin::AdminController
-  def show
-    set_search_params
+  before_action :set_search_params
 
-    if signature_search?
-      perform_signature_search
-    elsif find_petition_by_id?
+  def show
+    if find_petition_by_id?
       find_petition_by_id
+    elsif signature_search?
+      find_signatures
     else
       find_petitions
     end
@@ -15,8 +15,16 @@ class Admin::SearchesController < Admin::AdminController
 
   def set_search_params
     @query = params.fetch(:q, '')
-    @search_type = params.fetch(:search_type, "keyword")
+    @search_type = params.fetch(:search_type, "petition")
     @tag_filters = params.fetch(:tag_filters, [])
+  end
+
+  def find_petition_by_id?
+    @query =~ /^\d+$/
+  end
+
+  def signature_search?
+    @search_type == "signature"
   end
 
   def find_petition_by_id
@@ -27,30 +35,11 @@ class Admin::SearchesController < Admin::AdminController
     end
   end
 
-  def find_petition_by_id?
-    @search_type == "petition_id"
-  end
-
-  def find_signatures(query_method)
-    @signatures = Signature.send(query_method, @query).paginate(page: params[:page], per_page: 50)
+  def find_signatures
+    redirect_to(controller: 'admin/signatures', action: 'index', q: @query)
   end
 
   def find_petitions
-    redirect_to(controller: 'admin/petitions', action: 'index', q: @query, search_type: @search_type, tag_filters: @tag_filters)
-  end
-
-  def signature_search?
-    @search_type == "sig_name" || @search_type == "sig_email" || @search_type == "ip_address"
-  end
-
-  def perform_signature_search
-    case @search_type
-    when "sig_name"
-      find_signatures(:for_name)
-    when "sig_email"
-      find_signatures(:for_email)
-    when "ip_address"
-      find_signatures(:for_ip)
-    end
+    redirect_to(controller: 'admin/petitions', action: 'index', q: @query, tag_filters: @tag_filters)
   end
 end

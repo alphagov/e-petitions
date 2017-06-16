@@ -1,8 +1,9 @@
 class Admin::PetitionsController < Admin::AdminController
   respond_to :html
+  before_action :set_search_params, only: :index
 
   def index
-    set_search_params
+    @search_type = "petition"
     @petitions = Petition.search(params.merge(count: 50))
 
     respond_to do |format|
@@ -33,7 +34,6 @@ class Admin::PetitionsController < Admin::AdminController
 
   def set_search_params
     @query = params.fetch(:q, '')
-    @search_type = params.fetch(:search_type, 'keyword')
     @state = params.fetch(:state, :all)
     @tag_filters = params.fetch(:tag_filters, [])
   end

@@ -9,6 +9,7 @@
       <%= radio_button_tag :search_type, search_type[:value], check_search_type?(@search_type, search_type[:value]) %><%= search_type[:display_name] %>
     <% end %>
   </div>
+
   <details class="tag-filters" <%= "open" if @tag_filters && @tag_filters.any? %>>
     <summary class="summary">Filter by tags</summary>
     <div class="panel-indent">
@@ -20,4 +21,5 @@
       <% end %>
     </div>
   </details>
+
 <% end %>

@@ -38,13 +38,17 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
     before { login_as(user) }
 
     describe "GET 'index'" do
-
       describe "a HTML request" do
         it "responds successfully with HTML" do
           get :index
           expect(response).to be_success
           expect(response).to render_template('admin/petitions/index')
         end
+      end
+
+      it "it sets the search_type" do
+        get :index
+        expect(assigns(:search_type)).to eq "petition"
       end
 
       describe "a CSV request" do
@@ -88,7 +92,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
       end
 
-      describe "when no 'q', 'search_type', 'or 'state' param is present" do
+      describe "when no 'q' or 'state' param is present" do
         it "fetchs a list of 50 petitions" do
           expect(Petition).to receive(:search).with(hash_including(count: 50)).and_return Petition.none
           get :index
@@ -102,7 +106,6 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         it "assigns defaults" do
           get :index
           expect(assigns(:query)).to eq ''
-          expect(assigns(:search_type)).to eq 'keyword'
           expect(assigns(:state)).to eq :all
         end
       end
@@ -115,17 +118,6 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         it "passes on pagination params" do
           expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
           get :index, q: 'lorem', page: '3'
-        end
-      end
-
-      describe "when a 'search_type' param is present" do
-        it "passes in the search_type param" do
-          expect(Petition).to receive(:search).with(hash_including(search_type: 'tag')).and_return Petition.none
-          get :index, search_type: 'tag'
-        end
-        it "passes on pagination params" do
-          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, search_type: 'tag', page: '3'
         end
       end
 

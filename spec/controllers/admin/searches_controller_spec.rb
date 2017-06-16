@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Admin::SearchesController, type: :controller, admin: true do
-
   describe "logged in as moderator user" do
     before :each do
       @user = FactoryGirl.create(:moderator_user)
@@ -15,7 +14,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         context "search_type not present" do
           it "defaults the search type to 'keyword'" do
             get :show
-            expect(assigns(:search_type)).to eq "keyword"
+            expect(assigns(:search_type)).to eq "petition"
           end
         end
 
@@ -49,47 +48,10 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         end
       end
 
-      context "searching for signatures" do
-        let(:signatures) { double }
-
-        shared_examples "a signature search" do |search_type, sig_method|
-          it "returns an array of signatures" do
-            allow(signatures).to receive_messages(paginate: signatures)
-            allow(Signature).to receive_messages(sig_method => signatures)
-            get :show, q: '', search_type: search_type
-            expect(assigns(:signatures)).to eq(signatures)
-          end
-        end
-
-        context "by name" do
-          let(:query) { "Joe Bloggs" }
-          let(:search_type) { "sig_name" }
-
-          it_behaves_like "a signature search", "sig_name", :for_name
-          it_behaves_like "it sets instance variables"
-        end
-
-        context "by email address" do
-          let(:query) { "joe.bloggs@unboxed.com" }
-          let(:search_type) { "sig_email" }
-
-          it_behaves_like "a signature search", "sig_email", :for_email
-          it_behaves_like "it sets instance variables"
-        end
-
-        context "by IP address" do
-          let(:query) { "192.168.1.1" }
-          let(:search_type) { "ip_address" }
-
-          it_behaves_like "a signature search", "ip_address", :for_ip
-          it_behaves_like "it sets instance variables"
-        end
-      end
-
       context "searching for petition by id" do
         let(:petition) { double(id: 123, to_param: '123') }
-        let(:search_type) { "petition_id" }
         let(:query) { "123" }
+        let(:search_type) { "signature" }
 
         before do
           allow(Petition).to receive_messages(find: petition)
@@ -98,6 +60,11 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         it_behaves_like "it sets instance variables"
 
         it "redirects to a petition if the id exists" do
+          get :show, q: query
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+        end
+
+        it "ignores the search type param" do
           get :show, q: query, search_type: search_type
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
@@ -108,38 +75,43 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
           end
 
           it "renders the form with an error" do
-            get :show, q: query, search_type: search_type
+            get :show, q: query
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions")
           end
 
           it "sets the flash error" do
-            get :show, q: query, search_type: search_type
+            get :show, q: query
             expect(flash[:alert]).to match(/123/)
           end
         end
       end
 
-      context "searching by keyword" do
-        let(:search_type) { "keyword" }
+      context "searching for signatures" do
+        let(:search_type) { "signature" }
+        let(:query) { "test@email.com" }
+
+        it_behaves_like "it sets instance variables"
+
+        it "redirects to admin signature index path" do
+          get :show, q: query, search_type: search_type
+          expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/signatures?q=test%40email.com"
+        end
+
+        it "ignores any tag filters in the params" do
+          get :show, q: query, search_type: search_type, tag_filters: tag_filters
+          expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/signatures?q=test%40email.com"
+        end
+      end
+
+      context "searching for petitions" do
+        let(:search_type) { "petitions" }
         let(:query) { "example query" }
 
         it_behaves_like "it sets instance variables"
 
-        it "redirects to the all petitions page" do
+        it "redirects to the admin petitions index path" do
           get :show, q: query, search_type: search_type, tag_filters: tag_filters
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=example+query&search_type=keyword&tag_filters%5B%5D=tag+1&tag_filters%5B%5D=tag+2")
-        end
-      end
-
-      context "searching by tag" do
-        let(:search_type) { "tag" }
-        let(:query) { "tag 1"}
-
-        it_behaves_like "it sets instance variables"
-
-        it "redirects to the all petitions page" do
-          get :show, q: query, search_type: search_type, tag_filters: tag_filters
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=tag+1&search_type=tag&tag_filters%5B%5D=tag+1&tag_filters%5B%5D=tag+2")
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=example+query&tag_filters%5B%5D=tag+1&tag_filters%5B%5D=tag+2")
         end
       end
     end
