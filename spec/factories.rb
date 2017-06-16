@@ -18,6 +18,10 @@ FactoryGirl.define do
     role "moderator"
   end
 
+  factory :moderator_user_due_for_password_reset, :parent => :moderator_user do
+    password_changed_at 10.months.ago
+  end
+
   factory :archived_debate_outcome, class: "Archived::DebateOutcome" do
     association :petition, factory: :archived_petition
     debated_on { 1.year.ago.to_date }
