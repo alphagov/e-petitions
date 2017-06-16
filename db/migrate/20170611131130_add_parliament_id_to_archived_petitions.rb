@@ -7,6 +7,9 @@ class AddParliamentIdToArchivedPetitions < ActiveRecord::Migration
     add_index :archived_petitions, :parliament_id
     add_foreign_key :archived_petitions, :parliaments
 
+    Parliament.reset_column_information
+    ArchivedPetition.reset_column_information
+
     parliament = Parliament.create!(
       government: "Conservative – Liberal Democrat coalition",
       opening_at: "2010-05-18T00:00:00".in_time_zone,
