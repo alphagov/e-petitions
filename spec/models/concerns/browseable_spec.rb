@@ -49,8 +49,7 @@ RSpec.describe Browseable, type: :model do
     let(:klass)  { double(:klass, facet_definitions: scopes, taggable?: true, filter_definitions: filters) }
     let(:relation) { double(:relation, except: self) }
     let(:tag_filters) { ["tag 1", "tag 2"] }
-    let(:search_type) { "keyword" }
-    let(:params) { { q: 'search', page: '3', tag_filters: tag_filters, search_type: search_type} }
+    let(:params) { { q: 'search', page: '3', tag_filters: tag_filters } }
     let(:search) { described_class.new(klass, params) }
 
 
@@ -333,42 +332,6 @@ RSpec.describe Browseable, type: :model do
 
         it "returns false" do
           expect(search.scoped?).to eq(false)
-        end
-      end
-    end
-
-    describe "#tag_search?" do
-      context "when search_type is tag" do
-        let(:search_type) { "tag" }
-
-        context "when there is a query param" do
-          it "returns true" do
-            expect(search.tag_search?).to be true
-          end
-        end
-
-        context "when there is no query param" do
-          let(:params) { { page: '3', tag_filters: tag_filters, search_type: search_type } }
-
-          it "returns false" do
-            expect(search.tag_search?).to be false
-          end
-        end
-      end
-
-      context "when search_type is keyword" do
-        context "when there is a query param" do
-          it "returns true" do
-            expect(search.keyword_search?).to be true
-          end
-        end
-
-        context "when there is no query param" do
-          let(:params) { { page: '3', tag_filters: tag_filters, search_type: search_type } }
-
-          it "returns false" do
-            expect(search.keyword_search?).to be false
-          end
         end
       end
     end

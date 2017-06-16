@@ -125,10 +125,6 @@ module Browseable
       @query ||= params.fetch(:q, '')
     end
 
-    def search_type
-      @search_type ||= params.fetch(:search_type, 'keyword')
-    end
-
     def page_size
       @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
     end
@@ -147,6 +143,10 @@ module Browseable
 
     def scoped?
       scope != :all
+    end
+
+    def search?
+      query.present?
     end
 
     def tag_search?
@@ -211,14 +211,13 @@ module Browseable
     end
 
     def pre_scope_search
-      if tag_search?
-        relation = klass.with_tag(query)
-        relation = relation.except(:select).select(star)
-        relation = relation.except(:order)
-      elsif keyword_search?
+      if search?
         relation = klass.basic_search(query)
         relation = relation.except(:select).select(star)
         relation = relation.except(:order)
+        # TODO: Also search for petitions that have query in their tags list
+        # and append results to the basic search.
+        # klass.with_tag(query)
       else
         relation = klass
       end
