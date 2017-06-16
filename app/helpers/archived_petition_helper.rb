@@ -22,4 +22,18 @@ module ArchivedPetitionHelper
   def archived_petition_facets_with_counts(petitions)
     petitions.facets.slice(*archived_petition_facets)
   end
+
+  def petition_duration_to_words(duration)
+    duration = duration.to_d
+
+    if duration.frac.zero?
+      pluralize(duration.floor, "month")
+    elsif duration.frac > 0.75
+      "nearly #{pluralize(duration.ceil, "month")}"
+    elsif duration.frac < 0.25
+      "just over #{pluralize(duration.floor, "month")}"
+    else
+      "over #{pluralize(duration.floor, "month")}"
+    end
+  end
 end

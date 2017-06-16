@@ -532,7 +532,7 @@ CREATE TABLE parliaments (
     archived_at timestamp without time zone,
     threshold_for_response integer DEFAULT 10000 NOT NULL,
     threshold_for_debate integer DEFAULT 100000 NOT NULL,
-    petition_duration integer DEFAULT 6 NOT NULL
+    petition_duration integer DEFAULT 6
 );
 
 
@@ -1918,4 +1918,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170611131130');
 INSERT INTO schema_migrations (version) VALUES ('20170611190354');
 
 INSERT INTO schema_migrations (version) VALUES ('20170612120307');
+
+INSERT INTO schema_migrations (version) VALUES ('20170615133536');
 

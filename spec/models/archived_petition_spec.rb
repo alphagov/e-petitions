@@ -199,7 +199,76 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#duration" do
-    it { is_expected.to delegate_method(:duration).to(:parliament).as(:petition_duration) }
+    context "when the parliament petition duration is nil" do
+      let(:parliament) { FactoryGirl.create(:parliament, petition_duration: nil) }
+
+      context "and the petition was not published" do
+        let(:petition) { FactoryGirl.create(:archived_petition, :rejected, parliament: parliament) }
+
+        it "returns 0" do
+          expect(petition.duration).to eq(0)
+        end
+      end
+
+      context "and the petition was published for three months" do
+        let(:opened_at) { 2.years.ago }
+        let(:closed_at) { opened_at + 3.months }
+        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+
+        it "returns 3" do
+          expect(petition.duration).to eq(3)
+        end
+      end
+
+      context "and the petition was published for six months" do
+        let(:opened_at) { 2.years.ago }
+        let(:closed_at) { opened_at + 6.months }
+        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+
+        it "returns 3" do
+          expect(petition.duration).to eq(6)
+        end
+      end
+
+      context "and the petition was published for nine months" do
+        let(:opened_at) { 2.years.ago }
+        let(:closed_at) { opened_at + 9.months }
+        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+
+        it "returns 3" do
+          expect(petition.duration).to eq(9)
+        end
+      end
+
+      context "and the petition was published for twelve months" do
+        let(:opened_at) { 2.years.ago }
+        let(:closed_at) { opened_at + 12.months }
+        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+
+        it "returns 3" do
+          expect(petition.duration).to eq(12)
+        end
+      end
+
+      context "and the petition was published for an arbitrary length of time" do
+        let(:opened_at) { 2.years.ago }
+        let(:closed_at) { opened_at + 45.days }
+        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+
+        it "returns a fractional number of months assuming that 1 month == 30 days" do
+          expect(petition.duration).to eq(1.5)
+        end
+      end
+    end
+
+    context "when the parliament petition duration is not nil" do
+      let(:parliament) { FactoryGirl.create(:parliament, petition_duration: 6) }
+      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament) }
+
+      it "returns the duration from the parliament" do
+        expect(petition.duration).to eq(6)
+      end
+    end
   end
 
   describe "#threshold_for_response" do

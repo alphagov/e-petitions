@@ -49,6 +49,8 @@ FactoryGirl.define do
     trait :rejected do
       reason_for_rejection "Petition rejection"
       state "rejected"
+      opened_at nil
+      closed_at nil
     end
   end
 

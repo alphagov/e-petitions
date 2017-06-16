@@ -40,7 +40,7 @@
   <% else %>
     <p class="flash-notice">
       This petition is closed
-      <span>This petition ran for <%= @petition.duration %> months</span>
+      <span>This petition ran for <%= petition_duration_to_words(@petition.duration) %></span>
     </p>
   <% end %>
 
