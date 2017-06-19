@@ -2,7 +2,7 @@ class Sponsor < ApplicationRecord
 
   # = Relationships =
   belongs_to :petition
-  belongs_to :signature
+  belongs_to :signature, optional: true
 
   # = Validations =
   validates_presence_of :petition
@@ -10,6 +10,7 @@ class Sponsor < ApplicationRecord
   def self.supporting_the_petition
     joins(:signature).merge(Signature.validated)
   end
+
   def supports_the_petition?
     signature.present? && signature.validated?
   end

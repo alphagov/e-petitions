@@ -60,7 +60,7 @@ class Petition < ApplicationRecord
   facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
   facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
 
-  belongs_to :creator_signature, class_name: 'Signature'
+  belongs_to :creator_signature, class_name: 'Signature', optional: true
   accepts_nested_attributes_for :creator_signature, update_only: true
 
   has_one :debate_outcome, dependent: :destroy

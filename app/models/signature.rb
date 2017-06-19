@@ -25,8 +25,8 @@ class Signature < ApplicationRecord
   }
 
   # = Relationships =
-  belongs_to :petition
-  belongs_to :invalidation
+  belongs_to :petition, optional: true
+  belongs_to :invalidation, optional: true
   has_one :sponsor
 
   # = Validations =

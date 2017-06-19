@@ -1,6 +1,6 @@
 class ConstituencyPetitionJournal < ApplicationRecord
   belongs_to :petition
-  belongs_to :constituency, primary_key: :external_id
+  belongs_to :constituency, primary_key: :external_id, optional: true
 
   validates :petition, presence: true
   validates :constituency_id, presence: true, length: { maximum: 255 }

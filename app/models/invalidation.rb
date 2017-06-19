@@ -2,7 +2,7 @@ class Invalidation < ApplicationRecord
   extend Searchable(:id, :summary, :details, :petition_id)
   include Browseable
 
-  belongs_to :petition
+  belongs_to :petition, optional: true
   has_many :signatures
 
   facet :all,       -> { by_most_recent }
