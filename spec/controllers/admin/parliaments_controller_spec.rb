@@ -8,7 +8,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
     ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method }
+        before { process action, method: method }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -28,7 +28,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
     ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method }
+        before { process action, method: method }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
