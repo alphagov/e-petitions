@@ -1,257 +1,114 @@
 namespace :epets do
   namespace :migrations do
-    desc "Migrate countries to location codes"
-    task :country_to_location_codes => :environment do
-      country_map = {
-        "Afghanistan" => "AF",
-        "Albania" => "AL",
-        "Algeria" => "DZ",
-        "American Samoa" => "AS",
-        "Andorra" => "AD",
-        "Angola" => "AO",
-        "Anguilla (British Overseas Territory)" => "AI",
-        "Antigua and Barbuda" => "AG",
-        "Argentina" => "AR",
-        "Armenia" => "AM",
-        "Aruba/Dutch Caribbean" => "AW",
-        "Ascension Island (British Overseas Territory)" => "SH",
-        "Australia" => "AU",
-        "Austria" => "AT",
-        "Azerbaijan" => "AZ",
-        "Bahamas" => "BS",
-        "Bahrain" => "BH",
-        "Bangladesh" => "BD",
-        "Barbados" => "BB",
-        "Belarus" => "BY",
-        "Belgium" => "BE",
-        "Belize" => "BZ",
-        "Benin" => "BJ",
-        "Bermuda (British Overseas Territory)" => "BM",
-        "Bhutan" => "BT",
-        "Bolivia" => "BO",
-        "Bosnia and Herzegovina" => "BA",
-        "Botswana" => "BW",
-        "Brazil" => "BR",
-        "British Antarctic Territory" => "BAT",
-        "British Indian Ocean Territory" => "IO",
-        "British Virgin Islands (British Overseas Territory)" => "VG",
-        "Brunei" => "BN",
-        "Bulgaria" => "BG",
-        "Burkina Faso" => "BF",
-        "Burma" => "MM",
-        "Burundi" => "BI",
-        "Cambodia" => "KH",
-        "Cameroon" => "CM",
-        "Canada" => "CA",
-        "Cape Verde" => "CV",
-        "Cayman Islands" => "KY",
-        "Central African Republic" => "CF",
-        "Chad" => "TD",
-        "Channel Islands" => "XC",
-        "Chile" => "CL",
-        "China" => "CN",
-        "Colombia" => "CO",
-        "Comoros" => "KM",
-        "Congo" => "CG",
-        "Congo (Democratic Republic)" => "CD",
-        "Costa Rica" => "CR",
-        "Croatia" => "HR",
-        "Cuba" => "CU",
-        "Cyprus" => "CY",
-        "Czech Republic" => "CZ",
-        "Denmark" => "DK",
-        "Djibouti" => "DJ",
-        "Dominica, Commonwealth of" => "DM",
-        "Dominican Republic" => "DO",
-        "East Timor (Timor-Leste)" => "TL",
-        "Ecuador" => "EC",
-        "Egypt" => "EG",
-        "El Salvador" => "SV",
-        "Equatorial Guinea" => "GQ",
-        "Eritrea" => "ER",
-        "Estonia" => "EE",
-        "Ethiopia" => "ET",
-        "Falkland Islands (British Overseas Territory)" => "FK",
-        "Fiji" => "FJ",
-        "Finland" => "FI",
-        "France" => "FR",
-        "French Guiana" => "GF",
-        "French Polynesia" => "PF",
-        "Gabon" => "GA",
-        "Gambia" => "GM",
-        "Georgia" => "GE",
-        "Germany" => "DE",
-        "Ghana" => "GH",
-        "Gibraltar" => "GI",
-        "Greece" => "GR",
-        "Grenada" => "GD",
-        "Guadeloupe" => "GP",
-        "Guatemala" => "GT",
-        "Guinea" => "GN",
-        "Guinea-Bissau" => "GW",
-        "Guyana" => "GY",
-        "Haiti" => "HT",
-        "Honduras" => "HN",
-        "Hong Kong" => "HK",
-        "Hungary" => "HU",
-        "Iceland" => "IS",
-        "India" => "IN",
-        "Indonesia" => "ID",
-        "Iran" => "IR",
-        "Iraq" => "IQ",
-        "Ireland" => "IE",
-        "Isle of Man" => "IM",
-        "Israel" => "IL",
-        "Italy" => "IT",
-        "Ivory Coast (Cote d'Ivoire)" => "CI",
-        "Jamaica" => "JM",
-        "Japan" => "JP",
-        "Jordan" => "JO",
-        "Kazakhstan" => "KZ",
-        "Kenya" => "KE",
-        "Kiribati" => "KI",
-        "North Korea" => "KP",
-        "South Korea" => "KR",
-        "Kosovo" => "XK",
-        "Kuwait" => "KW",
-        "Kyrgyzstan" => "KG",
-        "Laos" => "LA",
-        "Latvia" => "LV",
-        "Lebanon" => "LB",
-        "Lesotho" => "LS",
-        "Liberia" => "LR",
-        "Libya" => "LY",
-        "Liechtenstein" => "LI",
-        "Lithuania" => "LT",
-        "Luxembourg" => "LU",
-        "Macao" => "MO",
-        "Macedonia" => "MK",
-        "Madagascar" => "MG",
-        "Malawi" => "MW",
-        "Malaysia" => "MY",
-        "Maldives" => "MV",
-        "Mali" => "ML",
-        "Malta" => "MT",
-        "Marshall Islands" => "MH",
-        "Martinique" => "MQ",
-        "Mauritania" => "MR",
-        "Mauritius" => "MU",
-        "Mayotte" => "YT",
-        "Mexico" => "MX",
-        "Micronesia" => "FM",
-        "Moldova" => "MD",
-        "Monaco" => "MC",
-        "Mongolia" => "MN",
-        "Montenegro" => "ME",
-        "Montserrat (British Overseas Territory)" => "MS",
-        "Morocco" => "MA",
-        "Mozambique" => "MZ",
-        "Namibia" => "NA",
-        "Nauru" => "NR",
-        "Nepal" => "NP",
-        "Netherlands" => "NL",
-        "New Caledonia" => "NC",
-        "New Zealand" => "NZ",
-        "Nicaragua" => "NI",
-        "Niger" => "NE",
-        "Nigeria" => "NG",
-        "Norway" => "NO",
-        "Oman" => "OM",
-        "Pakistan" => "PK",
-        "Palau" => "PW",
-        "The Occupied Palestinian Territories" => "PS",
-        "Panama" => "PA",
-        "Papua New Guinea" => "PG",
-        "Paraguay" => "PY",
-        "Peru" => "PE",
-        "Philippines" => "PH",
-        "Pitcairn" => "PN",
-        "Poland" => "PL",
-        "Portugal" => "PT",
-        "Qatar" => "QA",
-        "Réunion" => "RE",
-        "Romania" => "RO",
-        "Russian Federation" => "RU",
-        "Rwanda" => "RW",
-        "St Helena" => "SH",
-        "St Kitts and Nevis" => "KN",
-        "St Lucia" => "LC",
-        "St Pierre & Miquelon" => "PM",
-        "St Vincent and the Grenadines" => "VC",
-        "Samoa" => "WS",
-        "São Tomé and Principe" => "ST",
-        "Saudi Arabia" => "SA",
-        "Senegal" => "SN",
-        "Serbia" => "RS",
-        "Seychelles" => "SC",
-        "Sierra Leone" => "SL",
-        "Singapore" => "SG",
-        "Slovakia" => "SK",
-        "Slovenia" => "SI",
-        "Solomon Islands" => "SB",
-        "Somalia" => "SO",
-        "South Africa" => "ZA",
-        "South Georgia & South Sandwich Islands" => "GS",
-        "Spain" => "ES",
-        "Sri Lanka" => "LK",
-        "Sudan" => "SD",
-        "Suriname" => "SR",
-        "Swaziland" => "SZ",
-        "Sweden" => "SE",
-        "Switzerland" => "CH",
-        "Syria" => "SY",
-        "Taiwan" => "TW",
-        "Tajikistan" => "TJ",
-        "Tanzania" => "TZ",
-        "Thailand" => "TH",
-        "Togo" => "TG",
-        "Tonga" => "TO",
-        "Trinidad and Tobago" => "TT",
-        "Tristan da Cunha" => "SH",
-        "Tunisia" => "TN",
-        "Turkey" => "TR",
-        "Turkmenistan" => "TM",
-        "Turks & Caicos Islands (British Overseas Territory)" => "TC",
-        "Tuvalu" => "TV",
-        "Uganda" => "UG",
-        "Ukraine" => "UA",
-        "United Arab Emirates" => "AE",
-        "United Kingdom" => "GB",
-        "United States" => "US",
-        "Uruguay" => "UY",
-        "Uzbekistan" => "UZ",
-        "Vanuatu" => "VU",
-        "Venezuela" => "VE",
-        "Vietnam" => "VN",
-        "Wallis & Futuna" => "WF",
-        "Western Sahara" => "EH",
-        "Yemen" => "YE",
-        "Zambia" => "ZM",
-        "Zimbabwe" => "ZW"
-      }
+    desc "Copy legacy archived petition data to new columns"
+    task archived_petitions: :environment do
+      no_action    = /\AIt did not have a clear statement explaining what action you want the government to take\./
+      honours      = /\APetitions cannot include information about honours or appointments\. Find information about nominations for honours at https:\/\/www\.gov\.uk\/honours\./
+      duplicate    = /\AThere is already a petition about this issue\./
+      irrelevant   = /\APetitions cannot be used to request action on issues that are outside the responsibility of the government. This includes party political material; commercial endorsements including the promotion of any product, service or publication; issues that are dealt with by devolved bodies, eg The Scottish Parliament; correspondence on personal issues. E-petitions cannot be used for freedom of information requests./
+      notes_added  = /The following explanatory notes have been added:/
+      petition_url = /http:\/\/submissions.epetitions.direct.gov.uk\/petitions\/(\d+)/
 
-      Signature.find_each do |signature|
-        next if signature.location_code?
-        next unless country = signature.country
-        next unless location_code = country_map[country]
-
-        signature.location_code = location_code
-        signature.save(validate: false)
+      cleaner = lambda do |petition, pattern|
+        petition.reason_for_rejection.dup.tap do |reason|
+          reason.sub!(pattern, '')
+          reason.sub!(notes_added, '')
+          reason.gsub!(petition_url, 'https://petition.parliament.uk/archived/petitions/\1')
+          reason.strip!
+          reason.sub!(/\A[^a-zA-Z0-9]+/, '')
+          reason.sub!(/\A\w/) { |match| match.upcase }
+        end
       end
 
-      Petition.find_each do |petition|
-        locations = petition.signatures.validated.distinct.pluck(:location_code).compact
+      Archived::Petition.find_each do |petition|
+        Archived::Petition.transaction do
+          petition.action = petition.title
 
-        locations.each do |location|
-          journal = CountryPetitionJournal.for(petition, location)
+          # Move decription into the additional details field. Whilst this
+          # isn't strictly correct, the background field is limited to 300
+          # characters so we'll automatically display additional details if
+          # the background is blank.
+          petition.additional_details = petition.description
 
-          journal.with_lock do
-            signature_count = petition.signatures.validated.where(location_code: location).count
-            journal.update(signature_count: signature_count)
+          # There was no moderation for the original e-petitions website
+          petition.moderation_threshold_reached_at = petition.created_at
+
+          if petition.opened_at?
+            # No way of knowing this so just set it to the closing date/time
+            petition.last_signed_at = petition.closed_at
+
+            # Synthesize threshold timestamps based upon a linear interpolation
+            # of when they got to halfway to the threshold. This should weight
+            # the threshold timestamp to earlier in the petition's lifespan to
+            # take account of the long tail effect of petitions. We need these
+            # so that the state filters can be extended to include further scopes
+            # such as responded and debated.
+            #
+            # More complicated modelling is not possible since it all depends on
+            # when the petition goes viral (if at all).
+            duration = petition.closed_at - petition.opened_at
+
+            if petition.signature_count >= 10000
+              fraction = Rational(5000, petition.signature_count)
+              petition.response_threshold_reached_at = petition.opened_at + duration * fraction
+            end
+
+            if petition.signature_count >= 100000
+              fraction = Rational(50000, petition.signature_count)
+              petition.debate_threshold_reached_at = petition.opened_at + duration * fraction
+            end
           end
+
+          if petition.response?
+            government_response = petition.government_response || petition.build_government_response
+            government_response.summary = ""
+            government_response.details = petition.response
+            government_response.save!
+
+            if petition.signature_count > 10000
+              # Assume that the petition got a government response one month after it
+              petition.government_response_at = petition.response_threshold_reached_at + 1.month
+            else
+              # If the government responded without passing the threshold
+              # assume that it was done after the petition was closed.
+              petition.government_response_at = petition.closed_at + 1.month
+            end
+          end
+
+          if petition.reason_for_rejection?
+            rejection = petition.rejection || petition.build_rejection
+
+            case petition.reason_for_rejection
+            when no_action
+              rejection.code = "no-action"
+              rejection.details = cleaner.call(petition, no_action).presence
+            when honours
+              rejection.code = "honours"
+              rejection.details = cleaner.call(petition, honours).presence
+            when duplicate
+              rejection.code = "duplicate"
+              rejection.details = cleaner.call(petition, duplicate).presence
+            when irrelevant
+              rejection.code = "irrelevant"
+              rejection.details = cleaner.call(petition, irrelevant).presence
+            else
+              raise RuntimeError, "Unrecognised rejection reason: #{petition.reason_for_rejection.inspect}"
+            end
+
+            rejection.save!
+
+            # Assume that the updated_at timestamp is when the petition was rejected
+            petition.rejected_at = petition.updated_at
+          end
+
+          # Set default values for new columns
+          petition.debate_state = "pending"
+          petition.special_consideration = false
+
+          petition.save!
         end
 
-        petition.touch
+        $stdout.puts "Migrated #{petition.id} - #{petition.title}"
       end
     end
   end

@@ -24,6 +24,13 @@ en-GB:
             role:
               inclusion: "Role '%{value}' is invalid"
 
+        archived/debate_outcome:
+          attributes:
+            commons_image:
+              too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
+              too_short: "Height must be at least %{min_height}px (is %{height}px)"
+              incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+
         petition:
           attributes:
             moderation:

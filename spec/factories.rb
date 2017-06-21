@@ -18,6 +18,40 @@ FactoryGirl.define do
     role "moderator"
   end
 
+  factory :archived_debate_outcome, class: "Archived::DebateOutcome" do
+    association :petition, factory: :archived_petition
+    debated_on { 1.year.ago.to_date }
+    debated true
+
+    trait :fully_specified do
+      overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
+      sequence(:transcript_url) { |n|
+        "http://www.publications.parliament.uk/pa/cm#{debated_on.strftime('%Y%m')}/cmhansrd/cm#{debated_on.strftime('%y%m%d')}/debtext/#{debated_on.strftime('%y%m%d')}-0003.htm##{debated_on.strftime('%y%m%d')}49#{ '%06d' % n }"
+      }
+      video_url {
+        "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
+      }
+    end
+  end
+
+  factory :archived_government_response, class: "Archived::GovernmentResponse" do
+    association :petition, factory: :archived_petition
+    details "Government Response Details"
+    summary "Government Response Summary"
+  end
+
+  factory :archived_note, class: "Archived::Note" do
+    association :petition, factory: :archived_petition
+    details "Petition notes"
+  end
+
+  factory :archived_petition_email, class: "Archived::Petition::Email" do
+    association :petition, factory: :archived_petition
+    subject "Message Subject"
+    body "Message body"
+    sent_by "Admin User"
+  end
+
   factory :archived_petition, class: "Archived::Petition" do
     sequence(:title) { |n| "Petition #{n}" }
     state "closed"
@@ -52,6 +86,22 @@ FactoryGirl.define do
       opened_at nil
       closed_at nil
     end
+  end
+
+  factory :archived_rejection, class: "Archived::Rejection" do
+    association :petition, factory: :archived_petition
+    code "duplicate"
+  end
+
+  factory :archived_signature, class: "Archived::Signature" do
+    association :petition, factory: :archived_petition
+
+    sequence(:name)   { |n| "Jo Public #{n}" }
+    sequence(:email)  { |n| "jo#{n}@public.com" }
+    postcode            "SW1A 1AA"
+    location_code       "GB"
+    state               Signature::VALIDATED_STATE
+    unsubscribe_token { Authlogic::Random.friendly_token }
   end
 
   factory :petition do
