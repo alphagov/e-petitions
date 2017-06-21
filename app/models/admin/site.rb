@@ -40,7 +40,7 @@ class Admin::Site < ActiveRecord::Base
     deleted_tags = existing_tags - new_tags
 
     petitions_with_deleted_tags = deleted_tags.each do |tag|
-      petitions = Petition.where("'#{tag}' = ANY (tags)")
+      petitions = Petition.with_tag(tag)
       if petitions.any?
         error_message = "Tag '#{tag}' still being used on petitions: #{petitions.pluck(:id).join(', ')}"
         errors.add(:petition_tags, error_message)

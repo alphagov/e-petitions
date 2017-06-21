@@ -12,10 +12,10 @@ $(document).ready(function() {
 
   search_type_radios.change(function() {
     if ($(this).val() == "petition") {
-      $('details.tag-filters').show();
+      tag_filters_pane.show();
     }
     else {
-     $('details.tag-filters').hide();
+     tag_filters_pane.hide();
     }
   });
 });
