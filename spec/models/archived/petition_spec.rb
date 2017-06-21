@@ -15,6 +15,10 @@ RSpec.describe Archived::Petition, type: :model do
         }.from([]).to(["Parliament can't be blank"])
       end
     end
+
+    describe "government_response" do
+      it { is_expected.to have_one(:government_response) }
+    end
   end
 
   describe ".search" do
@@ -92,12 +96,6 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     it { is_expected.to validate_length_of(:additional_details).is_at_most(1000) }
-  end
-
-  describe "#response" do
-    it "defaults to nil" do
-      expect(petition.response).to be_nil
-    end
   end
 
   describe "#state" do

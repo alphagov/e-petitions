@@ -37,6 +37,10 @@ module PetitionHelper
     petition_list_header.present?
   end
 
+  def reveal_government_response?
+    params[:reveal_response] == "yes"
+  end
+
   private
 
   def render_petition_hidden_details(stage_manager, form)

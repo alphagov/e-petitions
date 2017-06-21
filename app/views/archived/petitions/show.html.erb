@@ -20,14 +20,14 @@
 
 <% if @petition.background? %>
   <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% unless @petition.additional_details.blank? %>
+  <% if @petition.additional_details? %>
     <details>
       <summary><span class="summary">More details</span></summary>
       <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
   <% end %>
 <% else %>
-  <% unless @petition.additional_details.blank? %>
+  <% if @petition.additional_details? %>
     <details open="open">
       <summary><span class="summary">More details</span></summary>
       <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
@@ -69,13 +69,34 @@
   </div>
 
   <div class="about-petitions">
-    <% if @petition.response? %>
+    <% if government_response = @petition.government_response? %>
       <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
         <h2 id="response-threshold-heading">Government responded</h2>
-        <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
+        <% if government_response.summary? %>
+          <blockquote class="pull-quote">
+            <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
+          </blockquote>
+
+          <% if government_response.details? %>
+            <% if reveal_government_response? %>
+              <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+            <% else %>
+              <details>
+                <summary><span class="summary">Read the response in full</span></summary>
+                <div class="panel-indent panel-no-border">
+                  <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+                </div>
+              </details>
+            <% end %>
+          <% end %>
+
+        <% else %>
+          <%= auto_link(simple_format(h(government_response.details), class: 'response'), html: { rel: 'nofollow' }) %>
+        <% end %>
       </section>
     <% end %>
   </div>
+
 <% end %>
 
 <ul class="petition-meta">

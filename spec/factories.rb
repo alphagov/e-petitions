@@ -65,7 +65,19 @@ FactoryGirl.define do
     end
 
     trait :response do
-      response "Petition response"
+      government_response_at { 1.week.ago }
+
+      transient do
+        response_summary { "Response Summary" }
+        response_details { "Response Details" }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_government_response do |r|
+          r.summary = evaluator.response_summary
+          r.details = evaluator.response_details
+        end
+      end
     end
 
     trait :open do

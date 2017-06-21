@@ -13,6 +13,7 @@ json.attributes do
   json.signature_count petition.signature_count
   json.opened_at api_date_format(petition.opened_at)
   json.closed_at api_date_format(petition.closed_at)
+  json.government_response_at api_date_format(petition.government_response_at)
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)
 
@@ -24,9 +25,12 @@ json.attributes do
     json.rejection nil
   end
 
-  if petition.response?
+  if response = petition.government_response
     json.government_response do
-      json.details petition.response
+      json.summary response.summary
+      json.details response.details
+      json.created_at api_date_format(response.created_at)
+      json.updated_at api_date_format(response.updated_at)
     end
   else
     json.government_response nil

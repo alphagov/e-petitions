@@ -46,7 +46,7 @@ module Archived
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
 
-    deprecate_attribute :title, :description
+    deprecate_attribute :title, :description, :response
 
     class << self
       def for_state(state)
@@ -86,6 +86,10 @@ module Archived
 
     def closed_early_due_to_election?
       closed_at == parliament.dissolution_at
+    end
+
+    def government_response?
+      government_response_at && government_response
     end
 
     def threshold_for_debate_reached?

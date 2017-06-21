@@ -1,6 +1,6 @@
 module ArchivedPetitionHelper
   def archived_threshold(petition)
-    if petition.threshold_for_response_reached? || petition.response?
+    if petition.threshold_for_response_reached? || petition.government_response?
       petition.threshold_for_debate
     else
       petition.threshold_for_response
