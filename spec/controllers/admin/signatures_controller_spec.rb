@@ -108,8 +108,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           post :validate, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signature index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash notice message" do
@@ -126,8 +126,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           post :validate, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signature index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash alert message" do
@@ -147,8 +147,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           post :invalidate, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signature index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash notice message" do
@@ -165,8 +165,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           post :invalidate, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signature index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash alert message" do
@@ -186,8 +186,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           delete :destroy, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signatures index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash notice message" do
@@ -201,8 +201,8 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           delete :destroy, id: signature.id, q: "user@example.com"
         end
 
-        it "redirects to the search page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/search?q=user%40example.com")
+        it "redirects to the signatures index page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash alert message" do

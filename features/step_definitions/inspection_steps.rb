@@ -78,6 +78,7 @@ end
 
 Then(/^I should see the following list of petitions:$/) do |table|
   expected_petitions = table.raw.flatten
+
   expect(page).to have_selector(:css, '.petition-list-petition', count: expected_petitions.size)
 
   expected_petitions.each.with_index do |expected_petition, idx|

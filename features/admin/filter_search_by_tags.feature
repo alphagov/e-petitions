@@ -6,7 +6,7 @@ Feature: Maggie fitlers her searches wth tags
   Background:
     Given I am logged in as a moderator
 
-  Scenario: When searching for petitions by keyword, it returns all petitions tagged with selected tags
+  Scenario: When searching for petitions, it returns all petitions tagged with selected tags
     Given allowed tags in site settings are "tag 1, tag 2, tag 3, tag 4, tag 5"
     And a petition "Raise benefits" exists with tags "tag 1, tag 2"
     And a petition "Help the poor" exists with tags "tag 2, tag 3"
@@ -24,7 +24,7 @@ Feature: Maggie fitlers her searches wth tags
     Then I should see the following list of petitions:
           | Raise benefits |
 
-  Scenario: When searching for petitions in the admin hub by keyword, it returns all petitions tagged with selected tags
+  Scenario: When searching for petitions in the admin hub, it returns all petitions tagged with selected tags
     Given allowed tags in site settings are "tag 1, tag 2, tag 3, tag 4, tag 5"
     And a petition "Raise benefits" exists with tags "tag 1, tag 2"
     And a petition "Help the poor" exists with tags "tag 2, tag 3"
@@ -42,40 +42,26 @@ Feature: Maggie fitlers her searches wth tags
     Then I should see the following list of petitions:
           | Raise benefits |
 
-  Scenario: When searching for petitions by tag, it returns all petitions also tagged with selected tags
+  Scenario: When searching for petitions without a keyword, it returns all petitions tagged with selected tags
     Given allowed tags in site settings are "tag 1, tag 2, tag 3, tag 4, tag 5"
     And a petition "Raise benefits" exists with tags "tag 1, tag 2"
     And a petition "Help the poor" exists with tags "tag 2, tag 3"
     And a petition "Help the homeless" exists with tags "tag 3, tag 4"
     And a petition "Petition about something else" exists with tags "tag 4, tag 5"
-    When I search for petitions with tag "tag 3"
+    When I search for petitions with keyword ""
     And I filter the results by tags "tag 2"
     Then I should see the following list of petitions:
           | Help the poor |
-    When I search for petitions with tag "tag 2"
-    And I filter the results by tags "tag 1, tag 2, tag 3"
-    Then I should not see any petitions
-    When I search for petitions with tag "tag 4"
-    And I filter the results by tags "tag 4"
-    Then I should see the following list of petitions:
-          | Petition about something else |
-          | Help the homeless             |
+          | Raise benefits |
 
-  Scenario: When searching for petitions by tag, it returns all petitions also tagged with selected tags
+  Scenario: When searching for petitions without a keyword, it returns all petitions tagged with selected tags
     Given allowed tags in site settings are "tag 1, tag 2, tag 3, tag 4, tag 5"
     And a petition "Raise benefits" exists with tags "tag 1, tag 2"
     And a petition "Help the poor" exists with tags "tag 2, tag 3"
     And a petition "Help the homeless" exists with tags "tag 3, tag 4"
     And a petition "Petition about something else" exists with tags "tag 4, tag 5"
-    When I search for petitions with tag "tag 3" from the admin hub
+    When I search for petitions with keyword "" from the admin hub
     And I filter the results by tags "tag 2"
     Then I should see the following list of petitions:
           | Help the poor |
-    When I search for petitions with tag "tag 2" from the admin hub
-    And I filter the results by tags "tag 1, tag 2, tag 3"
-    Then I should not see any petitions
-    When I search for petitions with tag "tag 4" from the admin hub
-    And I filter the results by tags "tag 4"
-    Then I should see the following list of petitions:
-          | Petition about something else |
-          | Help the homeless             |
+          | Raise benefits |

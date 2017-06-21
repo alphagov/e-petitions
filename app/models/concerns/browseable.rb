@@ -149,14 +149,6 @@ module Browseable
       query.present?
     end
 
-    def tag_search?
-      query.present? && search_type == "tag"
-    end
-
-    def keyword_search?
-      query.present? && search_type == "keyword"
-    end
-
     def to_a
       results.to_a
     end

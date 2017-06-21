@@ -411,8 +411,8 @@ Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
   @petition = FactoryGirl.create(:awaiting_petition, action: action)
 end
 
-Given(/^a petition "(.*?)" exists with notes (\[[^"]*\])$/) do |action, tags|
-  @petition = FactoryGirl.create(:open_petition, action: action, tags: tags)
+Given(/^a petition "(.*?)" exists with notes (\[[^"]*\])$/) do |action, notes|
+  @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
 end
 
 Given(/^a petition "(.*?)" exists with tags "([^"]*)"$/) do |action, tags|
