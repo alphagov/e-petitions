@@ -77,6 +77,19 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".with_response" do
+    before do
+      @p1 = FactoryGirl.create(:archived_petition, :response)
+      @p2 = FactoryGirl.create(:archived_petition)
+      @p3 = FactoryGirl.create(:archived_petition, :response)
+      @p4 = FactoryGirl.create(:archived_petition)
+    end
+
+    it "returns only the petitions have a government response timestamp" do
+      expect(described_class.with_response).to match_array([@p1, @p3])
+    end
+  end
+
   describe "#action" do
     it "defaults to nil" do
       expect(petition.action).to be_nil

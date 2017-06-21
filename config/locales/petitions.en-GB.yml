@@ -53,6 +53,7 @@ en-GB:
         - :all
         - :published
         - :rejected
+        - :with_response
       public:
         - :all
         - :open

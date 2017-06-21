@@ -39,6 +39,7 @@ module Archived
     facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
     facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
     facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
+    facet :with_response, -> { with_response.by_most_signatures }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
 
@@ -59,6 +60,10 @@ module Archived
 
       def by_most_signatures
         reorder(signature_count: :desc)
+      end
+
+      def with_response
+        where.not(government_response_at: nil)
       end
     end
 
