@@ -159,8 +159,8 @@ Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) d
     :rejection_details => reason_text)
 end
 
-Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, reason_for_rejection|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action, reason_for_rejection: reason_for_rejection)
+Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, rejection_details|
+  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action, rejection_details: rejection_details)
 end
 
 When(/^I view the petition$/) do
@@ -231,12 +231,7 @@ end
 
 Then(/^I should see the reason for rejection$/) do
   @petition.reload
-
-  if @petition.is_a?(Archived::Petition)
-    expect(page).to have_content(@petition.reason_for_rejection)
-  else
-    expect(page).to have_content(@petition.rejection.details)
-  end
+  expect(page).to have_content(@petition.rejection.details)
 end
 
 Then(/^I should be asked to search for a new petition$/) do

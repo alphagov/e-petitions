@@ -39,9 +39,11 @@
   <p class="flash-notice">This petition was rejected</p>
 
   <h2>Why was this petition rejected?</h2>
-  <%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %>
-
-  <p>We only reject petitions that don’t meet the <a href="https://petition.parliament.uk/help#standards">petition standards</a>.</p>
+  <%= rejection_description(@petition.rejection.code) %>
+  <% if @petition.rejection.details? %>
+    <p><%= auto_link(simple_format(h(@petition.rejection.details))) %></p>
+  <% end %>
+  <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
 <% else %>
   <% if @petition.closed_early_due_to_election? %>
     <p class="flash-notice">

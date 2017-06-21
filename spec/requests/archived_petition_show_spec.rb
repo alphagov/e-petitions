@@ -59,12 +59,13 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
     end
 
     it "includes the rejection section for rejected petitions" do
-      petition = FactoryGirl.create :archived_petition, :rejected
+      petition = FactoryGirl.create :archived_petition, :rejected, rejection_code: "duplicate", rejection_details: "This is a duplication of another petition"
 
       make_successful_request petition
 
       expect(attributes["rejection"]).to be_a(Hash)
-      expect(attributes["rejection"]["details"]).to eq(petition.reason_for_rejection)
+      expect(attributes["rejection"]["code"]).to eq("duplicate")
+      expect(attributes["rejection"]["details"]).to eq("This is a duplication of another petition")
     end
 
     it "includes the government_response section for petitions with a government_response" do

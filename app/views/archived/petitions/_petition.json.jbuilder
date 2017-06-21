@@ -14,12 +14,14 @@ json.attributes do
   json.opened_at api_date_format(petition.opened_at)
   json.closed_at api_date_format(petition.closed_at)
   json.government_response_at api_date_format(petition.government_response_at)
+  json.rejected_at api_date_format(petition.rejected_at)
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)
 
-  if petition.rejected?
+  if rejection = petition.rejection
     json.rejection do
-      json.details petition.reason_for_rejection
+      json.code rejection.code
+      json.details rejection.details
     end
   else
     json.rejection nil

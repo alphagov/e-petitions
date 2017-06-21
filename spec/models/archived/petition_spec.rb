@@ -19,6 +19,10 @@ RSpec.describe Archived::Petition, type: :model do
     describe "government_response" do
       it { is_expected.to have_one(:government_response) }
     end
+
+    describe "rejection" do
+      it { is_expected.to have_one(:rejection) }
+    end
   end
 
   describe ".search" do
@@ -107,12 +111,6 @@ RSpec.describe Archived::Petition, type: :model do
     it { is_expected.to validate_inclusion_of(:state).in_array(%w[open closed rejected]) }
   end
 
-  describe "#reason_for_rejection" do
-    it "defaults to nil" do
-      expect(petition.reason_for_rejection).to be_nil
-    end
-  end
-
   describe "#opened_at" do
     it "defaults to nil" do
       expect(petition.opened_at).to be_nil
@@ -125,6 +123,12 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     it { is_expected.to validate_presence_of(:closed_at) }
+  end
+
+  describe "#rejected_at" do
+    it "defaults to nil" do
+      expect(petition.opened_at).to be_nil
+    end
   end
 
   describe "#signature_count" do

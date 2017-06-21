@@ -93,10 +93,21 @@ FactoryGirl.define do
     end
 
     trait :rejected do
-      reason_for_rejection "Petition rejection"
       state "rejected"
       opened_at nil
       closed_at nil
+
+      transient do
+        rejection_code { "duplicate" }
+        rejection_details { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_rejection do |r|
+          r.code = evaluator.rejection_code
+          r.details = evaluator.rejection_details
+        end
+      end
     end
   end
 

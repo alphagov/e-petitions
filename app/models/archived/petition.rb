@@ -46,7 +46,7 @@ module Archived
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
 
-    deprecate_attribute :title, :description, :response
+    deprecate_attribute :title, :description, :response, :reason_for_rejection
 
     class << self
       def for_state(state)
