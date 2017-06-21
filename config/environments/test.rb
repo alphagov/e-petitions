@@ -61,5 +61,5 @@ Rails.application.configure do
   WebMock.disable_net_connect!(allow_localhost: true,
                                allow: %w{validator.unboxedconsulting.com})
 
-  config.active_job.queue_adapter = :test
+  config.active_job.queue_adapter = :delayed_job
 end

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "setting job priorities" do
   before do
-    ActiveJob::Base.queue_adapter = :delayed_job
+    ActiveJob::Base.disable_test_adapter
   end
 
   describe "default priority" do
