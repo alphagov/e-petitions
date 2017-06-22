@@ -220,11 +220,7 @@ ALTER SEQUENCE archived_petition_emails_id_seq OWNED BY archived_petition_emails
 
 CREATE TABLE archived_petitions (
     id integer NOT NULL,
-    title character varying(255),
-    description text,
-    response text,
     state character varying(10) DEFAULT 'open'::character varying NOT NULL,
-    reason_for_rejection text,
     opened_at timestamp without time zone,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
@@ -1663,13 +1659,6 @@ CREATE INDEX index_archived_petitions_on_background ON archived_petitions USING 
 
 
 --
--- Name: index_archived_petitions_on_description; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_archived_petitions_on_description ON archived_petitions USING gin (to_tsvector('english'::regconfig, description));
-
-
---
 -- Name: index_archived_petitions_on_parliament_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1688,13 +1677,6 @@ CREATE INDEX index_archived_petitions_on_signature_count ON archived_petitions U
 --
 
 CREATE INDEX index_archived_petitions_on_state_and_closed_at ON archived_petitions USING btree (state, closed_at);
-
-
---
--- Name: index_archived_petitions_on_title; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_archived_petitions_on_title ON archived_petitions USING gin (to_tsvector('english'::regconfig, (title)::text));
 
 
 --
@@ -2471,4 +2453,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170613113510');
 INSERT INTO schema_migrations (version) VALUES ('20170614165953');
 
 INSERT INTO schema_migrations (version) VALUES ('20170615133536');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622114605');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622114801');
 

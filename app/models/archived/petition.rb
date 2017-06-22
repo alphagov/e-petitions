@@ -2,8 +2,6 @@ require 'textacular/searchable'
 
 module Archived
   class Petition < ActiveRecord::Base
-    include DeprecatedAttributes
-
     OPEN_STATE = 'open'
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
@@ -46,8 +44,6 @@ module Archived
     default_scope { preload(:parliament) }
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
-
-    deprecate_attribute :title, :description, :response, :reason_for_rejection
 
     class << self
       def for_state(state)
