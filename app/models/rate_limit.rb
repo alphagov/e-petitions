@@ -1,5 +1,4 @@
 require 'ipaddr'
-require 'list_processor'
 
 class RateLimit < ActiveRecord::Base
   include ListProcessor

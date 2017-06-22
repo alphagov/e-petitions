@@ -1,7 +1,6 @@
 class Admin::TagsController < Admin::AdminController
   respond_to :html
   before_action :fetch_petition
-  before_action :find_site_settings
 
   def show
     render 'admin/petitions/show'
@@ -23,9 +22,5 @@ class Admin::TagsController < Admin::AdminController
 
   def params_for_update
     params.require(:petition).permit(tags: [])
-  end
-
-  def find_site_settings
-    @site_settings ||= Admin::Site.first_or_create!
   end
 end

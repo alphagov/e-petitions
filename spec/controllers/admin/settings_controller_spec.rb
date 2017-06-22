@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-RSpec.describe Admin::SiteController, type: :controller, admin: true do
+RSpec.describe Admin::SettingsController, type: :controller, admin: true do
   context "when not logged in" do
     [
-      ["GET", "/admin/site/edit", :edit, {}],
-      ["PATCH", "/admin/site", :update, {}]
+      ["GET", "/admin/settings/edit", :edit, {}],
+      ["PATCH", "/admin/settings", :update, {}]
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
@@ -42,7 +42,7 @@ RSpec.describe Admin::SiteController, type: :controller, admin: true do
     let(:sysadmin) { FactoryGirl.create(:sysadmin_user) }
     before { login_as(sysadmin) }
 
-    describe "GET /admin/site/edit" do
+    describe "GET /admin/settings/edit" do
       before { get :edit }
 
       it "returns 200 OK" do
@@ -50,19 +50,19 @@ RSpec.describe Admin::SiteController, type: :controller, admin: true do
       end
 
       it "renders the :edit template" do
-        expect(response).to render_template("admin/site/edit")
+        expect(response).to render_template("admin/settings/edit")
       end
     end
 
-    describe "PATCH /admin/site" do
-      before { patch :update, admin_site: params }
+    describe "PATCH /admin/settings" do
+      before { patch :update, admin_settings: params }
 
       let :params do
         { petition_tags: ["hello", "world"] }
       end
 
       it "redirects to the edit page" do
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/site/edit")
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/settings/edit")
       end
 
       it "sets the flash notice message" do

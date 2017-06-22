@@ -26,13 +26,13 @@ namespace :data do
       raise "** #{PETITION_STATE} is not a valid state within #{VALID_STATES.inspect} **"
     end
 
-    admin_site_settings = Admin::Site.first_or_create
+    admin_settings = Admin::Settings.first_or_create
 
     if USE_EXISTING_TAGS == 'true'
-      allowed_petition_tags = admin_site_settings.petition_tags
+      allowed_petition_tags = admin_settings.petition_tags
     else
       allowed_petition_tags = String.new.tap { |s| 10.times { s << "#{Faker::Company.buzzword}\n"}}
-      admin_site_settings.update_attributes(petition_tags: allowed_petition_tags)
+      admin_settings.update_attributes(petition_tags: allowed_petition_tags)
     end
 
     ActiveRecord::Base.transaction do

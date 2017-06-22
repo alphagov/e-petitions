@@ -39,16 +39,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "included modules" do
-    it "includes AdminTagsValidation module" do
-      expect(Petition.included_modules).to include(AdminTagsValidation)
-    end
-
-    it "includes Taggable module" do
-      expect(Petition.included_modules).to include(Taggable)
-    end
-  end
-
   context "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }

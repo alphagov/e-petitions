@@ -43,10 +43,10 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: admin_sites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_settings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE TABLE admin_sites (
+CREATE TABLE admin_settings (
     id integer NOT NULL,
     petition_tags character varying DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -55,10 +55,10 @@ CREATE TABLE admin_sites (
 
 
 --
--- Name: admin_sites_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: admin_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE admin_sites_id_seq
+CREATE SEQUENCE admin_settings_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -67,10 +67,10 @@ CREATE SEQUENCE admin_sites_id_seq
 
 
 --
--- Name: admin_sites_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: admin_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE admin_sites_id_seq OWNED BY admin_sites.id;
+ALTER SEQUENCE admin_settings_id_seq OWNED BY admin_settings.id;
 
 
 --
@@ -1173,7 +1173,7 @@ ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY admin_sites ALTER COLUMN id SET DEFAULT nextval('admin_sites_id_seq'::regclass);
+ALTER TABLE ONLY admin_settings ALTER COLUMN id SET DEFAULT nextval('admin_settings_id_seq'::regclass);
 
 
 --
@@ -1373,11 +1373,11 @@ ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regcl
 
 
 --
--- Name: admin_sites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
-ALTER TABLE ONLY admin_sites
-    ADD CONSTRAINT admin_sites_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY admin_settings
+    ADD CONSTRAINT admin_settings_pkey PRIMARY KEY (id);
 
 
 --

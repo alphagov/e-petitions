@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::TagsController, type: :controller, admin: true do
 
-  let!(:site_settings) { Admin::Site.first_or_create!(petition_tags: "tag 1\ntag 2") }
+  let!(:admin_settings) { Admin::Settings.first_or_create!(petition_tags: "tag 1\ntag 2") }
   let!(:petition) { FactoryGirl.create(:open_petition) }
 
   describe 'not logged in' do
@@ -52,7 +52,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
 
       it 'fetches the site settings' do
         get :show, petition_id: petition.id
-        expect(assigns(:site_settings)).to eq site_settings
+        expect(assigns(:admin_settings)).to eq admin_settings
       end
 
       it 'responds successfully and renders the petitions/show template' do
@@ -70,7 +70,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
 
       it 'fetches the site settings' do
         patch :update, petition_id: petition.id, petition: { tags: ["tag 1", "tag 2"]}
-        expect(assigns(:site_settings)).to eq site_settings
+        expect(assigns(:admin_settings)).to eq admin_settings
       end
 
       context 'with valid params' do

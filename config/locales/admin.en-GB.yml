@@ -70,7 +70,7 @@ en-GB:
       signature_not_invalidated: "Signature could not be invalidated - please contact support"
       signature_deleted: "Signature removed successfully"
       signature_not_deleted: "Signature could not be removed - please contact support"
-      site_settings_updated: "Site settings updated successfully"
+      admin_settings_updated: "Site settings updated successfully"
       sysadmin_required: "You must be logged in as a system administrator to view this page"
       petition_updated: "Petition has been successfully updated"
       user_created: "User was successfully created"

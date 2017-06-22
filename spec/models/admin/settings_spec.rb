@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Admin::Site, type: :model do
+RSpec.describe Admin::Settings, type: :model do
   describe "validations" do
     describe "checking existing petitions for deleted tags" do
       let!(:settings) { described_class.create(petition_tags: "tag 1\ntag 2\ntag 3") }
@@ -36,20 +36,20 @@ RSpec.describe Admin::Site, type: :model do
     end
 
     context "when there duplicate tags" do
-      let(:site_settings) { described_class.create(petition_tags: tags) }
+      let(:admin_settings) { described_class.create(petition_tags: tags) }
       let(:tags) { "tag 1\ntag 1" }
 
       it "is invalid" do
-        expect(site_settings).to be_invalid
-        expect(site_settings.errors[:petition_tags]).to include "Duplicate tags not allowed: tag 1"
+        expect(admin_settings).to be_invalid
+        expect(admin_settings.errors[:petition_tags]).to include "Duplicate tags not allowed: tag 1"
       end
 
       context "that are in a different case" do
         let(:tags) { "tag 1\nTAG 1"}
 
         it "is invalid" do
-          expect(site_settings).to be_invalid
-          expect(site_settings.errors[:petition_tags]).to include "Duplicate tags not allowed: tag 1"
+          expect(admin_settings).to be_invalid
+          expect(admin_settings.errors[:petition_tags]).to include "Duplicate tags not allowed: tag 1"
         end
       end
     end

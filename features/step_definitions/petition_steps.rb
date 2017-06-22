@@ -422,9 +422,9 @@ end
 
 Given(/^allowed tags in site settings are "([^"]*)"$/) do |allowed_tags|
   allowed_tags_string = allowed_tags.gsub(/,\s*/, "\n")
-  site_settings = Admin::Site.first_or_create
-  site_settings.update_attributes(petition_tags: allowed_tags_string)
-  @site_settings = site_settings
+  admin_settings = Admin::Settings.first_or_create
+  admin_settings.update_attributes(petition_tags: allowed_tags_string)
+  @admin_settings = admin_settings
 end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|

@@ -59,10 +59,6 @@ module AdminHelper
     !trending_ips(since: since, limit: limit).empty?
   end
 
-  def admin_site_settings
-    @admin_site_settings ||= Admin::Site.first_or_create!
-  end
-
   private
 
   def admin_petition_facets

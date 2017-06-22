@@ -9,5 +9,5 @@ if Rails.env.development?
     FactoryGirl.create(:moderator_user)
   end
 
-  Admin::Site.first_or_create!
+  Admin::Settings.first_or_create!
 end

@@ -3,11 +3,11 @@
     <%= f.label :tags, 'Tags', class: 'form-label petition-action-heading' %>
     <p><small>Select tags for this petition. These can be changed by an admin user in the site settings.</small></p>
     <%= error_messages_for_field f.object, :tags %>
-    <% if @site_settings.allowed_petition_tags.any? %>
+    <% if @admin_settings.allowed_petition_tags.any? %>
       <!-- Generates check boxes for all allowed tags in site settings. -->
       <!-- Compares the downcased versions to Petition#tags_for_comparison and selects the check boxes if they match. -->
       <!-- Saves selected check box values as tags on Petition. -->
-      <%= collection_check_boxes(:petition, :tags, @site_settings.allowed_petition_tags, :downcase, :itself, { checked: f.object.tags_for_comparison }) do |b| %>
+      <%= collection_check_boxes(:petition, :tags, @admin_settings.allowed_petition_tags, :downcase, :itself, { checked: f.object.tags_for_comparison }) do |b| %>
         <div class="tag-filter-check-box"><%= b.label %><%= b.check_box %></div>
       <% end %>
     <% else %>

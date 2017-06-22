@@ -24,10 +24,10 @@ RSpec.describe AdminTagsValidation, type: :model do
   let(:admin_tags_validation_record) { admin_tags_validation_class.create }
 
   describe "tags validations" do
-    let(:site_settings) { Admin::Site.create(petition_tags: "tag 1\nTAG 2") }
+    let(:admin_settings) { Admin::Settings.create(petition_tags: "tag 1\nTAG 2") }
 
     before do
-      set_site_settings
+      set_admin_settings
     end
 
     describe "validating tags" do
@@ -63,8 +63,8 @@ RSpec.describe AdminTagsValidation, type: :model do
     end
   end
 
-  def set_site_settings
-    allow(Admin::Site).to receive(:first).and_return site_settings
+  def set_admin_settings
+    allow(Admin::Settings).to receive(:first).and_return admin_settings
   end
 
   def create_table
