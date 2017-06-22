@@ -90,6 +90,29 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".visible" do
+    let!(:stopped_petition) { FactoryGirl.create(:archived_petition, :stopped) }
+    let!(:closed_petition) { FactoryGirl.create(:archived_petition, :closed) }
+    let!(:rejected_petition) { FactoryGirl.create(:archived_petition, :rejected) }
+    let!(:hidden_petition) { FactoryGirl.create(:archived_petition, :hidden) }
+
+    it "doesn't include stopped petitions" do
+      expect(described_class.visible).not_to include(stopped_petition)
+    end
+
+    it "includes closed petitions" do
+      expect(described_class.visible).to include(closed_petition)
+    end
+
+    it "includes rejected petitions" do
+      expect(described_class.visible).to include(rejected_petition)
+    end
+
+    it "doesn't include hidden petitions" do
+      expect(described_class.visible).not_to include(hidden_petition)
+    end
+  end
+
   describe "#action" do
     it "defaults to nil" do
       expect(petition.action).to be_nil
@@ -116,12 +139,12 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#state" do
-    it "defaults to 'open'" do
-      expect(petition.state).to eq("open")
+    it "defaults to 'closed'" do
+      expect(petition.state).to eq("closed")
     end
 
     it { is_expected.to validate_presence_of(:state) }
-    it { is_expected.to validate_inclusion_of(:state).in_array(%w[open closed rejected]) }
+    it { is_expected.to validate_inclusion_of(:state).in_array(%w[stopped closed rejected hidden]) }
   end
 
   describe "#opened_at" do
@@ -150,12 +173,12 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
-  describe "#open?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+  describe "#stopped?" do
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns true" do
-        expect(petition.open?).to eq(true)
+        expect(petition.stopped?).to eq(true)
       end
     end
 
@@ -163,7 +186,7 @@ RSpec.describe Archived::Petition, type: :model do
       subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
 
       it "returns false" do
-        expect(petition.open?).to eq(false)
+        expect(petition.stopped?).to eq(false)
       end
     end
 
@@ -171,14 +194,22 @@ RSpec.describe Archived::Petition, type: :model do
       subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
 
       it "returns false" do
-        expect(petition.open?).to eq(false)
+        expect(petition.stopped?).to eq(false)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.stopped?).to eq(false)
       end
     end
   end
 
   describe "#closed?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.closed?).to eq(false)
@@ -200,11 +231,19 @@ RSpec.describe Archived::Petition, type: :model do
         expect(petition.closed?).to eq(false)
       end
     end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.closed?).to eq(false)
+      end
+    end
   end
 
   describe "#rejected?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.rejected?).to eq(false)
@@ -224,6 +263,48 @@ RSpec.describe Archived::Petition, type: :model do
 
       it "returns true" do
         expect(petition.rejected?).to eq(true)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.rejected?).to eq(false)
+      end
+    end
+  end
+
+  describe "#hidden?" do
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a closed state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a rejected state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(true)
       end
     end
   end

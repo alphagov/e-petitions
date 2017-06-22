@@ -11,6 +11,8 @@ Feature: Joe views all archived petition
       | Save the planet          | closed   | 243             |  2014-01-01 |
       | Wombles to Parliament    | closed   | 243             |  2013-01-01 |
       | Free gig tickets         | rejected |                 |  2013-01-01 |
+      | Wombles are &*!%         | hidden   |                 |  2013-02-01 |
+      | Bring back the Wombles   | stopped  |                 |  2013-03-01 |
 
   Scenario:
     When I view all petitions from the home page
@@ -35,6 +37,8 @@ Feature: Joe views all archived petition
       | Save the planet           | 243 signatures |
       | Wombles to Parliament     | 243 signatures |
       | Free gig tickets          | Rejected       |
+    And I should not see "Wombles are &*!%"
+    And I should not see "Bring back the Wombles"
     And the markup should be valid
 
   Scenario: Downloading the JSON data for archived petitions

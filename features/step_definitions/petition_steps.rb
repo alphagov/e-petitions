@@ -42,8 +42,8 @@ Given(/^an archived petition "([^"]*)"$/) do |action|
   @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, action: action)
 end
 
-Given(/^a rejected archived petition exists with action: "(.*?)"$/) do |action|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action)
+Given(/^a (stopped|rejected|hidden) archived petition exists with action: "(.*?)"$/) do |state, action|
+  @petition = FactoryGirl.create(:archived_petition, state.to_sym, action: action)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|

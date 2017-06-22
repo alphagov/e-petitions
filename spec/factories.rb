@@ -80,10 +80,10 @@ FactoryGirl.define do
       end
     end
 
-    trait :open do
-      state "open"
-      signature_count 100
-      closed_at { 6.month.from_now }
+    trait :stopped do
+      state "stopped"
+      signature_count 5
+      stopped_at { 6.months.ago }
     end
 
     trait :closed do
@@ -99,6 +99,24 @@ FactoryGirl.define do
 
       transient do
         rejection_code { "duplicate" }
+        rejection_details { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_rejection do |r|
+          r.code = evaluator.rejection_code
+          r.details = evaluator.rejection_details
+        end
+      end
+    end
+
+    trait :hidden do
+      state "hidden"
+      opened_at nil
+      closed_at nil
+
+      transient do
+        rejection_code { "offensive" }
         rejection_details { nil }
       end
 

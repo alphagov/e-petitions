@@ -220,7 +220,7 @@ ALTER SEQUENCE archived_petition_emails_id_seq OWNED BY archived_petition_emails
 
 CREATE TABLE archived_petitions (
     id integer NOT NULL,
-    state character varying(10) DEFAULT 'open'::character varying NOT NULL,
+    state character varying(10) DEFAULT 'closed'::character varying NOT NULL,
     opened_at timestamp without time zone,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
@@ -2461,4 +2461,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170622114801');
 INSERT INTO schema_migrations (version) VALUES ('20170622151936');
 
 INSERT INTO schema_migrations (version) VALUES ('20170622152415');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622161343');
 

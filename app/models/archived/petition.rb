@@ -2,12 +2,13 @@ require 'textacular/searchable'
 
 module Archived
   class Petition < ActiveRecord::Base
-    OPEN_STATE = 'open'
+    STOPPED_STATE = 'stopped'
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
     REJECTED_STATE = 'rejected'
-    STATES = [OPEN_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
-    PUBLISHED_STATES = [OPEN_STATE, CLOSED_STATE]
+    STATES = [STOPPED_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
+    PUBLISHED_STATES = [CLOSED_STATE]
+    VISIBLE_STATES = [CLOSED_STATE, REJECTED_STATE]
 
     belongs_to :parliament, inverse_of: :petitions, required: true
 
@@ -25,16 +26,16 @@ module Archived
     validates :background, length: { maximum: 300 }, allow_blank: true
     validates :additional_details, length: { maximum: 1000 }, allow_blank: true
     validates :state, presence: true, inclusion: STATES
-    validates :closed_at, presence: true, unless: :rejected?
+    validates :closed_at, presence: true, if: :closed?
 
     extend Searchable(:action, :background, :additional_details)
     include Browseable
 
     filter :parliament
 
-    facet :all, -> { by_most_signatures }
+    facet :all, -> { visible.by_most_signatures }
     facet :published, -> { for_state(PUBLISHED_STATES).by_most_signatures }
-    facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
+    facet :stopped, -> { for_state(STOPPED_STATE).by_most_signatures }
     facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
     facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
     facet :with_response, -> { with_response.by_most_signatures }
@@ -61,10 +62,14 @@ module Archived
       def with_response
         where.not(government_response_at: nil)
       end
+
+      def visible
+        where(state: VISIBLE_STATES)
+      end
     end
 
-    def open?
-      state == OPEN_STATE
+    def stopped?
+      state == STOPPED_STATE
     end
 
     def closed?
@@ -73,6 +78,10 @@ module Archived
 
     def rejected?
       state == REJECTED_STATE
+    end
+
+    def hidden?
+      state == HIDDEN_STATE
     end
 
     def duration
