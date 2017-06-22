@@ -851,7 +851,8 @@ CREATE TABLE petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30) DEFAULT 'pending'::character varying,
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    archived_at timestamp without time zone
 );
 
 
@@ -2458,4 +2459,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170622114605');
 INSERT INTO schema_migrations (version) VALUES ('20170622114801');
 
 INSERT INTO schema_migrations (version) VALUES ('20170622151936');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622152415');
 

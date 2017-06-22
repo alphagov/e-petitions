@@ -2308,5 +2308,23 @@ RSpec.describe Petition, type: :model do
         end
       end
     end
+
+    describe "#archived?" do
+      context "when a petition has not been copied to the archive" do
+        let(:petition) { FactoryGirl.create(:open_petition, archived_at: nil) }
+
+        it "returns false" do
+          expect(petition.archived?).to eq(false)
+        end
+      end
+
+      context "when a petition has been copied to the archive" do
+        let(:petition) { FactoryGirl.create(:open_petition, archived_at: 1.day.ago) }
+
+        it "returns true" do
+          expect(petition.archived?).to eq(true)
+        end
+      end
+    end
   end
 end

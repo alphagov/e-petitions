@@ -600,6 +600,10 @@ class Petition < ActiveRecord::Base
     state.in?(PUBLISHED_STATES)
   end
 
+  def archived?
+    archived_at?
+  end
+
   def can_have_debate_added?
     state.in?(DEBATABLE_STATES)
   end
