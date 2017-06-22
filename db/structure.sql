@@ -316,7 +316,6 @@ CREATE TABLE archived_signatures (
     constituency_id character varying,
     validated_at timestamp without time zone,
     number integer,
-    seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
     location_code character varying(30),
     invalidated_at timestamp without time zone,
     invalidation_id integer,
@@ -2457,4 +2456,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170615133536');
 INSERT INTO schema_migrations (version) VALUES ('20170622114605');
 
 INSERT INTO schema_migrations (version) VALUES ('20170622114801');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622151936');
 

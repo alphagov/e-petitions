@@ -20,7 +20,6 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.to have_db_column(:constituency_id).of_type(:string) }
     it { is_expected.to have_db_column(:validated_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:number).of_type(:integer) }
-    it { is_expected.to have_db_column(:seen_signed_confirmation_page).of_type(:boolean) }
     it { is_expected.to have_db_column(:location_code).of_type(:string).with_options(limit: 30) }
     it { is_expected.to have_db_column(:invalidated_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:invalidation_id).of_type(:integer) }
