@@ -50,6 +50,10 @@ group :development, :test do
   gem 'pry'
 end
 
+group :development do
+  gem 'listen', '~> 3.0.0'
+end
+
 group :test do
   gem 'nokogiri'
   gem 'shoulda-matchers'
