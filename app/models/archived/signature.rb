@@ -1,5 +1,5 @@
 module Archived
-  class Signature < ActiveRecord::Base
+  class Signature < ApplicationRecord
     PENDING_STATE = 'pending'
     FRAUDULENT_STATE = 'fraudulent'
     VALIDATED_STATE = 'validated'

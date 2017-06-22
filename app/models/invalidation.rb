@@ -1,4 +1,4 @@
-class Invalidation < ActiveRecord::Base
+class Invalidation < ApplicationRecord
   extend Searchable(:id, :summary, :details, :petition_id)
   include Browseable
 

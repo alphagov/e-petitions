@@ -2,7 +2,7 @@ require 'bcrypt'
 require 'uri'
 require 'active_support/number_helper'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   class ServiceUnavailable < StandardError; end
 
   include ActiveSupport::NumberHelper

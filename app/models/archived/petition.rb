@@ -1,7 +1,7 @@
 require 'textacular/searchable'
 
 module Archived
-  class Petition < ActiveRecord::Base
+  class Petition < ApplicationRecord
     include DeprecatedAttributes
 
     OPEN_STATE = 'open'

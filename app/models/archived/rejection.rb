@@ -1,5 +1,5 @@
 module Archived
-  class Rejection < ActiveRecord::Base
+  class Rejection < ApplicationRecord
     CODES = %w[duplicate irrelevant no-action honours fake-name foi libellous offensive]
     HIDDEN_CODES = %w[libellous offensive]
 

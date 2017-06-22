@@ -1,7 +1,7 @@
 require 'active_support/core_ext/digest/uuid'
 require 'postcode_sanitizer'
 
-class Signature < ActiveRecord::Base
+class Signature < ApplicationRecord
   include PerishableTokenGenerator
 
   has_perishable_token

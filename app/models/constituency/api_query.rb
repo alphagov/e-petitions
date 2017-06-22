@@ -1,6 +1,6 @@
 require 'nokogiri'
 
-class Constituency < ActiveRecord::Base
+class Constituency < ApplicationRecord
   class ApiQuery
     CONSTITUENCIES    = '//Constituencies/Constituency'
     CONSTITUENCY_ID   = './Constituency_Id'

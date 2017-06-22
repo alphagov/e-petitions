@@ -1,7 +1,7 @@
 require_dependency 'constituency/api_client'
 require_dependency 'constituency/api_query'
 
-class Constituency < ActiveRecord::Base
+class Constituency < ApplicationRecord
   MP_URL = "http://www.parliament.uk/biographies/commons"
 
   has_many :signatures, primary_key: :external_id

@@ -1,6 +1,6 @@
 require 'textacular/searchable'
 
-class Petition < ActiveRecord::Base
+class Petition < ApplicationRecord
   include PerishableTokenGenerator
 
   PENDING_STATE     = 'pending'

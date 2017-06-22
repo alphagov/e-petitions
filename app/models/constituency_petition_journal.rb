@@ -1,4 +1,4 @@
-class ConstituencyPetitionJournal < ActiveRecord::Base
+class ConstituencyPetitionJournal < ApplicationRecord
   belongs_to :petition
   belongs_to :constituency, primary_key: :external_id
 
