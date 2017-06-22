@@ -2,6 +2,8 @@ require 'textacular/searchable'
 
 module Archived
   class Petition < ActiveRecord::Base
+    include DeprecatedAttributes
+
     OPEN_STATE = 'open'
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
@@ -21,12 +23,13 @@ module Archived
     has_many :signatures
     has_many :sponsors, -> { where(sponsor: true) }, class_name: "Signature"
 
-    validates :title, presence: true, length: { maximum: 150 }
-    validates :description, presence: true, length: { maximum: 1000 }
+    validates :action, presence: true, length: { maximum: 150 }
+    validates :background, length: { maximum: 300 }, allow_blank: true
+    validates :additional_details, length: { maximum: 1000 }, allow_blank: true
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, unless: :rejected?
 
-    extend Searchable(:title, :description)
+    extend Searchable(:action, :background, :additional_details)
     include Browseable
 
     filter :parliament
@@ -36,12 +39,15 @@ module Archived
     facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
     facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
     facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
+    facet :with_response, -> { with_response.by_most_signatures }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
 
     default_scope { preload(:parliament) }
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
+
+    deprecate_attribute :title, :description, :response, :reason_for_rejection
 
     class << self
       def for_state(state)
@@ -55,14 +61,10 @@ module Archived
       def by_most_signatures
         reorder(signature_count: :desc)
       end
-    end
 
-    def action
-      super || title
-    end
-
-    def action?
-      super || title?
+      def with_response
+        where.not(government_response_at: nil)
+      end
     end
 
     def open?
@@ -89,6 +91,10 @@ module Archived
 
     def closed_early_due_to_election?
       closed_at == parliament.dissolution_at
+    end
+
+    def government_response?
+      government_response_at && government_response
     end
 
     def threshold_for_debate_reached?

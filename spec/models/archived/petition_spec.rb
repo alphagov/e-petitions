@@ -15,27 +15,43 @@ RSpec.describe Archived::Petition, type: :model do
         }.from([]).to(["Parliament can't be blank"])
       end
     end
+
+    describe "government_response" do
+      it { is_expected.to have_one(:government_response) }
+    end
+
+    describe "rejection" do
+      it { is_expected.to have_one(:rejection) }
+    end
   end
 
   describe ".search" do
     let!(:petition_1) do
-      FactoryGirl.create(:archived_petition, :closed, title: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
+      FactoryGirl.create(:archived_petition, :closed, action: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
     end
 
     let!(:petition_2) do
-      FactoryGirl.create(:archived_petition, :closed, description: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
+      FactoryGirl.create(:archived_petition, :closed, background: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
     end
 
-    it "searches based upon title" do
-      expect(Archived::Petition.search(q: "Wombles")).to include(petition_1)
+    let!(:petition_3) do
+      FactoryGirl.create(:archived_petition, :closed, additional_details: "Are wombling free", created_at: 3.years.ago, signature_count: 300)
     end
 
-    it "searches based upon description" do
-      expect(Archived::Petition.search(q: "Wombles")).to include(petition_2)
+    it "searches based upon action" do
+      expect(Archived::Petition.search(q: "wombles")).to include(petition_1)
+    end
+
+    it "searches based upon background" do
+      expect(Archived::Petition.search(q: "wimbledon")).to include(petition_2)
+    end
+
+    it "searches based upon additional_details" do
+      expect(Archived::Petition.search(q: "wombling")).to include(petition_3)
     end
 
     it "sorts the results by the highest number of signatures" do
-      expect(Archived::Petition.search(q: "Petition").to_a).to eq([petition_2, petition_1])
+      expect(Archived::Petition.search(q: "Petition").to_a).to eq([petition_3, petition_2, petition_1])
     end
   end
 
@@ -61,28 +77,42 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
-  describe "#title" do
-    it "defaults to nil" do
-      expect(petition.title).to be_nil
+  describe ".with_response" do
+    before do
+      @p1 = FactoryGirl.create(:archived_petition, :response)
+      @p2 = FactoryGirl.create(:archived_petition)
+      @p3 = FactoryGirl.create(:archived_petition, :response)
+      @p4 = FactoryGirl.create(:archived_petition)
     end
 
-    it { is_expected.to validate_presence_of(:title) }
-    it { is_expected.to validate_length_of(:title).is_at_most(150) }
+    it "returns only the petitions have a government response timestamp" do
+      expect(described_class.with_response).to match_array([@p1, @p3])
+    end
   end
 
-  describe "#description" do
+  describe "#action" do
     it "defaults to nil" do
-      expect(petition.description).to be_nil
+      expect(petition.action).to be_nil
     end
 
-    it { is_expected.to validate_presence_of(:description) }
-    it { is_expected.to validate_length_of(:description).is_at_most(1000) }
+    it { is_expected.to validate_presence_of(:action) }
+    it { is_expected.to validate_length_of(:action).is_at_most(150) }
   end
 
-  describe "#response" do
+  describe "#background" do
     it "defaults to nil" do
-      expect(petition.response).to be_nil
+      expect(petition.background).to be_nil
     end
+
+    it { is_expected.to validate_length_of(:background).is_at_most(300) }
+  end
+
+  describe "#additional_details" do
+    it "defaults to nil" do
+      expect(petition.additional_details).to be_nil
+    end
+
+    it { is_expected.to validate_length_of(:additional_details).is_at_most(1000) }
   end
 
   describe "#state" do
@@ -92,12 +122,6 @@ RSpec.describe Archived::Petition, type: :model do
 
     it { is_expected.to validate_presence_of(:state) }
     it { is_expected.to validate_inclusion_of(:state).in_array(%w[open closed rejected]) }
-  end
-
-  describe "#reason_for_rejection" do
-    it "defaults to nil" do
-      expect(petition.reason_for_rejection).to be_nil
-    end
   end
 
   describe "#opened_at" do
@@ -112,6 +136,12 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     it { is_expected.to validate_presence_of(:closed_at) }
+  end
+
+  describe "#rejected_at" do
+    it "defaults to nil" do
+      expect(petition.opened_at).to be_nil
+    end
   end
 
   describe "#signature_count" do

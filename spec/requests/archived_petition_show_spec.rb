@@ -47,8 +47,9 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
       make_successful_request petition
 
       expect(json["data"]).to be_a(Hash)
-      expect(attributes["title"]).to eq(petition.title)
-      expect(attributes["description"]).to eq(petition.description)
+      expect(attributes["action"]).to eq(petition.action)
+      expect(attributes["background"]).to eq(petition.background)
+      expect(attributes["additional_details"]).to eq(petition.additional_details)
       expect(attributes["state"]).to eq(petition.state)
       expect(attributes["signature_count"]).to eq(petition.signature_count)
       expect(attributes["opened_at"]).to eq(timestampify petition.opened_at)
@@ -58,21 +59,23 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
     end
 
     it "includes the rejection section for rejected petitions" do
-      petition = FactoryGirl.create :archived_petition, :rejected
+      petition = FactoryGirl.create :archived_petition, :rejected, rejection_code: "duplicate", rejection_details: "This is a duplication of another petition"
 
       make_successful_request petition
 
       expect(attributes["rejection"]).to be_a(Hash)
-      expect(attributes["rejection"]["details"]).to eq(petition.reason_for_rejection)
+      expect(attributes["rejection"]["code"]).to eq("duplicate")
+      expect(attributes["rejection"]["details"]).to eq("This is a duplication of another petition")
     end
 
     it "includes the government_response section for petitions with a government_response" do
-      petition = FactoryGirl.create :archived_petition, :response
+      petition = FactoryGirl.create :archived_petition, :response, response_summary: "Summary of what the government said", response_details: "Details of what the government said"
 
       make_successful_request petition
 
       expect(attributes["government_response"]).to be_a(Hash)
-      expect(attributes["government_response"]["details"]).to eq(petition.response)
+      expect(attributes["government_response"]["summary"]).to eq("Summary of what the government said")
+      expect(attributes["government_response"]["details"]).to eq("Details of what the government said")
     end
   end
 end

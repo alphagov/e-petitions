@@ -15,18 +15,35 @@
   <% else %>
     <span class="heading-secondary">Petition</span>
   <% end %>
-  <%= @petition.title %>
+  <%= @petition.action %>
 </h1>
 
-<div><%= auto_link(simple_format(h(@petition.description)), html: { rel: 'nofollow' }) %></div>
+<% if @petition.background? %>
+  <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
+  <% if @petition.additional_details? %>
+    <details>
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
+<% else %>
+  <% if @petition.additional_details? %>
+    <details open="open">
+      <summary><span class="summary">More details</span></summary>
+      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+    </details>
+  <% end %>
+<% end %>
 
 <% if @petition.rejected? %>
   <p class="flash-notice">This petition was rejected</p>
 
   <h2>Why was this petition rejected?</h2>
-  <%= auto_link(simple_format(h(@petition.reason_for_rejection)), html: { rel: 'nofollow' }) %>
-
-  <p>We only reject petitions that don’t meet the <a href="https://petition.parliament.uk/help#standards">petition standards</a>.</p>
+  <%= rejection_description(@petition.rejection.code) %>
+  <% if @petition.rejection.details? %>
+    <p><%= auto_link(simple_format(h(@petition.rejection.details))) %></p>
+  <% end %>
+  <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
 <% else %>
   <% if @petition.closed_early_due_to_election? %>
     <p class="flash-notice">
@@ -54,13 +71,34 @@
   </div>
 
   <div class="about-petitions">
-    <% if @petition.response? %>
+    <% if government_response = @petition.government_response? %>
       <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
         <h2 id="response-threshold-heading">Government responded</h2>
-        <%= auto_link(simple_format(h(@petition.response), class: 'response'), html: { rel: 'nofollow' }) %>
+        <% if government_response.summary? %>
+          <blockquote class="pull-quote">
+            <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
+          </blockquote>
+
+          <% if government_response.details? %>
+            <% if reveal_government_response? %>
+              <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+            <% else %>
+              <details>
+                <summary><span class="summary">Read the response in full</span></summary>
+                <div class="panel-indent panel-no-border">
+                  <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+                </div>
+              </details>
+            <% end %>
+          <% end %>
+
+        <% else %>
+          <%= auto_link(simple_format(h(government_response.details), class: 'response'), html: { rel: 'nofollow' }) %>
+        <% end %>
       </section>
     <% end %>
   </div>
+
 <% end %>
 
 <ul class="petition-meta">

@@ -111,9 +111,9 @@ RSpec.describe 'API request to list archived petitions', type: :request, show_ex
 
       expect(json["data"].length).to eq(3)
 
-      expect(json["data"][0]["attributes"]["title"]).to eq(petition_2.title)
-      expect(json["data"][1]["attributes"]["title"]).to eq(petition_3.title)
-      expect(json["data"][2]["attributes"]["title"]).to eq(petition_1.title)
+      expect(json["data"][0]["attributes"]["action"]).to eq(petition_2.action)
+      expect(json["data"][1]["attributes"]["action"]).to eq(petition_3.action)
+      expect(json["data"][2]["attributes"]["action"]).to eq(petition_1.action)
     end
 
     it "includes a link to each petitions details" do
@@ -126,19 +126,22 @@ RSpec.describe 'API request to list archived petitions', type: :request, show_ex
     end
 
     it "includes the rejection section for rejected petitions" do
-      petition = FactoryGirl.create :archived_petition, :rejected
+      petition = FactoryGirl.create :archived_petition, :rejected, rejection_code: "duplicate", rejection_details: "This is a duplication of another petition"
 
       make_successful_request
 
-      expect(json["data"][0]["attributes"]["rejection"]["details"]).to eq(petition.reason_for_rejection)
+      expect(json["data"][0]["attributes"]["rejection"]).to be_a(Hash)
+      expect(json["data"][0]["attributes"]["rejection"]["code"]).to eq("duplicate")
+      expect(json["data"][0]["attributes"]["rejection"]["details"]).to eq("This is a duplication of another petition")
     end
 
     it "includes the government_response section for petitions with a government_response" do
-      petition = FactoryGirl.create :archived_petition, :response
+      petition = FactoryGirl.create :archived_petition, :response, response_summary: "Summary of what the government said", response_details: "Details of what the government said"
 
       make_successful_request
 
-      expect(json["data"][0]["attributes"]["government_response"]["details"]).to eq(petition.response)
+      expect(json["data"][0]["attributes"]["government_response"]["summary"]).to eq("Summary of what the government said")
+      expect(json["data"][0]["attributes"]["government_response"]["details"]).to eq("Details of what the government said")
     end
   end
 end

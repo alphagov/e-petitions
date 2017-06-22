@@ -41,8 +41,7 @@ RSpec.describe PetitionHelper, type: :helper do
   end
 
   describe "#current_threshold" do
-
-    context "when the response threshold has never been reached" do 
+    context "when the response threshold has never been reached" do
       let(:petition) { FactoryGirl.create(:petition) }
 
       it "returns the response threshold" do
@@ -73,11 +72,9 @@ RSpec.describe PetitionHelper, type: :helper do
         expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
       end
     end
-
   end
 
   describe "#signatures_threshold_percentage" do
-
     context "when the signature count is less than the response threshold" do
       let(:petition) { FactoryGirl.create(:petition, signature_count: 239) }
 
@@ -115,6 +112,34 @@ RSpec.describe PetitionHelper, type: :helper do
 
       it "returns 1%" do
         expect(helper.signatures_threshold_percentage(petition)).to eq("1.00%")
+      end
+    end
+  end
+
+  describe "#reveal_government_response?" do
+    context "when the param 'reveal_response' isn't set" do
+      it "returns false" do
+        expect(helper.reveal_government_response?).to eq(false)
+      end
+    end
+
+    context "when the param 'reveal_response' is set to 'no'" do
+      before do
+        params[:reveal_response] = "no"
+      end
+
+      it "returns false" do
+        expect(helper.reveal_government_response?).to eq(false)
+      end
+    end
+
+    context "when the param 'reveal_response' is set to 'yes'" do
+      before do
+        params[:reveal_response] = "yes"
+      end
+
+      it "returns true" do
+        expect(helper.reveal_government_response?).to eq(true)
       end
     end
   end

@@ -6,26 +6,33 @@ json.links do
 end if defined?(is_collection)
 
 json.attributes do
-  json.title petition.title
-  json.description petition.description
+  json.action petition.action
+  json.background petition.background
+  json.additional_details petition.additional_details
   json.state petition.state
   json.signature_count petition.signature_count
   json.opened_at api_date_format(petition.opened_at)
   json.closed_at api_date_format(petition.closed_at)
+  json.government_response_at api_date_format(petition.government_response_at)
+  json.rejected_at api_date_format(petition.rejected_at)
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)
 
-  if petition.rejected?
+  if rejection = petition.rejection
     json.rejection do
-      json.details petition.reason_for_rejection
+      json.code rejection.code
+      json.details rejection.details
     end
   else
     json.rejection nil
   end
 
-  if petition.response?
+  if response = petition.government_response
     json.government_response do
-      json.details petition.response
+      json.summary response.summary
+      json.details response.details
+      json.created_at api_date_format(response.created_at)
+      json.updated_at api_date_format(response.updated_at)
     end
   else
     json.government_response nil

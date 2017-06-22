@@ -6,7 +6,7 @@ Feature: Joe searches for an archived petition
 
   Background:
     Given the following archived petitions exist:
-      | title                    | state    | signature_count| opened_at  | closed_at  | created_at |
+      | action                   | state    | signature_count| opened_at  | closed_at  | created_at |
       | Wombles are great        | closed   | 835            | 2012-01-01 | 2013-01-01 | 2012-01-01 |
       | The Wombles of Wimbledon | closed   | 243            | 2011-04-01 | 2012-04-01 | 2011-04-01 |
       | Common People            | closed   | 639            | 2014-10-01 | 2015-03-31 | 2014-10-01 |
@@ -24,7 +24,7 @@ Feature: Joe searches for an archived petition
     And the markup should be valid
 
   Scenario: Paging through archived petitions
-    Given 51 archived petitions exist with title: "International development spending"
+    Given 51 archived petitions exist with action: "International development spending"
     When I go to the archived petitions page
     And I fill in "search" with "spending"
     And I press "Search"

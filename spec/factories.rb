@@ -53,9 +53,9 @@ FactoryGirl.define do
   end
 
   factory :archived_petition, class: "Archived::Petition" do
-    sequence(:title) { |n| "Petition #{n}" }
+    sequence(:action) { |n| "Petition #{n}" }
     state "closed"
-    description "Petition description"
+    background "Petition background"
     signature_count 0
     opened_at { 2.years.ago }
     closed_at { 1.year.ago }
@@ -65,7 +65,19 @@ FactoryGirl.define do
     end
 
     trait :response do
-      response "Petition response"
+      government_response_at { 1.week.ago }
+
+      transient do
+        response_summary { "Response Summary" }
+        response_details { "Response Details" }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_government_response do |r|
+          r.summary = evaluator.response_summary
+          r.details = evaluator.response_details
+        end
+      end
     end
 
     trait :open do
@@ -81,10 +93,21 @@ FactoryGirl.define do
     end
 
     trait :rejected do
-      reason_for_rejection "Petition rejection"
       state "rejected"
       opened_at nil
       closed_at nil
+
+      transient do
+        rejection_code { "duplicate" }
+        rejection_details { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_rejection do |r|
+          r.code = evaluator.rejection_code
+          r.details = evaluator.rejection_details
+        end
+      end
     end
   end
 
