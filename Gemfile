@@ -45,7 +45,7 @@ gem 'aws-sdk'
 gem 'fog-aws'
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.5.2'
   gem 'jasmine-rails'
   gem 'pry'
 end
