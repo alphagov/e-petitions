@@ -1,4 +1,4 @@
-class MigrateNotes < ActiveRecord::Migration
+class MigrateNotes < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       INSERT INTO notes

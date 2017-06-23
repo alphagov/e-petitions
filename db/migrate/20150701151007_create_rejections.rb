@@ -1,4 +1,4 @@
-class CreateRejections < ActiveRecord::Migration
+class CreateRejections < ActiveRecord::Migration[4.2]
   def change
     create_table :rejections do |t|
       t.references :petition

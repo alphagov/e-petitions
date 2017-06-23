@@ -1,4 +1,4 @@
-class AddDebateOutcomeAtToPetitions < ActiveRecord::Migration
+class AddDebateOutcomeAtToPetitions < ActiveRecord::Migration[4.2]
   def up
     add_column :petitions, :debate_outcome_at, :datetime
 

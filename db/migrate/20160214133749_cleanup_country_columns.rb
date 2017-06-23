@@ -1,4 +1,4 @@
-class CleanupCountryColumns < ActiveRecord::Migration
+class CleanupCountryColumns < ActiveRecord::Migration[4.2]
   def up
     # This migration commands have guard clauses because the preview
     # website executed a migration that was subsequently deleted

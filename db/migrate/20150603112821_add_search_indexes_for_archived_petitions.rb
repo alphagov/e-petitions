@@ -1,4 +1,4 @@
-class AddSearchIndexesForArchivedPetitions < ActiveRecord::Migration
+class AddSearchIndexesForArchivedPetitions < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       CREATE INDEX index_archived_petitions_on_title

@@ -1,4 +1,4 @@
-class MigrateRejections < ActiveRecord::Migration
+class MigrateRejections < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       INSERT INTO rejections

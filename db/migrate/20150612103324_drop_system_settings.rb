@@ -1,4 +1,4 @@
-class DropSystemSettings < ActiveRecord::Migration
+class DropSystemSettings < ActiveRecord::Migration[4.2]
   def change
     drop_table :system_settings do |t|
       t.string   :key, limit: 64, null: false

@@ -1,4 +1,4 @@
-class CreateDebateOutcomes < ActiveRecord::Migration
+class CreateDebateOutcomes < ActiveRecord::Migration[4.2]
   def change
     create_table :debate_outcomes do |t|
       t.references :petition, null: false

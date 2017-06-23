@@ -1,4 +1,4 @@
-class ImportInitialLocations < ActiveRecord::Migration
+class ImportInitialLocations < ActiveRecord::Migration[4.2]
   class Location < ActiveRecord::Base; end
 
   def up

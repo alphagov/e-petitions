@@ -1,4 +1,4 @@
-class CreateConstituencyPetitionJournals < ActiveRecord::Migration
+class CreateConstituencyPetitionJournals < ActiveRecord::Migration[4.2]
   def change
     create_table :constituency_petition_journals do |t|
       t.string :constituency_id, null: false

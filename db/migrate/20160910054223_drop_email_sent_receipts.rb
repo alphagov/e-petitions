@@ -1,4 +1,4 @@
-class DropEmailSentReceipts < ActiveRecord::Migration
+class DropEmailSentReceipts < ActiveRecord::Migration[4.2]
   def up
     remove_foreign_key :email_sent_receipts, column: :signature_id
     drop_table :email_sent_receipts

@@ -1,4 +1,4 @@
-class AddValidatedAtToSignatures < ActiveRecord::Migration
+class AddValidatedAtToSignatures < ActiveRecord::Migration[4.2]
   def change
     change_table :signatures do |t|
       t.datetime :validated_at

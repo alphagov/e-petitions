@@ -1,4 +1,4 @@
-class AddSearchIndexesForInvalidations < ActiveRecord::Migration
+class AddSearchIndexesForInvalidations < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       CREATE INDEX ft_index_invalidations_on_id ON invalidations

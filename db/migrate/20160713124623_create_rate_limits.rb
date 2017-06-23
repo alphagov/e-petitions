@@ -1,4 +1,4 @@
-class CreateRateLimits < ActiveRecord::Migration
+class CreateRateLimits < ActiveRecord::Migration[4.2]
   def change
     create_table :rate_limits do |t|
       t.integer :burst_rate, null: false, default: 1

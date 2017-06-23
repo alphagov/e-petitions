@@ -1,4 +1,4 @@
-class AddDissolutionHeadingToParliaments < ActiveRecord::Migration
+class AddDissolutionHeadingToParliaments < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
 
   def up
