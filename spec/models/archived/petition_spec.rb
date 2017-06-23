@@ -476,4 +476,76 @@ RSpec.describe Archived::Petition, type: :model do
       end
     end
   end
+
+  describe "#signatures_by_constituency" do
+    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_constituency: signatures_by_constituency) }
+
+    let(:signatures_by_constituency) do
+      { "3427" => 123, "3320" => 456 }
+    end
+
+    before do
+      FactoryGirl.create(:constituency, :coventry_north_east)
+      FactoryGirl.create(:constituency, :bethnal_green_and_bow)
+    end
+
+    it "returns an array of constituency signature details" do
+      expect(petition.signatures_by_constituency).to eq [
+        {
+          name: "Bethnal Green and Bow",
+          ons_code: "E14000555",
+          mp: "Rushanara Ali MP",
+          signature_count: 456
+        },
+        {
+          name: "Coventry North East",
+          ons_code: "E14000649",
+          mp: "Colleen Fletcher MP",
+          signature_count: 123
+        }
+      ]
+    end
+
+    it "only finds the constituencies once" do
+      expect(Constituency).to receive(:where).with(external_id: %w[3427 3320]).once.and_call_original
+
+      petition.signatures_by_constituency
+      petition.signatures_by_constituency
+    end
+  end
+
+  describe "#signatures_by_country" do
+    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_country: signatures_by_country) }
+
+    let(:signatures_by_country) do
+      { "GB" => 1234, "US" => 56 }
+    end
+
+    before do
+      FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+      FactoryGirl.create(:location, code: "US", name: "United States")
+    end
+
+    it "returns an array of country signature details" do
+      expect(petition.signatures_by_country).to eq [
+        {
+          name: "United Kingdom",
+          code: "GB",
+          signature_count: 1234
+        },
+        {
+          name: "United States",
+          code: "US",
+          signature_count: 56
+        }
+      ]
+    end
+
+    it "only finds the countries once" do
+      expect(Location).to receive(:where).with(code: %w[GB US]).once.and_call_original
+
+      petition.signatures_by_country
+      petition.signatures_by_country
+    end
+  end
 end

@@ -110,6 +110,30 @@ module Archived
       signature_count >= parliament.threshold_for_response
     end
 
+    def signatures_by_constituency
+      if defined?(@_signatures_by_constituency)
+        @_signatures_by_constituency
+      else
+        if signatures_by_constituency?
+          @_signatures_by_constituency = calculate_signatures_by_constituency(super)
+        else
+          []
+        end
+      end
+    end
+
+    def signatures_by_country
+      if defined?(@_signatures_by_country)
+        @_signatures_by_country
+      else
+        if signatures_by_country?
+          @_signatures_by_country = calculate_signatures_by_country(super)
+        else
+          []
+        end
+      end
+    end
+
     private
 
     def calculate_petition_duration
@@ -123,6 +147,35 @@ module Archived
         12
       else
         Rational(closed_at - opened_at, 86400 * 30).to_f
+      end
+    end
+
+    def constituencies(external_ids)
+      Constituency.where(external_id: external_ids).order(:name)
+    end
+
+    def calculate_signatures_by_constituency(hash)
+      constituencies(hash.keys).map do |constituency|
+        {
+          name: constituency.name,
+          ons_code: constituency.ons_code,
+          mp: constituency.mp_name,
+          signature_count: hash[constituency.external_id]
+        }
+      end
+    end
+
+    def locations(codes)
+      Location.where(code: codes).order(:name)
+    end
+
+    def calculate_signatures_by_country(hash)
+      locations(hash.keys).map do |location|
+        {
+          name: location.name,
+          code: location.code,
+          signature_count: hash[location.code]
+        }
       end
     end
   end

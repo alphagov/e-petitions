@@ -240,7 +240,9 @@ CREATE TABLE archived_petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30),
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    signatures_by_constituency jsonb,
+    signatures_by_country jsonb
 );
 
 
@@ -2463,4 +2465,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170622151936');
 INSERT INTO schema_migrations (version) VALUES ('20170622152415');
 
 INSERT INTO schema_migrations (version) VALUES ('20170622161343');
+
+INSERT INTO schema_migrations (version) VALUES ('20170623144023');
 
