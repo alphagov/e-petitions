@@ -6,6 +6,6 @@ class GovernmentResponse < ActiveRecord::Base
   validates :details, length: { maximum: 6000 }, allow_blank: true
 
   after_create do
-    petition.touch(:government_response_at)
+    petition.touch(:government_response_at) unless petition.government_response_at?
   end
 end
