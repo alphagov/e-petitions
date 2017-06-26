@@ -343,7 +343,7 @@ class Petition < ActiveRecord::Base
     end
 
     def archived?
-      !where(archived_at: nil).exists?
+      !where(archived_at: nil).exists? && count > 0
     end
 
     private

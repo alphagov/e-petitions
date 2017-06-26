@@ -548,4 +548,495 @@ RSpec.describe Parliament, type: :model do
       end
     end
   end
+
+  describe "#archiving?" do
+    context "when archiving_started_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archiving_started_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.archiving?).to eq(false)
+      end
+    end
+
+    context "when archiving_started_at is not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archiving_started_at: 1.day.ago)
+      end
+
+      context "and all petitions are unarchived" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+        end
+
+        it "returns true" do
+          expect(parliament.archiving?).to eq(true)
+        end
+      end
+
+      context "and there is a mix of archived and unarchived petitions" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+        end
+
+        it "returns true" do
+          expect(parliament.archiving?).to eq(true)
+        end
+      end
+
+      context "and all the petitions are archived" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryGirl.create(:closed_petition, archived_at: 6.hours.ago)
+        end
+
+        it "returns false" do
+          expect(parliament.archiving?).to eq(false)
+        end
+      end
+    end
+  end
+
+  describe "#start_archiving!" do
+    let :archive_petitions_job do
+      {
+        job: ArchivePetitionsJob,
+        args: [],
+        queue: "high_priority"
+      }
+    end
+
+    context "when petitions have not been archived" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: nil)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+      end
+
+      it "schedules an ArchivedPetitionsJob" do
+        expect {
+          subject.start_archiving!
+        }.to change {
+          enqueued_jobs
+        }.from([]).to([archive_petitions_job])
+      end
+
+      it "updates the archiving_started_at timestamp" do
+        expect {
+          subject.start_archiving!
+        }.to change {
+          subject.reload.archiving_started_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when archiving has already started" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+      end
+
+      it "doesn't schedule an ArchivedPetitionsJob" do
+        expect {
+          subject.start_archiving!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+
+      it "doesn't update the archiving_started_at timestamp" do
+        expect {
+          subject.start_archiving!
+        }.not_to change {
+          subject.reload.archiving_started_at
+        }
+      end
+    end
+
+    context "when archiving has finished" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+      end
+
+      it "doesn't schedule an ArchivedPetitionsJob" do
+        expect {
+          subject.start_archiving!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+
+      it "doesn't update the archiving_started_at timestamp" do
+        expect {
+          subject.start_archiving!
+        }.not_to change {
+          subject.reload.archiving_started_at
+        }
+      end
+    end
+  end
+
+  describe "#archive!" do
+    let :delete_petitions_job do
+      {
+        job: DeletePetitionsJob,
+        args: [],
+        queue: "high_priority"
+      }
+    end
+
+    context "when archiving has not started" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: nil)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+      end
+
+      it "doesn't schedule an DeletePetitionsJob" do
+        expect {
+          subject.archive!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+
+      it "doesn't update the archived_at timestamp" do
+        expect {
+          subject.archive!
+        }.not_to change {
+          subject.reload.archived_at
+        }
+      end
+    end
+
+    context "when archiving has started" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryGirl.create(:closed_petition, archived_at: nil)
+      end
+
+      it "doesn't schedule an DeletePetitionsJob" do
+        expect {
+          subject.archive!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+
+      it "doesn't update the archived_at timestamp" do
+        expect {
+          subject.archive!
+        }.not_to change {
+          subject.reload.archived_at
+        }
+      end
+    end
+
+    context "when archiving has finished" do
+      subject :parliament do
+        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+      end
+
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+      end
+
+      it "schedules an DeletePetitionsJob" do
+        expect {
+          subject.archive!
+        }.to change {
+          enqueued_jobs
+        }.from([]).to([delete_petitions_job])
+      end
+
+      it "updates the archived_at timestamp" do
+        expect {
+          subject.archive!
+        }.to change {
+          subject.reload.archived_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+  end
+
+  describe "#notify_creators!" do
+    let :notify_creators_job do
+      {
+        job: NotifyCreatorsThatParliamentIsDissolvingJob,
+        args: [],
+        queue: "high_priority"
+      }
+    end
+
+    context "when parliament has not announced dissolution" do
+      subject :parliament do
+        FactoryGirl.create(:parliament)
+      end
+
+      it "does not schedule a job" do
+        expect {
+          subject.notify_creators!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+    end
+
+    context "when parliament has announced dissolution" do
+      context "and the dissolution date has not passed" do
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolving)
+        end
+
+        it "schedules a job" do
+          expect {
+            subject.notify_creators!
+          }.to change {
+            enqueued_jobs
+          }.from([]).to([notify_creators_job])
+        end
+      end
+
+      context "and the dissolution date has passsed" do
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolved)
+        end
+
+        it "does not schedule a job" do
+          expect {
+            subject.notify_creators!
+          }.not_to change {
+            enqueued_jobs
+          }
+        end
+      end
+    end
+  end
+
+  describe "#schedule_closure!" do
+    let :close_petitions_job do
+      {
+        job: ClosePetitionsEarlyJob,
+        args: [dissolution_at.iso8601],
+        queue: "high_priority",
+        at: dissolution_at.to_f
+      }
+    end
+
+    let :stop_petitions_job do
+      {
+        job: StopPetitionsEarlyJob,
+        args: [dissolution_at.iso8601],
+        queue: "high_priority",
+        at: dissolution_at.to_f
+      }
+    end
+
+    context "when parliament has not announced dissolution" do
+      subject :parliament do
+        FactoryGirl.create(:parliament)
+      end
+
+      it "does not schedule a job" do
+        expect {
+          subject.schedule_closure!
+        }.not_to change {
+          enqueued_jobs
+        }
+      end
+    end
+
+    context "when parliament has announced dissolution" do
+      context "and the dissolution date has not passed" do
+        let(:dissolution_at) { 2.weeks.from_now }
+
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolving, dissolution_at: dissolution_at)
+        end
+
+        it "schedules a job" do
+          expect {
+            subject.schedule_closure!
+          }.to change {
+            enqueued_jobs
+          }.from([]).to([close_petitions_job, stop_petitions_job])
+        end
+      end
+
+      context "and the dissolution date has passsed" do
+        let(:dissolution_at) { 2.weeks.ago }
+
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolved, dissolution_at: dissolution_at)
+        end
+
+        it "does not schedule a job" do
+          expect {
+            subject.schedule_closure!
+          }.not_to change {
+            enqueued_jobs
+          }
+        end
+      end
+    end
+  end
+
+  describe "#can_archive_petitions?" do
+    context "when parliament has not announced dissolution" do
+      subject :parliament do
+        FactoryGirl.create(:parliament)
+      end
+
+      it "returns false" do
+        expect(parliament.can_archive_petitions?).to eq(false)
+      end
+    end
+
+    context "when parliament has announced dissolution" do
+      context "and the dissolution date has not passed" do
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolving)
+        end
+
+        it "returns false" do
+          expect(parliament.can_archive_petitions?).to eq(false)
+        end
+      end
+
+      context "and the dissolution date has passed" do
+        context "and the petitions have not been archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: nil)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: nil)
+          end
+
+          it "returns true" do
+            expect(parliament.can_archive_petitions?).to eq(true)
+          end
+        end
+
+        context "and the petitions are being archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: nil)
+          end
+
+          it "returns false" do
+            expect(parliament.can_archive_petitions?).to eq(false)
+          end
+        end
+
+        context "and the petitions have been archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+          end
+
+          it "returns false" do
+            expect(parliament.can_archive_petitions?).to eq(false)
+          end
+        end
+      end
+    end
+  end
+
+  describe "#can_archive?" do
+    context "when parliament has not announced dissolution" do
+      subject :parliament do
+        FactoryGirl.create(:parliament)
+      end
+
+      it "returns false" do
+        expect(parliament.can_archive?).to eq(false)
+      end
+    end
+
+    context "when parliament has announced dissolution" do
+      context "and the dissolution date has not passed" do
+        subject :parliament do
+          FactoryGirl.create(:parliament, :dissolving)
+        end
+
+        it "returns false" do
+          expect(parliament.can_archive?).to eq(false)
+        end
+      end
+
+      context "and the dissolution date has passed" do
+        context "and the petitions have not been archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: nil)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: nil)
+          end
+
+          it "returns false" do
+            expect(parliament.can_archive?).to eq(false)
+          end
+        end
+
+        context "and the petitions are being archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: nil)
+          end
+
+          it "returns false" do
+            expect(parliament.can_archive?).to eq(false)
+          end
+        end
+
+        context "and the petitions have been archived" do
+          subject :parliament do
+            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+          end
+
+          before do
+            FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+          end
+
+          it "returns true" do
+            expect(parliament.can_archive?).to eq(true)
+          end
+        end
+      end
+    end
+  end
 end

@@ -73,8 +73,16 @@
 
       <%= form.submit 'Save', class: 'button' %>
       <% if @parliament.dissolution_announced? %>
-        <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
-        <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
+        <% if @parliament.dissolved? %>
+          <% if @parliament.can_archive_petitions? %>
+            <%= form.submit 'Archive petitions', name: 'archive_petitions', class: 'button-secondary', data: { confirm: 'Copy current petitions to archive?' } %>
+          <% elsif @parliament.can_archive? %>
+            <%= form.submit 'Archive parliament', name: 'archive_parliament', class: 'button-secondary', data: { confirm: 'Archive this parliament and create a new one?' } %>
+          <% end %>
+        <% else %>
+          <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
+          <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
+        <% end %>
       <% end %>
       <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
     <% end %>

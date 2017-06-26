@@ -125,4 +125,43 @@ class Parliament < ActiveRecord::Base
   def archived?(now = Time.current)
     archived_at? && archived_at <= now
   end
+
+  def archiving?
+    archiving_started_at? && !Petition.archived?
+  end
+
+  def start_archiving!(now = Time.current)
+    unless archiving? || Petition.archived?
+      ArchivePetitionsJob.perform_later
+      update_column(:archiving_started_at, now)
+    end
+  end
+
+  def schedule_closure!
+    if dissolution_announced? && !dissolved?
+      ClosePetitionsEarlyJob.schedule_for(dissolution_at)
+      StopPetitionsEarlyJob.schedule_for(dissolution_at)
+    end
+  end
+
+  def notify_creators!
+    if dissolution_announced? && !dissolved?
+      NotifyCreatorsThatParliamentIsDissolvingJob.perform_later
+    end
+  end
+
+  def archive!(now = Time.current)
+    if Petition.archived?
+      DeletePetitionsJob.perform_later
+      update_column(:archived_at, now)
+    end
+  end
+
+  def can_archive_petitions?
+    dissolved? && !Petition.archived? && !archiving?
+  end
+
+  def can_archive?
+    dissolved? && Petition.archived?
+  end
 end
