@@ -262,6 +262,18 @@ FactoryGirl.define do
   factory :sponsored_petition, :parent => :petition do
     moderation_threshold_reached_at { Time.current }
     state  Petition::SPONSORED_STATE
+
+    trait :overdue do
+      moderation_threshold_reached_at { Site.moderation_overdue_in_days.ago - 5.minutes }
+    end
+
+    trait :nearly_overdue do
+      moderation_threshold_reached_at { Site.moderation_overdue_in_days.ago + 5.minutes }
+    end
+
+    trait :recent do
+      moderation_threshold_reached_at { Time.current }
+    end
   end
 
   factory :flagged_petition, :parent => :petition do

@@ -341,6 +341,14 @@ class Petition < ActiveRecord::Base
       where(archived_at: nil)
     end
 
+    def between_in_moderation_times(from: Site.moderation_overdue_in_days.ago, to: Time.current)
+      where(arel_table[:moderation_threshold_reached_at].between(from..to))
+    end
+
+    def overdue_in_moderation_time_limit
+      where(arel_table[:moderation_threshold_reached_at].lt(Site.moderation_overdue_in_days.ago))
+    end
+
     private
 
     def popular_in(constituency_id, count)

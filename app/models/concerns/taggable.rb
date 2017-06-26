@@ -17,6 +17,10 @@ module Taggable
       where(tags_column.overlaps(normalize_tags(tags)))
     end
 
+    def tagged
+      where(tags_column.not_eq([]))
+    end
+
     def untagged
       where(tags_column.eq([]))
     end
