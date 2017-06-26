@@ -21,6 +21,7 @@ RSpec.describe Taggable, type: :model do
     let!(:taggable_record_a) { taggable.create(tags: ["tag 1", "tag 2"]) }
     let!(:taggable_record_b) { taggable.create(tags: ["tag 1", "tag 3"]) }
     let!(:taggable_record_c) { taggable.create(tags: ["tag 1", "tag 2", "tag 3"]) }
+    let!(:taggable_record_d) { taggable.create }
 
     let(:tags_query) { ["tag 1", "tag 2"] }
 
@@ -40,6 +41,18 @@ RSpec.describe Taggable, type: :model do
     describe "with_tag" do
       it "returns all records tagged with tag" do
         expect(taggable.with_tag("tag 3")).to match_array [taggable_record_b, taggable_record_c]
+      end
+    end
+
+    describe ".with_no_tags" do
+      it "returns all records with no tags" do
+        expect(taggable.with_no_tags).to match_array [taggable_record_d]
+      end
+    end
+
+    describe ".with_any_tags" do
+      it "returns all record with any tags" do
+        expect(taggable.with_any_tags).to match_array [taggable_record_a, taggable_record_b, taggable_record_c]
       end
     end
 
