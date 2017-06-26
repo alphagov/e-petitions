@@ -1334,6 +1334,39 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".archived?" do
+    context "When there are only unarchived petitions" do
+      before do
+        FactoryGirl.create(:closed_petition)
+      end
+
+      it "returns false" do
+        expect(described_class.archived?).to eq(false)
+      end
+    end
+
+    context "When there are a mix of archived and unarchived petitions" do
+      before do
+        FactoryGirl.create(:closed_petition)
+        FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
+      end
+
+      it "returns false" do
+        expect(described_class.archived?).to eq(false)
+      end
+    end
+
+    context "When all petitions are archived" do
+      before do
+        FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
+      end
+
+      it "returns true" do
+        expect(described_class.archived?).to eq(true)
+      end
+    end
+  end
+
   describe "#update_signature_count!" do
     let!(:petition) { FactoryGirl.create(:open_petition, attributes) }
 

@@ -1927,6 +1927,13 @@ CREATE INDEX index_petitions_on_additional_details ON petitions USING gin (to_ts
 
 
 --
+-- Name: index_petitions_on_archived_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_archived_at ON petitions USING btree (archived_at);
+
+
+--
 -- Name: index_petitions_on_background; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2467,4 +2474,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170622152415');
 INSERT INTO schema_migrations (version) VALUES ('20170622161343');
 
 INSERT INTO schema_migrations (version) VALUES ('20170623144023');
+
+INSERT INTO schema_migrations (version) VALUES ('20170626123257');
 

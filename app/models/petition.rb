@@ -342,6 +342,10 @@ class Petition < ActiveRecord::Base
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
     end
 
+    def archived?
+      !where(archived_at: nil).exists?
+    end
+
     private
 
     def popular_in(constituency_id, count)
