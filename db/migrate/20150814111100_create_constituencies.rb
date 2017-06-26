@@ -1,4 +1,4 @@
-class CreateConstituencies < ActiveRecord::Migration
+class CreateConstituencies < ActiveRecord::Migration[4.2]
   def change
     create_table :constituencies do |t|
       t.string :name, limit: 100, null: false

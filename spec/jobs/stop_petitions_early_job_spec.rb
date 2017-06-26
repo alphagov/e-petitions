@@ -20,7 +20,7 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
   end
 
   before do
-    ActiveJob::Base.queue_adapter = :delayed_job
+    ActiveJob::Base.disable_test_adapter
 
     allow(Parliament).to receive(:notification_cutoff_at).and_return(notification_cutoff_at)
     allow(Parliament).to receive(:dissolved?).and_return(true)
@@ -28,10 +28,6 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
     travel_to(scheduled_at) {
       described_class.schedule_for(dissolution_at)
     }
-  end
-
-  after do
-    ActiveJob::Base.queue_adapter = :test
   end
 
   it "enqueues the job" do

@@ -1,4 +1,4 @@
-class MigrateGovernmentResponses < ActiveRecord::Migration
+class MigrateGovernmentResponses < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       INSERT INTO government_responses

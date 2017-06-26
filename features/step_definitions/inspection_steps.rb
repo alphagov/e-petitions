@@ -3,7 +3,7 @@ Then(/^I should see a fieldset called "(.*?)"$/) do |legend|
 end
 
 Then(/^I should see a heading called "(.*?)"$/) do |title|
-  expect(page).to have_css('h1', "#{title}")
+  expect(page).to have_css('h1', text: "#{title}")
 end
 
 Then /^I should (not |)see "([^\"]*)" in the ((?!email\b).*)$/ do |see_or_not, text, section_name|

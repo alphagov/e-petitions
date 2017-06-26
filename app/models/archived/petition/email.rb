@@ -1,6 +1,6 @@
 module Archived
-  class Petition < ActiveRecord::Base
-    class Email < ActiveRecord::Base
+  class Petition < ApplicationRecord
+    class Email < ApplicationRecord
       belongs_to :petition, touch: true
 
       validates :petition, presence: true

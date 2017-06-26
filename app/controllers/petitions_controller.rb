@@ -96,7 +96,7 @@ class PetitionsController < ApplicationController
 
   def avoid_unknown_state_filters
     return if params[:state].blank?
-    redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
+    redirect_to url_for(params.permit([:q, :state]).merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
   end
 
   def collecting_sponsors?

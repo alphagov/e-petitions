@@ -30,13 +30,13 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   context "when a new session is created" do
     it "logs out existing sessions" do
       s1 = new_browser
-      s1.post "/admin/user_sessions", admin_user_session: login_params
+      s1.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s1.response.status).to eq(302)
       expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.uk/admin")
 
       s2 = new_browser
-      s2.post "/admin/user_sessions", admin_user_session: login_params
+      s2.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s2.response.status).to eq(302)
       expect(s2.response.headers["Location"]).to eq("https://moderate.petition.parliament.uk/admin")
@@ -51,7 +51,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   context "when a session is destroyed" do
     it "resets the persistence token" do
       s1 = new_browser
-      s1.post "/admin/user_sessions", admin_user_session: login_params
+      s1.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s1.response.status).to eq(302)
       expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.uk/admin")
@@ -81,7 +81,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       Site.instance.update(login_timeout: 600)
 
       travel_to 5.minutes.ago do
-        post "/admin/user_sessions", admin_user_session: login_params
+        post "/admin/user_sessions", params: { admin_user_session: login_params }
         expect(response).to redirect_to("/admin")
       end
 

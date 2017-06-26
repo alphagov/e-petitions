@@ -1,8 +1,8 @@
-class Invalidation < ActiveRecord::Base
+class Invalidation < ApplicationRecord
   extend Searchable(:id, :summary, :details, :petition_id)
   include Browseable
 
-  belongs_to :petition
+  belongs_to :petition, optional: true
   has_many :signatures
 
   facet :all,       -> { by_most_recent }
@@ -51,7 +51,7 @@ class Invalidation < ActiveRecord::Base
   end
 
   before_destroy do
-    !started?
+    throw :abort if started?
   end
 
   class << self
@@ -169,7 +169,7 @@ class Invalidation < ActiveRecord::Base
     Appsignal.without_instrumentation do
       matching_signatures.find_in_batches(batch_size: 100) do |signatures|
         signatures.each do |signature|
-          signature.invalidate!(Time.current, self)
+          signature.invalidate!(Time.current, self.id)
           increment!(:invalidated_count)
         end
 

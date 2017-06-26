@@ -1,6 +1,6 @@
 class Admin::AdminUsersController < Admin::AdminController
-  before_filter :require_sysadmin
-  before_filter :find_user, only: %i[edit update destroy]
+  before_action :require_sysadmin
+  before_action :find_user, only: %i[edit update destroy]
 
   rescue_from AdminUser::CannotDeleteCurrentUser do
     redirect_to admin_admin_users_url, alert: :user_is_current_user

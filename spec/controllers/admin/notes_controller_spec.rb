@@ -7,14 +7,14 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
   describe 'not logged in' do
     describe 'GET /show' do
       it 'redirects to the login page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
 
     describe 'GET /show' do
       it 'redirects to edit profile page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -46,12 +46,12 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
     describe 'GET /show' do
       shared_examples_for 'viewing notes for a petition' do
         it 'fetches the requested petition' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'responds successfully and renders the petitions/show template' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(response).to be_success
           expect(response).to render_template('petitions/show')
         end
@@ -96,7 +96,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
 
       def do_patch(overrides = {})
         params = { petition_id: petition.id, note: notes_attributes }
-        patch :update, params.merge(overrides)
+        patch :update, params: params.merge(overrides)
       end
 
       shared_examples_for 'updating notes for a petition' do
@@ -159,13 +159,13 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
           expect {
             expect(petition.note).to be_nil
 
-            patch :update, petition_id: petition.id, note: { details: "update 1" }
+            patch :update, params: { petition_id: petition.id, note: { details: "update 1" } }
             expect(petition.note.details).to eq("update 1")
 
             allow(petition).to receive(:note).and_return(nil, petition.note)
             allow(petition).to receive(:build_note).and_return(note)
 
-            patch :update, petition_id: petition.id, note: { details: "update 2" }
+            patch :update, params: { petition_id: petition.id, note: { details: "update 2" } }
             expect(petition.note(true).details).to eq("update 2")
           }.not_to raise_error
         end

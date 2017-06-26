@@ -67,7 +67,7 @@ module Browseable
     end
 
     def to_hash
-      params.slice(*filter_definitions)
+      params.permit(*filter_definitions).to_h.symbolize_keys
     end
   end
 

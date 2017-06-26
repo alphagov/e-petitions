@@ -5,7 +5,7 @@ RSpec.describe SponsorsController, type: :controller do
     let(:petition) { FactoryGirl.create(:petition) }
 
     it 'fetches the requested petition' do
-      get :show, petition_id: petition, token: petition.sponsor_token
+      get :show, params: { petition_id: petition, token: petition.sponsor_token }
       expect(assigns[:petition]).to eq petition
     end
 
@@ -14,51 +14,51 @@ RSpec.describe SponsorsController, type: :controller do
       petition_param = petition.to_param
       petition.destroy
       expect {
-        get :show, petition_id: petition_param, token: petition.sponsor_token
+        get :show, params: { petition_id: petition_param, token: petition.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it '404s if the requested token belongs to a different petition' do
       petition_2 = FactoryGirl.create(:petition)
       expect {
-        get :show, petition_id: petition, token: petition_2.sponsor_token
+        get :show, params: { petition_id: petition, token: petition_2.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it 'renders the form' do
-      get :show, petition_id: petition, token: petition.sponsor_token
+      get :show, params: { petition_id: petition, token: petition.sponsor_token }
       expect(response).to render_template :show
     end
 
     it 'builds a new sponsor for the petition identified by the token' do
-      get :show, petition_id: petition, token: petition.sponsor_token
+      get :show, params: { petition_id: petition, token: petition.sponsor_token }
       expect(assigns[:sponsor]).to be_new_record
       expect(assigns[:sponsor].petition).to eq petition
     end
 
     it 'builds a signature for the sponsor' do
-      get :show, petition_id: petition, token: petition.sponsor_token
+      get :show, params: { petition_id: petition, token: petition.sponsor_token }
       expect(assigns[:stage_manager].signature).to be_present
       expect(assigns[:stage_manager].signature.petition).to eq petition
     end
 
     it 'redirects to petition page when the petition is closed' do
       closed_petition = FactoryGirl.create(:closed_petition)
-      get :show, petition_id: closed_petition, token: closed_petition.sponsor_token
+      get :show, params: { petition_id: closed_petition, token: closed_petition.sponsor_token }
       redirect_url = "https://petition.parliament.uk/petitions/#{closed_petition.id}"
       expect(response).to redirect_to redirect_url
     end
 
     it 'redirects to petition page when the petition is rejected' do
       rejected_petition = FactoryGirl.create(:rejected_petition)
-      get :show, petition_id: rejected_petition, token: rejected_petition.sponsor_token
+      get :show, params: { petition_id: rejected_petition, token: rejected_petition.sponsor_token }
       redirect_url = "https://petition.parliament.uk/petitions/#{rejected_petition.id}"
       expect(response).to redirect_to redirect_url
     end
 
     it 'redirects to petition view page if the petition is already published' do
       published_petition = FactoryGirl.create(:open_petition)
-      get :show, petition_id: published_petition, token: published_petition.sponsor_token
+      get :show, params: { petition_id: published_petition, token: published_petition.sponsor_token }
       redirect_url = "https://petition.parliament.uk/petitions/#{published_petition.id}"
       expect(response).to redirect_to redirect_url
     end
@@ -66,7 +66,7 @@ RSpec.describe SponsorsController, type: :controller do
     it 'redirects to 404 if the petition is hidden' do
       hidden_petition = FactoryGirl.create(:hidden_petition)
       expect {
-        get :show, petition_id: hidden_petition, token: hidden_petition.sponsor_token
+        get :show, params: { petition_id: hidden_petition, token: hidden_petition.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
@@ -76,7 +76,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it 'validates the creator signature' do
         expect {
-          get :show, petition_id: petition.id, token: petition.sponsor_token
+          get :show, params: { petition_id: petition.id, token: petition.sponsor_token }
         }.to change{ signature.reload.validated? }.from(false).to(true)
       end
     end
@@ -84,21 +84,21 @@ RSpec.describe SponsorsController, type: :controller do
     context 'petition has reached maximum amount of sponsors' do
       it 'redirects to petition moderation info page when petition is in sponsored state' do
         sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: sponsored_petition, token: sponsored_petition.sponsor_token
+        get :show, params: { petition_id: sponsored_petition, token: sponsored_petition.sponsor_token }
         redirect_url = "https://petition.parliament.uk/petitions/#{sponsored_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
 
       it 'redirects to petition moderation info page when petition is in validated state' do
         validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: validated_petition, token: validated_petition.sponsor_token
+        get :show, params: { petition_id: validated_petition, token: validated_petition.sponsor_token }
         redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
 
       it 'redirects to petition moderation info page when petition is in pending state' do
         pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: pending_petition, token: pending_petition.sponsor_token
+        get :show, params: { petition_id: pending_petition, token: pending_petition.sponsor_token }
         redirect_url = "https://petition.parliament.uk/petitions/#{pending_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
@@ -136,7 +136,7 @@ RSpec.describe SponsorsController, type: :controller do
       allow(Constituency).to receive(:find_by_postcode).with("SP11NR").and_return(constituency)
 
       perform_enqueued_jobs do
-        patch :update, params
+        patch :update, params: params
       end
     end
 
@@ -175,7 +175,6 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     it '404s if the requested petition does not exist' do
-      petition_param = petition.to_param
       petition.destroy
       expect {
         do_patch
@@ -308,7 +307,7 @@ RSpec.describe SponsorsController, type: :controller do
     before { signature.present? }
 
     it 'fetches the requested petition' do
-      get :thank_you, petition_id: petition, token: petition.sponsor_token
+      get :thank_you, params: { petition_id: petition, token: petition.sponsor_token }
       expect(assigns[:petition]).to eq petition
     end
 
@@ -317,19 +316,19 @@ RSpec.describe SponsorsController, type: :controller do
       petition_param = petition.to_param
       petition.destroy
       expect {
-        get :thank_you, petition_id: petition_param, token: petition.sponsor_token
+        get :thank_you, params: { petition_id: petition_param, token: petition.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it '404s if the requested token belongs to a different petition' do
       petition_2 = FactoryGirl.create(:petition)
       expect {
-        get :thank_you, petition_id: petition, token: petition_2.sponsor_token
+        get :thank_you, params: { petition_id: petition, token: petition_2.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it 'renders the view' do
-      get :thank_you, petition_id: petition, token: petition.sponsor_token
+      get :thank_you, params: { petition_id: petition, token: petition.sponsor_token }
       expect(response).to render_template :thank_you
     end
 
@@ -337,7 +336,7 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
 
       it "does not redirect to the moderation page" do
-        get :thank_you, petition_id: petition, token: petition.sponsor_token
+        get :thank_you, params: { petition_id: petition, token: petition.sponsor_token }
         expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
       end
     end
@@ -351,7 +350,7 @@ RSpec.describe SponsorsController, type: :controller do
     before { signature.present? }
 
     it 'fetches the requested petition' do
-      get :sponsored, petition_id: petition, token: petition.sponsor_token
+      get :sponsored, params: { petition_id: petition, token: petition.sponsor_token }
       expect(assigns[:petition]).to eq petition
     end
 
@@ -360,19 +359,19 @@ RSpec.describe SponsorsController, type: :controller do
       petition_param = petition.to_param
       petition.destroy
       expect {
-        get :sponsored, petition_id: petition_param, token: petition.sponsor_token
+        get :sponsored, params: { petition_id: petition_param, token: petition.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it '404s if the requested token belongs to a different petition' do
       petition_2 = FactoryGirl.create(:petition)
       expect {
-        get :sponsored, petition_id: petition, token: petition_2.sponsor_token
+        get :sponsored, params: { petition_id: petition, token: petition_2.sponsor_token }
       }.to raise_error ActiveRecord::RecordNotFound
     end
 
     it 'renders the view' do
-      get :sponsored, petition_id: petition, token: petition.sponsor_token
+      get :sponsored, params: { petition_id: petition, token: petition.sponsor_token }
       expect(response).to render_template :sponsored
     end
 
@@ -380,7 +379,7 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
 
       it "does not redirect to the moderation page" do
-        get :sponsored, petition_id: petition, token: petition.sponsor_token
+        get :sponsored, params: { petition_id: petition, token: petition.sponsor_token }
         expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
       end
     end

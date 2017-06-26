@@ -1,4 +1,4 @@
-class AddForeignKeys < ActiveRecord::Migration
+class AddForeignKeys < ActiveRecord::Migration[4.2]
   def change
     add_foreign_key :constituency_petition_journals, :petitions, on_delete: :cascade
     add_foreign_key :debate_outcomes, :petitions, on_delete: :cascade

@@ -1,4 +1,4 @@
-class CreatePetitionEmails < ActiveRecord::Migration
+class CreatePetitionEmails < ActiveRecord::Migration[4.2]
   def change
     create_table :petition_emails do |t|
       t.references :petition

@@ -1,6 +1,6 @@
 require 'ipaddr'
 
-class RateLimit < ActiveRecord::Base
+class RateLimit < ApplicationRecord
   GLOB_PATTERN = /^(\*\*\.|\*\.)/
   RECURSIVE_GLOB = "**."
   RECURSIVE_PATTERN = "(?:[-a-z0-9]+\\.)+"

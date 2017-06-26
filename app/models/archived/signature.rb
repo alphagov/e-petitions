@@ -1,5 +1,5 @@
 module Archived
-  class Signature < ActiveRecord::Base
+  class Signature < ApplicationRecord
     PENDING_STATE = 'pending'
     FRAUDULENT_STATE = 'fraudulent'
     VALIDATED_STATE = 'validated'
@@ -18,8 +18,8 @@ module Archived
     }
 
     belongs_to :petition
-    belongs_to :invalidation
-    belongs_to :constituency, primary_key: :external_id
+    belongs_to :invalidation, optional: true
+    belongs_to :constituency, primary_key: :external_id, optional: true
 
     validates :constituency_id, length: { maximum: 255 }
     validates :email, presence: true

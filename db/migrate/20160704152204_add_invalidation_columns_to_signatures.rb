@@ -1,4 +1,4 @@
-class AddInvalidationColumnsToSignatures < ActiveRecord::Migration
+class AddInvalidationColumnsToSignatures < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

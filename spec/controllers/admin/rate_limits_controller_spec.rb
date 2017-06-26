@@ -3,12 +3,12 @@ require 'rails_helper'
 RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
   context "when not logged in" do
     [
-      ["GET", "/admin/rate-limits/edit", :edit, {}],
-      ["PATCH", "/admin/rate-limits", :update, {}]
-    ].each do |method, path, action, params|
+      ["GET", "/admin/rate-limits/edit", :edit],
+      ["PATCH", "/admin/rate-limits", :update]
+    ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -23,12 +23,12 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
     before { login_as(moderator) }
 
     [
-      ["GET", "/admin/rate-limits/edit", :edit, {}],
-      ["PATCH", "/admin/rate-limits", :update, {}]
-    ].each do |method, path, action, params|
+      ["GET", "/admin/rate-limits/edit", :edit],
+      ["PATCH", "/admin/rate-limits", :update]
+    ].each do |method, path, action|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -55,7 +55,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
     end
 
     describe "PATCH /admin/rate-limits" do
-      before { patch :update, rate_limit: params }
+      before { patch :update, params: { rate_limit: params } }
 
       context "when the params are invalid" do
         let :params do

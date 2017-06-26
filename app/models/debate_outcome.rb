@@ -1,4 +1,4 @@
-class DebateOutcome < ActiveRecord::Base
+class DebateOutcome < ApplicationRecord
   # By default we want the user to upload a '2x' style image, and we can then
   # resize it down with Imagemagick
   COMMONS_IMAGE_SIZE = { w: 1260.0, h: 710.0 }

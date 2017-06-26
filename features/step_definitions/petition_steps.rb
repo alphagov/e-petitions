@@ -248,7 +248,7 @@ Then(/^I should see a list of (\d+) petitions$/) do |petition_count|
 end
 
 Then(/^I should see my search query already filled in as the action of the petition$/) do
-  expect(page).to have_field("What do you want us to do?", "#{@petition.action}")
+  expect(page).to have_field("What do you want us to do?", with: "#{@petition.action}")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
@@ -335,19 +335,19 @@ Then(/^I can share it via (.+)$/) do |service|
   case service
   when 'Email'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Email', %r[\Amailto:?subject=#{URI.escape(@petition.action)}&body=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Email', href: %r[\Amailto:\?body=#{CGI.escape(petition_url(@petition))}&subject=#{CGI.escape('Petition: ' + @petition.action).gsub('+', '%20')}\z])
     end
   when 'Facebook'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Facebook', %r[\Ahttp://www.facebook.com/sharer.php?t=#{URI.escape(@petition.action)}&u=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Facebook', href: %r[\Ahttps://www.facebook.com/sharer/sharer.php\?ref=responsive&u=#{CGI.escape(petition_url(@petition))}\z])
     end
   when 'Twitter'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Twitter', %r[\Ahttp://twitter.com/share?text=#{URI.escape(@petition.action)}&url=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Twitter', href: %r[\Ahttps://twitter.com/intent/tweet\?text=#{CGI.escape('Petition: ' + @petition.action).gsub('+', '%20')}&url=#{CGI.escape(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Whatsapp', %r[\Awhatsapp://send?text=#{URI.escape(@petition.action + "\n" + petition_url(@petition))}\z])
+      expect(page).to have_link('Whatsapp', href: %r[\Awhatsapp://send\?text=#{CGI.escape('Petition: ' + @petition.action + "\n" + petition_url(@petition)).gsub('+', '%20')}\z])
     end
   else
     raise ArgumentError, "Unknown sharing service: #{service.inspect}"

@@ -1,4 +1,4 @@
-class CreateParliaments < ActiveRecord::Migration
+class CreateParliaments < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
 
   def up

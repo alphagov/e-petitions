@@ -1,7 +1,7 @@
 require 'active_support/core_ext/digest/uuid'
 require 'postcode_sanitizer'
 
-class Signature < ActiveRecord::Base
+class Signature < ApplicationRecord
   include PerishableTokenGenerator
 
   has_perishable_token
@@ -25,8 +25,8 @@ class Signature < ActiveRecord::Base
   }
 
   # = Relationships =
-  belongs_to :petition
-  belongs_to :invalidation
+  belongs_to :petition, optional: true
+  belongs_to :invalidation, optional: true
   has_one :sponsor
 
   # = Validations =
@@ -42,7 +42,7 @@ class Signature < ActiveRecord::Base
   end
 
   before_destroy do
-    !creator?
+    throw :abort if creator?
   end
 
   after_destroy do

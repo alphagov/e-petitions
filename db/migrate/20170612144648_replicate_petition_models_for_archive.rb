@@ -1,4 +1,4 @@
-class ReplicatePetitionModelsForArchive < ActiveRecord::Migration
+class ReplicatePetitionModelsForArchive < ActiveRecord::Migration[4.2]
   def change
     create_table :archived_debate_outcomes do |t|
       t.integer  :petition_id, null: false

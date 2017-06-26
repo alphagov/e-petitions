@@ -8,10 +8,10 @@ Feature: Maggie searches for petitions by keyword
     Given I am logged in as a moderator
 
   Scenario: When searching for keyword, it returns all petitions with keyword in action OR background OR additional_details
-    Given a petition "p1" exists with action: "Raise benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p2" exists with action: "Help the poor", background: "Need higher benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p3" exists with action: "Help the homeless", additional_details: "Could raise benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p4" exists with action: "Petition about something else", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
+    Given an open petition "p1" exists with action: "Raise benefits"
+    And an open petition "p2" exists with action: "Help the poor", background: "Need higher benefits"
+    And an open petition "p3" exists with action: "Help the homeless", additional_details: "Could raise benefits"
+    And an open petition "p4" exists with action: "Petition about something else"
     When I search for petitions with keyword "benefits"
     Then I should see the following list of petitions:
           | Help the homeless |
@@ -32,10 +32,10 @@ Feature: Maggie searches for petitions by keyword
           | My open petition about benefits     |
 
   Scenario: A user can search by keyword from the admin hub
-    Given a petition "p1" exists with action: "Raise benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p2" exists with action: "Help the poor", background: "Need higher benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p3" exists with action: "Help the homeless", additional_details: "Could raise benefits", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
-    And a petition "p4" exists with action: "Petition about something else", state: "open", open_at: "1 day ago", closed_at: "1 day from now"
+    Given an open petition "p1" exists with action: "Raise benefits"
+    And an open petition "p2" exists with action: "Help the poor", background: "Need higher benefits"
+    And an open petition "p3" exists with action: "Help the homeless", additional_details: "Could raise benefits"
+    And an open petition "p4" exists with action: "Petition about something else"
     When I search for petitions with keyword "benefits" from the admin hub
     Then I should see the following list of petitions:
           | Help the homeless |

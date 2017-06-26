@@ -1,5 +1,5 @@
 module Archived
-  class GovernmentResponse < ActiveRecord::Base
+  class GovernmentResponse < ApplicationRecord
     belongs_to :petition, touch: true
 
     validates :petition, presence: true

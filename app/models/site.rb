@@ -2,14 +2,14 @@ require 'bcrypt'
 require 'uri'
 require 'active_support/number_helper'
 
-class Site < ActiveRecord::Base
+class Site < ApplicationRecord
   class ServiceUnavailable < StandardError; end
 
   include ActiveSupport::NumberHelper
 
   class << self
-    def table_exists?
-      @table_exists ||= connection.table_exists?(table_name)
+    def data_source_exists?
+      @data_source_exists ||= connection.data_source_exists?(table_name)
     end
 
     def before_remove_const
@@ -53,7 +53,7 @@ class Site < ActiveRecord::Base
     end
 
     def constraints_for_public
-      if table_exists?
+      if data_source_exists?
         instance.constraints_for_public
       else
         default_constraints_for_public
@@ -69,7 +69,7 @@ class Site < ActiveRecord::Base
     end
 
     def constraints_for_moderation
-      if table_exists?
+      if data_source_exists?
         instance.constraints_for_moderation
       else
         default_constraints_for_moderation
@@ -240,7 +240,7 @@ class Site < ActiveRecord::Base
     end
   end
 
-  if table_exists?
+  if data_source_exists?
     column_names.map(&:to_sym).each do |column|
       define_singleton_method(column) do |*args, &block|
         instance.public_send(column, *args, &block)

@@ -1,4 +1,4 @@
-class CreateGovernmentResponses < ActiveRecord::Migration
+class CreateGovernmentResponses < ActiveRecord::Migration[4.2]
   def change
     create_table :government_responses do |t|
       t.references :petition

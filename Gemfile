@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
-gem 'rails', '4.2.8'
+gem 'rails', '5.1.1'
 
 # Legacy Rails feature gems - will no longer be supported in Rails 5.0
 gem 'responders'
@@ -45,9 +45,13 @@ gem 'aws-sdk'
 gem 'fog-aws'
 
 group :development, :test do
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 3.5.2'
   gem 'jasmine-rails'
   gem 'pry'
+end
+
+group :development do
+  gem 'listen', '~> 3.0.0'
 end
 
 group :test do
@@ -62,6 +66,7 @@ group :test do
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'
+  gem 'rails-controller-testing'
 end
 
 group :production do

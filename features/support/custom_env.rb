@@ -20,9 +20,11 @@ Capybara.register_driver :poltergeist do |app|
   )
 end
 
-Capybara.server do |app, port|
+Capybara.register_server :epets do |app, port|
   Epets::SSLServer.build(app, port)
 end
+
+Capybara.server = :epets
 
 pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log')
 Process.detach(pid)

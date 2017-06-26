@@ -3,6 +3,6 @@ class PingController < ApplicationController
   skip_before_action :authenticate
 
   def ping
-    render text: "PONG"
+    render plain: "PONG"
   end
 end

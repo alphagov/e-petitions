@@ -1,4 +1,4 @@
-class CountryPetitionJournal < ActiveRecord::Base
+class CountryPetitionJournal < ApplicationRecord
   belongs_to :petition
   belongs_to :location, foreign_key: :location_code, primary_key: :code
 

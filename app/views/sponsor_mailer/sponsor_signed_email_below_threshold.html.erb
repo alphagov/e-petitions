@@ -2,7 +2,7 @@
 
 <p><%= @sponsor.signature.name %> supported your petition – “<%= @petition.action %>”.</p>
 
-<p>You have <%= pluralize(@supporting_sponsors_count, 'supporter') %> so far. If <%= @moderation_threshold %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.</p>
+<p>You have <%= pluralize(@supporting_sponsors_count, 'supporter', 'supporters') %> so far. If <%= @moderation_threshold %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.</p>
 
 <p>Find out how we check petitions before we publish them:<br />
 <%= link_to nil, help_url(anchor: 'standards') %></p>

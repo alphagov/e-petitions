@@ -47,7 +47,7 @@ RSpec.describe Browseable, type: :model do
     let(:scopes)  { { all: -> { self }, open: -> { self } } }
     let(:filters) { [] }
     let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters) }
-    let(:params)  { { q: 'search', page: '3'} }
+    let(:params)  { ActionController::Parameters.new({ q: 'search', page: '3'}) }
     let(:search)  { described_class.new(klass, params) }
 
     it "is enumerable" do
@@ -161,7 +161,7 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a custom state param" do
-        let(:params) { { q: 'search', page: '3', state: 'open' } }
+        let(:params) { ActionController::Parameters.new({ q: 'search', page: '3', state: 'open' }) }
 
         it "returns a hash of params for building the previous page link" do
           expect(search.previous_params).to eq({ q: 'search', state: :open, page: 2 })
@@ -169,7 +169,7 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
+        let(:params) { ActionController::Parameters.new({ q: 'search', page: '3', parliament: '1' }) }
         let(:filters) { [:parliament] }
 
         it "returns a hash of params for building the previous page link" do
@@ -204,7 +204,7 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a custom state param" do
-        let(:params) { { q: 'search', page: '3', state: 'open' } }
+        let(:params) { ActionController::Parameters.new({ q: 'search', page: '3', state: 'open' }) }
 
         it "returns a hash of params for building the previous page link" do
           expect(search.next_params).to eq({ q: 'search', state: :open, page: 4 })
@@ -212,7 +212,7 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
+        let(:params) { ActionController::Parameters.new({ q: 'search', page: '3', parliament: '1' }) }
         let(:filters) { [:parliament] }
 
         it "returns a hash of params for building the previous page link" do
@@ -515,7 +515,7 @@ RSpec.describe Browseable, type: :model do
 
     describe "implicit conversion" do
       let(:filter_definitions) { [] }
-      let(:params) { Hash.new }
+      let(:params) { ActionController::Parameters.new }
 
       it "can be merged with another hash" do
         expect{ {}.merge(filters) }.not_to raise_error
@@ -526,7 +526,7 @@ RSpec.describe Browseable, type: :model do
       let(:filter_definitions) { [:parliament] }
 
       context "when the key is not present in the params hash" do
-        let(:params) { Hash.new }
+        let(:params) { ActionController::Parameters.new }
 
         it "returns a hash without the filter key" do
           expect(filters.to_hash).to eq({})
@@ -534,7 +534,7 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "when the key is present in the params hash" do
-        let(:params) { { parliament: 1 } }
+        let(:params) { ActionController::Parameters.new({ parliament: 1 }) }
 
         it "returns a hash with the filter key" do
           expect(filters.to_hash).to eq({ parliament: 1 })

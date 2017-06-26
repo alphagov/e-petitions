@@ -1,7 +1,7 @@
 require 'faraday'
 require 'postcode_sanitizer'
 
-class Constituency < ActiveRecord::Base
+class Constituency < ApplicationRecord
   class ApiClient
     HOST = 'http://data.parliament.uk'
     ENDPOINT = '/membersdataplatform/services/mnis/Constituencies/%{postcode}/'

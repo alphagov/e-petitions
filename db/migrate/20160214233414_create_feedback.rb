@@ -1,4 +1,4 @@
-class CreateFeedback < ActiveRecord::Migration
+class CreateFeedback < ActiveRecord::Migration[4.2]
   def change
     create_table :feedback do |t|
       t.string :comment, limit: 32768, null: false

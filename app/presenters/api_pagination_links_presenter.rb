@@ -64,7 +64,7 @@ class ApiPaginationLinksPresenter
   end
 
   def url_params
-    params.slice(*api_links_allowed_components)
+    params.permit(*api_links_allowed_components)
   end
 
   def api_links_allowed_components

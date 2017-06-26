@@ -1,6 +1,6 @@
 require 'textacular/searchable'
 
-class Petition < ActiveRecord::Base
+class Petition < ApplicationRecord
   include PerishableTokenGenerator
 
   PENDING_STATE     = 'pending'
@@ -60,7 +60,7 @@ class Petition < ActiveRecord::Base
   facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
   facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
 
-  belongs_to :creator_signature, class_name: 'Signature'
+  belongs_to :creator_signature, class_name: 'Signature', optional: true
   accepts_nested_attributes_for :creator_signature, update_only: true
 
   has_one :debate_outcome, dependent: :destroy
@@ -517,7 +517,7 @@ class Petition < ActiveRecord::Base
     begin
       build_rejection(attributes) && rejection.save
     rescue ActiveRecord::RecordNotUnique => e
-      rejection(true).update(attributes)
+      reload_rejection.update(attributes)
     end
   end
 
@@ -545,10 +545,6 @@ class Petition < ActiveRecord::Base
     if pending?
       creator_signature && creator_signature.validate! && reload
     end
-  end
-
-  def count_validated_signatures
-    signatures.validated.count
   end
 
   def collecting_sponsors?

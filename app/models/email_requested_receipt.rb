@@ -1,4 +1,4 @@
-class EmailRequestedReceipt < ActiveRecord::Base
+class EmailRequestedReceipt < ApplicationRecord
   belongs_to :petition, touch: true
 
   validates :petition, presence: true

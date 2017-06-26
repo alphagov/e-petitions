@@ -2,16 +2,9 @@ require 'rails_helper'
 
 RSpec.describe HomeHelper, type: :helper do
   describe "#no_petitions_yet?" do
-    let(:connection) { Petition.connection }
-    let(:sql) { /^SELECT COUNT/ }
-
-    it "performs a count query" do
-      expect(connection).to receive(:select).with(sql, any_args).and_call_original
-      expect(helper.no_petitions_yet?).to be true
-    end
-
     it "it caches the result" do
-      expect(connection).to receive(:select).once.with(sql, any_args).and_call_original
+      expect(Petition).to receive(:visible).once.and_call_original
+
       expect(helper.no_petitions_yet?).to be true
       expect(helper.no_petitions_yet?).to be true
     end

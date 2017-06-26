@@ -14,12 +14,12 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         it "returns an array of signatures for an email address" do
           allow(signatures).to receive_messages(:paginate => signatures)
           allow(Signature).to receive_messages(:for_email => signatures)
-          get :show, q: 'something@example.com'
+          get :show, params: { q: 'something@example.com' }
           expect(assigns(:signatures)).to eq(signatures)
         end
 
         it "sets @query" do
-          get :show, q: 'foo bar'
+          get :show, params: { q: 'foo bar' }
           expect(assigns(:query)).to eq("foo bar")
         end
       end
@@ -32,7 +32,7 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         end
 
         it "redirects to a petition if the id exists" do
-          get :show, q: '123'
+          get :show, params: { q: '123' }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
 
@@ -42,12 +42,12 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
           end
 
           it "renders the form with an error" do
-            get :show, q: '123'
+            get :show, params: { q: '123' }
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions")
           end
 
           it "sets the flash error" do
-            get :show, q: '123'
+            get :show, params: { q: '123' }
             expect(flash[:alert]).to match(/123/)
           end
         end
@@ -55,14 +55,14 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
 
       context "searching by keyword" do
         it "redirects to the all petitions page for a keyword" do
-          get :show, q: 'example_keyword'
+          get :show, params: { q: 'example_keyword' }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=example_keyword")
         end
       end
 
       context "searching by tag" do
         it "redirects to the all petitions page for a tag" do
-          get :show, q: '[a tag]'
+          get :show, params: { q: '[a tag]' }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?t=a+tag")
         end
       end

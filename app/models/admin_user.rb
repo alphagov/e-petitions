@@ -1,4 +1,4 @@
-class AdminUser < ActiveRecord::Base
+class AdminUser < ApplicationRecord
   DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'
   MODERATOR_ROLE = 'moderator'

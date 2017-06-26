@@ -22,7 +22,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
       def do_patch(options = patch_options)
         params = { petition_id: petition.id }.merge(petition: options)
-        patch :update, params
+        patch :update, params: params
       end
 
       it "is unsuccessful for a petition that is not validated" do

@@ -1,4 +1,4 @@
-class Parliament < ActiveRecord::Base
+class Parliament < ApplicationRecord
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
 
   class << self

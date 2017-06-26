@@ -74,7 +74,7 @@ Feature: Restricted access to the admin console
     Then I should be on the admin home page
 
   Scenario: Login as a user who hasn't changed their password for over 9 months
-    Given a moderator user exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!", password_changed_at: "10 months ago"
+    Given a moderator user due for password reset exists with email: "admin@example.com", password: "Letmein1!", password_confirmation: "Letmein1!"
     When I go to the admin login page
     And I fill in "Email" with "admin@example.com"
     And I fill in "Password" with "Letmein1!"

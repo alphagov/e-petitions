@@ -8,7 +8,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
       before do
         expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
 
-        get :index, postcode: "n1 1ty"
+        get :index, params: { postcode: "n1 1ty" }
       end
 
       it "assigns the sanitized postcode" do
@@ -25,7 +25,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
         expect(Parliament).to receive(:dissolved?).and_return(true)
         expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
 
-        get :index, postcode: "n1 1ty"
+        get :index, params: { postcode: "n1 1ty" }
       end
 
       it "redirects to the constituency page for all popular petitions" do
@@ -36,7 +36,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
     context "when the postcode is invalid" do
       before do
         expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(nil)
-        get :index, postcode: "sw1a 1aa"
+        get :index, params: { postcode: "sw1a 1aa" }
       end
 
       it "assigns the sanitized postcode" do
@@ -63,7 +63,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
     context "when the postcode is blank" do
       before do
         expect(Constituency).not_to receive(:find_by_postcode)
-        get :index, postcode: ""
+        get :index, params: { postcode: "" }
       end
 
       it "responds successfully" do
@@ -98,7 +98,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
       expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
       expect(Petition).to receive(:popular_in_constituency).with("99999", 50).and_return(petitions)
 
-      get :show, id: "holborn"
+      get :show, params: { id: "holborn" }
     end
 
     it "renders the show template" do
@@ -121,7 +121,7 @@ RSpec.describe LocalPetitionsController, type: :controller do
       expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
       expect(Petition).to receive(:all_popular_in_constituency).with("99999", 50).and_return(petitions)
 
-      get :all, id: "holborn"
+      get :all, params: { id: "holborn" }
     end
 
     it "renders the all template" do
