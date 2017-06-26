@@ -9,6 +9,14 @@ module Taggable
     # Assumes that base model implements a 'tags' array column. Being this
     # opinionated keeps the codebase simpler.
 
+    def with_no_tags
+      where("tags = '{}'")
+    end
+
+    def with_any_tags
+      where.not("tags = '{}'")
+    end
+
     def with_all_tags(tags)
       where("array_lowercase(tags) @> ARRAY[?]::varchar[]", downcase_tags(tags))
     end
