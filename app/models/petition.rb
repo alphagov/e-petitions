@@ -89,6 +89,8 @@ class Petition < ActiveRecord::Base
     delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
   end
 
+  alias_attribute :opened_at, :open_at
+
   class << self
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)

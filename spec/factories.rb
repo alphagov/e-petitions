@@ -280,14 +280,20 @@ FactoryGirl.define do
       overview { nil }
       transcript_url { nil }
       video_url { nil }
+      commons_image { nil }
     end
+
     debate_state 'debated'
+
     after(:build) do |petition, evaluator|
-      debate_outcome_attributes = {petition: petition}
+      debate_outcome_attributes = { petition: petition }
+
       debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
       debate_outcome_attributes[:overview] = evaluator.overview if evaluator.overview.present?
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
+      debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
+
       petition.create_debate_outcome(debate_outcome_attributes)
     end
   end
