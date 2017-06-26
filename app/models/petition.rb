@@ -333,6 +333,14 @@ class Petition < ActiveRecord::Base
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
     end
 
+    def between_in_moderation_times(from: Site.moderation_overdue_in_days.days.ago, to: Time.current)
+      where('moderation_threshold_reached_at BETWEEN ? AND ?', from, to)
+    end
+
+    def overdue_in_moderation_time_limit
+      where('moderation_threshold_reached_at < ?', Site.moderation_overdue_in_days.days.ago)
+    end
+
     private
 
     def popular_in(constituency_id, count)
