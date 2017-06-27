@@ -28,6 +28,10 @@ class Archived::PetitionsController < ApplicationController
     params[:parliament].to_i
   end
 
+  def petition_id
+    params[:id].to_i
+  end
+
   def fetch_parliament
     if params.key?(:parliament)
       @parliament = Parliament.archived.find(parliament_id)
@@ -41,8 +45,12 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petition
-    @petition = Archived::Petition.visible.find(params[:id])
+    @petition = Archived::Petition.visible.find(petition_id)
     @parliament = @petition.parliament
+
+    unless @parliament.archived?
+      redirect_to petition_url(petition_id)
+    end
   end
 
   def csv_filename

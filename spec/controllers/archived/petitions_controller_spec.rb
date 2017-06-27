@@ -42,4 +42,45 @@ RSpec.describe Archived::PetitionsController, type: :controller do
       end
     end
   end
+
+  describe "GET #show" do
+    context "when the petition is visible" do
+      let!(:petition) { FactoryGirl.create(:archived_petition) }
+
+      it "assigns the given petition" do
+        get :show, id: petition.id
+        expect(assigns(:petition)).to eq(petition)
+      end
+    end
+
+    context "when the petition is hidden" do
+      let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+
+      it "raises a ActiveRecord::RecordNotFound error" do
+        expect {
+          get :show, id: petition.id
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the petition is stopped" do
+      let!(:petition) { FactoryGirl.create(:archived_petition, :stopped) }
+
+      it "raises a ActiveRecord::RecordNotFound error" do
+        expect {
+          get :show, id: petition.id
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the petition is archived but the parliament is not" do
+      let!(:parliament) { FactoryGirl.create(:parliament) }
+      let!(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament) }
+
+      it "redirects to the current petition" do
+        get :show, id: petition.id
+        expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}"
+      end
+    end
+  end
 end
