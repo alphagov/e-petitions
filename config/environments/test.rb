@@ -53,8 +53,7 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Use webmock to disable net connections except for localhost and exceptions
-  WebMock.disable_net_connect!(allow_localhost: true,
-                               allow: %w{validator.unboxedconsulting.com})
+  WebMock.disable_net_connect!(allow_localhost: true)
 
   config.active_job.queue_adapter = :test
 end
