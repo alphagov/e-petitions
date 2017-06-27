@@ -164,7 +164,7 @@ RSpec.describe Parliament, type: :model do
     let(:now) { Time.current }
 
     before do
-      allow(Parliament).to receive(:last_or_create).and_return(parliament)
+      allow(Parliament).to receive(:current_or_create).and_return(parliament)
     end
 
     around do |example|
@@ -273,12 +273,12 @@ RSpec.describe Parliament, type: :model do
       end
 
       it "finds the last record" do
-        expect(Parliament).to receive(:last_or_create).and_return(parliament)
+        expect(Parliament).to receive(:current_or_create).and_return(parliament)
         expect(Parliament.instance).to equal(parliament)
       end
 
       it "caches it in Thread.current" do
-        expect(Parliament).to receive(:last_or_create).and_return(parliament)
+        expect(Parliament).to receive(:current_or_create).and_return(parliament)
         expect(Parliament.instance).to equal(Thread.current[:__parliament__])
       end
     end
@@ -293,7 +293,7 @@ RSpec.describe Parliament, type: :model do
       end
 
       it "returns the cached instance" do
-        expect(Parliament).not_to receive(:last_or_create)
+        expect(Parliament).not_to receive(:current_or_create)
         expect(Parliament.instance).to equal(parliament)
       end
     end

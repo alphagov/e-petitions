@@ -7,7 +7,7 @@ class Parliament < ActiveRecord::Base
     end
 
     def instance
-      Thread.current[:__parliament__] ||= last_or_create
+      Thread.current[:__parliament__] ||= current_or_create
     end
 
     def archived(now = Time.current)
@@ -15,7 +15,7 @@ class Parliament < ActiveRecord::Base
     end
 
     def current
-      where(archived_at: nil).order(created_at: :desc)
+      where(archived_at: nil).order(created_at: :asc)
     end
 
     def government
@@ -78,8 +78,8 @@ class Parliament < ActiveRecord::Base
       Thread.current[:__parliament__] = nil
     end
 
-    def last_or_create
-      current.first_or_create(government: "TBC", opening_at: 2.weeks.from_now)
+    def current_or_create
+      current.first_or_create(government: "TBC", opening_at: 2.weeks.ago)
     end
   end
 
