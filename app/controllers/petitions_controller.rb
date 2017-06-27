@@ -8,6 +8,7 @@ class PetitionsController < ApplicationController
 
   before_action :redirect_to_home_page_if_dissolved, only: [:new, :check, :check_results, :create]
   before_action :redirect_to_home_page_unless_opened, only: [:index, :new, :check, :check_results, :create]
+  before_action :redirect_to_archived_petition_if_archived, only: [:show]
 
   before_action :retrieve_petitions, only: [:index]
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
@@ -71,7 +72,7 @@ class PetitionsController < ApplicationController
   end
 
   def moderation_info
-    @petition = Petition.find(params[:id])
+    @petition = Petition.find(petition_id)
     respond_to do |format|
       format.html
     end
@@ -85,6 +86,10 @@ class PetitionsController < ApplicationController
 
   protected
 
+  def petition_id
+    params[:id].to_i
+  end
+
   def redirect_to_home_page_if_dissolved
     redirect_to home_url if Parliament.dissolved?
   end
@@ -93,18 +98,18 @@ class PetitionsController < ApplicationController
     redirect_to home_url unless Parliament.opened?
   end
 
-  def retrieve_petition
-    @petition = Petition.show.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
-    if @petition = Archived::Petition.find_by_id(params[:id])
-      redirect_to archived_petition_url(@petition)
-    else
-      raise e
+  def redirect_to_archived_petition_if_archived
+    if petition = Archived::Petition.find_by(id: petition_id)
+      redirect_to archived_petition_url(petition_id) if petition.parliament.archived?
     end
   end
 
   def retrieve_petitions
     @petitions = Petition.visible.search(params)
+  end
+
+  def retrieve_petition
+    @petition = Petition.show.find(petition_id)
   end
 
   def avoid_unknown_state_filters

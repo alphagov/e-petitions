@@ -290,6 +290,29 @@ RSpec.describe PetitionsController, type: :controller do
       get :show, id: 1
       expect(response).to redirect_to "https://petition.parliament.uk/"
     end
+
+    context "when the petition is archived" do
+      let!(:petition) { FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago) }
+      let!(:archived_petition) { FactoryGirl.create(:archived_petition, id: petition.id, parliament: parliament) }
+
+      context "and the parliament is not archived" do
+        let!(:parliament) { FactoryGirl.create(:parliament, archived_at: nil) }
+
+        it "assigns the given petition" do
+          get :show, id: petition.id
+          expect(assigns(:petition)).to eq(petition)
+        end
+      end
+
+      context "and the parliament is archived" do
+        let(:parliament) { FactoryGirl.create(:parliament, archived_at: 1.hour.ago) }
+
+        it "redirects to the archived petition page" do
+          get :show, id: petition.id
+          expect(response).to redirect_to "https://petition.parliament.uk/archived/petitions/#{petition.id}"
+        end
+      end
+    end
   end
 
   describe "GET #index" do
