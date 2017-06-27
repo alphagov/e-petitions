@@ -1,4 +1,5 @@
 require 'paperclip/matchers'
+require 'fileutils'
 
 module PaperclipHelpers
   def commons_image_fixture_path(filename)
@@ -25,4 +26,14 @@ end
 RSpec.configure do |config|
   config.include PaperclipHelpers
   config.include Paperclip::Shoulda::Matchers
+
+  config.before(:suite) do
+    FileUtils.mkdir_p "#{Rails.root}/public/test"
+    Paperclip::Attachment.default_options[:url] = '/test/:class/:attachment/:id_partition/:style/:filename'
+  end
+
+  config.after(:suite) do
+    FileUtils.rm_rf "#{Rails.root}/public/test"
+    Paperclip::Attachment.default_options[:url] = '/system/:class/:attachment/:id_partition/:style/:filename'
+  end
 end
