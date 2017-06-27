@@ -16,9 +16,11 @@
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
-      <li class="petition-action">
-        <%= render 'petition_action_government_response', petition: @petition %>
-      </li>
+      <% if @petition.moderated? %>
+        <li class="petition-action">
+          <%= render 'petition_action_government_response', petition: @petition %>
+        </li>
+      <% end %>
 
       <% if @petition.can_have_debate_added? %>
         <li class="petition-action">
@@ -30,9 +32,11 @@
         </li>
       <% end %>
 
-      <li class="petition-action">
-        <%= render 'petition_action_email_petitioners', petition: @petition %>
-      </li>
+      <% if @petition.moderated? %>
+        <li class="petition-action">
+          <%= render 'petition_action_email_petitioners', petition: @petition %>
+        </li>
+      <% end %>
 
       <% if current_user.can_take_petitions_down? && @petition.can_be_signed? %>
         <li class="petition-action">
