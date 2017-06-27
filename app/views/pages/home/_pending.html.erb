@@ -1,0 +1,34 @@
+<div class="notification">
+  <span class="icon icon-warning-white"></span>
+  <h3 class="header"><%= Parliament.dissolved_heading %></h3>
+  <p class="content"><%= Parliament.dissolved_message %></p>
+  <% if Parliament.dissolution_faq_url? %>
+    <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
+  <% end %>
+</div>
+
+<a href="https://www.parliament.uk/get-involved/" class="get-involved">
+  Get involved with the UK Parliament
+</a>
+
+<h2 id="archived-petitions">View petitions from a previous government</h2>
+
+<ul>
+  <% archived_parliaments.each do |parliament| %>
+    <li><%= link_to "#{parliament.period} #{parliament.government} government", archived_petitions_path(parliament: parliament, state: "published") %></li>
+  <% end %>
+</ul>
+
+<section aria-labelledby="response-threshold-heading" id="petitions-with-response">
+  <div class="threshold-panel threshold-panel-response">
+    <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+    <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+  </div>
+</section>
+
+<section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
+  <div class="threshold-panel threshold-panel-debate">
+    <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
+    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+  </div>
+</section>

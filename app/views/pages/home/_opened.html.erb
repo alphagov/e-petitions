@@ -1,0 +1,24 @@
+<% if no_petitions_yet? %>
+  <div class="section-panel-borderless no-petitions-yet">
+    <p class="lede">The new Petitions service launched today</p>
+    <p class="lede">We're expecting the first petitions to go live in the next few hours</p>
+  </div>
+<% end %>
+
+<%= render "pages/home/actioned_petitions" %>
+
+<% unless no_petitions_yet? %>
+  <%= render "pages/home/trending_petitions" %>
+<% end %>
+
+<%= render "pages/home/explanation_petitions" %>
+
+<% unless no_petitions_yet? %>
+  <%= render "pages/home/local_petitions" %>
+<% end %>
+
+<section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
+  <h2 id="start-a-petition-heading">Start a petition</h2>
+  <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
+  <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
+</section>

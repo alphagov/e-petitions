@@ -1,106 +1,13 @@
 <%= cache_for :home_page do %>
   <h1 class="visuallyhidden">Petitions – UK Government and Parliament</h1>
 
-  <% if Parliament.dissolution_announced? %>
-    <%= render 'parliament_dissolution_warning' %>
-
-    <% if Parliament.registration_closed? %>
-      <a href="https://www.parliament.uk/get-involved/" class="get-involved">
-        Get involved with the UK Parliament
-      </a>
-    <% else %>
-      <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
-        Register to vote in the General Election
-      </a>
-    <% end %>
-  <% end %>
-
-  <% if no_petitions_yet? %>
-    <div class="section-panel-borderless no-petitions-yet">
-      <p class="lede">The new Petitions service launched today</p>
-      <p class="lede">We're expecting the first petitions to go live in the next few hours</p>
-    </div>
-  <% end %>
-
-  <% actioned_petitions do |actions| %>
-    <div class="section-panel actioned-petitions">
-      <ul>
-        <% actions.with_result.each do |state, action| %>
-          <li>
-            <%= link_to petition_count(state, action[:count]), home_path(anchor: 'petitions-' + state.to_s.dasherize) %>
-          </li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <% unless no_petitions_yet? %>
-    <div class="section-panel-borderless">
-      <% trending_petitions do |petitions| %>
-        <section class="trending" aria-labelledby="trending-heading">
-          <h2 id="trending-heading">Popular petitions</h2>
-          <ul>
-            <% petitions.each do |petition| %>
-              <%= render 'petitions/trending_petition', :trending_petition => petition %>
-            <% end -%>
-          </ul>
-        </section>
-      <% end %>
-      <% unless Parliament.dissolved? %>
-        <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
-      <% end %>
-    </div>
-  <% end %>
-
-  <% explanation_petitions do |actioned| %>
-    <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
-      <% if actioned[:with_response][:count].zero? %>
-        <div class="threshold-panel threshold-panel-response">
-          <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-          <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
-        </div>
-      <% else %>
-        <%= link_to( petitions_path(state: :with_response), class: "threshold-panel threshold-panel-response" ) do %>
-          <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-          <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
-        <% end %>
-      <% end %>
-      <div class="section-panel-borderless">
-        <%= render "home_responded_petitions", actioned: actioned %>
-      </div>
-    </section>
-
-    <section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
-      <% if actioned[:with_debated_outcome][:count].zero? %>
-        <div class="threshold-panel threshold-panel-debate">
-          <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-          <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
-        </div>
-      <% else %>
-        <%= link_to( petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
-          <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-          <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
-        <% end %>
-      <% end %>
-      <div class="section-panel-borderless">
-        <%= render "home_debated_petitions", actioned: actioned %>
-      </div>
-    </section>
-  <% end %>
-
-  <% unless no_petitions_yet? %>
-    <section class="section-panel local-to-you" aria-labelledby="local-to-you-heading">
-      <h2 id="local-to-you-heading">Local to you</h2>
-      <p>Find petitions being signed by people near you</p>
-      <%= render 'local_search' %>
-    </section>
-  <% end %>
-
-  <% unless Parliament.dissolved? %>
-    <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
-      <h2 id="start-a-petition-heading">Start a petition</h2>
-      <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
-      <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
-    </section>
+  <% if Parliament.dissolved? %>
+    <%= render 'pages/home/dissolved' %>
+  <% elsif Parliament.dissolution_announced? %>
+    <%= render 'pages/home/dissolution_announced' %>
+  <% elsif Parliament.opened? %>
+    <%= render 'pages/home/opened' %>
+  <% else %>
+    <%= render 'pages/home/pending' %>
   <% end %>
 <% end %>
