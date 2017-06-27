@@ -29,6 +29,17 @@ RSpec.describe PetitionsController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
     end
+
+    context "when parliament has not yet opened" do
+      before do
+        allow(Parliament).to receive(:opened?).and_return(false)
+      end
+
+      it "redirects to the home page" do
+        get :new
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "create" do
@@ -236,6 +247,17 @@ RSpec.describe PetitionsController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
     end
+
+    context "when parliament has not yet opened" do
+      before do
+        allow(Parliament).to receive(:opened?).and_return(false)
+      end
+
+      it "redirects to the home page" do
+        post :create, petition: {}
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "show" do
@@ -308,6 +330,17 @@ RSpec.describe PetitionsController, type: :controller do
         end
       end
     end
+
+    context "when parliament has not yet opened" do
+      before do
+        allow(Parliament).to receive(:opened?).and_return(false)
+      end
+
+      it "redirects to the home page" do
+        get :index
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "GET #check" do
@@ -326,6 +359,17 @@ RSpec.describe PetitionsController, type: :controller do
         expect(response).to redirect_to("https://petition.parliament.uk/")
       end
     end
+
+    context "when parliament has not yet opened" do
+      before do
+        allow(Parliament).to receive(:opened?).and_return(false)
+      end
+
+      it "redirects to the home page" do
+        get :check
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
   end
 
   describe "GET #check_results" do
@@ -337,6 +381,17 @@ RSpec.describe PetitionsController, type: :controller do
     context "when parliament is dissolved" do
       before do
         allow(Parliament).to receive(:dissolved?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :check_results, q: "action"
+        expect(response).to redirect_to("https://petition.parliament.uk/")
+      end
+    end
+
+    context "when parliament has not yet opened" do
+      before do
+        allow(Parliament).to receive(:opened?).and_return(false)
       end
 
       it "redirects to the home page" do
