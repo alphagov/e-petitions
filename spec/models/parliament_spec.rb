@@ -1039,4 +1039,24 @@ RSpec.describe Parliament, type: :model do
       end
     end
   end
+
+  describe "#formatted_threshold_for_response" do
+    subject :parliament do
+      FactoryGirl.build(:parliament, threshold_for_response: 10000)
+    end
+
+    it "returns a formatted number" do
+      expect(parliament.formatted_threshold_for_response).to eq("10,000")
+    end
+  end
+
+  describe "#formatted_threshold_for_debate" do
+    subject :parliament do
+      FactoryGirl.build(:parliament, threshold_for_debate: 100000)
+    end
+
+    it "returns a formatted number" do
+      expect(parliament.formatted_threshold_for_debate).to eq("100,000")
+    end
+  end
 end

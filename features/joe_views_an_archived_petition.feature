@@ -49,6 +49,31 @@ Feature: Joe views an archived petition
     When I view the petition
     Then I should see "This petition was submitted during the 2010–2015 Conservative - Liberal Democrat coalition government"
 
+  Scenario: Joe sees information about the outcomes when viewing a debated archived petition
+    Given an archived petition "Ban Badger Baiting" has been debated 2 days ago
+    When I view the petition
+    Then I should see the date of the debate is 2 days ago
+    And I should see links to transcript and video
+    And I should see a summary of the debate outcome
+
+  Scenario: Joe views an archived petition which has a scheduled debate date
+    Given the date is the "01/08/2015"
+    And an archived petition "Spend more money on Defence" with scheduled debate date of "18/08/2015"
+    When I view the petition
+    Then I should see "Parliament will debate this petition on 18 August 2015. You'll be able to watch online at parliamentlive.tv"
+
+  Scenario: Joe views an archived petition which will not be debated
+    Given an archived petition "Spend more money on Defence" with a negative debate outcome
+    When I view the petition
+    Then I should see "The Petitions Committee decided not to debate this petition"
+
+  Scenario: Joe views a petition which was debated yesterday
+    Given the date is the "27/10/2015"
+    And an archived petition "Free the wombles" has been debated yesterday
+    When I view the petition
+    Then I should see "Parliament debated this petition on 26 October 2015"
+    And I should see "Waiting for 1 day for Parliament to publish the debate outcome"
+
   @allow-rescue
   Scenario: Joe tries to see a stopped archived petition
     Given a stopped archived petition exists with action: "Spend more money on Defence"

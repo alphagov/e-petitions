@@ -1,4 +1,8 @@
+require 'active_support/number_helper'
+
 class Parliament < ActiveRecord::Base
+  include ActiveSupport::NumberHelper
+
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
 
   class << self
@@ -163,5 +167,13 @@ class Parliament < ActiveRecord::Base
 
   def can_archive?
     dissolved? && Petition.archived?
+  end
+
+  def formatted_threshold_for_response
+    number_to_delimited(threshold_for_response)
+  end
+
+  def formatted_threshold_for_debate
+    number_to_delimited(threshold_for_debate)
   end
 end

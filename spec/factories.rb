@@ -80,6 +80,35 @@ FactoryGirl.define do
       end
     end
 
+    trait :debated do
+      debate_outcome_at { 1.week.ago }
+      debate_state "debated"
+
+      transient do
+        debated_on { 1.week.ago.to_date }
+        overview { nil }
+        transcript_url { nil }
+        video_url { nil }
+        commons_image { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_debate_outcome do |o|
+          o.debated_on = evaluator.debated_on if evaluator.debated_on.present?
+          o.overview = evaluator.overview if evaluator.overview.present?
+          o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
+          o.video_url = evaluator.video_url if evaluator.video_url.present?
+          o.commons_image = evaluator.commons_image if evaluator.commons_image.present?
+        end
+      end
+    end
+
+    trait :not_debated do
+      after(:build) do |petition, evaluator|
+        petition.build_debate_outcome(debated: false)
+      end
+    end
+
     trait :stopped do
       state "stopped"
       signature_count 5

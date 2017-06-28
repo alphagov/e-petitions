@@ -9,8 +9,27 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
   @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
 
+Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_action, debated_days_ago|
+  @petition = FactoryGirl.create(:archived_petition, :debated,
+    action: petition_action,
+    debate_outcome_at: debated_days_ago.days.ago,
+    debated_on: debated_days_ago.days.ago.to_date,
+    overview: 'Everyone was in agreement, this petition must be made law!',
+    transcript_url: 'http://transcripts.parliament.example.com/2.html',
+    video_url: 'http://videos.parliament.example.com/2.avi'
+  )
+end
+
 Given(/^a petition "(.*?)" has been debated yesterday$/) do |petition_action|
   @petition = FactoryGirl.create(:open_petition,
+    action: petition_action,
+    scheduled_debate_date: 1.day.ago,
+    debate_state: 'debated'
+  )
+end
+
+Given(/^an archived petition "(.*?)" has been debated yesterday$/) do |petition_action|
+  @petition = FactoryGirl.create(:archived_petition,
     action: petition_action,
     scheduled_debate_date: 1.day.ago,
     debate_state: 'debated'
