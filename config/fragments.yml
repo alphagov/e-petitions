@@ -46,6 +46,14 @@ petition:
   options:
     expires_in: 300
 
+archived_petition:
+  keys:
+    - :petition
+    - :reveal_response
+    - :site_updated_at
+  options:
+    expires_in: 300
+
 robots:
   keys:
     - :last_petition_created_at
