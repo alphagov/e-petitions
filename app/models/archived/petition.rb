@@ -39,6 +39,8 @@ module Archived
     facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
     facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
     facet :with_response, -> { with_response.by_most_signatures }
+    facet :debated, -> { debated.by_most_recent_debate_outcome }
+    facet :not_debated, -> { not_debated.by_most_recent_debate_outcome }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
 
@@ -55,12 +57,24 @@ module Archived
         reorder(created_at: :asc)
       end
 
+      def by_most_recent_debate_outcome
+        reorder(debate_outcome_at: :desc, created_at: :desc)
+      end
+
       def by_most_signatures
         reorder(signature_count: :desc)
       end
 
       def with_response
         where.not(government_response_at: nil)
+      end
+
+      def debated
+        where(debate_state: 'debated')
+      end
+
+      def not_debated
+        where(debate_state: 'not_debated')
       end
 
       def visible

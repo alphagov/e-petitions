@@ -54,6 +54,8 @@ en-GB:
         - :published
         - :rejected
         - :with_response
+        - :debated
+        - :not_debated
       public:
         - :all
         - :open

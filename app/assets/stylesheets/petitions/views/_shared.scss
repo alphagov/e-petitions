@@ -179,6 +179,10 @@ input.back-page {
   padding-bottom: $gutter-half;
 }
 
+.search-pagination a {
+  width: 40%;
+}
+
 .search-pagination a:visited {
   color: $link-colour
 }
