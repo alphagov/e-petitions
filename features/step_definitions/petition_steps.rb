@@ -430,6 +430,15 @@ Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_acti
   )
 end
 
+Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |petition_action|
+  @petition = FactoryGirl.create(:archived_petition, action: petition_action)
+  @email = FactoryGirl.create(:archived_petition_email,
+    petition: @petition,
+    subject: "Committee to discuss #{petition_action}",
+    body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
+  )
+end
+
 Then(/^I should see the other business items$/) do
   steps %Q(
     Then I should see "Other parliamentary business"
