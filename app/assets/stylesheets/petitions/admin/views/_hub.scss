@@ -1,29 +1,105 @@
 .hub-actions {
   margin-top: $gutter;
-  li {
-    margin-bottom: $gutter;
-  }
-  a {
-    position: relative;
-    display: block;
-    @include box-sizing(border-box);
-    width: 100%;
-    height: 200px;
-  background-color: $house-of-commons-green;
-    padding: $gutter-half;
-    color: $white;
-    @include bold-27;
-
-    .count {
-      @include bold-48;
+  ul {
+    li {
+      margin-bottom: $gutter;
+    }
+    a {
+      position: relative;
       display: block;
-      margin-bottom: $gutter * 2;
+      @include box-sizing(border-box);
+      width: 100%;
+      height: 200px;
+      background-color: $house-of-commons-green;
+      padding: $gutter-half;
+      color: $white;
+      @include bold-27;
+
+      .count {
+        @include bold-48;
+        display: block;
+        margin-bottom: $gutter * 2;
+      }
+
+      .graphic {
+        position: absolute;
+        top: $gutter-half;
+        right: $gutter-two-thirds;
+      }
+    }
+  }
+
+  .all-petitions-link {
+    float: right;
+    margin-right: $gutter-half;
+    text-decoration: underline;
+  }
+
+  .moderation {
+    margin-left: $gutter-half;
+    margin-right: $gutter-half;
+
+    .queue-stable {
+      background-color: $house-of-commons-green;
     }
 
-    .graphic {
-      position: absolute;
-      top: $gutter-half;
-      right: $gutter-two-thirds;
+    .queue-caution {
+      background-color: $caution;
+    }
+
+    .queue-danger {
+      background-color: $danger;
+    }
+
+    .panel {
+      height: 200px;
+      color: $white;
+
+      @include media(tablet) {
+        float: left;
+        width: 50%;
+      }
+
+      margin-bottom: $gutter;
+
+      a {
+        color: $white;
+      }
+
+      .summary {
+        @include bold-27;
+      }
+
+      .details {
+        .label {
+          float: right;
+
+        }
+        .tagged {
+          background-color: $grey-3;
+        }
+      }
+
+      .count {
+        @include bold-48;
+        display: block;
+        margin-bottom: $gutter * 2;
+      }
+
+      .details div {
+        height: 50px;
+      }
+
+      .summary {
+        padding-top: $gutter-half;
+        padding-left: $gutter-half;
+      }
+
+      .details div {
+        padding-right: $gutter-half;
+        padding-left: $gutter-half;
+        line-height: 50px;
+      }
     }
   }
 }

@@ -415,9 +415,10 @@ Given(/^a petition "(.*?)" exists with notes (\[[^"]*\])$/) do |action, notes|
   @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
 end
 
-Given(/^a petition "(.*?)" exists with tags "([^"]*)"$/) do |action, tags|
+Given(/^a(n)? ?(pending|validated|sponsored|flagged|open)? petition "(.*?)" exists with tags "([^"]*)"$/) do |a_or_an, state, action, tags|
   tags = tags.split(',').map(&:strip)
-  @petition = FactoryGirl.create(:open_petition, action: action, tags: tags)
+  state ||= 'open'
+  @petition = FactoryGirl.create(:open_petition, state: state, action: action, tags: tags)
 end
 
 Given(/^allowed tags in site settings are "([^"]*)"$/) do |allowed_tags|

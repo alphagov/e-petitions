@@ -16,9 +16,37 @@ Feature: Admin hub page
     Then I should see "20 Moderation queue"
     And I should see "12 Government response queue"
     And I should see "8 Debate queue"
-    And I should see "40 All petitions"
+    And I should see "All Petitions (40)"
     And I should be connected to the server via an ssl connection
     And the markup should be valid
+
+  Scenario: I can see when there are petitions that are overdue moderation
+    Given 5 overdue moderation petitions exist
+    When I go to the Admin home page
+    Then the overdue moderation panel should have the queue danger style applied
+    And the moderation summary should have the queue danger style applied
+    And the overdue moderation panel should show 5
+
+  Scenario: I can see when there are petitions that are nearly overdue moderation
+    Given 5 nearly overdue moderation petitions exist
+    When I go to the Admin home page
+    Then the nearly overdue moderation panel should have the queue caution style applied
+    And the moderation summary should have the queue caution style applied
+    And the nearly overdue moderation panel should show 5
+
+  Scenario: I can see when there are petitions that have recently joined the moderation queue
+    Given 5 recently in moderation petitions exist
+    When I go to the Admin home page
+    Then the nearly overdue moderation panel should have the queue stable style applied
+    And the overdue moderation panel should have the queue stable style applied
+    And the moderation summary should have the queue stable style applied
+    And the recently in moderation panel should show 5
+
+  Scenario: I can see when there are petitions in moderation that are tagged
+    Given allowed tags in site settings are "tag 1"
+    And a sponsored petition "Raise benefits" exists with tags "tag 1"
+    When I go to the Admin home page
+    And the tagged panel should show 1
 
   Scenario: I can click through to see lists of matching petitions
     Given 12 petitions exist with state: "sponsored"

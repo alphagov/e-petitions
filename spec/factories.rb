@@ -257,6 +257,18 @@ FactoryGirl.define do
     end
   end
 
+  factory :overdue_moderation_petition, :parent => :sponsored_petition do
+    moderation_threshold_reached_at (Site.moderation_overdue_in_days.days.ago - 5.minutes)
+  end
+
+  factory :nearly_overdue_moderation_petition, :parent => :sponsored_petition do
+    moderation_threshold_reached_at (Site.moderation_overdue_in_days.days.ago + 5.minutes)
+  end
+
+  factory :recently_in_moderation_petition, :parent => :sponsored_petition do
+    moderation_threshold_reached_at (Time.current)
+  end
+
   factory :signature do
     sequence(:name)  {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
