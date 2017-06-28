@@ -1,0 +1,17 @@
+.tag-filters {
+  clear: both;
+  padding: 15px;
+  display: none;
+
+  summary {
+    margin-bottom: 15px;
+  }
+}
+
+.tag-filter-check-box {
+  display: inline-block;
+  padding: 0.2rem;
+  margin: 0.2rem;
+  background-color: $grey-3;
+  @include core-14();
+}

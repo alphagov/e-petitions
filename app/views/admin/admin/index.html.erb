@@ -1,25 +1,66 @@
 <h1>Petition admin</h1>
 
 <div class="grid-row">
-  <div class="column-two-thirds">
-    <%= render 'admin/searches/form', query: '' %>
+  <%= render 'admin/searches/form', query: '' %>
 
-    <% action_counts do |counts| %>
-      <ul class="hub-actions grid-row">
-        <% counts.each do |state, count| %>
-          <li class="column-half action-<%= state.to_s.dasherize %>">
-            <%= link_to admin_petitions_url(state: state) do %>
-              <% if state == :awaiting_response %>
-                <span class="graphic graphic-crest-large-white"></span>
-              <% elsif state == :in_debate_queue %>
-                <span class="graphic graphic-portcullis-large-white"></span>
+  <div class="column-two-thirds">
+    <div class="hub-actions grid-row">
+      <div class="moderation">
+        <% nearly_overdue_count = nearly_overdue_moderation_count %>
+        <% overdue_count = overdue_moderation_count %>
+
+        <%= link_to admin_petitions_url(state: :in_moderation) do %>
+          <% summary_class_name = summary_class_name_for_counts(nearly_overdue_count, overdue_count) %>
+          <div class="<%= "panel #{summary_class_name}" %>">
+            <div class="summary">
+              <div class="count">
+                <%= in_moderation_count %>
+              </div>
+              Moderation queue
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="details">
+              <div class="recently-in-moderation queue-stable">
+                <%= recently_in_moderation_count %><span class="label">0-5 days</span>
+              </div>
+
+              <div class="<%= "nearly-overdue-moderation #{nearly_overdue_count > 0 ? 'queue-caution' : 'queue-stable'}" %>">
+                <%= nearly_overdue_moderation_count %><span class="label">6-7 days</span>
+              </div>
+
+              <div class="<%= "overdue-moderation #{overdue_count > 0 ? 'queue-danger': 'queue-stable'}" %>">
+                <%= overdue_moderation_count %><span class="label">&gt; 7 days</span>
+              </div>
+
+              <div class="tagged">
+                <%= tagged_count %><span class="label">Tagged</span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <ul>
+        <% action_counts do |counts| %>
+          <% counts.each do |state, count| %>
+            <li class="column-half action-<%= state.to_s.dasherize %>">
+              <%= link_to admin_petitions_url(state: state) do %>
+                <% if state == :awaiting_response %>
+                  <span class="graphic graphic-crest-large-white"></span>
+                <% elsif state == :in_debate_queue %>
+                  <span class="graphic graphic-portcullis-large-white"></span>
+                <% end %>
+                <%= action_count(state, count) %>
               <% end %>
-              <%= action_count(state, count) %>
-            <% end %>
-          </li>
+            </li>
+          <% end %>
         <% end %>
       </ul>
-    <% end %>
+
+      <%= link_to "All Petitions (#{petition_total_count})", admin_petitions_url(state: :all), class: 'all-petitions-link' %>
+      </div>
   </div>
 
   <div class="signature-trends column-third">

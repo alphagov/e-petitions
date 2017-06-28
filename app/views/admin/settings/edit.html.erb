@@ -1,0 +1,24 @@
+<h1>Edit Site Settings</h1>
+<div>
+  <p>Petition Tags</p>
+</div>
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for @admin_settings, url: admin_settings_path do |form| %>
+      <%= hidden_field_tag :tab, "petition_tags" %>
+
+      <%= form_row for: [form.object, :petition_tags] do %>
+        <%= form.text_area :petition_tags, tabindex: increment, rows: 8, class: 'form-control' %>
+        <p><small>Add tags that are allowed to be used on petitions. Tags are case <strong>insensitive</strong>. HMRC is the same as hmrc.</small></p>
+        <% if @admin_settings.errors[:petition_tags].any? %>
+          <% @admin_settings.errors[:petition_tags].each do |error| %>
+            <%= content_tag :span, error, { class: 'error-message' } %>
+          <% end %>
+        <% end %>
+      <% end %>
+
+    <%= form.submit 'Save', class: 'button' %>
+    <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
+    <% end %>
+  </div>
+</div>

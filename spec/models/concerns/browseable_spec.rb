@@ -44,11 +44,14 @@ RSpec.describe Browseable, type: :model do
   end
 
   describe Browseable::Search do
-    let(:scopes)  { { all: -> { self }, open: -> { self } } }
+    let(:scopes) { { all: -> { self }, open: -> { self } } }
     let(:filters) { [] }
-    let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters) }
-    let(:params)  { { q: 'search', page: '3'} }
-    let(:search)  { described_class.new(klass, params) }
+    let(:klass)  { double(:klass, facet_definitions: scopes, taggable?: true, filter_definitions: filters) }
+    let(:relation) { double(:relation, except: self) }
+    let(:tag_filters) { ["tag 1", "tag 2"] }
+    let(:params) { { q: 'search', page: '3', tag_filters: tag_filters } }
+    let(:search) { described_class.new(klass, params) }
+
 
     it "is enumerable" do
       expect(search).to respond_to(:each)
@@ -92,6 +95,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#facets" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       it "returns an instance of Browseable::Facets" do
         expect(search.facets).to be_an_instance_of(Browseable::Facets)
       end
@@ -149,6 +156,7 @@ RSpec.describe Browseable, type: :model do
         allow(klass).to receive(:arel_table).and_return(arel_table)
         allow(klass).to receive(:select).with("*").and_return(klass)
         allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:with_all_tags).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
         allow(results).to receive(:to_a).and_return(petitions)
         allow(results).to receive(:previous_page).and_return(2)
@@ -192,6 +200,7 @@ RSpec.describe Browseable, type: :model do
         allow(klass).to receive(:arel_table).and_return(arel_table)
         allow(klass).to receive(:select).with("*").and_return(klass)
         allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:with_all_tags).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
         allow(results).to receive(:to_a).and_return(petitions)
         allow(results).to receive(:next_page).and_return(4)
@@ -268,6 +277,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#scope" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       context "when the search scope is valid" do
         let(:params) { { q: 'search', page: '3', state: 'open'} }
 
@@ -294,6 +307,10 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#scoped?" do
+      before do
+        allow(search).to receive(:pre_scope_search).and_return(klass)
+      end
+
       context "when the search scope is valid" do
         let(:params) { { q: 'search', page: '3', state: 'open'} }
 
@@ -319,18 +336,36 @@ RSpec.describe Browseable, type: :model do
       end
     end
 
-    describe "#search?" do
-      context "when there is a query param" do
-        it "returns true" do
-          expect(search.search?).to be true
+    describe "#tag_filter" do
+      it "returns a tag filter object" do
+        expect(search.tag_filter(klass)).to be_kind_of Browseable::TagFilter
+      end
+    end
+
+    describe "#relation_is_filterable?" do
+      context "relation implements taggable?" do
+        context "relation includes Taggable" do
+          let(:klass)  { double(:klass, facet_definitions: scopes, taggable?: true) }
+
+          it "returns true" do
+            expect(search.relation_is_filterable?(klass)).to be true
+          end
+        end
+
+        context "relation does not include Taggable" do
+          let(:klass)  { double(:klass, facet_definitions: scopes, taggable?: false) }
+
+          it "returns true" do
+            expect(search.relation_is_filterable?(klass)).to be false
+          end
         end
       end
 
-      context "when there is no query param" do
-        let(:params) { { page: '1' } }
+      context "relation does not implement taggable?" do
+        let(:klass)  { double(:klass, facet_definitions: scopes) }
 
         it "returns false" do
-          expect(search.search?).to be false
+          expect(search.relation_is_filterable?(klass)).to be false
         end
       end
     end
@@ -339,7 +374,7 @@ RSpec.describe Browseable, type: :model do
       let(:arel_table) { double(:arel_table) }
       let(:petition)   { double(:petition) }
       let(:petitions)  { [petition] }
-      let(:results)    { double(:results, to_a: petitions) }
+      let(:results)    { double(:results, to_a: petitions, taggable?: true) }
 
       context "when there is a search term" do
         before do
@@ -427,6 +462,40 @@ RSpec.describe Browseable, type: :model do
     end
   end
 
+  describe Browseable::TagFilter do
+    let(:tag_filter) { described_class.new(relation, params) }
+    let(:relation) { double(:relation, taggable?: true) }
+    let(:tags) { ["tag 1", "tag 2"] }
+    let(:params) do
+      { tag_filters: tags }
+    end
+
+    context "klass is not taggable" do
+      let(:relation) { double(:relation) }
+
+      it "raises an error" do
+        expect{ tag_filter }.to raise_error(Browseable::TagFilter::ClassNotFilterableError)
+      end
+    end
+
+    describe "#by_all_tags" do
+      context "tag_filters are empty" do
+        let(:tags) { [] }
+
+        it "returns original relation object" do
+          expect(tag_filter.by_all_tags).to eq relation
+        end
+      end
+
+      context "tag_filters are not empty" do
+        it "filters the relation by the tags" do
+          expect(relation).to receive(:with_all_tags).with(tags)
+          tag_filter.by_all_tags
+        end
+      end
+    end
+  end
+
   describe Browseable::Facets do
     let(:scope)  { ->{ where(state: 'open') } }
     let(:query)  { double(:query) }
@@ -450,7 +519,7 @@ RSpec.describe Browseable, type: :model do
 
       it "returns the count for known facets" do
         expect(klass).to receive(:where).with(state: 'open').and_return(query)
-        expect(query).to receive(:count).and_return(999)
+        expect(query).to receive(:count).with(:all).and_return(999)
         expect(facets[:open]).to eq(999)
       end
     end
@@ -482,11 +551,12 @@ RSpec.describe Browseable, type: :model do
 
         open_query = double(:query)
         allow(klass).to receive(:where).with(state: 'open').and_return(open_query)
-        allow(open_query).to receive(:count).and_return(999)
+        allow(open_query).to receive(:count).with(:all).and_return(999)
 
         pending_query = double(:query)
+
         allow(klass).to receive(:where).with(state: 'pending').and_return(pending_query)
-        allow(pending_query).to receive(:count).and_return(20)
+        allow(pending_query).to receive(:count).with(:all).and_return(20)
       end
 
       it 'returns a hash with only the specified keys and their counts' do

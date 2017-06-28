@@ -38,13 +38,17 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
     before { login_as(user) }
 
     describe "GET 'index'" do
-
       describe "a HTML request" do
         it "responds successfully with HTML" do
           get :index
           expect(response).to be_success
           expect(response).to render_template('admin/petitions/index')
         end
+      end
+
+      it "it sets the search_type" do
+        get :index
+        expect(assigns(:search_type)).to eq "petition"
       end
 
       describe "a CSV request" do
@@ -88,19 +92,26 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
       end
 
-      describe "when no 'q', 't', or 'state' param is present" do
+      describe "when no 'q' or 'state' param is present" do
         it "fetchs a list of 50 petitions" do
           expect(Petition).to receive(:search).with(hash_including(count: 50)).and_return Petition.none
           get :index
         end
+
         it "passes on pagination params" do
           expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
           get :index, page: '3'
         end
+
+        it "assigns defaults" do
+          get :index
+          expect(assigns(:query)).to eq ''
+          expect(assigns(:state)).to eq :all
+        end
       end
 
       describe "when a 'q' param is present" do
-        it "passes in the q param to perform a search for" do
+        it "passes in the q param to perform a search" do
           expect(Petition).to receive(:search).with(hash_including(q: 'lorem')).and_return Petition.none
           get :index, q: 'lorem'
         end
@@ -110,30 +121,14 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
       end
 
-      describe "when a 't' param is present" do
-        let(:petition_scope) { Petition.none }
-        it "uses the t param to find tagged petitions" do
-          expect(Petition).to receive(:tagged_with).with('a tag').and_return petition_scope
-          get :index, t: 'a tag'
+      describe "when a 'tag_filters' param is present" do
+        it "passes in the tag_filters param" do
+          expect(Petition).to receive(:search).with(hash_including(tag_filters: ['tag'])).and_return Petition.none
+          get :index, tag_filters: ['tag']
         end
         it "passes on pagination params" do
-          allow(Petition).to receive(:tagged_with).and_return petition_scope
-          expect(petition_scope).to receive(:search).with(page: '3', per_page: 50).and_return petition_scope
-          get :index, t: 'a tag', page: '3'
-        end
-        context 'and `q` is also present' do
-          it 'does a search, not a tagged filter' do
-            expect(Petition).to receive(:search)
-            expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', q: 'lorem'
-          end
-        end
-        context 'and `state` is also present' do
-          it 'does a search, not a tagged filter' do
-            expect(Petition).to receive(:search)
-            expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', state: 'open'
-          end
+          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
+          get :index, tag_filters: ['tag'], page: '3'
         end
       end
 

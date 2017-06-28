@@ -1,12 +1,10 @@
 class Admin::PetitionsController < Admin::AdminController
   respond_to :html
+  before_action :set_search_params, only: :index
 
   def index
-    if filter_by_tag?
-      petitions_by_tag
-    else
-      petitions_by_filter_or_keyword_search
-    end
+    @search_type = "petition"
+    @petitions = Petition.search(params.merge(count: 50))
 
     respond_to do |format|
       format.html
@@ -34,6 +32,12 @@ class Admin::PetitionsController < Admin::AdminController
 
   protected
 
+  def set_search_params
+    @query = params.fetch(:q, '')
+    @state = params.fetch(:state, :all)
+    @tag_filters = params.fetch(:tag_filters, [])
+  end
+
   def render_csv
     set_file_headers
     set_streaming_headers
@@ -57,28 +61,6 @@ class Admin::PetitionsController < Admin::AdminController
 
   def csv_filename
     "#{@petitions.scope.to_s.dasherize}-petitions-#{Time.current.to_s(:number)}.csv"
-  end
-
-  def filter_by_tag?
-    params[:t].present? && !(filter_by_state? || filter_by_keyword?)
-  end
-
-  def filter_by_state?
-    params[:state].present?
-  end
-
-  def filter_by_keyword?
-    params[:q].present?
-  end
-
-  def petitions_by_filter_or_keyword_search
-    @petitions = Petition.search(params.merge(count: 50))
-    @query = params[:q]
-  end
-
-  def petitions_by_tag
-    @petitions = Petition.tagged_with(params[:t]).search(page: params[:page], per_page: 50)
-    @query = Petition.sanitized_tag(params[:t])
   end
 
   def fetch_petition_for_scheduled_debate_date

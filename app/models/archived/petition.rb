@@ -29,6 +29,8 @@ module Archived
 
     extend Searchable(:action, :background, :additional_details)
     include Browseable
+    include Taggable
+    include AdminTagsValidation
 
     filter :parliament
 

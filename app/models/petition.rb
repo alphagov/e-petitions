@@ -38,6 +38,8 @@ class Petition < ActiveRecord::Base
 
   extend Searchable(:action, :background, :additional_details)
   include Browseable
+  include Taggable
+  include AdminTagsValidation
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -323,21 +325,20 @@ class Petition < ActiveRecord::Base
       popular_in(constituency_id, count).for_state(PUBLISHED_STATES)
     end
 
-    def tagged_with(tag)
-      joins(:note).
-      where(Note.arel_table['details'].matches("%#{sanitized_tag(tag)}%"))
-    end
-
-    def sanitized_tag(tag)
-      "[#{tag.gsub(/[\[\]%]/,'')}]"
-    end
-
     def in_need_of_marking_as_debated(date = Date.current)
       where(scheduled_debate_state.and(debate_date_in_the_past(date)))
     end
 
     def mark_petitions_as_debated!(date = Date.current)
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
+    end
+
+    def between_in_moderation_times(from: Site.moderation_overdue_in_days.days.ago, to: Time.current)
+      where('moderation_threshold_reached_at BETWEEN ? AND ?', from, to)
+    end
+
+    def overdue_in_moderation_time_limit
+      where('moderation_threshold_reached_at < ?', Site.moderation_overdue_in_days.days.ago)
     end
 
     private

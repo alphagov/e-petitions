@@ -31,13 +31,8 @@ When(/^I search for petitions signed by "([^"]*)"( from the admin hub)?$/) do |n
     visit admin_root_url
   end
 
-  if name_or_email =~ /\A[^@]+@[^@]+\z/
-    query = name_or_email
-  else
-    query = %["#{name_or_email}"]
-  end
-
-  fill_in "Search", :with => query
+  fill_in "Search", :with => name_or_email
+  choose "search_type_signature"
   click_button 'Search'
 end
 
@@ -49,6 +44,7 @@ When(/^I search for petitions signed from "([^"]*)"( from the admin hub)?$/) do 
   end
 
   fill_in "Search", with: ip_address
+  choose "search_type_signature"
   click_button 'Search'
 end
 
@@ -69,23 +65,25 @@ When(/^I search for petitions with keyword "([^"]*)"( from the admin hub)?$/) do
   else
     visit admin_root_url
   end
+
   fill_in "Search", :with => keyword
+
   click_button 'Search'
 end
 
-When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |tag, from_the_hub|
-  if from_the_hub.blank?
-    visit admin_petitions_url
-  else
-    visit admin_root_url
+When(/^I filter the results by tags "(.*?)"$/) do |tags|
+  tags = tags.split(',').map(&:strip)
+  tags.each do |tag|
+    page.check tag.downcase.gsub(/\s+/,'-')
   end
-  fill_in "Search", :with => "[#{tag}]"
-  click_button 'Search'
+
+  click_button "Search"
 end
 
 When(/^I search for the petition creator from the admin hub$/) do
   visit admin_petitions_url
   fill_in "Search", :with => @petition.creator_signature.email
+  choose "search_type_signature"
   click_button 'Search'
 end
 
