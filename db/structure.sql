@@ -25,9 +25,53 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 SET search_path = public, pg_catalog;
 
+--
+-- Name: array_lowercase(character varying[]); Type: FUNCTION; Schema: public; Owner: -
+--
+
+CREATE FUNCTION array_lowercase(character varying[]) RETURNS character varying[]
+    LANGUAGE sql IMMUTABLE
+    AS $_$
+        SELECT array_agg(q.tag) FROM (
+          SELECT btrim(lower(unnest($1)))::varchar AS tag
+        ) AS q;
+      $_$;
+
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: admin_settings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admin_settings (
+    id integer NOT NULL,
+    petition_tags character varying DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: admin_settings_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_settings_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_settings_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_settings_id_seq OWNED BY admin_settings.id;
+
 
 --
 -- Name: admin_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
@@ -226,6 +270,7 @@ CREATE TABLE archived_petitions (
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    tags character varying[] DEFAULT '{}'::character varying[],
     parliament_id integer,
     action character varying(255),
     background character varying(300),
@@ -852,7 +897,8 @@ CREATE TABLE petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30) DEFAULT 'pending'::character varying,
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    tags character varying[] DEFAULT '{}'::character varying[]
 );
 
 
@@ -1123,6 +1169,13 @@ ALTER SEQUENCE tasks_id_seq OWNED BY tasks.id;
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY admin_settings ALTER COLUMN id SET DEFAULT nextval('admin_settings_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY admin_users ALTER COLUMN id SET DEFAULT nextval('admin_users_id_seq'::regclass);
 
 
@@ -1313,6 +1366,14 @@ ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq':
 --
 
 ALTER TABLE ONLY tasks ALTER COLUMN id SET DEFAULT nextval('tasks_id_seq'::regclass);
+
+
+--
+-- Name: admin_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admin_settings
+    ADD CONSTRAINT admin_settings_pkey PRIMARY KEY (id);
 
 
 --
@@ -1537,6 +1598,13 @@ ALTER TABLE ONLY sponsors
 
 ALTER TABLE ONLY tasks
     ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: archived_petitions_tag_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX archived_petitions_tag_lower ON archived_petitions USING gin (array_lowercase(tags));
 
 
 --
@@ -2086,6 +2154,13 @@ CREATE UNIQUE INDEX index_tasks_on_name ON tasks USING btree (name);
 
 
 --
+-- Name: petitions_tag_lower; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX petitions_tag_lower ON petitions USING gin (array_lowercase(tags));
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2433,6 +2508,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170501093620');
 INSERT INTO schema_migrations (version) VALUES ('20170502155040');
 
 INSERT INTO schema_migrations (version) VALUES ('20170503192115');
+
+INSERT INTO schema_migrations (version) VALUES ('20170602154741');
+
+INSERT INTO schema_migrations (version) VALUES ('20170605144924');
 
 INSERT INTO schema_migrations (version) VALUES ('20170610132850');
 

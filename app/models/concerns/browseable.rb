@@ -49,7 +49,7 @@ module Browseable
           raise ArgumentError, "Unsupported facet: #{key.inspect}"
         end
 
-        hash[key] = facet_scope(key).count
+        hash[key] = facet_scope(key).count(:all)
       end
     end
 
@@ -98,11 +98,15 @@ module Browseable
     end
 
     def facets
-      @facets ||= Facets.new(klass)
+      @facets ||= Facets.new(pre_scope_relation)
     end
 
     def filters
       @filters ||= Filters.new(klass, params)
+    end
+
+    def tag_filter(records)
+      @tag_filter ||= TagFilter.new(records, params)
     end
 
     def first_page?
@@ -118,7 +122,7 @@ module Browseable
     end
 
     def query
-      @query ||= params[:q].to_s
+      @query ||= params.fetch(:q, '')
     end
 
     def page_size
@@ -170,6 +174,10 @@ module Browseable
       klass.klass
     end
 
+    def relation_is_filterable?(relation)
+      relation.respond_to?(:taggable?) && relation.taggable?
+    end
+
     private
 
     def new_params(page)
@@ -190,19 +198,60 @@ module Browseable
     end
 
     def execute_search
+      relation = pre_scope_relation
+      relation.instance_exec(&klass.facet_definitions[scope])
+    end
+
+    def pre_scope_search
       if search?
         relation = klass.basic_search(query)
         relation = relation.except(:select).select(star)
         relation = relation.except(:order)
+        # TODO: Also search for petitions that have query in their tags list
+        # and append results to the basic search.
+        # klass.with_tag(query)
       else
         relation = klass
       end
 
-      relation.instance_exec(&klass.facet_definitions[scope])
+      if relation_is_filterable?(relation)
+        relation = tag_filter(relation).by_all_tags
+      end
+
+      relation
+    end
+
+    def pre_scope_relation
+      @pre_scope_relation ||= pre_scope_search
     end
 
     def star
       klass.arel_table[Arel.star]
+    end
+  end
+
+  class TagFilter
+    class ClassNotFilterableError < RuntimeError; end
+
+    attr_reader :relation, :tag_filters
+
+    def initialize(relation, params)
+      raise ClassNotFilterableError, "#{relation.class} does not implement Taggable." unless relation.respond_to?(:taggable?)
+
+      @relation = relation
+      @tag_filters = params.fetch(:tag_filters, [])
+    end
+
+    def by_all_tags
+      return relation if tag_filters_blank?
+
+      relation.with_all_tags(tag_filters)
+    end
+
+    private
+
+    def tag_filters_blank?
+      tag_filters.reject { |tag| tag == "" }.blank?
     end
   end
 

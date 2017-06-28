@@ -10,10 +10,18 @@
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
+      <li class="petition-action">
+        <%= render 'petition_action_tags', petition: @petition %>
+      </li>
+
     <%# If petition has already been moderated %>
     <% else %>
       <li class="petition-action">
         <%= render 'petition_action_notes', petition: @petition %>
+      </li>
+
+      <li class="petition-action">
+        <%= render 'petition_action_tags', petition: @petition %>
       </li>
 
       <li class="petition-action">

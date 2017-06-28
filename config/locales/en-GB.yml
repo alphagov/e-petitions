@@ -102,6 +102,7 @@ en-GB:
       accepted: "%{attribute} must be accepted"
       blank: "%{attribute} can't be blank"
       confirmation: "%{attribute} doesn't match %{attribute}"
+      duplicate_tags: "Duplicate tags not allowed: %{tags}"
       empty: "%{attribute} can't be empty"
       equal_to: "%{attribute} must be equal to %{count}"
       even: "%{attribute} must be even"
@@ -116,6 +117,7 @@ en-GB:
       not_an_integer: "%{attribute} must be an integer"
       odd: "%{attribute} must be odd"
       record_invalid: 'Validation failed: %{errors}'
+      tag_in_use: "Tag '%{tag}' still being used on petitions: %{petitions}"
       taken: "%{attribute} has already been taken"
       too_long:
         one: "%{attribute} is too long (maximum is 1 character)"

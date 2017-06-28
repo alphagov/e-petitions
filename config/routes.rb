@@ -95,11 +95,13 @@ Rails.application.routes.draw do
         resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
         resource 'government-response', :only => [:show, :update], as: :government_response, controller: :government_response
         resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
+        resource 'tags', :only => [:show, :update]
       end
 
       resource :rate_limits, :only => [:edit, :update], :path => 'rate-limits'
+      resource :settings, only: [:edit, :update], controller: "settings"
 
-      resources :signatures, :only => [:destroy] do
+      resources :signatures, :only => [:index, :destroy] do
         post :validate, :invalidate, :on => :member
       end
 

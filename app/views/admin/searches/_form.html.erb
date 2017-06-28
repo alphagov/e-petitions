@@ -1,5 +1,25 @@
 <%= form_tag [:admin, :search], class: 'search-inline search-petitions', method: 'get' do %>
-  <%= label_tag :q, "Search all petitions", class: "visuallyhidden" %>
-  <%= search_field_tag 'q', query, class: 'form-control', placeholder:"Keywords, name, email address, IP address, petition ID or [tag]" %>
-  <%= submit_tag 'Search', class: 'inline-submit' %>
+  <div class="column-two-thirds">
+    <%= label_tag :q, "Search all petitions", class: "visuallyhidden" %>
+    <%= search_field_tag 'q', query, class: 'form-control', placeholder:"Select search type from below and enter search term" %>
+    <%= submit_tag 'Search', class: 'inline-submit' %>
+  </div>
+  <div class="column-two-thirds search-types">
+    <% search_form_search_types.each do |search_type| %>
+      <%= radio_button_tag :search_type, search_type[:value], check_search_type?(@search_type, search_type[:value]) %><%= search_type[:display_name] %>
+    <% end %>
+  </div>
+
+  <details class="tag-filters" <%= "open" if @tag_filters && @tag_filters.any? %>>
+    <summary class="summary">Filter by tags</summary>
+    <div class="panel-indent">
+      <% @admin_settings.allowed_petition_tags.each do |tag| %>
+        <div class="tag-filter-check-box">
+          <%= label_tag tag, tag %>
+          <%= check_box_tag "tag_filters[]", tag, check_tag_filter?(@tag_filters, tag), { id: css_safe(tag) } %>
+        </div>
+      <% end %>
+    </div>
+  </details>
+
 <% end %>

@@ -1,9 +1,7 @@
 <h1>Search results</h1>
 
 <div class="grid-row">
-  <div class="column-two-thirds">
-    <%= render 'form', query: @query %>
-  </div>
+  <%= render 'admin/searches/form', query: @query %>
 </div>
 
 <% if @signatures.present? %>
@@ -38,7 +36,7 @@
     <% elsif defined?(@email) %>
       No signatures found for email address <%= mail_to @email %>
     <% else %>
-      No signatures found %>
+      No signatures found
     <% end %>
   </p>
 <% end %>
