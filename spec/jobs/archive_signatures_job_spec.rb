@@ -51,13 +51,6 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
       expect(archived_signature.perishable_token).to eq(signature.perishable_token)
       expect(archived_signature.unsubscribe_token).to eq(signature.unsubscribe_token)
       expect(archived_signature.notify_by_email).to eq(signature.notify_by_email)
-      expect(archived_signature.invalidation_id).to eq(signature.invalidation_id)
-      expect(archived_signature.invalidated_at).to be_usec_precise_with(signature.invalidated_at)
-      expect(archived_signature.validated_at).to be_usec_precise_with(signature.validated_at)
-      expect(archived_signature.government_response_email_at).to be_usec_precise_with(signature.government_response_email_at)
-      expect(archived_signature.debate_scheduled_email_at).to be_usec_precise_with(signature.debate_scheduled_email_at)
-      expect(archived_signature.debate_outcome_email_at).to be_usec_precise_with(signature.debate_outcome_email_at)
-      expect(archived_signature.petition_email_at).to be_usec_precise_with(signature.petition_email_at)
       expect(archived_signature.created_at).to be_usec_precise_with(signature.created_at)
       expect(archived_signature.updated_at).to be_usec_precise_with(signature.updated_at)
     end
@@ -81,6 +74,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the validated_at timestamp" do
+      expect(archived_signature.validated_at).to be_usec_precise_with(signature.validated_at)
+    end
   end
 
   context "with an invalidated signature" do
@@ -92,6 +89,14 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the invalidation assocation" do
+      expect(archived_signature.invalidation_id).to be_usec_precise_with(signature.invalidation_id)
+    end
+
+    it "copies the invalidated_at timestamp" do
+      expect(archived_signature.invalidated_at).to be_usec_precise_with(signature.invalidated_at)
+    end
   end
 
   context "with a fradulent signature" do
@@ -112,6 +117,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the government_response_email_at timestamp" do
+      expect(archived_signature.government_response_email_at).to be_usec_precise_with(signature.government_response_email_at)
+    end
   end
 
   context "with a signature that has been notified about a scheduled debate" do
@@ -122,6 +131,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the debate_scheduled_email_at timestamp" do
+      expect(archived_signature.debate_scheduled_email_at).to be_usec_precise_with(signature.debate_scheduled_email_at)
+    end
   end
 
   context "with a signature that has been notified about a debate outcome" do
@@ -132,6 +145,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the debate_outcome_email_at timestamp" do
+      expect(archived_signature.debate_outcome_email_at).to be_usec_precise_with(signature.debate_outcome_email_at)
+    end
   end
 
   context "with a signature that has been notified about a other business" do
@@ -142,6 +159,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
 
     it_behaves_like "a copied signature"
+
+    it "copies the petition_email_at timestamp" do
+      expect(archived_signature.petition_email_at).to be_usec_precise_with(signature.petition_email_at)
+    end
   end
 
   context "when there are no signatures left" do
