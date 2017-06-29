@@ -207,6 +207,24 @@ FactoryGirl.define do
     trait :scheduled_for_debate do
       scheduled_debate_date { 10.days.from_now }
     end
+
+    trait :email_requested do
+      transient do
+        email_requested_for_government_response_at { nil }
+        email_requested_for_debate_scheduled_at { nil }
+        email_requested_for_debate_outcome_at { nil }
+        email_requested_for_petition_email_at { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_email_requested_receipt do |r|
+          r.government_response = evaluator.email_requested_for_government_response_at
+          r.debate_scheduled = evaluator.email_requested_for_debate_scheduled_at
+          r.debate_outcome = evaluator.email_requested_for_debate_outcome_at
+          r.petition_email = evaluator.email_requested_for_petition_email_at
+        end
+      end
+    end
   end
 
   factory :pending_petition, :parent => :petition do

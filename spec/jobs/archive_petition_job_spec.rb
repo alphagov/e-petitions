@@ -4,6 +4,7 @@ require 'digest/sha2'
 RSpec.describe ArchivePetitionJob, type: :job do
   let(:petition) { FactoryGirl.create(:closed_petition) }
   let(:archived_petition) { Archived::Petition.first }
+  let(:email_request) { petition.email_requested_receipt }
 
   let(:archive_signatures_job) do
     {
@@ -225,6 +226,46 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
       expect(File.exist?(path)).to eq(true)
       expect(Digest::SHA256.file(path)).to eq(commons_image_file_digest)
+    end
+  end
+
+  context "with a petition that has an government_response email scheduled" do
+    let(:petition) do
+      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_government_response_at: Time.current)
+    end
+
+    it "copies the receipt timestamp to the archived petition" do
+      expect(archived_petition.email_requested_for_government_response_at).to be_usec_precise_with(email_request.government_response)
+    end
+  end
+
+  context "with a petition that has an debate_scheduled email scheduled" do
+    let(:petition) do
+      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_debate_scheduled_at: Time.current)
+    end
+
+    it "copies the receipt timestamp to the archived petition" do
+      expect(archived_petition.email_requested_for_debate_scheduled_at).to be_usec_precise_with(email_request.debate_scheduled)
+    end
+  end
+
+  context "with a petition that has an debate_outcome email scheduled" do
+    let(:petition) do
+      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_debate_outcome_at: Time.current)
+    end
+
+    it "copies the receipt timestamp to the archived petition" do
+      expect(archived_petition.email_requested_for_debate_outcome_at).to be_usec_precise_with(email_request.debate_outcome)
+    end
+  end
+
+  context "with a petition that has an petition_email email scheduled" do
+    let(:petition) do
+      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_petition_email_at: Time.current)
+    end
+
+    it "copies the receipt timestamp to the archived petition" do
+      expect(archived_petition.email_requested_for_petition_email_at).to be_usec_precise_with(email_request.petition_email)
     end
   end
 end
