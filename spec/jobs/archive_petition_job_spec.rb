@@ -65,13 +65,13 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.background).to eq(petition.background)
       expect(archived_petition.additional_details).to eq(petition.additional_details)
       expect(archived_petition.state).to eq(petition.state)
-      expect(archived_petition.opened_at).to eq(petition.opened_at)
-      expect(archived_petition.closed_at).to eq(petition.closed_at)
+      expect(archived_petition.opened_at).to be_usec_precise_with(petition.opened_at)
+      expect(archived_petition.closed_at).to be_usec_precise_with(petition.closed_at)
       expect(archived_petition.signature_count).to eq(petition.signature_count)
-      expect(archived_petition.moderation_threshold_reached_at).to eq(petition.moderation_threshold_reached_at)
-      expect(archived_petition.last_signed_at).to eq(petition.last_signed_at)
-      expect(archived_petition.created_at).to eq(petition.created_at)
-      expect(archived_petition.updated_at).to eq(petition.updated_at)
+      expect(archived_petition.moderation_threshold_reached_at).to be_usec_precise_with(petition.moderation_threshold_reached_at)
+      expect(archived_petition.last_signed_at).to be_usec_precise_with(petition.last_signed_at)
+      expect(archived_petition.created_at).to be_usec_precise_with(petition.created_at)
+      expect(archived_petition.updated_at).to be_usec_precise_with(petition.updated_at)
     end
 
     it "copies the constituency_petition_journal data" do
@@ -89,7 +89,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
 
     it "copies the attributes" do
-      expect(archived_petition.stopped_at).to eq(petition.stopped_at)
+      expect(archived_petition.stopped_at).to be_usec_precise_with(petition.stopped_at)
     end
   end
 
@@ -109,7 +109,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
 
     it "copies the attributes" do
-      expect(archived_petition.response_threshold_reached_at).to eq(petition.response_threshold_reached_at)
+      expect(archived_petition.response_threshold_reached_at).to be_usec_precise_with(petition.response_threshold_reached_at)
     end
   end
 
@@ -122,7 +122,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
 
     it "copies the attributes" do
-      expect(archived_petition.debate_threshold_reached_at).to eq(petition.debate_threshold_reached_at)
+      expect(archived_petition.debate_threshold_reached_at).to be_usec_precise_with(petition.debate_threshold_reached_at)
       expect(archived_petition.debate_state).to eq(petition.debate_state)
     end
   end
@@ -150,14 +150,14 @@ RSpec.describe ArchivePetitionJob, type: :job do
     let(:archived_rejection) { archived_petition.rejection }
 
     it "copies the attributes" do
-      expect(archived_petition.rejected_at).to eq(petition.rejected_at)
+      expect(archived_petition.rejected_at).to be_usec_precise_with(petition.rejected_at)
     end
 
     it "copies the rejection object" do
       expect(archived_rejection.code).to eq(rejection.code)
       expect(archived_rejection.details).to eq(rejection.details)
-      expect(archived_rejection.created_at).to eq(rejection.created_at)
-      expect(archived_rejection.updated_at).to eq(rejection.updated_at)
+      expect(archived_rejection.created_at).to be_usec_precise_with(rejection.created_at)
+      expect(archived_rejection.updated_at).to be_usec_precise_with(rejection.updated_at)
     end
   end
 
@@ -176,14 +176,14 @@ RSpec.describe ArchivePetitionJob, type: :job do
     let(:archived_government_response) { archived_petition.government_response }
 
     it "copies the attributes" do
-      expect(archived_petition.government_response_at).to eq(petition.government_response_at)
+      expect(archived_petition.government_response_at).to be_usec_precise_with(petition.government_response_at)
     end
 
     it "copies the government_response object" do
       expect(archived_government_response.summary).to eq(government_response.summary)
       expect(archived_government_response.details).to eq(government_response.details)
-      expect(archived_government_response.created_at).to eq(government_response.created_at)
-      expect(archived_government_response.updated_at).to eq(government_response.updated_at)
+      expect(archived_government_response.created_at).to be_usec_precise_with(government_response.created_at)
+      expect(archived_government_response.updated_at).to be_usec_precise_with(government_response.updated_at)
     end
   end
 
@@ -206,7 +206,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     let(:commons_image_file_digest) { Digest::SHA256.file(commons_image_file) }
 
     it "copies the attributes" do
-      expect(archived_petition.debate_outcome_at).to eq(petition.debate_outcome_at)
+      expect(archived_petition.debate_outcome_at).to be_usec_precise_with(petition.debate_outcome_at)
     end
 
     it "copies the debate_outcome object" do
@@ -216,8 +216,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
       expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
       expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
-      expect(archived_debate_outcome.created_at).to eq(debate_outcome.created_at)
-      expect(archived_debate_outcome.updated_at).to eq(debate_outcome.updated_at)
+      expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
+      expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
     end
 
     it "copies the commons_image object" do

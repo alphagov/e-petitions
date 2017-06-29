@@ -52,14 +52,14 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
       expect(archived_signature.unsubscribe_token).to eq(signature.unsubscribe_token)
       expect(archived_signature.notify_by_email).to eq(signature.notify_by_email)
       expect(archived_signature.invalidation_id).to eq(signature.invalidation_id)
-      expect(archived_signature.invalidated_at).to eq(signature.invalidated_at)
-      expect(archived_signature.validated_at).to eq(signature.validated_at)
-      expect(archived_signature.government_response_email_at).to eq(signature.government_response_email_at)
-      expect(archived_signature.debate_scheduled_email_at).to eq(signature.debate_scheduled_email_at)
-      expect(archived_signature.debate_outcome_email_at).to eq(signature.debate_outcome_email_at)
-      expect(archived_signature.petition_email_at).to eq(signature.petition_email_at)
-      expect(archived_signature.created_at).to eq(signature.created_at)
-      expect(archived_signature.updated_at).to eq(signature.updated_at)
+      expect(archived_signature.invalidated_at).to be_usec_precise_with(signature.invalidated_at)
+      expect(archived_signature.validated_at).to be_usec_precise_with(signature.validated_at)
+      expect(archived_signature.government_response_email_at).to be_usec_precise_with(signature.government_response_email_at)
+      expect(archived_signature.debate_scheduled_email_at).to be_usec_precise_with(signature.debate_scheduled_email_at)
+      expect(archived_signature.debate_outcome_email_at).to be_usec_precise_with(signature.debate_outcome_email_at)
+      expect(archived_signature.petition_email_at).to be_usec_precise_with(signature.petition_email_at)
+      expect(archived_signature.created_at).to be_usec_precise_with(signature.created_at)
+      expect(archived_signature.updated_at).to be_usec_precise_with(signature.updated_at)
     end
   end
 
