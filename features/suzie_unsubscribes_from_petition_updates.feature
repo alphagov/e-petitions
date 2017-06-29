@@ -10,7 +10,7 @@ Feature: Unsubscribing from petiton updates as Suzie
     And the threshold for a parliamentary debate is "5"
     And a moderator responds to the petition
 
-  Scenario: Suzie receives and email containing an unsubscription link
+  Scenario: Suzie receives an email containing an unsubscription link
     Then Suzie should have received a petition response email with an unsubscription link
     When Suzie follows the unsubscription link
     Then Suzie should see a confirmation page stating that her subscription was successful
