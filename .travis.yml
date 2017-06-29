@@ -6,6 +6,9 @@ rvm:
 - 2.2.6
 services:
 - memcached
+- postgresql
+addons:
+  postgresql: "9.4"
 before_install:
 - gem install bundler
 before_script:
