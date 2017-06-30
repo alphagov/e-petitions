@@ -80,6 +80,11 @@ FactoryGirl.define do
       end
     end
 
+    trait :scheduled_for_debate do
+      scheduled_debate_date { 1.week.from_now }
+      debate_state "scheduled"
+    end
+
     trait :debated do
       debate_outcome_at { 1.week.ago }
       debate_state "debated"
