@@ -1,4 +1,5 @@
 require 'textacular/searchable'
+require_dependency 'archived'
 
 module Archived
   class Petition < ActiveRecord::Base
@@ -75,6 +76,10 @@ module Archived
 
       def not_debated
         where(debate_state: 'not_debated')
+      end
+
+      def debate_scheduled
+        where.not(scheduled_debate_date: nil)
       end
 
       def visible

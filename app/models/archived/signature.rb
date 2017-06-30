@@ -1,3 +1,5 @@
+require_dependency 'archived'
+
 module Archived
   class Signature < ActiveRecord::Base
     PENDING_STATE = 'pending'

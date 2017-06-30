@@ -1,3 +1,5 @@
+require_dependency 'archived'
+
 module Archived
   class Petition < ActiveRecord::Base
     class Email < ActiveRecord::Base
