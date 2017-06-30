@@ -50,6 +50,10 @@ Rails.application.routes.draw do
 
     namespace :archived do
       resources :petitions, only: [:index, :show]
+
+      resources :signatures, only: [] do
+        get :unsubscribe, on: :member
+      end
     end
 
     # REDIRECTS OLD PAGES
