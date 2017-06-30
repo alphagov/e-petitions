@@ -1,0 +1,16 @@
+require 'rails_helper'
+require_relative '../shared_examples'
+
+RSpec.describe Archived::EmailThresholdResponseJob, type: :job do
+  let(:email_requested_at) { Time.current }
+  let(:petition) { FactoryGirl.create(:archived_petition, :response) }
+  let(:signature) { FactoryGirl.create(:archived_signature, petition: petition) }
+  let(:arguments) { { petition: petition } }
+
+  before do
+    petition.set_email_requested_at_for('government_response', to: email_requested_at)
+    allow(petition).to receive_message_chain(:signatures_to_email_for, :find_each).and_yield(signature)
+  end
+
+  it_behaves_like "job to enqueue signatory mailing jobs"
+end

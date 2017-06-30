@@ -2,6 +2,20 @@
 
 module Archived
   class PetitionMailerPreview < ActionMailer::Preview
+    def notify_signer_of_threshold_response
+      petition = Archived::Petition.with_response.last
+      signature = petition.signatures.validated.last
+
+      Archived::PetitionMailer.notify_signer_of_threshold_response(petition, signature)
+    end
+
+    def notify_creator_of_threshold_response
+      petition = Archived::Petition.with_response.last
+      signature = petition.creator
+
+      Archived::PetitionMailer.notify_creator_of_threshold_response(petition, signature)
+    end
+
     def notify_signer_of_debate_scheduled
       petition = Archived::Petition.debated.last
       signature = petition.signatures.validated.last
