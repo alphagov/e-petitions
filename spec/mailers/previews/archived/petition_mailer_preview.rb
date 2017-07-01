@@ -2,6 +2,22 @@
 
 module Archived
   class PetitionMailerPreview < ActionMailer::Preview
+    def email_signer
+      email = Archived::Petition::Email.last
+      petition = email.petition
+      signature = petition.signatures.validated.last
+
+      PetitionMailer.email_signer(petition, signature, email)
+    end
+
+    def email_creator
+      email = Archived::Petition::Email.last
+      petition = email.petition
+      signature = petition.creator
+
+      PetitionMailer.email_creator(petition, signature, email)
+    end
+
     def notify_signer_of_threshold_response
       petition = Archived::Petition.with_response.last
       signature = petition.signatures.validated.last

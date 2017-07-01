@@ -2,6 +2,21 @@ module Archived
   class PetitionMailer < ApplicationMailer
     include ActiveSupport::NumberHelper
 
+    def email_signer(petition, signature, email)
+      @petition, @signature, @email = petition, signature, email
+
+      mail to: @signature.email,
+        subject: subject_for(:email_signer),
+        list_unsubscribe: unsubscribe_url
+    end
+
+    def email_creator(petition, signature, email)
+      @petition, @signature, @email = petition, signature, email
+      mail to: @signature.email,
+        subject: subject_for(:email_creator),
+        list_unsubscribe: unsubscribe_url
+    end
+
     def notify_signer_of_threshold_response(petition, signature)
       @petition, @signature = petition, signature
       @government_response, @parliament = petition.government_response, petition.parliament
