@@ -189,43 +189,74 @@ RSpec.describe ArchivePetitionJob, type: :job do
   end
 
   context "with a petition that has a debate outcome" do
-    let(:petition) do
-      FactoryGirl.create(:debated_petition,
-        state: "closed",
-        closed_at: 2.months.ago,
-        debate_outcome_at: 2.months.ago,
-        debated_on: 2.months.ago,
-        overview: "Debate on kids TV",
-        transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
-        video_url: "http://www.parliamentlive.tv/Event/Index/123456",
-        commons_image: File.new(commons_image_file)
-      )
-    end
-
     let(:debate_outcome) { petition.debate_outcome }
     let(:archived_debate_outcome) { archived_petition.debate_outcome }
     let(:commons_image_file_digest) { Digest::SHA256.file(commons_image_file) }
 
-    it "copies the attributes" do
-      expect(archived_petition.debate_outcome_at).to be_usec_precise_with(petition.debate_outcome_at)
+    context "when the debate outcome doesn't have a commons image" do
+      let(:petition) do
+        FactoryGirl.create(:debated_petition,
+          state: "closed",
+          closed_at: 2.months.ago,
+          debate_outcome_at: 2.months.ago,
+          debated_on: 2.months.ago,
+          overview: "Debate on kids TV",
+          transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
+          video_url: "http://www.parliamentlive.tv/Event/Index/123456",
+        )
+      end
+
+      it "copies the attributes" do
+        expect(archived_petition.debate_outcome_at).to be_usec_precise_with(petition.debate_outcome_at)
+      end
+
+      it "copies the debate_outcome object" do
+        expect(archived_debate_outcome.debated).to eq(debate_outcome.debated)
+        expect(archived_debate_outcome.debated_on).to eq(debate_outcome.debated_on)
+        expect(archived_debate_outcome.overview).to eq(debate_outcome.overview)
+        expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
+        expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
+        expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
+        expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
+        expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
+      end
     end
 
-    it "copies the debate_outcome object" do
-      expect(archived_debate_outcome.debated).to eq(debate_outcome.debated)
-      expect(archived_debate_outcome.debated_on).to eq(debate_outcome.debated_on)
-      expect(archived_debate_outcome.overview).to eq(debate_outcome.overview)
-      expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
-      expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
-      expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
-      expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
-      expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
-    end
+    context "when the debate outcome has a commons image" do
+      let(:petition) do
+        FactoryGirl.create(:debated_petition,
+          state: "closed",
+          closed_at: 2.months.ago,
+          debate_outcome_at: 2.months.ago,
+          debated_on: 2.months.ago,
+          overview: "Debate on kids TV",
+          transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
+          video_url: "http://www.parliamentlive.tv/Event/Index/123456",
+          commons_image: File.new(commons_image_file)
+        )
+      end
 
-    it "copies the commons_image object" do
-      path = archived_debate_outcome.commons_image.path
+      it "copies the attributes" do
+        expect(archived_petition.debate_outcome_at).to be_usec_precise_with(petition.debate_outcome_at)
+      end
 
-      expect(File.exist?(path)).to eq(true)
-      expect(Digest::SHA256.file(path)).to eq(commons_image_file_digest)
+      it "copies the debate_outcome object" do
+        expect(archived_debate_outcome.debated).to eq(debate_outcome.debated)
+        expect(archived_debate_outcome.debated_on).to eq(debate_outcome.debated_on)
+        expect(archived_debate_outcome.overview).to eq(debate_outcome.overview)
+        expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
+        expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
+        expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
+        expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
+        expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
+      end
+
+      it "copies the commons_image object" do
+        path = archived_debate_outcome.commons_image.path
+
+        expect(File.exist?(path)).to eq(true)
+        expect(Digest::SHA256.file(path)).to eq(commons_image_file_digest)
+      end
     end
   end
 

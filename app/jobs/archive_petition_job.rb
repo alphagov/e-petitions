@@ -81,12 +81,14 @@ class ArchivePetitionJob < ApplicationJob
             o.created_at = debate_outcome.created_at
             o.updated_at = debate_outcome.updated_at
 
-            tempfile = Tempfile.new("commons_image")
-            debate_outcome.commons_image.copy_to_local_file(:original, tempfile.path)
-            tempfile.rewind
+            if debate_outcome.commons_image?
+              tempfile = Tempfile.new("commons_image")
+              debate_outcome.commons_image.copy_to_local_file(:original, tempfile.path)
+              tempfile.rewind
 
-            o.commons_image = tempfile
-            o.commons_image_file_name = debate_outcome.commons_image_file_name
+              o.commons_image = tempfile
+              o.commons_image_file_name = debate_outcome.commons_image_file_name
+            end
           end
         end
 
