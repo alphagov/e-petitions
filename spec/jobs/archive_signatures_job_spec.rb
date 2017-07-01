@@ -54,6 +54,10 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
       expect(archived_signature.created_at).to be_usec_precise_with(signature.created_at)
       expect(archived_signature.updated_at).to be_usec_precise_with(signature.updated_at)
     end
+
+    it "is persisted" do
+      expect(archived_signature.persisted?).to eq(true)
+    end
   end
 
   context "with a pending signature" do
@@ -162,6 +166,27 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
 
     it "copies the petition_email_at timestamp" do
       expect(archived_signature.petition_email_at).to be_usec_precise_with(signature.petition_email_at)
+    end
+  end
+
+  context "with a signature that has invalid attributes" do
+    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+
+    before do
+      signature.update_column(:location_code, nil)
+      signature.reload
+
+      described_class.perform_now(petition, archived_petition)
+    end
+
+    it_behaves_like "a copied signature"
+
+    it "the original signature is invalid" do
+      expect(signature.valid?).to eq(false)
+    end
+
+    it "the archived signature is invalid" do
+      expect(signature.valid?).to eq(false)
     end
   end
 

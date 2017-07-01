@@ -6,7 +6,7 @@ class ArchiveSignaturesJob < ApplicationJob
     next_id = signatures.map(&:id).max + 1
 
     signatures.each do |signature|
-      archived_petition.signatures.create! do |s|
+      archived_signature = archived_petition.signatures.build do |s|
         s.uuid = signature.uuid
         s.state = signature.state
         s.number = signature.number
@@ -31,6 +31,8 @@ class ArchiveSignaturesJob < ApplicationJob
         s.created_at = signature.created_at
         s.updated_at = signature.updated_at
       end
+
+      archived_signature.save!(validate: false)
     end
 
     if petition.signatures.batch(next_id, limit: limit).exists?
