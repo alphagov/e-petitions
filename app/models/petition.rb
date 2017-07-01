@@ -342,8 +342,8 @@ class Petition < ActiveRecord::Base
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
     end
 
-    def archived?
-      !where(archived_at: nil).exists? && count > 0
+    def unarchived
+      where(archived_at: nil)
     end
 
     private

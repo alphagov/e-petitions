@@ -376,6 +376,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
 
       context "when clicking the Archive Parliament button" do
         before { FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago) }
+        before { FactoryGirl.create(:parliament, archiving_started_at: 1.day.ago) }
         before { patch :update, parliament: params, archive_parliament: "Archive Parliament" }
 
         context "and the params are invalid" do

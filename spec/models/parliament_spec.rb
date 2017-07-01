@@ -600,6 +600,57 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
+  describe "#archiving_finished?" do
+    context "when archiving_started_at is nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archiving_started_at: nil)
+      end
+
+      it "returns false" do
+        expect(parliament.archiving_finished?).to eq(false)
+      end
+    end
+
+    context "when archiving_started_at is not nil" do
+      subject :parliament do
+        FactoryGirl.build(:parliament, archiving_started_at: 1.day.ago)
+      end
+
+      context "and all petitions are unarchived" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+        end
+
+        it "returns false" do
+          expect(parliament.archiving_finished?).to eq(false)
+        end
+      end
+
+      context "and there is a mix of archived and unarchived petitions" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryGirl.create(:closed_petition, archived_at: nil)
+        end
+
+        it "returns false" do
+          expect(parliament.archiving_finished?).to eq(false)
+        end
+      end
+
+      context "and all the petitions are archived" do
+        before do
+          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryGirl.create(:closed_petition, archived_at: 6.hours.ago)
+        end
+
+        it "returns true" do
+          expect(parliament.archiving_finished?).to eq(true)
+        end
+      end
+    end
+  end
+
   describe "#start_archiving!" do
     let :archive_petitions_job do
       {

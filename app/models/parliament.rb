@@ -131,11 +131,15 @@ class Parliament < ActiveRecord::Base
   end
 
   def archiving?
-    archiving_started_at? && !Petition.archived?
+    archiving_started_at? && !archiving_finished?
+  end
+
+  def archiving_finished?
+    archiving_started_at? && Petition.unarchived.empty?
   end
 
   def start_archiving!(now = Time.current)
-    unless archiving? || Petition.archived?
+    unless archiving? || archiving_finished?
       ArchivePetitionsJob.perform_later
       update_column(:archiving_started_at, now)
     end
@@ -155,18 +159,18 @@ class Parliament < ActiveRecord::Base
   end
 
   def archive!(now = Time.current)
-    if Petition.archived?
+    if archiving_finished?
       DeletePetitionsJob.perform_later
       update_column(:archived_at, now)
     end
   end
 
   def can_archive_petitions?
-    dissolved? && !Petition.archived? && !archiving?
+    dissolved? && !archiving_finished? && !archiving?
   end
 
   def can_archive?
-    dissolved? && Petition.archived?
+    dissolved? && archiving_finished?
   end
 
   def formatted_threshold_for_response
