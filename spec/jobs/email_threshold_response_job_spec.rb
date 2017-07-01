@@ -13,5 +13,4 @@ RSpec.describe EmailThresholdResponseJob, type: :job do
   end
 
   it_behaves_like "job to enqueue signatory mailing jobs"
-
 end
