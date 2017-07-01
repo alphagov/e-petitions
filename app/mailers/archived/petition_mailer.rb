@@ -35,6 +35,30 @@ module Archived
         list_unsubscribe: unsubscribe_url
     end
 
+    def notify_signer_of_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      if @debate_outcome.debated?
+        subject = subject_for(:notify_signer_of_positive_debate_outcome)
+      else
+        subject = subject_for(:notify_signer_of_negative_debate_outcome)
+      end
+
+      mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+    end
+
+    def notify_creator_of_debate_outcome(petition, signature)
+      @petition, @debate_outcome, @signature = petition, petition.debate_outcome, signature
+
+      if @debate_outcome.debated?
+        subject = subject_for(:notify_creator_of_positive_debate_outcome)
+      else
+        subject = subject_for(:notify_creator_of_negative_debate_outcome)
+      end
+
+      mail to: @signature.email, subject: subject, list_unsubscribe: unsubscribe_url
+    end
+
     private
 
     def subject_for(key, options = {})

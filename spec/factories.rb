@@ -99,6 +99,7 @@ FactoryGirl.define do
 
       after(:build) do |petition, evaluator|
         petition.build_debate_outcome do |o|
+          o.debated = true
           o.debated_on = evaluator.debated_on if evaluator.debated_on.present?
           o.overview = evaluator.overview if evaluator.overview.present?
           o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
@@ -109,8 +110,15 @@ FactoryGirl.define do
     end
 
     trait :not_debated do
+      transient do
+        overview { nil }
+      end
+
       after(:build) do |petition, evaluator|
-        petition.build_debate_outcome(debated: false)
+        petition.build_debate_outcome do |o|
+          o.debated = false
+          o.overview = evaluator.overview if evaluator.overview.present?
+        end
       end
     end
 
