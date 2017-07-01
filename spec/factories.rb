@@ -80,10 +80,39 @@ FactoryGirl.define do
       end
     end
 
-    trait :open do
-      state "open"
-      signature_count 100
-      closed_at { 6.month.from_now }
+    trait :debated do
+      debate_outcome_at { 1.week.ago }
+      debate_state "debated"
+
+      transient do
+        debated_on { 1.week.ago.to_date }
+        overview { nil }
+        transcript_url { nil }
+        video_url { nil }
+        commons_image { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_debate_outcome do |o|
+          o.debated_on = evaluator.debated_on if evaluator.debated_on.present?
+          o.overview = evaluator.overview if evaluator.overview.present?
+          o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
+          o.video_url = evaluator.video_url if evaluator.video_url.present?
+          o.commons_image = evaluator.commons_image if evaluator.commons_image.present?
+        end
+      end
+    end
+
+    trait :not_debated do
+      after(:build) do |petition, evaluator|
+        petition.build_debate_outcome(debated: false)
+      end
+    end
+
+    trait :stopped do
+      state "stopped"
+      signature_count 5
+      stopped_at { 6.months.ago }
     end
 
     trait :closed do
@@ -99,6 +128,24 @@ FactoryGirl.define do
 
       transient do
         rejection_code { "duplicate" }
+        rejection_details { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        petition.build_rejection do |r|
+          r.code = evaluator.rejection_code
+          r.details = evaluator.rejection_details
+        end
+      end
+    end
+
+    trait :hidden do
+      state "hidden"
+      opened_at nil
+      closed_at nil
+
+      transient do
+        rejection_code { "offensive" }
         rejection_details { nil }
       end
 
@@ -262,14 +309,20 @@ FactoryGirl.define do
       overview { nil }
       transcript_url { nil }
       video_url { nil }
+      commons_image { nil }
     end
+
     debate_state 'debated'
+
     after(:build) do |petition, evaluator|
-      debate_outcome_attributes = {petition: petition}
+      debate_outcome_attributes = { petition: petition }
+
       debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
       debate_outcome_attributes[:overview] = evaluator.overview if evaluator.overview.present?
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
+      debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
+
       petition.create_debate_outcome(debate_outcome_attributes)
     end
   end

@@ -220,7 +220,7 @@ ALTER SEQUENCE archived_petition_emails_id_seq OWNED BY archived_petition_emails
 
 CREATE TABLE archived_petitions (
     id integer NOT NULL,
-    state character varying(10) DEFAULT 'open'::character varying NOT NULL,
+    state character varying(10) DEFAULT 'closed'::character varying NOT NULL,
     opened_at timestamp without time zone,
     closed_at timestamp without time zone,
     signature_count integer DEFAULT 0,
@@ -240,7 +240,9 @@ CREATE TABLE archived_petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30),
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    signatures_by_constituency jsonb,
+    signatures_by_country jsonb
 );
 
 
@@ -316,7 +318,6 @@ CREATE TABLE archived_signatures (
     constituency_id character varying,
     validated_at timestamp without time zone,
     number integer,
-    seen_signed_confirmation_page boolean DEFAULT false NOT NULL,
     location_code character varying(30),
     invalidated_at timestamp without time zone,
     invalidation_id integer,
@@ -767,7 +768,8 @@ CREATE TABLE parliaments (
     archived_at timestamp without time zone,
     threshold_for_response integer DEFAULT 10000 NOT NULL,
     threshold_for_debate integer DEFAULT 100000 NOT NULL,
-    petition_duration integer DEFAULT 6
+    petition_duration integer DEFAULT 6,
+    archiving_started_at timestamp without time zone
 );
 
 
@@ -852,7 +854,8 @@ CREATE TABLE petitions (
     moderation_threshold_reached_at timestamp without time zone,
     debate_state character varying(30) DEFAULT 'pending'::character varying,
     stopped_at timestamp without time zone,
-    special_consideration boolean
+    special_consideration boolean,
+    archived_at timestamp without time zone
 );
 
 
@@ -1925,6 +1928,13 @@ CREATE INDEX index_petitions_on_additional_details ON petitions USING gin (to_ts
 
 
 --
+-- Name: index_petitions_on_archived_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_archived_at ON petitions USING btree (archived_at);
+
+
+--
 -- Name: index_petitions_on_background; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2457,4 +2467,18 @@ INSERT INTO schema_migrations (version) VALUES ('20170615133536');
 INSERT INTO schema_migrations (version) VALUES ('20170622114605');
 
 INSERT INTO schema_migrations (version) VALUES ('20170622114801');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622151936');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622152415');
+
+INSERT INTO schema_migrations (version) VALUES ('20170622161343');
+
+INSERT INTO schema_migrations (version) VALUES ('20170623144023');
+
+INSERT INTO schema_migrations (version) VALUES ('20170626123257');
+
+INSERT INTO schema_migrations (version) VALUES ('20170626130418');
+
+INSERT INTO schema_migrations (version) VALUES ('20170627125046');
 

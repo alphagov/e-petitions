@@ -10,12 +10,17 @@ class Admin::ParliamentsController < Admin::AdminController
   def update
     if @parliament.update(parliament_params)
       if email_creators?
-        NotifyCreatorsThatParliamentIsDissolvingJob.perform_later
+        @parliament.notify_creators!
         redirect_to admin_root_url, notice: :creators_emailed
       elsif schedule_closure?
-        ClosePetitionsEarlyJob.schedule_for(@parliament.dissolution_at)
-        StopPetitionsEarlyJob.schedule_for(@parliament.dissolution_at)
+        @parliament.schedule_closure!
         redirect_to admin_root_url, notice: :closure_scheduled
+      elsif archive_petitions?
+        @parliament.start_archiving!
+        redirect_to admin_root_url, notice: :petitions_archiving
+      elsif archive_parliament?
+        @parliament.archive!
+        redirect_to admin_root_url, notice: :parliament_archived
       else
         redirect_to admin_root_url, notice: :parliament_updated
       end
@@ -46,5 +51,13 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def schedule_closure?
     params.key?(:schedule_closure) && @parliament.dissolution_announced?
+  end
+
+  def archive_petitions?
+    params.key?(:archive_petitions) && @parliament.can_archive_petitions?
+  end
+
+  def archive_parliament?
+    params.key?(:archive_parliament) && @parliament.can_archive?
   end
 end

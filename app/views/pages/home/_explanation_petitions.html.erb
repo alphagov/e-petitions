@@ -1,0 +1,35 @@
+<% explanation_petitions do |actioned| %>
+  <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
+    <% if actioned[:with_response][:count].zero? %>
+      <div class="threshold-panel threshold-panel-response">
+        <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+      </div>
+    <% else %>
+      <%= link_to( petitions_path(state: :with_response), class: "threshold-panel threshold-panel-response" ) do %>
+        <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+      <% end %>
+    <% end %>
+    <div class="section-panel-borderless">
+      <%= render "pages/home/responded_petitions", actioned: actioned %>
+    </div>
+  </section>
+
+  <section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
+    <% if actioned[:with_debated_outcome][:count].zero? %>
+      <div class="threshold-panel threshold-panel-debate">
+        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+      </div>
+    <% else %>
+      <%= link_to( petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
+        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
+        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+      <% end %>
+    <% end %>
+    <div class="section-panel-borderless">
+      <%= render "pages/home/debated_petitions", actioned: actioned %>
+    </div>
+  </section>
+<% end %>

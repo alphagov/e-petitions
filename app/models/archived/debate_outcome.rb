@@ -23,7 +23,7 @@ module Archived
     validate :validate_commons_image_dimensions, unless: :no_commons_image_queued
 
     after_create do
-      petition.touch(:debate_outcome_at)
+      petition.touch(:debate_outcome_at) unless petition.debate_outcome_at?
     end
 
     after_save do

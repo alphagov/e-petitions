@@ -11,6 +11,8 @@ Feature: Joe views all archived petition
       | Save the planet          | closed   | 243             |  2014-01-01 |
       | Wombles to Parliament    | closed   | 243             |  2013-01-01 |
       | Free gig tickets         | rejected |                 |  2013-01-01 |
+      | Wombles are &*!%         | hidden   |                 |  2013-02-01 |
+      | Bring back the Wombles   | stopped  |                 |  2013-03-01 |
 
   Scenario:
     When I view all petitions from the home page
@@ -35,6 +37,23 @@ Feature: Joe views all archived petition
       | Save the planet           | 243 signatures |
       | Wombles to Parliament     | 243 signatures |
       | Free gig tickets          | Rejected       |
+    And I should not see "Wombles are &*!%"
+    And I should not see "Bring back the Wombles"
+    And the markup should be valid
+
+  Scenario: Joe browses petitions which have been debated
+    Given an archived petition "Free the wombles" has been debated yesterday
+    And an archived petition "Ban Badger Baiting" has been debated 2 days ago
+    And an archived petition "Spend more money on Defence" has been debated 18 days ago
+    And an archived petition "Force supermarkets to give unsold food to charities" has been debated 234 days ago
+    And an archived petition "Make every monday bank holiday" exists
+    When I browse to see only "Debated in Parliament" archived petitions
+    Then I should see "4 petitions"
+    Then I should see the following ordered list of petitions:
+     | Free the wombles                                    |
+     | Ban Badger Baiting                                  |
+     | Spend more money on Defence                         |
+     | Force supermarkets to give unsold food to charities |
     And the markup should be valid
 
   Scenario: Downloading the JSON data for archived petitions

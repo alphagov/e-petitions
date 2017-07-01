@@ -2,12 +2,13 @@ require 'textacular/searchable'
 
 module Archived
   class Petition < ActiveRecord::Base
-    OPEN_STATE = 'open'
+    STOPPED_STATE = 'stopped'
     CLOSED_STATE = 'closed'
     HIDDEN_STATE = 'hidden'
     REJECTED_STATE = 'rejected'
-    STATES = [OPEN_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
-    PUBLISHED_STATES = [OPEN_STATE, CLOSED_STATE]
+    STATES = [STOPPED_STATE, CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
+    PUBLISHED_STATES = [CLOSED_STATE]
+    VISIBLE_STATES = [CLOSED_STATE, REJECTED_STATE]
 
     belongs_to :parliament, inverse_of: :petitions, required: true
 
@@ -25,19 +26,21 @@ module Archived
     validates :background, length: { maximum: 300 }, allow_blank: true
     validates :additional_details, length: { maximum: 1000 }, allow_blank: true
     validates :state, presence: true, inclusion: STATES
-    validates :closed_at, presence: true, unless: :rejected?
+    validates :closed_at, presence: true, if: :closed?
 
     extend Searchable(:action, :background, :additional_details)
     include Browseable
 
     filter :parliament
 
-    facet :all, -> { by_most_signatures }
+    facet :all, -> { visible.by_most_signatures }
     facet :published, -> { for_state(PUBLISHED_STATES).by_most_signatures }
-    facet :open, -> { for_state(OPEN_STATE).by_most_signatures }
+    facet :stopped, -> { for_state(STOPPED_STATE).by_most_signatures }
     facet :closed, -> { for_state(CLOSED_STATE).by_most_signatures }
     facet :rejected, -> { for_state(REJECTED_STATE).by_most_signatures }
     facet :with_response, -> { with_response.by_most_signatures }
+    facet :debated, -> { debated.by_most_recent_debate_outcome }
+    facet :not_debated, -> { not_debated.by_most_recent_debate_outcome }
     facet :by_most_signatures, -> { by_most_signatures }
     facet :by_created_at, -> { by_created_at }
 
@@ -54,6 +57,10 @@ module Archived
         reorder(created_at: :asc)
       end
 
+      def by_most_recent_debate_outcome
+        reorder(debate_outcome_at: :desc, created_at: :desc)
+      end
+
       def by_most_signatures
         reorder(signature_count: :desc)
       end
@@ -61,10 +68,22 @@ module Archived
       def with_response
         where.not(government_response_at: nil)
       end
+
+      def debated
+        where(debate_state: 'debated')
+      end
+
+      def not_debated
+        where(debate_state: 'not_debated')
+      end
+
+      def visible
+        where(state: VISIBLE_STATES)
+      end
     end
 
-    def open?
-      state == OPEN_STATE
+    def stopped?
+      state == STOPPED_STATE
     end
 
     def closed?
@@ -73,6 +92,10 @@ module Archived
 
     def rejected?
       state == REJECTED_STATE
+    end
+
+    def hidden?
+      state == HIDDEN_STATE
     end
 
     def duration
@@ -101,6 +124,30 @@ module Archived
       signature_count >= parliament.threshold_for_response
     end
 
+    def signatures_by_constituency
+      if defined?(@_signatures_by_constituency)
+        @_signatures_by_constituency
+      else
+        if signatures_by_constituency?
+          @_signatures_by_constituency = calculate_signatures_by_constituency(super)
+        else
+          []
+        end
+      end
+    end
+
+    def signatures_by_country
+      if defined?(@_signatures_by_country)
+        @_signatures_by_country
+      else
+        if signatures_by_country?
+          @_signatures_by_country = calculate_signatures_by_country(super)
+        else
+          []
+        end
+      end
+    end
+
     private
 
     def calculate_petition_duration
@@ -114,6 +161,35 @@ module Archived
         12
       else
         Rational(closed_at - opened_at, 86400 * 30).to_f
+      end
+    end
+
+    def constituencies(external_ids)
+      Constituency.where(external_id: external_ids).order(:name)
+    end
+
+    def calculate_signatures_by_constituency(hash)
+      constituencies(hash.keys).map do |constituency|
+        {
+          name: constituency.name,
+          ons_code: constituency.ons_code,
+          mp: constituency.mp_name,
+          signature_count: hash[constituency.external_id]
+        }
+      end
+    end
+
+    def locations(codes)
+      Location.where(code: codes).order(:name)
+    end
+
+    def calculate_signatures_by_country(hash)
+      locations(hash.keys).map do |location|
+        {
+          name: location.name,
+          code: location.code,
+          signature_count: hash[location.code]
+        }
       end
     end
   end

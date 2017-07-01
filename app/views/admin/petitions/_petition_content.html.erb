@@ -16,10 +16,12 @@
   <% end %>
 <% end %>
 
-<p class="edit-petition-link">
-  <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition) %>
-</p>
- 
+<% unless @petition.archived? %>
+  <p class="edit-petition-link">
+    <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition) %>
+  </p>
+<% end %>
+
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>
   <p><%= rejection_reason(@petition.rejection.code) %></p>

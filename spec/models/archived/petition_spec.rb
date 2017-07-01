@@ -90,6 +90,29 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".visible" do
+    let!(:stopped_petition) { FactoryGirl.create(:archived_petition, :stopped) }
+    let!(:closed_petition) { FactoryGirl.create(:archived_petition, :closed) }
+    let!(:rejected_petition) { FactoryGirl.create(:archived_petition, :rejected) }
+    let!(:hidden_petition) { FactoryGirl.create(:archived_petition, :hidden) }
+
+    it "doesn't include stopped petitions" do
+      expect(described_class.visible).not_to include(stopped_petition)
+    end
+
+    it "includes closed petitions" do
+      expect(described_class.visible).to include(closed_petition)
+    end
+
+    it "includes rejected petitions" do
+      expect(described_class.visible).to include(rejected_petition)
+    end
+
+    it "doesn't include hidden petitions" do
+      expect(described_class.visible).not_to include(hidden_petition)
+    end
+  end
+
   describe "#action" do
     it "defaults to nil" do
       expect(petition.action).to be_nil
@@ -116,12 +139,12 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#state" do
-    it "defaults to 'open'" do
-      expect(petition.state).to eq("open")
+    it "defaults to 'closed'" do
+      expect(petition.state).to eq("closed")
     end
 
     it { is_expected.to validate_presence_of(:state) }
-    it { is_expected.to validate_inclusion_of(:state).in_array(%w[open closed rejected]) }
+    it { is_expected.to validate_inclusion_of(:state).in_array(%w[stopped closed rejected hidden]) }
   end
 
   describe "#opened_at" do
@@ -150,12 +173,12 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
-  describe "#open?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+  describe "#stopped?" do
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns true" do
-        expect(petition.open?).to eq(true)
+        expect(petition.stopped?).to eq(true)
       end
     end
 
@@ -163,7 +186,7 @@ RSpec.describe Archived::Petition, type: :model do
       subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
 
       it "returns false" do
-        expect(petition.open?).to eq(false)
+        expect(petition.stopped?).to eq(false)
       end
     end
 
@@ -171,14 +194,22 @@ RSpec.describe Archived::Petition, type: :model do
       subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
 
       it "returns false" do
-        expect(petition.open?).to eq(false)
+        expect(petition.stopped?).to eq(false)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.stopped?).to eq(false)
       end
     end
   end
 
   describe "#closed?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.closed?).to eq(false)
@@ -200,11 +231,19 @@ RSpec.describe Archived::Petition, type: :model do
         expect(petition.closed?).to eq(false)
       end
     end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.closed?).to eq(false)
+      end
+    end
   end
 
   describe "#rejected?" do
-    context "when petition is in an open state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :open) }
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.rejected?).to eq(false)
@@ -224,6 +263,48 @@ RSpec.describe Archived::Petition, type: :model do
 
       it "returns true" do
         expect(petition.rejected?).to eq(true)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.rejected?).to eq(false)
+      end
+    end
+  end
+
+  describe "#hidden?" do
+    context "when petition is in a stopped state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a closed state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a rejected state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(false)
+      end
+    end
+
+    context "when petition is in a hidden state" do
+      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+
+      it "returns false" do
+        expect(petition.hidden?).to eq(true)
       end
     end
   end
@@ -393,6 +474,78 @@ RSpec.describe Archived::Petition, type: :model do
       it "returns true" do
         expect(petition.threshold_for_debate_reached?).to eq(true)
       end
+    end
+  end
+
+  describe "#signatures_by_constituency" do
+    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_constituency: signatures_by_constituency) }
+
+    let(:signatures_by_constituency) do
+      { "3427" => 123, "3320" => 456 }
+    end
+
+    before do
+      FactoryGirl.create(:constituency, :coventry_north_east)
+      FactoryGirl.create(:constituency, :bethnal_green_and_bow)
+    end
+
+    it "returns an array of constituency signature details" do
+      expect(petition.signatures_by_constituency).to eq [
+        {
+          name: "Bethnal Green and Bow",
+          ons_code: "E14000555",
+          mp: "Rushanara Ali MP",
+          signature_count: 456
+        },
+        {
+          name: "Coventry North East",
+          ons_code: "E14000649",
+          mp: "Colleen Fletcher MP",
+          signature_count: 123
+        }
+      ]
+    end
+
+    it "only finds the constituencies once" do
+      expect(Constituency).to receive(:where).with(external_id: %w[3427 3320]).once.and_call_original
+
+      petition.signatures_by_constituency
+      petition.signatures_by_constituency
+    end
+  end
+
+  describe "#signatures_by_country" do
+    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_country: signatures_by_country) }
+
+    let(:signatures_by_country) do
+      { "GB" => 1234, "US" => 56 }
+    end
+
+    before do
+      FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+      FactoryGirl.create(:location, code: "US", name: "United States")
+    end
+
+    it "returns an array of country signature details" do
+      expect(petition.signatures_by_country).to eq [
+        {
+          name: "United Kingdom",
+          code: "GB",
+          signature_count: 1234
+        },
+        {
+          name: "United States",
+          code: "US",
+          signature_count: 56
+        }
+      ]
+    end
+
+    it "only finds the countries once" do
+      expect(Location).to receive(:where).with(code: %w[GB US]).once.and_call_original
+
+      petition.signatures_by_country
+      petition.signatures_by_country
     end
   end
 end

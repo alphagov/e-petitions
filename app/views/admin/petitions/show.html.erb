@@ -1,4 +1,7 @@
 <!-- Back to X list -->
+<% if @petition.archived? %>
+  <p class="flash-alert">This petition has been archived and cannot be edited</p>
+<% end %>
 
 <div class="grid-row">
 

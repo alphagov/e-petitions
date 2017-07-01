@@ -1334,6 +1334,19 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe ".unarchived" do
+    let!(:archived_petition) { FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago) }
+    let!(:unarchived_petition) { FactoryGirl.create(:closed_petition, archived_at: nil) }
+
+    it "includes unarchived petitions" do
+      expect(described_class.unarchived).to include(unarchived_petition)
+    end
+
+    it "excludes archived petitions" do
+      expect(described_class.unarchived).not_to include(archived_petition)
+    end
+  end
+
   describe "#update_signature_count!" do
     let!(:petition) { FactoryGirl.create(:open_petition, attributes) }
 
@@ -2305,6 +2318,24 @@ RSpec.describe Petition, type: :model do
 
         it "returns true" do
           expect(subject.closed_early_due_to_election?).to eq(true)
+        end
+      end
+    end
+
+    describe "#archived?" do
+      context "when a petition has not been copied to the archive" do
+        let(:petition) { FactoryGirl.create(:open_petition, archived_at: nil) }
+
+        it "returns false" do
+          expect(petition.archived?).to eq(false)
+        end
+      end
+
+      context "when a petition has been copied to the archive" do
+        let(:petition) { FactoryGirl.create(:open_petition, archived_at: 1.day.ago) }
+
+        it "returns true" do
+          expect(petition.archived?).to eq(true)
         end
       end
     end

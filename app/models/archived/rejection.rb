@@ -10,7 +10,11 @@ module Archived
     validates :details, length: { maximum: 4000 }, allow_blank: true
 
     after_create do
-      petition.update!(state: state_for_petition, rejected_at: Time.current)
+      if petition.rejected_at?
+        petition.update!(state: state_for_petition)
+      else
+        petition.update!(state: state_for_petition, rejected_at: Time.current)
+      end
     end
 
     def hide_petition?

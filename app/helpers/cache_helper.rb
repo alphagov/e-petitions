@@ -65,7 +65,7 @@ module CacheHelper
       end
 
       def petition
-        assigns['petition'] if petition_page?
+        assigns['petition'] if petition_page? || archived_petition_page?
       end
 
       def petition_page

@@ -4,7 +4,7 @@ class Archived::PetitionsController < ApplicationController
   respond_to :html, :json
   respond_to :csv, only: [:index]
 
-  before_action :redirect_to_index_page, unless: :valid_state?, only: [:index]
+  before_action :redirect_to_valid_state, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
@@ -28,6 +28,10 @@ class Archived::PetitionsController < ApplicationController
     params[:parliament].to_i
   end
 
+  def petition_id
+    params[:id].to_i
+  end
+
   def fetch_parliament
     if params.key?(:parliament)
       @parliament = Parliament.archived.find(parliament_id)
@@ -41,20 +45,34 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petition
-    @petition = Archived::Petition.find(params[:id])
+    @petition = Archived::Petition.visible.find(petition_id)
     @parliament = @petition.parliament
+
+    unless @parliament.archived?
+      redirect_to petition_url(petition_id)
+    end
   end
 
   def csv_filename
     "#{@petitions.scope}-petitions-#{@parliament.period}.csv"
   end
 
-  def redirect_to_index_page
-    redirect_to archived_petitions_url
+  def redirect_to_valid_state
+    if state_present? && !valid_state?
+      redirect_to archived_petitions_url(search_params(state: :all))
+    end
+  end
+
+  def state_present?
+    params[:state].present?
   end
 
   def valid_state?
-    params[:state] ? archived_petition_facets.include?(params[:state].to_sym) : true
+    archived_petition_facets.include?(params[:state].to_sym)
+  end
+
+  def search_params(overrides = {})
+    params.permit(:page, :parliament, :q, :state).merge(overrides)
   end
 
   def archived_petition_facets

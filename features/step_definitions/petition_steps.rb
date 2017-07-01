@@ -31,7 +31,11 @@ Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
   @petition = FactoryGirl.create(:not_debated_petition, action: action)
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
+Given(/^an archived petition "([^"]*)" with a negative debate outcome$/) do |action|
+  @petition = FactoryGirl.create(:archived_petition, :not_debated, action: action)
+end
+
+Given(/^a(n)? ?(archived|pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
   step "an #{state} petition \"#{petition_title}\""
   @petition.scheduled_debate_date = scheduled_debate_date.to_date
   @petition.save
@@ -42,8 +46,8 @@ Given(/^an archived petition "([^"]*)"$/) do |action|
   @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, action: action)
 end
 
-Given(/^a rejected archived petition exists with action: "(.*?)"$/) do |action|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action)
+Given(/^a (stopped|rejected|hidden) archived petition exists with action: "(.*?)"$/) do |state, action|
+  @petition = FactoryGirl.create(:archived_petition, state.to_sym, action: action)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
@@ -420,6 +424,15 @@ end
 Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
   @petition = FactoryGirl.create(:open_petition, action: petition_action)
   @email = FactoryGirl.create(:petition_email,
+    petition: @petition,
+    subject: "Committee to discuss #{petition_action}",
+    body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
+  )
+end
+
+Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |petition_action|
+  @petition = FactoryGirl.create(:archived_petition, action: petition_action)
+  @email = FactoryGirl.create(:archived_petition_email,
     petition: @petition,
     subject: "Committee to discuss #{petition_action}",
     body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"

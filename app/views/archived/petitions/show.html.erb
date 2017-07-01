@@ -1,118 +1,201 @@
-<div class="notification">
-  <span class="icon icon-warning-white"></span>
-  <p class="content">
-    This petition was submitted during the <%= @parliament.period %> <%= @parliament.government %> government
-  </p>
-
-  <p class="link">
-    <%= link_to "View other petitions from this government", archived_petitions_path(parliament: @parliament) %>
-  </p>
-</div>
-
-<h1>
-  <% if @petition.rejected? %>
-    <span class="heading-secondary">Rejected petition</span>
-  <% else %>
-    <span class="heading-secondary">Petition</span>
-  <% end %>
-  <%= @petition.action %>
-</h1>
-
-<% if @petition.background? %>
-  <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% if @petition.additional_details? %>
-    <details>
-      <summary><span class="summary">More details</span></summary>
-      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-    </details>
-  <% end %>
-<% else %>
-  <% if @petition.additional_details? %>
-    <details open="open">
-      <summary><span class="summary">More details</span></summary>
-      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-    </details>
-  <% end %>
-<% end %>
-
-<% if @petition.rejected? %>
-  <p class="flash-notice">This petition was rejected</p>
-
-  <h2>Why was this petition rejected?</h2>
-  <%= rejection_description(@petition.rejection.code) %>
-  <% if @petition.rejection.details? %>
-    <p><%= auto_link(simple_format(h(@petition.rejection.details))) %></p>
-  <% end %>
-  <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
-<% else %>
-  <% if @petition.closed_early_due_to_election? %>
-    <p class="flash-notice">
-      This petition closed early because of a General Election
-
-      <% if @parliament.dissolution_faq_url? %>
-        <span>Find out more on the <%= link_to 'Petitions Committee website', @parliament.dissolution_faq_url %></span>
-      <% end %>
+<%= cache_for :archived_petition do %>
+  <div class="notification">
+    <span class="icon icon-warning-white"></span>
+    <p class="content">
+      This petition was submitted during the <%= @parliament.period %> <%= @parliament.government %> government
     </p>
-  <% else %>
-    <p class="flash-notice">
-      This petition is closed
-      <span>This petition ran for <%= petition_duration_to_words(@petition.duration) %></span>
-    </p>
-  <% end %>
 
-  <div class="signature-count">
-    <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
-    <div class="signature-count-graph" aria-hidden="true">
-      <span class="signature-count-current" style="width: <%= archived_threshold_percentage(@petition) %>"></span>
-    </div>
-    <p class="signature-count-goal">
-      <%= number_with_delimiter(archived_threshold(@petition)) %>
+    <p class="link">
+      <%= link_to "View other petitions from this government", archived_petitions_path(parliament: @parliament) %>
     </p>
   </div>
 
-  <div class="about-petitions">
-    <% if government_response = @petition.government_response? %>
-      <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
-        <h2 id="response-threshold-heading">Government responded</h2>
-        <% if government_response.summary? %>
-          <blockquote class="pull-quote">
-            <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
-          </blockquote>
+  <h1>
+    <% if @petition.rejected? %>
+      <span class="heading-secondary">Rejected petition</span>
+    <% else %>
+      <span class="heading-secondary">Petition</span>
+    <% end %>
+    <%= @petition.action %>
+  </h1>
 
-          <% if government_response.details? %>
-            <% if reveal_government_response? %>
-              <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
-            <% else %>
-              <details>
-                <summary><span class="summary">Read the response in full</span></summary>
-                <div class="panel-indent panel-no-border">
-                  <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
-                </div>
-              </details>
+  <% if @petition.background? %>
+    <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
+    <% if @petition.additional_details? %>
+      <details>
+        <summary><span class="summary">More details</span></summary>
+        <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+      </details>
+    <% end %>
+  <% else %>
+    <% if @petition.additional_details? %>
+      <details open="open">
+        <summary><span class="summary">More details</span></summary>
+        <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+      </details>
+    <% end %>
+  <% end %>
+
+  <% if @petition.rejected? %>
+    <p class="flash-notice">This petition was rejected</p>
+
+    <h2>Why was this petition rejected?</h2>
+    <%= rejection_description(@petition.rejection.code) %>
+    <% if @petition.rejection.details? %>
+      <p><%= auto_link(simple_format(h(@petition.rejection.details))) %></p>
+    <% end %>
+    <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
+  <% else %>
+    <% if @petition.closed_early_due_to_election? %>
+      <p class="flash-notice">
+        This petition closed early because of a General Election
+
+        <% if @parliament.dissolution_faq_url? %>
+          <span>Find out more on the <%= link_to 'Petitions Committee website', @parliament.dissolution_faq_url %></span>
+        <% end %>
+      </p>
+    <% else %>
+      <p class="flash-notice">
+        This petition is closed
+        <span>This petition ran for <%= petition_duration_to_words(@petition.duration) %></span>
+      </p>
+    <% end %>
+
+    <div class="signature-count">
+      <p class="signature-count-number"><%= signature_count(:default, @petition.signature_count) %></p>
+      <div class="signature-count-graph" aria-hidden="true">
+        <span class="signature-count-current" style="width: <%= archived_threshold_percentage(@petition) %>"></span>
+      </div>
+      <p class="signature-count-goal">
+        <%= number_with_delimiter(archived_threshold(@petition)) %>
+      </p>
+    </div>
+
+    <div class="about-petitions">
+      <% if debate_outcome = @petition.debate_outcome %>
+        <section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+          <% if debate_outcome.debated? %>
+            <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
+            <section class="debate-outcome">
+              <p class="secondary">This topic was debated on <%= short_date_format(debate_outcome.debated_on) %></p>
+              <% if debate_outcome.video_url? %>
+                <%= link_to debate_outcome.video_url, rel: 'external' do %>
+                  <span class="debate-video graphic graphic-house-of-commons" aria-hidden>
+                    <%= debate_outcome_image(debate_outcome) %>
+                    <span class="play-button icon icon-play-white" aria-hidden></span>
+                  </span>
+                <% end %>
+              <% end %>
+              <% if debate_outcome.video_url? || debate_outcome.transcript_url? %>
+                <p>
+                <% if debate_outcome.video_url? %>
+                  <%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %>
+                <% end %>
+                <% if debate_outcome.video_url? && debate_outcome.transcript_url? %>
+                  &bull;
+                <% end %>
+                <% if debate_outcome.transcript_url? %>
+                  <%= link_to 'Read the transcript', debate_outcome.transcript_url, rel: 'external' %>
+                <% end %>
+                </p>
+              <% end %>
+              <% if debate_outcome.overview? %>
+                <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
+              <% end %>
+            </section>
+          <% else %>
+            <h2 id="debate-threshold-heading">The Petitions Committee decided not to debate this petition</h2>
+            <% if debate_outcome.overview? %>
+              <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
             <% end %>
           <% end %>
+        </section>
+      <% elsif @petition.scheduled_debate_date? %>
+        <section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+          <% if @petition.scheduled_debate_date.past? %>
+            <h2 id="debate-threshold-heading">Parliament debated this topic</h2>
+            <p class="about-item-scheduled-debate-date">
+              Parliament debated this petition on <%= short_date_format(@petition.scheduled_debate_date) %>
+            </p>
+            <p>
+              You'll be able to watch the debate online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+            </p>
+            <p class="secondary"><%= waiting_for_in_words(@petition.scheduled_debate_date) %> for Parliament to publish the debate outcome</p>
+          <% else %>
+            <h2 id="debate-threshold-heading">Parliament will debate this petition</h2>
+            <p class="about-item-scheduled-debate-date">
+              Parliament will debate this petition on <%= short_date_format(@petition.scheduled_debate_date) %>.
+            </p>
+            <p>
+              You'll be able to watch online at <a href="http://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+            </p>
+          <% end %>
+        </section>
+      <% elsif @petition.debate_threshold_reached_at? %>
+        <section class="about-item about-item-count-debate" id="debate-threshold" aria-labelledby="debate-threshold-heading">
+          <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
+          <p>Parliament considers all petitions that get more than <%= @parliament.formatted_threshold_for_debate %> signatures for a debate</p>
+          <p class="secondary"><%= waiting_for_in_words(@petition.debate_threshold_reached_at) %> for a debate date</p>
+        </section>
+      <% end %>
 
-        <% else %>
-          <%= auto_link(simple_format(h(government_response.details), class: 'response'), html: { rel: 'nofollow' }) %>
+      <% if government_response = @petition.government_response? %>
+        <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
+          <h2 id="response-threshold-heading">Government responded</h2>
+          <% if government_response.summary? %>
+            <blockquote class="pull-quote">
+              <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>
+            </blockquote>
+
+            <% if government_response.details? %>
+              <% if reveal_government_response? %>
+                <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+              <% else %>
+                <details>
+                  <summary><span class="summary">Read the response in full</span></summary>
+                  <div class="panel-indent panel-no-border">
+                    <%= auto_link(simple_format(h(government_response.details)), html: { rel: 'nofollow' }) %>
+                  </div>
+                </details>
+              <% end %>
+            <% end %>
+
+          <% else %>
+            <%= auto_link(simple_format(h(government_response.details), class: 'response'), html: { rel: 'nofollow' }) %>
+          <% end %>
+        </section>
+      <% end %>
+    </div>
+
+    <% unless @petition.emails.empty? %>
+      <section class="about-item about-item-other-business" id="other-business" aria-labelledby="other-business-heading">
+        <h2 id="other-business-heading">Other parliamentary business</h2>
+
+        <% @petition.emails.each do |email| %>
+          <details>
+            <summary><span class="summary"><%= email.subject %></span></summary>
+            <div class="panel-indent panel-no-border">
+              <%= auto_link(simple_format(h(email.body)), html: { rel: 'nofollow' }) %>
+            </div>
+          </details>
         <% end %>
       </section>
     <% end %>
-  </div>
-
-<% end %>
-
-<ul class="petition-meta">
-  <% if @petition.rejected? %>
-    <li>
-      <span class="label">Date submitted</span> <%= short_date_format @petition.created_at %>
-    </li>
-  <% else %>
-    <li>
-      <span class="label">Date closed</span> <%= short_date_format @petition.closed_at %>
-    </li>
   <% end %>
 
-  <li class="meta-json">
-    <span class="note"><%= link_to "Get petition data (json format)", archived_petition_path(@petition, :json) %></span>
-  </li>
-</ul>
+  <ul class="petition-meta">
+    <% if @petition.rejected? %>
+      <li>
+        <span class="label">Date submitted</span> <%= short_date_format @petition.created_at %>
+      </li>
+    <% else %>
+      <li>
+        <span class="label">Date closed</span> <%= short_date_format @petition.closed_at %>
+      </li>
+    <% end %>
+
+    <li class="meta-json">
+      <span class="note"><%= link_to "Get petition data (json format)", archived_petition_path(@petition, :json) %></span>
+    </li>
+  </ul>
+<% end %>

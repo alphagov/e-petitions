@@ -89,6 +89,8 @@ class Petition < ActiveRecord::Base
     delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
   end
 
+  alias_attribute :opened_at, :open_at
+
   class << self
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)
@@ -338,6 +340,10 @@ class Petition < ActiveRecord::Base
 
     def mark_petitions_as_debated!(date = Date.current)
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
+    end
+
+    def unarchived
+      where(archived_at: nil)
     end
 
     private
@@ -598,6 +604,10 @@ class Petition < ActiveRecord::Base
 
   def published?
     state.in?(PUBLISHED_STATES)
+  end
+
+  def archived?
+    archived_at?
   end
 
   def can_have_debate_added?
