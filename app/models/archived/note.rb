@@ -1,3 +1,5 @@
+require_dependency 'archived'
+
 module Archived
   class Note < ActiveRecord::Base
     belongs_to :petition, touch: true

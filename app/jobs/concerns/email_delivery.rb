@@ -67,7 +67,14 @@ module EmailDelivery
   end
 
   def mailer
-    PetitionMailer
+    case petition
+    when Archived::Petition
+      Archived::PetitionMailer
+    when Petition
+      PetitionMailer
+    else
+      raise ArgumentError, "Unknown petition type: #{petition.class}"
+    end
   end
 
   def create_email

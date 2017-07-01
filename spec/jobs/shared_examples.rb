@@ -7,7 +7,6 @@ RSpec.shared_examples_for "job to enqueue signatory mailing jobs" do
   end
 
   describe '.run_later_tonight' do
-    let(:petition) { FactoryGirl.create(:open_petition) }
     let(:petition_gid) { { "_aj_globalid" => petition.to_global_id.to_s } }
 
     let(:queue_size) { enqueued_jobs.size }

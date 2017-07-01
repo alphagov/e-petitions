@@ -1,4 +1,5 @@
 require 'textacular/searchable'
+require_dependency 'archived'
 
 module Archived
   class Petition < ActiveRecord::Base
@@ -77,6 +78,10 @@ module Archived
         where(debate_state: 'not_debated')
       end
 
+      def debate_scheduled
+        where.not(scheduled_debate_date: nil)
+      end
+
       def visible
         where(state: VISIBLE_STATES)
       end
@@ -145,6 +150,22 @@ module Archived
         else
           []
         end
+      end
+    end
+
+    def get_email_requested_at_for(name)
+      self["email_requested_for_#{name}_at"]
+    end
+
+    def set_email_requested_at_for(name, to: Time.current)
+      update_column("email_requested_for_#{name}_at", to)
+    end
+
+    def signatures_to_email_for(name)
+      if timestamp = get_email_requested_at_for(name)
+        signatures.need_emailing_for(name, since: timestamp)
+      else
+        raise ArgumentError, "The #{name} email has not been requested for petition #{id}"
       end
     end
 

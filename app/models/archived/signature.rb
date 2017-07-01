@@ -1,3 +1,5 @@
+require_dependency 'archived'
+
 module Archived
   class Signature < ActiveRecord::Base
     PENDING_STATE = 'pending'
@@ -27,8 +29,41 @@ module Archived
     validates :name, presence: true, length: { maximum: 255 }
     validates :state, presence: true, inclusion: { in: STATES }
 
-    def self.batch(id = 0, limit: 1000)
-      where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)
+    class << self
+      def batch(id = 0, limit: 1000)
+        where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)
+      end
+
+      def column_name_for(timestamp)
+        TIMESTAMPS.fetch(timestamp)
+      rescue
+        raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
+      end
+
+      def for_timestamp(timestamp, since:)
+        column = arel_table[column_name_for(timestamp)]
+        where(column.eq(nil).or(column.lt(since)))
+      end
+
+      def need_emailing_for(timestamp, since:)
+        validated.subscribed.for_timestamp(timestamp, since: since)
+      end
+
+      def subscribed
+        where(notify_by_email: true)
+      end
+
+      def validated
+        where(state: VALIDATED_STATE)
+      end
+    end
+
+    def get_email_sent_at_for(timestamp)
+      self[column_name_for(timestamp)]
+    end
+
+    def set_email_sent_at_for(timestamp, to: Time.current)
+      update_column(column_name_for(timestamp), to)
     end
 
     def pending?
@@ -67,6 +102,12 @@ module Archived
 
     def invalid_unsubscribe_token?
       errors[:base].include?("Invalid Unsubscribe Token")
+    end
+
+    private
+
+    def column_name_for(timestamp)
+      self.class.column_name_for(timestamp)
     end
   end
 end

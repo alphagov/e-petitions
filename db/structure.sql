@@ -242,7 +242,11 @@ CREATE TABLE archived_petitions (
     stopped_at timestamp without time zone,
     special_consideration boolean,
     signatures_by_constituency jsonb,
-    signatures_by_country jsonb
+    signatures_by_country jsonb,
+    email_requested_for_government_response_at timestamp without time zone,
+    email_requested_for_debate_scheduled_at timestamp without time zone,
+    email_requested_for_debate_outcome_at timestamp without time zone,
+    email_requested_for_petition_email_at timestamp without time zone
 );
 
 
@@ -2481,4 +2485,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170626123257');
 INSERT INTO schema_migrations (version) VALUES ('20170626130418');
 
 INSERT INTO schema_migrations (version) VALUES ('20170627125046');
+
+INSERT INTO schema_migrations (version) VALUES ('20170629144129');
 

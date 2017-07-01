@@ -548,4 +548,119 @@ RSpec.describe Archived::Petition, type: :model do
       petition.signatures_by_country
     end
   end
+
+  describe "#get_email_requested_at_for" do
+    let(:requested_at) { Time.current }
+
+    %w[government_response debate_scheduled debate_outcome petition_email].each do |timestamp|
+      context "when nothing has been requested for '#{timestamp}'" do
+        let(:petition) { FactoryGirl.create(:archived_petition, "email_requested_for_#{timestamp}_at": nil) }
+
+        it "returns nil" do
+          expect(petition.get_email_requested_at_for(timestamp)).to be_nil
+        end
+      end
+
+      context "when an email has been requested for '#{timestamp}'" do
+        let(:petition) { FactoryGirl.create(:archived_petition, "email_requested_for_#{timestamp}_at": requested_at) }
+
+        it "returns the timestamp" do
+          expect(petition.get_email_requested_at_for(timestamp)).to be_usec_precise_with(requested_at)
+        end
+      end
+    end
+  end
+
+  describe '#set_email_requested_at_for' do
+    let(:petition) { FactoryGirl.create(:archived_petition) }
+    let(:requested_at) { Time.current }
+
+    %w[government_response debate_scheduled debate_outcome petition_email].each do |timestamp|
+      it "sets the email requested timestamp for '#{timestamp}'" do
+        expect {
+          petition.set_email_requested_at_for(timestamp, to: requested_at)
+        }.to change {
+          petition[:"email_requested_for_#{timestamp}_at"]
+        }.from(nil).to(be_usec_precise_with(requested_at))
+      end
+    end
+  end
+
+  describe "#signatures_to_email_for" do
+    let!(:petition) { FactoryGirl.create(:archived_petition) }
+    let!(:creator) { FactoryGirl.create(:archived_signature, petition: petition, creator: true) }
+    let!(:pending) { FactoryGirl.create(:archived_signature, petition: petition, state: "pending") }
+    let!(:fraudulent) { FactoryGirl.create(:archived_signature, petition: petition, state: "fraudulent") }
+    let!(:invalidated) { FactoryGirl.create(:archived_signature, petition: petition, state: "invalidated") }
+    let!(:subscribed) { FactoryGirl.create(:archived_signature, petition: petition) }
+    let!(:unsubscribed) { FactoryGirl.create(:archived_signature, petition: petition, notify_by_email: false) }
+
+    let(:requested_at) { 6.days.ago }
+
+    %w[government_response debate_scheduled debate_outcome petition_email].each do |timestamp|
+      context "when the email requested timestamp for '#{timestamp}' is not set" do
+        it "raises an ArgumentError" do
+          expect {
+            petition.signatures_to_email_for(timestamp)
+          }.to raise_error(ArgumentError, /#{timestamp} email has not been requested/)
+        end
+      end
+
+      context "when the email requested timestamp for '#{timestamp}' is set" do
+        before do
+          petition.set_email_requested_at_for(timestamp, to: requested_at)
+        end
+
+        it "includes subscribed signatures" do
+          expect(petition.signatures_to_email_for(timestamp)).to match_array([creator, subscribed])
+        end
+
+        it "does not include unsubscribed signatures" do
+          expect(petition.signatures_to_email_for(timestamp)).not_to include(unsubscribed)
+        end
+
+        it "does not include pending signatures" do
+          expect(petition.signatures_to_email_for(timestamp)).not_to include(pending)
+        end
+
+        it "does not include fraudulent signatures" do
+          expect(petition.signatures_to_email_for(timestamp)).not_to include(fraudulent)
+        end
+
+        it "does not include invalidated signatures" do
+          expect(petition.signatures_to_email_for(timestamp)).not_to include(invalidated)
+        end
+
+        context "and the email sent timestamp for '#{timestamp}' is before the requested timestamp" do
+          before do
+            subscribed.set_email_sent_at_for(timestamp, to: requested_at - 1.day)
+          end
+
+          it "includes the signature" do
+            expect(petition.signatures_to_email_for(timestamp)).to include(subscribed)
+          end
+        end
+
+        context "and the email sent timestamp for '#{timestamp}' is the same as the requested timestamp" do
+          before do
+            subscribed.set_email_sent_at_for(timestamp, to: requested_at)
+          end
+
+          it "does not include the signature" do
+            expect(petition.signatures_to_email_for(timestamp)).not_to include(subscribed)
+          end
+        end
+
+        context "and the email sent timestamp for '#{timestamp}' is after as the requested timestamp" do
+          before do
+            subscribed.set_email_sent_at_for(timestamp, to: requested_at + 1.day)
+          end
+
+          it "does not include the signature" do
+            expect(petition.signatures_to_email_for(timestamp)).not_to include(subscribed)
+          end
+        end
+      end
+    end
+  end
 end

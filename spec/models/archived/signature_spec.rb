@@ -65,6 +65,131 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.not_to allow_values("unknown", "").for(:state) }
   end
 
+
+  describe ".need_emailing_for" do
+    let!(:petition) { FactoryGirl.create(:archived_petition) }
+    let!(:creator) { FactoryGirl.create(:archived_signature, petition: petition, creator: true) }
+    let!(:pending) { FactoryGirl.create(:archived_signature, petition: petition, state: "pending") }
+    let!(:fraudulent) { FactoryGirl.create(:archived_signature, petition: petition, state: "fraudulent") }
+    let!(:invalidated) { FactoryGirl.create(:archived_signature, petition: petition, state: "invalidated") }
+    let!(:subscribed) { FactoryGirl.create(:archived_signature, petition: petition) }
+    let!(:unsubscribed) { FactoryGirl.create(:archived_signature, petition: petition, notify_by_email: false) }
+
+    let(:requested_at) { 1.hour.ago }
+
+    Archived::Signature::TIMESTAMPS.each do |timestamp, column|
+      context "when the email sent timestamp for '#{timestamp}' is not set" do
+        subject(:signatures) { described_class.need_emailing_for(timestamp, since: requested_at) }
+
+        it "includes subscribed signatures" do
+          expect(signatures).to match_array([creator, subscribed])
+        end
+
+        it "does not include unsubscribed signatures" do
+          expect(signatures).not_to include(unsubscribed)
+        end
+
+        it "does not include pending signatures" do
+          expect(signatures).not_to include(pending)
+        end
+
+        it "does not include fraudulent signatures" do
+          expect(signatures).not_to include(fraudulent)
+        end
+
+        it "does not include invalidated signatures" do
+          expect(signatures).not_to include(invalidated)
+        end
+      end
+
+      context "when the email sent timestamp for '#{column}' is set to before the requested timestamp" do
+        subject(:signatures) { described_class.need_emailing_for(timestamp, since: requested_at) }
+
+        before do
+          subscribed.update_column(column, requested_at - 1.day)
+        end
+
+        it "includes the signature" do
+          expect(signatures).to include(subscribed)
+        end
+      end
+
+      context "when the email sent timestamp for '#{column}' is set to the same as the requested timestamp" do
+        subject(:signatures) { described_class.need_emailing_for(timestamp, since: requested_at) }
+
+        before do
+          subscribed.update_column(column, requested_at)
+        end
+
+        it "does not include the signature" do
+          expect(signatures).not_to include(subscribed)
+        end
+      end
+
+      context "when the email sent timestamp for '#{column}' is set to after as the requested timestamp" do
+        subject(:signatures) { described_class.need_emailing_for(timestamp, since: requested_at) }
+
+        before do
+          subscribed.update_column(column, requested_at + 1.day)
+        end
+
+        it "does not include the signature" do
+          expect(signatures).not_to include(subscribed)
+        end
+      end
+    end
+  end
+
+  describe '#get_email_sent_at_for' do
+    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:sent_at) { 6.days.ago }
+
+    Archived::Signature::TIMESTAMPS.each do |timestamp, column|
+      context "when the email sent timestamp for '#{timestamp}' is not set" do
+        it "returns nil" do
+          expect(signature.get_email_sent_at_for(timestamp)).to be_nil
+        end
+      end
+
+      context "when the email sent timestamp for '#{timestamp}' is set" do
+        before do
+          signature.update_column(column, sent_at)
+        end
+
+        it "returns the stored timestamp" do
+          expect(signature.get_email_sent_at_for(timestamp)).to be_usec_precise_with(sent_at)
+        end
+      end
+    end
+  end
+
+  describe '#set_email_sent_at_for' do
+    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:sent_at) { 6.days.ago }
+
+    Archived::Signature::TIMESTAMPS.each do |timestamp, column|
+      context "when a time is supplied for the email sent timestamp '#{timestamp}'" do
+        it "sets the column to the supplied time" do
+          expect {
+            signature.set_email_sent_at_for(timestamp, to: sent_at)
+          }.to change {
+            signature.reload[column]
+          }.from(nil).to(be_usec_precise_with(sent_at))
+        end
+      end
+
+      context "when a time is not supplied for the email sent timestamp '#{timestamp}'" do
+        it "sets the column to the current time" do
+          expect {
+            signature.set_email_sent_at_for(timestamp)
+          }.to change {
+            signature.reload[column]
+          }.from(nil).to(be_within(1.second).of(Time.current))
+        end
+      end
+    end
+  end
+
   describe "#pending?" do
     context "when the signature has a state of 'pending'" do
       let(:signature) { FactoryGirl.build(:archived_signature, state: "pending") }

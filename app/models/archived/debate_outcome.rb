@@ -1,3 +1,5 @@
+require_dependency 'archived'
+
 module Archived
   class DebateOutcome < ActiveRecord::Base
     # By default we want the user to upload a '2x' style image, and we can then
