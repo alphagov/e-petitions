@@ -29,6 +29,8 @@ module Archived
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, if: :closed?
 
+    before_save :update_debate_state, if: :scheduled_debate_date_changed?
+
     extend Searchable(:action, :background, :additional_details)
     include Browseable
 
@@ -84,6 +86,24 @@ module Archived
 
       def visible
         where(state: VISIBLE_STATES)
+      end
+
+      def in_need_of_marking_as_debated(date = Date.current)
+        where(scheduled_debate_state.and(debate_date_in_the_past(date)))
+      end
+
+      def mark_petitions_as_debated!(date = Date.current)
+        in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
+      end
+
+      private
+
+      def debate_date_in_the_past(date)
+        arel_table[:scheduled_debate_date].lt(date)
+      end
+
+      def scheduled_debate_state
+        arel_table[:debate_state].eq('scheduled')
       end
     end
 
@@ -169,7 +189,19 @@ module Archived
       end
     end
 
+    def update_debate_state
+      self.debate_state = evaluate_debate_state
+    end
+
     private
+
+    def evaluate_debate_state
+      if scheduled_debate_date?
+        scheduled_debate_date > Date.current ? 'scheduled' : 'debated'
+      else
+        'awaiting'
+      end
+    end
 
     def calculate_petition_duration
       if opened_at + 3.months == closed_at
