@@ -16,7 +16,7 @@
   <% end %>
 <% end %>
 
-<% unless @petition.archived? %>
+<% unless @petition.editing_disabled? %>
   <p class="edit-petition-link">
     <%= link_to 'Edit petition', admin_petition_petition_details_path(@petition) %>
   </p>
