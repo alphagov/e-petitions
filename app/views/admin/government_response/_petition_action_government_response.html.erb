@@ -3,19 +3,19 @@
   <%= form_row :for => [f.object, :summary] do %>
     <%= f.label :summary, 'Summary quote', class: 'form-label' %>
     <%= error_messages_for_field f.object, :summary %>
-    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, data: { max_length: 200 }, class: 'form-control', disabled: @petition.archived? %>
+    <%= f.text_area :summary, rows: 3, cols: 70, tabindex: increment, data: { max_length: 200 }, class: 'form-control', disabled: @petition.editing_disabled? %>
     <p class="character-count">200 characters max</p>
   <% end %>
 
   <%= form_row :for => [f.object, :details] do %>
     <%= f.label :details, 'Response in full', class: 'form-label' %>
     <%= error_messages_for_field f.object, :details %>
-    <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, class: 'form-control', disabled: @petition.archived? %>
+    <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
   <% end %>
 
-  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.archived?) %>
+  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
 
-  <% if @petition.archived? %>
+  <% if @petition.editing_disabled? %>
     <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
   <% else %>
     <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>

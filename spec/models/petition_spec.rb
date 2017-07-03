@@ -2322,6 +2322,32 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    describe "#archiving?" do
+      context "when a petition has not started archiving" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
+
+        it "returns false" do
+          expect(petition.archiving?).to eq(false)
+        end
+      end
+
+      context "when a petition has started archiving, but not finished" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
+
+        it "returns true" do
+          expect(petition.archiving?).to eq(true)
+        end
+      end
+
+      context "when a petition has finished archiving" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
+
+        it "returns false" do
+          expect(petition.archiving?).to eq(false)
+        end
+      end
+    end
+
     describe "#archived?" do
       context "when a petition has not been copied to the archive" do
         let(:petition) { FactoryGirl.create(:open_petition, archived_at: nil) }
@@ -2336,6 +2362,32 @@ RSpec.describe Petition, type: :model do
 
         it "returns true" do
           expect(petition.archived?).to eq(true)
+        end
+      end
+    end
+
+    describe "#editing_disabled?" do
+      context "when a petition has not started archiving" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
+
+        it "returns false" do
+          expect(petition.editing_disabled?).to eq(false)
+        end
+      end
+
+      context "when a petition has started archiving, but not finished" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
+
+        it "returns true" do
+          expect(petition.editing_disabled?).to eq(true)
+        end
+      end
+
+      context "when a petition has finished archiving" do
+        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
+
+        it "returns true" do
+          expect(petition.editing_disabled?).to eq(true)
         end
       end
     end

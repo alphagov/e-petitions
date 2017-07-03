@@ -606,8 +606,16 @@ class Petition < ActiveRecord::Base
     state.in?(PUBLISHED_STATES)
   end
 
+  def archiving?
+    archiving_started_at? && !archived_at?
+  end
+
   def archived?
     archived_at?
+  end
+
+  def editing_disabled?
+    archiving_started_at? || archived_at?
   end
 
   def can_have_debate_added?

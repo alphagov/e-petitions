@@ -1,5 +1,7 @@
 <!-- Back to X list -->
-<% if @petition.archived? %>
+<% if @petition.archiving? %>
+  <p class="flash-alert">This petition is being archived and cannot be edited</p>
+<% elsif @petition.archived? %>
   <p class="flash-alert">This petition has been archived and cannot be edited</p>
 <% end %>
 

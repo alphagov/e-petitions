@@ -859,7 +859,8 @@ CREATE TABLE petitions (
     debate_state character varying(30) DEFAULT 'pending'::character varying,
     stopped_at timestamp without time zone,
     special_consideration boolean,
-    archived_at timestamp without time zone
+    archived_at timestamp without time zone,
+    archiving_started_at timestamp without time zone
 );
 
 
@@ -2487,4 +2488,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170626130418');
 INSERT INTO schema_migrations (version) VALUES ('20170627125046');
 
 INSERT INTO schema_migrations (version) VALUES ('20170629144129');
+
+INSERT INTO schema_migrations (version) VALUES ('20170703100952');
 

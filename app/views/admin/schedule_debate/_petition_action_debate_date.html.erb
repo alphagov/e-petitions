@@ -3,12 +3,12 @@
   <%= form_row :for => [f.object, :scheduled_debate_date] do %>
     <%= f.label :scheduled_debate_date, class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :debated_on %>
-    <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control', disabled: @petition.archived? %>
+    <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
   <% end %>
 
-  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.archived?) %>
+  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
 
-  <% if @petition.archived? %>
+  <% if @petition.editing_disabled? %>
     <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
   <% else %>
     <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>

@@ -35,6 +35,10 @@ RSpec.describe ArchivePetitionJob, type: :job do
     expect(enqueued_jobs).to include(archive_signatures_job)
   end
 
+  it "updates the archiving_started_at timestamp" do
+    expect(petition.archiving_started_at).not_to be_nil
+  end
+
   context "with a closed petition" do
     let(:petition) do
       FactoryGirl.create(
