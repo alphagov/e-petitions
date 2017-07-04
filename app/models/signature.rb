@@ -91,7 +91,7 @@ class Signature < ActiveRecord::Base
   end
 
   def self.batch(id = 0, limit: 1000)
-    where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)
+    where(arel_table[:id].gt(id)).order(id: :asc).limit(limit)
   end
 
   def self.fraudulent_domains
