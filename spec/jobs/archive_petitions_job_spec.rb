@@ -30,6 +30,22 @@ RSpec.describe ArchivePetitionsJob, type: :job do
     }.from([]).to([archive_petition_job])
   end
 
+  it "updates the archiving_started_at timestamp" do
+    petition = FactoryGirl.create(:closed_petition)
+
+    archive_petition_job = {
+      job: ArchivePetitionJob,
+      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+      queue: "high_priority"
+    }
+
+    expect {
+      described_class.perform_now
+    }.to change {
+      petition.reload.archiving_started_at
+    }.from(nil).to(be_within(1.second).of(Time.current))
+  end
+
   it "doesn't enqueue a job for a petition that's already archived" do
     FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
 

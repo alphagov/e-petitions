@@ -103,7 +103,6 @@ class ArchivePetitionJob < ApplicationJob
         end
       end
 
-      petition.update_column(:archiving_started_at, Time.current)
       ArchiveSignaturesJob.perform_later(petition, archived_petition)
     end
   end

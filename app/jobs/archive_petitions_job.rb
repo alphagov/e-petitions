@@ -6,6 +6,7 @@ class ArchivePetitionsJob < ApplicationJob
       next if petition.archived?
 
       ArchivePetitionJob.perform_later(petition)
+      petition.update_column(:archiving_started_at, Time.current)
     end
   end
 end
