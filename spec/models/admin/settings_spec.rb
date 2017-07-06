@@ -60,8 +60,8 @@ RSpec.describe Admin::Settings, type: :model do
       described_class.new(petition_tags: " Tag 1\r\nTag 2\r\n")
     end
 
-    it "normalizes line endings and strips whitespace" do
-      expect(subject.petition_tags).to eq("Tag 1\nTag 2")
+    it "normalizes line endings, downcases and strips whitespace" do
+      expect(subject.petition_tags).to eq("tag 1\ntag 2")
     end
   end
 
@@ -70,8 +70,8 @@ RSpec.describe Admin::Settings, type: :model do
       described_class.create!(petition_tags: allowed_petition_tags)
     end
 
-    let(:tag_1) { "Tag 1" }
-    let(:tag_2) { "Tag 2" }
+    let(:tag_1) { "tag 1" }
+    let(:tag_2) { "tag 2" }
 
     context "when there is extra whitespace" do
       let :allowed_petition_tags do

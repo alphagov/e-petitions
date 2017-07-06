@@ -7,7 +7,7 @@ module Admin
 
     def petition_tags=(value)
       @allowed_petition_tags = nil
-      super(normalize_lines(value))
+      super(normalize_lines(value.downcase))
     end
 
     def allowed_petition_tags(for_comparison: false)
@@ -18,7 +18,7 @@ module Admin
 
     def petition_tags_map(tags=petition_tags, for_comparison: false)
       tags_map = strip_blank_lines(strip_comments(tags)).map(&:strip)
-      for_comparison ? tags_map.map(&:downcase) : tags_map
+      for_comparison ? tags_map : tags_map.map { |tag| tag.humanize(capitalize: false) }
     end
 
     def duplicate_tags_not_allowed

@@ -14,15 +14,15 @@ module Taggable
     end
 
     def with_any_tags
-      where.not("tags = '{}'")
+      where('tags && ARRAY[?]::varchar[]', all_tags)
     end
 
     def with_all_tags(tags)
-      where("array_lowercase(tags) @> ARRAY[?]::varchar[]", downcase_tags(tags))
+      where("tags @> ARRAY[?]::varchar[]", tags)
     end
 
     def with_tag(tag)
-      where("'#{tag}' = ANY (array_lowercase(tags))")
+      where("'{#{tag.downcase}}' <@ (tags)")
     end
 
     def all_tags(options={}, &block)
