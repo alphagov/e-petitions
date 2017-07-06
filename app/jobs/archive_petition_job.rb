@@ -104,6 +104,7 @@ class ArchivePetitionJob < ApplicationJob
       end
 
       ArchiveSignaturesJob.perform_later(petition, archived_petition)
+      MarkPetitionAsArchivedJob.perform_later(petition, archived_petition)
     end
   end
 
