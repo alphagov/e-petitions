@@ -993,7 +993,8 @@ CREATE TABLE signatures (
     debate_scheduled_email_at timestamp without time zone,
     debate_outcome_email_at timestamp without time zone,
     petition_email_at timestamp without time zone,
-    uuid uuid
+    uuid uuid,
+    archived_at timestamp without time zone
 );
 
 
@@ -2490,4 +2491,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170627125046');
 INSERT INTO schema_migrations (version) VALUES ('20170629144129');
 
 INSERT INTO schema_migrations (version) VALUES ('20170703100952');
+
+INSERT INTO schema_migrations (version) VALUES ('20170710090730');
 

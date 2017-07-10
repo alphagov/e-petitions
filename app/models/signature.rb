@@ -63,6 +63,7 @@ class Signature < ActiveRecord::Base
   scope :for_ip, ->(ip) { where(ip_address: ip) }
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
+  scope :unarchived, -> { where(archived_at: nil) }
 
   def self.for_invalidating
     where(state: [PENDING_STATE, VALIDATED_STATE])
