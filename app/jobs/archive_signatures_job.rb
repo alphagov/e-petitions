@@ -12,7 +12,8 @@ class ArchiveSignaturesJob < ApplicationJob
     Appsignal.without_instrumentation do
       petition.signatures.unarchived.find_each do |signature|
         signature.transaction do
-          archived_signature = archived_petition.signatures.build do |s|
+          archived_signature = Archived::Signature.new do |s|
+            s.petition_id = signature.petition_id
             s.uuid = signature.uuid
             s.state = signature.state
             s.number = signature.number
