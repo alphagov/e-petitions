@@ -88,4 +88,24 @@ RSpec.describe HomeHelper, type: :helper do
       end
     end
   end
+
+  describe "#any_actioned_petitions?" do
+    let!(:pending_petition) { FactoryGirl.create :pending_petition }
+    let!(:hidden_petition) { FactoryGirl.create :hidden_petition }
+    let!(:open_petition) { FactoryGirl.create :open_petition }
+
+    describe "when there is an actioned petition" do
+      let!(:responded_petition) { FactoryGirl.create :responded_petition }
+
+      it "returns true" do
+        expect(helper.any_actioned_petitions?).to eq true
+      end
+    end
+
+    describe "when there are no actioned petitions" do
+      it "returns false" do
+        expect(helper.any_actioned_petitions?).to eq false
+      end
+    end
+  end
 end
