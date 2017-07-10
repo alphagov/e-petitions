@@ -13,18 +13,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         { "_aj_globalid" => "gid://epets/Petition/#{petition.id}" },
         { "_aj_globalid" => "gid://epets/Archived::Petition/#{petition.id}" }
       ],
-      queue: "high_priority"
-    }
-  end
-
-  let(:mark_petition_as_archived_job) do
-    {
-      job: MarkPetitionAsArchivedJob,
-      args: [
-        { "_aj_globalid" => "gid://epets/Petition/#{petition.id}" },
-        { "_aj_globalid" => "gid://epets/Archived::Petition/#{petition.id}" }
-      ],
-      queue: "high_priority"
+      queue: "low_priority"
     }
   end
 
@@ -44,10 +33,6 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   it "enqueues an ArchiveSignaturesJob" do
     expect(enqueued_jobs).to include(archive_signatures_job)
-  end
-
-  it "enqueues an MarkPetitionAsArchivedJob" do
-    expect(enqueued_jobs).to include(mark_petition_as_archived_job)
   end
 
   context "with a closed petition" do
