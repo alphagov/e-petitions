@@ -2004,6 +2004,13 @@ CREATE UNIQUE INDEX index_rejections_on_petition_id ON rejections USING btree (p
 
 
 --
+-- Name: index_signatures_on_archived_at_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_archived_at_and_petition_id ON signatures USING btree (archived_at, petition_id);
+
+
+--
 -- Name: index_signatures_on_constituency_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2493,4 +2500,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170629144129');
 INSERT INTO schema_migrations (version) VALUES ('20170703100952');
 
 INSERT INTO schema_migrations (version) VALUES ('20170710090730');
+
+INSERT INTO schema_migrations (version) VALUES ('20170711112737');
 
