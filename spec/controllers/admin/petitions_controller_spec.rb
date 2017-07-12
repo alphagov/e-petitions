@@ -1,164 +1,113 @@
 require 'rails_helper'
 
 RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
-  let(:creator_signature) { FactoryGirl.create(:signature, :email => 'john@example.com') }
-  let(:petition) { FactoryGirl.create(:sponsored_petition, :creator_signature => creator_signature) }
-
-  describe "not logged in" do
-    describe "GET 'index'" do
+  context "when not logged in" do
+    describe "GET /admin/petitions" do
       it "redirects to the login page" do
         get :index
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
 
-    describe "GET 'show'" do
+    describe "GET /admin/petitions/:id" do
       it "redirects to the login page" do
-        get :show, :id => petition.id
+        get :show, id: "100000"
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
   end
 
-  context "logged in as moderator user but need to reset password" do
-    before :each do
-      @user = FactoryGirl.create(:moderator_user, :force_password_reset => true)
-      login_as(@user)
+  context "when logged in as a moderator but need to reset password" do
+    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    before { login_as(user) }
+
+    describe "GET /admin/petitions" do
+      it "redirects to the edit profile page" do
+        get :index
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
+      end
     end
 
-    it "redirects to edit profile page" do
-      expect(@user.has_to_change_password?).to be_truthy
-      get :show, :id => petition.id
-      expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{@user.id}/edit")
+    describe "GET /admin/petitions/:id" do
+      it "redirects to the edit profile page" do
+        get :show, id: "100000"
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
+      end
     end
   end
 
-  describe "logged in as moderator user" do
+  context "when logged in as a moderator" do
     let(:user) { FactoryGirl.create(:moderator_user) }
     before { login_as(user) }
 
-    describe "GET 'index'" do
+    describe "GET /admin/petitions" do
+      context "when making a HTML request" do
+        before { get :index }
 
-      describe "a HTML request" do
-        it "responds successfully with HTML" do
-          get :index
-          expect(response).to be_success
-          expect(response).to render_template('admin/petitions/index')
+        it "returns 200 OK" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "renders the :index template" do
+          expect(response).to render_template("admin/petitions/index")
         end
       end
 
-      describe "a CSV request" do
-        describe "response headers" do
-          it "responds with csv file headers" do
-            travel_to "2015-08-21 05:00:00 UTC" do
-              get :index, format: 'csv'
-              expect(response.headers["Content-Type"]).to eq("text/csv")
-              expect(response.headers["Content-disposition"]).to eq("attachment; filename=all-petitions-20150821060000.csv")
-            end
-          end
+      context "when making a CSV request" do
+        before { get :index, format: "csv" }
 
-          it "responds with steaming file headers" do
-            get :index, format: 'csv'
-            expect(response.headers["X-Accel-Buffering"]).to eq("no")
-            expect(response.headers["Cache-Control"]).to include("no-cache")
-          end
-
-          it "does not set a Content-Length headers" do
-            get :index, format: 'csv'
-            expect(response.headers).not_to have_key("Content-Length")
-          end
+        it "returns a CSV file" do
+          expect(response.content_type).to eq("text/csv")
         end
 
-        it "wraps the list of petitions in a PetitionsCSVPresenter" do
-          expect(PetitionsCSVPresenter).to receive(:new).with([]).and_call_original
-          get :index, format: 'csv'
+        it "doesn't set the content length" do
+          expect(response.content_length).to be_nil
         end
 
-        it "sets the enumerated csv file as the response_body" do
-          csv_presenter = PetitionsCSVPresenter.new([])
-          enumerator = [].to_enum
+        it "sets the streaming headers" do
+          expect(response["Cache-Control"]).to match(/no-cache/)
+          expect(response["X-Accel-Buffering"]).to eq("no")
+        end
 
-          allow(PetitionsCSVPresenter).to receive(:new).and_return csv_presenter
-          allow(csv_presenter).to receive(:render).and_return enumerator
-
-          expect(controller).to receive(:response_body=).with(enumerator).and_call_original
-
-          get :index, format: 'csv'
-          expect(response).to be_success
+        it "sets the content disposition" do
+          expect(response['Content-Disposition']).to match(/attachment; filename=all-petitions-\d{14}\.csv/)
         end
       end
 
-      describe "when no 'q', 't', or 'state' param is present" do
-        it "fetchs a list of 50 petitions" do
-          expect(Petition).to receive(:search).with(hash_including(count: 50)).and_return Petition.none
-          get :index
-        end
-        it "passes on pagination params" do
-          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, page: '3'
-        end
-      end
+      context "when searching by id" do
+        before { get :index, q: "100000" }
 
-      describe "when a 'q' param is present" do
-        it "passes in the q param to perform a search for" do
-          expect(Petition).to receive(:search).with(hash_including(q: 'lorem')).and_return Petition.none
-          get :index, q: 'lorem'
-        end
-        it "passes on pagination params" do
-          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, q: 'lorem', page: '3'
-        end
-      end
-
-      describe "when a 't' param is present" do
-        let(:petition_scope) { Petition.none }
-        it "uses the t param to find tagged petitions" do
-          expect(Petition).to receive(:tagged_with).with('a tag').and_return petition_scope
-          get :index, t: 'a tag'
-        end
-        it "passes on pagination params" do
-          allow(Petition).to receive(:tagged_with).and_return petition_scope
-          expect(petition_scope).to receive(:search).with(page: '3', per_page: 50).and_return petition_scope
-          get :index, t: 'a tag', page: '3'
-        end
-        context 'and `q` is also present' do
-          it 'does a search, not a tagged filter' do
-            expect(Petition).to receive(:search)
-            expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', q: 'lorem'
-          end
-        end
-        context 'and `state` is also present' do
-          it 'does a search, not a tagged filter' do
-            expect(Petition).to receive(:search)
-            expect(Petition).not_to receive(:tagged_with)
-            get :index, t: 'a tag', state: 'open'
-          end
-        end
-      end
-
-      describe 'when a `state` param is present' do
-        it "passes in the state param to perform a search for" do
-          expect(Petition).to receive(:search).with(hash_including(state: 'open')).and_return Petition.none
-          get :index, state: 'open'
-        end
-        it "passes on pagination params" do
-          expect(Petition).to receive(:search).with(hash_including(page: '3')).and_return Petition.none
-          get :index, state: 'open', page: '3'
+        it "redirects to the admin petition page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/100000")
         end
       end
     end
 
-    describe "GET 'show'" do
-      it "assigns petition successfully" do
-        get :show, id: petition.id
-        expect(assigns(:petition)).to eq(petition)
+    describe "GET /admin/petitions/:id" do
+      context "when the petition doesn't exist" do
+        before { get :show, id: "999999" }
+
+        it "redirects to the admin dashboard page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Sorry, we couldn't find petition 999999")
+        end
       end
 
-      it "responds successfully" do
-        get :show, id: petition.id
-        expect(response).to be_success
-        expect(response).to render_template('admin/petitions/show')
+      context "when the petition exists" do
+        let!(:petition) { FactoryGirl.create(:petition) }
+
+        before { get :show, id: petition.to_param }
+
+        it "returns 200 OK" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "renders the :show template" do
+          expect(response).to render_template("admin/petitions/show")
+        end
       end
     end
   end

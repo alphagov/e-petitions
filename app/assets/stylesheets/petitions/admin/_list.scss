@@ -44,4 +44,18 @@
     th:last-child, td:last-child {
     }
   }
+
+  .tag-list {
+    th, td {
+      text-align: left;
+    }
+
+    th:last-child, td:last-child {
+      text-align: right;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+  }
 }

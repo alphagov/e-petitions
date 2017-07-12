@@ -23,6 +23,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: intarray; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS intarray WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION intarray; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION intarray IS 'functions, operators, and index support for 1-D arrays of integers';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -246,7 +260,8 @@ CREATE TABLE archived_petitions (
     email_requested_for_government_response_at timestamp without time zone,
     email_requested_for_debate_scheduled_at timestamp without time zone,
     email_requested_for_debate_outcome_at timestamp without time zone,
-    email_requested_for_petition_email_at timestamp without time zone
+    email_requested_for_petition_email_at timestamp without time zone,
+    tags integer[] DEFAULT '{}'::integer[] NOT NULL
 );
 
 
@@ -860,7 +875,8 @@ CREATE TABLE petitions (
     stopped_at timestamp without time zone,
     special_consideration boolean,
     archived_at timestamp without time zone,
-    archiving_started_at timestamp without time zone
+    archiving_started_at timestamp without time zone,
+    tags integer[] DEFAULT '{}'::integer[] NOT NULL
 );
 
 
@@ -1098,6 +1114,38 @@ ALTER SEQUENCE sponsors_id_seq OWNED BY sponsors.id;
 
 
 --
+-- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE tags (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    description character varying(200),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE tags_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
+
+
+--
 -- Name: tasks; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1315,6 +1363,13 @@ ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regcl
 --
 
 ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
@@ -1541,6 +1596,14 @@ ALTER TABLE ONLY sponsors
 
 
 --
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY tags
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1686,6 +1749,13 @@ CREATE INDEX index_archived_petitions_on_signature_count ON archived_petitions U
 --
 
 CREATE INDEX index_archived_petitions_on_state_and_closed_at ON archived_petitions USING btree (state, closed_at);
+
+
+--
+-- Name: index_archived_petitions_on_tags; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_tags ON archived_petitions USING gin (tags gin__int_ops);
 
 
 --
@@ -1843,6 +1913,20 @@ CREATE INDEX index_email_requested_receipts_on_petition_id ON email_requested_re
 
 
 --
+-- Name: index_ft_tags_on_description; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ft_tags_on_description ON tags USING gin (to_tsvector('english'::regconfig, (description)::text));
+
+
+--
+-- Name: index_ft_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_ft_tags_on_name ON tags USING gin (to_tsvector('english'::regconfig, (name)::text));
+
+
+--
 -- Name: index_government_responses_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1997,6 +2081,13 @@ CREATE INDEX index_petitions_on_signature_count_and_state ON petitions USING btr
 
 
 --
+-- Name: index_petitions_on_tags; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_tags ON petitions USING gin (tags gin__int_ops);
+
+
+--
 -- Name: index_rejections_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2099,6 +2190,13 @@ CREATE INDEX index_signatures_on_uuid ON signatures USING btree (uuid);
 --
 
 CREATE INDEX index_signatures_on_validated_at ON signatures USING btree (validated_at);
+
+
+--
+-- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
 
 
 --
@@ -2502,4 +2600,12 @@ INSERT INTO schema_migrations (version) VALUES ('20170703100952');
 INSERT INTO schema_migrations (version) VALUES ('20170710090730');
 
 INSERT INTO schema_migrations (version) VALUES ('20170711112737');
+
+INSERT INTO schema_migrations (version) VALUES ('20170711134626');
+
+INSERT INTO schema_migrations (version) VALUES ('20170711134758');
+
+INSERT INTO schema_migrations (version) VALUES ('20170711153944');
+
+INSERT INTO schema_migrations (version) VALUES ('20170711153945');
 

@@ -2,7 +2,48 @@
 
 <div class="grid-row">
   <div class="column-two-thirds">
-    <%= render 'admin/searches/form', query: '' %>
+    <%= form_tag [:admin, :search], enforce_utf8: false, class: "search-inline search-petitions", method: "get" do %>
+      <p>
+        Search for <label><%= radio_button_tag :type, "petition", checked: true %> petitions</label>
+        or <label><%= radio_button_tag :type, "signature" %> signatures</label>
+      </p>
+      <%= label_tag :q, "Search", class: "visuallyhidden" %>
+      <%= search_field_tag "q", "", class: "form-control", placeholder:"Enter a search query" %>
+      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+
+      <details class="tag-selector">
+        <summary><span>Tags</span></summary>
+        <p>
+          <small>
+            Match <label><input type="radio" name="match" value="any" checked /> any selected tags</label>
+            or <label><input type="radio" name="match" value="all" /> all selected tags</label>
+          </small>
+        </p>
+        <div class="inline tag-list">
+          <% Tag.by_name.each do |tag| %>
+            <%= label_tag nil, title: tag.description, class: "block-label" do %>
+              <%= check_box_tag :"tags[]", tag.id %> <%= tag.name %>
+            <% end %>
+          <% end %>
+        </div>
+      </details>
+
+      <script>
+        $(document).ready(function() {
+          $('.search-petitions input[name="type"]').on('change', function() {
+            if (this.checked) {
+              if (this.value == 'signature') {
+                $('.search-petitions .tag-selector').hide();
+                $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', true);
+              } else {
+                $('.search-petitions .tag-selector').show();
+                $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', false);
+              }
+            }
+          });
+        });
+      </script>
+    <% end %>
 
     <% action_counts do |counts| %>
       <ul class="hub-actions grid-row">

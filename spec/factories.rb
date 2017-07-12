@@ -635,4 +635,8 @@ FactoryGirl.define do
       archived_at { 1.month.ago }
     end
   end
+
+  factory :tag do
+    sequence(:name) { |n| "Tag #{n}" }
+  end
 end

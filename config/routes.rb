@@ -94,6 +94,7 @@ Rails.application.routes.draw do
         resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
         resources :emails, only: [:new, :create, :edit, :update, :destroy], controller: :petition_emails
         resource :petition_details, :only => [:show, :update]
+        resource :tags, :only => [:show, :update], controller: :petition_tags
         resource :moderation, :only => [:update], controller: :moderation
         resource :notes, :only => [:show, :update]
         resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
@@ -103,9 +104,11 @@ Rails.application.routes.draw do
 
       resource :rate_limits, :only => [:edit, :update], :path => 'rate-limits'
 
-      resources :signatures, :only => [:destroy] do
+      resources :signatures, :only => [:index, :destroy] do
         post :validate, :invalidate, :on => :member
       end
+
+      resources :tags, :except => [:show]
 
       get 'logout' => 'user_sessions#destroy', :as => :logout
       get 'login' => 'user_sessions#new', :as => :login

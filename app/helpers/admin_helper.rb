@@ -1,4 +1,7 @@
 module AdminHelper
+  def selected_tags
+    @selected_tags ||= Array(params[:tags]).flatten.map(&:to_i).compact.reject(&:zero?)
+  end
 
   def mandatory_field
     content_tag :span, raw(' *'), class: 'mandatory'

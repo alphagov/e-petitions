@@ -128,6 +128,33 @@ class Signature < ActiveRecord::Base
                                          name: signature.name,
                                          petition_id: signature.petition_id) }
 
+  class << self
+    def search(query, options = {})
+      query = query.to_s
+      page = [options[:page].to_i, 1].max
+
+      if ip_search?(query)
+        scope = for_ip(query)
+      elsif email_search?(query)
+        scope = for_email(query)
+      else
+        scope = for_name(query)
+      end
+
+      scope.paginate(page: page, per_page: 50)
+    end
+
+    private
+
+    def ip_search?(query)
+      /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
+    end
+
+    def email_search?(query)
+      query.include?('@')
+    end
+  end
+
   # = Methods =
   attr_accessor :uk_citizenship
 

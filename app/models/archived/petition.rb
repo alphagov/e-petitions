@@ -32,7 +32,7 @@ module Archived
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
-    include Browseable
+    include Browseable, Taggable
 
     filter :parliament
 

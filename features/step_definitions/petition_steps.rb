@@ -409,6 +409,13 @@ Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
   @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
 end
 
+Given(/^a petition "(.*?)" exists with tags "([^"]*)"$/) do |action, tags|
+  tags = tags.split(",").map(&:strip)
+  tag_ids = tags.map { |tag| Tag.find_or_create_by(name: tag).id }
+
+  @petition = FactoryGirl.create(:open_petition, action: action, tags: tag_ids)
+end
+
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
   scheduled_debate_petitions_count.times do |count|
     FactoryGirl.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")

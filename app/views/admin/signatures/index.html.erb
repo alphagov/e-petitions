@@ -1,8 +1,12 @@
-<h1>Search results</h1>
+<h1>Signatures</h1>
 
 <div class="grid-row">
   <div class="column-two-thirds">
-    <%= render 'form', query: @query %>
+    <%= form_tag [:admin, :signatures], enforce_utf8: false, class: 'search-inline search-signatures', method: 'get' do %>
+      <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
+      <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
+      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    <% end %>
   </div>
 </div>
 
@@ -31,14 +35,6 @@
 
 <% else %>
   <p>
-    <% if defined?(@name) %>
-      No signatures found for name <%= @name.inspect %>
-    <% elsif defined?(@ip_address) %>
-      No signatures found for IP address <%= @ip_address.inspect %>
-    <% elsif defined?(@email) %>
-      No signatures found for email address <%= mail_to @email %>
-    <% else %>
-      No signatures found %>
-    <% end %>
+    No signatures found
   </p>
 <% end %>
