@@ -104,6 +104,14 @@ class Site < ActiveRecord::Base
       instance.touch(*names)
     end
 
+    def moderation_overdue_in_days
+      7.days
+    end
+
+    def moderation_near_overdue_in_days
+      5.days
+    end
+
     def defaults
       {
         title:                      default_title,

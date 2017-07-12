@@ -1,6 +1,45 @@
 require 'rails_helper'
 
-RSpec.describe HomeHelper, type: :helper do
+RSpec.describe AdminHubHelper, type: :helper do
+  describe "moderation count helpers" do
+    let!(:tag) { FactoryGirl.create(:tag, name: "one") }
+    let!(:petition_recently_in_moderation) { FactoryGirl.create(:sponsored_petition, :recent) }
+    let!(:petition_nearly_overdue_moderation) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+    let!(:petition_overdue_moderation) { FactoryGirl.create(:sponsored_petition, :overdue) }
+    let!(:tagged_in_moderation_petition) { FactoryGirl.create(:validated_petition, tags: [tag.id]) }
+    let!(:sponsored_petition) { FactoryGirl.create(:sponsored_petition, tags: [tag.id]) }
+
+    describe "in_moderation_count" do
+      it 'returns the number in moderation' do
+        expect(helper.in_moderation_count).to eq 4
+      end
+    end
+
+    describe "recently_in_moderation_count" do
+      it 'returns the number recently in moderation' do
+        expect(helper.recently_in_moderation_count).to eq 1
+      end
+    end
+
+    describe "nearly_overdue_moderation_count" do
+      it 'returns the number nearly overdue moderation' do
+        expect(helper.nearly_overdue_moderation_count).to eq 1
+      end
+    end
+
+    describe "overdue_moderation_count" do
+      it 'returns the number overdue moderation' do
+        expect(helper.overdue_moderation_count).to eq 1
+      end
+    end
+
+    describe "tagged_count" do
+      it 'returns the number of tagged petitions' do
+        expect(helper.tagged_count).to eq 1
+      end
+    end
+  end
+
   describe "#action_count" do
     describe "for counting the moderation queue" do
       it "returns a HTML-safe string" do

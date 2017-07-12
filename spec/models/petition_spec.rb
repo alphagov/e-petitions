@@ -597,6 +597,51 @@ RSpec.describe Petition, type: :model do
         expect(Petition.all_popular_in_constituency(constituency_1, 1)).to be_an ActiveRecord::Relation
       end
     end
+
+    describe 'between_in_moderation_times' do
+      let(:moderation_overdue_in_days) { 7.days }
+      let(:moderation_near_overdue_in_days) { 5.days }
+
+      before do
+        allow(Site).to receive(:moderation_overdue_in_days).and_return(moderation_overdue_in_days)
+
+        @p1 = FactoryGirl.create(:debated_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:closed_petition)
+        @p4 = FactoryGirl.create(:rejected_petition)
+        @p5 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago - 1.minute))
+        @p6 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago + 1.minute))
+        @p7 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_near_overdue_in_days.ago - 1.minute))
+        @p8 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_near_overdue_in_days.ago + 1.minute))
+        @p9 = FactoryGirl.create(:pending_petition)
+        @p10 = FactoryGirl.create(:validated_petition)
+      end
+
+      it 'returns petitions within the specified in moderation times' do
+        expect(Petition.between_in_moderation_times(from: moderation_overdue_in_days.ago, to: moderation_near_overdue_in_days.ago)).to eq([@p6, @p7])
+      end
+    end
+
+    describe 'overdue_in_moderation_time_limit' do
+      let(:moderation_overdue_in_days) { 7.days }
+
+      before do
+        allow(Site).to receive(:moderation_overdue_in_days).and_return(moderation_overdue_in_days)
+
+        @p1 = FactoryGirl.create(:debated_petition)
+        @p2 = FactoryGirl.create(:open_petition)
+        @p3 = FactoryGirl.create(:closed_petition)
+        @p4 = FactoryGirl.create(:rejected_petition)
+        @p5 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago - 1.minute))
+        @p6 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago + 1.minute))
+        @p7 = FactoryGirl.create(:pending_petition)
+        @p8 = FactoryGirl.create(:validated_petition)
+      end
+
+      it 'returns petitions that have been in the moderation queue for too long' do
+        expect(Petition.overdue_in_moderation_time_limit).to eq([@p5])
+      end
+    end
   end
 
   it_behaves_like "a taggable model"
