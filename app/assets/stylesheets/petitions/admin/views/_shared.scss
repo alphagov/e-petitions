@@ -23,7 +23,7 @@
     margin: 5px 0;
   }
 
-  .search-petitions, .search-invalidations {
+  .search-petitions, .search-invalidations, .search-signatures {
     margin-bottom: $gutter-half;
   }
 
@@ -90,5 +90,41 @@
 
   .auto-width {
     width: auto;
+  }
+
+  .actions-right {
+    .inline-button {
+      margin-right: 0;
+    }
+  }
+
+  .tag-list {
+    label {
+      font-size: 14px;
+      padding: 5px 10px 5px 30px;
+      margin: 0 5px 5px 0;
+    }
+
+    input[type=checkbox] {
+      top: 4px;
+      left: 5px;
+    }
+  }
+
+  .tag-selector {
+    padding-top: 10px;
+    clear: both;
+
+    summary {
+      font-size: 16px;
+    }
+
+    small {
+      font-size: 16px;
+    }
+
+    .tag-list {
+      margin-top: 5px;
+    }
   }
 }

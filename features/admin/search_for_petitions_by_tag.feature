@@ -7,10 +7,10 @@ Feature: Maggie searches for petitions by tag
     Given I am logged in as a moderator
 
   Scenario: When searching for tag, it returns all petitions with keyword in action OR background OR additional_details
-    Given a petition "Raise benefits" exists with notes "[DWP] [benefits] lorem ipsum"
-    And a petition "Help the poor" exists with notes "[benefits] what about the home less"
-    And a petition "Help the homeless" exists with notes "[home less]"
-    And a petition "Petition about something else" exists with notes "this is not about benefits"
+    Given a petition "Raise benefits" exists with tags "DWP, benefits"
+    And a petition "Help the poor" exists with tags "benefits"
+    And a petition "Help the homeless" exists with tags "home less"
+    And a petition "Petition about something else" exists with tags ""
     When I search for petitions with tag "benefits"
     Then I should see the following list of petitions:
           | Help the poor     |
@@ -20,10 +20,10 @@ Feature: Maggie searches for petitions by tag
           | Help the homeless |
 
   Scenario: A user can search by tag from the admin hub
-    Given a petition "Raise benefits" exists with notes "[DWP] [benefits] lorem ipsum"
-    And a petition "Help the poor" exists with notes "[benefits] what about the home less"
-    And a petition "Help the homeless" exists with notes "[home less]"
-    And a petition "Petition about something else" exists with notes "this is not about benefits"
+    Given a petition "Raise benefits" exists with tags "DWP, benefits"
+    And a petition "Help the poor" exists with tags "benefits"
+    And a petition "Help the homeless" exists with tags "home less"
+    And a petition "Petition about something else" exists with tags ""
     When I search for petitions with tag "benefits" from the admin hub
     Then I should see the following list of petitions:
           | Help the poor     |

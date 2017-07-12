@@ -1,69 +1,58 @@
 require 'rails_helper'
 
 RSpec.describe Admin::SearchesController, type: :controller, admin: true do
-
-  describe "logged in as moderator user" do
-    before :each do
-      @user = FactoryGirl.create(:moderator_user)
-      login_as(@user)
+  context "when not logged in" do
+    describe "GET /admin/search" do
+      it "redirects to the login page" do
+        get :show, type: "petition", q: "foo"
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+      end
     end
+  end
 
-    describe "GET 'show'" do
-      context "searching for email address" do
-        let(:signatures) { double }
-        it "returns an array of signatures for an email address" do
-          allow(signatures).to receive_messages(:paginate => signatures)
-          allow(Signature).to receive_messages(:for_email => signatures)
-          get :show, q: 'something@example.com'
-          expect(assigns(:signatures)).to eq(signatures)
-        end
+  context "when logged in as a moderator but need to reset password" do
+    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    before { login_as(user) }
 
-        it "sets @query" do
-          get :show, q: 'foo bar'
-          expect(assigns(:query)).to eq("foo bar")
+    describe "GET /admin/search" do
+      it "redirects to the edit profile page" do
+        get :show, type: "petition", q: "foo"
+        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
+      end
+    end
+  end
+
+  context "when logged in as a moderator" do
+    let(:user) { FactoryGirl.create(:moderator_user) }
+    before { login_as(user) }
+
+    describe "GET /admin/search" do
+      context "when searching for petitions" do
+        it "redirects to the petitions search url" do
+          get :show, type: "petition", q: "foo"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=foo")
         end
       end
 
-      context "searching for petition by id" do
-        let(:petition) { double(:id => 123, :to_param => '123') }
-
-        before do
-          allow(Petition).to receive_messages(:find => petition)
-        end
-
-        it "redirects to a petition if the id exists" do
-          get :show, q: '123'
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
-        end
-
-        context "when petition not found" do
-          before do
-            allow(Petition).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
-          end
-
-          it "renders the form with an error" do
-            get :show, q: '123'
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions")
-          end
-
-          it "sets the flash error" do
-            get :show, q: '123'
-            expect(flash[:alert]).to match(/123/)
-          end
+      context "when searching for petitions with tags" do
+        it "redirects to the petitions search url" do
+          get :show, type: "petition", q: "foo", tags: ["1"], match: "any"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?match=any&q=foo&tags%5B%5D=1")
         end
       end
 
-      context "searching by keyword" do
-        it "redirects to the all petitions page for a keyword" do
-          get :show, q: 'example_keyword'
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=example_keyword")
+      context "when searching for signatures" do
+        it "redirects to the signatures search url" do
+          get :show, type: "signature", q: "foo"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=foo")
         end
       end
 
-      context "searching by tag" do
-        it "redirects to the all petitions page for a tag" do
-          get :show, q: '[a tag]'
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?t=a+tag")
+      context "when searching for an unknown type" do
+        it "redirects to the admin dashboard url" do
+          get :show, q: "foo"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          expect(flash[:notice]).to eq("Sorry, we didn't understand your query")
         end
       end
     end

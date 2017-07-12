@@ -37,7 +37,7 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
-  include Browseable
+  include Browseable, Taggable
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -323,11 +323,6 @@ class Petition < ActiveRecord::Base
 
     def all_popular_in_constituency(constituency_id, count = 50)
       popular_in(constituency_id, count).for_state(PUBLISHED_STATES)
-    end
-
-    def tagged_with(tag)
-      joins(:note).
-      where(Note.arel_table['details'].matches("%#{sanitized_tag(tag)}%"))
     end
 
     def sanitized_tag(tag)

@@ -1,25 +1,44 @@
 <h1>Petitions</h1>
 
-<div class="grid-row">
-  <div class="column-two-thirds">
-    <%= render 'admin/searches/form', query: @query %>
-  </div>
-</div>
-
-<div class="grid-row">
-  <div class="column-two-thirds">
-    <%= form_tag admin_petitions_path, :method => :get do -%>
+<%= form_tag admin_petitions_path, enforce_utf8: false, method: :get, class: "search-inline search-petitions" do %>
+  <div class="grid-row">
+    <div class="column-third">
       <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
-      <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control", data: {autosubmit: true} %>
-      <%= submit_tag "Go", name: nil, class: "button" %>
-    <% end -%>
+      <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control" %>
+    </div>
+    <div class="column-third">
+      <%= label_tag :q, "Search petitions", class: "visuallyhidden" %>
+      <%= search_field_tag :q, params[:q], class: "form-control", placeholder:"Enter a search query" %>
+      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    </div>
+    <div class="column-third actions-right">
+      <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
+    </div>
   </div>
-  <div class="column-third actions-right">
-    <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
-  </div>
-</div>
 
-<%= will_paginate(@petitions) if @petitions.any? %>
+  <div class="grid-row">
+    <div class="column-two-thirds">
+      <%= content_tag(:details, class: "tag-selector", open: selected_tags.present?) do %>
+        <summary><span>Tags</span></summary>
+        <p>
+          <small>
+            Match <label><%= radio_button_tag :match, "any", params[:match] != "all" %> any selected tags</label>
+            or <label><%= radio_button_tag :match, "all", params[:match] == "all" %> all selected tags</label>
+          </small>
+        </p>
+        <div class="inline tag-list">
+          <% Tag.by_name.each do |tag| %>
+            <%= label_tag nil, title: tag.description, class: "block-label" do %>
+              <%= check_box_tag :"tags[]", tag.id, selected_tags.include?(tag.id) %> <%= tag.name %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<%= will_paginate(@petitions) %>
 
 <table class="petition-list">
   <thead>
@@ -47,4 +66,4 @@
 
 </table>
 
-<%= will_paginate(@petitions) if @petitions.any? %>
+<%= will_paginate(@petitions) %>

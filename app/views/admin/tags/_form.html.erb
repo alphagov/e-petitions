@@ -1,0 +1,17 @@
+<%= form_row for: [form.object, :name] do %>
+  <%= form.label :name, class: 'form-label' %>
+  <%= error_messages_for_field @tag, :name %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 50, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :description] do %>
+  <%= form.label :description, class: 'form-label' %>
+  <%= error_messages_for_field @tag, :description %>
+  <%= form.text_area :description, tabindex: increment, rows: 5, data: { max_length: 200 }, class: 'form-control' %>
+  <p class="character-count">200 characters max</p>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_tags_path, class: 'button-secondary' %>
+
+<%= javascript_include_tag 'character-counter' %>

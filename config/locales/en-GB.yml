@@ -135,6 +135,8 @@ en-GB:
           other: "%{count} errors prohibited this %{model} from being saved"
   helpers:
     label:
+      tag:
+        name: "Tag"
       parliament:
         dissolution_heading: "Heading"
         dissolution_message: "Message"

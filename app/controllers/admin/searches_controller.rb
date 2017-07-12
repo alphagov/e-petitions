@@ -1,88 +1,35 @@
 class Admin::SearchesController < Admin::AdminController
-
   def show
-    if query_is_number?
-      find_petition_by_id
-    elsif query_is_ip?
-      find_signatures_by_ip
-    elsif query_is_email?
-      find_signatures_by_email
-    elsif query_is_name?
-      find_signatures_by_name
-    elsif query_is_tag?
-      find_petitions_by_tag
+    if petition_search?
+      redirect_to admin_petitions_url(search_params)
+    elsif signature_search?
+      redirect_to admin_signatures_url(search_params)
     else
-      find_petitions_by_keyword
+      redirect_to admin_root_url, notice: "Sorry, we didn't understand your query"
     end
   end
 
   private
 
-  def query
-    @query ||= params.fetch(:q, '')
+  def petition_search?
+    params[:type] == "petition"
   end
 
-  def ip_address
-    @ip_address ||= @query
+  def signature_search?
+    params[:type] == "signature"
   end
 
-  def name
-    @name ||= @query.gsub(/\A"|"\Z/, '')
-  end
-
-  def email
-    @email ||= @query
-  end
-
-  def tag
-    @tag ||= @query.gsub(/\A\[|\]\Z/, '')
-  end
-
-  def find_petition_by_id
-    begin
-      redirect_to admin_petition_url(Petition.find(query.to_i))
-    rescue ActiveRecord::RecordNotFound
-      redirect_to admin_petitions_url, alert: [:petition_not_found, query: query.inspect]
+  def search_params
+    if petition_search?
+      if params[:tags].present?
+        params.slice(:q, :tags, :match)
+      else
+        params.slice(:q)
+      end
+    elsif signature_search?
+      params.slice(:q)
+    else
+      {}
     end
-  end
-
-  def find_signatures_by_ip
-    @signatures = Signature.for_ip(ip_address).paginate(page: params[:page], per_page: 50)
-  end
-
-  def find_signatures_by_email
-    @signatures = Signature.for_email(email).paginate(page: params[:page], per_page: 50)
-  end
-
-  def find_signatures_by_name
-    @signatures = Signature.for_name(name).paginate(page: params[:page], per_page: 50)
-  end
-
-  def find_petitions_by_keyword
-    redirect_to(controller: 'admin/petitions', action: 'index', q: query)
-  end
-
-  def find_petitions_by_tag
-    redirect_to(controller: 'admin/petitions', action: 'index', t: tag)
-  end
-
-  def query_is_number?
-    /^\d+$/ =~ query
-  end
-
-  def query_is_ip?
-    /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
-  end
-
-  def query_is_email?
-    query.include?('@')
-  end
-
-  def query_is_name?
-    query.starts_with?('"') && query.ends_with?('"')
-  end
-
-  def query_is_tag?
-    query.starts_with?('[') && query.ends_with?(']')
   end
 end

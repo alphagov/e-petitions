@@ -27,6 +27,11 @@
   <dt>ID</dt>
   <dd><%= @petition.id %></dd>
 
+  <% if @petition.tags? %>
+    <dt>Tags</dt>
+    <dd><%= @petition.tag_names.join(", ") %></dd>
+  <% end %>
+
   <% if current_user.is_a_sysadmin? %>
     <% if @petition.fraudulent_domains? %>
       <dt>Fraudulent domains</dt>
