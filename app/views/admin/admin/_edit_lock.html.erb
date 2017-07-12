@@ -1,0 +1,17 @@
+<div id="edit-lock">
+  <div class="edit-lock-modal">
+    <p class="edit-lock-message">
+      This petition is currently being edited by someone else.
+    </p>
+    <p class="edit-lock-actions">
+      <button id="edit-lock-override" class="button">Override</button>
+      <button id="edit-lock-cancel" class="button-secondary">Cancel</button>
+    </p>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>);
+  });
+</script>

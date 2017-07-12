@@ -1,13 +1,15 @@
-<div class="notification">
-  <span class="icon icon-warning-white"></span>
-  <% if Parliament.dissolved? %>
-    <h3 class="header"><%= Parliament.dissolved_heading %></h3>
-    <p class="content"><%= Parliament.dissolved_message %></p>
-  <% else %>
-    <h3 class="header"><%= Parliament.dissolution_heading %></h3>
-    <p class="content"><%= Parliament.dissolution_message %></p>
-  <% end %>
-  <% if Parliament.dissolution_faq_url? %>
-    <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
-  <% end %>
-</div>
+<% if Parliament.dissolution_announced? %>
+  <div class="notification">
+    <span class="icon icon-warning-white"></span>
+    <% if Parliament.dissolved? %>
+      <h3 class="header"><%= Parliament.dissolved_heading %></h3>
+      <p class="content"><%= Parliament.dissolved_message %></p>
+    <% else %>
+      <h3 class="header"><%= Parliament.dissolution_heading %></h3>
+      <p class="content"><%= Parliament.dissolution_message %></p>
+    <% end %>
+    <% if Parliament.dissolution_faq_url? %>
+      <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
+    <% end %>
+  </div>
+<% end %>

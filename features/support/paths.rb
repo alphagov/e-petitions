@@ -126,7 +126,7 @@ module NavigationHelpers
       admin_petition_government_response_url(Petition.find_by(action: $1))
 
     when /^petition edit details page for "([^\"]*)"$/
-      admin_petition_petition_details_url(Petition.find_by(action: $1))
+      admin_petition_details_url(Petition.find_by(action: $1))
 
     else
       raise "Can't find mapping from \"#{admin_page}\" to an Admin path.\n" +

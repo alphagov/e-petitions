@@ -1,124 +1,143 @@
 Rails.application.routes.draw do
   constraints Site.constraints_for_public do
-    get '/' => 'pages#index', :as => :home
-    get 'help' => 'pages#help', :as => :help
-    get 'privacy' => 'pages#privacy', :as => :privacy
-    get 'browserconfig' => 'pages#browserconfig', format: true, constraints: { format: 'xml' }
-    get 'manifest' => 'pages#manifest', format: true, constraints: { format: 'json' }
+    controller 'pages' do
+      get '/',        action: 'index', as: :home
+      get '/help',    action: 'help'
+      get '/privacy', action: 'privacy'
 
-    get  'feedback', to: 'feedback#new', as: 'feedback'
-    post 'feedback', to: 'feedback#create', as: nil
-    get  'feedback/thanks', to: 'feedback#thanks', as: 'thanks_feedback'
-
-    scope 'petitions' do
-      get 'local' => 'local_petitions#index', as: 'local_petitions'
-      get 'local/:id' => 'local_petitions#show', as: 'local_petition'
-      get 'local/:id/all' => 'local_petitions#all', as: 'all_local_petition'
+      scope format: true do
+        get '/browserconfig', action: 'browserconfig', constraints: { format: 'xml'  }
+        get '/manifest',      action: 'manifest',      constraints: { format: 'json' }
+      end
     end
 
-    resources :petitions, :only => [:new, :show, :index] do
+    controller 'feedback' do
+      scope '/feedback' do
+        get  '/',       action: 'new',    as: :feedback
+        post '/',       action: 'create', as: nil
+        get  '/thanks', action: 'thanks', as: :thanks_feedback
+      end
+    end
+
+    controller 'local_petitions' do
+      scope '/petitions/local' do
+        get '/',        action: 'index', as: :local_petitions
+        get '/:id',     action: 'show',  as: :local_petition
+        get '/:id/all', action: 'all',   as: :all_local_petition
+      end
+    end
+
+    resources :petitions, only: %i[new show index] do
       collection do
-        get 'check'
-        get 'check_results'
+        get  'check'
+        get  'check_results'
+        post 'create', path: 'new', as: :create
       end
 
       member do
-        get 'count', :action => :count, :as => :count
-        get 'thank-you', :action => :thank_you, :as => :thank_you
-        get 'gathering-support', :action => :gathering_support, :as => :gathering_support
-        get 'moderation-info', :action => :moderation_info, :as => :moderation_info
+        get 'count'
+        get 'thank-you'
+        get 'gathering-support'
+        get 'moderation-info'
       end
 
-      resources :sponsors, only: [:show, :update], param: :token do
-        get 'thank-you', on: :member
-        get 'sponsored', on: :member
+      resources :sponsors, only: %i[show update], param: :token do
+        member do
+          get 'thank-you'
+          get 'sponsored'
+        end
       end
 
-      resources :signatures, :only => [:new] do
-        post 'new' => 'signatures#create', :as => :sign, :on => :collection
-        get 'thank-you', :action => :thank_you, :on => :collection, :as => :thank_you
+      resources :signatures, only: %i[new], shallow: true do
+        collection do
+          post 'new', action: 'create', as: :sign
+          get  'thank-you'
+        end
+
+        member do
+          get 'verify',      path: '/verify(/:legacy_token)'
+          get 'unsubscribe', path: '/unsubscribe(/:legacy_token)'
+          get 'signed',      path: '/signed(/:legacy_token)'
+        end
       end
-    end
-
-    post 'petitions/new' => 'petitions#create', :as => :create_petition
-
-    scope 'signatures/:id' do
-      get 'verify(/:legacy_token)' => 'signatures#verify', :as => :verify_signature
-      get 'unsubscribe(/:legacy_token)' => 'signatures#unsubscribe', :as => :unsubscribe_signature
-      get 'signed(/:legacy_token)' => 'signatures#signed', :as => :signed_signature
     end
 
     namespace :archived do
-      resources :petitions, only: [:index, :show]
+      resources :petitions, only: %i[index show]
 
       resources :signatures, only: [] do
-        get :unsubscribe, on: :member
+        get 'unsubscribe', on: :member
       end
     end
 
     # REDIRECTS OLD PAGES
-    get '/departments',           to: redirect('/')
-    get '/departments/:id',       to: redirect('/')
+    get '/accessibility',         to: redirect('/help')
     get '/api/petitions',         to: redirect('/')
     get '/api/petitions/:id',     to: redirect('/')
-
-    get '/privacy-policy',       to: redirect('/privacy')
-    get '/accessibility',        to: redirect('/help')
-    get '/terms-and-conditions', to: redirect('/help')
-    get '/how-it-works',         to: redirect('/help')
-    get '/faq',                  to: redirect('/help')
-
-    get '/crown-copyright', to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
+    get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
+    get '/departments',           to: redirect('/')
+    get '/departments/:id',       to: redirect('/')
+    get '/how-it-works',          to: redirect('/help')
+    get '/privacy-policy',        to: redirect('/privacy')
+    get '/faq',                   to: redirect('/help')
+    get '/terms-and-conditions',  to: redirect('/help')
   end
 
   constraints Site.constraints_for_moderation do
     get '/', to: redirect('/admin')
 
     namespace :admin do
-      root :to => 'admin#index'
-
       mount Delayed::Web::Engine, at: '/delayed'
 
-      resource :parliament, :only => [:show, :update]
-      resource :search, :only => [:show]
+      root to: 'admin#index'
+
+      resource :parliament, only: %i[show update]
+      resource :search, only: %i[show]
 
       resources :admin_users
-      resources :profile, :only => [:edit, :update]
-      resources :user_sessions, :only => [:create]
+      resources :profile, only: %i[edit update]
+      resources :user_sessions, only: %i[create]
 
-      resources :invalidations, :except => [:show] do
-        post :cancel, :count, :start, :on => :member
+      resources :invalidations, except: %i[show] do
+        post :cancel, :count, :start, on: :member
       end
 
-      resources :petitions, :only => [:show, :index] do
-        resource 'debate-outcome', only: [:show, :update], as: :debate_outcome, controller: :debate_outcomes
-        resources :emails, only: [:new, :create, :edit, :update, :destroy], controller: :petition_emails
-        resource :petition_details, :only => [:show, :update]
-        resource :tags, :only => [:show, :update], controller: :petition_tags
-        resource :moderation, :only => [:update], controller: :moderation
-        resource :notes, :only => [:show, :update]
-        resource 'take-down', :only => [:show, :update], as: :take_down, controller: :take_down
-        resource 'government-response', :only => [:show, :update], as: :government_response, controller: :government_response
-        resource 'schedule-debate', :only => [:show, :update], as: :schedule_debate, controller: :schedule_debate
+      resources :petitions, only: %i[show index] do
+        resources :emails, controller: 'petition_emails', except: %i[index show]
+        resource  :lock, only: %i[show create update destroy]
+        resource  :moderation, controller: 'moderation', only: %i[update]
+
+        scope only: %i[show update] do
+          resource :debate_outcome, path: 'debate-outcome'
+          resource :government_response, path: 'government-response', controller: 'government_response'
+          resource :notes
+          resource :details, controller: 'petition_details'
+          resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
+          resource :tags, controller: 'petition_tags'
+          resource :take_down, path: 'take-down', controller: 'take_down'
+        end
       end
 
-      resource :rate_limits, :only => [:edit, :update], :path => 'rate-limits'
+      resource :rate_limits, path: 'rate-limits', only: %i[edit update]
 
-      resources :signatures, :only => [:index, :destroy] do
-        post :validate, :invalidate, :on => :member
+      resources :signatures, only: %i[index destroy] do
+        post :validate, :invalidate, on: :member
       end
 
-      resources :tags, :except => [:show]
+      resources :tags, except: %i[show]
 
-      get 'logout' => 'user_sessions#destroy', :as => :logout
-      get 'login' => 'user_sessions#new', :as => :login
-
-      get 'continue' => 'user_sessions#continue', :as => :continue
-      get 'status' => 'user_sessions#status', :as => :status
+      controller 'user_sessions' do
+        get '/logout',   action: 'destroy'
+        get '/login',    action: 'new'
+        get '/continue', action: 'continue'
+        get '/status',   action: 'status'
+      end
     end
   end
 
-  get 'ping' => 'ping#ping'
+  get 'ping', to: 'ping#ping'
 
-  mount JasmineRails::Engine => '/specs' if defined?(JasmineRails)
+  if defined?(JasmineRails)
+    mount JasmineRails::Engine, at: '/specs'
+  end
 end

@@ -8,6 +8,6 @@ RSpec.describe "routes for petitions", type: :routes do
 
   it "routes POST /petitions/new to petitions#create" do
     expect({:post => "/petitions/new"}).to route_to({:controller => "petitions", :action => "create"})
-    expect(create_petition_path).to eq('/petitions/new')
+    expect(create_petitions_path).to eq('/petitions/new')
   end
 end
