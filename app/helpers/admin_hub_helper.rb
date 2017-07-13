@@ -1,32 +1,32 @@
 module AdminHubHelper
   def petition_total_count
-    Petition.all.count
+    @petition_total_count ||= Petition.all.count
   end
 
   def in_moderation_count
-    Petition.in_moderation.count
+    @in_moderation_count ||= Petition.in_moderation.count
   end
 
   def recently_in_moderation_count
-    Petition.untagged.in_moderation.between_in_moderation_times(from: Site.moderation_near_overdue_in_days.ago, to: Time.current).count
+    @recently_in_moderation_count ||= Petition.recently_in_moderation.count
   end
 
-  def nearly_overdue_moderation_count
-    Petition.untagged.in_moderation.between_in_moderation_times(from: Site.moderation_overdue_in_days.ago, to: Site.moderation_near_overdue_in_days.ago).count
+  def nearly_overdue_in_moderation_count
+    @nearly_overdue_in_moderation_count ||= Petition.nearly_overdue_in_moderation.count
   end
 
-  def overdue_moderation_count
-    Petition.untagged.in_moderation.overdue_in_moderation_time_limit.count
+  def overdue_in_moderation_count
+    @overdue_in_moderation_count ||= Petition.overdue_in_moderation.count
   end
 
-  def tagged_count
-    Petition.tagged.in_moderation.count
+  def tagged_in_moderation_count
+    @tagged_in_moderation_count ||= Petition.tagged_in_moderation.count
   end
 
-  def summary_class_name_for_counts(nearly_overdue_count, overdue_count)
-    if overdue_count > 0
+  def summary_class_name_for_in_moderation
+    if overdue_in_moderation_count > 0
       "queue-danger"
-    elsif nearly_overdue_count > 0
+    elsif nearly_overdue_in_moderation_count > 0
       "queue-caution"
     else
       "queue-stable"

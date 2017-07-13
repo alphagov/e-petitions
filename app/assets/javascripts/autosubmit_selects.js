@@ -3,7 +3,4 @@ $().ready(function() {
     .change(function() {
       $(this).closest('form').submit();
     })
-    .closest('form')
-      .find('input[type="submit"]')
-      .hide();
 });

@@ -23,16 +23,16 @@ Feature: Admin hub page
   Scenario: I can see when there are petitions that are overdue moderation
     Given 5 overdue moderation petitions exist
     When I go to the Admin home page
-    Then the overdue moderation panel should have the queue danger style applied
+    Then the overdue in moderation panel should have the queue danger style applied
     And the moderation summary should have the queue danger style applied
-    And the overdue moderation panel should show 5
+    And the overdue in moderation panel should show 5
 
   Scenario: I can see when there are petitions that are nearly overdue moderation
     Given 5 nearly overdue moderation petitions exist
     When I go to the Admin home page
-    Then the nearly overdue moderation panel should have the queue caution style applied
+    Then the nearly overdue in moderation panel should have the queue caution style applied
     And the moderation summary should have the queue caution style applied
-    And the nearly overdue moderation panel should show 5
+    And the nearly overdue in moderation panel should show 5
 
   Scenario: I can see when there are petitions that have recently joined the moderation queue
     Given 5 recently in moderation petitions exist
@@ -44,7 +44,7 @@ Feature: Admin hub page
   Scenario: I can see when there are petitions in moderation that are tagged
     Given a sponsored petition "Raise benefits" exists with tags "tag 1"
     When I go to the Admin home page
-    And the tagged panel should show 1
+    And the tagged in moderation panel should show 1
 
   Scenario: I can click through to see lists of matching petitions
     Given 12 petitions exist with state: "sponsored"

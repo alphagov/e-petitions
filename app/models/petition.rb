@@ -60,6 +60,11 @@ class Petition < ActiveRecord::Base
   facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
   facet :in_debate_queue,      -> { in_debate_queue.by_waiting_for_debate_longest }
 
+  facet :recently_in_moderation,       -> { recently_in_moderation.by_most_recent_moderation_threshold_reached }
+  facet :nearly_overdue_in_moderation, -> { nearly_overdue_in_moderation.by_most_recent_moderation_threshold_reached }
+  facet :overdue_in_moderation,        -> { overdue_in_moderation.by_most_recent_moderation_threshold_reached }
+  facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
+
   belongs_to :creator_signature, class_name: 'Signature'
   accepts_nested_attributes_for :creator_signature, update_only: true
 
@@ -190,8 +195,16 @@ class Petition < ActiveRecord::Base
       where(threshold_for_debate_reached.or(scheduled_for_debate))
     end
 
-    def in_moderation
-      where(state: IN_MODERATION_STATES)
+    def in_moderation(from: nil, to: nil)
+      if from && to
+        where(state: IN_MODERATION_STATES).where(moderation_threshold_reached_at.between(from..to))
+      elsif from
+        where(state: IN_MODERATION_STATES).where(moderation_threshold_reached_at.gt(from))
+      elsif to
+        where(state: IN_MODERATION_STATES).where(moderation_threshold_reached_at.lt(to))
+      else
+        where(state: IN_MODERATION_STATES)
+      end
     end
 
     def moderated
@@ -343,15 +356,35 @@ class Petition < ActiveRecord::Base
       where(archived_at: nil)
     end
 
-    def between_in_moderation_times(from: Site.moderation_overdue_in_days.ago, to: Time.current)
-      where(arel_table[:moderation_threshold_reached_at].between(from..to))
+    def recently_in_moderation
+      untagged.in_moderation(from: moderation_near_overdue_at)
     end
 
-    def overdue_in_moderation_time_limit
-      where(arel_table[:moderation_threshold_reached_at].lt(Site.moderation_overdue_in_days.ago))
+    def nearly_overdue_in_moderation
+      untagged.in_moderation(from: moderation_overdue_at, to: moderation_near_overdue_at)
+    end
+
+    def overdue_in_moderation
+      untagged.in_moderation(to: moderation_overdue_at)
+    end
+
+    def tagged_in_moderation
+      tagged.in_moderation
     end
 
     private
+
+    def moderation_threshold_reached_at
+      arel_table[:moderation_threshold_reached_at]
+    end
+
+    def moderation_near_overdue_at
+      Site.moderation_near_overdue_in_days.ago
+    end
+
+    def moderation_overdue_at
+      Site.moderation_overdue_in_days.ago
+    end
 
     def popular_in(constituency_id, count)
       klass = ConstituencyPetitionJournal

@@ -70,6 +70,10 @@ en-GB:
         - :all
         - :collecting_sponsors
         - :in_moderation
+        - :recently_in_moderation
+        - :nearly_overdue_in_moderation
+        - :overdue_in_moderation
+        - :tagged_in_moderation
         - :open
         - :closed
         - :rejected
@@ -85,6 +89,10 @@ en-GB:
           all: "All petitions (%{quantity})"
           collecting_sponsors: "Collecting sponsors (%{quantity})"
           in_moderation: "Awaiting moderation (%{quantity})"
+          recently_in_moderation: "Awaiting moderation - recent (%{quantity})"
+          nearly_overdue_in_moderation: "Awaiting moderation - nearly overdue (%{quantity})"
+          overdue_in_moderation: "Awaiting moderation - overdue (%{quantity})"
+          tagged_in_moderation: "Awaiting moderation - tagged (%{quantity})"
           open: "Open (%{quantity})"
           closed: "Closed (%{quantity})"
           rejected: "Rejected (%{quantity})"

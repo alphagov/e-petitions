@@ -59,7 +59,7 @@ Feature: A moderator user views all petitions
      | My validated petition                         |
      | My pending petition                           |
 
-    And I filter the list to show "Awaiting moderation" petitions
+    And I filter the list to show "Awaiting moderation (3)" petitions
     Then I should see the following list of petitions:
      | My other sponsored petition |
      | My sponsored petition       |
