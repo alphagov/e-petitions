@@ -33,6 +33,10 @@ class Admin::LocksController < Admin::AdminController
     end
   end
 
+  def last_request_update_allowed?
+    false
+  end
+
   private
 
   def fetch_petition
