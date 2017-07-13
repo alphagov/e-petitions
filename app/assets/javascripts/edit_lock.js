@@ -44,7 +44,7 @@
           url: LOCK_URL,
           method: 'DELETE',
           success: function() {
-            console.log('Lock on petition' + ID + ' released');
+            console.log('Lock on petition ' + ID + ' released');
           }
         });
       },

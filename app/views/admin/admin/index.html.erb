@@ -49,40 +49,44 @@
   <div class="column-two-thirds">
     <div class="hub-actions grid-row">
       <div class="moderation">
-        <% nearly_overdue_count = nearly_overdue_moderation_count %>
-        <% overdue_count = overdue_moderation_count %>
-
-        <%= link_to admin_petitions_url(state: :in_moderation) do %>
-          <% summary_class_name = summary_class_name_for_counts(nearly_overdue_count, overdue_count) %>
-          <div class="<%= "panel #{summary_class_name}" %>">
+        <div class="<%= "panel #{summary_class_name_for_in_moderation}" %>">
+          <%= link_to admin_petitions_url(state: :in_moderation) do %>
             <div class="summary">
               <div class="count">
                 <%= in_moderation_count %>
               </div>
               Moderation queue
             </div>
-          </div>
+          <% end %>
+        </div>
 
-          <div class="panel">
-            <div class="details">
-              <div class="recently-in-moderation queue-stable">
+        <div class="panel">
+          <div class="details">
+            <div class="recently-in-moderation queue-stable">
+              <%= link_to admin_petitions_url(state: :recently_in_moderation) do %>
                 <%= recently_in_moderation_count %><span class="label">0-5 days</span>
-              </div>
+              <% end %>
+            </div>
 
-              <div class="nearly-overdue-moderation queue-caution">
-                <%= nearly_overdue_moderation_count %><span class="label">6-7 days</span>
-              </div>
+            <div class="nearly-overdue-in-moderation queue-caution">
+              <%= link_to admin_petitions_url(state: :nearly_overdue_in_moderation) do %>
+                <%= nearly_overdue_in_moderation_count %><span class="label">6-7 days</span>
+              <% end %>
+            </div>
 
-              <div class="overdue-moderation queue-danger">
-                <%= overdue_moderation_count %><span class="label">&gt; 7 days</span>
-              </div>
+            <div class="overdue-in-moderation queue-danger">
+              <%= link_to admin_petitions_url(state: :overdue_in_moderation) do %>
+                <%= overdue_in_moderation_count %><span class="label">&gt; 7 days</span>
+              <% end %>
+            </div>
 
-              <div class="tagged">
-                <%= tagged_count %><span class="label">Tagged</span>
-              </div>
+            <div class="tagged-in-moderation">
+              <%= link_to admin_petitions_url(state: :tagged_in_moderation) do %>
+                <%= tagged_in_moderation_count %><span class="label">Tagged</span>
+              <% end %>
             </div>
           </div>
-        <% end %>
+        </div>
       </div>
 
       <ul>

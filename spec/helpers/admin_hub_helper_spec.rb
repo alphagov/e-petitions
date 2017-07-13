@@ -21,21 +21,47 @@ RSpec.describe AdminHubHelper, type: :helper do
       end
     end
 
-    describe "nearly_overdue_moderation_count" do
+    describe "nearly_overdue_in_moderation_count" do
       it 'returns the number nearly overdue moderation' do
-        expect(helper.nearly_overdue_moderation_count).to eq 1
+        expect(helper.nearly_overdue_in_moderation_count).to eq 1
       end
     end
 
-    describe "overdue_moderation_count" do
+    describe "overdue_in_moderation_count" do
       it 'returns the number overdue moderation' do
-        expect(helper.overdue_moderation_count).to eq 1
+        expect(helper.overdue_in_moderation_count).to eq 1
       end
     end
 
-    describe "tagged_count" do
+    describe "tagged_in_moderation_count" do
       it 'returns the number of tagged petitions' do
-        expect(helper.tagged_count).to eq 1
+        expect(helper.tagged_in_moderation_count).to eq 1
+      end
+    end
+  end
+
+  describe "#summary_class_name_for_in_moderation" do
+    before { FactoryGirl.create(:sponsored_petition, :recent) }
+
+    context "when there are no overdue and nearly overdue petitions" do
+      it "returns the CSS class name 'queue-stable'" do
+        expect(helper.summary_class_name_for_in_moderation).to eq("queue-stable")
+      end
+    end
+
+    context "when there are no overdue but there are nearly overdue petitions" do
+      before { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+
+      it "returns the CSS class name 'queue-caution'" do
+        expect(helper.summary_class_name_for_in_moderation).to eq("queue-caution")
+      end
+    end
+
+    context "when there are overdue petitions" do
+      before { FactoryGirl.create(:sponsored_petition, :overdue) }
+
+      it "returns the CSS class name 'queue-danger'" do
+        expect(helper.summary_class_name_for_in_moderation).to eq("queue-danger")
       end
     end
   end

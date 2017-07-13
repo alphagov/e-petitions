@@ -6,16 +6,19 @@ RSpec.describe AdminHelper, type: :helper do
 
     let(:facets) do
       {
-        all: 1, collecting_sponsors: 2, in_moderation: 3, open: 4, closed: 5,
-        rejected: 6, hidden: 7, stopped: 8, awaiting_response: 9, with_response: 10,
-        awaiting_debate_date: 11, with_debate_outcome: 12, in_debate_queue: 13
+        all: 1, collecting_sponsors: 2, in_moderation: 3,
+        recently_in_moderation: 4, nearly_overdue_in_moderation: 5,
+        overdue_in_moderation: 6, tagged_in_moderation: 7,
+        open: 8, closed: 9, rejected: 10, hidden: 11, stopped: 12,
+        awaiting_response: 13, with_response: 14, awaiting_debate_date: 15,
+        with_debate_outcome: 16, in_debate_queue: 17
       }
     end
 
     subject { helper.admin_petition_facets_for_select(facets, selected) }
 
     it "generates the correct number of options" do
-      expect(subject).to have_css("option", count: 13)
+      expect(subject).to have_css("option", count: 17)
     end
 
     it "generates the correct option for 'all'" do
@@ -30,44 +33,60 @@ RSpec.describe AdminHelper, type: :helper do
       expect(subject).to have_css("option:nth-of-type(3)[value='in_moderation']", text: "Awaiting moderation (3)")
     end
 
+    it "generates the correct option for 'recently_in_moderation'" do
+      expect(subject).to have_css("option:nth-of-type(4)[value='recently_in_moderation']", text: "Awaiting moderation - recent (4)")
+    end
+
+    it "generates the correct option for 'nearly_overdue_in_moderation'" do
+      expect(subject).to have_css("option:nth-of-type(5)[value='nearly_overdue_in_moderation']", text: "Awaiting moderation - nearly overdue (5)")
+    end
+
+    it "generates the correct option for 'overdue_in_moderation'" do
+      expect(subject).to have_css("option:nth-of-type(6)[value='overdue_in_moderation']", text: "Awaiting moderation - overdue (6)")
+    end
+
+    it "generates the correct option for 'tagged_in_moderation'" do
+      expect(subject).to have_css("option:nth-of-type(7)[value='tagged_in_moderation']", text: "Awaiting moderation - tagged (7)")
+    end
+
     it "generates the correct option for 'open'" do
-      expect(subject).to have_css("option:nth-of-type(4)[value='open']", text: "Open (4)")
+      expect(subject).to have_css("option:nth-of-type(8)[value='open']", text: "Open (8)")
     end
 
     it "generates the correct option for 'closed'" do
-      expect(subject).to have_css("option:nth-of-type(5)[value='closed']", text: "Closed (5)")
+      expect(subject).to have_css("option:nth-of-type(9)[value='closed']", text: "Closed (9)")
     end
 
     it "generates the correct option for 'rejected'" do
-      expect(subject).to have_css("option:nth-of-type(6)[value='rejected']", text: "Rejected (6)")
+      expect(subject).to have_css("option:nth-of-type(10)[value='rejected']", text: "Rejected (10)")
     end
 
     it "generates the correct option for 'hidden'" do
-      expect(subject).to have_css("option:nth-of-type(7)[value='hidden']", text: "Hidden (7)")
+      expect(subject).to have_css("option:nth-of-type(11)[value='hidden']", text: "Hidden (11)")
     end
 
     it "generates the correct option for 'hidden'" do
-      expect(subject).to have_css("option:nth-of-type(8)[value='stopped']", text: "Stopped (8)")
+      expect(subject).to have_css("option:nth-of-type(12)[value='stopped']", text: "Stopped (12)")
     end
 
     it "generates the correct option for 'awaiting_response'" do
-      expect(subject).to have_css("option:nth-of-type(9)[value='awaiting_response']", text: "Awaiting a government response (9)")
+      expect(subject).to have_css("option:nth-of-type(13)[value='awaiting_response']", text: "Awaiting a government response (13)")
     end
 
     it "generates the correct option for 'with_response'" do
-      expect(subject).to have_css("option:nth-of-type(10)[value='with_response']", text: "With a government response (10)")
+      expect(subject).to have_css("option:nth-of-type(14)[value='with_response']", text: "With a government response (14)")
     end
 
     it "generates the correct option for 'awaiting_debate_date'" do
-      expect(subject).to have_css("option:nth-of-type(11)[value='awaiting_debate_date']", text: "Awaiting a debate in parliament (11)")
+      expect(subject).to have_css("option:nth-of-type(15)[value='awaiting_debate_date']", text: "Awaiting a debate in parliament (15)")
     end
 
     it "generates the correct option for 'with_debate_outcome'" do
-      expect(subject).to have_css("option:nth-of-type(12)[value='with_debate_outcome']", text: "Has been debated in parliament (12)")
+      expect(subject).to have_css("option:nth-of-type(16)[value='with_debate_outcome']", text: "Has been debated in parliament (16)")
     end
 
     it "generates the correct option for 'in_debate_queue'" do
-      expect(subject).to have_css("option:nth-of-type(13)[value='in_debate_queue']", text: "In debate queue (13)")
+      expect(subject).to have_css("option:nth-of-type(17)[value='in_debate_queue']", text: "In debate queue (17)")
     end
 
     it "marks the correct option as selected" do

@@ -2,11 +2,11 @@
 
 <%= form_tag admin_petitions_path, enforce_utf8: false, method: :get, class: "search-inline search-petitions" do %>
   <div class="grid-row">
-    <div class="column-third">
+    <div class="column-two-thirds">
       <%= label_tag :state, "Filter by status", class: "visuallyhidden" %>
-      <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control" %>
+      <%= select_tag :state, admin_petition_facets_for_select(@petitions.facets, params[:state]), class: "form-control", data: { autosubmit: true } %>
     </div>
-    <div class="column-third">
+    <div class="column-two-thirds">
       <%= label_tag :q, "Search petitions", class: "visuallyhidden" %>
       <%= search_field_tag :q, params[:q], class: "form-control", placeholder:"Enter a search query" %>
       <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>

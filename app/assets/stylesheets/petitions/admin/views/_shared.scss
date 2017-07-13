@@ -3,6 +3,10 @@
     margin-top: $gutter-half;
   }
 
+  select#state {
+    margin-bottom: $gutter-half;
+  }
+
   .flash-notice {
     background-color: $flash-green;
     padding: $gutter-half;

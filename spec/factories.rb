@@ -238,6 +238,22 @@ FactoryGirl.define do
         end
       end
     end
+
+    trait :tagged do
+      transient do
+        tag_name { nil }
+      end
+
+      after(:build) do |petition, evaluator|
+        if evaluator.tag_name
+          tag = create(:tag, name: evaluator.tag_name)
+        else
+          tag = create(:tag)
+        end
+
+        petition.tags = [tag.id]
+      end
+    end
   end
 
   factory :pending_petition, :parent => :petition do

@@ -598,48 +598,125 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    describe 'between_in_moderation_times' do
-      let(:moderation_overdue_in_days) { 7.days }
-      let(:moderation_near_overdue_in_days) { 5.days }
+    describe ".in_moderation" do
+      let!(:open_petition) { FactoryGirl.create(:open_petition) }
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
 
-      before do
-        allow(Site).to receive(:moderation_overdue_in_days).and_return(moderation_overdue_in_days)
+      context "with no arguments" do
+        it "returns all petitions awaiting moderation" do
+          expect(Petition.in_moderation).to include(recent_petition, overdue_petition, nearly_overdue_petition)
+        end
 
-        @p1 = FactoryGirl.create(:debated_petition)
-        @p2 = FactoryGirl.create(:open_petition)
-        @p3 = FactoryGirl.create(:closed_petition)
-        @p4 = FactoryGirl.create(:rejected_petition)
-        @p5 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago - 1.minute))
-        @p6 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago + 1.minute))
-        @p7 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_near_overdue_in_days.ago - 1.minute))
-        @p8 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_near_overdue_in_days.ago + 1.minute))
-        @p9 = FactoryGirl.create(:pending_petition)
-        @p10 = FactoryGirl.create(:validated_petition)
+        it "doesn't return petitions in other states" do
+          expect(Petition.in_moderation).not_to include(open_petition)
+        end
       end
 
-      it 'returns petitions within the specified in moderation times' do
-        expect(Petition.between_in_moderation_times(from: moderation_overdue_in_days.ago, to: moderation_near_overdue_in_days.ago)).to eq([@p6, @p7])
+      context "with a :from argument" do
+        it "returns all petitions awaiting moderation after the timestamp" do
+          expect(Petition.in_moderation(from: 5.days.ago)).to include(recent_petition)
+        end
+
+        it "doesn't return petitions awaiting moderation before the timestamp" do
+          expect(Petition.in_moderation(from: 5.days.ago)).not_to include(overdue_petition, nearly_overdue_petition)
+        end
+
+        it "doesn't return petitions in other states" do
+          expect(Petition.in_moderation(from: 5.days.ago)).not_to include(open_petition)
+        end
+      end
+
+      context "with a :to argument" do
+        it "returns all petitions awaiting moderation before the timestamp" do
+          expect(Petition.in_moderation(to: 7.days.ago)).to include(overdue_petition)
+        end
+
+        it "doesn't return petitions awaiting moderation after the timestamp" do
+          expect(Petition.in_moderation(to: 7.days.ago)).not_to include(recent_petition, nearly_overdue_petition)
+        end
+
+        it "doesn't return petitions in other states" do
+          expect(Petition.in_moderation(to: 7.days.ago)).not_to include(open_petition)
+        end
+      end
+
+      context "with both a :from and :to argument" do
+        it "returns all petitions awaiting moderation between the timestamps" do
+          expect(Petition.in_moderation(from: 7.days.ago, to: 5.days.ago)).to include(nearly_overdue_petition)
+        end
+
+        it "doesn't return petitions awaiting moderation before the timestamp" do
+          expect(Petition.in_moderation(from: 7.days.ago, to: 5.days.ago)).not_to include(overdue_petition)
+        end
+
+        it "doesn't return petitions awaiting moderation after the timestamp" do
+          expect(Petition.in_moderation(from: 7.days.ago, to: 5.days.ago)).not_to include(recent_petition)
+        end
+
+        it "doesn't return petitions in other states" do
+          expect(Petition.in_moderation(from: 7.days.ago, to: 5.days.ago)).not_to include(open_petition)
+        end
       end
     end
 
-    describe 'overdue_in_moderation_time_limit' do
-      let(:moderation_overdue_in_days) { 7.days }
+    describe ".recently_in_moderation" do
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
 
-      before do
-        allow(Site).to receive(:moderation_overdue_in_days).and_return(moderation_overdue_in_days)
-
-        @p1 = FactoryGirl.create(:debated_petition)
-        @p2 = FactoryGirl.create(:open_petition)
-        @p3 = FactoryGirl.create(:closed_petition)
-        @p4 = FactoryGirl.create(:rejected_petition)
-        @p5 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago - 1.minute))
-        @p6 = FactoryGirl.create(:sponsored_petition, moderation_threshold_reached_at: (moderation_overdue_in_days.ago + 1.minute))
-        @p7 = FactoryGirl.create(:pending_petition)
-        @p8 = FactoryGirl.create(:validated_petition)
+      it "returns petitions that have recently joined the moderation queue" do
+        expect(Petition.recently_in_moderation).to include(recent_petition)
       end
 
-      it 'returns petitions that have been in the moderation queue for too long' do
-        expect(Petition.overdue_in_moderation_time_limit).to eq([@p5])
+      it "doesn't return petitions that are overdue or nearly overdue" do
+        expect(Petition.recently_in_moderation).not_to include(overdue_petition, nearly_overdue_petition)
+      end
+    end
+
+    describe ".nearly_overdue_in_moderation" do
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+
+      it "returns petitions that are nearly overdue for moderation" do
+        expect(Petition.nearly_overdue_in_moderation).to include(nearly_overdue_petition)
+      end
+
+      it "doesn't return petitions that are overdue or have recently joined the moderation queue" do
+        expect(Petition.nearly_overdue_in_moderation).not_to include(recent_petition, overdue_petition)
+      end
+    end
+
+    describe ".overdue_in_moderation" do
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+
+      it "returns petitions that are overdue for moderation" do
+        expect(Petition.overdue_in_moderation).to include(overdue_petition)
+      end
+
+      it "doesn't return petitions that are nearly overdue or have recently joined the moderation queue" do
+        expect(Petition.overdue_in_moderation).not_to include(recent_petition, nearly_overdue_petition)
+      end
+    end
+
+    describe ".tagged_in_moderation" do
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+      let!(:tagged_recent_petition) { FactoryGirl.create(:sponsored_petition, :recent, :tagged) }
+      let!(:tagged_overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue, :tagged) }
+      let!(:tagged_nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue, :tagged) }
+
+      it "returns petitions that are in the moderation queue and are tagged" do
+        expect(Petition.tagged_in_moderation).to include(tagged_recent_petition, tagged_overdue_petition, tagged_nearly_overdue_petition)
+      end
+
+      it "doesn't return petitions that are in the moderation queue but are not tagged" do
+        expect(Petition.tagged_in_moderation).not_to include(recent_petition, overdue_petition, nearly_overdue_petition)
       end
     end
   end

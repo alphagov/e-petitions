@@ -12,7 +12,8 @@ Capybara.default_selector = :xpath
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app,
-    :phantomjs_options => [
+    phantomjs_logger: "/dev/null",
+    phantomjs_options: [
       '--ignore-ssl-errors=yes',
       '--local-to-remote-url-access=yes',
       '--proxy=127.0.0.1:8443'

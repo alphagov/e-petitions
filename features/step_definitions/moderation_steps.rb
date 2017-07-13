@@ -122,7 +122,6 @@ end
 
 When(/^I filter the list to show "([^"]*)" petitions$/) do |option|
   select option
-  click_button "Search"
 end
 
 Then /^I should not see any "([^"]*)" petitions$/ do |state|

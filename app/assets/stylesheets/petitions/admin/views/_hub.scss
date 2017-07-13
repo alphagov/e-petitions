@@ -1,9 +1,14 @@
 .hub-actions {
-  margin-top: $gutter;
+  margin-top: $gutter-half;
+
   ul {
+    overflow: hidden;
+    margin-bottom: -$gutter-half;
+
     li {
       margin-bottom: $gutter;
     }
+
     a {
       position: relative;
       display: block;
@@ -36,6 +41,7 @@
   }
 
   .moderation {
+    overflow: hidden;
     margin-left: $gutter-half;
     margin-right: $gutter-half;
 
@@ -64,6 +70,7 @@
 
       a {
         color: $white;
+        display: block;
       }
 
       .summary {
@@ -73,11 +80,24 @@
       .details {
         .label {
           float: right;
-
         }
-        .tagged {
+
+        .tagged-in-moderation {
           background-color: $grey-3;
-          color: $black;
+
+          a {
+            color: $black;
+          }
+        }
+
+        div {
+          line-height: 50px;
+          height: 50px;
+        }
+
+        a {
+          padding-right: $gutter-half;
+          padding-left: $gutter-half;
         }
       }
 
@@ -87,19 +107,9 @@
         margin-bottom: $gutter * 2;
       }
 
-      .details div {
-        height: 50px;
-      }
-
       .summary {
         padding-top: $gutter-half;
         padding-left: $gutter-half;
-      }
-
-      .details div {
-        padding-right: $gutter-half;
-        padding-left: $gutter-half;
-        line-height: 50px;
       }
     }
   }
