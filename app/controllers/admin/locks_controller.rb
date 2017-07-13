@@ -1,0 +1,41 @@
+class Admin::LocksController < Admin::AdminController
+  before_action :fetch_petition
+
+  def show
+    @petition.update_lock!(current_user)
+
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def create
+    @petition.checkout!(current_user)
+
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def update
+    @petition.force_checkout!(current_user)
+
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  def destroy
+    @petition.release!(current_user)
+
+    respond_to do |format|
+      format.json
+    end
+  end
+
+  private
+
+  def fetch_petition
+    @petition = Petition.find(params[:petition_id])
+  end
+end

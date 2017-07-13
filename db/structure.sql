@@ -876,7 +876,9 @@ CREATE TABLE petitions (
     special_consideration boolean,
     archived_at timestamp without time zone,
     archiving_started_at timestamp without time zone,
-    tags integer[] DEFAULT '{}'::integer[] NOT NULL
+    tags integer[] DEFAULT '{}'::integer[] NOT NULL,
+    locked_at timestamp without time zone,
+    locked_by_id integer
 );
 
 
@@ -2067,6 +2069,13 @@ CREATE INDEX index_petitions_on_last_signed_at ON petitions USING btree (last_si
 
 
 --
+-- Name: index_petitions_on_locked_by_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_locked_by_id ON petitions USING btree (locked_by_id);
+
+
+--
 -- Name: index_petitions_on_response_threshold_reached_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2608,4 +2617,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170711134758');
 INSERT INTO schema_migrations (version) VALUES ('20170711153944');
 
 INSERT INTO schema_migrations (version) VALUES ('20170711153945');
+
+INSERT INTO schema_migrations (version) VALUES ('20170712070139');
 

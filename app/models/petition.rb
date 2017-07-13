@@ -63,6 +63,8 @@ class Petition < ActiveRecord::Base
   belongs_to :creator_signature, class_name: 'Signature'
   accepts_nested_attributes_for :creator_signature, update_only: true
 
+  belongs_to :locked_by, class_name: 'AdminUser'
+
   has_one :debate_outcome, dependent: :destroy
   has_one :email_requested_receipt, dependent: :destroy
   has_one :government_response, dependent: :destroy
@@ -619,6 +621,36 @@ class Petition < ActiveRecord::Base
 
   def editing_disabled?
     archiving_started_at? || archived_at?
+  end
+
+  def update_lock!(user, now = Time.current)
+    if locked_by == user
+      update!(locked_at: now)
+    end
+  end
+
+  def checkout!(user, now = Time.current)
+    with_lock do
+      if locked_by.present? && locked_by != user
+        raise RuntimeError, "Petition already being edited by #{locked_by.pretty_name}"
+      else
+        update!(locked_by: user, locked_at: now)
+      end
+    end
+  end
+
+  def force_checkout!(user, now = Time.current)
+    update!(locked_by: user, locked_at: now)
+  end
+
+  def release!(user)
+    with_lock do
+      if locked_by.present? && locked_by != user
+        raise RuntimeError, "Petition already being edited by #{locked_by.pretty_name}"
+      else
+        update!(locked_by: nil, locked_at: nil)
+      end
+    end
   end
 
   def can_have_debate_added?

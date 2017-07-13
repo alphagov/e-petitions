@@ -11,7 +11,7 @@
   <div class="column-two-thirds extra-gutter">
     <h2 class="petition-action-heading">Edit petition</h2>
 
-    <%= form_for @petition, url: admin_petition_petition_details_path(@petition), method: :patch do |f| %>
+    <%= form_for @petition, url: admin_petition_details_path(@petition), method: :patch do |f| %>
 
       <%= form_row for: [f.object, :action] do %>
         <%= f.label :action, class: 'form-label' %>
@@ -53,8 +53,10 @@
     <% end %>
   </div>
 
-  <div class="admin-petition-meta column-third">
+  <div class="petition-meta column-third">
     <%= render 'admin/petitions/petition_details' %>
   </div>
 
 </div>
+
+<%= render 'edit_lock' %>
