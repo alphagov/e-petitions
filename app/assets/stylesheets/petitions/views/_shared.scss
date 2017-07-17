@@ -359,3 +359,27 @@ input.back-page {
     }
   }
 }
+
+.debate-outcome-links {
+  margin: em(10, 19) 0;
+
+  li {
+    margin: em(5, 16) 0;
+
+    @include media(tablet) {
+      display: inline;
+    }
+  }
+
+  li:before {
+    @include media(tablet) {
+      content: "• ";
+    }
+  }
+
+  li:first-child:before {
+    @include media(tablet) {
+      content: "";
+    }
+  }
+}

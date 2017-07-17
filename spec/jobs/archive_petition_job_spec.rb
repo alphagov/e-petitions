@@ -203,6 +203,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
           overview: "Debate on kids TV",
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001"
         )
       end
 
@@ -216,6 +217,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.overview).to eq(debate_outcome.overview)
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
+        expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
         expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
         expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
@@ -232,6 +234,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
           overview: "Debate on kids TV",
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
           commons_image: File.new(commons_image_file)
         )
       end
@@ -246,6 +249,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.overview).to eq(debate_outcome.overview)
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
+        expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
         expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
         expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)

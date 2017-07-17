@@ -197,7 +197,8 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
           debated_on: 1.day.ago,
           overview: "What happened in the debate",
           transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
-          video_url: "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00"
+          video_url: "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
 
       get "/archived/petitions.json"
       expect(response).to be_success
@@ -210,7 +211,8 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
                 "debated_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
                 "overview" => "What happened in the debate",
                 "transcript_url" => "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
-                "video_url" => "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00"
+                "video_url" => "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
+                "debate_pack_url" => "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
               )
             )
           )

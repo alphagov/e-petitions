@@ -19,6 +19,10 @@ Watch the debate: <%= @debate_outcome.video_url %>
 Read the transcript: <%= @debate_outcome.transcript_url %>
 
 <% end %>
+<% if @debate_outcome.debate_pack_url? %>
+Read the transcript: <%= @debate_outcome.debate_pack_url %>
+
+<% end %>
 The petition: <%= archived_petition_url(@petition) %>
 
 <% else %>

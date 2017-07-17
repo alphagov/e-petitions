@@ -94,6 +94,7 @@ class Petition < ActiveRecord::Base
     delegate :code, :details, to: :rejection
     delegate :summary, :details, :created_at, :updated_at, to: :government_response
     delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
+    delegate :debate_pack_url, to: :debate_outcome, prefix: false
   end
 
   alias_attribute :opened_at, :open_at

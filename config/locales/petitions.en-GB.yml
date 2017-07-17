@@ -226,6 +226,12 @@ en-GB:
         html:
           "<span class=\"count\">%{formatted_count}</span> All petitions"
 
+    debate_outcomes:
+      link_titles:
+        video_url: "Watch the debate"
+        transcript_url: "Read the transcript"
+        debate_pack_url: "Read the research"
+
     pagination:
       previous_html: |-
         <a class="previous" href="%{previous_link}">

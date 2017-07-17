@@ -28,8 +28,8 @@ class PetitionCSVPresenter
     [:id,
       :action, :background, :additional_details, :state,
       :creator_name, :creator_email, :signature_count, :rejection_code, :rejection_details,
-      :government_response_summary, :government_response_details,
-      :debate_date, :debate_transcript_url, :debate_video_url, :debate_overview
+      :government_response_summary, :government_response_details, :debate_date,
+      :debate_transcript_url, :debate_video_url, :debate_pack_url, :debate_overview
     ]
   end
 

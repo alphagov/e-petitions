@@ -31,6 +31,9 @@ FactoryGirl.define do
       video_url {
         "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
       }
+      sequence(:debate_pack_url) { |n|
+        "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
+      }
     end
   end
 
@@ -94,6 +97,7 @@ FactoryGirl.define do
         overview { nil }
         transcript_url { nil }
         video_url { nil }
+        debate_pack_url { nil }
         commons_image { nil }
       end
 
@@ -104,6 +108,7 @@ FactoryGirl.define do
           o.overview = evaluator.overview if evaluator.overview.present?
           o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
           o.video_url = evaluator.video_url if evaluator.video_url.present?
+          o.debate_pack_url = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
           o.commons_image = evaluator.commons_image if evaluator.commons_image.present?
         end
       end
@@ -374,6 +379,7 @@ FactoryGirl.define do
       overview { nil }
       transcript_url { nil }
       video_url { nil }
+      debate_pack_url { nil }
       commons_image { nil }
     end
 
@@ -386,6 +392,7 @@ FactoryGirl.define do
       debate_outcome_attributes[:overview] = evaluator.overview if evaluator.overview.present?
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
+      debate_outcome_attributes[:debate_pack_url] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
       debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
 
       petition.create_debate_outcome(debate_outcome_attributes)
@@ -552,6 +559,9 @@ FactoryGirl.define do
       }
       video_url {
         "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
+      }
+      sequence(:debate_pack_url) { |n|
+        "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
       }
     end
   end

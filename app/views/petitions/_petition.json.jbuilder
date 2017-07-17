@@ -55,6 +55,7 @@ json.attributes do
       json.debated_on debate_outcome.date
       json.transcript_url debate_outcome.transcript_url
       json.video_url debate_outcome.video_url
+      json.debate_pack_url debate_outcome.debate_pack_url
       json.overview debate_outcome.overview
     end
   else

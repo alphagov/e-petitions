@@ -10,7 +10,7 @@ module Archived
 
     validates :petition, presence: true
     validates :debated_on, presence: true, if: :debated?
-    validates :transcript_url, :video_url, length: { maximum: 500 }
+    validates :transcript_url, :video_url, :debate_pack_url, length: { maximum: 500 }
 
     has_attached_file :commons_image,
       # default_url needs to be a lambda - this way the generated image url will

@@ -37,9 +37,11 @@ class Admin::DebateOutcomesController < Admin::AdminController
   end
 
   def debate_outcome_params
-    params.require(:debate_outcome).permit(
-      :debated_on, :overview, :transcript_url, :video_url, :debated, :commons_image
-    )
+    params.require(:debate_outcome).permit(*debate_outcome_attributes)
+  end
+
+  def debate_outcome_attributes
+    %i[debated_on overview transcript_url video_url debate_pack_url debated commons_image]
   end
 
   def send_email_to_petitioners?

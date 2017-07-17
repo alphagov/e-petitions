@@ -37,6 +37,12 @@
       <%= f.url_field :video_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
     <% end %>
 
+    <%= form_row for: [f.object, :debate_pack_url] do %>
+      <%= f.label :debate_pack_url, 'Debate Pack URL', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :debate_pack_url %>
+      <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <% end %>
+
     <%= form_row for: [f.object, :commons_image] do %>
       <%= f.label :commons_image, 'Commons Image', class: 'form-label' %>
       <%= error_messages_for_field f.object, :commons_image %>
