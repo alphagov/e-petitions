@@ -65,7 +65,7 @@ class PetitionsController < ApplicationController
   end
 
   def check_results
-    @petitions = Petition.visible.search(params.merge(count: 3))
+    @petitions = Petition.current.search(params.merge(count: 3))
     respond_to do |format|
       format.html
     end

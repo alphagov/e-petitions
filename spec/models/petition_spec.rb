@@ -218,6 +218,25 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "current" do
+      let!(:petition) { FactoryGirl.create(:open_petition) }
+      let!(:other_petition) { FactoryGirl.create(:open_petition, created_at: 2.week.ago) }
+      let!(:closed_petition) { FactoryGirl.create(:closed_petition) }
+      let!(:rejected_petition) { FactoryGirl.create(:rejected_petition) }
+
+      it "doesn't include closed petitions" do
+        expect(described_class.current).not_to include(closed_petition)
+      end
+
+      it "doesn't include rejected petitions" do
+        expect(described_class.current).not_to include(closed_petition)
+      end
+
+      it "returns open petitions, newest first" do
+        expect(described_class.current).to match_array([petition, other_petition])
+      end
+    end
+
     context "not_hidden" do
       let!(:petition) { FactoryGirl.create(:hidden_petition) }
 
