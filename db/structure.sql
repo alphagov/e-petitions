@@ -106,7 +106,8 @@ CREATE TABLE archived_debate_outcomes (
     commons_image_file_name character varying,
     commons_image_content_type character varying,
     commons_image_file_size integer,
-    commons_image_updated_at timestamp without time zone
+    commons_image_updated_at timestamp without time zone,
+    debate_pack_url character varying(500)
 );
 
 
@@ -490,7 +491,8 @@ CREATE TABLE debate_outcomes (
     commons_image_file_name character varying,
     commons_image_content_type character varying,
     commons_image_file_size integer,
-    commons_image_updated_at timestamp without time zone
+    commons_image_updated_at timestamp without time zone,
+    debate_pack_url character varying(500)
 );
 
 
@@ -2619,4 +2621,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170711153944');
 INSERT INTO schema_migrations (version) VALUES ('20170711153945');
 
 INSERT INTO schema_migrations (version) VALUES ('20170712070139');
+
+INSERT INTO schema_migrations (version) VALUES ('20170713193039');
 

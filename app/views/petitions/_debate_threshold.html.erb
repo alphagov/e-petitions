@@ -13,19 +13,15 @@
             </span>
           <% end -%>
         <% end -%>
-        <% if debate_outcome.video_url? || debate_outcome.transcript_url? -%>
-          <p>
-          <% if debate_outcome.video_url? -%>
-            <%= link_to 'Watch the debate', debate_outcome.video_url, rel: 'external' %>
-          <% end -%>
-          <% if debate_outcome.video_url? && debate_outcome.transcript_url? -%>
-            &bull;
-          <% end -%>
-          <% if debate_outcome.transcript_url? -%>
-            <%= link_to 'Read the transcript', debate_outcome.transcript_url, rel: 'external' %>
-          <% end -%>
-          </p>
-        <% end -%>
+
+        <% if debate_outcome_links?(debate_outcome) %>
+          <ul class="debate-outcome-links">
+            <% debate_outcome_links(debate_outcome).each do |link| %>
+              <li><%= link_to link.title, link.url, rel: 'external' %></li>
+            <% end %>
+          </ul>
+        <% end %>
+
         <% if debate_outcome.overview? -%>
           <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
         <% end -%>

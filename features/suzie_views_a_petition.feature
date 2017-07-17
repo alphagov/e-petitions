@@ -91,7 +91,7 @@ Feature: Suzie views a petition
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
     When I view the petition
     Then I should see the date of the debate is 2 days ago
-    And I should see links to transcript and video
+    And I should see links to the transcript, video and research
     And I should see a summary of the debate outcome
 
   Scenario: Suzie views a petition which has a scheduled debate date

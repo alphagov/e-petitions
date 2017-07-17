@@ -36,13 +36,14 @@ Feature: Suzie sees actioned petitions
     And I should see 2 petitions counted in the debate threshold section
     And I should see 2 petitions listed in the debate threshold section
 
-  Scenario: There are petitions debated in parliament with video and transcript urls
-    Given there are 1 petitions debated in parliament with a video url
-    And there are 1 petitions debated in parliament with a transcript url
-    And there are 1 petitions debated in parliament with both video and transcript urls
+  Scenario: There are petitions debated in parliament with video, transcript and debate pack urls
+    Given there is 1 petition debated in parliament with a transcript url
+    And there is 1 petition debated in parliament with both video and transcript urls
+    And there is 1 petition debated in parliament with all debate outcome urls
     And I am on the home page
     Then I should see 2 debated petition video links
-    And I should see 2 debated petition transcript links
+    And I should see 3 debated petition transcript links
+    And I should see 1 debated petition debate pack links
     And I should see 3 petitions counted in the debate threshold section
     And I should see 3 petitions listed in the debate threshold section
 

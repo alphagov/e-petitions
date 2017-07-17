@@ -47,6 +47,7 @@ RSpec.describe PetitionCSVPresenter do
       petition.debate_date,
       petition.debate_transcript_url,
       petition.debate_video_url,
+      petition.debate_pack_url,
       petition.debate_overview,
       timestampify(petition.created_at),
       timestampify(petition.updated_at),

@@ -1,14 +1,6 @@
 require 'rails_helper'
-require_relative 'api_request_helpers'
 
-RSpec.describe 'API request to show an archived petition', type: :request, show_exceptions: true do
-  include ApiRequestHelpers
-
-  def make_successful_request(petition, params = {})
-    get archived_petition_url(petition, {format: 'json'}.merge(params))
-    expect(response).to be_success
-  end
-
+RSpec.describe "API request to show an archived petition", type: :request, show_exceptions: true do
   let(:petition) { FactoryGirl.create :archived_petition }
   let(:attributes) { json["data"]["attributes"] }
 
@@ -18,64 +10,214 @@ RSpec.describe 'API request to show an archived petition', type: :request, show_
 
   describe "format" do
     it "responds to JSON" do
-      make_successful_request petition
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
     end
 
     it "sets CORS headers" do
-      get archived_petition_url(petition, format: 'json')
+      get "/archived/petitions/#{petition.id}.json"
+
+      expect(response).to be_success
       expect(access_control_allow_origin).to eq('*')
       expect(access_control_allow_methods).to eq('GET')
       expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
     end
 
     it "does not respond to XML" do
-      get archived_petition_url(petition, format: 'xml')
+      get "/archived/petitions/#{petition.id}.xml"
       expect(response.status).to eq(406)
     end
   end
 
   describe "links" do
-    it "returns a link to itself" do
-      make_successful_request petition
+    let(:links) { json["links"] }
 
-      expect(json["links"]).to include({"self" => archived_petition_url(petition, format: 'json')})
+    it "returns a link to itself" do
+      get "/archived/petitions/#{petition.id}.json"
+
+      expect(response).to be_success
+      expect(links).to include("self" => "https://petition.parliament.uk/archived/petitions/#{petition.id}.json")
     end
   end
 
   describe "data" do
     it "returns the petition with the expected fields" do
-      make_successful_request petition
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
 
-      expect(json["data"]).to be_a(Hash)
-      expect(attributes["action"]).to eq(petition.action)
-      expect(attributes["background"]).to eq(petition.background)
-      expect(attributes["additional_details"]).to eq(petition.additional_details)
-      expect(attributes["state"]).to eq(petition.state)
-      expect(attributes["signature_count"]).to eq(petition.signature_count)
-      expect(attributes["opened_at"]).to eq(timestampify petition.opened_at)
-      expect(attributes["closed_at"]).to eq(timestampify petition.closed_at)
-      expect(attributes["created_at"]).to eq(timestampify petition.created_at)
-      expect(attributes["updated_at"]).to eq(timestampify petition.updated_at)
+      expect(attributes).to match(
+        a_hash_including(
+          "action" => a_string_matching(petition.action),
+          "background" => a_string_matching(petition.background),
+          "additional_details" => a_string_matching(petition.additional_details),
+          "state" => a_string_matching(petition.state),
+          "signature_count" => eq_to(petition.signature_count),
+          "opened_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "closed_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+        )
+      )
     end
 
     it "includes the rejection section for rejected petitions" do
-      petition = FactoryGirl.create :archived_petition, :rejected, rejection_code: "duplicate", rejection_details: "This is a duplication of another petition"
+      petition = \
+        FactoryGirl.create :archived_petition, :rejected,
+          rejection_code: "duplicate",
+          rejection_details: "This is a duplication of another petition"
 
-      make_successful_request petition
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
 
-      expect(attributes["rejection"]).to be_a(Hash)
-      expect(attributes["rejection"]["code"]).to eq("duplicate")
-      expect(attributes["rejection"]["details"]).to eq("This is a duplication of another petition")
+      expect(attributes).to match(
+        a_hash_including(
+          "rejected_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "rejection" => a_hash_including(
+            "code" => "duplicate",
+            "details" => "This is a duplication of another petition"
+          )
+        )
+      )
     end
 
     it "includes the government_response section for petitions with a government_response" do
-      petition = FactoryGirl.create :archived_petition, :response, response_summary: "Summary of what the government said", response_details: "Details of what the government said"
+      petition = \
+        FactoryGirl.create :archived_petition, :response,
+          response_summary: "Summary of what the government said",
+          response_details: "Details of what the government said"
 
-      make_successful_request petition
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
 
-      expect(attributes["government_response"]).to be_a(Hash)
-      expect(attributes["government_response"]["summary"]).to eq("Summary of what the government said")
-      expect(attributes["government_response"]["details"]).to eq("Details of what the government said")
+      expect(attributes).to match(
+        a_hash_including(
+          "government_response_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "government_response" => a_hash_including(
+            "summary" => "Summary of what the government said",
+            "details" => "Details of what the government said",
+            "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+            "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+          )
+        )
+      )
+    end
+
+    it "includes the date and time at which the thresholds were reached" do
+      petition = \
+        FactoryGirl.create :archived_petition,
+          moderation_threshold_reached_at: 1.month.ago,
+          response_threshold_reached_at: 1.weeks.ago,
+          debate_threshold_reached_at: 1.day.ago
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes).to match(
+        a_hash_including(
+          "moderation_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "response_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "debate_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+        )
+      )
+    end
+
+    it "includes the date when a petition is scheduled for a debate" do
+      petition = FactoryGirl.create :archived_petition, :scheduled_for_debate
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes).to match(
+        a_hash_including(
+          "scheduled_debate_date" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z])
+        )
+      )
+    end
+
+    it "includes the debate section for petitions that have been debated" do
+      petition = \
+        FactoryGirl.create :archived_petition, :debated,
+          debated_on: 1.day.ago,
+          overview: "What happened in the debate",
+          transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
+          video_url: "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
+          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes).to match(
+        a_hash_including(
+          "debate_outcome_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "debate" => a_hash_including(
+            "debated_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
+            "overview" => "What happened in the debate",
+            "transcript_url" => "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
+            "video_url" => "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
+            "debate_pack_url" => "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+          )
+        )
+      )
+    end
+
+    it "includes the signatures by constituency data" do
+      FactoryGirl.create :constituency, :coventry_north_east
+      FactoryGirl.create :constituency, :bethnal_green_and_bow
+
+      petition = \
+        FactoryGirl.create :archived_petition,
+          signatures_by_constituency: { 3427 => 123, 3320 => 456 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes).to match(
+        a_hash_including(
+          "signatures_by_constituency" => a_collection_containing_exactly(
+            {
+              "name" => "Coventry North East",
+              "ons_code" => "E14000649",
+              "mp" => "Colleen Fletcher MP",
+              "signature_count" => 123
+            },
+            {
+              "name" => "Bethnal Green and Bow",
+              "ons_code" => "E14000555",
+              "mp" => "Rushanara Ali MP",
+              "signature_count" => 456
+            }
+          )
+        )
+      )
+    end
+
+    it "includes the signatures by country data" do
+      FactoryGirl.create :location, name: "United Kingdom", code: "gb"
+      FactoryGirl.create :location, name: "France", code: "fr"
+
+      petition = \
+        FactoryGirl.create :archived_petition,
+          signatures_by_country: { "gb" => 123456, "fr" => 789 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes).to match(
+        a_hash_including(
+          "signatures_by_country" => a_collection_containing_exactly(
+            {
+              "name" => "United Kingdom",
+              "code" => "gb",
+              "signature_count" => 123456
+            },
+            {
+              "name" => "France",
+              "code" => "fr",
+              "signature_count" => 789
+            }
+          )
+        )
+      )
     end
   end
 end

@@ -373,6 +373,7 @@ RSpec.describe PetitionMailer, type: :mailer do
               overview: "Discussion of the 2015 Christmas Adjournment",
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
               video_url: "http://parliamentlive.tv/event/index/20150924000001",
+              debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
               petition: petition
             )
           end
@@ -492,6 +493,7 @@ RSpec.describe PetitionMailer, type: :mailer do
               overview: "Discussion of the 2015 Christmas Adjournment",
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
               video_url: "http://parliamentlive.tv/event/index/20150924000001",
+              debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
               petition: petition
             )
           end

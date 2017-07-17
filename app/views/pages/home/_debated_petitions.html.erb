@@ -20,6 +20,9 @@
         <% if petition.debate_outcome.transcript_url.present? %>
           <p>Read the transcript at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %></p>
         <% end %>
+        <% if petition.debate_outcome.debate_pack_url.present? %>
+          <p>Read the research at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %></p>
+        <% end %>
       </li>
     <% end -%>
   </ol>
