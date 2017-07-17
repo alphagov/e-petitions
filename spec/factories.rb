@@ -190,6 +190,7 @@ FactoryGirl.define do
   factory :petition do
     transient do
       admin_notes { nil }
+      creator_name { nil }
       creator_signature_attributes { {} }
       sponsors_signed false
       sponsor_count { Site.minimum_number_of_sponsors }
@@ -210,6 +211,10 @@ FactoryGirl.define do
 
       if evaluator.admin_notes
         petition.build_note details: evaluator.admin_notes
+      end
+
+      if evaluator.creator_name
+        petition.creator_signature.name = evaluator.creator_name
       end
     end
 
@@ -359,6 +364,7 @@ FactoryGirl.define do
 
   factory :scheduled_debate_petition, :parent => :open_petition do
     debate_threshold_reached_at { 1.week.ago }
+    scheduled_debate_date { 1.week.from_now }
     debate_state 'scheduled'
   end
 
