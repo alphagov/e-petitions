@@ -1,12 +1,19 @@
 <tr>
-  <td class="petition_id"><%= signature.petition.id %></td>
-  <td><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
-  <td><%= mail_to signature.email, signature.name %></td>
-  <td><%= signature.state %></td>
-  <td><%= date_time_format(signature.updated_at) %></td>
+  <td class="petition-id"><%= signature.petition.id %></td>
+  <td class="petition-action"><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
+  <td class="petition-signature-count"><%= number_with_delimiter(signature.petition.signature_count) %></td>
+  <td class="signature-name"><%= mail_to signature.email, signature.name %></td>
+  <td class="signature-status"><%= signature.state %></td>
+  <td class="signature-timestamp">
+    <% if signature.validated? %>
+      <span title="Validated"><%= date_time_format(signature.validated_at) %></span>
+    <% else %>
+      <span title="Created"><%= date_time_format(signature.updated_at) %></spam>
+    <% end %>
+  </td>
   <% if signature.creator? %>
-    <td>Yes</td>
-    <td>
+    <td class="signature-creator">Yes</td>
+    <td class="signature-actions">
       <% if signature.pending? %>
         <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
       <% else %>
@@ -14,8 +21,8 @@
       <% end %>
     </td>
   <% else %>
-    <td>No</td>
-    <td>
+    <td class="signature-creator">No</td>
+    <td class="signature-actions">
       <% if signature.pending? %>
         <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button', data: { confirm: 'Validate signature?' } %>
       <% elsif signature.validated? %>

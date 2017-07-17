@@ -45,6 +45,49 @@
     }
   }
 
+  .signature-list {
+    margin-bottom: em(24, 16);
+
+    th, td {
+      text-align: left;
+      padding: em(12, 16) em(20, 16) em(12, 16) 0;
+    }
+
+    th:last-child, td:last-child {
+      text-align: right;
+      padding-right: 0;
+    }
+
+    td:first-child {
+      text-align: left;
+    }
+
+    td:last-child {
+      white-space: nowrap;
+    }
+
+    .petition-action {
+      a {
+        display: block;
+      }
+    }
+
+    .petition-signature-count {
+      text-align: right;
+    }
+
+    .signature-status,
+    .signature-creator,
+    .signature-timestamp {
+      text-align: center;
+    }
+
+    .signature-name,
+    .signature-timestamp {
+      white-space: nowrap;
+    }
+  }
+
   .tag-list {
     th, td {
       text-align: left;
