@@ -64,6 +64,7 @@ class Signature < ActiveRecord::Base
   scope :for_email, ->(email) { where(email: email.downcase) }
   scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
   scope :unarchived, -> { where(archived_at: nil) }
+  scope :by_most_recent, -> { order(created_at: :desc) }
 
   def self.for_invalidating
     where(state: [PENDING_STATE, VALIDATED_STATE])
@@ -132,13 +133,14 @@ class Signature < ActiveRecord::Base
     def search(query, options = {})
       query = query.to_s
       page = [options[:page].to_i, 1].max
+      scope = by_most_recent
 
       if ip_search?(query)
-        scope = for_ip(query)
+        scope = scope.for_ip(query)
       elsif email_search?(query)
-        scope = for_email(query)
+        scope = scope.for_email(query)
       else
-        scope = for_name(query)
+        scope = scope.for_name(query)
       end
 
       scope.paginate(page: page, per_page: 50)

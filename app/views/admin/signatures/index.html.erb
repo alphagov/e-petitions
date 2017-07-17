@@ -14,16 +14,17 @@
 
   <%= will_paginate @signatures %>
 
-  <table class="petition-list">
+  <table class="signature-list">
     <thead>
       <tr>
-        <th>Petition Id</th>
-        <th>Petition Action</th>
-        <th>Name</th>
-        <th>Status</th>
-        <th>Last Updated</th>
-        <th>Creator?</th>
-        <th>Actions</th>
+        <th class="petition-id">ID</th>
+        <th class="petition-action">Action</th>
+        <th class="petition-signature-count">Signatures</th>
+        <th class="signature-name">Name</th>
+        <th class="signature-status">Status</th>
+        <th class="signature-timestamp">Date</th>
+        <th class="signature-creator">Creator?</th>
+        <th class="signature-actions">Actions</th>
       </tr>
     </thead>
     <tbody>
