@@ -5,11 +5,13 @@ Feature: As Charlie
 @search
 Scenario: Charlie has to search for a petition before creating one
   Given a petition "Rioters should loose benefits"
+  And a rejected petition "Rioters must loose benefits"
   Given I am on the home page
   When I follow "Start a petition" within ".//main"
   Then I should be asked to search for a new petition
   When I check for similar petitions
-  Then I should see a list of existing petitions I can sign
+  Then I should see "Rioters should loose benefits"
+  Then I should not see "Rioters must loose benefits"
   When I choose to create a petition anyway
   Then I should be on the new petition page
   And I should see my search query already filled in as the action of the petition

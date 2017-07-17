@@ -136,6 +136,10 @@ class Petition < ActiveRecord::Base
       reorder(response_threshold_reached_at: :asc, created_at: :desc)
     end
 
+    def current
+      open_state.by_most_recent
+    end
+
     def open_state
       where(state: OPEN_STATE)
     end

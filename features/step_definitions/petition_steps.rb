@@ -14,7 +14,7 @@ When(/^I navigate to the next page of petitions$/) do
   click_link "Next"
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|flagged|open)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
+Given(/^a(n)? ?(pending|validated|sponsored|flagged|open|rejected)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
     :closed_at => 1.day.from_now,
@@ -241,10 +241,6 @@ end
 Then(/^I should be asked to search for a new petition$/) do
   expect(page).to have_content("What do you want us to do?")
   expect(page).to have_css("form textarea[name=q]")
-end
-
-Then(/^I should see a list of existing petitions I can sign$/) do
-  expect(page).to have_content(@petition.action)
 end
 
 Then(/^I should see a list of (\d+) petitions$/) do |petition_count|
