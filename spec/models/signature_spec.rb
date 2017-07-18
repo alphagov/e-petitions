@@ -545,6 +545,211 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".validate!" do
+    let(:attributes) { FactoryGirl.attributes_for(:petition) }
+    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:petition) do
+      Petition.create(attributes) do |petition|
+        petition.creator_signature = creator
+
+        5.times do
+          petition.signatures << FactoryGirl.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each { |s| s.validate! }
+      petition.publish
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.invalidate!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with a pending signature" do
+      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+
+      before do
+        allow(described_class).to receive(:find).and_call_original
+        allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+        expect(signature).to receive(:validate!).and_call_original
+      end
+
+      it "transitions the signature to the validated state" do
+        expect {
+          described_class.validate!([signature.id])
+        }.to change {
+          signature.reload.validated?
+        }.from(false).to(true)
+      end
+    end
+  end
+
+  describe ".invalidate!" do
+    let(:attributes) { FactoryGirl.attributes_for(:petition) }
+    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:petition) do
+      Petition.create(attributes) do |petition|
+        petition.creator_signature = creator
+
+        5.times do
+          petition.signatures << FactoryGirl.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each { |s| s.validate! }
+      petition.publish
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.invalidate!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "with a validated signature" do
+      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+
+      before do
+        signature.validate!
+
+        allow(described_class).to receive(:find).and_call_original
+        allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+        expect(signature).to receive(:invalidate!).and_call_original
+      end
+
+      it "transitions the signature to the invalidated state" do
+        expect {
+          described_class.invalidate!([signature.id])
+        }.to change {
+          signature.reload.invalidated?
+        }.from(false).to(true)
+      end
+    end
+  end
+
+  describe ".destroy!" do
+    let(:attributes) { FactoryGirl.attributes_for(:petition) }
+    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:petition) do
+      Petition.create(attributes) do |petition|
+        petition.creator_signature = creator
+
+        5.times do
+          petition.signatures << FactoryGirl.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each { |s| s.validate! }
+      petition.publish
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when trying to delete the creator" do
+      let(:signature_ids) { [creator.id] }
+
+      it "raises an ActiveRecord::RecordNotDestroyed error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+    end
+
+    context "when the signature is not the creator" do
+      let(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
+      let(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+
+      let(:signature) {
+        FactoryGirl.create(
+          :pending_signature,
+          petition: petition,
+          constituency_id: constituency_journal.constituency_id,
+          location_code: country_journal.location_code
+        )
+      }
+
+      before do
+        signature.validate!
+        petition.reload
+      end
+
+      it "decrements the petition signature count" do
+        expect {
+          described_class.destroy!([signature.id])
+        }.to change {
+          petition.reload.signature_count
+        }.from(7).to(6)
+      end
+
+      it "decrements the country journal signature count" do
+        expect {
+          described_class.destroy!([signature.id])
+        }.to change {
+          country_journal.reload.signature_count
+        }.by(-1)
+      end
+
+      it "decrements the constituency journal signature count" do
+        expect {
+          described_class.destroy!([signature.id])
+        }.to change {
+          constituency_journal.reload.signature_count
+        }.by(-1)
+      end
+    end
+
+    context "when one signature fails" do
+      let(:signatures) { [petition.signatures.last, creator] }
+      let(:signature_ids) { signatures.map(&:id) }
+
+      before do
+        allow(described_class).to receive(:find).with(signature_ids).and_return(signatures)
+      end
+
+      it "raises an ActiveRecord::RecordNotDestroyed error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+
+      it "doesn't destroy any signatures" do
+        expect {
+          begin
+            described_class.destroy!(signature_ids)
+          rescue ActiveRecord::RecordNotDestroyed => e
+            0
+          end
+        }.not_to change {
+          petition.reload.signatures.count
+        }
+      end
+    end
+  end
+
   describe ".petition_ids_with_invalid_signature_counts" do
     subject do
       described_class.petition_ids_with_invalid_signature_counts

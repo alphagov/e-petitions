@@ -122,6 +122,12 @@ Rails.application.routes.draw do
 
       resources :signatures, only: %i[index destroy] do
         post :validate, :invalidate, on: :member
+
+        collection do
+          delete :destroy, action: :bulk_destroy
+          post   :validate, action: :bulk_validate
+          post   :invalidate, action: :bulk_invalidate
+        end
       end
 
       resources :tags, except: %i[show]
