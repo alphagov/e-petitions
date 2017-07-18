@@ -103,7 +103,9 @@
         }
 
         $checkboxes.each(function() {
-          $(this).prop('checked', checked);
+          if ($(this).prop('disabled') == false) {
+            $(this).prop('checked', checked);
+          }
         });
 
         enableDisableActions();
