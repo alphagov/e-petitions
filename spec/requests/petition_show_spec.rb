@@ -207,11 +207,11 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     it "includes the signatures by country data" do
       petition = FactoryGirl.create :open_petition
 
-      FactoryGirl.create :location, name: "United Kingdom", code: "gb"
-      FactoryGirl.create :location, name: "France", code: "fr"
+      gb = FactoryGirl.create :location, name: "United Kingdom", code: "gb"
+      fr = FactoryGirl.create :location, name: "France", code: "fr"
 
-      FactoryGirl.create :country_petition_journal, location_code: "gb", signature_count: 123456, petition: petition
-      FactoryGirl.create :country_petition_journal, location_code: "fr", signature_count: 789, petition: petition
+      FactoryGirl.create :country_petition_journal, location: gb, signature_count: 123456, petition: petition
+      FactoryGirl.create :country_petition_journal, location: fr, signature_count: 789, petition: petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_success
