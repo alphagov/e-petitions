@@ -146,6 +146,36 @@ class Signature < ActiveRecord::Base
       scope.paginate(page: page, per_page: 50)
     end
 
+    def validate!(signature_ids, now = Time.current)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          signature.validate!(now)
+        end
+      end
+    end
+
+    def invalidate!(signature_ids, now = Time.current, invalidation_id = nil)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          signature.invalidate!(now, invalidation_id)
+        end
+      end
+    end
+
+    def destroy!(signature_ids)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          signature.destroy!
+        end
+      end
+    end
+
     private
 
     def ip_search?(query)

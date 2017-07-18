@@ -17,7 +17,9 @@
   <table class="signature-list">
     <thead>
       <tr>
-        <th class="petition-id">ID</th>
+        <th class="petition-id">
+          <label><input type="checkbox" value="1" name="select_all"> ID</label>
+        </th>
         <th class="petition-action">Action</th>
         <th class="petition-signature-count">Signatures</th>
         <th class="signature-name">Name</th>
@@ -33,6 +35,89 @@
   </table>
 
   <%= will_paginate @signatures %>
+
+  <div class="inline-actions">
+    <%= form_tag validate_admin_signatures_path(q: params[:q]), method: :post, class: 'action validate-action' do %>
+      <%= hidden_field_tag 'ids', '' %>
+      <%= submit_tag 'Validate', name: nil, class: 'button', disabled: true, data: { confirm: 'Validate selected signatures?' } %>
+    <% end %>
+
+    <%= form_tag invalidate_admin_signatures_path(q: params[:q]), method: :post, class: 'action invalidate-action' do %>
+      <%= hidden_field_tag 'ids', '' %>
+      <%= submit_tag 'Invalidate', name: nil, class: 'button', disabled: true, data: { confirm: 'Invalidate selected signatures?' } %>
+    <% end %>
+
+    <%= form_tag admin_signatures_path(q: params[:q]), method: :delete, class: 'action delete-action' do %>
+      <%= hidden_field_tag 'ids', '' %>
+      <%= submit_tag 'Delete', name: nil, class: 'button-warning', disabled: true, data: { confirm: 'Delete selected signatures?' } %>
+    <% end %>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      var $list = $('.signature-list');
+      var $checkboxes = $list.find('input[name="ids"]');
+      var $selectAll = $list.find('input[name="select_all"]');
+
+      var selectedIds = function() {
+        var ids = [];
+
+        $checkboxes.filter(':checked').each(function() {
+          ids.push($(this).val());
+        });
+
+        return ids.join();
+      };
+
+      var actionDisabled = function(action) {
+        var $checked = $checkboxes.filter(':checked');
+        var disabled = false;
+
+        if ($checked.length == 0) {
+          return true;
+        }
+
+        $checked.each(function() {
+          var $tr = $(this).closest('tr');
+          var $action = $tr.find('input[type=submit].' + action + '-action');
+
+          if ($action.length == 0) {
+            disabled = true;
+          }
+        });
+
+        return disabled;
+      };
+
+      var enableDisableActions = function() {
+        $('.validate-action input[type=submit]').prop('disabled', actionDisabled('validate'));
+        $('.invalidate-action input[type=submit]').prop('disabled', actionDisabled('invalidate'));
+        $('.delete-action input[type=submit]').prop('disabled', actionDisabled('delete'));
+      };
+
+      $selectAll.on('click', function(e) {
+        var checked = false;
+
+        if ($(this).prop('checked')) {
+          checked = true;
+        }
+
+        $checkboxes.each(function() {
+          $(this).prop('checked', checked);
+        });
+
+        enableDisableActions();
+      });
+
+      $checkboxes.on('click', function(e) {
+        enableDisableActions();
+      });
+
+      $('.inline-actions form').on('submit', function() {
+        $(this).find('input[name="ids"]').val(selectedIds());
+      });
+    });
+  </script>
 
 <% else %>
   <p>

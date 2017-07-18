@@ -162,5 +162,116 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         end
       end
     end
+
+    describe "POST /admin/signatures/validate" do
+      context "when the signature is validated" do
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_return(true)
+          post :bulk_validate, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Signatures validated successfully")
+        end
+      end
+
+      context "when the signature is not validated" do
+        let(:exception) { ActiveRecord::StatementInvalid.new("Invalid SQL") }
+
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_raise(exception)
+          expect(Appsignal).to receive(:send_exception).with(exception)
+          post :bulk_validate, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Signatures could not be validated - please contact support")
+        end
+      end
+    end
+
+    describe "POST /admin/signatures/invalidate" do
+      context "when the signature is invalidated" do
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:invalidate!).and_return(true)
+          post :bulk_invalidate, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Signatures invalidated successfully")
+        end
+      end
+
+      context "when the signature is not invalidated" do
+        let(:exception) { ActiveRecord::StatementInvalid.new("Invalid SQL") }
+
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:invalidate!).and_raise(exception)
+          expect(Appsignal).to receive(:send_exception).with(exception)
+          post :bulk_invalidate, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Signatures could not be invalidated - please contact support")
+        end
+      end
+    end
+
+    describe "DELETE /admin/signatures" do
+      context "when the signature is destroyed" do
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:destroy!).and_return(true)
+          delete :bulk_destroy, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Signatures removed successfully")
+        end
+      end
+
+      context "when the signature is not destroyed" do
+        let(:exception) { ActiveRecord::RecordNotDestroyed.new("Cannot delete the creator signature") }
+
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:destroy!).and_raise(exception)
+          expect(Appsignal).to receive(:send_exception).with(exception)
+          delete :bulk_destroy, ids: signature.id, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Signatures could not be removed - please contact support")
+        end
+      end
+    end
   end
 end
