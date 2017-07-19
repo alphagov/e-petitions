@@ -129,6 +129,15 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe: unsubscribe_url
   end
 
+  def notify_creator_that_moderation_is_delayed(signature, subject, body)
+    @petition, @signature = signature.petition, signature
+    @subject, @body = subject, body
+
+    mail to: @signature.email,
+      subject: subject_for(:notify_creator_that_moderation_is_delayed),
+      list_unsubscribe: unsubscribe_url
+  end
+
   private
 
   def subject_for(key, options = {})
@@ -151,6 +160,10 @@ class PetitionMailer < ApplicationMailer
 
       if defined?(@email)
         options[:subject] = @email.subject
+      end
+
+      if defined?(@subject)
+        options[:subject] = @subject
       end
     end
   end

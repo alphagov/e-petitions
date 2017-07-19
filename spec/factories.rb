@@ -223,6 +223,16 @@ FactoryGirl.define do
       end
     end
 
+    after(:create) do |petition, evaluator|
+      if evaluator.sponsors_signed
+        petition.sponsors.each do |sp|
+          sp.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        end
+
+        petition.update_signature_count!
+      end
+    end
+
     trait :with_additional_details do
       additional_details "Petition additional details"
     end
@@ -273,16 +283,6 @@ FactoryGirl.define do
 
   factory :validated_petition, :parent => :petition do
     state  Petition::VALIDATED_STATE
-
-    after(:create) do |petition, evaluator|
-      if evaluator.sponsors_signed
-        petition.sponsors.each do |sp|
-          sp.create_signature!(FactoryGirl.attributes_for(:validated_signature))
-        end
-
-        petition.update_signature_count!
-      end
-    end
   end
 
   factory :sponsored_petition, :parent => :petition do
