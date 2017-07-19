@@ -145,6 +145,21 @@ RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
   end
 end
 
+RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do
+  let(:petition) { FactoryGirl.create(:sponsored_petition, :overdue, sponsors_signed: true) }
+  let(:signature) { petition.creator_signature }
+  let(:subject) { "Moderation of your petition is delayed" }
+  let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
+
+  it "sends the PetitionMailer#notify_creator_that_moderation_is_delayed email" do
+    expect(PetitionMailer).to receive(:notify_creator_that_moderation_is_delayed).with(signature, subject, body).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(signature, subject, body)
+    end
+  end
+end
+
 RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
   let(:petition) { FactoryGirl.create(:petition) }
   let(:signature) { FactoryGirl.create(:signature, petition: petition) }

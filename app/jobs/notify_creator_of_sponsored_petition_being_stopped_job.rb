@@ -10,4 +10,3 @@ class NotifyCreatorOfSponsoredPetitionBeingStoppedJob < EmailJob
     end
   end
 end
-

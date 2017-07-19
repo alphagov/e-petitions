@@ -10,4 +10,3 @@ class NotifyCreatorOfValidatedPetitionBeingStoppedJob < EmailJob
     end
   end
 end
-

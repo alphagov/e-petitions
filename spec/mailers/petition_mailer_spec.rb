@@ -18,6 +18,39 @@ RSpec.describe PetitionMailer, type: :mailer do
   let(:validated_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
 
+  describe "notifying creator that moderation is delayed" do
+    let! :petition do
+      FactoryGirl.create(:sponsored_petition,
+        creator_signature: creator,
+        action: "Allow organic vegetable vans to use red diesel",
+        background: "Add vans to permitted users of red diesel",
+        additional_details: "To promote organic vegetables"
+      )
+    end
+
+    let(:subject) { "Moderation of your petition is delayed" }
+    let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
+    let(:mail) { PetitionMailer.notify_creator_that_moderation_is_delayed(creator, subject, body) }
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bazbutler@gmail.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "has an appropriate subject heading" do
+      expect(mail).to have_subject("Moderation of your petition is delayed")
+    end
+
+    it "is addressed to the creator" do
+      expect(mail).to have_body_text("Dear Barry Butler,")
+    end
+
+    it "informs the creator of the change" do
+      expect(mail).to have_body_text("Sorry, but moderation of your petition is delayed for reasons.")
+    end
+  end
+
   describe "notifying creator of publication" do
     let(:mail) { PetitionMailer.notify_creator_that_petition_is_published(creator) }
 
