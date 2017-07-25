@@ -45,7 +45,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         before do
           perform_enqueued_jobs do
-            sponsor.signature.validate!
+            sponsor.validate!
             do_patch moderation: 'approve'
             petition.reload
           end

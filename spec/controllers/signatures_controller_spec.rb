@@ -37,8 +37,7 @@ RSpec.describe SignaturesController, type: :controller do
 
     context 'signature to be verified is a sponsor' do
       let(:petition) { FactoryGirl.create(:petition) }
-      let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-      let(:signature) { sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition)) }
+      let(:signature) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
 
       around do |example|
         perform_enqueued_jobs do

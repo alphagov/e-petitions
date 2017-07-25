@@ -83,21 +83,21 @@ RSpec.describe SponsorsController, type: :controller do
 
     context 'petition has reached maximum amount of sponsors' do
       it 'redirects to petition moderation info page when petition is in sponsored state' do
-        sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
+        sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
         get :show, petition_id: sponsored_petition, token: sponsored_petition.sponsor_token
         redirect_url = "https://petition.parliament.uk/petitions/#{sponsored_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
 
       it 'redirects to petition moderation info page when petition is in validated state' do
-        validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
+        validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
         get :show, petition_id: validated_petition, token: validated_petition.sponsor_token
         redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
       end
 
       it 'redirects to petition moderation info page when petition is in pending state' do
-        pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
+        pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
         get :show, petition_id: pending_petition, token: pending_petition.sponsor_token
         redirect_url = "https://petition.parliament.uk/petitions/#{pending_petition.id}/moderation-info"
         expect(response).to redirect_to redirect_url
@@ -198,7 +198,7 @@ RSpec.describe SponsorsController, type: :controller do
         expect(signature.postcode).to eq signature_params[:postcode]
         expect(signature.location_code).to eq signature_params[:location_code]
         expect(signature.notify_by_email).to eq true
-        expect(petition.sponsors.for(signature)).to be_present
+        expect(petition.sponsors).to include(signature)
       end
 
       it 'creates the signature in the pending state' do
@@ -302,8 +302,7 @@ RSpec.describe SponsorsController, type: :controller do
 
   context 'GET thank-you' do
     let(:petition) { FactoryGirl.create(:petition) }
-    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:pending_signature)) }
+    let(:signature) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
 
     before { signature.present? }
 
@@ -345,8 +344,7 @@ RSpec.describe SponsorsController, type: :controller do
 
   context 'GET sponsored' do
     let(:petition) { FactoryGirl.create(:petition) }
-    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
+    let(:signature) { FactoryGirl.create(:sponsor, :validated, petition: petition) }
 
     before { signature.present? }
 

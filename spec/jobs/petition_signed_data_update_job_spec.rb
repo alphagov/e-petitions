@@ -84,8 +84,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
 
     context 'and the signature is a sponsor' do
       let(:petition) { FactoryGirl.create(:petition) }
-      let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-      let(:signature) { sponsor.create_signature(FactoryGirl.attributes_for(:pending_signature, petition: petition)) }
+      let(:signature) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
 
       it "sets petition state to validated" do
         expect {

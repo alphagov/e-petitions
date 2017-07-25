@@ -36,7 +36,7 @@ RSpec.describe SponsorMailer, type: :mailer do
     end
 
     it "includes the verification url for the sponsor's signature" do
-      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{sponsor.signature.id}/verify\?token=#{sponsor.signature.perishable_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/signatures/#{sponsor.id}/verify\?token=#{sponsor.perishable_token}])
     end
 
     it "includes the petition action" do
@@ -57,7 +57,7 @@ RSpec.describe SponsorMailer, type: :mailer do
 
     context "when the number of supporters is 1" do
       before do
-        allow(petition).to receive(:supporting_sponsors_count).and_return(1)
+        allow(petition).to receive_message_chain(:sponsors, :validated, :count).and_return(1)
       end
 
       it "pluralizes supporters correctly" do
@@ -67,7 +67,7 @@ RSpec.describe SponsorMailer, type: :mailer do
 
     context "when the number of supporters is more than 1" do
       before do
-        allow(petition).to receive(:supporting_sponsors_count).and_return(2)
+        allow(petition).to receive_message_chain(:sponsors, :validated, :count).and_return(2)
       end
 
       it "pluralizes supporters correctly" do

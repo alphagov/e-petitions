@@ -34,14 +34,14 @@ end
 
 Given(/^I only need one more sponsor to support my petition$/) do
   before_threshold = Site.threshold_for_moderation - 1
-  while (@sponsor_petition.supporting_sponsors_count < before_threshold) do
+  while (@sponsor_petition.sponsors.validated.count < before_threshold) do
     step %{a sponsor supports my petition}
   end
   step %{"charlie.the.creator@example.com" has read all their email}
 end
 
 Given(/^I have enough support from sponsors for my petition$/) do
-  while (@sponsor_petition.supporting_sponsors_count < Site.threshold_for_moderation) do
+  while (@sponsor_petition.sponsors.validated.count < Site.threshold_for_moderation) do
     step %{a sponsor supports my petition}
   end
   step %{"charlie.the.creator@example.com" has read all their email}
@@ -72,7 +72,7 @@ Then(/^I will see 404 error page$/) do
 end
 
 Given(/^the petition I want to sign has enough sponsors?$/) do
-  @sponsor_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
+  @sponsor_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
 end
 
 Then(/^I am redirected to the petition moderation info page$/) do
@@ -101,17 +101,15 @@ end
 Then(/^I should have fully signed the petition as a sponsor$/) do
   sponsor = @sponsor_petition.sponsors.for_email('laura.the.sponsor@example.com').first
   expect(sponsor).to be_present
-  expect(sponsor.signature).to be_present
-  expect(sponsor.signature.petition).to eq @sponsor_petition
-  expect(sponsor.signature).to be_validated
+  expect(sponsor.petition).to eq @sponsor_petition
+  expect(sponsor).to be_validated
 end
 
 Then(/^I should have a pending signature on the petition as a sponsor$/) do
   sponsor = @sponsor_petition.sponsors.for_email('laura.the.sponsor@example.com').first
   expect(sponsor).to be_present
-  expect(sponsor.signature).to be_present
-  expect(sponsor.signature.petition).to eq @sponsor_petition
-  expect(sponsor.signature).to be_pending
+  expect(sponsor.petition).to eq @sponsor_petition
+  expect(sponsor).to be_pending
 end
 
 Then(/^I should not have signed the petition as a sponsor$/) do

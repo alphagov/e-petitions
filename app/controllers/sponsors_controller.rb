@@ -7,13 +7,14 @@ class SponsorsController < ApplicationController
   before_action :validate_creator_signature, only: %i[show]
   before_action :do_not_cache
 
-  respond_to :html
-
   def show
     assign_stage
-    @sponsor = @petition.sponsors.build
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
-    respond_with @sponsor
+    @sponsor = @stage_manager.signature
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def update
@@ -23,8 +24,7 @@ class SponsorsController < ApplicationController
     if @stage_manager.create_signature
       @signature = @stage_manager.signature
       @signature.store_constituency_id
-      @sponsor = @petition.sponsors.create(signature: @signature)
-      send_email_to_sponsor(@sponsor)
+      send_email_to_sponsor(@signature)
       redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
     else
       respond_to do |format|
@@ -89,7 +89,7 @@ class SponsorsController < ApplicationController
   def signature_params_for_create
     params.
       require(:signature).
-      permit(:name, :email, :postcode, :location_code, :uk_citizenship)
+      permit(:name, :email, :postcode, :location_code, :uk_citizenship).merge(sponsor: true)
   end
 
   def send_email_to_sponsor(sponsor)

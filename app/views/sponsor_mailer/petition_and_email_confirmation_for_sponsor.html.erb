@@ -1,6 +1,6 @@
 <p>Click this link to sign the petition “<%= @petition.action %>”</p>
 
-<p><%= link_to nil, verify_signature_url(@signature, token: @signature.perishable_token) %></p>
+<p><%= link_to nil, verify_signature_url(@sponsor, token: @sponsor.perishable_token) %></p>
 
 <hr />
 
@@ -17,4 +17,4 @@
 <hr />
 
 <p>Click this link to sign the petition:<br />
-<%= link_to nil, verify_signature_url(@signature, token: @signature.perishable_token) %></p>
+<%= link_to nil, verify_signature_url(@sponsor, token: @sponsor.perishable_token) %></p>

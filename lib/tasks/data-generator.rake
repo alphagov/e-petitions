@@ -47,7 +47,7 @@ namespace :data do
 
         # Create the sponsor signatures
         5.times do
-          petition.sponsor_signatures.create!(
+          petition.sponsors.create!(
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email("#{Faker::Lorem.characters(rand(10..40))}-#{rand(1..999999)}"),

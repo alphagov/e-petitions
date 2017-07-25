@@ -2,9 +2,9 @@
 
 <p>Your petition is nearly ready to go.</p>
 
-<p><%= @sponsor.signature.name %> supported your petition – “<%= @petition.action %>”.</p>
+<p><%= @sponsor.name %> supported your petition – “<%= @petition.action %>”.</p>
 
-<p><%= @supporting_sponsors_count %> people have supported your petition so far. We’re checking your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less.</p>
+<p><%= @sponsor_count %> people have supported your petition so far. We’re checking your petition to make sure it meets the petition standards. If it does, we’ll publish it. This usually takes a week or less.</p>
 
 <p>Find out how we check petitions before we publish them:<br />
 <%= link_to nil, help_url(anchor: 'standards') %></p>

@@ -77,11 +77,10 @@ class Petition < ActiveRecord::Base
   has_one :rejection, dependent: :destroy
 
   has_many :signatures
-  has_many :sponsors
-  has_many :sponsor_signatures, :through => :sponsors, :source => :signature
-  has_many :country_petition_journals, :dependent => :destroy
-  has_many :constituency_petition_journals, :dependent => :destroy
-  has_many :emails, :dependent => :destroy
+  has_many :sponsors, -> { where(sponsor: true) }, class_name: 'Signature'
+  has_many :country_petition_journals, dependent: :destroy
+  has_many :constituency_petition_journals, dependent: :destroy
+  has_many :emails, dependent: :destroy
   has_many :invalidations
 
   include Staged::Validations::PetitionDetails
@@ -740,10 +739,6 @@ class Petition < ActiveRecord::Base
 
   def update_last_petition_created_at
     Site.touch(:last_petition_created_at)
-  end
-
-  def supporting_sponsors_count
-    sponsors.supporting_the_petition.count
   end
 
   def has_maximum_sponsors?

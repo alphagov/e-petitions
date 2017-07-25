@@ -11,7 +11,7 @@ Then(/^I should not receive a sponsor support notification email$/) do
 end
 
 Then(/^the sponsor support notification email should include the countdown to the threshold$/) do
-  signed = @sponsor_petition.sponsors.where.not(signature_id: nil).count
+  signed = @sponsor_petition.sponsors.validated.count
   threshold = Site.threshold_for_moderation
   email = open_last_email_for("charlie.the.creator@example.com")
   expect(email.subject).to match /supported your petition/

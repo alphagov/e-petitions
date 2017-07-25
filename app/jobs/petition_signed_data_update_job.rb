@@ -19,9 +19,9 @@ class PetitionSignedDataUpdateJob < ApplicationJob
     petition = signature.petition
 
     if petition.in_moderation?
-      SponsorSignedEmailOnThresholdEmailJob.perform_later(petition, signature.sponsor)
+      SponsorSignedEmailOnThresholdEmailJob.perform_later(petition, signature)
     elsif petition.collecting_sponsors?
-      SponsorSignedEmailBelowThresholdEmailJob.perform_later(petition, signature.sponsor)
+      SponsorSignedEmailBelowThresholdEmailJob.perform_later(petition, signature)
     end
   end
 end

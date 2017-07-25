@@ -34,14 +34,6 @@ RSpec.describe DeletePetitionJob, type: :job do
       }.from(6).to(0)
     end
 
-    it "destroys the sponsors" do
-      expect {
-        described_class.perform_now(petition)
-      }.to change {
-        Sponsor.count
-      }.from(5).to(0)
-    end
-
     it "destroys the country journals" do
       expect {
         described_class.perform_now(petition)

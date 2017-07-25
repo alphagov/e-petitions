@@ -214,10 +214,6 @@ FactoryGirl.define do
     creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
 
     after(:build) do |petition, evaluator|
-      evaluator.sponsor_count.times do
-        sponsor = petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
-      end
-
       if petition.signature_count.zero?
         petition.signature_count += 1 if petition.creator_signature.validated?
       end
@@ -233,8 +229,8 @@ FactoryGirl.define do
 
     after(:create) do |petition, evaluator|
       if evaluator.sponsors_signed
-        petition.sponsors.each do |sp|
-          sp.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+        evaluator.sponsor_count.times do
+          FactoryGirl.create(:sponsor, :validated, petition: petition)
         end
 
         petition.update_signature_count!
@@ -455,19 +451,15 @@ FactoryGirl.define do
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
 
-  factory :sponsor do
-    transient do
-      email { generate(:sponsor_email) }
-    end
-
-    association :petition
+  factory :sponsor, parent: :pending_signature do
+    sponsor true
 
     trait :pending do
-      signature  { |s| s.association(:pending_signature, petition: s.petition, email: s.email) }
+      state "pending"
     end
 
     trait :validated do
-      signature  { |s| s.association(:validated_signature, petition: s.petition, email: s.email) }
+      state "validated"
     end
   end
 

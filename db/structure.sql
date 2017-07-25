@@ -1017,7 +1017,8 @@ CREATE TABLE signatures (
     petition_email_at timestamp without time zone,
     uuid uuid,
     archived_at timestamp without time zone,
-    email_count integer DEFAULT 0 NOT NULL
+    email_count integer DEFAULT 0 NOT NULL,
+    sponsor boolean DEFAULT false NOT NULL
 );
 
 
@@ -1086,38 +1087,6 @@ CREATE SEQUENCE sites_id_seq
 --
 
 ALTER SEQUENCE sites_id_seq OWNED BY sites.id;
-
-
---
--- Name: sponsors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE sponsors (
-    id integer NOT NULL,
-    petition_id integer,
-    signature_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: sponsors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE sponsors_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sponsors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE sponsors_id_seq OWNED BY sponsors.id;
 
 
 --
@@ -1369,13 +1338,6 @@ ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
@@ -1592,14 +1554,6 @@ ALTER TABLE ONLY signatures
 
 ALTER TABLE ONLY sites
     ADD CONSTRAINT sites_pkey PRIMARY KEY (id);
-
-
---
--- Name: sponsors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT sponsors_pkey PRIMARY KEY (id);
 
 
 --
@@ -2251,14 +2205,6 @@ ALTER TABLE ONLY archived_petition_emails
 
 
 --
--- Name: fk_rails_38c9c83a88; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT fk_rails_38c9c83a88 FOREIGN KEY (signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
-
-
---
 -- Name: fk_rails_39cbbc815d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2360,14 +2306,6 @@ ALTER TABLE ONLY petition_emails
 
 ALTER TABLE ONLY archived_rejections
     ADD CONSTRAINT fk_rails_b6266f73f1 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_bc381510eb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT fk_rails_bc381510eb FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -2637,6 +2575,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170713193039');
 INSERT INTO schema_migrations (version) VALUES ('20170818110849');
 
 INSERT INTO schema_migrations (version) VALUES ('20170821153056');
+
+INSERT INTO schema_migrations (version) VALUES ('20170821153057');
 
 INSERT INTO schema_migrations (version) VALUES ('20170903162156');
 
