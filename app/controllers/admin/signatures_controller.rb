@@ -10,7 +10,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_validate
     begin
-      Signature.validate!(siganture_ids)
+      Signature.validate!(signature_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_validated
     rescue StandardError => e
       Appsignal.send_exception e
@@ -30,7 +30,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_invalidate
     begin
-      Signature.invalidate!(siganture_ids)
+      Signature.invalidate!(signature_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_invalidated
     rescue StandardError => e
       Appsignal.send_exception e
@@ -50,7 +50,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_destroy
     begin
-      Signature.destroy!(siganture_ids)
+      Signature.destroy!(signature_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_deleted
     rescue StandardError => e
       Appsignal.send_exception e
@@ -76,7 +76,7 @@ class Admin::SignaturesController < Admin::AdminController
     @signature = Signature.find(params[:id])
   end
 
-  def siganture_ids
+  def signature_ids
     params[:ids].to_s.split(",").map(&:to_i).reject(&:zero?)
   end
 end
