@@ -55,9 +55,9 @@ Rails.application.routes.draw do
         end
 
         member do
-          get 'verify',      path: '/verify(/:legacy_token)'
-          get 'unsubscribe', path: '/unsubscribe(/:legacy_token)'
-          get 'signed',      path: '/signed(/:legacy_token)'
+          get 'verify'
+          get 'unsubscribe'
+          get 'signed'
         end
       end
     end

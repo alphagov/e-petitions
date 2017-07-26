@@ -63,7 +63,7 @@ class SignaturesController < ApplicationController
   private
 
   def token_param
-    @token_param ||= (params[:token] || params[:legacy_token]).to_s
+    @token_param ||= params[:token].to_s
   end
 
   def verify_token
