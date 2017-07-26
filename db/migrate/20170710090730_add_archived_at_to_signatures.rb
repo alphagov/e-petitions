@@ -1,4 +1,4 @@
-class AddArchivedAtToSigantures < ActiveRecord::Migration
+class AddArchivedAtToSignatures < ActiveRecord::Migration
   def up
     unless column_exists?(:signatures, :archived_at)
       add_column :signatures, :archived_at, :datetime
