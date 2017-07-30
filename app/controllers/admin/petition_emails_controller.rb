@@ -1,5 +1,4 @@
 class Admin::PetitionEmailsController < Admin::AdminController
-  respond_to :html
   before_action :fetch_petition
   before_action :build_email, only: [:new, :create]
   before_action :fetch_email, only: [:edit, :update, :destroy]

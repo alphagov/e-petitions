@@ -20,27 +20,35 @@ class PetitionsController < ApplicationController
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
   after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
-  respond_to :html
-  respond_to :json, only: [:index, :show]
-  respond_to :csv, only: [:index]
-
   def index
-    respond_with @petitions
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv
+    end
   end
 
   def show
-    respond_with @petition
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def count
-    respond_to { |f| f.json }
+    respond_to do |format|
+      format.json
+    end
   end
 
   def new
     assign_action
     assign_stage
     @stage_manager = Staged::PetitionCreator.manager(petition_params_for_new, request, params[:stage], params[:move])
-    respond_with @stage_manager.stage_object
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create

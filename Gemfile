@@ -5,9 +5,6 @@ gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
 gem 'rails', '4.2.8'
 
-# Legacy Rails feature gems - will no longer be supported in Rails 5.0
-gem 'responders'
-
 gem 'rake'
 gem 'pg'
 gem 'authlogic'

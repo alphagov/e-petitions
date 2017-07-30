@@ -233,8 +233,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.0.0)
     request_store (1.2.1)
-    responders (2.1.0)
-      railties (>= 4.2.0, < 5)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -340,7 +338,6 @@ DEPENDENCIES
   puma
   rails (= 4.2.8)
   rake
-  responders
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers

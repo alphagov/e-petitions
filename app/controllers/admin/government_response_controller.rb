@@ -1,5 +1,4 @@
 class Admin::GovernmentResponseController < Admin::AdminController
-  respond_to :html
   before_action :fetch_petition
   before_action :fetch_government_response
 

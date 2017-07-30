@@ -4,8 +4,6 @@ module Archived
     before_action :verify_unsubscribe_token
     before_action :do_not_cache
 
-    respond_to :html
-
     def unsubscribe
       @signature.unsubscribe!(token_param)
 

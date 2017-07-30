@@ -9,12 +9,13 @@ class SignaturesController < ApplicationController
   before_action :redirect_to_verify_page, unless: :signature_validated?, only: [:signed]
   before_action :do_not_cache
 
-  respond_to :html
-
   def new
     assign_stage
     @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
-    respond_with @stage_manager.stage_object
+
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
@@ -152,7 +153,7 @@ class SignaturesController < ApplicationController
       return handle_duplicate_signature(petition) if @stage_manager.signature.duplicate?
       @stage_manager.signature.store_constituency_id
       send_email_to_petition_signer(@stage_manager.signature)
-      respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
+      redirect_to thank_you_petition_signatures_url(petition)
     else
       respond_to do |format|
         format.html { render :new }

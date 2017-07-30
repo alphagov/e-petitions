@@ -1,9 +1,6 @@
 require 'csv'
 
 class Archived::PetitionsController < ApplicationController
-  respond_to :html, :json
-  respond_to :csv, only: [:index]
-
   before_action :redirect_to_valid_state, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
@@ -15,11 +12,18 @@ class Archived::PetitionsController < ApplicationController
   helper_method :archived_petition_facets
 
   def index
-    respond_with(@petitions)
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv
+    end
   end
 
   def show
-    respond_with(@petition)
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   private
