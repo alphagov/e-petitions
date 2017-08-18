@@ -913,12 +913,12 @@ CREATE TABLE rate_limits (
     burst_period integer DEFAULT 60 NOT NULL,
     sustained_rate integer DEFAULT 5 NOT NULL,
     sustained_period integer DEFAULT 300 NOT NULL,
-    domain_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
-    ip_whitelist character varying(10000) DEFAULT ''::character varying NOT NULL,
+    allowed_domains character varying(10000) DEFAULT ''::character varying NOT NULL,
+    allowed_ips character varying(10000) DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    domain_blacklist character varying(50000) DEFAULT ''::character varying NOT NULL,
-    ip_blacklist character varying(50000) DEFAULT ''::character varying NOT NULL,
+    blocked_domains character varying(50000) DEFAULT ''::character varying NOT NULL,
+    blocked_ips character varying(50000) DEFAULT ''::character varying NOT NULL,
     geoblocking_enabled boolean DEFAULT false NOT NULL,
     countries character varying(2000) DEFAULT ''::character varying NOT NULL
 );
@@ -2623,4 +2623,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170711153945');
 INSERT INTO schema_migrations (version) VALUES ('20170712070139');
 
 INSERT INTO schema_migrations (version) VALUES ('20170713193039');
+
+INSERT INTO schema_migrations (version) VALUES ('20170818110849');
 

@@ -66,10 +66,14 @@ en-GB:
 
         rate_limit:
           attributes:
-            ip_whitelist:
-              invalid: "IP whitelist is invalid"
-            ip_blacklist:
-              invalid: "IP blacklist is invalid"
+            allowed_domains:
+              invalid: "Allowed domains list is invalid"
+            blocked_domains:
+              invalid: "Blocked domains list is invalid"
+            allowed_ips:
+              invalid: "Allowed IPs list is invalid"
+            blocked_ips:
+              invalid: "Blocked IPs list is invalid"
 
         tag:
           attributes:

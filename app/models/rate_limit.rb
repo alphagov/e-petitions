@@ -11,10 +11,10 @@ class RateLimit < ActiveRecord::Base
   validates :burst_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :sustained_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :domain_whitelist, length: { maximum: 10000, allow_blank: true }
-  validates :ip_whitelist, length: { maximum: 10000, allow_blank: true }
-  validates :domain_blacklist, length: { maximum: 50000, allow_blank: true }
-  validates :ip_blacklist, length: { maximum: 50000, allow_blank: true }
+  validates :allowed_domains, length: { maximum: 10000, allow_blank: true }
+  validates :allowed_ips, length: { maximum: 10000, allow_blank: true }
+  validates :blocked_domains, length: { maximum: 50000, allow_blank: true }
+  validates :blocked_ips, length: { maximum: 50000, allow_blank: true }
   validates :countries, length: { maximum: 2000, allow_blank: true }
 
   validate do
@@ -31,74 +31,74 @@ class RateLimit < ActiveRecord::Base
     end
 
     begin
-      whitelisted_domains
+      allowed_domains_list
     rescue StandardError => e
-      errors.add :domain_whitelist, :invalid
+      errors.add :allowed_domains, :invalid
     end
 
     begin
-      whitelisted_ips
+      allowed_ips_list
     rescue StandardError => e
-      errors.add :ip_whitelist, :invalid
+      errors.add :allowed_ips, :invalid
     end
 
     begin
-      blacklisted_domains
+      blocked_domains_list
     rescue StandardError => e
-      errors.add :domain_blacklist, :invalid
+      errors.add :blocked_domains, :invalid
     end
 
     begin
-      blacklisted_ips
+      blocked_ips_list
     rescue StandardError => e
-      errors.add :ip_blacklist, :invalid
+      errors.add :blocked_ips, :invalid
     end
   end
 
   def exceeded?(signature)
-    return false if domain_whitelisted?(signature.domain)
-    return false if ip_whitelisted?(signature.ip_address)
-    return true if domain_blacklisted?(signature.domain)
-    return true if ip_blacklisted?(signature.ip_address)
+    return false if domain_allowed?(signature.domain)
+    return false if ip_allowed?(signature.ip_address)
+    return true if domain_blocked?(signature.domain)
+    return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
 
     burst_rate_exceeded?(signature) || sustained_rate_exceeded?(signature)
   end
 
-  def domain_whitelist=(value)
-    @whitelisted_domains = nil
+  def allowed_domains=(value)
+    @allowed_domains_list = nil
     super(normalize_lines(value))
   end
 
-  def whitelisted_domains
-    @whitelisted_domains ||= build_domain_whitelist
+  def allowed_domains_list
+    @allowed_domains_list ||= build_allowed_domains
   end
 
-  def domain_blacklist=(value)
-    @blacklisted_domains = nil
+  def blocked_domains=(value)
+    @blocked_domains_list = nil
     super(normalize_lines(value))
   end
 
-  def blacklisted_domains
-    @blacklisted_domains ||= build_domain_blacklist
+  def blocked_domains_list
+    @blocked_domains_list ||= build_blocked_domains
   end
 
-  def ip_whitelist=(value)
-    @whitelisted_ips = nil
+  def allowed_ips=(value)
+    @allowed_ips_list = nil
     super(normalize_lines(value))
   end
 
-  def whitelisted_ips
-    @whitelisted_ips ||= build_ip_whitelist
+  def allowed_ips_list
+    @allowed_ips_list ||= build_allowed_ips
   end
 
-  def ip_blacklist=(value)
-    @blacklisted_ips = nil
+  def blocked_ips=(value)
+    @blocked_ips_list = nil
     super(normalize_lines(value))
   end
 
-  def blacklisted_ips
-    @blacklisted_ips ||= build_ip_blacklist
+  def blocked_ips_list
+    @blocked_ips_list ||= build_blocked_ips
   end
 
   def allowed_countries
@@ -120,48 +120,48 @@ class RateLimit < ActiveRecord::Base
     list.each_line.reject(&:blank?)
   end
 
-  def build_domain_whitelist
-    whitelist = strip_comments(domain_whitelist)
-    whitelist = strip_blank_lines(whitelist)
+  def build_allowed_domains
+    domains = strip_comments(allowed_domains)
+    domains = strip_blank_lines(domains)
 
-    whitelist.map{ |l| %r[\A#{convert_glob(l.strip)}\z] }
+    domains.map{ |l| %r[\A#{convert_glob(l.strip)}\z] }
   end
 
-  def domain_whitelisted?(domain)
-    whitelisted_domains.any?{ |d| d === domain }
+  def domain_allowed?(domain)
+    allowed_domains_list.any?{ |d| d === domain }
   end
 
-  def build_domain_blacklist
-    blacklist = strip_comments(domain_blacklist)
-    blacklist = strip_blank_lines(blacklist)
+  def build_blocked_domains
+    domains = strip_comments(blocked_domains)
+    domains = strip_blank_lines(domains)
 
-    blacklist.map{ |l| %r[\A#{convert_glob(l.strip)}\z] }
+    domains.map{ |l| %r[\A#{convert_glob(l.strip)}\z] }
   end
 
-  def domain_blacklisted?(domain)
-    blacklisted_domains.any?{ |d| d === domain }
+  def domain_blocked?(domain)
+    blocked_domains_list.any?{ |d| d === domain }
   end
 
-  def build_ip_whitelist
-    whitelist = strip_comments(ip_whitelist)
-    whitelist = strip_blank_lines(whitelist)
+  def build_allowed_ips
+    ips = strip_comments(allowed_ips)
+    ips = strip_blank_lines(ips)
 
-    whitelist.map{ |l| IPAddr.new(l.strip) }
+    ips.map{ |l| IPAddr.new(l.strip) }
   end
 
-  def ip_whitelisted?(ip)
-    whitelisted_ips.any?{ |i| i.include?(ip) }
+  def ip_allowed?(ip)
+    allowed_ips_list.any?{ |i| i.include?(ip) }
   end
 
-  def build_ip_blacklist
-    blacklist = strip_comments(ip_blacklist)
-    blacklist = strip_blank_lines(blacklist)
+  def build_blocked_ips
+    ips = strip_comments(blocked_ips)
+    ips = strip_blank_lines(ips)
 
-    blacklist.map{ |l| IPAddr.new(l.strip) }
+    ips.map{ |l| IPAddr.new(l.strip) }
   end
 
-  def ip_blacklisted?(ip)
-    blacklisted_ips.any?{ |i| i.include?(ip) }
+  def ip_blocked?(ip)
+    blocked_ips_list.any?{ |i| i.include?(ip) }
   end
 
   def build_allowed_countries
