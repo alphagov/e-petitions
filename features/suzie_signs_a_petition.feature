@@ -150,7 +150,7 @@ Feature: Suzie signs a petition
 
   Scenario: Suzie cannot validate her signature when IP address is rate limited
     Given the burst rate limit is 1 per minute
-    And there is no IP whitelist
+    And there are no allowed IPs
     And there is a signature already from this IP address
     When I am on the new signature page
     And I fill in my details
@@ -160,10 +160,10 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should have no emails
 
-  Scenario: Suzie can validate her signature when IP address is rate limited but the domain is whitelisted
+  Scenario: Suzie can validate her signature when IP address is rate limited but the domain is allowed
     Given the burst rate limit is 1 per minute
-    And there is no IP whitelist
-    And the domain "wimbledon.com" is whitelisted
+    And there are no allowed IPs
+    And the domain "wimbledon.com" is allowed
     And there is a signature already from this IP address
     When I am on the new signature page
     And I fill in my details

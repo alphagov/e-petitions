@@ -17,59 +17,59 @@ Feature: Sysadmin updates the rate limits
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
-  Scenario: Sysadmin updates the domain whitelist
+  Scenario: Sysadmin updates the allowed domains list
     When I am logged in as a sysadmin
     And I am on the admin home page
     And I follow "Rate Limits"
     Then I should see "Edit Rate Limits"
-    When I follow "Domain Whitelist"
+    When I follow "Allowed Domains"
     Then I should see "use *.example.com to match one subdomain and **.example.com to match nested subdomains"
-    When I fill in "rate_limit_domain_whitelist" with "foo("
+    When I fill in "rate_limit_allowed_domains" with "foo("
     And I press "Save"
-    Then I should see "Domain whitelist is invalid"
-    When I fill in "rate_limit_domain_whitelist" with "example.com"
+    Then I should see "Allowed domains list is invalid"
+    When I fill in "rate_limit_allowed_domains" with "example.com"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
-  Scenario: Sysadmin updates the domain blacklist
+  Scenario: Sysadmin updates the blocked domains list
     When I am logged in as a sysadmin
     And I am on the admin home page
     And I follow "Rate Limits"
     Then I should see "Edit Rate Limits"
-    When I follow "Domain Blacklist"
+    When I follow "Blocked Domains"
     Then I should see "use *.example.com to match one subdomain and **.example.com to match nested subdomains"
-    When I fill in "rate_limit_domain_blacklist" with "foo("
+    When I fill in "rate_limit_blocked_domains" with "foo("
     And I press "Save"
-    Then I should see "Domain blacklist is invalid"
-    When I fill in "rate_limit_domain_blacklist" with "example.com"
+    Then I should see "Blocked domains list is invalid"
+    When I fill in "rate_limit_blocked_domains" with "example.com"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
-  Scenario: Sysadmin updates the IP whitelist
+  Scenario: Sysadmin updates the allowed IPs list
     When I am logged in as a sysadmin
     And I am on the admin home page
     And I follow "Rate Limits"
     Then I should see "Edit Rate Limits"
-    When I follow "IP Whitelist"
+    When I follow "Allowed IPs"
     Then I should see "use CIDR addressing to match ranges, e.g. 192.168.0.0/24"
-    When I fill in "rate_limit_ip_whitelist" with "127"
+    When I fill in "rate_limit_allowed_ips" with "127"
     And I press "Save"
-    Then I should see "IP whitelist is invalid"
-    When I fill in "rate_limit_ip_whitelist" with "127.0.0.1/32"
+    Then I should see "Allowed IPs list is invalid"
+    When I fill in "rate_limit_allowed_ips" with "127.0.0.1/32"
     And I press "Save"
     Then I should see "Rate limits updated successfully"
 
-  Scenario: Sysadmin updates the IP whitelist
+  Scenario: Sysadmin updates the blocked IPs list
     When I am logged in as a sysadmin
     And I am on the admin home page
     And I follow "Rate Limits"
     Then I should see "Edit Rate Limits"
-    When I follow "IP Blacklist"
+    When I follow "Blocked IPs"
     Then I should see "use CIDR addressing to match ranges, e.g. 192.168.0.0/24"
-    When I fill in "rate_limit_ip_blacklist" with "127"
+    When I fill in "rate_limit_blocked_ips" with "127"
     And I press "Save"
-    Then I should see "IP blacklist is invalid"
-    When I fill in "rate_limit_ip_blacklist" with "127.0.0.1/32"
+    Then I should see "Blocked IPs list is invalid"
+    When I fill in "rate_limit_blocked_ips" with "127.0.0.1/32"
 
   Scenario: Sysadmin updates the countries
     When I am logged in as a sysadmin

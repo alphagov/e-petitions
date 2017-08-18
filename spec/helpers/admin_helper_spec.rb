@@ -148,7 +148,7 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "#trending_domains" do
     let(:rate_limit) { double(:rate_limit) }
-    let(:whitelist) { [/\Afoo.com\z/] }
+    let(:allowed_domains_list) { [/\Afoo.com\z/] }
     let(:now) { Time.current.beginning_of_minute }
 
     let(:domains) do
@@ -158,7 +158,7 @@ RSpec.describe AdminHelper, type: :helper do
     before do
       expect(Signature).to receive(:trending_domains).with(args).and_return(domains)
       expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
-      expect(rate_limit).to receive(:whitelisted_domains).and_return(whitelist)
+      expect(rate_limit).to receive(:allowed_domains_list).and_return(allowed_domains_list)
     end
 
     around do |example|
@@ -174,7 +174,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_domains
       end
 
-      it "returns non-whitelisted trending domains" do
+      it "returns non-allowed trending domains" do
         expect(subject).to eq([["bar.com", 1]])
       end
     end
@@ -188,7 +188,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_domains(since: 2.hours.ago)
       end
 
-      it "returns non-whitelisted trending domains" do
+      it "returns non-allowed trending domains" do
         expect(subject).to eq([["bar.com", 1]])
       end
     end
@@ -202,7 +202,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_domains(limit: 20)
       end
 
-      it "returns non-whitelisted trending domains" do
+      it "returns non-allowed trending domains" do
         expect(subject).to eq([["bar.com", 1]])
       end
     end
@@ -210,16 +210,16 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "#trending_domains?" do
     let(:rate_limit) { double(:rate_limit) }
-    let(:whitelist) { [/\Afoo.com\z/] }
+    let(:allowed_domains_list) { [/\Afoo.com\z/] }
 
     before do
-      expect(Signature).to receive(:trending_domains).and_return(ips)
+      expect(Signature).to receive(:trending_domains).and_return(domains)
       expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
-      expect(rate_limit).to receive(:whitelisted_domains).and_return(whitelist)
+      expect(rate_limit).to receive(:allowed_domains_list).and_return(allowed_domains_list)
     end
 
-    context "when there are non-whitelisted trending domains" do
-      let(:ips) do
+    context "when there are non-allowed trending domains" do
+      let(:domains) do
         { "foo.com" => 2, "bar.com" => 1 }
       end
 
@@ -232,8 +232,8 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
-    context "when there aren't any non-whitelisted trending IP addresses" do
-      let(:ips) do
+    context "when there aren't any non-allowed trending domains" do
+      let(:domains) do
         { "foo.com" => 2 }
       end
 
@@ -249,7 +249,7 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "#trending_ips" do
     let(:rate_limit) { double(:rate_limit) }
-    let(:whitelist) { [IPAddr.new("192.168.1.1")] }
+    let(:allowed_ips_list) { [IPAddr.new("192.168.1.1")] }
     let(:now) { Time.current.beginning_of_minute }
 
     let(:ips) do
@@ -259,7 +259,7 @@ RSpec.describe AdminHelper, type: :helper do
     before do
       expect(Signature).to receive(:trending_ips).with(args).and_return(ips)
       expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
-      expect(rate_limit).to receive(:whitelisted_ips).and_return(whitelist)
+      expect(rate_limit).to receive(:allowed_ips_list).and_return(allowed_ips_list)
     end
 
     around do |example|
@@ -275,7 +275,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_ips
       end
 
-      it "returns non-whitelisted trending IP addresses" do
+      it "returns non-allowed trending IP addresses" do
         expect(subject).to eq([["10.0.1.1", 1]])
       end
     end
@@ -289,7 +289,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_ips(since: 2.hours.ago)
       end
 
-      it "returns non-whitelisted trending IP addresses" do
+      it "returns non-allowed trending IP addresses" do
         expect(subject).to eq([["10.0.1.1", 1]])
       end
     end
@@ -303,7 +303,7 @@ RSpec.describe AdminHelper, type: :helper do
         helper.trending_ips(limit: 20)
       end
 
-      it "returns non-whitelisted trending IP addresses" do
+      it "returns non-allowed trending IP addresses" do
         expect(subject).to eq([["10.0.1.1", 1]])
       end
     end
@@ -311,15 +311,15 @@ RSpec.describe AdminHelper, type: :helper do
 
   describe "#trending_ips?" do
     let(:rate_limit) { double(:rate_limit) }
-    let(:whitelist) { [IPAddr.new("192.168.1.1")] }
+    let(:allowed_ips_list) { [IPAddr.new("192.168.1.1")] }
 
     before do
       expect(Signature).to receive(:trending_ips).and_return(ips)
       expect(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
-      expect(rate_limit).to receive(:whitelisted_ips).and_return(whitelist)
+      expect(rate_limit).to receive(:allowed_ips_list).and_return(allowed_ips_list)
     end
 
-    context "when there are non-whitelisted trending IP addresses" do
+    context "when there are non-allowed trending IP addresses" do
       let(:ips) do
         { "192.168.1.1" => 2, "10.0.1.1" => 1 }
       end
@@ -333,7 +333,7 @@ RSpec.describe AdminHelper, type: :helper do
       end
     end
 
-    context "when there aren't any non-whitelisted trending IP addresses" do
+    context "when there aren't any non-allowed trending IP addresses" do
       let(:ips) do
         { "192.168.1.1" => 2 }
       end

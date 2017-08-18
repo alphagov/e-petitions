@@ -85,9 +85,9 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
-      context "when submitting just the domain whitelist" do
+      context "when submitting just the allowed domains list" do
         let :params do
-          { domain_whitelist: "example.com" }
+          { allowed_domains: "example.com" }
         end
 
         it "redirects to the edit page" do
@@ -99,9 +99,9 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
-      context "when submitting just the domain blacklist" do
+      context "when submitting just the blocked domains list" do
         let :params do
-          { domain_blacklist: "example.com" }
+          { blocked_domains: "example.com" }
         end
 
         it "redirects to the edit page" do
@@ -113,9 +113,9 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
-      context "when submitting just the ip whitelist" do
+      context "when submitting just the allowed IPs list" do
         let :params do
-          { ip_whitelist: "127.0.0.1" }
+          { allowed_ips: "127.0.0.1" }
         end
 
         it "redirects to the edit page" do
@@ -127,9 +127,9 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
       end
 
-      context "when submitting just the ip blacklist" do
+      context "when submitting just the blocked IPs list" do
         let :params do
-          { ip_blacklist: "127.0.0.1" }
+          { blocked_ips: "127.0.0.1" }
         end
 
         it "redirects to the edit page" do

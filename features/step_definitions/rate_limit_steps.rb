@@ -2,12 +2,12 @@ Given(/^the burst rate limit is (\d+) per minute$/) do |rate|
   RateLimit.first_or_create!.update!(burst_rate: rate, burst_period: 60)
 end
 
-Given(/^there is no IP whitelist$/) do
-  RateLimit.first_or_create!.update!(ip_whitelist: "")
+Given(/^there are no allowed IPs$/) do
+  RateLimit.first_or_create!.update!(allowed_ips: "")
 end
 
-Given(/^the domain "(.*?)" is whitelisted$/) do |domain|
-  RateLimit.first_or_create!.update!(domain_whitelist: domain)
+Given(/^the domain "(.*?)" is allowed$/) do |domain|
+  RateLimit.first_or_create!.update!(allowed_domains: domain)
 end
 
 Given(/^there is a signature already from this IP address$/) do

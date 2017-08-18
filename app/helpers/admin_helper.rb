@@ -78,12 +78,12 @@ module AdminHelper
 
   def build_trending_domains(since, limit)
     all_domains = Signature.trending_domains(since: since, limit: limit + 30)
-    whitelist = rate_limit.whitelisted_domains
+    allowed_domains = rate_limit.allowed_domains_list
 
     all_domains.inject([]) do |domains, (domain, count)|
       return domains if domains.size == limit
 
-      unless whitelist.any?{ |d| d === domain }
+      unless allowed_domains.any?{ |d| d === domain }
         domains << [domain, count]
       end
 
@@ -93,12 +93,12 @@ module AdminHelper
 
   def build_trending_ips(since, limit)
     all_ips = Signature.trending_ips(since: since, limit: limit + 30)
-    whitelist = rate_limit.whitelisted_ips
+    allowed_ips = rate_limit.allowed_ips_list
 
     all_ips.inject([]) do |ips, (ip, count)|
       return ips if ips.size == limit
 
-      unless whitelist.any?{ |i| i.include?(ip) }
+      unless allowed_ips.any?{ |i| i.include?(ip) }
         ips << [ip, count]
       end
 
