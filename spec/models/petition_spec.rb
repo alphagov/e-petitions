@@ -1159,7 +1159,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and closed_at has passed" do
-      let(:open_at) { Site.opened_at_for_closing(2.days.ago) }
+      let(:open_at) { Site.opened_at_for_closing - 1.day }
       let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does close the petition" do
@@ -1224,7 +1224,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and the closing date has passed" do
-      let(:open_at) { Site.opened_at_for_closing(2.days.ago) }
+      let(:open_at) { Site.opened_at_for_closing - 1.day }
       let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "finds the petition" do
