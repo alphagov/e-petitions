@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe DeletePetitionJob, type: :job do
+  before do
+    FactoryGirl.create(:constituency, :london_and_westminster)
+    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+  end
+
   context "with a stopped petition" do
     let!(:petition) { FactoryGirl.create(:stopped_petition) }
 

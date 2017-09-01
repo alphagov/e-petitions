@@ -11,6 +11,11 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  before do
+    FactoryGirl.create(:constituency, :london_and_westminster)
+    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+  end
+
   context "defaults" do
     it "has pending as default state" do
       s = Signature.new
@@ -98,15 +103,15 @@ RSpec.describe Signature, type: :model do
       end
 
       context "when the signature is not the creator" do
-        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
-        let!(:signature) {
+        let(:signature) {
           FactoryGirl.create(
             :pending_signature,
             petition: petition,
-            constituency_id: constituency_journal.constituency_id,
-            location_code: country_journal.location_code
+            constituency_id: "3415",
+            location_code: "GB"
           )
         }
 
@@ -132,15 +137,15 @@ RSpec.describe Signature, type: :model do
       end
 
       context "when the signature is invalidated" do
-        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
-        let!(:signature) {
+        let(:signature) {
           FactoryGirl.create(
             :pending_signature,
             petition: petition,
-            constituency_id: constituency_journal.constituency_id,
-            location_code: country_journal.location_code
+            constituency_id: "3415",
+            location_code: "GB"
           )
         }
 
@@ -155,12 +160,12 @@ RSpec.describe Signature, type: :model do
           expect{ signature.destroy }.not_to change{ petition.reload.signature_count }
         end
 
-        it "decrements the country journal signature count" do
+        it "doesn't decrement the country journal signature count" do
           expect(petition.signature_count).to eq(6)
           expect{ signature.destroy }.not_to change{ country_journal.reload.signature_count }
         end
 
-        it "decrements the constituency journal signature count" do
+        it "doesn't decrement the constituency journal signature count" do
           expect(petition.signature_count).to eq(6)
           expect{ signature.destroy }.not_to change{ constituency_journal.reload.signature_count }
         end
@@ -601,15 +606,15 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the signature is not the creator" do
-      let(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-      let(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+      let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+      let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
       let(:signature) {
         FactoryGirl.create(
           :pending_signature,
           petition: petition,
-          constituency_id: constituency_journal.constituency_id,
-          location_code: country_journal.location_code
+          constituency_id: "3415",
+          location_code: "GB"
         )
       }
 

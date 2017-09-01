@@ -528,6 +528,17 @@ FactoryGirl.define do
       example_postcode "S61AR"
     end
 
+    trait(:london_and_westminster) do
+      name "Cities of London and Westminster"
+      slug "cities-of-london-and-westminster"
+      external_id "3415"
+      ons_code "E14000639"
+      mp_id "1405"
+      mp_name "Rt Hon Mark Field MP"
+      mp_date "2017-06-08"
+      example_postcode "SW1A1AA"
+    end
+
     england
 
     name { Faker::Address.county }
@@ -538,12 +549,12 @@ FactoryGirl.define do
   end
 
   factory :constituency_petition_journal do
-    constituency_id { generate(:constituency_id) }
+    constituency_id "3415"
     association :petition
   end
 
   factory :country_petition_journal do
-    association :location
+    location_code "GB"
     association :petition
   end
 

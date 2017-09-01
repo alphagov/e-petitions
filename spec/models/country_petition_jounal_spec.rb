@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe CountryPetitionJournal, type: :model do
+  before do
+    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+  end
+
+  let(:location) { Location.find_by!(code: "GB") }
+  let(:location_code) { "GB" }
+
   it "has a valid factory" do
     expect(FactoryGirl.build(:country_petition_journal)).to be_valid
   end
@@ -22,8 +29,6 @@ RSpec.describe CountryPetitionJournal, type: :model do
   end
 
   describe ".for" do
-    let!(:location) { FactoryGirl.create(:location) }
-    let(:location_code) { location.code }
     let(:petition) { FactoryGirl.create(:petition) }
 
     context "when there is a journal for the requested petition and country" do
@@ -68,15 +73,13 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
   describe ".record_new_signature_for" do
     let!(:petition) { FactoryGirl.create(:open_petition) }
-    let!(:location) { FactoryGirl.create(:location) }
-    let!(:location_code) { location.code }
 
     def journal
-      described_class.for(petition, location_code)
+      described_class.for(petition, "GB")
     end
 
     context "when the supplied signature is valid" do
-      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: "GB") }
       let(:now) { 1.hour.from_now.change(usec: 0) }
 
       it "increments the signature_count by 1" do
@@ -103,7 +106,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when the supplied signature has no petition" do
-      let(:signature) { FactoryGirl.build(:validated_signature, petition: nil, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: nil, location_code: "GB") }
 
       it "does nothing" do
         expect {
@@ -123,7 +126,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when the supplied signature is not validated" do
-      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, location_code: "GB") }
 
       it "does nothing" do
         expect {
@@ -133,7 +136,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when no journal exists" do
-      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:validated_signature, petition: petition, location_code: "GB") }
 
       it "creates a new journal" do
         expect {
@@ -145,13 +148,11 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
   describe ".invalidate_signature_for" do
     let!(:petition) { FactoryGirl.create(:open_petition) }
-    let!(:location) { FactoryGirl.create(:location) }
-    let!(:location_code) { location.code }
     let!(:journal) { FactoryGirl.create(:country_petition_journal, petition: petition, location: location, signature_count: signature_count) }
     let(:signature_count) { 1 }
 
     context "when the supplied signature is valid" do
-      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: "GB") }
       let(:now) { 1.hour.from_now.change(usec: 0) }
 
       it "decrements the signature_count by 1" do
@@ -178,7 +179,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when the supplied signature has no petition" do
-      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: nil, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: nil, location_code: "GB") }
 
       it "does nothing" do
         expect {
@@ -198,7 +199,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when the supplied signature is not validated" do
-      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:pending_signature, petition: petition, location_code: "GB") }
 
       it "does nothing" do
         expect {
@@ -208,7 +209,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when the signature count is already zero" do
-      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: "GB") }
       let(:signature_count) { 0 }
 
       it "does nothing" do
@@ -219,7 +220,7 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
 
     context "when no journal exists" do
-      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: location_code) }
+      let(:signature) { FactoryGirl.build(:invalidated_signature, petition: petition, location_code: "GB") }
 
       before do
         described_class.delete_all
