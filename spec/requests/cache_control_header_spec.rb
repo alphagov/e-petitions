@@ -45,7 +45,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
     let!(:petition) { FactoryGirl.create(:pending_petition) }
 
     before do
-      get "/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}"
+      get "/petitions/#{petition.id}/sponsors/new?token=#{petition.sponsor_token}"
     end
 
     it "changes the cache control headers to 'no-store, no-cache'" do

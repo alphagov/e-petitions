@@ -41,16 +41,21 @@ Rails.application.routes.draw do
         get 'moderation-info'
       end
 
-      resources :sponsors, only: %i[show update], param: :token do
+      resources :sponsors, only: %i[new create], shallow: true do
+        collection do
+          post 'new', action: 'confirm', as: :confirm
+          get  'thank-you'
+        end
+
         member do
-          get 'thank-you'
-          get 'sponsored'
+          get 'verify'
+          get 'signed', path: 'sponsored'
         end
       end
 
-      resources :signatures, only: %i[new], shallow: true do
+      resources :signatures, only: %i[new create], shallow: true do
         collection do
-          post 'new', action: 'create', as: :sign
+          post 'new', action: 'confirm', as: :confirm
           get  'thank-you'
         end
 

@@ -36,6 +36,12 @@ class Signature < ActiveRecord::Base
   validates :constituency_id, length: { maximum: 255 }
 
   before_save if: :email? do
+    if find_duplicate
+      raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
+    end
+  end
+
+  before_save if: :email? do
     self.uuid = generate_uuid
   end
 
@@ -129,6 +135,10 @@ class Signature < ActiveRecord::Base
                                          petition_id: signature.petition_id) }
 
   class << self
+    def duplicate(id, email)
+      where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+    end
+
     def search(query, options = {})
       query = query.to_s
       page = [options[:page].to_i, 1].max
@@ -189,12 +199,39 @@ class Signature < ActiveRecord::Base
   # = Methods =
   attr_accessor :uk_citizenship
 
+  def find_duplicate
+    return nil unless petition
+
+    signatures = petition.signatures.duplicate(id, email)
+    return signatures.first if signatures.many?
+
+    if signature = signatures.first
+      if sanitized_name == signature.sanitized_name
+        signature
+      elsif postcode != signature.postcode
+        signature
+      end
+    end
+  end
+
+  def find_duplicate!
+    find_duplicate || (raise ActiveRecord::RecordNotFound, "Signature not found: #{name}, #{email}, #{postcode}")
+  end
+
+  def name=(value)
+    super(value.to_s.strip)
+  end
+
   def email=(value)
-    super(value.to_s.downcase)
+    super(value.to_s.strip.downcase)
   end
 
   def postcode=(value)
     super(PostcodeSanitizer.call(value))
+  end
+
+  def sanitized_name
+    name.to_s.parameterize
   end
 
   def creator?
@@ -335,18 +372,6 @@ class Signature < ActiveRecord::Base
 
   def email_threshold_reached?
     email_count >= 5
-  end
-
-  def duplicate?
-    matcher = Signature.where(email: email, petition_id: petition_id)
-    matcher = matcher.where("signatures.id != ?", id) unless new_record?
-    existing_email_address_count = matcher.count
-    return false if existing_email_address_count == 0
-    return true if existing_email_address_count > 1
-    existing_signature = matcher.first
-    return true if (existing_signature.name.strip.downcase == name.strip.downcase)
-    return true if (existing_signature.postcode.gsub(/\s+/,'').downcase != postcode.gsub(/\s+/,'').downcase)
-    return false
   end
 
   private

@@ -6,7 +6,7 @@
 <%= render 'petitions/create/error_summary', f: f %>
 
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-  <%= render :partial => 'signatures/form', :locals => { :f => csf, :signature => csf.object, :context => 'create-petition' } %>
+  <%= render 'petitions/create/signature_form', :f => csf, :signature => csf.object, :context => 'create-petition' %>
 <% end %>
 
 <%= f.submit 'Continue', :name => 'move:next', :class => 'button', :tabindex => increment %>

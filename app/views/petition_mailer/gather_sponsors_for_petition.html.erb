@@ -15,7 +15,7 @@
 <p>I’ve made a petition – will you sign it?</p>
 
 <p>Click this link to sign the petition:<br />
-<%= link_to nil, petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
+<%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
 
 <p>My petition:</p>
 
@@ -30,4 +30,4 @@
 <hr />
 
 <p>Click this link to sign the petition:<br />
-<%= link_to nil, petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>
+<%= link_to nil, new_petition_sponsor_url(@petition, token: @petition.sponsor_token) %></p>

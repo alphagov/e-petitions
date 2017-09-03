@@ -953,7 +953,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "open?" do
+  describe "#open?" do
     context "when the state is open" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
 
@@ -993,7 +993,36 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "rejected?" do
+  describe "#closed_for_signing?" do
+    let(:now) { Time.current.change(sec: 0) }
+    let(:yesterday) { now - 24.hours }
+
+    context "when the petition closed less than 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday + 1.second) }
+
+      it "returns false" do
+        expect(petition.closed_for_signing?(now)).to be_falsey
+      end
+    end
+
+    context "when the petition closed exactly 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday) }
+
+      it "returns false" do
+        expect(petition.closed_for_signing?(now)).to be_falsey
+      end
+    end
+
+    context "when the petition closed more than 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday - 1.second) }
+
+      it "returns true" do
+        expect(petition.closed_for_signing?(now)).to be_truthy
+      end
+    end
+  end
+
+  describe "#rejected?" do
     context "when the state is rejected" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
 
@@ -1013,7 +1042,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "stopped?" do
+  describe "#stopped?" do
     context "when the state is stopped" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::STOPPED_STATE) }
 
@@ -1033,7 +1062,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "hidden?" do
+  describe "#hidden?" do
     context "when the state is hidden" do
       it "returns true" do
         expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
@@ -1051,7 +1080,29 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "flagged?" do
+  describe "#visible?" do
+    context "for moderated states" do
+      Petition::VISIBLE_STATES.each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is visible when state is #{state}" do
+          expect(petition.visible?).to be_truthy
+        end
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - Petition::VISIBLE_STATES).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not visible when state is #{state}" do
+          expect(petition.visible?).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe "#flagged?" do
     context "when the state is flagged" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::FLAGGED_STATE) }
 

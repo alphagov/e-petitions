@@ -320,7 +320,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "includes a link to pass on to potential sponsors to have them support the petition" do
-      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.uk/petitions/#{petition.id}/sponsors/new\?token=#{petition.sponsor_token}])
     end
 
     it "includes the petition action" do

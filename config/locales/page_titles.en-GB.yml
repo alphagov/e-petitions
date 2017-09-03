@@ -25,12 +25,14 @@ en-GB:
       thank_you: "Thank you - Petitions"
     signatures:
       new: "%{petition} - Sign this petition - Petitions"
+      confirm: "%{petition} - Sign this petition - Petitions"
       signed: "Thank you - Petitions"
       thank_you: "Thank you - Petitions"
       unsubscribe: "Unsubscribe from %{petition} email updates - Petitions"
     sponsors:
-      show: "Support %{creator}’s petition - Petitions"
-      sponsored: "Thank you - Petitions"
+      new: "Support %{creator}’s petition - Petitions"
+      confirm: "Support %{creator}’s petition - Petitions"
+      signed: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
       index: "Petitions - UK Government and Parliament"

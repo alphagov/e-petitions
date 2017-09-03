@@ -648,6 +648,14 @@ class Petition < ActiveRecord::Base
     state.in?(PUBLISHED_STATES)
   end
 
+  def visible?
+    state.in?(VISIBLE_STATES)
+  end
+
+  def closed_for_signing?(now = Time.current)
+    closed_at? && closed_at < 24.hours.ago(now)
+  end
+
   def archiving?
     archiving_started_at? && !archived_at?
   end

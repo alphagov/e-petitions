@@ -155,6 +155,10 @@ Given(/^the petition has closed$/) do
   @petition.close!
 end
 
+Given(/^the petition has closed some time ago$/) do
+  @petition.close!(2.days.ago)
+end
+
 Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:rejected_petition,

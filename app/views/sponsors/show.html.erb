@@ -1,3 +1,0 @@
-<%= form_for @stage_manager.stage_object, url: petition_sponsor_path(@petition, @petition.sponsor_token), html: {method: 'patch', class: 'wizard_form new_petition_form'} do |f| %>
-  <%= render_signature_form @stage_manager, f, with_signer_ui_back_link: false %>
-<% end -%>

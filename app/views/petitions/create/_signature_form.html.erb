@@ -1,0 +1,37 @@
+<%= form_row :for => [signature, :uk_citizenship], :class => 'uk-citizen' do %>
+  <span class="form-label">
+    <% if context == 'create-petition' %>
+      Only British citizens or UK residents have the right to create and sign petitions
+    <% else %>
+      Only British citizens or UK residents have the right to sign
+    <% end %>
+  </span>
+  <%= error_messages_for_field signature, :uk_citizenship %>
+  <%= f.label :uk_citizenship,  :class => 'block-label', :for => nil do  %>
+    <%= f.check_box :uk_citizenship, :tabindex => increment %>
+    I am a British citizen or UK resident
+  <% end %>
+<% end %>
+
+<%= form_row :for => [signature, :name] do %>
+  <%= f.label :name, :class => 'form-label' %>
+  <%= error_messages_for_field signature, :name %>
+  <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
+  <% if context == 'create-petition' %>
+    <span class="form-hint">You must use your full name</span>
+  <% end %>
+<% end %>
+
+<%= render 'petitions/create/signature_email', f: f, signature: signature,  hide_label: false %>
+
+<%= form_row :for => [signature, :location_code] do %>
+  <%= f.label :location_code, 'Location', :class => 'form-label' %>
+  <%= error_messages_for_field signature, :location_code %>
+  <%= f.select :location_code, countries_for_select, {}, :tabindex => increment, :class => 'form-control' %>
+<% end %>
+
+<%= form_row :for => [signature, :postcode] do %>
+  <%= f.label :postcode, :class => 'form-label' %>
+  <%= error_messages_for_field signature, :postcode %>
+  <%= f.text_field :postcode, :tabindex => increment, :class => 'form-control small' %>
+<% end %>

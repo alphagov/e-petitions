@@ -32,7 +32,7 @@ RSpec.describe PageTitleHelper, type: :helper do
           show: "%{petition} - Pétitions"
         },
         sponsors: {
-          show: "La pétition de soutien %{creator} - Pétitions"
+          new: "La pétition de soutien %{creator} - Pétitions"
     }}}
   end
 
@@ -93,7 +93,7 @@ RSpec.describe PageTitleHelper, type: :helper do
 
       it "the petition creator is available for interpolation" do
         params[:controller] = "sponsors"
-        params[:action] = "show"
+        params[:action] = "new"
 
         expect(helper.page_title).to eq("La pétition de soutien Jacques Cousteau - Pétitions")
       end

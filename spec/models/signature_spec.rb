@@ -173,6 +173,29 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the signature is saved" do
+      context "and the signature is a duplicate" do
+        let(:petition) { FactoryGirl.create(:open_petition) }
+        let(:signature) { petition.signatures.build(attributes) }
+
+        let(:attributes) do
+          {
+            name: "Suzy Signer",
+            email: "foo@example.com",
+            postcode: "SW1A 1AA",
+            location_code: "GB",
+            uk_citizenship: "1"
+          }
+        end
+
+        before do
+          petition.signatures.create!(attributes)
+        end
+
+        it "raises an ActiveRecord::RecordNotUnique exception" do
+          expect { signature.save }.to raise_exception(ActiveRecord::RecordNotUnique)
+        end
+      end
+
       context "and the email is blank" do
         subject { FactoryGirl.build(:signature, email: "") }
 
@@ -1409,82 +1432,167 @@ RSpec.describe Signature, type: :model do
     end
   end
 
-  describe "#duplicate?" do
+  describe "#find_duplicate" do
     let(:petition) { FactoryGirl.create(:open_petition) }
     let(:other_petition) { FactoryGirl.create(:open_petition) }
+    let(:signature) { petition.signatures.build(attributes) }
+    let(:name) { "Suzy Signer" }
+    let(:postcode) { "SW1A 1AA" }
+    let(:email) { "foo@example.com" }
+
     let(:attributes) do
       {
-        name:     "Suzy Signer",
-        petition: petition,
-        postcode: "SW1A 1AA",
-        email:    "foo@example.com"
+        name: name,
+        email: email,
+        postcode: postcode,
+        location_code: "GB",
+        uk_citizenship: "1"
       }
+    end
+
+    context "when a signature doesn't already exist with the same email address" do
+      it "returns nil" do
+        expect(signature.find_duplicate).to be_nil
+      end
     end
 
     context "when a signature already exists with the same email address" do
       before do
-        FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
+        petition.signatures.create!(
+          name: "Suzy Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
       end
 
-      let(:duplicate_record_exception) { ActiveRecord::RecordNotUnique }
-
-      it "raises an exception if the signature has the same email address and the same name" do
-        expect{ FactoryGirl.create(:signature, attributes) }.to raise_exception(duplicate_record_exception)
+      context "and the name is the same" do
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
 
-      it "returns false if the signature has the same email address but a different name" do
-        signature = FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
-        expect(signature.duplicate?).to be false
+      context "and the name is the same but different case" do
+        let(:name) { "suzy signer" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
 
-      it "returns true if the signature has the same email address and the same name with whitespace at the end" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Suzy Signer "))
-        expect(signature.duplicate?).to be true
+      context "and the name is the same but with extra whitespace" do
+        let(:name) { " Suzy  Signer " }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
 
-      it "returns true if the signature has the same email address and the same name with whitespace at the beginning" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: " Suzy Signer"))
-        expect(signature.duplicate?).to be true
+      context "and the name is different" do
+        let(:name) { "Sam Signer" }
+
+        it "returns nil" do
+          expect(signature.find_duplicate).to be_nil
+        end
       end
 
-      it "returns true if the signature has the same email but a different postcode" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A 1AB"))
-        expect(signature.duplicate?).to be true
+      context "and the postcode is different" do
+        let(:postcode) { "SW1A 1AB" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
 
-      it "returns false if the signature is scoped to another petition" do
-        signature = FactoryGirl.build(:signature, attributes.merge(petition: other_petition))
-        expect(signature.duplicate?).to be false
+      context "and the name and postcode are different" do
+        let(:name) { "Sam Signer" }
+        let(:postcode) { "SW1A 1AB" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
 
-      it "ignores the space on the postcode check" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AA"))
-        expect(signature.duplicate?).to be false
+      context "and the name is the same, but is scoped to a different petition" do
+        let(:signature) { other_petition.signatures.build(attributes) }
 
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AB"))
-        expect(signature.duplicate?).to be true
+        it "returns nil" do
+          expect(signature.find_duplicate).to be_nil
+        end
       end
 
-      it "does a case insensitive postcode check" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "sw1a 1aa"))
-        expect(signature.duplicate?).to be false
-      end
+      context "but the email is a different case" do
+        let(:email) { "FOO@example.com" }
 
-      it "is case insensitive about the email validation" do
-        signature = FactoryGirl.build(:signature, attributes.merge(email: "FOO@example.com"))
-        expect(signature.duplicate?).to be true
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
       end
     end
 
-    context "when two signatures already exist with the same email address" do
+    context "when two signatures already exists with the same email address" do
       before do
-        FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
-        FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
+        petition.signatures.create!(
+          name: "Suzy Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
+
+        petition.signatures.create!(
+          name: "Sam Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
       end
 
-      it "returns true for a third signature with the same email address" do
-        signature = FactoryGirl.build(:signature, attributes.merge(name: "Sarah Signer"))
-        expect(signature.duplicate?).to be true
+      context "and the name is the same" do
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is different" do
+        let(:name) { "Sue Signer" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+    end
+  end
+
+  describe "#find_duplicate!" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:signature) { petition.signatures.build(attributes) }
+
+    let(:attributes) do
+      {
+        name: "Suzy Signer",
+        email: "foo@example.com",
+        postcode: "SW1A 1AA",
+        location_code: "GB",
+        uk_citizenship: "1"
+      }
+    end
+
+    context "when a duplicate signature doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect { signature.find_duplicate! }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when a duplicate signature does exist" do
+      before do
+        petition.signatures.create!(attributes)
+      end
+
+      it "returns the signature" do
+        expect(signature.find_duplicate!).to be_present
       end
     end
   end

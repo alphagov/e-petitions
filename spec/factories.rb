@@ -205,7 +205,7 @@ FactoryGirl.define do
       admin_notes { nil }
       creator_name { nil }
       creator_signature_attributes { {} }
-      sponsors_signed false
+      sponsors_signed nil
       sponsor_count { Site.minimum_number_of_sponsors }
     end
 
@@ -228,9 +228,13 @@ FactoryGirl.define do
     end
 
     after(:create) do |petition, evaluator|
-      if evaluator.sponsors_signed
+      unless evaluator.sponsors_signed.nil?
         evaluator.sponsor_count.times do
-          FactoryGirl.create(:sponsor, :validated, petition: petition)
+          if evaluator.sponsors_signed
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+          else
+            FactoryGirl.create(:sponsor, :pending, petition: petition)
+          end
         end
 
         petition.update_signature_count!
@@ -460,6 +464,10 @@ FactoryGirl.define do
 
     trait :validated do
       state "validated"
+    end
+
+    trait :just_signed do
+      seen_signed_confirmation_page false
     end
   end
 

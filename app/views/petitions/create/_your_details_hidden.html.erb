@@ -1,3 +1,3 @@
 <%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
-  <%= render 'signatures/create/signer_hidden', f: csf, signature: csf.object %>
+  <%= render 'petitions/create/signature_hidden', f: csf, signature: csf.object %>
 <% end %>
