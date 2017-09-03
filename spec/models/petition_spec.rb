@@ -2180,44 +2180,55 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#has_maximum_sponsors?' do
-    it 'is true when flagged petition has reached maximum amount of sponsors' do
-      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
-      expect(flagged_petition.has_maximum_sponsors?).to be_truthy
-    end
+    %w[pending validated sponsored flagged].each do |state|
+      let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }
 
-    it 'is true when sponsored petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
-    end
+      context "when petition is #{state}" do
+        context "and has less than the maximum number of sponsors" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors - 1 }
+          let(:sponsors_signed) { true }
 
-    it 'is true when validated petition has reached maximum amount of sponsors' do
-      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
-      expect(validated_petition.has_maximum_sponsors?).to be_truthy
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is true when pending petition has reached maximum amount of sponsors' do
-      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
-      expect(pending_petition.has_maximum_sponsors?).to be_truthy
-    end
+        context "and has the maximum number of sponsors, but none have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsors_signed) { false }
 
-    it 'is false when flagged petition has not reached maximum amount of sponsors' do
-      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true)
-      expect(flagged_petition.has_maximum_sponsors?).to be_falsey
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is false when sponsored petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
-    end
+        context "and has more than the maximum number of sponsors, but none have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsors_signed) { false }
 
-    it 'is false when validated petition has not reached maximum amount of sponsors' do
-      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true)
-      expect(validated_petition.has_maximum_sponsors?).to be_falsey
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is false when validated petition has not reached maximum amount of sponsors' do
-      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true)
-      expect(pending_petition.has_maximum_sponsors?).to be_falsey
+        context "and has the maximum number of sponsors and they have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsors_signed) { true }
+
+          it "returns true" do
+            expect(petition.has_maximum_sponsors?).to eq(true)
+          end
+        end
+
+        context "and has more than the maximum number of sponsors and they have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsors_signed) { true }
+
+          it "returns true" do
+            expect(petition.has_maximum_sponsors?).to eq(true)
+          end
+        end
+      end
     end
   end
 

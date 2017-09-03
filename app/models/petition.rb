@@ -742,7 +742,7 @@ class Petition < ActiveRecord::Base
   end
 
   def has_maximum_sponsors?
-    sponsors.count >= Site.maximum_number_of_sponsors && state.in?(STOP_COLLECTING_STATES)
+    sponsors.validated.count >= Site.maximum_number_of_sponsors
   end
 
   def update_all(updates)
