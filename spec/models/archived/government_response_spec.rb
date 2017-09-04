@@ -25,8 +25,8 @@ RSpec.describe Archived::GovernmentResponse, type: :model do
     subject { FactoryGirl.build(:archived_government_response) }
 
     it { is_expected.to validate_presence_of(:petition) }
-    it { is_expected.not_to validate_presence_of(:summary) }
-    it { is_expected.to validate_length_of(:summary).is_at_most(200) }
+    it { is_expected.to validate_presence_of(:summary) }
+    it { is_expected.to validate_length_of(:summary).is_at_most(500) }
     it { is_expected.to validate_length_of(:details).is_at_most(10000) }
   end
 

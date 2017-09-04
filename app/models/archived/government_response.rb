@@ -5,7 +5,7 @@ module Archived
     belongs_to :petition, touch: true
 
     validates :petition, presence: true
-    validates :summary, length: { maximum: 200 }, allow_blank: true
+    validates :summary, presence: true, length: { maximum: 500 }
     validates :details, length: { maximum: 10000 }, allow_blank: true
 
     after_create do

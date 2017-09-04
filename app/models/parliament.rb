@@ -100,6 +100,10 @@ class Parliament < ActiveRecord::Base
 
   after_save { Site.touch }
 
+  def name
+    "#{period} #{government} government"
+  end
+
   def opened?(now = Time.current)
     opening_at? && opening_at <= now
   end

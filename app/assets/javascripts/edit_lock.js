@@ -1,7 +1,7 @@
 (function ($) {
   'use strict';
 
-  $.fn.editLock = function(id, user_id) {
+  $.fn.editLock = function(id, user_id, path) {
     var $html = this;
     var $message = $html.find('.edit-lock-message');
     var $override = $html.find('#edit-lock-override');
@@ -9,8 +9,9 @@
 
     var ID = id;
     var USER_ID = user_id;
+    var PATH = path;
     var INTERVAL = 10000;
-    var LOCK_URL = '/admin/petitions/' + ID + '/lock.json';
+    var LOCK_URL = PATH + '/' + ID + '/lock.json';
 
     var EditLock = {
       processStatus: function(data) {
@@ -58,7 +59,7 @@
       },
 
       cancelClicked: function(e) {
-        window.location = '/admin/petitions/' + ID;
+        window.location = PATH + '/' + ID;
       }
     };
 
