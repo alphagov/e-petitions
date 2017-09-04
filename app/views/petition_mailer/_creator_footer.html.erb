@@ -1,0 +1,13 @@
+<hr>
+<p><small>You’re receiving this email because you created this petition: “<%= @petition.action %>”.</small></p>
+<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
+
+<div itemscope itemtype="http://schema.org/EmailMessage">
+  <div itemprop="potentialAction" itemscope itemtype="http://schema.org/ConfirmAction">
+    <meta itemprop="name" content="Unsubscribe" />
+    <div itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+      <link itemprop="url" href="<%= unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %>" />
+    </div>
+  </div>
+  <meta itemprop="description" content="Click to unsubscribe from getting emails about this petition" />
+</div>

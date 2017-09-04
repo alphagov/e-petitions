@@ -1,6 +1,4 @@
-<p><small>You’re receiving this email because you created this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
-<hr>
+<%= render 'creator_header' %>
 
 <p>Dear <%= @signature.name %>,</p>
 
@@ -40,6 +38,4 @@
 <%= t("petitions.emails.signoff_prefix") %><br />
 <%= t("petitions.emails.signoff_suffix") %></p>
 
-<hr>
-<p><small>You’re receiving this email because you created this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
+<%= render 'creator_footer' %>
