@@ -188,8 +188,16 @@ FactoryGirl.define do
     sequence(:email)  { |n| "jo#{n}@public.com" }
     postcode            "SW1A 1AA"
     location_code       "GB"
-    state               Signature::VALIDATED_STATE
+    state               Archived::Signature::VALIDATED_STATE
     unsubscribe_token { Authlogic::Random.friendly_token }
+
+    trait :pending do
+      state Archived::Signature::PENDING_STATE
+    end
+
+    trait :validated do
+      state Archived::Signature::VALIDATED_STATE
+    end
   end
 
   factory :petition do

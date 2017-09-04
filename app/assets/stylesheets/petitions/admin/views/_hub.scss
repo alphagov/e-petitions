@@ -34,12 +34,6 @@
     }
   }
 
-  .all-petitions-link {
-    float: right;
-    margin-right: $gutter-half;
-    text-decoration: underline;
-  }
-
   .moderation {
     overflow: hidden;
     margin-left: $gutter-half;
@@ -113,4 +107,8 @@
       }
     }
   }
+}
+
+.hub-links {
+  text-align: right;
 }

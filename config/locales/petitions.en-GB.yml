@@ -84,6 +84,17 @@ en-GB:
         - :awaiting_debate_date
         - :with_debate_outcome
         - :in_debate_queue
+      admin_archived:
+        - :all
+        - :published
+        - :rejected
+        - :hidden
+        - :stopped
+        - :awaiting_response
+        - :with_response
+        - :awaiting_debate_date
+        - :with_debate_outcome
+        - :in_debate_queue
       names:
         admin:
           all: "All petitions (%{quantity})"
@@ -95,6 +106,17 @@ en-GB:
           tagged_in_moderation: "Awaiting moderation - tagged (%{quantity})"
           open: "Open (%{quantity})"
           closed: "Closed (%{quantity})"
+          rejected: "Rejected (%{quantity})"
+          hidden: "Hidden (%{quantity})"
+          stopped: "Stopped (%{quantity})"
+          awaiting_response: "Awaiting a government response (%{quantity})"
+          with_response: "With a government response (%{quantity})"
+          awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
+          with_debate_outcome: "Has been debated in parliament (%{quantity})"
+          in_debate_queue: "In debate queue (%{quantity})"
+        admin_archived:
+          all: "All petitions (%{quantity})"
+          published: "Published (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
           stopped: "Stopped (%{quantity})"

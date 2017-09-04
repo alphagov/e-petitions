@@ -1,0 +1,299 @@
+require 'rails_helper'
+
+RSpec.describe Admin::Archived::LocksController, type: :controller, admin: true do
+  context "when not logged in" do
+    [
+      ["GET", "/admin/archived/petitions/:petition_id/lock.json", :show, { petition_id: "100000", format: :json }],
+      ["POST", "/admin/archived/petitions/:petition_id/lock.json", :create, { petition_id: "100000", format: :json }],
+      ["PATCH", "/admin/archived/petitions/:petition_id/lock.json", :update, { petition_id: "100000", format: :json }],
+      ["DELETE", "/admin/archived/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000", format: :json }]
+    ].each do |method, path, action, params|
+
+      describe "#{method} #{path}" do
+        before { process action, method, params }
+
+        it "redirects to the login page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+        end
+      end
+
+    end
+  end
+
+  context "when logged in as a moderator requiring a password reset" do
+    let(:moderator) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    before { login_as(moderator) }
+
+    [
+      ["GET", "/admin/archived/petitions/:petition_id/lock.json", :show, { petition_id: "100000", format: :json }],
+      ["POST", "/admin/archived/petitions/:petition_id/lock.json", :create, { petition_id: "100000", format: :json }],
+      ["PATCH", "/admin/archived/petitions/:petition_id/lock.json", :update, { petition_id: "100000", format: :json }],
+      ["DELETE", "/admin/archived/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000", format: :json }]
+    ].each do |method, path, action, params|
+
+      describe "#{method} #{path}" do
+        before { process action, method, params }
+
+        it "redirects to the admin profile page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{moderator.id}/edit")
+        end
+      end
+
+    end
+  end
+
+  context "when logged in as a moderator" do
+    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:petition) { FactoryGirl.create(:archived_petition) }
+
+    before { login_as(moderator) }
+
+    describe "GET /admin/archived/petitions/:petition_id/lock.json" do
+      it "returns 200 OK" do
+        get :show, petition_id: petition.to_param, format: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the :show template" do
+        get :show, petition_id: petition.to_param, format: :json
+        expect(response).to render_template("admin/archived/locks/show")
+      end
+
+      context "when the petition is locked by the moderator" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: moderator, locked_at: 1.hour.ago) }
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :show, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition is locked by someone else" do
+        let(:other_user) { FactoryGirl.create(:moderator_user) }
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+        it "doesn't update the locked_at timestamp" do
+          expect {
+            get :show, petition_id: petition.to_param, format: :json
+          }.not_to change {
+            petition.reload.locked_at
+          }
+        end
+      end
+    end
+
+    describe "POST /admin/archived/petitions/:petition_id/lock.json" do
+      it "returns 200 OK" do
+        get :create, petition_id: petition.to_param, format: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the :create template" do
+        get :create, petition_id: petition.to_param, format: :json
+        expect(response).to render_template("admin/archived/locks/create")
+      end
+
+      context "when the petition is unlocked" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: nil, locked_at: nil) }
+
+        it "updates the locked_by association" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_by
+          }.from(nil).to eq(moderator)
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.from(nil).to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition is locked by the moderator" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: moderator, locked_at: 1.hour.ago) }
+
+        it "doesn't update the locked_by association" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.not_to change {
+            petition.reload.locked_by
+          }
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition is locked by someone else" do
+        let(:other_user) { FactoryGirl.create(:moderator_user) }
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+        it "doesn't update the locked_by association" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.to raise_error(RuntimeError, /Petition already being edited/)
+        end
+
+        it "doesn't update the locked_at timestamp" do
+          expect {
+            get :create, petition_id: petition.to_param, format: :json
+          }.to raise_error(RuntimeError, /Petition already being edited/)
+        end
+      end
+    end
+
+    describe "PATCH /admin/archived/petitions/:petition_id/lock.json" do
+      it "returns 200 OK" do
+        get :update, petition_id: petition.to_param, format: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the :update template" do
+        get :update, petition_id: petition.to_param, format: :json
+        expect(response).to render_template("admin/archived/locks/update")
+      end
+
+      context "when the petition is unlocked" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: nil, locked_at: nil) }
+
+        it "updates the locked_by association" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_by
+          }.from(nil).to eq(moderator)
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.from(nil).to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition is locked by the moderator" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: moderator, locked_at: 1.hour.ago) }
+
+        it "doesn't update the locked_by association" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.not_to change {
+            petition.reload.locked_by
+          }
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.to be_within(1.second).of(Time.current)
+        end
+      end
+
+      context "when the petition is locked by someone else" do
+        let(:other_user) { FactoryGirl.create(:moderator_user) }
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+        it "updates the locked_by association" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_by
+          }.from(other_user).to eq(moderator)
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :update, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.to be_within(1.second).of(Time.current)
+        end
+      end
+    end
+
+    describe "DELETE /admin/archived/petitions/:petition_id/lock.json" do
+      it "returns 200 OK" do
+        get :destroy, petition_id: petition.to_param, format: :json
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "renders the :destroy template" do
+        get :destroy, petition_id: petition.to_param, format: :json
+        expect(response).to render_template("admin/archived/locks/destroy")
+      end
+
+      context "when the petition is unlocked" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: nil, locked_at: nil) }
+
+        it "doesn't update the locked_by association" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.not_to change {
+            petition.reload.locked_by
+          }
+        end
+
+        it "doesn't update the locked_at timestamp" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.not_to change {
+            petition.reload.locked_at
+          }
+        end
+      end
+
+      context "when the petition is locked by the moderator" do
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: moderator, locked_at: 1.hour.ago) }
+
+        it "updates the locked_by association" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_by
+          }.from(moderator).to(nil)
+        end
+
+        it "updates the locked_at timestamp" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.to change {
+            petition.reload.locked_at
+          }.to be_nil
+        end
+      end
+
+      context "when the petition is locked by someone else" do
+        let(:other_user) { FactoryGirl.create(:moderator_user) }
+        let(:petition) { FactoryGirl.create(:archived_petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+        it "doesn't update the locked_by association" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.to raise_error(RuntimeError, /Petition already being edited/)
+        end
+
+        it "doesn't update the locked_at timestamp" do
+          expect {
+            get :destroy, petition_id: petition.to_param, format: :json
+          }.to raise_error(RuntimeError, /Petition already being edited/)
+        end
+      end
+    end
+  end
+end

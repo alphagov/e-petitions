@@ -24,12 +24,24 @@ module AdminHelper
     options_for_select(options, selected)
   end
 
+  def admin_archived_petition_facets_for_select(facets, selected)
+    options = admin_archived_petition_facets.map do |facet|
+      [I18n.t(facet,  scope: :"petitions.facets.names.admin_archived", quantity: facets[facet]), facet]
+    end
+
+    options_for_select(options, selected)
+  end
+
   def admin_invalidation_facets_for_select(facets, selected)
     options = admin_invalidation_facets.map do |facet|
       [I18n.t(facet,  scope: :"admin.invalidations.facets.labels", quantity: facets[facet]), facet]
     end
 
     options_for_select(options, selected)
+  end
+
+  def admin_parliaments_for_select(selected)
+    options_from_collection_for_select(archived_parliaments, :id, :name, selected)
   end
 
   def email_petitioners_with_count_submit_button(form, petition, options = {})
@@ -66,6 +78,10 @@ module AdminHelper
 
   def admin_petition_facets
     I18n.t(:admin, scope: :"petitions.facets")
+  end
+
+  def admin_archived_petition_facets
+    I18n.t(:admin_archived, scope: :"petitions.facets")
   end
 
   def admin_invalidation_facets

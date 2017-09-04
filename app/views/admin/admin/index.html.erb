@@ -106,7 +106,11 @@
         <% end %>
       </ul>
 
-      <%= link_to "All Petitions (#{petition_total_count})", admin_petitions_url(state: :all), class: 'all-petitions-link' %>
+    </div>
+
+    <div class="hub-links">
+      <%= link_to "All Petitions (#{petition_total_count})", admin_petitions_url(state: :all) %> |
+      <%= link_to "Archived Petitions (#{archived_petition_total_count})", admin_archived_root_url %>
     </div>
   </div>
 

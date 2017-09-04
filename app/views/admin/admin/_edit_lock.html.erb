@@ -12,6 +12,10 @@
 
 <script>
   $(document).ready(function() {
-    $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>);
+    <% if @petition.is_a?(::Archived::Petition) %>
+      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/archived/petitions');
+    <% else %>
+      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions');
+    <% end %>
   });
 </script>

@@ -262,7 +262,9 @@ CREATE TABLE archived_petitions (
     email_requested_for_debate_scheduled_at timestamp without time zone,
     email_requested_for_debate_outcome_at timestamp without time zone,
     email_requested_for_petition_email_at timestamp without time zone,
-    tags integer[] DEFAULT '{}'::integer[] NOT NULL
+    tags integer[] DEFAULT '{}'::integer[] NOT NULL,
+    locked_at timestamp without time zone,
+    locked_by_id integer
 );
 
 
@@ -1735,6 +1737,13 @@ CREATE INDEX index_archived_petitions_on_background ON archived_petitions USING 
 
 
 --
+-- Name: index_archived_petitions_on_locked_by_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_locked_by_id ON archived_petitions USING btree (locked_by_id);
+
+
+--
 -- Name: index_archived_petitions_on_parliament_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2625,4 +2634,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170712070139');
 INSERT INTO schema_migrations (version) VALUES ('20170713193039');
 
 INSERT INTO schema_migrations (version) VALUES ('20170818110849');
+
+INSERT INTO schema_migrations (version) VALUES ('20170903181738');
 

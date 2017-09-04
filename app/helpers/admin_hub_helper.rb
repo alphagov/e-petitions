@@ -3,6 +3,10 @@ module AdminHubHelper
     @petition_total_count ||= Petition.all.count
   end
 
+  def archived_petition_total_count
+    @archived_petition_total_count ||= Archived::Petition.all.count
+  end
+
   def in_moderation_count
     @in_moderation_count ||= Petition.in_moderation.count
   end
