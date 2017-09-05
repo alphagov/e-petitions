@@ -137,6 +137,8 @@ en-GB:
     label:
       tag:
         name: "Tag"
+      site:
+        url: "URL"
       parliament:
         dissolution_heading: "Heading"
         dissolution_message: "Message"
