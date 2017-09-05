@@ -1,8 +1,8 @@
 <h1>Edit Rate Limits</h1>
 
 <div class="grid-row">
-  <div class="column-two-thirds extra-gutter">
-    <p>
+  <div class="grid-column">
+    <p class="tabs">
       <% if params[:tab] == "allowed_domains" %>
         <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
         Allowed Domains |
@@ -47,6 +47,9 @@
         <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
       <% end %>
     </p>
+  </div>
+
+  <div class="column-two-thirds extra-gutter">
 
     <%= form_for @rate_limit, url: admin_rate_limits_path do |form| %>
 

@@ -81,6 +81,7 @@ en-GB:
       signatures_not_invalidated: "Signatures could not be invalidated - please contact support"
       signatures_deleted: "Signatures removed successfully"
       signatures_not_deleted: "Signatures could not be removed - please contact support"
+      site_updated: "Site updated successfully"
       sysadmin_required: "You must be logged in as a system administrator to view this page"
       tag_created: "Tag created successfully"
       tag_updated: "Tag updated successfully"

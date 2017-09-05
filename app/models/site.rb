@@ -331,8 +331,6 @@ class Site < ActiveRecord::Base
 
     if @password
       self.password_digest = BCrypt::Password.create(@password, cost: 10)
-    else
-      self.password_digest = nil
     end
   end
 
@@ -352,6 +350,7 @@ class Site < ActiveRecord::Base
 
   validates :title, presence: true, length: { maximum: 50 }
   validates :url, presence: true, length: { maximum: 50 }
+  validates :moderate_url, presence: true, length: { maximum: 50 }
   validates :email_from, presence: true, length: { maximum: 100 }
   validates :feedback_email, presence: true, length: { maximum: 100 }
   validates :petition_duration, presence: true, numericality: { only_integer: true }

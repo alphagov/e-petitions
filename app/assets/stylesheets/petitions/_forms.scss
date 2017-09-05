@@ -23,12 +23,21 @@ select.form-control:hover {
   }
 }
 
+.form-control-1-4 {
+  width: 25%;
+}
+
 .form-group {
   margin-bottom: $gutter;
   clear: both;
 
   input[type=file] {
     line-height: 1ex;
+  }
+
+  .suffix {
+    display: inline-block;
+    margin-left: $gutter-one-quarter;
   }
 }
 

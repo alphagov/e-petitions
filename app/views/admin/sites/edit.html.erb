@@ -1,0 +1,184 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <p class="tabs">
+      <% if params[:tab] == "petitions" %>
+        <%= link_to "Description", edit_admin_site_path %> |
+        Petitions |
+        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
+      <% elsif params[:tab] == "moderation" %>
+        <%= link_to "Description", edit_admin_site_path %> |
+        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+        Moderation |
+        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
+      <% elsif params[:tab] == "access" %>
+        <%= link_to "Description", edit_admin_site_path %> |
+        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+        Access
+      <% else %>
+        Description |
+        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for @site, url: admin_site_url do |form| %>
+
+      <% if params[:tab] == "petitions" %>
+        <%= hidden_field_tag :tab, "petitions" %>
+
+        <%= form_row for: [form.object, :petition_duration] do %>
+          <%= form.label :petition_duration, "Duration", class: 'form-label' %>
+          <%= error_messages_for_field @site, :petition_duration %>
+          <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %> <span class="suffix">months</span>
+        <% end %>
+
+        <%= form_row for: [form.object, :threshold_for_response] do %>
+          <%= form.label :threshold_for_response, "Threshold for government response", class: 'form-label' %>
+          <%= error_messages_for_field @site, :threshold_for_response %>
+          <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :threshold_for_debate] do %>
+          <%= form.label :threshold_for_debate, "Threshold for consideration for a debate", class: 'form-label' %>
+          <%= error_messages_for_field @site, :threshold_for_debate %>
+          <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+        <% end %>
+
+      <% elsif params[:tab] == "moderation" %>
+        <%= hidden_field_tag :tab, "moderation" %>
+
+        <%= form_row for: [form.object, :threshold_for_moderation] do %>
+          <%= form.label :threshold_for_moderation, "Threshold for moderation", class: 'form-label' %>
+          <%= error_messages_for_field @site, :threshold_for_moderation %>
+          <%= form.text_field :threshold_for_moderation, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
+          <%= form.label :minimum_number_of_sponsors, class: 'form-label' %>
+          <%= error_messages_for_field @site, :minimum_number_of_sponsors %>
+          <%= form.text_field :minimum_number_of_sponsors, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :maximum_number_of_sponsors] do %>
+          <%= form.label :maximum_number_of_sponsors, class: 'form-label' %>
+          <%= error_messages_for_field @site, :maximum_number_of_sponsors %>
+          <%= form.text_field :maximum_number_of_sponsors, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+        <% end %>
+
+      <% elsif params[:tab] == "access" %>
+        <%= hidden_field_tag :tab, "access" %>
+
+        <%= form_row for: [form.object, :enabled], class: 'inline' do %>
+          <%= form.label :enabled, "Disable public website?", class: 'form-label' %>
+          <%= error_messages_for_field @site, :enabled %>
+          <%= form.label :enabled, nil, class: 'block-label' do %>
+            <%= form.radio_button :enabled, false %> Yes
+          <% end %>
+          <%= form.label :enabled, nil, class: 'block-label' do %>
+            <%= form.radio_button :enabled, true %> No
+          <% end %>
+        <% end %>
+
+        <%= form_row for: [form.object, :protected], class: 'inline' do %>
+          <%= form.label :protected, "Password protect public website?", class: 'form-label' %>
+          <%= error_messages_for_field @site, :protected %>
+          <%= form.label :protected, nil, class: 'block-label' do %>
+            <%= form.radio_button :protected, true %> Yes
+          <% end %>
+          <%= form.label :protected, nil, class: 'block-label' do %>
+            <%= form.radio_button :protected, false %> No
+          <% end %>
+        <% end %>
+
+        <div id="protected-fields">
+          <%= form_row for: [form.object, :username] do %>
+            <%= form.label :username, class: 'form-label' %>
+            <%= error_messages_for_field @site, :username %>
+            <%= form.text_field :username, tabindex: increment, maxlength: 50, class: 'form-control' %>
+          <% end %>
+
+          <%= form_row for: [form.object, :password] do %>
+            <%= form.label :password, class: 'form-label' %>
+            <%= error_messages_for_field @site, :password %>
+            <%= form.password_field :password, tabindex: increment, maxlength: 50, class: 'form-control' %>
+          <% end %>
+        </div>
+
+        <%= form_row for: [form.object, :login_timeout] do %>
+          <%= form.label :login_timeout, "Login timeout for moderation users", class: 'form-label' %>
+          <%= error_messages_for_field @site, :login_timeout %>
+          <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %> <span class="suffix">seconds</span>
+        <% end %>
+
+        <%= javascript_tag do %>
+          $().ready(function() {
+            var $protected_fields = $('#protected-fields'),
+                $true_control = $('input[name="site[protected]"][value=true]'),
+                $false_control = $('input[name="site[protected]"][value=false]'),
+                $all_controls = $('input[name="site[protected]"][type=radio]');
+
+            if ($true_control.is(':checked')) {
+              $protected_fields.show();
+            } else {
+              $protected_fields.hide();
+            }
+
+            $all_controls.keyup(function() {
+              this.blur();
+              this.focus();
+            }).change(function() {
+              if ($true_control.is(':checked')) {
+                $protected_fields.show();
+              } else {
+                $protected_fields.hide();
+              }
+            });
+          });
+        <% end -%>
+
+      <% else %>
+
+        <%= form_row for: [form.object, :title] do %>
+          <%= form.label :title, class: 'form-label' %>
+          <%= error_messages_for_field @site, :title %>
+          <%= form.text_field :title, tabindex: increment, maxlength: 50, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :url] do %>
+          <%= form.label :url, "URL for public website", class: 'form-label' %>
+          <%= error_messages_for_field @site, :url %>
+          <%= form.text_field :url, tabindex: increment, maxlength: 50, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :moderate_url] do %>
+          <%= form.label :moderate_url, "URL for moderation website", class: 'form-label' %>
+          <%= error_messages_for_field @site, :moderate_url %>
+          <%= form.text_field :moderate_url, tabindex: increment, maxlength: 50, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :email_from] do %>
+          <%= form.label :email_from, "From address for emails", class: 'form-label' %>
+          <%= error_messages_for_field @site, :email_from %>
+          <%= form.text_field :email_from, tabindex: increment, maxlength: 100, class: 'form-control' %>
+        <% end %>
+
+        <%= form_row for: [form.object, :feedback_email] do %>
+          <%= form.label :feedback_email, "Email address for feedback messages", class: 'form-label' %>
+          <%= error_messages_for_field @site, :feedback_email %>
+          <%= form.text_field :feedback_email, tabindex: increment, maxlength: 100, class: 'form-control' %>
+        <% end %>
+
+      <% end %>
+
+      <%= form.submit 'Save', class: 'button' %>
+      <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
+    <% end %>
+  </div>
+</div>
