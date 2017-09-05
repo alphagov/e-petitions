@@ -28,6 +28,19 @@ Feature: Suzy Singer searches by free text
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
     Given a petition "Leave EU" has been debated 18 days ago
 
+  Scenario: Search for all visible petitions
+    When I search for "All petitions" with "Wombles"
+    Then I should see my search term "Wombles" filled in the search field
+    And I should see "6 results"
+    And I should see the following search results:
+      | Wombles                            | 1 signature             |
+      | Overthrow the Wombles              | 1 signature             |
+      | Uncle Bulgaria                     | 1 signature             |
+      | Common People                      | 1 signature             |
+      | The Wombles will rock Glasto       | 1 signature, now closed |
+      | Eavis vs the Wombles               | Rejected                |
+    And the markup should be valid
+
   Scenario: Search for open petitions
     When I search for "Open petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field

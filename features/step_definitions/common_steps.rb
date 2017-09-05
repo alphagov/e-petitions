@@ -30,6 +30,10 @@ Given(/^Parliament is dissolved$/) do
     dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
 end
 
+Given(/^Parliament is pending$/) do
+  Parliament.instance.update!(opening_at: 1.month.from_now)
+end
+
 Given(/^the request is not local$/) do
   page.driver.options[:headers] = { "REMOTE_ADDR" => "192.168.1.128" }
 end

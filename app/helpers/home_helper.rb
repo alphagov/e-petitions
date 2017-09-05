@@ -38,6 +38,10 @@ module HomeHelper
     end
   end
 
+  def any_actioned_petitions?
+    !actioned_petitions_decorator.empty?
+  end
+
   def actioned_petitions(&block)
     actioned = actioned_petitions_decorator
     yield actioned unless actioned.empty?

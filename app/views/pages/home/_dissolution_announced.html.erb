@@ -11,5 +11,15 @@
 <% end %>
 
 <%= render "pages/home/actioned_petitions" %>
+
+<section class="search-petitions">
+  <h1 class="page-title">Search petitions</h1>
+
+  <%= form_tag petitions_path, class: 'search-inline', method: 'get', enforce_utf8: false do %>
+    <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>
+    <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+  <% end %>
+</section>
+
 <%= render "pages/home/explanation_petitions" %>
 <%= render "pages/home/local_petitions" %>

@@ -466,3 +466,11 @@ Given(/^these archived petitions? exist?:?$/) do |table|
     FactoryGirl.create(:archived_petition, attributes)
   end
 end
+
+When (/^I search all petitions for "(.*?)"$/) do |search_term|
+  within :css, '.search-petitions' do
+    fill_in :search, with: search_term
+    step %{I press "Search"}
+  end
+end
+
