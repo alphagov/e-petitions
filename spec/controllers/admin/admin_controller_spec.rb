@@ -7,6 +7,47 @@ RSpec.describe Admin::AdminController, type: :controller do
     login_as(user)
   end
 
+  context "when the site is protected" do
+    context "and the request is local" do
+      before do
+        expect(request).not_to receive(:local?)
+        expect(Site).not_to receive(:protected?)
+      end
+
+      it "does not request authentication" do
+        get :index
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context "and the request is not local" do
+      before do
+        expect(request).not_to receive(:local?)
+        expect(Site).not_to receive(:protected?)
+      end
+
+      it "does not request authentication" do
+        get :index
+        expect(response).to have_http_status(200)
+      end
+    end
+
+    context "and the request is authenticated" do
+      before do
+        http_authentication "username", "password"
+
+        expect(request).not_to receive(:local?)
+        expect(Site).not_to receive(:protected?)
+        expect(Site).not_to receive(:authenticate)
+      end
+
+      it "does not request authentication" do
+        get :index
+        expect(response).to have_http_status(200)
+      end
+    end
+  end
+
   describe "flash translation" do
     let(:i18n_args) { [i18n_key, i18n_options] }
 
