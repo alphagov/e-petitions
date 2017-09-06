@@ -5,7 +5,7 @@
     <% if Tag.any? %>
       <%= collection_check_boxes(:petition, :tags, Tag.by_name, :id, :name) do |b| %>
         <%= b.label class: 'block-label' do %>
-          <%= b.check_box %> <%= content_tag :span, b.text, title: b.object.description %>
+          <%= b.check_box disabled: @petition.editing_disabled? %> <%= content_tag :span, b.text, title: b.object.description %>
         <% end %>
       <% end %>
     <% else %>
@@ -18,7 +18,7 @@
       </p>
     <% end %>
   <% end %>
-  <%= f.submit 'Save tags', class: 'button' %>
+  <%= f.submit 'Save tags', class: 'button', disabled: @petition.editing_disabled? %>
   <%= link_to 'Cancel', admin_petition_path(petition), class: 'button-secondary' %>
 <% end %>
 
