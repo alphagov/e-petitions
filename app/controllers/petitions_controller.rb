@@ -157,10 +157,6 @@ class PetitionsController < ApplicationController
     redirect_to petition_url(@petition)
   end
 
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
-  end
-
   def petition_params_for_new
     params.
       fetch('petition', {}).
@@ -170,16 +166,13 @@ class PetitionsController < ApplicationController
   def petition_params_for_create
     params.
       require(:petition).
-      permit(:action, :background, :additional_details, :duration, :sponsor_emails,
+      permit(:action, :background, :additional_details, :duration,
              creator_signature: [
                :name, :email, :email_confirmation,
                :postcode, :location_code, :uk_citizenship
              ]).tap do |sanitized|
                if sanitized['creator_signature'].present?
                  sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')
-               end
-               if sanitized['sponsor_emails']
-                 sanitized['sponsor_emails'] = parse_emails(sanitized['sponsor_emails'])
                end
              end
   end
@@ -198,10 +191,6 @@ class PetitionsController < ApplicationController
 
   def send_email_to_gather_sponsors(petition)
     GatherSponsorsForPetitionEmailJob.perform_later(petition)
-  end
-
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
   end
 
   def csv_filename
