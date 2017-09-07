@@ -21,6 +21,22 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     }.from(6).to(0)
   end
 
+  it "schedules a new job if it doesn't finish archiving" do
+    expect {
+      described_class.perform_now(petition, archived_petition, limit: 2)
+    }.to change {
+      enqueued_jobs.size
+    }.from(0).to(1)
+  end
+
+  it "marks the petition as archived if it finishes archiving" do
+    expect {
+      described_class.perform_now(petition, archived_petition)
+    }.to change {
+      petition.archived_at
+    }.from(nil).to(be_within(1.second).of(Time.current))
+  end
+
   context "with the creator signature" do
     let(:signature) { archived_petition.signatures.first }
 
