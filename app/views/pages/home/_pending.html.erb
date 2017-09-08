@@ -11,8 +11,8 @@
   Get involved with the UK Parliament
 </a>
 
-<section class="search-petitions">
-  <h1 class="page-title">Search petitions</h1>
+<section class="search-petitions" aria-labelledby="search-petitions-heading">
+  <h2 id="search-petitions-heading">Search petitions</h2>
 
   <%= form_tag archived_petitions_path(state: 'published'), class: 'search-inline', method: 'get', enforce_utf8: false do %>
     <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>

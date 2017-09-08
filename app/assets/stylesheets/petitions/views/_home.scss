@@ -128,3 +128,21 @@ a.threshold-panel:hover, a.threshold-panel:focus {
     margin-bottom: em(20, 24);
   }
 }
+
+.search-petitions {
+  margin-top: $gutter;
+  padding-bottom: 0;
+}
+
+.search-petitions h2 {
+  @include bold-36();
+
+  margin-top: em(30, 20);
+  margin-bottom: em(10, 20);
+
+  @include media(tablet) {
+    margin-top: em(30, 24);
+    margin-bottom: em(10, 24);
+  }
+}
+
