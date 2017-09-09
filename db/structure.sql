@@ -276,7 +276,7 @@ CREATE SEQUENCE archived_petitions_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
-    MAXVALUE 99999
+    MAXVALUE 199999
     CACHE 1;
 
 
@@ -891,9 +891,9 @@ CREATE TABLE petitions (
 --
 
 CREATE SEQUENCE petitions_id_seq
-    START WITH 100000
+    START WITH 200000
     INCREMENT BY 1
-    MINVALUE 100000
+    MINVALUE 200000
     NO MAXVALUE
     CACHE 1;
 
@@ -2634,6 +2634,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170712070139');
 INSERT INTO schema_migrations (version) VALUES ('20170713193039');
 
 INSERT INTO schema_migrations (version) VALUES ('20170818110849');
+
+INSERT INTO schema_migrations (version) VALUES ('20170903162156');
 
 INSERT INTO schema_migrations (version) VALUES ('20170903181738');
 
