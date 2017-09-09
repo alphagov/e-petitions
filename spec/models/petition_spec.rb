@@ -43,7 +43,7 @@ RSpec.describe Petition, type: :model do
   context "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
 
     it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
     it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 300, null: true) }
@@ -753,7 +753,7 @@ RSpec.describe Petition, type: :model do
     end
 
     before do
-      petition.validate_creator_signature!
+      petition.validate_creator!
     end
 
     it "returns 1 (the creator) for a new petition" do
@@ -2065,7 +2065,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the creator's signature is now invalid" do
-      let(:creator) { petition.creator_signature }
+      let(:creator) { petition.creator }
 
       before do
         creator.update_column(:email, "jo+123@public.com")
@@ -2185,9 +2185,9 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#validate_creator_signature!" do
+  describe "#validate_creator!" do
     let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
-    let(:signature) { petition.creator_signature }
+    let(:signature) { petition.creator }
 
     around do |example|
       perform_enqueued_jobs do
@@ -2201,23 +2201,23 @@ RSpec.describe Petition, type: :model do
 
     it "changes creator signature state to validated" do
       expect {
-        petition.validate_creator_signature!
+        petition.validate_creator!
       }.to change { signature.reload.validated? }.from(false).to(true)
     end
 
     it "increments the signature count" do
       expect {
-        petition.validate_creator_signature!
+        petition.validate_creator!
       }.to change { petition.signature_count }.by(1)
     end
 
     it "timestamps the petition to say it was updated just now" do
-      petition.validate_creator_signature!
+      petition.validate_creator!
       expect(petition.updated_at).to be_within(1.second).of(Time.current)
     end
 
     it "timestamps the petition to say it was last signed at just now" do
-      petition.validate_creator_signature!
+      petition.validate_creator!
       expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
     end
   end
@@ -2338,7 +2338,7 @@ RSpec.describe Petition, type: :model do
 
     describe "#signatures_to_email_for" do
       let!(:petition) { FactoryGirl.create(:petition) }
-      let!(:creator_signature) { petition.creator_signature }
+      let!(:creator) { petition.creator }
       let!(:other_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
       let(:petition_timestamp) { 5.days.ago }
 
@@ -2355,8 +2355,8 @@ RSpec.describe Petition, type: :model do
       end
 
       it "does not return those that do not want to be emailed" do
-        petition.creator_signature.update_attribute(:notify_by_email, false)
-        expect(petition.signatures_to_email_for('government_response')).not_to include creator_signature
+        petition.creator.update_attribute(:notify_by_email, false)
+        expect(petition.signatures_to_email_for('government_response')).not_to include creator
       end
 
       it 'does not return unvalidated signatures' do
@@ -2380,7 +2380,7 @@ RSpec.describe Petition, type: :model do
       end
 
       it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
-        expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
+        expect(petition.signatures_to_email_for('government_response')).to match_array [creator, other_signature]
       end
     end
 

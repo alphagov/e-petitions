@@ -5,7 +5,7 @@
 
 <%= render 'petitions/create/error_summary', f: f %>
 
-<%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+<%= f.fields_for :creator, petition.creator do |csf| %>
   <%= render 'petitions/create/signature_form', :f => csf, :signature => csf.object, :context => 'create-petition' %>
 <% end %>
 

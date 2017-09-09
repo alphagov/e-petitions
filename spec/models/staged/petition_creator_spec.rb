@@ -15,30 +15,30 @@ RSpec.describe Staged::PetitionCreator, type: :model do
       expect(petition.action).to eq 'woo'
     end
 
-    context 'when creator_signature attributes are present' do
+    context 'when creator attributes are present' do
       it 'strips trailing whitespace from the creator signature email' do
-        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        petition_params[:creator_attributes] = { email: ' woo@example.com ' }
         subject.create_petition
-        expect(petition.creator_signature.email).to eq 'woo@example.com'
+        expect(petition.creator.email).to eq 'woo@example.com'
       end
 
       it 'assigns the remote_ip of the request to the ip_address of the creator signature' do
-        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        petition_params[:creator_attributes] = { email: ' woo@example.com ' }
         subject.create_petition
-        expect(petition.creator_signature.ip_address).to eq '192.168.0.1'
+        expect(petition.creator.ip_address).to eq '192.168.0.1'
       end
 
       it 'assumes that the creator wants notify_by_email to be true' do
-        petition_params[:creator_signature_attributes] = { email: ' woo@example.com ' }
+        petition_params[:creator_attributes] = { email: ' woo@example.com ' }
         subject.create_petition
-        expect(petition.creator_signature.notify_by_email).to eq true
+        expect(petition.creator.notify_by_email).to eq true
       end
     end
 
-    context 'when creator_signature attributes are not present' do
-      it 'does not cause a creator_signature to appear' do
+    context 'when creator attributes are not present' do
+      it 'does not cause a creator to appear' do
         subject.create_petition
-        expect(petition.creator_signature).to be_nil
+        expect(petition.creator).to be_nil
       end
     end
 
@@ -78,7 +78,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
   describe 'stages' do
     extend StagedObjectHelpers
 
-    let(:creator_signature_params) do
+    let(:creator_params) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
         :postcode => 'SE3 4LL', :location_code => 'GB',
@@ -90,7 +90,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
         :action => 'Save the planet',
         :background => 'Limit temperature rise at two degrees',
         :additional_details => 'Global warming is upon us',
-        :creator_signature_attributes => creator_signature_params
+        :creator_attributes => creator_params
       }
     end
 
@@ -139,7 +139,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
         end
 
         context 'around the "creator" UI' do
-          before { creator_signature_params.delete(:postcode) }
+          before { creator_params.delete(:postcode) }
 
           context 'before attempting to create the petition' do
             for_stage 'petition', next_is: 'replay-petition', back_is: 'petition', not_moving_is: 'petition'
@@ -161,7 +161,7 @@ RSpec.describe Staged::PetitionCreator, type: :model do
         end
 
         context 'around the "replay email" UI' do
-          before { creator_signature_params.delete(:email) }
+          before { creator_params.delete(:email) }
 
           # NOTE: the creator stage also checks for errors on email, so
           # we need to be aware that errors on the "replay email" UI will

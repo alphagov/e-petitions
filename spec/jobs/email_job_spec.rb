@@ -180,7 +180,7 @@ end
 
 RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do
   let(:petition) { FactoryGirl.create(:sponsored_petition, :overdue, sponsors_signed: true) }
-  let(:signature) { petition.creator_signature }
+  let(:signature) { petition.creator }
   let(:subject) { "Moderation of your petition is delayed" }
   let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
 

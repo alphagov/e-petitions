@@ -232,9 +232,9 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   end
 
   describe ".reset!" do
-    let(:petition_1) { FactoryGirl.create(:petition, creator_signature_attributes: {constituency_id: constituency_1}) }
+    let(:petition_1) { FactoryGirl.create(:petition, creator_attributes: {constituency_id: constituency_1}) }
     let(:constituency_1) { FactoryGirl.generate(:constituency_id) }
-    let(:petition_2) { FactoryGirl.create(:petition, creator_signature_attributes: {constituency_id: constituency_1}) }
+    let(:petition_2) { FactoryGirl.create(:petition, creator_attributes: {constituency_id: constituency_1}) }
     let(:constituency_2) { FactoryGirl.generate(:constituency_id) }
 
     before do

@@ -76,7 +76,7 @@ end
 
 Then(/^the creator should receive a notification email$/) do
   steps %Q(
-    Then "#{@petition.creator_signature.email}" should receive an email
+    Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "published" in the email body
     And they should see /We published your petition/ in the email subject
@@ -84,13 +84,13 @@ Then(/^the creator should receive a notification email$/) do
 end
 
 Then(/^the creator should not receive a notification email$/) do
-  step %{"#{@petition.creator_signature.email}" should receive no email with subject "We published your petition"}
+  step %{"#{@petition.creator.email}" should receive no email with subject "We published your petition"}
 end
 
 Then(/^the creator should receive a (libel\/profanity )?rejection notification email$/) do |petition_is_libellous|
   @petition.reload
   steps %Q(
-    Then "#{@petition.creator_signature.email}" should receive an email
+    Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "We rejected the petition you created" in the email body
     And they should see "#{rejection_description(@petition.rejection.code).gsub(/<.*?>/,' ').split.last}" in the email body
@@ -104,7 +104,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
 end
 
 Then(/^the creator should not receive a rejection notification email$/) do
-  step %{"#{@petition.creator_signature.email}" should receive no email with subject "We rejected your petition"}
+  step %{"#{@petition.creator.email}" should receive no email with subject "We rejected your petition"}
 end
 
 When(/^I view all petitions$/) do

@@ -56,7 +56,7 @@ class PetitionsController < ApplicationController
     assign_stage
     @stage_manager = Staged::PetitionCreator.manager(petition_params_for_create, request, params[:stage], params[:move])
     if @stage_manager.create_petition
-      @stage_manager.petition.creator_signature.store_constituency_id
+      @stage_manager.petition.creator.store_constituency_id
       send_email_to_gather_sponsors(@stage_manager.petition)
       redirect_to thank_you_petition_url(@stage_manager.petition)
     else
@@ -167,12 +167,12 @@ class PetitionsController < ApplicationController
     params.
       require(:petition).
       permit(:action, :background, :additional_details, :duration,
-             creator_signature: [
+             creator: [
                :name, :email, :email_confirmation,
                :postcode, :location_code, :uk_citizenship
              ]).tap do |sanitized|
-               if sanitized['creator_signature'].present?
-                 sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')
+               if sanitized['creator'].present?
+                 sanitized['creator_attributes'] = sanitized.delete('creator')
                end
              end
   end

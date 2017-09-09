@@ -373,7 +373,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
         'petition' => {
           'background' => 'Limit temperature rise at two degrees',
           'additional_details' => 'Global warming is upon us',
-          'creator_signature' => {
+          'creator' => {
             'name' => 'John Mcenroe', 'email' => 'john@example.com',
             'postcode' => 'SE3 4LL', 'location_code' => 'GB',
             'uk_citizenship' => '1'

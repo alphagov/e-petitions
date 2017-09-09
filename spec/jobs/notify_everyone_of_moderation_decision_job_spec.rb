@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
   let(:petition) { FactoryGirl.create(:pending_petition, sponsor_count: 0) }
-  let(:creator) { petition.creator_signature }
+  let(:creator) { petition.creator }
   let(:validated_sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition) }
   let(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
 

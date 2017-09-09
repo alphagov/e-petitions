@@ -71,11 +71,11 @@ RSpec.describe PageTitleHelper, type: :helper do
     end
 
     context "when there is a petition assigned" do
-      let(:creator_signature) { double(:signature, name: "Jacques Cousteau") }
+      let(:creator) { double(:signature, name: "Jacques Cousteau") }
 
       let(:petition) do
         double(:petition,
-          creator_signature: creator_signature,
+          creator: creator,
           action: "Ban devoirs pour les enfants de l'école primaire"
         )
       end

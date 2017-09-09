@@ -80,10 +80,10 @@ RSpec.describe Signature, type: :model do
   describe "callbacks" do
     context "when the signature is destroyed" do
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
-      let(:creator) { FactoryGirl.create(:pending_signature) }
+      let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
       let(:petition) do
         Petition.create(attributes) do |petition|
-          petition.creator_signature = creator
+          petition.creator = creator
 
           5.times do
             petition.signatures << FactoryGirl.create(:pending_signature)
@@ -318,7 +318,7 @@ RSpec.describe Signature, type: :model do
       it "returns only validated signatures" do
         signatures = Signature.validated
         expect(signatures.size).to eq(3)
-        expect(signatures).to include(signature1, signature3, petition.creator_signature)
+        expect(signatures).to include(signature1, signature3, petition.creator)
       end
     end
 
@@ -326,7 +326,7 @@ RSpec.describe Signature, type: :model do
       it "returns only signatures with notify_by_email: true" do
         signatures = Signature.notify_by_email
         expect(signatures.size).to eq(3)
-        expect(signatures).to include(signature1, signature2, petition.creator_signature)
+        expect(signatures).to include(signature1, signature2, petition.creator)
       end
     end
 
@@ -432,7 +432,7 @@ RSpec.describe Signature, type: :model do
     describe "checking whether the signature is the creator" do
       let!(:petition) { FactoryGirl.create(:petition) }
       it "is the creator if the signature is listed as the creator signature" do
-        expect(petition.creator_signature).to be_creator
+        expect(petition.creator).to be_creator
       end
 
       it "is not the creator if the signature is not listed as the creator" do
@@ -496,10 +496,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".validate!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -543,10 +543,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".invalidate!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -592,10 +592,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".destroy!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -838,10 +838,10 @@ RSpec.describe Signature, type: :model do
 
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -850,10 +850,10 @@ RSpec.describe Signature, type: :model do
     end
 
     let(:other_attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:other_creator) { FactoryGirl.create(:pending_signature) }
+    let(:other_creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:other_petition) do
       Petition.create(other_attributes) do |petition|
-        petition.creator_signature = other_creator
+        petition.creator = other_creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -967,13 +967,13 @@ RSpec.describe Signature, type: :model do
   describe '#creator?' do
     let(:petition) { FactoryGirl.create(:petition) }
     let(:signature) { FactoryGirl.create(:signature, petition: petition) }
-    let(:creator_signature) { petition.creator_signature }
+    let(:creator) { petition.creator }
 
-    it 'is true if the signature is the creator_signature for the petition it belongs to' do
-      expect(creator_signature.creator?).to be_truthy
+    it 'is true if the signature is the creator for the petition it belongs to' do
+      expect(creator.creator?).to be_truthy
     end
 
-    it 'is false if the signature is not the creator_signature for the petition it belongs to' do
+    it 'is false if the signature is not the creator for the petition it belongs to' do
       expect(signature.creator?).to be_falsey
     end
   end

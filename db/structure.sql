@@ -859,7 +859,6 @@ CREATE TABLE petitions (
     additional_details text,
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     open_at timestamp without time zone,
-    creator_signature_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     closed_at timestamp without time zone,
@@ -1018,7 +1017,8 @@ CREATE TABLE signatures (
     uuid uuid,
     archived_at timestamp without time zone,
     email_count integer DEFAULT 0 NOT NULL,
-    sponsor boolean DEFAULT false NOT NULL
+    sponsor boolean DEFAULT false NOT NULL,
+    creator boolean DEFAULT false NOT NULL
 );
 
 
@@ -2007,13 +2007,6 @@ CREATE INDEX index_petitions_on_created_at_and_state ON petitions USING btree (c
 
 
 --
--- Name: index_petitions_on_creator_signature_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING btree (creator_signature_id);
-
-
---
 -- Name: index_petitions_on_debate_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2140,6 +2133,13 @@ CREATE INDEX index_signatures_on_petition_id_and_location_code ON signatures USI
 
 
 --
+-- Name: index_signatures_on_petition_id_where_creator_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_signatures_on_petition_id_where_creator_is_true ON signatures USING btree (petition_id) WHERE (creator = true);
+
+
+--
 -- Name: index_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2234,14 +2234,6 @@ ALTER TABLE ONLY notes
 
 ALTER TABLE ONLY constituency_petition_journals
     ADD CONSTRAINT fk_rails_5186723bbd FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_5451a341b3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY petitions
-    ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE RESTRICT;
 
 
 --
@@ -2581,4 +2573,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170821153057');
 INSERT INTO schema_migrations (version) VALUES ('20170903162156');
 
 INSERT INTO schema_migrations (version) VALUES ('20170903181738');
+
+INSERT INTO schema_migrations (version) VALUES ('20170906203439');
 

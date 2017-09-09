@@ -48,7 +48,7 @@ module PetitionHelper
       concat hidden_field_tag(:stage, stage_manager.stage)
       concat hidden_field_tag(:move, 'next')
       concat render('/petitions/create/petition_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'petition'
-      if stage_manager.stage_object.creator_signature.present?
+      if stage_manager.stage_object.creator.present?
         concat render('/petitions/create/your_details_hidden', petition: stage_manager.stage_object, f: form) unless stage_manager.stage == 'creator'
         concat render('/petitions/create/email_hidden', petition: stage_manager.stage_object, f: form) unless ['creator', 'replay-email'].include? stage_manager.stage
       end

@@ -2,7 +2,7 @@
 
 <h1 class="page-title">Make sure this is right</h1>
 
-<%= f.fields_for :creator_signature, petition.creator_signature do |csf| %>
+<%= f.fields_for :creator, petition.creator do |csf| %>
   <%= render 'petitions/create/signature_email', f: csf, signature: csf.object,  hide_label: true %>
 <% end %>
 

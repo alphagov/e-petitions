@@ -43,7 +43,7 @@ RSpec.describe PetitionsController, type: :controller do
   end
 
   describe "create" do
-    let(:creator_signature_attributes) do
+    let(:creator_attributes) do
       {
         :name => 'John Mcenroe', :email => 'john@example.com',
         :postcode => 'SE3 4LL', :location_code => 'GB',
@@ -55,7 +55,7 @@ RSpec.describe PetitionsController, type: :controller do
         :action => 'Save the planet',
         :background => 'Limit temperature rise at two degrees',
         :additional_details => 'Global warming is upon us',
-        :creator_signature => creator_signature_attributes
+        :creator => creator_attributes
       }
     end
 
@@ -115,12 +115,12 @@ RSpec.describe PetitionsController, type: :controller do
       it "should successfully create a new petition and a signature" do
         do_post
         petition = Petition.find_by_action!('Save the planet')
-        expect(petition.creator_signature).not_to be_nil
+        expect(petition.creator).not_to be_nil
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
       end
 
       it "should successfully create a new petition and a signature even when email has white space either end" do
-        creator_signature_attributes[:email] = ' john@example.com '
+        creator_attributes[:email] = ' john@example.com '
         do_post
         petition = Petition.find_by_action!('Save the planet')
       end
@@ -143,13 +143,13 @@ RSpec.describe PetitionsController, type: :controller do
       it "should successfully point the signature at the petition" do
         do_post
         petition = Petition.find_by_action!('Save the planet')
-        expect(petition.creator_signature.petition).to eq(petition)
+        expect(petition.creator.petition).to eq(petition)
       end
 
       it "should set user's ip address on signature" do
         do_post
         petition = Petition.find_by_action!('Save the planet')
-        expect(petition.creator_signature.ip_address).to eq("0.0.0.0")
+        expect(petition.creator.ip_address).to eq("0.0.0.0")
       end
 
       it "should not be able to set the state of a new petition" do
@@ -160,20 +160,20 @@ RSpec.describe PetitionsController, type: :controller do
       end
 
       it "should not be able to set the state of a new signature" do
-        creator_signature_attributes[:state] = Signature::VALIDATED_STATE
+        creator_attributes[:state] = Signature::VALIDATED_STATE
         do_post
         petition = Petition.find_by_action!('Save the planet')
-        expect(petition.creator_signature.state).to eq(Signature::PENDING_STATE)
+        expect(petition.creator.state).to eq(Signature::PENDING_STATE)
       end
 
       it "should set notify_by_email to true on the creator signature" do
         do_post
-        expect(Petition.find_by_action!('Save the planet').creator_signature.notify_by_email).to be_truthy
+        expect(Petition.find_by_action!('Save the planet').creator.notify_by_email).to be_truthy
       end
 
       it "sets the constituency_id on the creator signature, based on the postcode" do
         do_post
-        expect(Petition.find_by_action!('Save the planet').creator_signature.constituency_id).to eq("54321")
+        expect(Petition.find_by_action!('Save the planet').creator.constituency_id).to eq("54321")
       end
 
       context "invalid post" do
@@ -186,14 +186,14 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         it "should not create a new petition if email is invalid" do
-          creator_signature_attributes[:email] = 'not much of an email'
+          creator_attributes[:email] = 'not much of an email'
           do_post
           expect(Petition.find_by_action('Save the planet')).to be_nil
           expect(response).to be_success
         end
 
         it "should not create a new petition if UK citizenship is not confirmed" do
-          creator_signature_attributes[:uk_citizenship] = '0'
+          creator_attributes[:uk_citizenship] = '0'
           do_post
           expect(Petition.find_by_action('Save the planet')).to be_nil
           expect(response).to be_success
@@ -209,27 +209,27 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         it "has stage of 'creator' if there are errors on name, uk_citizenship, postcode or country" do
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:name => ''))
+          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:name => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:uk_citizenship => ''))
+          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:uk_citizenship => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:postcode => ''))
+          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:postcode => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator_signature => creator_signature_attributes.merge(:location_code => ''))
+          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:location_code => ''))
           expect(assigns[:stage_manager].stage).to eq 'creator'
         end
 
         it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
-          new_creator_signature_attribtues = creator_signature_attributes.merge(:email => 'foo@')
-          new_petition_attributes = petition_attributes.merge(:creator_signature => new_creator_signature_attribtues)
+          new_creator_attribtues = creator_attributes.merge(:email => 'foo@')
+          new_petition_attributes = petition_attributes.merge(:creator => new_creator_attribtues)
           do_post :stage => 'replay-email',
                   :petition => new_petition_attributes
           expect(assigns[:stage_manager].stage).to eq 'replay-email'
         end
 
         it "has stage of 'creator' if there are errors on email and we came from 'creator' stage" do
-          new_creator_signature_attribtues = creator_signature_attributes.merge(:email => 'foo@')
-          new_petition_attributes = petition_attributes.merge(:creator_signature => new_creator_signature_attribtues)
+          new_creator_attribtues = creator_attributes.merge(:email => 'foo@')
+          new_petition_attributes = petition_attributes.merge(:creator => new_creator_attribtues)
           do_post :stage => 'creator',
                   :petition => new_petition_attributes
           expect(assigns[:stage_manager].stage).to eq 'creator'

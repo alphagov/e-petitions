@@ -5,7 +5,7 @@ class SponsorMailer < ApplicationMailer
 
     mail(
       subject: "#{@sponsor.name} supported your petition",
-      to: @petition.creator_signature.email
+      to: @petition.creator.email
     )
   end
 
@@ -15,7 +15,7 @@ class SponsorMailer < ApplicationMailer
 
     mail(
       subject: "We’re checking your petition",
-      to: @petition.creator_signature.email
+      to: @petition.creator.email
     )
   end
 

@@ -10,7 +10,7 @@ module Staged
 
       delegate :id, :to_param, :model_name, :to_key, :name,
                :email, :email?, :uk_citizenship, :postcode,
-               :location_code, :constituency, to: :creator_signature
+               :location_code, :constituency, to: :creator
 
       def validation_context
         :create
@@ -20,11 +20,11 @@ module Staged
 
       attr_reader :petition
 
-      def creator_signature
-        if petition.creator_signature.nil?
-          petition.build_creator_signature(location_code: 'GB')
+      def creator
+        if petition.creator.nil?
+          petition.build_creator(location_code: 'GB')
         end
-        petition.creator_signature
+        petition.creator
       end
     end
   end

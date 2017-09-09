@@ -82,7 +82,7 @@ end
 When(/^I search for the petition creator from the admin hub$/) do
   visit admin_root_url
   choose "signatures"
-  fill_in "Search", :with => @petition.creator_signature.email
+  fill_in "Search", :with => @petition.creator.email
   click_button 'Search'
 end
 

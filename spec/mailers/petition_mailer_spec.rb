@@ -7,7 +7,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   let :petition do
     FactoryGirl.create(:pending_petition,
-      creator_signature: creator,
+      creator: creator,
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
       additional_details: "To promote organic vegetables"
@@ -21,7 +21,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "notifying creator that moderation is delayed" do
     let! :petition do
       FactoryGirl.create(:sponsored_petition,
-        creator_signature: creator,
+        creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables"
@@ -243,7 +243,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "notifying creator of their sponsored petition being stopped" do
     let! :petition do
       FactoryGirl.create(:sponsored_petition,
-        creator_signature: creator,
+        creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables"
@@ -274,7 +274,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "notifying creator of their validated petition being stopped" do
     let! :petition do
       FactoryGirl.create(:validated_petition,
-        creator_signature: creator,
+        creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables"
@@ -338,7 +338,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   describe "notifying signature of debate outcome" do
     context "when the signature is the creator" do
-      let(:signature) { petition.creator_signature }
+      let(:signature) { petition.creator }
       subject(:mail) { described_class.notify_creator_of_debate_outcome(petition, signature) }
 
       shared_examples_for "a debate outcome email" do
@@ -579,7 +579,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying signature of debate scheduled" do
-    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_signature_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
 
     shared_examples_for "a debate scheduled email" do
       it "addresses the signatory by name" do
@@ -606,7 +606,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     context "when the signature is the creator" do
-      let(:signature) { petition.creator_signature }
+      let(:signature) { petition.creator }
       subject(:mail) { described_class.notify_creator_of_debate_scheduled(petition, signature) }
 
       it_behaves_like "a debate scheduled email"
@@ -637,7 +637,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "emailing a signature" do
-    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_signature_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
     let(:email) { FactoryGirl.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
 
     shared_examples_for "a petition email" do
@@ -673,7 +673,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     context "when the signature is the creator" do
-      let(:signature) { petition.creator_signature }
+      let(:signature) { petition.creator }
       subject(:mail) { described_class.email_creator(petition, signature, email) }
 
       it_behaves_like "a petition email"

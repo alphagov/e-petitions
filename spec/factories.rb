@@ -204,18 +204,18 @@ FactoryGirl.define do
     transient do
       admin_notes { nil }
       creator_name { nil }
-      creator_signature_attributes { {} }
+      creator_attributes { {} }
       sponsors_signed nil
       sponsor_count { Site.minimum_number_of_sponsors }
     end
 
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
-    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
+    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::VALIDATED_STATE, validated_at: Time.current)) }
 
     after(:build) do |petition, evaluator|
       if petition.signature_count.zero?
-        petition.signature_count += 1 if petition.creator_signature.validated?
+        petition.signature_count += 1 if petition.creator.validated?
       end
 
       if evaluator.admin_notes
@@ -223,7 +223,7 @@ FactoryGirl.define do
       end
 
       if evaluator.creator_name
-        petition.creator_signature.name = evaluator.creator_name
+        petition.creator.name = evaluator.creator_name
       end
     end
 
@@ -285,8 +285,8 @@ FactoryGirl.define do
   end
 
   factory :pending_petition, :parent => :petition do
-    state  Petition::PENDING_STATE
-    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::PENDING_STATE)) }
+    state Petition::PENDING_STATE
+    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::PENDING_STATE)) }
   end
 
   factory :validated_petition, :parent => :petition do

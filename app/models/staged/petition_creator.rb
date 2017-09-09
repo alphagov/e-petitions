@@ -47,9 +47,9 @@ module Staged
       end
 
       def sanitize!
-        if petition.creator_signature
-          petition.creator_signature.email.strip! unless petition.creator_signature.email.blank?
-          petition.creator_signature.ip_address = @request.remote_ip
+        if petition.creator
+          petition.creator.email.strip! unless petition.creator.email.blank?
+          petition.creator.ip_address = @request.remote_ip
         end
         petition.action.strip! unless petition.action.blank?
       end

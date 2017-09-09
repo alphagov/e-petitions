@@ -234,10 +234,6 @@ class Signature < ActiveRecord::Base
     name.to_s.parameterize
   end
 
-  def creator?
-    petition.creator_signature == self
-  end
-
   def pending?
     state == PENDING_STATE
   end
@@ -272,7 +268,7 @@ class Signature < ActiveRecord::Base
     retry_lock do
       if pending?
         update_signature_counts = true
-        petition.validate_creator_signature! unless creator?
+        petition.validate_creator! unless creator?
 
         update_columns(
           number:       petition.signature_count + 1,

@@ -23,14 +23,14 @@ class PetitionMailerPreview < ActionMailer::Preview
   def email_creator
     email = Petition::Email.last
     petition = email.petition
-    signature = petition.creator_signature
+    signature = petition.creator
 
     PetitionMailer.email_creator(petition, signature, email)
   end
 
   def notify_creator_that_moderation_is_delayed
     petition = Petition.overdue_in_moderation.last
-    signature = petition.creator_signature
+    signature = petition.creator
     subject = "Moderation of your petition has been delayed"
     body = "We are sorry, but moderation of your petition has been delayed due to an overwhelming number of requests."
 
@@ -46,28 +46,28 @@ class PetitionMailerPreview < ActionMailer::Preview
 
   def notify_creator_of_threshold_response
     petition = Petition.with_response.last
-    signature = petition.creator_signature
+    signature = petition.creator
 
     PetitionMailer.notify_creator_of_threshold_response(petition, signature)
   end
 
   def notify_creator_of_closing_date_change
     petition = Petition.open_at_dissolution.first
-    signature = petition.creator_signature
+    signature = petition.creator
 
     PetitionMailer.notify_creator_of_closing_date_change(signature)
   end
 
   def notify_creator_of_sponsored_petition_being_stopped
     petition = Petition.where(state: "sponsored").last
-    signature = petition.creator_signature
+    signature = petition.creator
 
     PetitionMailer.notify_creator_of_sponsored_petition_being_stopped(signature)
   end
 
   def notify_creator_of_validated_petition_being_stopped
     petition = Petition.where(state: "validated").last
-    signature = petition.creator_signature
+    signature = petition.creator
 
     PetitionMailer.notify_creator_of_validated_petition_being_stopped(signature)
   end

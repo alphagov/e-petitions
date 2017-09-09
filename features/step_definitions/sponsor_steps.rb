@@ -10,7 +10,7 @@ Given(/^I have created a petition and told people to sponsor it$/) do
     action: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
     state: Petition::PENDING_STATE,
-    creator_signature_attributes: { email: 'charlie.the.creator@example.com' })
+    creator_attributes: { email: 'charlie.the.creator@example.com' })
 end
 
 When(/^a sponsor supports my petition$/) do

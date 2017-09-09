@@ -3,7 +3,7 @@ class NotifyCreatorsThatParliamentIsDissolvingJob < ApplicationJob
 
   def perform
     petitions.find_each do |petition|
-      NotifyCreatorThatParliamentIsDissolvingJob.perform_later(petition.creator_signature)
+      NotifyCreatorThatParliamentIsDissolvingJob.perform_later(petition.creator)
     end
   end
 

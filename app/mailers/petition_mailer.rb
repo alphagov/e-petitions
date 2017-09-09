@@ -91,7 +91,7 @@ class PetitionMailer < ApplicationMailer
   end
 
   def gather_sponsors_for_petition(petition)
-    @petition, @creator = petition, petition.creator_signature
+    @petition, @creator = petition, petition.creator
     mail to: @creator.email, subject: subject_for(:gather_sponsors_for_petition)
   end
 

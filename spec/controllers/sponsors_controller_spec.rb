@@ -27,7 +27,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     context "when the creator's signature has not been validated" do
       let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:creator) { petition.creator_signature }
+      let(:creator) { petition.creator }
 
       it "validates the creator's signature" do
         expect {

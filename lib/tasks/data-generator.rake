@@ -33,7 +33,7 @@ namespace :data do
           action: Faker::Lorem.sentence(rand(3..10)).first(80),
           background: Faker::Lorem.sentence(rand(7..22)).first(200),
           additional_details: Faker::Lorem.paragraph(rand(2..20)).first(500),
-          creator_signature: Signature.new({
+          creator: Signature.new({
             uk_citizenship: '1',
             name: Faker::Name.name,
             email: Faker::Internet.safe_email,

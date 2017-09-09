@@ -11,7 +11,7 @@ module Staged
 
       delegate :id, :to_param, :model_name, :to_key,
                :action, :background, :additional_details,
-               :duration, :creator_signature, to: :petition
+               :duration, :creator, to: :petition
     end
   end
 end

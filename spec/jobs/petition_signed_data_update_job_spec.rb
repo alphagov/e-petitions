@@ -95,7 +95,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
       it 'sends email notification to the petition creator' do
         run_the_job
         email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq([petition.creator_signature.email])
+        expect(email.to).to eq([petition.creator.email])
       end
 
       context "and the petition is published" do

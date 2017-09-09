@@ -4,7 +4,7 @@ class NotifyEveryoneOfModerationDecisionJob < ApplicationJob
   end
 
   def perform(petition)
-    creator = petition.creator_signature
+    creator = petition.creator
     sponsors = petition.sponsors.validated
 
     if petition.published?

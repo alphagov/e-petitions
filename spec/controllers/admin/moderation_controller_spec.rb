@@ -8,7 +8,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
     let(:petition) do
       FactoryGirl.create(:pending_petition,
-        creator_signature_attributes: {
+        creator_attributes: {
           name: "Barry Butler",
           email: "bazbutler@gmail.com"
         },

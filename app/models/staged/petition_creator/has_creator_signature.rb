@@ -4,20 +4,20 @@ module Staged
       extend ActiveSupport::Concern
 
       included do
-        validate :creator_signature_valid?
+        validate :creator_valid?
 
-        def creator_signature
-          @_creator_signature ||= self.class::CreatorSignature.new(petition)
+        def creator
+          @_creator ||= self.class::CreatorSignature.new(petition)
         end
 
         private
 
-        def creator_signature_valid?
-          if creator_signature.valid?
+        def creator_valid?
+          if creator.valid?
             true
           else
-            creator_signature.errors.each do |attribute, message|
-              attribute = "creator_signature.#{attribute}"
+            creator.errors.each do |attribute, message|
+              attribute = "creator.#{attribute}"
               errors[attribute] << message
               errors[attribute].uniq!
             end

@@ -21,7 +21,7 @@ class Admin::PetitionDetailsController < Admin::AdminController
   def petition_params
     params.require(:petition).permit(
       :action, :background, :additional_details,
-      :special_consideration, :creator_signature_attributes => [:name]
+      :special_consideration, :creator_attributes => [:name]
     )
   end
 end

@@ -35,7 +35,7 @@
 
   <ul class="petition-meta">
     <li class="meta-created-by">
-      <span class="label">Created by</span> <%= petition.creator_signature.name %>
+      <span class="label">Created by</span> <%= petition.creator.name %>
     </li>
     <li class="meta-deadline">
       <% if petition.closing_early_for_dissolution? %>

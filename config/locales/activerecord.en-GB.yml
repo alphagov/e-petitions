@@ -89,6 +89,8 @@ en-GB:
         blank: "Email must be completed"
         invalid: "Email '%{value}' not recognised"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
+      creator:
+        blank: "Creator must be completed"
       action:
         blank: "Action must be completed"
         too_long: "Action is too long"

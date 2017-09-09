@@ -7,7 +7,7 @@ RSpec.describe SponsorMailer, type: :mailer do
 
   let :petition do
     FactoryGirl.create(:pending_petition,
-      creator_signature: creator,
+      creator: creator,
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
       additional_details: "To promote organic vegetables"

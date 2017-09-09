@@ -5,7 +5,7 @@ class SponsorsController < SignaturesController
 
   before_action :redirect_to_petition_page_if_moderated, except: [:thank_you, :signed]
   before_action :redirect_to_moderation_info_page_if_sponsored, except: [:thank_you, :signed]
-  before_action :validate_creator_signature, only: [:new]
+  before_action :validate_creator, only: [:new]
 
   def verify
     if @signature.validated?
@@ -88,7 +88,7 @@ class SponsorsController < SignaturesController
     end
   end
 
-  def validate_creator_signature
-    @petition.validate_creator_signature!
+  def validate_creator
+    @petition.validate_creator!
   end
 end

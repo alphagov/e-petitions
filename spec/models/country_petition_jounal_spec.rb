@@ -239,8 +239,8 @@ RSpec.describe CountryPetitionJournal, type: :model do
     let!(:location_2) { FactoryGirl.create(:location, code: "ZZ", name: "Country 2") }
     let!(:location_code_1) { location_1.code }
     let!(:location_code_2) { location_2.code }
-    let!(:petition_1) { FactoryGirl.create(:petition, creator_signature_attributes: {location_code: location_code_1}) }
-    let!(:petition_2) { FactoryGirl.create(:petition, creator_signature_attributes: {location_code: location_code_1}) }
+    let!(:petition_1) { FactoryGirl.create(:petition, creator_attributes: {location_code: location_code_1}) }
+    let!(:petition_2) { FactoryGirl.create(:petition, creator_attributes: {location_code: location_code_1}) }
 
     before do
       described_class.for(petition_1, location_code_1).update_attribute(:signature_count, 20)
