@@ -3,7 +3,7 @@ require 'csv'
 class PetitionsController < ApplicationController
   include ManagingMoveParameter
 
-  before_action :avoid_unknown_state_filters, only: [:index]
+  before_action :redirect_to_valid_state, only: [:index]
   before_action :do_not_cache, except: [:index, :show]
 
   before_action :redirect_to_home_page_if_dissolved, only: [:new, :check, :check_results, :create]
@@ -119,9 +119,22 @@ class PetitionsController < ApplicationController
     @petition = Petition.show.find(petition_id)
   end
 
-  def avoid_unknown_state_filters
-    return if params[:state].blank?
-    redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
+  def redirect_to_valid_state
+    if state_present? && !valid_state?
+      redirect_to petitions_url(search_params(state: :all))
+    end
+  end
+
+  def state_present?
+    params[:state].present?
+  end
+
+  def valid_state?
+    public_petition_facets.include?(params[:state].to_sym)
+  end
+
+  def search_params(overrides = {})
+    params.permit(:page, :q, :state).merge(overrides)
   end
 
   def collecting_sponsors?
