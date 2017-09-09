@@ -51,8 +51,6 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.to have_db_index([:updated_at]) }
     it { is_expected.to have_db_index([:uuid]) }
     it { is_expected.to have_db_index([:validated_at]) }
-    it { is_expected.to have_db_index([:creator, :petition_id]) }
-    it { is_expected.to have_db_index([:sponsor, :petition_id]) }
   end
 
   describe "validations" do

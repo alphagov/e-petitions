@@ -1748,13 +1748,6 @@ CREATE INDEX index_archived_signatures_on_creation_ip_and_petition_id ON archive
 
 
 --
--- Name: index_archived_signatures_on_creator_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_archived_signatures_on_creator_and_petition_id ON archived_signatures USING btree (creator, petition_id);
-
-
---
 -- Name: index_archived_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1790,10 +1783,17 @@ CREATE INDEX index_archived_signatures_on_petition_id_and_location_code ON archi
 
 
 --
--- Name: index_archived_signatures_on_sponsor_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_archived_signatures_on_petition_id_where_creator_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_archived_signatures_on_sponsor_and_petition_id ON archived_signatures USING btree (sponsor, petition_id);
+CREATE UNIQUE INDEX index_archived_signatures_on_petition_id_where_creator_is_true ON archived_signatures USING btree (petition_id) WHERE (creator = true);
+
+
+--
+-- Name: index_archived_signatures_on_petition_id_where_sponsor_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_petition_id_where_sponsor_is_true ON archived_signatures USING btree (petition_id) WHERE (sponsor = true);
 
 
 --
@@ -2575,4 +2575,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170903162156');
 INSERT INTO schema_migrations (version) VALUES ('20170903181738');
 
 INSERT INTO schema_migrations (version) VALUES ('20170906203439');
+
+INSERT INTO schema_migrations (version) VALUES ('20170909092251');
 
