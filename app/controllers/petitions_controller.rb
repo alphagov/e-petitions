@@ -80,7 +80,6 @@ class PetitionsController < ApplicationController
   end
 
   def moderation_info
-    @petition = Petition.find(petition_id)
     respond_to do |format|
       format.html
     end
