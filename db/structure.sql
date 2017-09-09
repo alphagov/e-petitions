@@ -2140,6 +2140,13 @@ CREATE UNIQUE INDEX index_signatures_on_petition_id_where_creator_is_true ON sig
 
 
 --
+-- Name: index_signatures_on_petition_id_where_sponsor_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_petition_id_where_sponsor_is_true ON signatures USING btree (petition_id) WHERE (sponsor = true);
+
+
+--
 -- Name: index_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2577,4 +2584,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170903181738');
 INSERT INTO schema_migrations (version) VALUES ('20170906203439');
 
 INSERT INTO schema_migrations (version) VALUES ('20170909092251');
+
+INSERT INTO schema_migrations (version) VALUES ('20170909095357');
 
