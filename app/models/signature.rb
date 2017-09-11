@@ -24,15 +24,17 @@ class Signature < ActiveRecord::Base
     'petition_email'      => :petition_email_at
   }
 
-  # = Relationships =
+  POSTCODE_REGEX = /\A(([A-Z]{1,2}[0-9][0-9A-Z]?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO?(C\/O)?[0-9]{1,4})|(GIR0AA))\Z/i
+
   belongs_to :petition
   belongs_to :invalidation
 
-  # = Validations =
-  include Staged::Validations::Email
-  include Staged::Validations::SignerDetails
-
-  validates_inclusion_of :state, in: STATES
+  validates :state, inclusion: { in: STATES }
+  validates :name, presence: true, length: { maximum: 255 }
+  validates :email, presence: true, email: { allow_blank: true }, on: :create
+  validates :location_code, presence: true
+  validates :postcode, presence: true, format: { with: POSTCODE_REGEX }, if: :united_kingdom?
+  validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
   before_save if: :email? do
@@ -58,85 +60,95 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  # = Finders =
-  scope :validated, -> { where(state: VALIDATED_STATE) }
-  scope :pending, -> { where(state: PENDING_STATE) }
-  scope :fraudulent, -> { where(state: FRAUDULENT_STATE) }
-  scope :invalidated, -> { where(state: INVALIDATED_STATE) }
-  scope :notify_by_email, -> { where(notify_by_email: true) }
-  scope :for_ip, ->(ip) { where(ip_address: ip) }
-  scope :for_email, ->(email) { where(email: email.downcase) }
-  scope :for_name, ->(name) { where("lower(name) = ?", name.downcase) }
-  scope :unarchived, -> { where(archived_at: nil) }
-  scope :by_most_recent, -> { order(created_at: :desc) }
-  scope :sponsors, -> { where(sponsor: true) }
-
-  def self.for_invalidating
-    where(state: [PENDING_STATE, VALIDATED_STATE])
-  end
-
-  def self.for_timestamp(timestamp, since:)
-    column = arel_table[column_name_for(timestamp)]
-    where(column.eq(nil).or(column.lt(since)))
-  end
-
-  def self.need_emailing_for(timestamp, since:)
-    validated.notify_by_email.for_timestamp(timestamp, since: since)
-  end
-
-  def self.petition_ids_with_invalid_signature_counts
-    validated.joins(:petition).
-      group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
-      having(arel_table[Arel.star].count.not_eq(Petition.arel_table[:signature_count])).
-      pluck(:petition_id)
-  end
-
-  def self.column_name_for(timestamp)
-    TIMESTAMPS.fetch(timestamp)
-  rescue
-    raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
-  end
-
-  def self.batch(id = 0, limit: 1000)
-    where(arel_table[:id].gt(id)).order(id: :asc).limit(limit)
-  end
-
-  def self.fraudulent_domains
-    where(state: FRAUDULENT_STATE).
-    select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
-    group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
-    order("COUNT(*) DESC").
-    count(:all)
-  end
-
-  def self.trending_domains(since: 1.hour.ago, limit: 20)
-    select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
-    where(arel_table[:validated_at].gt(since)).
-    where(arel_table[:invalidated_at].eq(nil)).
-    group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
-    order("COUNT(*) DESC").
-    limit(limit).
-    count(:all)
-  end
-
-  def self.trending_ips(since: 1.hour.ago, limit: 20)
-    select(:ip_address).
-    where(arel_table[:validated_at].gt(since)).
-    where(arel_table[:invalidated_at].eq(nil)).
-    group(:ip_address).
-    order("COUNT(*) DESC").
-    limit(limit).
-    count(:all)
-  end
-
-  scope :in_days, ->(number_of_days) { validated.where("updated_at > ?", number_of_days.day.ago) }
-  scope :matching, ->(signature) { where(email: signature.email,
-                                         name: signature.name,
-                                         petition_id: signature.petition_id) }
-
   class << self
+    def batch(id = 0, limit: 1000)
+      where(arel_table[:id].gt(id)).order(id: :asc).limit(limit)
+    end
+
+    def by_most_recent
+      order(created_at: :desc)
+    end
+
+    def column_name_for(timestamp)
+      TIMESTAMPS.fetch(timestamp)
+    rescue KeyError => e
+      raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
+    end
+
+    def destroy!(signature_ids)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          signature.destroy!
+        end
+      end
+    end
+
     def duplicate(id, email)
       where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+    end
+
+    def for_email(email)
+      where(email: email.downcase)
+    end
+
+    def for_invalidating
+      where(state: [PENDING_STATE, VALIDATED_STATE])
+    end
+
+    def for_ip(ip)
+      where(ip_address: ip)
+    end
+
+    def for_name(name)
+      where(arel_table[:name].lower.eq(name.downcase))
+    end
+
+    def for_timestamp(timestamp, since:)
+      column = arel_table[column_name_for(timestamp)]
+      where(column.eq(nil).or(column.lt(since)))
+    end
+
+    def fraudulent
+      where(state: FRAUDULENT_STATE)
+    end
+
+    def fraudulent_domains
+      where(state: FRAUDULENT_STATE).
+      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+      order("COUNT(*) DESC").
+      count(:all)
+    end
+
+    def invalidate!(signature_ids, now = Time.current, invalidation_id = nil)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          signature.invalidate!(now, invalidation_id)
+        end
+      end
+    end
+
+    def invalidated
+      where(state: INVALIDATED_STATE)
+    end
+
+    def need_emailing_for(timestamp, since:)
+      validated.subscribed.for_timestamp(timestamp, since: since)
+    end
+
+    def pending
+      where(state: PENDING_STATE)
+    end
+
+    def petition_ids_with_invalid_signature_counts
+      validated.joins(:petition).
+        group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
+        having(arel_table[Arel.star].count.not_eq(Petition.arel_table[:signature_count])).
+        pluck(:petition_id)
     end
 
     def search(query, options = {})
@@ -155,6 +167,38 @@ class Signature < ActiveRecord::Base
       scope.paginate(page: page, per_page: 50)
     end
 
+    def sponsors
+      where(sponsor: true)
+    end
+
+    def subscribed
+      where(notify_by_email: true)
+    end
+
+    def trending_domains(since: 1.hour.ago, limit: 20)
+      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      where(arel_table[:validated_at].gt(since)).
+      where(arel_table[:invalidated_at].eq(nil)).
+      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
+    end
+
+    def trending_ips(since: 1.hour.ago, limit: 20)
+      select(:ip_address).
+      where(arel_table[:validated_at].gt(since)).
+      where(arel_table[:invalidated_at].eq(nil)).
+      group(:ip_address).
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
+    end
+
+    def unarchived
+      where(archived_at: nil)
+    end
+
     def validate!(signature_ids, now = Time.current)
       signatures = find(signature_ids)
 
@@ -165,24 +209,8 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def invalidate!(signature_ids, now = Time.current, invalidation_id = nil)
-      signatures = find(signature_ids)
-
-      transaction do
-        signatures.each do |signature|
-          signature.invalidate!(now, invalidation_id)
-        end
-      end
-    end
-
-    def destroy!(signature_ids)
-      signatures = find(signature_ids)
-
-      transaction do
-        signatures.each do |signature|
-          signature.destroy!
-        end
-      end
+    def validated
+      where(state: VALIDATED_STATE)
     end
 
     private
@@ -196,7 +224,6 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  # = Methods =
   attr_accessor :uk_citizenship
 
   def find_duplicate
@@ -368,6 +395,10 @@ class Signature < ActiveRecord::Base
 
   def email_threshold_reached?
     email_count >= 5
+  end
+
+  def united_kingdom?
+    location_code == 'GB'
   end
 
   private

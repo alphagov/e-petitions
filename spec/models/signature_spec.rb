@@ -322,9 +322,9 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    describe "notify_by_email" do
+    describe "subscribed" do
       it "returns only signatures with notify_by_email: true" do
-        signatures = Signature.notify_by_email
+        signatures = Signature.subscribed
         expect(signatures.size).to eq(3)
         expect(signatures).to include(signature1, signature2, petition.creator)
       end
@@ -351,25 +351,6 @@ RSpec.describe Signature, type: :model do
         signatures = Signature.fraudulent
         expect(signatures.size).to eq(1)
         expect(signatures).to include(signature5)
-      end
-    end
-
-    describe "matching" do
-      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE) }
-
-      it "returns a signature matching in name, email and petition_id" do
-        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
-        expect(Signature.matching(signature)).to include(signature1)
-      end
-
-      it "does not return a signature matching in name, email and different petition" do
-        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition_id: 2)
-        expect(Signature.matching(signature)).to_not include(signature1)
-      end
-
-      it "does not return a signature matching in email, petition and different name" do
-        signature = FactoryGirl.build(:signature, name: "Josey Public", email: "person1@example.com", petition: petition)
-        expect(Signature.matching(signature)).to_not include(signature1)
       end
     end
 

@@ -40,7 +40,7 @@ end
 
 Then(/^all the signatories of the petition should have been emailed with the update$/) do
   @petition.reload
-  @petition.signatures.notify_by_email.validated.where.not(id: @petition.creator.id).each do |signatory|
+  @petition.signatures.validated.subscribed.where.not(id: @petition.creator.id).each do |signatory|
     steps %Q(
       Then "#{signatory.email}" should receive an email
       When they open the email
@@ -53,7 +53,7 @@ end
 
 Then(/^all the signatories of the petition should not have been emailed with the update$/) do
   @petition.reload
-  @petition.signatures.notify_by_email.validated.where.not(id: @petition.creator.id).each do |signatory|
+  @petition.signatures.validated.subscribed.where.not(id: @petition.creator.id).each do |signatory|
     steps %Q(
       Then "#{signatory.email}" should receive no emails
     )

@@ -206,7 +206,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
                   petition.reload
                   petition_timestamp = petition.get_email_requested_at_for('debate_outcome')
                   expect(petition_timestamp).not_to be_nil
-                  petition.signatures.validated.notify_by_email.each do |signature|
+                  petition.signatures.validated.subscribed.each do |signature|
                     expect(signature.get_email_sent_at_for('debate_outcome')).to eq(petition_timestamp)
                   end
                 end
