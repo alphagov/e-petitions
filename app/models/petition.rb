@@ -82,7 +82,9 @@ class Petition < ActiveRecord::Base
   has_many :emails, dependent: :destroy
   has_many :invalidations
 
-  include Staged::Validations::PetitionDetails
+  validates :action, presence: true, length: { maximum: 80, allow_blank: true }
+  validates :background, presence: true, length: { maximum: 300, allow_blank: true }
+  validates :additional_details, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true
   validates :state, inclusion: { in: STATES }
