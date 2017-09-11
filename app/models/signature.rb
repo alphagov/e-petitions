@@ -24,8 +24,6 @@ class Signature < ActiveRecord::Base
     'petition_email'      => :petition_email_at
   }
 
-  POSTCODE_REGEX = /\A(([A-Z]{1,2}[0-9][0-9A-Z]?[0-9][A-BD-HJLNP-UW-Z]{2})|(BFPO?(C\/O)?[0-9]{1,4})|(GIR0AA))\Z/i
-
   belongs_to :petition
   belongs_to :invalidation
 
@@ -33,7 +31,7 @@ class Signature < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validates :email, presence: true, email: { allow_blank: true }, on: :create
   validates :location_code, presence: true
-  validates :postcode, presence: true, format: { with: POSTCODE_REGEX }, if: :united_kingdom?
+  validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
