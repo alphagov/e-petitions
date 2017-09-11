@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       collection do
         get  'check'
         get  'check_results'
-        post 'create', path: 'new', as: :create
+        post 'new', action: 'create', as: nil
       end
 
       member do
