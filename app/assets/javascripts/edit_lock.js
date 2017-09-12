@@ -1,7 +1,7 @@
 (function ($) {
   'use strict';
 
-  $.fn.editLock = function(id, user_id, path) {
+  $.fn.editLock = function(id, user_id, path, moderated) {
     var $html = this;
     var $message = $html.find('.edit-lock-message');
     var $override = $html.find('#edit-lock-override');
@@ -12,6 +12,7 @@
     var PATH = path;
     var INTERVAL = 10000;
     var LOCK_URL = PATH + '/' + ID + '/lock.json';
+    var MODERATED = moderated;
 
     var EditLock = {
       processStatus: function(data) {
@@ -59,7 +60,11 @@
       },
 
       cancelClicked: function(e) {
-        window.location = PATH + '/' + ID;
+        if (MODERATED) {
+          window.location = PATH + '/' + ID;
+        } else {
+          window.history.back();
+        }
       }
     };
 
