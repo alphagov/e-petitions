@@ -859,7 +859,6 @@ CREATE TABLE petitions (
     additional_details text,
     state character varying(10) DEFAULT 'pending'::character varying NOT NULL,
     open_at timestamp without time zone,
-    creator_signature_id integer NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     closed_at timestamp without time zone,
@@ -1016,7 +1015,10 @@ CREATE TABLE signatures (
     debate_outcome_email_at timestamp without time zone,
     petition_email_at timestamp without time zone,
     uuid uuid,
-    archived_at timestamp without time zone
+    archived_at timestamp without time zone,
+    email_count integer DEFAULT 0 NOT NULL,
+    sponsor boolean DEFAULT false NOT NULL,
+    creator boolean DEFAULT false NOT NULL
 );
 
 
@@ -1085,38 +1087,6 @@ CREATE SEQUENCE sites_id_seq
 --
 
 ALTER SEQUENCE sites_id_seq OWNED BY sites.id;
-
-
---
--- Name: sponsors; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE sponsors (
-    id integer NOT NULL,
-    petition_id integer,
-    signature_id integer,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
-);
-
-
---
--- Name: sponsors_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE sponsors_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: sponsors_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE sponsors_id_seq OWNED BY sponsors.id;
 
 
 --
@@ -1368,13 +1338,6 @@ ALTER TABLE ONLY sites ALTER COLUMN id SET DEFAULT nextval('sites_id_seq'::regcl
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY sponsors ALTER COLUMN id SET DEFAULT nextval('sponsors_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
@@ -1594,14 +1557,6 @@ ALTER TABLE ONLY sites
 
 
 --
--- Name: sponsors_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT sponsors_pkey PRIMARY KEY (id);
-
-
---
 -- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1793,13 +1748,6 @@ CREATE INDEX index_archived_signatures_on_creation_ip_and_petition_id ON archive
 
 
 --
--- Name: index_archived_signatures_on_creator_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_archived_signatures_on_creator_and_petition_id ON archived_signatures USING btree (creator, petition_id);
-
-
---
 -- Name: index_archived_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1835,10 +1783,17 @@ CREATE INDEX index_archived_signatures_on_petition_id_and_location_code ON archi
 
 
 --
--- Name: index_archived_signatures_on_sponsor_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_archived_signatures_on_petition_id_where_creator_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
-CREATE INDEX index_archived_signatures_on_sponsor_and_petition_id ON archived_signatures USING btree (sponsor, petition_id);
+CREATE UNIQUE INDEX index_archived_signatures_on_petition_id_where_creator_is_true ON archived_signatures USING btree (petition_id) WHERE (creator = true);
+
+
+--
+-- Name: index_archived_signatures_on_petition_id_where_sponsor_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_petition_id_where_sponsor_is_true ON archived_signatures USING btree (petition_id) WHERE (sponsor = true);
 
 
 --
@@ -2052,13 +2007,6 @@ CREATE INDEX index_petitions_on_created_at_and_state ON petitions USING btree (c
 
 
 --
--- Name: index_petitions_on_creator_signature_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_petitions_on_creator_signature_id ON petitions USING btree (creator_signature_id);
-
-
---
 -- Name: index_petitions_on_debate_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2185,6 +2133,20 @@ CREATE INDEX index_signatures_on_petition_id_and_location_code ON signatures USI
 
 
 --
+-- Name: index_signatures_on_petition_id_where_creator_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_signatures_on_petition_id_where_creator_is_true ON signatures USING btree (petition_id) WHERE (creator = true);
+
+
+--
+-- Name: index_signatures_on_petition_id_where_sponsor_is_true; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_signatures_on_petition_id_where_sponsor_is_true ON signatures USING btree (petition_id) WHERE (sponsor = true);
+
+
+--
 -- Name: index_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2250,14 +2212,6 @@ ALTER TABLE ONLY archived_petition_emails
 
 
 --
--- Name: fk_rails_38c9c83a88; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT fk_rails_38c9c83a88 FOREIGN KEY (signature_id) REFERENCES signatures(id) ON DELETE CASCADE;
-
-
---
 -- Name: fk_rails_39cbbc815d; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2287,14 +2241,6 @@ ALTER TABLE ONLY notes
 
 ALTER TABLE ONLY constituency_petition_journals
     ADD CONSTRAINT fk_rails_5186723bbd FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_5451a341b3; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY petitions
-    ADD CONSTRAINT fk_rails_5451a341b3 FOREIGN KEY (creator_signature_id) REFERENCES signatures(id) ON DELETE RESTRICT;
 
 
 --
@@ -2359,14 +2305,6 @@ ALTER TABLE ONLY petition_emails
 
 ALTER TABLE ONLY archived_rejections
     ADD CONSTRAINT fk_rails_b6266f73f1 FOREIGN KEY (petition_id) REFERENCES archived_petitions(id) ON DELETE CASCADE;
-
-
---
--- Name: fk_rails_bc381510eb; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY sponsors
-    ADD CONSTRAINT fk_rails_bc381510eb FOREIGN KEY (petition_id) REFERENCES petitions(id) ON DELETE CASCADE;
 
 
 --
@@ -2635,7 +2573,17 @@ INSERT INTO schema_migrations (version) VALUES ('20170713193039');
 
 INSERT INTO schema_migrations (version) VALUES ('20170818110849');
 
+INSERT INTO schema_migrations (version) VALUES ('20170821153056');
+
+INSERT INTO schema_migrations (version) VALUES ('20170821153057');
+
 INSERT INTO schema_migrations (version) VALUES ('20170903162156');
 
 INSERT INTO schema_migrations (version) VALUES ('20170903181738');
+
+INSERT INTO schema_migrations (version) VALUES ('20170906203439');
+
+INSERT INTO schema_migrations (version) VALUES ('20170909092251');
+
+INSERT INTO schema_migrations (version) VALUES ('20170909095357');
 

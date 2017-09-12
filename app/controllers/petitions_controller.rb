@@ -1,9 +1,7 @@
 require 'csv'
 
 class PetitionsController < ApplicationController
-  include ManagingMoveParameter
-
-  before_action :avoid_unknown_state_filters, only: [:index]
+  before_action :redirect_to_valid_state, only: [:index]
   before_action :do_not_cache, except: [:index, :show]
 
   before_action :redirect_to_home_page_if_dissolved, only: [:new, :check, :check_results, :create]
@@ -12,6 +10,8 @@ class PetitionsController < ApplicationController
 
   before_action :retrieve_petitions, only: [:index]
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
+  before_action :build_petition_creator, only: [:check, :check_results, :new, :create]
+
   before_action :redirect_to_stopped_page, if: :stopped?, only: [:moderation_info, :show]
   before_action :redirect_to_gathering_support_url, if: :collecting_sponsors?, only: [:moderation_info, :show]
   before_action :redirect_to_moderation_info_url, if: :in_moderation?, only: [:gathering_support, :show]
@@ -20,41 +20,24 @@ class PetitionsController < ApplicationController
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
   after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
-  respond_to :html
-  respond_to :json, only: [:index, :show]
-  respond_to :csv, only: [:index]
-
   def index
-    respond_with @petitions
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv
+    end
   end
 
   def show
-    respond_with @petition
+    respond_to do |format|
+      format.html
+      format.json
+    end
   end
 
   def count
-    respond_to { |f| f.json }
-  end
-
-  def new
-    assign_action
-    assign_stage
-    @stage_manager = Staged::PetitionCreator.manager(petition_params_for_new, request, params[:stage], params[:move])
-    respond_with @stage_manager.stage_object
-  end
-
-  def create
-    assign_move
-    assign_stage
-    @stage_manager = Staged::PetitionCreator.manager(petition_params_for_create, request, params[:stage], params[:move])
-    if @stage_manager.create_petition
-      @stage_manager.petition.creator_signature.store_constituency_id
-      send_email_to_gather_sponsors(@stage_manager.petition)
-      redirect_to thank_you_petition_url(@stage_manager.petition)
-    else
-      respond_to do |format|
-        format.html { render :new }
-      end
+    respond_to do |format|
+      format.json
     end
   end
 
@@ -65,14 +48,28 @@ class PetitionsController < ApplicationController
   end
 
   def check_results
-    @petitions = Petition.current.search(params.merge(count: 3))
     respond_to do |format|
       format.html
     end
   end
 
+  def new
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def create
+    if @new_petition.save
+      redirect_to thank_you_petition_url(@new_petition)
+    else
+      respond_to do |format|
+        format.html { render :new }
+      end
+    end
+  end
+
   def moderation_info
-    @petition = Petition.find(petition_id)
     respond_to do |format|
       format.html
     end
@@ -112,9 +109,26 @@ class PetitionsController < ApplicationController
     @petition = Petition.show.find(petition_id)
   end
 
-  def avoid_unknown_state_filters
-    return if params[:state].blank?
-    redirect_to url_for(params.merge(state: 'all')) unless public_petition_facets.include? params[:state].to_sym
+  def build_petition_creator
+    @new_petition = PetitionCreator.new(params, request)
+  end
+
+  def redirect_to_valid_state
+    if state_present? && !valid_state?
+      redirect_to petitions_url(search_params(state: :all))
+    end
+  end
+
+  def state_present?
+    params[:state].present?
+  end
+
+  def valid_state?
+    public_petition_facets.include?(params[:state].to_sym)
+  end
+
+  def search_params(overrides = {})
+    params.permit(:page, :q, :state).merge(overrides)
   end
 
   def collecting_sponsors?
@@ -147,53 +161,6 @@ class PetitionsController < ApplicationController
 
   def redirect_to_petition_url
     redirect_to petition_url(@petition)
-  end
-
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
-  end
-
-  def petition_params_for_new
-    params.
-      fetch('petition', {}).
-      permit(:action)
-  end
-
-  def petition_params_for_create
-    params.
-      require(:petition).
-      permit(:action, :background, :additional_details, :duration, :sponsor_emails,
-             creator_signature: [
-               :name, :email, :email_confirmation,
-               :postcode, :location_code, :uk_citizenship
-             ]).tap do |sanitized|
-               if sanitized['creator_signature'].present?
-                 sanitized['creator_signature_attributes'] = sanitized.delete('creator_signature')
-               end
-               if sanitized['sponsor_emails']
-                 sanitized['sponsor_emails'] = parse_emails(sanitized['sponsor_emails'])
-               end
-             end
-  end
-
-  def assign_action
-    return if params[:petition_action].blank?
-    petition_action = params.delete(:petition_action)
-    params[:petition] ||= {}
-    params[:petition][:action] = petition_action
-  end
-
-  def assign_stage
-    return if Staged::PetitionCreator.stages.include? params[:stage]
-    params[:stage] = 'petition'
-  end
-
-  def send_email_to_gather_sponsors(petition)
-    GatherSponsorsForPetitionEmailJob.perform_later(petition)
-  end
-
-  def parse_emails(emails)
-    emails.strip.split(/\r?\n/).map { |e| e.strip }
   end
 
   def csv_filename

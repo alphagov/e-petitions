@@ -226,8 +226,6 @@ GEM
       rails-deprecated_sanitizer (>= 1.0.1)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
-    rails_autolink (1.1.6)
-      rails (> 3.1)
     railties (4.2.8)
       actionpack (= 4.2.8)
       activesupport (= 4.2.8)
@@ -235,8 +233,6 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (12.0.0)
     request_store (1.2.1)
-    responders (2.1.0)
-      railties (>= 4.2.0, < 5)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -341,9 +337,7 @@ DEPENDENCIES
   pry
   puma
   rails (= 4.2.8)
-  rails_autolink
   rake
-  responders
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers

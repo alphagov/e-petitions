@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
   let(:petition) do
     FactoryGirl.create(:open_petition,
-      creator_signature_attributes: {
+      creator_attributes: {
         name: "Barry Butler",
         email: "bazbutler@gmail.com"
       },

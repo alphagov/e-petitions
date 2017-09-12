@@ -1,3 +1,5 @@
-<%= form_for @stage_manager.stage_object, :url => sign_petition_signatures_path, :html => {:class => 'wizard_form new_petition_form'} do |f| %>
-  <%= render_signature_form @stage_manager, f %>
-<% end -%>
+<%= form_for @signature, url: confirm_petition_signatures_path(@petition) do |form| %>
+  <h1 class="page-title">Sign petition</h1>
+  <h2 class="page-subtitle"><%= @petition.action %></h2>
+  <%= render "form", form: form, signature: @signature %>
+<% end %>

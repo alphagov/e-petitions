@@ -83,5 +83,5 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I should have fully signed the petition as a sponsor
     When I confirm my email address
     Then I should see a heading called "Thanks"
-    And I should see "You've already supported this petition."
+    And I should see "You’ve already supported this petition"
     And I should see /This petition needs [0-9]+ supporters to go live/

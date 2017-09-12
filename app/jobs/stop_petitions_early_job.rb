@@ -26,9 +26,9 @@ class StopPetitionsEarlyJob < ApplicationJob
     unless petition.special_consideration?
       case petition.state
       when Petition::VALIDATED_STATE
-        NotifyCreatorOfValidatedPetitionBeingStoppedJob.perform_later(petition.creator_signature)
+        NotifyCreatorOfValidatedPetitionBeingStoppedJob.perform_later(petition.creator)
       when Petition::SPONSORED_STATE
-        NotifyCreatorOfSponsoredPetitionBeingStoppedJob.perform_later(petition.creator_signature)
+        NotifyCreatorOfSponsoredPetitionBeingStoppedJob.perform_later(petition.creator)
       end
     end
   end

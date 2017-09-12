@@ -1,6 +1,4 @@
 class Admin::ParliamentsController < Admin::AdminController
-  respond_to :html
-
   before_action :require_sysadmin
   before_action :fetch_parliament
 

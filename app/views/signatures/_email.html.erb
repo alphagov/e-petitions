@@ -1,5 +1,0 @@
-<%= form_row :for => [signature, :email] do %>
-  <%= f.label :email, 'Email address', :class => 'form-label' + (hide_label ? ' visuallyhidden' : '') %>
-  <%= error_messages_for_field signature, :email %>
-  <%= f.text_field :email, :type => 'email', :tabindex => increment, :class => 'form-control' %>
-<% end %>

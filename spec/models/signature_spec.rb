@@ -11,6 +11,11 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  before do
+    FactoryGirl.create(:constituency, :london_and_westminster)
+    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+  end
+
   context "defaults" do
     it "has pending as default state" do
       s = Signature.new
@@ -75,10 +80,10 @@ RSpec.describe Signature, type: :model do
   describe "callbacks" do
     context "when the signature is destroyed" do
       let(:attributes) { FactoryGirl.attributes_for(:petition) }
-      let(:creator) { FactoryGirl.create(:pending_signature) }
+      let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
       let(:petition) do
         Petition.create(attributes) do |petition|
-          petition.creator_signature = creator
+          petition.creator = creator
 
           5.times do
             petition.signatures << FactoryGirl.create(:pending_signature)
@@ -98,15 +103,15 @@ RSpec.describe Signature, type: :model do
       end
 
       context "when the signature is not the creator" do
-        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
-        let!(:signature) {
+        let(:signature) {
           FactoryGirl.create(
             :pending_signature,
             petition: petition,
-            constituency_id: constituency_journal.constituency_id,
-            location_code: country_journal.location_code
+            constituency_id: "3415",
+            location_code: "GB"
           )
         }
 
@@ -132,15 +137,15 @@ RSpec.describe Signature, type: :model do
       end
 
       context "when the signature is invalidated" do
-        let!(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-        let!(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
-        let!(:signature) {
+        let(:signature) {
           FactoryGirl.create(
             :pending_signature,
             petition: petition,
-            constituency_id: constituency_journal.constituency_id,
-            location_code: country_journal.location_code
+            constituency_id: "3415",
+            location_code: "GB"
           )
         }
 
@@ -155,12 +160,12 @@ RSpec.describe Signature, type: :model do
           expect{ signature.destroy }.not_to change{ petition.reload.signature_count }
         end
 
-        it "decrements the country journal signature count" do
+        it "doesn't decrement the country journal signature count" do
           expect(petition.signature_count).to eq(6)
           expect{ signature.destroy }.not_to change{ country_journal.reload.signature_count }
         end
 
-        it "decrements the constituency journal signature count" do
+        it "doesn't decrement the constituency journal signature count" do
           expect(petition.signature_count).to eq(6)
           expect{ signature.destroy }.not_to change{ constituency_journal.reload.signature_count }
         end
@@ -168,6 +173,29 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the signature is saved" do
+      context "and the signature is a duplicate" do
+        let(:petition) { FactoryGirl.create(:open_petition) }
+        let(:signature) { petition.signatures.build(attributes) }
+
+        let(:attributes) do
+          {
+            name: "Suzy Signer",
+            email: "foo@example.com",
+            postcode: "SW1A 1AA",
+            location_code: "GB",
+            uk_citizenship: "1"
+          }
+        end
+
+        before do
+          petition.signatures.create!(attributes)
+        end
+
+        it "raises an ActiveRecord::RecordNotUnique exception" do
+          expect { signature.save }.to raise_exception(ActiveRecord::RecordNotUnique)
+        end
+      end
+
       context "and the email is blank" do
         subject { FactoryGirl.build(:signature, email: "") }
 
@@ -215,85 +243,6 @@ RSpec.describe Signature, type: :model do
       signature = FactoryGirl.build(:signature, email: 'foobar+petitions@example.com')
       expect(signature).not_to have_valid(:email)
       expect(signature.errors.full_messages).to include("You can’t use ‘plus addressing’ in your email address")
-    end
-
-    describe "uniqueness of email" do
-      let(:petition) { FactoryGirl.create(:open_petition) }
-      let(:other_petition) { FactoryGirl.create(:open_petition) }
-      let(:attributes) do
-        {
-          name:     "Suzy Signer",
-          petition: petition,
-          postcode: "SW1A 1AA",
-          email:    "foo@example.com"
-        }
-      end
-
-      context "when a signature already exists with the same email address" do
-        before do
-          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
-        end
-
-        it "doesn't allow a second signature with the same email address and the same name" do
-          signature = FactoryGirl.build(:signature, attributes)
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "does allow a second signature with the same email address but a different name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer"))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "is scoped to a petition" do
-          signature = FactoryGirl.build(:signature, attributes.merge(petition: other_petition))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "ignores extra whitespace at the end of the name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Suzy Signer "))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "ignores extra whitespace at the beginning of the name" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: " Suzy Signer"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "only allows the second email if the postcode is the same" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A 1AB"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "ignores the space on the postcode check" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AA"))
-          expect(signature).to have_valid(:email)
-
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "SW1A1AB"))
-          expect(signature).not_to have_valid(:email)
-        end
-
-        it "does a case insensitive postcode check" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sam Signer", postcode: "sw1a 1aa"))
-          expect(signature).to have_valid(:email)
-        end
-
-        it "is case insensitive about the email validation" do
-          signature = FactoryGirl.build(:signature, attributes.merge(email: "FOO@example.com"))
-          expect(signature).not_to have_valid(:email)
-        end
-      end
-
-      context "when two signatures already exist with the same email address" do
-        before do
-          FactoryGirl.create(:signature, attributes.merge(name: "Suzy Signer"))
-          FactoryGirl.create(:signature, attributes.merge(name: "Sam Signer"))
-        end
-
-        it "doesn't allow a third signature with the same email address" do
-          signature = FactoryGirl.build(:signature, attributes.merge(name: "Sarah Signer"))
-          expect(signature).not_to have_valid(:email)
-        end
-      end
     end
 
     it "does not allow blank or unknown state" do
@@ -369,15 +318,15 @@ RSpec.describe Signature, type: :model do
       it "returns only validated signatures" do
         signatures = Signature.validated
         expect(signatures.size).to eq(3)
-        expect(signatures).to include(signature1, signature3, petition.creator_signature)
+        expect(signatures).to include(signature1, signature3, petition.creator)
       end
     end
 
-    describe "notify_by_email" do
+    describe "subscribed" do
       it "returns only signatures with notify_by_email: true" do
-        signatures = Signature.notify_by_email
+        signatures = Signature.subscribed
         expect(signatures.size).to eq(3)
-        expect(signatures).to include(signature1, signature2, petition.creator_signature)
+        expect(signatures).to include(signature1, signature2, petition.creator)
       end
     end
 
@@ -402,25 +351,6 @@ RSpec.describe Signature, type: :model do
         signatures = Signature.fraudulent
         expect(signatures.size).to eq(1)
         expect(signatures).to include(signature5)
-      end
-    end
-
-    describe "matching" do
-      let!(:signature1) { FactoryGirl.create(:signature, name: "Joe Public", email: "person1@example.com", petition: petition, state: Signature::VALIDATED_STATE) }
-
-      it "returns a signature matching in name, email and petition_id" do
-        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition: petition)
-        expect(Signature.matching(signature)).to include(signature1)
-      end
-
-      it "does not return a signature matching in name, email and different petition" do
-        signature = FactoryGirl.build(:signature, name: "Joe Public", email: "person1@example.com", petition_id: 2)
-        expect(Signature.matching(signature)).to_not include(signature1)
-      end
-
-      it "does not return a signature matching in email, petition and different name" do
-        signature = FactoryGirl.build(:signature, name: "Josey Public", email: "person1@example.com", petition: petition)
-        expect(Signature.matching(signature)).to_not include(signature1)
       end
     end
 
@@ -483,7 +413,7 @@ RSpec.describe Signature, type: :model do
     describe "checking whether the signature is the creator" do
       let!(:petition) { FactoryGirl.create(:petition) }
       it "is the creator if the signature is listed as the creator signature" do
-        expect(petition.creator_signature).to be_creator
+        expect(petition.creator).to be_creator
       end
 
       it "is not the creator if the signature is not listed as the creator" do
@@ -547,10 +477,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".validate!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -594,10 +524,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".invalidate!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -643,10 +573,10 @@ RSpec.describe Signature, type: :model do
 
   describe ".destroy!" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -680,15 +610,15 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the signature is not the creator" do
-      let(:country_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-      let(:constituency_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+      let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+      let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
       let(:signature) {
         FactoryGirl.create(
           :pending_signature,
           petition: petition,
-          constituency_id: constituency_journal.constituency_id,
-          location_code: country_journal.location_code
+          constituency_id: "3415",
+          location_code: "GB"
         )
       }
 
@@ -889,10 +819,10 @@ RSpec.describe Signature, type: :model do
 
   describe "#number" do
     let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature) }
+    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
-        petition.creator_signature = creator
+        petition.creator = creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -901,10 +831,10 @@ RSpec.describe Signature, type: :model do
     end
 
     let(:other_attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:other_creator) { FactoryGirl.create(:pending_signature) }
+    let(:other_creator) { FactoryGirl.create(:pending_signature, creator: true) }
     let(:other_petition) do
       Petition.create(other_attributes) do |petition|
-        petition.creator_signature = other_creator
+        petition.creator = other_creator
 
         5.times do
           petition.signatures << FactoryGirl.create(:pending_signature)
@@ -1018,13 +948,13 @@ RSpec.describe Signature, type: :model do
   describe '#creator?' do
     let(:petition) { FactoryGirl.create(:petition) }
     let(:signature) { FactoryGirl.create(:signature, petition: petition) }
-    let(:creator_signature) { petition.creator_signature }
+    let(:creator) { petition.creator }
 
-    it 'is true if the signature is the creator_signature for the petition it belongs to' do
-      expect(creator_signature.creator?).to be_truthy
+    it 'is true if the signature is the creator for the petition it belongs to' do
+      expect(creator.creator?).to be_truthy
     end
 
-    it 'is false if the signature is not the creator_signature for the petition it belongs to' do
+    it 'is false if the signature is not the creator for the petition it belongs to' do
       expect(signature.creator?).to be_falsey
     end
   end
@@ -1032,11 +962,10 @@ RSpec.describe Signature, type: :model do
   describe '#sponsor?' do
     let(:petition) { FactoryGirl.create(:petition) }
     let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:sponsor_signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:signature)) }
     let(:signature) { FactoryGirl.create(:signature, petition: petition) }
 
     it 'is true if the signature is a sponsor signature for the petition it belongs to' do
-      expect(sponsor_signature.sponsor?).to be_truthy
+      expect(sponsor.sponsor?).to be_truthy
     end
 
     it 'is false if the signature is not a sponsor signature for the petition it belongs to' do
@@ -1462,5 +1391,190 @@ RSpec.describe Signature, type: :model do
       end
     end
   end
-end
 
+  describe "#email_count" do
+    it "returns 0 for new signatures" do
+      signature = FactoryGirl.create(:pending_signature)
+      expect(signature.email_count).to be(0)
+    end
+  end
+
+  describe "#email_threshold_reached?" do
+    let(:email_count_threshold) { 5 }
+
+    it "returns false when the signature hasn't reached the threshold" do
+      signature = FactoryGirl.create(:validated_signature)
+      expect(signature.email_threshold_reached?).to be false
+    end
+
+    it "returns true when the signature is at the email count threshold" do
+      signature = FactoryGirl.create(:validated_signature, email_count: email_count_threshold)
+      expect(signature.email_threshold_reached?).to be true
+    end
+  end
+
+  describe "#find_duplicate" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:other_petition) { FactoryGirl.create(:open_petition) }
+    let(:signature) { petition.signatures.build(attributes) }
+    let(:name) { "Suzy Signer" }
+    let(:postcode) { "SW1A 1AA" }
+    let(:email) { "foo@example.com" }
+
+    let(:attributes) do
+      {
+        name: name,
+        email: email,
+        postcode: postcode,
+        location_code: "GB",
+        uk_citizenship: "1"
+      }
+    end
+
+    context "when a signature doesn't already exist with the same email address" do
+      it "returns nil" do
+        expect(signature.find_duplicate).to be_nil
+      end
+    end
+
+    context "when a signature already exists with the same email address" do
+      before do
+        petition.signatures.create!(
+          name: "Suzy Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
+      end
+
+      context "and the name is the same" do
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is the same but different case" do
+        let(:name) { "suzy signer" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is the same but with extra whitespace" do
+        let(:name) { " Suzy  Signer " }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is different" do
+        let(:name) { "Sam Signer" }
+
+        it "returns nil" do
+          expect(signature.find_duplicate).to be_nil
+        end
+      end
+
+      context "and the postcode is different" do
+        let(:postcode) { "SW1A 1AB" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name and postcode are different" do
+        let(:name) { "Sam Signer" }
+        let(:postcode) { "SW1A 1AB" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is the same, but is scoped to a different petition" do
+        let(:signature) { other_petition.signatures.build(attributes) }
+
+        it "returns nil" do
+          expect(signature.find_duplicate).to be_nil
+        end
+      end
+
+      context "but the email is a different case" do
+        let(:email) { "FOO@example.com" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+    end
+
+    context "when two signatures already exists with the same email address" do
+      before do
+        petition.signatures.create!(
+          name: "Suzy Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
+
+        petition.signatures.create!(
+          name: "Sam Signer",
+          email: "foo@example.com",
+          postcode: "SW1A 1AA",
+          location_code: "GB",
+          uk_citizenship: "1"
+        )
+      end
+
+      context "and the name is the same" do
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+
+      context "and the name is different" do
+        let(:name) { "Sue Signer" }
+
+        it "returns the signature" do
+          expect(signature.find_duplicate).to be_present
+        end
+      end
+    end
+  end
+
+  describe "#find_duplicate!" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:signature) { petition.signatures.build(attributes) }
+
+    let(:attributes) do
+      {
+        name: "Suzy Signer",
+        email: "foo@example.com",
+        postcode: "SW1A 1AA",
+        location_code: "GB",
+        uk_citizenship: "1"
+      }
+    end
+
+    context "when a duplicate signature doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect { signature.find_duplicate! }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when a duplicate signature does exist" do
+      before do
+        petition.signatures.create!(attributes)
+      end
+
+      it "returns the signature" do
+        expect(signature.find_duplicate!).to be_present
+      end
+    end
+  end
+end

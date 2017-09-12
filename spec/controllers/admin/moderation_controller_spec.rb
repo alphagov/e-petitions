@@ -8,7 +8,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
     let(:petition) do
       FactoryGirl.create(:pending_petition,
-        creator_signature_attributes: {
+        creator_attributes: {
           name: "Barry Butler",
           email: "bazbutler@gmail.com"
         },
@@ -45,7 +45,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         before do
           perform_enqueued_jobs do
-            sponsor.signature.validate!
+            sponsor.validate!
             do_patch moderation: 'approve'
             petition.reload
           end

@@ -1,387 +1,856 @@
 require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
-  context 'GET show' do
-    let(:petition) { FactoryGirl.create(:petition) }
+  before do
+    constituency = FactoryGirl.create(:constituency, :london_and_westminster)
+    allow(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(constituency)
+  end
 
-    it 'fetches the requested petition' do
-      get :show, petition_id: petition, token: petition.sponsor_token
-      expect(assigns[:petition]).to eq petition
-    end
-
-    # TODO: check for invalid petition states?
-    it '404s if the requested petition does not exist' do
-      petition_param = petition.to_param
-      petition.destroy
-      expect {
-        get :show, petition_id: petition_param, token: petition.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
-
-    it '404s if the requested token belongs to a different petition' do
-      petition_2 = FactoryGirl.create(:petition)
-      expect {
-        get :show, petition_id: petition, token: petition_2.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
-
-    it 'renders the form' do
-      get :show, petition_id: petition, token: petition.sponsor_token
-      expect(response).to render_template :show
-    end
-
-    it 'builds a new sponsor for the petition identified by the token' do
-      get :show, petition_id: petition, token: petition.sponsor_token
-      expect(assigns[:sponsor]).to be_new_record
-      expect(assigns[:sponsor].petition).to eq petition
-    end
-
-    it 'builds a signature for the sponsor' do
-      get :show, petition_id: petition, token: petition.sponsor_token
-      expect(assigns[:stage_manager].signature).to be_present
-      expect(assigns[:stage_manager].signature.petition).to eq petition
-    end
-
-    it 'redirects to petition page when the petition is closed' do
-      closed_petition = FactoryGirl.create(:closed_petition)
-      get :show, petition_id: closed_petition, token: closed_petition.sponsor_token
-      redirect_url = "https://petition.parliament.uk/petitions/#{closed_petition.id}"
-      expect(response).to redirect_to redirect_url
-    end
-
-    it 'redirects to petition page when the petition is rejected' do
-      rejected_petition = FactoryGirl.create(:rejected_petition)
-      get :show, petition_id: rejected_petition, token: rejected_petition.sponsor_token
-      redirect_url = "https://petition.parliament.uk/petitions/#{rejected_petition.id}"
-      expect(response).to redirect_to redirect_url
-    end
-
-    it 'redirects to petition view page if the petition is already published' do
-      published_petition = FactoryGirl.create(:open_petition)
-      get :show, petition_id: published_petition, token: published_petition.sponsor_token
-      redirect_url = "https://petition.parliament.uk/petitions/#{published_petition.id}"
-      expect(response).to redirect_to redirect_url
-    end
-
-    it 'redirects to 404 if the petition is hidden' do
-      hidden_petition = FactoryGirl.create(:hidden_petition)
-      expect {
-        get :show, petition_id: hidden_petition, token: hidden_petition.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
-
-    context 'creator signature is pending' do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { petition.creator_signature }
-
-      it 'validates the creator signature' do
+  describe "GET /petitions/:petition_id/sponsors/new" do
+    context "when the petition doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :show, petition_id: petition.id, token: petition.sponsor_token
-        }.to change{ signature.reload.validated? }.from(false).to(true)
+          get :new, petition_id: 1, token: 'token'
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
-    context 'petition has reached maximum amount of sponsors' do
-      it 'redirects to petition moderation info page when petition is in sponsored state' do
-        sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: sponsored_petition, token: sponsored_petition.sponsor_token
-        redirect_url = "https://petition.parliament.uk/petitions/#{sponsored_petition.id}/moderation-info"
-        expect(response).to redirect_to redirect_url
-      end
+    context "when the token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
 
-      it 'redirects to petition moderation info page when petition is in validated state' do
-        validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: validated_petition, token: validated_petition.sponsor_token
-        redirect_url = "https://petition.parliament.uk/petitions/#{validated_petition.id}/moderation-info"
-        expect(response).to redirect_to redirect_url
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :new, petition_id: petition.id, token: 'token'
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
+    end
 
-      it 'redirects to petition moderation info page when petition is in pending state' do
-        pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
-        get :show, petition_id: pending_petition, token: pending_petition.sponsor_token
-        redirect_url = "https://petition.parliament.uk/petitions/#{pending_petition.id}/moderation-info"
-        expect(response).to redirect_to redirect_url
+    context "when the creator's signature has not been validated" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:creator) { petition.creator }
+
+      it "validates the creator's signature" do
+        expect {
+          get :new, petition_id: petition.id, token: petition.sponsor_token
+        }.to change {
+          creator.reload.validated?
+        }.from(false).to(true)
+      end
+    end
+
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            get :new, petition_id: petition.id, token: petition.sponsor_token
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        before do
+          get :new, petition_id: petition.id, token: petition.sponsor_token
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}")
+        end
+      end
+    end
+
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        before do
+          get :new, petition_id: petition.id, token: petition.sponsor_token
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "assigns the @signature instance variable with a new signature" do
+          expect(assigns[:signature]).not_to be_persisted
+        end
+
+        it "sets the signature's location_code to 'GB'" do
+          expect(assigns[:signature].location_code).to eq("GB")
+        end
+
+        it "renders the sponsors/new template" do
+          expect(response).to render_template("sponsors/new")
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          it "doesn't redirect to the petition moderation info page" do
+            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+          it "redirects to the petition moderation info page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
       end
     end
   end
 
-  context 'PATCH update' do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:signature_params) {
+  describe "POST /petitions/:petition_id/sponsors/new" do
+    let(:params) do
       {
-        name: 'S. Ponsor',
-        email: 's.ponsor@example.com',
-        postcode: 'SP11NR',
-        location_code: 'GB',
-        uk_citizenship: '1',
-        notify_by_email: '0'
+        name: "Ted Berry",
+        email: "ted@example.com",
+        uk_citizenship: "1",
+        postcode: "SW1A 1AA",
+        location_code: "GB"
       }
-    }
-
-    let(:constituency) do
-      FactoryGirl.create(
-        :constituency, external_id: '54321', name: 'Sponsor-upon-petition'
-      )
     end
 
-    def do_patch(options = {})
-      params = {
-        petition_id: petition,
-        token: petition.sponsor_token,
-        signature: signature_params,
-        stage: 'replay-email',
-        move: 'next'
-      }.merge(options)
-
-      allow(Constituency).to receive(:find_by_postcode).with("SP11NR").and_return(constituency)
-
-      perform_enqueued_jobs do
-        patch :update, params
+    context "when the petition doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :confirm, petition_id: 1, token: 'token', signature: params
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
-    let(:signature) { petition.signatures.for_email('s.ponsor@example.com').first }
+    context "when the token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
 
-    context 'managing the "move" parameter' do
-      it 'defaults to "next" if it is not present' do
-        do_patch :move => nil
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'defaults to "next" if it is present but blank' do
-        do_patch :move => ''
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "next" if it is present but not "next" or "back"' do
-        do_patch :move => 'blah'
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "next" if "move:next" is present' do
-        do_patch :move => 'blah', :'move:next' => 'Onwards!'
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "back" if "move:back" is present' do
-        do_patch :move => 'blah', :'move:back' => 'Backwards!'
-        expect(controller.params['move']).to eq 'back'
-      end
-
-      it 'overrides it to "next" if both "move:next" and "move:back" are present' do
-        do_patch :move => 'blah',  :'move:next' => 'Onwards!', :'move:back' => 'Backwards!'
-        expect(controller.params['move']).to eq 'next'
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :confirm, petition_id: petition.id, token: 'token', signature: params
+        }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
-    it '404s if the requested petition does not exist' do
-      petition_param = petition.to_param
-      petition.destroy
-      expect {
-        do_patch
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
 
-    it '404s if the requested token belongs to a different petition' do
-      petition_2 = FactoryGirl.create(:petition)
-      expect {
-        do_patch token: petition_2.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
-    end
-
-    context 'with valid signature params' do
-      it 'creates a sponsor signature for the petition with the supplied params' do
-        do_patch
-        expect(signature).to be_present
-        expect(signature).to be_sponsor
-        expect(signature.name).to eq signature_params[:name]
-        expect(signature.postcode).to eq signature_params[:postcode]
-        expect(signature.location_code).to eq signature_params[:location_code]
-        expect(signature.notify_by_email).to eq true
-        expect(petition.sponsors.for(signature)).to be_present
-      end
-
-      it 'creates the signature in the pending state' do
-        do_patch
-        expect(signature).to be_pending
-        expect(signature.perishable_token).not_to be_nil
-      end
-
-      it "sets the constituency_id on the creator signature, based on the postcode" do
-        do_patch
-        expect(signature.constituency_id).to eq("54321")
-      end
-
-      it 'redirects to the thank you page' do
-        do_patch
-        redirect_url = "https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/thank-you"
-        expect(response).to redirect_to redirect_url
-      end
-
-      it "allows overriding of the email via params" do
-        signature_params[:email] = 'not-the-sponsors-email-address@example.com'
-        do_patch
-        expect(signature).to be_nil
-        created_signature = petition.signatures.for_email('not-the-sponsors-email-address@example.com').first
-        expect(created_signature).to be_present
-      end
-
-      it "overrides the petition of the signature, no matter what has been passed in" do
-        signature_params[:petition_id] = (petition.id + 1000).to_s
-        do_patch
-        expect(signature.petition).to eq petition
-      end
-
-      it "ignores attempts to set the state of signature" do
-        signature_params[:state] = 'not-a-state'
-        do_patch
-        expect(signature).to be_pending
-      end
-
-      it "emails the sponsor" do
-        do_patch
-        email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq(['s.ponsor@example.com'])
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            post :confirm, petition_id: petition.id, token: petition.sponsor_token, signature: params
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
       end
     end
 
-    context 'with invalid signature params' do
-      before { signature_params[:name] = '' }
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
 
-      it 'does not persist the signature' do
-        do_patch
-        expect(signature).not_to be_present
-        expect(assigns[:stage_manager].signature).not_to be_persisted
-      end
+        before do
+          post :confirm, petition_id: petition.id, token: petition.sponsor_token, signature: params
+        end
 
-      it 'renders the form again' do
-        do_patch
-        expect(response).to render_template :show
-      end
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
 
-      it "has stage of 'signer' if there are errors on name, uk_citizenship, postcode or country" do
-        do_patch signature: signature_params.merge(:name => '')
-        expect(assigns[:stage_manager].stage).to eq 'signer'
-        do_patch signature: signature_params.merge(:uk_citizenship => '')
-        expect(assigns[:stage_manager].stage).to eq 'signer'
-        do_patch signature: signature_params.merge(:postcode => '')
-        expect(assigns[:stage_manager].stage).to eq 'signer'
-        do_patch signature: signature_params.merge(:location_code => '')
-        expect(assigns[:stage_manager].stage).to eq 'signer'
-      end
-
-      it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
-        new_signature_params = signature_params.merge(:email => 'foo@')
-        do_patch stage: 'replay-email',
-                 signature: new_signature_params
-        expect(assigns[:stage_manager].stage).to eq 'replay-email'
-      end
-
-      it "has stage of 'creator' if there are errors on email and we came from 'signer' stage" do
-        new_signature_params = signature_params.merge(:email => 'foo@')
-        do_patch stage: 'signer',
-                 signature: new_signature_params
-        expect(assigns[:stage_manager].stage).to eq 'signer'
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}")
+        end
       end
     end
 
-    context "when a race condition occurs" do
-      let(:exception) { ActiveRecord::RecordNotUnique.new("PG::UniqueViolation") }
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
 
-      before do
-        FactoryGirl.create(:sponsor, :validated, petition: petition)
-        allow_any_instance_of(Signature).to receive(:save).and_raise(exception)
-      end
+        before do
+          post :confirm, petition_id: petition.id, token: petition.sponsor_token, signature: params
+        end
 
-      it "redirects to the thank you page" do
-        do_patch
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/thank-you")
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "assigns the @signature instance variable with a new signature" do
+          expect(assigns[:signature]).not_to be_persisted
+        end
+
+        it "sets the signature's params" do
+          expect(assigns[:signature].name).to eq("Ted Berry")
+          expect(assigns[:signature].email).to eq("ted@example.com")
+          expect(assigns[:signature].uk_citizenship).to eq("1")
+          expect(assigns[:signature].postcode).to eq("SW1A1AA")
+          expect(assigns[:signature].location_code).to eq("GB")
+        end
+
+        it "records the IP address on the signature" do
+          expect(assigns[:signature].ip_address).to eq("0.0.0.0")
+        end
+
+        it "renders the sponsors/confirm template" do
+          expect(response).to render_template("sponsors/confirm")
+        end
+
+        context "and the params are invalid" do
+          let(:params) do
+            {
+              name: "Ted Berry",
+              email: "",
+              uk_citizenship: "1",
+              postcode: "12345",
+              location_code: "GB"
+            }
+          end
+
+          it "renders the sponsors/new template" do
+            expect(response).to render_template("sponsors/new")
+          end
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          it "doesn't redirect to the petition moderation info page" do
+            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+          it "redirects to the petition moderation info page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
       end
     end
   end
 
-  context 'GET thank-you' do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:pending_signature)) }
-
-    before { signature.present? }
-
-    it 'fetches the requested petition' do
-      get :thank_you, petition_id: petition, token: petition.sponsor_token
-      expect(assigns[:petition]).to eq petition
+  describe "POST /petitions/:petition_id/sponsors" do
+    let(:params) do
+      {
+        name: "Ted Berry",
+        email: "ted@example.com",
+        uk_citizenship: "1",
+        postcode: "SW1A 1AA",
+        location_code: "GB"
+      }
     end
 
-    # TODO: check for invalid petition states?
-    it '404s if the requested petition does not exist' do
-      petition_param = petition.to_param
-      petition.destroy
-      expect {
-        get :thank_you, petition_id: petition_param, token: petition.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
+    context "when the petition doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :create, petition_id: 1, token: 'token', signature: params
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
 
-    it '404s if the requested token belongs to a different petition' do
-      petition_2 = FactoryGirl.create(:petition)
-      expect {
-        get :thank_you, petition_id: petition, token: petition_2.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
+    context "when the token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          post :create, petition_id: petition.id, token: 'token', signature: params
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
 
-    it 'renders the view' do
-      get :thank_you, petition_id: petition, token: petition.sponsor_token
-      expect(response).to render_template :thank_you
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
     end
 
-    context "when the petition has the maximum number of sponsors" do
-      let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
 
-      it "does not redirect to the moderation page" do
-        get :thank_you, petition_id: petition, token: petition.sponsor_token
-        expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+        before do
+          post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}")
+        end
+      end
+    end
+
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        context "and the signature is not a duplicate" do
+          before do
+            perform_enqueued_jobs {
+              post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+            }
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "assigns the @signature instance variable with a saved signature" do
+            expect(assigns[:signature]).to be_persisted
+          end
+
+          it "sets the signature's params" do
+            expect(assigns[:signature].name).to eq("Ted Berry")
+            expect(assigns[:signature].email).to eq("ted@example.com")
+            expect(assigns[:signature].uk_citizenship).to eq("1")
+            expect(assigns[:signature].postcode).to eq("SW1A1AA")
+            expect(assigns[:signature].location_code).to eq("GB")
+          end
+
+          it "records the IP address on the signature" do
+            expect(assigns[:signature].ip_address).to eq("0.0.0.0")
+          end
+
+          it "records the constituency id on the signature" do
+            expect(assigns[:signature].constituency_id).to eq("3415")
+          end
+
+          it "sends a confirmation email" do
+            expect(last_email_sent).to deliver_to("ted@example.com")
+            expect(last_email_sent).to have_subject("Please confirm your email address")
+          end
+
+          it "redirects to the thank you page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/sponsors/thank-you?token=#{petition.sponsor_token}")
+          end
+
+          context "and the params are invalid" do
+            let(:params) do
+              {
+                name: "Ted Berry",
+                email: "",
+                uk_citizenship: "1",
+                postcode: "SW1A 1AA",
+                location_code: "GB"
+              }
+            end
+
+            it "renders the sponsors/new template" do
+              expect(response).to render_template("sponsors/new")
+            end
+          end
+        end
+
+        context "and the signature is a pending duplicate" do
+          let!(:signature) { FactoryGirl.create(:pending_signature, params.merge(petition: petition)) }
+
+          before do
+            perform_enqueued_jobs {
+              post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+            }
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "assigns the @signature instance variable to the original signature" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "re-sends the confirmation email" do
+            expect(last_email_sent).to deliver_to("ted@example.com")
+            expect(last_email_sent).to have_subject("Please confirm your email address")
+          end
+
+          it "redirects to the thank you page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/sponsors/thank-you?token=#{petition.sponsor_token}")
+          end
+        end
+
+        context "and the signature is a validated duplicate" do
+          let!(:signature) { FactoryGirl.create(:validated_signature, params.merge(petition: petition)) }
+
+          before do
+            perform_enqueued_jobs {
+              post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+            }
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "assigns the @signature instance variable to the original signature" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "sends a duplicate signature email" do
+            expect(last_email_sent).to deliver_to("ted@example.com")
+            expect(last_email_sent).to have_subject("Duplicate signature of petition")
+          end
+
+          it "redirects to the thank you page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/sponsors/thank-you?token=#{petition.sponsor_token}")
+          end
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          before do
+            perform_enqueued_jobs {
+              post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+            }
+          end
+
+          it "doesn't redirect to the petition moderation info page" do
+            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+          before do
+            perform_enqueued_jobs {
+              post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
+            }
+          end
+
+          it "redirects to the petition moderation info page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
       end
     end
   end
 
-  context 'GET sponsored' do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { sponsor.create_signature!(FactoryGirl.attributes_for(:validated_signature)) }
-
-    before { signature.present? }
-
-    it 'fetches the requested petition' do
-      get :sponsored, petition_id: petition, token: petition.sponsor_token
-      expect(assigns[:petition]).to eq petition
+  describe "GET /petitions/:petition_id/signatures/thank-you" do
+    context "when the petition doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :thank_you, petition_id: 1, token: 'token'
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
 
-    # TODO: check for invalid petition states?
-    it '404s if the requested petition does not exist' do
-      petition_param = petition.to_param
-      petition.destroy
-      expect {
-        get :sponsored, petition_id: petition_param, token: petition.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
+    context "when the token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :thank_you, petition_id: petition.id, token: 'token'
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
     end
 
-    it '404s if the requested token belongs to a different petition' do
-      petition_2 = FactoryGirl.create(:petition)
-      expect {
-        get :sponsored, petition_id: petition, token: petition_2.sponsor_token
-      }.to raise_error ActiveRecord::RecordNotFound
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            get :thank_you, petition_id: petition.id, token: petition.sponsor_token
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
     end
 
-    it 'renders the view' do
-      get :sponsored, petition_id: petition, token: petition.sponsor_token
-      expect(response).to render_template :sponsored
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+
+        before do
+          get :thank_you, petition_id: petition.id, token: petition.sponsor_token
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "doesn't redirect to the petition page" do
+          expect(response).not_to redirect_to("/petitions/#{petition.id}")
+        end
+
+        it "renders the signatures/thank_you template" do
+          expect(response).to render_template("signatures/thank_you")
+        end
+      end
     end
 
-    context "when the petition has the maximum number of sponsors" do
-      let(:petition) { FactoryGirl.create(:petition, sponsor_count: 19) }
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition) }
 
-      it "does not redirect to the moderation page" do
-        get :sponsored, petition_id: petition, token: petition.sponsor_token
-        expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+        before do
+          get :thank_you, petition_id: petition.id, token: petition.sponsor_token
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "renders the signatures/thank_you template" do
+          expect(response).to render_template("signatures/thank_you")
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          it "doesn't redirect to the petition moderation info page" do
+            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+
+          it "renders the signatures/thank_you template" do
+            expect(response).to render_template("signatures/thank_you")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+          it "doesn't redirect to the petition moderation info page" do
+            expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+
+          it "renders the signatures/thank_you template" do
+            expect(response).to render_template("signatures/thank_you")
+          end
+        end
+      end
+    end
+  end
+
+  describe "GET /sponsors/:id/verify" do
+    context "when the signature doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: 1, token: "token"
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: signature.id, token: "token"
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            get :verify, id: signature.id, token: signature.perishable_token
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+        before do
+          get :verify, id: signature.id, token: signature.perishable_token
+        end
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}")
+        end
+      end
+    end
+
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+        before do
+          get :verify, id: signature.id, token: signature.perishable_token
+        end
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "validates the signature" do
+          expect(assigns[:signature]).to be_validated
+        end
+
+        it "redirects to the signed signature page" do
+          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored?token=#{signature.perishable_token}")
+        end
+
+        context "and the signature has already been validated" do
+          let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, sponsor: true) }
+
+          it "sets the flash :notice message" do
+            expect(flash[:notice]).to eq("You’ve already supported this petition")
+          end
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          it "assigns the @signature instance variable" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "validates the signature" do
+            expect(assigns[:signature]).to be_validated
+          end
+
+          it "redirects to the signed signature page" do
+            expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored?token=#{signature.perishable_token}")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+          it "redirects to the petition moderation info page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+      end
+    end
+  end
+
+  describe "GET /sponsors/:id/sponsored" do
+    context "when the signature doesn't exist" do
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: 1, token: "token"
+        }.to raise_exception(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature token is invalid" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: signature.id, token: "token"
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition, sponsor: true) }
+
+      it "raises an ActiveRecord::RecordNotFound exception" do
+        expect {
+          get :signed, id: signature.id, token: signature.perishable_token
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    %w[flagged hidden stopped].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+
+        it "raises an ActiveRecord::RecordNotFound exception" do
+          expect {
+            get :signed, id: signature.id, token: signature.perishable_token
+          }.to raise_exception(ActiveRecord::RecordNotFound)
+        end
+      end
+    end
+
+    %w[open closed rejected].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+
+        before do
+          get :signed, id: signature.id, token: signature.perishable_token
+        end
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "doesn't redirect to the petition page" do
+          expect(response).not_to redirect_to("/petitions/#{petition.id}")
+        end
+
+        it "renders the sponsors/signed template" do
+          expect(response).to render_template("sponsors/signed")
+        end
+      end
+    end
+
+    %w[pending validated sponsored].each do |state|
+      context "when the petition is #{state}" do
+        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+
+        before do
+          get :signed, id: signature.id, token: signature.perishable_token
+        end
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "marks the signature has having seen the confirmation page" do
+          expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+        end
+
+        it "renders the sponsors/signed template" do
+          expect(response).to render_template("sponsors/signed")
+        end
+
+        context "and the signature has not been validated" do
+          let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+
+          it "redirects to the verify page" do
+            expect(response).to redirect_to("/sponsors/#{signature.id}/verify?token=#{signature.perishable_token}")
+          end
+        end
+
+        context "and the signature has already seen the confirmation page" do
+          let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, sponsor: true) }
+
+          it "assigns the @signature instance variable" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "renders the sponsors/signed template" do
+            expect(response).to render_template("sponsors/signed")
+          end
+        end
+
+        context "and has one remaining sponsor slot" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 2, sponsors_signed: true) }
+
+          it "assigns the @signature instance variable" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "marks the signature has having seen the confirmation page" do
+            expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+          end
+
+          it "renders the sponsors/signed template" do
+            expect(response).to render_template("sponsors/signed")
+          end
+        end
+
+        context "and has reached the maximum number of sponsors" do
+          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+          it "assigns the @signature instance variable" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "marks the signature has having seen the confirmation page" do
+            expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+          end
+
+          it "renders the sponsors/signed template" do
+            expect(response).to render_template("sponsors/signed")
+          end
+        end
       end
     end
   end

@@ -1,38 +1,60 @@
 class SignaturesController < ApplicationController
-  include ManagingMoveParameter
-
-  before_action :retrieve_petition, only: [:new, :create, :thank_you]
+  before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
   before_action :verify_token, only: [:verify, :signed]
   before_action :verify_unsubscribe_token, only: [:unsubscribe]
-  before_action :redirect_to_petition_page, if: :petition_closed?, only: [:new, :create, :verify]
+  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
+  before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
   before_action :redirect_to_verify_page, unless: :signature_validated?, only: [:signed]
   before_action :do_not_cache
 
-  respond_to :html
+  rescue_from ActiveRecord::RecordNotUnique do |exception|
+    @signature = @signature.find_duplicate!
+    send_email_to_petition_signer
+
+    redirect_to thank_you_url
+  end
+
+  rescue_from ActiveRecord::RecordInvalid do |exception|
+    respond_to do |format|
+      format.html { render :new }
+    end
+  end
 
   def new
-    assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
-    respond_with @stage_manager.stage_object
+    @signature = build_signature(signature_params_for_new)
+
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def confirm
+    @signature = build_signature(signature_params_for_create)
+
+    respond_to do |format|
+      format.html { render(@signature.valid? ? :confirm : :new) }
+    end
   end
 
   def create
-    matching_signatures = find_existing_pending_signatures
+    @signature = build_signature(signature_params_for_create)
 
-    if matching_signatures.any?
-      handle_existing_signatures(matching_signatures, @petition)
-    else
-      handle_new_signature(@petition)
+    if @signature.save!
+      store_constituency_id
+      send_email_to_petition_signer
+
+      redirect_to thank_you_url
     end
   end
 
   def signed
     if @signature.seen_signed_confirmation_page?
-      redirect_to petition_url @signature.petition
+      redirect_to petition_url(@petition)
     else
       @signature.mark_seen_signed_confirmation_page!
-      @petition = @signature.petition
+
       respond_to do |format|
         format.html
       end
@@ -40,15 +62,18 @@ class SignaturesController < ApplicationController
   end
 
   def verify
-    if @signature.sponsor?
-      validate_sponsor
+    if @signature.validated?
+      flash[:notice] = "You’ve already signed this petition"
     else
-      validate_signature
+      @signature.validate!
     end
+
+    redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
   end
 
   def unsubscribe
     @signature.unsubscribe!(token_param)
+
     respond_to do |format|
       format.html
     end
@@ -63,7 +88,7 @@ class SignaturesController < ApplicationController
   private
 
   def token_param
-    @token_param ||= (params[:token] || params[:legacy_token]).to_s
+    @token_param ||= params[:token].to_s
   end
 
   def verify_token
@@ -86,99 +111,80 @@ class SignaturesController < ApplicationController
     @signature = Signature.find(params[:id])
     @petition = @signature.petition
 
+    unless @petition.visible?
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+    end
+
     if @signature.invalidated? || @signature.fraudulent?
       raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
     end
   end
 
-  def redirect_to_petition_page
-    redirect_to petition_url(@petition)
+  def build_signature(attributes)
+    @petition.signatures.build(attributes) { |s| s.ip_address = request.remote_ip }
+  end
+
+  def thank_you_url
+    thank_you_petition_signatures_url(@petition)
+  end
+
+  def verify_url
+    verify_signature_url(@signature, token: @signature.perishable_token)
+  end
+
+  def redirect_to_petition_page_if_rejected
+    if @petition.rejected?
+      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been rejected"
+    end
+  end
+
+  def redirect_to_petition_page_if_closed
+    if @petition.closed?
+      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+    end
+  end
+
+  def redirect_to_petition_page_if_closed_for_signing
+    if @petition.closed_for_signing?
+      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+    end
   end
 
   def redirect_to_verify_page
-    redirect_to verify_signature_url(@signature, token: @signature.perishable_token)
-  end
-
-  def petition_closed?
-    @petition && @petition.closed?
+    redirect_to verify_url
   end
 
   def signature_validated?
-    @signature && @signature.validated?
+    @signature.validated?
   end
 
-  def send_email_to_petition_signer(signature)
-    EmailConfirmationForSignerEmailJob.perform_later(signature)
+  def store_constituency_id
+    @signature.store_constituency_id
   end
 
-  def assign_stage
-    return if Staged::PetitionSigner.stages.include? params[:stage]
-    params[:stage] = 'signer'
+  def send_email_to_petition_signer
+    unless @signature.email_threshold_reached?
+      if @signature.pending?
+        EmailConfirmationForSignerEmailJob.perform_later(@signature)
+      else
+        EmailDuplicateSignaturesEmailJob.perform_later(@signature)
+      end
+    end
   end
 
   def signature_params_for_new
-    {location_code: 'GB'}
+    { location_code: "GB" }
+  end
+
+  def signature_params
+    params.require(:signature).permit(*signature_attributes)
   end
 
   def signature_params_for_create
-    @_signature_params_for_create ||=
-      params.
-        require(:signature).
-        permit(:name, :email, :email_confirmation,
-               :postcode, :location_code, :uk_citizenship)
+    signature_params.merge(ip_address: request.remote_ip)
   end
 
-  def find_existing_pending_signatures
-    @signature = Signature.new(signature_params_for_create)
-    @signature.email.strip!
-    @signature.petition = @petition
-    Signature.pending.matching(@signature)
-  end
-
-  def handle_existing_signatures(signatures, petition)
-    signatures.each { |sig| send_email_to_petition_signer(sig) }
-    redirect_to thank_you_petition_signatures_url(petition)
-  end
-
-  def handle_new_signature(petition)
-    assign_move
-    assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, request, petition, params[:stage], params[:move])
-    if @stage_manager.create_signature
-      @stage_manager.signature.store_constituency_id
-      send_email_to_petition_signer(@stage_manager.signature)
-      respond_with @stage_manager.stage_object, :location => thank_you_petition_signatures_url(petition)
-    else
-      respond_to do |format|
-        format.html { render :new }
-      end
-    end
-  rescue ActiveRecord::RecordNotUnique => e
-    redirect_to thank_you_petition_signatures_url(petition)
-  end
-
-  def validate_sponsor
-    if @signature.validated?
-      flash[:notice] = "You've already supported this petition."
-      redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
-    else
-      @signature.validate!
-
-      if @signature.petition.open?
-        redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
-      else
-        redirect_to sponsored_petition_sponsor_url(@signature.petition, token: @signature.petition.sponsor_token)
-      end
-    end
-  end
-
-  def validate_signature
-    if @signature.validated?
-      flash[:notice] = "You've already signed this petition"
-    else
-      @signature.validate!
-    end
-    redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
+  def signature_attributes
+    %i[name email email_confirmation postcode location_code uk_citizenship]
   end
 end
-

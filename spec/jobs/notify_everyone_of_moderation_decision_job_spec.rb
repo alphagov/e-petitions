@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
   let(:petition) { FactoryGirl.create(:pending_petition, sponsor_count: 0) }
-  let(:creator) { petition.creator_signature }
-  let(:validated_sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition).signature }
-  let(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition).signature }
+  let(:creator) { petition.creator }
+  let(:validated_sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition) }
+  let(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
 
   context "when the petition is published" do
     before do

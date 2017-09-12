@@ -57,23 +57,30 @@ Feature: Suzie signs a petition
     And I try to sign
     Then I should see an error
 
-  Scenario: Suzie cannot sign if she has already signed and validated
+  Scenario: Suzie receives a duplicate signature email if she tries to sign but she has already signed and validated
     When I have already signed the petition with an uppercase email
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
-    Then I should see an error
+    And I say I am happy with my email address
+    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
+
+  Scenario: Suzie receives a duplicate signature email if she changes to her original email but she has already signed and validated
+    When I have already signed the petition with an uppercase email
+    And I decide to sign the petition
+    And I fill in my details
     And I fill in my details with email "womboidian@wimbledon.com"
     And I try to sign
     When I change my email address to "womboid@wimbledon.com"
     And I say I am happy with my email address
-    Then I should see an error
+    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives another email if she has already signed but not validated
     When I have already signed the petition but not validated my email
     And I decide to sign the petition
     And I fill in my details
     And I try to sign
+    And I say I am happy with my email address
     Then the signature count stays at 2
     And I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
@@ -142,11 +149,28 @@ Feature: Suzie signs a petition
     When I say I am happy with my email address
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
-    When the petition has closed
+    When the petition has closed some time ago
     And I confirm my email address
     Then I should be on the petition page
     And I should see "This petition is closed"
     And I should see "1 signature"
+
+  Scenario: Suzie can validate her signature when the petition has closed recently
+    Given I am on the new signature page
+    When I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    When the petition has closed
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "This petition is closed"
+    And I should see "2 signatures"
 
   Scenario: Suzie cannot validate her signature when IP address is rate limited
     Given the burst rate limit is 1 per minute

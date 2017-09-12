@@ -10,7 +10,7 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
   let(:notification_cutoff_at) { "2017-03-31T23:00:00Z".in_time_zone }
   let(:job) { Delayed::Job.last }
   let(:jobs) { Delayed::Job.all.to_a }
-  let(:creator) { petition.creator_signature }
+  let(:creator) { petition.creator }
 
   let!(:petition) do
     FactoryGirl.create(

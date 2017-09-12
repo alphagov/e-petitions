@@ -33,7 +33,6 @@ class Petition < ActiveRecord::Base
   has_perishable_token called: 'sponsor_token'
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
-  after_create :set_petition_on_creator_signature
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
@@ -65,8 +64,8 @@ class Petition < ActiveRecord::Base
   facet :overdue_in_moderation,        -> { overdue_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
 
-  belongs_to :creator_signature, class_name: 'Signature'
-  accepts_nested_attributes_for :creator_signature, update_only: true
+  has_one :creator, -> { where(creator: true) }, class_name: 'Signature'
+  accepts_nested_attributes_for :creator, update_only: true
 
   belongs_to :locked_by, class_name: 'AdminUser'
 
@@ -77,20 +76,21 @@ class Petition < ActiveRecord::Base
   has_one :rejection, dependent: :destroy
 
   has_many :signatures
-  has_many :sponsors
-  has_many :sponsor_signatures, :through => :sponsors, :source => :signature
-  has_many :country_petition_journals, :dependent => :destroy
-  has_many :constituency_petition_journals, :dependent => :destroy
-  has_many :emails, :dependent => :destroy
+  has_many :sponsors, -> { where(sponsor: true) }, class_name: 'Signature'
+  has_many :country_petition_journals, dependent: :destroy
+  has_many :constituency_petition_journals, dependent: :destroy
+  has_many :emails, dependent: :destroy
   has_many :invalidations
 
-  include Staged::Validations::PetitionDetails
-  validates_presence_of :open_at, if: :open?
-  validates_presence_of :creator_signature, on: :create
-  validates_inclusion_of :state, in: STATES
+  validates :action, presence: true, length: { maximum: 80, allow_blank: true }
+  validates :background, presence: true, length: { maximum: 300, allow_blank: true }
+  validates :additional_details, length: { maximum: 800, allow_blank: true }
+  validates :open_at, presence: true, if: :open?
+  validates :creator, presence: true
+  validates :state, inclusion: { in: STATES }
 
   with_options allow_nil: true, prefix: true do
-    delegate :name, :email, to: :creator_signature, prefix: :creator
+    delegate :name, :email, to: :creator
     delegate :code, :details, to: :rejection
     delegate :summary, :details, :created_at, :updated_at, to: :government_response
     delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
@@ -310,7 +310,7 @@ class Petition < ActiveRecord::Base
     end
 
     def in_need_of_stopping(time = nil)
-      scope = preload(:creator_signature)
+      scope = preload(:creator)
       time ? scope.stoppable.created_after(time) : scope.stoppable
     end
 
@@ -590,9 +590,9 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def validate_creator_signature!
+  def validate_creator!
     if pending?
-      creator_signature && creator_signature.validate! && reload
+      creator && creator.validate! && reload
     end
   end
 
@@ -647,6 +647,14 @@ class Petition < ActiveRecord::Base
 
   def published?
     state.in?(PUBLISHED_STATES)
+  end
+
+  def visible?
+    state.in?(VISIBLE_STATES)
+  end
+
+  def closed_for_signing?(now = Time.current)
+    closed_at? && closed_at < 24.hours.ago(now)
   end
 
   def archiving?
@@ -715,11 +723,6 @@ class Petition < ActiveRecord::Base
     open_at && dissolution_at ? deadline > dissolution_at : false
   end
 
-  # need this callback since the relationship is circular
-  def set_petition_on_creator_signature
-    creator_signature.update_attribute(:petition_id, id)
-  end
-
   def cache_key(*timestamp_names)
     case
     when new_record?
@@ -742,12 +745,8 @@ class Petition < ActiveRecord::Base
     Site.touch(:last_petition_created_at)
   end
 
-  def supporting_sponsors_count
-    sponsors.supporting_the_petition.count
-  end
-
   def has_maximum_sponsors?
-    sponsors.count >= Site.maximum_number_of_sponsors && state.in?(STOP_COLLECTING_STATES)
+    sponsors.validated.count >= Site.maximum_number_of_sponsors
   end
 
   def update_all(updates)

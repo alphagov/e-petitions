@@ -11,6 +11,7 @@ class EmailConfirmationForSignerEmailJob < EmailJob
       signature.fraudulent!
     else
       mailer.send(email, signature).deliver_now
+      Signature.increment_counter(:email_count, signature.id)
     end
   end
 

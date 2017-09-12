@@ -204,22 +204,18 @@ FactoryGirl.define do
     transient do
       admin_notes { nil }
       creator_name { nil }
-      creator_signature_attributes { {} }
-      sponsors_signed false
+      creator_attributes { {} }
+      sponsors_signed nil
       sponsor_count { Site.minimum_number_of_sponsors }
     end
 
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
-    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::VALIDATED_STATE, :validated_at => Time.current)) }
+    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::VALIDATED_STATE, validated_at: Time.current)) }
 
     after(:build) do |petition, evaluator|
-      evaluator.sponsor_count.times do
-        sponsor = petition.sponsors.build(FactoryGirl.attributes_for(:sponsor))
-      end
-
       if petition.signature_count.zero?
-        petition.signature_count += 1 if petition.creator_signature.validated?
+        petition.signature_count += 1 if petition.creator.validated?
       end
 
       if evaluator.admin_notes
@@ -227,14 +223,18 @@ FactoryGirl.define do
       end
 
       if evaluator.creator_name
-        petition.creator_signature.name = evaluator.creator_name
+        petition.creator.name = evaluator.creator_name
       end
     end
 
     after(:create) do |petition, evaluator|
-      if evaluator.sponsors_signed
-        petition.sponsors.each do |sp|
-          sp.create_signature!(FactoryGirl.attributes_for(:validated_signature))
+      unless evaluator.sponsors_signed.nil?
+        evaluator.sponsor_count.times do
+          if evaluator.sponsors_signed
+            FactoryGirl.create(:sponsor, :validated, petition: petition)
+          else
+            FactoryGirl.create(:sponsor, :pending, petition: petition)
+          end
         end
 
         petition.update_signature_count!
@@ -285,8 +285,8 @@ FactoryGirl.define do
   end
 
   factory :pending_petition, :parent => :petition do
-    state  Petition::PENDING_STATE
-    creator_signature  { |cs| cs.association(:signature, creator_signature_attributes.merge(:state => Signature::PENDING_STATE)) }
+    state Petition::PENDING_STATE
+    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::PENDING_STATE)) }
   end
 
   factory :validated_petition, :parent => :petition do
@@ -455,19 +455,19 @@ FactoryGirl.define do
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
 
-  factory :sponsor do
-    transient do
-      email { generate(:sponsor_email) }
-    end
-
-    association :petition
+  factory :sponsor, parent: :pending_signature do
+    sponsor true
 
     trait :pending do
-      signature  { |s| s.association(:pending_signature, petition: s.petition, email: s.email) }
+      state "pending"
     end
 
     trait :validated do
-      signature  { |s| s.association(:validated_signature, petition: s.petition, email: s.email) }
+      state "validated"
+    end
+
+    trait :just_signed do
+      seen_signed_confirmation_page false
     end
   end
 
@@ -536,6 +536,17 @@ FactoryGirl.define do
       example_postcode "S61AR"
     end
 
+    trait(:london_and_westminster) do
+      name "Cities of London and Westminster"
+      slug "cities-of-london-and-westminster"
+      external_id "3415"
+      ons_code "E14000639"
+      mp_id "1405"
+      mp_name "Rt Hon Mark Field MP"
+      mp_date "2017-06-08"
+      example_postcode "SW1A1AA"
+    end
+
     england
 
     name { Faker::Address.county }
@@ -546,12 +557,12 @@ FactoryGirl.define do
   end
 
   factory :constituency_petition_journal do
-    constituency_id { generate(:constituency_id) }
+    constituency_id "3415"
     association :petition
   end
 
   factory :country_petition_journal do
-    association :location
+    location_code "GB"
     association :petition
   end
 

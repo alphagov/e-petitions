@@ -1,47 +1,27 @@
-class SponsorsController < ApplicationController
-  include ManagingMoveParameter
+class SponsorsController < SignaturesController
+  skip_before_filter :redirect_to_petition_page_if_rejected
+  skip_before_filter :redirect_to_petition_page_if_closed
+  skip_before_filter :redirect_to_petition_page_if_closed_for_signing
 
-  before_action :retrieve_petition
-  before_action :redirect_to_petition_url, if: :moderated?, except: [:sponsored, :thank_you]
-  before_action :redirect_to_moderation_info_url, if: :has_maximum_sponsors?, except: [:sponsored, :thank_you]
-  before_action :validate_creator_signature, only: %i[show]
-  before_action :do_not_cache
+  before_action :redirect_to_petition_page_if_moderated, except: [:thank_you, :signed]
+  before_action :redirect_to_moderation_info_page_if_sponsored, except: [:thank_you, :signed]
+  before_action :validate_creator, only: [:new]
 
-  respond_to :html
-
-  def show
-    assign_stage
-    @sponsor = @petition.sponsors.build
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_new, request, @petition, params[:stage], params[:move])
-    respond_with @sponsor
-  end
-
-  def update
-    assign_move
-    assign_stage
-    @stage_manager = Staged::PetitionSigner.manage(signature_params_for_create, request, @petition, params[:stage], params[:move])
-    if @stage_manager.create_signature
-      @signature = @stage_manager.signature
-      @signature.store_constituency_id
-      @sponsor = @petition.sponsors.create(signature: @signature)
-      send_email_to_sponsor(@sponsor)
-      redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
+  def verify
+    if @signature.validated?
+      flash[:notice] = "You’ve already supported this petition"
     else
-      respond_to do |format|
-        format.html { render :show }
-      end
+      @signature.validate!
     end
-  rescue ActiveRecord::RecordNotUnique => e
-    redirect_to thank_you_petition_sponsor_url(@petition, token: @petition.sponsor_token)
+
+    redirect_to signed_sponsor_url(@signature, token: @signature.perishable_token)
   end
 
-  def thank_you
-    respond_to do |format|
-      format.html
+  def signed
+    unless @signature.seen_signed_confirmation_page?
+      @signature.mark_seen_signed_confirmation_page!
     end
-  end
 
-  def sponsored
     respond_to do |format|
       format.html
     end
@@ -51,48 +31,64 @@ class SponsorsController < ApplicationController
 
   def retrieve_petition
     @petition = Petition.not_hidden.find_by!(sponsor_token_and_id)
+
+    if @petition.flagged? || @petition.stopped?
+      raise ActiveRecord::RecordNotFound, "Unable to find Petition with id: #{params[:petition_id]}"
+    end
   end
 
   def sponsor_token_and_id
     { sponsor_token: params[:token].to_s, id: params[:petition_id].to_i }
   end
 
-  def redirect_to_petition_url
-    redirect_to petition_url(@petition)
+  def retrieve_signature
+    @signature = Signature.sponsors.find(params[:id])
+    @petition = @signature.petition
+
+    if @petition.flagged? || @petition.hidden? || @petition.stopped?
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+    end
+
+    if @signature.invalidated? || @signature.fraudulent?
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+    end
   end
 
-  def redirect_to_moderation_info_url
-    redirect_to moderation_info_petition_url(@petition)
+  def build_signature(attributes)
+    @petition.sponsors.build(attributes) { |s| s.ip_address = request.remote_ip }
   end
 
-  def moderated?
-    @petition.moderated?
+  def send_email_to_petition_signer
+    unless @signature.email_threshold_reached?
+      if @signature.pending?
+        PetitionAndEmailConfirmationForSponsorEmailJob.perform_later(@signature)
+      else
+        EmailDuplicateSignaturesEmailJob.perform_later(@signature)
+      end
+    end
   end
 
-  def has_maximum_sponsors?
-    @petition.has_maximum_sponsors?
+  def thank_you_url
+    thank_you_petition_sponsors_url(@petition, token: @petition.sponsor_token)
   end
 
-  def validate_creator_signature
-    @petition.validate_creator_signature!
+  def verify_url
+    verify_sponsor_url(@signature, token: @signature.perishable_token)
   end
 
-  def assign_stage
-    return if Staged::PetitionSigner.stages.include? params[:stage]
-    params[:stage] = 'signer'
+  def redirect_to_petition_page_if_moderated
+    if @petition.moderated?
+      redirect_to petition_url(@petition)
+    end
   end
 
-  def signature_params_for_new
-    {location_code: 'GB'}
+  def redirect_to_moderation_info_page_if_sponsored
+    if @petition.has_maximum_sponsors?
+      redirect_to moderation_info_petition_url(@petition)
+    end
   end
 
-  def signature_params_for_create
-    params.
-      require(:signature).
-      permit(:name, :email, :postcode, :location_code, :uk_citizenship)
-  end
-
-  def send_email_to_sponsor(sponsor)
-    PetitionAndEmailConfirmationForSponsorEmailJob.perform_later(sponsor)
+  def validate_creator
+    @petition.validate_creator!
   end
 end

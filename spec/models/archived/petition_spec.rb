@@ -552,7 +552,7 @@ RSpec.describe Archived::Petition, type: :model do
         let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns a fractional number of months assuming that 1 month == 30 days" do
-          expect(petition.duration).to eq(1.5)
+          expect(petition.duration).to be_within(0.1).of(1.5)
         end
       end
     end

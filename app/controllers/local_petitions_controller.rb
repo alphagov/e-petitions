@@ -2,9 +2,6 @@ require 'postcode_sanitizer'
 require 'csv'
 
 class LocalPetitionsController < ApplicationController
-  respond_to :html
-  respond_to :csv, :json, only: [:show, :all]
-
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
   before_action :find_by_slug, only: [:show, :all]
@@ -21,11 +18,19 @@ class LocalPetitionsController < ApplicationController
   end
 
   def show
-    respond_with(@petitions)
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv
+    end
   end
 
   def all
-    respond_with(@petitions)
+    respond_to do |format|
+      format.html
+      format.json
+      format.csv
+    end
   end
 
   private

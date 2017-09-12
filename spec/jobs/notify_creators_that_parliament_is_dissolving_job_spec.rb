@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe NotifyCreatorsThatParliamentIsDissolvingJob, type: :job do
   let(:petition) { FactoryGirl.create(:open_petition, open_at: 3.months.ago) }
-  let(:signature) { petition.creator_signature }
+  let(:signature) { petition.creator }
 
   let(:notify_creator_job) do
     {

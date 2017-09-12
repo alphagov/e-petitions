@@ -155,6 +155,10 @@ Given(/^the petition has closed$/) do
   @petition.close!
 end
 
+Given(/^the petition has closed some time ago$/) do
+  @petition.close!(2.days.ago)
+end
+
 Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
   @petition = FactoryGirl.create(:rejected_petition,
@@ -215,7 +219,7 @@ Then(/^I should see the vote count, closed and open dates$/) do
     expect(page).to have_css("ul.petition-meta", :text => "Date closed " + @petition.closed_at.strftime("%e %B %Y").squish)
   else
     expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
-    expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
+    expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator.name)
   end
 end
 
@@ -230,7 +234,7 @@ Then(/^I should see submitted date$/) do
 end
 
 Then(/^I should not see the petition creator$/) do
-  expect(page).not_to have_css("li.meta-created-by", :text => "Created by " + @petition.creator_signature.name)
+  expect(page).not_to have_css("li.meta-created-by", :text => "Created by " + @petition.creator.name)
 end
 
 Then(/^I should see the reason for rejection$/) do
@@ -256,8 +260,8 @@ Then(/^I can click on a link to return to the petition$/) do
 end
 
 Then(/^I should receive an email telling me how to get an MP on board$/) do
-  expect(unread_emails_for(@petition.creator_signature.email).size).to eq 1
-  open_email(@petition.creator_signature.email)
+  expect(unread_emails_for(@petition.creator.email).size).to eq 1
+  open_email(@petition.creator.email)
   expect(current_email.default_part_body.to_s).to include("MP")
 end
 
@@ -265,7 +269,7 @@ When(/^I am allowed to make the petition action too long$/) do
   # NOTE: we do this to remove the maxlength attribtue on the petition
   # action input because any modern browser/driver will not let us enter
   # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "document.getElementById('petition_action').removeAttribute('maxlength');"
+  page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
 Then(/^the petition with action: "(.*?)" should have requested a government response email after "(.*?)"$/) do |petition_action, timestamp|
@@ -328,7 +332,7 @@ end
 
 Then(/^the petition creator signature should be validated$/) do
   @sponsor_petition.reload
-  expect(@sponsor_petition.creator_signature.state).to eq Signature::VALIDATED_STATE
+  expect(@sponsor_petition.creator.state).to eq Signature::VALIDATED_STATE
 end
 
 Then(/^I can share it via (.+)$/) do |service|

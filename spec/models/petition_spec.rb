@@ -43,7 +43,7 @@ RSpec.describe Petition, type: :model do
   context "validations" do
     it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:creator_signature).with_message(/must be completed/) }
+    it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
 
     it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
     it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 300, null: true) }
@@ -753,7 +753,7 @@ RSpec.describe Petition, type: :model do
     end
 
     before do
-      petition.validate_creator_signature!
+      petition.validate_creator!
     end
 
     it "returns 1 (the creator) for a new petition" do
@@ -953,7 +953,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "open?" do
+  describe "#open?" do
     context "when the state is open" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::OPEN_STATE) }
 
@@ -993,7 +993,36 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "rejected?" do
+  describe "#closed_for_signing?" do
+    let(:now) { Time.current.change(sec: 0) }
+    let(:yesterday) { now - 24.hours }
+
+    context "when the petition closed less than 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday + 1.second) }
+
+      it "returns false" do
+        expect(petition.closed_for_signing?(now)).to be_falsey
+      end
+    end
+
+    context "when the petition closed exactly 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday) }
+
+      it "returns false" do
+        expect(petition.closed_for_signing?(now)).to be_falsey
+      end
+    end
+
+    context "when the petition closed more than 24 hours ago" do
+      let(:petition) { FactoryGirl.create(:closed_petition, closed_at: yesterday - 1.second) }
+
+      it "returns true" do
+        expect(petition.closed_for_signing?(now)).to be_truthy
+      end
+    end
+  end
+
+  describe "#rejected?" do
     context "when the state is rejected" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::REJECTED_STATE) }
 
@@ -1013,7 +1042,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "stopped?" do
+  describe "#stopped?" do
     context "when the state is stopped" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::STOPPED_STATE) }
 
@@ -1033,7 +1062,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "hidden?" do
+  describe "#hidden?" do
     context "when the state is hidden" do
       it "returns true" do
         expect(FactoryGirl.build(:petition, :state => Petition::HIDDEN_STATE).hidden?).to be_truthy
@@ -1051,7 +1080,29 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "flagged?" do
+  describe "#visible?" do
+    context "for moderated states" do
+      Petition::VISIBLE_STATES.each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is visible when state is #{state}" do
+          expect(petition.visible?).to be_truthy
+        end
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - Petition::VISIBLE_STATES).each do |state|
+        let(:petition) { FactoryGirl.build(:petition, state: state) }
+
+        it "is not visible when state is #{state}" do
+          expect(petition.visible?).to be_falsey
+        end
+      end
+    end
+  end
+
+  describe "#flagged?" do
     context "when the state is flagged" do
       let(:petition) { FactoryGirl.build(:petition, state: Petition::FLAGGED_STATE) }
 
@@ -1159,7 +1210,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and closed_at has passed" do
-      let(:open_at) { Site.opened_at_for_closing(2.days.ago) }
+      let(:open_at) { Site.opened_at_for_closing - 1.day }
       let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "does close the petition" do
@@ -1224,7 +1275,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and the closing date has passed" do
-      let(:open_at) { Site.opened_at_for_closing(2.days.ago) }
+      let(:open_at) { Site.opened_at_for_closing - 1.day }
       let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
 
       it "finds the petition" do
@@ -2014,7 +2065,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the creator's signature is now invalid" do
-      let(:creator) { petition.creator_signature }
+      let(:creator) { petition.creator }
 
       before do
         creator.update_column(:email, "jo+123@public.com")
@@ -2134,9 +2185,9 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#validate_creator_signature!" do
+  describe "#validate_creator!" do
     let(:petition) { FactoryGirl.create(:pending_petition, attributes) }
-    let(:signature) { petition.creator_signature }
+    let(:signature) { petition.creator }
 
     around do |example|
       perform_enqueued_jobs do
@@ -2150,23 +2201,23 @@ RSpec.describe Petition, type: :model do
 
     it "changes creator signature state to validated" do
       expect {
-        petition.validate_creator_signature!
+        petition.validate_creator!
       }.to change { signature.reload.validated? }.from(false).to(true)
     end
 
     it "increments the signature count" do
       expect {
-        petition.validate_creator_signature!
+        petition.validate_creator!
       }.to change { petition.signature_count }.by(1)
     end
 
     it "timestamps the petition to say it was updated just now" do
-      petition.validate_creator_signature!
+      petition.validate_creator!
       expect(petition.updated_at).to be_within(1.second).of(Time.current)
     end
 
     it "timestamps the petition to say it was last signed at just now" do
-      petition.validate_creator_signature!
+      petition.validate_creator!
       expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
     end
   end
@@ -2180,44 +2231,55 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#has_maximum_sponsors?' do
-    it 'is true when flagged petition has reached maximum amount of sponsors' do
-      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(flagged_petition.has_maximum_sponsors?).to be_truthy
-    end
+    %w[pending validated sponsored flagged].each do |state|
+      let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }
 
-    it 'is true when sponsored petition has reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_truthy
-    end
+      context "when petition is #{state}" do
+        context "and has less than the maximum number of sponsors" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors - 1 }
+          let(:sponsors_signed) { true }
 
-    it 'is true when validated petition has reached maximum amount of sponsors' do
-      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(validated_petition.has_maximum_sponsors?).to be_truthy
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is true when pending petition has reached maximum amount of sponsors' do
-      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors)
-      expect(pending_petition.has_maximum_sponsors?).to be_truthy
-    end
+        context "and has the maximum number of sponsors, but none have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsors_signed) { false }
 
-    it 'is false when flagged petition has not reached maximum amount of sponsors' do
-      flagged_petition = FactoryGirl.create(:flagged_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(flagged_petition.has_maximum_sponsors?).to be_falsey
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is false when sponsored petition has not reached maximum amount of sponsors' do
-      sponsored_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(sponsored_petition.has_maximum_sponsors?).to be_falsey
-    end
+        context "and has more than the maximum number of sponsors, but none have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsors_signed) { false }
 
-    it 'is false when validated petition has not reached maximum amount of sponsors' do
-      validated_petition = FactoryGirl.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(validated_petition.has_maximum_sponsors?).to be_falsey
-    end
+          it "returns false" do
+            expect(petition.has_maximum_sponsors?).to eq(false)
+          end
+        end
 
-    it 'is false when validated petition has not reached maximum amount of sponsors' do
-      pending_petition = FactoryGirl.create(:pending_petition, sponsor_count: Site.maximum_number_of_sponsors - 1)
-      expect(pending_petition.has_maximum_sponsors?).to be_falsey
+        context "and has the maximum number of sponsors and they have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors }
+          let(:sponsors_signed) { true }
+
+          it "returns true" do
+            expect(petition.has_maximum_sponsors?).to eq(true)
+          end
+        end
+
+        context "and has more than the maximum number of sponsors and they have signed" do
+          let(:sponor_count) { Site.maximum_number_of_sponsors + 1 }
+          let(:sponsors_signed) { true }
+
+          it "returns true" do
+            expect(petition.has_maximum_sponsors?).to eq(true)
+          end
+        end
+      end
     end
   end
 
@@ -2276,7 +2338,7 @@ RSpec.describe Petition, type: :model do
 
     describe "#signatures_to_email_for" do
       let!(:petition) { FactoryGirl.create(:petition) }
-      let!(:creator_signature) { petition.creator_signature }
+      let!(:creator) { petition.creator }
       let!(:other_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
       let(:petition_timestamp) { 5.days.ago }
 
@@ -2293,8 +2355,8 @@ RSpec.describe Petition, type: :model do
       end
 
       it "does not return those that do not want to be emailed" do
-        petition.creator_signature.update_attribute(:notify_by_email, false)
-        expect(petition.signatures_to_email_for('government_response')).not_to include creator_signature
+        petition.creator.update_attribute(:notify_by_email, false)
+        expect(petition.signatures_to_email_for('government_response')).not_to include creator
       end
 
       it 'does not return unvalidated signatures' do
@@ -2318,7 +2380,7 @@ RSpec.describe Petition, type: :model do
       end
 
       it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
-        expect(petition.signatures_to_email_for('government_response')).to match_array [creator_signature, other_signature]
+        expect(petition.signatures_to_email_for('government_response')).to match_array [creator, other_signature]
       end
     end
 

@@ -1,18 +1,21 @@
 class FeedbackController < ApplicationController
-  respond_to :html
-
   before_action :build_feedback, only: [:new, :create]
 
   def new
-    respond_with @feedback
+    respond_to do |format|
+      format.html
+    end
   end
 
   def create
     if @feedback.save
       FeedbackEmailJob.perform_later(@feedback)
+      redirect_to thanks_feedback_url
+    else
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
-
-    respond_with @feedback, location: thanks_feedback_url
   end
 
   def thanks

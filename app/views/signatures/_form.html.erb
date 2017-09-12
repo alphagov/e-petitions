@@ -1,37 +1,41 @@
-<%= form_row :for => [signature, :uk_citizenship], :class => 'uk-citizen' do %>
+<%= form_row for: [signature, :uk_citizenship], class: "uk-citizen" do %>
   <span class="form-label">
-    <% if context == 'create-petition' %>
-      Only British citizens or UK residents have the right to create and sign petitions
-    <% else %>
-      Only British citizens or UK residents have the right to sign
-    <% end %>
+    Only British citizens or UK residents have the right to sign
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
-  <%= f.label :uk_citizenship,  :class => 'block-label', :for => nil do  %>
-    <%= f.check_box :uk_citizenship, :tabindex => increment %>
+  <%= form.label :uk_citizenship,  class: "block-label", for: nil do  %>
+    <%= form.check_box :uk_citizenship, tabindex: increment %>
     I am a British citizen or UK resident
   <% end %>
 <% end %>
 
-<%= form_row :for => [signature, :name] do %>
-  <%= f.label :name, :class => 'form-label' %>
+<%= form_row for: [signature, :name] do %>
+  <%= form.label :name, class: "form-label" %>
   <%= error_messages_for_field signature, :name %>
-  <%= f.text_field :name, :tabindex => increment, :maxlength => 255, :size => nil, :class => 'form-control'  %>
-  <% if context == 'create-petition' %>
-    <span class="form-hint">You must use your full name</span>
-  <% end %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 255, size: nil, class: "form-control"  %>
 <% end %>
 
-<%= render 'signatures/email', f: f, signature: signature,  hide_label: false %>
+<%= form_row for: [signature, :email] do %>
+  <%= form.label :email, "Email address", class: "form-label" %>
+  <%= error_messages_for_field signature, :email %>
+  <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+<% end %>
 
-<%= form_row :for => [signature, :location_code] do %>
-  <%= f.label :location_code, 'Location', :class => 'form-label' %>
+<%= form_row for: [signature, :location_code] do %>
+  <%= form.label :location_code, "Location", class: "form-label" %>
   <%= error_messages_for_field signature, :location_code %>
-  <%= f.select :location_code, countries_for_select, {}, :tabindex => increment, :class => 'form-control' %>
+  <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
 <% end %>
 
-<%= form_row :for => [signature, :postcode] do %>
-  <%= f.label :postcode, :class => 'form-label' %>
+<%= form_row for: [signature, :postcode] do %>
+  <%= form.label :postcode, class: "form-label" %>
   <%= error_messages_for_field signature, :postcode %>
-  <%= f.text_field :postcode, :tabindex => increment, :class => 'form-control small' %>
+  <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
 <% end %>
+
+<%= form.submit "Continue", name: "move:next", class: "button", tabindex: increment %>
+
+<section class="secondary">
+  <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
+  <p>We will email you about this petition, and nothing else. You can unsubscribe at any time.</p>
+</section>

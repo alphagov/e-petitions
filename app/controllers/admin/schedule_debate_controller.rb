@@ -1,5 +1,4 @@
 class Admin::ScheduleDebateController < Admin::AdminController
-  respond_to :html
   before_action :fetch_petition
 
   def show

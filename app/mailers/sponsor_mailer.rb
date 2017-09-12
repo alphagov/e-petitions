@@ -1,32 +1,30 @@
 class SponsorMailer < ApplicationMailer
   def sponsor_signed_email_below_threshold(petition, sponsor)
-    @petition = petition
-    @sponsor = sponsor
-    @supporting_sponsors_count = petition.supporting_sponsors_count
-    @moderation_threshold = Site.threshold_for_moderation
+    @petition, @sponsor = petition, sponsor
+    @sponsor_count = petition.sponsors.validated.count
+
     mail(
-      subject: "#{@sponsor.signature.name} supported your petition",
-      to: @petition.creator_signature.email
+      subject: "#{@sponsor.name} supported your petition",
+      to: @petition.creator.email
     )
   end
 
   def sponsor_signed_email_on_threshold(petition, sponsor)
-    @petition = petition
-    @sponsor = sponsor
-    @supporting_sponsors_count = petition.supporting_sponsors_count
-    @moderation_threshold = Site.threshold_for_moderation
+    @petition, @sponsor = petition, sponsor
+    @sponsor_count = petition.sponsors.validated.count
+
     mail(
       subject: "We’re checking your petition",
-      to: @petition.creator_signature.email
+      to: @petition.creator.email
     )
   end
 
   def petition_and_email_confirmation_for_sponsor(sponsor)
-    @petition = sponsor.petition
-    @signature = sponsor.signature
+    @petition, @sponsor = sponsor.petition, sponsor
+
     mail(
       subject: "Please confirm your email address",
-      to: @signature.email
+      to: @sponsor.email
     )
   end
 end

@@ -225,26 +225,39 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that only supports html formats'
   end
 
-  context 'the petitions/sponsors show url' do
-    let(:url) { "/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}" }
+  context 'the petitions/sponsors/new url' do
+    let(:url) { "/petitions/#{petition.id}/sponsors/new" }
     let(:petition) { FactoryGirl.create(:pending_petition) }
-    let(:params) { {} }
+    let(:params) {
+      {
+        'token' => petition.sponsor_token
+      }
+    }
 
     it_behaves_like 'a route that only supports html formats'
   end
 
   context 'the petitions/sponsors/thank-you url' do
-    let(:url) { "/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/thank-you" }
+    let(:url) { "/petitions/#{petition.id}/sponsors/thank-you" }
     let(:petition) { FactoryGirl.create(:pending_petition) }
-    let(:params) { {} }
+    let(:params) {
+      {
+        'token' => petition.sponsor_token
+      }
+    }
 
     it_behaves_like 'a route that only supports html formats'
   end
 
-  context 'the petitions/sponsors/sponsored url' do
-    let(:url) { "/petitions/#{petition.id}/sponsors/#{petition.sponsor_token}/sponsored" }
+  context 'the sponsors/sponsored url' do
+    let(:url) { "/sponsors/#{signature.id}/sponsored" }
     let(:petition) { FactoryGirl.create(:pending_petition) }
-    let(:params) { {} }
+    let(:signature) { FactoryGirl.create(:sponsor, :validated, :just_signed, petition: petition) }
+    let(:params) {
+      {
+        'token' => signature.perishable_token
+      }
+    }
 
     it_behaves_like 'a route that only supports html formats'
   end
@@ -360,7 +373,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
         'petition' => {
           'background' => 'Limit temperature rise at two degrees',
           'additional_details' => 'Global warming is upon us',
-          'creator_signature' => {
+          'creator' => {
             'name' => 'John Mcenroe', 'email' => 'john@example.com',
             'postcode' => 'SE3 4LL', 'location_code' => 'GB',
             'uk_citizenship' => '1'

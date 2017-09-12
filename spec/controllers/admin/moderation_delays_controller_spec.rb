@@ -125,7 +125,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
           FactoryGirl.create(
             :sponsored_petition, :overdue,
             sponsors_signed: true,
-            creator_signature_attributes: {
+            creator_attributes: {
               name: "Barry Butler",
               email: "bazbutler@gmail.com"
             }
@@ -136,7 +136,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
           FactoryGirl.create(
             :sponsored_petition, :overdue,
             sponsors_signed: true,
-            creator_signature_attributes: {
+            creator_attributes: {
               name: "Laura Palmer",
               email: "laurapalmer@gmail.com"
             }

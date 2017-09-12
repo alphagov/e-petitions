@@ -1,5 +1,4 @@
 class Admin::NotesController < Admin::AdminController
-  respond_to :html
   before_action :fetch_petition
   before_action :fetch_note
 

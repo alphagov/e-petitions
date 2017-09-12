@@ -219,7 +219,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                   petition.reload
                   petition_timestamp = petition.get_email_requested_at_for('petition_email')
                   expect(petition_timestamp).not_to be_nil
-                  petition.signatures.validated.notify_by_email.each do |signature|
+                  petition.signatures.validated.subscribed.each do |signature|
                     expect(signature.get_email_sent_at_for('petition_email')).to eq(petition_timestamp)
                   end
                 end
@@ -230,7 +230,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                   do_post
                   expect(deliveries.length).to eq 5
                   expect(deliveries.map(&:to)).to eq([
-                    [petition.creator_signature.email],
+                    [petition.creator.email],
                     ['laura_0@example.com'],
                     ['laura_1@example.com'],
                     ['laura_2@example.com'],
@@ -593,7 +593,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                   petition.reload
                   petition_timestamp = petition.get_email_requested_at_for('petition_email')
                   expect(petition_timestamp).not_to be_nil
-                  petition.signatures.validated.notify_by_email.each do |signature|
+                  petition.signatures.validated.subscribed.each do |signature|
                     expect(signature.get_email_sent_at_for('petition_email')).to eq(petition_timestamp)
                   end
                 end
@@ -604,7 +604,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                   do_patch
                   expect(deliveries.length).to eq 5
                   expect(deliveries.map(&:to)).to eq([
-                    [petition.creator_signature.email],
+                    [petition.creator.email],
                     ['laura_0@example.com'],
                     ['laura_1@example.com'],
                     ['laura_2@example.com'],

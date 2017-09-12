@@ -1,6 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe DeletePetitionJob, type: :job do
+  before do
+    FactoryGirl.create(:constituency, :london_and_westminster)
+    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+  end
+
   context "with a stopped petition" do
     let!(:petition) { FactoryGirl.create(:stopped_petition) }
 
@@ -32,14 +37,6 @@ RSpec.describe DeletePetitionJob, type: :job do
       }.to change {
         Signature.count
       }.from(6).to(0)
-    end
-
-    it "destroys the sponsors" do
-      expect {
-        described_class.perform_now(petition)
-      }.to change {
-        Sponsor.count
-      }.from(5).to(0)
     end
 
     it "destroys the country journals" do

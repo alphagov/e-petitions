@@ -1,9 +1,9 @@
-<% if f.object.errors.any? -%>
+<% if form.object.errors.any? -%>
   <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
     <h2 class="error-summary-heading" id="error-summary-heading">We couldn't create this petition</h2>
-    <p><%= t(:prompt, scope: :"petitions.errors", count: f.object.errors.size) %></p>
+    <p><%= t(:prompt, scope: :"petitions.errors", count: form.object.errors.size) %></p>
     <ul class="error-summary-list">
-      <% f.object.errors.each do |key, error| -%>
+      <% form.object.errors.each do |key, error| -%>
         <li><%= error %></li>
       <% end -%>
     </ul>

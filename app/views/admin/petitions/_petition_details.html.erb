@@ -9,8 +9,8 @@
 
 <dt>Creator</dt>
 <dd>
-  <%=  @petition.creator_signature.name %><br />
-  <%= auto_link(@petition.creator_signature.email) %>
+  <%=  @petition.creator.name %><br />
+  <%= auto_link(@petition.creator.email) %>
 </dd>
 
 <% if @petition.in_todo_list? %>

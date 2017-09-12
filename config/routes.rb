@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       collection do
         get  'check'
         get  'check_results'
-        post 'create', path: 'new', as: :create
+        post 'new', action: 'create', as: nil
       end
 
       member do
@@ -41,23 +41,28 @@ Rails.application.routes.draw do
         get 'moderation-info'
       end
 
-      resources :sponsors, only: %i[show update], param: :token do
-        member do
-          get 'thank-you'
-          get 'sponsored'
-        end
-      end
-
-      resources :signatures, only: %i[new], shallow: true do
+      resources :sponsors, only: %i[new create], shallow: true do
         collection do
-          post 'new', action: 'create', as: :sign
+          post 'new', action: 'confirm', as: :confirm
           get  'thank-you'
         end
 
         member do
-          get 'verify',      path: '/verify(/:legacy_token)'
-          get 'unsubscribe', path: '/unsubscribe(/:legacy_token)'
-          get 'signed',      path: '/signed(/:legacy_token)'
+          get 'verify'
+          get 'signed', path: 'sponsored'
+        end
+      end
+
+      resources :signatures, only: %i[new create], shallow: true do
+        collection do
+          post 'new', action: 'confirm', as: :confirm
+          get  'thank-you'
+        end
+
+        member do
+          get 'verify'
+          get 'unsubscribe'
+          get 'signed'
         end
       end
     end

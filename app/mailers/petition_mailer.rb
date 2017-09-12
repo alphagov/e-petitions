@@ -6,6 +6,11 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:email_confirmation_for_signer)
   end
 
+  def email_duplicate_signatures(signature)
+    @signature, @petition = signature, signature.petition
+    mail to: @signature.email, subject: subject_for(:email_duplicate_signatures)
+  end
+
   def email_signer(petition, signature, email)
     @petition, @signature, @email = petition, signature, email
 
@@ -86,7 +91,7 @@ class PetitionMailer < ApplicationMailer
   end
 
   def gather_sponsors_for_petition(petition)
-    @petition, @creator = petition, petition.creator_signature
+    @petition, @creator = petition, petition.creator
     mail to: @creator.email, subject: subject_for(:gather_sponsors_for_petition)
   end
 

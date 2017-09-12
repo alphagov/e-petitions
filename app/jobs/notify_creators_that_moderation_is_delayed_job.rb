@@ -3,7 +3,7 @@ class NotifyCreatorsThatModerationIsDelayedJob < ApplicationJob
 
   def perform(subject, body)
     petitions.find_each do |petition|
-      NotifyCreatorThatModerationIsDelayedJob.perform_later(petition.creator_signature, subject, body)
+      NotifyCreatorThatModerationIsDelayedJob.perform_later(petition.creator, subject, body)
     end
   end
 
