@@ -2,7 +2,7 @@ class EmailValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     if value =~ EMAIL_REGEX
       email = parsed_email(value)
-      record.errors.add :email, :plus_address if plus_address?(email)
+      record.errors.add attribute, :plus_address if plus_address?(email)
     else
       record.errors.add attribute, :invalid
     end

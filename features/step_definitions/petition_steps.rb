@@ -269,7 +269,7 @@ When(/^I am allowed to make the petition action too long$/) do
   # NOTE: we do this to remove the maxlength attribtue on the petition
   # action input because any modern browser/driver will not let us enter
   # values longer than maxlength and so we can't test our JS validation
-  page.execute_script "document.getElementById('petition_action').removeAttribute('maxlength');"
+  page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
 Then(/^the petition with action: "(.*?)" should have requested a government response email after "(.*?)"$/) do |petition_action, timestamp|

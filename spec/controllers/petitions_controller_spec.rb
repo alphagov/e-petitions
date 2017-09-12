@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe PetitionsController, type: :controller do
-  describe "new" do
-    it "should assign a new stage_manager with a petition" do
+  describe "GET /petitions/new" do
+    it "should assign a petition creator" do
       get :new
-      expect(assigns[:stage_manager]).not_to be_nil
-      expect(assigns[:stage_manager].petition).not_to be_nil
+      expect(assigns[:new_petition]).not_to be_nil
     end
 
     it "is on stage 'petition'" do
       get :new
-      expect(assigns[:stage_manager].stage).to eq 'petition';
+      expect(assigns[:new_petition].stage).to eq "petition";
     end
 
-    it "fills in the action if given as petition_action" do
-      action = "my fancy new action"
-      get :new, :petition_action => action
-      expect(assigns[:stage_manager].petition.action).to eq action
+    it "fills in the action if given as query parameter 'q'" do
+      get :new, q: "my fancy new action"
+      expect(assigns[:new_petition].action).to eq("my fancy new action")
     end
 
     context "when parliament is dissolved" do
@@ -42,197 +40,213 @@ RSpec.describe PetitionsController, type: :controller do
     end
   end
 
-  describe "create" do
-    let(:creator_attributes) do
+  describe "POST /petitions/new" do
+    let(:params) do
       {
-        :name => 'John Mcenroe', :email => 'john@example.com',
-        :postcode => 'SE3 4LL', :location_code => 'GB',
-        :uk_citizenship => '1'
-      }
-    end
-    let(:petition_attributes) do
-      {
-        :action => 'Save the planet',
-        :background => 'Limit temperature rise at two degrees',
-        :additional_details => 'Global warming is upon us',
-        :creator => creator_attributes
+        action: "Save the planet",
+        background: "Limit temperature rise at two degrees",
+        additional_details: "Global warming is upon us",
+        name: "John Mcenroe", email: "john@example.com",
+        postcode: "SE3 4LL", location_code: "GB",
+        uk_citizenship: "1"
       }
     end
 
     let(:constituency) do
-      FactoryGirl.create(
-        :constituency, external_id: '54321', name: 'North Creatorshire'
-      )
+      FactoryGirl.create(:constituency, external_id: "54321", name: "North Creatorshire")
     end
 
-    def do_post(options = {})
-      params = {
-        :stage => 'replay-email',
-        :move => 'next',
-        :petition => petition_attributes
-      }.merge(options)
-
+    before do
       allow(Constituency).to receive(:find_by_postcode).with("SE34LL").and_return(constituency)
-
-      perform_enqueued_jobs do
-        post :create, params
-      end
-    end
-
-    context 'managing the "move" parameter' do
-      it 'defaults to "next" if it is not present' do
-        do_post :move => nil
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'defaults to "next" if it is present but blank' do
-        do_post :move => ''
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "next" if it is present but not "next" or "back"' do
-        do_post :move => 'blah'
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "next" if "move:next" is present' do
-        do_post :move => 'blah', :'move:next' => 'Onwards!'
-        expect(controller.params['move']).to eq 'next'
-      end
-
-      it 'overrides it to "back" if "move:back" is present' do
-        do_post :move => 'blah', :'move:back' => 'Backwards!'
-        expect(controller.params['move']).to eq 'back'
-      end
-
-      it 'overrides it to "next" if both "move:next" and "move:back" are present' do
-        do_post :move => 'blah',  :'move:next' => 'Onwards!', :'move:back' => 'Backwards!'
-        expect(controller.params['move']).to eq 'next'
-      end
     end
 
     context "valid post" do
+      let(:petition) { Petition.find_by_action("Save the planet") }
+
       it "should successfully create a new petition and a signature" do
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params
+        end
+
         expect(petition.creator).not_to be_nil
         expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
       end
 
       it "should successfully create a new petition and a signature even when email has white space either end" do
-        creator_attributes[:email] = ' john@example.com '
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(email: " john@example.com ")
+        end
+
+        expect(petition).not_to be_nil
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
       end
 
       it "should strip a petition action on petition creation" do
-        petition_attributes[:action] = ' Save the planet'
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(action: " Save the planet")
+        end
+
+        expect(petition).not_to be_nil
+        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
       end
 
       it "should send gather sponsors email to petition's creator" do
-        ActionMailer::Base.deliveries.clear
-        do_post
-        email = ActionMailer::Base.deliveries.detect { |email| email.subject =~ /Action required: Petition/ }
-        expect(email).to be_present
-        expect(email.from).to eq(["no-reply@petition.parliament.uk"])
-        expect(email.to).to eq(["john@example.com"])
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params
+        end
+
+        expect(last_email_sent).to deliver_to("john@example.com")
+        expect(last_email_sent).to deliver_from(%{"Petitions: UK Government and Parliament" <no-reply@petition.parliament.uk>})
+        expect(last_email_sent).to have_subject("Action required: Petition “Save the planet”")
       end
 
       it "should successfully point the signature at the petition" do
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params
+        end
+
         expect(petition.creator.petition).to eq(petition)
       end
 
       it "should set user's ip address on signature" do
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params
+        end
+
         expect(petition.creator.ip_address).to eq("0.0.0.0")
       end
 
       it "should not be able to set the state of a new petition" do
-        petition_attributes[:state] = Petition::VALIDATED_STATE
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(state: Petition::VALIDATED_STATE)
+        end
+
         expect(petition.state).to eq(Petition::PENDING_STATE)
       end
 
       it "should not be able to set the state of a new signature" do
-        creator_attributes[:state] = Signature::VALIDATED_STATE
-        do_post
-        petition = Petition.find_by_action!('Save the planet')
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(state: Signature::VALIDATED_STATE)
+        end
+
         expect(petition.creator.state).to eq(Signature::PENDING_STATE)
       end
 
       it "should set notify_by_email to true on the creator signature" do
-        do_post
-        expect(Petition.find_by_action!('Save the planet').creator.notify_by_email).to be_truthy
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(state: Signature::VALIDATED_STATE)
+        end
+
+        expect(petition.creator.notify_by_email).to be_truthy
       end
 
       it "sets the constituency_id on the creator signature, based on the postcode" do
-        do_post
-        expect(Petition.find_by_action!('Save the planet').creator.constituency_id).to eq("54321")
+        perform_enqueued_jobs do
+          post :create, stage: "replay_email", petition_creator: params.merge(state: Signature::VALIDATED_STATE)
+        end
+
+        expect(petition.creator.constituency_id).to eq("54321")
       end
 
       context "invalid post" do
         it "should not create a new petition if no action is given" do
-          petition_attributes[:action] = ''
-          do_post
-          expect(Petition.find_by_action('Save the planet')).to be_nil
-          expect(assigns[:stage_manager].petition.errors[:action]).not_to be_blank
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(action: "")
+          end
+
+          expect(petition).to be_nil
+          expect(assigns[:new_petition].errors[:action]).not_to be_blank
           expect(response).to be_success
         end
 
         it "should not create a new petition if email is invalid" do
-          creator_attributes[:email] = 'not much of an email'
-          do_post
-          expect(Petition.find_by_action('Save the planet')).to be_nil
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(email: "not much of an email")
+          end
+
+          expect(petition).to be_nil
           expect(response).to be_success
         end
 
         it "should not create a new petition if UK citizenship is not confirmed" do
-          creator_attributes[:uk_citizenship] = '0'
-          do_post
-          expect(Petition.find_by_action('Save the planet')).to be_nil
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(uk_citizenship: "0")
+          end
+
+          expect(petition).to be_nil
           expect(response).to be_success
         end
 
-        it "has stage of 'petition' if there are errors on action, background, or additional_details" do
-          do_post :petition => petition_attributes.merge(:action => '')
-          expect(assigns[:stage_manager].stage).to eq 'petition'
-          do_post :petition => petition_attributes.merge(:background => '')
-          expect(assigns[:stage_manager].stage).to eq 'petition'
-          do_post :petition => petition_attributes.merge(:additional_details => 'a'*801)
-          expect(assigns[:stage_manager].stage).to eq 'petition'
+        it "has stage of 'petition' if there is an error on action" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(action: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "petition"
         end
 
-        it "has stage of 'creator' if there are errors on name, uk_citizenship, postcode or country" do
-          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:name => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:uk_citizenship => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:postcode => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
-          do_post :petition => petition_attributes.merge(:creator => creator_attributes.merge(:location_code => ''))
-          expect(assigns[:stage_manager].stage).to eq 'creator'
+        it "has stage of 'petition' if there is an error on background" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(background: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "petition"
         end
 
-        it "has stage of 'replay-email' if there are errors on email and we came from 'replay-email' stage" do
-          new_creator_attribtues = creator_attributes.merge(:email => 'foo@')
-          new_petition_attributes = petition_attributes.merge(:creator => new_creator_attribtues)
-          do_post :stage => 'replay-email',
-                  :petition => new_petition_attributes
-          expect(assigns[:stage_manager].stage).to eq 'replay-email'
+        it "has stage of 'petition' if there is an error on additional_details" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(additional_details: "a" * 801)
+          end
+
+          expect(assigns[:new_petition].stage).to eq "petition"
         end
 
-        it "has stage of 'creator' if there are errors on email and we came from 'creator' stage" do
-          new_creator_attribtues = creator_attributes.merge(:email => 'foo@')
-          new_petition_attributes = petition_attributes.merge(:creator => new_creator_attribtues)
-          do_post :stage => 'creator',
-                  :petition => new_petition_attributes
-          expect(assigns[:stage_manager].stage).to eq 'creator'
+        it "has stage of 'creator' if there is an error on name" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(name: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "creator"
+        end
+
+        it "has stage of 'creator' if there is an error on uk_citizenship" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(uk_citizenship: "0")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "creator"
+        end
+
+        it "has stage of 'creator' if there is an error on postcode" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(postcode: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "creator"
+        end
+
+        it "has stage of 'creator' if there is an error on location_code" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(location_code: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "creator"
+        end
+
+        it "has stage of 'replay_email' if there are errors on email and we came from the 'replay_email' stage" do
+          perform_enqueued_jobs do
+            post :create, stage: "replay_email", petition_creator: params.merge(email: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "replay_email"
+        end
+
+        it "has stage of 'creator' if there are errors on email and we came from the 'creator' stage" do
+          perform_enqueued_jobs do
+            post :create, stage: "creator", petition_creator: params.merge(email: "")
+          end
+
+          expect(assigns[:new_petition].stage).to eq "creator"
         end
       end
     end
@@ -260,23 +274,24 @@ RSpec.describe PetitionsController, type: :controller do
     end
   end
 
-  describe "show" do
+  describe "GET /petitions/:id" do
     let(:petition) { double }
+
     it "assigns the given petition" do
       allow(petition).to receive(:stopped?).and_return(false)
       allow(petition).to receive(:collecting_sponsors?).and_return(false)
       allow(petition).to receive(:in_moderation?).and_return(false)
       allow(petition).to receive(:moderated?).and_return(true)
-      allow(Petition).to receive_message_chain(:show, :find => petition)
+      allow(Petition).to receive_message_chain(:show, find: petition)
 
-      get :show, :id => 1
+      get :show, id: 1
       expect(assigns(:petition)).to eq(petition)
     end
 
     it "does not allow hidden petitions to be shown" do
       expect {
         allow(Petition).to receive_message_chain(:visible, :find).and_raise ActiveRecord::RecordNotFound
-        get :show, :id => 1
+        get :show, id: 1
       }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
@@ -315,8 +330,8 @@ RSpec.describe PetitionsController, type: :controller do
     end
   end
 
-  describe "GET #index" do
-    context 'when no state param is provided' do
+  describe "GET /petitions" do
+    context "when no state param is provided" do
       it "is successful" do
         get :index
         expect(response).to be_success
@@ -328,27 +343,27 @@ RSpec.describe PetitionsController, type: :controller do
       end
     end
 
-    context 'when a state param is provided' do
-      context 'but it is not a public facet from the locale file' do
-        it 'redirects to itself with state=all' do
-          get :index, state: 'awaiting_monkey'
-          expect(response).to redirect_to 'https://petition.parliament.uk/petitions?state=all'
+    context "when a state param is provided" do
+      context "but it is not a public facet from the locale file" do
+        it "redirects to itself with state=all" do
+          get :index, state: "awaiting_monkey"
+          expect(response).to redirect_to "https://petition.parliament.uk/petitions?state=all"
         end
 
-        it 'preserves other params when it redirects' do
-          get :index, q: 'what is clocks', state: 'awaiting_monkey'
-          expect(response).to redirect_to 'https://petition.parliament.uk/petitions?q=what+is+clocks&state=all'
+        it "preserves other params when it redirects" do
+          get :index, q: "what is clocks", state: "awaiting_monkey"
+          expect(response).to redirect_to "https://petition.parliament.uk/petitions?q=what+is+clocks&state=all"
         end
       end
 
-      context 'and it is a public facet from the locale file' do
-        it 'is successful' do
-          get :index, state: 'open'
+      context "and it is a public facet from the locale file" do
+        it "is successful" do
+          get :index, state: "open"
           expect(response).to be_success
         end
 
         it "exposes a search scoped to the state param" do
-          get :index, state: 'open'
+          get :index, state: "open"
           expect(assigns(:petitions).scope).to eq :open
         end
       end
@@ -366,7 +381,7 @@ RSpec.describe PetitionsController, type: :controller do
     end
   end
 
-  describe "GET #check" do
+  describe "GET /petitions/check" do
     it "is successful" do
       get :check
       expect(response).to be_success
@@ -395,7 +410,7 @@ RSpec.describe PetitionsController, type: :controller do
     end
   end
 
-  describe "GET #check_results" do
+  describe "GET /petitions/check_results" do
     it "is successful" do
       get :check_results, q: "action"
       expect(response).to be_success
