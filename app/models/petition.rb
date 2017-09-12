@@ -691,9 +691,7 @@ class Petition < ActiveRecord::Base
 
   def release!(user)
     with_lock do
-      if locked_by.present? && locked_by != user
-        raise RuntimeError, "Petition already being edited by #{locked_by.pretty_name}"
-      else
+      if locked_by.present? && locked_by == user
         update!(locked_by: nil, locked_at: nil)
       end
     end

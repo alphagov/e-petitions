@@ -848,4 +848,254 @@ RSpec.describe Archived::Petition, type: :model do
       end
     end
   end
+
+  describe "#update_lock!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "#checkout!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(nil).to(current_user)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "raises an error" do
+        expect {
+          petition.checkout!(current_user)
+        }.to raise_error(RuntimeError, /Petition already being edited/)
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.checkout!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "#force_checkout!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(nil).to(current_user)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(other_user).to(current_user)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+          }.to be_within(1.second).of(Time.current)
+        end
+      end
+    end
+
+  describe "#release!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(current_user).to(nil)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_nil
+      end
+    end
+  end
 end
