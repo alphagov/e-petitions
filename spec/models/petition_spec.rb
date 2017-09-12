@@ -2302,497 +2302,507 @@ RSpec.describe Petition, type: :model do
         expect(instance.petition).to be_persisted
       end
     end
+  end
 
-    describe '#get_email_requested_at_for' do
-      let(:petition) { FactoryGirl.create(:open_petition) }
-      let(:receipt) { petition.email_requested_receipt! }
-      let(:the_stored_time) { 6.days.ago }
+  describe '#get_email_requested_at_for' do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:receipt) { petition.email_requested_receipt! }
+    let(:the_stored_time) { 6.days.ago }
 
-      it 'returns nil when nothing has been stamped for the supplied name' do
-        expect(petition.get_email_requested_at_for('government_response')).to be_nil
+    it 'returns nil when nothing has been stamped for the supplied name' do
+      expect(petition.get_email_requested_at_for('government_response')).to be_nil
+    end
+
+    it 'returns the stored timestamp for the supplied name' do
+      receipt.update_column('government_response', the_stored_time)
+      expect(petition.get_email_requested_at_for('government_response')).to eq the_stored_time
+    end
+  end
+
+  describe '#set_email_requested_at_for' do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:receipt) { petition.email_requested_receipt! }
+    let(:the_stored_time) { 6.days.ago }
+
+    it 'sets the stored timestamp for the supplied name to the supplied time' do
+      petition.set_email_requested_at_for('government_response', to: the_stored_time)
+      expect(receipt.government_response).to eq the_stored_time
+    end
+
+    it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
+      travel_to the_stored_time do
+        petition.set_email_requested_at_for('government_response')
+        expect(receipt.government_response).to eq Time.current
       end
+    end
+  end
 
-      it 'returns the stored timestamp for the supplied name' do
-        receipt.update_column('government_response', the_stored_time)
-        expect(petition.get_email_requested_at_for('government_response')).to eq the_stored_time
+  describe "#signatures_to_email_for" do
+    let!(:petition) { FactoryGirl.create(:petition) }
+    let!(:creator) { petition.creator }
+    let!(:other_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+    let(:petition_timestamp) { 5.days.ago }
+
+    before { petition.set_email_requested_at_for('government_response', to: petition_timestamp) }
+
+    it 'raises an error if the petition does not have an email requested receipt' do
+      petition.email_requested_receipt.destroy && petition.reload
+      expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+    end
+
+    it 'raises an error if the petition does not have the requested timestamp in its email requested receipt' do
+      petition.email_requested_receipt.update_column('government_response', nil)
+      expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+    end
+
+    it "does not return those that do not want to be emailed" do
+      petition.creator.update_attribute(:notify_by_email, false)
+      expect(petition.signatures_to_email_for('government_response')).not_to include creator
+    end
+
+    it 'does not return unvalidated signatures' do
+      other_signature.update_column(:state, Signature::PENDING_STATE)
+      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+    end
+
+    it 'does not return signatures that have a sent timestamp newer than the petitions requested receipt' do
+      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp + 1.day)
+      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+    end
+
+    it 'does not return signatures that have a sent timestamp equal to the petitions requested receipt' do
+      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp)
+      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+    end
+
+    it 'does return signatures that have a sent timestamp older than the petitions requested receipt' do
+      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp - 1.day)
+      expect(petition.signatures_to_email_for('government_response')).to include other_signature
+    end
+
+    it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
+      expect(petition.signatures_to_email_for('government_response')).to match_array [creator, other_signature]
+    end
+  end
+
+  describe "#cache_key" do
+    let(:petition) { FactoryGirl.create(:petition, last_signed_at: "2016-06-28 00:00:17 UTC", open_at: "2016-06-28 00:00:07 UTC") }
+    let(:now) { "2016-06-29 00:00:07 UTC".in_time_zone }
+
+    around do |example|
+      travel_to(now) { example.run }
+    end
+
+    it "rounds down to the nearest 5 seconds" do
+      expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000000")
+    end
+
+    it "can use other columns" do
+      expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000000")
+    end
+  end
+
+  describe "#fraudulent_domains" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:signatures) { double(:signatures) }
+
+    let(:domains) do
+      { "foo.com" => 2, "bar.com" => 1 }
+    end
+
+    before do
+      allow(petition).to receive(:signatures).and_return(signatures)
+    end
+
+    it "delegates to signatures association and caches the result" do
+      expect(signatures).to receive(:fraudulent_domains).once.and_return(domains)
+      expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
+      expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
+    end
+  end
+
+  describe "#fraudulent_domains?" do
+    let(:petition) { FactoryGirl.create(:open_petition) }
+
+    context "when there no fraudulent signatures" do
+      it "returns false" do
+        expect(petition.fraudulent_domains?).to eq(false)
       end
     end
 
-    describe '#set_email_requested_at_for' do
-      let(:petition) { FactoryGirl.create(:open_petition) }
-      let(:receipt) { petition.email_requested_receipt! }
-      let(:the_stored_time) { 6.days.ago }
-
-      it 'sets the stored timestamp for the supplied name to the supplied time' do
-        petition.set_email_requested_at_for('government_response', to: the_stored_time)
-        expect(receipt.government_response).to eq the_stored_time
-      end
-
-      it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
-        travel_to the_stored_time do
-          petition.set_email_requested_at_for('government_response')
-          expect(receipt.government_response).to eq Time.current
-        end
-      end
-    end
-
-    describe "#signatures_to_email_for" do
-      let!(:petition) { FactoryGirl.create(:petition) }
-      let!(:creator) { petition.creator }
-      let!(:other_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
-      let(:petition_timestamp) { 5.days.ago }
-
-      before { petition.set_email_requested_at_for('government_response', to: petition_timestamp) }
-
-      it 'raises an error if the petition does not have an email requested receipt' do
-        petition.email_requested_receipt.destroy && petition.reload
-        expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
-      end
-
-      it 'raises an error if the petition does not have the requested timestamp in its email requested receipt' do
-        petition.email_requested_receipt.update_column('government_response', nil)
-        expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
-      end
-
-      it "does not return those that do not want to be emailed" do
-        petition.creator.update_attribute(:notify_by_email, false)
-        expect(petition.signatures_to_email_for('government_response')).not_to include creator
-      end
-
-      it 'does not return unvalidated signatures' do
-        other_signature.update_column(:state, Signature::PENDING_STATE)
-        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
-      end
-
-      it 'does not return signatures that have a sent timestamp newer than the petitions requested receipt' do
-        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp + 1.day)
-        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
-      end
-
-      it 'does not return signatures that have a sent timestamp equal to the petitions requested receipt' do
-        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp)
-        expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
-      end
-
-      it 'does return signatures that have a sent timestamp older than the petitions requested receipt' do
-        other_signature.set_email_sent_at_for('government_response', to: petition_timestamp - 1.day)
-        expect(petition.signatures_to_email_for('government_response')).to include other_signature
-      end
-
-      it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
-        expect(petition.signatures_to_email_for('government_response')).to match_array [creator, other_signature]
-      end
-    end
-
-    describe "#cache_key" do
-      let(:petition) { FactoryGirl.create(:petition, last_signed_at: "2016-06-28 00:00:17 UTC", open_at: "2016-06-28 00:00:07 UTC") }
-      let(:now) { "2016-06-29 00:00:07 UTC".in_time_zone }
-
-      around do |example|
-        travel_to(now) { example.run }
-      end
-
-      it "rounds down to the nearest 5 seconds" do
-        expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000000")
-      end
-
-      it "can use other columns" do
-        expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000000")
-      end
-    end
-
-    describe "#fraudulent_domains" do
-      let(:petition) { FactoryGirl.create(:open_petition) }
-      let(:signatures) { double(:signatures) }
-
-      let(:domains) do
-        { "foo.com" => 2, "bar.com" => 1 }
-      end
-
+    context "when there are fraudulent signatures" do
       before do
-        allow(petition).to receive(:signatures).and_return(signatures)
+        FactoryGirl.create(:fraudulent_signature, email: "alice@foo.com", petition: petition)
       end
 
-      it "delegates to signatures association and caches the result" do
-        expect(signatures).to receive(:fraudulent_domains).once.and_return(domains)
-        expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
-        expect(petition.fraudulent_domains).to eq("foo.com" => 2, "bar.com" => 1)
+      it "returns true" do
+        expect(petition.fraudulent_domains?).to eq(true)
+      end
+    end
+  end
+
+  describe "#closed_early_due_to_election?" do
+    let(:dissolution_at) { "2017-05-03T00:01:00+01:00".in_time_zone }
+
+    before do
+      allow(Parliament).to receive(:dissolution_at).and_return(dissolution_at)
+    end
+
+    context "when the petition was not closed early" do
+      let(:open_at) { "2016-04-01T12:00:00+01:00".in_time_zone }
+      let(:closed_at) { Site.closed_at_for_opening(open_at) }
+
+      subject do
+        FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
+      end
+
+      it "returns false" do
+        expect(subject.closed_early_due_to_election?).to eq(false)
       end
     end
 
-    describe "#fraudulent_domains?" do
-      let(:petition) { FactoryGirl.create(:open_petition) }
+    context "when the petition was closed early for other reasons" do
+      let(:open_at) { "2016-11-01T12:00:00+00:00".in_time_zone }
+      let(:closed_at) { "2017-03-03T12:00:00+00:00".in_time_zone }
 
-      context "when there no fraudulent signatures" do
-        it "returns false" do
-          expect(petition.fraudulent_domains?).to eq(false)
-        end
+      subject do
+        FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
       end
 
-      context "when there are fraudulent signatures" do
-        before do
-          FactoryGirl.create(:fraudulent_signature, email: "alice@foo.com", petition: petition)
-        end
-
-        it "returns true" do
-          expect(petition.fraudulent_domains?).to eq(true)
-        end
+      it "returns false" do
+        expect(subject.closed_early_due_to_election?).to eq(false)
       end
     end
 
-    describe "#closed_early_due_to_election?" do
-      let(:dissolution_at) { "2017-05-03T00:01:00+01:00".in_time_zone }
+    context "when the petition was closed early because parliament was dissolved" do
+      let(:open_at) { "2017-04-01T12:00:00+01:00".in_time_zone }
 
-      before do
-        allow(Parliament).to receive(:dissolution_at).and_return(dissolution_at)
+      subject do
+        FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: dissolution_at)
       end
 
-      context "when the petition was not closed early" do
-        let(:open_at) { "2016-04-01T12:00:00+01:00".in_time_zone }
-        let(:closed_at) { Site.closed_at_for_opening(open_at) }
-
-        subject do
-          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
-        end
-
-        it "returns false" do
-          expect(subject.closed_early_due_to_election?).to eq(false)
-        end
+      it "returns true" do
+        expect(subject.closed_early_due_to_election?).to eq(true)
       end
+    end
+  end
 
-      context "when the petition was closed early for other reasons" do
-        let(:open_at) { "2016-11-01T12:00:00+00:00".in_time_zone }
-        let(:closed_at) { "2017-03-03T12:00:00+00:00".in_time_zone }
+  describe "#archiving?" do
+    context "when a petition has not started archiving" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
 
-        subject do
-          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: closed_at)
-        end
-
-        it "returns false" do
-          expect(subject.closed_early_due_to_election?).to eq(false)
-        end
-      end
-
-      context "when the petition was closed early because parliament was dissolved" do
-        let(:open_at) { "2017-04-01T12:00:00+01:00".in_time_zone }
-
-        subject do
-          FactoryGirl.create(:closed_petition, open_at: open_at, closed_at: dissolution_at)
-        end
-
-        it "returns true" do
-          expect(subject.closed_early_due_to_election?).to eq(true)
-        end
+      it "returns false" do
+        expect(petition.archiving?).to eq(false)
       end
     end
 
-    describe "#archiving?" do
-      context "when a petition has not started archiving" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
+    context "when a petition has started archiving, but not finished" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
 
-        it "returns false" do
-          expect(petition.archiving?).to eq(false)
-        end
-      end
-
-      context "when a petition has started archiving, but not finished" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
-
-        it "returns true" do
-          expect(petition.archiving?).to eq(true)
-        end
-      end
-
-      context "when a petition has finished archiving" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
-
-        it "returns false" do
-          expect(petition.archiving?).to eq(false)
-        end
+      it "returns true" do
+        expect(petition.archiving?).to eq(true)
       end
     end
 
-    describe "#archived?" do
-      context "when a petition has not been copied to the archive" do
-        let(:petition) { FactoryGirl.create(:open_petition, archived_at: nil) }
+    context "when a petition has finished archiving" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
 
-        it "returns false" do
-          expect(petition.archived?).to eq(false)
-        end
+      it "returns false" do
+        expect(petition.archiving?).to eq(false)
       end
+    end
+  end
 
-      context "when a petition has been copied to the archive" do
-        let(:petition) { FactoryGirl.create(:open_petition, archived_at: 1.day.ago) }
+  describe "#archived?" do
+    context "when a petition has not been copied to the archive" do
+      let(:petition) { FactoryGirl.create(:open_petition, archived_at: nil) }
 
-        it "returns true" do
-          expect(petition.archived?).to eq(true)
-        end
+      it "returns false" do
+        expect(petition.archived?).to eq(false)
       end
     end
 
-    describe "#editing_disabled?" do
-      context "when a petition has not started archiving" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
+    context "when a petition has been copied to the archive" do
+      let(:petition) { FactoryGirl.create(:open_petition, archived_at: 1.day.ago) }
 
-        it "returns false" do
-          expect(petition.editing_disabled?).to eq(false)
-        end
+      it "returns true" do
+        expect(petition.archived?).to eq(true)
       end
+    end
+  end
 
-      context "when a petition has started archiving, but not finished" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
+  describe "#editing_disabled?" do
+    context "when a petition has not started archiving" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: nil, archived_at: nil) }
 
-        it "returns true" do
-          expect(petition.editing_disabled?).to eq(true)
-        end
-      end
-
-      context "when a petition has finished archiving" do
-        let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
-
-        it "returns true" do
-          expect(petition.editing_disabled?).to eq(true)
-        end
+      it "returns false" do
+        expect(petition.editing_disabled?).to eq(false)
       end
     end
 
-    describe "#update_lock!" do
-      let(:current_user) { FactoryGirl.create(:moderator_user) }
+    context "when a petition has started archiving, but not finished" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: Time.current, archived_at: nil) }
 
-      context "when the petition is not locked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.update_lock!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "doesn't update the locked_at timestamp" do
-          expect {
-            petition.update_lock!(current_user)
-          }.not_to change {
-            petition.reload.locked_at
-          }
-        end
-      end
-
-      context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.update_lock!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "doesn't update the locked_at timestamp" do
-          expect {
-            petition.update_lock!(current_user)
-          }.not_to change {
-            petition.reload.locked_at
-          }
-        end
-      end
-
-      context "when the petition is locked by the current user" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.update_lock!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.update_lock!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.to be_within(1.second).of(Time.current)
-        end
+      it "returns true" do
+        expect(petition.editing_disabled?).to eq(true)
       end
     end
 
-    describe "#checkout!" do
-      let(:current_user) { FactoryGirl.create(:moderator_user) }
+    context "when a petition has finished archiving" do
+      let(:petition) { FactoryGirl.create(:open_petition, archiving_started_at: 1.hour.ago, archived_at: Time.current) }
 
-      context "when the petition is not locked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+      it "returns true" do
+        expect(petition.editing_disabled?).to eq(true)
+      end
+    end
+  end
 
-        it "updates the locked_by association" do
-          expect {
-            petition.checkout!(current_user)
-          }.to change {
-            petition.reload.locked_by
-          }.from(nil).to(current_user)
-        end
+  describe "#update_lock!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
 
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.checkout!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.from(nil).to(be_within(1.second).of(Time.current))
-        end
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
       end
 
-      context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
-
-        it "raises an error" do
-          expect {
-            petition.checkout!(current_user)
-          }.to raise_error(RuntimeError, /Petition already being edited/)
-        end
-      end
-
-      context "when the petition is locked by the current user" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.checkout!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.checkout!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.to be_within(1.second).of(Time.current)
-        end
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
       end
     end
 
-    describe "#force_checkout!" do
-      let(:current_user) { FactoryGirl.create(:moderator_user) }
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
-      context "when the petition is not locked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
-
-        it "updates the locked_by association" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.to change {
-            petition.reload.locked_by
-          }.from(nil).to(current_user)
-        end
-
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.from(nil).to(be_within(1.second).of(Time.current))
-        end
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
       end
 
-      context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
-
-        it "updates the locked_by association" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.to change {
-            petition.reload.locked_by
-          }.from(other_user).to(current_user)
-        end
-
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.to(be_within(1.second).of(Time.current))
-        end
-      end
-
-      context "when the petition is locked by the current user" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.force_checkout!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.to be_within(1.second).of(Time.current)
-        end
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
       end
     end
 
-    describe "#release!" do
-      let(:current_user) { FactoryGirl.create(:moderator_user) }
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
 
-      context "when the petition is not locked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
-
-        it "doesn't update the locked_by association" do
-          expect {
-            petition.release!(current_user)
-          }.not_to change {
-            petition.reload.locked_by
-          }
-        end
-
-        it "doesn't update the locked_at timestamp" do
-          expect {
-            petition.release!(current_user)
-          }.not_to change {
-            petition.reload.locked_at
-          }
-        end
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.update_lock!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
       end
 
-      context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.update_lock!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_within(1.second).of(Time.current)
+      end
+    end
+  end
 
-        it "raises an error" do
-          expect {
-            petition.release!(current_user)
-          }.to raise_error(RuntimeError, /Petition already being edited/)
-        end
+  describe "#checkout!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(nil).to(current_user)
       end
 
-      context "when the petition is locked by the current user" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
 
-        it "updates the locked_by association" do
-          expect {
-            petition.release!(current_user)
-          }.to change {
-            petition.reload.locked_by
-          }.from(current_user).to(nil)
-        end
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
-        it "updates the locked_at timestamp" do
-          expect {
-            petition.release!(current_user)
-          }.to change {
-            petition.reload.locked_at
-          }.to be_nil
-        end
+      it "raises an error" do
+        expect {
+          petition.checkout!(current_user)
+        }.to raise_error(RuntimeError, /Petition already being edited/)
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.checkout!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "#force_checkout!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(nil).to(current_user)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.from(nil).to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(other_user).to(current_user)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to(be_within(1.second).of(Time.current))
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.force_checkout!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_within(1.second).of(Time.current)
+      end
+    end
+  end
+
+  describe "#release!" do
+    let(:current_user) { FactoryGirl.create(:moderator_user) }
+
+    context "when the petition is not locked" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by someone else" do
+      let(:other_user) { FactoryGirl.create(:moderator_user) }
+      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+
+      it "doesn't update the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_by
+        }
+      end
+
+      it "doesn't update the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.not_to change {
+          petition.reload.locked_at
+        }
+      end
+    end
+
+    context "when the petition is locked by the current user" do
+      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+
+      it "updates the locked_by association" do
+        expect {
+          petition.release!(current_user)
+        }.to change {
+          petition.reload.locked_by
+        }.from(current_user).to(nil)
+      end
+
+      it "updates the locked_at timestamp" do
+        expect {
+          petition.release!(current_user)
+        }.to change {
+          petition.reload.locked_at
+        }.to be_nil
       end
     end
   end
