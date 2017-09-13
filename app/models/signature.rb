@@ -396,7 +396,11 @@ class Signature < ActiveRecord::Base
   end
 
   def constituency
-    @constituency ||= Constituency.find_by_postcode(postcode)
+    if constituency_id?
+      @constituency ||= Constituency.find_by_external_id(constituency_id)
+    else
+      @constituency ||= Constituency.find_by_postcode(postcode)
+    end
   end
 
   def get_email_sent_at_for(timestamp)

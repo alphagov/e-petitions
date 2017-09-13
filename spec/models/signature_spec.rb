@@ -1431,28 +1431,79 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#constituency" do
-    it "returns a constituency object from the API return array" do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
-      signature = FactoryBot.build(:signature, postcode: 'N1 1TY')
-      expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3550'))
+    let(:signature) { FactoryBot.build(:signature, attributes) }
+    let(:constituency) { signature.constituency }
+
+    let(:attributes) do
+      { postcode: postcode, constituency_id: constituency_id }
     end
 
-    it "returns the first object for multiple results" do
-      stub_api_request_for("N1").to_return(api_response(:ok, "multiple"))
-      signature = FactoryBot.build(:signature, postcode: 'N1')
-      expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3506'))
+    context "when the constituency_id is not set" do
+      let(:constituency_id) { nil }
+
+      context "and the API returns a single result" do
+        let(:postcode) { "N1 1TY" }
+
+        before do
+          stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
+        end
+
+        it "returns the correct constituency" do
+          expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_call_original
+          expect(constituency.name).to eq("Islington South and Finsbury")
+        end
+      end
+
+      context "and the API returns multiple result" do
+        let(:postcode) { "N1" }
+
+        before do
+          stub_api_request_for("N1").to_return(api_response(:ok, "multiple"))
+        end
+
+        it "returns the correct constituency" do
+          expect(Constituency).to receive(:find_by_postcode).with("N1").and_call_original
+          expect(constituency.name).to eq("Hackney North and Stoke Newington")
+        end
+      end
+
+
+      context "and the API returns no results" do
+        let(:postcode) { "SW14 9RQ" }
+
+        before do
+          stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+        end
+
+        it "returns nil" do
+          expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
+          expect(constituency).to be_nil
+        end
+      end
+
+      context "and the API raises an error" do
+        let(:postcode) { "N1 1TY" }
+
+        before do
+          stub_api_request_for("N11TY").to_timeout
+        end
+
+        it "returns nil" do
+          expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_call_original
+          expect(constituency).to be_nil
+        end
+      end
     end
 
-    it "returns nil for invalid postcode" do
-      stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
-      signature = FactoryBot.build(:signature, postcode: 'SW14 9RQ')
-      expect(signature.constituency).to be_nil
-    end
+    context "when the constituency_id is set" do
+      let(:constituency_id) { "3415" }
+      let(:postcode) { "SW1A 1AA" }
 
-    it "returns nil for unexpected API response" do
-      stub_api_request_for("N1").to_timeout
-      signature = FactoryBot.build(:signature, postcode: 'N1')
-      expect(signature.constituency).to be_nil
+      it "searches the database for the constituency" do
+        expect(Constituency).not_to receive(:find_by_postcode)
+        expect(Constituency).to receive(:find_by_external_id).with("3415").and_call_original
+        expect(constituency.name).to eq("Cities of London and Westminster")
+      end
     end
   end
 
