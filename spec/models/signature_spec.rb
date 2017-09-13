@@ -220,6 +220,79 @@ RSpec.describe Signature, type: :model do
         end
       end
     end
+
+    context "when the signature is created" do
+      let!(:petition) { FactoryBot.create(:open_petition) }
+      let!(:signature) { petition.signatures.build(attributes) }
+
+      let(:attributes) do
+        {
+          name: "Suzy Signer",
+          email: "foo@example.com",
+          postcode: postcode,
+          location_code: location_code,
+          uk_citizenship: "1"
+        }
+      end
+
+      context "and the location is the UK" do
+        let(:location_code) { "GB" }
+
+        context "and the postcode is valid" do
+          let(:postcode) { "SW1A 1AA" }
+
+          it "calls the Constituency API and sets the constituency_id" do
+            expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_call_original
+            expect(signature.save).to be_truthy
+            expect(signature.constituency_id).to eq("3415")
+          end
+        end
+
+        context "and the postcode is invalid" do
+          let(:postcode) { "SW14 9RQ" }
+
+          it "calls the Constituency API but doesn't set constituency_id" do
+            expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
+            expect(signature.save).to be_truthy
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+
+        context "and the postcode is blank" do
+          let(:postcode) { "" }
+
+          it "doesn't call the Constituency API and doesn't set constituency_id" do
+            expect(Constituency).not_to receive(:find_by_postcode)
+            expect(signature.save).to be_falsey
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+      end
+
+      context "and the location is not the UK" do
+        let(:location_code) { "US" }
+
+        context "and the postcode is set" do
+          let(:postcode) { "12345" }
+
+          it "doesn't call the Constituency API and doesn't set constituency_id" do
+            expect(Constituency).not_to receive(:find_by_postcode)
+            expect(signature.save).to be_truthy
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+
+        context "and the postcode is blank" do
+          let(:postcode) { "" }
+
+          it "doesn't call the Constituency API and doesn't set constituency_id" do
+            expect(Constituency).not_to receive(:find_by_postcode)
+            expect(signature.save).to be_truthy
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+      end
+    end
   end
 
   context "validations" do
@@ -1381,52 +1454,6 @@ RSpec.describe Signature, type: :model do
       stub_api_request_for("N1").to_timeout
       signature = FactoryBot.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
-    end
-  end
-
-  describe 'set_constituency_id' do
-    let(:signature) { FactoryBot.build(:signature, postcode: 'N1 1TY') }
-
-    it 'sets the constituency_id based on the id of the constituency' do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
-      signature.set_constituency_id
-      expect(signature.constituency_id).to eq '3550'
-    end
-
-    it 'does not raise if the api fails' do
-      stub_api_request_for("N11TY").to_timeout
-      expect { signature.set_constituency_id }.not_to raise_error
-      expect(signature.constituency_id).to be_nil
-    end
-
-    it 'leaves it blank if there are no constituencies found' do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "no_results"))
-      signature.set_constituency_id
-      expect(signature.constituency_id).to be_nil
-    end
-
-    it 'chooses the first one if multiple constituencies are found' do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "multiple"))
-      signature.set_constituency_id
-      expect(signature.constituency_id).to eq '3506'
-    end
-  end
-
-  describe 'store_constituency_id' do
-    let(:signature) { FactoryBot.build(:signature, postcode: 'N1 1TY')}
-
-    it 'saves the instance and sets the constituency id' do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
-      signature.store_constituency_id
-      expect(signature.constituency_id).to eq '3550'
-      expect(signature).to be_persisted
-    end
-
-    it 'does not save the instance if it did not set a constituency id' do
-      stub_api_request_for("N11TY").to_return(api_response(:ok, "no_results"))
-      signature.store_constituency_id
-      expect(signature.constituency_id).to be_nil
-      expect(signature).not_to be_persisted
     end
   end
 

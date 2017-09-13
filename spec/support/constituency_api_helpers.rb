@@ -28,5 +28,10 @@ end
 if RSpec.respond_to?(:configure)
   RSpec.configure do |config|
     config.include(ConstituencyApiHelper)
+
+    config.before do
+      stub_api_request_for("SW1A1AA").to_return(api_response(:ok, "london_and_westminster"))
+      stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+    end
   end
 end

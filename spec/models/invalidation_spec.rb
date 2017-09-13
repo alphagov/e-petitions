@@ -605,6 +605,11 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by postcode" do
+        before do
+          stub_api_request_for("SW1A0AA").to_return(api_response(:ok, "london_and_westminster"))
+          stub_api_request_for("E16PL").to_return(api_response(:ok, "bethnal_green_and_bow"))
+        end
+
         let!(:petition) { FactoryBot.create(:open_petition) }
         let!(:signature_1) { FactoryBot.create(:validated_signature, postcode: "SW1A 0AA", petition: petition) }
         let!(:signature_2) { FactoryBot.create(:validated_signature, postcode: "E1 6PL", petition: petition) }

@@ -45,6 +45,12 @@ class Signature < ActiveRecord::Base
     self.uuid = generate_uuid
   end
 
+  before_create if: :postcode? do
+    if united_kingdom?
+      self.constituency_id ||= constituency.try(:external_id)
+    end
+  end
+
   before_destroy do
     !creator?
   end
@@ -391,15 +397,6 @@ class Signature < ActiveRecord::Base
 
   def constituency
     @constituency ||= Constituency.find_by_postcode(postcode)
-  end
-
-  def set_constituency_id
-    self.constituency_id = constituency.try(:external_id)
-  end
-
-  def store_constituency_id
-    set_constituency_id
-    save if constituency_id_changed?
   end
 
   def get_email_sent_at_for(timestamp)
