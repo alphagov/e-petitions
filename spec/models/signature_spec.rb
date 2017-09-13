@@ -172,21 +172,24 @@ RSpec.describe Signature, type: :model do
       end
     end
 
-    context "when the signature is saved" do
+    context "when the signature is created" do
+      let!(:petition) { FactoryBot.create(:open_petition) }
+      let!(:signature) { petition.signatures.build(attributes) }
+      let(:email) { "foo@example.com" }
+      let(:location_code) { "GB" }
+      let(:postcode) { "SW1A 1AA" }
+
+      let(:attributes) do
+        {
+          name: "Suzy Signer",
+          email: email,
+          postcode: postcode,
+          location_code: location_code,
+          uk_citizenship: "1"
+        }
+      end
+
       context "and the signature is a duplicate" do
-        let(:petition) { FactoryBot.create(:open_petition) }
-        let(:signature) { petition.signatures.build(attributes) }
-
-        let(:attributes) do
-          {
-            name: "Suzy Signer",
-            email: "foo@example.com",
-            postcode: "SW1A 1AA",
-            location_code: "GB",
-            uk_citizenship: "1"
-          }
-        end
-
         before do
           petition.signatures.create!(attributes)
         end
@@ -197,25 +200,25 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the email is blank" do
-        subject { FactoryBot.build(:signature, email: "") }
+        let(:email) { "" }
 
         it "doesn't set the uuid column" do
           expect {
-            subject.save
+            signature.save
           }.not_to change {
-            subject.uuid
+            signature.uuid
           }
         end
       end
 
       context "and the email is set" do
-        subject { FactoryBot.build(:signature, email: "alice@example.com") }
+        let(:email) { "alice@example.com" }
 
         it "sets the uuid column" do
           expect {
-            subject.save
+            signature.save
           }.to change {
-            subject.uuid
+            signature.uuid
           }.from(nil).to("6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6")
         end
       end
@@ -236,11 +239,7 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the location is the UK" do
-        let(:location_code) { "GB" }
-
         context "and the postcode is valid" do
-          let(:postcode) { "SW1A 1AA" }
-
           it "calls the Constituency API and sets the constituency_id" do
             expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_call_original
             expect(signature.save).to be_truthy

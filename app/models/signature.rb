@@ -35,13 +35,13 @@ class Signature < ActiveRecord::Base
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
-  before_save if: :email? do
+  before_create if: :email? do
     if find_duplicate
       raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
     end
   end
 
-  before_save if: :email? do
+  before_create if: :email? do
     self.uuid = generate_uuid
   end
 
