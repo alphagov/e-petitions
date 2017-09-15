@@ -223,75 +223,6 @@ RSpec.describe Signature, type: :model do
         end
       end
     end
-
-    context "when the signature is created" do
-      let!(:petition) { FactoryBot.create(:open_petition) }
-      let!(:signature) { petition.signatures.build(attributes) }
-
-      let(:attributes) do
-        {
-          name: "Suzy Signer",
-          email: "foo@example.com",
-          postcode: postcode,
-          location_code: location_code,
-          uk_citizenship: "1"
-        }
-      end
-
-      context "and the location is the UK" do
-        context "and the postcode is valid" do
-          it "calls the Constituency API and sets the constituency_id" do
-            expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_call_original
-            expect(signature.save).to be_truthy
-            expect(signature.constituency_id).to eq("3415")
-          end
-        end
-
-        context "and the postcode is invalid" do
-          let(:postcode) { "SW14 9RQ" }
-
-          it "calls the Constituency API but doesn't set constituency_id" do
-            expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
-            expect(signature.save).to be_truthy
-            expect(signature.constituency_id).to be_nil
-          end
-        end
-
-        context "and the postcode is blank" do
-          let(:postcode) { "" }
-
-          it "doesn't call the Constituency API and doesn't set constituency_id" do
-            expect(Constituency).not_to receive(:find_by_postcode)
-            expect(signature.save).to be_falsey
-            expect(signature.constituency_id).to be_nil
-          end
-        end
-      end
-
-      context "and the location is not the UK" do
-        let(:location_code) { "US" }
-
-        context "and the postcode is set" do
-          let(:postcode) { "12345" }
-
-          it "doesn't call the Constituency API and doesn't set constituency_id" do
-            expect(Constituency).not_to receive(:find_by_postcode)
-            expect(signature.save).to be_truthy
-            expect(signature.constituency_id).to be_nil
-          end
-        end
-
-        context "and the postcode is blank" do
-          let(:postcode) { "" }
-
-          it "doesn't call the Constituency API and doesn't set constituency_id" do
-            expect(Constituency).not_to receive(:find_by_postcode)
-            expect(signature.save).to be_truthy
-            expect(signature.constituency_id).to be_nil
-          end
-        end
-      end
-    end
   end
 
   context "validations" do
@@ -1154,7 +1085,22 @@ RSpec.describe Signature, type: :model do
   end
 
   describe '#validate!' do
-    let(:signature) { FactoryBot.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:signature) { FactoryBot.create(:pending_signature, attributes) }
+    let(:location_code) { "GB" }
+    let(:postcode) { "SW1A 1AA" }
+
+    let (:attributes) do
+      {
+        petition: petition,
+        name: "Suzy Signer",
+        email: "suzy@example.com",
+        postcode: postcode,
+        location_code: location_code,
+        uk_citizenship: "1",
+        created_at: 2.days.ago,
+        updated_at: 2.days.ago
+      }
+    end
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
@@ -1227,6 +1173,66 @@ RSpec.describe Signature, type: :model do
       it "raises PG::InFailedSqlTransaction if it fails twice" do
         expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
         expect{ signature.validate! }.to raise_error(PG::InFailedSqlTransaction)
+      end
+
+      context "and the signer is from the UK" do
+        let(:location_code) { "GB" }
+
+        context "and the postcode is valid" do
+          let(:postcode) { "SW1A 1AA" }
+
+          it "calls the Constituency API and sets the constituency_id" do
+            expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_call_original
+
+            signature.validate!
+
+            expect(signature).to be_validated
+            expect(signature.constituency_id).to eq("3415")
+          end
+        end
+
+        context "and the postcode is invalid" do
+          let(:postcode) { "SW14 9RQ" }
+
+          it "calls the Constituency API but doesn't set constituency_id" do
+            expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
+
+            signature.validate!
+
+            expect(signature).to be_validated
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+      end
+
+      context "and the signer is not from the UK" do
+        let(:location_code) { "US" }
+
+        context "and the postcode is set" do
+          let(:postcode) { "12345" }
+
+          it "doesn't call the Constituency API and doesn't set constituency_id" do
+            expect(Constituency).not_to receive(:find_by_postcode)
+
+            signature.validate!
+
+            expect(signature).to be_validated
+            expect(signature.constituency_id).to be_nil
+          end
+        end
+
+        context "and the postcode is blank" do
+          let(:postcode) { "" }
+
+          it "doesn't call the Constituency API and doesn't set constituency_id" do
+            expect(Constituency).not_to receive(:find_by_postcode)
+
+            signature.validate!
+
+            expect(signature).to be_validated
+            expect(signature.constituency_id).to be_nil
+          end
+        end
       end
     end
   end

@@ -47,12 +47,6 @@ class Signature < ActiveRecord::Base
     self.uuid = generate_uuid
   end
 
-  before_create if: :postcode? do
-    if united_kingdom?
-      self.constituency_id ||= constituency.try(:external_id)
-    end
-  end
-
   before_destroy do
     !creator?
   end
@@ -321,18 +315,31 @@ class Signature < ActiveRecord::Base
 
   def validate!(now = Time.current)
     update_signature_counts = false
+    new_constituency_id = nil
+
+    unless constituency_id?
+      if united_kingdom? && postcode?
+        new_constituency_id = constituency.try(:external_id)
+      end
+    end
 
     retry_lock do
       if pending?
         update_signature_counts = true
         petition.validate_creator! unless creator?
 
-        update_columns(
+        attributes = {
           number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: now,
           updated_at:   now
-        )
+        }
+
+        if new_constituency_id
+          attributes[:constituency_id] = new_constituency_id
+        end
+
+        update_columns(attributes)
       end
     end
 
