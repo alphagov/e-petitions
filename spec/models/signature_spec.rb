@@ -495,6 +495,44 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "read-only attributes" do
+    [
+      [:sponsor, true, false],
+      [:creator, true, false]
+    ].each do |attribute, value, new_value|
+
+      describe "##{attribute}" do
+        let(:signature) { FactoryBot.create(:signature, attribute => value) }
+        let(:exception) { ActiveRecord::ActiveRecordError }
+        let(:message) { "#{attribute} is marked as readonly" }
+
+        it "can't be updated via update_column" do
+          expect {
+            signature.update_column(attribute, new_value)
+          }.to raise_error(exception, message)
+        end
+
+        it "can't be updated via update" do
+          expect {
+            signature.update(attribute => value)
+          }.not_to change {
+            signature.reload.send(attribute)
+          }
+        end
+
+        it "can't be updated via save" do
+          expect {
+            signature.send(:"#{attribute}=", new_value)
+            signature.save
+          }.not_to change {
+            signature.reload.send(attribute)
+          }
+        end
+      end
+
+    end
+  end
+
   describe ".search" do
     let(:scope) { double(:scope) }
 
