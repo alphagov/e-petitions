@@ -212,23 +212,25 @@ FactoryBot.define do
 
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
-    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::VALIDATED_STATE, notify_by_email: true, validated_at: Time.current)) }
 
     after(:build) do |petition, evaluator|
-      if petition.signature_count.zero?
-        petition.signature_count += 1 if petition.creator.validated?
+      petition.creator ||= FactoryBot.build(:validated_signature, creator: true)
+      petition.creator.assign_attributes(evaluator.creator_attributes)
+
+      if evaluator.creator_name
+        petition.creator.name = evaluator.creator_name
       end
 
       if evaluator.admin_notes
         petition.build_note details: evaluator.admin_notes
       end
-
-      if evaluator.creator_name
-        petition.creator.name = evaluator.creator_name
-      end
     end
 
     after(:create) do |petition, evaluator|
+      if petition.signature_count.zero?
+        petition.increment!(:signature_count) if petition.creator.validated?
+      end
+
       unless evaluator.sponsors_signed.nil?
         evaluator.sponsor_count.times do
           if evaluator.sponsors_signed
@@ -287,7 +289,11 @@ FactoryBot.define do
 
   factory :pending_petition, :parent => :petition do
     state Petition::PENDING_STATE
-    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::PENDING_STATE)) }
+
+    after(:build) do |petition, evaluator|
+      petition.creator.state = Signature::PENDING_STATE
+      petition.creator.validated_at = nil
+    end
   end
 
   factory :validated_petition, :parent => :petition do
