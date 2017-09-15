@@ -17,7 +17,7 @@ RSpec.describe AdminHubHelper, type: :helper do
 
     describe "recently_in_moderation_count" do
       it 'returns the number recently in moderation' do
-        expect(helper.recently_in_moderation_count).to eq 1
+        expect(helper.recently_in_moderation_count).to eq 2
       end
     end
 

@@ -362,15 +362,15 @@ class Petition < ActiveRecord::Base
     end
 
     def recently_in_moderation
-      untagged.in_moderation(from: moderation_near_overdue_at)
+      in_moderation(from: moderation_near_overdue_at)
     end
 
     def nearly_overdue_in_moderation
-      untagged.in_moderation(from: moderation_overdue_at, to: moderation_near_overdue_at)
+      in_moderation(from: moderation_overdue_at, to: moderation_near_overdue_at)
     end
 
     def overdue_in_moderation
-      untagged.in_moderation(to: moderation_overdue_at)
+      in_moderation(to: moderation_overdue_at)
     end
 
     def tagged_in_moderation
