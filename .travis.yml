@@ -2,6 +2,8 @@ sudo: false
 language: ruby
 cache:
   bundler: true
+  directories:
+    - travis_phantomjs
 rvm:
 - 2.2.6
 services:
@@ -11,6 +13,16 @@ addons:
   postgresql: "9.4"
 before_install:
 - gem install bundler
+- |
+    export PHANTOMJS_VERSION=2.1.1
+    export PATH=$PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
+    if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then
+      rm -rf $PWD/travis_phantomjs
+      mkdir -p $PWD/travis_phantomjs
+      wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
+      tar -xvf phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs
+    fi
+    phantomjs -v
 before_script:
 - bundle install
 - psql -c 'create database epets_test;' -U postgres
