@@ -678,7 +678,7 @@ class Petition < ActiveRecord::Base
   def checkout!(user, now = Time.current)
     with_lock do
       if locked_by.present? && locked_by != user
-        raise RuntimeError, "Petition already being edited by #{locked_by.pretty_name}"
+        false
       else
         update!(locked_by: user, locked_at: now)
       end

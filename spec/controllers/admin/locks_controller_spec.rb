@@ -143,13 +143,17 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
         it "doesn't update the locked_by association" do
           expect {
             get :create, petition_id: petition.to_param, format: :json
-          }.to raise_error(RuntimeError, /Petition already being edited/)
+          }.not_to change {
+            petition.reload.locked_by
+          }
         end
 
         it "doesn't update the locked_at timestamp" do
           expect {
             get :create, petition_id: petition.to_param, format: :json
-          }.to raise_error(RuntimeError, /Petition already being edited/)
+          }.not_to change {
+            petition.reload.locked_at
+          }
         end
       end
     end
