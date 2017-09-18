@@ -941,10 +941,8 @@ RSpec.describe Archived::Petition, type: :model do
       let(:other_user) { FactoryGirl.create(:moderator_user) }
       let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
-      it "raises an error" do
-        expect {
-          petition.checkout!(current_user)
-        }.to raise_error(RuntimeError, /Petition already being edited/)
+      it "returns false" do
+        expect(petition.checkout!(current_user)).to eq(false)
       end
     end
 
