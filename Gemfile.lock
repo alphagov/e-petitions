@@ -36,9 +36,8 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     addressable (2.3.8)
-    appsignal (2.1.0)
+    appsignal (2.3.4)
       rack
-      thread_safe
     arel (6.0.4)
     authlogic (3.4.6)
       activerecord (>= 3.2)
@@ -204,7 +203,7 @@ GEM
       method_source (~> 0.8.1)
       slop (~> 3.4)
     puma (3.4.0)
-    rack (1.6.7)
+    rack (1.6.8)
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.8)
