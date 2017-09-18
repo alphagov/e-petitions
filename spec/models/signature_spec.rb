@@ -791,6 +791,39 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".missing_constituency_id" do
+    let!(:signature_1) { FactoryBot.create(:validated_signature, validated_at: 2.weeks.ago) }
+    let!(:signature_2) { FactoryBot.create(:validated_signature, constituency_id: "3415") }
+    let!(:signature_3) { FactoryBot.create(:validated_signature, location_code: "US") }
+    let!(:signature_4) { FactoryBot.create(:validated_signature) }
+
+    subject { described_class.missing_constituency_id(since: 1.week.ago) }
+
+    it "doesn't include signatures from before the cut-off date" do
+      expect(subject).not_to include(signature_1)
+    end
+
+    it "doesn't include signatures that have a constituency_id" do
+      expect(subject).not_to include(signature_2)
+    end
+
+    it "doesn't include signatures that are not in the UK" do
+      expect(subject).not_to include(signature_3)
+    end
+
+    it "includes signatures that need their constituency_id set" do
+      expect(subject).to include(signature_4)
+    end
+
+    context "when not supplying the cut-off date" do
+      subject { described_class.missing_constituency_id }
+
+      it "includes all signatures that need their constituency_id set" do
+        expect(subject).to include(signature_1)
+      end
+    end
+  end
+
   describe ".petition_ids_with_invalid_signature_counts" do
     subject do
       described_class.petition_ids_with_invalid_signature_counts

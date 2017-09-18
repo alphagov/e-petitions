@@ -472,6 +472,53 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe "feature flags" do
+    let(:site) { Site.first_or_create(Site.defaults) }
+    let(:feature_flags) { site.feature_flags }
+
+    let(:true_values) {
+      [true, 1, '1', 't', 'T', 'true', 'TRUE', 'on', 'ON']
+    }
+
+    let(:false_values) {
+      [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF']
+    }
+
+    Site::FEATURE_FLAGS.each do |feature_flag|
+      context feature_flag do
+        it "has a singleton query method" do
+          expect(Site).to respond_to(:"#{feature_flag}?")
+        end
+
+        it "has a instance getter" do
+          expect(site).to respond_to(:"#{feature_flag}")
+        end
+
+        it "has a instance setter" do
+          expect(site).to respond_to(:"#{feature_flag}=")
+        end
+
+        it "typecasts true values correctly" do
+          true_values.each do |value|
+            feature_flags.clear
+            site.send(:"#{feature_flag}=", value)
+
+            expect(feature_flags).to eq(feature_flag => true)
+          end
+        end
+
+        it "typecasts false values correctly" do
+          false_values.each do |value|
+            feature_flags.clear
+            site.send(:"#{feature_flag}=", value)
+
+            expect(feature_flags).to eq(feature_flag => false)
+          end
+        end
+      end
+    end
+  end
+
   describe ".authenticate" do
     let(:site) { Site.first_or_create(Site.defaults) }
 

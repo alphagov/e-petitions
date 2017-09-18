@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe BackfillSignatureUuidsJob, type: :job do
-  let(:relation) { double(:relation) }
-
   context "when the uuid column is nil" do
     let(:signature) { FactoryBot.create(:signature, email: "alice@example.com") }
     let(:uuid) { "6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6" }
@@ -14,7 +12,7 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
 
     it "updates the signature column" do
       expect {
-        subject.perform_now
+        described_class.perform_now
       }.to change {
         signature.reload.uuid
       }.from(nil).to(uuid)
@@ -32,7 +30,7 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
 
     it "skips updating the uuid" do
       expect {
-        subject.perform_now
+        described_class.perform_now
       }.not_to change {
         signature.reload.uuid
       }

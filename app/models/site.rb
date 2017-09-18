@@ -7,6 +7,9 @@ class Site < ActiveRecord::Base
 
   include ActiveSupport::NumberHelper
 
+  FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
+  FEATURE_FLAGS = %w[disable_constituency_api]
+
   class << self
     def table_exists?
       @table_exists ||= connection.table_exists?(table_name)
@@ -256,6 +259,20 @@ class Site < ActiveRecord::Base
     end
   end
 
+  FEATURE_FLAGS.each do |feature_flag|
+    define_singleton_method(:"#{feature_flag}?") do |*args, &block|
+      instance.public_send(feature_flag, *args, &block)
+    end
+
+    define_method(:"#{feature_flag}=") do |value|
+      write_store_attribute(:feature_flags, feature_flag, type_cast_feature_flag(value))
+    end
+
+    define_method(feature_flag) do
+      read_store_attribute(:feature_flags, feature_flag)
+    end
+  end
+
   attr_reader :password
 
   def authenticate(username, password)
@@ -394,5 +411,9 @@ class Site < ActiveRecord::Base
 
   def moderate_uri
     @moderate_uri ||= URI.parse(moderate_url)
+  end
+
+  def type_cast_feature_flag(value)
+    value.in?(FALSE_VALUES) ? false : true
   end
 end

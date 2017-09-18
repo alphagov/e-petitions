@@ -1,0 +1,19 @@
+<%= hidden_field_tag :tab, "petitions" %>
+
+<%= form_row for: [form.object, :petition_duration] do %>
+  <%= form.label :petition_duration, "Duration", class: "form-label" %>
+  <%= error_messages_for_field @site, :petition_duration %>
+  <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">months</span>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_response] do %>
+  <%= form.label :threshold_for_response, "Threshold for government response", class: "form-label" %>
+  <%= error_messages_for_field @site, :threshold_for_response %>
+  <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_debate] do %>
+  <%= form.label :threshold_for_debate, "Threshold for consideration for a debate", class: "form-label" %>
+  <%= error_messages_for_field @site, :threshold_for_debate %>
+  <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>

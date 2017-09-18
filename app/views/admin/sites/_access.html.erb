@@ -1,0 +1,69 @@
+<%= hidden_field_tag :tab, "access" %>
+
+<%= form_row for: [form.object, :enabled], class: "inline" do %>
+  <%= form.label :enabled, "Disable public website?", class: "form-label" %>
+  <%= error_messages_for_field @site, :enabled %>
+  <%= form.label :enabled, nil, class: "block-label" do %>
+    <%= form.radio_button :enabled, false %> Yes
+  <% end %>
+  <%= form.label :enabled, nil, class: "block-label" do %>
+    <%= form.radio_button :enabled, true %> No
+  <% end %>
+<% end %>
+
+<%= form_row for: [form.object, :protected], class: "inline" do %>
+  <%= form.label :protected, "Password protect public website?", class: "form-label" %>
+  <%= error_messages_for_field @site, :protected %>
+  <%= form.label :protected, nil, class: "block-label" do %>
+    <%= form.radio_button :protected, true %> Yes
+  <% end %>
+  <%= form.label :protected, nil, class: "block-label" do %>
+    <%= form.radio_button :protected, false %> No
+  <% end %>
+<% end %>
+
+<div id="protected-fields">
+  <%= form_row for: [form.object, :username] do %>
+    <%= form.label :username, class: "form-label" %>
+    <%= error_messages_for_field @site, :username %>
+    <%= form.text_field :username, tabindex: increment, maxlength: 50, class: "form-control" %>
+  <% end %>
+
+  <%= form_row for: [form.object, :password] do %>
+    <%= form.label :password, class: "form-label" %>
+    <%= error_messages_for_field @site, :password %>
+    <%= form.password_field :password, tabindex: increment, maxlength: 50, class: "form-control" %>
+  <% end %>
+</div>
+
+<%= form_row for: [form.object, :login_timeout] do %>
+  <%= form.label :login_timeout, "Login timeout for moderation users", class: "form-label" %>
+  <%= error_messages_for_field @site, :login_timeout %>
+  <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">seconds</span>
+<% end %>
+
+<%= javascript_tag do %>
+  $().ready(function() {
+    var $protected_fields = $('#protected-fields'),
+        $true_control = $('input[name="site[protected]"][value=true]'),
+        $false_control = $('input[name="site[protected]"][value=false]'),
+        $all_controls = $('input[name="site[protected]"][type=radio]');
+
+    if ($true_control.is(':checked')) {
+      $protected_fields.show();
+    } else {
+      $protected_fields.hide();
+    }
+
+    $all_controls.keyup(function() {
+      this.blur();
+      this.focus();
+    }).change(function() {
+      if ($true_control.is(':checked')) {
+        $protected_fields.show();
+      } else {
+        $protected_fields.hide();
+      }
+    });
+  });
+<% end -%>

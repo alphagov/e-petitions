@@ -136,6 +136,14 @@ class Signature < ActiveRecord::Base
       where(state: INVALIDATED_STATE)
     end
 
+    def missing_constituency_id(since: nil)
+      if since
+        uk.validated(since: since).where(constituency_id: nil)
+      else
+        uk.validated.where(constituency_id: nil)
+      end
+    end
+
     def need_emailing_for(timestamp, since:)
       validated.subscribed.for_timestamp(timestamp, since: since)
     end
@@ -199,6 +207,10 @@ class Signature < ActiveRecord::Base
       count(:all)
     end
 
+    def uk
+      where(location_code: "GB")
+    end
+
     def unarchived
       where(archived_at: nil)
     end
@@ -229,8 +241,12 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validated
-      where(state: VALIDATED_STATE)
+    def validated(since: nil)
+      if since
+        where(state: VALIDATED_STATE).where(validated_at.gt(since))
+      else
+        where(state: VALIDATED_STATE)
+      end
     end
 
     private
@@ -241,6 +257,10 @@ class Signature < ActiveRecord::Base
 
     def email_search?(query)
       query.include?('@')
+    end
+
+    def validated_at
+      arel_table[:validated_at]
     end
   end
 

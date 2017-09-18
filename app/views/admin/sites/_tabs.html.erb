@@ -1,0 +1,43 @@
+<% if params[:tab] == "petitions" %>
+  <%= link_to "Description", edit_admin_site_path %> |
+  Petitions |
+  <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+  <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+  <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+  <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %>
+<% elsif params[:tab] == "moderation" %>
+  <%= link_to "Description", edit_admin_site_path %> |
+  <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+  Moderation |
+  <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+  <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+  <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %>
+<% elsif params[:tab] == "access" %>
+  <%= link_to "Description", edit_admin_site_path %> |
+  <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+  <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+  Access |
+  <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+  <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %>
+<% elsif params[:tab] == "features" %>
+  <%= link_to "Description", edit_admin_site_path %> |
+  <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+  <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+  <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+  Features |
+  <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %>
+<% elsif params[:tab] == "tasks" %>
+  <%= link_to "Description", edit_admin_site_path %> |
+  <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+  <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+  <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+  <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+  Tasks
+<% else %>
+  Description |
+  <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+  <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+  <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+  <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+  <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %>
+<% end %>

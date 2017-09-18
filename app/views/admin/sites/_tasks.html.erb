@@ -1,0 +1,22 @@
+<%= form_tag admin_tasks_url do |form| %>
+  <div class="form-group inline">
+    <label class="form-label">
+      <input type="checkbox" value="backfill_constituencies" name="tasks[]">
+      Backfill constituencies on signatures validated in the last:
+    </label>
+
+    <label class="block-label">
+      <input type="radio" value="week" name="backfill_constituencies[since]" checked> Week
+    </label>
+
+    <label class="block-label">
+      <input type="radio" value="month" name="backfill_constituencies[since]"> Month
+    </label>
+
+    <label class="block-label">
+      <input type="radio" value="three_months" name="backfill_constituencies[since]"> Three months
+    </label>
+  </div>
+
+  <%= submit_tag "Run Tasks", class: "button" %>
+<% end %>
