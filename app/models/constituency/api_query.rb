@@ -24,7 +24,7 @@ class Constituency < ActiveRecord::Base
     rescue Faraday::ResourceNotFound, Faraday::ClientError => e
       return []
     rescue Faraday::Error => e
-      Appsignal.send_exception(e) if defined?(Appsignal)
+      Appsignal.send_exception(e)
       return []
     end
 
