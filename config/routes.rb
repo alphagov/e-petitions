@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   constraints Site.constraints_for_public do
+    controller 'constituencies' do
+      get '/constituencies', action: 'index', as: :constituencies
+    end
+
     controller 'pages' do
       get '/',        action: 'index', as: :home
       get '/help',    action: 'help'
