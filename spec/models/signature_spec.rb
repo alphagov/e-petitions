@@ -1130,6 +1130,34 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "#save" do
+    let(:petition) { FactoryGirl.create(:petition, creator_attributes: { name: "Alice", email: "aliceandbob@example.com" }) }
+
+    before do
+      FactoryGirl.create(:validated_signature, name: "Bob", email: "aliceandbob@example.com", petition: petition)
+    end
+
+    context "when the new creator hasn't already signed" do
+      it "saves the new name" do
+        expect(petition.update(creator_attributes: { name: "Fred" })).to be_truthy
+      end
+    end
+
+    context "when the new creator has already signed" do
+      it "doesn't save the new name" do
+        expect(petition.update(creator_attributes: { name: "Bob" })).to be_falsey
+      end
+
+      it "adds an error to the name attribute" do
+        expect {
+          petition.update(creator_attributes: { name: "Bob" })
+        }.to change {
+          petition.creator.errors[:name]
+        }.from([]).to(["Bob has already signed this petition using aliceandbob@example.com"])
+      end
+    end
+  end
+
   describe "#unsubscribe" do
     let(:signature) { FactoryGirl.create(:validated_signature, notify_by_email: subscribed) }
     let(:unsubscribe_token) { signature.unsubscribe_token }

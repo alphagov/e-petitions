@@ -51,6 +51,8 @@ en-GB:
           attributes:
             state:
               inclusion: "State '%{value}' not recognised"
+            name:
+              already_signed: "%{name} has already signed this petition using %{email}"
 
         sponsor:
           attributes:
