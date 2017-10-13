@@ -31,7 +31,7 @@
         <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control', disabled: @petition.editing_disabled? %>
       <% end %>
 
-      <%= form_row for: [f.object, :creator_name] do %>
+      <%= form_row for: [@petition.creator, :name] do %>
         <%= f.fields_for :creator do |c| %>
           <%= c.label :name, "Creator", class: 'form-label' %>
           <%= error_messages_for_field @petition.creator, :name %>
