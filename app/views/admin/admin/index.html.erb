@@ -16,7 +16,8 @@
         <p>
           <small>
             Match <label><input type="radio" name="match" value="any" checked /> any selected tags</label>
-            or <label><input type="radio" name="match" value="all" /> all selected tags</label>
+            <label><input type="radio" name="match" value="all" /> all selected tags</label>
+            <label><input type="radio" name="match" value="none" /> no tags</label>
           </small>
         </p>
         <div class="inline tag-list">
@@ -64,25 +65,43 @@
           <div class="details">
             <div class="recently-in-moderation queue-stable">
               <%= link_to admin_petitions_url(state: :recently_in_moderation) do %>
-                <%= recently_in_moderation_count %><span class="label">0-5 days</span>
+                <%= recently_in_moderation_count %>
+                <% unless recently_in_moderation_untagged_count.zero? %>
+                 / <%= recently_in_moderation_untagged_count %>
+                <% end %>
+                <span class="label">0-5 days</span>
               <% end %>
             </div>
 
             <div class="nearly-overdue-in-moderation queue-caution">
               <%= link_to admin_petitions_url(state: :nearly_overdue_in_moderation) do %>
-                <%= nearly_overdue_in_moderation_count %><span class="label">6-7 days</span>
+                <%= nearly_overdue_in_moderation_count %>
+                <span class="label">6-7 days</span>
+                <% unless nearly_overdue_in_moderation_untagged_count.zero? %>
+                 / <%= nearly_overdue_in_moderation_untagged_count %>
+                <% end %>
               <% end %>
             </div>
 
             <div class="overdue-in-moderation queue-danger">
               <%= link_to admin_petitions_url(state: :overdue_in_moderation) do %>
-                <%= overdue_in_moderation_count %><span class="label">&gt; 7 days</span>
+                <%= overdue_in_moderation_count %>
+                <span class="label">&gt; 7 days</span>
+                <% unless overdue_in_moderation_untagged_count.zero? %>
+                  <small>(<%= overdue_in_moderation_untagged_count %> untagged)</small>
+                <% end %>
               <% end %>
             </div>
 
             <div class="tagged-in-moderation">
               <%= link_to admin_petitions_url(state: :tagged_in_moderation) do %>
                 <%= tagged_in_moderation_count %><span class="label">Tagged</span>
+              <% end %>
+            </div>
+
+            <div class="untagged-in-moderation">
+              <%= link_to admin_petitions_url(state: :untagged_in_moderation) do %>
+                <%= untagged_in_moderation_count %><span class="label">Untagged</span>
               <% end %>
             </div>
           </div>

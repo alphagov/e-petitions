@@ -15,6 +15,14 @@ module AdminHubHelper
     @recently_in_moderation_count ||= Petition.recently_in_moderation.count
   end
 
+  def recently_in_moderation_untagged_count
+    @recently_in_moderation_untagged_count ||= Petition.untagged.recently_in_moderation.count
+  end
+
+  def nearly_overdue_in_moderation_untagged_count
+    @nearly_overdue_in_moderation_untagged_count ||= Petition.untagged.nearly_overdue_in_moderation.count
+  end
+
   def nearly_overdue_in_moderation_count
     @nearly_overdue_in_moderation_count ||= Petition.nearly_overdue_in_moderation.count
   end
@@ -23,8 +31,16 @@ module AdminHubHelper
     @overdue_in_moderation_count ||= Petition.overdue_in_moderation.count
   end
 
+  def overdue_in_moderation_untagged_count
+    @overdue_in_moderation_untagged_count ||= Petition.untagged.overdue_in_moderation.count
+  end
+
   def tagged_in_moderation_count
     @tagged_in_moderation_count ||= Petition.tagged_in_moderation.count
+  end
+
+  def untagged_in_moderation_count
+    @untagged_in_moderation_count ||= Petition.untagged_in_moderation.count
   end
 
   def summary_class_name_for_in_moderation
