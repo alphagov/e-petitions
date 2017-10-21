@@ -738,6 +738,23 @@ RSpec.describe Petition, type: :model do
         expect(Petition.tagged_in_moderation).not_to include(recent_petition, overdue_petition, nearly_overdue_petition)
       end
     end
+
+    describe ".untagged_in_moderation" do
+      let!(:recent_petition) { FactoryGirl.create(:sponsored_petition, :recent) }
+      let!(:overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue) }
+      let!(:nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+      let!(:tagged_recent_petition) { FactoryGirl.create(:sponsored_petition, :recent, :tagged) }
+      let!(:tagged_overdue_petition) { FactoryGirl.create(:sponsored_petition, :overdue, :tagged) }
+      let!(:tagged_nearly_overdue_petition) { FactoryGirl.create(:sponsored_petition, :nearly_overdue, :tagged) }
+
+      it "returns petitions that are in the moderation queue and are untagged" do
+        expect(Petition.untagged_in_moderation).to include(recent_petition, overdue_petition, nearly_overdue_petition)
+      end
+
+      it "doesn't return petitions that are in the moderation queue and are tagged" do
+        expect(Petition.untagged_in_moderation).not_to include(tagged_recent_petition, tagged_overdue_petition, tagged_nearly_overdue_petition)
+      end
+    end
   end
 
   it_behaves_like "a taggable model"

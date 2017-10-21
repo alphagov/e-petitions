@@ -22,12 +22,13 @@
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <%= content_tag(:details, class: "tag-selector", open: selected_tags.present?) do %>
+      <%= content_tag(:details, class: "tag-selector", open: selected_tags.present? || params[:match] == "none") do %>
         <summary><span>Tags</span></summary>
         <p>
           <small>
-            Match <label><%= radio_button_tag :match, "any", params[:match] != "all" %> any selected tags</label>
-            or <label><%= radio_button_tag :match, "all", params[:match] == "all" %> all selected tags</label>
+            Match <label><%= radio_button_tag :match, "any", %w[all none].exclude?(params[:match]) %> any selected tags</label>
+            <label><%= radio_button_tag :match, "all", params[:match] == "all" %> all selected tags</label>
+            <label><%= radio_button_tag :match, "none", params[:match] == "none" %> no tags</label>
           </small>
         </p>
         <div class="inline tag-list">

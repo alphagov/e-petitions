@@ -21,7 +21,9 @@ class Admin::SearchesController < Admin::AdminController
 
   def search_params
     if petition_search?
-      if params[:tags].present?
+      if params[:match] == "none"
+        params.slice(:q, :match)
+      elsif params[:tags].present?
         params.slice(:q, :tags, :match)
       else
         params.slice(:q)

@@ -63,6 +63,7 @@ class Petition < ActiveRecord::Base
   facet :nearly_overdue_in_moderation, -> { nearly_overdue_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :overdue_in_moderation,        -> { overdue_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
+  facet :untagged_in_moderation,       -> { untagged_in_moderation.by_most_recent_moderation_threshold_reached }
 
   has_one :creator, -> { where(creator: true) }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true
@@ -375,6 +376,10 @@ class Petition < ActiveRecord::Base
 
     def tagged_in_moderation
       tagged.in_moderation
+    end
+
+    def untagged_in_moderation
+      untagged.in_moderation
     end
 
     private

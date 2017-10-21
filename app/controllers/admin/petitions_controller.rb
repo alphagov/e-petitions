@@ -31,7 +31,9 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def scope
-    if params[:tags].present?
+    if params[:match] == "none"
+      Petition.untagged
+    elsif params[:tags].present?
       if params[:match] == "all"
         Petition.tagged_with_all(params[:tags])
       else

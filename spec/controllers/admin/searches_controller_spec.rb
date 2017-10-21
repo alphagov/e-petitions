@@ -41,6 +41,13 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         end
       end
 
+      context "when searching for petitions with no tags" do
+        it "redirects to the petitions search url" do
+          get :show, type: "petition", q: "foo", match: "none"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?match=none&q=foo")
+        end
+      end
+
       context "when searching for signatures" do
         it "redirects to the signatures search url" do
           get :show, type: "signature", q: "foo"
