@@ -93,7 +93,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "We rejected the petition you created" in the email body
-    And they should see "#{rejection_description(@petition.rejection.code).gsub(/<.*?>/,' ').split.last}" in the email body
+    And they should see "#{strip_tags(rejection_description(@petition.rejection.code)).split("\n").first}" in the email body
     And they should see /We rejected your petition/ in the email subject
   )
   if petition_is_libellous

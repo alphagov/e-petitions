@@ -35,7 +35,15 @@ module CucumberI18n
   end
 end
 
+module CucumberSanitizer
+  def strip_tags(html)
+    @sanitizer ||= Rails::Html::FullSanitizer.new
+    @sanitizer.sanitize(html, encode_special_chars: false)
+  end
+end
+
 World(CucumberI18n)
+World(CucumberSanitizer)
 World(RejectionHelper)
 
 # run background jobs inline with delayed job
