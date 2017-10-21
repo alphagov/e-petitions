@@ -17,8 +17,10 @@
   <dt>Created on</dt>
   <dd><%= date_time_format(@petition.created_at) %></dd>
 
-  <dt>Sponsored on</dt>
-  <dd><%= date_time_format(@petition.moderation_threshold_reached_at) %></dd>
+  <% if @petition.moderation_threshold_reached_at? %>
+    <dt>Sponsored on</dt>
+    <dd><%= date_time_format(@petition.moderation_threshold_reached_at) %></dd>
+  <% end %>
 <% else %>
   <dt>Deadline</dt>
   <dd><%= date_format_admin(@petition.deadline) %></dd>
