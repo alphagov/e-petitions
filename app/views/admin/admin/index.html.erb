@@ -76,20 +76,20 @@
             <div class="nearly-overdue-in-moderation queue-caution">
               <%= link_to admin_petitions_url(state: :nearly_overdue_in_moderation) do %>
                 <%= nearly_overdue_in_moderation_count %>
-                <span class="label">6-7 days</span>
                 <% unless nearly_overdue_in_moderation_untagged_count.zero? %>
                  / <%= nearly_overdue_in_moderation_untagged_count %>
                 <% end %>
+                <span class="label">6-7 days</span>
               <% end %>
             </div>
 
             <div class="overdue-in-moderation queue-danger">
               <%= link_to admin_petitions_url(state: :overdue_in_moderation) do %>
                 <%= overdue_in_moderation_count %>
-                <span class="label">&gt; 7 days</span>
                 <% unless overdue_in_moderation_untagged_count.zero? %>
-                  <small>(<%= overdue_in_moderation_untagged_count %> untagged)</small>
+                 / <%= overdue_in_moderation_untagged_count %>
                 <% end %>
+                <span class="label">&gt; 7 days</span>
               <% end %>
             </div>
 
