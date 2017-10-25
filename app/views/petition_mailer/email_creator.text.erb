@@ -7,7 +7,7 @@ Dear <%= @signature.name %>,
 You recently created the petition “<%= @petition.action %>”:
 <%= petition_url(@petition) %>
 
-<%= @email.body %>
+<%= markdown_to_text(@email.body) %>
 
 Thanks,
 <%= t("petitions.emails.signoff_prefix") %>

@@ -73,3 +73,69 @@
     margin-top: 10px;
   }
 }
+
+.about-item-other-business {
+  ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  ol {
+    list-style-type: decimal;
+    padding-left: 20px;
+
+    @include ie-lte(7) {
+      padding-left: 28px;
+    }
+  }
+
+  ul, ol {
+    margin-top: em(5, 16);
+    margin-bottom: em(10, 16);
+
+    @include media(tablet) {
+      margin-top: em(10, 16);
+      margin-bottom: em(10, 16);
+    }
+
+    & li {
+      margin: 0 0 em(2, 16);
+
+      @include media(tablet) {
+        margin: 0 0 em(2, 19);
+      }
+    }
+  }
+
+  h3 {
+    margin: em(15, 16) 0 em(5, 16);
+
+    @include media(tablet) {
+      margin: em(15, 19) 0 em(5, 19);
+    }
+  }
+
+  p {
+    margin: 0 0 em(10, 16);
+
+    @include media(tablet) {
+      margin: 0 0 em(10, 19);
+    }
+  }
+
+  .panel-indent {
+    margin: 0;
+  }
+
+  hr {
+    height: 0px;
+    border: none;
+    border-top: 1px solid $grey-2;
+
+    margin: em(15, 16) 0;
+
+    @include media(tablet) {
+      margin: em(15, 19) 0;
+    }
+  }
+}
