@@ -429,6 +429,152 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
           it_behaves_like 'trying to email supporters of a petition in the wrong state'
         end
       end
+
+      context 'when clicking the Preview button' do
+        def do_post(overrides = {})
+          params = {
+            petition_id: petition.id,
+            archived_petition_email: petition_email_attributes,
+            save_and_preview: "Save and preview"
+          }
+
+          post :create, params.merge(overrides)
+        end
+
+        describe 'for an open petition' do
+          it 'fetches the requested petition' do
+            do_post
+            expect(assigns(:petition)).to eq petition
+          end
+
+          describe 'with valid params' do
+            it 'redirects to the petition show page' do
+              do_post
+              expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}"
+            end
+
+            it 'tells the moderator that their changes were saved' do
+              do_post
+              expect(flash[:notice]).to eq 'Preview email successfully sent'
+            end
+
+            it 'stores the supplied email details in the db' do
+              do_post
+              petition.reload
+              email = petition.emails.last
+              expect(email).to be_present
+              expect(email.subject).to eq "Petition email subject"
+              expect(email.body).to eq "Petition email body"
+              expect(email.sent_by).to eq user.pretty_name
+            end
+
+            context "does not email out the petition email" do
+              before do
+                3.times do |i|
+                  attributes = {
+                    name: "Laura #{i}",
+                    email: "laura_#{i}@example.com",
+                    notify_by_email: true,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :validated, attributes)
+                end
+
+                2.times do |i|
+                  attributes = {
+                    name: "Sarah #{i}",
+                    email: "sarah_#{i}@example.com",
+                    notify_by_email: false,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :validated, attributes)
+                end
+
+                2.times do |i|
+                  attributes = {
+                    name: "Brian #{i}",
+                    email: "brian_#{i}@example.com",
+                    notify_by_email: true,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :pending, attributes)
+                end
+
+                petition.reload
+              end
+
+              it "does not queue a job to process the emails" do
+                assert_enqueued_jobs 0 do
+                  do_post
+                end
+              end
+            end
+
+            it "should email out a preview email" do
+              perform_enqueued_jobs do
+                do_post
+                expect(deliveries.length).to eq 1
+                expect(deliveries.map(&:to)).to eq([
+                  ['petitionscommittee@parliament.uk']
+                ])
+              end
+            end
+          end
+
+          describe 'with invalid params' do
+            let(:petition_email_attributes) do
+              { subject: "", body: "" }
+            end
+
+            it 're-renders the petitions/show template' do
+              do_post
+              expect(response).to be_success
+              expect(response).to render_template('petitions/show')
+            end
+
+            it 'leaves the in-memory instance with errors' do
+              do_post
+              expect(assigns(:email)).to be_present
+              expect(assigns(:email).errors).not_to be_empty
+            end
+
+            it 'does not stores the email details in the db' do
+              do_post
+              petition.reload
+              expect(petition.emails).to be_empty
+            end
+          end
+        end
+
+        shared_examples_for 'trying to email supporters of a petition in the wrong state' do
+          it 'raises a 404 error' do
+            expect {
+              do_post
+            }.to raise_error ActiveRecord::RecordNotFound
+          end
+
+          it 'does not store the supplied email details in the db' do
+            suppress(ActiveRecord::RecordNotFound) { do_post }
+            petition.reload
+            expect(petition.emails).to be_empty
+          end
+        end
+
+        describe 'for a rejected petition' do
+          let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
+
+          it_behaves_like 'trying to email supporters of a petition in the wrong state'
+        end
+
+        describe 'for a hidden petition' do
+          let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
+
+          it_behaves_like 'trying to email supporters of a petition in the wrong state'
+        end
+      end
     end
 
     describe 'GET /:id/edit' do
@@ -754,6 +900,162 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
                 assert_enqueued_jobs 0 do
                   do_patch
                 end
+              end
+            end
+          end
+
+          describe 'with invalid params' do
+            let(:petition_email_attributes) do
+              { subject: "", body: "" }
+            end
+
+            it 're-renders the petitions/show template' do
+              do_patch
+              expect(response).to be_success
+              expect(response).to render_template('petitions/show')
+            end
+
+            it 'leaves the in-memory instance with errors' do
+              do_patch
+              expect(assigns(:email)).to be_present
+              expect(assigns(:email).errors).not_to be_empty
+            end
+
+            it 'does not stores the email details in the db' do
+              do_patch
+              email.reload
+              expect(email.subject).to eq("Petition email subject")
+              expect(email.body).to eq("Petition email body")
+            end
+          end
+        end
+
+        shared_examples_for 'trying to email supporters of a petition in the wrong state' do
+          it 'raises a 404 error' do
+            expect {
+              do_patch
+            }.to raise_error ActiveRecord::RecordNotFound
+          end
+
+          it 'does not store the supplied email details in the db' do
+            suppress(ActiveRecord::RecordNotFound) { do_patch }
+            email.reload
+            expect(email.subject).to eq("Petition email subject")
+            expect(email.body).to eq("Petition email body")
+          end
+        end
+
+        describe 'for a pending petition' do
+          before { petition.update_column(:state, Petition::PENDING_STATE) }
+          it_behaves_like 'trying to email supporters of a petition in the wrong state'
+        end
+
+        describe 'for a validated petition' do
+          before { petition.update_column(:state, Petition::VALIDATED_STATE) }
+          it_behaves_like 'trying to email supporters of a petition in the wrong state'
+        end
+
+        describe 'for a sponsored petition' do
+          before { petition.update_column(:state, Petition::SPONSORED_STATE) }
+          it_behaves_like 'trying to email supporters of a petition in the wrong state'
+        end
+      end
+
+      context 'when clicking the Preview button' do
+        def do_patch(overrides = {})
+          params = {
+            petition_id: petition.id,
+            id: email.id,
+            archived_petition_email: petition_email_attributes,
+            save_and_preview: "Save and preview"
+          }
+
+          patch :update, params.merge(overrides)
+        end
+
+        describe 'for an open petition' do
+          it 'fetches the requested petition' do
+            do_patch
+            expect(assigns(:petition)).to eq petition
+          end
+
+          it 'fetches the requested email' do
+            do_patch
+            expect(assigns(:email)).to eq email
+          end
+
+          describe 'with valid params' do
+            it 'redirects to the petition show page' do
+              do_patch
+              expect(response).to redirect_to "https://moderate.petition.parliament.uk/admin/archived/petitions/#{petition.id}"
+            end
+
+            it 'tells the moderator that their changes were saved' do
+              do_patch
+              expect(flash[:notice]).to eq 'Preview email successfully sent'
+            end
+
+            it 'stores the supplied email details in the db' do
+              do_patch
+              email.reload
+              expect(email).to be_present
+              expect(email.subject).to eq "New petition email subject"
+              expect(email.body).to eq "New petition email body"
+              expect(email.sent_by).to eq user.pretty_name
+            end
+
+            context "does not email out the petition email" do
+              before do
+                3.times do |i|
+                  attributes = {
+                    name: "Laura #{i}",
+                    email: "laura_#{i}@example.com",
+                    notify_by_email: true,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :validated, attributes)
+                end
+
+                2.times do |i|
+                  attributes = {
+                    name: "Sarah #{i}",
+                    email: "sarah_#{i}@example.com",
+                    notify_by_email: false,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :validated, attributes)
+                end
+
+                2.times do |i|
+                  attributes = {
+                    name: "Brian #{i}",
+                    email: "brian_#{i}@example.com",
+                    notify_by_email: true,
+                    petition: petition
+                  }
+
+                  FactoryBot.create(:archived_signature, :pending, attributes)
+                end
+
+                petition.reload
+              end
+
+              it "does not queue a job to process the emails" do
+                assert_enqueued_jobs 0 do
+                  do_patch
+                end
+              end
+            end
+
+            it "should email out a preview email" do
+              perform_enqueued_jobs do
+                do_patch
+                expect(deliveries.length).to eq 1
+                expect(deliveries.map(&:to)).to eq([
+                  ['petitionscommittee@parliament.uk']
+                ])
               end
             end
           end

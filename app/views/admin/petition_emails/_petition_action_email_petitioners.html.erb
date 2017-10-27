@@ -42,7 +42,8 @@
   <% if @petition.editing_disabled? %>
     <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
   <% else %>
-    <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
+    <%= f.submit "Save and preview", name: 'save_and_preview', class: 'button-secondary' %>
+    <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
   <% end %>
 <% end -%>
 
