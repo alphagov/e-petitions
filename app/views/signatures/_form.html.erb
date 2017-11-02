@@ -3,7 +3,7 @@
     Only British citizens or UK residents have the right to sign
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
-  <%= form.label :uk_citizenship,  class: "block-label", for: nil do  %>
+  <%= form.label :uk_citizenship,  class: "block-label" do  %>
     <%= form.check_box :uk_citizenship, tabindex: increment %>
     I am a British citizen or UK resident
   <% end %>
