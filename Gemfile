@@ -37,8 +37,8 @@ gem 'maxminddb'
 # Two AWS libraries:
 #   - aws-sdk v2 for CodeDeploy, which neither Fog nor aws-sdk v1 support
 #   - fog for image uploads, as Paperclip doesn't support aws-sdk v2
-gem 'aws-sdk'
-gem 'fog-aws'
+gem 'aws-sdk', '~> 2.0'
+gem 'fog-aws', '~> 1.0'
 
 group :development, :test do
   gem 'rspec-rails'
