@@ -1,6 +1,6 @@
 Then /^the markup should be valid$/ do
   tags = %w[header nav main details summary section footer]
-  pattern = /\ATag (?:#{tags.join('|')}) invalid\z/
+  pattern = /\A\d+:\d+: ERROR: Tag (?:#{tags.join('|')}) invalid\z/
   filter = -> (error){ error.message =~ pattern }
 
   document = Nokogiri::HTML(page.source)
