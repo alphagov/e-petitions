@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Archived::GovernmentResponse, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:archived_government_response)).to be_valid
+    expect(FactoryBot.build(:archived_government_response)).to be_valid
   end
 
   describe "schema" do
@@ -22,7 +22,7 @@ RSpec.describe Archived::GovernmentResponse, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:archived_government_response) }
+    subject { FactoryBot.build(:archived_government_response) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:summary) }
@@ -32,8 +32,8 @@ RSpec.describe Archived::GovernmentResponse, type: :model do
 
   describe "callbacks" do
     describe "when the government response is created" do
-      let(:petition) { FactoryGirl.create(:archived_petition) }
-      let(:government_response) { FactoryGirl.build(:archived_government_response, petition: petition) }
+      let(:petition) { FactoryBot.create(:archived_petition) }
+      let(:government_response) { FactoryBot.build(:archived_government_response, petition: petition) }
       let(:now) { Time.current }
 
       it "updates the government_response_at timestamp" do

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:archived_petition) }
-  let!(:creator) { FactoryGirl.create(:archived_signature, :validated, creator: true, petition: petition) }
+  let!(:petition) { FactoryBot.create(:archived_petition) }
+  let!(:creator) { FactoryBot.create(:archived_signature, :validated, creator: true, petition: petition) }
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -62,13 +62,13 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
       end
 
       describe 'for a rejected petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
         it_behaves_like 'viewing scheduled debate date'
       end
 
       describe 'for a hidden petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
         it_behaves_like 'viewing scheduled debate date'
       end
@@ -125,7 +125,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -136,7 +136,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -147,7 +147,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :pending, attributes)
+                  FactoryBot.create(:archived_signature, :pending, attributes)
                 end
 
                 petition.reload
@@ -233,13 +233,13 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
         end
 
         describe 'for a rejected petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
           it_behaves_like 'scheduling a debate date'
         end
 
         describe 'for a hidden petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
           it_behaves_like 'scheduling a debate date'
         end
@@ -289,7 +289,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -300,7 +300,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -311,7 +311,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :pending, attributes)
+                  FactoryBot.create(:archived_signature, :pending, attributes)
                 end
 
                 petition.reload
@@ -371,13 +371,13 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
         end
 
         describe 'for a rejected petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
           it_behaves_like 'scheduling a debate date'
         end
 
         describe 'for a hidden petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
           it_behaves_like 'scheduling a debate date'
         end

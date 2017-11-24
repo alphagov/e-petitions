@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe InvalidateSignaturesJob, type: :job do
-  let(:invalidation) { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
+  let(:invalidation) { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
   let(:exception_class) { ActiveJob::DeserializationError }
 
   context "when the invalidation is present" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
-    let!(:signature_1) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
-    let!(:signature_2) { FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
+    let!(:signature_1) { FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
+    let!(:signature_2) { FactoryBot.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
 
     it "performs the invalidation process" do
       expect(Invalidation).to receive(:find).with(invalidation.id.to_s).and_return(invalidation)

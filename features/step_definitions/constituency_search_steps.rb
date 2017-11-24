@@ -4,7 +4,7 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
 
   if constituency.nil?
     mp_name = mp_name.present? ? mp_name : 'Rye Tonnemem-Burr MP'
-    constituency = FactoryGirl.create(:constituency, name: constituency_name, mp_name: mp_name, mp_date: 3.years.ago)
+    constituency = FactoryBot.create(:constituency, name: constituency_name, mp_name: mp_name, mp_date: 3.years.ago)
     @constituencies[constituency.name] = constituency
   end
 
@@ -35,7 +35,7 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
     end
 
   how_many.times do
-    FactoryGirl.create(:pending_signature, petition: petition, constituency_id: constituency.external_id).validate!
+    FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency.external_id).validate!
   end
 end
 

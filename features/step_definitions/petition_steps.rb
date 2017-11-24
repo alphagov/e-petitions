@@ -1,12 +1,12 @@
 Given /^a set of petitions$/ do
   3.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
+    @petition = FactoryBot.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
   end
 end
 
 Given(/^a set of (\d+) petitions$/) do |number|
   number.times do |x|
-    @petition = FactoryGirl.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
+    @petition = FactoryBot.create(:open_petition, :with_additional_details, :action => "Petition #{x}")
   end
 end
 
@@ -20,19 +20,19 @@ Given(/^a(n)? ?(pending|validated|sponsored|flagged|open|rejected)? petition "([
     :closed_at => 1.day.from_now,
     :state => state || "open"
   }
-  @petition = FactoryGirl.create(:open_petition, petition_args)
+  @petition = FactoryBot.create(:open_petition, petition_args)
 end
 
 Given(/^a (sponsored|flagged) petition "(.*?)" reached threshold (\d+) days? ago$/) do |state, action, age|
-  @petition = FactoryGirl.create(:petition, action: action, state: state, moderation_threshold_reached_at: age.days.ago)
+  @petition = FactoryBot.create(:petition, action: action, state: state, moderation_threshold_reached_at: age.days.ago)
 end
 
 Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
-  @petition = FactoryGirl.create(:not_debated_petition, action: action)
+  @petition = FactoryBot.create(:not_debated_petition, action: action)
 end
 
 Given(/^an archived petition "([^"]*)" with a negative debate outcome$/) do |action|
-  @petition = FactoryGirl.create(:archived_petition, :not_debated, action: action)
+  @petition = FactoryBot.create(:archived_petition, :not_debated, action: action)
 end
 
 Given(/^a(n)? ?(archived|pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
@@ -42,35 +42,35 @@ Given(/^a(n)? ?(archived|pending|validated|sponsored|open)? petition "([^"]*)" w
 end
 
 Given(/^an archived petition "([^"]*)"$/) do |action|
-  @parliament = FactoryGirl.create(:parliament, :coalition)
-  @petition = FactoryGirl.create(:archived_petition, :closed, parliament: @parliament, action: action)
+  @parliament = FactoryBot.create(:parliament, :coalition)
+  @petition = FactoryBot.create(:archived_petition, :closed, parliament: @parliament, action: action)
 end
 
 Given(/^a (stopped|rejected|hidden) archived petition exists with action: "(.*?)"$/) do |state, action|
-  @petition = FactoryGirl.create(:archived_petition, state.to_sym, action: action)
+  @petition = FactoryBot.create(:archived_petition, state.to_sym, action: action)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
   petition = Petition.find_by(action: petition_action)
-  (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
-  no_pending.times { FactoryGirl.create(:pending_signature, petition: petition) }
+  (no_validated - 1).times { FactoryBot.create(:validated_signature, petition: petition) }
+  no_pending.times { FactoryBot.create(:pending_signature, petition: petition) }
   petition.reload
 end
 
 Given(/^(\d+) petitions exist with a signature count of (\d+)$/) do |number, count|
   number.times do
-    p = FactoryGirl.create(:open_petition)
+    p = FactoryBot.create(:open_petition)
     p.update_attribute(:signature_count, count)
   end
 end
 
 Given(/^a petition "([^"]*)" exists with a signature count of (\d+)$/) do |petition_action, count|
-  @petition = FactoryGirl.create(:open_petition, action: petition_action)
+  @petition = FactoryBot.create(:open_petition, action: petition_action)
   @petition.update_attribute(:signature_count, count)
 end
 
 Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, details, summary|
-  @petition = FactoryGirl.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
+  @petition = FactoryBot.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
 Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
@@ -81,60 +81,60 @@ Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a governmen
     response_details: 'Government Response',
     government_response_at: parliament_response_days_ago.to_i.days.ago
   }
-  FactoryGirl.create(:responded_petition, petition_attributes)
+  FactoryBot.create(:responded_petition, petition_attributes)
 end
 
 Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
-  FactoryGirl.create(:open_petition, action: action)
+  FactoryBot.create(:open_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
-  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
+  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
-  FactoryGirl.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
-  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
+  petition = FactoryBot.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
   petition.debate_outcome = nil
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and has no debate date set$/) do |action, amount|
-  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: amount.days.ago)
+  petition = FactoryBot.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: amount.days.ago)
   petition.debate_outcome = nil
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate (\d+) days? ago and has a debate in (\d+) days$/) do |action, threshold, debate|
-  petition = FactoryGirl.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: threshold.days.ago, scheduled_debate_date: debate.days.from_now)
+  petition = FactoryBot.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: threshold.days.ago, scheduled_debate_date: debate.days.from_now)
   petition.debate_outcome = nil
 end
 
 Given(/^I have created a petition$/) do
-  @petition = FactoryGirl.create(:open_petition)
+  @petition = FactoryBot.create(:open_petition)
   reset_mailer
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated signatures$/) do |petition_action, no_validated|
   petition = Petition.find_by(action: petition_action)
-  (no_validated - 1).times { FactoryGirl.create(:validated_signature, petition: petition) }
+  (no_validated - 1).times { FactoryBot.create(:validated_signature, petition: petition) }
   petition.reload
   @petition.reload if @petition
 end
 
 And(/^the petition "([^"]*)" has reached maximum amount of sponsors$/) do |petition_action|
   petition = Petition.find_by(action: petition_action)
-  Site.maximum_number_of_sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
+  Site.maximum_number_of_sponsors.times { petition.sponsors.build(FactoryBot.attributes_for(:sponsor)) }
 end
 
 And(/^the petition "([^"]*)" has (\d+) pending sponsors$/) do |petition_action, sponsors|
   petition = Petition.find_by(action: petition_action)
-  sponsors.times { petition.sponsors.build(FactoryGirl.attributes_for(:sponsor)) }
+  sponsors.times { petition.sponsors.build(FactoryBot.attributes_for(:sponsor)) }
 end
 
 Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
-  @petition = FactoryGirl.create(:closed_petition, :action => petition_action)
+  @petition = FactoryBot.create(:closed_petition, :action => petition_action)
 end
 
 Given(/^a petition "([^"]*)" has been closed early because of parliament dissolving$/) do |petition_action|
@@ -148,7 +148,7 @@ Given(/^a petition "([^"]*)" has been closed early because of parliament dissolv
     dissolved_message: "All petitions have been closed",
     dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
 
-  @petition = FactoryGirl.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
+  @petition = FactoryBot.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
 end
 
 Given(/^the petition has closed$/) do
@@ -161,14 +161,14 @@ end
 
 Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
   reason_text = reason.nil? ? "It doesn't make any sense" : reason
-  @petition = FactoryGirl.create(:rejected_petition,
+  @petition = FactoryBot.create(:rejected_petition,
     :action => petition_action,
     :rejection_code => "irrelevant",
     :rejection_details => reason_text)
 end
 
 Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, rejection_details|
-  @petition = FactoryGirl.create(:archived_petition, :rejected, action: action, rejection_details: rejection_details)
+  @petition = FactoryBot.create(:archived_petition, :rejected, action: action, rejection_details: rejection_details)
 end
 
 When(/^I view the petition$/) do
@@ -252,7 +252,7 @@ Then(/^I should see a list of (\d+) petitions$/) do |petition_count|
 end
 
 Then(/^I should see my search query already filled in as the action of the petition$/) do
-  expect(page).to have_field("What do you want us to do?", "#{@petition.action}")
+  expect(page).to have_field("What do you want us to do?", text: "Rioters should loose benefits")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
@@ -339,19 +339,19 @@ Then(/^I can share it via (.+)$/) do |service|
   case service
   when 'Email'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Email', %r[\Amailto:?subject=#{URI.escape(@petition.action)}&body=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Email', href: %r[\Amailto:\?body=#{ERB::Util.url_encode(petition_url(@petition))}&subject=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}\z])
     end
   when 'Facebook'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Facebook', %r[\Ahttp://www.facebook.com/sharer.php?t=#{URI.escape(@petition.action)}&u=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Facebook', href: %r[\Ahttps://www\.facebook\.com/sharer/sharer\.php\?ref=responsive&u=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'Twitter'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Twitter', %r[\Ahttp://twitter.com/share?text=#{URI.escape(@petition.action)}&url=#{URI.escape(petition_url(@petition))}\z])
+      expect(page).to have_link('Twitter', href: %r[\Ahttps://twitter\.com/intent/tweet\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action)}&url=#{ERB::Util.url_encode(petition_url(@petition))}\z])
     end
   when 'Whatsapp'
     within(:css, '.petition-share') do
-      expect(page).to have_link('Whatsapp', %r[\Awhatsapp://send?text=#{URI.escape(@petition.action + "\n" + petition_url(@petition))}\z])
+      expect(page).to have_link('Whatsapp', href: %r[\Awhatsapp://send\?text=Petition%3A%20#{ERB::Util.url_encode(@petition.action + "\n" + petition_url(@petition))}\z])
     end
   else
     raise ArgumentError, "Unknown sharing service: #{service.inspect}"
@@ -370,9 +370,9 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
     open_at: 3.months.ago,
     closed_at: petition_closed_at
   }
-  @petition = FactoryGirl.create(:"#{state}_petition", petition_args)
+  @petition = FactoryBot.create(:"#{state}_petition", petition_args)
   signature_state ||= "validated"
-  5.times { FactoryGirl.create(:"#{signature_state}_signature", petition: @petition) }
+  5.times { FactoryBot.create(:"#{signature_state}_signature", petition: @petition) }
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
@@ -381,32 +381,32 @@ end
 
 Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
   response_count.times do |count|
-    petition = FactoryGirl.create(:awaiting_petition, :action => "Petition #{count}")
+    petition = FactoryBot.create(:awaiting_petition, :action => "Petition #{count}")
   end
 end
 
 Given(/^a petition "(.*?)" exists with a debate outcome$/) do |action|
-  @petition = FactoryGirl.create(:debated_petition, action: action, debated_on: 1.day.ago)
+  @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago)
 end
 
 Given(/^a petition "(.*?)" exists with a debate outcome and with response threshold met$/) do |action|
-  @petition = FactoryGirl.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
+  @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
 end
 
 Given(/^a petition "(.*?)" exists awaiting debate date$/) do |action|
-  @petition = FactoryGirl.create(:awaiting_debate_petition, action: action)
+  @petition = FactoryBot.create(:awaiting_debate_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists with government response$/) do |action|
-  @petition = FactoryGirl.create(:responded_petition, action: action)
+  @petition = FactoryBot.create(:responded_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
-  @petition = FactoryGirl.create(:awaiting_petition, action: action)
+  @petition = FactoryBot.create(:awaiting_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
-  @petition = FactoryGirl.create(:open_petition, action: action, admin_notes: notes)
+  @petition = FactoryBot.create(:open_petition, action: action, admin_notes: notes)
 end
 
 Given(/^an? ?(pending|validated|sponsored|flagged|open)? petition "(.*?)" exists with tags "([^"]*)"$/) do |state, action, tags|
@@ -414,24 +414,24 @@ Given(/^an? ?(pending|validated|sponsored|flagged|open)? petition "(.*?)" exists
   state ||= "open"
   tag_ids = tags.map { |tag| Tag.find_or_create_by(name: tag).id }
 
-  @petition = FactoryGirl.create(:open_petition, state: state, action: action, tags: tag_ids)
+  @petition = FactoryBot.create(:open_petition, state: state, action: action, tags: tag_ids)
 end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
   scheduled_debate_petitions_count.times do |count|
-    FactoryGirl.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")
+    FactoryBot.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")
   end
 end
 
 Given(/^there are (\d+) petitions with enough signatures to require a debate$/) do |debate_threshold_petitions_count|
   debate_threshold_petitions_count.times do |count|
-    FactoryGirl.create(:awaiting_debate_petition, action: "Petition #{count}")
+    FactoryBot.create(:awaiting_debate_petition, action: "Petition #{count}")
   end
 end
 
 Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
-  @petition = FactoryGirl.create(:open_petition, action: petition_action)
-  @email = FactoryGirl.create(:petition_email,
+  @petition = FactoryBot.create(:open_petition, action: petition_action)
+  @email = FactoryBot.create(:petition_email,
     petition: @petition,
     subject: "Committee to discuss #{petition_action}",
     body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
@@ -439,8 +439,8 @@ Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_acti
 end
 
 Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |petition_action|
-  @petition = FactoryGirl.create(:archived_petition, action: petition_action)
-  @email = FactoryGirl.create(:archived_petition_email,
+  @petition = FactoryBot.create(:archived_petition, action: petition_action)
+  @email = FactoryBot.create(:archived_petition_email,
     petition: @petition,
     subject: "Committee to discuss #{petition_action}",
     body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
@@ -456,7 +456,7 @@ Then(/^I should see the other business items$/) do
 end
 
 Given(/^these archived petitions? exist?:?$/) do |table|
-  parliament = FactoryGirl.create(:parliament, :coalition)
+  parliament = FactoryBot.create(:parliament, :coalition)
 
   table.raw[1..-1].each do |petition|
     attributes = {
@@ -467,7 +467,7 @@ Given(/^these archived petitions? exist?:?$/) do |table|
       created_at:      petition[3]
     }
 
-    FactoryGirl.create(:archived_petition, attributes)
+    FactoryBot.create(:archived_petition, attributes)
   end
 end
 

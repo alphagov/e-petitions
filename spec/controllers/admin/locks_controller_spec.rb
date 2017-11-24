@@ -21,7 +21,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator requiring a password reset" do
-    let(:moderator) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:moderator) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(moderator) }
 
     [
@@ -43,8 +43,8 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
-    let(:petition) { FactoryGirl.create(:petition) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
+    let(:petition) { FactoryBot.create(:petition) }
 
     before { login_as(moderator) }
 
@@ -60,7 +60,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by the moderator" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
 
         it "updates the locked_at timestamp" do
           expect {
@@ -72,8 +72,8 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+        let(:other_user) { FactoryBot.create(:moderator_user) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
         it "doesn't update the locked_at timestamp" do
           expect {
@@ -97,7 +97,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is unlocked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
         it "updates the locked_by association" do
           expect {
@@ -117,7 +117,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by the moderator" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
 
         it "doesn't update the locked_by association" do
           expect {
@@ -137,8 +137,8 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+        let(:other_user) { FactoryBot.create(:moderator_user) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
         it "doesn't update the locked_by association" do
           expect {
@@ -170,7 +170,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is unlocked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
         it "updates the locked_by association" do
           expect {
@@ -190,7 +190,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by the moderator" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
 
         it "doesn't update the locked_by association" do
           expect {
@@ -210,8 +210,8 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+        let(:other_user) { FactoryBot.create(:moderator_user) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
         it "updates the locked_by association" do
           expect {
@@ -243,7 +243,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is unlocked" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
         it "doesn't update the locked_by association" do
           expect {
@@ -263,7 +263,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by the moderator" do
-        let(:petition) { FactoryGirl.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: moderator, locked_at: 1.hour.ago) }
 
         it "updates the locked_by association" do
           expect {
@@ -283,8 +283,8 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
       end
 
       context "when the petition is locked by someone else" do
-        let(:other_user) { FactoryGirl.create(:moderator_user) }
-        let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+        let(:other_user) { FactoryBot.create(:moderator_user) }
+        let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
         it "doesn't update the locked_by association" do
           expect {

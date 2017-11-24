@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
   let(:petition) do
-    FactoryGirl.create(:open_petition,
+    FactoryBot.create(:open_petition,
       creator_attributes: {
         name: "Barry Butler",
         email: "bazbutler@gmail.com"
@@ -28,7 +28,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -47,7 +47,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -110,8 +110,8 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
       let(:creator_email) { deliveries.detect{ |m| m.to == %w[bazbutler@gmail.com] } }
       let(:sponsor_email) { deliveries.detect{ |m| m.to == %w[laurapalmer@gmail.com] } }
       let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
-      let!(:sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition, email: "laurapalmer@gmail.com") }
-      let!(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
+      let!(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition, email: "laurapalmer@gmail.com") }
+      let!(:pending_sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
       def do_patch(overrides = {})
         params = { petition_id: petition.id, petition: take_down_attributes }

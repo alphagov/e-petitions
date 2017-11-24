@@ -2,11 +2,11 @@ Given(/^(\d+) (overdue|nearly overdue|recently in) moderation petitions exist$/)
   number.times do
     case age
     when "overdue"
-      FactoryGirl.create(:sponsored_petition, :overdue)
+      FactoryBot.create(:sponsored_petition, :overdue)
     when "nearly overdue"
-      FactoryGirl.create(:sponsored_petition, :nearly_overdue)
+      FactoryBot.create(:sponsored_petition, :nearly_overdue)
     when "recently in"
-      FactoryGirl.create(:sponsored_petition, :recent)
+      FactoryBot.create(:sponsored_petition, :recent)
     end
   end
 end

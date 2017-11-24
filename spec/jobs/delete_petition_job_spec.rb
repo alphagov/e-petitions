@@ -2,12 +2,12 @@ require 'rails_helper'
 
 RSpec.describe DeletePetitionJob, type: :job do
   before do
-    FactoryGirl.create(:constituency, :london_and_westminster)
-    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+    FactoryBot.create(:constituency, :london_and_westminster)
+    FactoryBot.create(:location, code: "GB", name: "United Kingdom")
   end
 
   context "with a stopped petition" do
-    let!(:petition) { FactoryGirl.create(:stopped_petition) }
+    let!(:petition) { FactoryBot.create(:stopped_petition) }
 
     it "destroys the petition" do
       expect {
@@ -19,9 +19,9 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a closed petition" do
-    let!(:petition) { FactoryGirl.create(:validated_petition, sponsors_signed: true, state: "closed", closed_at: 4.weeks.ago) }
-    let!(:country_petition_journal) { FactoryGirl.create(:country_petition_journal, petition: petition) }
-    let!(:constituency_petition_journal) { FactoryGirl.create(:constituency_petition_journal, petition: petition) }
+    let!(:petition) { FactoryBot.create(:validated_petition, sponsors_signed: true, state: "closed", closed_at: 4.weeks.ago) }
+    let!(:country_petition_journal) { FactoryBot.create(:country_petition_journal, petition: petition) }
+    let!(:constituency_petition_journal) { FactoryBot.create(:constituency_petition_journal, petition: petition) }
 
     it "destroys the petition" do
       expect {
@@ -57,7 +57,7 @@ RSpec.describe DeletePetitionJob, type: :job do
 
     context "when the petition has a note" do
       before do
-        FactoryGirl.create(:note, petition: petition)
+        FactoryBot.create(:note, petition: petition)
       end
 
       it "destroys the associated note" do
@@ -71,8 +71,8 @@ RSpec.describe DeletePetitionJob, type: :job do
 
     context "when the petition has an email" do
       before do
-        FactoryGirl.create(:petition_email, petition: petition)
-        FactoryGirl.create(:email_requested_receipt, petition: petition)
+        FactoryBot.create(:petition_email, petition: petition)
+        FactoryBot.create(:email_requested_receipt, petition: petition)
       end
 
       it "destroys the associated email" do
@@ -94,7 +94,7 @@ RSpec.describe DeletePetitionJob, type: :job do
 
     context "when the petition has a government response" do
       before do
-        FactoryGirl.create(:government_response, petition: petition)
+        FactoryBot.create(:government_response, petition: petition)
       end
 
       it "destroys the associated government response" do
@@ -108,7 +108,7 @@ RSpec.describe DeletePetitionJob, type: :job do
 
     context "when the petition has a debate outcome" do
       before do
-        FactoryGirl.create(:debate_outcome, petition: petition)
+        FactoryBot.create(:debate_outcome, petition: petition)
       end
 
       it "destroys the associated debate outcome" do
@@ -122,7 +122,7 @@ RSpec.describe DeletePetitionJob, type: :job do
 
     context "when the petition has an invalidation" do
       before do
-        FactoryGirl.create(:invalidation, petition: petition)
+        FactoryBot.create(:invalidation, petition: petition)
       end
 
       it "doesn't destroy the associated invalidation" do
@@ -136,7 +136,7 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a rejected petition" do
-    let!(:petition) { FactoryGirl.create(:rejected_petition) }
+    let!(:petition) { FactoryBot.create(:rejected_petition) }
 
     it "destroys the petition" do
       expect {
@@ -156,7 +156,7 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a hidden petition" do
-    let!(:petition) { FactoryGirl.create(:rejected_petition, rejection_code: "libellous") }
+    let!(:petition) { FactoryBot.create(:rejected_petition, rejection_code: "libellous") }
 
     it "destroys the petition" do
       expect {

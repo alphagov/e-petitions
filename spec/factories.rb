@@ -1,6 +1,6 @@
-require 'factory_girl'
+require 'factory_bot'
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :admin_user do
     sequence(:email) {|n| "admin#{n}@example.com" }
     password              "Letmein1!"
@@ -64,7 +64,7 @@ FactoryGirl.define do
     closed_at { 1.year.ago }
 
     after(:build) do |petition, evaluator|
-      petition.parliament ||= Parliament.archived.first || FactoryGirl.create(:parliament, :archived)
+      petition.parliament ||= Parliament.archived.first || FactoryBot.create(:parliament, :archived)
     end
 
     trait :response do
@@ -231,9 +231,9 @@ FactoryGirl.define do
       unless evaluator.sponsors_signed.nil?
         evaluator.sponsor_count.times do
           if evaluator.sponsors_signed
-            FactoryGirl.create(:sponsor, :validated, petition: petition)
+            FactoryBot.create(:sponsor, :validated, petition: petition)
           else
-            FactoryGirl.create(:sponsor, :pending, petition: petition)
+            FactoryBot.create(:sponsor, :pending, petition: petition)
           end
         end
 

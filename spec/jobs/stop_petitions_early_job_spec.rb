@@ -13,7 +13,7 @@ RSpec.describe StopPetitionsEarlyJob, type: :job do
   let(:creator) { petition.creator }
 
   let!(:petition) do
-    FactoryGirl.create(
+    FactoryBot.create(
       :"#{state}_petition", created_at: created_at,
       special_consideration: special_consideration
     )

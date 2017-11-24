@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe ArchiveSignaturesJob, type: :job do
-  let(:petition) { FactoryGirl.create(:validated_petition, sponsors_signed: true) }
-  let(:archived_petition) { FactoryGirl.create(:archived_petition, id: petition.id) }
+  let(:petition) { FactoryBot.create(:validated_petition, sponsors_signed: true) }
+  let(:archived_petition) { FactoryBot.create(:archived_petition, id: petition.id) }
   let(:archived_signature) { archived_petition.signatures.last }
 
   it "copies every signature" do
@@ -85,7 +85,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a pending signature" do
-    let!(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+    let!(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -95,7 +95,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a validated signature" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, number: 7) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, number: 7) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -109,8 +109,8 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with an invalidated signature" do
-    let!(:invalidation) { FactoryGirl.create(:invalidation, name: "Jo Public") }
-    let!(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition, invalidation: invalidation) }
+    let!(:invalidation) { FactoryBot.create(:invalidation, name: "Jo Public") }
+    let!(:signature) { FactoryBot.create(:invalidated_signature, petition: petition, invalidation: invalidation) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -128,7 +128,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a fradulent signature" do
-    let!(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition) }
+    let!(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -138,7 +138,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a signature that has been notified about a government response" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, government_response_email_at: 4.weeks.ago) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, government_response_email_at: 4.weeks.ago) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -152,7 +152,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a signature that has been notified about a scheduled debate" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, debate_scheduled_email_at: 4.weeks.ago) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, debate_scheduled_email_at: 4.weeks.ago) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -166,7 +166,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a signature that has been notified about a debate outcome" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, debate_outcome_email_at: 4.weeks.ago) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, debate_outcome_email_at: 4.weeks.ago) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -180,7 +180,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a signature that has been notified about a other business" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, petition_email_at: 4.weeks.ago) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, petition_email_at: 4.weeks.ago) }
 
     before do
       described_class.perform_now(petition, archived_petition)
@@ -194,7 +194,7 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
   end
 
   context "with a signature that has invalid attributes" do
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
     before do
       signature.update_column(:location_code, nil)

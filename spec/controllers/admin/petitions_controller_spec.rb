@@ -18,7 +18,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator but need to reset password" do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe "GET /admin/petitions" do
@@ -37,7 +37,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe "GET /admin/petitions" do
@@ -97,7 +97,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       context "when the petition exists" do
-        let!(:petition) { FactoryGirl.create(:petition) }
+        let!(:petition) { FactoryBot.create(:petition) }
 
         before { get :show, id: petition.to_param }
 

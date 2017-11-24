@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Rejection, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:rejection)).to be_valid
+    expect(FactoryBot.build(:rejection)).to be_valid
   end
 
   describe "associations" do
@@ -14,7 +14,7 @@ RSpec.describe Rejection, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:rejection) }
+    subject { FactoryBot.build(:rejection) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:code) }
@@ -24,8 +24,8 @@ RSpec.describe Rejection, type: :model do
 
   describe "callbacks" do
     describe "when the rejection is created" do
-      let(:petition) { FactoryGirl.create(:validated_petition) }
-      let(:rejection) { FactoryGirl.build(:rejection, code: rejection_code, petition: petition) }
+      let(:petition) { FactoryBot.create(:validated_petition) }
+      let(:rejection) { FactoryBot.build(:rejection, code: rejection_code, petition: petition) }
       let(:now) { Time.current }
 
       context "and the rejection should be public" do

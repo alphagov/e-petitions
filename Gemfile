@@ -50,11 +50,12 @@ group :test do
   gem 'nokogiri'
   gem 'shoulda-matchers'
   gem 'pickle'
+  gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'capybara'
   gem 'poltergeist'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'

@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe DeletePetitionsJob, type: :job do
   it "enqueues a job for every petition" do
-    FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
-    FactoryGirl.create(:stopped_petition, archived_at: 1.day.ago)
-    FactoryGirl.create(:rejected_petition, archived_at: 1.day.ago)
-    FactoryGirl.create(:hidden_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:closed_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:stopped_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:rejected_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:hidden_petition, archived_at: 1.day.ago)
 
     expect {
       described_class.perform_now
@@ -15,7 +15,7 @@ RSpec.describe DeletePetitionsJob, type: :job do
   end
 
   it "enqueues an DeletePetitionJob job" do
-    petition = FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
+    petition = FactoryBot.create(:closed_petition, archived_at: 1.day.ago)
 
     delete_petition_job = {
       job: DeletePetitionJob,
@@ -31,8 +31,8 @@ RSpec.describe DeletePetitionsJob, type: :job do
   end
 
   it "raises a RuntimeError unless all petitions are archived" do
-    FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
-    FactoryGirl.create(:closed_petition, archived_at: nil)
+    FactoryBot.create(:closed_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:closed_petition, archived_at: nil)
 
     expect {
       described_class.perform_now

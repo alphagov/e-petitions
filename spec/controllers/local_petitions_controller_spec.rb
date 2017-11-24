@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe LocalPetitionsController, type: :controller do
-  let(:constituency) { FactoryGirl.create(:constituency, external_id: "99999", name: "Holborn") }
+  let(:constituency) { FactoryBot.create(:constituency, external_id: "99999", name: "Holborn") }
 
   describe "GET /petitions/local" do
     context "when the postcode is valid" do

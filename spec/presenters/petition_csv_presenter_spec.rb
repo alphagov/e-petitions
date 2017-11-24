@@ -21,7 +21,7 @@ RSpec.describe PetitionCSVPresenter do
 
     Petition::STATES.each do |state_name|
       context "with a #{state_name} petition" do
-        let!(:petition) { FactoryGirl.create "#{state_name}_petition" }
+        let!(:petition) { FactoryBot.create "#{state_name}_petition" }
 
         specify { is_expected.to eq(csvd_petition petition) }
       end

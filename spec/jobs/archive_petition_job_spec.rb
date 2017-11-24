@@ -2,7 +2,7 @@ require 'rails_helper'
 require 'digest/sha2'
 
 RSpec.describe ArchivePetitionJob, type: :job do
-  let(:petition) { FactoryGirl.create(:closed_petition) }
+  let(:petition) { FactoryBot.create(:closed_petition) }
   let(:archived_petition) { Archived::Petition.first }
   let(:email_request) { petition.email_requested_receipt }
 
@@ -18,15 +18,15 @@ RSpec.describe ArchivePetitionJob, type: :job do
   end
 
   before do
-    FactoryGirl.create(:constituency, :coventry_north_east)
-    FactoryGirl.create(:constituency, :bethnal_green_and_bow)
-    FactoryGirl.create(:constituency_petition_journal, constituency_id: "3427", signature_count: 123, petition: petition)
-    FactoryGirl.create(:constituency_petition_journal, constituency_id: "3320", signature_count: 456, petition: petition)
+    FactoryBot.create(:constituency, :coventry_north_east)
+    FactoryBot.create(:constituency, :bethnal_green_and_bow)
+    FactoryBot.create(:constituency_petition_journal, constituency_id: "3427", signature_count: 123, petition: petition)
+    FactoryBot.create(:constituency_petition_journal, constituency_id: "3320", signature_count: 456, petition: petition)
 
-    gb = FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
-    us = FactoryGirl.create(:location, code: "US", name: "United States")
-    FactoryGirl.create(:country_petition_journal, location: gb, signature_count: 1234, petition: petition)
-    FactoryGirl.create(:country_petition_journal, location: us, signature_count: 56, petition: petition)
+    gb = FactoryBot.create(:location, code: "GB", name: "United Kingdom")
+    us = FactoryBot.create(:location, code: "US", name: "United States")
+    FactoryBot.create(:country_petition_journal, location: gb, signature_count: 1234, petition: petition)
+    FactoryBot.create(:country_petition_journal, location: us, signature_count: 56, petition: petition)
 
     described_class.perform_now(petition)
   end
@@ -37,7 +37,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a closed petition" do
     let(:petition) do
-      FactoryGirl.create(
+      FactoryBot.create(
         :closed_petition,
         action: "Make Wombles Great Again",
         background: "The 70s was a great time for kids TV",
@@ -86,7 +86,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a stopped petition" do
     let(:petition) do
-      FactoryGirl.create(:stopped_petition, stopped_at: 2.months.ago)
+      FactoryBot.create(:stopped_petition, stopped_at: 2.months.ago)
     end
 
     it "copies the attributes" do
@@ -96,7 +96,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition marked for special consideration" do
     let(:petition) do
-      FactoryGirl.create(:stopped_petition, special_consideration: true)
+      FactoryBot.create(:stopped_petition, special_consideration: true)
     end
 
     it "copies the attributes" do
@@ -106,7 +106,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that reached the response threshold" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, response_threshold_reached_at: 2.months.ago)
+      FactoryBot.create(:closed_petition, response_threshold_reached_at: 2.months.ago)
     end
 
     it "copies the attributes" do
@@ -116,7 +116,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that reached the debate threshold" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition,
+      FactoryBot.create(:closed_petition,
         debate_threshold_reached_at: 2.months.ago,
         debate_state: "awaiting"
       )
@@ -130,7 +130,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has a debate scheduled" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, scheduled_debate_date: 2.weeks.from_now)
+      FactoryBot.create(:closed_petition, scheduled_debate_date: 2.weeks.from_now)
     end
 
     it "copies the attributes" do
@@ -140,7 +140,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a rejected petition" do
     let(:petition) do
-      FactoryGirl.create(:rejected_petition,
+      FactoryBot.create(:rejected_petition,
         rejected_at: 6.months.ago,
         rejection_code: "irrelevant",
         rejection_details: "The government doesn't control kids TV"
@@ -164,7 +164,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a responded petition" do
     let(:petition) do
-      FactoryGirl.create(:responded_petition,
+      FactoryBot.create(:responded_petition,
         state: "closed",
         closed_at: 2.months.ago,
         government_response_at: 2.months.ago,
@@ -195,7 +195,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
     context "when the debate outcome doesn't have a commons image" do
       let(:petition) do
-        FactoryGirl.create(:debated_petition,
+        FactoryBot.create(:debated_petition,
           state: "closed",
           closed_at: 2.months.ago,
           debate_outcome_at: 2.months.ago,
@@ -226,7 +226,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
     context "when the debate outcome has a commons image" do
       let(:petition) do
-        FactoryGirl.create(:debated_petition,
+        FactoryBot.create(:debated_petition,
           state: "closed",
           closed_at: 2.months.ago,
           debate_outcome_at: 2.months.ago,
@@ -266,7 +266,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has an government_response email scheduled" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_government_response_at: Time.current)
+      FactoryBot.create(:closed_petition, :email_requested, email_requested_for_government_response_at: Time.current)
     end
 
     it "copies the receipt timestamp to the archived petition" do
@@ -276,7 +276,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has an debate_scheduled email scheduled" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_debate_scheduled_at: Time.current)
+      FactoryBot.create(:closed_petition, :email_requested, email_requested_for_debate_scheduled_at: Time.current)
     end
 
     it "copies the receipt timestamp to the archived petition" do
@@ -286,7 +286,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has an debate_outcome email scheduled" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_debate_outcome_at: Time.current)
+      FactoryBot.create(:closed_petition, :email_requested, email_requested_for_debate_outcome_at: Time.current)
     end
 
     it "copies the receipt timestamp to the archived petition" do
@@ -296,7 +296,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has an petition_email email scheduled" do
     let(:petition) do
-      FactoryGirl.create(:closed_petition, :email_requested, email_requested_for_petition_email_at: Time.current)
+      FactoryBot.create(:closed_petition, :email_requested, email_requested_for_petition_email_at: Time.current)
     end
 
     it "copies the receipt timestamp to the archived petition" do

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:archived_petition) }
-  let!(:creator) { FactoryGirl.create(:archived_signature, :validated, creator: true, petition: petition) }
+  let!(:petition) { FactoryBot.create(:archived_petition) }
+  let!(:creator) { FactoryBot.create(:archived_signature, :validated, creator: true, petition: petition) }
 
   describe 'not logged in' do
     describe 'GET #show' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET #show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
   end
 
   describe 'logged in as moderator user' do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET #show' do
@@ -62,20 +62,20 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
       end
 
       describe 'for a rejected petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
         it_behaves_like 'viewing a petition in the correct state'
       end
 
       describe 'for a hidden petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
         it_behaves_like 'viewing a petition in the correct state'
       end
     end
 
     describe 'PATCH #update' do
-      let(:petition) { FactoryGirl.create(:archived_petition, action: 'Old action', background: 'Old background', additional_details: 'Old additional details') }
+      let(:petition) { FactoryBot.create(:archived_petition, action: 'Old action', background: 'Old background', additional_details: 'Old additional details') }
 
       def do_update
         patch :update,

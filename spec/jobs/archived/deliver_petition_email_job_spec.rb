@@ -5,9 +5,9 @@ RSpec.describe Archived::DeliverPetitionEmailJob, type: :job do
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
-  let(:petition) { FactoryGirl.create(:archived_petition) }
-  let(:signature) { FactoryGirl.create(:archived_signature, petition: petition) }
-  let(:email) { FactoryGirl.create(:archived_petition_email, petition: petition) }
+  let(:petition) { FactoryBot.create(:archived_petition) }
+  let(:signature) { FactoryBot.create(:archived_signature, petition: petition) }
+  let(:email) { FactoryBot.create(:archived_petition_email, petition: petition) }
   let(:timestamp_name) { 'petition_email' }
 
   let :arguments do

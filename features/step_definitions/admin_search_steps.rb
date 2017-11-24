@@ -6,21 +6,21 @@ Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, name_or_emai
       attrs = { name: name_or_email }
     end
 
-    attrs[:petition] = FactoryGirl.create(:open_petition)
-    FactoryGirl.create(:signature, attrs)
+    attrs[:petition] = FactoryBot.create(:open_petition)
+    FactoryBot.create(:signature, attrs)
   end
 end
 
 Given(/^(\d+) petitions? signed from "([^"]*)"$/) do |petition_count, ip_address|
   petition_count.times do
-    petition = FactoryGirl.create(:open_petition)
-    FactoryGirl.create(:signature, ip_address: ip_address, petition: petition)
+    petition = FactoryBot.create(:open_petition)
+    FactoryBot.create(:signature, ip_address: ip_address, petition: petition)
   end
 end
 
 Given(/^(\d+) petitions? with a (pending|validated) signature by "([^"]*)"$/) do |petition_count, state, email|
   petition_count.times do
-    FactoryGirl.create(:"#{state}_signature", :petition => FactoryGirl.create(:open_petition), :email => email)
+    FactoryBot.create(:"#{state}_signature", :petition => FactoryBot.create(:open_petition), :email => email)
   end
 end
 

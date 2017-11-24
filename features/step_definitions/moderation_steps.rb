@@ -1,10 +1,10 @@
 When(/^I look at the next petition on my list$/) do
-  @petition = FactoryGirl.create(:sponsored_petition, :with_additional_details, :action => "Petition 1")
+  @petition = FactoryBot.create(:sponsored_petition, :with_additional_details, :action => "Petition 1")
   visit admin_petition_url(@petition)
 end
 
 When(/^I visit a sponsored petition with action: "([^"]*)", that has background: "([^"]*)" and additional details: "([^"]*)"$/) do |petition_action, background, additional_details|
-  @sponsored_petition = FactoryGirl.create(:sponsored_petition, action: petition_action, background: background, additional_details: additional_details)
+  @sponsored_petition = FactoryBot.create(:sponsored_petition, action: petition_action, background: background, additional_details: additional_details)
   visit admin_petition_url(@sponsored_petition)
 end
 

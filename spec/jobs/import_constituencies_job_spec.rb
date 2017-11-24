@@ -62,7 +62,7 @@ RSpec.describe ImportConstituenciesJob, type: :job do
       end
 
       describe "updating constituencies" do
-        let!(:constituency) { FactoryGirl.create(:constituency, :bethnal_green_and_bow) }
+        let!(:constituency) { FactoryBot.create(:constituency, :bethnal_green_and_bow) }
 
         before do
           stub_api_request_for("E18FF").to_return(api_response(:ok, "bethnal_green_and_bow"))
@@ -79,7 +79,7 @@ RSpec.describe ImportConstituenciesJob, type: :job do
 
       describe "error handling" do
         context "when a record fails to save" do
-          let!(:constituency) { FactoryGirl.create(:constituency, :bethnal_green_and_bow) }
+          let!(:constituency) { FactoryBot.create(:constituency, :bethnal_green_and_bow) }
           let(:exception) { ActiveRecord::RecordInvalid.new(constituency) }
 
           it "notifies Appsignal of the failure" do

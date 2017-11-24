@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe ArchivePetitionsJob, type: :job do
   it "enqueues a job for every petition" do
-    FactoryGirl.create(:closed_petition)
-    FactoryGirl.create(:stopped_petition)
-    FactoryGirl.create(:rejected_petition)
-    FactoryGirl.create(:hidden_petition)
+    FactoryBot.create(:closed_petition)
+    FactoryBot.create(:stopped_petition)
+    FactoryBot.create(:rejected_petition)
+    FactoryBot.create(:hidden_petition)
 
     expect {
       described_class.perform_now
@@ -15,7 +15,7 @@ RSpec.describe ArchivePetitionsJob, type: :job do
   end
 
   it "enqueues an ArchivePetitionJob job" do
-    petition = FactoryGirl.create(:closed_petition)
+    petition = FactoryBot.create(:closed_petition)
 
     archive_petition_job = {
       job: ArchivePetitionJob,
@@ -31,7 +31,7 @@ RSpec.describe ArchivePetitionsJob, type: :job do
   end
 
   it "updates the archiving_started_at timestamp" do
-    petition = FactoryGirl.create(:closed_petition)
+    petition = FactoryBot.create(:closed_petition)
 
     archive_petition_job = {
       job: ArchivePetitionJob,
@@ -47,7 +47,7 @@ RSpec.describe ArchivePetitionsJob, type: :job do
   end
 
   it "doesn't enqueue a job for a petition that's already archived" do
-    FactoryGirl.create(:closed_petition, archived_at: 1.day.ago)
+    FactoryBot.create(:closed_petition, archived_at: 1.day.ago)
 
     expect {
       described_class.perform_now

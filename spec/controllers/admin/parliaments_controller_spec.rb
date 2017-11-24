@@ -19,7 +19,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }
 
     [
@@ -39,7 +39,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
   end
 
   context "when logged in as a sysadmin" do
-    let(:sysadmin) { FactoryGirl.create(:sysadmin_user) }
+    let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
     before { login_as(sysadmin) }
 
     describe "GET /admin/parliament" do
@@ -375,8 +375,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the Archive Parliament button" do
-        before { FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago) }
-        before { FactoryGirl.create(:parliament, archiving_started_at: 1.day.ago) }
+        before { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
+        before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }
         before { patch :update, parliament: params, archive_parliament: "Archive Parliament" }
 
         context "and the params are invalid" do

@@ -100,32 +100,32 @@ When(/^I say I am happy with my email address$/) do
 end
 
 And "I have already signed the petition with an uppercase email" do
-  FactoryGirl.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
+  FactoryBot.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
                      :email => "WOMBOID@WIMBLEDON.COM")
 end
 
 And "I have already signed the petition but not validated my email" do
-  FactoryGirl.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
+  FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
                      :email => "womboid@wimbledon.com")
 end
 
 Given /^Suzie has already signed the petition$/ do
-  @suzies_signature = FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  @suzies_signature = FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
 end
 
 Given /^Eric has already signed the petition with Suzies email$/ do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Eric Wibbledon")
 end
 
 Given /^I have signed the petition with a second name$/ do
-  FactoryGirl.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Sam Wibbledon")
 end
 
 Given(/^Suzie has already signed the petition and validated her email$/) do
-  @suzies_signature = FactoryGirl.create(:validated_signature, :petition => @petition, :email => "womboid@wimbledon.com",
+  @suzies_signature = FactoryBot.create(:validated_signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
 end
 
@@ -185,7 +185,7 @@ end
 
 Given /^I have already signed the petition "([^"]*)" but not confirmed my email$/ do |petition_action|
   petition = Petition.find_by(action: petition_action)
-  FactoryGirl.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
+  FactoryBot.create(:pending_signature, :email => 'suzie@example.com', :petition => petition)
 end
 
 When /^I fill in "([^"]*)" with my email address$/ do |field_name|

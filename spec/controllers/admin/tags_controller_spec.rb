@@ -23,7 +23,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }
 
     [
@@ -47,7 +47,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
   end
 
   context "when logged in as a sysadmin" do
-    let(:sysadmin) { FactoryGirl.create(:sysadmin_user) }
+    let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
     before { login_as(sysadmin) }
 
     describe "GET /admin/tags" do
@@ -107,7 +107,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     end
 
     describe "GET /admin/tags/:id/edit" do
-      let(:tag) { FactoryGirl.create(:tag) }
+      let(:tag) { FactoryBot.create(:tag) }
 
       before { get :edit, id: tag.id }
 
@@ -121,7 +121,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     end
 
     describe "PATCH /admin/tags/:id" do
-      let(:tag) { FactoryGirl.create(:tag) }
+      let(:tag) { FactoryBot.create(:tag) }
 
       before { patch :update, id: tag.id, tag: params }
 
@@ -155,7 +155,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     end
 
     describe "DELETE /admin/tags/:id" do
-      let(:tag) { FactoryGirl.create(:tag) }
+      let(:tag) { FactoryBot.create(:tag) }
 
       before { delete :destroy, id: tag.id }
 

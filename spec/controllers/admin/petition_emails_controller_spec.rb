@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:open_petition) }
+  let!(:petition) { FactoryBot.create(:open_petition) }
 
   describe 'not logged in' do
-    let(:email) { FactoryGirl.create(:petition_email, petition: petition) }
+    let(:email) { FactoryBot.create(:petition_email, petition: petition) }
 
     describe 'GET /new' do
       it 'redirects to the login page' do
@@ -43,8 +43,8 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:email) { FactoryGirl.create(:petition_email, petition: petition) }
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:email) { FactoryBot.create(:petition_email, petition: petition) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
 
     before { login_as(user) }
 
@@ -85,7 +85,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /new' do
@@ -181,7 +181,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -192,7 +192,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     petition: petition
                   }
 
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -202,7 +202,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  FactoryGirl.create(:pending_signature, attributes)
+                  FactoryBot.create(:pending_signature, attributes)
                 end
                 petition.reload
               end
@@ -343,7 +343,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -354,7 +354,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     petition: petition
                   }
 
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -364,7 +364,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  FactoryGirl.create(:pending_signature, attributes)
+                  FactoryBot.create(:pending_signature, attributes)
                 end
                 petition.reload
               end
@@ -435,7 +435,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
     describe 'GET /:id/edit' do
       let(:email) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :petition_email,
           petition: petition,
           subject: "Petition email subject",
@@ -487,7 +487,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
     describe 'PATCH /:id' do
       let(:email) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :petition_email,
           petition: petition,
           subject: "Petition email subject",
@@ -555,7 +555,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -566,7 +566,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     petition: petition
                   }
 
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -576,7 +576,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  FactoryGirl.create(:pending_signature, attributes)
+                  FactoryBot.create(:pending_signature, attributes)
                 end
                 petition.reload
               end
@@ -726,7 +726,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -737,7 +737,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     petition: petition
                   }
 
-                  s = FactoryGirl.create(:pending_signature, attributes)
+                  s = FactoryBot.create(:pending_signature, attributes)
                   s.validate!
                 end
                 2.times do |i|
@@ -747,7 +747,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     notify_by_email: true,
                     petition: petition
                   }
-                  FactoryGirl.create(:pending_signature, attributes)
+                  FactoryBot.create(:pending_signature, attributes)
                 end
                 petition.reload
               end
@@ -820,7 +820,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
     describe 'DELETE /:id' do
       let(:email) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :petition_email,
           petition: petition,
           subject: "Petition email subject",

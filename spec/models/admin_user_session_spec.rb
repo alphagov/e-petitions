@@ -4,7 +4,7 @@ RSpec.describe AdminUserSession do
   describe "#last_login_attempt?" do
     before do
       Authlogic::Session::Base.controller = Authlogic::TestCase::MockController.new
-      FactoryGirl.create(:moderator_user, email: email)
+      FactoryBot.create(:moderator_user, email: email)
     end
 
     let(:email) { "admin@petition.parliament.uk" }

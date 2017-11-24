@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
   before do
-    constituency = FactoryGirl.create(:constituency, :london_and_westminster)
+    constituency = FactoryBot.create(:constituency, :london_and_westminster)
     allow(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(constituency)
   end
 
@@ -16,7 +16,7 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -26,7 +26,7 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the creator's signature has not been validated" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
       let(:creator) { petition.creator }
 
       it "validates the creator's signature" do
@@ -40,7 +40,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -52,7 +52,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           get :new, petition_id: petition.id, token: petition.sponsor_token
@@ -70,7 +70,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           get :new, petition_id: petition.id, token: petition.sponsor_token
@@ -93,7 +93,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           it "doesn't redirect to the petition moderation info page" do
             expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -101,7 +101,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -131,7 +131,7 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -142,7 +142,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -154,7 +154,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           post :confirm, petition_id: petition.id, token: petition.sponsor_token, signature: params
@@ -172,7 +172,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           post :confirm, petition_id: petition.id, token: petition.sponsor_token, signature: params
@@ -219,7 +219,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           it "doesn't redirect to the petition moderation info page" do
             expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -227,7 +227,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -257,7 +257,7 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -268,7 +268,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -280,7 +280,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           post :create, petition_id: petition.id, token: petition.sponsor_token, signature: params
@@ -298,7 +298,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         context "and the signature is not a duplicate" do
           before do
@@ -358,7 +358,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and the signature is a pending duplicate" do
-          let!(:signature) { FactoryGirl.create(:pending_signature, params.merge(petition: petition)) }
+          let!(:signature) { FactoryBot.create(:pending_signature, params.merge(petition: petition)) }
 
           before do
             perform_enqueued_jobs {
@@ -385,7 +385,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and the signature is a validated duplicate" do
-          let!(:signature) { FactoryGirl.create(:validated_signature, params.merge(petition: petition)) }
+          let!(:signature) { FactoryBot.create(:validated_signature, params.merge(petition: petition)) }
 
           before do
             perform_enqueued_jobs {
@@ -412,7 +412,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           before do
             perform_enqueued_jobs {
@@ -426,7 +426,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
           before do
             perform_enqueued_jobs {
@@ -452,7 +452,7 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -463,7 +463,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -475,7 +475,7 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
 
         before do
           get :thank_you, petition_id: petition.id, token: petition.sponsor_token
@@ -497,8 +497,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
 
         before do
           get :thank_you, petition_id: petition.id, token: petition.sponsor_token
@@ -513,7 +513,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           it "doesn't redirect to the petition moderation info page" do
             expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -525,7 +525,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
           it "doesn't redirect to the petition moderation info page" do
             expect(response).not_to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -549,8 +549,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -560,8 +560,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature is fraudulent" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -571,8 +571,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature is invalidated" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -583,8 +583,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -596,8 +596,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
         before do
           get :verify, id: signature.id, token: signature.perishable_token
@@ -619,8 +619,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
         before do
           get :verify, id: signature.id, token: signature.perishable_token
@@ -643,7 +643,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and the signature has already been validated" do
-          let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, sponsor: true) }
+          let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
 
           it "sets the flash :notice message" do
             expect(flash[:notice]).to eq("You’ve already supported this petition")
@@ -651,7 +651,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           it "assigns the @signature instance variable" do
             expect(assigns[:signature]).to eq(signature)
@@ -671,7 +671,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
@@ -691,8 +691,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature token is invalid" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -702,8 +702,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature is fraudulent" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:fraudulent_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -713,8 +713,8 @@ RSpec.describe SponsorsController, type: :controller do
     end
 
     context "when the signature is invalidated" do
-      let(:petition) { FactoryGirl.create(:pending_petition) }
-      let(:signature) { FactoryGirl.create(:invalidated_signature, petition: petition, sponsor: true) }
+      let(:petition) { FactoryBot.create(:pending_petition) }
+      let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition, sponsor: true) }
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -725,8 +725,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[flagged hidden stopped].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
@@ -738,8 +738,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[open closed rejected].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
         before do
           get :signed, id: signature.id, token: signature.perishable_token
@@ -765,8 +765,8 @@ RSpec.describe SponsorsController, type: :controller do
 
     %w[pending validated sponsored].each do |state|
       context "when the petition is #{state}" do
-        let(:petition) { FactoryGirl.create(:"#{state}_petition") }
-        let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
+        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+        let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
         before do
           get :signed, id: signature.id, token: signature.perishable_token
@@ -789,7 +789,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and the signature has not been validated" do
-          let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, sponsor: true) }
+          let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
           it "redirects to the verify page" do
             expect(response).to redirect_to("/sponsors/#{signature.id}/verify?token=#{signature.perishable_token}")
@@ -797,7 +797,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and the signature has already seen the confirmation page" do
-          let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, sponsor: true) }
+          let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
 
           it "assigns the @signature instance variable" do
             expect(assigns[:signature]).to eq(signature)
@@ -813,7 +813,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 2, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 2, sponsors_signed: true) }
 
           it "assigns the @signature instance variable" do
             expect(assigns[:signature]).to eq(signature)
@@ -833,7 +833,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryGirl.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
 
           it "assigns the @signature instance variable" do
             expect(assigns[:signature]).to eq(signature)

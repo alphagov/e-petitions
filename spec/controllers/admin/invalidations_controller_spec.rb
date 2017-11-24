@@ -26,7 +26,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }
 
     [
@@ -53,7 +53,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
   end
 
   context "when logged in as a sysadmin" do
-    let(:sysadmin) { FactoryGirl.create(:sysadmin_user) }
+    let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
     before { login_as(sysadmin) }
 
     describe "GET /admin/invalidations" do
@@ -116,7 +116,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       before { get :edit, id: invalidation.id }
 
       context "when the invalidation is still pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
         it "returns 200 OK" do
           expect(response).to have_http_status(:ok)
@@ -128,7 +128,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is not pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :completed, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :completed, email: "user@example.com") }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -144,7 +144,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       before { patch :update, id: invalidation.id, invalidation: params }
 
       context "when the invalidation is still pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
         context "and the params are invalid" do
           let :params do
@@ -176,7 +176,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is not pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :completed, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :completed, email: "user@example.com") }
 
         let :params do
           { summary: "Invalidate some signatures", email: "user@example.com" }
@@ -194,7 +194,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
 
     describe "DELETE /admin/invalidations/:id" do
       context "when the invalidation is still pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
         before { delete :destroy, id: invalidation.id }
 
@@ -208,7 +208,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is cancelled, but not started" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :cancelled, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :cancelled, email: "user@example.com") }
 
         before { delete :destroy, id: invalidation.id }
 
@@ -222,7 +222,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is not pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :started, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
         before { delete :destroy, id: invalidation.id }
 
@@ -236,7 +236,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the destroy fails for an unknown reason" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
         let(:id) { invalidation.id.to_s }
 
         before do
@@ -257,7 +257,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
 
     describe "POST /admin/invalidations/:id/cancel" do
       context "when the invalidation has not completed" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :started, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
         before { post :cancel, id: invalidation.id }
 
@@ -271,7 +271,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation has completed" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :completed, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :completed, email: "user@example.com") }
 
         before { post :cancel, id: invalidation.id }
 
@@ -285,7 +285,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the cancel fails for an unknown reason" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
         let(:id) { invalidation.id.to_s }
 
         before do
@@ -306,7 +306,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
 
     describe "POST /admin/invalidations/:id/count" do
       context "when the invalidation is still pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
         before { post :count, id: invalidation.id }
 
@@ -320,7 +320,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is no longer pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :started, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
         before { post :count, id: invalidation.id }
 
@@ -334,7 +334,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the count fails for an unknown reason" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
         let(:id) { invalidation.id.to_s }
 
         before do
@@ -355,7 +355,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
 
     describe "POST /admin/invalidations/:id/start" do
       context "when the invalidation is still pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
         before { post :start, id: invalidation.id }
 
@@ -369,7 +369,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the invalidation is no longer pending" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, :started, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
         before { post :start, id: invalidation.id }
 
@@ -383,7 +383,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       end
 
       context "when the start fails for an unknown reason" do
-        let(:invalidation) { FactoryGirl.create(:invalidation, email: "user@example.com") }
+        let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
         let(:id) { invalidation.id.to_s }
 
         before do

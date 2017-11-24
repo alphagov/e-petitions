@@ -16,7 +16,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   end
 
   before do
-    FactoryGirl.create(:sysadmin_user, user_attributes)
+    FactoryBot.create(:sysadmin_user, user_attributes)
   end
 
   def new_browser

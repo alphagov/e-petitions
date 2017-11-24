@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe AdminHubHelper, type: :helper do
   describe "moderation count helpers" do
-    let!(:tag) { FactoryGirl.create(:tag, name: "one") }
-    let!(:petition_recently_in_moderation) { FactoryGirl.create(:sponsored_petition, :recent) }
-    let!(:petition_nearly_overdue_moderation) { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
-    let!(:petition_overdue_moderation) { FactoryGirl.create(:sponsored_petition, :overdue) }
-    let!(:tagged_in_moderation_petition) { FactoryGirl.create(:sponsored_petition, tags: [tag.id]) }
+    let!(:tag) { FactoryBot.create(:tag, name: "one") }
+    let!(:petition_recently_in_moderation) { FactoryBot.create(:sponsored_petition, :recent) }
+    let!(:petition_nearly_overdue_moderation) { FactoryBot.create(:sponsored_petition, :nearly_overdue) }
+    let!(:petition_overdue_moderation) { FactoryBot.create(:sponsored_petition, :overdue) }
+    let!(:tagged_in_moderation_petition) { FactoryBot.create(:sponsored_petition, tags: [tag.id]) }
 
     describe "in_moderation_count" do
       it "returns the number in moderation" do
@@ -64,7 +64,7 @@ RSpec.describe AdminHubHelper, type: :helper do
   end
 
   describe "#summary_class_name_for_in_moderation" do
-    before { FactoryGirl.create(:sponsored_petition, :recent) }
+    before { FactoryBot.create(:sponsored_petition, :recent) }
 
     context "when there are no overdue and nearly overdue petitions" do
       it "returns the CSS class name 'queue-stable'" do
@@ -73,7 +73,7 @@ RSpec.describe AdminHubHelper, type: :helper do
     end
 
     context "when there are no overdue but there are nearly overdue petitions" do
-      before { FactoryGirl.create(:sponsored_petition, :nearly_overdue) }
+      before { FactoryBot.create(:sponsored_petition, :nearly_overdue) }
 
       it "returns the CSS class name 'queue-caution'" do
         expect(helper.summary_class_name_for_in_moderation).to eq("queue-caution")
@@ -81,7 +81,7 @@ RSpec.describe AdminHubHelper, type: :helper do
     end
 
     context "when there are overdue petitions" do
-      before { FactoryGirl.create(:sponsored_petition, :overdue) }
+      before { FactoryBot.create(:sponsored_petition, :overdue) }
 
       it "returns the CSS class name 'queue-danger'" do
         expect(helper.summary_class_name_for_in_moderation).to eq("queue-danger")

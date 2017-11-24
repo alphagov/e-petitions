@@ -10,12 +10,12 @@ RSpec.shared_examples_for "a taggable model" do
   let(:factory) { described_class.model_name.singular.to_sym }
 
   describe ".tagged_with" do
-    let!(:tag_1) { FactoryGirl.create(:tag) }
-    let!(:tag_2) { FactoryGirl.create(:tag) }
-    let!(:model_1) { FactoryGirl.create(factory, tags: []) }
-    let!(:model_2) { FactoryGirl.create(factory, tags: [tag_1.id]) }
-    let!(:model_3) { FactoryGirl.create(factory, tags: [tag_1.id, tag_2.id]) }
-    let!(:model_4) { FactoryGirl.create(factory, tags: [tag_2.id]) }
+    let!(:tag_1) { FactoryBot.create(:tag) }
+    let!(:tag_2) { FactoryBot.create(:tag) }
+    let!(:model_1) { FactoryBot.create(factory, tags: []) }
+    let!(:model_2) { FactoryBot.create(factory, tags: [tag_1.id]) }
+    let!(:model_3) { FactoryBot.create(factory, tags: [tag_1.id, tag_2.id]) }
+    let!(:model_4) { FactoryBot.create(factory, tags: [tag_2.id]) }
 
     context "when using no tags" do
       it "returns all models" do
@@ -53,12 +53,12 @@ RSpec.shared_examples_for "a taggable model" do
   end
 
   describe ".tagged_with_all" do
-    let!(:tag_1) { FactoryGirl.create(:tag) }
-    let!(:tag_2) { FactoryGirl.create(:tag) }
-    let!(:model_1) { FactoryGirl.create(factory, tags: []) }
-    let!(:model_2) { FactoryGirl.create(factory, tags: [tag_1.id]) }
-    let!(:model_3) { FactoryGirl.create(factory, tags: [tag_1.id, tag_2.id]) }
-    let!(:model_4) { FactoryGirl.create(factory, tags: [tag_2.id]) }
+    let!(:tag_1) { FactoryBot.create(:tag) }
+    let!(:tag_2) { FactoryBot.create(:tag) }
+    let!(:model_1) { FactoryBot.create(factory, tags: []) }
+    let!(:model_2) { FactoryBot.create(factory, tags: [tag_1.id]) }
+    let!(:model_3) { FactoryBot.create(factory, tags: [tag_1.id, tag_2.id]) }
+    let!(:model_4) { FactoryBot.create(factory, tags: [tag_2.id]) }
 
     context "when using no tags" do
       it "returns all models" do
@@ -96,12 +96,12 @@ RSpec.shared_examples_for "a taggable model" do
   end
 
   describe ".tagged_with_any" do
-    let!(:tag_1) { FactoryGirl.create(:tag) }
-    let!(:tag_2) { FactoryGirl.create(:tag) }
-    let!(:model_1) { FactoryGirl.create(factory, tags: []) }
-    let!(:model_2) { FactoryGirl.create(factory, tags: [tag_1.id]) }
-    let!(:model_3) { FactoryGirl.create(factory, tags: [tag_1.id, tag_2.id]) }
-    let!(:model_4) { FactoryGirl.create(factory, tags: [tag_2.id]) }
+    let!(:tag_1) { FactoryBot.create(:tag) }
+    let!(:tag_2) { FactoryBot.create(:tag) }
+    let!(:model_1) { FactoryBot.create(factory, tags: []) }
+    let!(:model_2) { FactoryBot.create(factory, tags: [tag_1.id]) }
+    let!(:model_3) { FactoryBot.create(factory, tags: [tag_1.id, tag_2.id]) }
+    let!(:model_4) { FactoryBot.create(factory, tags: [tag_2.id]) }
 
     context "when using no tags" do
       it "returns no models" do
@@ -139,9 +139,9 @@ RSpec.shared_examples_for "a taggable model" do
   end
 
   describe ".untagged" do
-    let!(:tag) { FactoryGirl.create(:tag) }
-    let!(:model_1) { FactoryGirl.create(factory, tags: []) }
-    let!(:model_2) { FactoryGirl.create(factory, tags: [tag.id]) }
+    let!(:tag) { FactoryBot.create(:tag) }
+    let!(:model_1) { FactoryBot.create(factory, tags: []) }
+    let!(:model_2) { FactoryBot.create(factory, tags: [tag.id]) }
 
     it "returns untagged models" do
       expect(described_class.untagged).to include(model_1)
@@ -186,8 +186,8 @@ RSpec.shared_examples_for "a taggable model" do
 
   describe "#tag_names" do
     before do
-      foo = FactoryGirl.create(:tag, name: "Foo")
-      bar = FactoryGirl.create(:tag, name: "Bar")
+      foo = FactoryBot.create(:tag, name: "Foo")
+      bar = FactoryBot.create(:tag, name: "Bar")
 
       subject.tags = [foo.id, bar.id]
     end

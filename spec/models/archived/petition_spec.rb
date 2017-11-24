@@ -30,7 +30,7 @@ RSpec.describe Archived::Petition, type: :model do
     describe "updating the scheduled debate date" do
       context "when the debate date is changed to nil" do
         subject(:petition) {
-          FactoryGirl.create(:archived_petition,
+          FactoryBot.create(:archived_petition,
             scheduled_debate_date: 2.days.from_now,
             debate_state: "scheduled"
           )
@@ -47,7 +47,7 @@ RSpec.describe Archived::Petition, type: :model do
 
       context "when the debate date is in the future" do
         subject(:petition) {
-          FactoryGirl.create(:archived_petition,
+          FactoryBot.create(:archived_petition,
             scheduled_debate_date: nil,
             debate_state: "awaiting"
           )
@@ -64,7 +64,7 @@ RSpec.describe Archived::Petition, type: :model do
 
       context "when the debate date is in the past" do
         subject(:petition) {
-          FactoryGirl.create(:archived_petition,
+          FactoryBot.create(:archived_petition,
             scheduled_debate_date: nil,
             debate_state: "awaiting"
           )
@@ -81,7 +81,7 @@ RSpec.describe Archived::Petition, type: :model do
 
       context "when the debate date is not changed" do
         subject(:petition) {
-          FactoryGirl.create(:archived_petition,
+          FactoryBot.create(:archived_petition,
             scheduled_debate_date: Date.yesterday,
             debate_state: "awaiting"
           )
@@ -100,15 +100,15 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe ".search" do
     let!(:petition_1) do
-      FactoryGirl.create(:archived_petition, :closed, action: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
+      FactoryBot.create(:archived_petition, :closed, action: "Wombles are great", created_at: 1.year.ago, signature_count: 100)
     end
 
     let!(:petition_2) do
-      FactoryGirl.create(:archived_petition, :closed, background: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
+      FactoryBot.create(:archived_petition, :closed, background: "The Wombles of Wimbledon", created_at: 2.years.ago, signature_count: 200)
     end
 
     let!(:petition_3) do
-      FactoryGirl.create(:archived_petition, :closed, additional_details: "Are wombling free", created_at: 3.years.ago, signature_count: 300)
+      FactoryBot.create(:archived_petition, :closed, additional_details: "Are wombling free", created_at: 3.years.ago, signature_count: 300)
     end
 
     it "searches based upon action" do
@@ -129,9 +129,9 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe ".by_created_at" do
-    let!(:petition_1) { FactoryGirl.create(:archived_petition, created_at: 3.years.ago) }
-    let!(:petition_2) { FactoryGirl.create(:archived_petition, created_at: 1.year.ago) }
-    let!(:petition_3) { FactoryGirl.create(:archived_petition, created_at: 2.years.ago) }
+    let!(:petition_1) { FactoryBot.create(:archived_petition, created_at: 3.years.ago) }
+    let!(:petition_2) { FactoryBot.create(:archived_petition, created_at: 1.year.ago) }
+    let!(:petition_3) { FactoryBot.create(:archived_petition, created_at: 2.years.ago) }
     let(:petitions) { [petition_1, petition_3, petition_2] }
 
     it 'returns archived petitions ordered by the created_at timestamp' do
@@ -140,9 +140,9 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe ".by_most_signatures" do
-    let!(:petition_1) { FactoryGirl.create(:archived_petition, signature_count: 100) }
-    let!(:petition_2) { FactoryGirl.create(:archived_petition, signature_count: 10) }
-    let!(:petition_3) { FactoryGirl.create(:archived_petition, signature_count: 50) }
+    let!(:petition_1) { FactoryBot.create(:archived_petition, signature_count: 100) }
+    let!(:petition_2) { FactoryBot.create(:archived_petition, signature_count: 10) }
+    let!(:petition_3) { FactoryBot.create(:archived_petition, signature_count: 50) }
     let(:petitions) { [petition_1, petition_3, petition_2] }
 
     it 'returns archived petitions ordered by highest number of signatures' do
@@ -152,10 +152,10 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe ".with_response" do
     before do
-      @p1 = FactoryGirl.create(:archived_petition, :response)
-      @p2 = FactoryGirl.create(:archived_petition)
-      @p3 = FactoryGirl.create(:archived_petition, :response)
-      @p4 = FactoryGirl.create(:archived_petition)
+      @p1 = FactoryBot.create(:archived_petition, :response)
+      @p2 = FactoryBot.create(:archived_petition)
+      @p3 = FactoryBot.create(:archived_petition, :response)
+      @p4 = FactoryBot.create(:archived_petition)
     end
 
     it "returns only the petitions have a government response timestamp" do
@@ -164,10 +164,10 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe ".visible" do
-    let!(:stopped_petition) { FactoryGirl.create(:archived_petition, :stopped) }
-    let!(:closed_petition) { FactoryGirl.create(:archived_petition, :closed) }
-    let!(:rejected_petition) { FactoryGirl.create(:archived_petition, :rejected) }
-    let!(:hidden_petition) { FactoryGirl.create(:archived_petition, :hidden) }
+    let!(:stopped_petition) { FactoryBot.create(:archived_petition, :stopped) }
+    let!(:closed_petition) { FactoryBot.create(:archived_petition, :closed) }
+    let!(:rejected_petition) { FactoryBot.create(:archived_petition, :rejected) }
+    let!(:hidden_petition) { FactoryBot.create(:archived_petition, :hidden) }
 
     it "doesn't include stopped petitions" do
       expect(described_class.visible).not_to include(stopped_petition)
@@ -188,7 +188,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe ".in_need_of_marking_as_debated" do
     context "when a petition is not in the the 'awaiting' debate state" do
-      let!(:petition) { FactoryGirl.create(:archived_petition) }
+      let!(:petition) { FactoryBot.create(:archived_petition) }
 
       it "does not find the petition" do
         expect(described_class.in_need_of_marking_as_debated).not_to include(petition)
@@ -197,7 +197,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     context "when a petition is awaiting a debate date" do
       let!(:petition) {
-        FactoryGirl.create(:archived_petition,
+        FactoryBot.create(:archived_petition,
           debate_state: 'awaiting',
           scheduled_debate_date: nil
         )
@@ -210,7 +210,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     context "when a petition is awaiting a debate" do
       let!(:petition) {
-        FactoryGirl.create(:archived_petition,
+        FactoryBot.create(:archived_petition,
           debate_state: 'awaiting',
           scheduled_debate_date: 2.days.from_now
         )
@@ -223,7 +223,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     context "when a petition debate date has passed but is still marked as 'awaiting'" do
       let(:petition) {
-        FactoryGirl.build(:archived_petition,
+        FactoryBot.build(:archived_petition,
           debate_state: 'awaiting',
           scheduled_debate_date: Date.tomorrow
         )
@@ -242,7 +242,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     context "when a petition debate date has passed and it marked as 'debated'" do
       let!(:petition) {
-        FactoryGirl.create(:archived_petition,
+        FactoryBot.create(:archived_petition,
           debate_state: 'debated',
           scheduled_debate_date: 2.days.ago
         )
@@ -257,7 +257,7 @@ RSpec.describe Archived::Petition, type: :model do
   describe ".mark_petitions_as_debated!" do
     context "when a petition is in the scheduled debate state and the debate date has passed" do
       let(:petition) {
-        FactoryGirl.build(:archived_petition,
+        FactoryBot.build(:archived_petition,
           debate_state: 'scheduled',
           scheduled_debate_date: Date.tomorrow
         )
@@ -278,7 +278,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     context "when a petition is in the scheduled debate state and the debate date has not passed" do
       let(:petition) {
-        FactoryGirl.build(:archived_petition,
+        FactoryBot.build(:archived_petition,
           debate_state: 'scheduled',
           scheduled_debate_date: Date.tomorrow
         )
@@ -360,7 +360,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "#stopped?" do
     context "when petition is in a stopped state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :stopped) }
 
       it "returns true" do
         expect(petition.stopped?).to eq(true)
@@ -368,7 +368,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a closed state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :closed) }
 
       it "returns false" do
         expect(petition.stopped?).to eq(false)
@@ -376,7 +376,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a rejected state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :rejected) }
 
       it "returns false" do
         expect(petition.stopped?).to eq(false)
@@ -384,7 +384,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a hidden state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :hidden) }
 
       it "returns false" do
         expect(petition.stopped?).to eq(false)
@@ -394,7 +394,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "#closed?" do
     context "when petition is in a stopped state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.closed?).to eq(false)
@@ -402,7 +402,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a closed state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :closed) }
 
       it "returns true" do
         expect(petition.closed?).to eq(true)
@@ -410,7 +410,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a rejected state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :rejected) }
 
       it "returns false" do
         expect(petition.closed?).to eq(false)
@@ -418,7 +418,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a hidden state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :hidden) }
 
       it "returns false" do
         expect(petition.closed?).to eq(false)
@@ -428,7 +428,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "#rejected?" do
     context "when petition is in a stopped state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.rejected?).to eq(false)
@@ -436,7 +436,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a closed state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :closed) }
 
       it "returns false" do
         expect(petition.rejected?).to eq(false)
@@ -444,7 +444,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a rejected state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :rejected) }
 
       it "returns true" do
         expect(petition.rejected?).to eq(true)
@@ -452,7 +452,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a hidden state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :hidden) }
 
       it "returns false" do
         expect(petition.rejected?).to eq(false)
@@ -462,7 +462,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "#hidden?" do
     context "when petition is in a stopped state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :stopped) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :stopped) }
 
       it "returns false" do
         expect(petition.hidden?).to eq(false)
@@ -470,7 +470,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a closed state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :closed) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :closed) }
 
       it "returns false" do
         expect(petition.hidden?).to eq(false)
@@ -478,7 +478,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a rejected state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :rejected) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :rejected) }
 
       it "returns false" do
         expect(petition.hidden?).to eq(false)
@@ -486,7 +486,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when petition is in a hidden state" do
-      subject(:petition) { FactoryGirl.build(:archived_petition, :hidden) }
+      subject(:petition) { FactoryBot.build(:archived_petition, :hidden) }
 
       it "returns false" do
         expect(petition.hidden?).to eq(true)
@@ -496,10 +496,10 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "#duration" do
     context "when the parliament petition duration is nil" do
-      let(:parliament) { FactoryGirl.create(:parliament, petition_duration: nil) }
+      let(:parliament) { FactoryBot.create(:parliament, petition_duration: nil) }
 
       context "and the petition was not published" do
-        let(:petition) { FactoryGirl.create(:archived_petition, :rejected, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, :rejected, parliament: parliament) }
 
         it "returns 0" do
           expect(petition.duration).to eq(0)
@@ -509,7 +509,7 @@ RSpec.describe Archived::Petition, type: :model do
       context "and the petition was published for three months" do
         let(:opened_at) { 2.years.ago }
         let(:closed_at) { opened_at + 3.months }
-        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns 3" do
           expect(petition.duration).to eq(3)
@@ -519,7 +519,7 @@ RSpec.describe Archived::Petition, type: :model do
       context "and the petition was published for six months" do
         let(:opened_at) { 2.years.ago }
         let(:closed_at) { opened_at + 6.months }
-        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns 3" do
           expect(petition.duration).to eq(6)
@@ -529,7 +529,7 @@ RSpec.describe Archived::Petition, type: :model do
       context "and the petition was published for nine months" do
         let(:opened_at) { 2.years.ago }
         let(:closed_at) { opened_at + 9.months }
-        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns 3" do
           expect(petition.duration).to eq(9)
@@ -539,7 +539,7 @@ RSpec.describe Archived::Petition, type: :model do
       context "and the petition was published for twelve months" do
         let(:opened_at) { 2.years.ago }
         let(:closed_at) { opened_at + 12.months }
-        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns 3" do
           expect(petition.duration).to eq(12)
@@ -549,7 +549,7 @@ RSpec.describe Archived::Petition, type: :model do
       context "and the petition was published for an arbitrary length of time" do
         let(:opened_at) { 2.years.ago }
         let(:closed_at) { opened_at + 45.days }
-        let(:petition) { FactoryGirl.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
+        let(:petition) { FactoryBot.create(:archived_petition, opened_at: opened_at, closed_at: closed_at, parliament: parliament) }
 
         it "returns a fractional number of months assuming that 1 month == 30 days" do
           expect(petition.duration).to be_within(0.1).of(1.5)
@@ -558,8 +558,8 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the parliament petition duration is not nil" do
-      let(:parliament) { FactoryGirl.create(:parliament, petition_duration: 6) }
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament) }
+      let(:parliament) { FactoryBot.create(:parliament, petition_duration: 6) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament) }
 
       it "returns the duration from the parliament" do
         expect(petition.duration).to eq(6)
@@ -576,8 +576,8 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#closed_early_due_to_election?" do
-    let(:parliament) { FactoryGirl.create(:parliament, :dissolved, :archived, dissolution_at: "2015-05-18T23:59:59") }
-    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, closed_at: closed_at) }
+    let(:parliament) { FactoryBot.create(:parliament, :dissolved, :archived, dissolution_at: "2015-05-18T23:59:59") }
+    let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, closed_at: closed_at) }
 
     context "when closed_at is before the dissolution_at timestamp" do
       let(:closed_at) { "2015-05-01T00:00:00" }
@@ -605,8 +605,8 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#threshold_for_response_reached?" do
-    let(:parliament) { FactoryGirl.create(:parliament, threshold_for_response: 500) }
-    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
+    let(:parliament) { FactoryBot.create(:parliament, threshold_for_response: 500) }
+    let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
 
     context "when the signature count is less than the threshold" do
       let(:signature_count) { 250 }
@@ -634,8 +634,8 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#threshold_for_debate_reached?" do
-    let(:parliament) { FactoryGirl.create(:parliament, threshold_for_debate: 5000) }
-    let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
+    let(:parliament) { FactoryBot.create(:parliament, threshold_for_debate: 5000) }
+    let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: signature_count) }
 
     context "when the signature count is less than the threshold" do
       let(:signature_count) { 2500 }
@@ -663,15 +663,15 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#signatures_by_constituency" do
-    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_constituency: signatures_by_constituency) }
+    let(:petition) { FactoryBot.create(:archived_petition, signatures_by_constituency: signatures_by_constituency) }
 
     let(:signatures_by_constituency) do
       { "3427" => 123, "3320" => 456 }
     end
 
     before do
-      FactoryGirl.create(:constituency, :coventry_north_east)
-      FactoryGirl.create(:constituency, :bethnal_green_and_bow)
+      FactoryBot.create(:constituency, :coventry_north_east)
+      FactoryBot.create(:constituency, :bethnal_green_and_bow)
     end
 
     it "returns an array of constituency signature details" do
@@ -700,15 +700,15 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#signatures_by_country" do
-    let(:petition) { FactoryGirl.create(:archived_petition, signatures_by_country: signatures_by_country) }
+    let(:petition) { FactoryBot.create(:archived_petition, signatures_by_country: signatures_by_country) }
 
     let(:signatures_by_country) do
       { "GB" => 1234, "US" => 56 }
     end
 
     before do
-      FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
-      FactoryGirl.create(:location, code: "US", name: "United States")
+      FactoryBot.create(:location, code: "GB", name: "United Kingdom")
+      FactoryBot.create(:location, code: "US", name: "United States")
     end
 
     it "returns an array of country signature details" do
@@ -739,7 +739,7 @@ RSpec.describe Archived::Petition, type: :model do
 
     %w[government_response debate_scheduled debate_outcome petition_email].each do |timestamp|
       context "when nothing has been requested for '#{timestamp}'" do
-        let(:petition) { FactoryGirl.create(:archived_petition, "email_requested_for_#{timestamp}_at": nil) }
+        let(:petition) { FactoryBot.create(:archived_petition, "email_requested_for_#{timestamp}_at": nil) }
 
         it "returns nil" do
           expect(petition.get_email_requested_at_for(timestamp)).to be_nil
@@ -747,7 +747,7 @@ RSpec.describe Archived::Petition, type: :model do
       end
 
       context "when an email has been requested for '#{timestamp}'" do
-        let(:petition) { FactoryGirl.create(:archived_petition, "email_requested_for_#{timestamp}_at": requested_at) }
+        let(:petition) { FactoryBot.create(:archived_petition, "email_requested_for_#{timestamp}_at": requested_at) }
 
         it "returns the timestamp" do
           expect(petition.get_email_requested_at_for(timestamp)).to be_usec_precise_with(requested_at)
@@ -757,7 +757,7 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe '#set_email_requested_at_for' do
-    let(:petition) { FactoryGirl.create(:archived_petition) }
+    let(:petition) { FactoryBot.create(:archived_petition) }
     let(:requested_at) { Time.current }
 
     %w[government_response debate_scheduled debate_outcome petition_email].each do |timestamp|
@@ -772,13 +772,13 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#signatures_to_email_for" do
-    let!(:petition) { FactoryGirl.create(:archived_petition) }
-    let!(:creator) { FactoryGirl.create(:archived_signature, petition: petition, creator: true) }
-    let!(:pending) { FactoryGirl.create(:archived_signature, petition: petition, state: "pending") }
-    let!(:fraudulent) { FactoryGirl.create(:archived_signature, petition: petition, state: "fraudulent") }
-    let!(:invalidated) { FactoryGirl.create(:archived_signature, petition: petition, state: "invalidated") }
-    let!(:subscribed) { FactoryGirl.create(:archived_signature, petition: petition) }
-    let!(:unsubscribed) { FactoryGirl.create(:archived_signature, petition: petition, notify_by_email: false) }
+    let!(:petition) { FactoryBot.create(:archived_petition) }
+    let!(:creator) { FactoryBot.create(:archived_signature, petition: petition, creator: true) }
+    let!(:pending) { FactoryBot.create(:archived_signature, petition: petition, state: "pending") }
+    let!(:fraudulent) { FactoryBot.create(:archived_signature, petition: petition, state: "fraudulent") }
+    let!(:invalidated) { FactoryBot.create(:archived_signature, petition: petition, state: "invalidated") }
+    let!(:subscribed) { FactoryBot.create(:archived_signature, petition: petition) }
+    let!(:unsubscribed) { FactoryBot.create(:archived_signature, petition: petition, notify_by_email: false) }
 
     let(:requested_at) { 6.days.ago }
 
@@ -850,10 +850,10 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#update_lock!" do
-    let(:current_user) { FactoryGirl.create(:moderator_user) }
+    let(:current_user) { FactoryBot.create(:moderator_user) }
 
     context "when the petition is not locked" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -873,8 +873,8 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by someone else" do
-      let(:other_user) { FactoryGirl.create(:moderator_user) }
-      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+      let(:other_user) { FactoryBot.create(:moderator_user) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -894,7 +894,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by the current user" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -915,10 +915,10 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#checkout!" do
-    let(:current_user) { FactoryGirl.create(:moderator_user) }
+    let(:current_user) { FactoryBot.create(:moderator_user) }
 
     context "when the petition is not locked" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
       it "updates the locked_by association" do
         expect {
@@ -938,8 +938,8 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by someone else" do
-      let(:other_user) { FactoryGirl.create(:moderator_user) }
-      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+      let(:other_user) { FactoryBot.create(:moderator_user) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
       it "returns false" do
         expect(petition.checkout!(current_user)).to eq(false)
@@ -947,7 +947,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by the current user" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -968,10 +968,10 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe "#force_checkout!" do
-    let(:current_user) { FactoryGirl.create(:moderator_user) }
+    let(:current_user) { FactoryBot.create(:moderator_user) }
 
     context "when the petition is not locked" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
       it "updates the locked_by association" do
         expect {
@@ -991,8 +991,8 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by someone else" do
-      let(:other_user) { FactoryGirl.create(:moderator_user) }
-      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+      let(:other_user) { FactoryBot.create(:moderator_user) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
       it "updates the locked_by association" do
         expect {
@@ -1012,7 +1012,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by the current user" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -1033,10 +1033,10 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
   describe "#release!" do
-    let(:current_user) { FactoryGirl.create(:moderator_user) }
+    let(:current_user) { FactoryBot.create(:moderator_user) }
 
     context "when the petition is not locked" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: nil, locked_at: nil) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: nil, locked_at: nil) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -1056,8 +1056,8 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by someone else" do
-      let(:other_user) { FactoryGirl.create(:moderator_user) }
-      let(:petition) { FactoryGirl.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
+      let(:other_user) { FactoryBot.create(:moderator_user) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: other_user, locked_at: 1.hour.ago) }
 
       it "doesn't update the locked_by association" do
         expect {
@@ -1077,7 +1077,7 @@ RSpec.describe Archived::Petition, type: :model do
     end
 
     context "when the petition is locked by the current user" do
-      let(:petition) { FactoryGirl.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
+      let(:petition) { FactoryBot.create(:petition, locked_by: current_user, locked_at: 1.hour.ago) }
 
       it "updates the locked_by association" do
         expect {

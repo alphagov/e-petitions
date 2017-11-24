@@ -4,7 +4,7 @@ When(/^I fill in the email details$/) do
 end
 
 Given(/^it has an existing petition email "(.*?)"$/) do |subject|
-  @email = FactoryGirl.create(:petition_email, petition: @petition, subject: subject)
+  @email = FactoryBot.create(:petition_email, petition: @petition, subject: subject)
 end
 
 Then(/^the petition should not have any emails$/) do

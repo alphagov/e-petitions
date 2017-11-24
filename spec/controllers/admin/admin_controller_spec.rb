@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::AdminController, type: :controller do
-  let(:user) { FactoryGirl.create(:moderator_user) }
+  let(:user) { FactoryBot.create(:moderator_user) }
 
   before do
     login_as(user)

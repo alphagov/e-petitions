@@ -19,7 +19,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }
 
     [
@@ -39,7 +39,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
   end
 
   context "when logged in as a sysadmin" do
-    let(:sysadmin) { FactoryGirl.create(:sysadmin_user) }
+    let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
     before { login_as(sysadmin) }
 
     describe "GET /admin/rate-limits/edit" do

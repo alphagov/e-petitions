@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::NotesController, type: :controller, admin: true do
 
-  let!(:petition) { FactoryGirl.create(:open_petition) }
+  let!(:petition) { FactoryBot.create(:open_petition) }
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -149,7 +149,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
       end
 
       context "when two moderators update the notes for the first time simultaneously" do
-        let(:note) { FactoryGirl.build(:note, details: "", petition: petition) }
+        let(:note) { FactoryBot.build(:note, details: "", petition: petition) }
 
         before do
           allow(Petition).to receive(:find).with(petition.id.to_s).and_return(petition)

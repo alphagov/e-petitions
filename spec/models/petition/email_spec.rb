@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Petition::Email, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:petition_email)).to be_valid
+    expect(FactoryBot.build(:petition_email)).to be_valid
   end
 
   describe "associations" do
@@ -14,7 +14,7 @@ RSpec.describe Petition::Email, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:petition_email) }
+    subject { FactoryBot.build(:petition_email) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:subject) }

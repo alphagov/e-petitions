@@ -4,7 +4,7 @@ RSpec.describe EmailJob, type: :job do
   let(:job) { described_class.new(petition) }
   let(:mailer) { double(:mailer) }
   let(:message) { double(:message, deliver_now: true) }
-  let(:petition) { FactoryGirl.create(:petition) }
+  let(:petition) { FactoryBot.create(:petition) }
 
   before do
     job.mailer = mailer
@@ -121,8 +121,8 @@ RSpec.describe EmailJob, type: :job do
 end
 
 RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:open_petition) }
-  let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:open_petition) }
+  let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
   let(:run_jobs_and_reload_signature) do
     perform_enqueued_jobs do
       described_class.perform_later(signature)
@@ -143,7 +143,7 @@ RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
 end
 
 RSpec.describe EmailDuplicateSignaturesEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:open_petition) }
+  let(:petition) { FactoryBot.create(:open_petition) }
   let(:original_signature) { petition.signatures.first }
   let(:duplicated_signature) { original_signature.clone }
   let(:run_jobs_and_reload_signatures) do
@@ -167,7 +167,7 @@ RSpec.describe EmailDuplicateSignaturesEmailJob, type: :job do
 end
 
 RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
+  let(:petition) { FactoryBot.create(:petition) }
 
   it "sends the PetitionMailer#gather_sponsors_for_petition email" do
     expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition).and_call_original
@@ -179,7 +179,7 @@ RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do
-  let(:petition) { FactoryGirl.create(:sponsored_petition, :overdue, sponsors_signed: true) }
+  let(:petition) { FactoryBot.create(:sponsored_petition, :overdue, sponsors_signed: true) }
   let(:signature) { petition.creator }
   let(:subject) { "Moderation of your petition is delayed" }
   let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
@@ -194,8 +194,8 @@ RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   context "when parliament is not dissolving" do
     before do
@@ -228,8 +228,8 @@ RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorOfValidatedPetitionBeingStoppedJob, type: :job do
-  let(:petition) { FactoryGirl.create(:validated_petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:validated_petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   context "when parliament is not dissolved" do
     before do
@@ -261,8 +261,8 @@ RSpec.describe NotifyCreatorOfValidatedPetitionBeingStoppedJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorOfSponsoredPetitionBeingStoppedJob, type: :job do
-  let(:petition) { FactoryGirl.create(:sponsored_petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:sponsored_petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   context "when parliament is not dissolved" do
     before do
@@ -294,8 +294,8 @@ RSpec.describe NotifyCreatorOfSponsoredPetitionBeingStoppedJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorThatPetitionIsPublishedEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   it "sends the PetitionMailer#notify_creator_that_petition_is_published email" do
     expect(PetitionMailer).to receive(:notify_creator_that_petition_is_published).with(signature).and_call_original
@@ -307,8 +307,8 @@ RSpec.describe NotifyCreatorThatPetitionIsPublishedEmailJob, type: :job do
 end
 
 RSpec.describe NotifySponsorThatPetitionIsPublishedEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   it "sends the PetitionMailer#notify_sponsor_that_petition_is_published email" do
     expect(PetitionMailer).to receive(:notify_sponsor_that_petition_is_published).with(signature).and_call_original
@@ -320,8 +320,8 @@ RSpec.describe NotifySponsorThatPetitionIsPublishedEmailJob, type: :job do
 end
 
 RSpec.describe NotifyCreatorThatPetitionWasRejectedEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:rejected_petition) }
-  let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:rejected_petition) }
+  let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
   it "sends the PetitionMailer#notify_creator_that_petition_was_rejected email" do
     expect(PetitionMailer).to receive(:notify_creator_that_petition_was_rejected).with(signature).and_call_original
@@ -333,8 +333,8 @@ RSpec.describe NotifyCreatorThatPetitionWasRejectedEmailJob, type: :job do
 end
 
 RSpec.describe NotifySponsorThatPetitionWasRejectedEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:rejected_petition) }
-  let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:rejected_petition) }
+  let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
   it "sends the PetitionMailer#notify_sponsor_that_petition_was_rejected email" do
     expect(PetitionMailer).to receive(:notify_sponsor_that_petition_was_rejected).with(signature).and_call_original
@@ -346,8 +346,8 @@ RSpec.describe NotifySponsorThatPetitionWasRejectedEmailJob, type: :job do
 end
 
 RSpec.describe PetitionAndEmailConfirmationForSponsorEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition) }
 
   it "sends the SponsorMailer#petition_and_email_confirmation_for_sponsor email" do
     expect(SponsorMailer).to receive(:petition_and_email_confirmation_for_sponsor).with(sponsor).and_call_original
@@ -359,8 +359,8 @@ RSpec.describe PetitionAndEmailConfirmationForSponsorEmailJob, type: :job do
 end
 
 RSpec.describe SponsorSignedEmailBelowThresholdEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
   it "sends the SponsorMailer#sponsor_signed_email_below_threshold email" do
     expect(SponsorMailer).to receive(:sponsor_signed_email_below_threshold).with(petition, sponsor).and_call_original
@@ -372,8 +372,8 @@ RSpec.describe SponsorSignedEmailBelowThresholdEmailJob, type: :job do
 end
 
 RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
-  let(:petition) { FactoryGirl.create(:petition) }
-  let(:sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition) }
+  let(:petition) { FactoryBot.create(:petition) }
+  let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
   it "sends the SponsorMailer#sponsor_signed_email_on_threshold email" do
     expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(petition, sponsor).and_call_original
@@ -385,7 +385,7 @@ RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
 end
 
 RSpec.describe FeedbackEmailJob, type: :job do
-  let(:feedback) { FactoryGirl.create(:feedback) }
+  let(:feedback) { FactoryBot.create(:feedback) }
 
   it "sends the FeedbackMailer#send_feedback email" do
     expect(FeedbackMailer).to receive(:send_feedback).with(feedback).and_call_original

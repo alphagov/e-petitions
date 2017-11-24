@@ -20,6 +20,10 @@ Given(/^I try the password "([^"]*)" (\d+) times in a row for the email "([^"]*)
   end
 end
 
+Given(/^the password was changed (\d+) months ago$/) do |period|
+  AdminUser.last.update!(password_changed_at: period.months.ago)
+end
+
 Then(/^I should see the following admin user table:$/) do |values_table|
   actual_table = find(:css, 'table.user-list').all(:css, 'tr').map { |row| row.all(:css, 'th, td').map { |cell| cell.text.strip } }
   values_table.diff!(actual_table)

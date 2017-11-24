@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Signature, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:signature)).to be_valid
+    expect(FactoryBot.build(:signature)).to be_valid
   end
 
   around do |example|
@@ -12,8 +12,8 @@ RSpec.describe Signature, type: :model do
   end
 
   before do
-    FactoryGirl.create(:constituency, :london_and_westminster)
-    FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+    FactoryBot.create(:constituency, :london_and_westminster)
+    FactoryBot.create(:location, code: "GB", name: "United Kingdom")
   end
 
   context "defaults" do
@@ -23,7 +23,7 @@ RSpec.describe Signature, type: :model do
     end
 
     it "generates perishable token" do
-      s = FactoryGirl.create(:signature, :perishable_token => nil)
+      s = FactoryBot.create(:signature, :perishable_token => nil)
       expect(s.perishable_token).not_to be_nil
     end
 
@@ -33,7 +33,7 @@ RSpec.describe Signature, type: :model do
     end
 
     it "generates unsubscription token" do
-      s = FactoryGirl.create(:signature, :unsubscribe_token=> nil)
+      s = FactoryBot.create(:signature, :unsubscribe_token=> nil)
       expect(s.unsubscribe_token).not_to be_nil
     end
   end
@@ -47,7 +47,7 @@ RSpec.describe Signature, type: :model do
 
   context "custom attribute setters" do
     describe "#postcode=" do
-      let(:signature) { FactoryGirl.build(:signature) }
+      let(:signature) { FactoryBot.build(:signature) }
 
       it "removes all whitespace" do
         signature.postcode = " N1  1TY  "
@@ -63,7 +63,7 @@ RSpec.describe Signature, type: :model do
       end
     end
     describe "#email=" do
-      let(:signature) { FactoryGirl.build(:signature) }
+      let(:signature) { FactoryBot.build(:signature) }
 
       it "downcases the email" do
         signature.email = "JOE@PUBLIC.COM"
@@ -79,14 +79,14 @@ RSpec.describe Signature, type: :model do
 
   describe "callbacks" do
     context "when the signature is destroyed" do
-      let(:attributes) { FactoryGirl.attributes_for(:petition) }
-      let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
+      let(:attributes) { FactoryBot.attributes_for(:petition) }
+      let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
       let(:petition) do
         Petition.create(attributes) do |petition|
           petition.creator = creator
 
           5.times do
-            petition.signatures << FactoryGirl.create(:pending_signature)
+            petition.signatures << FactoryBot.create(:pending_signature)
           end
         end
       end
@@ -107,7 +107,7 @@ RSpec.describe Signature, type: :model do
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
         let(:signature) {
-          FactoryGirl.create(
+          FactoryBot.create(
             :pending_signature,
             petition: petition,
             constituency_id: "3415",
@@ -141,7 +141,7 @@ RSpec.describe Signature, type: :model do
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
         let(:signature) {
-          FactoryGirl.create(
+          FactoryBot.create(
             :pending_signature,
             petition: petition,
             constituency_id: "3415",
@@ -174,7 +174,7 @@ RSpec.describe Signature, type: :model do
 
     context "when the signature is saved" do
       context "and the signature is a duplicate" do
-        let(:petition) { FactoryGirl.create(:open_petition) }
+        let(:petition) { FactoryBot.create(:open_petition) }
         let(:signature) { petition.signatures.build(attributes) }
 
         let(:attributes) do
@@ -197,7 +197,7 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the email is blank" do
-        subject { FactoryGirl.build(:signature, email: "") }
+        subject { FactoryBot.build(:signature, email: "") }
 
         it "doesn't set the uuid column" do
           expect {
@@ -209,7 +209,7 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the email is set" do
-        subject { FactoryGirl.build(:signature, email: "alice@example.com") }
+        subject { FactoryBot.build(:signature, email: "alice@example.com") }
 
         it "sets the uuid column" do
           expect {
@@ -230,30 +230,30 @@ RSpec.describe Signature, type: :model do
     it { is_expected.to validate_length_of(:constituency_id).is_at_most(255) }
 
     it "validates format of email" do
-      s = FactoryGirl.build(:signature, :email => 'joe@example.com')
+      s = FactoryBot.build(:signature, :email => 'joe@example.com')
       expect(s).to have_valid(:email)
     end
 
     it "does not allow invalid email" do
-      s = FactoryGirl.build(:signature, :email => 'not an email')
+      s = FactoryBot.build(:signature, :email => 'not an email')
       expect(s).not_to have_valid(:email)
     end
 
     it "does not allow emails using plus addresses" do
-      signature = FactoryGirl.build(:signature, email: 'foobar+petitions@example.com')
+      signature = FactoryBot.build(:signature, email: 'foobar+petitions@example.com')
       expect(signature).not_to have_valid(:email)
       expect(signature.errors.full_messages).to include("You can’t use ‘plus addressing’ in your email address")
     end
 
     it "does not allow blank or unknown state" do
-      s = FactoryGirl.build(:signature, :state => '')
+      s = FactoryBot.build(:signature, :state => '')
       expect(s).not_to have_valid(:state)
       s.state = 'unknown'
       expect(s).not_to have_valid(:state)
     end
 
     it "allows known states" do
-      s = FactoryGirl.build(:signature)
+      s = FactoryBot.build(:signature)
       %w(pending validated ).each do |state|
         s.state = state
         expect(s).to have_valid(:state)
@@ -262,41 +262,41 @@ RSpec.describe Signature, type: :model do
 
     describe "postcode" do
       it "requires a postcode for a UK address" do
-        expect(FactoryGirl.build(:signature, :postcode => 'SW1A 1AA')).to be_valid
-        expect(FactoryGirl.build(:signature, :postcode => '')).not_to be_valid
+        expect(FactoryBot.build(:signature, :postcode => 'SW1A 1AA')).to be_valid
+        expect(FactoryBot.build(:signature, :postcode => '')).not_to be_valid
       end
       it "does not require a postcode for non-UK addresses" do
-        expect(FactoryGirl.build(:signature, :location_code => "GB", :postcode => '')).not_to be_valid
-        expect(FactoryGirl.build(:signature, :location_code => "US", :postcode => '')).to be_valid
+        expect(FactoryBot.build(:signature, :location_code => "GB", :postcode => '')).not_to be_valid
+        expect(FactoryBot.build(:signature, :location_code => "US", :postcode => '')).to be_valid
       end
       it "checks the format of postcode" do
-        s = FactoryGirl.build(:signature, :postcode => 'SW1A1AA')
+        s = FactoryBot.build(:signature, :postcode => 'SW1A1AA')
         expect(s).to have_valid(:postcode)
       end
       it "recognises special postcodes" do
-        expect(FactoryGirl.build(:signature, :postcode => 'BFPO 1234')).to have_valid(:postcode)
-        expect(FactoryGirl.build(:signature, :postcode => 'XM4 5HQ')).to have_valid(:postcode)
-        expect(FactoryGirl.build(:signature, :postcode => 'GIR 0AA')).to have_valid(:postcode)
+        expect(FactoryBot.build(:signature, :postcode => 'BFPO 1234')).to have_valid(:postcode)
+        expect(FactoryBot.build(:signature, :postcode => 'XM4 5HQ')).to have_valid(:postcode)
+        expect(FactoryBot.build(:signature, :postcode => 'GIR 0AA')).to have_valid(:postcode)
       end
       it "does not allow prefix of postcode only" do
-        s = FactoryGirl.build(:signature, :postcode => 'N1')
+        s = FactoryBot.build(:signature, :postcode => 'N1')
         expect(s).not_to have_valid(:postcode)
       end
       it "does not allow unrecognised postcodes" do
-        s = FactoryGirl.build(:signature, :postcode => '90210')
+        s = FactoryBot.build(:signature, :postcode => '90210')
         expect(s).not_to have_valid(:postcode)
       end
     end
 
     describe "uk_citizenship" do
       it "requires acceptance of uk_citizenship for a new record" do
-        expect(FactoryGirl.build(:signature, :uk_citizenship => '1')).to be_valid
-        expect(FactoryGirl.build(:signature, :uk_citizenship => '0')).not_to be_valid
-        expect(FactoryGirl.build(:signature, :uk_citizenship => nil)).not_to be_valid
+        expect(FactoryBot.build(:signature, :uk_citizenship => '1')).to be_valid
+        expect(FactoryBot.build(:signature, :uk_citizenship => '0')).not_to be_valid
+        expect(FactoryBot.build(:signature, :uk_citizenship => nil)).not_to be_valid
       end
 
       it "does not require acceptance of uk_citizenship for old records" do
-        sig = FactoryGirl.create(:signature)
+        sig = FactoryBot.create(:signature)
         sig.reload
         sig.uk_citizenship = '0'
         expect(sig).to be_valid
@@ -307,12 +307,12 @@ RSpec.describe Signature, type: :model do
   describe "scopes" do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
-    let!(:petition) { FactoryGirl.create(:petition) }
-    let!(:signature1) { FactoryGirl.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
-    let!(:signature2) { FactoryGirl.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
-    let!(:signature3) { FactoryGirl.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
-    let!(:signature4) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::INVALIDATED_STATE, :notify_by_email => false) }
-    let!(:signature5) { FactoryGirl.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::FRAUDULENT_STATE, :notify_by_email => false) }
+    let!(:petition) { FactoryBot.create(:petition) }
+    let!(:signature1) { FactoryBot.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
+    let!(:signature2) { FactoryBot.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
+    let!(:signature3) { FactoryBot.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
+    let!(:signature4) { FactoryBot.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::INVALIDATED_STATE, :notify_by_email => false) }
+    let!(:signature5) { FactoryBot.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::FRAUDULENT_STATE, :notify_by_email => false) }
 
     describe "validated" do
       it "returns only validated signatures" do
@@ -355,37 +355,37 @@ RSpec.describe Signature, type: :model do
     end
 
     describe "for_invalidating" do
-      let(:petition) { FactoryGirl.create(:open_petition) }
+      let(:petition) { FactoryBot.create(:open_petition) }
 
       subject do
         described_class.for_invalidating.to_a
       end
 
       it "returns pending signatures" do
-        signature = FactoryGirl.create(:pending_signature, petition: petition)
+        signature = FactoryBot.create(:pending_signature, petition: petition)
         expect(subject).to include(signature)
       end
 
       it "returns validated signatures" do
-        signature = FactoryGirl.create(:validated_signature, petition: petition)
+        signature = FactoryBot.create(:validated_signature, petition: petition)
         expect(subject).to include(signature)
       end
 
       it "doesn't return fraudulent signatures" do
-        signature = FactoryGirl.create(:fraudulent_signature, petition: petition)
+        signature = FactoryBot.create(:fraudulent_signature, petition: petition)
         expect(subject).not_to include(signature)
       end
 
       it "doesn't return invalidated signatures" do
-        signature = FactoryGirl.create(:invalidated_signature, petition: petition)
+        signature = FactoryBot.create(:invalidated_signature, petition: petition)
         expect(subject).not_to include(signature)
       end
     end
 
     describe "for_email" do
-      let!(:other_petition) { FactoryGirl.create(:petition) }
+      let!(:other_petition) { FactoryBot.create(:petition) }
       let!(:other_signature) do
-        FactoryGirl.create(
+        FactoryBot.create(
           :signature,
           :email => "person3@example.com",
           :petition => other_petition,
@@ -411,13 +411,13 @@ RSpec.describe Signature, type: :model do
     end
 
     describe "checking whether the signature is the creator" do
-      let!(:petition) { FactoryGirl.create(:petition) }
+      let!(:petition) { FactoryBot.create(:petition) }
       it "is the creator if the signature is listed as the creator signature" do
         expect(petition.creator).to be_creator
       end
 
       it "is not the creator if the signature is not listed as the creator" do
-        signature = FactoryGirl.create(:signature, :petition => petition)
+        signature = FactoryBot.create(:signature, :petition => petition)
         expect(signature).not_to be_creator
       end
     end
@@ -476,14 +476,14 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".validate!" do
-    let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
+    let(:attributes) { FactoryBot.attributes_for(:petition) }
+    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
         petition.creator = creator
 
         5.times do
-          petition.signatures << FactoryGirl.create(:pending_signature)
+          petition.signatures << FactoryBot.create(:pending_signature)
         end
       end
     end
@@ -504,7 +504,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "with a pending signature" do
-      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
       before do
         allow(described_class).to receive(:find).and_call_original
@@ -523,14 +523,14 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".invalidate!" do
-    let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
+    let(:attributes) { FactoryBot.attributes_for(:petition) }
+    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
         petition.creator = creator
 
         5.times do
-          petition.signatures << FactoryGirl.create(:pending_signature)
+          petition.signatures << FactoryBot.create(:pending_signature)
         end
       end
     end
@@ -551,7 +551,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "with a validated signature" do
-      let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
       before do
         signature.validate!
@@ -572,14 +572,14 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".destroy!" do
-    let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
+    let(:attributes) { FactoryBot.attributes_for(:petition) }
+    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
         petition.creator = creator
 
         5.times do
-          petition.signatures << FactoryGirl.create(:pending_signature)
+          petition.signatures << FactoryBot.create(:pending_signature)
         end
       end
     end
@@ -614,7 +614,7 @@ RSpec.describe Signature, type: :model do
       let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
       let(:signature) {
-        FactoryGirl.create(
+        FactoryBot.create(
           :pending_signature,
           petition: petition,
           constituency_id: "3415",
@@ -686,7 +686,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when there are no petitions with invalid signature counts" do
-      let!(:petition) { FactoryGirl.create(:open_petition) }
+      let!(:petition) { FactoryBot.create(:open_petition) }
 
       it "returns an empty array" do
         expect(subject).to eq([])
@@ -694,7 +694,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when there are petitions with invalid signature counts" do
-      let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 100) }
+      let!(:petition) { FactoryBot.create(:open_petition, signature_count: 100) }
 
       it "returns an array of ids" do
         expect(described_class.petition_ids_with_invalid_signature_counts).to eq([petition.id])
@@ -708,9 +708,9 @@ RSpec.describe Signature, type: :model do
     end
 
     before do
-      FactoryGirl.create(:fraudulent_signature, email: "alice@foo.com")
-      FactoryGirl.create(:fraudulent_signature, email: "bob@bar.com")
-      FactoryGirl.create(:fraudulent_signature, email: "charlie@foo.com")
+      FactoryBot.create(:fraudulent_signature, email: "alice@foo.com")
+      FactoryBot.create(:fraudulent_signature, email: "bob@bar.com")
+      FactoryBot.create(:fraudulent_signature, email: "charlie@foo.com")
     end
 
     it "returns a hash of domains and counts in descending order" do
@@ -721,9 +721,9 @@ RSpec.describe Signature, type: :model do
 
   describe ".trending_domains" do
     before do
-      FactoryGirl.create(:validated_signature, email: "alice@foo.com", validated_at: 30.minutes.ago)
-      FactoryGirl.create(:validated_signature, email: "bob@bar.com", validated_at: 30.minutes.ago)
-      FactoryGirl.create(:validated_signature, email: "charlie@foo.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, email: "alice@foo.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, email: "bob@bar.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, email: "charlie@foo.com", validated_at: 30.minutes.ago)
     end
 
     it "returns a hash of domains and counts in descending order" do
@@ -734,28 +734,28 @@ RSpec.describe Signature, type: :model do
     end
 
     it "ignores pending signatures" do
-      FactoryGirl.create(:pending_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      FactoryBot.create(:pending_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "ignores invalidated signatures" do
-      FactoryGirl.create(:invalidated_signature, email: "derek@foo.com", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      FactoryBot.create(:invalidated_signature, email: "derek@foo.com", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "ignores fraudulent signatures" do
-      FactoryGirl.create(:fraudulent_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      FactoryBot.create(:fraudulent_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "can override the timespan" do
-      FactoryGirl.create(:validated_signature, email: "derek@foo.com", validated_at: 5.minutes.ago)
+      FactoryBot.create(:validated_signature, email: "derek@foo.com", validated_at: 5.minutes.ago)
       domains = described_class.trending_domains(since: 10.minutes.ago)
 
       expect(domains.to_a).to eq([["foo.com", 1]])
@@ -770,9 +770,9 @@ RSpec.describe Signature, type: :model do
 
   describe ".trending_ips" do
     before do
-      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
-      FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", validated_at: 30.minutes.ago)
-      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, ip_address: "192.168.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
     end
 
     it "returns a hash of domains and counts in descending order" do
@@ -783,28 +783,28 @@ RSpec.describe Signature, type: :model do
     end
 
     it "ignores pending signatures" do
-      FactoryGirl.create(:pending_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      FactoryBot.create(:pending_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
       domains = described_class.trending_ips
 
       expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "ignores invalidated signatures" do
-      FactoryGirl.create(:invalidated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      FactoryBot.create(:invalidated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
       domains = described_class.trending_ips
 
       expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "ignores fraudulent signatures" do
-      FactoryGirl.create(:fraudulent_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      FactoryBot.create(:fraudulent_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
       domains = described_class.trending_ips
 
       expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "can override the timespan" do
-      FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 5.minutes.ago)
+      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 5.minutes.ago)
       domains = described_class.trending_ips(since: 10.minutes.ago)
 
       expect(domains.to_a).to eq([["10.0.1.1", 1]])
@@ -818,26 +818,26 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#number" do
-    let(:attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:creator) { FactoryGirl.create(:pending_signature, creator: true) }
+    let(:attributes) { FactoryBot.attributes_for(:petition) }
+    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
     let(:petition) do
       Petition.create(attributes) do |petition|
         petition.creator = creator
 
         5.times do
-          petition.signatures << FactoryGirl.create(:pending_signature)
+          petition.signatures << FactoryBot.create(:pending_signature)
         end
       end
     end
 
-    let(:other_attributes) { FactoryGirl.attributes_for(:petition) }
-    let(:other_creator) { FactoryGirl.create(:pending_signature, creator: true) }
+    let(:other_attributes) { FactoryBot.attributes_for(:petition) }
+    let(:other_creator) { FactoryBot.create(:pending_signature, creator: true) }
     let(:other_petition) do
       Petition.create(other_attributes) do |petition|
         petition.creator = other_creator
 
         5.times do
-          petition.signatures << FactoryGirl.create(:pending_signature)
+          petition.signatures << FactoryBot.create(:pending_signature)
         end
       end
     end
@@ -851,7 +851,7 @@ RSpec.describe Signature, type: :model do
     end
 
     it "returns the signature number" do
-      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature = FactoryBot.create(:pending_signature, petition: petition)
       signature.validate!
 
       expect(signature.petition.reload.signature_count).to eq(7)
@@ -859,10 +859,10 @@ RSpec.describe Signature, type: :model do
     end
 
     it "is scoped to the petition" do
-      other_signature = FactoryGirl.create(:pending_signature, petition: other_petition)
+      other_signature = FactoryBot.create(:pending_signature, petition: other_petition)
       other_signature.validate!
 
-      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature = FactoryBot.create(:pending_signature, petition: petition)
       signature.validate!
 
       expect(other_signature.petition.reload.signature_count).to eq(7)
@@ -873,16 +873,16 @@ RSpec.describe Signature, type: :model do
     end
 
     it "remains the same after another signature is added" do
-      signature = FactoryGirl.create(:pending_signature, petition: petition)
-      later_signature = FactoryGirl.create(:pending_signature, petition: petition)
+      signature = FactoryBot.create(:pending_signature, petition: petition)
+      later_signature = FactoryBot.create(:pending_signature, petition: petition)
       signature.validate!
 
       expect { later_signature.validate! }.not_to change{ signature.number }
     end
 
     it "remains the same even if an earlier signature is validated" do
-      earlier_signature = FactoryGirl.create(:pending_signature, petition: petition)
-      signature = FactoryGirl.create(:pending_signature, petition: petition)
+      earlier_signature = FactoryBot.create(:pending_signature, petition: petition)
+      signature = FactoryBot.create(:pending_signature, petition: petition)
       signature.validate!
 
       expect { earlier_signature.validate! }.not_to change{ signature.number }
@@ -891,13 +891,13 @@ RSpec.describe Signature, type: :model do
 
   describe "#pending?" do
     it "returns true if the signature has a pending state" do
-      signature = FactoryGirl.build(:pending_signature)
+      signature = FactoryBot.build(:pending_signature)
       expect(signature.pending?).to be_truthy
     end
 
     (Signature::STATES - [Signature::PENDING_STATE]).each do |state|
       it "returns false if the signature is #{state} state" do
-        signature = FactoryGirl.build(:"#{state}_signature")
+        signature = FactoryBot.build(:"#{state}_signature")
         expect(signature.pending?).to be_falsey
       end
     end
@@ -905,13 +905,13 @@ RSpec.describe Signature, type: :model do
 
   describe "#fraudulent?" do
     it "returns true if the signature has a fraudulent state" do
-      signature = FactoryGirl.build(:fraudulent_signature)
+      signature = FactoryBot.build(:fraudulent_signature)
       expect(signature.fraudulent?).to be_truthy
     end
 
     (Signature::STATES - [Signature::FRAUDULENT_STATE]).each do |state|
       it "returns false if the signature is #{state} state" do
-        signature = FactoryGirl.build(:"#{state}_signature")
+        signature = FactoryBot.build(:"#{state}_signature")
         expect(signature.fraudulent?).to be_falsey
       end
     end
@@ -919,13 +919,13 @@ RSpec.describe Signature, type: :model do
 
   describe "#validated?" do
     it "returns true if the signature has a validated state" do
-      signature = FactoryGirl.build(:validated_signature)
+      signature = FactoryBot.build(:validated_signature)
       expect(signature.validated?).to be_truthy
     end
 
     (Signature::STATES - [Signature::VALIDATED_STATE]).each do |state|
       it "returns false if the signature is #{state} state" do
-        signature = FactoryGirl.build(:"#{state}_signature")
+        signature = FactoryBot.build(:"#{state}_signature")
         expect(signature.validated?).to be_falsey
       end
     end
@@ -933,21 +933,21 @@ RSpec.describe Signature, type: :model do
 
   describe "#invalidated?" do
     it "returns true if the signature has an invalidated state" do
-      signature = FactoryGirl.build(:invalidated_signature)
+      signature = FactoryBot.build(:invalidated_signature)
       expect(signature.invalidated?).to be_truthy
     end
 
     (Signature::STATES - [Signature::INVALIDATED_STATE]).each do |state|
       it "returns false if the signature is #{state} state" do
-        signature = FactoryGirl.build(:"#{state}_signature")
+        signature = FactoryBot.build(:"#{state}_signature")
         expect(signature.invalidated?).to be_falsey
       end
     end
   end
 
   describe '#creator?' do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+    let(:petition) { FactoryBot.create(:petition) }
+    let(:signature) { FactoryBot.create(:signature, petition: petition) }
     let(:creator) { petition.creator }
 
     it 'is true if the signature is the creator for the petition it belongs to' do
@@ -960,9 +960,9 @@ RSpec.describe Signature, type: :model do
   end
 
   describe '#sponsor?' do
-    let(:petition) { FactoryGirl.create(:petition) }
-    let(:sponsor) { FactoryGirl.create(:sponsor, petition: petition) }
-    let(:signature) { FactoryGirl.create(:signature, petition: petition) }
+    let(:petition) { FactoryBot.create(:petition) }
+    let(:sponsor) { FactoryBot.create(:sponsor, petition: petition) }
+    let(:signature) { FactoryBot.create(:signature, petition: petition) }
 
     it 'is true if the signature is a sponsor signature for the petition it belongs to' do
       expect(sponsor.sponsor?).to be_truthy
@@ -974,10 +974,10 @@ RSpec.describe Signature, type: :model do
   end
 
   describe '#validate!' do
-    let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:signature) { FactoryBot.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
     context "when the petition is open" do
-      let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+      let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
       it "transitions the signature to the validated state" do
         signature.validate!
@@ -1052,8 +1052,8 @@ RSpec.describe Signature, type: :model do
   end
 
   describe '#invalidate!' do
-    let!(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
-    let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let!(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
     let(:now) { Time.current }
 
     it "transitions the signature to the validated state" do
@@ -1131,10 +1131,10 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#save" do
-    let(:petition) { FactoryGirl.create(:petition, creator_attributes: { name: "Alice", email: "aliceandbob@example.com" }) }
+    let(:petition) { FactoryBot.create(:petition, creator_attributes: { name: "Alice", email: "aliceandbob@example.com" }) }
 
     before do
-      FactoryGirl.create(:validated_signature, name: "Bob", email: "aliceandbob@example.com", petition: petition)
+      FactoryBot.create(:validated_signature, name: "Bob", email: "aliceandbob@example.com", petition: petition)
     end
 
     context "when the new creator hasn't already signed" do
@@ -1159,7 +1159,7 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#unsubscribe" do
-    let(:signature) { FactoryGirl.create(:validated_signature, notify_by_email: subscribed) }
+    let(:signature) { FactoryBot.create(:validated_signature, notify_by_email: subscribed) }
     let(:unsubscribe_token) { signature.unsubscribe_token }
 
     before do
@@ -1205,7 +1205,7 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#already_unsubscribed?" do
-    let(:signature) { FactoryGirl.create(:validated_signature) }
+    let(:signature) { FactoryBot.create(:validated_signature) }
 
     context "when there is no error on the :base attribute" do
       it "returns false" do
@@ -1225,7 +1225,7 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#invalid_unsubscribe_token?" do
-    let(:signature) { FactoryGirl.create(:validated_signature) }
+    let(:signature) { FactoryBot.create(:validated_signature) }
 
     context "when there is no error on the :base attribute" do
       it "returns false" do
@@ -1247,31 +1247,31 @@ RSpec.describe Signature, type: :model do
   describe "#constituency" do
     it "returns a constituency object from the API return array" do
       stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
-      signature = FactoryGirl.build(:signature, postcode: 'N1 1TY')
+      signature = FactoryBot.build(:signature, postcode: 'N1 1TY')
       expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3550'))
     end
 
     it "returns the first object for multiple results" do
       stub_api_request_for("N1").to_return(api_response(:ok, "multiple"))
-      signature = FactoryGirl.build(:signature, postcode: 'N1')
+      signature = FactoryBot.build(:signature, postcode: 'N1')
       expect(signature.constituency).to eq(Constituency.find_by!(external_id: '3506'))
     end
 
     it "returns nil for invalid postcode" do
       stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
-      signature = FactoryGirl.build(:signature, postcode: 'SW14 9RQ')
+      signature = FactoryBot.build(:signature, postcode: 'SW14 9RQ')
       expect(signature.constituency).to be_nil
     end
 
     it "returns nil for unexpected API response" do
       stub_api_request_for("N1").to_timeout
-      signature = FactoryGirl.build(:signature, postcode: 'N1')
+      signature = FactoryBot.build(:signature, postcode: 'N1')
       expect(signature.constituency).to be_nil
     end
   end
 
   describe 'set_constituency_id' do
-    let(:signature) { FactoryGirl.build(:signature, postcode: 'N1 1TY') }
+    let(:signature) { FactoryBot.build(:signature, postcode: 'N1 1TY') }
 
     it 'sets the constituency_id based on the id of the constituency' do
       stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
@@ -1299,7 +1299,7 @@ RSpec.describe Signature, type: :model do
   end
 
   describe 'store_constituency_id' do
-    let(:signature) { FactoryGirl.build(:signature, postcode: 'N1 1TY')}
+    let(:signature) { FactoryBot.build(:signature, postcode: 'N1 1TY')}
 
     it 'saves the instance and sets the constituency id' do
       stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
@@ -1318,7 +1318,7 @@ RSpec.describe Signature, type: :model do
 
   describe 'email sent timestamps' do
     describe '#get_email_sent_at_for' do
-      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:signature) { FactoryBot.create(:validated_signature) }
       let(:the_stored_time) { 6.days.ago }
 
       [
@@ -1348,7 +1348,7 @@ RSpec.describe Signature, type: :model do
     end
 
     describe '#set_email_sent_at_for' do
-      let(:signature) { FactoryGirl.create(:validated_signature) }
+      let(:signature) { FactoryBot.create(:validated_signature) }
       let(:the_stored_time) { 6.days.ago }
 
       [
@@ -1382,8 +1382,8 @@ RSpec.describe Signature, type: :model do
     end
 
     describe "#need_emailing_for" do
-      let!(:a_signature) { FactoryGirl.create(:validated_signature) }
-      let!(:another_signature) { FactoryGirl.create(:validated_signature) }
+      let!(:a_signature) { FactoryBot.create(:validated_signature) }
+      let!(:another_signature) { FactoryBot.create(:validated_signature) }
       let(:since_timestamp) { 5.days.ago }
 
       subject { Signature.need_emailing_for('government_response', since: since_timestamp) }
@@ -1422,7 +1422,7 @@ RSpec.describe Signature, type: :model do
 
   describe "#email_count" do
     it "returns 0 for new signatures" do
-      signature = FactoryGirl.create(:pending_signature)
+      signature = FactoryBot.create(:pending_signature)
       expect(signature.email_count).to be(0)
     end
   end
@@ -1431,19 +1431,19 @@ RSpec.describe Signature, type: :model do
     let(:email_count_threshold) { 5 }
 
     it "returns false when the signature hasn't reached the threshold" do
-      signature = FactoryGirl.create(:validated_signature)
+      signature = FactoryBot.create(:validated_signature)
       expect(signature.email_threshold_reached?).to be false
     end
 
     it "returns true when the signature is at the email count threshold" do
-      signature = FactoryGirl.create(:validated_signature, email_count: email_count_threshold)
+      signature = FactoryBot.create(:validated_signature, email_count: email_count_threshold)
       expect(signature.email_threshold_reached?).to be true
     end
   end
 
   describe "#find_duplicate" do
-    let(:petition) { FactoryGirl.create(:open_petition) }
-    let(:other_petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:other_petition) { FactoryBot.create(:open_petition) }
     let(:signature) { petition.signatures.build(attributes) }
     let(:name) { "Suzy Signer" }
     let(:postcode) { "SW1A 1AA" }
@@ -1576,7 +1576,7 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#find_duplicate!" do
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:signature) { petition.signatures.build(attributes) }
 
     let(:attributes) do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Archived::Signature, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:archived_signature)).to be_valid
+    expect(FactoryBot.build(:archived_signature)).to be_valid
   end
 
   describe "schema" do
@@ -65,13 +65,13 @@ RSpec.describe Archived::Signature, type: :model do
 
 
   describe ".need_emailing_for" do
-    let!(:petition) { FactoryGirl.create(:archived_petition) }
-    let!(:creator) { FactoryGirl.create(:archived_signature, petition: petition, creator: true) }
-    let!(:pending) { FactoryGirl.create(:archived_signature, petition: petition, state: "pending") }
-    let!(:fraudulent) { FactoryGirl.create(:archived_signature, petition: petition, state: "fraudulent") }
-    let!(:invalidated) { FactoryGirl.create(:archived_signature, petition: petition, state: "invalidated") }
-    let!(:subscribed) { FactoryGirl.create(:archived_signature, petition: petition) }
-    let!(:unsubscribed) { FactoryGirl.create(:archived_signature, petition: petition, notify_by_email: false) }
+    let!(:petition) { FactoryBot.create(:archived_petition) }
+    let!(:creator) { FactoryBot.create(:archived_signature, petition: petition, creator: true) }
+    let!(:pending) { FactoryBot.create(:archived_signature, petition: petition, state: "pending") }
+    let!(:fraudulent) { FactoryBot.create(:archived_signature, petition: petition, state: "fraudulent") }
+    let!(:invalidated) { FactoryBot.create(:archived_signature, petition: petition, state: "invalidated") }
+    let!(:subscribed) { FactoryBot.create(:archived_signature, petition: petition) }
+    let!(:unsubscribed) { FactoryBot.create(:archived_signature, petition: petition, notify_by_email: false) }
 
     let(:requested_at) { 1.hour.ago }
 
@@ -139,7 +139,7 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe '#get_email_sent_at_for' do
-    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:signature) { FactoryBot.create(:archived_signature) }
     let(:sent_at) { 6.days.ago }
 
     Archived::Signature::TIMESTAMPS.each do |timestamp, column|
@@ -162,7 +162,7 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe '#set_email_sent_at_for' do
-    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:signature) { FactoryBot.create(:archived_signature) }
     let(:sent_at) { 6.days.ago }
 
     Archived::Signature::TIMESTAMPS.each do |timestamp, column|
@@ -190,7 +190,7 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "#pending?" do
     context "when the signature has a state of 'pending'" do
-      let(:signature) { FactoryGirl.build(:archived_signature, state: "pending") }
+      let(:signature) { FactoryBot.build(:archived_signature, state: "pending") }
 
       it "returns true" do
         expect(signature.pending?).to be_truthy
@@ -199,7 +199,7 @@ RSpec.describe Archived::Signature, type: :model do
 
     (Archived::Signature::STATES - [Archived::Signature::PENDING_STATE]).each do |state|
       context "when the signature has a state of '#{state}'" do
-        let(:signature) { FactoryGirl.build(:archived_signature, state: state) }
+        let(:signature) { FactoryBot.build(:archived_signature, state: state) }
 
         it "returns false" do
           expect(signature.pending?).to be_falsey
@@ -210,7 +210,7 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "#fraudulent?" do
     context "when the signature has a state of 'fraudulent'" do
-      let(:signature) { FactoryGirl.build(:archived_signature, state: "fraudulent") }
+      let(:signature) { FactoryBot.build(:archived_signature, state: "fraudulent") }
 
       it "returns true" do
         expect(signature.fraudulent?).to be_truthy
@@ -219,7 +219,7 @@ RSpec.describe Archived::Signature, type: :model do
 
     (Archived::Signature::STATES - [Archived::Signature::FRAUDULENT_STATE]).each do |state|
       context "when the signature has a state of '#{state}'" do
-        let(:signature) { FactoryGirl.build(:archived_signature, state: state) }
+        let(:signature) { FactoryBot.build(:archived_signature, state: state) }
 
         it "returns false" do
           expect(signature.fraudulent?).to be_falsey
@@ -230,7 +230,7 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "#validated?" do
     context "when the signature has a state of 'validated'" do
-      let(:signature) { FactoryGirl.build(:archived_signature, state: "validated") }
+      let(:signature) { FactoryBot.build(:archived_signature, state: "validated") }
 
       it "returns true" do
         expect(signature.validated?).to be_truthy
@@ -239,7 +239,7 @@ RSpec.describe Archived::Signature, type: :model do
 
     (Archived::Signature::STATES - [Archived::Signature::VALIDATED_STATE]).each do |state|
       context "when the signature has a state of '#{state}'" do
-        let(:signature) { FactoryGirl.build(:archived_signature, state: state) }
+        let(:signature) { FactoryBot.build(:archived_signature, state: state) }
 
         it "returns false" do
           expect(signature.validated?).to be_falsey
@@ -250,7 +250,7 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "#invalidated?" do
     context "when the signature has a state of 'invalidated'" do
-      let(:signature) { FactoryGirl.build(:archived_signature, state: "invalidated") }
+      let(:signature) { FactoryBot.build(:archived_signature, state: "invalidated") }
 
       it "returns true" do
         expect(signature.invalidated?).to be_truthy
@@ -259,7 +259,7 @@ RSpec.describe Archived::Signature, type: :model do
 
     (Archived::Signature::STATES - [Archived::Signature::INVALIDATED_STATE]).each do |state|
       context "when the signature has a state of '#{state}'" do
-        let(:signature) { FactoryGirl.build(:archived_signature, state: state) }
+        let(:signature) { FactoryBot.build(:archived_signature, state: state) }
 
         it "returns false" do
           expect(signature.invalidated?).to be_falsey
@@ -270,7 +270,7 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "#unsubscribed?" do
     context "when notify_by_email is true" do
-      let(:signature) { FactoryGirl.build(:archived_signature, notify_by_email: true) }
+      let(:signature) { FactoryBot.build(:archived_signature, notify_by_email: true) }
 
       it "returns false" do
         expect(signature.unsubscribed?).to be_falsey
@@ -278,7 +278,7 @@ RSpec.describe Archived::Signature, type: :model do
     end
 
     context "when notify_by_email is false" do
-      let(:signature) { FactoryGirl.build(:archived_signature, notify_by_email: false) }
+      let(:signature) { FactoryBot.build(:archived_signature, notify_by_email: false) }
 
       it "returns true" do
         expect(signature.unsubscribed?).to be_truthy
@@ -287,7 +287,7 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe "#unsubscribe!" do
-    let(:signature) { FactoryGirl.create(:archived_signature, notify_by_email: subscribed) }
+    let(:signature) { FactoryBot.create(:archived_signature, notify_by_email: subscribed) }
     let(:unsubscribe_token) { signature.unsubscribe_token }
 
     context "when subcribed" do
@@ -353,7 +353,7 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe "#already_unsubscribed?" do
-    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:signature) { FactoryBot.create(:archived_signature) }
 
     context "when there is no error on the :base attribute" do
       it "returns false" do
@@ -373,7 +373,7 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe "#invalid_unsubscribe_token?" do
-    let(:signature) { FactoryGirl.create(:archived_signature) }
+    let(:signature) { FactoryBot.create(:archived_signature) }
 
     context "when there is no error on the :base attribute" do
       it "returns false" do

@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
   describe "logged in" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     let(:petition) do
-      FactoryGirl.create(:pending_petition,
+      FactoryBot.create(:pending_petition,
         creator_attributes: {
           name: "Barry Butler",
           email: "bazbutler@gmail.com"
@@ -40,8 +40,8 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
         let(:duration) { Site.petition_duration.months }
         let(:closing_date) { (now + duration).end_of_day }
-        let!(:sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "laurapalmer@gmail.com") }
-        let!(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
+        let!(:sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition, email: "laurapalmer@gmail.com") }
+        let!(:pending_sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
         before do
           perform_enqueued_jobs do
@@ -90,8 +90,8 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         let(:creator_email) { deliveries.detect{ |m| m.to == %w[bazbutler@gmail.com] } }
         let(:sponsor_email) { deliveries.detect{ |m| m.to == %w[laurapalmer@gmail.com] } }
         let(:pending_email) { deliveries.detect{ |m| m.to == %w[sandyfisher@hotmail.com] } }
-        let!(:sponsor) { FactoryGirl.create(:sponsor, :validated, petition: petition, email: "laurapalmer@gmail.com") }
-        let!(:pending_sponsor) { FactoryGirl.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
+        let!(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition, email: "laurapalmer@gmail.com") }
+        let!(:pending_sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
         before do
           perform_enqueued_jobs do

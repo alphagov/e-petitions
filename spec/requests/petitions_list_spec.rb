@@ -30,7 +30,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
     let(:links) { json["links"] }
 
     before do
-      FactoryGirl.create_list :open_petition, 3
+      FactoryBot.create_list :open_petition, 3
     end
 
     it "returns a link to itself" do
@@ -108,9 +108,9 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
     end
 
     it "returns a list of serialized petitions in the expected order" do
-      petition_1 = FactoryGirl.create :open_petition, signature_count: 100
-      petition_2 = FactoryGirl.create :open_petition, signature_count: 300
-      petition_3 = FactoryGirl.create :open_petition, signature_count: 200
+      petition_1 = FactoryBot.create :open_petition, signature_count: 100
+      petition_2 = FactoryBot.create :open_petition, signature_count: 300
+      petition_3 = FactoryBot.create :open_petition, signature_count: 200
 
       get "/petitions.json"
       expect(response).to be_success
@@ -125,7 +125,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
     end
 
     it "includes a link to each petitions details" do
-      petition = FactoryGirl.create :open_petition
+      petition = FactoryBot.create :open_petition
 
       get "/petitions.json"
       expect(response).to be_success
@@ -142,7 +142,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
     end
 
     it "includes the creator_name field for open petitions" do
-      petition = FactoryGirl.create :open_petition, creator_name: "Bob Jones"
+      petition = FactoryBot.create :open_petition, creator_name: "Bob Jones"
 
       get "/petitions.json"
       expect(response).to be_success
@@ -156,7 +156,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
 
     (Petition::VISIBLE_STATES - Array(Petition::OPEN_STATE)).each do |state_name|
       it "does not include the creator_name field for #{state_name} petitions" do
-        petition = FactoryGirl.create "#{state_name}_petition".to_sym
+        petition = FactoryBot.create "#{state_name}_petition".to_sym
 
       get "/petitions.json"
       expect(response).to be_success
@@ -171,7 +171,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
 
     it "includes the rejection section for rejected petitions" do
       petition = \
-        FactoryGirl.create :rejected_petition,
+        FactoryBot.create :rejected_petition,
           rejection_code: "duplicate",
           rejection_details: "This is a duplication of another petition"
 
@@ -194,7 +194,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
 
     it "includes the government_response section for petitions with a government_response" do
       petition = \
-        FactoryGirl.create :responded_petition,
+        FactoryBot.create :responded_petition,
           response_summary: "Summary of what the government said",
           response_details: "Details of what the government said"
 
@@ -217,7 +217,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
 
     it "includes the debate section for petitions that have been debated" do
       petition = \
-        FactoryGirl.create :debated_petition,
+        FactoryBot.create :debated_petition,
           debated_on: 1.day.ago,
           overview: "What happened in the debate",
           transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",

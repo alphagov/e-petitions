@@ -1,12 +1,12 @@
 Given(/^I have been told about a petition that needs sponsoring$/) do
-  @sponsor_petition = FactoryGirl.create(:open_petition,
+  @sponsor_petition = FactoryBot.create(:open_petition,
     action: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
     state: Petition::VALIDATED_STATE)
 end
 
 Given(/^I have created a petition and told people to sponsor it$/) do
-  @sponsor_petition = FactoryGirl.create(:pending_petition,
+  @sponsor_petition = FactoryBot.create(:pending_petition,
     action: 'Charles to be nominated for sublimation',
     closed_at: 1.day.from_now,
     state: Petition::PENDING_STATE,
@@ -14,7 +14,7 @@ Given(/^I have created a petition and told people to sponsor it$/) do
 end
 
 When(/^a sponsor supports my petition$/) do
-  sponsor_email = FactoryGirl.generate(:sponsor_email)
+  sponsor_email = FactoryBot.generate(:sponsor_email)
   steps %{
     When I visit the "sponsor this petition" url I was given
     And I fill in "Name" with "Anonymous Sponsor"
@@ -49,14 +49,14 @@ end
 
 Given(/^the petition I want to sign is (validated|sponsored|open|hidden|rejected)$/) do |state|
   if state == "rejected"
-    @sponsor_petition = FactoryGirl.create(:rejected_petition, rejection_code: "irrelevant")
+    @sponsor_petition = FactoryBot.create(:rejected_petition, rejection_code: "irrelevant")
   else
-    @sponsor_petition = FactoryGirl.create(:open_petition, state: state)
+    @sponsor_petition = FactoryBot.create(:open_petition, state: state)
   end
 end
 
 Given(/^the petition I want to sign has been closed$/) do
-  @sponsor_petition = FactoryGirl.create(:closed_petition, closed_at: 1.day.ago)
+  @sponsor_petition = FactoryBot.create(:closed_petition, closed_at: 1.day.ago)
 end
 
 Then(/^I am redirected to the petition closed page$/) do
@@ -72,7 +72,7 @@ Then(/^I will see 404 error page$/) do
 end
 
 Given(/^the petition I want to sign has enough sponsors?$/) do
-  @sponsor_petition = FactoryGirl.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
+  @sponsor_petition = FactoryBot.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
 end
 
 Then(/^I am redirected to the petition moderation info page$/) do

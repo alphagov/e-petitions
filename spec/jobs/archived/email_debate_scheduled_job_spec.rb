@@ -3,8 +3,8 @@ require_relative '../shared_examples'
 
 RSpec.describe Archived::EmailDebateScheduledJob, type: :job do
   let(:email_requested_at) { Time.current }
-  let(:petition) { FactoryGirl.create(:archived_petition, :scheduled_for_debate) }
-  let(:signature) { FactoryGirl.create(:archived_signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:archived_petition, :scheduled_for_debate) }
+  let(:signature) { FactoryBot.create(:archived_signature, petition: petition) }
   let(:arguments) { { petition: petition } }
 
   before do

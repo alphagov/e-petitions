@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Archived::Rejection, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:archived_rejection)).to be_valid
+    expect(FactoryBot.build(:archived_rejection)).to be_valid
   end
 
   describe "schema" do
@@ -22,7 +22,7 @@ RSpec.describe Archived::Rejection, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:archived_rejection) }
+    subject { FactoryBot.build(:archived_rejection) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:code) }
@@ -32,8 +32,8 @@ RSpec.describe Archived::Rejection, type: :model do
 
   describe "callbacks" do
     describe "when the rejection is created" do
-      let(:petition) { FactoryGirl.create(:archived_petition) }
-      let(:rejection) { FactoryGirl.build(:archived_rejection, code: rejection_code, petition: petition) }
+      let(:petition) { FactoryBot.create(:archived_petition) }
+      let(:rejection) { FactoryBot.build(:archived_rejection, code: rejection_code, petition: petition) }
       let(:now) { Time.current }
 
       context "and the rejection should be public" do

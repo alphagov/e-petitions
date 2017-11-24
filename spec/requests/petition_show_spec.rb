@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "API request to show a petition", type: :request, show_exceptions: true do
-  let(:petition) { FactoryGirl.create :open_petition }
+  let(:petition) { FactoryBot.create :open_petition }
   let(:attributes) { json["data"]["attributes"] }
 
   let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
@@ -60,7 +60,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     end
 
     it "returns the closed_at timestamp if the petition is closed" do
-      petition = FactoryGirl.create :closed_petition
+      petition = FactoryBot.create :closed_petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_success
@@ -74,7 +74,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
     it "includes the rejection section for rejected petitions" do
       petition = \
-        FactoryGirl.create :rejected_petition,
+        FactoryBot.create :rejected_petition,
           rejection_code: "duplicate",
           rejection_details: "This is a duplication of another petition"
 
@@ -94,7 +94,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
     it "includes the government_response section for petitions with a government_response" do
       petition = \
-        FactoryGirl.create :responded_petition,
+        FactoryBot.create :responded_petition,
           response_summary: "Summary of what the government said",
           response_details: "Details of what the government said"
 
@@ -116,7 +116,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
     it "includes the date and time at which the thresholds were reached" do
       petition = \
-        FactoryGirl.create :open_petition,
+        FactoryBot.create :open_petition,
           moderation_threshold_reached_at: 1.month.ago,
           response_threshold_reached_at: 1.weeks.ago,
           debate_threshold_reached_at: 1.day.ago
@@ -134,7 +134,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     end
 
     it "includes the date when a petition is scheduled for a debate" do
-      petition = FactoryGirl.create :scheduled_debate_petition
+      petition = FactoryBot.create :scheduled_debate_petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_success
@@ -148,7 +148,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
 
     it "includes the debate section for petitions that have been debated" do
       petition = \
-        FactoryGirl.create :debated_petition,
+        FactoryBot.create :debated_petition,
           debated_on: 1.day.ago,
           overview: "What happened in the debate",
           transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
@@ -173,13 +173,13 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     end
 
     it "includes the signatures by constituency data" do
-      petition = FactoryGirl.create :open_petition
+      petition = FactoryBot.create :open_petition
 
-      FactoryGirl.create :constituency, :coventry_north_east
-      FactoryGirl.create :constituency, :bethnal_green_and_bow
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
 
-      FactoryGirl.create :constituency_petition_journal, constituency_id: 3427, signature_count: 123, petition: petition
-      FactoryGirl.create :constituency_petition_journal, constituency_id: 3320, signature_count: 456, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: 3427, signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: 3320, signature_count: 456, petition: petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_success
@@ -205,13 +205,13 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     end
 
     it "includes the signatures by country data" do
-      petition = FactoryGirl.create :open_petition
+      petition = FactoryBot.create :open_petition
 
-      gb = FactoryGirl.create :location, name: "United Kingdom", code: "gb"
-      fr = FactoryGirl.create :location, name: "France", code: "fr"
+      gb = FactoryBot.create :location, name: "United Kingdom", code: "gb"
+      fr = FactoryBot.create :location, name: "France", code: "fr"
 
-      FactoryGirl.create :country_petition_journal, location: gb, signature_count: 123456, petition: petition
-      FactoryGirl.create :country_petition_journal, location: fr, signature_count: 789, petition: petition
+      FactoryBot.create :country_petition_journal, location: gb, signature_count: 123456, petition: petition
+      FactoryBot.create :country_petition_journal, location: fr, signature_count: 789, petition: petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_success

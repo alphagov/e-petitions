@@ -1,5 +1,5 @@
 Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_action, debated_days_ago|
-  @petition = FactoryGirl.create(:debated_petition,
+  @petition = FactoryBot.create(:debated_petition,
     action: petition_action,
     debated_on: debated_days_ago.days.ago.to_date,
     overview: 'Everyone was in agreement, this petition must be made law!',
@@ -11,7 +11,7 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
 end
 
 Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_action, debated_days_ago|
-  @petition = FactoryGirl.create(:archived_petition, :debated,
+  @petition = FactoryBot.create(:archived_petition, :debated,
     action: petition_action,
     debate_outcome_at: debated_days_ago.days.ago,
     debated_on: debated_days_ago.days.ago.to_date,
@@ -23,7 +23,7 @@ Given(/^an archived petition "(.*?)" has been debated (\d+) days ago?$/) do |pet
 end
 
 Given(/^a petition "(.*?)" has been debated yesterday$/) do |petition_action|
-  @petition = FactoryGirl.create(:open_petition,
+  @petition = FactoryBot.create(:open_petition,
     action: petition_action,
     scheduled_debate_date: 1.day.ago,
     debate_state: 'debated'
@@ -31,7 +31,7 @@ Given(/^a petition "(.*?)" has been debated yesterday$/) do |petition_action|
 end
 
 Given(/^an archived petition "(.*?)" has been debated yesterday$/) do |petition_action|
-  @petition = FactoryGirl.create(:archived_petition,
+  @petition = FactoryBot.create(:archived_petition,
     action: petition_action,
     scheduled_debate_date: 1.day.ago,
     debate_state: 'debated'
