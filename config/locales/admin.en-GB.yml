@@ -68,6 +68,7 @@ en-GB:
       petition_email_not_deleted: "Unable to delete other parliamentary business - please contact support"
       petition_not_found: "Cannot find petition with id: %{query}"
       petition_updated: "Petition has been successfully updated"
+      preview_email_sent: "Preview email successfully sent"
       rate_limits_updated: "Rate limits updated successfully"
       signature_validated: "Signature validated successfully"
       signature_not_validated: "Signature could not be validated - please contact support"

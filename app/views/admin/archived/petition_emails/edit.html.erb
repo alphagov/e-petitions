@@ -18,7 +18,8 @@
       <% end %>
 
       <%= email_petitioners_with_count_submit_button(f, @petition) %>
-      <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
+      <%= f.submit "Save and preview", name: 'save_and_preview', class: 'button-secondary' %>
+      <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
 
     <% end -%>
   </div>

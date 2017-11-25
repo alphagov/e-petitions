@@ -228,6 +228,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     rake (12.3.0)
+    redcarpet (3.4.0)
     rb-fsevent (0.10.2)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
@@ -337,6 +338,7 @@ DEPENDENCIES
   puma
   rails (= 4.2.10)
   rake
+  redcarpet
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers

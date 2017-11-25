@@ -11,7 +11,11 @@ class Admin::Archived::PetitionEmailsController < Admin::AdminController
     if @email.update(email_params)
       if send_email_to_petitioners?
         schedule_email_petitioners_job
+        send_preview_email
         message = :email_sent_overnight
+      elsif send_preview_email?
+        send_preview_email
+        message = :preview_email_sent
       else
         message = :petition_email_created
       end
@@ -29,7 +33,11 @@ class Admin::Archived::PetitionEmailsController < Admin::AdminController
     if @email.update(email_params)
       if send_email_to_petitioners?
         schedule_email_petitioners_job
+        send_preview_email
         message = :email_sent_overnight
+      elsif send_preview_email?
+        send_preview_email
+        message = :preview_email_sent
       else
         message = :petition_email_updated
       end
@@ -76,8 +84,15 @@ class Admin::Archived::PetitionEmailsController < Admin::AdminController
     params.key?(:save_and_email)
   end
 
+  def send_preview_email?
+    params.key?(:save_and_preview)
+  end
+
   def schedule_email_petitioners_job
     ::Archived::EmailPetitionersJob.run_later_tonight(petition: @petition, email: @email)
+  end
+
+  def send_preview_email
     ::Archived::PetitionMailer.email_signer(@petition, feedback_signature, @email).deliver_now
   end
 end

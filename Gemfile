@@ -33,6 +33,7 @@ gem 'logstash-logger'
 gem 'jbuilder'
 gem 'paperclip'
 gem 'maxminddb'
+gem 'redcarpet'
 
 gem 'aws-sdk', '~> 2.0'
 

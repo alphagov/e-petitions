@@ -171,7 +171,7 @@
           <details>
             <summary><span class="summary"><%= email.subject %></span></summary>
             <div class="panel-indent panel-no-border">
-              <%= auto_link(simple_format(h(email.body)), html: { rel: 'nofollow' }) %>
+              <%= markdown_to_html(email.body, link_attributes: { rel: 'nofollow' }) %>
             </div>
           </details>
         <% end %>

@@ -7,7 +7,7 @@
 <p>You recently created the petition “<%= @petition.action %>”:<br />
 <%= link_to nil, archived_petition_url(@petition) %></p>
 
-<%= auto_link(simple_format(h(@email.body))) %>
+<%= markdown_to_html(@email.body) %>
 
 <p>Thanks,<br />
 <%= t("petitions.emails.signoff_prefix") %><br />
