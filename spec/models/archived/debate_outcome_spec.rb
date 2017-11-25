@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Archived::DebateOutcome, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:archived_debate_outcome)).to be_valid
+    expect(FactoryBot.build(:archived_debate_outcome)).to be_valid
   end
 
   describe "schema" do
@@ -31,7 +31,7 @@ RSpec.describe Archived::DebateOutcome, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:archived_debate_outcome) }
+    subject { FactoryBot.build(:archived_debate_outcome) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_length_of(:transcript_url).is_at_most(500) }
@@ -53,8 +53,8 @@ RSpec.describe Archived::DebateOutcome, type: :model do
   end
 
   describe "commons_image" do
-    let(:petition) { FactoryGirl.create(:archived_petition, debate_state: "awaiting") }
-    let(:debate_outcome) { FactoryGirl.build(:archived_debate_outcome, petition: petition) }
+    let(:petition) { FactoryBot.create(:archived_petition, debate_state: "awaiting") }
+    let(:debate_outcome) { FactoryBot.build(:archived_debate_outcome, petition: petition) }
 
     it { should have_attached_file(:commons_image) }
 
@@ -110,8 +110,8 @@ RSpec.describe Archived::DebateOutcome, type: :model do
 
   describe "callbacks" do
     describe "when the debate outcome is created" do
-      let(:petition) { FactoryGirl.create(:archived_petition, debate_state: "awaiting") }
-      let(:debate_outcome) { FactoryGirl.build(:archived_debate_outcome, petition: petition) }
+      let(:petition) { FactoryBot.create(:archived_petition, debate_state: "awaiting") }
+      let(:debate_outcome) { FactoryBot.build(:archived_debate_outcome, petition: petition) }
       let(:now) { Time.current }
 
       it "updates the debate_outcome_at timestamp" do
@@ -132,8 +132,8 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     end
 
     describe "when the debate outcome is updated" do
-      let(:petition) { FactoryGirl.create(:awaiting_debate_petition) }
-      let(:debate_outcome) { FactoryGirl.build(:debate_outcome, petition: petition) }
+      let(:petition) { FactoryBot.create(:awaiting_debate_petition) }
+      let(:debate_outcome) { FactoryBot.build(:debate_outcome, petition: petition) }
 
       before do
         travel_to 2.days.ago do

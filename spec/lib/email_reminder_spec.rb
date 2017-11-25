@@ -3,15 +3,15 @@ require 'rails_helper'
 RSpec.describe EmailReminder do
   describe "threshold_email_reminders" do
     before :each do
-      @user1 = FactoryGirl.create(:moderator_user, :email => 'peter@directgov.uk')
-      @user2 = FactoryGirl.create(:moderator_user, :email => 'richard@directgov.uk')
-      @p1 = FactoryGirl.create(:open_petition)
+      @user1 = FactoryBot.create(:moderator_user, :email => 'peter@directgov.uk')
+      @user2 = FactoryBot.create(:moderator_user, :email => 'richard@directgov.uk')
+      @p1 = FactoryBot.create(:open_petition)
       @p1.update_attribute(:signature_count, 11)
-      @p2 = FactoryGirl.create(:closed_petition)
+      @p2 = FactoryBot.create(:closed_petition)
       @p2.update_attribute(:signature_count, 10)
-      @p3 = FactoryGirl.create(:open_petition)
+      @p3 = FactoryBot.create(:open_petition)
       @p3.update_attribute(:signature_count, 9)
-      @p4 = FactoryGirl.create(:open_petition, :notified_by_email => true)
+      @p4 = FactoryBot.create(:open_petition, :notified_by_email => true)
 
       allow(Site).to receive(:threshold_for_debate).and_return(10)
     end
@@ -40,14 +40,14 @@ RSpec.describe EmailReminder do
   describe "special_resend_of_signature_email_validation" do
 
     let(:beginning_of_september) { Time.parse("2011-09-01 00:00") }
-    let(:petition) { FactoryGirl.create(:petition) }
-    let!(:validated_signature) { FactoryGirl.create(:signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september) }
-    let!(:recent_signature) { FactoryGirl.create(:pending_signature, :petition => petition) }
+    let(:petition) { FactoryBot.create(:petition) }
+    let!(:validated_signature) { FactoryBot.create(:signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september) }
+    let!(:recent_signature) { FactoryBot.create(:pending_signature, :petition => petition) }
 
     before do
       @signatures = []
       3.times do
-        @signatures << FactoryGirl.create(:pending_signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september)
+        @signatures << FactoryBot.create(:pending_signature, :petition => petition, :created_at => beginning_of_september, :updated_at => beginning_of_september)
       end
     end
 

@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ArchivedPetitionHelper, type: :helper do
-  let(:parliament) { FactoryGirl.create(:parliament, threshold_for_response: 500, threshold_for_debate: 5000) }
+  let(:parliament) { FactoryBot.create(:parliament, threshold_for_response: 500, threshold_for_debate: 5000) }
 
   describe "#archived_threshold" do
     context "when the response threshold has never been reached" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 50) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 50) }
 
       it "returns the response threshold" do
         expect(helper.archived_threshold(petition)).to eq(500)
@@ -13,7 +13,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the response threshold was reached but the government never responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 550) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 550) }
 
       it "returns the debate threshold" do
         expect(helper.archived_threshold(petition)).to eq(5000)
@@ -21,7 +21,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the response threshold was reached and the government responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 550) }
+      let(:petition) { FactoryBot.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 550) }
 
       it "returns the debate threshold" do
         expect(helper.archived_threshold(petition)).to eq(5000)
@@ -29,7 +29,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the response threshold was not reached but the government has responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 50) }
+      let(:petition) { FactoryBot.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 50) }
 
       it "returns the debate threshold" do
         expect(helper.archived_threshold(petition)).to eq(5000)
@@ -37,7 +37,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the debate threshold was reached but the government never responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 5500) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 5500) }
 
       it "returns the debate threshold" do
         expect(helper.archived_threshold(petition)).to eq(5000)
@@ -45,7 +45,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the debate threshold was reached and the government responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 5500) }
+      let(:petition) { FactoryBot.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 5500) }
 
       it "returns the debate threshold" do
         expect(helper.archived_threshold(petition)).to eq(5000)
@@ -55,7 +55,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
 
   describe "#archived_threshold_percentage" do
     context "when the signature count is less than the response threshold" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 18) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 18) }
 
       it "returns a percentage relative to the response threshold" do
         expect(helper.archived_threshold_percentage(petition)).to eq("3.60%")
@@ -63,7 +63,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the signature count is greater than the response threshold and less than the debate threshold" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 625) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 625) }
 
       it "returns a percentage relative to the debate threshold" do
         expect(helper.archived_threshold_percentage(petition)).to eq("12.50%")
@@ -71,7 +71,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the signature count is greater than the debate threshold" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 5500) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 5500) }
 
       it "returns 100 percent" do
         expect(helper.archived_threshold_percentage(petition)).to eq("100.00%")
@@ -79,7 +79,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the response threshold was not reached but government has responded" do
-      let(:petition) { FactoryGirl.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 275) }
+      let(:petition) { FactoryBot.create(:archived_petition, :response, parliament: parliament, response_details: "Petition response", signature_count: 275) }
 
       it "returns a percentage relative to the debate threshold" do
         expect(helper.archived_threshold_percentage(petition)).to eq("5.50%")
@@ -87,7 +87,7 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     end
 
     context "when the actual percentage is less than 1" do
-      let(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament, signature_count: 2) }
+      let(:petition) { FactoryBot.create(:archived_petition, parliament: parliament, signature_count: 2) }
 
       it "returns 1%" do
         expect(helper.archived_threshold_percentage(petition)).to eq("1.00%")
@@ -96,9 +96,9 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
   end
 
   describe "#archived_parliaments" do
-    let!(:parliament) { FactoryGirl.create(:parliament) }
-    let!(:archived_parliament) { FactoryGirl.create(:parliament, :archived) }
-    let!(:dissolved_parliament) { FactoryGirl.create(:parliament, :dissolved) }
+    let!(:parliament) { FactoryBot.create(:parliament) }
+    let!(:archived_parliament) { FactoryBot.create(:parliament, :archived) }
+    let!(:dissolved_parliament) { FactoryBot.create(:parliament, :dissolved) }
 
     it "includes archived parliaments" do
       expect(helper.archived_parliaments).to include(archived_parliament)
@@ -127,8 +127,8 @@ RSpec.describe ArchivedPetitionHelper, type: :helper do
     subject { helper.archived_petition_facets_with_counts(petitions) }
 
     before do
-      FactoryGirl.create(:archived_petition, :closed)
-      FactoryGirl.create(:archived_petition, :rejected)
+      FactoryBot.create(:archived_petition, :closed)
+      FactoryBot.create(:archived_petition, :rejected)
 
       helper.extend(archived_petition_facets)
     end

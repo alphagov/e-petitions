@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:open_petition) }
-  let!(:signature) { FactoryGirl.create(:validated_signature, petition: petition, email: "user@example.com") }
+  let!(:petition) { FactoryBot.create(:open_petition) }
+  let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, email: "user@example.com") }
 
   context "not logged in" do
     describe "GET /admin/signatures" do
@@ -21,7 +21,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
   end
 
   context "logged in as moderator user but need to reset password" do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe "GET /admin/signatures" do
@@ -40,7 +40,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
   end
 
   context "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe "GET /admin/signatures" do

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe DebatedPetitionsJob, type: :job do
   context "for a petition with a scheduled debate date in the winter" do
     let(:petition) {
-      FactoryGirl.build(:open_petition,
+      FactoryBot.build(:open_petition,
         debate_state: "scheduled",
         scheduled_debate_date: "2015-12-29"
       )
@@ -45,7 +45,7 @@ RSpec.describe DebatedPetitionsJob, type: :job do
 
   context "for an archived petition with a scheduled debate date in the winter" do
     let(:petition) {
-      FactoryGirl.build(:archived_petition,
+      FactoryBot.build(:archived_petition,
         debate_state: "scheduled",
         scheduled_debate_date: "2015-12-29"
       )
@@ -89,7 +89,7 @@ RSpec.describe DebatedPetitionsJob, type: :job do
 
   context "for a petition with a scheduled debate date in the summer" do
     let(:petition) {
-      FactoryGirl.build(:open_petition,
+      FactoryBot.build(:open_petition,
         debate_state: "scheduled",
         scheduled_debate_date: "2016-06-29"
       )
@@ -133,7 +133,7 @@ RSpec.describe DebatedPetitionsJob, type: :job do
 
   context "for an archived petition with a scheduled debate date in the summer" do
     let(:petition) {
-      FactoryGirl.build(:archived_petition,
+      FactoryBot.build(:archived_petition,
         debate_state: "scheduled",
         scheduled_debate_date: "2016-06-29"
       )

@@ -24,7 +24,7 @@ RSpec.describe Parliament, type: :model do
 
   describe "callbacks" do
     describe "when the parliament is updated" do
-      let(:parliament) { FactoryGirl.create(:parliament, :dissolving, dissolution_at: 3.weeks.from_now) }
+      let(:parliament) { FactoryBot.create(:parliament, :dissolving, dissolution_at: 3.weeks.from_now) }
       let(:site) { Site.instance }
 
       before do
@@ -113,9 +113,9 @@ RSpec.describe Parliament, type: :model do
 
   describe "scopes" do
     describe "archived" do
-      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
-      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
-      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+      let!(:coalition) { FactoryBot.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryBot.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryBot.create(:parliament, :new_government) }
 
       context "when the archive_at timestamp is in the future" do
         let(:now) { "2017-05-31T00:00:00".in_time_zone }
@@ -135,9 +135,9 @@ RSpec.describe Parliament, type: :model do
     end
 
     describe "current" do
-      let!(:coalition) { FactoryGirl.create(:parliament, :coalition) }
-      let!(:conservatives) { FactoryGirl.create(:parliament, :conservatives) }
-      let!(:new_government) { FactoryGirl.create(:parliament, :new_government) }
+      let!(:coalition) { FactoryBot.create(:parliament, :coalition) }
+      let!(:conservatives) { FactoryBot.create(:parliament, :conservatives) }
+      let!(:new_government) { FactoryBot.create(:parliament, :new_government) }
 
       let(:now) { "2017-05-31T00:00:00".in_time_zone }
 
@@ -160,7 +160,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "singleton methods" do
-    let(:parliament) { FactoryGirl.create(:parliament) }
+    let(:parliament) { FactoryBot.create(:parliament) }
     let(:now) { Time.current }
 
     before do
@@ -245,7 +245,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".reload" do
-    let(:parliament) { FactoryGirl.create(:parliament) }
+    let(:parliament) { FactoryBot.create(:parliament) }
 
     context "when it is cached in Thread.current" do
       before do
@@ -261,7 +261,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".instance" do
-    let(:parliament) { FactoryGirl.create(:parliament) }
+    let(:parliament) { FactoryBot.create(:parliament) }
 
     context "when it isn't cached in Thread.current" do
       before do
@@ -300,7 +300,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe ".before_remove_const" do
-    let(:parliament) { FactoryGirl.create(:parliament) }
+    let(:parliament) { FactoryBot.create(:parliament) }
 
     context "when it is cached in Thread.current" do
       before do
@@ -318,7 +318,7 @@ RSpec.describe Parliament, type: :model do
   describe "#period" do
     context "when opening_at and dissolution_at are nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+        FactoryBot.build(:parliament, opening_at: nil, dissolution_at: nil)
       end
 
       it "returns nil" do
@@ -328,7 +328,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+        FactoryBot.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
       end
 
       it "returns nil" do
@@ -338,7 +338,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+        FactoryBot.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
       end
 
       it "returns nil" do
@@ -348,7 +348,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at and dissolution_at are not nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+        FactoryBot.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
       end
 
       it "returns the years of operation" do
@@ -360,7 +360,7 @@ RSpec.describe Parliament, type: :model do
   describe "#period?" do
     context "when opening_at and dissolution_at are nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: nil)
+        FactoryBot.build(:parliament, opening_at: nil, dissolution_at: nil)
       end
 
       it "returns false" do
@@ -370,7 +370,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
+        FactoryBot.build(:parliament, opening_at: nil, dissolution_at: 1.year.from_now)
       end
 
       it "returns false" do
@@ -380,7 +380,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
+        FactoryBot.build(:parliament, opening_at: 1.year.ago, dissolution_at: nil)
       end
 
       it "returns false" do
@@ -390,7 +390,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at and dissolution_at are not nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
+        FactoryBot.build(:parliament, opening_at: "2010-05-18 00:00:00", dissolution_at: "2015-03-30 00:01:00")
       end
 
       it "returns true" do
@@ -402,7 +402,7 @@ RSpec.describe Parliament, type: :model do
   describe "#opened?" do
     context "when opening_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, opening_at: nil)
+        FactoryBot.build(:parliament, opening_at: nil)
       end
 
       it "returns false" do
@@ -412,7 +412,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at is in the future" do
       subject :parliament do
-        FactoryGirl.create(:parliament, opening_at: 4.weeks.from_now)
+        FactoryBot.create(:parliament, opening_at: 4.weeks.from_now)
       end
 
       it "returns false" do
@@ -422,7 +422,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when opening_at is in the past" do
       subject :parliament do
-        FactoryGirl.create(:parliament, opening_at: 2.years.ago)
+        FactoryBot.create(:parliament, opening_at: 2.years.ago)
       end
 
       it "returns true" do
@@ -434,7 +434,7 @@ RSpec.describe Parliament, type: :model do
   describe "#dissolution_announced?" do
     context "when dissolution_at is nil" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "returns false" do
@@ -444,7 +444,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is not nil" do
       subject :parliament do
-        FactoryGirl.create(:parliament, :dissolving)
+        FactoryBot.create(:parliament, :dissolving)
       end
 
       it "returns true" do
@@ -456,7 +456,7 @@ RSpec.describe Parliament, type: :model do
   describe "#dissolved?" do
     context "when dissolution_at is nil" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "returns false" do
@@ -466,7 +466,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is in the future" do
       subject :parliament do
-        FactoryGirl.create(:parliament, :dissolving)
+        FactoryBot.create(:parliament, :dissolving)
       end
 
       it "returns false" do
@@ -476,7 +476,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when dissolution_at is in the past" do
       subject :parliament do
-        FactoryGirl.create(:parliament, :dissolved)
+        FactoryBot.create(:parliament, :dissolved)
       end
 
       it "returns true" do
@@ -488,7 +488,7 @@ RSpec.describe Parliament, type: :model do
   describe "#registration_closed?" do
     context "when registration_closed_at is nil" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "returns false" do
@@ -498,7 +498,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when registration_closed_at is in the future" do
       subject :parliament do
-        FactoryGirl.create(:parliament, :dissolving, registration_closed_at: 2.weeks.from_now)
+        FactoryBot.create(:parliament, :dissolving, registration_closed_at: 2.weeks.from_now)
       end
 
       it "returns false" do
@@ -508,7 +508,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when registration_closed_at is in the past" do
       subject :parliament do
-        FactoryGirl.create(:parliament, :dissolved, registration_closed_at: 2.weeks.ago)
+        FactoryBot.create(:parliament, :dissolved, registration_closed_at: 2.weeks.ago)
       end
 
       it "returns true" do
@@ -520,7 +520,7 @@ RSpec.describe Parliament, type: :model do
   describe "#archived?" do
     context "when archived_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archived_at: nil)
+        FactoryBot.build(:parliament, archived_at: nil)
       end
 
       it "returns false" do
@@ -530,7 +530,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when archived_at is in the future" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archived_at: 2.weeks.from_now)
+        FactoryBot.build(:parliament, archived_at: 2.weeks.from_now)
       end
 
       it "returns false" do
@@ -540,7 +540,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when archived_at is in the past" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archived_at: 2.weeks.ago)
+        FactoryBot.build(:parliament, archived_at: 2.weeks.ago)
       end
 
       it "returns true" do
@@ -552,7 +552,7 @@ RSpec.describe Parliament, type: :model do
   describe "#archiving?" do
     context "when archiving_started_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archiving_started_at: nil)
+        FactoryBot.build(:parliament, archiving_started_at: nil)
       end
 
       it "returns false" do
@@ -562,13 +562,13 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving_started_at is not nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archiving_started_at: 1.day.ago)
+        FactoryBot.build(:parliament, archiving_started_at: 1.day.ago)
       end
 
       context "and all petitions are unarchived" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: nil)
-          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: nil)
         end
 
         it "returns true" do
@@ -578,8 +578,8 @@ RSpec.describe Parliament, type: :model do
 
       context "and there is a mix of archived and unarchived petitions" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
-          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: nil)
         end
 
         it "returns true" do
@@ -589,8 +589,8 @@ RSpec.describe Parliament, type: :model do
 
       context "and all the petitions are archived" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
-          FactoryGirl.create(:closed_petition, archived_at: 6.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: 6.hours.ago)
         end
 
         it "returns false" do
@@ -603,7 +603,7 @@ RSpec.describe Parliament, type: :model do
   describe "#archiving_finished?" do
     context "when archiving_started_at is nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archiving_started_at: nil)
+        FactoryBot.build(:parliament, archiving_started_at: nil)
       end
 
       it "returns false" do
@@ -613,13 +613,13 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving_started_at is not nil" do
       subject :parliament do
-        FactoryGirl.build(:parliament, archiving_started_at: 1.day.ago)
+        FactoryBot.build(:parliament, archiving_started_at: 1.day.ago)
       end
 
       context "and all petitions are unarchived" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: nil)
-          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: nil)
         end
 
         it "returns false" do
@@ -629,8 +629,8 @@ RSpec.describe Parliament, type: :model do
 
       context "and there is a mix of archived and unarchived petitions" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
-          FactoryGirl.create(:closed_petition, archived_at: nil)
+          FactoryBot.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: nil)
         end
 
         it "returns false" do
@@ -640,8 +640,8 @@ RSpec.describe Parliament, type: :model do
 
       context "and all the petitions are archived" do
         before do
-          FactoryGirl.create(:closed_petition, archived_at: 12.hours.ago)
-          FactoryGirl.create(:closed_petition, archived_at: 6.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: 12.hours.ago)
+          FactoryBot.create(:closed_petition, archived_at: 6.hours.ago)
         end
 
         it "returns true" do
@@ -662,12 +662,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when petitions have not been archived" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: nil)
+        FactoryBot.create(:parliament, archiving_started_at: nil)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: nil)
-        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: nil)
       end
 
       it "schedules an ArchivedPetitionsJob" do
@@ -689,12 +689,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving has already started" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+        FactoryBot.create(:parliament, archiving_started_at: 2.hours.ago)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
-        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: nil)
       end
 
       it "doesn't schedule an ArchivedPetitionsJob" do
@@ -716,12 +716,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving has finished" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+        FactoryBot.create(:parliament, archiving_started_at: 2.hours.ago)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
       end
 
       it "doesn't schedule an ArchivedPetitionsJob" do
@@ -753,12 +753,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving has not started" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: nil)
+        FactoryBot.create(:parliament, archiving_started_at: nil)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: nil)
-        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: nil)
       end
 
       it "doesn't schedule an DeletePetitionsJob" do
@@ -780,12 +780,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving has started" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+        FactoryBot.create(:parliament, archiving_started_at: 2.hours.ago)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
-        FactoryGirl.create(:closed_petition, archived_at: nil)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: nil)
       end
 
       it "doesn't schedule an DeletePetitionsJob" do
@@ -807,12 +807,12 @@ RSpec.describe Parliament, type: :model do
 
     context "when archiving has finished" do
       subject :parliament do
-        FactoryGirl.create(:parliament, archiving_started_at: 2.hours.ago)
+        FactoryBot.create(:parliament, archiving_started_at: 2.hours.ago)
       end
 
       before do
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
-        FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
+        FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
       end
 
       it "schedules an DeletePetitionsJob" do
@@ -844,7 +844,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when parliament has not announced dissolution" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "does not schedule a job" do
@@ -859,7 +859,7 @@ RSpec.describe Parliament, type: :model do
     context "when parliament has announced dissolution" do
       context "and the dissolution date has not passed" do
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolving)
+          FactoryBot.create(:parliament, :dissolving)
         end
 
         it "schedules a job" do
@@ -873,7 +873,7 @@ RSpec.describe Parliament, type: :model do
 
       context "and the dissolution date has passsed" do
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolved)
+          FactoryBot.create(:parliament, :dissolved)
         end
 
         it "does not schedule a job" do
@@ -908,7 +908,7 @@ RSpec.describe Parliament, type: :model do
 
     context "when parliament has not announced dissolution" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "does not schedule a job" do
@@ -925,7 +925,7 @@ RSpec.describe Parliament, type: :model do
         let(:dissolution_at) { 2.weeks.from_now }
 
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolving, dissolution_at: dissolution_at)
+          FactoryBot.create(:parliament, :dissolving, dissolution_at: dissolution_at)
         end
 
         it "schedules a job" do
@@ -941,7 +941,7 @@ RSpec.describe Parliament, type: :model do
         let(:dissolution_at) { 2.weeks.ago }
 
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolved, dissolution_at: dissolution_at)
+          FactoryBot.create(:parliament, :dissolved, dissolution_at: dissolution_at)
         end
 
         it "does not schedule a job" do
@@ -958,7 +958,7 @@ RSpec.describe Parliament, type: :model do
   describe "#can_archive_petitions?" do
     context "when parliament has not announced dissolution" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "returns false" do
@@ -969,7 +969,7 @@ RSpec.describe Parliament, type: :model do
     context "when parliament has announced dissolution" do
       context "and the dissolution date has not passed" do
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolving)
+          FactoryBot.create(:parliament, :dissolving)
         end
 
         it "returns false" do
@@ -980,11 +980,11 @@ RSpec.describe Parliament, type: :model do
       context "and the dissolution date has passed" do
         context "and the petitions have not been archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: nil)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: nil)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: nil)
+            FactoryBot.create(:closed_petition, archived_at: nil)
           end
 
           it "returns true" do
@@ -994,11 +994,11 @@ RSpec.describe Parliament, type: :model do
 
         context "and the petitions are being archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: nil)
+            FactoryBot.create(:closed_petition, archived_at: nil)
           end
 
           it "returns false" do
@@ -1008,11 +1008,11 @@ RSpec.describe Parliament, type: :model do
 
         context "and the petitions have been archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+            FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
           end
 
           it "returns false" do
@@ -1026,7 +1026,7 @@ RSpec.describe Parliament, type: :model do
   describe "#can_archive?" do
     context "when parliament has not announced dissolution" do
       subject :parliament do
-        FactoryGirl.create(:parliament)
+        FactoryBot.create(:parliament)
       end
 
       it "returns false" do
@@ -1037,7 +1037,7 @@ RSpec.describe Parliament, type: :model do
     context "when parliament has announced dissolution" do
       context "and the dissolution date has not passed" do
         subject :parliament do
-          FactoryGirl.create(:parliament, :dissolving)
+          FactoryBot.create(:parliament, :dissolving)
         end
 
         it "returns false" do
@@ -1048,11 +1048,11 @@ RSpec.describe Parliament, type: :model do
       context "and the dissolution date has passed" do
         context "and the petitions have not been archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: nil)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: nil)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: nil)
+            FactoryBot.create(:closed_petition, archived_at: nil)
           end
 
           it "returns false" do
@@ -1062,11 +1062,11 @@ RSpec.describe Parliament, type: :model do
 
         context "and the petitions are being archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: nil)
+            FactoryBot.create(:closed_petition, archived_at: nil)
           end
 
           it "returns false" do
@@ -1076,11 +1076,11 @@ RSpec.describe Parliament, type: :model do
 
         context "and the petitions have been archived" do
           subject :parliament do
-            FactoryGirl.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
           end
 
           before do
-            FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago)
+            FactoryBot.create(:closed_petition, archived_at: 1.hour.ago)
           end
 
           it "returns true" do
@@ -1093,7 +1093,7 @@ RSpec.describe Parliament, type: :model do
 
   describe "#formatted_threshold_for_response" do
     subject :parliament do
-      FactoryGirl.build(:parliament, threshold_for_response: 10000)
+      FactoryBot.build(:parliament, threshold_for_response: 10000)
     end
 
     it "returns a formatted number" do
@@ -1103,7 +1103,7 @@ RSpec.describe Parliament, type: :model do
 
   describe "#formatted_threshold_for_debate" do
     subject :parliament do
-      FactoryGirl.build(:parliament, threshold_for_debate: 100000)
+      FactoryBot.build(:parliament, threshold_for_debate: 100000)
     end
 
     it "returns a formatted number" do

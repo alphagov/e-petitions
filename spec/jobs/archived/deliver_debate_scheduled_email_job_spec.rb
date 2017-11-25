@@ -5,8 +5,8 @@ RSpec.describe Archived::DeliverDebateScheduledEmailJob, type: :job do
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
-  let(:petition) { FactoryGirl.create(:archived_petition, :scheduled_for_debate) }
-  let(:signature) { FactoryGirl.create(:archived_signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:archived_petition, :scheduled_for_debate) }
+  let(:signature) { FactoryBot.create(:archived_signature, petition: petition) }
   let(:timestamp_name) { 'debate_scheduled' }
 
   let :arguments do

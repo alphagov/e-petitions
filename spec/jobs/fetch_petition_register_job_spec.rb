@@ -72,7 +72,7 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
 
   context "when a country does exist" do
     before do
-      FactoryGirl.create(:location, code: "GB")
+      FactoryBot.create(:location, code: "GB")
 
       stub_register.to_return json_response <<-JSON
       {
@@ -129,7 +129,7 @@ RSpec.describe FetchCountryRegisterJob, type: :job do
     let(:location) { Location.find_by!(code: "GB") }
 
     before do
-      FactoryGirl.create(:location, code: "GB", name: "United Kingdom")
+      FactoryBot.create(:location, code: "GB", name: "United Kingdom")
 
       stub_register.to_return json_response <<-JSON
       {

@@ -18,7 +18,7 @@ RSpec.describe HomeHelper, type: :helper do
 
     context "when there are no published petitions" do
       before do
-        FactoryGirl.create(:pending_petition)
+        FactoryBot.create(:pending_petition)
       end
 
       it "returns true" do
@@ -29,7 +29,7 @@ RSpec.describe HomeHelper, type: :helper do
     Petition::VISIBLE_STATES.each do |state|
       context "when there is a #{state} petition" do
         before do
-          FactoryGirl.create(:"#{state}_petition")
+          FactoryBot.create(:"#{state}_petition")
         end
 
         it "returns false" do
@@ -90,12 +90,12 @@ RSpec.describe HomeHelper, type: :helper do
   end
 
   describe "#any_actioned_petitions?" do
-    let!(:pending_petition) { FactoryGirl.create :pending_petition }
-    let!(:hidden_petition) { FactoryGirl.create :hidden_petition }
-    let!(:open_petition) { FactoryGirl.create :open_petition }
+    let!(:pending_petition) { FactoryBot.create :pending_petition }
+    let!(:hidden_petition) { FactoryBot.create :hidden_petition }
+    let!(:open_petition) { FactoryBot.create :open_petition }
 
     describe "when there is an actioned petition" do
-      let!(:responded_petition) { FactoryGirl.create :responded_petition }
+      let!(:responded_petition) { FactoryBot.create :responded_petition }
 
       it "returns true" do
         expect(helper.any_actioned_petitions?).to eq true

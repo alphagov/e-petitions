@@ -9,7 +9,7 @@ RSpec.describe 'session cookie', type: :request, show_exceptions: true do
   end
 
   before do
-    petition = FactoryGirl.create(:open_petition)
+    petition = FactoryBot.create(:open_petition)
     get "/petitions/#{petition.id}/signatures/new"
   end
 

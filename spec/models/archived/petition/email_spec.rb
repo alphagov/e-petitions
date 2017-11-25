@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Archived::Petition::Email, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:archived_petition_email)).to be_valid
+    expect(FactoryBot.build(:archived_petition_email)).to be_valid
   end
 
   describe "schema" do
@@ -23,7 +23,7 @@ RSpec.describe Archived::Petition::Email, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:archived_petition_email) }
+    subject { FactoryBot.build(:archived_petition_email) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:subject) }

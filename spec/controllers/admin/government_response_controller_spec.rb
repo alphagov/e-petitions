@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:open_petition) }
+  let!(:petition) { FactoryBot.create(:open_petition) }
   let(:government_response) { petition.government_response }
 
   describe 'not logged in' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -161,7 +161,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   notify_by_email: true,
                   petition: petition
                 }
-                s = FactoryGirl.create(:pending_signature, attributes)
+                s = FactoryBot.create(:pending_signature, attributes)
                 s.validate!
               end
               2.times do |i|
@@ -172,7 +172,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   petition: petition
                 }
 
-                s = FactoryGirl.create(:pending_signature, attributes)
+                s = FactoryBot.create(:pending_signature, attributes)
                 s.validate!
               end
               2.times do |i|
@@ -182,7 +182,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   notify_by_email: true,
                   petition: petition
                 }
-                FactoryGirl.create(:pending_signature, attributes)
+                FactoryBot.create(:pending_signature, attributes)
               end
               petition.reload
             end
@@ -412,7 +412,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   notify_by_email: true,
                   petition: petition
                 }
-                s = FactoryGirl.create(:pending_signature, attributes)
+                s = FactoryBot.create(:pending_signature, attributes)
                 s.validate!
               end
               2.times do |i|
@@ -423,7 +423,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   petition: petition
                 }
 
-                s = FactoryGirl.create(:pending_signature, attributes)
+                s = FactoryBot.create(:pending_signature, attributes)
                 s.validate!
               end
               2.times do |i|
@@ -433,7 +433,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
                   notify_by_email: true,
                   petition: petition
                 }
-                FactoryGirl.create(:pending_signature, attributes)
+                FactoryBot.create(:pending_signature, attributes)
               end
               petition.reload
             end
@@ -577,7 +577,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
       context "when two moderators update the response for the first time simultaneously" do
         let(:government_response) do
-          FactoryGirl.build(:government_response, summary: "", details: "", petition: petition)
+          FactoryBot.build(:government_response, summary: "", details: "", petition: petition)
         end
 
         before do

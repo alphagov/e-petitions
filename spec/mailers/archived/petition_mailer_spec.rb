@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Archived::PetitionMailer, type: :mailer do
   let :creator do
-    FactoryGirl.create(:archived_signature,
+    FactoryBot.create(:archived_signature,
       name: "Barry Butler",
       email: "bazbutler@gmail.com",
       creator: true
@@ -10,7 +10,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
   end
 
   let(:signer) do
-    FactoryGirl.create(:archived_signature,
+    FactoryBot.create(:archived_signature,
       name: "Laura Palmer",
       email: "laurapalmer@hotmail.com",
       petition: petition
@@ -19,7 +19,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
   describe "notifying signature of a government response" do
     let :petition do
-      FactoryGirl.create(:archived_petition, :response,
+      FactoryBot.create(:archived_petition, :response,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables",
@@ -130,7 +130,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
   describe "notifying signature of a debate being scheduled" do
     let :petition do
-      FactoryGirl.create(:archived_petition, :scheduled_for_debate,
+      FactoryBot.create(:archived_petition, :scheduled_for_debate,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables",
@@ -263,7 +263,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       context "when the debate outcome is positive" do
         context "when the debate outcome is not filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :debated,
+            FactoryBot.create(:archived_petition, :debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables"
@@ -276,7 +276,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :debated,
+            FactoryBot.create(:archived_petition, :debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables",
@@ -308,7 +308,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       context "when the debate outcome is negative" do
         context "when the debate outcome is not filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :not_debated,
+            FactoryBot.create(:archived_petition, :not_debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables"
@@ -321,7 +321,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :not_debated,
+            FactoryBot.create(:archived_petition, :not_debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables",
@@ -394,7 +394,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       context "when the debate outcome is positive" do
         context "when the debate outcome is not filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :debated,
+            FactoryBot.create(:archived_petition, :debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables"
@@ -407,7 +407,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :debated,
+            FactoryBot.create(:archived_petition, :debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables",
@@ -439,7 +439,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
       context "when the debate outcome is negative" do
         context "when the debate outcome is not filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :not_debated,
+            FactoryBot.create(:archived_petition, :not_debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables"
@@ -452,7 +452,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           let :petition do
-            FactoryGirl.create(:archived_petition, :not_debated,
+            FactoryBot.create(:archived_petition, :not_debated,
               action: "Allow organic vegetable vans to use red diesel",
               background: "Add vans to permitted users of red diesel",
               additional_details: "To promote organic vegetables",
@@ -473,7 +473,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
 
   describe "emailing a signature" do
     let :petition do
-      FactoryGirl.create(:archived_petition,
+      FactoryBot.create(:archived_petition,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
         additional_details: "To promote organic vegetables"
@@ -481,7 +481,7 @@ RSpec.describe Archived::PetitionMailer, type: :mailer do
     end
 
     let(:email) do
-      FactoryGirl.create(:archived_petition_email,
+      FactoryBot.create(:archived_petition_email,
         subject: "This is a message from the committee",
         body: "Message body from the petition committee",
         petition: petition

@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::Archived::PetitionTagsController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:archived_petition) }
-  let!(:creator) { FactoryGirl.create(:archived_signature, :validated, creator: true, petition: petition) }
+  let!(:petition) { FactoryBot.create(:archived_petition) }
+  let!(:creator) { FactoryBot.create(:archived_signature, :validated, creator: true, petition: petition) }
 
   context "when not logged in" do
     describe "GET /admin/archived/petitions/:petition_id/tags" do
@@ -21,7 +21,7 @@ RSpec.describe Admin::Archived::PetitionTagsController, type: :controller, admin
   end
 
   context "when logged in as moderator user but need to reset password" do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe "GET /admin/archived/petitions/:petition_id/tags" do
@@ -40,7 +40,7 @@ RSpec.describe Admin::Archived::PetitionTagsController, type: :controller, admin
   end
 
   context "when logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe "GET /admin/archived/petitions/:petition_id/tags" do

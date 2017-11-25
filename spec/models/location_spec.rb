@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Location, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:location)).to be_valid
+    expect(FactoryBot.build(:location)).to be_valid
   end
 
   describe "indexes" do
@@ -12,7 +12,7 @@ RSpec.describe Location, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:location) }
+    subject { FactoryBot.build(:location) }
 
     it { is_expected.to validate_presence_of(:code) }
     it { is_expected.to validate_length_of(:code).is_at_most(30) }
@@ -22,9 +22,9 @@ RSpec.describe Location, type: :model do
   end
 
   describe ".current" do
-    let!(:ussr) { FactoryGirl.create(:location, code: "SU", name: "USSR", end_date: "1991-12-25") }
-    let!(:uk) { FactoryGirl.create(:location, code: "GB", name: "United Kingdom") }
-    let!(:russia) { FactoryGirl.create(:location, code: "RU", name: "Russia", start_date: "1991-12-25") }
+    let!(:ussr) { FactoryBot.create(:location, code: "SU", name: "USSR", end_date: "1991-12-25") }
+    let!(:uk) { FactoryBot.create(:location, code: "GB", name: "United Kingdom") }
+    let!(:russia) { FactoryBot.create(:location, code: "RU", name: "Russia", start_date: "1991-12-25") }
 
     subject { described_class.current.to_a }
 
@@ -74,9 +74,9 @@ RSpec.describe Location, type: :model do
   end
 
   describe ".menu" do
-    let!(:russia) { FactoryGirl.create(:location, code: "RU", name: "Russia", start_date: "1991-12-25") }
-    let!(:uk) { FactoryGirl.create(:location, code: "GB", name: "United Kingdom") }
-    let!(:australia) { FactoryGirl.create(:location, code: "AU", name: "Australia") }
+    let!(:russia) { FactoryBot.create(:location, code: "RU", name: "Russia", start_date: "1991-12-25") }
+    let!(:uk) { FactoryBot.create(:location, code: "GB", name: "United Kingdom") }
+    let!(:australia) { FactoryBot.create(:location, code: "AU", name: "Australia") }
 
     subject { described_class.menu }
 

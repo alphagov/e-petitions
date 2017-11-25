@@ -19,7 +19,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
   end
 
   context "when logged in as a moderator requiring a password reset" do
-    let(:moderator) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:moderator) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(moderator) }
 
     [
@@ -39,7 +39,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
   end
 
   context "when logged in as a moderator" do
-    let(:moderator) { FactoryGirl.create(:moderator_user) }
+    let(:moderator) { FactoryBot.create(:moderator_user) }
     before { login_as(moderator) }
 
 
@@ -57,7 +57,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
 
     describe "POST /admin/moderation-delay" do
       describe "sending a preview email" do
-        let!(:petition) { FactoryGirl.create(:sponsored_petition, :overdue, sponsors_signed: true) }
+        let!(:petition) { FactoryBot.create(:sponsored_petition, :overdue, sponsors_signed: true) }
 
         before do
           perform_enqueued_jobs do
@@ -122,7 +122,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
 
       describe "sending email to the creators" do
         let!(:petition_1) do
-          FactoryGirl.create(
+          FactoryBot.create(
             :sponsored_petition, :overdue,
             sponsors_signed: true,
             creator_attributes: {
@@ -133,7 +133,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
         end
 
         let!(:petition_2) do
-          FactoryGirl.create(
+          FactoryBot.create(
             :sponsored_petition, :overdue,
             sponsors_signed: true,
             creator_attributes: {

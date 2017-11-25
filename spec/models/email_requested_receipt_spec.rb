@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe EmailRequestedReceipt, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:email_requested_receipt)).to be_valid
+    expect(FactoryBot.build(:email_requested_receipt)).to be_valid
   end
 
   describe 'petition' do
@@ -10,14 +10,14 @@ RSpec.describe EmailRequestedReceipt, type: :model do
   end
 
   context "validations" do
-    subject { FactoryGirl.create(:email_requested_receipt) }
+    subject { FactoryBot.create(:email_requested_receipt) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_uniqueness_of(:petition_id) }
   end
 
   describe '#get' do
-    let(:receipt) { FactoryGirl.build(:email_requested_receipt) }
+    let(:receipt) { FactoryBot.build(:email_requested_receipt) }
     let(:the_stored_time) { 6.days.ago }
 
     it 'returns nil when nothing has been stamped for the supplied name' do
@@ -46,7 +46,7 @@ RSpec.describe EmailRequestedReceipt, type: :model do
   end
 
   describe '#set' do
-    let(:receipt) { FactoryGirl.create(:email_requested_receipt) }
+    let(:receipt) { FactoryBot.create(:email_requested_receipt) }
     let(:the_stored_time) { 6.days.ago }
 
     it 'saves the stored timestamp for the supplied name in the db to the supplied time' do

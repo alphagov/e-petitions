@@ -2,11 +2,11 @@ require 'rails_helper'
 
 RSpec.describe SponsorMailer, type: :mailer do
   let :creator do
-    FactoryGirl.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
+    FactoryBot.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
   end
 
   let :petition do
-    FactoryGirl.create(:pending_petition,
+    FactoryBot.create(:pending_petition,
       creator: creator,
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
@@ -15,7 +15,7 @@ RSpec.describe SponsorMailer, type: :mailer do
   end
 
   let :sponsor do
-    FactoryGirl.create(:sponsor, :pending, email: 'allyadams@outlook.com', petition: petition)
+    FactoryBot.create(:sponsor, :pending, email: 'allyadams@outlook.com', petition: petition)
   end
 
   describe "#petition_and_email_confirmation_for_sponsor" do

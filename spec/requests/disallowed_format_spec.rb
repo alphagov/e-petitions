@@ -2,10 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Requests for pages when we do not support the format on that page', type: :request, show_exceptions: true do
 
-  let(:petition) { FactoryGirl.create :open_petition }
+  let(:petition) { FactoryBot.create :open_petition }
 
   before do
-    FactoryGirl.create(:parliament, :archived)
+    FactoryBot.create(:parliament, :archived)
   end
 
   shared_examples 'a route that only supports html formats' do |headers_only: false|
@@ -187,7 +187,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/local results url' do
     let(:url) { "/petitions/local/#{constituency.slug}" }
-    let(:constituency) { FactoryGirl.create(:constituency) }
+    let(:constituency) { FactoryBot.create(:constituency) }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html, json and csv formats'
@@ -195,7 +195,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/local/all results url' do
     let(:url) { "/petitions/local/#{constituency.slug}/all" }
-    let(:constituency) { FactoryGirl.create(:constituency) }
+    let(:constituency) { FactoryBot.create(:constituency) }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html, json and csv formats'
@@ -203,7 +203,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions show url' do
     let(:url) { "/petitions/#{petition.id}" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html and json formats'
@@ -211,7 +211,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/thank-you url' do
     let(:url) { "/petitions/#{petition.id}/thank-you" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that only supports html formats'
@@ -219,7 +219,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/moderation-info url' do
     let(:url) { "/petitions/#{petition.id}/moderation-info" }
-    let(:petition) { FactoryGirl.create(:sponsored_petition) }
+    let(:petition) { FactoryBot.create(:sponsored_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that only supports html formats'
@@ -227,7 +227,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/sponsors/new url' do
     let(:url) { "/petitions/#{petition.id}/sponsors/new" }
-    let(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:petition) { FactoryBot.create(:pending_petition) }
     let(:params) {
       {
         'token' => petition.sponsor_token
@@ -239,7 +239,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/sponsors/thank-you url' do
     let(:url) { "/petitions/#{petition.id}/sponsors/thank-you" }
-    let(:petition) { FactoryGirl.create(:pending_petition) }
+    let(:petition) { FactoryBot.create(:pending_petition) }
     let(:params) {
       {
         'token' => petition.sponsor_token
@@ -251,8 +251,8 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the sponsors/sponsored url' do
     let(:url) { "/sponsors/#{signature.id}/sponsored" }
-    let(:petition) { FactoryGirl.create(:pending_petition) }
-    let(:signature) { FactoryGirl.create(:sponsor, :validated, :just_signed, petition: petition) }
+    let(:petition) { FactoryBot.create(:pending_petition) }
+    let(:signature) { FactoryBot.create(:sponsor, :validated, :just_signed, petition: petition) }
     let(:params) {
       {
         'token' => signature.perishable_token
@@ -264,7 +264,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/signatures/new url' do
     let(:url) { "/petitions/#{petition.id}/signatures/new" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that only supports html formats'
@@ -272,7 +272,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the petitions/signatures/thank-you url' do
     let(:url) { "/petitions/#{petition.id}/signatures/thank-you" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that only supports html formats'
@@ -280,8 +280,8 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the signatures/signed url' do
     let(:url) { "/signatures/#{signature.id}/signed" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
-    let(:signature) { FactoryGirl.create(:validated_signature, :just_signed, petition: petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
     let(:params) {
       {
         'token' => signature.perishable_token
@@ -300,8 +300,8 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the signatures/unsubscribe url' do
     let(:url) { "/signatures/#{signature.id}/unsubscribe" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
-    let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
     let(:params) {
       {
         'token' => signature.unsubscribe_token
@@ -313,7 +313,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'the archived/petitions show url' do
     let(:url) { "/archived/petitions/#{petition.id}" }
-    let(:petition) { FactoryGirl.create(:archived_petition) }
+    let(:petition) { FactoryBot.create(:archived_petition) }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html and json formats'
@@ -387,7 +387,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   context 'a failed post to signatures/new' do
     let(:url) { "/petitions/#{petition.id}/signatures/new" }
-    let(:petition) { FactoryGirl.create(:open_petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
     let(:params) {
       {
         'stage' => 'replay-email',

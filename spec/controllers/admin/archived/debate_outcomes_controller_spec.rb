@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, admin: true do
-  let!(:petition) { FactoryGirl.create(:archived_petition) }
-  let!(:creator) { FactoryGirl.create(:archived_signature, :validated, creator: true, petition: petition) }
+  let!(:petition) { FactoryBot.create(:archived_petition) }
+  let!(:creator) { FactoryBot.create(:archived_signature, :validated, creator: true, petition: petition) }
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
   end
 
   describe "logged in as moderator user" do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET /show' do
@@ -60,7 +60,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
         end
 
         context 'that already has a debate outcome' do
-          let!(:debate_outcome) { FactoryGirl.create(:archived_debate_outcome, petition: petition) }
+          let!(:debate_outcome) { FactoryBot.create(:archived_debate_outcome, petition: petition) }
           it 'exposes the existing debate_outcome on the requested petition' do
             get :show, petition_id: petition.id
             expect(assigns(:debate_outcome)).to be_present
@@ -84,13 +84,13 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
       end
 
       describe 'for a rejected petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
         it_behaves_like 'trying to view a debate outcome for a petition in the wrong state'
       end
 
       describe 'for a hidden petition' do
-        let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+        let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
         it_behaves_like 'trying to view a debate outcome for a petition in the wrong state'
       end
@@ -156,7 +156,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -167,7 +167,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -178,7 +178,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :pending, attributes)
+                  FactoryBot.create(:archived_signature, :pending, attributes)
                 end
 
                 petition.reload
@@ -293,13 +293,13 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
         end
 
         describe 'for a rejected petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
           it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
         end
 
         describe 'for a hidden petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
           it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
         end
@@ -354,7 +354,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
 
                 2.times do |i|
@@ -365,7 +365,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :validated, attributes)
+                  FactoryBot.create(:archived_signature, :validated, attributes)
                 end
                 2.times do |i|
                   attributes = {
@@ -375,7 +375,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
                     petition: petition
                   }
 
-                  FactoryGirl.create(:archived_signature, :pending, attributes)
+                  FactoryBot.create(:archived_signature, :pending, attributes)
                 end
 
                 petition.reload
@@ -427,13 +427,13 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
         end
 
         describe 'for a rejected petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :rejected) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :rejected) }
 
           it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
         end
 
         describe 'for a hidden petition' do
-          let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+          let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
           it_behaves_like 'trying to add debate outcome details to a petition in the wrong state'
         end
@@ -441,7 +441,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
 
       context "when two moderators update the debate outcome for the first time simultaneously" do
         let(:debate_outcome) do
-          FactoryGirl.build(:archived_debate_outcome, overview: "", debated: false, petition: petition)
+          FactoryBot.build(:archived_debate_outcome, overview: "", debated: false, petition: petition)
         end
 
         before do

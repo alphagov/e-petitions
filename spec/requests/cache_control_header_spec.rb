@@ -16,7 +16,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
   end
 
   context "when visiting the petition show page" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
 
     before do
       get "/petitions/#{petition.id}"
@@ -29,7 +29,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
   end
 
   context "when visiting the new petition page" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
 
     before do
       get "/petitions/new"
@@ -42,7 +42,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
   end
 
   context "when visiting the new sponsor page" do
-    let!(:petition) { FactoryGirl.create(:pending_petition) }
+    let!(:petition) { FactoryBot.create(:pending_petition) }
 
     before do
       get "/petitions/#{petition.id}/sponsors/new?token=#{petition.sponsor_token}"
@@ -55,7 +55,7 @@ RSpec.describe 'Cache-Control headers', type: :request do
   end
 
   context "when visiting the new signature page" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
 
     before do
       get "/petitions/#{petition.id}/signatures/new"

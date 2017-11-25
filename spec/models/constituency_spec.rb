@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Constituency, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:constituency)).to be_valid
+    expect(FactoryBot.build(:constituency)).to be_valid
   end
 
   describe "schema" do
@@ -27,7 +27,7 @@ RSpec.describe Constituency, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:constituency) }
+    subject { FactoryBot.build(:constituency) }
 
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_length_of(:name).is_at_most(100) }
@@ -54,7 +54,7 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.to validate_presence_of(:example_postcode) }
 
     it "should not allow an :example_postcode that doesn't belong to the constituency" do
-      constituency = FactoryGirl.create(:constituency, :romford)
+      constituency = FactoryBot.create(:constituency, :romford)
       stub_api_request_for("CV66HN").to_return(api_response(:ok, "coventry_north_east"))
 
       expect {
@@ -66,7 +66,7 @@ RSpec.describe Constituency, type: :model do
   describe "callbacks" do
     describe "slug" do
       context "when creating a constituency" do
-        let!(:constituency) { FactoryGirl.create(:constituency, name: "Coventry North East") }
+        let!(:constituency) { FactoryBot.create(:constituency, name: "Coventry North East") }
 
         it "is generated from the name" do
           expect(constituency.slug).to eq("coventry-north-east")
@@ -74,7 +74,7 @@ RSpec.describe Constituency, type: :model do
       end
 
       context "when updated a constituency" do
-        let!(:constituency) { FactoryGirl.create(:constituency, name: "Coventry North East") }
+        let!(:constituency) { FactoryBot.create(:constituency, name: "Coventry North East") }
 
         before do
           constituency.update!(name: "Coventry North")
@@ -89,7 +89,7 @@ RSpec.describe Constituency, type: :model do
     describe "example_postcode" do
       context "when creating a constituency" do
         let(:constituency) do
-          FactoryGirl.create(:constituency, :romford, example_postcode: example_postcode)
+          FactoryBot.create(:constituency, :romford, example_postcode: example_postcode)
         end
 
         context "and the example_postcode is nil" do
@@ -111,7 +111,7 @@ RSpec.describe Constituency, type: :model do
 
       context "when updating a constituency" do
         let(:constituency) do
-          FactoryGirl.create(:constituency, :romford, example_postcode: "RM53FA")
+          FactoryBot.create(:constituency, :romford, example_postcode: "RM53FA")
         end
 
         context "and the example_postcode is nil" do
@@ -153,7 +153,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when the constituency already exists in the database" do
       let!(:existing_constituency) do
-        FactoryGirl.create(:constituency, {
+        FactoryBot.create(:constituency, {
           name: "Islington South and Finsbury", external_id: "3550", ons_code: "E14000764",
           mp_id: "1536", mp_name: "Emily Thornberry MP", mp_date: "2015-05-07T00:00:00"
         })
@@ -186,7 +186,7 @@ RSpec.describe Constituency, type: :model do
       end
 
       before do
-        FactoryGirl.create(:constituency, {
+        FactoryBot.create(:constituency, {
           name: "Oldham West and Royton", external_id: "3671", ons_code: "E14000871",
           mp_id: "454", mp_name: "Mr Michael Meacher", mp_date: "2015-05-07T00:00:00"
         })
@@ -209,7 +209,7 @@ RSpec.describe Constituency, type: :model do
       end
 
       before do
-        FactoryGirl.create(:constituency, {
+        FactoryBot.create(:constituency, {
           name: "Sheffield, Brightside and Hillsborough", external_id: "3724", ons_code: "E14000921",
           mp_id: "4477", mp_name: "Harry Harpham", mp_date: "2015-05-07T00:00:00"
         })
@@ -230,11 +230,11 @@ RSpec.describe Constituency, type: :model do
   describe ".refresh!" do
     context "when Parliament has dissolved" do
       let!(:constituency_1) do
-        FactoryGirl.create(:constituency, :coventry_north_east)
+        FactoryBot.create(:constituency, :coventry_north_east)
       end
 
       let!(:constituency_2) do
-        FactoryGirl.create(:constituency, :sheffield_brightside_and_hillsborough)
+        FactoryBot.create(:constituency, :sheffield_brightside_and_hillsborough)
       end
 
       before do
@@ -257,7 +257,7 @@ RSpec.describe Constituency, type: :model do
 
   describe "#sitting_mp?" do
     context "when the MP details are available" do
-      let(:constituency) { FactoryGirl.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }
+      let(:constituency) { FactoryBot.build(:constituency, mp_id: "4477", mp_name: "Harry Harpham") }
 
       it "returns true" do
         expect(constituency.sitting_mp?).to be true
@@ -265,7 +265,7 @@ RSpec.describe Constituency, type: :model do
     end
 
     context "when the MP details are not available" do
-      let(:constituency) { FactoryGirl.build(:constituency, mp_id: nil, mp_name: nil) }
+      let(:constituency) { FactoryBot.build(:constituency, mp_id: nil, mp_name: nil) }
 
       it "returns false" do
         expect(constituency.sitting_mp?).to be false
@@ -274,7 +274,7 @@ RSpec.describe Constituency, type: :model do
   end
 
   describe "#mp_url" do
-    let(:constituency) { FactoryGirl.build(:constituency, mp_id: "2564", mp_name: "The Rt. Hon. Duncan Short MP") }
+    let(:constituency) { FactoryBot.build(:constituency, mp_id: "2564", mp_name: "The Rt. Hon. Duncan Short MP") }
 
     it "generates a valid link to the MP on the parliament.uk website" do
       expect(constituency.mp_url).to eq <<-URL.strip
@@ -286,7 +286,7 @@ RSpec.describe Constituency, type: :model do
   describe "#refresh!" do
     context "when Parliament has dissolved" do
       let!(:constituency) do
-        FactoryGirl.create(:constituency, :coventry_north_east)
+        FactoryBot.create(:constituency, :coventry_north_east)
       end
 
       before do
@@ -304,7 +304,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when there is no example postcode" do
       let!(:constituency) do
-        FactoryGirl.create(:constituency, :coventry_north_east)
+        FactoryBot.create(:constituency, :coventry_north_east)
       end
 
       before do
@@ -323,7 +323,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when the API returns no results" do
       let!(:constituency) do
-        FactoryGirl.create(:constituency, :coventry_north_east)
+        FactoryBot.create(:constituency, :coventry_north_east)
       end
 
       before do
@@ -337,7 +337,7 @@ RSpec.describe Constituency, type: :model do
 
     context "when a postcode lookup mismatch occurs" do
       let!(:constituency) do
-        FactoryGirl.create(:constituency, :coventry_north_east)
+        FactoryBot.create(:constituency, :coventry_north_east)
       end
 
       before do

@@ -8,7 +8,7 @@ RSpec.describe ClosePetitionsEarlyJob, type: :job do
   let(:job) { Delayed::Job.last }
   let(:jobs) { Delayed::Job.all.to_a }
 
-  let!(:petition) { FactoryGirl.create(:open_petition, open_at: open_at) }
+  let!(:petition) { FactoryBot.create(:open_petition, open_at: open_at) }
 
   before do
     ActiveJob::Base.queue_adapter = :delayed_job

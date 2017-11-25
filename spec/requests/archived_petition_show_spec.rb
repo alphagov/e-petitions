@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe "API request to show an archived petition", type: :request, show_exceptions: true do
-  let(:petition) { FactoryGirl.create :archived_petition }
+  let(:petition) { FactoryBot.create :archived_petition }
   let(:attributes) { json["data"]["attributes"] }
 
   let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
@@ -62,7 +62,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
     it "includes the rejection section for rejected petitions" do
       petition = \
-        FactoryGirl.create :archived_petition, :rejected,
+        FactoryBot.create :archived_petition, :rejected,
           rejection_code: "duplicate",
           rejection_details: "This is a duplication of another petition"
 
@@ -82,7 +82,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
     it "includes the government_response section for petitions with a government_response" do
       petition = \
-        FactoryGirl.create :archived_petition, :response,
+        FactoryBot.create :archived_petition, :response,
           response_summary: "Summary of what the government said",
           response_details: "Details of what the government said"
 
@@ -104,7 +104,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
     it "includes the date and time at which the thresholds were reached" do
       petition = \
-        FactoryGirl.create :archived_petition,
+        FactoryBot.create :archived_petition,
           moderation_threshold_reached_at: 1.month.ago,
           response_threshold_reached_at: 1.weeks.ago,
           debate_threshold_reached_at: 1.day.ago
@@ -122,7 +122,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
     end
 
     it "includes the date when a petition is scheduled for a debate" do
-      petition = FactoryGirl.create :archived_petition, :scheduled_for_debate
+      petition = FactoryBot.create :archived_petition, :scheduled_for_debate
 
       get "/archived/petitions/#{petition.id}.json"
       expect(response).to be_success
@@ -136,7 +136,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
     it "includes the debate section for petitions that have been debated" do
       petition = \
-        FactoryGirl.create :archived_petition, :debated,
+        FactoryBot.create :archived_petition, :debated,
           debated_on: 1.day.ago,
           overview: "What happened in the debate",
           transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
@@ -161,11 +161,11 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
     end
 
     it "includes the signatures by constituency data" do
-      FactoryGirl.create :constituency, :coventry_north_east
-      FactoryGirl.create :constituency, :bethnal_green_and_bow
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
 
       petition = \
-        FactoryGirl.create :archived_petition,
+        FactoryBot.create :archived_petition,
           signatures_by_constituency: { 3427 => 123, 3320 => 456 }
 
       get "/archived/petitions/#{petition.id}.json"
@@ -192,11 +192,11 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
     end
 
     it "includes the signatures by country data" do
-      FactoryGirl.create :location, name: "United Kingdom", code: "gb"
-      FactoryGirl.create :location, name: "France", code: "fr"
+      FactoryBot.create :location, name: "United Kingdom", code: "gb"
+      FactoryBot.create :location, name: "France", code: "fr"
 
       petition = \
-        FactoryGirl.create :archived_petition,
+        FactoryBot.create :archived_petition,
           signatures_by_country: { "gb" => 123456, "fr" => 789 }
 
       get "/archived/petitions/#{petition.id}.json"

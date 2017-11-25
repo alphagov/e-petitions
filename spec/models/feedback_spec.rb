@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Feedback, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:feedback)).to be_valid
+    expect(FactoryBot.build(:feedback)).to be_valid
   end
 
   describe "schema" do

@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Invalidation, type: :model do
-  subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs") }
+  subject { FactoryBot.create(:invalidation, name: "Joe Bloggs") }
 
   it "has a valid factory" do
-    expect(FactoryGirl.build(:invalidation, name: "Joe Bloggs")).to be_valid
+    expect(FactoryBot.build(:invalidation, name: "Joe Bloggs")).to be_valid
   end
 
   describe "associations" do
@@ -18,7 +18,7 @@ RSpec.describe Invalidation, type: :model do
 
   describe "callbacks" do
     context "when an invalidation hasn't started" do
-      let!(:invalidation) { FactoryGirl.create(:invalidation, name: "Joe Bloggs") }
+      let!(:invalidation) { FactoryBot.create(:invalidation, name: "Joe Bloggs") }
 
       it "can be deleted" do
         expect(invalidation.destroy).to be_truthy
@@ -26,7 +26,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when an invalidation has started" do
-      let!(:invalidation) { FactoryGirl.create(:invalidation, :started, name: "Joe Bloggs") }
+      let!(:invalidation) { FactoryBot.create(:invalidation, :started, name: "Joe Bloggs") }
 
       it "can't be deleted" do
         expect(invalidation.destroy).to be_falsey
@@ -50,7 +50,7 @@ RSpec.describe Invalidation, type: :model do
     it { is_expected.to allow_value("123.123.123.123").for(:ip_address) }
 
     context "when there are no conditions" do
-      subject { FactoryGirl.build(:invalidation) }
+      subject { FactoryBot.build(:invalidation) }
 
       before do
         subject.valid?
@@ -62,7 +62,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when a petition doesn't exist" do
-      subject { FactoryGirl.build(:invalidation, petition_id: 123456) }
+      subject { FactoryBot.build(:invalidation, petition_id: 123456) }
 
       before do
         subject.valid?
@@ -74,7 +74,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when a constituency doesn't exist" do
-      subject { FactoryGirl.build(:invalidation, constituency_id: "1234") }
+      subject { FactoryBot.build(:invalidation, constituency_id: "1234") }
 
       before do
         subject.valid?
@@ -86,7 +86,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when a constituency doesn't exist" do
-      subject { FactoryGirl.build(:invalidation, constituency_id: "1234") }
+      subject { FactoryBot.build(:invalidation, constituency_id: "1234") }
 
       before do
         subject.valid?
@@ -98,7 +98,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when a location doesn't exist" do
-      subject { FactoryGirl.build(:invalidation, location_code: "XX") }
+      subject { FactoryBot.build(:invalidation, location_code: "XX") }
 
       before do
         subject.valid?
@@ -110,7 +110,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     context "when the date range is reversed" do
-      subject { FactoryGirl.build(:invalidation, created_after: 2.weeks.ago, created_before: 3.weeks.ago) }
+      subject { FactoryBot.build(:invalidation, created_after: 2.weeks.ago, created_before: 3.weeks.ago) }
 
       before do
         subject.valid?
@@ -124,8 +124,8 @@ RSpec.describe Invalidation, type: :model do
 
   describe "class methods" do
     describe ".by_most_recent" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", created_at: 3.weeks.ago) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", created_at: 2.weeks.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", created_at: 3.weeks.ago) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", created_at: 2.weeks.ago) }
 
       it "orders the invalidations by the created_at timestamp in descending order" do
         expect(described_class.by_most_recent.to_a).to eq([invalidation_2, invalidation_1])
@@ -133,8 +133,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".by_longest_running" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 1.hour.ago) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 1.hour.ago) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
 
       it "orders the invalidations by the started_at timestamp in ascending order" do
         expect(described_class.by_most_recent.to_a).to eq([invalidation_2, invalidation_1])
@@ -142,8 +142,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".cancelled" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: 2.hours.ago) }
 
       it "scopes the query to invalidations with a cancelled_at timestamp" do
         expect(described_class.cancelled.to_a).to eq([invalidation_2])
@@ -151,8 +151,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".completed" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
 
       it "scopes the query to invalidations with a completed_at timestamp" do
         expect(described_class.completed.to_a).to eq([invalidation_2])
@@ -160,9 +160,9 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".enqueued" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago) }
-      let!(:invalidation_3) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago, started_at: 1.hour.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago) }
+      let!(:invalidation_3) { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago, started_at: 1.hour.ago) }
 
       it "scopes the query to invalidations with a enqueued_at timestamp that have not started" do
         expect(described_class.enqueued.to_a).to eq([invalidation_2])
@@ -170,8 +170,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".not_completed" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
 
       it "scopes the query to invalidations without a completed_at timestamp" do
         expect(described_class.not_completed.to_a).to eq([invalidation_1])
@@ -179,11 +179,11 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".pending" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs") }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago) }
-      let!(:invalidation_3) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
-      let!(:invalidation_4) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: 2.hours.ago) }
-      let!(:invalidation_5) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs") }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: 2.hours.ago) }
+      let!(:invalidation_3) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
+      let!(:invalidation_4) { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: 2.hours.ago) }
+      let!(:invalidation_5) { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: 2.hours.ago) }
 
       it "scopes the query to invalidations that have not been processed in anyway" do
         expect(described_class.pending.to_a).to eq([invalidation_1])
@@ -191,8 +191,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".running" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 3.hours.ago, completed_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 3.hours.ago, completed_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 3.hours.ago, completed_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 3.hours.ago, completed_at: 2.hours.ago) }
 
       it "scopes the query to invalidations that have started, but not completed" do
         expect(described_class.running.to_a).to eq([invalidation_1])
@@ -200,8 +200,8 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe ".started" do
-      let!(:invalidation_1) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: nil) }
-      let!(:invalidation_2) { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
+      let!(:invalidation_1) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: nil) }
+      let!(:invalidation_2) { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: 2.hours.ago) }
 
       it "scopes the query to invalidations with a started_at timestamp" do
         expect(described_class.started.to_a).to eq([invalidation_2])
@@ -212,7 +212,7 @@ RSpec.describe Invalidation, type: :model do
   describe "instance methods" do
     describe "#cancelled?" do
       context "when cancelled_at is nil" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: nil) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: nil) }
 
         it "returns false" do
           expect(subject.cancelled?).to eq(false)
@@ -220,7 +220,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when cancelled_at is set" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
 
         it "returns true" do
           expect(subject.cancelled?).to eq(true)
@@ -246,7 +246,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when the invalidation has already been cancelled" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
 
         it "returns false" do
           expect(subject.cancel!).to be_falsey
@@ -254,7 +254,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when the invalidation has already completed processing" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
 
         it "returns false" do
           expect(subject.cancel!).to be_falsey
@@ -264,7 +264,7 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#completed?" do
       context "when completed_at is nil" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: nil) }
 
         it "returns false" do
           expect(subject.completed?).to eq(false)
@@ -272,7 +272,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when completed_at is set" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
 
         it "returns true" do
           expect(subject.completed?).to eq(true)
@@ -283,11 +283,11 @@ RSpec.describe Invalidation, type: :model do
     describe "#count!" do
       before do
         3.times do
-          FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1")
+          FactoryBot.create(:validated_signature, ip_address: "10.0.1.1")
         end
       end
 
-      subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
+      subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
 
       it "updates the matching_count" do
         expect {
@@ -306,7 +306,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when the invalidation in no longer pending" do
-        subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1", started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1", started_at: Time.current) }
 
         it "returns false" do
           expect(subject.count!).to be_falsey
@@ -316,7 +316,7 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#enqueued?" do
       context "when enqueued_at is nil" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: nil) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: nil) }
 
         it "returns false" do
           expect(subject.enqueued?).to eq(false)
@@ -324,7 +324,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when enqueued_at is set" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: Time.current) }
 
         it "returns true" do
           expect(subject.enqueued?).to eq(true)
@@ -333,7 +333,7 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe "#start!" do
-      subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
+      subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
 
       let(:job) do
         {
@@ -362,7 +362,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when the invalidation in no longer pending" do
-        subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1", started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1", started_at: Time.current) }
 
         it "returns false" do
           expect(subject.start!).to be_falsey
@@ -372,7 +372,7 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#started?" do
       context "when started_at is nil" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: nil) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: nil) }
 
         it "returns false" do
           expect(subject.started?).to eq(false)
@@ -380,7 +380,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when started_at is set" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
 
         it "returns true" do
           expect(subject.started?).to eq(true)
@@ -390,7 +390,7 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#pending?" do
       context "by default" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs") }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs") }
 
         it "returns true" do
           expect(subject.pending?).to eq(true)
@@ -398,7 +398,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation is enqueued" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", enqueued_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", enqueued_at: Time.current) }
 
         it "returns false" do
           expect(subject.pending?).to eq(false)
@@ -406,7 +406,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation is running" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
 
         it "returns false" do
           expect(subject.pending?).to eq(false)
@@ -414,7 +414,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation has been cancelled" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", cancelled_at: Time.current) }
 
         it "returns false" do
           expect(subject.pending?).to eq(false)
@@ -422,7 +422,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation has been completed" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", completed_at: Time.current) }
 
         it "returns false" do
           expect(subject.pending?).to eq(false)
@@ -432,7 +432,7 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#running?" do
       context "by default" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs") }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs") }
 
         it "returns false" do
           expect(subject.running?).to eq(false)
@@ -440,7 +440,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation is running" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: Time.current) }
 
         it "returns true" do
           expect(subject.running?).to eq(true)
@@ -448,7 +448,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation has been cancelled" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: Time.current, cancelled_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: Time.current, cancelled_at: Time.current) }
 
         it "returns false" do
           expect(subject.running?).to eq(false)
@@ -456,7 +456,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when a invalidation has been completed" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", started_at: Time.current, completed_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", started_at: Time.current, completed_at: Time.current) }
 
         it "returns false" do
           expect(subject.running?).to eq(false)
@@ -467,7 +467,7 @@ RSpec.describe Invalidation, type: :model do
     describe "#percent_completed" do
       context "when matching_count is zero" do
         context "and the invalidation has not started" do
-          subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0) }
+          subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0) }
 
           it "returns 0" do
             expect(subject.percent_completed).to eq(0)
@@ -475,7 +475,7 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and the invalidation has started" do
-          subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0, started_at: Time.current) }
+          subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0, started_at: Time.current) }
 
           it "returns 100" do
             expect(subject.percent_completed).to eq(100)
@@ -483,7 +483,7 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and the invalidation has completed" do
-          subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0, started_at: Time.current, completed_at: Time.current) }
+          subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 0, invalidated_count: 0, started_at: Time.current, completed_at: Time.current) }
 
           it "returns 100" do
             expect(subject.percent_completed).to eq(100)
@@ -492,7 +492,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when matching_count is not zero" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 100, invalidated_count: 50, started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 100, invalidated_count: 50, started_at: Time.current) }
 
         it "returns the percentage of completed invalidations" do
           expect(subject.percent_completed).to eq(50)
@@ -500,7 +500,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when invalidated_count is a negative number" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 100, invalidated_count: -50, started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 100, invalidated_count: -50, started_at: Time.current) }
 
         it "returns 0" do
           expect(subject.percent_completed).to eq(0)
@@ -508,7 +508,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when invalidated_count is greater than matching_count" do
-        subject { FactoryGirl.create(:invalidation, name: "Joe Bloggs", matching_count: 50, invalidated_count: 100, started_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, name: "Joe Bloggs", matching_count: 50, invalidated_count: 100, started_at: Time.current) }
 
         it "returns 100" do
           expect(subject.percent_completed).to eq(100)
@@ -518,15 +518,15 @@ RSpec.describe Invalidation, type: :model do
 
     describe "#matching_signatures" do
       context "when filtering by petition" do
-        let!(:petition_1) { FactoryGirl.create(:open_petition) }
-        let!(:petition_2) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, petition: petition_1) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, petition: petition_2) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, petition: petition_1) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, petition: petition_1) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, petition: petition_1) }
+        let!(:petition_1) { FactoryBot.create(:open_petition) }
+        let!(:petition_2) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, petition: petition_1) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, petition: petition_2) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, petition: petition_1) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, petition: petition_1) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, petition: petition_1) }
 
-        subject { FactoryGirl.create(:invalidation, petition: petition_1) }
+        subject { FactoryBot.create(:invalidation, petition: petition_1) }
 
         it "includes validated signatures for petition 1" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -550,14 +550,14 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by name" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, name: "Joe Public", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, name: "John Doe", petition: petition) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, name: "Joe Public", petition: petition) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, name: "Joe Public", petition: petition) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, name: "Joe Public", petition: petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, name: "Joe Public", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, name: "John Doe", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, name: "Joe Public", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, name: "Joe Public", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, name: "Joe Public", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, name: "Joe Public") }
+        subject { FactoryBot.create(:invalidation, name: "Joe Public") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -580,7 +580,7 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and the filter includes a LIKE wildcard" do
-          subject { FactoryGirl.create(:invalidation, name: "Joe %") }
+          subject { FactoryBot.create(:invalidation, name: "Joe %") }
 
           it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
@@ -605,14 +605,14 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by postcode" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, postcode: "E1 6PL", petition: petition) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, postcode: "E1 6PL", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, postcode: "SW1A 0AA", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, postcode: "SW1A0AA") }
+        subject { FactoryBot.create(:invalidation, postcode: "SW1A0AA") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -636,14 +636,14 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by ip_address" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, ip_address: "10.0.1.1", petition: petition) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, ip_address: "10.0.1.1", petition: petition) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, ip_address: "10.0.1.1", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, ip_address: "10.0.1.1", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
+        subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -667,17 +667,17 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by email" do
-        let!(:petition_1) { FactoryGirl.create(:open_petition) }
-        let!(:petition_2) { FactoryGirl.create(:open_petition) }
-        let!(:petition_3) { FactoryGirl.create(:open_petition) }
-        let!(:petition_4) { FactoryGirl.create(:open_petition) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, email: "joe@public.com", petition: petition_1) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, email: "john@doe.com", petition: petition_1) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, email: "joe@public.com", petition: petition_2) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, email: "joe@public.com", petition: petition_3) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, email: "joe@public.com", petition: petition_4) }
+        let!(:petition_1) { FactoryBot.create(:open_petition) }
+        let!(:petition_2) { FactoryBot.create(:open_petition) }
+        let!(:petition_3) { FactoryBot.create(:open_petition) }
+        let!(:petition_4) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, email: "joe@public.com", petition: petition_1) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, email: "john@doe.com", petition: petition_1) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, email: "joe@public.com", petition: petition_2) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, email: "joe@public.com", petition: petition_3) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, email: "joe@public.com", petition: petition_4) }
 
-        subject { FactoryGirl.create(:invalidation, email: "joe@public.com") }
+        subject { FactoryBot.create(:invalidation, email: "joe@public.com") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -700,7 +700,7 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and the filter includes a LIKE wildcard" do
-          subject { FactoryGirl.create(:invalidation, email: "%@public.com") }
+          subject { FactoryBot.create(:invalidation, email: "%@public.com") }
 
           it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
@@ -725,16 +725,16 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by date range" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
 
         context "and just the start date is specified" do
-          let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
-          let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 2.weeks.ago, petition: petition) }
-          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 2.weeks.ago, petition: petition) }
-          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_1) { FactoryBot.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_2) { FactoryBot.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryBot.create(:pending_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryBot.create(:invalidated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryBot.create(:fraudulent_signature, created_at: 2.weeks.ago, petition: petition) }
 
-          subject { FactoryGirl.create(:invalidation, created_after: 3.weeks.ago) }
+          subject { FactoryBot.create(:invalidation, created_after: 3.weeks.ago) }
 
           it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
@@ -758,13 +758,13 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and just the end date is specified" do
-          let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
-          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_1) { FactoryBot.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_2) { FactoryBot.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryBot.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryBot.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryBot.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
 
-          subject { FactoryGirl.create(:invalidation, created_before: 3.weeks.ago) }
+          subject { FactoryBot.create(:invalidation, created_before: 3.weeks.ago) }
 
           it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
@@ -788,13 +788,13 @@ RSpec.describe Invalidation, type: :model do
         end
 
         context "and both the start date and end date are specified" do
-          let!(:signature_1) { FactoryGirl.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_2) { FactoryGirl.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
-          let!(:signature_3) { FactoryGirl.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_4) { FactoryGirl.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
-          let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_1) { FactoryBot.create(:validated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_2) { FactoryBot.create(:validated_signature, created_at: 2.weeks.ago, petition: petition) }
+          let!(:signature_3) { FactoryBot.create(:pending_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_4) { FactoryBot.create(:invalidated_signature, created_at: 4.weeks.ago, petition: petition) }
+          let!(:signature_5) { FactoryBot.create(:fraudulent_signature, created_at: 4.weeks.ago, petition: petition) }
 
-          subject { FactoryGirl.create(:invalidation, created_before: 3.weeks.ago, created_after: 5.weeks.ago) }
+          subject { FactoryBot.create(:invalidation, created_before: 3.weeks.ago, created_after: 5.weeks.ago) }
 
           it "includes validated signatures that match" do
             expect(subject.matching_signatures).to include(signature_1)
@@ -819,16 +819,16 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by constituency_id" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:coventry) { FactoryGirl.create(:constituency, :coventry_north_east) }
-        let!(:bethnal) { FactoryGirl.create(:constituency, :bethnal_green_and_bow) }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, constituency_id: "3320", petition: petition) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, constituency_id: "3427", petition: petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
+        let!(:coventry) { FactoryBot.create(:constituency, :coventry_north_east) }
+        let!(:bethnal) { FactoryBot.create(:constituency, :bethnal_green_and_bow) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, constituency_id: "3320", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, constituency_id: "3427", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, constituency_id: "3427", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, constituency_id: "3427") }
+        subject { FactoryBot.create(:invalidation, constituency_id: "3427") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -852,16 +852,16 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when filtering by location_code" do
-        let!(:petition) { FactoryGirl.create(:open_petition) }
-        let!(:united_kingdom) { FactoryGirl.create(:location, code: "GB", name: "United Kingdom") }
-        let!(:australia) { FactoryGirl.create(:location, code: "AU", name: "Australia") }
-        let!(:signature_1) { FactoryGirl.create(:validated_signature, location_code: "GB", petition: petition) }
-        let!(:signature_2) { FactoryGirl.create(:validated_signature, location_code: "AU", petition: petition) }
-        let!(:signature_3) { FactoryGirl.create(:pending_signature, location_code: "GB", petition: petition) }
-        let!(:signature_4) { FactoryGirl.create(:invalidated_signature, location_code: "GB", petition: petition) }
-        let!(:signature_5) { FactoryGirl.create(:fraudulent_signature, location_code: "GB", petition: petition) }
+        let!(:petition) { FactoryBot.create(:open_petition) }
+        let!(:united_kingdom) { FactoryBot.create(:location, code: "GB", name: "United Kingdom") }
+        let!(:australia) { FactoryBot.create(:location, code: "AU", name: "Australia") }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, location_code: "GB", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, location_code: "AU", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, location_code: "GB", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, location_code: "GB", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, location_code: "GB", petition: petition) }
 
-        subject { FactoryGirl.create(:invalidation, location_code: "GB") }
+        subject { FactoryBot.create(:invalidation, location_code: "GB") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -886,14 +886,14 @@ RSpec.describe Invalidation, type: :model do
     end
 
     describe "#invalidate!" do
-      let!(:petition) { FactoryGirl.create(:open_petition) }
-      let!(:signature_1) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
-      let!(:signature_2) { FactoryGirl.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
-      let!(:signature_3) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
-      let!(:signature_4) { FactoryGirl.create(:validated_signature, ip_address: "192.168.1.2", petition: petition) }
-      let!(:signature_5) { FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
+      let!(:petition) { FactoryBot.create(:open_petition) }
+      let!(:signature_1) { FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
+      let!(:signature_2) { FactoryBot.create(:validated_signature, ip_address: "192.168.1.1", petition: petition) }
+      let!(:signature_3) { FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
+      let!(:signature_4) { FactoryBot.create(:validated_signature, ip_address: "192.168.1.2", petition: petition) }
+      let!(:signature_5) { FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition) }
 
-      subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1") }
+      subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
 
       it "sets the matching_count" do
         expect {
@@ -941,7 +941,7 @@ RSpec.describe Invalidation, type: :model do
       end
 
       context "when the invalidation has already completed processing" do
-        subject { FactoryGirl.create(:invalidation, ip_address: "10.0.1.1", completed_at: Time.current) }
+        subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1", completed_at: Time.current) }
 
         it "returns false" do
           expect(subject.invalidate!).to be_falsey
@@ -965,7 +965,7 @@ RSpec.describe Invalidation, type: :model do
       context "when cancelled during processing" do
         before do
           200.times do
-            FactoryGirl.create(:validated_signature, ip_address: "10.0.1.1", petition: petition)
+            FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", petition: petition)
           end
         end
 

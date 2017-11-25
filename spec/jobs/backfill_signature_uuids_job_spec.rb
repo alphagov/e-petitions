@@ -4,7 +4,7 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
   let(:relation) { double(:relation) }
 
   context "when the uuid column is nil" do
-    let(:signature) { FactoryGirl.create(:signature, email: "alice@example.com") }
+    let(:signature) { FactoryBot.create(:signature, email: "alice@example.com") }
     let(:uuid) { "6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6" }
 
     before do
@@ -22,7 +22,7 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
   end
 
   context "when the uuid column is not nil" do
-    let(:signature) { FactoryGirl.create(:signature, email: "bob@example.com") }
+    let(:signature) { FactoryBot.create(:signature, email: "bob@example.com") }
     let(:uuid) { "6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6" }
 
     before do

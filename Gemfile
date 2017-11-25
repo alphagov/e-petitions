@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.10'
 
 gem 'rake'
 gem 'pg'
@@ -37,8 +37,8 @@ gem 'maxminddb'
 # Two AWS libraries:
 #   - aws-sdk v2 for CodeDeploy, which neither Fog nor aws-sdk v1 support
 #   - fog for image uploads, as Paperclip doesn't support aws-sdk v2
-gem 'aws-sdk'
-gem 'fog-aws'
+gem 'aws-sdk', '~> 2.0'
+gem 'fog-aws', '~> 1.0'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -50,11 +50,12 @@ group :test do
   gem 'nokogiri'
   gem 'shoulda-matchers'
   gem 'pickle'
+  gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
   gem 'capybara'
   gem 'poltergeist'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'

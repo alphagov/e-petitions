@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe PetitionCountJob, type: :job do
   context "when there are no petitions with invalid signature counts" do
-    let!(:petition) { FactoryGirl.create(:open_petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
 
     it "doesn't update the signature count" do
       expect{
@@ -30,7 +30,7 @@ RSpec.describe PetitionCountJob, type: :job do
   end
 
   context "when there are petitions with invalid signature counts" do
-    let!(:petition) { FactoryGirl.create(:open_petition, signature_count: 100) }
+    let!(:petition) { FactoryBot.create(:open_petition, signature_count: 100) }
     let(:exception_class) { PetitionCountJob::InvalidSignatureCounts }
 
     it "updates the signature count" do

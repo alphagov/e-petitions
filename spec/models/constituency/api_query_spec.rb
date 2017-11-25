@@ -8,7 +8,7 @@ RSpec.describe Constituency::ApiQuery, type: :model do
       mp_date = mp_date ? mp_date : "2015-05-07T00:00:00+01:00"
     end
 
-    FactoryGirl.attributes_for(:constituency, {
+    FactoryBot.attributes_for(:constituency, {
       name: name, external_id: external_id, ons_code: ons_code,
       mp_id: mp_id, mp_name: mp_name, mp_date: mp_date
     })

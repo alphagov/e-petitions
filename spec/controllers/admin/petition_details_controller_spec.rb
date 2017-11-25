@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true do
 
-  let(:petition) { FactoryGirl.create(:sponsored_petition) }
+  let(:petition) { FactoryBot.create(:sponsored_petition) }
 
   describe 'not logged in' do
     describe 'GET #show' do
@@ -21,7 +21,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
   end
 
   context 'logged in as moderator user but need to reset password' do
-    let(:user) { FactoryGirl.create(:moderator_user, force_password_reset: true) }
+    let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
     describe 'GET #show' do
@@ -40,7 +40,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
   end
 
   describe 'logged in as moderator user' do
-    let(:user) { FactoryGirl.create(:moderator_user) }
+    let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
     describe 'GET #show' do
@@ -88,7 +88,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
     end
 
     describe 'PATCH #update' do
-      let(:petition) { FactoryGirl.create(:sponsored_petition, action: 'Old action', background: 'Old background', additional_details: 'Old additional details') }
+      let(:petition) { FactoryBot.create(:sponsored_petition, action: 'Old action', background: 'Old background', additional_details: 'Old additional details') }
 
       def do_update
         patch :update,

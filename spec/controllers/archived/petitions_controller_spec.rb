@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Archived::PetitionsController, type: :controller do
-  let!(:parliament) { FactoryGirl.create(:parliament, :archived) }
+  let!(:parliament) { FactoryBot.create(:parliament, :archived) }
 
   describe "GET #index" do
     context "when no state param is provided" do
@@ -45,7 +45,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
 
   describe "GET #show" do
     context "when the petition is visible" do
-      let!(:petition) { FactoryGirl.create(:archived_petition) }
+      let!(:petition) { FactoryBot.create(:archived_petition) }
 
       it "assigns the given petition" do
         get :show, id: petition.id
@@ -54,7 +54,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
     end
 
     context "when the petition is hidden" do
-      let!(:petition) { FactoryGirl.create(:archived_petition, :hidden) }
+      let!(:petition) { FactoryBot.create(:archived_petition, :hidden) }
 
       it "raises a ActiveRecord::RecordNotFound error" do
         expect {
@@ -64,7 +64,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
     end
 
     context "when the petition is stopped" do
-      let!(:petition) { FactoryGirl.create(:archived_petition, :stopped) }
+      let!(:petition) { FactoryBot.create(:archived_petition, :stopped) }
 
       it "raises a ActiveRecord::RecordNotFound error" do
         expect {
@@ -74,8 +74,8 @@ RSpec.describe Archived::PetitionsController, type: :controller do
     end
 
     context "when the petition is archived but the parliament is not" do
-      let!(:parliament) { FactoryGirl.create(:parliament) }
-      let!(:petition) { FactoryGirl.create(:archived_petition, parliament: parliament) }
+      let!(:parliament) { FactoryBot.create(:parliament) }
+      let!(:petition) { FactoryBot.create(:archived_petition, parliament: parliament) }
 
       it "redirects to the current petition" do
         get :show, id: petition.id

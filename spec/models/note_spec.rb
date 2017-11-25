@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Note, type: :model do
   it "has a valid factory" do
-    expect(FactoryGirl.build(:note)).to be_valid
+    expect(FactoryBot.build(:note)).to be_valid
   end
 
   describe "associations" do
@@ -14,7 +14,7 @@ RSpec.describe Note, type: :model do
   end
 
   describe "validations" do
-    subject { FactoryGirl.build(:note) }
+    subject { FactoryBot.build(:note) }
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.not_to validate_presence_of(:details) }

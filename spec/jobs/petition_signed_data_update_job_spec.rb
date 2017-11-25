@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe PetitionSignedDataUpdateJob, type: :job do
-  let(:signature) { FactoryGirl.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+  let(:signature) { FactoryBot.create(:pending_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
   def running_the_job
     perform_enqueued_jobs {
@@ -11,7 +11,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
   alias_method :run_the_job, :running_the_job
 
   context 'when the signature has gone away' do
-    let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
     before do
       Signature.delete(signature)
@@ -28,7 +28,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
   end
 
   context "when the petition is open" do
-    let(:petition) { FactoryGirl.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
     it "increments the petition count" do
       expect{ running_the_job }.to change{ petition.reload.signature_count }.by(1)
@@ -56,7 +56,7 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
   end
 
   context "when the petition is pending" do
-    let(:petition) { FactoryGirl.create(:pending_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+    let(:petition) { FactoryBot.create(:pending_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
 
     it "increments the petition count" do
       expect{ running_the_job }.to change{ petition.reload.signature_count }.by(1)
@@ -83,8 +83,8 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
     end
 
     context 'and the signature is a sponsor' do
-      let(:petition) { FactoryGirl.create(:petition) }
-      let(:signature) { FactoryGirl.create(:sponsor, :pending, petition: petition) }
+      let(:petition) { FactoryBot.create(:petition) }
+      let(:signature) { FactoryBot.create(:sponsor, :pending, petition: petition) }
 
       it "sets petition state to validated" do
         expect {

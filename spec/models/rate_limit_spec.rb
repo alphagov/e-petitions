@@ -86,8 +86,8 @@ RSpec.describe RateLimit, type: :model do
   end
 
   describe "#exceeded?" do
-    let(:petition) { FactoryGirl.create(:open_petition) }
-    let(:signature) { FactoryGirl.create(:pending_signature, petition: petition) }
+    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
     let(:allowed_domains) { "" }
     let(:allowed_ips) { "" }

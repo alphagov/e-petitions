@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Admin::ProfileController, type: :controller, admin: true do
   before :each do
-    @user = FactoryGirl.create(:sysadmin_user, :password => 'Letmein1!',
+    @user = FactoryBot.create(:sysadmin_user, :password => 'Letmein1!',
                            :password_confirmation => 'Letmein1!', :force_password_reset => true)
   end
 

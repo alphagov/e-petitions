@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe RefreshConstituenciesJob, type: :job do
   context "when Parliament has dissolved" do
     let(:constituency_1) do
-      FactoryGirl.create(:constituency, :coventry_north_east)
+      FactoryBot.create(:constituency, :coventry_north_east)
     end
 
     let(:constituency_2) do
-      FactoryGirl.create(:constituency, :sheffield_brightside_and_hillsborough)
+      FactoryBot.create(:constituency, :sheffield_brightside_and_hillsborough)
     end
 
     before do

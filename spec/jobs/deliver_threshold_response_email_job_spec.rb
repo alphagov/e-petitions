@@ -5,8 +5,8 @@ RSpec.describe DeliverThresholdResponseEmailJob, type: :job do
   let(:requested_at) { Time.current.change(usec: 0) }
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
-  let(:petition) { FactoryGirl.create(:responded_petition) }
-  let(:signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+  let(:petition) { FactoryBot.create(:responded_petition) }
+  let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
   let(:timestamp_name) { 'government_response' }
 
   let :arguments do

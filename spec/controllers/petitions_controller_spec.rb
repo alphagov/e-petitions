@@ -53,7 +53,7 @@ RSpec.describe PetitionsController, type: :controller do
     end
 
     let(:constituency) do
-      FactoryGirl.create(:constituency, external_id: "54321", name: "North Creatorshire")
+      FactoryBot.create(:constituency, external_id: "54321", name: "North Creatorshire")
     end
 
     before do
@@ -307,11 +307,11 @@ RSpec.describe PetitionsController, type: :controller do
     end
 
     context "when the petition is archived" do
-      let!(:petition) { FactoryGirl.create(:closed_petition, archived_at: 1.hour.ago) }
-      let!(:archived_petition) { FactoryGirl.create(:archived_petition, id: petition.id, parliament: parliament) }
+      let!(:petition) { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
+      let!(:archived_petition) { FactoryBot.create(:archived_petition, id: petition.id, parliament: parliament) }
 
       context "and the parliament is not archived" do
-        let!(:parliament) { FactoryGirl.create(:parliament, archived_at: nil) }
+        let!(:parliament) { FactoryBot.create(:parliament, archived_at: nil) }
 
         it "assigns the given petition" do
           get :show, id: petition.id
@@ -320,7 +320,7 @@ RSpec.describe PetitionsController, type: :controller do
       end
 
       context "and the parliament is archived" do
-        let(:parliament) { FactoryGirl.create(:parliament, archived_at: 1.hour.ago) }
+        let(:parliament) { FactoryBot.create(:parliament, archived_at: 1.hour.ago) }
 
         it "redirects to the archived petition page" do
           get :show, id: petition.id

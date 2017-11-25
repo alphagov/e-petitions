@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe PetitionMailer, type: :mailer do
   let :creator do
-    FactoryGirl.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
+    FactoryBot.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com")
   end
 
   let :petition do
-    FactoryGirl.create(:pending_petition,
+    FactoryBot.create(:pending_petition,
       creator: creator,
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
@@ -14,13 +14,13 @@ RSpec.describe PetitionMailer, type: :mailer do
     )
   end
 
-  let(:pending_signature) { FactoryGirl.create(:pending_signature, petition: petition) }
-  let(:validated_signature) { FactoryGirl.create(:validated_signature, petition: petition) }
+  let(:pending_signature) { FactoryBot.create(:pending_signature, petition: petition) }
+  let(:validated_signature) { FactoryBot.create(:validated_signature, petition: petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
 
   describe "notifying creator that moderation is delayed" do
     let! :petition do
-      FactoryGirl.create(:sponsored_petition,
+      FactoryBot.create(:sponsored_petition,
         creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
@@ -80,7 +80,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "notifying sponsor of publication" do
     let(:mail) { PetitionMailer.notify_sponsor_that_petition_is_published(sponsor) }
     let(:sponsor) do
-      FactoryGirl.create(:validated_signature,
+      FactoryBot.create(:validated_signature,
         name: "Laura Palmer",
         email: "laura@red-room.example.com",
         petition: petition
@@ -161,7 +161,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   describe "notifying sponsor of rejection" do
     let(:mail) { PetitionMailer.notify_sponsor_that_petition_was_rejected(sponsor) }
     let(:sponsor) do
-      FactoryGirl.create(:validated_signature,
+      FactoryBot.create(:validated_signature,
         name: "Laura Palmer",
         email: "laura@red-room.example.com",
         petition: petition
@@ -242,7 +242,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   describe "notifying creator of their sponsored petition being stopped" do
     let! :petition do
-      FactoryGirl.create(:sponsored_petition,
+      FactoryBot.create(:sponsored_petition,
         creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
@@ -273,7 +273,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   describe "notifying creator of their validated petition being stopped" do
     let! :petition do
-      FactoryGirl.create(:validated_petition,
+      FactoryBot.create(:validated_petition,
         creator: creator,
         action: "Allow organic vegetable vans to use red diesel",
         background: "Add vans to permitted users of red diesel",
@@ -392,7 +392,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       context "when the debate outcome is positive" do
         context "when the debate outcome is not filled out" do
           before do
-            FactoryGirl.create(:debate_outcome, petition: petition)
+            FactoryBot.create(:debate_outcome, petition: petition)
           end
 
           it_behaves_like "a debate outcome email"
@@ -401,7 +401,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           before do
-            FactoryGirl.create(:debate_outcome,
+            FactoryBot.create(:debate_outcome,
               debated_on: "2015-09-24",
               overview: "Discussion of the 2015 Christmas Adjournment",
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
@@ -431,7 +431,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       context "when the debate outcome is negative" do
         context "when the debate outcome is not filled out" do
           before do
-            FactoryGirl.create(:debate_outcome, debated: false, petition: petition)
+            FactoryBot.create(:debate_outcome, debated: false, petition: petition)
           end
 
           it_behaves_like "a debate outcome email"
@@ -440,7 +440,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           before do
-            FactoryGirl.create(:debate_outcome,
+            FactoryBot.create(:debate_outcome,
               debated: false,
               overview: "Discussion of the 2015 Christmas Adjournment",
               petition: petition
@@ -458,7 +458,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     context "when the signature is not the creator" do
-      let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
       subject(:mail) { described_class.notify_signer_of_debate_outcome(petition, signature) }
 
       shared_examples_for "a debate outcome email" do
@@ -512,7 +512,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       context "when the debate outcome is positive" do
         context "when the debate outcome is not filled out" do
           before do
-            FactoryGirl.create(:debate_outcome, petition: petition)
+            FactoryBot.create(:debate_outcome, petition: petition)
           end
 
           it_behaves_like "a debate outcome email"
@@ -521,7 +521,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           before do
-            FactoryGirl.create(:debate_outcome,
+            FactoryBot.create(:debate_outcome,
               debated_on: "2015-09-24",
               overview: "Discussion of the 2015 Christmas Adjournment",
               transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
@@ -551,7 +551,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       context "when the debate outcome is negative" do
         context "when the debate outcome is not filled out" do
           before do
-            FactoryGirl.create(:debate_outcome, debated: false, petition: petition)
+            FactoryBot.create(:debate_outcome, debated: false, petition: petition)
           end
 
           it_behaves_like "a debate outcome email"
@@ -560,7 +560,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
         context "when the debate outcome is filled out" do
           before do
-            FactoryGirl.create(:debate_outcome,
+            FactoryBot.create(:debate_outcome,
               debated: false,
               overview: "Discussion of the 2015 Christmas Adjournment",
               petition: petition
@@ -579,7 +579,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying signature of debate scheduled" do
-    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
 
     shared_examples_for "a debate scheduled email" do
       it "addresses the signatory by name" do
@@ -621,7 +621,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     context "when the signature is not the creator" do
-      let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
       subject(:mail) { described_class.notify_signer_of_debate_scheduled(petition, signature) }
 
       it_behaves_like "a debate scheduled email"
@@ -637,8 +637,8 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "emailing a signature" do
-    let(:petition) { FactoryGirl.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
-    let(:email) { FactoryGirl.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
+    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:email) { FactoryBot.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
 
     shared_examples_for "a petition email" do
       it "has the correct subject" do
@@ -684,7 +684,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     context "when the signature is not the creator" do
-      let(:signature) { FactoryGirl.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, name: "Laura Palmer", email: "laura@red-room.example.com") }
       subject(:mail) { described_class.email_signer(petition, signature, email) }
 
       it_behaves_like "a petition email"

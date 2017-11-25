@@ -1,13 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe EmailThresholdReminderJob, type: :job do
-  let!(:moderator_1) { FactoryGirl.create(:moderator_user, email: "alice@parliament.uk") }
-  let!(:moderator_2) { FactoryGirl.create(:moderator_user, email: "bob@parliament.uk") }
+  let!(:moderator_1) { FactoryBot.create(:moderator_user, email: "alice@parliament.uk") }
+  let!(:moderator_2) { FactoryBot.create(:moderator_user, email: "bob@parliament.uk") }
 
-  let!(:petition_1) { FactoryGirl.create(:open_petition, signature_count: 11) }
-  let!(:petition_2) { FactoryGirl.create(:open_petition, signature_count: 10) }
-  let!(:petition_3) { FactoryGirl.create(:open_petition, signature_count: 9) }
-  let!(:petition_4) { FactoryGirl.create(:open_petition, notified_by_email: true) }
+  let!(:petition_1) { FactoryBot.create(:open_petition, signature_count: 11) }
+  let!(:petition_2) { FactoryBot.create(:open_petition, signature_count: 10) }
+  let!(:petition_3) { FactoryBot.create(:open_petition, signature_count: 9) }
+  let!(:petition_4) { FactoryBot.create(:open_petition, notified_by_email: true) }
 
   let(:deliveries) { ActionMailer::Base.deliveries }
   let(:email) { deliveries.last }
