@@ -106,15 +106,12 @@ Rails.application.configure do
   # any url that starts with /attachments/ to the S3 bucket
 
   config.paperclip_defaults = {
-    storage: :fog,
-    fog_directory: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET'),
-    fog_credentials: {
-      use_iam_profile: true,
-      provider: 'AWS',
-      region: 'eu-west-1',
-      scheme: 'https'
+    storage: :s3,
+    s3_region: 'eu-west-1',
+    s3_credentials: {
+      bucket: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET')
     },
-    # Proxied to S3 via the webserver
-    fog_host: '/attachments'
+    path: '/:class/:attachment/:id_partition/:style/:filename',
+    url: ':s3_attachment_url'
   }
 end
