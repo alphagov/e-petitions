@@ -1,4 +1,4 @@
-class AddParliamentIdToArchivedPetitions < ActiveRecord::Migration
+class AddParliamentIdToArchivedPetitions < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
   class ArchivedPetition < ActiveRecord::Base; end
 

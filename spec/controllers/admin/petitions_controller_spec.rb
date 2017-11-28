@@ -11,7 +11,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/:id" do
       it "redirects to the login page" do
-        get :show, id: "100000"
+        get :show, params: { id: "100000" }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -30,7 +30,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/:id" do
       it "redirects to the edit profile page" do
-        get :show, id: "100000"
+        get :show, params: { id: "100000" }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -54,7 +54,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       context "when making a CSV request" do
-        before { get :index, format: "csv" }
+        before { get :index, format: :csv }
 
         it "returns a CSV file" do
           expect(response.content_type).to eq("text/csv")
@@ -75,7 +75,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       end
 
       context "when searching by id" do
-        before { get :index, q: "100000" }
+        before { get :index, params: { q: "100000" } }
 
         it "redirects to the admin petition page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/100000")
@@ -85,7 +85,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/:id" do
       context "when the petition doesn't exist" do
-        before { get :show, id: "999999" }
+        before { get :show, params: { id: "999999" } }
 
         it "redirects to the admin dashboard page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -99,7 +99,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       context "when the petition exists" do
         let!(:petition) { FactoryBot.create(:petition) }
 
-        before { get :show, id: petition.to_param }
+        before { get :show, params: { id: petition.to_param } }
 
         it "returns 200 OK" do
           expect(response).to have_http_status(:ok)
@@ -113,7 +113,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
 
     describe "POST /admin/petitions/:id/resend" do
       context "when the petition doesn't exist" do
-        before { post :resend, id: "999999" }
+        before { post :resend, params: { id: "999999" } }
 
         it "redirects to the admin dashboard page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -127,7 +127,7 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
       context "when the petition exists" do
         let!(:petition) { FactoryBot.create(:petition, action: "Do Stuff!", creator_attributes: { email: "bob@example.com" }) }
 
-        before { perform_enqueued_jobs { post :resend, id: petition.to_param } }
+        before { perform_enqueued_jobs { post :resend, params: { id: petition.to_param } } }
 
         it "redirects to the admin petition page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.to_param}")

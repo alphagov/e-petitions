@@ -1,4 +1,4 @@
-class AddPetitionStatusColumnsToParliament < ActiveRecord::Migration
+class AddPetitionStatusColumnsToParliament < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base
     class << self
       def current

@@ -1,4 +1,6 @@
 require File.expand_path('../boot', __FILE__)
+require File.expand_path('../../lib/cloud_front_remote_ip', __FILE__)
+require File.expand_path('../../lib/quiet_logger', __FILE__)
 
 require 'rails/all'
 
@@ -22,9 +24,6 @@ module Epets
 
     # Use SQL for the schema format
     config.active_record.schema_format = :sql
-
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
 
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {
@@ -51,11 +50,11 @@ module Epets
 
     # Replace ActionDispatch::RemoteIp with our custom middleware
     # to remove the CloudFront ip address from X-Forwarded-For
-    config.middleware.insert_before ActionDispatch::RemoteIp, "CloudFrontRemoteIp"
-    config.middleware.delete "ActionDispatch::RemoteIp"
+    config.middleware.insert_before ActionDispatch::RemoteIp, CloudFrontRemoteIp
+    config.middleware.delete ActionDispatch::RemoteIp
 
     # Don't log certain requests that spam the log files
-    config.middleware.insert_before Rails::Rack::Logger, "QuietLogger", paths: [
+    config.middleware.insert_before Rails::Rack::Logger, QuietLogger, paths: [
       %r[\A/petitions/\d+/count.json\z], %q[/admin/status.json], %q[/ping]
     ]
   end

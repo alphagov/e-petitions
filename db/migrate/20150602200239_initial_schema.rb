@@ -1,4 +1,4 @@
-class InitialSchema < ActiveRecord::Migration
+class InitialSchema < ActiveRecord::Migration[4.2]
   def change
     create_table :admin_users do |t|
       t.string   :email, limit: 255, null: false

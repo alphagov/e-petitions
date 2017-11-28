@@ -1,4 +1,4 @@
-class AddDomainIndexToArchivedSignatures < ActiveRecord::Migration
+class AddDomainIndexToArchivedSignatures < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

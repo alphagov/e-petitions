@@ -8,7 +8,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -28,7 +28,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -58,7 +58,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       let(:parliament) { Parliament.last }
 
       context "when clicking the Save button" do
-        before { patch :update, parliament: params, commit: "Save" }
+        before { patch :update, params: { parliament: params, commit: "Save" } }
 
         context "and the params are invalid" do
           let :params do
@@ -104,7 +104,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the 'Send emails' button" do
-        before { patch :update, parliament: params, send_emails: "Send emails" }
+        before { patch :update, params: { parliament: params, send_emails: "Send emails" } }
 
         context "and the params are invalid" do
           let :params do
@@ -183,7 +183,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the Schedule Closure button" do
-        before { patch :update, parliament: params, schedule_closure: "Schedule Closure" }
+        before { patch :update, params: { parliament: params, schedule_closure: "Schedule Closure" } }
 
         context "and the params are invalid" do
           let :params do
@@ -282,7 +282,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       end
 
       context "when clicking the Archive Petitions button" do
-        before { patch :update, parliament: params, archive_petitions: "Archive Petitions" }
+        before { patch :update, params: { parliament: params, archive_petitions: "Archive Petitions" } }
 
         context "and the params are invalid" do
           let :params do
@@ -378,7 +378,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
       context "when clicking the Archive Parliament button" do
         before { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
         before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }
-        before { patch :update, parliament: params, archive_parliament: "Archive Parliament" }
+        before { patch :update, params: { parliament: params, archive_parliament: "Archive Parliament" } }
 
         context "and the params are invalid" do
           let :params do

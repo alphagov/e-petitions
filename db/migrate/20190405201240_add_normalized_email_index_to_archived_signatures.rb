@@ -1,4 +1,4 @@
-class AddNormalizedEmailIndexToArchivedSignatures < ActiveRecord::Migration
+class AddNormalizedEmailIndexToArchivedSignatures < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

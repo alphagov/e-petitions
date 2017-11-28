@@ -38,7 +38,7 @@ module Archived
     attr_readonly :sponsor, :creator
 
     before_destroy do
-      !creator?
+      throw :abort if creator?
     end
 
     class << self

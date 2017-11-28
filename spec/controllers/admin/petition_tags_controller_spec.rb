@@ -6,14 +6,14 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
   context "when not logged in" do
     describe "GET /admin/petitions/:petition_id/tags" do
       it "redirects to the login page" do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
 
     describe "PATCH /admin/petitions/:petition_id/tags" do
       it "redirects to the login page" do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -25,14 +25,14 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/:petition_id/tags" do
       it "redirects to the edit profile page" do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe "PATCH /admin/petitions/:petition_id/tags" do
       it "redirects to the edit profile page" do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -43,7 +43,7 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
     before { login_as(user) }
 
     describe "GET /admin/petitions/:petition_id/tags" do
-      before { get :show, petition_id: petition.id }
+      before { get :show, params: { petition_id: petition.id } }
 
       it "returns 200 OK" do
         expect(response).to have_http_status(:ok)
@@ -55,7 +55,7 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
     end
 
     describe "PATCH /admin/petitions/:petition_id/tags" do
-      before { patch :update, petition_id: petition.id, petition: params }
+      before { patch :update, params: { petition_id: petition.id, petition: params } }
 
       context "and the params are invalid" do
         let :params do

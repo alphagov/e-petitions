@@ -1,4 +1,4 @@
-class NullifyPreviousParliamentPetitionDuration < ActiveRecord::Migration
+class NullifyPreviousParliamentPetitionDuration < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
 
   def up

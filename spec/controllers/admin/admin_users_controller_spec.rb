@@ -84,7 +84,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
 
     describe "POST 'create'" do
       def do_create
-        post :create, :admin_user => admin_user_attributes
+        post :create, params: { admin_user: admin_user_attributes }
       end
 
       describe "with valid params" do
@@ -135,7 +135,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
       let(:edit_user) { FactoryBot.create(:moderator_user) }
 
       def do_get
-        get :edit, :id => edit_user.to_param
+        get :edit, params: { id: edit_user.to_param }
       end
 
       it "should be successful" do
@@ -154,9 +154,10 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
       let(:edit_user) { FactoryBot.create(:moderator_user, :email => "admin@example.com", :failed_login_count => 5) }
 
       def do_update
-        patch :update,
-          :id => edit_user.to_param,
-          :admin_user => admin_user_attributes
+        patch :update, params: {
+          id: edit_user.to_param,
+          admin_user: admin_user_attributes
+        }
       end
 
       describe "with valid params" do
@@ -201,13 +202,13 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
       let(:delete_user) { FactoryBot.create(:moderator_user, :email => 'admin@example.com') }
 
       it "deletes the requested user" do
-        delete :destroy, :id => delete_user.to_param
+        delete :destroy, params: { id: delete_user.to_param }
         expect(AdminUser.exists?(delete_user.id)).to be_falsey
         expect(response).to redirect_to(:action => :index)
       end
 
       it "will not let you delete yourself" do
-        delete :destroy, :id => user.to_param
+        delete :destroy, params: { id: user.to_param }
         expect(AdminUser.exists?(user.id)).to be_truthy
         expect(response).to redirect_to(:action => :index)
         expect(flash[:alert]).to eq "You are not allowed to delete yourself!"

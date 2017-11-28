@@ -1,4 +1,4 @@
-class AddThresholdForFormEntryToRateLimits < ActiveRecord::Migration
+class AddThresholdForFormEntryToRateLimits < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:rate_limits, :threshold_for_form_entry)
       add_column :rate_limits, :threshold_for_form_entry, :integer, null: false, default: 0

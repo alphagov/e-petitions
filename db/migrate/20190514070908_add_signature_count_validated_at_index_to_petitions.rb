@@ -1,4 +1,4 @@
-class AddSignatureCountValidatedAtIndexToPetitions < ActiveRecord::Migration
+class AddSignatureCountValidatedAtIndexToPetitions < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

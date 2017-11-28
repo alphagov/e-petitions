@@ -15,7 +15,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -42,7 +42,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -81,7 +81,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
     end
 
     describe "POST /admin/invalidations" do
-      before { post :create, invalidation: params }
+      before { post :create, params: { invalidation: params } }
 
       context "with invalid params" do
         let :params do
@@ -113,7 +113,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
     end
 
     describe "GET /admin/invalidations/:id/edit" do
-      before { get :edit, id: invalidation.id }
+      before { get :edit, params: { id: invalidation.id } }
 
       context "when the invalidation is still pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
@@ -141,7 +141,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
     end
 
     describe "PATCH /admin/invalidations/:id" do
-      before { patch :update, id: invalidation.id, invalidation: params }
+      before { patch :update, params: { id: invalidation.id, invalidation: params } }
 
       context "when the invalidation is still pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
@@ -196,7 +196,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is still pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
-        before { delete :destroy, id: invalidation.id }
+        before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -210,7 +210,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is cancelled, but not started" do
         let(:invalidation) { FactoryBot.create(:invalidation, :cancelled, email: "user@example.com") }
 
-        before { delete :destroy, id: invalidation.id }
+        before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -224,7 +224,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is not pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
-        before { delete :destroy, id: invalidation.id }
+        before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -242,7 +242,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before do
           expect(Invalidation).to receive(:find).with(id).and_return(invalidation)
           expect(invalidation).to receive(:destroy).and_return(false)
-          delete :destroy, id: invalidation.id
+          delete :destroy, params: { id: invalidation.id }
         end
 
         it "redirects to the index page" do
@@ -259,7 +259,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation has not completed" do
         let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
-        before { post :cancel, id: invalidation.id }
+        before { post :cancel, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -273,7 +273,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation has completed" do
         let(:invalidation) { FactoryBot.create(:invalidation, :completed, email: "user@example.com") }
 
-        before { post :cancel, id: invalidation.id }
+        before { post :cancel, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -291,7 +291,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before do
           expect(Invalidation).to receive(:find).with(id).and_return(invalidation)
           expect(invalidation).to receive(:cancel!).and_return(false)
-          post :cancel, id: invalidation.id
+          post :cancel, params: { id: invalidation.id }
         end
 
         it "redirects to the index page" do
@@ -308,7 +308,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is still pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
-        before { post :count, id: invalidation.id }
+        before { post :count, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -322,7 +322,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is no longer pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
-        before { post :count, id: invalidation.id }
+        before { post :count, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -340,7 +340,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before do
           expect(Invalidation).to receive(:find).with(id).and_return(invalidation)
           expect(invalidation).to receive(:count!).and_return(false)
-          post :count, id: invalidation.id
+          post :count, params: { id: invalidation.id }
         end
 
         it "redirects to the index page" do
@@ -357,7 +357,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is still pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, email: "user@example.com") }
 
-        before { post :start, id: invalidation.id }
+        before { post :start, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -371,7 +371,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
       context "when the invalidation is no longer pending" do
         let(:invalidation) { FactoryBot.create(:invalidation, :started, email: "user@example.com") }
 
-        before { post :start, id: invalidation.id }
+        before { post :start, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/invalidations")
@@ -389,7 +389,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before do
           expect(Invalidation).to receive(:find).with(id).and_return(invalidation)
           expect(invalidation).to receive(:start!).and_return(false)
-          post :start, id: invalidation.id
+          post :start, params: { id: invalidation.id }
         end
 
         it "redirects to the index page" do

@@ -63,7 +63,17 @@ module Browseable
     delegate :filter_definitions, to: :klass
 
     def initialize(klass, params)
-      @klass, @params = klass, params
+      @klass = klass
+
+      @params = \
+        case params
+        when ActionController::Parameters
+          params.to_unsafe_hash
+        when Hash
+          params
+        else
+          raise ArgumentError, "Expected params to be a Hash or a ActionController::Parameters but was a #{params.class}"
+        end
     end
 
     def to_hash

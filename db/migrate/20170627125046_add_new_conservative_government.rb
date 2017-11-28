@@ -1,4 +1,4 @@
-class AddNewConservativeGovernment < ActiveRecord::Migration
+class AddNewConservativeGovernment < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
 
   def up

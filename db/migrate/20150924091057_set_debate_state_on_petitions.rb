@@ -1,4 +1,4 @@
-class SetDebateStateOnPetitions < ActiveRecord::Migration
+class SetDebateStateOnPetitions < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       UPDATE petitions SET debate_state = 'awaiting'

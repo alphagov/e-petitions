@@ -1,4 +1,4 @@
-class CreateTrendingIps < ActiveRecord::Migration
+class CreateTrendingIps < ActiveRecord::Migration[4.2]
   def change
     create_table :trending_ips do |t|
       t.belongs_to :petition, index: true, foreign_key: true

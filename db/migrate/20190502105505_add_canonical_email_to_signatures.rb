@@ -1,4 +1,4 @@
-class AddCanonicalEmailToSignatures < ActiveRecord::Migration
+class AddCanonicalEmailToSignatures < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:signatures, :canonical_email)
       add_column :signatures, :canonical_email, :string

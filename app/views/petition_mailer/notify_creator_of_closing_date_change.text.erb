@@ -8,7 +8,7 @@ You recently started the <%= "petition".pluralize(@count) %>:
 
 <% end %>
 <% if @remaining > 0 %>
-Plus another <%= pluralize(@remaining, "petition") %>
+Plus another <%= pluralize(@remaining, "petition", locale: :en) %>
 
 <% end %>
 Because of the General Election, the closing date for your <%= "petition".pluralize(@count) %> has changed. All petitions now have to close at <%= @closing_time %> on <%= @closing_date %>. This is because Parliament will be dissolved, which means all parliamentary business – including petitions – will come to an end until after the election. This means the petitions site will be closed and people will not be able to start or sign petitions.

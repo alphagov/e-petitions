@@ -1,4 +1,4 @@
-class AddLastSignedAtToJournals < ActiveRecord::Migration
+class AddLastSignedAtToJournals < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:constituency_petition_journals, :last_signed_at)
       add_column :constituency_petition_journals, :last_signed_at, :datetime

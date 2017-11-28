@@ -7,14 +7,14 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
   describe 'not logged in' do
     describe 'GET /show' do
       it 'redirects to the login page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
 
     describe 'GET /show' do
       it 'redirects to edit profile page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -46,12 +46,12 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
     describe 'GET /show' do
       shared_examples_for 'viewing scheduled debate date' do
         it 'fetches the requested petition' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'responds successfully and renders the petitions/show template' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(response).to be_success
           expect(response).to render_template('petitions/show')
         end
@@ -102,7 +102,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
             save_and_email: "Email"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'scheduling a debate date for a petition' do
@@ -276,7 +276,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
             save: "Save"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'scheduling a debate date for a petition' do

@@ -7,14 +7,14 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
   describe 'not logged in' do
     describe 'GET /show' do
       it 'redirects to the login page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
 
     describe 'GET /show' do
       it 'redirects to edit profile page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -46,13 +46,13 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
     describe 'GET /show' do
       describe 'for an open petition' do
         it 'fetches the requested petition' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         context 'that does not already have a debate outcome' do
           it 'exposes an new unsaved debate_outcome for the requested petition' do
-            get :show, petition_id: petition.id
+            get :show, params: { petition_id: petition.id }
             expect(assigns(:debate_outcome)).to be_present
             expect(assigns(:debate_outcome)).not_to be_persisted
             expect(assigns(:debate_outcome).petition).to eq petition
@@ -62,14 +62,14 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
         context 'that already has a debate outcome' do
           let!(:debate_outcome) { FactoryBot.create(:archived_debate_outcome, petition: petition) }
           it 'exposes the existing debate_outcome on the requested petition' do
-            get :show, petition_id: petition.id
+            get :show, params: { petition_id: petition.id }
             expect(assigns(:debate_outcome)).to be_present
             expect(assigns(:debate_outcome)).to eq debate_outcome
           end
         end
 
         it 'responds successfully and renders the petitions/show template' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(response).to be_success
           expect(response).to render_template('petitions/show')
         end
@@ -78,7 +78,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
       shared_examples_for 'trying to view a debate outcome for a petition in the wrong state' do
         it 'raises a 404 error' do
           expect {
-            get :show, petition_id: petition.id
+            get :show, params: { petition_id: petition.id }
           }.to raise_error ActiveRecord::RecordNotFound
         end
       end
@@ -115,7 +115,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
             save_and_email: "Email"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'for a published petition' do
@@ -313,7 +313,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
             save: "Save"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -459,7 +459,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
               debated: false
             }
 
-            patch :update, petition_id: petition.id, archived_debate_outcome: outcome_attributes, save: "Save"
+            patch :update, params: { petition_id: petition.id, archived_debate_outcome: outcome_attributes, save: "Save" }
             expect(petition.debate_outcome.overview).to eq("overview 1")
 
             allow(petition).to receive(:debate_outcome).and_return(nil, petition.debate_outcome)
@@ -470,7 +470,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
               debated: false
             }
 
-            patch :update, petition_id: petition.id, archived_debate_outcome: outcome_attributes, save: "Save"
+            patch :update, params: { petition_id: petition.id, archived_debate_outcome: outcome_attributes, save: "Save" }
             expect(petition.debate_outcome(true).overview).to eq("overview 2")
           }.not_to raise_error
         end

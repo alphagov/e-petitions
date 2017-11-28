@@ -628,7 +628,7 @@ class Petition < ActiveRecord::Base
     begin
       build_rejection(attributes) && rejection.save
     rescue ActiveRecord::RecordNotUnique => e
-      rejection(true).update(attributes)
+      reload_rejection.update(attributes)
     end
   end
 

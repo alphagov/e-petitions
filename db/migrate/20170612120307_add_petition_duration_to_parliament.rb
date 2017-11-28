@@ -1,4 +1,4 @@
-class AddPetitionDurationToParliament < ActiveRecord::Migration
+class AddPetitionDurationToParliament < ActiveRecord::Migration[4.2]
   class Parliament < ActiveRecord::Base; end
 
   def up

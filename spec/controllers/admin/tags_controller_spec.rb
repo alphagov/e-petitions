@@ -12,7 +12,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -36,7 +36,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -75,7 +75,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     end
 
     describe "POST /admin/tags" do
-      before { post :create, tag: params }
+      before { post :create, params: { tag: params } }
 
       context "with invalid params" do
         let :params do
@@ -109,7 +109,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     describe "GET /admin/tags/:id/edit" do
       let(:tag) { FactoryBot.create(:tag) }
 
-      before { get :edit, id: tag.id }
+      before { get :edit, params: { id: tag.id } }
 
       it "returns 200 OK" do
         expect(response).to have_http_status(:ok)
@@ -123,7 +123,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     describe "PATCH /admin/tags/:id" do
       let(:tag) { FactoryBot.create(:tag) }
 
-      before { patch :update, id: tag.id, tag: params }
+      before { patch :update, params: { id: tag.id, tag: params } }
 
       context "and the params are invalid" do
         let :params do
@@ -157,7 +157,7 @@ RSpec.describe Admin::TagsController, type: :controller, admin: true do
     describe "DELETE /admin/tags/:id" do
       let(:tag) { FactoryBot.create(:tag) }
 
-      before { delete :destroy, id: tag.id }
+      before { delete :destroy, params: { id: tag.id } }
 
       it "redirects to the index page" do
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/tags")

@@ -1,4 +1,4 @@
-class InsertConstituencies < ActiveRecord::Migration
+class InsertConstituencies < ActiveRecord::Migration[4.2]
   def up
     constituency_ids = ConstituencyPetitionJournal.distinct.pluck(:constituency_id)
 

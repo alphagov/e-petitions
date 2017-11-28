@@ -18,7 +18,7 @@ RSpec.describe Archived::SignaturesController, type: :controller do
       end
 
       it "renders the action template" do
-        get :unsubscribe, id: "1", token: "token"
+        get :unsubscribe, params: { id: "1", token: "token" }
         expect(response).to render_template(:unsubscribe)
       end
     end
@@ -30,7 +30,7 @@ RSpec.describe Archived::SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound error" do
         expect {
-          get :unsubscribe, id: "1", token: "token"
+          get :unsubscribe, params: { id: "1", token: "token" }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -42,7 +42,7 @@ RSpec.describe Archived::SignaturesController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound error" do
         expect {
-          get :unsubscribe, id: "1", token: "token"
+          get :unsubscribe, params: { id: "1", token: "token" }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

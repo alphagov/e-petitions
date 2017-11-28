@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="column-third actions-right">
-      <%= link_to "Download CSV", url_for(params.merge(format: 'csv')) %>
+      <%= link_to "Download CSV", admin_archived_petitions_path(params.permit(:state, :q, :match, tags: []).merge(format: "csv")) %>
     </div>
   </div>
 

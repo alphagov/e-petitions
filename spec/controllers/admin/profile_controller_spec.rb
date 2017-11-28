@@ -9,7 +9,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
   describe "not logged in" do
     describe "GET 'edit'" do
       it "should redirect to the login page" do
-        get 'edit', :id => @user.id
+        get 'edit', params: { id: @user.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -22,7 +22,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
 
     it "should render successfully" do
       expect(@user.has_to_change_password?).to be_truthy
-      get :edit, :id => 50000 # id does not matter
+      get :edit, params: { id: 50000 }
       expect(response).to be_success
     end
   end
@@ -34,7 +34,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
 
     describe "GET 'edit'" do
       it "should render successfully" do
-        get :edit, :id => 50000 # id does not matter
+        get :edit, params: { id: 50000 }
         expect(response).to be_success
       end
     end
@@ -46,7 +46,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
           password: new_password,
           password_confirmation: password_confirmation
         }
-        patch :update, id: 50000, admin_user: admin_user_attributes
+        patch :update, params: { id: 50000, admin_user: admin_user_attributes }
       end
 
       context "successful password change" do

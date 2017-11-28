@@ -1,4 +1,4 @@
-class AddEmailTimestampsToSignatures < ActiveRecord::Migration
+class AddEmailTimestampsToSignatures < ActiveRecord::Migration[4.2]
   def change
     add_column :signatures, :government_response_email_at, :datetime
     add_column :signatures, :debate_scheduled_email_at, :datetime

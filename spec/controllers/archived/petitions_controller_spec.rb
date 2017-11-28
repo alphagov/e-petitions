@@ -19,24 +19,24 @@ RSpec.describe Archived::PetitionsController, type: :controller do
     context "when a state param is provided" do
       context "but it is not a public facet from the locale file" do
         it "redirects to itself with state=all" do
-          get :index, state: "awaiting_monkey"
+          get :index, params: { state: "awaiting_monkey" }
           expect(response).to redirect_to "https://petition.parliament.uk/archived/petitions?state=all"
         end
 
         it "preserves other params when it redirects" do
-          get :index, q: "what is clocks", state: "awaiting_monkey"
+          get :index, params: { q: "what is clocks", state: "awaiting_monkey" }
           expect(response).to redirect_to "https://petition.parliament.uk/archived/petitions?q=what+is+clocks&state=all"
         end
       end
 
       context "and it is a public facet from the locale file" do
         it "is successful" do
-          get :index, state: "published"
+          get :index, params: { state: "published" }
           expect(response).to be_success
         end
 
         it "exposes a search scoped to the state param" do
-          get :index, state: "published"
+          get :index, params: { state: "published" }
           expect(assigns(:petitions).scope).to eq :published
         end
       end
@@ -48,7 +48,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
       let!(:petition) { FactoryBot.create(:archived_petition) }
 
       it "assigns the given petition" do
-        get :show, id: petition.id
+        get :show, params: { id: petition.id }
         expect(assigns(:petition)).to eq(petition)
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
 
       it "raises a ActiveRecord::RecordNotFound error" do
         expect {
-          get :show, id: petition.id
+          get :show, params: { id: petition.id }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -68,7 +68,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
 
       it "raises a ActiveRecord::RecordNotFound error" do
         expect {
-          get :show, id: petition.id
+          get :show, params: { id: petition.id }
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -78,7 +78,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
       let!(:petition) { FactoryBot.create(:archived_petition, parliament: parliament) }
 
       it "redirects to the current petition" do
-        get :show, id: petition.id
+        get :show, params: { id: petition.id }
         expect(response).to redirect_to "https://petition.parliament.uk/petitions/#{petition.id}"
       end
     end

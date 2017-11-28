@@ -8,35 +8,35 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
     describe 'GET /new' do
       it 'redirects to the login page' do
-        get :new, petition_id: petition.id
+        get :new, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'POST /' do
       it 'redirects to the login page' do
-        post :create, petition_id: petition.id
+        post :create, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'GET /:id/edit' do
       it 'redirects to the login page' do
-        get :edit, petition_id: petition.id, id: email.id
+        get :edit, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /:id' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id, id: email.id
+        patch :update, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'DELETE /:id' do
       it 'redirects to the login page' do
-        patch :destroy, petition_id: petition.id, id: email.id
+        patch :destroy, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -50,35 +50,35 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
     describe 'GET /new' do
       it 'redirects to edit profile page' do
-        get :new, petition_id: petition.id
+        get :new, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'POST /' do
       it 'redirects to edit profile page' do
-        post :create, petition_id: petition.id
+        post :create, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'GET /:id/edit' do
       it 'redirects to the login page' do
-        get :edit, petition_id: petition.id, id: email.id
+        get :edit, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /:id' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id, id: email.id
+        patch :update, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'DELETE /:id' do
       it 'redirects to the login page' do
-        patch :destroy, petition_id: petition.id, id: email.id
+        patch :destroy, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -91,12 +91,12 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
     describe 'GET /new' do
       describe 'for an open petition' do
         it 'fetches the requested petition' do
-          get :new, petition_id: petition.id
+          get :new, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'responds successfully and renders the petitions/show template' do
-          get :new, petition_id: petition.id
+          get :new, params: { petition_id: petition.id }
           expect(response).to be_success
           expect(response).to render_template('petitions/show')
         end
@@ -105,7 +105,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
       shared_examples_for 'trying to view the email petitioners form of a petition in the wrong state' do
         it 'raises a 404 error' do
           expect {
-            get :new, petition_id: petition.id
+            get :new, params: { petition_id: petition.id }
           }.to raise_error ActiveRecord::RecordNotFound
         end
       end
@@ -142,7 +142,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save_and_email: "Email"
           }
 
-          post :create, params.merge(overrides)
+          post :create, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -304,7 +304,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save: "Save"
           }
 
-          post :create, params.merge(overrides)
+          post :create, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -440,7 +440,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save_and_preview: "Save and preview"
           }
 
-          post :create, params.merge(overrides)
+          post :create, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -581,17 +581,17 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
       describe 'for an open petition' do
         it 'fetches the requested petition' do
-          get :edit, petition_id: petition.id, id: email.id
+          get :edit, params: { petition_id: petition.id, id: email.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'fetches the requested email' do
-          get :edit, petition_id: petition.id, id: email.id
+          get :edit, params: { petition_id: petition.id, id: email.id }
           expect(assigns(:email)).to eq email
         end
 
         it 'responds successfully and renders the petition_emails/edit template' do
-          get :edit, petition_id: petition.id, id: email.id
+          get :edit, params: { petition_id: petition.id, id: email.id }
           expect(response).to be_success
           expect(response).to render_template('petition_emails/edit')
         end
@@ -600,7 +600,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
       shared_examples_for 'trying to view the email petitioners form of a petition in the wrong state' do
         it 'raises a 404 error' do
           expect {
-            get :new, petition_id: petition.id, id: email.id
+            get :new, params: { petition_id: petition.id, id: email.id }
           }.to raise_error ActiveRecord::RecordNotFound
         end
       end
@@ -647,7 +647,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save_and_email: "Email"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -819,7 +819,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save: "Save"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -962,7 +962,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             save_and_preview: "Save and preview"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'for an open petition' do
@@ -1119,7 +1119,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
       def do_delete(overrides = {})
         params = { petition_id: petition.id, id: email.id }
-        delete :destroy, params.merge(overrides)
+        delete :destroy, params: params.merge(overrides)
       end
 
       describe 'for an open petition' do

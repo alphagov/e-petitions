@@ -4,7 +4,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
   context "when not logged in" do
     describe "GET /admin/petitions/200000/trending-ips" do
       before do
-        get :index, petition_id: "200000"
+        get :index, params: { petition_id: "200000" }
       end
 
       it "redirects to the login page" do
@@ -22,7 +22,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/200000/trending-ips" do
       before do
-        get :index, petition_id: "200000"
+        get :index, params: { petition_id: "200000" }
       end
 
       it "redirects to edit profile page" do
@@ -69,7 +69,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       context "when viewing all trending ip addresses" do
         before do
           expect(scope).to receive(:search).with(nil, page: nil).and_return(trending_ips)
-          get :index, petition_id: "200000"
+          get :index, params: { petition_id: "200000" }
         end
 
         include_examples("trending ip addresses index page")
@@ -78,7 +78,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       context "when viewing page 2 of all trending ip addresses" do
         before do
           expect(scope).to receive(:search).with(nil, page: "2").and_return(trending_ips)
-          get :index, petition_id: "200000", page: "2"
+          get :index, params: { petition_id: "200000", page: "2" }
         end
 
         include_examples("trending ip addresses index page")
@@ -87,7 +87,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       context "when searching trending ip addresses" do
         before do
           expect(scope).to receive(:search).with("127.0.0.1", page: nil).and_return(trending_ips)
-          get :index, petition_id: "200000", q: "127.0.0.1"
+          get :index, params: { petition_id: "200000", q: "127.0.0.1" }
         end
 
         include_examples("trending ip addresses index page")
@@ -96,7 +96,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       context "when viewing page 2 of a trending ip addresses search" do
         before do
           expect(scope).to receive(:search).with("127.0.0.1", page: "2").and_return(trending_ips)
-          get :index, petition_id: "200000", q: "127.0.0.1", page: "2"
+          get :index, params: { petition_id: "200000", q: "127.0.0.1", page: "2" }
         end
 
         include_examples("trending ip addresses index page")

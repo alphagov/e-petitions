@@ -1,4 +1,4 @@
-class AddTrendingItemsToRateLimits < ActiveRecord::Migration
+class AddTrendingItemsToRateLimits < ActiveRecord::Migration[4.2]
   def up
     add_column :rate_limits, :enable_logging_of_trending_items, :boolean, null: false, default: false
     add_column :rate_limits, :threshold_for_logging_trending_items, :integer, null: false, default: 100

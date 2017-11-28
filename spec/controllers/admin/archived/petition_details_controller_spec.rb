@@ -7,14 +7,14 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
   describe 'not logged in' do
     describe 'GET #show' do
       it 'redirects to the login page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH #update' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
 
     describe 'GET #show' do
       it 'redirects to edit profile page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH #update' do
       it 'redirects to edit profile page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -46,12 +46,12 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
     describe 'GET #show' do
       shared_examples_for 'viewing a petition in the correct state' do
         it 'fetches the requested petition' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'responds successfully and renders the petition_details/show template' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(response).to be_success
           expect(response).to render_template('petition_details/show')
         end
@@ -78,9 +78,10 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
       let(:petition) { FactoryBot.create(:archived_petition, action: 'Old action', background: 'Old background', additional_details: 'Old additional details') }
 
       def do_update
-        patch :update,
-              petition_id: petition.id,
-              archived_petition: petition_attributes
+        patch :update, params: {
+          petition_id: petition.id,
+          archived_petition: petition_attributes
+        }
       end
 
       describe 'allowed params' do
@@ -96,7 +97,7 @@ RSpec.describe Admin::Archived::PetitionDetailsController, type: :controller, ad
         end
 
         it "are limited to action, background, additional_details and creator name" do
-          is_expected.to permit(:action, :background, :additional_details).for(:update, params: params).on(:archived_petition)
+          is_expected.to permit(:action, :background, :additional_details).for(:update, params: { params: params }).on(:archived_petition)
         end
       end
 

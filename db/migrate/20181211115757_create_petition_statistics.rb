@@ -1,4 +1,4 @@
-class CreatePetitionStatistics < ActiveRecord::Migration
+class CreatePetitionStatistics < ActiveRecord::Migration[4.2]
   def change
     create_table :petition_statistics do |t|
       t.belongs_to :petition, index: { unique: true }, foreign_key: true

@@ -7,7 +7,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -26,7 +26,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
@@ -44,7 +44,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
       context "with no selected tasks" do
         before do
           expect(Admin::TaskRunner).not_to receive(:run)
-          post :create, tasks: []
+          post :create, params: { tasks: [] }
         end
 
         it "redirects back to the tasks tab" do
@@ -59,7 +59,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
       context "with invalid params" do
         before do
           expect(Admin::TaskRunner).to receive(:run).and_return(false)
-          post :create, tasks: %w[task_1], task_1: {}
+          post :create, params: { tasks: %w[task_1], task_1: {} }
         end
 
         it "redirects back to the tasks tab" do
@@ -74,7 +74,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
       context "with one task" do
         before do
           expect(Admin::TaskRunner).to receive(:run).and_return(true)
-          post :create, tasks: %w[task_1], task_1: {}
+          post :create, params: { tasks: %w[task_1], task_1: {} }
         end
 
         it "redirects back to the tasks tab" do
@@ -89,7 +89,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
       context "with two tasks" do
         before do
           expect(Admin::TaskRunner).to receive(:run).and_return(true)
-          post :create, tasks: %w[task_1 task_2], task_1: {}, task_2: {}
+          post :create, params: { tasks: %w[task_1 task_2], task_1: {}, task_2: {} }
         end
 
         it "redirects back to the tasks tab" do
