@@ -23,6 +23,8 @@ module EmailDelivery
   ]
 
   included do
+    before_perform :set_appsignal_namespace
+
     attr_reader :signature, :timestamp_name, :petition, :requested_at
     queue_as :low_priority
 
@@ -100,5 +102,9 @@ module EmailDelivery
   def email_not_previously_sent?
     # check that the signature is still in the list of signatures
     petition.signatures_to_email_for(timestamp_name).where(id: signature.id).exists?
+  end
+
+  def set_appsignal_namespace
+    Appsignal.set_namespace("email")
   end
 end

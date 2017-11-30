@@ -1,4 +1,6 @@
 class EmailJob < ApplicationJob
+  before_perform :set_appsignal_namespace
+
   class_attribute :mailer, :email
 
   PERMANENT_FAILURES = [
@@ -41,5 +43,9 @@ class EmailJob < ApplicationJob
 
   def log_message(exception)
     "#{exception.class.name} while sending email for #{self.class.name}"
+  end
+
+  def set_appsignal_namespace
+    Appsignal.set_namespace("email")
   end
 end
