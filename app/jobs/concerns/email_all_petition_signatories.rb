@@ -5,6 +5,8 @@ module EmailAllPetitionSignatories
   extend ActiveSupport::Concern
 
   included do
+    before_perform :set_appsignal_namespace
+
     class_attribute :email_delivery_job_class
     class_attribute :timestamp_name
 
@@ -88,5 +90,9 @@ module EmailAllPetitionSignatories
 
   def signatures_to_email
     petition.signatures_to_email_for(timestamp_name)
+  end
+
+  def set_appsignal_namespace
+    Appsignal.set_namespace("email")
   end
 end
