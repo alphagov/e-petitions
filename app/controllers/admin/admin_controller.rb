@@ -12,6 +12,10 @@ class Admin::AdminController < ApplicationController
   def index
   end
 
+  def admin_request?
+    true
+  end
+
   private
 
   def set_appsignal_namespace

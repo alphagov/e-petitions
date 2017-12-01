@@ -53,6 +53,22 @@ Rails.application.configure do
 
   # Turn on lograge, to give us more parseable logs
   config.lograge.enabled = true
+  config.lograge.ignore_actions = %w[
+    PingController#ping
+    Admin::UserSessionsController#status
+    Admin::LocksController#show
+    Admin::LocksController#create
+    Admin::LocksController#update
+    Admin::LocksController#destroy
+    Admin::Archived::LocksController#show
+    Admin::Archived::LocksController#create
+    Admin::Archived::LocksController#update
+    Admin::Archived::LocksController#destroy
+  ]
+
+  config.lograge.custom_payload do |controller|
+    controller.admin_request? ? { user_id: controller.current_user.try(:id) } : {}
+  end
 
   # Log in logstash format, so that we can easily parse the output
   config.logger = LogStashLogger.new(
