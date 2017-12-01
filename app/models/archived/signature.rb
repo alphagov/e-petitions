@@ -56,6 +56,14 @@ module Archived
       def validated
         where(state: VALIDATED_STATE)
       end
+
+      def creator
+        where(arel_table[:creator].eq(true))
+      end
+
+      def sponsors
+        where(arel_table[:sponsor].eq(true))
+      end
     end
 
     def get_email_sent_at_for(timestamp)

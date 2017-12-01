@@ -65,7 +65,7 @@ class Petition < ActiveRecord::Base
   facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :untagged_in_moderation,       -> { untagged_in_moderation.by_most_recent_moderation_threshold_reached }
 
-  has_one :creator, -> { where(creator: true) }, class_name: 'Signature'
+  has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true
 
   belongs_to :locked_by, class_name: 'AdminUser'
@@ -77,7 +77,7 @@ class Petition < ActiveRecord::Base
   has_one :rejection, dependent: :destroy
 
   has_many :signatures
-  has_many :sponsors, -> { where(sponsor: true) }, class_name: 'Signature'
+  has_many :sponsors, -> { sponsors }, class_name: 'Signature'
   has_many :country_petition_journals, dependent: :destroy
   has_many :constituency_petition_journals, dependent: :destroy
   has_many :emails, dependent: :destroy
