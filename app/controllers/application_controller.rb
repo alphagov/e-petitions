@@ -10,6 +10,12 @@ class ApplicationController < ActionController::Base
   before_action :set_seen_cookie_message, if: :show_cookie_message?
   helper_method :show_cookie_message?, :public_petition_facets
 
+  hide_action :admin_request?
+
+  def admin_request?
+    false
+  end
+
   protected
 
   def authenticate

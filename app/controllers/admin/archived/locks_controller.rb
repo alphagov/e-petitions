@@ -33,11 +33,11 @@ class Admin::Archived::LocksController < Admin::AdminController
     end
   end
 
+  private
+
   def last_request_update_allowed?
     false
   end
-
-  private
 
   def fetch_petition
     @petition = ::Archived::Petition.find(params[:petition_id])
