@@ -165,8 +165,12 @@ class Signature < ActiveRecord::Base
       scope.paginate(page: page, per_page: 50)
     end
 
+    def creator
+      where(arel_table[:creator].eq(true))
+    end
+
     def sponsors
-      where(sponsor: true)
+      where(arel_table[:sponsor].eq(true))
     end
 
     def subscribed

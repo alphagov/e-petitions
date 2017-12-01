@@ -16,7 +16,7 @@ module Archived
     belongs_to :parliament, inverse_of: :petitions, required: true
     belongs_to :locked_by, class_name: 'AdminUser'
 
-    has_one :creator, -> { where(creator: true) }, class_name: "Signature"
+    has_one :creator, -> { creator }, class_name: "Signature"
     has_one :debate_outcome, dependent: :destroy
     has_one :government_response, dependent: :destroy
     has_one :note, dependent: :destroy
@@ -24,7 +24,7 @@ module Archived
 
     has_many :emails, :dependent => :destroy
     has_many :signatures
-    has_many :sponsors, -> { where(sponsor: true) }, class_name: "Signature"
+    has_many :sponsors, -> { sponsors }, class_name: "Signature"
 
     validates :action, presence: true, length: { maximum: 150 }
     validates :background, length: { maximum: 300 }, allow_blank: true
