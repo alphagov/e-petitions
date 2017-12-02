@@ -37,18 +37,23 @@
   <%= will_paginate @signatures %>
 
   <div class="inline-actions">
+    <% signature_ids = bulk_verifier.generate(@signatures.map(&:id)) %>
+
     <%= form_tag validate_admin_signatures_path(q: params[:q]), method: :post, class: 'action validate-action' do %>
-      <%= hidden_field_tag 'ids', '' %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Validate', name: nil, class: 'button', disabled: true, data: { confirm: 'Validate selected signatures?' } %>
     <% end %>
 
     <%= form_tag invalidate_admin_signatures_path(q: params[:q]), method: :post, class: 'action invalidate-action' do %>
-      <%= hidden_field_tag 'ids', '' %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Invalidate', name: nil, class: 'button', disabled: true, data: { confirm: 'Invalidate selected signatures?' } %>
     <% end %>
 
     <%= form_tag admin_signatures_path(q: params[:q]), method: :delete, class: 'action delete-action' do %>
-      <%= hidden_field_tag 'ids', '' %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Delete', name: nil, class: 'button-warning', disabled: true, data: { confirm: 'Delete selected signatures?' } %>
     <% end %>
   </div>
@@ -56,7 +61,7 @@
   <script>
     $(document).ready(function() {
       var $list = $('.signature-list');
-      var $checkboxes = $list.find('input[name="ids"]');
+      var $checkboxes = $list.find('input[name="id"]');
       var $selectAll = $list.find('input[name="select_all"]');
 
       var selectedIds = function() {
@@ -116,7 +121,7 @@
       });
 
       $('.inline-actions form').on('submit', function() {
-        $(this).find('input[name="ids"]').val(selectedIds());
+        $(this).find('input[name="selected_ids"]').val(selectedIds());
       });
     });
   </script>

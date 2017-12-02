@@ -1,7 +1,7 @@
 <tr>
   <td class="petition-id">
     <label>
-      <%= check_box_tag 'ids', signature.id, false, disabled: signature.creator? %> <%= signature.petition.id %>
+      <%= check_box_tag 'id', signature.id, false, disabled: signature.creator? %> <%= signature.petition.id %>
     </label>
   </td>
   <td class="petition-action"><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
