@@ -41,7 +41,14 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
   context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
-    before { login_as(user) }
+    let(:token) { SecureRandom.base64(32) }
+    let(:verifier) { ActiveSupport::MessageVerifier.new(token, serializer: JSON) }
+    let(:signature_ids) { verifier.generate([signature.id]) }
+
+    before do
+      login_as(user)
+      session[:_bulk_verification_token] = token
+    end
 
     describe "GET /admin/signatures" do
       before { get :index, q: "Alice" }
@@ -168,7 +175,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:validate!).and_return(true)
-          post :bulk_validate, ids: signature.id, q: "user@example.com"
+          post :bulk_validate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -187,7 +194,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:validate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_validate, ids: signature.id, q: "user@example.com"
+          post :bulk_validate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -198,6 +205,30 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(flash[:alert]).to eq("Signatures could not be validated - please contact support")
         end
       end
+
+      context "when the signature ids hmac is missing" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_validate, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
+        end
+      end
+
+      context "when the selected_ids param contains an invalid id" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_validate, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
+        end
+      end
     end
 
     describe "POST /admin/signatures/invalidate" do
@@ -205,7 +236,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:invalidate!).and_return(true)
-          post :bulk_invalidate, ids: signature.id, q: "user@example.com"
+          post :bulk_invalidate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -224,7 +255,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:invalidate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_invalidate, ids: signature.id, q: "user@example.com"
+          post :bulk_invalidate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -235,6 +266,30 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(flash[:alert]).to eq("Signatures could not be invalidated - please contact support")
         end
       end
+
+      context "when the signature ids hmac is missing" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_invalidate, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
+        end
+      end
+
+      context "when the selected_ids param contains an invalid id" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_invalidate, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
+        end
+      end
     end
 
     describe "DELETE /admin/signatures" do
@@ -242,7 +297,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:destroy!).and_return(true)
-          delete :bulk_destroy, ids: signature.id, q: "user@example.com"
+          delete :bulk_destroy, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -261,7 +316,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:destroy!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          delete :bulk_destroy, ids: signature.id, q: "user@example.com"
+          delete :bulk_destroy, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
         end
 
         it "redirects to the search page" do
@@ -270,6 +325,30 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "sets the flash alert message" do
           expect(flash[:alert]).to eq("Signatures could not be removed - please contact support")
+        end
+      end
+
+      context "when the signature ids hmac is missing" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_destroy, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
+        end
+      end
+
+      context "when the selected_ids param contains an invalid id" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_destroy, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end
     end

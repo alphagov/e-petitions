@@ -1,4 +1,6 @@
 class Admin::SignaturesController < Admin::AdminController
+  include BulkVerification
+
   before_action :fetch_signature, except: [:index, :bulk_validate, :bulk_invalidate, :bulk_destroy]
   before_action :fetch_signatures, only: [:index]
 
@@ -10,7 +12,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_validate
     begin
-      Signature.validate!(signature_ids)
+      Signature.validate!(selected_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_validated
     rescue StandardError => e
       Appsignal.send_exception e
@@ -30,7 +32,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_invalidate
     begin
-      Signature.invalidate!(signature_ids)
+      Signature.invalidate!(selected_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_invalidated
     rescue StandardError => e
       Appsignal.send_exception e
@@ -50,7 +52,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_destroy
     begin
-      Signature.destroy!(signature_ids)
+      Signature.destroy!(selected_ids)
       redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_deleted
     rescue StandardError => e
       Appsignal.send_exception e
@@ -74,9 +76,5 @@ class Admin::SignaturesController < Admin::AdminController
 
   def fetch_signature
     @signature = Signature.find(params[:id])
-  end
-
-  def signature_ids
-    params[:ids].to_s.split(",").map(&:to_i).reject(&:zero?)
   end
 end

@@ -38,9 +38,10 @@ module Epets
     # Remove the error wrapper from around the form element
     config.action_view.field_error_proc = -> (html_tag, instance) { html_tag }
 
-    # Add 503 Service Unavailable to the rescue response
+    # Add additional exceptions to the rescue responses
     config.action_dispatch.rescue_responses.merge!(
-      'Site::ServiceUnavailable' => :service_unavailable
+      'Site::ServiceUnavailable' => :service_unavailable,
+      'BulkVerification::InvalidBulkRequest' => :bad_request
     )
 
     config.action_dispatch.default_headers.merge!('X-UA-Compatible' => 'IE=edge')
