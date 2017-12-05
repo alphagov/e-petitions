@@ -128,8 +128,9 @@
     </div>
 
     <div class="hub-links">
-      <%= link_to "All Petitions (#{petition_total_count})", admin_petitions_url(state: :all) %> |
-      <%= link_to "Archived Petitions (#{archived_petition_total_count})", admin_archived_root_url %>
+      <%= link_to "All Petitions (#{petition_total_count})", admin_petitions_path(state: :all) %> |
+      <%= link_to "Archived Petitions (#{archived_petition_total_count})", admin_archived_root_path %> |
+      <%= link_to "Statistics", admin_stats_path %>
     </div>
   </div>
 

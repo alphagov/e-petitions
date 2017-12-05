@@ -7,12 +7,13 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
     before { login_as(user) }
 
     let(:petition) do
-      FactoryBot.create(:pending_petition,
+      FactoryBot.create(:sponsored_petition,
         creator_attributes: {
           name: "Barry Butler",
           email: "bazbutler@gmail.com"
         },
-        sponsor_count: 0
+        sponsor_count: 5,
+        moderation_threshold_reached_at: 4.days.ago
       )
     end
 
@@ -59,6 +60,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(petition.open_at).to be_within(1.second).of(now)
         end
 
+        it "sets the moderation lag" do
+          expect(petition.moderation_lag).to eq(4)
+        end
+
         it "redirects to the admin show page for the petition page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
@@ -101,8 +106,18 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         end
 
         shared_examples_for 'rejecting a petition' do
+          let(:now) { Time.current }
+
           it 'sets the petition state to "rejected"' do
             expect(petition.state).to eq(Petition::REJECTED_STATE)
+          end
+
+          it "sets the petition rejected date to now" do
+            expect(petition.rejected_at).to be_within(1.second).of(now)
+          end
+
+          it "sets the moderation lag" do
+            expect(petition.moderation_lag).to eq(4)
           end
 
           it 'sets the rejection code to the supplied code' do
@@ -135,8 +150,18 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         end
 
         shared_examples_for 'hiding a petition' do
+          let(:now) { Time.current }
+
           it 'sets the petition state to "hidden"' do
             expect(petition.state).to eq(Petition::HIDDEN_STATE)
+          end
+
+          it "sets the petition rejected date to now" do
+            expect(petition.rejected_at).to be_within(1.second).of(now)
+          end
+
+          it "sets the moderation lag" do
+            expect(petition.moderation_lag).to eq(4)
           end
 
           it 'sets the rejection code to the supplied code' do
@@ -178,8 +203,8 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           let(:rejection_code) { '' }
 
           it "leaves the state alone, in the DB and in-memory" do
-            expect(petition.state).to eq(Petition::PENDING_STATE)
-            expect(assigns(:petition).state).to eq(Petition::PENDING_STATE)
+            expect(petition.state).to eq(Petition::SPONSORED_STATE)
+            expect(assigns(:petition).state).to eq(Petition::SPONSORED_STATE)
           end
 
           it "renders the admin petitions show template" do
@@ -199,6 +224,18 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         it "flags the petition" do
           expect(petition.state).to eq(Petition::FLAGGED_STATE)
+        end
+
+        it "does not set the open date" do
+          expect(petition.open_at).to be_nil
+        end
+
+        it "does not set the rejected date" do
+          expect(petition.rejected_at).to be_nil
+        end
+
+        it "does not set the moderation lag" do
+          expect(petition.moderation_lag).to be_nil
         end
 
         it "redirects to the admin show page for the petition page" do
