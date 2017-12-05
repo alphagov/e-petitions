@@ -158,6 +158,11 @@ Rails.application.routes.draw do
         end
       end
 
+      scope 'stats', controller: 'statistics' do
+        get '/', action: 'index', as: :stats
+        get '/moderation/:period', action: 'moderation', as: :moderation_stats, period: /week|month/
+      end
+
       controller 'user_sessions' do
         get '/logout',   action: 'destroy'
         get '/login',    action: 'new'

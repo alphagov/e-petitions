@@ -1,0 +1,23 @@
+<h1>Statistics</h1>
+
+<h2>Moderation performance</h2>
+
+<ul>
+  <li>
+    <p>
+      Current parliament<br />
+      <%= link_to 'By week', admin_moderation_stats_path(format: :csv, period: 'week') %> |
+      <%= link_to 'By month', admin_moderation_stats_path(format: :csv, period: 'month') %>
+    </p>
+  </li>
+
+  <% archived_parliaments.each do |parliament| %>
+    <li>
+      <p>
+        <%= parliament.name %><br />
+        <%= link_to 'By week', admin_moderation_stats_path(format: :csv, period: 'week', parliament: parliament) %> |
+        <%= link_to 'By month', admin_moderation_stats_path(format: :csv, period: 'month', parliament: parliament) %>
+      </p>
+    </li>
+  <% end %>
+</ul>

@@ -264,7 +264,8 @@ CREATE TABLE archived_petitions (
     email_requested_for_petition_email_at timestamp without time zone,
     tags integer[] DEFAULT '{}'::integer[] NOT NULL,
     locked_at timestamp without time zone,
-    locked_by_id integer
+    locked_by_id integer,
+    moderation_lag integer
 );
 
 
@@ -881,7 +882,8 @@ CREATE TABLE petitions (
     archiving_started_at timestamp without time zone,
     tags integer[] DEFAULT '{}'::integer[] NOT NULL,
     locked_at timestamp without time zone,
-    locked_by_id integer
+    locked_by_id integer,
+    moderation_lag integer
 );
 
 
@@ -1699,6 +1701,13 @@ CREATE INDEX index_archived_petitions_on_locked_by_id ON archived_petitions USIN
 
 
 --
+-- Name: index_archived_petitions_on_mt_reached_at_and_moderation_lag; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_petitions_on_mt_reached_at_and_moderation_lag ON archived_petitions USING btree (moderation_threshold_reached_at, moderation_lag);
+
+
+--
 -- Name: index_archived_petitions_on_parliament_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2032,6 +2041,13 @@ CREATE INDEX index_petitions_on_last_signed_at ON petitions USING btree (last_si
 --
 
 CREATE INDEX index_petitions_on_locked_by_id ON petitions USING btree (locked_by_id);
+
+
+--
+-- Name: index_petitions_on_mt_reached_at_and_moderation_lag; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_petitions_on_mt_reached_at_and_moderation_lag ON petitions USING btree (moderation_threshold_reached_at, moderation_lag);
 
 
 --
@@ -2586,4 +2602,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170906203439');
 INSERT INTO schema_migrations (version) VALUES ('20170909092251');
 
 INSERT INTO schema_migrations (version) VALUES ('20170909095357');
+
+INSERT INTO schema_migrations (version) VALUES ('20171204113835');
+
+INSERT INTO schema_migrations (version) VALUES ('20171204122339');
 

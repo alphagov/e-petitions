@@ -33,6 +33,7 @@ class Petition < ActiveRecord::Base
   has_perishable_token called: 'sponsor_token'
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
+  before_save :update_moderation_lag, unless: :moderation_lag?
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
@@ -808,5 +809,19 @@ class Petition < ActiveRecord::Base
 
   def closed_early_due_to_election?(dissolution_at = Parliament.dissolution_at)
     closed_at == dissolution_at
+  end
+
+  def update_moderation_lag
+    if open_at_changed? || rejected_at_changed?
+      self.moderation_lag = calculate_moderation_lag(Date.current)
+    end
+  end
+
+  def calculate_moderation_lag(today)
+    if moderation_threshold_reached_at?
+      today - moderation_threshold_reached_at.to_date
+    else
+      0
+    end
   end
 end

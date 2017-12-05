@@ -19,6 +19,7 @@ class ArchivePetitionJob < ApplicationJob
         p.stopped_at = petition.stopped_at
         p.signature_count = petition.signature_count
         p.moderation_threshold_reached_at = petition.moderation_threshold_reached_at
+        p.moderation_lag = petition.moderation_lag
         p.last_signed_at = petition.last_signed_at
         p.response_threshold_reached_at = petition.response_threshold_reached_at
         p.government_response_at = petition.government_response_at
