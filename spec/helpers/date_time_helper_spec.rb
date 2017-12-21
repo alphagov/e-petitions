@@ -134,4 +134,56 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
     end
   end
+
+  describe "#christmas_period?" do
+    context "when the date is before the 22nd Dec" do
+      around do |example|
+        travel_to("2017-12-21") { example.run }
+      end
+
+      it "returns false" do
+        expect(helper.christmas_period?).to eq(false)
+      end
+    end
+
+    context "when the date is the 22nd Dec" do
+      around do |example|
+        travel_to("2017-12-22") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.christmas_period?).to eq(true)
+      end
+    end
+
+    context "when the date is between 22nd Dec and 4th Jan" do
+      around do |example|
+        travel_to("2017-12-26") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.christmas_period?).to eq(true)
+      end
+    end
+
+    context "when the date is the 4th Jan" do
+      around do |example|
+        travel_to("2018-01-04") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.christmas_period?).to eq(true)
+      end
+    end
+
+    context "when the date is after the 4th Jan" do
+      around do |example|
+        travel_to("2018-01-05") { example.run }
+      end
+
+      it "returns false" do
+        expect(helper.christmas_period?).to eq(false)
+      end
+    end
+  end
 end
