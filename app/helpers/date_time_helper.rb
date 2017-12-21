@@ -57,4 +57,14 @@ module DateTimeHelper
 
     t(key, scope: scope, formatted_date: short_date_format(date))
   end
+
+  def christmas_period?(today = Date.current)
+    if today.mon == 12
+      today.day > 21 ? true : false
+    elsif today.mon == 1
+      today.day < 5 ? true : false
+    else
+      false
+    end
+  end
 end
