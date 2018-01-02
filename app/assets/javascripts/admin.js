@@ -3,3 +3,4 @@
 //= require auto_logout
 //= require edit_lock
 //= require autosubmit_selects
+//= require accessible-autocomplete.min
