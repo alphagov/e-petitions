@@ -702,4 +702,13 @@ FactoryBot.define do
   factory :tag do
     sequence(:name) { |n| "Tag #{n}" }
   end
+
+  factory :survey do
+    constituency
+    percentage_petitioners 10
+    subject 'Exploratory Survey'
+    body 'Click this: https://www.example.com/a_survey_path'
+
+    petitions { create_list(:petition, 1) }
+  end
 end

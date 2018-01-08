@@ -907,6 +907,15 @@ ALTER SEQUENCE petitions_id_seq OWNED BY petitions.id;
 
 
 --
+-- Name: petitions_surveys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE petitions_surveys (
+    petition_id integer,
+    survey_id integer
+);
+
+--
 -- Name: rate_limits; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1089,6 +1098,40 @@ CREATE SEQUENCE sites_id_seq
 --
 
 ALTER SEQUENCE sites_id_seq OWNED BY sites.id;
+
+
+--
+-- Name: surveys; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE surveys (
+    id integer NOT NULL,
+    subject character varying NOT NULL,
+    body text,
+    percentage_petitioners integer,
+    constituency_id character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: surveys_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE surveys_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: surveys_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE surveys_id_seq OWNED BY surveys.id;
 
 
 --
@@ -1556,6 +1599,14 @@ ALTER TABLE ONLY signatures
 
 ALTER TABLE ONLY sites
     ADD CONSTRAINT sites_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: surveys surveys_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY surveys
+    ADD CONSTRAINT surveys_pkey PRIMARY KEY (id);
 
 
 --
@@ -2191,6 +2242,13 @@ CREATE INDEX index_signatures_on_validated_at ON signatures USING btree (validat
 
 
 --
+-- Name: index_surveys_on_constituency_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_surveys_on_constituency_id ON surveys USING btree (constituency_id);
+
+
+--
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2606,4 +2664,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170909095357');
 INSERT INTO schema_migrations (version) VALUES ('20171204113835');
 
 INSERT INTO schema_migrations (version) VALUES ('20171204122339');
+
+INSERT INTO schema_migrations (version) VALUES ('20180104152751');
 

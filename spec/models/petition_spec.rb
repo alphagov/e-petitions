@@ -20,6 +20,7 @@ RSpec.describe Petition, type: :model do
 
     it { is_expected.to have_many(:emails).dependent(:destroy) }
     it { is_expected.to have_many(:invalidations) }
+    it { is_expected.to have_and_belong_to_many(:surveys) }
   end
 
   describe "callbacks" do
