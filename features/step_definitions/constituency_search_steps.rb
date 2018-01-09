@@ -23,7 +23,7 @@ Given(/^the MP has passed away$/) do
   @mp_passed_away = true
 end
 
-Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_action|
+Given(/^(a|few|some|many|\d) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_action|
   petition = Petition.find_by!(action: petition_action)
   constituency = @constituencies.fetch(constituency)
   how_many =
@@ -32,11 +32,19 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
     when 'few' then 3
     when 'some' then 5
     when 'many' then 10
+    else
+      how_many
     end
 
   how_many.times do
     FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency.external_id).validate!
   end
+end
+
+Given(/^a constituent with email "(.*)" in "(.*?)" supports "(.*?)"$/) do |email, constituency, petition_action|
+  petition = Petition.find_by!(action: petition_action)
+  constituency = @constituencies.fetch(constituency)
+  FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency.external_id, email: email).validate!
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|

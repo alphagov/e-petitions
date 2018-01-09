@@ -266,7 +266,7 @@ Then(/^I should receive an email telling me how to get an MP on board$/) do
 end
 
 When(/^I am allowed to make the petition action too long$/) do
-  # NOTE: we do this to remove the maxlength attribtue on the petition
+  # NOTE: we do this to remove the maxlength attribute on the petition
   # action input because any modern browser/driver will not let us enter
   # values longer than maxlength and so we can't test our JS validation
   page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
