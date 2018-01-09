@@ -704,7 +704,6 @@ FactoryBot.define do
   end
 
   factory :survey do
-    constituency
     percentage_petitioners 10
     subject 'Exploratory Survey'
     body 'Click this: https://www.example.com/a_survey_path'
