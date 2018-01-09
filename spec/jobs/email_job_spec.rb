@@ -396,3 +396,16 @@ RSpec.describe FeedbackEmailJob, type: :job do
   end
 end
 
+RSpec.describe SurveyEmailJob, type: :job do
+  let(:email) { "sarah@example.com" }
+  let(:survey) { FactoryBot.create(:survey) }
+
+  it "sends the SurveyMailer#send_survey" do
+    expect(SurveyMailer).to receive(:send_survey).with(email, survey).and_call_original
+
+    perform_enqueued_jobs do
+      described_class.perform_later(email, survey)
+    end
+  end
+end
+
