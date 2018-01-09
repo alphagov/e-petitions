@@ -1,0 +1,78 @@
+<h1>New Survey</h1>
+
+<div id="js-petitions" data-stuff="<%= Petition.all.pluck(:action) %>"></div>
+
+<div id="petitions">
+  <div class="form-group">
+    <label class="form-label" for="petition-autocomplete">Petitions</label>
+
+    <div id="petition-autocomplete-container"></div>
+  </div>
+</div>
+
+<%= button_tag 'Add petition', class: 'button-secondary', id: "js-add-petition" %>
+<%= button_tag 'Remove last petition', class: 'button-secondary', id: "js-remove-petition" %>
+
+<div id="js-constituencies" data-stuff="<%= Constituency.all.pluck(:name) %>"></div>
+
+<div class="form-group">
+  <label class="form-label" for="constituency-autocomplete">Constituency</label>
+
+  <div id="constituency-autocomplete-container"></div>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="invalidation_details">Percentage Petitioners</label>
+
+  <textarea tabindex="1" rows="1" class="form-control" name="invalidation[percentage]" id="details">10</textarea>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="invalidation_details">Subject</label>
+
+  <textarea tabindex="1" rows="1" class="form-control" name="invalidation[details]" id="invalidation_details"></textarea>
+</div>
+
+<div class="form-group">
+  <label class="form-label" for="invalidation_details">Body</label>
+
+  <textarea tabindex="2" rows="5" class="form-control" name="invalidation[details]" id="invalidation_details"></textarea>
+</div>
+
+<%= submit_tag 'Email petitioners', class: 'button' %>
+<%= link_to 'Cancel', admin_invalidations_path, class: 'button-secondary' %>
+
+<script>
+$(document).ready(function() {
+  var surveyPetitionCount = 0;
+
+  $('#js-add-petition').on('click', function() {
+    var newId = 'petition-autocomplete-container-' + (surveyPetitionCount += 1);
+    var formGroup = $('<div class="form-group"><div id="' + newId + '"></div></div>')
+    $('#petitions').append(formGroup);
+
+    accessibleAutocomplete({
+      element: document.querySelector('#' + newId),
+      id: 'foo',
+      source: petitions
+    })
+  });
+
+  const petitions = $('#js-petitions').data('stuff');
+
+  accessibleAutocomplete({
+    element: document.querySelector('#petition-autocomplete-container'),
+    id: 'petition-autocomplete',
+    source: petitions
+  })
+
+  const constituencies = $('#js-constituencies').data('stuff');
+
+  accessibleAutocomplete({
+    element: document.querySelector('#constituency-autocomplete-container'),
+    id: 'constituency-autocomplete',
+    source: constituencies
+  })
+});
+</script>
+

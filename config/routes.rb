@@ -140,6 +140,8 @@ Rails.application.routes.draw do
 
       resources :tags, except: %i[show]
 
+      resources :surveys, only: %i[index new create]
+
       namespace :archived do
         root to: redirect('/admin/archived/petitions')
 
