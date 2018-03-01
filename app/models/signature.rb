@@ -201,6 +201,22 @@ class Signature < ActiveRecord::Base
       where(archived_at: nil)
     end
 
+    def unsubscribe!(signature_ids)
+      signatures = find(signature_ids)
+
+      transaction do
+        signatures.each do |signature|
+          if signature.creator?
+            raise RuntimeError, "Can't unsubscribe the creator signature"
+          elsif signature.pending?
+            raise RuntimeError, "Can't unsubscribe a pending signature"
+          else
+            signature.update!(notify_by_email: false)
+          end
+        end
+      end
+    end
+
     def validate!(signature_ids, now = Time.current)
       signatures = find(signature_ids)
 
@@ -277,6 +293,10 @@ class Signature < ActiveRecord::Base
 
   def invalidated?
     state == INVALIDATED_STATE
+  end
+
+  def subscribed?
+    validated? && !unsubscribed?
   end
 
   def unsubscribed?

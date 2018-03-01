@@ -38,6 +38,21 @@ Feature: Searching for signatures as Terry
     When I click the invalidate button
     Then I should see the email address is invalidated
 
+  Scenario: Unsubscribing a pending signature
+    Given 1 petition with a pending signature by "bob@example.com"
+    And I am logged in as a moderator
+    When I search for petitions signed by "bob@example.com" from the admin hub
+    Then I should see the email address is pending
+    And I should not see the unsubscribe button
+
+  Scenario: Unsubscribing a validated signature
+    Given 1 petition with a validated signature by "bob@example.com"
+    And I am logged in as a moderator
+    When I search for petitions signed by "bob@example.com" from the admin hub
+    Then I should see the email address is validated
+    When I click the unsubscribe button
+    Then I should see the email address is unsubscribed
+
   Scenario: Deleting a signature
     Given 1 petition signed by "bob@example.com"
     And I am logged in as a moderator

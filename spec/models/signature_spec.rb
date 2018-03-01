@@ -571,6 +571,76 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".unsubscribe!" do
+    let(:attributes) { FactoryBot.attributes_for(:petition) }
+    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
+    let(:petition) do
+      Petition.create(attributes) do |petition|
+        petition.creator = creator
+
+        5.times do
+          petition.signatures << FactoryBot.create(:pending_signature)
+        end
+      end
+    end
+
+    before do
+      petition.signatures.each { |s| s.validate! }
+      petition.publish
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.unsubscribe!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when trying to unsubscribe the creator" do
+      let(:signature_ids) { [creator.id] }
+
+      it "raises an error" do
+        expect {
+          described_class.unsubscribe!(signature_ids)
+        }.to raise_error(RuntimeError, "Can't unsubscribe the creator signature")
+      end
+    end
+
+    context "with a pending signature" do
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+      let(:signature_ids) { [signature.id] }
+
+      it "raises an error" do
+        expect {
+          described_class.unsubscribe!(signature_ids)
+        }.to raise_error(RuntimeError, "Can't unsubscribe a pending signature")
+      end
+    end
+
+    context "with a validated signature" do
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+      before do
+        signature.validate!
+
+        allow(described_class).to receive(:find).and_call_original
+        allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+        expect(signature).to receive(:update!).with(notify_by_email: false).and_call_original
+      end
+
+      it "unsubscribes the signature" do
+        expect {
+          described_class.unsubscribe!([signature.id])
+        }.to change {
+          signature.reload.unsubscribed?
+        }.from(false).to(true)
+      end
+    end
+  end
+
   describe ".destroy!" do
     let(:attributes) { FactoryBot.attributes_for(:petition) }
     let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
@@ -1240,6 +1310,50 @@ RSpec.describe Signature, type: :model do
 
       it "returns true" do
         expect(signature.invalid_unsubscribe_token?).to be_truthy
+      end
+    end
+  end
+
+  describe "#subscribed?" do
+    context "when the signature is pending" do
+      let(:signature) { FactoryBot.build(:pending_signature, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
+      end
+    end
+
+    context "when the signature is validated" do
+      context "and notify_by_email is true" do
+        let(:signature) { FactoryBot.build(:validated_signature, notify_by_email: true) }
+
+        it "returns true" do
+          expect(signature.subscribed?).to eq(true)
+        end
+      end
+
+      context "and notify_by_email is false" do
+        let(:signature) { FactoryBot.build(:validated_signature, notify_by_email: false) }
+
+        it "returns false" do
+          expect(signature.subscribed?).to eq(false)
+        end
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:signature) { FactoryBot.build(:fraudulent_signature, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:signature) { FactoryBot.build(:invalidated_signature, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
       end
     end
   end
