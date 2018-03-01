@@ -30,27 +30,27 @@ class SponsorsController < SignaturesController
   private
 
   def retrieve_petition
-    @petition = Petition.not_hidden.find_by!(sponsor_token_and_id)
+    @petition = Petition.not_hidden.find(petition_id)
 
     if @petition.flagged? || @petition.stopped?
-      raise ActiveRecord::RecordNotFound, "Unable to find Petition with id: #{params[:petition_id]}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Petition with id: #{petition_id}"
     end
-  end
 
-  def sponsor_token_and_id
-    { sponsor_token: params[:token].to_s, id: params[:petition_id].to_i }
+    unless @petition.sponsor_token == token_param
+      raise ActiveRecord::RecordNotFound, "Unable to find Petition with sponsor token: #{token_param.inspect}"
+    end
   end
 
   def retrieve_signature
-    @signature = Signature.sponsors.find(params[:id])
+    @signature = Signature.sponsors.find(signature_id)
     @petition = @signature.petition
 
     if @petition.flagged? || @petition.hidden? || @petition.stopped?
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
 
     if @signature.invalidated? || @signature.fraudulent?
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
   end
 

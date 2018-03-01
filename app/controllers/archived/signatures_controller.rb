@@ -14,8 +14,12 @@ module Archived
 
     private
 
+    def signature_id
+      @signature_id ||= Integer(params[:id])
+    end
+
     def token_param
-      @token_param ||= params[:token].to_s
+      @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
     end
 
     def verify_unsubscribe_token
@@ -29,7 +33,7 @@ module Archived
       @petition = @signature.petition
 
       if @signature.invalidated? || @signature.fraudulent?
-        raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+        raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
       end
     end
   end

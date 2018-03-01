@@ -87,13 +87,21 @@ class SignaturesController < ApplicationController
 
   private
 
+  def petition_id
+    @petition_id ||= Integer(params[:petition_id])
+  end
+
+  def signature_id
+    @signature_id ||= Integer(params[:id])
+  end
+
   def token_param
-    @token_param ||= params[:token].to_s
+    @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
   end
 
   def verify_token
     unless @signature.perishable_token == token_param
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: token_param.inspect}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: #{token_param.inspect}"
     end
   end
 
@@ -104,19 +112,19 @@ class SignaturesController < ApplicationController
   end
 
   def retrieve_petition
-    @petition = Petition.visible.find(params[:petition_id])
+    @petition = Petition.visible.find(petition_id)
   end
 
   def retrieve_signature
-    @signature = Signature.find(params[:id])
+    @signature = Signature.find(signature_id)
     @petition = @signature.petition
 
     unless @petition.visible?
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
 
     if @signature.invalidated? || @signature.fraudulent?
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{params[:id]}"
+      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
   end
 
