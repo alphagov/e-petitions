@@ -136,6 +136,49 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
       end
     end
 
+    describe "POST /admin/signatures/:id/unsubscribe" do
+      before do
+        signature.update!(notify_by_email: true)
+      end
+
+      context "and the update succeeds" do
+        it "redirects to the search page" do
+          post :unsubscribe, id: signature.id, q: "user@example.com"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          post :unsubscribe, id: signature.id, q: "user@example.com"
+          expect(flash[:notice]).to eq("Signature unsubscribed successfully")
+        end
+
+        it "changes the notify_by_email attribute" do
+          expect {
+            post :unsubscribe, id: signature.id, q: "user@example.com"
+          }.to change {
+            signature.reload.notify_by_email
+          }.from(true).to(false)
+        end
+      end
+
+      context "and the update fails" do
+        before do
+          expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
+          expect(signature).to receive(:update).with(notify_by_email: false).and_return(false)
+        end
+
+        it "redirects to the search page" do
+          post :unsubscribe, id: signature.id, q: "user@example.com"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          post :unsubscribe, id: signature.id, q: "user@example.com"
+          expect(flash[:alert]).to eq("Signature could not be unsubscribed - please contact support")
+        end
+      end
+    end
+
     describe "DELETE /admin/signatures/:id" do
       context "when the signature is destroyed" do
         before do
@@ -275,6 +318,67 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         it "returns a 400 Bad Request" do
           expect {
             delete :bulk_invalidate, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
+        end
+      end
+
+      context "when the selected_ids param contains an invalid id" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_invalidate, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+          }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
+        end
+      end
+    end
+
+    describe "POST /admin/signatures/unsubscribe" do
+      context "when the signature is unsubcribed" do
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:update!).with(notify_by_email: false).and_return(true)
+          post :bulk_unsubscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Signatures unsubscribed successfully")
+        end
+      end
+
+      context "when the signature is not unsubscribed" do
+        let(:exception) { ActiveRecord::StatementInvalid.new("Invalid SQL") }
+
+        before do
+          expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:update!).with(notify_by_email: false).and_raise(exception)
+          expect(Appsignal).to receive(:send_exception).with(exception)
+          post :bulk_unsubscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+        end
+
+        it "redirects to the search page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Signatures could not be unsubscribed - please contact support")
+        end
+      end
+
+      context "when the signature ids hmac is missing" do
+        before do
+          expect(Signature).not_to receive(:find)
+        end
+
+        it "returns a 400 Bad Request" do
+          expect {
+            delete :bulk_unsubscribe, selected_ids: signature.id, all_ids: "", q: "user@example.com"
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end

@@ -121,6 +121,14 @@ Then(/^I should see the email address is invalidated$/) do
   expect(page).to have_button "Delete"
 end
 
+Then(/^I should see the email address is unsubscribed$/) do
+  expect(page).not_to have_button "Unsubscribe"
+end
+
+When(/^I click the unsubscribe button$/) do
+  click_button "Unsubscribe"
+end
+
 When(/^I click the delete button$/) do
   click_button "Delete"
 end
@@ -129,6 +137,10 @@ When(/^I click the first delete button$/) do
   within :css, "tbody tr:first" do
     click_button "Delete"
   end
+end
+
+Then(/^I should not see the unsubscribe button$/) do
+  expect(page).not_to have_button "Unsubscribe"
 end
 
 Then(/^I should not see the delete button$/) do
