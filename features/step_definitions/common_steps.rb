@@ -47,7 +47,7 @@ Then(/^I will see a 503 error page$/) do
 end
 
 Then(/^I wait for (\d+) ((?:day|week|month|year|)s?)$/) do |duration, period|
-  travel(duration.to_i.send(period) + 1.second)
+  travel_to(Time.current + (duration.to_i.send(period) + 1.second))
 end
 
 Then /^the response status should be (\d+)$/ do |code|

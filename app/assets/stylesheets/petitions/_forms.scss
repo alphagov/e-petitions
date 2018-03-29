@@ -27,6 +27,10 @@ select.form-control:hover {
   width: 25%;
 }
 
+.form-control-auto {
+  width: auto;
+}
+
 .form-group {
   margin-bottom: $gutter;
   clear: both;

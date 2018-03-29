@@ -59,12 +59,10 @@ module DateTimeHelper
   end
 
   def christmas_period?(today = Date.current)
-    if today.mon == 12
-      today.day > 21 ? true : false
-    elsif today.mon == 1
-      today.day < 5 ? true : false
-    else
-      false
-    end
+    Holiday.christmas?(today)
+  end
+
+  def easter_period?(today = Date.current)
+    Holiday.easter?(today)
   end
 end
