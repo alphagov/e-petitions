@@ -186,4 +186,56 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
     end
   end
+
+  describe "#easter_period?" do
+    context "when the date is before the 30th Mar" do
+      around do |example|
+        travel_to("2018-03-29") { example.run }
+      end
+
+      it "returns false" do
+        expect(helper.easter_period?).to eq(false)
+      end
+    end
+
+    context "when the date is the 30th Mar" do
+      around do |example|
+        travel_to("2018-03-30") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.easter_period?).to eq(true)
+      end
+    end
+
+    context "when the date is between 30th Mar and 9th Apr" do
+      around do |example|
+        travel_to("2018-04-01") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.easter_period?).to eq(true)
+      end
+    end
+
+    context "when the date is the 9th Apr" do
+      around do |example|
+        travel_to("2018-04-09") { example.run }
+      end
+
+      it "returns true" do
+        expect(helper.easter_period?).to eq(true)
+      end
+    end
+
+    context "when the date is after the 9th Apr" do
+      around do |example|
+        travel_to("2018-04-10") { example.run }
+      end
+
+      it "returns false" do
+        expect(helper.easter_period?).to eq(false)
+      end
+    end
+  end
 end

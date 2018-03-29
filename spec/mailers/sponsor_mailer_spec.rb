@@ -158,5 +158,41 @@ RSpec.describe SponsorMailer, type: :mailer do
         expect(mail).not_to have_body_text(%r[over the Christmas period it may take us a little longer than usual])
       end
     end
+
+    context "before the Easter period" do
+      around do |example|
+        travel_to("2018-03-29") { example.run }
+      end
+
+      it_behaves_like "a sponsor signed on threshold email"
+
+      it "doesn't include the moderation delay message" do
+        expect(mail).not_to have_body_text(%r[over the Easter period it may take us a little longer than usual])
+      end
+    end
+
+    context "during the Easter period" do
+      around do |example|
+        travel_to("2018-04-01") { example.run }
+      end
+
+      it_behaves_like "a sponsor signed on threshold email"
+
+      it "includes the moderation delay message" do
+        expect(mail).to have_body_text(%r[over the Easter period it may take us a little longer than usual])
+      end
+    end
+
+    context "after the Easter period" do
+      around do |example|
+        travel_to("2018-04-10") { example.run }
+      end
+
+      it_behaves_like "a sponsor signed on threshold email"
+
+      it "doesn't include the moderation delay message" do
+        expect(mail).not_to have_body_text(%r[over the Easter period it may take us a little longer than usual])
+      end
+    end
   end
 end

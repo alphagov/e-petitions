@@ -658,6 +658,40 @@ ALTER SEQUENCE government_responses_id_seq OWNED BY government_responses.id;
 
 
 --
+-- Name: holidays; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE holidays (
+    id integer NOT NULL,
+    christmas_start date,
+    christmas_end date,
+    easter_start date,
+    easter_end date,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: holidays_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE holidays_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: holidays_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE holidays_id_seq OWNED BY holidays.id;
+
+
+--
 -- Name: invalidations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1270,6 +1304,13 @@ ALTER TABLE ONLY government_responses ALTER COLUMN id SET DEFAULT nextval('gover
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY holidays ALTER COLUMN id SET DEFAULT nextval('holidays_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY invalidations ALTER COLUMN id SET DEFAULT nextval('invalidations_id_seq'::regclass);
 
 
@@ -1476,6 +1517,14 @@ ALTER TABLE ONLY feedback
 
 ALTER TABLE ONLY government_responses
     ADD CONSTRAINT government_responses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: holidays_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY holidays
+    ADD CONSTRAINT holidays_pkey PRIMARY KEY (id);
 
 
 --
@@ -2606,4 +2655,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170909095357');
 INSERT INTO schema_migrations (version) VALUES ('20171204113835');
 
 INSERT INTO schema_migrations (version) VALUES ('20171204122339');
+
+INSERT INTO schema_migrations (version) VALUES ('20180329062433');
 

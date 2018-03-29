@@ -2,29 +2,7 @@
 
 <div class="grid-row">
   <div class="grid-column">
-    <p class="tabs">
-      <% if params[:tab] == "petitions" %>
-        <%= link_to "Description", edit_admin_site_path %> |
-        Petitions |
-        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
-        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
-      <% elsif params[:tab] == "moderation" %>
-        <%= link_to "Description", edit_admin_site_path %> |
-        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
-        Moderation |
-        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
-      <% elsif params[:tab] == "access" %>
-        <%= link_to "Description", edit_admin_site_path %> |
-        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
-        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
-        Access
-      <% else %>
-        Description |
-        <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
-        <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
-        <%= link_to "Access", edit_admin_site_path(tab: 'access') %>
-      <% end %>
-    </p>
+    <%= render "admin/shared/site_tabs" %>
   </div>
 
   <div class="column-two-thirds extra-gutter">
