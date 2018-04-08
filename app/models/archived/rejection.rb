@@ -12,6 +12,10 @@ module Archived
     validates :details, length: { maximum: 4000 }, allow_blank: true
 
     after_create do
+      # Prevent deprecation warnings about the
+      # upcoming new behaviour of attribute_changed?
+      petition.reload
+
       if petition.rejected_at?
         petition.update!(state: state_for_petition)
       else

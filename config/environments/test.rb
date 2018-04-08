@@ -57,6 +57,4 @@ Rails.application.configure do
     allow_localhost: true,
     allow: 'chromedriver.storage.googleapis.com'
   )
-
-  config.active_job.queue_adapter = :test
 end
