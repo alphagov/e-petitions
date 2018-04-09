@@ -37,7 +37,7 @@ class Admin::UserSessionsController < Admin::AdminController
   private
 
   def user_session_params
-    params.require(:admin_user_session).permit(:email, :password)
+    params.require(:admin_user_session).permit(:email, :password).to_h
   end
 
   def last_request_update_allowed?

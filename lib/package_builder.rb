@@ -1,6 +1,7 @@
 require 'tmpdir'
 require 'active_support/core_ext/string/strip'
-require 'aws-sdk'
+require 'aws-sdk-codedeploy'
+require 'aws-sdk-s3'
 require 'faraday'
 require 'slack-notifier'
 
