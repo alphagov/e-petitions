@@ -33,6 +33,10 @@ every :day, at: '1.45am' do
   rake "epets:constituencies:refresh", output: nil
 end
 
+every :day, at: '2.15am' do
+  rake "epets:constituencies:refresh_party", output: nil
+end
+
 every :day, at: '2.30am' do
   rake "epets:petitions:count", output: nil
 end

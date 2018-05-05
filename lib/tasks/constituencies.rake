@@ -13,5 +13,12 @@ namespace :epets do
         RefreshConstituenciesJob.perform_later
       end
     end
+
+    desc "Add task to the queue to refresh constituency party information from the Parliament API"
+    task :refresh => :environment do
+      Task.run("epets:constituencies:refresh_party") do
+        RefreshConstituencyPartyJob.perform_later
+      end
+    end
   end
 end

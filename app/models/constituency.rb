@@ -34,6 +34,10 @@ class Constituency < ActiveRecord::Base
   end
 
   class << self
+    def by_ons_code
+      order(ons_code: :asc)
+    end
+
     def find_by_postcode(postcode)
       results = query.fetch(postcode)
 

@@ -9,7 +9,7 @@ class FetchCountryRegisterJob < ApplicationJob
     Appsignal.send_exception exception
   end
 
-  def perform(*args)
+  def perform
     countries.each do |country|
       location = Location.find_or_initialize_by(code: country['country'])
 

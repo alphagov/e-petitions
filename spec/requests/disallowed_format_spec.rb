@@ -409,4 +409,46 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
     it_behaves_like 'a POST route where failure only supports html formats'
   end
+
+  context 'the constituencies url' do
+    let(:url) { '/constituencies' }
+    let(:params) { {} }
+
+    it 'supports json via extension' do
+      get url + '.json', params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq :json
+    end
+
+    it 'supports json via accepts header' do
+      get url, params, {'Accept' => 'application/json'}
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq :json
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params, {'Accept' => 'application/xml'}
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via extension' do
+      get url + '.html', params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via accepts header' do
+      get url, params, {'Accept' => 'text/html'}
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html default' do
+      get url, params
+      expect(response.status).to eq 406
+    end
+  end
 end
