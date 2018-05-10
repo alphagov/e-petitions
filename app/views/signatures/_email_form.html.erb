@@ -4,6 +4,7 @@
 <%= form.hidden_field :uk_citizenship %>
 <%= form.hidden_field :postcode %>
 <%= form.hidden_field :location_code %>
+<%= form.hidden_field :notify_by_email %>
 
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, "Email address", class: "form-label visuallyhidden" %>

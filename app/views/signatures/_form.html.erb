@@ -3,10 +3,10 @@
     Only British citizens or UK residents have the right to sign
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
-  <%= form.label :uk_citizenship,  class: "block-label" do  %>
+  <div class="multiple-choice">
     <%= form.check_box :uk_citizenship, tabindex: increment %>
-    I am a British citizen or UK resident
-  <% end %>
+    <%= form.label :uk_citizenship, "I am a British citizen or UK resident" %>
+  </div>
 <% end %>
 
 <%= form_row for: [signature, :name] do %>
@@ -31,6 +31,13 @@
   <%= form.label :postcode, class: "form-label" %>
   <%= error_messages_for_field signature, :postcode %>
   <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
+<% end %>
+
+<%= form_row for: [signature, :notify_by_email], class: "notify-by-email" do %>
+  <div class="multiple-choice">
+    <%= form.check_box :notify_by_email, tabindex: increment %>
+    <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
+  </div>
 <% end %>
 
 <%= form.submit "Continue", name: "move:next", class: "button", tabindex: increment %>

@@ -190,6 +190,7 @@ FactoryBot.define do
     location_code       "GB"
     state               Archived::Signature::VALIDATED_STATE
     unsubscribe_token { Authlogic::Random.friendly_token }
+    notify_by_email     true
 
     trait :pending do
       state Archived::Signature::PENDING_STATE
@@ -211,7 +212,7 @@ FactoryBot.define do
 
     sequence(:action) {|n| "Petition #{n}" }
     background "Petition background"
-    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::VALIDATED_STATE, validated_at: Time.current)) }
+    creator { |cs| cs.association(:signature, creator_attributes.merge(creator: true, state: Signature::VALIDATED_STATE, notify_by_email: true, validated_at: Time.current)) }
 
     after(:build) do |petition, evaluator|
       if petition.signature_count.zero?
