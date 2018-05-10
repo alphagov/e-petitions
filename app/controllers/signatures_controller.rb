@@ -193,6 +193,6 @@ class SignaturesController < ApplicationController
   end
 
   def signature_attributes
-    %i[name email email_confirmation postcode location_code uk_citizenship]
+    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email]
   end
 end

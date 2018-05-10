@@ -335,7 +335,7 @@ CREATE TABLE archived_signatures (
     petition_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    notify_by_email boolean DEFAULT true,
+    notify_by_email boolean DEFAULT false,
     email character varying(255),
     unsubscribe_token character varying,
     constituency_id character varying,
@@ -1037,7 +1037,7 @@ CREATE TABLE signatures (
     petition_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    notify_by_email boolean DEFAULT true,
+    notify_by_email boolean DEFAULT false,
     email character varying(255),
     unsubscribe_token character varying,
     constituency_id character varying,
@@ -2660,4 +2660,8 @@ INSERT INTO schema_migrations (version) VALUES ('20171204113835');
 INSERT INTO schema_migrations (version) VALUES ('20171204122339');
 
 INSERT INTO schema_migrations (version) VALUES ('20180329062433');
+
+INSERT INTO schema_migrations (version) VALUES ('20180510122656');
+
+INSERT INTO schema_migrations (version) VALUES ('20180510131346');
 

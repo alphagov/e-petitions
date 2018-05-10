@@ -9,6 +9,7 @@ Capybara.server_port = 3443
 Capybara.app_host = "https://127.0.0.1:3443"
 Capybara.default_host = "https://petition.parliament.uk"
 Capybara.default_selector = :xpath
+Capybara.automatic_label_click = true
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app,

@@ -49,6 +49,7 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
     And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
+    And I check "Email me whenever there’s an update about this petition"
   )
 end
 
@@ -59,6 +60,7 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
     And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "#{postcode}"
     And I select "United Kingdom" from "Location"
+    And I check "Email me whenever there’s an update about this petition"
   )
 end
 

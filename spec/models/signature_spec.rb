@@ -27,9 +27,9 @@ RSpec.describe Signature, type: :model do
       expect(s.perishable_token).not_to be_nil
     end
 
-    it "sets notify_by_email to truthy" do
+    it "sets notify_by_email to falsey" do
       s = Signature.new
-      expect(s.notify_by_email).to be_truthy
+      expect(s.notify_by_email).to be_falsey
     end
 
     it "generates unsubscription token" do

@@ -91,6 +91,7 @@ When(/^I fill in my details as a sponsor(?: with email "(.*?)")?$/) do |email_ad
     And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "AB10 1AA"
     And I select "United Kingdom" from "Location"
+    And I check "Email me whenever there’s an update about this petition"
   }
 end
 

@@ -14,7 +14,7 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.to have_db_column(:petition_id).of_type(:integer) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:notify_by_email).of_type(:boolean).with_options(default: true) }
+    it { is_expected.to have_db_column(:notify_by_email).of_type(:boolean).with_options(default: false) }
     it { is_expected.to have_db_column(:email).of_type(:string).with_options(limit: 255) }
     it { is_expected.to have_db_column(:unsubscribe_token).of_type(:string) }
     it { is_expected.to have_db_column(:constituency_id).of_type(:string) }

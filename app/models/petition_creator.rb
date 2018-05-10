@@ -8,7 +8,7 @@ class PetitionCreator
   STAGES = %w[petition replay_petition creator replay_email]
 
   PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship]
+  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email]
   PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
@@ -57,6 +57,7 @@ class PetitionCreator
           c.location_code = location_code
           c.uk_citizenship = uk_citizenship
           c.constituency_id = constituency_id
+          c.notify_by_email = notify_by_email
           c.ip_address = request.remote_ip
         end
       end
@@ -116,6 +117,10 @@ class PetitionCreator
 
   def uk_citizenship
     petition_creator_params[:uk_citizenship] || "0"
+  end
+
+  def notify_by_email
+    petition_creator_params[:notify_by_email] || "0"
   end
 
   private
