@@ -427,7 +427,7 @@ class Signature < ActiveRecord::Base
   def constituency
     if constituency_id?
       @constituency ||= Constituency.find_by_external_id(constituency_id)
-    else
+    elsif united_kingdom?
       @constituency ||= Constituency.find_by_postcode(postcode)
     end
   end
@@ -461,6 +461,10 @@ class Signature < ActiveRecord::Base
 
   def united_kingdom?
     location_code == 'GB'
+  end
+
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
   end
 
   private

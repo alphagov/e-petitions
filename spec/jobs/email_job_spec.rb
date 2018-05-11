@@ -123,6 +123,8 @@ end
 RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
   let(:petition) { FactoryBot.create(:open_petition) }
   let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+  let(:constituency) { FactoryBot.create(:constituency, :london_and_westminster) }
+
   let(:run_jobs_and_reload_signature) do
     perform_enqueued_jobs do
       described_class.perform_later(signature)
@@ -139,6 +141,12 @@ RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
 
   it "increments the signature email_count" do
     expect{ run_jobs_and_reload_signature }.to change{ signature.email_count }.from(0).to(1)
+  end
+
+  it "sets the constituency_id" do
+    expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(constituency)
+
+    expect{ run_jobs_and_reload_signature }.to change{ signature.reload.constituency_id }.from(nil).to("3415")
   end
 end
 

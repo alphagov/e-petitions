@@ -1510,6 +1510,7 @@ RSpec.describe Signature, type: :model do
   describe "#constituency" do
     let(:signature) { FactoryBot.build(:signature, attributes) }
     let(:constituency) { signature.constituency }
+    let(:location_code) { "GB" }
 
     let(:attributes) do
       { postcode: postcode, constituency_id: constituency_id }
@@ -1517,6 +1518,16 @@ RSpec.describe Signature, type: :model do
 
     context "when the constituency_id is not set" do
       let(:constituency_id) { nil }
+
+      context "and the signature is not from the UK" do
+        let(:postcode) { "12345" }
+
+        it "returns nil" do
+          expect(signature).to receive(:united_kingdom?).and_return(false)
+          expect(Constituency).not_to receive(:find_by_postcode)
+          expect(signature.constituency).to be_nil
+        end
+      end
 
       context "and the API returns a single result" do
         let(:postcode) { "N1 1TY" }
