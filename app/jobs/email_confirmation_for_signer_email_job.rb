@@ -11,7 +11,16 @@ class EmailConfirmationForSignerEmailJob < EmailJob
       signature.fraudulent!
     else
       mailer.send(email, signature).deliver_now
-      Signature.increment_counter(:email_count, signature.id)
+
+      updates, params = [], {}
+      updates << "email_count = COALESCE(email_count, 0) + 1"
+
+      if constituency = signature.constituency
+        updates << "constituency_id = :constituency_id"
+        params[:constituency_id] = constituency.external_id
+      end
+
+      signature.update_all([updates.join(", "), params])
     end
   end
 

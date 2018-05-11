@@ -30,7 +30,7 @@ class Admin::SitesController < Admin::AdminController
       :protected, :petition_duration, :minimum_number_of_sponsors,
       :maximum_number_of_sponsors, :threshold_for_moderation,
       :threshold_for_response, :threshold_for_debate, :feedback_email,
-      :moderate_url, :login_timeout
+      :moderate_url, :login_timeout, :disable_constituency_api
     )
   end
 end

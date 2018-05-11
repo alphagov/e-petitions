@@ -1,0 +1,19 @@
+<%= hidden_field_tag :tab, "moderation" %>
+
+<%= form_row for: [form.object, :threshold_for_moderation] do %>
+  <%= form.label :threshold_for_moderation, "Threshold for moderation", class: "form-label" %>
+  <%= error_messages_for_field @site, :threshold_for_moderation %>
+  <%= form.text_field :threshold_for_moderation, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>
+
+<%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
+  <%= form.label :minimum_number_of_sponsors, class: "form-label" %>
+  <%= error_messages_for_field @site, :minimum_number_of_sponsors %>
+  <%= form.text_field :minimum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>
+
+<%= form_row for: [form.object, :maximum_number_of_sponsors] do %>
+  <%= form.label :maximum_number_of_sponsors, class: "form-label" %>
+  <%= error_messages_for_field @site, :maximum_number_of_sponsors %>
+  <%= form.text_field :maximum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>

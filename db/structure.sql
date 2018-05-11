@@ -1103,7 +1103,8 @@ CREATE TABLE sites (
     feedback_email character varying(100) DEFAULT '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>'::character varying NOT NULL,
     moderate_url character varying(50) DEFAULT 'https://moderate.petition.parliament.uk'::character varying NOT NULL,
     last_petition_created_at timestamp without time zone,
-    login_timeout integer DEFAULT 1800 NOT NULL
+    login_timeout integer DEFAULT 1800 NOT NULL,
+    feature_flags jsonb DEFAULT '{}'::jsonb NOT NULL
 );
 
 
@@ -2652,6 +2653,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170906203439');
 INSERT INTO schema_migrations (version) VALUES ('20170909092251');
 
 INSERT INTO schema_migrations (version) VALUES ('20170909095357');
+
+INSERT INTO schema_migrations (version) VALUES ('20170915102120');
 
 INSERT INTO schema_migrations (version) VALUES ('20170918162913');
 

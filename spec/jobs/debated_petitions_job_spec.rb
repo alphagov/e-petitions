@@ -11,10 +11,12 @@ RSpec.describe DebatedPetitionsJob, type: :job do
 
     let(:open_at) { "2015-12-01T10:00:00Z".in_time_zone }
 
-    around do |example|
+    before do
       travel_to(open_at) { petition.save }
       travel_to(now)
-      example.run
+    end
+
+    after do
       travel_back
     end
 

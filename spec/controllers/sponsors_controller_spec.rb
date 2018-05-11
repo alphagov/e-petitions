@@ -327,10 +327,6 @@ RSpec.describe SponsorsController, type: :controller do
             expect(assigns[:signature].ip_address).to eq("0.0.0.0")
           end
 
-          it "records the constituency id on the signature" do
-            expect(assigns[:signature].constituency_id).to eq("3415")
-          end
-
           it "sends a confirmation email" do
             expect(last_email_sent).to deliver_to("ted@example.com")
             expect(last_email_sent).to have_subject("Please confirm your email address")
@@ -636,6 +632,10 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "validates the signature" do
           expect(assigns[:signature]).to be_validated
+        end
+
+        it "records the constituency id on the signature" do
+          expect(assigns[:signature].constituency_id).to eq("3415")
         end
 
         it "redirects to the signed signature page" do

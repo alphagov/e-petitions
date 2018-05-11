@@ -7,6 +7,11 @@ Before do
 end
 
 Before do
+  stub_api_request_for("SW1A1AA").to_return(api_response(:ok, "london_and_westminster"))
+  stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+end
+
+Before do
   RateLimit.create!(
     burst_rate: 10, burst_period: 60,
     sustained_rate: 20, sustained_period: 300,

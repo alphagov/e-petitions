@@ -1,0 +1,29 @@
+<%= form_row for: [form.object, :title] do %>
+  <%= form.label :title, class: "form-label" %>
+  <%= error_messages_for_field @site, :title %>
+  <%= form.text_field :title, tabindex: increment, maxlength: 50, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :url] do %>
+  <%= form.label :url, "URL for public website", class: "form-label" %>
+  <%= error_messages_for_field @site, :url %>
+  <%= form.text_field :url, tabindex: increment, maxlength: 50, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :moderate_url] do %>
+  <%= form.label :moderate_url, "URL for moderation website", class: "form-label" %>
+  <%= error_messages_for_field @site, :moderate_url %>
+  <%= form.text_field :moderate_url, tabindex: increment, maxlength: 50, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :email_from] do %>
+  <%= form.label :email_from, "From address for emails", class: "form-label" %>
+  <%= error_messages_for_field @site, :email_from %>
+  <%= form.text_field :email_from, tabindex: increment, maxlength: 100, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :feedback_email] do %>
+  <%= form.label :feedback_email, "Email address for feedback messages", class: "form-label" %>
+  <%= error_messages_for_field @site, :feedback_email %>
+  <%= form.text_field :feedback_email, tabindex: increment, maxlength: 100, class: "form-control" %>
+<% end %>

@@ -35,13 +35,15 @@ class Signature < ActiveRecord::Base
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
-  before_save if: :email? do
+  attr_readonly :sponsor, :creator
+
+  before_create if: :email? do
     if find_duplicate
       raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
     end
   end
 
-  before_save if: :email? do
+  before_create if: :email? do
     self.uuid = generate_uuid
   end
 
@@ -134,6 +136,14 @@ class Signature < ActiveRecord::Base
       where(state: INVALIDATED_STATE)
     end
 
+    def missing_constituency_id(since: nil)
+      if since
+        uk.validated(since: since).where(constituency_id: nil)
+      else
+        uk.validated.where(constituency_id: nil)
+      end
+    end
+
     def need_emailing_for(timestamp, since:)
       validated.subscribed.for_timestamp(timestamp, since: since)
     end
@@ -197,6 +207,10 @@ class Signature < ActiveRecord::Base
       count(:all)
     end
 
+    def uk
+      where(location_code: "GB")
+    end
+
     def unarchived
       where(archived_at: nil)
     end
@@ -227,8 +241,12 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validated
-      where(state: VALIDATED_STATE)
+    def validated(since: nil)
+      if since
+        where(state: VALIDATED_STATE).where(validated_at.gt(since))
+      else
+        where(state: VALIDATED_STATE)
+      end
     end
 
     private
@@ -239,6 +257,10 @@ class Signature < ActiveRecord::Base
 
     def email_search?(query)
       query.include?('@')
+    end
+
+    def validated_at
+      arel_table[:validated_at]
     end
   end
 
@@ -313,18 +335,31 @@ class Signature < ActiveRecord::Base
 
   def validate!(now = Time.current)
     update_signature_counts = false
+    new_constituency_id = nil
+
+    unless constituency_id?
+      if united_kingdom? && postcode?
+        new_constituency_id = constituency.try(:external_id)
+      end
+    end
 
     retry_lock do
       if pending?
         update_signature_counts = true
         petition.validate_creator! unless creator?
 
-        update_columns(
+        attributes = {
           number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: now,
           updated_at:   now
-        )
+        }
+
+        if new_constituency_id
+          attributes[:constituency_id] = new_constituency_id
+        end
+
+        update_columns(attributes)
       end
     end
 
@@ -390,16 +425,11 @@ class Signature < ActiveRecord::Base
   end
 
   def constituency
-    @constituency ||= Constituency.find_by_postcode(postcode)
-  end
-
-  def set_constituency_id
-    self.constituency_id = constituency.try(:external_id)
-  end
-
-  def store_constituency_id
-    set_constituency_id
-    save if constituency_id_changed?
+    if constituency_id?
+      @constituency ||= Constituency.find_by_external_id(constituency_id)
+    elsif united_kingdom?
+      @constituency ||= Constituency.find_by_postcode(postcode)
+    end
   end
 
   def get_email_sent_at_for(timestamp)
@@ -431,6 +461,10 @@ class Signature < ActiveRecord::Base
 
   def united_kingdom?
     location_code == 'GB'
+  end
+
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
   end
 
   private

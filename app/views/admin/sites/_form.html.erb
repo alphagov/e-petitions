@@ -1,0 +1,5 @@
+<%= form_for @site, url: admin_site_url do |form| %>
+  <%= render tab, form: form %>
+  <%= form.submit "Save", class: "button" %>
+  <%= link_to "Cancel", admin_root_path, class: "button-secondary" %>
+<% end %>

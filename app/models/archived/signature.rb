@@ -29,6 +29,8 @@ module Archived
     validates :name, presence: true, length: { maximum: 255 }
     validates :state, presence: true, inclusion: { in: STATES }
 
+    attr_readonly :sponsor, :creator
+
     class << self
       def batch(id = 0, limit: 1000)
         where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)

@@ -42,9 +42,7 @@ class SignaturesController < ApplicationController
     @signature = build_signature(signature_params_for_create)
 
     if @signature.save!
-      store_constituency_id
       send_email_to_petition_signer
-
       redirect_to thank_you_url
     end
   end
@@ -164,10 +162,6 @@ class SignaturesController < ApplicationController
 
   def signature_validated?
     @signature.validated?
-  end
-
-  def store_constituency_id
-    @signature.store_constituency_id
   end
 
   def send_email_to_petition_signer
