@@ -1,13 +1,15 @@
 <h1>Tags</h1>
 
 <div class="grid-row">
-  <%= form_tag admin_tags_path, method: :get, class: 'search-inline search-tags' do %>
+  <%= form_tag admin_tags_path, method: :get, class: 'search-tags' do %>
     <div class="column-half">
-      <%= label_tag :q, "Search tags", class: "visuallyhidden" %>
-      <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
-      <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+      <div class="search-inline">
+        <%= label_tag :q, "Search tags", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
+        <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+      </div>
     </div>
-    <div class="column-half actions-right">
+    <div class="column-half actions-right search-inline">
       <%= link_to "New Tag", new_admin_tag_path, class: 'button inline-button' %>
     </div>
   <% end %>

@@ -9,12 +9,15 @@
   <h3 class="petition-action-subheading">Was this petition debated?</h3>
 
   <%= form_row class: 'inline' do %>
-    <%= f.label :debated_true, nil, class: 'block-label' do %>
-      <%= f.radio_button :debated, true %> Yes
-    <% end %>
-    <%= f.label :debated_false, nil, class: 'block-label' do %>
-      <%= f.radio_button :debated, false %> No
-    <% end %>
+    <div class="multiple-choice">
+      <%= f.radio_button :debated, true %>
+      <%= f.label :debated_true, "Yes", for: "debated_true" %>
+    </div>
+
+    <div class="multiple-choice">
+      <%= f.radio_button :debated, false %>
+      <%= f.label :debated_false, "No", for: "debated_false" %>
+    </div>
     <%= error_messages_for_field petition, :debated %>
   <% end %>
 

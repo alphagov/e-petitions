@@ -4,9 +4,10 @@
     <%= error_messages_for_field f.object, :tags %>
     <% if Tag.any? %>
       <%= collection_check_boxes(:petition, :tags, Tag.by_name, :id, :name) do |b| %>
-        <%= b.label class: 'block-label' do %>
-          <%= b.check_box disabled: @petition.editing_disabled? %> <%= content_tag :span, b.text, title: b.object.description %>
-        <% end %>
+        <div class="multiple-choice">
+          <%= b.check_box disabled: @petition.editing_disabled? %>
+          <%= b.label title: b.object.description %>
+        </div>
       <% end %>
     <% else %>
       <%= hidden_field_tag "petition[tags][]", "" %>

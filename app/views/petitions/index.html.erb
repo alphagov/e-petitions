@@ -19,10 +19,12 @@
   <p class="text-secondary"><%= petition_list_header %></p>
 <% end %>
 
-<%= form_tag petitions_path, class: 'search-inline', method: 'get', enforce_utf8: false do %>
-  <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
-  <%= hidden_field_tag 'state', @petitions.scope %>
-  <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+<%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
+  <div class="search-inline">
+    <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
+    <%= hidden_field_tag 'state', @petitions.scope %>
+    <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+  </div>
 <% end %>
 
 <p class="filtered-petition-count"><%= filtered_petition_count(@petitions) %></p>

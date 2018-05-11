@@ -3,23 +3,27 @@
 <%= form_row for: [form.object, :enabled], class: "inline" do %>
   <%= form.label :enabled, "Disable public website?", class: "form-label" %>
   <%= error_messages_for_field @site, :enabled %>
-  <%= form.label :enabled, nil, class: "block-label" do %>
-    <%= form.radio_button :enabled, false %> Yes
-  <% end %>
-  <%= form.label :enabled, nil, class: "block-label" do %>
-    <%= form.radio_button :enabled, true %> No
-  <% end %>
+  <div class="multiple-choice">
+    <%= form.radio_button :enabled, false %>
+    <%= form.label :enabled, "Yes", for: "site_enabled_false" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :enabled, true %>
+    <%= form.label :enabled, "No", for: "site_enabled_true" %>
+  </div>
 <% end %>
 
 <%= form_row for: [form.object, :protected], class: "inline" do %>
   <%= form.label :protected, "Password protect public website?", class: "form-label" %>
   <%= error_messages_for_field @site, :protected %>
-  <%= form.label :protected, nil, class: "block-label" do %>
-    <%= form.radio_button :protected, true %> Yes
-  <% end %>
-  <%= form.label :protected, nil, class: "block-label" do %>
-    <%= form.radio_button :protected, false %> No
-  <% end %>
+  <div class="multiple-choice">
+    <%= form.radio_button :protected, true %>
+    <%= form.label :protected, "Yes", for: "site_protected_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :protected, false %>
+    <%= form.label :protected, "No", for: "site_protected_false" %>
+  </div>
 <% end %>
 
 <div id="protected-fields">

@@ -41,9 +41,8 @@ Feature: Admin users index and crud
     And I should see a "First name" text field
     And I should see a "Last name" text field
     And I should see a "Email" text field
-    And I should see a "Role" select field with the following options:
-      | sysadmin  |
-      | moderator |
+    And I should see a "sysadmin" radio field
+    And I should see a "moderator" radio field
     And I should see a "Force password reset" checkbox field
     And I should see a "Account disabled" checkbox field
     And I should see a "Password" password field
@@ -55,14 +54,14 @@ Feature: Admin users index and crud
     And I fill in "First name" with "Derek"
     And I fill in "Last name" with "Jacobi"
     And I fill in "Email" with "derek@example.com"
-    And I select "sysadmin" from "Role"
+    And I choose "sysadmin"
     And I fill in "Password" with "Letmein1!"
     And I fill in "Password confirmation" with "Letmein1!"
     And I press "Save"
     Then I should be on the admin users index page
     And I should see "derek@example.com"
     When I follow "Jacobi, Derek"
-    Then the "Role" select field should have "sysadmin" selected
+    Then the "sysadmin" radio button should be chosen
     And the "Account disabled" checkbox should not be checked
 
   Scenario: Updating a user

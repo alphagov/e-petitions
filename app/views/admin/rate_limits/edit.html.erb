@@ -101,12 +101,14 @@
         <%= form_row for: [form.object, :geoblocking_enabled], class: 'inline' do %>
           <%= form.label :geoblocking_enabled, "Enable geoblocking of signatures?", class: 'form-label' %>
           <%= error_messages_for_field @rate_limit, :geoblocking_enabled %>
-          <%= form.label :geoblocking_enabled_true, nil, class: 'block-label' do %>
-            <%= form.radio_button :geoblocking_enabled, true %> Yes
-          <% end %>
-          <%= form.label :geoblocking_enabled_false, nil, class: 'block-label' do %>
-            <%= form.radio_button :geoblocking_enabled, false %> No
-          <% end %>
+          <div class="multiple-choice">
+            <%= form.radio_button :geoblocking_enabled, true %>
+            <%= form.label :geoblocking_enabled_true, "Yes", for: "geoblocking_enabled_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :geoblocking_enabled, false %>
+            <%= form.label :geoblocking_enabled_false, "No", for: "geoblocking_enabled_false" %>
+          </div>
         <% end %>
 
       <% else %>

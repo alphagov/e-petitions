@@ -2,30 +2,35 @@
 
 <div class="grid-row">
   <div class="column-two-thirds">
-    <%= form_tag [:admin, :search], enforce_utf8: false, class: "search-inline search-petitions", method: "get" do %>
+    <%= form_tag [:admin, :search], enforce_utf8: false, class: "search-petitions", method: "get" do %>
       <p>
         Search for <label><%= radio_button_tag :type, "petition", checked: true %> petitions</label>
         or <label><%= radio_button_tag :type, "signature" %> signatures</label>
       </p>
-      <%= label_tag :q, "Search", class: "visuallyhidden" %>
-      <%= search_field_tag "q", "", class: "form-control", placeholder:"Enter a search query" %>
-      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      <div class="search-inline">
+        <%= label_tag :q, "Search", class: "visuallyhidden" %>
+        <%= search_field_tag "q", "", class: "form-control", placeholder:"Enter a search query" %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
 
       <details class="tag-selector">
         <summary><span>Tags</span></summary>
-        <p>
-          <small>
-            Match <label><input type="radio" name="match" value="any" checked /> any selected tags</label>
-            <label><input type="radio" name="match" value="all" /> all selected tags</label>
-            <label><input type="radio" name="match" value="none" /> no tags</label>
-          </small>
-        </p>
         <div class="inline tag-list">
-          <% Tag.by_name.each do |tag| %>
-            <%= label_tag nil, title: tag.description, class: "block-label" do %>
-              <%= check_box_tag :"tags[]", tag.id %> <%= tag.name %>
+          <div class="panel-indent">
+            <p>
+              <small>
+                Match <label><input type="radio" name="match" value="any" checked /> any selected tags</label>
+                <label><input type="radio" name="match" value="all" /> all selected tags</label>
+                <label><input type="radio" name="match" value="none" /> no tags</label>
+              </small>
+            </p>
+            <% Tag.by_name.each do |tag| %>
+              <div class="multiple-choice">
+                <input type="checkbox" name="tags[]" value="<%= tag.id %>" id="tags_<%= tag.id %>" />
+                <label for="tags_<%= tag.id %>" title="<%= tag.description %>"><%= tag.name %></label>
+              </div>
             <% end %>
-          <% end %>
+          </div>
         </div>
       </details>
 

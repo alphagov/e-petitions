@@ -1,15 +1,18 @@
 <%= form_for petition, url: admin_petition_moderation_path(petition), method: :patch do |f| -%>
   <%= form_row class: 'inline' do %>
-    <%= f.label :moderation_approve, nil, class: 'block-label' do %>
-      <%= f.radio_button :moderation, 'approve' %> Approve
-    <% end %>
-    <%= f.label :moderation_reject, nil, class: 'block-label' do %>
-      <%= f.radio_button :moderation, 'reject' %> Reject
-    <% end %>
+    <div class="multiple-choice">
+      <%= f.radio_button :moderation, 'approve' %>
+      <%= f.label :moderation_approve, "Approve", for: "petition_moderation_approve" %>
+    </div>
+    <div class="multiple-choice">
+      <%= f.radio_button :moderation, 'reject' %>
+      <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
+    </div>
     <% unless f.object.flagged? %>
-      <%= f.label :moderation_flag, nil, class: 'block-label' do %>
-        <%= f.radio_button :moderation, 'flag' %> Flag
-      <% end %>
+      <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'flag' %>
+        <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
+      </div>
     <% end %>
     <%= error_messages_for_field petition, :moderation %>
   <% end %>
