@@ -29,7 +29,7 @@ RSpec.describe ApplicationController, type: :controller do
 
   it "sets cache control headers when asked" do
     get :index
-    expect(cache_control).to eq('no-store, no-cache')
+    expect(cache_control).to eq('no-cache, no-store')
   end
 
   it "sets X-UA-Compatible control headers" do

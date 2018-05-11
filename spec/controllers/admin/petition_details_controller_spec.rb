@@ -52,7 +52,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
 
         it 'responds successfully and renders the petition_details/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petition_details/show')
         end
       end
@@ -170,7 +170,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
         shared_examples_for 'updating a petition in the correct state' do
           it 'renders the petition_details/show template again' do
             do_update
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('petition_details/show')
           end
         end

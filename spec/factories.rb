@@ -425,7 +425,7 @@ FactoryBot.define do
       debate_outcome_attributes[:debate_pack_url] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
       debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
 
-      petition.create_debate_outcome(debate_outcome_attributes)
+      petition.build_debate_outcome(debate_outcome_attributes)
     end
   end
 

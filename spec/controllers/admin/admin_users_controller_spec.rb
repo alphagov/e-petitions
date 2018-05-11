@@ -60,7 +60,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
 
       it "should be successful" do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "should display a list of users (sorted by name)" do
@@ -72,7 +72,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     describe "GET 'new'" do
       it "should be successful" do
         get :new
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "should assign a new user" do
@@ -140,7 +140,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
 
       it "should be successful" do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "should assign the user" do

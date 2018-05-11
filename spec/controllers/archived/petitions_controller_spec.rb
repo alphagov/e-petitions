@@ -7,7 +7,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
     context "when no state param is provided" do
       it "is successful" do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "exposes a search scoped to the all facet" do
@@ -32,7 +32,7 @@ RSpec.describe Archived::PetitionsController, type: :controller do
       context "and it is a public facet from the locale file" do
         it "is successful" do
           get :index, params: { state: "published" }
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "exposes a search scoped to the state param" do

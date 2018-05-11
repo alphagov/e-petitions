@@ -59,7 +59,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
         it 'responds successfully and renders the petitions/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -224,7 +224,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
           end
 
           it "renders the petitions/show template" do
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template 'petitions/show'
           end
         end

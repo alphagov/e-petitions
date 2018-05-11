@@ -23,7 +23,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
     it "should render successfully" do
       expect(@user.has_to_change_password?).to be_truthy
       get :edit, params: { id: 50000 }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
@@ -35,7 +35,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
     describe "GET 'edit'" do
       it "should render successfully" do
         get :edit, params: { id: 50000 }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

@@ -208,7 +208,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           end
 
           it "renders the admin petitions show template" do
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template 'admin/petitions/show'
           end
         end

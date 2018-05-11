@@ -52,7 +52,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
 
         it 'responds successfully and renders the petitions/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -198,7 +198,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
 
             it 're-renders the petitions/show template' do
               do_patch
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('petitions/show')
             end
 
@@ -336,7 +336,7 @@ RSpec.describe Admin::Archived::ScheduleDebateController, type: :controller, adm
 
             it 're-renders the petitions/show template' do
               do_patch
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('petitions/show')
             end
 

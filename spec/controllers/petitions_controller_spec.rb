@@ -156,7 +156,7 @@ RSpec.describe PetitionsController, type: :controller do
 
           expect(petition).to be_nil
           expect(assigns[:new_petition].errors[:action]).not_to be_blank
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "should not create a new petition if email is invalid" do
@@ -165,7 +165,7 @@ RSpec.describe PetitionsController, type: :controller do
           end
 
           expect(petition).to be_nil
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "should not create a new petition if UK citizenship is not confirmed" do
@@ -174,7 +174,7 @@ RSpec.describe PetitionsController, type: :controller do
           end
 
           expect(petition).to be_nil
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "has stage of 'petition' if there is an error on action" do
@@ -334,7 +334,7 @@ RSpec.describe PetitionsController, type: :controller do
     context "when no state param is provided" do
       it "is successful" do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "exposes a search scoped to the all facet" do
@@ -359,7 +359,7 @@ RSpec.describe PetitionsController, type: :controller do
       context "and it is a public facet from the locale file" do
         it "is successful" do
           get :index, params: { state: "open" }
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "exposes a search scoped to the state param" do
@@ -384,7 +384,7 @@ RSpec.describe PetitionsController, type: :controller do
   describe "GET /petitions/check" do
     it "is successful" do
       get :check
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     context "when parliament is dissolved" do
@@ -413,7 +413,7 @@ RSpec.describe PetitionsController, type: :controller do
   describe "GET /petitions/check_results" do
     it "is successful" do
       get :check_results, params: { q: "action" }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     context "when parliament is dissolved" do

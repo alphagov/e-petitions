@@ -50,9 +50,11 @@ class HealthCheck
   end
 
   def database_connection
-    ActiveRecord::Base.establish_connection
-    ActiveRecord::Base.connection
-    true
+    unless defined?(@connection)
+      ActiveRecord::Base.establish_connection
+    end
+
+    @connection ||= ActiveRecord::Base.connection
   rescue
     false
   end
@@ -68,6 +70,6 @@ class HealthCheck
 
   def database_integrity
     return false unless database_connection
-    !ActiveRecord::Migrator.needs_migration?
+    !database_connection.migration_context.needs_migration?
   end
 end

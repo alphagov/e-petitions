@@ -12,13 +12,13 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
   describe "format" do
     it "responds to JSON" do
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "sets CORS headers" do
       get "/archived/petitions.json"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(access_control_allow_origin).to eq('*')
       expect(access_control_allow_methods).to eq('GET')
       expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
@@ -40,63 +40,63 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
     it "returns a link to itself" do
       get "/archived/petitions.json"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("self" => "https://petition.parliament.uk/archived/petitions.json")
     end
 
     it "returns a link to the first page of results" do
       get "/archived/petitions.json?count=2"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("first" => "https://petition.parliament.uk/archived/petitions.json?count=2")
     end
 
     it "returns a link to the last page of results" do
       get "/archived/petitions.json?count=2"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("last" => "https://petition.parliament.uk/archived/petitions.json?count=2&page=2")
     end
 
     it "returns a link to the next page of results if there is one" do
       get "/archived/petitions.json?count=2"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("next" => "https://petition.parliament.uk/archived/petitions.json?count=2&page=2")
     end
 
     it "returns a link to the previous page of results if there is one" do
       get "/archived/petitions.json?count=2&page=2"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("prev" => "https://petition.parliament.uk/archived/petitions.json?count=2")
     end
 
     it "returns no link to the previous page of results when on the first page of results" do
       get "/archived/petitions.json?count=22"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("prev" => nil)
     end
 
     it "returns no link to the next page of results when on the last page of results" do
       get "/archived/petitions.json?count=2&page=2"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("next" => nil)
     end
 
     it "returns the last link == first link for empty results" do
       get "/archived/petitions.json?count=2&page=2&state=rejected"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("last" => "https://petition.parliament.uk/archived/petitions.json?count=2&state=rejected")
     end
 
     it "returns previous page link == last link when paging off the end of the results" do
       get "/archived/petitions.json?count=2&page=3&state=rejected"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("prev" => "https://petition.parliament.uk/archived/petitions.json?count=2&state=rejected")
     end
   end
@@ -107,7 +107,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
     it "returns an empty response if no petitions are public" do
       get "/archived/petitions.json"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(data).to be_empty
     end
 
@@ -117,7 +117,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
       petition_3 = FactoryBot.create :archived_petition, signature_count: 200
 
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(
@@ -132,7 +132,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
       petition = FactoryBot.create :archived_petition
 
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(
@@ -152,7 +152,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
           rejection_details: "This is a duplication of another petition"
 
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(
@@ -175,7 +175,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
           response_details: "Details of what the government said"
 
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(
@@ -202,7 +202,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
 
       get "/archived/petitions.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(data).to match(
         a_collection_containing_exactly(

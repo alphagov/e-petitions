@@ -52,7 +52,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
 
         it 'responds successfully and renders the petitions/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -166,7 +166,7 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
             allow(petition).to receive(:build_note).and_return(note)
 
             patch :update, params: { petition_id: petition.id, note: { details: "update 2" } }
-            expect(petition.note(true).details).to eq("update 2")
+            expect(petition.reload_note.details).to eq("update 2")
           }.not_to raise_error
         end
       end

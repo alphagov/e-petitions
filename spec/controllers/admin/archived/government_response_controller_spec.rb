@@ -53,7 +53,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
 
         it 'responds successfully and renders the petitions/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -247,7 +247,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
 
           it 're-renders the admin/archived/petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('admin/archived/petitions/show')
           end
         end
@@ -257,7 +257,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
 
           it 're-renders the petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('petitions/show')
           end
 
@@ -461,7 +461,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
 
           it 're-renders the admin/archived/petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('admin/archived/petitions/show')
           end
         end
@@ -471,7 +471,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
 
           it 're-renders the petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('petitions/show')
           end
 
@@ -584,7 +584,7 @@ RSpec.describe Admin::Archived::GovernmentResponseController, type: :controller,
             }
 
             patch :update, params: { petition_id: petition.id, archived_government_response: response_attributes, save: "Save" }
-            expect(petition.government_response(true).summary).to eq("summmary 2")
+            expect(petition.reload_government_response.summary).to eq("summmary 2")
           }.not_to raise_error
         end
       end

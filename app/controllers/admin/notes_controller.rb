@@ -3,7 +3,7 @@ class Admin::NotesController < Admin::AdminController
   before_action :fetch_note
 
   rescue_from ActiveRecord::RecordNotUnique do
-    @note = @petition.note(true) and update
+    @note = @petition.reload_note and update
   end
 
   def show

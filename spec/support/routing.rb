@@ -6,7 +6,7 @@ module RequestRoutingMatchers
 
     delegate :request, :response, to: :scope
     delegate :params, :path, to: :request
-    delegate :location, :success?, :redirect?, to: :response
+    delegate :location, :successful?, :redirect?, to: :response
 
     def initialize(scope, *expected)
       @expected = expected[1] || {}
@@ -24,7 +24,7 @@ module RequestRoutingMatchers
 
     def matches?(actual)
       process(actual) if Hash === actual
-      success? && !redirect? && params_match?
+      successful? && !redirect? && params_match?
     end
 
     def process(request)
@@ -66,7 +66,7 @@ module RequestRoutingMatchers
 
     delegate :request, :response, to: :scope
     delegate :params, :path, to: :request
-    delegate :location, :success?, :redirect?, to: :response
+    delegate :location, :successful?, :redirect?, to: :response
 
     def initialize(scope)
       @scope = scope
@@ -74,7 +74,7 @@ module RequestRoutingMatchers
 
     def matches?(actual)
       process(actual) if Hash === actual
-      success? && !redirect?
+      successful? && !redirect?
     end
 
     def process(request)
@@ -116,7 +116,7 @@ module RequestRoutingMatchers
 
     delegate :request, :response, to: :scope
     delegate :params, :path, to: :request
-    delegate :success?, :redirect?, to: :response
+    delegate :successful?, :redirect?, to: :response
 
     def initialize(scope, location, status)
       @scope, @location, @status = scope, location, status
@@ -147,7 +147,7 @@ module RequestRoutingMatchers
     def failure_message
       if redirect?
         "#{expected_message}, but it was redirected to #{response.location.inspect}"
-      elsif success?
+      elsif successful?
         "#{expected_message}, but it was routed to #{path_params.inspect}"
       else
         "#{expected_message}, but it was not routable"

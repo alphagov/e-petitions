@@ -70,7 +70,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
 
         it 'responds successfully and renders the petitions/show template' do
           get :show, params: { petition_id: petition.id }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -221,7 +221,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
           shared_examples_for 'a debate_outcome with invalid parameters' do
             it 're-renders the petitions/show template' do
               do_patch
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('petitions/show')
             end
 
@@ -394,7 +394,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
 
             it 're-renders the petitions/show template' do
               do_patch
-              expect(response).to be_success
+              expect(response).to be_successful
               expect(response).to render_template('petitions/show')
             end
 
@@ -471,7 +471,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
             }
 
             patch :update, params: { petition_id: petition.id, archived_debate_outcome: outcome_attributes, save: "Save" }
-            expect(petition.debate_outcome(true).overview).to eq("overview 2")
+            expect(petition.reload_debate_outcome.overview).to eq("overview 2")
           }.not_to raise_error
         end
       end
