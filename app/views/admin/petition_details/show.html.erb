@@ -40,9 +40,10 @@
       <% end %>
 
       <%= form_row for: [f.object, :special_consideration] do %>
-        <%= f.label :special_consideration do %>
-          <%= f.check_box :special_consideration, tabindex: increment, disabled: @petition.editing_disabled? %> Special consideration when dealing with this petition
-        <% end %>
+        <div class="multiple-choice">
+          <%= f.check_box :special_consideration, tabindex: increment, disabled: @petition.editing_disabled? %>
+          <%= f.label :special_consideration, 'Special consideration when dealing with this petition' %>
+        </div>
         <%= error_messages_for_field @petition, :special_consideration %>
       <% end %>
 

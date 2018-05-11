@@ -1,21 +1,26 @@
 <%= form_tag admin_tasks_url do |form| %>
   <div class="form-group inline">
-    <label class="form-label">
-      <input type="checkbox" value="backfill_constituencies" name="tasks[]">
-      Backfill constituencies on signatures validated in the last:
-    </label>
+    <div class="multiple-choice">
+      <input type="checkbox" value="backfill_constituencies" name="tasks[]" id="tasks_backfill_constituencies">
+      <label for="tasks_backfill_constituencies">Backfill constituencies on signatures validated in the last:</label>
+    </div>
 
-    <label class="block-label">
-      <input type="radio" value="week" name="backfill_constituencies[since]" checked> Week
-    </label>
+    <div class="form-group panel-indent">
+      <div class="multiple-choice">
+        <input type="radio" value="week" name="backfill_constituencies[since]" id="backfill_constituencies_since_week" checked>
+        <label for="backfill_constituencies_since_week">Week</label>
+      </div>
 
-    <label class="block-label">
-      <input type="radio" value="month" name="backfill_constituencies[since]"> Month
-    </label>
+      <div class="multiple-choice">
+        <input type="radio" value="month" name="backfill_constituencies[since]" id="backfill_constituencies_since_month">
+        <label for="backfill_constituencies_since_month">Month</label>
+      </div>
 
-    <label class="block-label">
-      <input type="radio" value="three_months" name="backfill_constituencies[since]"> Three months
-    </label>
+      <div class="multiple-choice">
+        <input type="radio" value="three_months" name="backfill_constituencies[since]" id="backfill_constituencies_since_three_months">
+        <label for="backfill_constituencies_since_three_months">Three months</label>
+      </div>
+    </div>
   </div>
 
   <%= submit_tag "Run Tasks", class: "button" %>

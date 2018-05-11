@@ -17,22 +17,31 @@
     <%= f.email_field :email, tabindex: increment, class: 'form-control' %>
   <% end %>
 
-  <%= form_row for: [f.object, :email] do %>
-    <%= f.label :role, class: 'form-label form-label-inline' %>
+  <%= form_row for: [f.object, :email], class: 'inline' do %>
+    <%= f.label :role, class: 'form-label' %>
     <%= error_messages_for_field f.object, :role %>
-    <%= f.select('role', AdminUser::ROLES, {}, class: 'form-control column-third') %>
+    <% AdminUser::ROLES.each do |role| %>
+      <div class="multiple-choice">
+        <%= f.radio_button :role, role %>
+        <%= f.label :role, role, for: "admin_user_role_#{role}" %>
+      </div>
+    <% end %>
   <% end %>
 
   <%= form_row for: [f.object, :force_password_reset] do %>
-    <%= f.check_box :force_password_reset, tabindex: increment, class: 'checkbox' %>
-    <%= f.label :force_password_reset %>
     <%= error_messages_for_field f.object, :force_password_reset %>
+    <div class="multiple-choice">
+      <%= f.check_box :force_password_reset, tabindex: increment %>
+      <%= f.label :force_password_reset %>
+    </div>
   <% end %>
 
   <%= form_row for: [f.object, :account_disabled] do %>
-    <%= f.check_box :account_disabled, tabindex: increment, class: 'checkbox' %>
-    <%= f.label :account_disabled %>
     <%= error_messages_for_field f.object, :account_disabled %>
+    <div class="multiple-choice">
+      <%= f.check_box :account_disabled, tabindex: increment %>
+      <%= f.label :account_disabled %>
+    </div>
   <% end %>
 
   <%= field_set_tag do %>

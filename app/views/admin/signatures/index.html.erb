@@ -2,10 +2,12 @@
 
 <div class="grid-row">
   <div class="column-two-thirds">
-    <%= form_tag [:admin, :signatures], enforce_utf8: false, class: 'search-inline search-signatures', method: 'get' do %>
-      <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
-      <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
-      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    <%= form_tag [:admin, :signatures], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+      <div class="search-inline">
+        <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
     <% end %>
   </div>
 </div>

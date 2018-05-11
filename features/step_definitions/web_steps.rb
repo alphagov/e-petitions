@@ -161,6 +161,20 @@ Then /^the "([^"]*)" checkbox(?: within "([^"]*)")? should not be checked$/ do |
   end
 end
 
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should be chosen$/ do |label, selector|
+  with_scope(selector) do
+    field_checked = find_field(label)['checked']
+    expect(field_checked).to be_truthy
+  end
+end
+
+Then /^the "([^"]*)" radio button(?: within "([^"]*)")? should not be chosen$/ do |label, selector|
+  with_scope(selector) do
+    field_checked = find_field(label)['checked']
+    expect(field_checked).to be_falsey
+  end
+end
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   url = URI.parse(current_url)
   url.query = nil
