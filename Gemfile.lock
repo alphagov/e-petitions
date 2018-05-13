@@ -50,6 +50,9 @@ GEM
     aws-sdk-core (2.10.88)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-rails (1.0.1)
+      aws-sdk-resources (~> 2)
+      railties (>= 3)
     aws-sdk-resources (2.10.88)
       aws-sdk-core (= 2.10.88)
     aws-sigv4 (1.0.2)
@@ -303,6 +306,7 @@ DEPENDENCIES
   appsignal
   authlogic
   aws-sdk (~> 2.0)
+  aws-sdk-rails (~> 1.0)
   bcrypt
   capybara
   connection_pool
@@ -350,4 +354,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
