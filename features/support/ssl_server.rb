@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'webrick/https'
 require 'rack/handler/webrick'
 
@@ -16,7 +17,7 @@ module Epets
           SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE,
           SSLPrivateKey:   private_key,
           SSLCertificate:  ssl_certificate,
-          SSLCertName:     [["US", 'localhost']],
+          SSLCertName:     [['GB', 'petition.parliament.uk']],
           AccessLog:       [],
           Logger:          logger
         }
@@ -27,23 +28,57 @@ module Epets
       end
 
       def log_path
-        Rails.root.join("./log/capybara_test.log").to_s
+        Rails.root.join('log', 'capybara_test.log').to_s
       end
 
       def private_key
+        unless File.exist?(private_key_path)
+          generate_ssl_certificate
+        end
+
         OpenSSL::PKey::RSA.new(File.read(private_key_path))
       end
 
       def private_key_path
-        Rails.root.join("./features/support/server.key").to_s
+        ssl_dir.join('key.pem').to_s
       end
 
       def ssl_certificate
+        unless File.exist?(ssl_certificate_path)
+          generate_ssl_certificate
+        end
+
         OpenSSL::X509::Certificate.new(File.read(ssl_certificate_path))
       end
 
       def ssl_certificate_path
-        Rails.root.join("./features/support/server.crt").to_s
+        ssl_dir.join('cert.pem').to_s
+      end
+
+      def generate_ssl_certificate
+        FileUtils.mkdir_p(ssl_dir) unless Dir.exist?(ssl_dir)
+
+        details = []
+        details << 'C=GB'
+        details << 'ST=London'
+        details << 'L=London'
+        details << 'O=Houses of Parliament'
+        details << 'OU=Parliamentary ICT'
+        details << 'CN=petition.parliament.uk'
+
+        args = %w[openssl req -x509]
+        args.concat ['-newkey', 'rsa:2048']
+        args.concat ['-keyout', private_key_path]
+        args.concat ['-out', ssl_certificate_path]
+        args.concat ['-days', '3650']
+        args.concat ['-nodes', '-sha256']
+        args.concat ['-subj', "/#{details.join('/')}"]
+
+        Kernel.system *args, err: File::NULL, out: File::NULL
+      end
+
+      def ssl_dir
+        Rails.root.join('tmp', 'ssl')
       end
     end
   end
