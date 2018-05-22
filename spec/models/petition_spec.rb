@@ -154,17 +154,13 @@ RSpec.describe Petition, type: :model do
 
     context "threshold" do
       before :each do
-        @p1 = FactoryBot.create(:open_petition)
-        @p1.update_attribute(:signature_count, 100000)
-        @p2 = FactoryBot.create(:open_petition)
-        @p2.update_attribute(:signature_count, 100001)
-        @p3 = FactoryBot.create(:open_petition)
-        @p3.update_attribute(:signature_count, 99999)
-        @p4 = FactoryBot.create(:open_petition)
-        @p4.update_attribute(:signature_count, 200000)
+        @p1 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate)
+        @p2 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate + 1)
+        @p3 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate - 1)
+        @p4 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate * 2)
       end
 
-      it "returns 4 petitions over the threshold" do
+      it "returns 3 petitions over the threshold" do
         petitions = Petition.threshold
         expect(petitions.size).to eq(3)
         expect(petitions).to include(@p1, @p2, @p4)
