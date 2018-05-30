@@ -34,3 +34,8 @@
 
 # Add back any keep files that might have been excluded by the above
 !.keep
+
+*~
+\#*\#
+.idea
+database.log
