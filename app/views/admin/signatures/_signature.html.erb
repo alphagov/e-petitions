@@ -29,6 +29,8 @@
     <td class="signature-actions">
       <% if signature.subscribed? %>
         <%= button_to 'Unsubscribe', unsubscribe_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
+      <% else %>
+        <%= button_to 'Subscribe', subscribe_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
       <% end %>
       <% if signature.pending? %>
         <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
