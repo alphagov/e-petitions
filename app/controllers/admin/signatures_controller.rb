@@ -1,7 +1,7 @@
 class Admin::SignaturesController < Admin::AdminController
   include BulkVerification
 
-  before_action :fetch_signature, except: [:index, :bulk_validate, :bulk_invalidate, :bulk_unsubscribe, :bulk_destroy]
+  before_action :fetch_signature, except: [:index, :bulk_validate, :bulk_invalidate, :bulk_subscribe, :bulk_unsubscribe, :bulk_destroy]
   before_action :fetch_signatures, only: [:index]
 
   def index
@@ -65,6 +65,24 @@ class Admin::SignaturesController < Admin::AdminController
       redirect_to admin_signatures_url(q: params[:q]), notice: :signature_deleted
     else
       redirect_to admin_signatures_url(q: params[:q]), alert: :signature_not_deleted
+    end
+  end
+
+  def bulk_subscribe
+    begin
+      Signature.subscribe!(selected_ids)
+      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_subscribed
+    rescue StandardError => e
+      Appsignal.send_exception e
+      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_subscribed
+    end
+  end
+
+  def subscribe
+    if @signature.update(notify_by_email: true)
+      redirect_to admin_signatures_url(q: params[:q]), notice: :signature_subscribed
+    else
+      redirect_to admin_signatures_url(q: params[:q]), alert: :signature_not_subscribed
     end
   end
 

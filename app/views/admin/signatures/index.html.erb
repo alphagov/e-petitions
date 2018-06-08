@@ -53,6 +53,12 @@
       <%= submit_tag 'Invalidate', name: nil, class: 'button', disabled: true, data: { confirm: 'Invalidate selected signatures?' } %>
     <% end %>
 
+    <%= form_tag subscribe_admin_signatures_path(q: params[:q]), method: :post, class: 'action subscribe-action' do %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
+      <%= submit_tag 'Subscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Subscribe selected signatures?' } %>
+    <% end %>
+
     <%= form_tag unsubscribe_admin_signatures_path(q: params[:q]), method: :post, class: 'action unsubscribe-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
@@ -105,6 +111,7 @@
       var enableDisableActions = function() {
         $('.validate-action input[type=submit]').prop('disabled', actionDisabled('validate'));
         $('.invalidate-action input[type=submit]').prop('disabled', actionDisabled('invalidate'));
+        $('.subscribe-action input[type=submit]').prop('disabled', actionDisabled('subscribe'));
         $('.unsubscribe-action input[type=submit]').prop('disabled', actionDisabled('unsubscribe'));
         $('.delete-action input[type=submit]').prop('disabled', actionDisabled('delete'));
       };
