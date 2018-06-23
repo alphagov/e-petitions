@@ -98,6 +98,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     describe 'PATCH /update' do
       let(:government_response_attributes) do
         {
+          responded_on: Date.civil(2018, 6, 23),
           summary: 'The government agrees',
           details: 'Your petition is brilliant and we will do our utmost to make it law.'
         }
@@ -130,6 +131,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           it 'stores the supplied government response in the db' do
             do_patch
             petition.reload
+            expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
             expect(government_response.summary).to eq government_response_attributes[:summary]
             expect(government_response.details).to eq government_response_attributes[:details]
           end
@@ -227,6 +229,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
         describe 'using no params to add a government response' do
           before do
+            government_response_attributes[:responded_on] = nil
             government_response_attributes[:summary] = nil
             government_response_attributes[:details] = nil
           end
@@ -305,6 +308,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           it 'stores the supplied response on the petition in the db' do
             do_patch
             petition.reload
+            expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
             expect(government_response.summary).to eq government_response_attributes[:summary]
             expect(government_response.details).to eq government_response_attributes[:details]
           end
@@ -381,6 +385,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           it 'stores the supplied government response in the db' do
             do_patch
             petition.reload
+            expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
             expect(government_response.summary).to eq government_response_attributes[:summary]
             expect(government_response.details).to eq government_response_attributes[:details]
           end
@@ -448,6 +453,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
         describe 'using no params to add a government response' do
           before do
+            government_response_attributes[:responded_on] = nil
             government_response_attributes[:summary] = nil
             government_response_attributes[:details] = nil
           end
@@ -526,6 +532,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
           it 'stores the supplied response on the petition in the db' do
             do_patch
             petition.reload
+            expect(government_response.responded_on).to eq government_response_attributes[:responded_on]
             expect(government_response.summary).to eq government_response_attributes[:summary]
             expect(government_response.details).to eq government_response_attributes[:details]
           end
@@ -577,7 +584,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
       context "when two moderators update the response for the first time simultaneously" do
         let(:government_response) do
-          FactoryBot.build(:government_response, summary: "", details: "", petition: petition)
+          FactoryBot.build(:government_response, responded_on: "", summary: "", details: "", petition: petition)
         end
 
         before do
@@ -591,6 +598,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             expect(petition.government_response).to be_nil
 
             response_attributes = {
+              responded_on: Date.civil(2018, 6, 23),
               summary: "summmary 1",
               details: "details 1"
             }
@@ -602,6 +610,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             allow(petition).to receive(:build_government_response).and_return(government_response)
 
             response_attributes = {
+              responded_on: Date.civil(2018, 6, 23),
               summary: "summmary 2",
               details: "details 2"
             }

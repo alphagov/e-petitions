@@ -36,7 +36,7 @@ class Admin::Archived::GovernmentResponseController < Admin::AdminController
   end
 
   def government_response_params
-    params.require(:archived_government_response).permit(:summary, :details)
+    params.require(:archived_government_response).permit(:responded_on, :summary, :details)
   end
 
   def send_email_to_petitioners?
