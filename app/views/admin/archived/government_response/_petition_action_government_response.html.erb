@@ -1,5 +1,11 @@
 <h2 class="petition-action-heading">Government response</h2>
 <%= form_for @government_response, :url => admin_archived_petition_government_response_path(petition), method: :put do |f| -%>
+  <%= form_row :for => [f.object, :responded_on] do %>
+    <%= f.label :responded_on, class: 'form-label' %>
+    <%= error_messages_for_field f.object, :responded_on %>
+    <%= f.date_field :responded_on, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
   <%= form_row :for => [f.object, :summary] do %>
     <%= f.label :summary, 'Summary quote', class: 'form-label' %>
     <%= error_messages_for_field f.object, :summary %>
@@ -10,7 +16,8 @@
   <%= form_row :for => [f.object, :details] do %>
     <%= f.label :details, 'Response in full', class: 'form-label' %>
     <%= error_messages_for_field f.object, :details %>
-    <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, class: 'form-control' %>
+    <%= f.text_area :details, rows: 8, cols: 70, tabindex: increment, data: { max_length: 10000 }, class: 'form-control' %>
+    <p class="character-count">10000 characters max</p>
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>

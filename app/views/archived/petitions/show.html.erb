@@ -138,6 +138,7 @@
       <% if government_response = @petition.government_response? %>
         <section class="about-item about-item-count-response" id="response-threshold" aria-labelledby="response-threshold-heading">
           <h2 id="response-threshold-heading">Government responded</h2>
+          <p class="secondary">This response was given on <%= short_date_format government_response.responded_on %></p>
           <% if government_response.summary? %>
             <blockquote class="pull-quote">
               <%= auto_link(simple_format(h(government_response.summary)), html: { rel: 'nofollow' } ) %>

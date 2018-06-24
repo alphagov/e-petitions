@@ -5,6 +5,15 @@ RSpec.describe GovernmentResponse, type: :model do
     expect(FactoryBot.build(:government_response)).to be_valid
   end
 
+  describe "schema" do
+    it { is_expected.to have_db_column(:petition_id).of_type(:integer) }
+    it { is_expected.to have_db_column(:summary).of_type(:string).with_options(limit: 500, null: false) }
+    it { is_expected.to have_db_column(:details).of_type(:text) }
+    it { is_expected.to have_db_column(:responded_on).of_type(:date) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  end
+
   describe "associations" do
     it { is_expected.to belong_to(:petition).touch(true) }
   end

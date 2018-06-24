@@ -65,6 +65,7 @@ class ArchivePetitionJob < ApplicationJob
 
         if government_response = petition.government_response
           p.build_government_response do |r|
+            r.responded_on = government_response.responded_on
             r.summary = government_response.summary
             r.details = government_response.details
             r.created_at = government_response.created_at

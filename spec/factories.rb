@@ -39,6 +39,7 @@ FactoryBot.define do
 
   factory :archived_government_response, class: "Archived::GovernmentResponse" do
     association :petition, factory: :archived_petition
+    responded_on { 1.year.ago.to_date }
     details "Government Response Details"
     summary "Government Response Summary"
   end
@@ -594,6 +595,7 @@ FactoryBot.define do
 
   factory :government_response do
     association :petition, factory: :awaiting_petition
+    responded_on { 1.day.ago.to_date }
     details "Government Response Details"
     summary "Government Response Summary"
   end

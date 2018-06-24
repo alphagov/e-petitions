@@ -140,7 +140,8 @@ CREATE TABLE archived_government_responses (
     summary character varying(500) NOT NULL,
     details text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    responded_on date
 );
 
 
@@ -635,7 +636,8 @@ CREATE TABLE government_responses (
     summary character varying(500) NOT NULL,
     details text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    responded_on date
 );
 
 
@@ -2667,4 +2669,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180329062433');
 INSERT INTO schema_migrations (version) VALUES ('20180510122656');
 
 INSERT INTO schema_migrations (version) VALUES ('20180510131346');
+
+INSERT INTO schema_migrations (version) VALUES ('20180623131406');
 

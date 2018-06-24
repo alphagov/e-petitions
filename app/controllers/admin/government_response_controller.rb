@@ -36,7 +36,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
   end
 
   def government_response_params
-    params.require(:government_response).permit(:summary, :details)
+    params.require(:government_response).permit(:responded_on, :summary, :details)
   end
 
   def send_email_to_petitioners?

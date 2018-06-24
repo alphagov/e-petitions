@@ -112,7 +112,7 @@ module Archived
       end
 
       def with_response
-        where.not(government_response_at: nil)
+        where.not(government_response_at: nil).preload(:government_response)
       end
 
       def response_threshold_reached
@@ -148,7 +148,7 @@ module Archived
       end
 
       def debated
-        where(debate_state: 'debated')
+        where(debate_state: 'debated').preload(:debate_outcome)
       end
 
       def not_debated
