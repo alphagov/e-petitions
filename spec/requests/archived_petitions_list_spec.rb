@@ -182,6 +182,7 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
           a_hash_including(
             "attributes" => a_hash_including(
               "government_response" => a_hash_including(
+                "responded_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
                 "summary" => "Summary of what the government said",
                 "details" => "Details of what the government said"
               )

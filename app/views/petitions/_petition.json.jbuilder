@@ -41,6 +41,7 @@ json.attributes do
 
   if response = petition.government_response
     json.government_response do
+      json.responded_on api_date_format(response.responded_on)
       json.summary response.summary
       json.details response.details
       json.created_at api_date_format(response.created_at)
