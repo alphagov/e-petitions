@@ -183,6 +183,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
 
     it "copies the government_response object" do
+      expect(archived_government_response.responded_on).to eq(government_response.responded_on)
       expect(archived_government_response.summary).to eq(government_response.summary)
       expect(archived_government_response.details).to eq(government_response.details)
       expect(archived_government_response.created_at).to be_usec_precise_with(government_response.created_at)
