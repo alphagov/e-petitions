@@ -18,7 +18,7 @@ Then(/^the site owners should be notified$/) do
     Then they should see "#{@feedback.email}" in the email body
     Then they should see "#{@feedback.petition_link_or_title}" in the email body
     Then they should see "#{@feedback.comment}" in the email body
-    Then they should see "Browser: Chrome" in the email body
+    Then they should see "Chrome" in the email body
   )
 end
 
