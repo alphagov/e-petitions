@@ -12,7 +12,7 @@ services:
 addons:
   postgresql: "9.4"
 before_install:
-- gem install bundler
+- gem install bundler -v 1.16.2
 - |
     export PHANTOMJS_VERSION=2.1.1
     export PATH=$PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
