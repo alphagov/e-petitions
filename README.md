@@ -29,7 +29,11 @@ A few things to know:
 
 ## Run the app
 
+If you have a development database set up run the app with this command:
+
 * `rails s`
+
+You can use `./local-startup.sh` to run a dockerised postgres and app with one command.  Note that by default the database will not be kept between runs of the app.
 
 ## Other info
 
