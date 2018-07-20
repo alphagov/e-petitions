@@ -3,6 +3,8 @@ require 'active_support/number_helper'
 class Parliament < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
+  CUTOFF_DATE = Date.civil(2015, 5, 7)
+
   has_many :petitions, inverse_of: :parliament, class_name: "Archived::Petition"
 
   class << self
@@ -183,5 +185,9 @@ class Parliament < ActiveRecord::Base
 
   def formatted_threshold_for_debate
     number_to_delimited(threshold_for_debate)
+  end
+
+  def show_on_a_map?
+    opening_at > CUTOFF_DATE
   end
 end
