@@ -120,4 +120,34 @@ RSpec.describe SearchHelper, type: :helper do
       end
     end
   end
+
+  describe "#petition_result_path" do
+    let(:petition) { FactoryBot.create(:petition) }
+
+    subject { helper.petition_result_path(petition) }
+
+    it "generates the correct url" do
+      expect(subject).to eq("/petitions/#{petition.id}")
+    end
+
+    context "with an archived petition" do
+      let(:petition) { FactoryBot.create(:archived_petition) }
+
+      it "generates the correct url" do
+        expect(subject).to eq("/archived/petitions/#{petition.id}")
+      end
+    end
+
+    context "with options" do
+      let(:options) do
+        { reveal_response: "yes", anchor: 'response-threshold' }
+      end
+
+      subject { helper.petition_result_path(petition, options) }
+
+      it "generates the correct url" do
+        expect(subject).to eq("/petitions/#{petition.id}?reveal_response=yes#response-threshold")
+      end
+    end
+  end
 end

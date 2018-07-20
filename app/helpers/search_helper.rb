@@ -20,4 +20,12 @@ module SearchHelper
     noun = petitions.search? ? 'result' : 'petition'
     "#{number_with_delimiter(total_entries)} #{noun.pluralize(total_entries)}"
   end
+
+  def petition_result_path(petition, options = {})
+    if petition.is_a?(Archived::Petition)
+      archived_petition_path(petition, options)
+    else
+      petition_path(petition, options)
+    end
+  end
 end
