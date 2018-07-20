@@ -3,6 +3,7 @@ require 'csv'
 class PetitionsController < ApplicationController
   before_action :redirect_to_valid_state, only: [:index]
   before_action :do_not_cache, except: [:index, :show]
+  before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
 
   before_action :redirect_to_home_page_if_dissolved, only: [:new, :check, :check_results, :create]
   before_action :redirect_to_home_page_unless_opened, only: [:index, :new, :check, :check_results, :create]
@@ -17,7 +18,6 @@ class PetitionsController < ApplicationController
   before_action :redirect_to_moderation_info_url, if: :in_moderation?, only: [:gathering_support, :show]
   before_action :redirect_to_petition_url, if: :moderated?, only: [:gathering_support, :moderation_info]
 
-  before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
   after_action :set_content_disposition, if: :csv_request?, only: [:index]
 
   def index
@@ -95,9 +95,13 @@ class PetitionsController < ApplicationController
     redirect_to home_url unless Parliament.opened?
   end
 
+  def request_format
+    request.format.json? ? :json : nil
+  end
+
   def redirect_to_archived_petition_if_archived
     if petition = Archived::Petition.find_by(id: petition_id)
-      redirect_to archived_petition_url(petition_id) if petition.parliament.archived?
+      redirect_to archived_petition_url(petition_id, format: request_format) if petition.parliament.archived?
     end
   end
 

@@ -66,6 +66,11 @@
       <div class="signature-count-graph" aria-hidden="true">
         <span class="signature-count-current" style="width: <%= archived_threshold_percentage(@petition) %>"></span>
       </div>
+      <% if @petition.show_on_a_map? %>
+        <p class="signatures-on-a-map">
+          <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= @petition.id %>">Show on a map</a>
+        </p>
+      <% end %>
       <p class="signature-count-goal">
         <%= number_with_delimiter(archived_threshold(@petition)) %>
       </p>

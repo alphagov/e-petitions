@@ -59,6 +59,7 @@ module Archived
     default_scope { preload(:parliament) }
 
     delegate :threshold_for_response, :threshold_for_debate, to: :parliament
+    delegate :show_on_a_map?, to: :parliament
 
     with_options allow_nil: true, prefix: true do
       delegate :name, :email, to: :creator

@@ -27,6 +27,19 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       get "/archived/petitions/#{petition.id}.xml"
       expect(response.status).to eq(406)
     end
+
+    context "when accessing the old url" do
+      before do
+        get "/petitions/#{petition.id}.json"
+      end
+
+      it "redirects to the archive url" do
+        expect(response).to redirect_to("/archived/petitions/#{petition.id}.json")
+        expect(access_control_allow_origin).to eq('*')
+        expect(access_control_allow_methods).to eq('GET')
+        expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
+      end
+    end
   end
 
   describe "links" do
