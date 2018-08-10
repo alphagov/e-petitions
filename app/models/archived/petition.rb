@@ -235,6 +235,10 @@ module Archived
       state == HIDDEN_STATE
     end
 
+    def published?
+      state.in?(PUBLISHED_STATES)
+    end
+
     def duration
       if parliament.petition_duration?
         parliament.petition_duration

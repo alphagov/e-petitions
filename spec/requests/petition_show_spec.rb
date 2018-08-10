@@ -205,6 +205,21 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "doesn't include the signatures by constituency data in rejected petitions" do
+      petition = FactoryBot.create :rejected_petition
+
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
+
+      FactoryBot.create :constituency_petition_journal, constituency_id: 3427, signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: 3320, signature_count: 456, petition: petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes.keys).not_to include("signatures_by_constituency")
+    end
+
     it "includes the signatures by country data" do
       petition = FactoryBot.create :open_petition
 
@@ -233,6 +248,21 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           )
         )
       )
+    end
+
+    it "doesn't include the signatures by country data in rejected petitions" do
+      petition = FactoryBot.create :rejected_petition
+
+      gb = FactoryBot.create :location, name: "United Kingdom", code: "gb"
+      fr = FactoryBot.create :location, name: "France", code: "fr"
+
+      FactoryBot.create :country_petition_journal, location: gb, signature_count: 123456, petition: petition
+      FactoryBot.create :country_petition_journal, location: fr, signature_count: 789, petition: petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes.keys).not_to include("signatures_by_country")
     end
   end
 end

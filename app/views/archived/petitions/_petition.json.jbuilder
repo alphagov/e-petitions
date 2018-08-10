@@ -57,7 +57,7 @@ json.attributes do
     json.debate nil
   end
 
-  if archived_petition_page?
+  if archived_petition_page? && petition.published?
     json.signatures_by_country petition.signatures_by_country
     json.signatures_by_constituency petition.signatures_by_constituency
   end

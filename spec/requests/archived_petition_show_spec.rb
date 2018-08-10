@@ -205,6 +205,20 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       )
     end
 
+    it "doesn't include the signatures by constituency data in rejected petitions" do
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
+
+      petition = \
+        FactoryBot.create :archived_petition, :rejected,
+          signatures_by_constituency: { 3427 => 123, 3320 => 456 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes.keys).not_to include("signatures_by_constituency")
+    end
+
     it "includes the signatures by country data" do
       FactoryBot.create :location, name: "United Kingdom", code: "gb"
       FactoryBot.create :location, name: "France", code: "fr"
@@ -232,6 +246,20 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           )
         )
       )
+    end
+
+    it "doesn't include the signatures by country data in rejected petitions" do
+      FactoryBot.create :location, name: "United Kingdom", code: "gb"
+      FactoryBot.create :location, name: "France", code: "fr"
+
+      petition = \
+        FactoryBot.create :archived_petition, :rejected,
+          signatures_by_country: { "gb" => 123456, "fr" => 789 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_success
+
+      expect(attributes.keys).not_to include("signatures_by_country")
     end
   end
 end
