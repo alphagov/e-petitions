@@ -645,8 +645,8 @@ RSpec.describe SponsorsController, type: :controller do
         context "and the signature has already been validated" do
           let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
 
-          it "sets the flash :notice message" do
-            expect(flash[:notice]).to eq("You’ve already supported this petition")
+          it "doesn't set the flash :notice message" do
+            expect(flash[:notice]).to be_nil
           end
         end
 

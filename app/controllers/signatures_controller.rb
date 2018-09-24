@@ -48,21 +48,17 @@ class SignaturesController < ApplicationController
   end
 
   def signed
-    if @signature.seen_signed_confirmation_page?
-      redirect_to petition_url(@petition)
-    else
+    unless @signature.seen_signed_confirmation_page?
       @signature.mark_seen_signed_confirmation_page!
+    end
 
-      respond_to do |format|
-        format.html
-      end
+    respond_to do |format|
+      format.html
     end
   end
 
   def verify
-    if @signature.validated?
-      flash[:notice] = "You’ve already signed this petition"
-    else
+    unless @signature.validated?
       @signature.validate!
     end
 

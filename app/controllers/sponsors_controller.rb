@@ -8,23 +8,11 @@ class SponsorsController < SignaturesController
   before_action :validate_creator, only: [:new]
 
   def verify
-    if @signature.validated?
-      flash[:notice] = "You’ve already supported this petition"
-    else
+    unless @signature.validated?
       @signature.validate!
     end
 
     redirect_to signed_sponsor_url(@signature, token: @signature.perishable_token)
-  end
-
-  def signed
-    unless @signature.seen_signed_confirmation_page?
-      @signature.mark_seen_signed_confirmation_page!
-    end
-
-    respond_to do |format|
-      format.html
-    end
   end
 
   private
