@@ -104,12 +104,13 @@ Feature: Suzie signs a petition
     When I fill in my details and sign a petition
     And I confirm my email address
     And I should see "2 signatures"
+    And I should see "We've added your signature to the petition"
     And I can click on a link to return to the petition
     And I should have signed the petition
-    When I confirm my email address
+    When I confirm my email address again
     And I should see "2 signatures"
+    And I should see "We've added your signature to the petition"
     And I can click on a link to return to the petition
-    Then I should see that I have already signed the petition
 
   Scenario: Eric clicks the link shared to him by Suzie
     When Suzie has already signed the petition and validated her email

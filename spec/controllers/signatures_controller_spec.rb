@@ -595,8 +595,8 @@ RSpec.describe SignaturesController, type: :controller do
       context "and the signature has already been validated" do
         let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
-        it "sets the flash :notice message" do
-          expect(flash[:notice]).to eq("You’ve already signed this petition")
+        it "doesn't set the flash :notice message" do
+          expect(flash[:notice]).to be_nil
         end
       end
     end
@@ -767,8 +767,8 @@ RSpec.describe SignaturesController, type: :controller do
       context "and the signature has already seen the confirmation page" do
         let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
-        it "redirects to the petition page" do
-          expect(response).to redirect_to("/petitions/#{petition.id}")
+        it "doesn't redirect to the petition page" do
+          expect(response).not_to redirect_to("/petitions/#{petition.id}")
         end
       end
     end

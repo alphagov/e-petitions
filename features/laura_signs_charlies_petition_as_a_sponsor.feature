@@ -80,8 +80,9 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     When I have sponsored a petition
     When I confirm my email address
     Then I should see a heading called "Thanks"
+    And I should see "Your signature has been added to this petition as a supporter"
     And I should have fully signed the petition as a sponsor
-    When I confirm my email address
+    When I confirm my email address again
     Then I should see a heading called "Thanks"
-    And I should see "You’ve already supported this petition"
+    And I should see "Your signature has been added to this petition as a supporter"
     And I should see /This petition needs [0-9]+ supporters to go live/

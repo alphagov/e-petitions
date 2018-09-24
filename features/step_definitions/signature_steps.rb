@@ -20,7 +20,7 @@ Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |
   expect(find_email(address, with_subject: "Please confirm your email address")).to be_present
 end
 
-When(/^I confirm my email address$/) do
+When(/^I confirm my email address(?: again)?$/) do
   steps %Q(
     And I open the email with subject "Please confirm your email address"
     When I click the first link in the email
@@ -28,8 +28,7 @@ When(/^I confirm my email address$/) do
 end
 
 def should_be_signature_count_of(count)
-  visit petition_url(@petition)
-  expect(page).to have_css("p.signature-count-number", :text => count.to_s + " signatures")
+  expect(Petition.find(@petition.id).signature_count).to eq(count)
 end
 
 Then /^I should have signed the petition$/ do
