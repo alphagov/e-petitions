@@ -217,6 +217,14 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that only supports html formats'
   end
 
+  context 'the petitions/gathering-support url' do
+    let(:url) { "/petitions/#{petition.id}/gathering-support" }
+    let(:petition) { FactoryBot.create(:validated_petition) }
+    let(:params) { {} }
+
+    it_behaves_like 'a route that only supports html formats'
+  end
+
   context 'the petitions/moderation-info url' do
     let(:url) { "/petitions/#{petition.id}/moderation-info" }
     let(:petition) { FactoryBot.create(:sponsored_petition) }
