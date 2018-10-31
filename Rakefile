@@ -7,4 +7,8 @@ require 'rake'
 Rails.application.load_tasks
 
 task(:default).clear_prerequisites
-task :default => [:spec, :'spec:javascripts', :'cucumber']
+
+task default: %i[
+  bundle:audit brakeman:check
+  spec spec:javascripts cucumber
+]

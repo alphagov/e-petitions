@@ -69,6 +69,12 @@ class PetitionsController < ApplicationController
     end
   end
 
+  def gathering_support
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def moderation_info
     respond_to do |format|
       format.html

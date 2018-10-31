@@ -6,7 +6,7 @@ gem 'dotenv-rails', :require => 'dotenv/rails-now'
 gem 'rails', '4.2.10'
 
 gem 'rake'
-gem 'pg'
+gem 'pg', '< 0.21'
 gem 'authlogic'
 gem 'will_paginate'
 gem 'json'
@@ -38,6 +38,8 @@ gem 'redcarpet'
 gem 'aws-sdk', '~> 2.0'
 
 group :development, :test do
+  gem 'brakeman', require: false
+  gem 'bundler-audit', require: false
   gem 'rspec-rails'
   gem 'jasmine-rails'
   gem 'pry'
