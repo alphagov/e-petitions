@@ -186,7 +186,7 @@ GEM
       cocaine (~> 0.5.5)
       mime-types
       mimemagic (~> 0.3.0)
-    pg (0.21.0)
+    pg (0.20.0)
     phantomjs (2.1.1.0)
     pickle (0.5.4)
       cucumber (>= 0.8, < 3.0)
@@ -331,7 +331,7 @@ DEPENDENCIES
   net-http-persistent
   nokogiri
   paperclip
-  pg
+  pg (< 0.21)
   pickle
   poltergeist
   pry
