@@ -54,6 +54,7 @@ Rails.application.configure do
   # Turn on lograge, to give us more parseable logs
   config.lograge.enabled = true
   config.lograge.ignore_actions = %w[
+    PetitionsController#count
     PingController#ping
     Admin::UserSessionsController#status
     Admin::LocksController#show
