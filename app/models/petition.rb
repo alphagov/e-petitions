@@ -440,53 +440,51 @@ class Petition < ActiveRecord::Base
   end
 
   def increment_signature_count!(time = Time.current)
-    updates = []
+    updates = ""
 
     if pending?
-      updates = ["state = '#{VALIDATED_STATE}'"]
+      updates = "state = '#{VALIDATED_STATE}', "
     end
 
     if at_threshold_for_moderation? && collecting_sponsors?
-      updates = [
-        "moderation_threshold_reached_at = :now",
-        "state = '#{Petition::SPONSORED_STATE}'"
-      ]
+      updates = "state = '#{SPONSORED_STATE}', "
+      updates << "moderation_threshold_reached_at = :now, "
     end
 
     if at_threshold_for_response?
-      updates << "response_threshold_reached_at = :now"
+      updates << "response_threshold_reached_at = :now, "
     end
 
     if at_threshold_for_debate?
-      updates << "debate_threshold_reached_at = :now"
-      updates << "debate_state = 'awaiting'"
+      updates << "debate_threshold_reached_at = :now, "
+      updates << "debate_state = 'awaiting', "
     end
 
-    updates << "signature_count = signature_count + 1"
-    updates << "last_signed_at = :now"
+    updates << "signature_count = signature_count + 1, "
+    updates << "last_signed_at = :now, "
     updates << "updated_at = :now"
 
-    if update_all([updates.join(", "), now: time]) > 0
+    if update_all([updates, now: time]) > 0
       self.reload
     end
   end
 
   def decrement_signature_count!(time = Time.current)
-    updates = []
+    updates = ""
 
     if below_threshold_for_debate?
-      updates << "debate_threshold_reached_at = NULL"
-      updates << "debate_state = 'pending'"
+      updates << "debate_threshold_reached_at = NULL, "
+      updates << "debate_state = 'pending', "
     end
 
     if below_threshold_for_response?
-      updates << "response_threshold_reached_at = NULL"
+      updates << "response_threshold_reached_at = NULL, "
     end
 
-    updates << "signature_count = greatest(signature_count - 1, 1)"
+    updates << "signature_count = greatest(signature_count - 1, 1), "
     updates << "updated_at = :now"
 
-    if update_all([updates.join(", "), now: time]) > 0
+    if update_all([updates, now: time]) > 0
       self.reload
     end
   end
