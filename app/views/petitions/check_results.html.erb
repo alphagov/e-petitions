@@ -7,7 +7,7 @@
   <h1 class="page-title">We found some similar petitions</h1>
   <p>If one of these petitions matches yours, sign it and share it instead</p>
   <p>Your petition is more likely to get to <%= Site.formatted_threshold_for_response %> and <%= Site.formatted_threshold_for_debate %> signatures that way.</p>
-  <%= render 'notification', text: "If there’s already a petition on the same topic, your petition is likely to be rejected" %>
+  <%= render 'notification', message: "If there’s already a petition on the same topic, your petition is likely to be rejected" %>
 
   <% petitions.each do |petition| %>
     <ul>
