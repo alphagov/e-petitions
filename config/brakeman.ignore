@@ -1,0 +1,83 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "07b7188ce44b7041f5729077eea749b2def4b8e62736ba248267e3c96c1ca927",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in link_to href",
+      "file": "app/views/local_petitions/all.html.erb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Constituency.find_by_slug!(params[:id]).mp_name, Constituency.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
+      "render_path": [{"type":"controller","class":"LocalPetitionsController","method":"all","line":30,"file":"app/controllers/local_petitions_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "local_petitions/all"
+      },
+      "user_input": "Constituency.find_by_slug!(params[:id]).mp_url",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "22e002a1359fd28418d81e2cadeb49195a5597840a43d97787ac79a868acb51f",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in link_to href",
+      "file": "app/views/local_petitions/show.html.erb",
+      "line": 11,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to(Constituency.find_by_slug!(params[:id]).mp_name, Constituency.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
+      "render_path": [{"type":"controller","class":"LocalPetitionsController","method":"show","line":22,"file":"app/controllers/local_petitions_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "local_petitions/show"
+      },
+      "user_input": "Constituency.find_by_slug!(params[:id]).mp_url",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "2f2f7bc18ebf0185bb7052fbdbb23b7fd47896c842f641387ace53fdaef36650",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/archived/petitions/index.html.erb",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{(Parliament.archived.find(parliament_id) or Parliament.archived.first).petitions.search(params).scope}\", { :petition => petition })",
+      "render_path": [{"type":"controller","class":"Archived::PetitionsController","method":"index","line":16,"file":"app/controllers/archived/petitions_controller.rb"}],
+      "location": {
+        "type": "template",
+        "template": "archived/petitions/index"
+      },
+      "user_input": "params",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
+      "warning_type": "Mass Assignment",
+      "warning_code": 105,
+      "fingerprint": "f523941f55e48c9af1dda1b71dd47c35e8cd6bce092c90e04bc940d257bf44e8",
+      "check_name": "PermitAttributes",
+      "message": "Potentially dangerous key allowed for mass assignment",
+      "file": "app/controllers/admin/admin_users_controller.rb",
+      "line": 60,
+      "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
+      "code": "params.require(:admin_user).permit(:password, :password_confirmation, :first_name, :last_name, :role, :email, :force_password_reset, :account_disabled)",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Admin::AdminUsersController",
+        "method": "admin_user_params"
+      },
+      "user_input": ":role",
+      "confidence": "Medium",
+      "note": ""
+    }
+  ],
+  "updated": "2018-10-31 03:32:07 +0000",
+  "brakeman_version": "4.2.1"
+}
