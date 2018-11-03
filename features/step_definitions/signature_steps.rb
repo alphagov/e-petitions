@@ -13,7 +13,7 @@ end
 
 Then /^I am told to check my inbox to complete signing$/ do
   expect(page).to have_title("Thank you")
-  expect(page).to have_content("Check your email")
+  expect(page).to have_content("We’ve sent you an email")
 end
 
 Then(/^(?:I|they|"(.*?)") should be asked to confirm their email address$/) do |address|
