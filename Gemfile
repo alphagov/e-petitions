@@ -31,7 +31,7 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
-gem 'paperclip'
+gem 'paperclip', '~> 5.3'
 gem 'maxminddb'
 gem 'redcarpet'
 
