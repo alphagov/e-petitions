@@ -182,7 +182,7 @@ GEM
       connection_pool (~> 2.2)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
-    paperclip (6.1.0)
+    paperclip (5.3.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       mime-types
@@ -336,7 +336,7 @@ DEPENDENCIES
   maxminddb
   net-http-persistent
   nokogiri
-  paperclip
+  paperclip (~> 5.3)
   pg (< 0.21)
   pickle
   poltergeist
