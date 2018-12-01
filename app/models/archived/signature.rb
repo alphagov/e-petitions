@@ -31,15 +31,45 @@ module Archived
 
     attr_readonly :sponsor, :creator
 
+    before_destroy do
+      !creator?
+    end
+
     class << self
       def batch(id = 0, limit: 1000)
         where(arel_table[:id].gteq(id)).order(id: :asc).limit(limit)
+      end
+
+      def by_most_recent
+        order(created_at: :desc)
       end
 
       def column_name_for(timestamp)
         TIMESTAMPS.fetch(timestamp)
       rescue
         raise ArgumentError, "Unknown petition email timestamp: #{timestamp.inspect}"
+      end
+
+      def destroy!(signature_ids)
+        signatures = find(signature_ids)
+
+        transaction do
+          signatures.each do |signature|
+            signature.destroy!
+          end
+        end
+      end
+
+      def for_email(email)
+        where(email: email.downcase)
+      end
+
+      def for_ip(ip)
+        where(ip_address: ip)
+      end
+
+      def for_name(name)
+        where(arel_table[:name].lower.eq(name.downcase))
       end
 
       def for_timestamp(timestamp, since:)
@@ -66,6 +96,58 @@ module Archived
       def sponsors
         where(arel_table[:sponsor].eq(true))
       end
+
+      def search(query, options = {})
+        query = query.to_s
+        page = [options[:page].to_i, 1].max
+        scope = by_most_recent
+
+        if ip_search?(query)
+          scope = scope.for_ip(query)
+        elsif email_search?(query)
+          scope = scope.for_email(query)
+        else
+          scope = scope.for_name(query)
+        end
+
+        scope.paginate(page: page, per_page: 50)
+      end
+
+      def subscribe!(signature_ids)
+        signatures = find(signature_ids)
+
+        transaction do
+          signatures.each do |signature|
+            signature.update!(notify_by_email: true)
+          end
+        end
+      end
+
+      def unsubscribe!(signature_ids)
+        signatures = find(signature_ids)
+
+        transaction do
+          signatures.each do |signature|
+            if signature.creator?
+              raise RuntimeError, "Can't unsubscribe the creator signature"
+            elsif signature.pending?
+              raise RuntimeError, "Can't unsubscribe a pending signature"
+            else
+              signature.update!(notify_by_email: false)
+            end
+          end
+        end
+      end
+
+      private
+
+      def ip_search?(query)
+        /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
+      end
+
+      def email_search?(query)
+        query.include?('@')
+      end
     end
 
     def get_email_sent_at_for(timestamp)
@@ -90,6 +172,10 @@ module Archived
 
     def invalidated?
       state == INVALIDATED_STATE
+    end
+
+    def subscribed?
+      validated? && !unsubscribed?
     end
 
     def unsubscribed?

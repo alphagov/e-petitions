@@ -53,6 +53,49 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.to have_db_index([:validated_at]) }
   end
 
+  describe "callbacks" do
+    context "when the signature is destroyed" do
+      let(:attributes) { FactoryBot.attributes_for(:archived_petition, signature_count: 6) }
+      let(:creator) { petition.creator }
+      let(:signature) { petition.signatures.last }
+
+      let(:petition) do
+        Archived::Petition.create!(attributes) do |petition|
+          petition.creator = FactoryBot.build(:archived_signature, creator: true)
+          petition.parliament = FactoryBot.build(:parliament)
+
+          5.times do
+            petition.signatures << FactoryBot.build(:archived_signature)
+          end
+        end
+      end
+
+      context "and the signature is the creator" do
+        it "cancels the destroy" do
+          expect(creator.destroy).to eq(false)
+        end
+      end
+
+      context "and the signature is not the creator" do
+        it "destroys the signature" do
+          expect {
+            signature.destroy
+          }.to change {
+            petition.reload.signatures.count
+          }.from(6).to(5)
+        end
+
+        it "doesn't decrement the signature count" do
+          expect {
+            signature.destroy
+          }.not_to change {
+            petition.reload.signature_count
+          }
+        end
+      end
+    end
+  end
+
   describe "validations" do
     it { is_expected.to validate_presence_of(:name).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:email).with_message(/must be completed/) }
@@ -171,6 +214,268 @@ RSpec.describe Archived::Signature, type: :model do
         it "does not include the signature" do
           expect(signatures).not_to include(subscribed)
         end
+      end
+    end
+  end
+
+  describe ".search" do
+    let(:scope) { double(:scope) }
+
+    context "when searching with an ip address" do
+      it "calls the for_ip scope and paginates the result" do
+        expect(Archived::Signature).to receive(:for_ip).with("127.0.0.1").and_return(scope)
+        expect(scope).to receive(:paginate).with(page: 1, per_page: 50)
+        described_class.search("127.0.0.1")
+      end
+
+      context "and passing the page parameter" do
+        it "calls the for_ip scope and paginates the result" do
+          expect(Archived::Signature).to receive(:for_ip).with("127.0.0.1").and_return(scope)
+          expect(scope).to receive(:paginate).with(page: 2, per_page: 50)
+          described_class.search("127.0.0.1", page: "2")
+        end
+      end
+    end
+
+    context "when searching with an email address" do
+      it "calls the for_email scope and paginates the result" do
+        expect(Archived::Signature).to receive(:for_email).with("alice@example.com").and_return(scope)
+        expect(scope).to receive(:paginate).with(page: 1, per_page: 50)
+        described_class.search("alice@example.com")
+      end
+
+      context "and passing the page parameter" do
+        it "calls the for_email scope and paginates the result" do
+          expect(Archived::Signature).to receive(:for_email).with("alice@example.com").and_return(scope)
+          expect(scope).to receive(:paginate).with(page: 2, per_page: 50)
+          described_class.search("alice@example.com", page: "2")
+        end
+      end
+    end
+
+    context "when searching with a name" do
+      it "calls the for_name scope and paginates the result" do
+        expect(Archived::Signature).to receive(:for_name).with("Alice").and_return(scope)
+        expect(scope).to receive(:paginate).with(page: 1, per_page: 50)
+        described_class.search("Alice")
+      end
+
+      context "and passing the page parameter" do
+        it "calls the for_name scope and paginates the result" do
+          expect(Archived::Signature).to receive(:for_name).with("Alice").and_return(scope)
+          expect(scope).to receive(:paginate).with(page: 2, per_page: 50)
+          described_class.search("Alice", page: "2")
+        end
+      end
+    end
+  end
+
+  describe ".subscribe!" do
+    let(:attributes) { FactoryBot.attributes_for(:archived_petition) }
+    let(:creator) { FactoryBot.create(:archived_signature, creator: true) }
+    let(:petition) { FactoryBot.create(:archived_petition, creator: creator) }
+
+    before do
+      5.times do
+        petition.signatures << FactoryBot.create(:archived_signature, notify_by_email: false)
+      end
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.subscribe!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when trying to subscribe the creator" do
+      it "doesn't raise an error" do
+        expect {
+          described_class.subscribe!([creator.id])
+        }.not_to raise_error
+      end
+    end
+
+    context "with a pending signature" do
+      let(:signature) { FactoryBot.create(:archived_signature, :pending, petition: petition) }
+
+      it "doesn't raise an error" do
+        expect {
+          described_class.subscribe!([signature.id])
+        }.not_to raise_error
+      end
+    end
+
+    context "with a pending signature that isn't subscribed" do
+      let(:signature) { FactoryBot.create(:archived_signature, :pending, petition: petition, notify_by_email: false) }
+
+      it "subscribes the signature" do
+        expect {
+          described_class.subscribe!([signature.id])
+        }.to change {
+          signature.reload.unsubscribed?
+        }.from(true).to(false)
+      end
+    end
+
+    context "with a validated signature" do
+      let(:signature) { FactoryBot.create(:archived_signature, :validated, petition: petition, notify_by_email: false) }
+
+      before do
+        allow(described_class).to receive(:find).and_call_original
+        allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+        expect(signature).to receive(:update!).with(notify_by_email: true).and_call_original
+      end
+
+      it "subscribes the signature" do
+        expect {
+          described_class.subscribe!([signature.id])
+        }.to change {
+          signature.reload.unsubscribed?
+        }.from(true).to(false)
+      end
+    end
+  end
+
+  describe ".unsubscribe!" do
+    let(:attributes) { FactoryBot.attributes_for(:archived_petition) }
+    let(:creator) { FactoryBot.create(:archived_signature, creator: true) }
+    let(:petition) { FactoryBot.create(:archived_petition, creator: creator) }
+
+    before do
+      5.times do
+        petition.signatures << FactoryBot.create(:archived_signature, notify_by_email: true)
+      end
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.unsubscribe!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when trying to unsubscribe the creator" do
+      it "raises an error" do
+        expect {
+          described_class.unsubscribe!([creator.id])
+        }.to raise_error(RuntimeError, "Can't unsubscribe the creator signature")
+      end
+    end
+
+    context "with a pending signature" do
+      let(:signature) { FactoryBot.create(:archived_signature, :pending, petition: petition, notify_by_email: true) }
+
+      it "raises an error" do
+        expect {
+          described_class.unsubscribe!([signature.id])
+        }.to raise_error(RuntimeError, "Can't unsubscribe a pending signature")
+      end
+    end
+
+    context "with a validated signature" do
+      let(:signature) { FactoryBot.create(:archived_signature, :validated, petition: petition, notify_by_email: true) }
+
+      before do
+        allow(described_class).to receive(:find).and_call_original
+        allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+        expect(signature).to receive(:update!).with(notify_by_email: false).and_call_original
+      end
+
+      it "unsubscribes the signature" do
+        expect {
+          described_class.unsubscribe!([signature.id])
+        }.to change {
+          signature.reload.unsubscribed?
+        }.from(false).to(true)
+      end
+    end
+  end
+
+  describe ".destroy!" do
+    let(:attributes) { FactoryBot.attributes_for(:archived_petition, signature_count: 6) }
+    let(:creator) { petition.creator }
+    let(:signature) { petition.signatures.last }
+
+    let(:petition) do
+      Archived::Petition.create!(attributes) do |petition|
+        petition.creator = FactoryBot.build(:archived_signature, creator: true)
+        petition.parliament = FactoryBot.build(:parliament)
+
+        5.times do
+          petition.signatures << FactoryBot.build(:archived_signature)
+        end
+      end
+    end
+
+    context "when passed a signature id that doesn't exist" do
+      let(:signature_ids) { [petition.signatures.maximum(:id) + 1] }
+
+      it "raises an ActiveRecord::RecordNotFound error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
+
+    context "when trying to delete the creator" do
+      let(:signature_ids) { [creator.id] }
+
+      it "raises an ActiveRecord::RecordNotDestroyed error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+    end
+
+    context "when the signature is not the creator" do
+      it "destroys the signature" do
+        expect {
+          described_class.destroy!([signature.id])
+        }.to change {
+          petition.reload.signatures.count
+        }.from(6).to(5)
+      end
+
+      it "doesn't decrement the petition signature count" do
+        expect {
+          described_class.destroy!([signature.id])
+        }.not_to change {
+          petition.reload.signature_count
+        }
+      end
+    end
+
+    context "when one signature fails" do
+      let(:signatures) { [signature, creator] }
+      let(:signature_ids) { signatures.map(&:id) }
+
+      before do
+        allow(described_class).to receive(:find).with(signature_ids).and_return(signatures)
+      end
+
+      it "raises an ActiveRecord::RecordNotDestroyed error" do
+        expect {
+          described_class.destroy!(signature_ids)
+        }.to raise_error(ActiveRecord::RecordNotDestroyed)
+      end
+
+      it "doesn't destroy any signatures" do
+        expect {
+          begin
+            described_class.destroy!(signature_ids)
+          rescue ActiveRecord::RecordNotDestroyed => e
+            0
+          end
+        }.not_to change {
+          petition.reload.signatures.count
+        }
       end
     end
   end
@@ -301,6 +606,50 @@ RSpec.describe Archived::Signature, type: :model do
         it "returns false" do
           expect(signature.invalidated?).to be_falsey
         end
+      end
+    end
+  end
+
+  describe "#subscribed?" do
+    context "when the signature is pending" do
+      let(:signature) { FactoryBot.build(:archived_signature, :pending, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
+      end
+    end
+
+    context "when the signature is validated" do
+      context "and notify_by_email is true" do
+        let(:signature) { FactoryBot.build(:archived_signature, :validated, notify_by_email: true) }
+
+        it "returns true" do
+          expect(signature.subscribed?).to eq(true)
+        end
+      end
+
+      context "and notify_by_email is false" do
+        let(:signature) { FactoryBot.build(:archived_signature, :validated, notify_by_email: false) }
+
+        it "returns false" do
+          expect(signature.subscribed?).to eq(false)
+        end
+      end
+    end
+
+    context "when the signature is fraudulent" do
+      let(:signature) { FactoryBot.build(:archived_signature, :fraudulent, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
+      end
+    end
+
+    context "when the signature is invalidated" do
+      let(:signature) { FactoryBot.build(:archived_signature, :invalidated, notify_by_email: true) }
+
+      it "returns false" do
+        expect(signature.subscribed?).to eq(false)
       end
     end
   end
