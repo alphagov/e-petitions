@@ -193,6 +193,14 @@ FactoryBot.define do
     unsubscribe_token { Authlogic::Random.friendly_token }
     notify_by_email     true
 
+    trait :fraudulent do
+      state Archived::Signature::FRAUDULENT_STATE
+    end
+
+    trait :invalidated do
+      state Archived::Signature::INVALIDATED_STATE
+    end
+
     trait :pending do
       state Archived::Signature::PENDING_STATE
     end

@@ -16,7 +16,10 @@ Feature: Admin hub page
     Then I should see "20 Moderation queue"
     And I should see "12 Government response queue"
     And I should see "8 Debate queue"
-    And I should see "All Petitions (40)"
+    And I should see a link called "All Petitions" linking to "/admin/petitions?state=all"
+    And I should see a link called "Archived Petitions" linking to "/admin/archived/petitions"
+    And I should see a link called "Archived Signatures" linking to "/admin/archived/signatures"
+    And I should see a link called "Statistics" linking to "/admin/stats"
     And I should be connected to the server via an ssl connection
     And the markup should be valid
 

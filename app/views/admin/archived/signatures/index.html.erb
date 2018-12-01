@@ -1,0 +1,137 @@
+<h1>Archived Signatures</h1>
+
+<div class="grid-row">
+  <div class="column-two-thirds">
+    <%= form_tag [:admin, :archived, :signatures], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+      <div class="search-inline">
+        <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% if @signatures.present? %>
+
+  <%= will_paginate @signatures %>
+
+  <table class="signature-list">
+    <thead>
+      <tr>
+        <th class="petition-id">
+          <label><input type="checkbox" value="1" name="select_all"> ID</label>
+        </th>
+        <th class="petition-action">Action</th>
+        <th class="petition-signature-count">Signatures</th>
+        <th class="signature-name">Name</th>
+        <th class="signature-status">Status</th>
+        <th class="signature-timestamp">Date</th>
+        <th class="signature-creator">Creator?</th>
+        <th class="signature-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render partial: 'signature', collection: @signatures -%>
+    </tbody>
+  </table>
+
+  <%= will_paginate @signatures %>
+
+  <div class="inline-actions">
+    <% signature_ids = bulk_verifier.generate(@signatures.map(&:id)) %>
+
+    <%= form_tag subscribe_admin_archived_signatures_path(q: params[:q]), method: :post, class: 'action subscribe-action' do %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
+      <%= submit_tag 'Subscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Subscribe selected signatures?' } %>
+    <% end %>
+
+    <%= form_tag unsubscribe_admin_archived_signatures_path(q: params[:q]), method: :post, class: 'action unsubscribe-action' do %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
+      <%= submit_tag 'Unsubscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Unsubscribe selected signatures?' } %>
+    <% end %>
+
+    <%= form_tag admin_archived_signatures_path(q: params[:q]), method: :delete, class: 'action delete-action' do %>
+      <%= hidden_field_tag 'selected_ids', '' %>
+      <%= hidden_field_tag 'all_ids', signature_ids %>
+      <%= submit_tag 'Delete', name: nil, class: 'button-warning', disabled: true, data: { confirm: 'Delete selected signatures?' } %>
+    <% end %>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      var $list = $('.signature-list');
+      var $checkboxes = $list.find('input[name="id"]');
+      var $selectAll = $list.find('input[name="select_all"]');
+
+      var selectedIds = function() {
+        var ids = [];
+
+        $checkboxes.filter(':checked').each(function() {
+          ids.push($(this).val());
+        });
+
+        return ids.join();
+      };
+
+      var actionDisabled = function(action) {
+        var $checked = $checkboxes.filter(':checked');
+        var disabled = false;
+
+        if ($checked.length == 0) {
+          return true;
+        }
+
+        $checked.each(function() {
+          var $tr = $(this).closest('tr');
+          var $action = $tr.find('input[type=submit].' + action + '-action');
+
+          if ($action.length == 0) {
+            disabled = true;
+          }
+        });
+
+        return disabled;
+      };
+
+      var enableDisableActions = function() {
+        $('.validate-action input[type=submit]').prop('disabled', actionDisabled('validate'));
+        $('.invalidate-action input[type=submit]').prop('disabled', actionDisabled('invalidate'));
+        $('.subscribe-action input[type=submit]').prop('disabled', actionDisabled('subscribe'));
+        $('.unsubscribe-action input[type=submit]').prop('disabled', actionDisabled('unsubscribe'));
+        $('.delete-action input[type=submit]').prop('disabled', actionDisabled('delete'));
+      };
+
+      $selectAll.on('click', function(e) {
+        var checked = false;
+
+        if ($(this).prop('checked')) {
+          checked = true;
+        }
+
+        $checkboxes.each(function() {
+          if ($(this).prop('disabled') == false) {
+            $(this).prop('checked', checked);
+          }
+        });
+
+        enableDisableActions();
+      });
+
+      $checkboxes.on('click', function(e) {
+        enableDisableActions();
+      });
+
+      $('.inline-actions form').on('submit', function() {
+        $(this).find('input[name="selected_ids"]').val(selectedIds());
+      });
+    });
+  </script>
+
+<% else %>
+  <p>
+    No signatures found
+  </p>
+<% end %>

@@ -96,13 +96,13 @@ RSpec.describe Signature, type: :model do
         petition.publish
       end
 
-      context "when the signature is the creator" do
+      context "and the signature is the creator" do
         it "cancels the destroy" do
           expect(creator.destroy).to eq(false)
         end
       end
 
-      context "when the signature is not the creator" do
+      context "and the signature is not the creator" do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
@@ -136,7 +136,7 @@ RSpec.describe Signature, type: :model do
         end
       end
 
-      context "when the signature is invalidated" do
+      context "and the signature is invalidated" do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 

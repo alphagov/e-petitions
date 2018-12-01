@@ -1830,6 +1830,13 @@ CREATE INDEX index_archived_signatures_on_ip_address_and_petition_id ON public.a
 
 
 --
+-- Name: index_archived_signatures_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_archived_signatures_on_name ON public.archived_signatures USING btree (lower((name)::text));
+
+
+--
 -- Name: index_archived_signatures_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2670,4 +2677,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180510122656');
 INSERT INTO schema_migrations (version) VALUES ('20180510131346');
 
 INSERT INTO schema_migrations (version) VALUES ('20180623131406');
+
+INSERT INTO schema_migrations (version) VALUES ('20181201073159');
 

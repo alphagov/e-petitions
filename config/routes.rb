@@ -165,6 +165,16 @@ Rails.application.routes.draw do
             resource :tags, controller: 'petition_tags'
           end
         end
+
+        resources :signatures, only: %i[index destroy] do
+          post :subscribe, :unsubscribe, on: :member
+
+          collection do
+            delete :destroy, action: :bulk_destroy
+            post   :subscribe, action: :bulk_subscribe
+            post   :unsubscribe, action: :bulk_unsubscribe
+          end
+        end
       end
 
       scope 'stats', controller: 'statistics' do
