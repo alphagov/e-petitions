@@ -5,6 +5,7 @@ class Signature < ActiveRecord::Base
   include PerishableTokenGenerator
 
   has_perishable_token
+  has_perishable_token called: 'signed_token'
   has_perishable_token called: 'unsubscribe_token'
 
   PENDING_STATE = 'pending'

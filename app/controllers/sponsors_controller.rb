@@ -12,7 +12,8 @@ class SponsorsController < SignaturesController
       @signature.validate!
     end
 
-    redirect_to signed_sponsor_url(@signature, token: @signature.perishable_token)
+    store_signed_token_in_session
+    redirect_to signed_sponsor_url(@signature)
   end
 
   private
@@ -60,8 +61,8 @@ class SponsorsController < SignaturesController
     thank_you_petition_sponsors_url(@petition, token: @petition.sponsor_token)
   end
 
-  def verify_url
-    verify_sponsor_url(@signature, token: @signature.perishable_token)
+  def signed_token_failure_url
+    moderation_info_petition_url(@petition)
   end
 
   def redirect_to_petition_page_if_moderated

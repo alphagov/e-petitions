@@ -260,12 +260,12 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   context 'the sponsors/sponsored url' do
     let(:url) { "/sponsors/#{signature.id}/sponsored" }
     let(:petition) { FactoryBot.create(:pending_petition) }
-    let(:signature) { FactoryBot.create(:sponsor, :validated, :just_signed, petition: petition) }
-    let(:params) {
-      {
-        'token' => signature.perishable_token
-      }
-    }
+    let(:signature) { FactoryBot.create(:sponsor, :pending, petition: petition) }
+    let(:params) { {} }
+
+    before do
+      get "/sponsors/#{signature.id}/verify?token=#{signature.perishable_token}"
+    end
 
     it_behaves_like 'a route that only supports html formats'
   end
@@ -289,14 +289,11 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   context 'the signatures/signed url' do
     let(:url) { "/signatures/#{signature.id}/signed" }
     let(:petition) { FactoryBot.create(:open_petition) }
-    let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
-    let(:params) {
-      {
-        'token' => signature.perishable_token
-      }
-    }
+    let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+    let(:params) { {} }
+
     before do
-      allow(Constituency).to receive(:find_by_postcode).and_return(nil)
+      get "/signatures/#{signature.id}/verify?token=#{signature.perishable_token}"
     end
 
     it_behaves_like 'a route that only supports html formats'

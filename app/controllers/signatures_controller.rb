@@ -1,12 +1,12 @@
 class SignaturesController < ApplicationController
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
-  before_action :verify_token, only: [:verify, :signed]
+  before_action :verify_token, only: [:verify]
+  before_action :verify_signed_token, only: [:signed]
   before_action :verify_unsubscribe_token, only: [:unsubscribe]
   before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
   before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
   before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
-  before_action :redirect_to_verify_page, unless: :signature_validated?, only: [:signed]
   before_action :do_not_cache
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
@@ -62,7 +62,8 @@ class SignaturesController < ApplicationController
       @signature.validate!
     end
 
-    redirect_to signed_signature_url(@signature, token: @signature.perishable_token)
+    store_signed_token_in_session
+    redirect_to signed_signature_url(@signature)
   end
 
   def unsubscribe
@@ -93,9 +94,31 @@ class SignaturesController < ApplicationController
     @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
   end
 
+  def signed_tokens
+    @signed_tokens = session[:signed_tokens] || {}
+  end
+
+  def session_signed_token
+    signed_tokens[signature_id.to_s]
+  end
+
+  def signed_token_hash
+    { signature_id.to_s => @signature.signed_token }
+  end
+
+  def store_signed_token_in_session
+    session[:signed_tokens] = signed_tokens.merge(signed_token_hash)
+  end
+
   def verify_token
     unless @signature.perishable_token == token_param
       raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: #{token_param.inspect}"
+    end
+  end
+
+  def verify_signed_token
+    unless @signature.signed_token == session_signed_token
+      redirect_to signed_token_failure_url
     end
   end
 
@@ -130,8 +153,8 @@ class SignaturesController < ApplicationController
     thank_you_petition_signatures_url(@petition)
   end
 
-  def verify_url
-    verify_signature_url(@signature, token: @signature.perishable_token)
+  def signed_token_failure_url
+    petition_url(@petition)
   end
 
   def redirect_to_petition_page_if_rejected
@@ -150,14 +173,6 @@ class SignaturesController < ApplicationController
     if @petition.closed_for_signing?
       redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
     end
-  end
-
-  def redirect_to_verify_page
-    redirect_to verify_url
-  end
-
-  def signature_validated?
-    @signature.validated?
   end
 
   def send_email_to_petition_signer
