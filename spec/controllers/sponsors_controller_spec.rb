@@ -638,8 +638,12 @@ RSpec.describe SponsorsController, type: :controller do
           expect(assigns[:signature].constituency_id).to eq("3415")
         end
 
+        it "saves the signed token in the session" do
+          expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+        end
+
         it "redirects to the signed signature page" do
-          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored?token=#{signature.perishable_token}")
+          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
         end
 
         context "and the signature has already been validated" do
@@ -665,8 +669,16 @@ RSpec.describe SponsorsController, type: :controller do
             expect(assigns[:signature]).to be_validated
           end
 
+          it "records the constituency id on the signature" do
+            expect(assigns[:signature].constituency_id).to eq("3415")
+          end
+
+          it "saves the signed token in the session" do
+            expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+          end
+
           it "redirects to the signed signature page" do
-            expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored?token=#{signature.perishable_token}")
+            expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
           end
         end
 
@@ -685,19 +697,18 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the signature doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :signed, id: 1, token: "token"
+          get :signed, id: 1
         }.to raise_exception(ActiveRecord::RecordNotFound)
       end
     end
 
-    context "when the signature token is invalid" do
+    context "when the signed token is missing" do
       let(:petition) { FactoryBot.create(:pending_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :signed, id: signature.id, token: "token"
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "redirects to the petition moderation info page" do
+        get :signed, id: signature.id
+        expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
       end
     end
 
@@ -707,7 +718,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :signed, id: signature.id, token: signature.perishable_token
+          get :signed, id: signature.id
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -718,7 +729,7 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
-          get :signed, id: signature.id, token: signature.perishable_token
+          get :signed, id: signature.id
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -730,7 +741,7 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "raises an ActiveRecord::RecordNotFound exception" do
           expect {
-            get :signed, id: signature.id, token: signature.perishable_token
+            get :signed, id: signature.id
           }.to raise_exception(ActiveRecord::RecordNotFound)
         end
       end
@@ -742,7 +753,8 @@ RSpec.describe SponsorsController, type: :controller do
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
         before do
-          get :signed, id: signature.id, token: signature.perishable_token
+          session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
+          get :signed, id: signature.id
         end
 
         it "assigns the @signature instance variable" do
@@ -768,87 +780,94 @@ RSpec.describe SponsorsController, type: :controller do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
-        before do
-          get :signed, id: signature.id, token: signature.perishable_token
+        context "when the signature has been validated" do
+          before do
+            session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
+            get :signed, id: signature.id
+          end
+
+          it "assigns the @signature instance variable" do
+            expect(assigns[:signature]).to eq(signature)
+          end
+
+          it "assigns the @petition instance variable" do
+            expect(assigns[:petition]).to eq(petition)
+          end
+
+          it "marks the signature has having seen the confirmation page" do
+            expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+          end
+
+          it "renders the sponsors/signed template" do
+            expect(response).to render_template("sponsors/signed")
+          end
+
+          context "and the signature has already seen the confirmation page" do
+            let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+
+            it "assigns the @signature instance variable" do
+              expect(assigns[:signature]).to eq(signature)
+            end
+
+            it "assigns the @petition instance variable" do
+              expect(assigns[:petition]).to eq(petition)
+            end
+
+            it "renders the sponsors/signed template" do
+              expect(response).to render_template("sponsors/signed")
+            end
+          end
+
+          context "and has one remaining sponsor slot" do
+            let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 2, sponsors_signed: true) }
+
+            it "assigns the @signature instance variable" do
+              expect(assigns[:signature]).to eq(signature)
+            end
+
+            it "assigns the @petition instance variable" do
+              expect(assigns[:petition]).to eq(petition)
+            end
+
+            it "marks the signature has having seen the confirmation page" do
+              expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+            end
+
+            it "renders the sponsors/signed template" do
+              expect(response).to render_template("sponsors/signed")
+            end
+          end
+
+          context "and has reached the maximum number of sponsors" do
+            let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
+
+            it "assigns the @signature instance variable" do
+              expect(assigns[:signature]).to eq(signature)
+            end
+
+            it "assigns the @petition instance variable" do
+              expect(assigns[:petition]).to eq(petition)
+            end
+
+            it "marks the signature has having seen the confirmation page" do
+              expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
+            end
+
+            it "renders the sponsors/signed template" do
+              expect(response).to render_template("sponsors/signed")
+            end
+          end
         end
 
-        it "assigns the @signature instance variable" do
-          expect(assigns[:signature]).to eq(signature)
-        end
-
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
-
-        it "marks the signature has having seen the confirmation page" do
-          expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
-        end
-
-        it "renders the sponsors/signed template" do
-          expect(response).to render_template("sponsors/signed")
-        end
-
-        context "and the signature has not been validated" do
+        context "when the signature has not been validated" do
           let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
-          it "redirects to the verify page" do
-            expect(response).to redirect_to("/sponsors/#{signature.id}/verify?token=#{signature.perishable_token}")
-          end
-        end
-
-        context "and the signature has already seen the confirmation page" do
-          let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
-
-          it "assigns the @signature instance variable" do
-            expect(assigns[:signature]).to eq(signature)
+          before do
+            get :signed, id: signature.id
           end
 
-          it "assigns the @petition instance variable" do
-            expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "renders the sponsors/signed template" do
-            expect(response).to render_template("sponsors/signed")
-          end
-        end
-
-        context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 2, sponsors_signed: true) }
-
-          it "assigns the @signature instance variable" do
-            expect(assigns[:signature]).to eq(signature)
-          end
-
-          it "assigns the @petition instance variable" do
-            expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "marks the signature has having seen the confirmation page" do
-            expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
-          end
-
-          it "renders the sponsors/signed template" do
-            expect(response).to render_template("sponsors/signed")
-          end
-        end
-
-        context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
-
-          it "assigns the @signature instance variable" do
-            expect(assigns[:signature]).to eq(signature)
-          end
-
-          it "assigns the @petition instance variable" do
-            expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "marks the signature has having seen the confirmation page" do
-            expect(assigns[:signature].seen_signed_confirmation_page).to eq(true)
-          end
-
-          it "renders the sponsors/signed template" do
-            expect(response).to render_template("sponsors/signed")
+          it "redirects to the petition moderation info page" do
+            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
           end
         end
       end

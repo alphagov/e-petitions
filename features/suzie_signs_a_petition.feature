@@ -116,7 +116,7 @@ Feature: Suzie signs a petition
     When Suzie has already signed the petition and validated her email
     And Suzie shares the signatory confirmation link with Eric
     And I click the shared link
-    Then I view the petition
+    Then I should see "Sign this petition"
 
   Scenario: Suzie cannot start a new signature when the petition has closed
     Given the petition has closed

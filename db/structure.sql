@@ -1056,7 +1056,8 @@ CREATE TABLE public.signatures (
     archived_at timestamp without time zone,
     email_count integer DEFAULT 0 NOT NULL,
     sponsor boolean DEFAULT false NOT NULL,
-    creator boolean DEFAULT false NOT NULL
+    creator boolean DEFAULT false NOT NULL,
+    signed_token character varying
 );
 
 
@@ -2679,4 +2680,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180510131346');
 INSERT INTO schema_migrations (version) VALUES ('20180623131406');
 
 INSERT INTO schema_migrations (version) VALUES ('20181201073159');
+
+INSERT INTO schema_migrations (version) VALUES ('20181202102751');
 

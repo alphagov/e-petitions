@@ -33,8 +33,13 @@ RSpec.describe Signature, type: :model do
     end
 
     it "generates unsubscription token" do
-      s = FactoryBot.create(:signature, :unsubscribe_token=> nil)
+      s = FactoryBot.create(:signature, :unsubscribe_token => nil)
       expect(s.unsubscribe_token).not_to be_nil
+    end
+
+    it "generates signed token" do
+      s = FactoryBot.create(:signature, :signed_token => nil)
+      expect(s.signed_token).not_to be_nil
     end
   end
 
