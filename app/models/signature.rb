@@ -90,6 +90,10 @@ class Signature < ActiveRecord::Base
       where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
     end
 
+    def duplicate_emails
+      unscoped.from(validated.select(:uuid).group(:uuid).having(arel_table[Arel.star].count.gt(1))).count
+    end
+
     def for_email(email)
       where(email: email.downcase)
     end

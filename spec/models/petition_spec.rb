@@ -751,6 +751,20 @@ RSpec.describe Petition, type: :model do
         expect(Petition.untagged_in_moderation).not_to include(tagged_recent_petition, tagged_overdue_petition, tagged_nearly_overdue_petition)
       end
     end
+
+    describe ".signed_since" do
+      let!(:petition_1) { FactoryBot.create(:open_petition, last_signed_at: 2.hours.ago) }
+      let!(:petition_2) { FactoryBot.create(:open_petition, last_signed_at: 30.minutes.ago) }
+      let!(:petition_3) { FactoryBot.create(:open_petition, last_signed_at: 15.minutes.ago) }
+
+      it "returns petitions that have been signed since the timestamp" do
+        expect(Petition.signed_since(1.hour.ago)).to include(petition_2, petition_3)
+      end
+
+      it "doesn't return petitions that haven't been signed since the timestamp" do
+        expect(Petition.signed_since(1.hour.ago)).not_to include(petition_1)
+      end
+    end
   end
 
   it_behaves_like "a taggable model"

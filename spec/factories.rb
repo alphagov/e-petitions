@@ -620,6 +620,10 @@ FactoryBot.define do
     sent_by "Admin User"
   end
 
+  factory :petition_statistics, class: "Petition::Statistics" do
+    association :petition, factory: :open_petition
+  end
+
   factory :rejection do
     association :petition, factory: :validated_petition
     code "duplicate"
