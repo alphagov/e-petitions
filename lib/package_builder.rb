@@ -315,7 +315,7 @@ class PackageBuilder
 
   def remove_artifacts
     args = %w[rm -rf]
-    args.concat %w[log tmp]
+    args.concat %w[.bundle log tmp]
 
     info "Removing build artifacts ..."
     Kernel.system *args
