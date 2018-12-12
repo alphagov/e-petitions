@@ -13,6 +13,15 @@
         }
       }
     }
+
+    .statistics-meta {
+      small {
+        @include core-14;
+        color: $grey-1;
+        display: block;
+        margin-bottom: em(6, 16);
+      }
+    }
   }
 
   .petition-meta-state, .petition-meta-signature-count {

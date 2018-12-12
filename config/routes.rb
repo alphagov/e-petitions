@@ -117,6 +117,7 @@ Rails.application.routes.draw do
         resources :emails, controller: 'petition_emails', except: %i[index show]
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
+        resource  :statistics, controller: 'petition_statistics', only: %i[update]
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'

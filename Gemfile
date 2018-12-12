@@ -58,6 +58,7 @@ group :test do
   gem 'email_spec'
   gem 'launchy'
   gem 'webmock'
+  gem 'test_after_commit'
 end
 
 group :production do

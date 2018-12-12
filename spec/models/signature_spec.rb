@@ -1042,6 +1042,27 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".duplicate_emails" do
+    let!(:petition) { FactoryBot.create(:open_petition) }
+
+    context "when there are no duplicate emails" do
+      it "returns zero" do
+        expect(petition.signatures.duplicate_emails).to eq(0)
+      end
+    end
+
+    context "when there are duplicate emails" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, name: "Alice", email: "aliceandbob@example.com")
+        FactoryBot.create(:validated_signature, petition: petition, name: "Bob", email: "aliceandbob@example.com")
+      end
+
+      it "returns the number of duplicate emails" do
+        expect(petition.signatures.duplicate_emails).to eq(1)
+      end
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryBot.attributes_for(:petition) }
     let(:creator) { FactoryBot.create(:pending_signature, creator: true) }

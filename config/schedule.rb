@@ -48,3 +48,7 @@ end
 every :day, at: '7.15am' do
   rake "epets:petitions:debated", output: nil
 end
+
+every 60.minutes do
+  rake "epets:petitions:update_statistics", output: nil
+end

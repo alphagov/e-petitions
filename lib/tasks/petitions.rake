@@ -23,6 +23,13 @@ namespace :epets do
       end
     end
 
+    desc "Add a task to the queue to update petition statistics"
+    task :update_statistics => :environment do
+      Task.run("epets:petitions:update_statistics", 30.minutes) do
+        EnqueuePetitionStatisticsUpdatesJob.perform_later(60.minutes.ago.iso8601)
+      end
+    end
+
     desc "Backfill moderation lag"
     task :backfill_moderation_lag => :environment do
       %w[petitions archived_petitions].each do |table_name|

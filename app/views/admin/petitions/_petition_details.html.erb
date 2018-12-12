@@ -37,6 +37,11 @@
   <% end %>
 
   <% if current_user.is_a_sysadmin? %>
+    <% if @petition.statistics.refreshed? %>
+      <dt>Duplicate emails</dt>
+      <dd><%= number_with_delimiter(@petition.statistics.duplicate_emails) %></dd>
+    <% end %>
+
     <% if @petition.fraudulent_domains? %>
       <dt>Fraudulent domains</dt>
       <dd>
@@ -53,3 +58,17 @@
   <% end %>
 <% end %>
 </dl>
+
+<% if current_user.is_a_sysadmin? %>
+  <div class="statistics-meta">
+    <small>
+      <% if @petition.statistics.refreshed? %>
+        Statistics last updated at <time datetime="<%= @petition.statistics.refreshed_at.iso8601 %>"><%= date_time_format(@petition.statistics.refreshed_at) %></time>
+      <% else %>
+        Statistics not yet generated
+      <% end %>
+    </small>
+
+    <%=  button_to 'Refresh', admin_petition_statistics_url(@petition), method: :patch, class: 'button' %>
+  </div>
+<% end %>

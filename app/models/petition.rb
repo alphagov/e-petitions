@@ -76,6 +76,7 @@ class Petition < ActiveRecord::Base
   has_one :government_response, dependent: :destroy
   has_one :note, dependent: :destroy
   has_one :rejection, dependent: :destroy
+  has_one :statistics, dependent: :destroy
 
   has_many :signatures
   has_many :sponsors, -> { sponsors }, class_name: 'Signature'
@@ -383,6 +384,10 @@ class Petition < ActiveRecord::Base
       untagged.in_moderation
     end
 
+    def signed_since(timestamp)
+      where(arel_table[:last_signed_at].gt(timestamp))
+    end
+
     private
 
     def moderation_threshold_reached_at
@@ -427,6 +432,10 @@ class Petition < ActiveRecord::Base
     def scheduled_debate_state
       arel_table[:debate_state].eq('scheduled')
     end
+  end
+
+  def statistics
+    super || create_statistics!
   end
 
   def update_signature_count!

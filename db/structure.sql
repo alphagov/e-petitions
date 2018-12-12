@@ -887,6 +887,39 @@ ALTER SEQUENCE public.petition_emails_id_seq OWNED BY public.petition_emails.id;
 
 
 --
+-- Name: petition_statistics; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE public.petition_statistics (
+    id integer NOT NULL,
+    petition_id integer,
+    refreshed_at timestamp without time zone,
+    duplicate_emails integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: petition_statistics_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.petition_statistics_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: petition_statistics_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.petition_statistics_id_seq OWNED BY public.petition_statistics.id;
+
+
+--
 -- Name: petitions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1350,6 +1383,13 @@ ALTER TABLE ONLY public.petition_emails ALTER COLUMN id SET DEFAULT nextval('pub
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY public.petition_statistics ALTER COLUMN id SET DEFAULT nextval('public.petition_statistics_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY public.petitions ALTER COLUMN id SET DEFAULT nextval('public.petitions_id_seq'::regclass);
 
 
@@ -1569,6 +1609,14 @@ ALTER TABLE ONLY public.parliaments
 
 ALTER TABLE ONLY public.petition_emails
     ADD CONSTRAINT petition_emails_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: petition_statistics_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY public.petition_statistics
+    ADD CONSTRAINT petition_statistics_pkey PRIMARY KEY (id);
 
 
 --
@@ -2041,6 +2089,13 @@ CREATE INDEX index_petition_emails_on_petition_id ON public.petition_emails USIN
 
 
 --
+-- Name: index_petition_statistics_on_petition_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_petition_statistics_on_petition_id ON public.petition_statistics USING btree (petition_id);
+
+
+--
 -- Name: index_petitions_on_action; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2376,6 +2431,14 @@ ALTER TABLE ONLY public.petition_emails
 
 
 --
+-- Name: fk_rails_a6de6b1362; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.petition_statistics
+    ADD CONSTRAINT fk_rails_a6de6b1362 FOREIGN KEY (petition_id) REFERENCES public.petitions(id);
+
+
+--
 -- Name: fk_rails_b6266f73f1; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -2682,4 +2745,6 @@ INSERT INTO schema_migrations (version) VALUES ('20180623131406');
 INSERT INTO schema_migrations (version) VALUES ('20181201073159');
 
 INSERT INTO schema_migrations (version) VALUES ('20181202102751');
+
+INSERT INTO schema_migrations (version) VALUES ('20181211115757');
 
