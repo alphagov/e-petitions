@@ -334,6 +334,30 @@ RSpec.describe PetitionMailer, type: :mailer do
     it "includes the petition additional details" do
       expect(mail).to have_body_text(%r[To promote organic vegetables])
     end
+
+    it "includes information about moderation" do
+      expect(mail).to have_body_text(%r[Once you’ve gained the required number of supporters])
+    end
+
+    context "during Christmas" do
+      before do
+        allow(Holiday).to receive(:christmas?).and_return(true)
+      end
+
+      it "includes information about delayed moderation" do
+        expect(mail).to have_body_text(%r[but over the Christmas period it will take us a little longer])
+      end
+    end
+
+    context "during Easter" do
+      before do
+        allow(Holiday).to receive(:easter?).and_return(true)
+      end
+
+      it "includes information about delayed moderation" do
+        expect(mail).to have_body_text(%r[but over the Easter period it will take us a little longer])
+      end
+    end
   end
 
   describe "notifying signature of debate outcome" do
