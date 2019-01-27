@@ -33,6 +33,7 @@ class Signature < ActiveRecord::Base
   validates :email, presence: true, email: { allow_blank: true }, on: :create
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
+  validates :postcode, length: { maximum: 255 }, allow_blank: true
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
