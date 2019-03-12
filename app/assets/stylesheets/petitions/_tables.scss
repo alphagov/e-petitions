@@ -1,0 +1,34 @@
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 0 em(9, 16) 0;
+  width: 100%;
+
+  th,
+  td {
+    @include core-16;
+    padding: em(9, 16) 0 em(9, 16) em(20, 16);
+
+    text-align: left;
+    color: $black;
+    border-bottom: 1px solid $border-colour;
+
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+
+  th {
+    font-weight: 700;
+    // Right align headings for numeric content
+    &.numeric {
+      text-align: right;
+    }
+  }
+
+  // Use tabular numbers for numeric table cells
+  td.numeric {
+    @include core-16($tabular-numbers: true);
+    text-align: right;
+  }
+}
