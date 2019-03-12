@@ -1,6 +1,7 @@
 class SignaturesController < ApplicationController
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+  before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
   before_action :verify_unsubscribe_token, only: [:unsubscribe]
@@ -99,11 +100,15 @@ class SignaturesController < ApplicationController
   end
 
   def session_signed_token
-    signed_tokens[signature_id.to_s]
+    signed_tokens.delete(signature_id.to_s)
   end
 
   def signed_token_hash
     { signature_id.to_s => @signature.signed_token }
+  end
+
+  def expire_signed_tokens
+    signed_tokens.delete_if { |id, token| Signature.validated?(id) }
   end
 
   def store_signed_token_in_session

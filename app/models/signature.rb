@@ -265,6 +265,10 @@ class Signature < ActiveRecord::Base
       end
     end
 
+    def validated?(id)
+      where(id: id).where(validated_at.not_eq(nil)).exists?
+    end
+
     private
 
     def ip_search?(query)

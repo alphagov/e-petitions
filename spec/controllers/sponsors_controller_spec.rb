@@ -617,8 +617,14 @@ RSpec.describe SponsorsController, type: :controller do
       context "when the petition is #{state}" do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
+        let(:other_petition) { FactoryBot.create(:open_petition) }
+        let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
 
         before do
+          session[:signed_tokens] = {
+            other_signature.id.to_s => other_signature.signed_token
+          }
+
           get :verify, id: signature.id, token: signature.perishable_token
         end
 
@@ -636,6 +642,10 @@ RSpec.describe SponsorsController, type: :controller do
 
         it "records the constituency id on the signature" do
           expect(assigns[:signature].constituency_id).to eq("3415")
+        end
+
+        it "deletes old signed tokens" do
+          expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
         end
 
         it "saves the signed token in the session" do
@@ -800,6 +810,10 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "renders the sponsors/signed template" do
             expect(response).to render_template("sponsors/signed")
+          end
+
+          it "deletes the signed token from the session" do
+            expect(session[:signed_tokens]).to be_empty
           end
 
           context "and the signature has already seen the confirmation page" do
