@@ -51,7 +51,7 @@ module PageTitleHelper
         if petition?
           opts[:petition] = petition.action
 
-          unless petition.is_a?(Archived::Petition)
+          if controller == 'sponsors'
             opts[:creator] = petition.creator.name
           end
         end
