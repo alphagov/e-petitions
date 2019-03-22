@@ -409,7 +409,7 @@ class Signature < ActiveRecord::Base
       )
     end
 
-    if update_signature_counts
+    if incremental_counting? && update_signature_counts
       ConstituencyPetitionJournal.invalidate_signature_for(self, now)
       CountryPetitionJournal.invalidate_signature_for(self, now)
       petition.decrement_signature_count!(now)
@@ -496,6 +496,10 @@ class Signature < ActiveRecord::Base
   end
 
   private
+
+  def incremental_counting?
+    ENV['SERVER_TYPE'] == 'test'
+  end
 
   def generate_uuid
     Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:#{email}")
