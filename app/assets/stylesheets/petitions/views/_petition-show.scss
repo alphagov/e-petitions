@@ -72,6 +72,12 @@
     color: $secondary-text-colour;
     margin-top: 10px;
   }
+  details {
+    @include core-14;
+  }
+  summary {
+    margin-bottom: 0;
+  }
 }
 
 .about-item-other-business {

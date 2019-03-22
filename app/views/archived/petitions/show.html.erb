@@ -198,6 +198,7 @@
 
     <li class="meta-json">
       <span class="note"><%= link_to "Get petition data (json format)", archived_petition_path(@petition, :json) %></span>
+      <%= render "about_petition_data" %>
     </li>
   </ul>
 <% end %>
