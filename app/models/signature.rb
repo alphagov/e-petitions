@@ -387,7 +387,7 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    if update_signature_counts
+    if incremental_counting? && update_signature_counts
       PetitionSignedDataUpdateJob.perform_later(self)
     end
   end
