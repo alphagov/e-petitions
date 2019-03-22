@@ -33,3 +33,7 @@ Before('~@admin') do
   Capybara.app_host = 'https://petition.parliament.uk'
   Capybara.default_host = 'https://petition.parliament.uk'
 end
+
+Before('@skip') do
+  skip_this_scenario
+end

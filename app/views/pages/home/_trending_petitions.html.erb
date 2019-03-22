@@ -1,13 +1,3 @@
 <div class="section-panel-borderless">
-  <% trending_petitions do |petitions| %>
-    <section class="trending" aria-labelledby="trending-heading">
-      <h2 id="trending-heading">Popular petitions</h2>
-      <ul>
-        <% petitions.each do |petition| %>
-          <%= render 'petitions/trending_petition', :trending_petition => petition %>
-        <% end -%>
-      </ul>
-    </section>
-  <% end %>
   <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
 </div>
