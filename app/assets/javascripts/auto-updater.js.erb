@@ -8,7 +8,7 @@
   var JSON_URL = window.location.pathname + '/count.json',
       THRESHOLD_RESPONSE = <%= Site.threshold_for_response %>,
       THRESHOLD_DEBATE = <%= Site.threshold_for_debate %>,
-      TIMEOUT = 10000;
+      TIMEOUT = 600000;
 
   function add_commas(n) {
         return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
