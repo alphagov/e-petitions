@@ -53,7 +53,7 @@ RSpec.describe SponsorMailer, type: :mailer do
   end
 
   describe "#sponsor_signed_email_below_threshold" do
-    subject(:mail) { described_class.sponsor_signed_email_below_threshold(petition, sponsor) }
+    subject(:mail) { described_class.sponsor_signed_email_below_threshold(sponsor) }
 
     context "when the number of supporters is 1" do
       before do
@@ -77,7 +77,7 @@ RSpec.describe SponsorMailer, type: :mailer do
   end
 
   describe "#sponsor_signed_email_on_threshold" do
-    subject(:mail) { described_class.sponsor_signed_email_on_threshold(petition, sponsor) }
+    subject(:mail) { described_class.sponsor_signed_email_on_threshold(sponsor) }
 
     before do
       allow(petition).to receive_message_chain(:sponsors, :validated, :count).and_return(5)

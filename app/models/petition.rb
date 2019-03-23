@@ -658,6 +658,10 @@ class Petition < ActiveRecord::Base
     state == PENDING_STATE
   end
 
+  def validated?
+    state == VALIDATED_STATE
+  end
+
   def published?
     state.in?(PUBLISHED_STATES)
   end

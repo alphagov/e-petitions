@@ -8,6 +8,6 @@ class SponsorMailerPreview < ActionMailer::Preview
     sponsor = Signature.sponsors.last
     petition = sponsor.petition
 
-    SponsorMailer.sponsor_signed_email_on_threshold(petition, sponsor)
+    SponsorMailer.sponsor_signed_email_on_threshold(sponsor)
   end
 end

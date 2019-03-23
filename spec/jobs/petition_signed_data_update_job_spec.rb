@@ -91,25 +91,6 @@ RSpec.describe PetitionSignedDataUpdateJob, type: :job do
           running_the_job
         }.to change { petition.reload.state }.from(Petition::PENDING_STATE).to(Petition::VALIDATED_STATE)
       end
-
-      it 'sends email notification to the petition creator' do
-        run_the_job
-        email = ActionMailer::Base.deliveries.last
-        expect(email.to).to eq([petition.creator.email])
-      end
-
-      context "and the petition is published" do
-        before do
-          petition.publish
-          petition.reload
-          ActionMailer::Base.deliveries.clear
-        end
-
-        it "does not send an email to the creator" do
-          run_the_job
-          expect(ActionMailer::Base.deliveries).to be_empty
-        end
-      end
     end
   end
 end
