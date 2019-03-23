@@ -388,7 +388,9 @@ class Signature < ActiveRecord::Base
     end
 
     if update_signature_counts
-      PetitionSignedDataUpdateJob.perform_later(self)
+      ConstituencyPetitionJournal.record_new_signature_for(self)
+      CountryPetitionJournal.record_new_signature_for(self)
+      petition.increment_signature_count!
     end
   end
 
