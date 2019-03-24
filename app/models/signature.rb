@@ -158,6 +158,10 @@ class Signature < ActiveRecord::Base
       where(state: PENDING_STATE)
     end
 
+    def petition_ids_signed_since(timestamp)
+      validated(since: timestamp).distinct.pluck(:petition_id)
+    end
+
     def petition_ids_with_invalid_signature_counts
       validated.joins(:petition).
         group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
@@ -265,6 +269,10 @@ class Signature < ActiveRecord::Base
       end
     end
 
+    def validated_count(timestamp = nil)
+      validated(since: timestamp).pluck(count_star, max_validated_at).first
+    end
+
     def validated?(id)
       where(id: id).where(validated_at.not_eq(nil)).exists?
     end
@@ -281,6 +289,14 @@ class Signature < ActiveRecord::Base
 
     def validated_at
       arel_table[:validated_at]
+    end
+
+    def count_star
+      arel_table[Arel.star].count.to_sql
+    end
+
+    def max_validated_at
+      arel_table[:validated_at].maximum.to_sql
     end
   end
 
@@ -366,7 +382,7 @@ class Signature < ActiveRecord::Base
     retry_lock do
       if pending?
         update_signature_counts = true
-        petition.validate_creator! unless creator?
+        petition.validate_creator!(now) unless creator?
 
         attributes = {
           number:       petition.signature_count + 1,
@@ -387,7 +403,7 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    if update_signature_counts
+    if inline_updates? && update_signature_counts
       ConstituencyPetitionJournal.record_new_signature_for(self)
       CountryPetitionJournal.record_new_signature_for(self)
       petition.increment_signature_count!
@@ -498,6 +514,10 @@ class Signature < ActiveRecord::Base
   end
 
   private
+
+  def inline_updates?
+    ENV["INLINE_UPDATES"] == "true"
+  end
 
   def generate_uuid
     Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:#{email}")

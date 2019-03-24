@@ -107,6 +107,10 @@ class Site < ActiveRecord::Base
       instance.touch(*names)
     end
 
+    def signature_count_updated_at!(timestamp)
+      instance.update!(signature_count_updated_at: timestamp)
+    end
+
     def moderation_overdue_in_days
       7.days
     end
@@ -382,6 +386,12 @@ class Site < ActiveRecord::Base
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
+  end
+
+  before_save if: :update_signature_counts_changed? do
+    if update_signature_counts
+      UpdateSignatureCountsJob.perform_later
+    end
   end
 
   private

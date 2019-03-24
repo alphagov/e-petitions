@@ -1248,7 +1248,16 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the petition is open" do
-      let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+      let(:petition) do
+        FactoryBot.create(:open_petition,
+          created_at: 2.days.ago,
+          updated_at: 2.days.ago,
+          last_signed_at: 1.days.ago,
+          creator_attributes: {
+            validated_at: 2.days.ago
+          }
+        )
+      end
 
       it "transitions the signature to the validated state" do
         signature.validate!

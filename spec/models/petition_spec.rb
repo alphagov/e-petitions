@@ -788,13 +788,19 @@ RSpec.describe Petition, type: :model do
     end
 
     it "still returns 1 with a new signature" do
-      signature && petition.reload
-      expect(petition.signature_count).to eq(1)
+      expect {
+        signature
+      }.not_to change {
+        petition.reload.signature_count
+      }.from(1)
     end
 
     it "returns 2 when signature is validated" do
-      signature.validate! && petition.reload
-      expect(petition.signature_count).to eq(2)
+      expect {
+        signature.validate!
+      }.to change {
+        petition.reload.signature_count
+      }.from(1).to(2)
     end
   end
 
@@ -1553,29 +1559,61 @@ RSpec.describe Petition, type: :model do
       FactoryBot.create(:open_petition, {
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
-        updated_at: 2.days.ago
+        updated_at: 2.days.ago,
+        creator_attributes: { validated_at: 5.days.ago }
       })
     end
 
-    it "increases the signature count by 1" do
-      expect{
+    context "when there is one more signature" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
+
+      it "increases the signature count by 1" do
+        expect{
+          petition.increment_signature_count!
+        }.to change{ petition.signature_count }.by(1)
+      end
+
+      it "updates the last_signed_at timestamp" do
         petition.increment_signature_count!
-      }.to change{ petition.signature_count }.by(1)
+        expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "updates the updated_at timestamp" do
+        petition.increment_signature_count!
+        expect(petition.updated_at).to be_within(1.second).of(Time.current)
+      end
     end
 
-    it "updates the last_signed_at timestamp" do
-      petition.increment_signature_count!
-      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
-    end
+    context "when there is more than one signature" do
+      before do
+        5.times do
+          FactoryBot.create(:validated_signature, petition: petition)
+        end
+      end
 
-    it "updates the updated_at timestamp" do
-      petition.increment_signature_count!
-      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+      it "increases the signature count by 5" do
+        expect{
+          petition.increment_signature_count!
+        }.to change{ petition.signature_count }.by(5)
+      end
+
+      it "updates the last_signed_at timestamp" do
+        petition.increment_signature_count!
+        expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+      end
+
+      it "updates the updated_at timestamp" do
+        petition.increment_signature_count!
+        expect(petition.updated_at).to be_within(1.second).of(Time.current)
+      end
     end
 
     context "when the petition is first sponsored" do
       let(:petition) do
-        FactoryBot.create(:pending_petition, {
+        FactoryBot.create(:petition, {
+          state: "pending",
           signature_count: 0,
           last_signed_at: nil,
           updated_at: 2.days.ago
@@ -1592,13 +1630,14 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the signature count crosses the threshold for moderation" do
-      let(:signature_count) { 5 }
+      let(:signature_count) { 4 }
 
       before do
         expect(Site).to receive(:threshold_for_response).and_return(5)
+        FactoryBot.create(:validated_signature, petition: petition)
       end
 
-      context 'having already been validated by the creator' do
+      context "having already been validated by a sponsor" do
         let(:petition) do
           FactoryBot.create(:validated_petition, {
             signature_count: signature_count,
@@ -1608,20 +1647,23 @@ RSpec.describe Petition, type: :model do
         end
 
         it "records the time it happened" do
-          petition.increment_signature_count!
-          expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.moderation_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
         end
 
         it "records changes the state from 'validated' to 'sponsored'" do
           expect {
             petition.increment_signature_count!
-          }.to change{
+          }.to change {
             petition.state
           }.from(Petition::VALIDATED_STATE).to(Petition::SPONSORED_STATE)
         end
       end
 
-      context 'without having been validated by the creator yet' do
+      context "without having been validated by a sponsor yet" do
         let(:petition) do
           FactoryBot.create(:pending_petition, {
             signature_count: signature_count,
@@ -1631,14 +1673,17 @@ RSpec.describe Petition, type: :model do
         end
 
         it "records the time it happened" do
-          petition.increment_signature_count!
-          expect(petition.moderation_threshold_reached_at).to be_within(1.second).of(Time.current)
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.moderation_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
         end
 
         it "records changes the state from 'validated' to 'sponsored'" do
           expect {
             petition.increment_signature_count!
-          }.to change{
+          }.to change {
             petition.state
           }.from(Petition::PENDING_STATE).to(Petition::SPONSORED_STATE)
         end
@@ -1647,6 +1692,10 @@ RSpec.describe Petition, type: :model do
 
     context "when the signature count is higher than the threshold for moderation" do
       let(:signature_count) { 100 }
+
+      before do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
 
       context "and moderation_threshold_reached_at is nil" do
         let(:petition) do
@@ -1661,13 +1710,13 @@ RSpec.describe Petition, type: :model do
         it "doesn't change the state to sponsored" do
           expect {
             petition.increment_signature_count!
-          }.not_to change{ petition.state }
+          }.not_to change { petition.state }
         end
 
         it "doesn't update the moderation_threshold_reached_at column" do
           expect {
             petition.increment_signature_count!
-          }.not_to change{ petition.moderation_threshold_reached_at }
+          }.not_to change { petition.moderation_threshold_reached_at }
         end
       end
     end
@@ -1677,11 +1726,15 @@ RSpec.describe Petition, type: :model do
 
       before do
         expect(Site).to receive(:threshold_for_response).and_return(10)
+        FactoryBot.create(:validated_signature, petition: petition)
       end
 
       it "records the time it happened" do
-        petition.increment_signature_count!
-        expect(petition.response_threshold_reached_at).to be_within(1.second).of(Time.current)
+        expect {
+          petition.increment_signature_count!
+        }.to change {
+          petition.response_threshold_reached_at
+        }.to be_within(1.second).of(Time.current)
       end
     end
 
@@ -1690,16 +1743,23 @@ RSpec.describe Petition, type: :model do
 
       before do
         expect(Site).to receive(:threshold_for_debate).and_return(100)
+        FactoryBot.create(:validated_signature, petition: petition)
       end
 
       it "records the time it happened" do
-        petition.increment_signature_count!
-        expect(petition.debate_threshold_reached_at).to be_within(1.second).of(Time.current)
+        expect {
+          petition.increment_signature_count!
+        }.to change {
+          petition.debate_threshold_reached_at
+        }.to be_within(1.second).of(Time.current)
       end
 
       it "sets the debate_state to 'awaiting'" do
-        petition.increment_signature_count!
-        expect(petition.debate_state).to eq("awaiting")
+        expect {
+          petition.increment_signature_count!
+        }.to change {
+          petition.debate_state
+        }.from("pending").to("awaiting")
       end
     end
   end
@@ -1770,7 +1830,7 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "at_threshold_for_moderation?" do
+  describe "will_reach_threshold_for_moderation?" do
     context "when moderation_threshold_reached_at is not present" do
       let(:petition) { FactoryBot.create(:validated_petition, signature_count: signature_count) }
 
@@ -1782,12 +1842,58 @@ RSpec.describe Petition, type: :model do
         let(:signature_count) { 4 }
 
         it "is falsey" do
+          expect(petition.will_reach_threshold_for_moderation?).to be_falsey
+        end
+      end
+
+      context "and the signature count is one less than the threshold" do
+        let(:signature_count) { 5 }
+
+        it "is truthy" do
+          expect(petition.will_reach_threshold_for_moderation?).to be_truthy
+        end
+      end
+
+      context "and the signature count is more than the threshold" do
+        let(:signature_count) { 6 }
+
+        it "is truthy" do
+          expect(petition.will_reach_threshold_for_moderation?).to be_truthy
+        end
+      end
+    end
+
+    context "when moderation_threshold_reached_at is present" do
+      let(:petition) { FactoryBot.create(:sponsored_petition) }
+
+      before do
+        expect(Site).not_to receive(:threshold_for_response)
+      end
+
+      it "is falsey" do
+        expect(petition.will_reach_threshold_for_moderation?).to be_falsey
+      end
+    end
+  end
+
+  describe "at_threshold_for_moderation?" do
+    context "when moderation_threshold_reached_at is not present" do
+      let(:petition) { FactoryBot.create(:validated_petition, signature_count: signature_count) }
+
+      before do
+        expect(Site).to receive(:threshold_for_moderation).and_return(5)
+      end
+
+      context "and the signature count is less than the threshold" do
+        let(:signature_count) { 5 }
+
+        it "is falsey" do
           expect(petition.at_threshold_for_moderation?).to be_falsey
         end
       end
 
       context "and the signature count is equal than the threshold" do
-        let(:signature_count) { 5 }
+        let(:signature_count) { 6 }
 
         it "is truthy" do
           expect(petition.at_threshold_for_moderation?).to be_truthy
@@ -1795,7 +1901,7 @@ RSpec.describe Petition, type: :model do
       end
 
       context "and the signature count is more than the threshold" do
-        let(:signature_count) { 6 }
+        let(:signature_count) { 7 }
 
         it "is truthy" do
           expect(petition.at_threshold_for_moderation?).to be_truthy
@@ -2243,9 +2349,9 @@ RSpec.describe Petition, type: :model do
       expect(petition.updated_at).to be_within(1.second).of(Time.current)
     end
 
-    it "timestamps the petition to say it was last signed at just now" do
+    it "timestamps the petition to say it was last signed at before now" do
       petition.validate_creator!
-      expect(petition.last_signed_at).to be_within(1.second).of(Time.current)
+      expect(petition.last_signed_at).to be < Time.current
     end
   end
 

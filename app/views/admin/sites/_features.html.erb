@@ -1,4 +1,5 @@
 <%= hidden_field_tag :tab, "features" %>
+<%= hidden_field_tag :"site[features]", "" %>
 
 <%= form_row for: [form.object, :disable_constituency_api], class: "inline" do %>
   <%= form.label :disable_constituency_api, "Disable fetching of constituency by postcode?", class: "form-label" %>
@@ -11,4 +12,23 @@
     <%= form.radio_button :disable_constituency_api, false %>
     <%= form.label :disable_constituency_api, "No", for: "site_disable_constituency_api_false" %>
   </div>
+<% end %>
+
+<%= form_row for: [form.object, :update_signature_counts], class: "inline" do %>
+  <%= form.label :update_signature_counts, "Disable automatic signature count updates?", class: "form-label" %>
+  <%= error_messages_for_field @site, :update_signature_counts %>
+  <div class="multiple-choice">
+    <%= form.radio_button :update_signature_counts, false %>
+    <%= form.label :update_signature_counts, "Yes", for: "site_update_signature_counts_false" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :update_signature_counts, true %>
+    <%= form.label :update_signature_counts, "No", for: "site_update_signature_counts_true" %>
+  </div>
+<% end %>
+
+<%= form_row for: [form.object, :signature_count_interval] do %>
+  <%= form.label :signature_count_interval, "Signature count update interval", class: "form-label" %>
+  <%= error_messages_for_field @site, :signature_count_interval %>
+  <%= form.select :signature_count_interval, signature_count_interval_menu, {}, class: "form-control form-control-1-4" %>
 <% end %>

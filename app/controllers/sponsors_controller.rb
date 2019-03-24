@@ -60,7 +60,7 @@ class SponsorsController < SignaturesController
 
   def send_sponsor_support_notification_email_to_petition_owner
     if @petition.collecting_sponsors?
-      if @petition.at_threshold_for_moderation?
+      if @petition.will_reach_threshold_for_moderation?
         SponsorSignedEmailOnThresholdEmailJob.perform_later(@signature)
       else
         SponsorSignedEmailBelowThresholdEmailJob.perform_later(@signature)
