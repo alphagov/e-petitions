@@ -261,16 +261,23 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validated(since: nil)
-      if since
-        where(state: VALIDATED_STATE).where(validated_at.gt(since))
-      else
-        where(state: VALIDATED_STATE)
-      end
+    def validated(since: nil, upto: nil)
+      scope = where(state: VALIDATED_STATE)
+      scope = scope.where(validated_at.gt(since)) if since
+      scope = scope.where(validated_at.lteq(upto)) if upto
+      scope
     end
 
     def validated_count(timestamp = nil)
       validated(since: timestamp).pluck(count_star, max_validated_at).first
+    end
+
+    def validated_count_by_location_code(timestamp = nil, upto = nil)
+      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star)
+    end
+
+    def validated_count_by_constituency_id(timestamp = nil, upto = nil)
+      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star)
     end
 
     def validated?(id)
@@ -404,9 +411,11 @@ class Signature < ActiveRecord::Base
     end
 
     if inline_updates? && update_signature_counts
-      ConstituencyPetitionJournal.record_new_signature_for(self)
-      CountryPetitionJournal.record_new_signature_for(self)
-      petition.increment_signature_count!
+      last_signed_at = petition.last_signed_at
+      petition.increment_signature_count!(now)
+
+      ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+      CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
     end
   end
 

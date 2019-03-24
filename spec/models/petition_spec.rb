@@ -2321,6 +2321,7 @@ RSpec.describe Petition, type: :model do
   describe "#validate_creator!" do
     let(:petition) { FactoryBot.create(:pending_petition, attributes) }
     let(:signature) { petition.creator }
+    let(:now) { Time.current }
 
     around do |example|
       perform_enqueued_jobs do
@@ -2344,9 +2345,9 @@ RSpec.describe Petition, type: :model do
       }.to change { petition.signature_count }.by(1)
     end
 
-    it "timestamps the petition to say it was updated just now" do
-      petition.validate_creator!
-      expect(petition.updated_at).to be_within(1.second).of(Time.current)
+    it "timestamps the petition to say it was updated before now" do
+      petition.validate_creator!(now)
+      expect(petition.updated_at).to be < Time.current
     end
 
     it "timestamps the petition to say it was last signed at before now" do

@@ -16,7 +16,11 @@ class UpdateSignatureCountsJob < ApplicationJob
     return unless update_signature_counts
 
     petitions.each do |petition|
+      last_signed_at = petition.last_signed_at
       petition.increment_signature_count!(now)
+
+      ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+      CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
     end
 
     signature_count_updated_at!(now)
@@ -24,6 +28,10 @@ class UpdateSignatureCountsJob < ApplicationJob
   end
 
   private
+
+  def log_exception(exception)
+    logger.info(log_message(exception))
+  end
 
   def petition_ids
     petition_ids_signed_since(signature_count_updated_at)

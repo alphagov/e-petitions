@@ -49,6 +49,10 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
     end
 
     describe "updating" do
+      let(:location) { FactoryBot.create(:location, code: "AA", name: "Country 1") }
+      let(:country_journal) { CountryPetitionJournal.for(petition, location.code) }
+      let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "9999") }
+
       before do
         # FIXME: reset the signature count to ensure it's valid because
         # the factories don't leave the petition in a consistent state.
@@ -60,7 +64,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
 
         before do
           5.times do
-            FactoryBot.create(:validated_signature, petition: petition)
+            FactoryBot.create(:validated_signature, petition: petition, location_code: "AA", constituency_id: "9999")
           end
         end
 
@@ -69,6 +73,22 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
             described_class.perform_now(current_time)
           }.to change {
             petition.reload.signature_count
+          }.by(5)
+        end
+
+        it "updates the country journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            country_journal.reload.signature_count
+          }.by(5)
+        end
+
+        it "updates the constituency journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            constituency_journal.reload.signature_count
           }.by(5)
         end
       end
@@ -78,7 +98,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
 
         before do
           5.times do
-            FactoryBot.create(:validated_signature, petition: petition)
+            FactoryBot.create(:validated_signature, petition: petition, location_code: "AA", constituency_id: "9999")
           end
         end
 
@@ -89,6 +109,22 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
             petition.reload.signature_count
           }.by(5)
         end
+
+        it "updates the country journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            country_journal.reload.signature_count
+          }.by(5)
+        end
+
+        it "updates the constituency journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            constituency_journal.reload.signature_count
+          }.by(5)
+        end
       end
 
       context "with a validated petition" do
@@ -96,7 +132,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
 
         before do
           5.times do
-            FactoryBot.create(:validated_signature, petition: petition)
+            FactoryBot.create(:validated_signature, petition: petition, location_code: "AA", constituency_id: "9999")
           end
         end
 
@@ -105,6 +141,22 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
             described_class.perform_now(current_time)
           }.to change {
             petition.reload.signature_count
+          }.by(5)
+        end
+
+        it "updates the country journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            country_journal.reload.signature_count
+          }.by(5)
+        end
+
+        it "updates the constituency journal signature_count" do
+          expect {
+            described_class.perform_now(current_time)
+          }.to change {
+            constituency_journal.reload.signature_count
           }.by(5)
         end
       end
