@@ -107,8 +107,16 @@ class Site < ActiveRecord::Base
       instance.touch(*names)
     end
 
-    def signature_count_updated_at!(timestamp)
-      instance.update!(signature_count_updated_at: timestamp)
+    def last_checked_at!(timestamp = Time.current)
+      instance.update_all(last_petition_created_at: timestamp)
+    end
+
+    def last_petition_created_at!(timestamp = Time.current)
+      instance.update_all(last_petition_created_at: timestamp)
+    end
+
+    def signature_count_updated_at!(timestamp = Time.current)
+      instance.update_all(signature_count_updated_at: timestamp)
     end
 
     def moderation_overdue_in_days
@@ -394,7 +402,19 @@ class Site < ActiveRecord::Base
     end
   end
 
+  def update_all(updates)
+    if scope.update_all(updates) > 0
+      reload
+    else
+      false
+    end
+  end
+
   private
+
+  def scope
+    self.class.unscoped.where(id: id)
+  end
 
   def database_migrating?
     ARGV.any?{ |arg| arg =~ /db:migrate/ }

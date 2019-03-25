@@ -68,7 +68,7 @@ RSpec.describe HealthCheck do
       end
 
       it "detects failure to write records" do
-        allow(Site).to receive(:touch).with(:last_checked_at).and_return(false)
+        allow(Site).to receive(:last_checked_at!).and_return(false)
         expect(subject['database_persistence']).to eq 'FAILED'
       end
     end

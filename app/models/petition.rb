@@ -774,7 +774,7 @@ class Petition < ActiveRecord::Base
   end
 
   def update_last_petition_created_at
-    Site.touch(:last_petition_created_at)
+    Site.last_petition_created_at!
   end
 
   def has_maximum_sponsors?
