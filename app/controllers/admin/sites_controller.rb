@@ -31,7 +31,8 @@ class Admin::SitesController < Admin::AdminController
       :maximum_number_of_sponsors, :threshold_for_moderation,
       :threshold_for_response, :threshold_for_debate, :feedback_email,
       :moderate_url, :login_timeout, :disable_constituency_api,
-      :signature_count_interval, :update_signature_counts
+      :signature_count_interval, :update_signature_counts,
+      :disable_trending_petitions
     )
   end
 end

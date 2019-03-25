@@ -8,7 +8,7 @@ class Site < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
-  FEATURE_FLAGS = %w[disable_constituency_api]
+  FEATURE_FLAGS = %w[disable_constituency_api disable_trending_petitions]
 
   class << self
     def table_exists?
