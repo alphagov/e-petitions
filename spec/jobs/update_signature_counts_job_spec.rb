@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UpdateSignatureCountsJob, type: :job do
-  let(:current_time) { Time.current }
+  let(:current_time) { Time.current.change(usec: 0) }
   let(:interval) { 30 }
   let(:scheduled_time) { interval.seconds.since(current_time) }
 
