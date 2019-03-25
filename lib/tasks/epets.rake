@@ -69,23 +69,23 @@ namespace :epets do
     task :unprotect => :environment do
       Site.instance.update! protected: false
     end
+
+    desc "Start the signature count updater if it's not running"
+    task :signature_counts => :environment do
+      Task.run("epets:site:signature_counts", 10.minutes) do
+        break unless Site.update_signature_counts
+
+        unless Site.signature_count_updated_at > 15.minutes.ago
+          UpdateSignatureCountsJob.perform_later
+        end
+      end
+    end
   end
 
   namespace :cache do
     desc "Clear the cache"
     task :clear => :environment do
       Rails.cache.clear
-    end
-  end
-
-  namespace :journals do
-    desc 'Reset the countries journal'
-    task :reset_countries => :environment do
-      CountryPetitionJournal.reset!
-    end
-
-    task :reset_constituencies => :environment do
-      ConstituencyPetitionJournal.reset!
     end
   end
 end

@@ -438,44 +438,63 @@ class Petition < ActiveRecord::Base
     super || create_statistics!
   end
 
-  def update_signature_count!
-    sql = "signature_count = (?), updated_at = ?"
-    count = Signature.arel_table[Arel.star].count
-    query = Signature.validated.where(petition_id: id).select(count)
+  def reset_signature_count!(time = Time.current)
+    if Site.update_signature_counts
+      raise RuntimeError, "Resetting signature counts while updates are running is unsafe"
+    else
+      update_columns(signature_count: 0, last_signed_at: created_at)
+      increment_signature_count!(time)
+      ConstituencyPetitionJournal.reset_signature_counts_for(self)
+      CountryPetitionJournal.reset_signature_counts_for(self)
+    end
+  end
 
-    if update_all([sql, query, Time.current]) > 0
+  def update_signature_count!(time = Time.current)
+    sql = "signature_count = ?, last_signed_at = ?, updated_at = ?"
+    count, counted_at = signatures.validated_count
+
+    if update_all([sql, count, counted_at, time]) > 0
       self.reload
     end
   end
 
   def increment_signature_count!(time = Time.current)
-    updates = ""
+    sql = "signature_count = signature_count + ?, last_signed_at = ?, updated_at = ?"
+    count, counted_at = signatures.validated_count(last_signed_at)
 
-    if pending?
-      updates = "state = '#{VALIDATED_STATE}', "
-    end
+    return true if count.zero?
 
-    if at_threshold_for_moderation? && collecting_sponsors?
-      updates = "state = '#{SPONSORED_STATE}', "
-      updates << "moderation_threshold_reached_at = :now, "
-    end
-
-    if at_threshold_for_response?
-      updates << "response_threshold_reached_at = :now, "
-    end
-
-    if at_threshold_for_debate?
-      updates << "debate_threshold_reached_at = :now, "
-      updates << "debate_state = 'awaiting', "
-    end
-
-    updates << "signature_count = signature_count + 1, "
-    updates << "last_signed_at = :now, "
-    updates << "updated_at = :now"
-
-    if update_all([updates, now: time]) > 0
+    if update_all([sql, count, counted_at, time]) > 0
       self.reload
+
+      updates = []
+
+      if at_threshold_for_moderation? && collecting_sponsors?
+        updates << "state = '#{SPONSORED_STATE}'"
+        updates << "moderation_threshold_reached_at = :now"
+      elsif pending?
+        updates << "state = '#{VALIDATED_STATE}'"
+      end
+
+      if at_threshold_for_response?
+        updates << "response_threshold_reached_at = :now"
+      end
+
+      if at_threshold_for_debate?
+        updates << "debate_threshold_reached_at = :now"
+        updates << "debate_state = 'awaiting'"
+      end
+
+      updates = updates.join(", ")
+
+      if updates.present?
+        if update_all([updates, now: time]) > 0
+          self.reload
+        end
+      end
     end
+
+    true
   end
 
   def decrement_signature_count!(time = Time.current)
@@ -498,9 +517,15 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def at_threshold_for_moderation?
+  def will_reach_threshold_for_moderation?
     unless moderation_threshold_reached_at?
       signature_count >= Site.threshold_for_moderation
+    end
+  end
+
+  def at_threshold_for_moderation?
+    unless moderation_threshold_reached_at?
+      signature_count >= Site.threshold_for_moderation + 1
     end
   end
 
@@ -603,9 +628,12 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def validate_creator!
+  def validate_creator!(now = Time.current)
     if pending?
-      creator && creator.validate! && reload
+      # Set the validated_at time to 1 second ago so that if
+      # the signature count update runs for it then it won't
+      # prevent this signature being missed.
+      creator && creator.validate!(1.second.ago(now)) && reload
     end
   end
 
@@ -656,6 +684,10 @@ class Petition < ActiveRecord::Base
 
   def pending?
     state == PENDING_STATE
+  end
+
+  def validated?
+    state == VALIDATED_STATE
   end
 
   def published?
@@ -753,7 +785,7 @@ class Petition < ActiveRecord::Base
   end
 
   def update_last_petition_created_at
-    Site.touch(:last_petition_created_at)
+    Site.last_petition_created_at!
   end
 
   def has_maximum_sponsors?

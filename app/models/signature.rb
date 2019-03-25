@@ -158,6 +158,10 @@ class Signature < ActiveRecord::Base
       where(state: PENDING_STATE)
     end
 
+    def petition_ids_signed_since(timestamp)
+      validated(since: timestamp).distinct.pluck(:petition_id)
+    end
+
     def petition_ids_with_invalid_signature_counts
       validated.joins(:petition).
         group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
@@ -257,12 +261,23 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validated(since: nil)
-      if since
-        where(state: VALIDATED_STATE).where(validated_at.gt(since))
-      else
-        where(state: VALIDATED_STATE)
-      end
+    def validated(since: nil, upto: nil)
+      scope = where(state: VALIDATED_STATE)
+      scope = scope.where(validated_at.gt(since)) if since
+      scope = scope.where(validated_at.lteq(upto)) if upto
+      scope
+    end
+
+    def validated_count(timestamp = nil)
+      validated(since: timestamp).pluck(count_star, max_validated_at).first
+    end
+
+    def validated_count_by_location_code(timestamp = nil, upto = nil)
+      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star)
+    end
+
+    def validated_count_by_constituency_id(timestamp = nil, upto = nil)
+      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star)
     end
 
     def validated?(id)
@@ -281,6 +296,14 @@ class Signature < ActiveRecord::Base
 
     def validated_at
       arel_table[:validated_at]
+    end
+
+    def count_star
+      arel_table[Arel.star].count.to_sql
+    end
+
+    def max_validated_at
+      arel_table[:validated_at].maximum.to_sql
     end
   end
 
@@ -366,7 +389,7 @@ class Signature < ActiveRecord::Base
     retry_lock do
       if pending?
         update_signature_counts = true
-        petition.validate_creator! unless creator?
+        petition.validate_creator!(now) unless creator?
 
         attributes = {
           number:       petition.signature_count + 1,
@@ -387,8 +410,12 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    if incremental_counting? && update_signature_counts
-      PetitionSignedDataUpdateJob.perform_later(self)
+    if inline_updates? && update_signature_counts
+      last_signed_at = petition.last_signed_at
+      petition.increment_signature_count!(now)
+
+      ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+      CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
     end
   end
 
@@ -409,7 +436,7 @@ class Signature < ActiveRecord::Base
       )
     end
 
-    if incremental_counting? && update_signature_counts
+    if update_signature_counts
       ConstituencyPetitionJournal.invalidate_signature_for(self, now)
       CountryPetitionJournal.invalidate_signature_for(self, now)
       petition.decrement_signature_count!(now)
@@ -497,8 +524,8 @@ class Signature < ActiveRecord::Base
 
   private
 
-  def incremental_counting?
-    ENV['SERVER_TYPE'] == 'test'
+  def inline_updates?
+    ENV["INLINE_UPDATES"] == "true"
   end
 
   def generate_uuid

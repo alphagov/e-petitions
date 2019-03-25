@@ -21,35 +21,26 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
       order(signature_count: :desc)
     end
 
-    def record_new_signature_for(signature, now = Time.current)
-      unless unrecordable?(signature)
-        journal = self.for(signature.petition, signature.constituency_id)
-        updates = "signature_count = signature_count + 1, updated_at = :now"
-        unscoped.where(id: journal.id).update_all([updates, now: now])
+    def increment_signature_counts_for(petition, since)
+      signature_counts(petition, since).each do |constituency_id, count|
+        next if constituency_id.blank?
+        self.for(petition, constituency_id).increment_signature_count(count, petition)
+      end
+    end
+
+    def reset_signature_counts_for(petition)
+      petition.constituency_petition_journals.delete_all
+
+      signature_counts(petition).each do |constituency_id, count|
+        next if constituency_id.blank?
+        self.for(petition, constituency_id).reset_signature_count(count, petition)
       end
     end
 
     def invalidate_signature_for(signature, now = Time.current)
       unless unrecordable?(signature)
-        journal = self.for(signature.petition, signature.constituency_id)
-        updates = "signature_count = greatest(signature_count - 1, 0), updated_at = :now"
-        unscoped.where(id: journal.id).update_all([updates, now: now])
+        self.for(signature.petition, signature.constituency_id).decrement_signature_count(now)
       end
-    end
-
-    def reset!
-      connection.execute "TRUNCATE TABLE #{self.table_name}"
-      connection.execute <<-SQL.strip_heredoc
-        INSERT INTO #{self.table_name}
-          (petition_id, constituency_id, signature_count, created_at, updated_at)
-        SELECT
-          petition_id, constituency_id, COUNT(*) AS signature_count,
-          timezone('utc', now()), timezone('utc', now())
-        FROM signatures
-        WHERE state = 'validated'
-        AND constituency_id IS NOT NULL
-        GROUP BY petition_id, constituency_id
-      SQL
     end
 
     def with_signatures_for(constituency_id)
@@ -61,5 +52,30 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     def unrecordable?(signature)
       signature.nil? || signature.petition.nil? || signature.constituency_id.blank? || !signature.validated_at?
     end
+
+    def signature_counts(petition, since = nil)
+      petition.signatures.validated_count_by_constituency_id(since, petition.last_signed_at)
+    end
+  end
+
+  def increment_signature_count(count, petition)
+    sql = "signature_count = signature_count + ?, last_signed_at = ?, updated_at = ?"
+    update_all([sql, count, petition.last_signed_at, petition.updated_at])
+  end
+
+  def reset_signature_count(count, petition)
+    sql = "signature_count = ?, last_signed_at = ?, updated_at = ?"
+    update_all([sql, count, petition.last_signed_at, petition.updated_at])
+  end
+
+  def decrement_signature_count(now = Time.current, count = 1)
+    sql = "signature_count = greatest(signature_count - ?, 0), updated_at = ?"
+    update_all([sql, count, now])
+  end
+
+  private
+
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
   end
 end

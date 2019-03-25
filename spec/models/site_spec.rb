@@ -21,6 +21,21 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: UK Government and Parliament" <petitionscommittee@parliament.uk>') }
     it { is_expected.to have_db_column(:last_petition_created_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:login_timeout).of_type(:integer).with_options(null: false, default: 1800) }
+    it { is_expected.to have_db_column(:signature_count_updated_at).of_type(:datetime).with_options(null: true, default: nil) }
+    it { is_expected.to have_db_column(:signature_count_interval).of_type(:integer).with_options(null: false, default: 60) }
+    it { is_expected.to have_db_column(:update_signature_counts).of_type(:boolean).with_options(null: false, default: false) }
+  end
+
+  describe "callbacks" do
+    context "when update_signature_counts is changed to true" do
+      subject(:site) { described_class.create(update_signature_counts: false) }
+
+      it "schedules an UpdateSignatureCountsJob" do
+        expect {
+          site.update!(update_signature_counts: true)
+        }.to have_enqueued_job(UpdateSignatureCountsJob)
+      end
+    end
   end
 
   describe "validations" do
@@ -225,6 +240,21 @@ RSpec.describe Site, type: :model do
     it "delegates last_petition_created_at to the instance" do
       expect(site).to receive(:last_petition_created_at).and_return(now)
       expect(Site.last_petition_created_at).to eq(now)
+    end
+
+    it "delegates signature_count_updated_at to the instance" do
+      expect(site).to receive(:signature_count_updated_at).and_return(now)
+      expect(Site.signature_count_updated_at).to eq(now)
+    end
+
+    it "delegates signature_count_interval to the instance" do
+      expect(site).to receive(:signature_count_interval).and_return(60)
+      expect(Site.signature_count_interval).to eq(60)
+    end
+
+    it "delegates signature_count_interval to the instance" do
+      expect(site).to receive(:update_signature_counts).and_return(true)
+      expect(Site.update_signature_counts).to eq(true)
     end
   end
 

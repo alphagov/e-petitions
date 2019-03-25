@@ -1248,7 +1248,16 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the petition is open" do
-      let(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
+      let(:petition) do
+        FactoryBot.create(:open_petition,
+          created_at: 2.days.ago,
+          updated_at: 2.days.ago,
+          last_signed_at: 1.days.ago,
+          creator_attributes: {
+            validated_at: 2.days.ago
+          }
+        )
+      end
 
       it "transitions the signature to the validated state" do
         signature.validate!
@@ -1292,28 +1301,6 @@ RSpec.describe Signature, type: :model do
         }.to change {
           signature.reload[:signed_token]
         }.from(nil).to(be_present)
-      end
-
-      it 'tells the relevant constituency petition journal to record a new signature' do
-        expect(ConstituencyPetitionJournal).to receive(:record_new_signature_for).with(signature)
-        signature.validate!
-      end
-
-      it 'does not talk to the constituency petition journal if the signature is not pending' do
-        expect(ConstituencyPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.update_columns(state: Signature::VALIDATED_STATE)
-        signature.validate!
-      end
-
-      it 'tells the relevant country petition journal to record a new signature' do
-        expect(CountryPetitionJournal).to receive(:record_new_signature_for).with(signature)
-        signature.validate!
-      end
-
-      it 'does not talk to the country petition journal if the signature is not pending' do
-        expect(CountryPetitionJournal).not_to receive(:record_new_signature_for)
-        signature.update_columns(state: Signature::VALIDATED_STATE)
-        signature.validate!
       end
 
       it "retries if the schema has changed" do

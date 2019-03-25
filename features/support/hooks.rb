@@ -19,6 +19,10 @@ Before do
   )
 end
 
+Before do
+  Rails.cache.clear
+end
+
 After do
   Site.reload
   Parliament.reload

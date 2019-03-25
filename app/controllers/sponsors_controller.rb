@@ -13,6 +13,7 @@ class SponsorsController < SignaturesController
     end
 
     store_signed_token_in_session
+    send_sponsor_support_notification_email_to_petition_owner
     redirect_to signed_sponsor_url(@signature)
   end
 
@@ -53,6 +54,16 @@ class SponsorsController < SignaturesController
         PetitionAndEmailConfirmationForSponsorEmailJob.perform_later(@signature)
       else
         EmailDuplicateSignaturesEmailJob.perform_later(@signature)
+      end
+    end
+  end
+
+  def send_sponsor_support_notification_email_to_petition_owner
+    if @petition.collecting_sponsors?
+      if @petition.will_reach_threshold_for_moderation?
+        SponsorSignedEmailOnThresholdEmailJob.perform_later(@signature)
+      else
+        SponsorSignedEmailBelowThresholdEmailJob.perform_later(@signature)
       end
     end
   end

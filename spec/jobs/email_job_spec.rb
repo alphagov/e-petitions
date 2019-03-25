@@ -371,10 +371,10 @@ RSpec.describe SponsorSignedEmailBelowThresholdEmailJob, type: :job do
   let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
   it "sends the SponsorMailer#sponsor_signed_email_below_threshold email" do
-    expect(SponsorMailer).to receive(:sponsor_signed_email_below_threshold).with(petition, sponsor).and_call_original
+    expect(SponsorMailer).to receive(:sponsor_signed_email_below_threshold).with(sponsor).and_call_original
 
     perform_enqueued_jobs do
-      described_class.perform_later(petition, sponsor)
+      described_class.perform_later(sponsor)
     end
   end
 end
@@ -384,10 +384,10 @@ RSpec.describe SponsorSignedEmailOnThresholdEmailJob, type: :job do
   let(:sponsor) { FactoryBot.create(:sponsor, :validated, petition: petition) }
 
   it "sends the SponsorMailer#sponsor_signed_email_on_threshold email" do
-    expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(petition, sponsor).and_call_original
+    expect(SponsorMailer).to receive(:sponsor_signed_email_on_threshold).with(sponsor).and_call_original
 
     perform_enqueued_jobs do
-      described_class.perform_later(petition, sponsor)
+      described_class.perform_later(sponsor)
     end
   end
 end

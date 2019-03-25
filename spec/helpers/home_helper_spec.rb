@@ -108,4 +108,51 @@ RSpec.describe HomeHelper, type: :helper do
       end
     end
   end
+
+  describe "#trending_petitions" do
+    let(:trending) { double(Petition) }
+
+    before do
+      allow(Petition).to receive(:trending).and_return(trending)
+      allow(trending).to receive(:pluck).and_return(petitions)
+    end
+
+    around do |example|
+      without_cache(:trending_petitions, expires_in: 500) { example.run }
+    end
+
+    context "when trending petitions is disabled" do
+      let(:petitions) { [[1, "Petition Action", 1000]] }
+
+      before do
+        allow(Site).to receive(:disable_trending_petitions?).and_return(true)
+      end
+
+      it "doesn't yield" do
+        expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+      end
+    end
+
+    context "when trending petitions is enabled" do
+      before do
+        allow(Site).to receive(:disable_trending_petitions?).and_return(false)
+      end
+
+      context "and there are no trending petitions" do
+        let(:petitions) { [] }
+
+        it "doesn't yield" do
+          expect { |b| helper.trending_petitions(&b) }.not_to yield_control
+        end
+      end
+
+      context "and there are trending petitions" do
+        let(:petitions) { [[1, "Petition Action", 1000]] }
+
+        it "yields the trending petitions" do
+          expect { |b| helper.trending_petitions(&b) }.to yield_with_args([[1, "Petition Action", 1000]])
+        end
+      end
+    end
+  end
 end

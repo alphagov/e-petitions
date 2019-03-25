@@ -66,82 +66,6 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
   end
 
-  describe ".record_new_signature_for" do
-    let(:petition) { FactoryBot.create(:open_petition) }
-    let(:constituency_id) { FactoryBot.generate(:constituency_id) }
-
-    def journal
-      described_class.for(petition, constituency_id)
-    end
-
-    context "when the supplied signature is valid" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
-      let(:now) { 1.hour.from_now.change(usec: 0) }
-
-      it "increments the signature_count by 1" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.to change { journal.signature_count }.by(1)
-      end
-
-      it "updates the updated_at timestamp" do
-        expect {
-          described_class.record_new_signature_for(signature, now)
-        }.to change { journal.updated_at }.to(now)
-      end
-    end
-
-    context "when the supplied signature is nil" do
-      let(:signature) { nil }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature has no petition" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: nil, constituency_id: constituency_id) }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature has no constituency_id" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, constituency_id: nil) }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature is not validated" do
-      let(:signature) { FactoryBot.build(:pending_signature, petition: petition, constituency_id: constituency_id) }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when no journal exists" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, constituency_id: constituency_id) }
-
-      it "creates a new journal" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.to change(described_class, :count).by(1)
-      end
-    end
-  end
-
   describe ".invalidate_signature_for" do
     let!(:petition) { FactoryBot.create(:open_petition) }
     let!(:constituency_id) { FactoryBot.generate(:constituency_id) }
@@ -231,7 +155,40 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
   end
 
-  describe ".reset!" do
+  describe ".increment_signature_counts_for" do
+    let(:constituency_1) { FactoryBot.generate(:constituency_id) }
+    let(:constituency_2) { FactoryBot.generate(:constituency_id) }
+    let!(:petition) { FactoryBot.create(:petition, creator_attributes: { constituency_id: constituency_1 }) }
+
+    let(:journal_1) { described_class.for(petition, constituency_1) }
+    let(:journal_2) { described_class.for(petition, constituency_2) }
+
+    before do
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_1)
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_2)
+
+      petition.update_signature_count!
+      described_class.reset_signature_counts_for(petition)
+    end
+
+    it "increments all of the journals" do
+      expect(journal_1.signature_count).to eq(2)
+      expect(journal_2.signature_count).to eq(1)
+
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_1)
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_2)
+
+      last_signed_at = petition.last_signed_at
+      petition.increment_signature_count!
+
+      described_class.increment_signature_counts_for(petition, last_signed_at)
+
+      expect(journal_1.reload.signature_count).to eq(3)
+      expect(journal_2.reload.signature_count).to eq(2)
+    end
+  end
+
+  describe ".reset_signature_counts_for" do
     let(:petition_1) { FactoryBot.create(:petition, creator_attributes: {constituency_id: constituency_1}) }
     let(:constituency_1) { FactoryBot.generate(:constituency_id) }
     let(:petition_2) { FactoryBot.create(:petition, creator_attributes: {constituency_id: constituency_1}) }
@@ -245,7 +202,9 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
 
     context 'when there are no signatures' do
       it 'resets all the counts to 0 or 1 for the creator' do
-        described_class.reset!
+        described_class.reset_signature_counts_for(petition_1)
+        described_class.reset_signature_counts_for(petition_2)
+
         expect(described_class.for(petition_1, constituency_1).signature_count).to eq 1
         expect(described_class.for(petition_1, constituency_2).signature_count).to eq 0
         expect(described_class.for(petition_2, constituency_1).signature_count).to eq 1
@@ -263,7 +222,9 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
       end
 
       it 'resets the counts to that of the validated signatures for the petition and country' do
-        described_class.reset!
+        described_class.reset_signature_counts_for(petition_1)
+        described_class.reset_signature_counts_for(petition_2)
+
         expect(described_class.for(petition_1, constituency_1).signature_count).to eq 5 # +1 for the creator
         expect(described_class.for(petition_1, constituency_2).signature_count).to eq 3
         expect(described_class.for(petition_2, constituency_1).signature_count).to eq 3 # +1 for the creator
@@ -272,7 +233,12 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
 
       it 'does not attempt to journal signatures without constituencies' do
         FactoryBot.create(:validated_signature, petition: petition_1, constituency_id: nil)
-        expect { described_class.reset! }.not_to raise_error
+
+        expect {
+          described_class.reset_signature_counts_for(petition_1)
+          described_class.reset_signature_counts_for(petition_2)
+        }.not_to raise_error
+
         expect(described_class.find_by(petition: petition_1, constituency_id: nil)).to be_nil
       end
     end

@@ -8,7 +8,7 @@ class Site < ActiveRecord::Base
   include ActiveSupport::NumberHelper
 
   FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
-  FEATURE_FLAGS = %w[disable_constituency_api]
+  FEATURE_FLAGS = %w[disable_constituency_api disable_trending_petitions]
 
   class << self
     def table_exists?
@@ -105,6 +105,18 @@ class Site < ActiveRecord::Base
 
     def touch(*names)
       instance.touch(*names)
+    end
+
+    def last_checked_at!(timestamp = Time.current)
+      instance.update_all(last_petition_created_at: timestamp)
+    end
+
+    def last_petition_created_at!(timestamp = Time.current)
+      instance.update_all(last_petition_created_at: timestamp)
+    end
+
+    def signature_count_updated_at!(timestamp = Time.current)
+      instance.update_all(signature_count_updated_at: timestamp)
     end
 
     def moderation_overdue_in_days
@@ -384,7 +396,25 @@ class Site < ActiveRecord::Base
     errors.add(:password, :blank) unless password_digest?
   end
 
+  before_save if: :update_signature_counts_changed? do
+    if update_signature_counts
+      UpdateSignatureCountsJob.perform_later
+    end
+  end
+
+  def update_all(updates)
+    if scope.update_all(updates) > 0
+      reload
+    else
+      false
+    end
+  end
+
   private
+
+  def scope
+    self.class.unscoped.where(id: id)
+  end
 
   def database_migrating?
     ARGV.any?{ |arg| arg =~ /db:migrate/ }

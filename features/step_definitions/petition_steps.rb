@@ -21,6 +21,7 @@ Given(/^a(n)? ?(pending|validated|sponsored|flagged|open|rejected)? petition "([
     :state => state || "open"
   }
   @petition = FactoryBot.create(:open_petition, petition_args)
+  @petition.update_signature_count!
 end
 
 Given(/^a (sponsored|flagged) petition "(.*?)" reached threshold (\d+) days? ago$/) do |state, action, age|
@@ -373,6 +374,7 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   @petition = FactoryBot.create(:"#{state}_petition", petition_args)
   signature_state ||= "validated"
   5.times { FactoryBot.create(:"#{signature_state}_signature", petition: @petition) }
+  @petition.update_signature_count!
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|

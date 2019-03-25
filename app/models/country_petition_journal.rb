@@ -17,37 +17,26 @@ class CountryPetitionJournal < ActiveRecord::Base
       end
     end
 
-    def record_new_signature_for(signature, now = Time.current)
-      unless unrecordable?(signature)
-        journal = self.for(signature.petition, signature.location_code)
-        updates = "signature_count = signature_count + 1, updated_at = :now"
-        unscoped.where(id: journal.id).update_all([updates, now: now])
+    def increment_signature_counts_for(petition, since)
+      signature_counts(petition, since).each do |location_code, count|
+        next if location_code.blank?
+        self.for(petition, location_code).increment_signature_count(count, petition)
+      end
+    end
+
+    def reset_signature_counts_for(petition)
+      petition.country_petition_journals.delete_all
+
+      signature_counts(petition).each do |location_code, count|
+        next if location_code.blank?
+        self.for(petition, location_code).reset_signature_count(count, petition)
       end
     end
 
     def invalidate_signature_for(signature, now = Time.current)
       unless unrecordable?(signature)
-        journal = self.for(signature.petition, signature.location_code)
-        updates = "signature_count = greatest(signature_count - 1, 0), updated_at = :now"
-        unscoped.where(id: journal.id).update_all([updates, now: now])
+        self.for(signature.petition, signature.location_code).decrement_signature_count(now)
       end
-    end
-
-    def reset!
-      # NOTE: location_code <> '' is the closest we can (performantly) get to rails'
-      # String#blank? in SQL
-      connection.execute 'TRUNCATE TABLE country_petition_journals'
-      connection.execute <<-SQL.strip_heredoc
-        INSERT INTO country_petition_journals
-          (petition_id, location_code, signature_count, created_at, updated_at)
-        SELECT
-          petition_id, location_code, COUNT(*) AS signature_count,
-          timezone('utc', now()), timezone('utc', now())
-        FROM signatures
-        WHERE state = 'validated'
-        AND location_code <> ''
-        GROUP BY petition_id, location_code
-      SQL
     end
 
     private
@@ -55,5 +44,30 @@ class CountryPetitionJournal < ActiveRecord::Base
     def unrecordable?(signature)
       signature.nil? || signature.petition.nil? || signature.location_code.blank? || !signature.validated_at?
     end
+
+    def signature_counts(petition, since = nil)
+      petition.signatures.validated_count_by_location_code(since, petition.last_signed_at)
+    end
+  end
+
+  def increment_signature_count(count, petition)
+    sql = "signature_count = signature_count + ?, last_signed_at = ?, updated_at = ?"
+    update_all([sql, count, petition.last_signed_at, petition.updated_at])
+  end
+
+  def reset_signature_count(count, petition)
+    sql = "signature_count = ?, last_signed_at = ?, updated_at = ?"
+    update_all([sql, count, petition.last_signed_at, petition.updated_at])
+  end
+
+  def decrement_signature_count(now = Time.current, count = 1)
+    sql = "signature_count = greatest(signature_count - ?, 0), updated_at = ?"
+    update_all([sql, count, now])
+  end
+
+  private
+
+  def update_all(updates)
+    self.class.unscoped.where(id: id).update_all(updates)
   end
 end

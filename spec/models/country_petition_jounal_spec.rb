@@ -71,81 +71,6 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
   end
 
-  describe ".record_new_signature_for" do
-    let!(:petition) { FactoryBot.create(:open_petition) }
-
-    def journal
-      described_class.for(petition, "GB")
-    end
-
-    context "when the supplied signature is valid" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, location_code: "GB") }
-      let(:now) { 1.hour.from_now.change(usec: 0) }
-
-      it "increments the signature_count by 1" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.to change { journal.signature_count }.by(1)
-      end
-
-      it "updates the updated_at timestamp" do
-        expect {
-          described_class.record_new_signature_for(signature, now)
-        }.to change { journal.updated_at }.to(now)
-      end
-    end
-
-    context "when the supplied signature is nil" do
-      let(:signature) { nil }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature has no petition" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: nil, location_code: "GB") }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature has no country" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, location_code: nil) }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when the supplied signature is not validated" do
-      let(:signature) { FactoryBot.build(:pending_signature, petition: petition, location_code: "GB") }
-
-      it "does nothing" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.not_to change { journal.signature_count }
-      end
-    end
-
-    context "when no journal exists" do
-      let(:signature) { FactoryBot.build(:validated_signature, petition: petition, location_code: "GB") }
-
-      it "creates a new journal" do
-        expect {
-          described_class.record_new_signature_for(signature)
-        }.to change(described_class, :count).by(1)
-      end
-    end
-  end
-
   describe ".invalidate_signature_for" do
     let!(:petition) { FactoryBot.create(:open_petition) }
     let!(:journal) { FactoryBot.create(:country_petition_journal, petition: petition, location: location, signature_count: signature_count) }
@@ -234,7 +159,42 @@ RSpec.describe CountryPetitionJournal, type: :model do
     end
   end
 
-  describe ".reset!" do
+  describe ".increment_signature_counts_for" do
+    let!(:location_1) { FactoryBot.create(:location, code: "AA", name: "Country 1") }
+    let!(:location_2) { FactoryBot.create(:location, code: "ZZ", name: "Country 2") }
+    let!(:location_code_1) { location_1.code }
+    let!(:location_code_2) { location_2.code }
+    let!(:petition) { FactoryBot.create(:petition, creator_attributes: {location_code: location_code_1}) }
+
+    let(:journal_1) { described_class.for(petition, location_code_1) }
+    let(:journal_2) { described_class.for(petition, location_code_2) }
+
+    before do
+      FactoryBot.create(:validated_signature, petition: petition, location_code: "AA")
+      FactoryBot.create(:validated_signature, petition: petition, location_code: "ZZ")
+
+      petition.update_signature_count!
+      described_class.reset_signature_counts_for(petition)
+    end
+
+    it "increments all of the journals" do
+      expect(journal_1.signature_count).to eq(2)
+      expect(journal_2.signature_count).to eq(1)
+
+      FactoryBot.create(:validated_signature, petition: petition, location_code: "AA")
+      FactoryBot.create(:validated_signature, petition: petition, location_code: "ZZ")
+
+      last_signed_at = petition.last_signed_at
+      petition.increment_signature_count!
+
+      described_class.increment_signature_counts_for(petition, last_signed_at)
+
+      expect(journal_1.reload.signature_count).to eq(3)
+      expect(journal_2.reload.signature_count).to eq(2)
+    end
+  end
+
+  describe ".reset_signature_counts_for" do
     let!(:location_1) { FactoryBot.create(:location, code: "AA", name: "Country 1") }
     let!(:location_2) { FactoryBot.create(:location, code: "ZZ", name: "Country 2") }
     let!(:location_code_1) { location_1.code }
@@ -250,7 +210,9 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
     context 'when there are no signatures' do
       it 'resets all the counts to 0 or 1 for the creator' do
-        described_class.reset!
+        described_class.reset_signature_counts_for(petition_1)
+        described_class.reset_signature_counts_for(petition_2)
+
         expect(described_class.for(petition_1, location_code_1).signature_count).to eq 1
         expect(described_class.for(petition_1, location_code_2).signature_count).to eq 0
         expect(described_class.for(petition_2, location_code_1).signature_count).to eq 1
@@ -268,7 +230,9 @@ RSpec.describe CountryPetitionJournal, type: :model do
       end
 
       it 'resets the counts to that of the validated signatures for the petition and country' do
-        described_class.reset!
+        described_class.reset_signature_counts_for(petition_1)
+        described_class.reset_signature_counts_for(petition_2)
+
         expect(described_class.for(petition_1, location_code_1).signature_count).to eq 5 # +1 for the creator
         expect(described_class.for(petition_1, location_code_2).signature_count).to eq 3
         expect(described_class.for(petition_2, location_code_1).signature_count).to eq 3 # +1 for the creator
@@ -279,7 +243,12 @@ RSpec.describe CountryPetitionJournal, type: :model do
         # The schema allows for nil countries, but our validations don't - update_column lets us get around that (!)
         FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'About to disappear').update_column(:location_code, nil)
         FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'About to disappear').update_column(:location_code, '')
-        expect { described_class.reset! }.not_to raise_error
+
+        expect {
+          described_class.reset_signature_counts_for(petition_1)
+          described_class.reset_signature_counts_for(petition_2)
+        }.not_to raise_error
+
         expect(described_class.find_by(petition: petition_1, location_code: nil)).to be_nil
         expect(described_class.find_by(petition: petition_1, location_code: '')).to be_nil
       end

@@ -613,20 +613,131 @@ RSpec.describe SponsorsController, type: :controller do
       end
     end
 
-    %w[pending validated sponsored].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
-        let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
-        let(:other_petition) { FactoryBot.create(:open_petition) }
-        let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
+    context "when the petition is pending" do
+      let(:petition) { FactoryBot.create(:pending_petition, creator_attributes: { email: "bob@example.com" }) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true, name: "Alice") }
+      let(:other_petition) { FactoryBot.create(:open_petition) }
+      let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
 
-        before do
-          session[:signed_tokens] = {
-            other_signature.id.to_s => other_signature.signed_token
-          }
+      before do
+        session[:signed_tokens] = {
+          other_signature.id.to_s => other_signature.signed_token
+        }
 
+        perform_enqueued_jobs {
           get :verify, id: signature.id, token: signature.perishable_token
+        }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "validates the signature" do
+        expect(assigns[:signature]).to be_validated
+      end
+
+      it "validates the creator" do
+        expect(petition.creator.reload).to be_validated
+      end
+
+      it "changes the petition state to validated" do
+        expect(petition.reload).to be_validated
+      end
+
+      it "records the constituency id on the signature" do
+        expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "deletes old signed tokens" do
+        expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
+      end
+
+      it "saves the signed token in the session" do
+        expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+      end
+
+      it "sends email notification to the petition creator" do
+        expect(last_email_sent).to deliver_to("bob@example.com")
+        expect(last_email_sent).to have_subject("Alice supported your petition")
+      end
+
+      it "redirects to the signed signature page" do
+        expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+      end
+
+      context "and the signature has already been validated" do
+        let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+
+        it "doesn't set the flash :notice message" do
+          expect(flash[:notice]).to be_nil
         end
+      end
+    end
+
+    context "when the petition is validated" do
+      let(:petition) { FactoryBot.create(:validated_petition, creator_attributes: { email: "bob@example.com" }) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true, name: "Alice") }
+      let(:other_petition) { FactoryBot.create(:open_petition) }
+      let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
+
+      before do
+        session[:signed_tokens] = {
+          other_signature.id.to_s => other_signature.signed_token
+        }
+
+        perform_enqueued_jobs {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "validates the signature" do
+        expect(assigns[:signature]).to be_validated
+      end
+
+      it "records the constituency id on the signature" do
+        expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "deletes old signed tokens" do
+        expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
+      end
+
+      it "saves the signed token in the session" do
+        expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+      end
+
+      it "sends email notification to the petition creator" do
+        expect(last_email_sent).to deliver_to("bob@example.com")
+        expect(last_email_sent).to have_subject("Alice supported your petition")
+      end
+
+      it "redirects to the signed signature page" do
+        expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+      end
+
+      context "and the signature has already been validated" do
+        let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+
+        it "doesn't set the flash :notice message" do
+          expect(flash[:notice]).to be_nil
+        end
+      end
+
+      context "and is at the threshold for moderation" do
+        let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: Site.minimum_number_of_sponsors - 1, sponsors_signed: true, creator_attributes: { email: "bob@example.com" }) }
 
         it "assigns the @signature instance variable" do
           expect(assigns[:signature]).to eq(signature)
@@ -644,60 +755,155 @@ RSpec.describe SponsorsController, type: :controller do
           expect(assigns[:signature].constituency_id).to eq("3415")
         end
 
-        it "deletes old signed tokens" do
-          expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
+        it "saves the signed token in the session" do
+          expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+        end
+
+        it "sends email notification to the petition creator" do
+          expect(last_email_sent).to deliver_to("bob@example.com")
+          expect(last_email_sent).to have_subject("We’re checking your petition")
+        end
+
+        it "redirects to the signed signature page" do
+          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+        end
+      end
+
+      context "and has one remaining sponsor slot" do
+        let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true, creator_attributes: { email: "bob@example.com" }) }
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
+        end
+
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
+        end
+
+        it "validates the signature" do
+          expect(assigns[:signature]).to be_validated
+        end
+
+        it "records the constituency id on the signature" do
+          expect(assigns[:signature].constituency_id).to eq("3415")
         end
 
         it "saves the signed token in the session" do
           expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
         end
 
+        it "sends email notification to the petition creator" do
+          expect(last_email_sent).to deliver_to("bob@example.com")
+          expect(last_email_sent).to have_subject("We’re checking your petition")
+        end
+
         it "redirects to the signed signature page" do
           expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
         end
+      end
 
-        context "and the signature has already been validated" do
-          let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+      context "and has reached the maximum number of sponsors" do
+        let(:petition) { FactoryBot.create(:validated_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
 
-          it "doesn't set the flash :notice message" do
-            expect(flash[:notice]).to be_nil
-          end
+        it "redirects to the petition moderation info page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+        end
+      end
+    end
+
+    context "when the petition is sponsored" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, creator_attributes: { email: "bob@example.com" }) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true, name: "Alice") }
+      let(:other_petition) { FactoryBot.create(:open_petition) }
+      let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
+
+      before do
+        session[:signed_tokens] = {
+          other_signature.id.to_s => other_signature.signed_token
+        }
+
+        perform_enqueued_jobs {
+          get :verify, id: signature.id, token: signature.perishable_token
+        }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "validates the signature" do
+        expect(assigns[:signature]).to be_validated
+      end
+
+      it "records the constituency id on the signature" do
+        expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "deletes old signed tokens" do
+        expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
+      end
+
+      it "saves the signed token in the session" do
+        expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+      end
+
+      it "doesn't send an email notification to the petition creator" do
+        expect(deliveries).to be_empty
+      end
+
+      it "redirects to the signed signature page" do
+        expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+      end
+
+      context "and the signature has already been validated" do
+        let(:signature) { FactoryBot.create(:validated_signature, petition: petition, sponsor: true) }
+
+        it "doesn't set the flash :notice message" do
+          expect(flash[:notice]).to be_nil
+        end
+      end
+
+      context "and has one remaining sponsor slot" do
+        let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true, creator_attributes: { email: "bob@example.com" }) }
+
+        it "assigns the @signature instance variable" do
+          expect(assigns[:signature]).to eq(signature)
         end
 
-        context "and has one remaining sponsor slot" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors - 1, sponsors_signed: true) }
-
-          it "assigns the @signature instance variable" do
-            expect(assigns[:signature]).to eq(signature)
-          end
-
-          it "assigns the @petition instance variable" do
-            expect(assigns[:petition]).to eq(petition)
-          end
-
-          it "validates the signature" do
-            expect(assigns[:signature]).to be_validated
-          end
-
-          it "records the constituency id on the signature" do
-            expect(assigns[:signature].constituency_id).to eq("3415")
-          end
-
-          it "saves the signed token in the session" do
-            expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
-          end
-
-          it "redirects to the signed signature page" do
-            expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
-          end
+        it "assigns the @petition instance variable" do
+          expect(assigns[:petition]).to eq(petition)
         end
 
-        context "and has reached the maximum number of sponsors" do
-          let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+        it "validates the signature" do
+          expect(assigns[:signature]).to be_validated
+        end
 
-          it "redirects to the petition moderation info page" do
-            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
-          end
+        it "records the constituency id on the signature" do
+          expect(assigns[:signature].constituency_id).to eq("3415")
+        end
+
+        it "saves the signed token in the session" do
+          expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+        end
+
+        it "doesn't send an email notification to the petition creator" do
+          expect(deliveries).to be_empty
+        end
+
+        it "redirects to the signed signature page" do
+          expect(response).to redirect_to("/sponsors/#{signature.id}/sponsored")
+        end
+      end
+
+      context "and has reached the maximum number of sponsors" do
+        let(:petition) { FactoryBot.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true) }
+
+        it "redirects to the petition moderation info page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
         end
       end
     end

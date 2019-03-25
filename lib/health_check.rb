@@ -60,7 +60,7 @@ class HealthCheck
   def database_persistence
     return false unless database_connection
     return false unless Site.first_or_create
-    return false unless Site.touch(:last_checked_at)
+    return false unless Site.last_checked_at!
     true
   rescue
     false

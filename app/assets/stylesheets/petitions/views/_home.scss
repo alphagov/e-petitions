@@ -27,6 +27,21 @@
   h2 {
     margin-bottom: 0;
   }
+  .petition-item {
+    margin: $gutter-half 0;
+
+    @include media(tablet) {
+      margin: $gutter-half 0;
+    }
+
+    h3 {
+      margin-top: $gutter-half;
+
+      @include media(tablet) {
+        margin-top: $gutter-half;
+      }
+    }
+  }
 }
 
 .view-all {

@@ -74,6 +74,18 @@ module AdminHelper
     !trending_ips(since: since, limit: limit).empty?
   end
 
+  def signature_count_interval_menu
+    {
+      "1 second" => "1",
+      "2 seconds" => "2",
+      "5 seconds" => "5",
+      "10 seconds" => "10",
+      "30 seconds" => "30",
+      "1 minute" => "60",
+      "5 minutes" => "300"
+    }
+  end
+
   private
 
   def admin_petition_facets
