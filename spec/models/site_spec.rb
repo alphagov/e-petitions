@@ -13,6 +13,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 5) }
     it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
     it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:threshold_for_moderation_delay).of_type(:integer).with_options(null: false, default: 500) }
     it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 10000) }
     it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 100000) }
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
@@ -46,6 +47,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_presence_of(:minimum_number_of_sponsors) }
     it { is_expected.to validate_presence_of(:maximum_number_of_sponsors) }
     it { is_expected.to validate_presence_of(:threshold_for_moderation) }
+    it { is_expected.to validate_presence_of(:threshold_for_moderation_delay) }
     it { is_expected.to validate_presence_of(:threshold_for_response) }
     it { is_expected.to validate_presence_of(:threshold_for_debate) }
     it { is_expected.to validate_presence_of(:login_timeout) }
@@ -56,8 +58,8 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_length_of(:feedback_email).is_at_most(100) }
 
     %w[
-      petition_duration minimum_number_of_sponsors maximum_number_of_sponsors
-      threshold_for_moderation threshold_for_response threshold_for_debate login_timeout
+      petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
+      threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
     ].each do |attribute|
       describe attribute do
         let(:errors) { subject.errors[attribute] }
@@ -474,6 +476,18 @@ RSpec.describe Site, type: :model do
       it "can be overridden with the THRESHOLD_FOR_MODERATION environment variable" do
         allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("10")
         expect(defaults[:threshold_for_moderation]).to eq(10)
+      end
+    end
+
+    describe "for threshold_for_moderation_delay" do
+      it "defaults to 500" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION_DELAY", '500').and_return("500")
+        expect(defaults[:threshold_for_moderation_delay]).to eq(500)
+      end
+
+      it "can be overridden with the THRESHOLD_FOR_MODERATION_DELAY environment variable" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION_DELAY", '500').and_return("100")
+        expect(defaults[:threshold_for_moderation_delay]).to eq(100)
       end
     end
 

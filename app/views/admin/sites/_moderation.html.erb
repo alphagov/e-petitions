@@ -6,6 +6,12 @@
   <%= form.text_field :threshold_for_moderation, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
 <% end %>
 
+<%= form_row for: [form.object, :threshold_for_moderation_delay] do %>
+  <%= form.label :threshold_for_moderation_delay, "Threshold for moderation delay", class: "form-label" %>
+  <%= error_messages_for_field @site, :threshold_for_moderation_delay %>
+  <%= form.text_field :threshold_for_moderation_delay, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+<% end %>
+
 <%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
   <%= form.label :minimum_number_of_sponsors, class: "form-label" %>
   <%= error_messages_for_field @site, :minimum_number_of_sponsors %>

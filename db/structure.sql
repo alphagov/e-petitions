@@ -1135,7 +1135,8 @@ CREATE TABLE public.sites (
     feature_flags jsonb DEFAULT '{}'::jsonb NOT NULL,
     signature_count_updated_at timestamp without time zone,
     signature_count_interval integer DEFAULT 60 NOT NULL,
-    update_signature_counts boolean DEFAULT false NOT NULL
+    update_signature_counts boolean DEFAULT false NOT NULL,
+    threshold_for_moderation_delay integer DEFAULT 500 NOT NULL
 );
 
 
@@ -2778,4 +2779,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190325204926');
 INSERT INTO schema_migrations (version) VALUES ('20190325205128');
 
 INSERT INTO schema_migrations (version) VALUES ('20190325205137');
+
+INSERT INTO schema_migrations (version) VALUES ('20190326144123');
 
