@@ -27,6 +27,19 @@
   </div>
 <% end %>
 
+<%= form_row for: [form.object, :disable_invalid_signature_count_check], class: "inline" do %>
+  <%= form.label :disable_invalid_signature_count_check, "Disable overnight check on invalid signature counts?", class: "form-label" %>
+  <%= error_messages_for_field @site, :disable_invalid_signature_count_check %>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_invalid_signature_count_check, true %>
+    <%= form.label :disable_invalid_signature_count_check, "Yes", for: "site_disable_invalid_signature_count_check_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_invalid_signature_count_check, false %>
+    <%= form.label :disable_invalid_signature_count_check, "No", for: "site_disable_invalid_signature_count_check_false" %>
+  </div>
+<% end %>
+
 <%= form_row for: [form.object, :update_signature_counts], class: "inline" do %>
   <%= form.label :update_signature_counts, "Disable automatic signature count updates?", class: "form-label" %>
   <%= error_messages_for_field @site, :update_signature_counts %>

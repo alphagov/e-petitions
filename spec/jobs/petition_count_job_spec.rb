@@ -1,17 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe PetitionCountJob, type: :job do
+  context "when the invalid signature count check is disabled" do
+    before do
+      allow(Site).to receive(:disable_invalid_signature_count_check?).and_return(true)
+    end
+
+    it "cancels the job" do
+      expect(Site).not_to receive(:update_signature_counts)
+      described_class.perform_now
+    end
+  end
+
   context "when there are no petitions with invalid signature counts" do
     let!(:petition) { FactoryBot.create(:open_petition) }
 
     it "doesn't update the signature count" do
-      expect{
+      expect {
         described_class.perform_now
       }.not_to change { petition.reload.signature_count }
     end
 
     it "doesn't change the updated_at timestamp" do
-      expect{
+      expect {
         described_class.perform_now
       }.not_to change { petition.reload.updated_at }
     end
