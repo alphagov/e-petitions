@@ -107,6 +107,14 @@ class Site < ActiveRecord::Base
       instance.touch(*names)
     end
 
+    def disable_signature_counts!
+      instance.update!(update_signature_counts: false)
+    end
+
+    def enable_signature_counts!
+      instance.update!(update_signature_counts: true)
+    end
+
     def last_checked_at!(timestamp = Time.current)
       instance.update_all(last_petition_created_at: timestamp)
     end

@@ -336,10 +336,6 @@ class Petition < ActiveRecord::Base
       end
     end
 
-    def with_invalid_signature_counts
-      where(id: Signature.petition_ids_with_invalid_signature_counts).to_a
-    end
-
     def popular_in_constituency(constituency_id, count = 50)
       popular_in(constituency_id, count).for_state(OPEN_STATE)
     end
@@ -515,6 +511,11 @@ class Petition < ActiveRecord::Base
     if update_all([updates, now: time]) > 0
       self.reload
     end
+  end
+
+  def valid_signature_count?
+    count, count_at = signatures.validated_count(nil, last_signed_at)
+    signature_count == count && last_signed_at == count_at
   end
 
   def will_reach_threshold_for_moderation?

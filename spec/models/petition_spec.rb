@@ -1500,26 +1500,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe ".with_invalid_signature_counts" do
-    let!(:petition) { FactoryBot.create(:open_petition, attributes) }
-
-    context "when there are no petitions with invalid signature counts" do
-      let(:attributes) { { created_at: 2.days.ago, updated_at: 2.days.ago } }
-
-      it "doesn't return any petitions" do
-        expect(described_class.with_invalid_signature_counts).to eq([])
-      end
-    end
-
-    context "when there are petitions with invalid signature counts" do
-      let(:attributes) { { created_at: 2.days.ago, updated_at: 2.days.ago, signature_count: 100 } }
-
-      it "returns the petitions" do
-        expect(described_class.with_invalid_signature_counts).to eq([petition])
-      end
-    end
-  end
-
   describe ".unarchived" do
     let!(:archived_petition) { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
     let!(:unarchived_petition) { FactoryBot.create(:closed_petition, archived_at: nil) }

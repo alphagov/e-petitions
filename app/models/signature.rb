@@ -167,13 +167,6 @@ class Signature < ActiveRecord::Base
       validated(since: timestamp).distinct.pluck(:petition_id)
     end
 
-    def petition_ids_with_invalid_signature_counts
-      validated.joins(:petition).
-        group([arel_table[:petition_id], Petition.arel_table[:signature_count]]).
-        having(arel_table[Arel.star].count.not_eq(Petition.arel_table[:signature_count])).
-        pluck(:petition_id)
-    end
-
     def search(query, options = {})
       query = query.to_s
       page = [options[:page].to_i, 1].max
@@ -275,8 +268,8 @@ class Signature < ActiveRecord::Base
       scope
     end
 
-    def validated_count(timestamp = nil)
-      validated(since: timestamp).pluck(count_star, max_validated_at).first
+    def validated_count(timestamp = nil, upto = nil)
+      validated(since: timestamp, upto: upto).pluck(count_star, max_validated_at).first
     end
 
     def validated_count_by_location_code(timestamp = nil, upto = nil)
