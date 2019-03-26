@@ -358,6 +358,32 @@ RSpec.describe PetitionMailer, type: :mailer do
         expect(mail).to have_body_text(%r[but over the Easter period it will take us a little longer])
       end
     end
+
+    context "when there's isn't a moderation delay" do
+      let(:scope) { double(Petition) }
+
+      before do
+        allow(Petition).to receive(:in_moderation).and_return(scope)
+        allow(scope).to receive(:count).and_return(499)
+      end
+
+      it "doesn't include information about delayed moderation" do
+        expect(mail).not_to have_body_text(%r[however we have a very large number to check])
+      end
+    end
+
+    context "when there's a moderation delay" do
+      let(:scope) { double(Petition) }
+
+      before do
+        allow(Petition).to receive(:in_moderation).and_return(scope)
+        allow(scope).to receive(:count).and_return(500)
+      end
+
+      it "includes information about delayed moderation" do
+        expect(mail).to have_body_text(%r[however we have a very large number to check])
+      end
+    end
   end
 
   describe "notifying signature of debate outcome" do

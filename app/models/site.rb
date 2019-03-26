@@ -137,22 +137,23 @@ class Site < ActiveRecord::Base
 
     def defaults
       {
-        title:                      default_title,
-        url:                        default_url,
-        moderate_url:               default_moderate_url,
-        email_from:                 default_email_from,
-        feedback_email:             default_feedback_email,
-        username:                   default_username,
-        password:                   default_password,
-        enabled:                    default_enabled,
-        protected:                  default_protected,
-        login_timeout:              default_login_timeout,
-        petition_duration:          default_petition_duration,
-        minimum_number_of_sponsors: default_minimum_number_of_sponsors,
-        maximum_number_of_sponsors: default_maximum_number_of_sponsors,
-        threshold_for_moderation:   default_threshold_for_moderation,
-        threshold_for_response:     default_threshold_for_response,
-        threshold_for_debate:       default_threshold_for_debate
+        title:                          default_title,
+        url:                            default_url,
+        moderate_url:                   default_moderate_url,
+        email_from:                     default_email_from,
+        feedback_email:                 default_feedback_email,
+        username:                       default_username,
+        password:                       default_password,
+        enabled:                        default_enabled,
+        protected:                      default_protected,
+        login_timeout:                  default_login_timeout,
+        petition_duration:              default_petition_duration,
+        minimum_number_of_sponsors:     default_minimum_number_of_sponsors,
+        maximum_number_of_sponsors:     default_maximum_number_of_sponsors,
+        threshold_for_moderation:       default_threshold_for_moderation,
+        threshold_for_moderation_delay: default_threshold_for_moderation_delay,
+        threshold_for_response:         default_threshold_for_response,
+        threshold_for_debate:           default_threshold_for_debate
       }
     end
 
@@ -252,6 +253,10 @@ class Site < ActiveRecord::Base
 
     def default_threshold_for_moderation
       ENV.fetch('THRESHOLD_FOR_MODERATION', '5').to_i
+    end
+
+    def default_threshold_for_moderation_delay
+      ENV.fetch('THRESHOLD_FOR_MODERATION_DELAY', '500').to_i
     end
 
     def default_threshold_for_response
@@ -394,6 +399,7 @@ class Site < ActiveRecord::Base
   validates :minimum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :maximum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :threshold_for_moderation, presence: true, numericality: { only_integer: true }
+  validates :threshold_for_moderation_delay, presence: true, numericality: { only_integer: true }
   validates :threshold_for_response, presence: true, numericality: { only_integer: true }
   validates :threshold_for_debate, presence: true, numericality: { only_integer: true }
   validates :username, presence: true, length: { maximum: 30 }, if: :protected?
