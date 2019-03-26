@@ -1,3 +1,5 @@
+require 'ipaddr'
+
 require_dependency 'archived'
 
 module Archived
@@ -60,12 +62,16 @@ module Archived
         end
       end
 
+      def for_domain(domain)
+        where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain[1..-1])
+      end
+
       def for_email(email)
         where(email: email.downcase)
       end
 
       def for_ip(ip)
-        where(ip_address: ip)
+        where("inet(ip_address) <<= inet(?)", ip)
       end
 
       def for_name(name)
@@ -100,10 +106,12 @@ module Archived
       def search(query, options = {})
         query = query.to_s
         page = [options[:page].to_i, 1].max
-        scope = by_most_recent
+        scope = preload(:petition).by_most_recent
 
         if ip_search?(query)
           scope = scope.for_ip(query)
+        elsif domain_search?(query)
+          scope = scope.for_domain(query)
         elsif email_search?(query)
           scope = scope.for_email(query)
         else
@@ -142,7 +150,13 @@ module Archived
       private
 
       def ip_search?(query)
-        /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
+        IPAddr.new(query)
+      rescue IPAddr::InvalidAddressError => e
+        false
+      end
+
+      def domain_search?(query)
+        query.starts_with?('@')
       end
 
       def email_search?(query)

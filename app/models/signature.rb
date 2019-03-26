@@ -1,5 +1,6 @@
 require 'active_support/core_ext/digest/uuid'
 require 'postcode_sanitizer'
+require 'ipaddr'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator
@@ -95,6 +96,10 @@ class Signature < ActiveRecord::Base
       unscoped.from(validated.select(:uuid).group(:uuid).having(arel_table[Arel.star].count.gt(1))).count
     end
 
+    def for_domain(domain)
+      where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain[1..-1])
+    end
+
     def for_email(email)
       where(email: email.downcase)
     end
@@ -104,7 +109,7 @@ class Signature < ActiveRecord::Base
     end
 
     def for_ip(ip)
-      where(ip_address: ip)
+      where("inet(ip_address) <<= inet(?)", ip)
     end
 
     def for_name(name)
@@ -172,10 +177,12 @@ class Signature < ActiveRecord::Base
     def search(query, options = {})
       query = query.to_s
       page = [options[:page].to_i, 1].max
-      scope = by_most_recent
+      scope = preload(:petition).by_most_recent
 
       if ip_search?(query)
         scope = scope.for_ip(query)
+      elsif domain_search?(query)
+        scope = scope.for_domain(query)
       elsif email_search?(query)
         scope = scope.for_email(query)
       else
@@ -287,7 +294,13 @@ class Signature < ActiveRecord::Base
     private
 
     def ip_search?(query)
-      /\A(?:\d{1,3}){1}(?:\.\d{1,3}){3}\z/ =~ query
+      IPAddr.new(query)
+    rescue IPAddr::InvalidAddressError => e
+      false
+    end
+
+    def domain_search?(query)
+      query.starts_with?('@')
     end
 
     def email_search?(query)

@@ -1854,10 +1854,24 @@ CREATE INDEX index_archived_signatures_on_creation_ip_and_petition_id ON public.
 
 
 --
+-- Name: index_archived_signatures_on_domain; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_domain ON public.archived_signatures USING btree ("substring"((email)::text, ("position"((email)::text, '@'::text) + 1)));
+
+
+--
 -- Name: index_archived_signatures_on_email_and_petition_id_and_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_archived_signatures_on_email_and_petition_id_and_name ON public.archived_signatures USING btree (email, petition_id, name);
+
+
+--
+-- Name: index_archived_signatures_on_inet; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_inet ON public.archived_signatures USING btree (((ip_address)::inet));
 
 
 --
@@ -2222,6 +2236,13 @@ CREATE INDEX index_signatures_on_domain ON public.signatures USING btree ("subst
 --
 
 CREATE UNIQUE INDEX index_signatures_on_email_and_petition_id_and_name ON public.signatures USING btree (email, petition_id, name);
+
+
+--
+-- Name: index_signatures_on_inet; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_inet ON public.signatures USING btree (((ip_address)::inet));
 
 
 --
@@ -2751,4 +2772,10 @@ INSERT INTO schema_migrations (version) VALUES ('20190323155133');
 INSERT INTO schema_migrations (version) VALUES ('20190323155704');
 
 INSERT INTO schema_migrations (version) VALUES ('20190324113503');
+
+INSERT INTO schema_migrations (version) VALUES ('20190325204926');
+
+INSERT INTO schema_migrations (version) VALUES ('20190325205128');
+
+INSERT INTO schema_migrations (version) VALUES ('20190325205137');
 

@@ -498,6 +498,22 @@ RSpec.describe Signature, type: :model do
       end
     end
 
+    context "when searching with a domain" do
+      it "calls the for_domain scope and paginates the result" do
+        expect(Signature).to receive(:for_domain).with("@example.com").and_return(scope)
+        expect(scope).to receive(:paginate).with(page: 1, per_page: 50)
+        described_class.search("@example.com")
+      end
+
+      context "and passing the page parameter" do
+        it "calls the for_ip scope and paginates the result" do
+          expect(Signature).to receive(:for_domain).with("@example.com").and_return(scope)
+          expect(scope).to receive(:paginate).with(page: 2, per_page: 50)
+          described_class.search("@example.com", page: "2")
+        end
+      end
+    end
+
     context "when searching with an email address" do
       it "calls the for_email scope and paginates the result" do
         expect(Signature).to receive(:for_email).with("alice@example.com").and_return(scope)

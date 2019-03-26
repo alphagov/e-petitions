@@ -149,7 +149,7 @@
             <table class="trending-domains">
               <% trending_domains.each do |domain, count| %>
                 <tr>
-                  <td><%= domain %></td>
+                  <td><%= link_to domain, admin_signatures_path(q: "@#{domain}") %></td>
                   <td><%= number_with_delimiter(count) %></td>
                 </tr>
               <% end %>
@@ -163,7 +163,7 @@
             <table class="trending-ips">
               <% trending_ips.each do |ip, count| %>
                 <tr>
-                  <td><%= ip %></td>
+                  <td><%= link_to ip, admin_signatures_path(q: ip) %></td>
                   <td><%= number_with_delimiter(count) %></td>
                 </tr>
               <% end %>
