@@ -21,3 +21,4 @@ Rails.application.config.assets.precompile += %w(
 
 # Compress JavaScript assets.
 Rails.application.config.assets.js_compressor = :uglifier
+Rails.configuration.assets.precompile += %w[serviceworker.js]

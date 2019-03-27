@@ -34,7 +34,7 @@ gem 'jbuilder'
 gem 'paperclip', '~> 5.3'
 gem 'maxminddb'
 gem 'redcarpet'
-
+gem 'serviceworker-rails'
 gem 'aws-sdk', '~> 2.0'
 
 group :development, :test do
