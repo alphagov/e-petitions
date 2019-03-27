@@ -32,6 +32,12 @@
   <%= form.text_field :email, tabindex: increment, maxlength: 255, class: 'form-control', placeholder: 'The email address used when signing - the use of % wildcards is allowed' %>
 <% end %>
 
+<%= form_row for: [form.object, :domain] do %>
+  <%= form.label :domain, "Domain", class: 'form-label' %>
+  <%= error_messages_for_field @invalidation, :domain %>
+  <%= form.text_field :domain, tabindex: increment, maxlength: 255, class: 'form-control', placeholder: 'The domain of the email address used when signing - the use of % wildcards is allowed' %>
+<% end %>
+
 <%= form_row for: [form.object, :postcode] do %>
   <%= form.label :postcode, class: 'form-label' %>
   <%= error_messages_for_field @invalidation, :postcode %>

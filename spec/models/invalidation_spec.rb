@@ -43,6 +43,7 @@ RSpec.describe Invalidation, type: :model do
     it { is_expected.to validate_length_of(:postcode).is_at_most(255) }
     it { is_expected.to validate_length_of(:ip_address).is_at_most(20) }
     it { is_expected.to validate_length_of(:email).is_at_most(255) }
+    it { is_expected.to validate_length_of(:domain).is_at_most(255) }
     it { is_expected.to validate_length_of(:constituency_id).is_at_most(30) }
     it { is_expected.to validate_length_of(:location_code).is_at_most(30) }
 
@@ -726,6 +727,40 @@ RSpec.describe Invalidation, type: :model do
           it "excludes signatures that don't match" do
             expect(subject.matching_signatures).not_to include(signature_2)
           end
+        end
+      end
+
+      context "when filtering by domain" do
+        let!(:petition_1) { FactoryBot.create(:open_petition) }
+        let!(:petition_2) { FactoryBot.create(:open_petition) }
+        let!(:petition_3) { FactoryBot.create(:open_petition) }
+        let!(:petition_4) { FactoryBot.create(:open_petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, email: "joe@public.com", petition: petition_1) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, email: "john@doe.com", petition: petition_1) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, email: "joe@public.com", petition: petition_2) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, email: "joe@public.com", petition: petition_3) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, email: "joe@public.com", petition: petition_4) }
+
+        subject { FactoryBot.create(:invalidation, domain: "public.com") }
+
+        it "includes validated signatures that match" do
+          expect(subject.matching_signatures).to include(signature_1)
+        end
+
+        it "includes pending signatures that match" do
+          expect(subject.matching_signatures).to include(signature_3)
+        end
+
+        it "excludes invalidated signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_4)
+        end
+
+        it "excludes fraudulent signatures that match" do
+          expect(subject.matching_signatures).not_to include(signature_5)
+        end
+
+        it "excludes signatures that don't match" do
+          expect(subject.matching_signatures).not_to include(signature_2)
         end
       end
 

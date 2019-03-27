@@ -16,7 +16,7 @@ class Invalidation < ActiveRecord::Base
 
   CONDITIONS = %i[
     petition_id name postcode ip_address
-    email constituency_id location_code
+    email domain constituency_id location_code
     created_before created_after
   ]
 
@@ -27,6 +27,7 @@ class Invalidation < ActiveRecord::Base
   validates :postcode, length: { maximum: 255, allow_blank: true }
   validates :ip_address, length: { maximum: 20 }, format: { with: /\A\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/ }, allow_blank: true
   validates :email, length: { maximum: 255, allow_blank: true }
+  validates :domain, length: { maximum: 255, allow_blank: true }
   validates :constituency_id, length: { maximum: 30, allow_blank: true }
   validates :location_code, length: { maximum: 30, allow_blank: true }
 
@@ -37,6 +38,10 @@ class Invalidation < ActiveRecord::Base
 
     if petition_id?
       errors.add :petition_id, "Petition doesn't exist" unless Petition.exists?(petition_id)
+    end
+
+    if domain?
+      errors.add :domain, "Please enter a domain and not an email address" if domain =~ /@/
     end
 
     if constituency_id?
@@ -152,6 +157,7 @@ class Invalidation < ActiveRecord::Base
     scope = postcode_scope(scope) if postcode?
     scope = ip_address_scope(scope) if ip_address?
     scope = email_scope(scope) if email?
+    scope = domain_scope(scope) if domain?
     scope = constituency_id_scope(scope) if constituency_id?
     scope = location_code_scope(scope) if location_code?
     scope = date_range_scope(scope) if date_range?
@@ -189,7 +195,11 @@ class Invalidation < ActiveRecord::Base
   end
 
   def name_scope(scope)
-    scope.where("lower(name) LIKE ?", name.strip.downcase)
+    if name =~ /%/
+      scope.where("lower(name) LIKE ?", name.strip.downcase)
+    else
+      scope.where("lower(name) = ?", name.strip.downcase)
+    end
   end
 
   def postcode_scope(scope)
@@ -201,7 +211,19 @@ class Invalidation < ActiveRecord::Base
   end
 
   def email_scope(scope)
-    scope.where("email LIKE ?", email)
+    if email =~ /%/
+      scope.where("email LIKE ?", email)
+    else
+      scope.where("email = ?", email)
+    end
+  end
+
+  def domain_scope(scope)
+    if domain =~ /%/
+      scope.where("SUBSTRING(email FROM POSITION('@' IN email) + 1) LIKE ?", domain)
+    else
+      scope.where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain)
+    end
   end
 
   def constituency_id_scope(scope)
