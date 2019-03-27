@@ -5,10 +5,13 @@ class PetitionCountJob < ApplicationJob
   delegate :signature_count_interval, to: :Site
   delegate :disable_signature_counts!, to: :Site
   delegate :enable_signature_counts!, to: :Site
+  delegate :disable_invalid_signature_count_check?, to: :Site
 
   queue_as :highest_priority
 
   def perform(now = Time.current)
+    return if disable_invalid_signature_count_check?
+
     if update_signature_counts
       disable_signature_counts!
       reschedule_job(scheduled_time(now))
