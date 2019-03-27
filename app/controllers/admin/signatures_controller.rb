@@ -107,7 +107,7 @@ class Admin::SignaturesController < Admin::AdminController
   private
 
   def fetch_signatures
-    @signatures = Signature.search(params[:q], page: params[:page])
+    @signatures = Signature.search(params[:q], state: params[:state], page: params[:page])
   end
 
   def fetch_signature

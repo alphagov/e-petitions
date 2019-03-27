@@ -28,6 +28,14 @@ en-GB:
           pending: "Pending invalidations (%{quantity})"
           running: "Running invalidations (%{quantity})"
 
+    signature:
+      states:
+        - ["Any", ""]
+        - ["Validated", "validated"]
+        - ["Pending", "pending"]
+        - ["Invalidated", "invalidated"]
+        - ["Fraudulent", "fraudulent"]
+
     flash:
       admin_required: "You must be logged in as an administrator to view this page"
       change_password: "Please change your password before continuing"

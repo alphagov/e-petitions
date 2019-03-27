@@ -1,16 +1,22 @@
 <h1>Archived Signatures</h1>
 
-<div class="grid-row">
-  <div class="column-two-thirds">
-    <%= form_tag [:admin, :archived, :signatures], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+<%= form_tag [:admin, :archived, :signatures], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+  <div class="grid-row">
+    <div class="column-half">
+      <%= label_tag :state, "Signature state", class: "visuallyhidden" %>
+      <%= select_tag :state, admin_signature_states_for_select(params[:state]), class: "form-control", data: { autosubmit: true } %>
+    </div>
+  </div>
+  <div class="grid-row">
+    <div class="column-half">
       <div class="search-inline">
         <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
         <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
         <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
       </div>
-    <% end %>
+    </div>
   </div>
-</div>
+<% end %>
 
 <% if @signatures.present? %>
 
