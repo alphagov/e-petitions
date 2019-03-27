@@ -78,6 +78,10 @@ module Archived
         where(arel_table[:name].lower.eq(name.downcase))
       end
 
+      def for_petition(id)
+        where(petition_id: id)
+      end
+
       def for_timestamp(timestamp, since:)
         column = arel_table[column_name_for(timestamp)]
         where(column.eq(nil).or(column.lt(since)))
@@ -105,8 +109,13 @@ module Archived
 
       def search(query, options = {})
         query = query.to_s
+        state = options[:state]
         page = [options[:page].to_i, 1].max
         scope = preload(:petition).by_most_recent
+
+        if state.in?(STATES)
+          scope = scope.where(state: state)
+        end
 
         if ip_search?(query)
           scope = scope.for_ip(query)
@@ -114,6 +123,8 @@ module Archived
           scope = scope.for_domain(query)
         elsif email_search?(query)
           scope = scope.for_email(query)
+        elsif petition_search?(query)
+          scope = scope.for_petition(query)
         else
           scope = scope.for_name(query)
         end
@@ -161,6 +172,10 @@ module Archived
 
       def email_search?(query)
         query.include?('@')
+      end
+
+      def petition_search?(query)
+        query =~ /\d+/
       end
     end
 

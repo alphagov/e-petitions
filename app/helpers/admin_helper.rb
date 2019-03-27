@@ -24,6 +24,10 @@ module AdminHelper
     options_for_select(options, selected)
   end
 
+  def admin_signature_states_for_select(selected)
+    options_for_select(I18n.t(:states, scope: :"admin.signature"), selected)
+  end
+
   def admin_archived_petition_facets_for_select(facets, selected)
     options = admin_archived_petition_facets.map do |facet|
       [I18n.t(facet,  scope: :"petitions.facets.names.admin_archived", quantity: facets[facet]), facet]
