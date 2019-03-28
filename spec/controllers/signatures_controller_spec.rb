@@ -454,10 +454,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :verify, id: signature.id, token: signature.perishable_token
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
@@ -465,10 +465,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :verify, id: signature.id, token: signature.perishable_token
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
@@ -643,10 +643,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :signed, id: signature.id
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
@@ -654,10 +654,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :signed, id: signature.id
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
@@ -819,10 +819,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :unsubscribe, id: signature.id, token: signature.unsubscribe_token
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
@@ -830,10 +830,10 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
+      it "doesn't raise an ActiveRecord::RecordNotFound exception" do
         expect {
           get :unsubscribe, id: signature.id, token: signature.unsubscribe_token
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        }.not_to raise_error
       end
     end
 
