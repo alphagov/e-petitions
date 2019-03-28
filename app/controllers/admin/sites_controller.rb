@@ -10,7 +10,7 @@ class Admin::SitesController < Admin::AdminController
 
   def update
     if @site.update(site_params)
-      redirect_to edit_admin_site_url, notice: :site_updated
+      redirect_to edit_admin_site_url(tab: params[:tab]), notice: :site_updated
     else
       respond_to do |format|
         format.html { render :edit }
@@ -33,7 +33,7 @@ class Admin::SitesController < Admin::AdminController
       :moderate_url, :login_timeout, :disable_constituency_api,
       :signature_count_interval, :update_signature_counts,
       :disable_trending_petitions, :threshold_for_moderation_delay,
-      :disable_invalid_signature_count_check
+      :disable_invalid_signature_count_check, :disable_daily_update_statistics_job
     )
   end
 end

@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe EnqueuePetitionStatisticsUpdatesJob, type: :job do
-  let(:timestamp) { 1.hour.ago.iso8601 }
+  let(:timestamp) { 1.day.ago.iso8601 }
 
-  it "only enqueues jobs for petitions signed in the last hour" do
-    FactoryBot.create(:open_petition, last_signed_at: 2.hours.ago)
-    FactoryBot.create(:open_petition, last_signed_at: 30.minutes.ago)
-    FactoryBot.create(:open_petition, last_signed_at: 15.minutes.ago)
+  it "only enqueues jobs for petitions signed in the last day" do
+    FactoryBot.create(:open_petition, last_signed_at: 6.hours.ago)
+    FactoryBot.create(:open_petition, last_signed_at: 36.hours.ago)
+    FactoryBot.create(:open_petition, last_signed_at: 18.hours.ago)
 
     expect {
       described_class.perform_now(timestamp)
@@ -15,19 +15,33 @@ RSpec.describe EnqueuePetitionStatisticsUpdatesJob, type: :job do
     }.from(0).to(2)
   end
 
-  it "enqueues an UpdatePetitionStatisticsJob job" do
-    petition = FactoryBot.create(:open_petition, last_signed_at: 15.minutes.ago)
+  describe "configuration" do
+    before do
+      FactoryBot.create(:open_petition, last_signed_at: 6.hours.ago)
+    end
 
-    update_statistics_job = {
-      job: UpdatePetitionStatisticsJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
-      queue: "low_priority"
-    }
+    context "when the daily update job is disabled" do
+      before do
+        allow(Site).to receive(:disable_daily_update_statistics_job?).and_return(true)
+      end
 
-    expect {
-      described_class.perform_now(timestamp)
-    }.to change {
-      enqueued_jobs
-    }.from([]).to([update_statistics_job])
+      it "doesn't enqueue any jobs" do
+        expect {
+          described_class.perform_now(timestamp)
+        }.not_to have_enqueued_job(UpdatePetitionStatisticsJob)
+      end
+    end
+
+    context "when the daily update job is enabled" do
+      before do
+        allow(Site).to receive(:disable_daily_update_statistics_job?).and_return(false)
+      end
+
+      it "enqueues an UpdatePetitionStatisticsJob job" do
+        expect {
+          described_class.perform_now(timestamp)
+        }.to have_enqueued_job(UpdatePetitionStatisticsJob)
+      end
+    end
   end
 end

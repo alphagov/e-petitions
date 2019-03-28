@@ -27,6 +27,19 @@
   </div>
 <% end %>
 
+<%= form_row for: [form.object, :disable_daily_update_statistics_job], class: "inline" do %>
+  <%= form.label :disable_daily_update_statistics_job, "Disable updating of duplicate email statistics?", class: "form-label" %>
+  <%= error_messages_for_field @site, :disable_daily_update_statistics_job %>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_daily_update_statistics_job, true %>
+    <%= form.label :disable_daily_update_statistics_job, "Yes", for: "site_disable_daily_update_statistics_job_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_daily_update_statistics_job, false %>
+    <%= form.label :disable_daily_update_statistics_job, "No", for: "site_disable_daily_update_statistics_job_false" %>
+  </div>
+<% end %>
+
 <%= form_row for: [form.object, :disable_invalid_signature_count_check], class: "inline" do %>
   <%= form.label :disable_invalid_signature_count_check, "Disable overnight check on invalid signature counts?", class: "form-label" %>
   <%= error_messages_for_field @site, :disable_invalid_signature_count_check %>
