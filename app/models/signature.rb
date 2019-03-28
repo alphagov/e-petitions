@@ -531,6 +531,10 @@ class Signature < ActiveRecord::Base
     update_column(:uuid, generate_uuid)
   end
 
+  def number
+    super || petition.signature_count + 1
+  end
+
   def email_threshold_reached?
     email_count >= 5
   end

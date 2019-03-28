@@ -38,10 +38,6 @@ class SponsorsController < SignaturesController
     if @petition.flagged? || @petition.hidden? || @petition.stopped?
       raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
     end
-
-    if @signature.invalidated? || @signature.fraudulent?
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with id: #{signature_id}"
-    end
   end
 
   def build_signature(attributes)

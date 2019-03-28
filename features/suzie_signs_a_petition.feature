@@ -183,7 +183,13 @@ Feature: Suzie signs a petition
     Then I should be on the new signature page
     When I say I am happy with my email address
     Then I am told to check my inbox to complete signing
-    And "womboid@wimbledon.com" should have no emails
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "1 signature"
 
   Scenario: Suzie can validate her signature when IP address is rate limited but the domain is allowed
     Given the burst rate limit is 1 per minute
