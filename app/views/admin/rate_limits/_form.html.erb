@@ -1,0 +1,5 @@
+<%= form_for @rate_limit, url: admin_rate_limits_path do |form| %>
+  <%= render tab, form: form %>
+  <%= form.submit "Save", class: "button" %>
+  <%= link_to "Cancel", admin_root_path, class: "button-secondary" %>
+<% end %>

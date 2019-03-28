@@ -17,6 +17,10 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_length_of(:blocked_domains).is_at_most(50000) }
     it { is_expected.to validate_length_of(:blocked_ips).is_at_most(50000) }
     it { is_expected.to validate_length_of(:countries).is_at_most(2000) }
+    it { is_expected.to validate_presence_of(:country_burst_rate) }
+    it { is_expected.to validate_numericality_of(:country_burst_rate).only_integer.is_greater_than(0) }
+    it { is_expected.to validate_presence_of(:country_sustained_rate) }
+    it { is_expected.to validate_numericality_of(:country_sustained_rate).only_integer.is_greater_than(0) }
 
     context "when the sustained rate is less than the burst rate" do
       before do
@@ -37,6 +41,17 @@ RSpec.describe RateLimit, type: :model do
       it "adds an error message" do
         expect(subject.valid?).to eq(false)
         expect(subject.errors[:sustained_period]).to include("Sustained period must be greater than burst period")
+      end
+    end
+
+    context "when the country sustained rate is less than the country burst rate" do
+      before do
+        subject.update(country_sustained_rate: 10, country_burst_rate: 20)
+      end
+
+      it "adds an error message" do
+        expect(subject.valid?).to eq(false)
+        expect(subject.errors[:country_sustained_rate]).to include("Country sustained rate must be greater than country burst rate")
       end
     end
 
@@ -97,6 +112,7 @@ RSpec.describe RateLimit, type: :model do
 
     let(:countries) { "" }
     let(:geoblocking_enabled) { false }
+    let(:country_rate_limits_enabled) { false }
 
     subject do
       described_class.create!(
@@ -104,7 +120,9 @@ RSpec.describe RateLimit, type: :model do
         sustained_rate: 20, sustained_period: 300,
         allowed_domains: allowed_domains, allowed_ips: allowed_ips,
         blocked_domains: blocked_domains, blocked_ips: blocked_ips,
-        countries: countries, geoblocking_enabled: geoblocking_enabled
+        countries: countries, geoblocking_enabled: geoblocking_enabled,
+        country_rate_limits_enabled: country_rate_limits_enabled,
+        country_burst_rate: 20, country_sustained_rate: 120
       )
     end
 
@@ -291,6 +309,74 @@ RSpec.describe RateLimit, type: :model do
 
       it_behaves_like "allowed domains"
       it_behaves_like "allowed IPs"
+    end
+
+    context "when country rate limits are enabled" do
+      let(:country_rate_limits_enabled) { true }
+      let(:countries) { "United Kingdom" }
+      let(:geoip_db_path) { "/path/to/GeoLite2-Country.mmdb" }
+      let(:geoip_db) { double(:geoip_db) }
+      let(:geoip_result) { double(:geoip_result) }
+      let(:country) { double(:country) }
+
+      before do
+        allow(MaxMindDB).to receive(:new).with(geoip_db_path).and_return(geoip_db)
+        allow(geoip_db).to receive(:lookup).with("12.34.56.78").and_return(geoip_result)
+        allow(signature).to receive(:ip_address).and_return("12.34.56.78")
+        allow(geoip_result).to receive(:found?).and_return(true)
+        allow(geoip_result).to receive(:country).and_return(country)
+      end
+
+      context "and both rates are below the default threshold" do
+        before do
+          allow(signature).to receive(:rate).with(60).and_return(5)
+          allow(signature).to receive(:rate).with(300).and_return(10)
+        end
+
+        it "returns false for allowed countries" do
+          allow(country).to receive(:name).and_return("United Kingdom")
+          expect(subject.exceeded?(signature)).to eq(false)
+        end
+
+        it "returns false for other countries" do
+          allow(country).to receive(:name).and_return("France")
+          expect(subject.exceeded?(signature)).to eq(false)
+        end
+      end
+
+      context "and both rates are below the country threshold but above the default threshold" do
+        before do
+          allow(signature).to receive(:rate).with(60).and_return(15)
+          allow(signature).to receive(:rate).with(300).and_return(70)
+        end
+
+        it "returns false for allowed countries" do
+          allow(country).to receive(:name).and_return("United Kingdom")
+          expect(subject.exceeded?(signature)).to eq(false)
+        end
+
+        it "returns true for other countries" do
+          allow(country).to receive(:name).and_return("France")
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+      end
+
+      context "and both rates are above the country threshold" do
+        before do
+          allow(signature).to receive(:rate).with(60).and_return(65)
+          allow(signature).to receive(:rate).with(300).and_return(130)
+        end
+
+        it "returns true for allowed countries" do
+          allow(country).to receive(:name).and_return("United Kingdom")
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+
+        it "returns true for other countries" do
+          allow(country).to receive(:name).and_return("France")
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+      end
     end
   end
 
