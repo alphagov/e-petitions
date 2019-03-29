@@ -2,150 +2,22 @@
 
 <div class="grid-row">
   <div class="grid-column">
-    <p class="tabs">
-      <% if params[:tab] == "allowed_domains" %>
-        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        Allowed Domains |
-        <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
-        <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
-        <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
-        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
-      <% elsif params[:tab] == "blocked_domains" %>
-        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
-        Blocked Domains |
-        <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
-        <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
-        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
-      <% elsif params[:tab] == "allowed_ips" %>
-        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
-        <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
-        Allowed IPs |
-        <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
-        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
-      <% elsif params[:tab] == "blocked_ips" %>
-        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
-        <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
-        <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
-        Blocked IPs |
-        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
-      <% elsif params[:tab] == "countries" %>
-        <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
-        <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
-        <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
-        <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
-        <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
-        Countries
-      <% else %>
-        Rate Limits |
-        <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
-        <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
-        <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
-        <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
-        <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %>
-      <% end %>
-    </p>
+    <%= render "tabs" %>
   </div>
 
   <div class="column-two-thirds extra-gutter">
-
-    <%= form_for @rate_limit, url: admin_rate_limits_path do |form| %>
-
-      <% if params[:tab] == "allowed_domains" %>
-        <%= hidden_field_tag :tab, "allowed_domains" %>
-
-        <%= form_row for: [form.object, :allowed_domains] do %>
-          <%= error_messages_for_field @rate_limit, :allowed_domains %>
-          <%= form.text_area :allowed_domains, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small><p>
-        <% end %>
-
-      <% elsif params[:tab] == "blocked_domains" %>
-        <%= hidden_field_tag :tab, "blocked_domains" %>
-
-        <%= form_row for: [form.object, :blocked_domains] do %>
-          <%= error_messages_for_field @rate_limit, :blocked_domains %>
-          <%= form.text_area :blocked_domains, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use *.example.com to match one subdomain and **.example.com to match nested subdomains</small><p>
-        <% end %>
-
-      <% elsif params[:tab] == "allowed_ips" %>
-        <%= hidden_field_tag :tab, "allowed_ips" %>
-
-        <%= form_row for: [form.object, :allowed_ips] do %>
-          <%= error_messages_for_field @rate_limit, :allowed_ips %>
-          <%= form.text_area :allowed_ips, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
-        <% end %>
-
-      <% elsif params[:tab] == "blocked_ips" %>
-        <%= hidden_field_tag :tab, "blocked_ips" %>
-
-        <%= form_row for: [form.object, :blocked_ips] do %>
-          <%= error_messages_for_field @rate_limit, :blocked_ips %>
-          <%= form.text_area :blocked_ips, tabindex: increment, rows: 15, class: 'form-control' %>
-          <p><small>use CIDR addressing to match ranges, e.g. 192.168.0.0/24</small><p>
-        <% end %>
-
-      <% elsif params[:tab] == "countries" %>
-        <%= hidden_field_tag :tab, "countries" %>
-
-        <%= form_row for: [form.object, :countries] do %>
-          <%= error_messages_for_field @rate_limit, :countries %>
-          <%= form.text_area :countries, tabindex: increment, rows: 8, class: 'form-control' %>
-          <p><small>Add countries that are allowed to sign petitions, e.g. United Kingdom</small><p>
-        <% end %>
-
-        <%= form_row for: [form.object, :geoblocking_enabled], class: 'inline' do %>
-          <%= form.label :geoblocking_enabled, "Enable geoblocking of signatures?", class: 'form-label' %>
-          <%= error_messages_for_field @rate_limit, :geoblocking_enabled %>
-          <div class="multiple-choice">
-            <%= form.radio_button :geoblocking_enabled, true %>
-            <%= form.label :geoblocking_enabled_true, "Yes", for: "geoblocking_enabled_true" %>
-          </div>
-          <div class="multiple-choice">
-            <%= form.radio_button :geoblocking_enabled, false %>
-            <%= form.label :geoblocking_enabled_false, "No", for: "geoblocking_enabled_false" %>
-          </div>
-        <% end %>
-
-      <% else %>
-
-        <h2>Short period signing rate per IP address</h2>
-
-        <%= form_row for: [form.object, :burst_period] do %>
-          <%= form.label :burst_period, "Length of short period in seconds", class: 'form-label' %>
-          <%= error_messages_for_field @rate_limit, :burst_period %>
-          <%= form.text_field :burst_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
-        <% end %>
-
-        <%= form_row for: [form.object, :burst_rate] do %>
-          <%= form.label :burst_rate, "Number of signatures created per short period", class: 'form-label' %>
-          <%= error_messages_for_field @rate_limit, :burst_rate %>
-          <%= form.text_field :burst_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
-        <% end %>
-
-        <h2>Long period signing rate per IP address</h2>
-
-        <%= form_row for: [form.object, :sustained_period] do %>
-          <%= form.label :sustained_period, "Length of long period in seconds", class: 'form-label' %>
-          <%= error_messages_for_field @rate_limit, :sustained_period %>
-          <%= form.text_field :sustained_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
-        <% end %>
-
-        <%= form_row for: [form.object, :sustained_rate] do %>
-          <%= form.label :sustained_rate, "Number of signatures created per long period", class: 'form-label' %>
-          <%= error_messages_for_field @rate_limit, :sustained_rate %>
-          <%= form.text_field :sustained_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
-        <% end %>
-
-      <% end %>
-
-      <%= form.submit 'Save', class: 'button' %>
-      <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
-
+    <% if params[:tab] == "allowed_domains" %>
+      <%= render "form", tab: "allowed_domains" %>
+    <% elsif params[:tab] == "blocked_domains" %>
+      <%= render "form", tab: "blocked_domains" %>
+    <% elsif params[:tab] == "allowed_ips" %>
+      <%= render "form", tab: "allowed_ips" %>
+    <% elsif params[:tab] == "blocked_ips" %>
+      <%= render "form", tab: "blocked_ips" %>
+    <% elsif params[:tab] == "countries" %>
+      <%= render "form", tab: "countries" %>
+    <% else %>
+      <%= render "form", tab: "rate_limits" %>
     <% end %>
   </div>
 </div>

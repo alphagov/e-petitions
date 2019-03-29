@@ -986,7 +986,10 @@ CREATE TABLE public.rate_limits (
     blocked_domains character varying(50000) DEFAULT ''::character varying NOT NULL,
     blocked_ips character varying(50000) DEFAULT ''::character varying NOT NULL,
     geoblocking_enabled boolean DEFAULT false NOT NULL,
-    countries character varying(2000) DEFAULT ''::character varying NOT NULL
+    countries character varying(2000) DEFAULT ''::character varying NOT NULL,
+    country_burst_rate integer DEFAULT 1 NOT NULL,
+    country_sustained_rate integer DEFAULT 60 NOT NULL,
+    country_rate_limits_enabled boolean DEFAULT false NOT NULL
 );
 
 
@@ -2791,4 +2794,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190325205137');
 INSERT INTO schema_migrations (version) VALUES ('20190326144123');
 
 INSERT INTO schema_migrations (version) VALUES ('20190327025958');
+
+INSERT INTO schema_migrations (version) VALUES ('20190328191633');
 

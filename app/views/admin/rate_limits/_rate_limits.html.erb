@@ -1,0 +1,27 @@
+<h2>Short period signing rate per IP address</h2>
+
+<%= form_row for: [form.object, :burst_period] do %>
+  <%= form.label :burst_period, "Length of short period in seconds", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :burst_period %>
+  <%= form.text_field :burst_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :burst_rate] do %>
+  <%= form.label :burst_rate, "Number of signatures created per short period", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :burst_rate %>
+  <%= form.text_field :burst_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>
+
+<h2>Long period signing rate per IP address</h2>
+
+<%= form_row for: [form.object, :sustained_period] do %>
+  <%= form.label :sustained_period, "Length of long period in seconds", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :sustained_period %>
+  <%= form.text_field :sustained_period, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :sustained_rate] do %>
+  <%= form.label :sustained_rate, "Number of signatures created per long period", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :sustained_rate %>
+  <%= form.text_field :sustained_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>

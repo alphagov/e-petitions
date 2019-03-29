@@ -16,6 +16,8 @@ class RateLimit < ActiveRecord::Base
   validates :blocked_domains, length: { maximum: 50000, allow_blank: true }
   validates :blocked_ips, length: { maximum: 50000, allow_blank: true }
   validates :countries, length: { maximum: 2000, allow_blank: true }
+  validates :country_burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :country_sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?
@@ -27,6 +29,12 @@ class RateLimit < ActiveRecord::Base
     unless sustained_period.nil? || burst_period.nil?
       if sustained_period <= burst_period
         errors.add :sustained_period, "Sustained period must be greater than burst period"
+      end
+    end
+
+    unless country_sustained_rate.nil? || country_burst_rate.nil?
+      if country_sustained_rate <= country_burst_rate
+        errors.add :country_sustained_rate, "Country sustained rate must be greater than country burst rate"
       end
     end
 
@@ -62,7 +70,11 @@ class RateLimit < ActiveRecord::Base
     return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
 
-    burst_rate_exceeded?(signature) || sustained_rate_exceeded?(signature)
+    if use_country_rate?(signature.ip_address)
+      country_rate_exceeded?(signature)
+    else
+      rate_exceeded?(signature)
+    end
   end
 
   def allowed_domains=(value)
@@ -202,6 +214,30 @@ class RateLimit < ActiveRecord::Base
 
   def normalize_lines(value)
     value.to_s.strip.gsub(/\r\n|\r/, "\n")
+  end
+
+  def use_country_rate?(ip)
+    if country_rate_limits_enabled?
+      allowed_countries.include?(country_for_ip(ip))
+    else
+      false
+    end
+  end
+
+  def country_rate_exceeded?(signature)
+    country_burst_rate_exceeded?(signature) || country_sustained_rate_exceeded?(signature)
+  end
+
+  def country_burst_rate_exceeded?(signature)
+    country_burst_rate < signature.rate(burst_period)
+  end
+
+  def country_sustained_rate_exceeded?(signature)
+    country_sustained_rate < signature.rate(sustained_period)
+  end
+
+  def rate_exceeded?(signature)
+    burst_rate_exceeded?(signature) || sustained_rate_exceeded?(signature)
   end
 
   def burst_rate_exceeded?(signature)
