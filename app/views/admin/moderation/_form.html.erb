@@ -26,8 +26,8 @@
       var $rejection_controls = $('.petition-rejection-controls'),
           $reject_control = $('#petition_moderation_reject'),
           $flag_control = $('#petition_moderation_flag'),
-          $submit_button = $('input[type=submit]'),
-          $all_controls = $('input[name="petition[moderation]"][type=radio]');
+          $submit_button = $('.edit_petition input[type=submit]'),
+          $all_controls = $('.edit_petition input[name="petition[moderation]"][type=radio]');
       // Hide it straight away if there were no errors displayed
       if ($rejection_controls.find('.error-message').size() === 0) {
         $rejection_controls.hide();
