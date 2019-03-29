@@ -25,8 +25,8 @@ namespace :epets do
 
     desc "Add a task to the queue to update petition statistics"
     task :update_statistics => :environment do
-      Task.run("epets:petitions:update_statistics", 30.minutes) do
-        EnqueuePetitionStatisticsUpdatesJob.perform_later(60.minutes.ago.iso8601)
+      Task.run("epets:petitions:update_statistics", 12.hours) do
+        EnqueuePetitionStatisticsUpdatesJob.perform_later(24.hours.ago.iso8601)
       end
     end
 
