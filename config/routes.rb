@@ -128,6 +128,19 @@ Rails.application.routes.draw do
           resource :tags, controller: 'petition_tags'
           resource :take_down, path: 'take-down', controller: 'take_down'
         end
+
+        resources :signatures, only: %i[index destroy] do
+          post :validate, :invalidate, on: :member
+          post :subscribe, :unsubscribe, on: :member
+
+          collection do
+            delete :destroy, action: :bulk_destroy
+            post   :validate, action: :bulk_validate
+            post   :invalidate, action: :bulk_invalidate
+            post   :subscribe, action: :bulk_subscribe
+            post   :unsubscribe, action: :bulk_unsubscribe
+          end
+        end
       end
 
       resource :rate_limits, path: 'rate-limits', only: %i[edit update]

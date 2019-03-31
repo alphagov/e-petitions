@@ -3,8 +3,10 @@
   <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
 <% unless @petition.in_todo_list? %>
-  <dt>Signatures</dt>
-  <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>
+  <%= link_to admin_petition_signatures_url(@petition) do %>
+    <dt>Signatures</dt>
+    <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+  <% end %>
 <% end %>
 
 <dt>Creator</dt>
