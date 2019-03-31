@@ -118,6 +118,7 @@ Rails.application.routes.draw do
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
         resource  :statistics, controller: 'petition_statistics', only: %i[update]
+        resources :trending_ips, path: 'trending-ips', only: %i[index]
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'

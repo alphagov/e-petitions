@@ -56,3 +56,7 @@ end
 every 15.minutes do
   rake "epets:site:signature_counts", output: nil
 end
+
+every :hour, at: 15 do
+  rake "epets:site:trending_ips", output: nil
+end

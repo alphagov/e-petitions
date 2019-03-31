@@ -1,0 +1,8 @@
+<tr>
+  <td class="petition-action"><%= link_to trending_ip.ip_address, admin_petition_trending_ips_path(@petition, q: trending_ip.ip_address) %></td>
+  <td class="petition-action"><%= trending_ip.country_code %></td>
+  <td class="signature-timestamp"><%= date_time_format(trending_ip.starts_at) %></td>
+  <td class="signature-timestamp"><%= date_time_format(trending_ip.ends_at) %></td>
+  <td class="petition-signature-count"><%= number_with_delimiter(trending_ip.count) %></td>
+  <td class="signature-actions"><%= link_to "Find Signatures", admin_petition_signatures_path(@petition, q: trending_ip.ip_address) %></td>
+</tr>

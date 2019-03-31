@@ -84,6 +84,7 @@ class Petition < ActiveRecord::Base
   has_many :constituency_petition_journals, dependent: :destroy
   has_many :emails, dependent: :destroy
   has_many :invalidations
+  has_many :trending_ips, dependent: :delete_all
 
   validates :action, presence: true, length: { maximum: 80, allow_blank: true }
   validates :background, presence: true, length: { maximum: 300, allow_blank: true }

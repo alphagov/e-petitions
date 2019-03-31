@@ -989,7 +989,11 @@ CREATE TABLE public.rate_limits (
     countries character varying(2000) DEFAULT ''::character varying NOT NULL,
     country_burst_rate integer DEFAULT 1 NOT NULL,
     country_sustained_rate integer DEFAULT 60 NOT NULL,
-    country_rate_limits_enabled boolean DEFAULT false NOT NULL
+    country_rate_limits_enabled boolean DEFAULT false NOT NULL,
+    enable_logging_of_trending_ips boolean DEFAULT false NOT NULL,
+    threshold_for_logging_trending_ip integer DEFAULT 100 NOT NULL,
+    threshold_for_notifying_trending_ip integer DEFAULT 200 NOT NULL,
+    trending_ip_notification_url character varying
 );
 
 
@@ -1227,6 +1231,41 @@ ALTER SEQUENCE public.tasks_id_seq OWNED BY public.tasks.id;
 
 
 --
+-- Name: trending_ips; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.trending_ips (
+    id integer NOT NULL,
+    petition_id integer,
+    ip_address inet NOT NULL,
+    country_code character varying(30) NOT NULL,
+    count integer NOT NULL,
+    starts_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: trending_ips_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.trending_ips_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: trending_ips_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.trending_ips_id_seq OWNED BY public.trending_ips.id;
+
+
+--
 -- Name: admin_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -1434,6 +1473,13 @@ ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id
 --
 
 ALTER TABLE ONLY public.tasks ALTER COLUMN id SET DEFAULT nextval('public.tasks_id_seq'::regclass);
+
+
+--
+-- Name: trending_ips id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.trending_ips ALTER COLUMN id SET DEFAULT nextval('public.trending_ips_id_seq'::regclass);
 
 
 --
@@ -1674,6 +1720,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.tasks
     ADD CONSTRAINT tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: trending_ips trending_ips_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.trending_ips
+    ADD CONSTRAINT trending_ips_pkey PRIMARY KEY (id);
 
 
 --
@@ -2349,6 +2403,27 @@ CREATE UNIQUE INDEX index_tasks_on_name ON public.tasks USING btree (name);
 
 
 --
+-- Name: index_trending_ips_on_created_at_and_count; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_trending_ips_on_created_at_and_count ON public.trending_ips USING btree (created_at, count DESC);
+
+
+--
+-- Name: index_trending_ips_on_ip_address_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_trending_ips_on_ip_address_and_petition_id ON public.trending_ips USING btree (ip_address, petition_id);
+
+
+--
+-- Name: index_trending_ips_on_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_trending_ips_on_petition_id ON public.trending_ips USING btree (petition_id);
+
+
+--
 -- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2361,6 +2436,14 @@ CREATE UNIQUE INDEX unique_schema_migrations ON public.schema_migrations USING b
 
 ALTER TABLE ONLY public.government_responses
     ADD CONSTRAINT fk_rails_0af6bc4d41 FOREIGN KEY (petition_id) REFERENCES public.petitions(id) ON DELETE CASCADE;
+
+
+--
+-- Name: trending_ips fk_rails_161c5b5e43; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.trending_ips
+    ADD CONSTRAINT fk_rails_161c5b5e43 FOREIGN KEY (petition_id) REFERENCES public.petitions(id);
 
 
 --
@@ -2796,4 +2879,8 @@ INSERT INTO schema_migrations (version) VALUES ('20190326144123');
 INSERT INTO schema_migrations (version) VALUES ('20190327025958');
 
 INSERT INTO schema_migrations (version) VALUES ('20190328191633');
+
+INSERT INTO schema_migrations (version) VALUES ('20190330185021');
+
+INSERT INTO schema_migrations (version) VALUES ('20190331160833');
 

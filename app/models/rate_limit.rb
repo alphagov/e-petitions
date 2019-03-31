@@ -18,6 +18,9 @@ class RateLimit < ActiveRecord::Base
   validates :countries, length: { maximum: 2000, allow_blank: true }
   validates :country_burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :country_sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :threshold_for_logging_trending_ip, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :threshold_for_notifying_trending_ip, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :trending_ip_notification_url, length: { maximum: 100, allow_blank: true }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?

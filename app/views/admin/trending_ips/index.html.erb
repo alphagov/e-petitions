@@ -1,0 +1,44 @@
+<h1>
+  <%= link_to @petition.action, admin_petition_url(@petition) %> –
+  Trending IP addresses
+</h1>
+
+<%= form_tag [:admin, @petition, :trending_ips], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+  <div class="grid-row">
+    <div class="column-half">
+      <div class="search-inline">
+        <%= label_tag :q, "Search trending IP addresses", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by IP address" %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @trending_ips.present? %>
+
+  <%= will_paginate @trending_ips %>
+
+  <table class="signature-list">
+    <thead>
+      <tr>
+        <th class="petition-action">IP Address</th>
+        <th class="petition-action">Country</th>
+        <th class="signature-timestamp">Starts At</th>
+        <th class="signature-timestamp">Ends At</th>
+        <th class="petition-signature-count">Count</th>
+        <th class="signature-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @trending_ips =%>
+    </tbody>
+  </table>
+
+  <%= will_paginate @trending_ips %>
+
+<% else %>
+  <p>
+    No trending IP addresses found
+  </p>
+<% end %>

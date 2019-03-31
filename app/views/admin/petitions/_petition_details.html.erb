@@ -57,6 +57,21 @@
         </table>
       </dd>
     <% end %>
+
+    <dt>Trending IP addresses</dt>
+    <dd>
+      <table class="fraudulent-domains">
+        <% @petition.trending_ips.limit(10).each do |trending_ip| %>
+          <tr>
+            <td><%= link_to trending_ip.ip_address, admin_petition_trending_ips_path(@petition, q: trending_ip.ip_address) %></td>
+            <td><%= number_with_delimiter(trending_ip.count) %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td colspan="2"><%= link_to "View all trending IP addresses", admin_petition_trending_ips_path(@petition) %></td>
+        </tr>
+      </table>
+    </dd>
   <% end %>
 <% end %>
 </dl>

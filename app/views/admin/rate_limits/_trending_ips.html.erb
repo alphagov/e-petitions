@@ -1,0 +1,32 @@
+<%= hidden_field_tag :tab, "trending_ips" %>
+
+<%= form_row for: [form.object, :enable_logging_of_trending_ips], class: 'inline' do %>
+  <%= form.label :enable_logging_of_trending_ips, "Enable logging of trending IP addresses for petitions?", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :enable_logging_of_trending_ips %>
+  <div class="multiple-choice">
+    <%= form.radio_button :enable_logging_of_trending_ips, true %>
+    <%= form.label :enable_logging_of_trending_ips_true, "Yes", for: "rate_limit_enable_logging_of_trending_ips_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :enable_logging_of_trending_ips, false %>
+    <%= form.label :enable_logging_of_trending_ips_false, "No", for: "rate_limit_enable_logging_of_trending_ips_false" %>
+  </div>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_logging_trending_ip] do %>
+  <%= form.label :threshold_for_logging_trending_ip, "Threshold for logging trending IP addresses", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :threshold_for_logging_trending_ip %>
+  <%= form.text_field :threshold_for_logging_trending_ip, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_notifying_trending_ip] do %>
+  <%= form.label :threshold_for_notifying_trending_ip, "Threshold for notifying trending IP addresses", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :threshold_for_notifying_trending_ip %>
+  <%= form.text_field :threshold_for_notifying_trending_ip, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+<% end %>
+
+<%= form_row for: [form.object, :trending_ip_notification_url] do %>
+  <%= form.label :trending_ip_notification_url, "Notification URL for trending IP addresses", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :trending_ip_notification_url %>
+  <%= form.text_field :trending_ip_notification_url, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>

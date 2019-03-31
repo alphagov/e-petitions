@@ -723,4 +723,12 @@ FactoryBot.define do
   factory :tag do
     sequence(:name) { |n| "Tag #{n}" }
   end
+
+  factory :trending_ip do
+    association :petition, factory: :open_petition
+    ip_address { "127.0.0.1" }
+    country_code { "GB" }
+    count { 32 }
+    starts_at { 1.hour.ago.at_beginning_of_hour }
+  end
 end
