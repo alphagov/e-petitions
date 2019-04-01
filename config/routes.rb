@@ -118,6 +118,7 @@ Rails.application.routes.draw do
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
         resource  :statistics, controller: 'petition_statistics', only: %i[update]
+        resources :trending_ips, path: 'trending-ips', only: %i[index]
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'
@@ -127,6 +128,19 @@ Rails.application.routes.draw do
           resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
           resource :tags, controller: 'petition_tags'
           resource :take_down, path: 'take-down', controller: 'take_down'
+        end
+
+        resources :signatures, only: %i[index destroy] do
+          post :validate, :invalidate, on: :member
+          post :subscribe, :unsubscribe, on: :member
+
+          collection do
+            delete :destroy, action: :bulk_destroy
+            post   :validate, action: :bulk_validate
+            post   :invalidate, action: :bulk_invalidate
+            post   :subscribe, action: :bulk_subscribe
+            post   :unsubscribe, action: :bulk_unsubscribe
+          end
         end
       end
 

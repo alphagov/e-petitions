@@ -228,6 +228,19 @@ class Signature < ActiveRecord::Base
       count(:all)
     end
 
+    def trending_ips_by_petition(window, threshold = 5)
+      trending_ips = Hash.new { |h, k| h[k] = {} }
+
+      where(validated_at: window)
+        .group(:petition_id, :ip_address)
+        .having(count_star.gteq(threshold))
+        .order(:petition_id, count_star.desc)
+        .pluck(:petition_id, :ip_address, count_star.to_sql)
+        .each_with_object(trending_ips) do |(petition_id, ip_address, count), hash|
+          hash[petition_id][ip_address] = count
+        end
+    end
+
     def uk
       where(location_code: "GB")
     end
@@ -280,15 +293,15 @@ class Signature < ActiveRecord::Base
     end
 
     def validated_count(timestamp = nil, upto = nil)
-      validated(since: timestamp, upto: upto).pluck(count_star, max_validated_at).first
+      validated(since: timestamp, upto: upto).pluck(count_star.to_sql, max_validated_at).first
     end
 
     def validated_count_by_location_code(timestamp = nil, upto = nil)
-      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star)
+      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star.to_sql)
     end
 
     def validated_count_by_constituency_id(timestamp = nil, upto = nil)
-      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star)
+      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star.to_sql)
     end
 
     def validated?(id)
@@ -320,7 +333,7 @@ class Signature < ActiveRecord::Base
     end
 
     def count_star
-      arel_table[Arel.star].count.to_sql
+      arel_table[Arel.star].count
     end
 
     def max_validated_at

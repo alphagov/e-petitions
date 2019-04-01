@@ -16,6 +16,8 @@
       <%= render "form", tab: "blocked_ips" %>
     <% elsif params[:tab] == "countries" %>
       <%= render "form", tab: "countries" %>
+    <% elsif params[:tab] == "trending_ips" %>
+      <%= render "form", tab: "trending_ips" %>
     <% else %>
       <%= render "form", tab: "rate_limits" %>
     <% end %>

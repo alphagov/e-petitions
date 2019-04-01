@@ -1,6 +1,7 @@
 class Admin::SignaturesController < Admin::AdminController
   include BulkVerification
 
+  before_action :fetch_petition, if: :petition_scope?
   before_action :fetch_signature, except: [:index, :bulk_validate, :bulk_invalidate, :bulk_subscribe, :bulk_unsubscribe, :bulk_destroy]
   before_action :fetch_signatures, only: [:index]
 
@@ -12,69 +13,69 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_validate
     begin
-      Signature.validate!(selected_ids)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_validated
+      scope.validate!(selected_ids)
+      redirect_to index_url(q: params[:q]), notice: :signatures_validated
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_validated
+      redirect_to index_url(q: params[:q]), alert: :signatures_not_validated
     end
   end
 
   def validate
     begin
       @signature.validate!
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signature_validated
+      redirect_to index_url(q: params[:q]), notice: :signature_validated
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signature_not_validated
+      redirect_to index_url(q: params[:q]), alert: :signature_not_validated
     end
   end
 
   def bulk_invalidate
     begin
-      Signature.invalidate!(selected_ids)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_invalidated
+      scope.invalidate!(selected_ids)
+      redirect_to index_url(q: params[:q]), notice: :signatures_invalidated
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_invalidated
+      redirect_to index_url(q: params[:q]), alert: :signatures_not_invalidated
     end
   end
 
   def invalidate
     begin
       @signature.invalidate!
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signature_invalidated
+      redirect_to index_url(q: params[:q]), notice: :signature_invalidated
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: @signature.email), alert: :signature_not_invalidated
+      redirect_to index_url(q: @signature.email), alert: :signature_not_invalidated
     end
   end
 
   def bulk_destroy
     begin
-      Signature.destroy!(selected_ids)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_deleted
+      scope.destroy!(selected_ids)
+      redirect_to index_url(q: params[:q]), notice: :signatures_deleted
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_deleted
+      redirect_to index_url(q: params[:q]), alert: :signatures_not_deleted
     end
   end
 
   def destroy
     if @signature.destroy
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signature_deleted
+      redirect_to index_url(q: params[:q]), notice: :signature_deleted
     else
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signature_not_deleted
+      redirect_to index_url(q: params[:q]), alert: :signature_not_deleted
     end
   end
 
   def bulk_subscribe
     begin
-      Signature.subscribe!(selected_ids)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_subscribed
+      scope.subscribe!(selected_ids)
+      redirect_to index_url(q: params[:q]), notice: :signatures_subscribed
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_subscribed
+      redirect_to index_url(q: params[:q]), alert: :signatures_not_subscribed
     end
   end
 
@@ -88,29 +89,49 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_unsubscribe
     begin
-      Signature.unsubscribe!(selected_ids)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signatures_unsubscribed
+      scope.unsubscribe!(selected_ids)
+      redirect_to index_url(q: params[:q]), notice: :signatures_unsubscribed
     rescue StandardError => e
       Appsignal.send_exception e
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signatures_not_unsubscribed
+      redirect_to index_url(q: params[:q]), alert: :signatures_not_unsubscribed
     end
   end
 
   def unsubscribe
     if @signature.update(notify_by_email: false)
-      redirect_to admin_signatures_url(q: params[:q]), notice: :signature_unsubscribed
+      redirect_to index_url(q: params[:q]), notice: :signature_unsubscribed
     else
-      redirect_to admin_signatures_url(q: params[:q]), alert: :signature_not_unsubscribed
+      redirect_to index_url(q: params[:q]), alert: :signature_not_unsubscribed
     end
   end
 
   private
 
+  def petition_scope?
+    params.key?(:petition_id)
+  end
+
+  def fetch_petition
+    @petition = Petition.find(params[:petition_id])
+  end
+
+  def scope
+    params.key?(:petition_id) ? @petition.signatures : Signature
+  end
+
   def fetch_signatures
-    @signatures = Signature.search(params[:q], state: params[:state], page: params[:page])
+    @signatures = scope.search(params[:q], state: params[:state], page: params[:page])
   end
 
   def fetch_signature
-    @signature = Signature.find(params[:id])
+    @signature = scope.find(params[:id])
+  end
+
+  def index_url(*args)
+    if petition_scope?
+      admin_petition_signatures_url(*args)
+    else
+      admin_signatures_url(*args)
+    end
   end
 end

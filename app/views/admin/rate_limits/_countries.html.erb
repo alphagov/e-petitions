@@ -11,11 +11,11 @@
   <%= error_messages_for_field @rate_limit, :country_rate_limits_enabled %>
   <div class="multiple-choice">
     <%= form.radio_button :country_rate_limits_enabled, true %>
-    <%= form.label :country_rate_limits_enabled_true, "Yes", for: "country_rate_limits_enabled_true" %>
+    <%= form.label :country_rate_limits_enabled_true, "Yes", for: "rate_limit_country_rate_limits_enabled_true" %>
   </div>
   <div class="multiple-choice">
     <%= form.radio_button :country_rate_limits_enabled, false %>
-    <%= form.label :country_rate_limits_enabled_false, "No", for: "country_rate_limits_enabled_false" %>
+    <%= form.label :country_rate_limits_enabled_false, "No", for: "rate_limit_country_rate_limits_enabled_false" %>
   </div>
 <% end %>
 
@@ -38,11 +38,11 @@
   <%= error_messages_for_field @rate_limit, :geoblocking_enabled %>
   <div class="multiple-choice">
     <%= form.radio_button :geoblocking_enabled, true %>
-    <%= form.label :geoblocking_enabled_true, "Yes", for: "geoblocking_enabled_true" %>
+    <%= form.label :geoblocking_enabled_true, "Yes", for: "rate_limit_geoblocking_enabled_true" %>
   </div>
   <div class="multiple-choice">
     <%= form.radio_button :geoblocking_enabled, false %>
-    <%= form.label :geoblocking_enabled_false, "No", for: "geoblocking_enabled_false" %>
+    <%= form.label :geoblocking_enabled_false, "No", for: "rate_limit_geoblocking_enabled_false" %>
   </div>
 <% end %>
 

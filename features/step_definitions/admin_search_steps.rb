@@ -11,6 +11,18 @@ Given(/^(\d+) petitions? signed by "([^"]*)"$/) do |petition_count, name_or_emai
   end
 end
 
+Given(/^a petition "(.*?)" signed by "([^"]*)"$/) do |action, name_or_email|
+  if name_or_email =~ /\A[^@]+@[^@]+\z/
+    attrs = { email: name_or_email }
+  else
+    attrs = { name: name_or_email }
+  end
+
+  @petition = FactoryBot.create(:open_petition, action: action)
+  @signature = FactoryBot.create(:validated_signature, attrs.merge(petition: @petition))
+  @petition.update_signature_count!
+end
+
 Given(/^(\d+) petitions? signed from "([^"]*)"$/) do |petition_count, ip_address|
   petition_count.times do
     petition = FactoryBot.create(:open_petition)
@@ -22,6 +34,15 @@ Given(/^(\d+) petitions? with a (pending|validated) signature by "([^"]*)"$/) do
   petition_count.times do
     FactoryBot.create(:"#{state}_signature", :petition => FactoryBot.create(:open_petition), :email => email)
   end
+end
+
+When(/^I search for signatures from "([^"]*)"$/) do |name_or_email|
+  fill_in "Search", with: name_or_email
+  click_button 'Search'
+end
+
+Then(/^I should see (\d+) signatures? associated with that (?:name|email address)$/) do |count|
+  expect(page).to have_css("tbody tr", count: count)
 end
 
 When(/^I search for petitions signed by "([^"]*)"( from the admin hub)?$/) do |name_or_email, from_the_hub|

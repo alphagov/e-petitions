@@ -1,6 +1,11 @@
-<h1>Signatures</h1>
+<h1>
+  <% if @petition.present? %>
+    <%= link_to @petition.action, admin_petition_url(@petition) %> –
+  <% end %>
+  Signatures
+</h1>
 
-<%= form_tag [:admin, :signatures], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+<%= form_tag [:admin, @petition, :signatures].compact, enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
   <div class="grid-row">
     <div class="column-half">
       <%= label_tag :state, "Signature state", class: "visuallyhidden" %>
@@ -47,31 +52,31 @@
   <div class="inline-actions">
     <% signature_ids = bulk_verifier.generate(@signatures.map(&:id)) %>
 
-    <%= form_tag validate_admin_signatures_path(q: params[:q]), method: :post, class: 'action validate-action' do %>
+    <%= form_tag [:validate, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action validate-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Validate', name: nil, class: 'button', disabled: true, data: { confirm: 'Validate selected signatures?' } %>
     <% end %>
 
-    <%= form_tag invalidate_admin_signatures_path(q: params[:q]), method: :post, class: 'action invalidate-action' do %>
+    <%= form_tag [:invalidate, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action invalidate-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Invalidate', name: nil, class: 'button', disabled: true, data: { confirm: 'Invalidate selected signatures?' } %>
     <% end %>
 
-    <%= form_tag subscribe_admin_signatures_path(q: params[:q]), method: :post, class: 'action subscribe-action' do %>
+    <%= form_tag [:subscribe, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action subscribe-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Subscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Subscribe selected signatures?' } %>
     <% end %>
 
-    <%= form_tag unsubscribe_admin_signatures_path(q: params[:q]), method: :post, class: 'action unsubscribe-action' do %>
+    <%= form_tag [:unsubscribe, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action unsubscribe-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Unsubscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Unsubscribe selected signatures?' } %>
     <% end %>
 
-    <%= form_tag admin_signatures_path(q: params[:q]), method: :delete, class: 'action delete-action' do %>
+    <%= form_tag [:admin, @petition, :signatures, q: params[:q]].compact, method: :delete, class: 'action delete-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Delete', name: nil, class: 'button-warning', disabled: true, data: { confirm: 'Delete selected signatures?' } %>
