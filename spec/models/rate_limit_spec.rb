@@ -384,6 +384,117 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
+  describe "#ignore_domain?" do
+    let(:domain) { "example.com" }
+    let(:allowed_domains) { "" }
+    let(:blocked_domains) { "" }
+
+    subject do
+      described_class.create!(
+        allowed_domains: allowed_domains,
+        blocked_domains: blocked_domains,
+      )
+    end
+
+    context "when the domain isn't on either list" do
+      it "returns false" do
+        expect(subject.ignore_domain?(domain)).to eq(false)
+      end
+    end
+
+    context "when the ip domain is on the allow list" do
+      let(:allowed_domains) { "example.com" }
+
+      it "returns true" do
+        expect(subject.ignore_domain?(domain)).to eq(true)
+      end
+    end
+
+    context "when the domain is on the block list" do
+      let(:blocked_domains) { "example.com" }
+
+      it "returns true" do
+        expect(subject.ignore_domain?(domain)).to eq(true)
+      end
+    end
+  end
+
+  describe "#ignore_ip?" do
+    let(:ip_address) { "12.34.56.78" }
+    let(:allowed_ips) { "" }
+    let(:blocked_ips) { "" }
+    let(:countries) { "" }
+    let(:geoblocking_enabled) { false }
+
+    let(:geoip_db_path) { "/path/to/GeoLite2-Country.mmdb" }
+    let(:geoip_db) { double(:geoip_db) }
+    let(:geoip_result) { double(:geoip_result) }
+    let(:country) { double(:country) }
+
+    subject do
+      described_class.create!(
+        allowed_ips: allowed_ips, blocked_ips: blocked_ips,
+        countries: countries, geoblocking_enabled: geoblocking_enabled
+      )
+    end
+
+    before do
+      allow(MaxMindDB).to receive(:new).with(geoip_db_path).and_return(geoip_db)
+      allow(geoip_db).to receive(:lookup).with("12.34.56.78").and_return(geoip_result)
+      allow(geoip_result).to receive(:found?).and_return(true)
+      allow(geoip_result).to receive(:country).and_return(country)
+    end
+
+    context "when geoip blocking is disabled" do
+      context "and the ip address isn't on either list" do
+        it "returns false" do
+          expect(subject.ignore_ip?(ip_address)).to eq(false)
+        end
+      end
+
+      context "and the ip address is on the allow list" do
+        let(:allowed_ips) { "12.34.56.0/24" }
+
+        it "returns true" do
+          expect(subject.ignore_ip?(ip_address)).to eq(true)
+        end
+      end
+
+      context "and the ip address is on the block list" do
+        let(:blocked_ips) { "12.34.56.0/24" }
+
+        it "returns true" do
+          expect(subject.ignore_ip?(ip_address)).to eq(true)
+        end
+      end
+    end
+
+    context "when geoip blocking is enabled" do
+      let(:countries) { "United Kingdom" }
+      let(:geoblocking_enabled) { true }
+
+      context "and the ip address is from an allowed country" do
+        before do
+          allow(country).to receive(:name).and_return("United Kingdom")
+        end
+
+        it "returns false" do
+          expect(subject.ignore_ip?(ip_address)).to eq(false)
+        end
+      end
+
+      context "and the ip address is from a blocked country" do
+        before do
+          allow(country).to receive(:name).and_return("France")
+        end
+
+        it "returns true" do
+          expect(subject.ignore_ip?(ip_address)).to eq(true)
+        end
+      end
+    end
+  end
+
   describe "#allowed_domains=" do
     subject do
       described_class.new(allowed_domains: " foo.com\r\nbar.com\r\n")

@@ -80,6 +80,14 @@ class RateLimit < ActiveRecord::Base
     end
   end
 
+  def ignore_domain?(domain)
+    domain_blocked?(domain) || domain_allowed?(domain)
+  end
+
+  def ignore_ip?(ip)
+    ip_blocked?(ip) || ip_allowed?(ip) || ip_geoblocked?(ip)
+  end
+
   def allowed_domains=(value)
     @allowed_domains_list = nil
     super(normalize_lines(value))
