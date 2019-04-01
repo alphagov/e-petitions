@@ -81,6 +81,13 @@ namespace :epets do
       end
     end
 
+    desc "Track trending domains"
+    task :trending_domains => :environment do
+      Task.run("epets:site:trending_domains", 30.minutes) do
+        TrendingDomainsByPetitionJob.perform_later
+      end
+    end
+
     desc "Track trending IP addresses"
     task :trending_ips => :environment do
       Task.run("epets:site:trending_ips", 30.minutes) do

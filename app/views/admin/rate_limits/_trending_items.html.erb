@@ -1,0 +1,32 @@
+<%= hidden_field_tag :tab, "trending_ips" %>
+
+<%= form_row for: [form.object, :enable_logging_of_trending_items], class: 'inline' do %>
+  <%= form.label :enable_logging_of_trending_items, "Enable logging of trending items for petitions?", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :enable_logging_of_trending_items %>
+  <div class="multiple-choice">
+    <%= form.radio_button :enable_logging_of_trending_items, true %>
+    <%= form.label :enable_logging_of_trending_items_true, "Yes", for: "rate_limit_enable_logging_of_trending_items_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :enable_logging_of_trending_items, false %>
+    <%= form.label :enable_logging_of_trending_items_false, "No", for: "rate_limit_enable_logging_of_trending_items_false" %>
+  </div>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_logging_trending_items] do %>
+  <%= form.label :threshold_for_logging_trending_items, "Threshold for logging trending items", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :threshold_for_logging_trending_items %>
+  <%= form.text_field :threshold_for_logging_trending_item, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+<% end %>
+
+<%= form_row for: [form.object, :threshold_for_notifying_trending_items] do %>
+  <%= form.label :threshold_for_notifying_trending_items, "Threshold for notifying trending items", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :threshold_for_notifying_trending_items %>
+  <%= form.text_field :threshold_for_notifying_trending_items, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+<% end %>
+
+<%= form_row for: [form.object, :trending_items_notification_url] do %>
+  <%= form.label :trending_items_notification_url, "Notification URL for trending items", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :trending_items_notification_url %>
+  <%= form.text_field :trending_items_notification_url, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>

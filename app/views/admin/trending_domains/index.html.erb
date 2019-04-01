@@ -1,0 +1,43 @@
+<h1>
+  <%= link_to @petition.action, admin_petition_url(@petition) %> –
+  Trending Domains
+</h1>
+
+<%= form_tag [:admin, @petition, :trending_domains], enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
+  <div class="grid-row">
+    <div class="column-half">
+      <div class="search-inline">
+        <%= label_tag :q, "Search trending domains", class: "visuallyhidden" %>
+        <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by domain" %>
+        <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
+    </div>
+  </div>
+<% end %>
+
+<% if @trending_domains.present? %>
+
+  <%= will_paginate @trending_domains %>
+
+  <table class="signature-list">
+    <thead>
+      <tr>
+        <th class="petition-action">Domain</th>
+        <th class="signature-timestamp">Starts At</th>
+        <th class="signature-timestamp">Ends At</th>
+        <th class="petition-signature-count">Count</th>
+        <th class="signature-actions">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render @trending_domains =%>
+    </tbody>
+  </table>
+
+  <%= will_paginate @trending_domains %>
+
+<% else %>
+  <p>
+    No trending domains found
+  </p>
+<% end %>

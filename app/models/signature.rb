@@ -228,6 +228,20 @@ class Signature < ActiveRecord::Base
       count(:all)
     end
 
+    def trending_domains_by_petition(window, threshold = 5)
+      trending_domains = Hash.new { |h, k| h[k] = {} }
+      domain = "SUBSTRING(email FROM POSITION('@' IN email) + 1)"
+
+      where(validated_at: window)
+        .group(:petition_id, domain)
+        .having(count_star.gteq(threshold))
+        .order(:petition_id, count_star.desc)
+        .pluck(:petition_id, domain, count_star.to_sql)
+        .each_with_object(trending_domains) do |(petition_id, domain, count), hash|
+          hash[petition_id][domain] = count
+        end
+    end
+
     def trending_ips_by_petition(window, threshold = 5)
       trending_ips = Hash.new { |h, k| h[k] = {} }
 

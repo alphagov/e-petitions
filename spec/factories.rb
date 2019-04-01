@@ -731,4 +731,11 @@ FactoryBot.define do
     count { 32 }
     starts_at { 1.hour.ago.at_beginning_of_hour }
   end
+
+  factory :trending_domain do
+    association :petition, factory: :open_petition
+    domain { "example.com" }
+    count { 32 }
+    starts_at { 1.hour.ago.at_beginning_of_hour }
+  end
 end

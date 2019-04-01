@@ -21,10 +21,10 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_numericality_of(:country_burst_rate).only_integer.is_greater_than(0) }
     it { is_expected.to validate_presence_of(:country_sustained_rate) }
     it { is_expected.to validate_numericality_of(:country_sustained_rate).only_integer.is_greater_than(0) }
-    it { is_expected.to validate_presence_of(:threshold_for_logging_trending_ip) }
-    it { is_expected.to validate_numericality_of(:threshold_for_logging_trending_ip).only_integer.is_greater_than(0) }
-    it { is_expected.to validate_presence_of(:threshold_for_notifying_trending_ip) }
-    it { is_expected.to validate_numericality_of(:threshold_for_notifying_trending_ip).only_integer.is_greater_than(0) }
+    it { is_expected.to validate_presence_of(:threshold_for_logging_trending_items) }
+    it { is_expected.to validate_numericality_of(:threshold_for_logging_trending_items).only_integer.is_greater_than(0) }
+    it { is_expected.to validate_presence_of(:threshold_for_notifying_trending_items) }
+    it { is_expected.to validate_numericality_of(:threshold_for_notifying_trending_items).only_integer.is_greater_than(0) }
 
     context "when the sustained rate is less than the burst rate" do
       before do

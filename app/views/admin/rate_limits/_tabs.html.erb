@@ -6,7 +6,7 @@
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
   <% elsif params[:tab] == "blocked_domains" %>
     <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
@@ -14,7 +14,7 @@
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
   <% elsif params[:tab] == "allowed_ips" %>
     <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
@@ -22,7 +22,7 @@
     Allowed IPs |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
   <% elsif params[:tab] == "blocked_ips" %>
     <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
@@ -30,7 +30,7 @@
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     Blocked IPs |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
   <% elsif params[:tab] == "countries" %>
     <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
@@ -38,15 +38,15 @@
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     Countries |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
-  <% elsif params[:tab] == "trending_ips" %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
+  <% elsif params[:tab] == "trending_items" %>
     <%= link_to "Rate Limits", edit_admin_rate_limits_path %> |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
     <%= link_to "Blocked Domains", edit_admin_rate_limits_path(tab: 'blocked_domains') %> |
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    Trending IPs
+    Trending Items
   <% else %>
     Rate Limits |
     <%= link_to "Allowed Domains", edit_admin_rate_limits_path(tab: 'allowed_domains') %> |
@@ -54,6 +54,6 @@
     <%= link_to "Allowed IPs", edit_admin_rate_limits_path(tab: 'allowed_ips') %> |
     <%= link_to "Blocked IPs", edit_admin_rate_limits_path(tab: 'blocked_ips') %> |
     <%= link_to "Countries", edit_admin_rate_limits_path(tab: 'countries') %> |
-    <%= link_to "Trending IPs", edit_admin_rate_limits_path(tab: 'trending_ips') %>
+    <%= link_to "Trending Items", edit_admin_rate_limits_path(tab: 'trending_items') %>
   <% end %>
 </p>

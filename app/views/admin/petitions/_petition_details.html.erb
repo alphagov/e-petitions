@@ -44,20 +44,6 @@
       <dd><%= number_with_delimiter(@petition.statistics.duplicate_emails) %></dd>
     <% end %>
 
-    <% if @petition.fraudulent_domains? %>
-      <dt>Fraudulent domains</dt>
-      <dd>
-        <table class="fraudulent-domains">
-          <% @petition.fraudulent_domains.each do |domain, count| %>
-            <tr>
-              <td><%= domain %></td>
-              <td><%= number_with_delimiter(count) %></td>
-            </tr>
-          <% end %>
-        </table>
-      </dd>
-    <% end %>
-
     <dt>Trending IP addresses</dt>
     <dd>
       <table class="fraudulent-domains">
@@ -72,6 +58,37 @@
         </tr>
       </table>
     </dd>
+
+    <dt>Trending domains</dt>
+    <dd>
+      <table class="fraudulent-domains">
+        <% @petition.trending_domains.limit(10).each do |trending_domain| %>
+          <tr>
+            <td><%= link_to trending_domain.domain, admin_petition_trending_domains_path(@petition, q: trending_domain.domain) %></td>
+            <td><%= number_with_delimiter(trending_domain.count) %></td>
+          </tr>
+        <% end %>
+        <tr>
+          <td colspan="2"><%= link_to "View all trending domains", admin_petition_trending_domains_path(@petition) %></td>
+        </tr>
+      </table>
+    </dd>
+
+    <% if @petition.fraudulent_domains? %>
+      <dd>
+        <details>
+          <summary>Fraudulent domains</summary>
+          <table class="fraudulent-domains">
+            <% @petition.fraudulent_domains.each do |domain, count| %>
+              <tr>
+                <td><%= domain %></td>
+                <td><%= number_with_delimiter(count) %></td>
+              </tr>
+            <% end %>
+          </table>
+        </details>
+      </dd>
+    <% end %>
   <% end %>
 <% end %>
 </dl>

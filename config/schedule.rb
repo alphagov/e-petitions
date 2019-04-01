@@ -60,3 +60,7 @@ end
 every :hour, at: 15 do
   rake "epets:site:trending_ips", output: nil
 end
+
+every :hour, at: 10 do
+  rake "epets:site:trending_domains", output: nil
+end
