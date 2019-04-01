@@ -2,6 +2,7 @@ class TrendingIpsByPetitionJob < ApplicationJob
   delegate :enable_logging_of_trending_ips?, to: :rate_limit
   delegate :threshold_for_logging_trending_ip, to: :rate_limit
   delegate :threshold_for_notifying_trending_ip, to: :rate_limit
+  delegate :ignore_ip?, to: :rate_limit
   delegate :trending_ips_by_petition, to: :Signature
 
   def perform(now = Time.current)
@@ -12,6 +13,7 @@ class TrendingIpsByPetitionJob < ApplicationJob
 
       ips.each do |ip, count|
         next unless ip.present?
+        next if ignore_ip?(ip)
 
         begin
           trending_ip = petition.trending_ips.log!(starts_at(now), ip, count)
