@@ -18,17 +18,18 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
     allow(geoip_country).to receive(:iso_code).and_return("GB")
 
     allow(RateLimit).to receive(:first_or_create!).and_return(rate_limit)
-    allow(rate_limit).to receive(:threshold_for_logging_trending_ip).and_return(1)
-    allow(rate_limit).to receive(:threshold_for_notifying_trending_ip).and_return(2)
+    allow(rate_limit).to receive(:threshold_for_logging_trending_items).and_return(1)
+    allow(rate_limit).to receive(:threshold_for_notifying_trending_items).and_return(2)
+    allow(rate_limit).to receive(:ignore_ip?).and_return(false)
 
     FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.1", validated_at: "2019-03-31T15:30:00Z")
     FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.2", validated_at: "2019-03-31T15:35:00Z")
     FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.2", validated_at: "2019-03-31T15:40:00Z")
   end
 
-  context "when trending ip logging is disabled" do
+  context "when trending item logging is disabled" do
     before do
-      allow(rate_limit).to receive(:enable_logging_of_trending_ips?).and_return(false)
+      allow(rate_limit).to receive(:enable_logging_of_trending_items?).and_return(false)
     end
 
     it "doesn't create any trending ip entries" do
@@ -40,9 +41,9 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
     end
   end
 
-  context "when trending ip logging is enabled" do
+  context "when trending item logging is enabled" do
     before do
-      allow(rate_limit).to receive(:enable_logging_of_trending_ips?).and_return(true)
+      allow(rate_limit).to receive(:enable_logging_of_trending_items?).and_return(true)
     end
 
     it "creates trending ip entries" do
@@ -57,6 +58,22 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
       expect {
         described_class.perform_now(current_time)
       }.to have_enqueued_job(NotifyTrendingIpJob)
+    end
+
+    context "and the ip address is ignored" do
+      let(:ignored_ips) { a_string_matching(/\A192\.168\.1\.\d\z/) }
+
+      before do
+        allow(rate_limit).to receive(:ignore_ip?).with(ignored_ips).and_return(true)
+      end
+
+      it "doesn't create any trending ip entries" do
+        expect {
+          described_class.perform_now(current_time)
+        }.not_to change {
+          TrendingIp.count
+        }
+      end
     end
   end
 end

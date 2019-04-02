@@ -30,8 +30,8 @@ class Admin::RateLimitsController < Admin::AdminController
       allowed_domains allowed_ips blocked_domains blocked_ips
       geoblocking_enabled countries country_rate_limits_enabled
       country_burst_rate country_sustained_rate trending_ip_notification_url
-      threshold_for_logging_trending_ip threshold_for_notifying_trending_ip
-      enable_logging_of_trending_ips
+      threshold_for_logging_trending_items threshold_for_notifying_trending_items
+      enable_logging_of_trending_items
     ]
   end
 

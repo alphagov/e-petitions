@@ -1,25 +1,25 @@
-class TrendingIpsByPetitionJob < ApplicationJob
+class TrendingDomainsByPetitionJob < ApplicationJob
   delegate :enable_logging_of_trending_items?, to: :rate_limit
   delegate :threshold_for_logging_trending_items, to: :rate_limit
   delegate :threshold_for_notifying_trending_items, to: :rate_limit
-  delegate :ignore_ip?, to: :rate_limit
-  delegate :trending_ips_by_petition, to: :Signature
+  delegate :ignore_domain?, to: :rate_limit
+  delegate :trending_domains_by_petition, to: :Signature
 
   def perform(now = Time.current)
     return unless enable_logging_of_trending_items?
 
-    trending_ips(now).each do |id, ips|
+    trending_domains(now).each do |id, domains|
       petition = Petition.find(id)
 
-      ips.each do |ip, count|
-        next unless ip.present?
-        next if ignore_ip?(ip)
+      domains.each do |domain, count|
+        next unless domain.present?
+        next if ignore_domain?(domain)
 
         begin
-          trending_ip = petition.trending_ips.log!(starts_at(now), ip, count)
+          trending_domain = petition.trending_domains.log!(starts_at(now), domain, count)
 
           if count >= threshold_for_notifying_trending_items
-            NotifyTrendingIpJob.perform_later(trending_ip)
+            NotifyTrendingDomainJob.perform_later(trending_domain)
           end
         rescue StandardError => e
           Appsignal.send_exception e
@@ -34,8 +34,8 @@ class TrendingIpsByPetitionJob < ApplicationJob
     @rate_limit ||= RateLimit.first_or_create!
   end
 
-  def trending_ips(now)
-    trending_ips_by_petition(window(now), threshold_for_logging_trending_items)
+  def trending_domains(now)
+    trending_domains_by_petition(window(now), threshold_for_logging_trending_items)
   end
 
   def petitions

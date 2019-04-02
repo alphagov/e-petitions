@@ -119,6 +119,7 @@ Rails.application.routes.draw do
         resource  :moderation, controller: 'moderation', only: %i[update]
         resource  :statistics, controller: 'petition_statistics', only: %i[update]
         resources :trending_ips, path: 'trending-ips', only: %i[index]
+        resources :trending_domains, path: 'trending-domains', only: %i[index]
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'

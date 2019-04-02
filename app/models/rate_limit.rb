@@ -7,6 +7,11 @@ class RateLimit < ActiveRecord::Base
   SINGLE_GLOB = "*."
   SINGLE_PATTERN = "(?:[-a-z0-9]+\\.)"
 
+  alias_attribute :enable_logging_of_trending_items, :enable_logging_of_trending_ips
+  alias_attribute :threshold_for_logging_trending_items, :threshold_for_logging_trending_ip
+  alias_attribute :threshold_for_notifying_trending_items, :threshold_for_notifying_trending_ip
+  alias_attribute :trending_items_notification_url, :trending_ip_notification_url
+
   validates :burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :burst_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
@@ -18,9 +23,9 @@ class RateLimit < ActiveRecord::Base
   validates :countries, length: { maximum: 2000, allow_blank: true }
   validates :country_burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :country_sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :threshold_for_logging_trending_ip, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :threshold_for_notifying_trending_ip, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :trending_ip_notification_url, length: { maximum: 100, allow_blank: true }
+  validates :threshold_for_logging_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :threshold_for_notifying_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :trending_items_notification_url, length: { maximum: 100, allow_blank: true }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?
@@ -78,6 +83,14 @@ class RateLimit < ActiveRecord::Base
     else
       rate_exceeded?(signature)
     end
+  end
+
+  def ignore_domain?(domain)
+    domain_blocked?(domain) || domain_allowed?(domain)
+  end
+
+  def ignore_ip?(ip)
+    ip_blocked?(ip) || ip_allowed?(ip) || ip_geoblocked?(ip)
   end
 
   def allowed_domains=(value)
