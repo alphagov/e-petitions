@@ -49,6 +49,6 @@ class NotifyTrendingDomainJob < ApplicationJob
   end
 
   def domain_address_link(domain)
-    "<#{admin_petition_signatures_url(domain.petition, q: domain.domain)}|#{domain.domain}>"
+    "<#{admin_petition_signatures_url(domain.petition, q: "@#{domain.domain}")}|#{domain.domain}>"
   end
 end
