@@ -16,7 +16,7 @@
 <%= form_row for: [form.object, :threshold_for_logging_trending_items] do %>
   <%= form.label :threshold_for_logging_trending_items, "Threshold for logging trending items", class: 'form-label' %>
   <%= error_messages_for_field @rate_limit, :threshold_for_logging_trending_items %>
-  <%= form.text_field :threshold_for_logging_trending_item, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+  <%= form.text_field :threshold_for_logging_trending_items, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
 <% end %>
 
 <%= form_row for: [form.object, :threshold_for_notifying_trending_items] do %>
