@@ -13,7 +13,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def bulk_validate
     begin
-      scope.validate!(selected_ids)
+      scope.validate!(selected_ids, force: true)
       redirect_to index_url(q: params[:q]), notice: :signatures_validated
     rescue StandardError => e
       Appsignal.send_exception e
@@ -23,7 +23,7 @@ class Admin::SignaturesController < Admin::AdminController
 
   def validate
     begin
-      @signature.validate!
+      @signature.validate!(force: true)
       redirect_to index_url(q: params[:q]), notice: :signature_validated
     rescue StandardError => e
       Appsignal.send_exception e

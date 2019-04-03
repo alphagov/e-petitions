@@ -289,12 +289,12 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validate!(signature_ids, now = Time.current)
+    def validate!(signature_ids, now = Time.current, force: false)
       signatures = find(signature_ids)
 
       transaction do
         signatures.each do |signature|
-          signature.validate!(now)
+          signature.validate!(now, force: force)
         end
       end
     end
@@ -424,7 +424,7 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  def validate!(now = Time.current)
+  def validate!(now = Time.current, force: false)
     update_signature_counts = false
     new_constituency_id = nil
 
@@ -435,7 +435,7 @@ class Signature < ActiveRecord::Base
     end
 
     retry_lock do
-      if pending?
+      if force || pending?
         update_signature_counts = true
         petition.validate_creator!(now) unless creator?
 
@@ -443,6 +443,8 @@ class Signature < ActiveRecord::Base
           number:       petition.signature_count + 1,
           state:        VALIDATED_STATE,
           validated_at: now,
+          invalidation_id: nil,
+          invalidated_at:  nil,
           updated_at:   now
         }
 

@@ -592,6 +592,82 @@ RSpec.describe Signature, type: :model do
         }.from(false).to(true)
       end
     end
+
+    describe "using the default :force option" do
+      context "with a fraudulent signature" do
+        let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
+
+        before do
+          allow(described_class).to receive(:find).and_call_original
+          allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_call_original
+        end
+
+        it "doesn't transition the signature to the validated state" do
+          expect {
+            described_class.validate!([signature.id])
+          }.not_to change {
+            signature.reload.validated?
+          }.from(false)
+        end
+      end
+
+      context "with an invalidated signature" do
+        let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
+
+        before do
+          allow(described_class).to receive(:find).and_call_original
+          allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_call_original
+        end
+
+        it "transitions the signature to the validated state" do
+          expect {
+            described_class.validate!([signature.id])
+          }.not_to change {
+            signature.reload.validated?
+          }.from(false)
+        end
+      end
+    end
+
+    describe "using the force: true option" do
+      context "with a fraudulent signature" do
+        let(:signature) { FactoryBot.create(:fraudulent_signature, petition: petition) }
+
+        before do
+          allow(described_class).to receive(:find).and_call_original
+          allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_call_original
+        end
+
+        it "transitions the signature to the validated state" do
+          expect {
+            described_class.validate!([signature.id], force: true)
+          }.to change {
+            signature.reload.validated?
+          }.from(false).to(true)
+        end
+      end
+
+      context "with an invalidated signature" do
+        let(:signature) { FactoryBot.create(:invalidated_signature, petition: petition) }
+
+        before do
+          allow(described_class).to receive(:find).and_call_original
+          allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
+          expect(signature).to receive(:validate!).and_call_original
+        end
+
+        it "transitions the signature to the validated state" do
+          expect {
+            described_class.validate!([signature.id], force: true)
+          }.to change {
+            signature.reload.validated?
+          }.from(false).to(true)
+        end
+      end
+    end
   end
 
   describe ".invalidate!" do
@@ -1370,6 +1446,88 @@ RSpec.describe Signature, type: :model do
           end
         end
       end
+
+      context "and the signature is fraudulent" do
+        let(:signature) { FactoryBot.create(:fraudulent_signature, attributes) }
+
+        it "doesn't transition the signature to the validated state" do
+          expect {
+            signature.validate!
+          }.not_to change {
+            signature.reload.validated?
+          }.from(false)
+        end
+
+        it "doesn't increment the petition count" do
+          expect {
+            signature.validate!
+          }.not_to change {
+            petition.reload.signature_count
+          }
+        end
+      end
+
+      context "and the signature is invalidated" do
+        let(:signature) { FactoryBot.create(:invalidated_signature, attributes) }
+
+        it "doesn't transition the signature to the validated state" do
+          expect {
+            signature.validate!
+          }.not_to change {
+            signature.reload.validated?
+          }.from(false)
+        end
+
+        it "doesn't increment the petition count" do
+          expect {
+            signature.validate!
+          }.not_to change {
+            petition.reload.signature_count
+          }
+        end
+      end
+
+      describe "using the force: true option" do
+        context "and the signature is fraudulent" do
+          let(:signature) { FactoryBot.create(:fraudulent_signature, attributes) }
+
+          it "transitions the signature to the validated state" do
+            expect {
+              signature.validate!(force: true)
+            }.to change {
+              signature.reload.validated?
+            }.from(false).to(true)
+          end
+
+          it "increments the petition count" do
+            expect {
+              signature.validate!(force: true)
+            }.to change {
+              petition.reload.signature_count
+            }.by(1)
+          end
+        end
+
+        context "and the signature is invalidated" do
+          let(:signature) { FactoryBot.create(:invalidated_signature, attributes) }
+
+          it "transitions the signature to the validated state" do
+            expect {
+              signature.validate!(force: true)
+            }.to change {
+              signature.reload.validated?
+            }.from(false).to(true)
+          end
+
+          it "increments the petition count" do
+            expect {
+              signature.validate!(force: true)
+            }.to change {
+              petition.reload.signature_count
+            }.by(1)
+          end
+        end
+      end
     end
   end
 
@@ -1449,6 +1607,24 @@ RSpec.describe Signature, type: :model do
     it "raises PG::InFailedSqlTransaction if it fails twice" do
       expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
       expect{ signature.invalidate! }.to raise_error(PG::InFailedSqlTransaction)
+    end
+
+    context "when the signature is pending" do
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+      it "doesn't decrement the petition count" do
+        expect{ signature.invalidate! }.not_to change{ petition.reload.signature_count }
+      end
+
+      it "doesn't update the constituency journal" do
+        expect(ConstituencyPetitionJournal).not_to receive(:invalidate_signature_for)
+        signature.invalidate!
+      end
+
+      it "doesn't update the country journal" do
+        expect(CountryPetitionJournal).not_to receive(:invalidate_signature_for)
+        signature.invalidate!
+      end
     end
   end
 
