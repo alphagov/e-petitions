@@ -21,10 +21,6 @@
 
 env :PATH, ENV['PATH']
 
-every :weekday, at: '6.30am' do
-  rake "epets:threshold_email_reminder", output: nil
-end
-
 every :day, at: '1.15am' do
   rake "epets:countries:fetch", output: nil
 end
