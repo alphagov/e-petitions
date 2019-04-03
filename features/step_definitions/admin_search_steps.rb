@@ -137,8 +137,8 @@ Then(/^I should see the email address is validated$/) do
 end
 
 Then(/^I should see the email address is invalidated$/) do
-  expect(page).not_to have_button "Validate"
   expect(page).not_to have_button "Invalidate"
+  expect(page).to have_button "Validate"
   expect(page).to have_button "Delete"
 end
 

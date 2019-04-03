@@ -27,15 +27,18 @@
   <% else %>
     <td class="signature-creator">No</td>
     <td class="signature-actions">
-      <% if signature.subscribed? %>
-        <%= button_to 'Unsubscribe', [:unsubscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
-      <% elsif signature.validated? %>
-        <%= button_to 'Subscribe', [:subscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
+      <% if signature.validated? %>
+        <% if signature.subscribed? %>
+          <%= button_to 'Unsubscribe', [:unsubscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
+        <% else %>
+          <%= button_to 'Subscribe', [:subscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
+        <% end %>
       <% end %>
-      <% if signature.pending? %>
-        <%= button_to 'Validate', [:validate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
-      <% elsif signature.validated? %>
+      <% unless signature.fraudulent? || signature.invalidated? %>
         <%= button_to 'Invalidate', [:invalidate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button invalidate-action', data: { confirm: 'Invalidate signature?' } %>
+      <% end %>
+      <% unless signature.validated? %>
+        <%= button_to 'Validate', [:validate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
       <% end %>
       <%= button_to 'Delete', [:admin, @petition, signature, q: params[:q]].compact, method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
     </td>
