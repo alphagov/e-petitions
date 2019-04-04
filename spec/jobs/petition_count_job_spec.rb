@@ -1,6 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe PetitionCountJob, type: :job do
+  let(:interval) { 30 }
+
+  before do
+    allow(Site).to receive(:signature_count_interval).and_return(interval)
+  end
+
   context "when the invalid signature count check is disabled" do
     before do
       allow(Site).to receive(:disable_invalid_signature_count_check?).and_return(true)
@@ -40,8 +46,9 @@ RSpec.describe PetitionCountJob, type: :job do
     let!(:petition) do
       FactoryBot.create(:open_petition,
         created_at: 2.days.ago,
-        last_signed_at: Time.current,
-        signature_count: 100
+        last_signed_at: 60.seconds.ago,
+        signature_count: 100,
+        creator_attributes: { validated_at: 60.seconds.ago }
       )
     end
 
@@ -79,7 +86,7 @@ RSpec.describe PetitionCountJob, type: :job do
           perform_enqueued_jobs {
             described_class.perform_later
           }
-        }.to change { petition.reload.updated_at }.to(be_within(1.second).of(Time.current))
+        }.to change { petition.reload.updated_at }.to(be_within(1.second).of(30.seconds.ago))
       end
 
       it "notifies AppSignal" do

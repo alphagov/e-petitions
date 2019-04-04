@@ -243,7 +243,7 @@ FactoryBot.define do
       unless evaluator.sponsors_signed.nil?
         evaluator.sponsor_count.times do
           if evaluator.sponsors_signed
-            FactoryBot.create(:sponsor, :validated, petition: petition)
+            FactoryBot.create(:sponsor, :validated, petition: petition, validated_at: 10.seconds.ago)
           else
             FactoryBot.create(:sponsor, :pending, petition: petition)
           end

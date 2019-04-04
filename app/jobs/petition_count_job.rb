@@ -9,15 +9,21 @@ class PetitionCountJob < ApplicationJob
 
   queue_as :highest_priority
 
-  def perform(now = Time.current)
+  def perform(now = current_time)
     return if disable_invalid_signature_count_check?
+
+    time = now.in_time_zone
+    count_at = signature_count_interval.seconds.ago(time)
 
     if update_signature_counts
       disable_signature_counts!
-      reschedule_job(scheduled_time(now))
+      reschedule_job(scheduled_time(time))
     else
       unless petitions.empty?
-        petitions.each(&:reset_signature_count!)
+        petitions.each do |petition|
+          petition.reset_signature_count!(count_at)
+        end
+
         send_notification(petitions)
       end
 
@@ -26,6 +32,10 @@ class PetitionCountJob < ApplicationJob
   end
 
   private
+
+  def current_time
+    Time.current.change(usec: 0).iso8601
+  end
 
   def petitions
     @petitions ||= fetch_petitions

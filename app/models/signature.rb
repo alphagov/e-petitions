@@ -355,15 +355,15 @@ class Signature < ActiveRecord::Base
       scope
     end
 
-    def validated_count(timestamp = nil, upto = nil)
-      validated(since: timestamp, upto: upto).pluck(count_star.to_sql, max_validated_at).first
+    def validated_count(timestamp, upto)
+      validated(since: timestamp, upto: upto).pluck(count_star.to_sql).first
     end
 
-    def validated_count_by_location_code(timestamp = nil, upto = nil)
+    def validated_count_by_location_code(timestamp, upto)
       validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star.to_sql)
     end
 
-    def validated_count_by_constituency_id(timestamp = nil, upto = nil)
+    def validated_count_by_constituency_id(timestamp, upto)
       validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star.to_sql)
     end
 
