@@ -3,6 +3,7 @@ class TrendingIpsByPetitionJob < ApplicationJob
   delegate :threshold_for_logging_trending_items, to: :rate_limit
   delegate :threshold_for_notifying_trending_items, to: :rate_limit
   delegate :ignore_ip?, to: :rate_limit
+  delegate :ignored_domains_list, to: :rate_limit
   delegate :trending_ips_by_petition, to: :Signature
 
   def perform(now = Time.current)
@@ -35,7 +36,7 @@ class TrendingIpsByPetitionJob < ApplicationJob
   end
 
   def trending_ips(now)
-    trending_ips_by_petition(window(now), threshold_for_logging_trending_items)
+    trending_ips_by_petition(window(now), threshold_for_logging_trending_items, ignored_domains_list)
   end
 
   def petitions

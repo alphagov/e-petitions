@@ -76,6 +76,8 @@ en-GB:
               invalid: "Allowed IPs list is invalid"
             blocked_ips:
               invalid: "Blocked IPs list is invalid"
+            ignored_domains:
+              invalid: "Ignored domains list is invalid"
 
         tag:
           attributes:

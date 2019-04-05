@@ -25,6 +25,7 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_numericality_of(:threshold_for_logging_trending_items).only_integer.is_greater_than(0) }
     it { is_expected.to validate_presence_of(:threshold_for_notifying_trending_items) }
     it { is_expected.to validate_numericality_of(:threshold_for_notifying_trending_items).only_integer.is_greater_than(0) }
+    it { is_expected.to validate_length_of(:ignored_domains).is_at_most(10000) }
 
     context "when the sustained rate is less than the burst rate" do
       before do
@@ -100,6 +101,17 @@ RSpec.describe RateLimit, type: :model do
       it "adds an error message" do
         expect(subject.valid?).to eq(false)
         expect(subject.errors[:blocked_ips]).to include("Blocked IPs list is invalid")
+      end
+    end
+
+    context "when the ignored domain list is invalid" do
+      before do
+        subject.update(ignored_domains: "(foo")
+      end
+
+      it "adds an error message" do
+        expect(subject.valid?).to eq(false)
+        expect(subject.errors[:ignored_domains]).to include("Ignored domains list is invalid")
       end
     end
   end
@@ -535,6 +547,16 @@ RSpec.describe RateLimit, type: :model do
     end
   end
 
+  describe "#ignored_domains=" do
+    subject do
+      described_class.new(ignored_domains: " foo.com\r\nbar.com\r\n")
+    end
+
+    it "normalizes line endings and strips whitespace" do
+      expect(subject.ignored_domains).to eq("foo.com\nbar.com")
+    end
+  end
+
   describe "#countries=" do
     subject do
       described_class.new(countries: " United Kingdom\r\nIreland\r\n")
@@ -811,6 +833,72 @@ RSpec.describe RateLimit, type: :model do
 
       it "they are stripped" do
         expect(subject.blocked_ips_list).to eq([ip_addr_1, ip_addr_2])
+      end
+    end
+  end
+
+  describe "#ignored_domains_list" do
+    subject do
+      described_class.create!(ignored_domains: ignored_domains)
+    end
+
+    context "when there is extra whitespace" do
+      let :ignored_domains do
+        <<-EOF
+          foo.com
+             bar.com
+
+        EOF
+      end
+
+      it "is is stripped" do
+        expect(subject.ignored_domains_list).to eq(%w[foo.com bar.com])
+      end
+    end
+
+    context "when there are blank lines" do
+      let :ignored_domains do
+        <<-EOF
+          foo.com
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.ignored_domains_list).to eq(%w[foo.com bar.com])
+      end
+    end
+
+    context "when there are line comments" do
+      let :ignored_domains do
+        <<-EOF
+          # This is a test
+          foo.com
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.ignored_domains_list).to eq(%w[foo.com bar.com])
+      end
+    end
+
+    context "when there are inline comments" do
+      let :ignored_domains do
+        <<-EOF
+          foo.com # This is a test
+
+             bar.com
+
+        EOF
+      end
+
+      it "they are stripped" do
+        expect(subject.ignored_domains_list).to eq(%w[foo.com bar.com])
       end
     end
   end

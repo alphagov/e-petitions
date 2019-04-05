@@ -6,6 +6,7 @@ class RateLimit < ActiveRecord::Base
   RECURSIVE_PATTERN = "(?:[-a-z0-9]+\\.)+"
   SINGLE_GLOB = "*."
   SINGLE_PATTERN = "(?:[-a-z0-9]+\\.)"
+  DOMAIN_PATTERN = /^(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.)+[a-z]{2,}$/
 
   alias_attribute :enable_logging_of_trending_items, :enable_logging_of_trending_ips
   alias_attribute :threshold_for_logging_trending_items, :threshold_for_logging_trending_ip
@@ -26,6 +27,7 @@ class RateLimit < ActiveRecord::Base
   validates :threshold_for_logging_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :threshold_for_notifying_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :trending_items_notification_url, length: { maximum: 100, allow_blank: true }
+  validates :ignored_domains, length: { maximum: 10000, allow_blank: true }
 
   validate do
     unless sustained_rate.nil? || burst_rate.nil?
@@ -69,6 +71,23 @@ class RateLimit < ActiveRecord::Base
     rescue StandardError => e
       errors.add :blocked_ips, :invalid
     end
+
+    begin
+      ignored_domains_list
+    rescue StandardError => e
+      errors.add :ignored_domains, :invalid
+    end
+  end
+
+  def reload
+    @allowed_domains_list = nil
+    @blocked_domains_list = nil
+    @allowed_ips_list = nil
+    @blocked_ips_list = nil
+    @allowed_countries = nil
+    @ignored_domains_list = nil
+
+    super
   end
 
   def exceeded?(signature)
@@ -138,6 +157,15 @@ class RateLimit < ActiveRecord::Base
     super(normalize_lines(value))
   end
 
+  def ignored_domains=(value)
+    @ignored_domains_list = nil
+    super(normalize_lines(value))
+  end
+
+  def ignored_domains_list
+    @ignored_domains_list ||= build_ignored_domains
+  end
+
   private
 
   def strip_comments(list)
@@ -192,6 +220,10 @@ class RateLimit < ActiveRecord::Base
     blocked_ips_list.any?{ |i| i.include?(ip) }
   end
 
+  def build_ignored_domains
+    strip_blank_lines(strip_comments(ignored_domains)).map { |d| validate_domain!(d.strip) }
+  end
+
   def build_allowed_countries
     strip_blank_lines(strip_comments(countries)).map(&:strip)
   end
@@ -225,6 +257,14 @@ class RateLimit < ActiveRecord::Base
       elsif match == SINGLE_GLOB
         SINGLE_PATTERN
       end
+    end
+  end
+
+  def validate_domain!(domain)
+    if domain =~ DOMAIN_PATTERN
+      domain
+    else
+      raise ArgumentError, "Invalid domain: #{domain.inspect}"
     end
   end
 
