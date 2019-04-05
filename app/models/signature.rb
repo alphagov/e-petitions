@@ -242,10 +242,17 @@ class Signature < ActiveRecord::Base
         end
     end
 
-    def trending_ips_by_petition(window, threshold = 5)
+    def trending_ips_by_petition(window, threshold = 5, ignored_domains = [])
       trending_ips = Hash.new { |h, k| h[k] = {} }
+      domain_not_in = "SUBSTRING(email FROM POSITION('@' IN email) + 1) NOT IN (?)"
 
-      where(validated_at: window)
+      scope = where(validated_at: window)
+
+      unless ignored_domains.empty?
+        scope = scope.where(domain_not_in, ignored_domains)
+      end
+
+      scope
         .group(:petition_id, :ip_address)
         .having(count_star.gteq(threshold))
         .order(:petition_id, count_star.desc)

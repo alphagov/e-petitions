@@ -1,4 +1,4 @@
-<%= hidden_field_tag :tab, "trending_ips" %>
+<%= hidden_field_tag :tab, "trending_items" %>
 
 <%= form_row for: [form.object, :enable_logging_of_trending_items], class: 'inline' do %>
   <%= form.label :enable_logging_of_trending_items, "Enable logging of trending items for petitions?", class: 'form-label' %>
@@ -11,6 +11,12 @@
     <%= form.radio_button :enable_logging_of_trending_items, false %>
     <%= form.label :enable_logging_of_trending_items_false, "No", for: "rate_limit_enable_logging_of_trending_items_false" %>
   </div>
+<% end %>
+
+<%= form_row for: [form.object, :ignored_domains] do %>
+  <%= form.label :ignored_domains, "Ignore the following domains when calculating trending IP addresses", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :ignored_domains %>
+  <%= form.text_area :ignored_domains, tabindex: increment, rows: 10, class: 'form-control' %>
 <% end %>
 
 <%= form_row for: [form.object, :threshold_for_logging_trending_items] do %>

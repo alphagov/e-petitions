@@ -993,7 +993,8 @@ CREATE TABLE public.rate_limits (
     enable_logging_of_trending_ips boolean DEFAULT false NOT NULL,
     threshold_for_logging_trending_ip integer DEFAULT 100 NOT NULL,
     threshold_for_notifying_trending_ip integer DEFAULT 200 NOT NULL,
-    trending_ip_notification_url character varying
+    trending_ip_notification_url character varying,
+    ignored_domains character varying(10000) DEFAULT ''::character varying NOT NULL
 );
 
 
@@ -2963,4 +2964,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190330185021');
 INSERT INTO schema_migrations (version) VALUES ('20190331160833');
 
 INSERT INTO schema_migrations (version) VALUES ('20190401040652');
+
+INSERT INTO schema_migrations (version) VALUES ('20190405110431');
 

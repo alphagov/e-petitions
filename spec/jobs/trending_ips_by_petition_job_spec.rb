@@ -10,6 +10,8 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
   let(:geoip_result) { double(:geoip_result) }
   let(:geoip_country) { double(:geoip_country) }
 
+  let(:ignored_domains) { [] }
+
   before do
     allow(MaxMindDB).to receive(:new).with(geoip_db_path).and_return(geoip_db)
     allow(geoip_db).to receive(:lookup).and_return(geoip_result)
@@ -21,6 +23,7 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
     allow(rate_limit).to receive(:threshold_for_logging_trending_items).and_return(1)
     allow(rate_limit).to receive(:threshold_for_notifying_trending_items).and_return(2)
     allow(rate_limit).to receive(:ignore_ip?).and_return(false)
+    allow(rate_limit).to receive(:ignored_domains_list).and_return(ignored_domains)
 
     FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.1", validated_at: "2019-03-31T15:30:00Z")
     FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.2", validated_at: "2019-03-31T15:35:00Z")
@@ -66,6 +69,18 @@ RSpec.describe TrendingIpsByPetitionJob, type: :job do
       before do
         allow(rate_limit).to receive(:ignore_ip?).with(ignored_ips).and_return(true)
       end
+
+      it "doesn't create any trending ip entries" do
+        expect {
+          described_class.perform_now(current_time)
+        }.not_to change {
+          TrendingIp.count
+        }
+      end
+    end
+
+    context "and the domain is ignored" do
+      let(:ignored_domains) { %w[public.com] }
 
       it "doesn't create any trending ip entries" do
         expect {
