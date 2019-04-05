@@ -14,6 +14,7 @@ class Site < ActiveRecord::Base
     disable_trending_petitions
     disable_invalid_signature_count_check
     disable_daily_update_statistics_job
+    disable_plus_address_check
   ]
 
   class << self

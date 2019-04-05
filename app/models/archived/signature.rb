@@ -67,7 +67,7 @@ module Archived
       end
 
       def for_email(email)
-        where(email: email.downcase)
+        where("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)) = ?)", normalize_email(email))
       end
 
       def for_ip(ip)
@@ -176,6 +176,18 @@ module Archived
 
       def petition_search?(query)
         query =~ /\d+/
+      end
+
+      def normalize_email(email)
+        "#{normalize_user(email)}@#{normalize_domain(email)}"
+      end
+
+      def normalize_user(email)
+        email.split("@").first.split("+").first.tr(".", "").downcase
+      end
+
+      def normalize_domain(email)
+        email.split("@").last.downcase
       end
     end
 

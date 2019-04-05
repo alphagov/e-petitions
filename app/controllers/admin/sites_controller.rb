@@ -33,7 +33,8 @@ class Admin::SitesController < Admin::AdminController
       :moderate_url, :login_timeout, :disable_constituency_api,
       :signature_count_interval, :update_signature_counts,
       :disable_trending_petitions, :threshold_for_moderation_delay,
-      :disable_invalid_signature_count_check, :disable_daily_update_statistics_job
+      :disable_invalid_signature_count_check, :disable_daily_update_statistics_job,
+      :disable_plus_address_check
     )
   end
 end
