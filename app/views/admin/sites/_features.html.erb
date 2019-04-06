@@ -1,9 +1,22 @@
 <%= hidden_field_tag :tab, "features" %>
 <%= hidden_field_tag :"site[features]", "" %>
 
+<%= form_row for: [form.object, :disable_plus_address_check], class: "inline" do %>
+  <%= form.label :disable_plus_address_check, "Disable check for plus email addressing?", class: "form-label" %>
+  <%= error_messages_for_field @site, :disable_plus_address_check %>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_plus_address_check, true %>
+    <%= form.label :disable_plus_address_check, "Yes", for: "site_disable_plus_address_check_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_plus_address_check, false %>
+    <%= form.label :disable_plus_address_check, "No", for: "site_disable_plus_address_check_false" %>
+  </div>
+<% end %>
+
 <%= form_row for: [form.object, :disable_constituency_api], class: "inline" do %>
   <%= form.label :disable_constituency_api, "Disable fetching of constituency by postcode?", class: "form-label" %>
-  <%= error_messages_for_field @site, :enabled %>
+  <%= error_messages_for_field @site, :disable_constituency_api %>
   <div class="multiple-choice">
     <%= form.radio_button :disable_constituency_api, true %>
     <%= form.label :disable_constituency_api, "Yes", for: "site_disable_constituency_api_true" %>

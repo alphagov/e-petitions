@@ -101,7 +101,7 @@ class Signature < ActiveRecord::Base
     end
 
     def for_email(email)
-      where(email: email.downcase)
+      where("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)) = ?)", normalize_email(email))
     end
 
     def for_invalidating
@@ -359,6 +359,18 @@ class Signature < ActiveRecord::Base
 
     def max_validated_at
       arel_table[:validated_at].maximum.to_sql
+    end
+
+    def normalize_email(email)
+      "#{normalize_user(email)}@#{normalize_domain(email)}"
+    end
+
+    def normalize_user(email)
+      email.split("@").first.split("+").first.tr(".", "").downcase
+    end
+
+    def normalize_domain(email)
+      email.split("@").last.downcase
     end
   end
 

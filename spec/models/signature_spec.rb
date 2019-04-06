@@ -401,30 +401,33 @@ RSpec.describe Signature, type: :model do
     end
 
     describe "for_email" do
-      let!(:other_petition) { FactoryBot.create(:petition) }
-      let!(:other_signature) do
-        FactoryBot.create(
-          :signature,
-          :email => "person3@example.com",
-          :petition => other_petition,
-          :state => Signature::PENDING_STATE
-        )
+      before do
+        allow(Site).to receive(:disable_plus_address_check?).and_return(true)
       end
+
+      let!(:other_petition) { FactoryBot.create(:petition) }
+      let!(:other_signature) { FactoryBot.create(:pending_signature, email: "person3@example.com", petition: other_petition) }
+      let!(:dotted_signature) { FactoryBot.create(:signature, email: "b.o.b@example.com", petition: other_petition) }
+      let!(:plus_signature) { FactoryBot.create(:signature, email: "alice+3@example.com", petition: other_petition) }
 
       it "returns an empty set if the email is not found" do
         expect(Signature.for_email("notfound@example.com")).to eq([])
       end
 
       it "returns only signatures for the given email address" do
-        expect(Signature.for_email("person3@example.com")).to match_array(
-          [signature3, other_signature]
-        )
+        expect(Signature.for_email("person3@example.com")).to match_array([signature3, other_signature])
       end
 
       it "searches case-insensitively" do
-        expect(Signature.for_email("Person3@example.com")).to match_array(
-          [signature3, other_signature]
-        )
+        expect(Signature.for_email("Person3@example.com")).to match_array([signature3, other_signature])
+      end
+
+      it "normalizes dots in the local part" do
+        expect(Signature.for_email("bob@example.com")).to match_array([dotted_signature])
+      end
+
+      it "normalizes pluses in the local part" do
+        expect(Signature.for_email("alice@example.com")).to match_array([plus_signature])
       end
     end
 
