@@ -67,7 +67,7 @@ class Admin::Archived::SignaturesController < Admin::AdminController
   private
 
   def fetch_signatures
-    @signatures = ::Archived::Signature.search(params[:q], state: params[:state], page: params[:page])
+    @signatures = ::Archived::Signature.search(params[:q], window: params[:window], state: params[:state], page: params[:page])
   end
 
   def fetch_signature

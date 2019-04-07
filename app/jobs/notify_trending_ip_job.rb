@@ -49,6 +49,6 @@ class NotifyTrendingIpJob < ApplicationJob
   end
 
   def ip_address_link(ip)
-    "<#{admin_petition_signatures_url(ip.petition, q: ip.ip_address)}|#{ip.ip_address}>"
+    "<#{admin_petition_signatures_url(ip.petition, q: ip.ip_address, window: ip.window)}|#{ip.ip_address}>"
   end
 end

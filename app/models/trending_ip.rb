@@ -45,6 +45,10 @@ class TrendingIp < ActiveRecord::Base
     starts_at.advance(hours: 1)
   end
 
+  def window
+    starts_at.getutc.iso8601(0)
+  end
+
   private
 
   def geoip_db

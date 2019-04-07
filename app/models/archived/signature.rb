@@ -4,6 +4,8 @@ require_dependency 'archived'
 
 module Archived
   class Signature < ActiveRecord::Base
+    ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
+
     PENDING_STATE = 'pending'
     FRAUDULENT_STATE = 'fraudulent'
     VALIDATED_STATE = 'validated'
@@ -108,13 +110,20 @@ module Archived
       end
 
       def search(query, options = {})
-        query = query.to_s
-        state = options[:state]
-        page = [options[:page].to_i, 1].max
-        scope = preload(:petition).by_most_recent
+        query  = query.to_s
+        state  = options[:state]
+        window = options[:window]
+        page   = [options[:page].to_i, 1].max
+        scope  = preload(:petition).by_most_recent
 
         if state.in?(STATES)
           scope = scope.where(state: state)
+        end
+
+        if window && window =~ ISO8601_TIMESTAMP
+          starts_at = window.in_time_zone.at_beginning_of_hour
+          ends_at = starts_at.advance(hours: 1)
+          scope = scope.where(created_at: starts_at..ends_at)
         end
 
         if ip_search?(query)
