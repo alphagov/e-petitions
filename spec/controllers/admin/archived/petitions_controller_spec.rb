@@ -85,6 +85,22 @@ RSpec.describe Admin::Archived::PetitionsController, type: :controller, admin: t
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/archived/petitions/100000")
         end
       end
+
+      context "when there are no archived parliaments" do
+        before do
+          allow(Parliament).to receive_message_chain(:archived, :first).and_return(nil)
+
+          get :index
+        end
+
+        it "redirects to the admin hub" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("There are no archived petitions")
+        end
+      end
     end
 
     describe "GET /admin/archived/petitions/:id" do
