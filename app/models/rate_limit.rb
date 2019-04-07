@@ -92,11 +92,11 @@ class RateLimit < ActiveRecord::Base
 
   def exceeded?(signature)
     return true if emails_exceeded?(signature)
-    return false if domain_allowed?(signature.domain)
-    return false if ip_allowed?(signature.ip_address)
-    return true if domain_blocked?(signature.domain)
     return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
+    return true if domain_blocked?(signature.domain)
+    return false if ip_allowed?(signature.ip_address)
+    return false if domain_allowed?(signature.domain)
 
     if use_country_rate?(signature.ip_address)
       country_rate_exceeded?(signature)
