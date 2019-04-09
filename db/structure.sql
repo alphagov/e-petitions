@@ -2446,13 +2446,6 @@ CREATE INDEX index_signatures_on_validated_at ON public.signatures USING btree (
 
 
 --
--- Name: index_signatures_on_validated_at_hour; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_signatures_on_validated_at_hour ON public.signatures USING btree (date_trunc('hour'::text, validated_at));
-
-
---
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
