@@ -10,6 +10,7 @@
 # Ignore logfiles and tempfiles.
 /log/*
 /tmp/*
+/coverage/*
 
 # Ignore precompiled assets
 /public/assets
