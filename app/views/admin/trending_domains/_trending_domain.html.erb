@@ -3,5 +3,5 @@
   <td class="signature-timestamp"><%= date_time_format(trending_domain.starts_at) %></td>
   <td class="signature-timestamp"><%= date_time_format(trending_domain.ends_at) %></td>
   <td class="petition-signature-count"><%= number_with_delimiter(trending_domain.count) %></td>
-  <td class="signature-actions"><%= link_to "Find Signatures", admin_petition_signatures_path(@petition, q: "@#{trending_domain.domain}") %></td>
+  <td class="signature-actions"><%= link_to "Find Signatures", admin_petition_signatures_path(@petition, q: "@#{trending_domain.domain}", window: trending_domain.window) %></td>
 </tr>

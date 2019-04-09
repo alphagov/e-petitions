@@ -1,6 +1,7 @@
 class Admin::Archived::PetitionsController < Admin::AdminController
   before_action :redirect_to_show_page, only: [:index], if: :petition_id?
   before_action :fetch_parliament, only: [:index]
+  before_action :redirect_to_admin_hub, only: [:index], unless: :parliament_present?
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
 
@@ -27,8 +28,16 @@ class Admin::Archived::PetitionsController < Admin::AdminController
     /^\d+$/ =~ params[:q].to_s
   end
 
+  def parliament_present?
+    @parliament.present?
+  end
+
   def redirect_to_show_page
     redirect_to admin_archived_petition_url(params[:q].to_i)
+  end
+
+  def redirect_to_admin_hub
+    redirect_to admin_root_url, notice: "There are no archived petitions"
   end
 
   def scope

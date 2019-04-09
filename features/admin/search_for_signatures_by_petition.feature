@@ -10,7 +10,7 @@ Feature: Searching for signatures as Terry
     When I search for a petition by id
     Then I am on the admin petition page for "Fun times!"
     When I follow "Signatures 2"
-    Then I should see "Fun times! – Signatures"
+    Then I should see "Signatures"
     When I search for signatures from "Bob Jones"
     Then I should see 1 signature associated with that name
 
@@ -20,6 +20,6 @@ Feature: Searching for signatures as Terry
     When I search for a petition by id
     Then I am on the admin petition page for "Fun times!"
     When I follow "Signatures 2"
-    Then I should see "Fun times! – Signatures"
+    Then I should see "Signatures"
     When I search for signatures from "bob@example.com"
     Then I should see 1 signature associated with that email address

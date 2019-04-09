@@ -120,7 +120,7 @@ class Admin::SignaturesController < Admin::AdminController
   end
 
   def fetch_signatures
-    @signatures = scope.search(params[:q], state: params[:state], page: params[:page])
+    @signatures = scope.search(params[:q], window: params[:window], state: params[:state], page: params[:page])
   end
 
   def fetch_signature

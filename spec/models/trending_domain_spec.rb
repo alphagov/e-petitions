@@ -40,4 +40,13 @@ RSpec.describe TrendingDomain, type: :model do
       expect(trending_domain.ends_at).to eq(Time.utc(2019, 3, 31, 17, 0, 0))
     end
   end
+
+  describe "#window" do
+    let(:starts_at) { Time.utc(2019, 3, 31, 16, 0, 0) }
+    let(:trending_domain) { FactoryBot.build(:trending_domain, starts_at: starts_at) }
+
+    it "returns a ISO8601 UTC timestamp" do
+      expect(trending_domain.window).to eq("2019-03-31T16:00:00Z")
+    end
+  end
 end

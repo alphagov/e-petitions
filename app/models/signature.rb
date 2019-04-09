@@ -4,10 +4,13 @@ require 'ipaddr'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator
+  include GeoipLookup
 
   has_perishable_token
   has_perishable_token called: 'signed_token'
   has_perishable_token called: 'unsubscribe_token'
+
+  ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 
   PENDING_STATE = 'pending'
   FRAUDULENT_STATE = 'fraudulent'
@@ -172,13 +175,20 @@ class Signature < ActiveRecord::Base
     end
 
     def search(query, options = {})
-      query = query.to_s
-      state = options[:state]
-      page = [options[:page].to_i, 1].max
-      scope = preload(:petition).by_most_recent
+      query  = query.to_s
+      state  = options[:state]
+      window = options[:window]
+      page   = [options[:page].to_i, 1].max
+      scope  = preload(:petition).by_most_recent
 
       if state.in?(STATES)
         scope = scope.where(state: state)
+      end
+
+      if window && window =~ ISO8601_TIMESTAMP
+        starts_at = window.in_time_zone.at_beginning_of_hour
+        ends_at = starts_at.advance(hours: 1)
+        scope = scope.where(created_at: starts_at..ends_at)
       end
 
       if ip_search?(query)
@@ -206,6 +216,26 @@ class Signature < ActiveRecord::Base
 
     def subscribed
       where(notify_by_email: true)
+    end
+
+    def fraudulent_domains(since: 1.hour.ago, limit: 20)
+      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      where(arel_table[:created_at].gt(since)).
+      where(state: FRAUDULENT_STATE).
+      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
+    end
+
+    def fraudulent_ips(since: 1.hour.ago, limit: 20)
+      select(:ip_address).
+      where(arel_table[:created_at].gt(since)).
+      where(state: FRAUDULENT_STATE).
+      group(:ip_address).
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
     end
 
     def trending_domains(since: 1.hour.ago, limit: 20)
@@ -346,7 +376,7 @@ class Signature < ActiveRecord::Base
     end
 
     def petition_search?(query)
-      query =~ /\d+/
+      query =~ /\A\d+\z/
     end
 
     def validated_at
@@ -564,6 +594,12 @@ class Signature < ActiveRecord::Base
     update_column(column_name_for(timestamp), to)
   end
 
+  def account
+    Mail::Address.new(email).local
+  rescue Mail::Field::ParseError
+    nil
+  end
+
   def domain
     Mail::Address.new(email).domain
   rescue Mail::Field::ParseError
@@ -595,7 +631,23 @@ class Signature < ActiveRecord::Base
     self.class.unscoped.where(id: id).update_all(updates)
   end
 
+  def location
+    if postcode?
+      "#{formatted_postcode}, #{location_code}"
+    else
+      location_code
+    end
+  end
+
   private
+
+  def formatted_postcode
+    if united_kingdom?
+      postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
+    else
+      postcode
+    end
+  end
 
   def inline_updates?
     ENV["INLINE_UPDATES"] == "true"
