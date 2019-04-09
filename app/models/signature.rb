@@ -218,6 +218,26 @@ class Signature < ActiveRecord::Base
       where(notify_by_email: true)
     end
 
+    def fraudulent_domains(since: 1.hour.ago, limit: 20)
+      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      where(arel_table[:created_at].gt(since)).
+      where(state: FRAUDULENT_STATE).
+      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
+    end
+
+    def fraudulent_ips(since: 1.hour.ago, limit: 20)
+      select(:ip_address).
+      where(arel_table[:created_at].gt(since)).
+      where(state: FRAUDULENT_STATE).
+      group(:ip_address).
+      order("COUNT(*) DESC").
+      limit(limit).
+      count(:all)
+    end
+
     def trending_domains(since: 1.hour.ago, limit: 20)
       select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
       where(arel_table[:validated_at].gt(since)).

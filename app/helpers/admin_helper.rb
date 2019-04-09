@@ -64,6 +64,22 @@ module AdminHelper
     form.submit(t(:email_button, i18n_options), html_options)
   end
 
+  def fraudulent_domains?(since: 1.hour.ago, limit: 10)
+    !fraudulent_domains(since: since, limit: limit).empty?
+  end
+
+  def fraudulent_domains(since: 1.hour.ago, limit: 10)
+    @fraudulent_domains ||= build_fraudulent_domains(since, limit)
+  end
+
+  def fraudulent_ips?(since: 1.hour.ago, limit: 10)
+    !fraudulent_ips(since: since, limit: limit).empty?
+  end
+
+  def fraudulent_ips(since: 1.hour.ago, limit: 10)
+    @fraudulent_ips ||= build_fraudulent_ips(since, limit)
+  end
+
   def trending_domains(since: 1.hour.ago, limit: 10)
     @trending_domains ||= build_trending_domains(since, limit)
   end
@@ -121,6 +137,14 @@ module AdminHelper
 
   def rate_limit
     @rate_limit ||= RateLimit.first_or_create!
+  end
+
+  def build_fraudulent_domains(since, limit)
+    Signature.fraudulent_domains(since: since, limit: limit)
+  end
+
+  def build_fraudulent_ips(since, limit)
+    Signature.fraudulent_ips(since: since, limit: limit)
   end
 
   def build_trending_domains(since, limit)
