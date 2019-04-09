@@ -1,4 +1,6 @@
 module AdminHelper
+  ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
+
   def selected_tags
     @selected_tags ||= Array(params[:tags]).flatten.map(&:to_i).compact.reject(&:zero?)
   end
@@ -76,6 +78,19 @@ module AdminHelper
 
   def trending_ips?(since: 1.hour.ago, limit: 10)
     !trending_ips(since: since, limit: limit).empty?
+  end
+
+  def trending_window?
+    params[:window].present? && params[:window] =~ ISO8601_TIMESTAMP
+  end
+
+  def trending_window
+    if trending_window?
+      starts_at = params[:window].in_time_zone
+      ends_at = starts_at.advance(hours: 1)
+
+      starts_at..ends_at
+    end
   end
 
   def signature_count_interval_menu

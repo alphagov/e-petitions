@@ -1,32 +1,50 @@
 <tr>
   <td class="petition-id">
-    <label>
-      <%= check_box_tag 'id', signature.id, false, disabled: signature.creator? %> <%= signature.petition.id %>
-    </label>
+    <label><%= check_box_tag 'id', signature.id, false, disabled: signature.creator? %></label>
   </td>
-  <td class="petition-action"><%= link_to signature.petition.action, admin_petition_path(signature.petition) %></td>
-  <td class="petition-signature-count"><%= number_with_delimiter(signature.petition.signature_count) %></td>
-  <td class="signature-name"><%= mail_to signature.email, signature.name %></td>
-  <td class="signature-status"><%= signature.state %></td>
-  <td class="signature-timestamp">
-    <% if signature.validated? %>
-      <span title="Validated"><%= date_time_format(signature.validated_at) %></span>
-    <% else %>
-      <span title="Created"><%= date_time_format(signature.updated_at) %></spam>
-    <% end %>
+  <td class="petition-details">
+    <p>
+      <%= link_to signature.petition.action, admin_petition_path(signature.petition) %> –
+      <%= number_with_delimiter(signature.petition.signature_count) %>
+    </p>
+    <dl>
+      <dt>ID</dt>
+      <dd><%= signature.petition.id %></dd>
+      <dt>URL</dt>
+      <dd><%= link_to petition_path(signature.petition), petition_url(signature.petition), target: "_blank" %></dd>
+    </dl>
   </td>
-  <% if signature.creator? %>
-    <td class="signature-creator">Yes</td>
-    <td class="signature-actions">
+  <td class="signature-details">
+    <p>
+      <%= link_to(signature.name, [:admin, @petition, :signatures, q: signature.name].compact) %>
+      &lt;<%= link_to(signature.account, [:admin, @petition, :signatures, q: signature.email].compact) %><%= link_to("@#{signature.domain}", [:admin, @petition, :signatures, q: "@#{signature.domain}"].compact) %>&gt; –
+      <span><%= signature.location %></span>
+    </p>
+
+    <dl>
+      <% if signature.ip_address? %>
+        <dt>IP</dt>
+        <dd><%= link_to(signature.ip_location, [:admin, @petition, :signatures, q: signature.ip_address].compact) %></dd>
+      <% end %>
+      <dt>Created</dt>
+      <dd><%= date_time_format(signature.created_at) %></dd>
+      <% if signature.validated? %>
+        <dt>Validated</dt>
+        <dd><%= date_time_format(signature.validated_at) %></dd>
+      <% end %>
+    </dl>
+  </td>
+  <td class="signature-status">
+    <%= content_tag(:span, signature.state, class: "status status-#{signature.state}") %>
+  </td>
+  <td class="signature-actions">
+    <% if signature.creator? %>
       <% if signature.pending? %>
         <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
       <% else %>
         &nbsp;
       <% end %>
-    </td>
-  <% else %>
-    <td class="signature-creator">No</td>
-    <td class="signature-actions">
+    <% else %>
       <% if signature.validated? %>
         <% if signature.subscribed? %>
           <%= button_to 'Unsubscribe', [:unsubscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
@@ -41,6 +59,6 @@
         <%= button_to 'Validate', [:validate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
       <% end %>
       <%= button_to 'Delete', [:admin, @petition, signature, q: params[:q]].compact, method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
-    </td>
-  <% end %>
+    <% end %>
+  </td>
 </tr>

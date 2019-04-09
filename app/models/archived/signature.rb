@@ -4,6 +4,8 @@ require_dependency 'archived'
 
 module Archived
   class Signature < ActiveRecord::Base
+    include GeoipLookup
+
     ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 
     PENDING_STATE = 'pending'
@@ -184,7 +186,7 @@ module Archived
       end
 
       def petition_search?(query)
-        query =~ /\d+/
+        query =~ /\A\d+\z/
       end
 
       def normalize_email(email)
@@ -250,7 +252,39 @@ module Archived
       errors[:base].include?("Invalid Unsubscribe Token")
     end
 
+    def united_kingdom?
+      location_code == 'GB'
+    end
+
+    def location
+      if postcode?
+        "#{formatted_postcode}, #{location_code}"
+      else
+        location_code
+      end
+    end
+
+    def account
+      Mail::Address.new(email).local
+    rescue Mail::Field::ParseError
+      nil
+    end
+
+    def domain
+      Mail::Address.new(email).domain
+    rescue Mail::Field::ParseError
+      nil
+    end
+
     private
+
+    def formatted_postcode
+      if united_kingdom?
+        postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
+      else
+        postcode
+      end
+    end
 
     def column_name_for(timestamp)
       self.class.column_name_for(timestamp)

@@ -4,6 +4,7 @@ require 'ipaddr'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator
+  include GeoipLookup
 
   has_perishable_token
   has_perishable_token called: 'signed_token'
@@ -355,7 +356,7 @@ class Signature < ActiveRecord::Base
     end
 
     def petition_search?(query)
-      query =~ /\d+/
+      query =~ /\A\d+\z/
     end
 
     def validated_at
@@ -573,6 +574,12 @@ class Signature < ActiveRecord::Base
     update_column(column_name_for(timestamp), to)
   end
 
+  def account
+    Mail::Address.new(email).local
+  rescue Mail::Field::ParseError
+    nil
+  end
+
   def domain
     Mail::Address.new(email).domain
   rescue Mail::Field::ParseError
@@ -604,7 +611,23 @@ class Signature < ActiveRecord::Base
     self.class.unscoped.where(id: id).update_all(updates)
   end
 
+  def location
+    if postcode?
+      "#{formatted_postcode}, #{location_code}"
+    else
+      location_code
+    end
+  end
+
   private
+
+  def formatted_postcode
+    if united_kingdom?
+      postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
+    else
+      postcode
+    end
+  end
 
   def inline_updates?
     ENV["INLINE_UPDATES"] == "true"

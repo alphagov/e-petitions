@@ -67,25 +67,60 @@
       white-space: nowrap;
     }
 
-    .petition-action {
-      a {
-        display: block;
-      }
-    }
-
-    .petition-signature-count {
-      text-align: right;
-    }
-
-    .signature-status,
-    .signature-creator,
-    .signature-timestamp {
+    .signature-status {
       text-align: center;
     }
 
-    .signature-name,
-    .signature-timestamp {
+    p {
+      font-size: 16px;
+      margin: 0 0 3px 0;
+    }
+
+    dl {
+      margin-top: 3px;
+      display: flex;
+      flex-direction: row;
+      align-items: baseline;
+    }
+
+    dt {
+      margin-right: 6px;
+      font-size: 12px;
+      font-weight: bold;
+      color: $grey-1;
+      text-transform: uppercase;
+    }
+
+    dd {
+      font-size: 14px;
+      margin-right: 12px;
       white-space: nowrap;
+    }
+
+    span {
+      white-space: nowrap;
+    }
+
+    .status {
+      background-color: $grey-2;
+      color: $white;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 14px;
+      padding: 3px 6px;
+      border-radius: 3px;
+    }
+
+    .status-validated {
+      background-color: $success;
+    }
+
+    .status-fraudulent {
+      background-color: $caution;
+    }
+
+    .status-invalidated {
+      background-color: $danger;
     }
   }
 
