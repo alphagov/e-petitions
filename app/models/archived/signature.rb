@@ -86,6 +86,10 @@ module Archived
         where(petition_id: id)
       end
 
+      def for_postcode(postcode)
+        where(postcode: PostcodeSanitizer.call(postcode))
+      end
+
       def for_timestamp(timestamp, since:)
         column = arel_table[column_name_for(timestamp)]
         where(column.eq(nil).or(column.lt(since)))
@@ -140,6 +144,8 @@ module Archived
           scope = scope.for_email(query)
         elsif petition_search?(query)
           scope = scope.for_petition(query)
+        elsif postcode_search?(query)
+          scope = scope.for_postcode(query)
         else
           scope = scope.for_name(query)
         end
@@ -191,6 +197,10 @@ module Archived
 
       def petition_search?(query)
         query =~ /\A\d+\z/
+      end
+
+      def postcode_search?(query)
+        PostcodeSanitizer.call(query) =~ PostcodeValidator::PATTERN
       end
 
       def normalize_email(email)
@@ -259,6 +269,7 @@ module Archived
     def united_kingdom?
       location_code == 'GB'
     end
+    alias_method :uk?, :united_kingdom?
 
     def location
       if postcode?

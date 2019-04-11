@@ -20,7 +20,13 @@
     <p>
       <%= link_to(signature.name, admin_archived_signatures_path(q: signature.name)) %>
       &lt;<%= link_to(signature.account, admin_archived_signatures_path(q: signature.email)) %><%= link_to("@#{signature.domain}", admin_archived_signatures_path(q: "@#{signature.domain}")) %>&gt; –
-      <span><%= signature.location %></span>
+      <span>
+        <% if signature.uk? && signature.postcode? %>
+          <%= link_to(signature.location, admin_archived_signatures_path(q: signature.postcode)) %>
+        <% else %>
+          <%= signature.location %>
+        <% end %>
+      </span>
     </p>
 
     <dl>

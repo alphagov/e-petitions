@@ -18,7 +18,13 @@
     <p>
       <%= link_to(signature.name, [:admin, @petition, :signatures, q: signature.name].compact) %>
       &lt;<%= link_to(signature.account, [:admin, @petition, :signatures, q: signature.email].compact) %><%= link_to("@#{signature.domain}", [:admin, @petition, :signatures, q: "@#{signature.domain}"].compact) %>&gt; –
-      <span><%= signature.location %></span>
+      <span>
+        <% if signature.uk? && signature.postcode? %>
+          <%= link_to(signature.location, [:admin, @petition, :signatures, q: signature.postcode].compact) %>
+        <% else %>
+          <%= signature.location %>
+        <% end %>
+      </span>
     </p>
 
     <dl>

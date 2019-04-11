@@ -123,6 +123,10 @@ class Signature < ActiveRecord::Base
       where(petition_id: id)
     end
 
+    def for_postcode(postcode)
+      where(postcode: PostcodeSanitizer.call(postcode))
+    end
+
     def for_timestamp(timestamp, since:)
       column = arel_table[column_name_for(timestamp)]
       where(column.eq(nil).or(column.lt(since)))
@@ -205,6 +209,8 @@ class Signature < ActiveRecord::Base
         scope = scope.for_email(query)
       elsif petition_search?(query)
         scope = scope.for_petition(query)
+      elsif postcode_search?(query)
+        scope = scope.for_postcode(query)
       else
         scope = scope.for_name(query)
       end
@@ -383,6 +389,10 @@ class Signature < ActiveRecord::Base
 
     def petition_search?(query)
       query =~ /\A\d+\z/
+    end
+
+    def postcode_search?(query)
+      PostcodeSanitizer.call(query) =~ PostcodeValidator::PATTERN
     end
 
     def validated_at
@@ -632,6 +642,7 @@ class Signature < ActiveRecord::Base
   def united_kingdom?
     location_code == 'GB'
   end
+  alias_method :uk?, :united_kingdom?
 
   def update_all(updates)
     self.class.unscoped.where(id: id).update_all(updates)

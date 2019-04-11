@@ -2040,6 +2040,20 @@ CREATE INDEX index_archived_signatures_on_petition_id_where_sponsor_is_true ON p
 
 
 --
+-- Name: index_archived_signatures_on_postcode_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_postcode_and_petition_id ON public.archived_signatures USING btree (postcode, petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_postcode_and_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_postcode_and_state_and_petition_id ON public.archived_signatures USING btree (postcode, state, petition_id);
+
+
+--
 -- Name: index_archived_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2415,6 +2429,20 @@ CREATE UNIQUE INDEX index_signatures_on_petition_id_where_creator_is_true ON pub
 --
 
 CREATE INDEX index_signatures_on_petition_id_where_sponsor_is_true ON public.signatures USING btree (petition_id) WHERE (sponsor = true);
+
+
+--
+-- Name: index_signatures_on_postcode_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_postcode_and_petition_id ON public.signatures USING btree (postcode, petition_id);
+
+
+--
+-- Name: index_signatures_on_postcode_and_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_postcode_and_state_and_petition_id ON public.signatures USING btree (postcode, state, petition_id);
 
 
 --
@@ -2977,4 +3005,8 @@ INSERT INTO schema_migrations (version) VALUES ('20190405110431');
 INSERT INTO schema_migrations (version) VALUES ('20190405175143');
 
 INSERT INTO schema_migrations (version) VALUES ('20190405201240');
+
+INSERT INTO schema_migrations (version) VALUES ('20190411173349');
+
+INSERT INTO schema_migrations (version) VALUES ('20190411174307');
 
