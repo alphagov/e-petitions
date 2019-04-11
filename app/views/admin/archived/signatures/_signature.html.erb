@@ -11,7 +11,7 @@
     </p>
     <dl>
       <dt>ID</dt>
-      <dd><%= signature.petition.id %></dd>
+      <dd><%= link_to signature.petition.id, admin_archived_signatures_path(q: signature.petition.id) %></dd>
       <dt>URL</dt>
       <dd><%= link_to archived_petition_path(signature.petition), archived_petition_url(signature.petition), target: "_blank" %></dd>
     </dl>
