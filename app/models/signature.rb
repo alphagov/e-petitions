@@ -185,10 +185,16 @@ class Signature < ActiveRecord::Base
         scope = scope.where(state: state)
       end
 
-      if window && window =~ ISO8601_TIMESTAMP
-        starts_at = window.in_time_zone.at_beginning_of_hour
-        ends_at = starts_at.advance(hours: 1)
-        scope = scope.where(created_at: starts_at..ends_at)
+      if window.present?
+        if window =~ ISO8601_TIMESTAMP
+          starts_at = window.in_time_zone.at_beginning_of_hour
+          ends_at = starts_at.advance(hours: 1)
+          scope = scope.where(created_at: starts_at..ends_at)
+        elsif window =~ /\A\d+\z/
+          starts_at = window.to_i.seconds.ago
+          ends_at = Time.current
+          scope = scope.where(created_at: starts_at..ends_at)
+        end
       end
 
       if ip_search?(query)

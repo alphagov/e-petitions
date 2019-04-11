@@ -44,11 +44,11 @@
       &nbsp;
     <% else %>
       <% if signature.subscribed? %>
-        <%= button_to 'Unsubscribe', unsubscribe_admin_archived_signature_path(signature, q: params[:q]), method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
+        <%= button_to 'Unsubscribe', unsubscribe_admin_archived_signature_path(signature, search_params), method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
       <% elsif signature.validated? %>
-        <%= button_to 'Subscribe', subscribe_admin_archived_signature_path(signature, q: params[:q]), method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
+        <%= button_to 'Subscribe', subscribe_admin_archived_signature_path(signature, search_params), method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
       <% end %>
-      <%= button_to 'Delete', admin_archived_signature_path(signature, q: params[:q]), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
+      <%= button_to 'Delete', admin_archived_signature_path(signature, search_params), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
     <% end %>
   </td>
 </tr>

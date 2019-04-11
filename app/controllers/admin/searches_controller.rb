@@ -29,7 +29,7 @@ class Admin::SearchesController < Admin::AdminController
         params.slice(:q)
       end
     elsif signature_search?
-      params.slice(:q)
+      params.slice(:q, :window)
     else
       {}
     end

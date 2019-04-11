@@ -174,4 +174,22 @@
       margin-top: 5px;
     }
   }
+
+  .search-period {
+    padding-top: 5px;
+
+    small {
+      font-size: 16px;
+
+      label {
+        display: inline-block;
+        margin-left: 6px;
+
+        input {
+          display: inline-block;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
 }
