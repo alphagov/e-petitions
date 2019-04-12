@@ -1,12 +1,5 @@
 <h1>Signatures</h1>
 
-<% if window = trending_window %>
-  <p>
-    Showing signatures from <%= date_time_format(window.begin) %> to <%= date_time_format(window.end) %>
-    (<%= link_to "clear", [:admin, @petition, :signatures, {q: params[:q].presence, state: params[:state].presence, page: params[:page].presence }].compact %>)
-  </p>
-<% end %>
-
 <%= form_tag [:admin, @petition, :signatures].compact, enforce_utf8: false, class: 'search-signatures', method: 'get' do %>
   <div class="grid-row">
     <div class="column-half">
@@ -20,6 +13,23 @@
         <%= label_tag :q, "Search signatures", class: "visuallyhidden" %>
         <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Search by name, email address or IP address" %>
         <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      </div>
+      <div class="search-period">
+        <p>
+          <small>
+            <% if window = trending_window %>
+              Showing signatures from
+              <strong><%= date_time_format(window.begin) %></strong> to <strong><%= date_time_format(window.end) %></strong>
+              (<%= link_to "clear", [:admin, @petition, :signatures, {q: params[:q].presence, state: params[:state].presence, page: params[:page].presence }].compact %>)
+            <% else %>
+              Search the past
+              <label><%= radio_button_tag :window, "1800", params[:window] == "1800", data: { autosubmit: true } %>30 minutes</label>
+              <label><%= radio_button_tag :window, "10800", params[:window] == "10800", data: { autosubmit: true } %>3 hours</label>
+              <label><%= radio_button_tag :window, "43200", params[:window] == "43200", data: { autosubmit: true } %>12 hours</label>
+              <label><%= radio_button_tag :window, "", params[:window].blank?, data: { autosubmit: true } %>all time</label>
+            <% end %>
+          </small>
+        </p>
       </div>
     </div>
   </div>
@@ -51,31 +61,31 @@
   <div class="inline-actions">
     <% signature_ids = bulk_verifier.generate(@signatures.map(&:id)) %>
 
-    <%= form_tag [:validate, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action validate-action' do %>
+    <%= form_tag [:validate, :admin, @petition, :signatures, search_params].compact, method: :post, class: 'action validate-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Validate', name: nil, class: 'button', disabled: true, data: { confirm: 'Validate selected signatures?' } %>
     <% end %>
 
-    <%= form_tag [:invalidate, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action invalidate-action' do %>
+    <%= form_tag [:invalidate, :admin, @petition, :signatures, search_params].compact, method: :post, class: 'action invalidate-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Invalidate', name: nil, class: 'button', disabled: true, data: { confirm: 'Invalidate selected signatures?' } %>
     <% end %>
 
-    <%= form_tag [:subscribe, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action subscribe-action' do %>
+    <%= form_tag [:subscribe, :admin, @petition, :signatures, search_params].compact, method: :post, class: 'action subscribe-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Subscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Subscribe selected signatures?' } %>
     <% end %>
 
-    <%= form_tag [:unsubscribe, :admin, @petition, :signatures, q: params[:q]].compact, method: :post, class: 'action unsubscribe-action' do %>
+    <%= form_tag [:unsubscribe, :admin, @petition, :signatures, search_params].compact, method: :post, class: 'action unsubscribe-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Unsubscribe', name: nil, class: 'button', disabled: true, data: { confirm: 'Unsubscribe selected signatures?' } %>
     <% end %>
 
-    <%= form_tag [:admin, @petition, :signatures, q: params[:q]].compact, method: :delete, class: 'action delete-action' do %>
+    <%= form_tag [:admin, @petition, :signatures, search_params].compact, method: :delete, class: 'action delete-action' do %>
       <%= hidden_field_tag 'selected_ids', '' %>
       <%= hidden_field_tag 'all_ids', signature_ids %>
       <%= submit_tag 'Delete', name: nil, class: 'button-warning', disabled: true, data: { confirm: 'Delete selected signatures?' } %>

@@ -39,7 +39,7 @@ en-GB:
         petition:
           attributes:
             moderation:
-              blank: "You must choose to approve or reject"
+              blank: "You must choose to approve, reject or flag"
             creator_signature:
               blank: "%{attribute} must be completed"
             state:

@@ -13,6 +13,18 @@
         <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
       </div>
 
+      <div class="search-period" style="display: none;">
+        <p>
+          <small>
+            Search the past
+            <label><%= radio_button_tag :window, "1800" %>30 minutes</label>
+            <label><%= radio_button_tag :window, "10800" %>3 hours</label>
+            <label><%= radio_button_tag :window, "43200" %>12 hours</label>
+            <label><%= radio_button_tag :window, "", true %>all time</label>
+          </small>
+        </p>
+      </div>
+
       <details class="tag-selector">
         <summary><span>Tags</span></summary>
         <div class="inline tag-list">
@@ -41,9 +53,13 @@
               if (this.value == 'signature') {
                 $('.search-petitions .tag-selector').hide();
                 $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', true);
+                $('.search-petitions .search-period').show();
+                $('.search-petitions .search-period input[type="radio"]').prop('disabled', false);
               } else {
                 $('.search-petitions .tag-selector').show();
                 $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', false);
+                $('.search-petitions .search-period').hide();
+                $('.search-petitions .search-period input[type="radio"]').prop('disabled', true);
               }
             }
           });

@@ -27,8 +27,13 @@
 
   .reject-flash-notice {
     background-color: $flash-blue;
+    clear: both;
     padding: $gutter-half;
-    margin: 5px 0;
+    margin: 5px 0 30px;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .search-petitions, .search-invalidations, .search-signatures {
@@ -172,6 +177,24 @@
 
     .tag-list {
       margin-top: 5px;
+    }
+  }
+
+  .search-period {
+    padding-top: 5px;
+
+    small {
+      font-size: 16px;
+
+      label {
+        display: inline-block;
+        margin-left: 6px;
+
+        input {
+          display: inline-block;
+          margin-right: 6px;
+        }
+      }
     }
   }
 }

@@ -9,7 +9,7 @@
     </p>
     <dl>
       <dt>ID</dt>
-      <dd><%= signature.petition.id %></dd>
+      <dd><%= link_to signature.petition.id, admin_signatures_path(q: signature.petition.id) %></dd>
       <dt>URL</dt>
       <dd><%= link_to petition_path(signature.petition), petition_url(signature.petition), target: "_blank" %></dd>
     </dl>
@@ -18,7 +18,13 @@
     <p>
       <%= link_to(signature.name, [:admin, @petition, :signatures, q: signature.name].compact) %>
       &lt;<%= link_to(signature.account, [:admin, @petition, :signatures, q: signature.email].compact) %><%= link_to("@#{signature.domain}", [:admin, @petition, :signatures, q: "@#{signature.domain}"].compact) %>&gt; –
-      <span><%= signature.location %></span>
+      <span>
+        <% if signature.uk? && signature.postcode? %>
+          <%= link_to(signature.location, [:admin, @petition, :signatures, q: signature.postcode].compact) %>
+        <% else %>
+          <%= signature.location %>
+        <% end %>
+      </span>
     </p>
 
     <dl>
@@ -40,25 +46,25 @@
   <td class="signature-actions">
     <% if signature.creator? %>
       <% if signature.pending? %>
-        <%= button_to 'Validate', validate_admin_signature_path(signature, q: params[:q]), method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
+        <%= button_to 'Validate', validate_admin_signature_path(signature, search_params), method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
       <% else %>
         &nbsp;
       <% end %>
     <% else %>
       <% if signature.validated? %>
         <% if signature.subscribed? %>
-          <%= button_to 'Unsubscribe', [:unsubscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
+          <%= button_to 'Unsubscribe', [:unsubscribe, :admin, @petition, signature, search_params].compact, method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
         <% else %>
-          <%= button_to 'Subscribe', [:subscribe, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
+          <%= button_to 'Subscribe', [:subscribe, :admin, @petition, signature, search_params].compact, method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
         <% end %>
       <% end %>
       <% unless signature.fraudulent? || signature.invalidated? %>
-        <%= button_to 'Invalidate', [:invalidate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button invalidate-action', data: { confirm: 'Invalidate signature?' } %>
+        <%= button_to 'Invalidate', [:invalidate, :admin, @petition, signature, search_params].compact, method: :post, class: 'button invalidate-action', data: { confirm: 'Invalidate signature?' } %>
       <% end %>
       <% unless signature.validated? %>
-        <%= button_to 'Validate', [:validate, :admin, @petition, signature, q: params[:q]].compact, method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
+        <%= button_to 'Validate', [:validate, :admin, @petition, signature, search_params].compact, method: :post, class: 'button validate-action', data: { confirm: 'Validate signature?' } %>
       <% end %>
-      <%= button_to 'Delete', [:admin, @petition, signature, q: params[:q]].compact, method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
+      <%= button_to 'Delete', [:admin, @petition, signature, search_params].compact, method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
     <% end %>
   </td>
 </tr>

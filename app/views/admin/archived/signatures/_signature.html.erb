@@ -11,7 +11,7 @@
     </p>
     <dl>
       <dt>ID</dt>
-      <dd><%= signature.petition.id %></dd>
+      <dd><%= link_to signature.petition.id, admin_archived_signatures_path(q: signature.petition.id) %></dd>
       <dt>URL</dt>
       <dd><%= link_to archived_petition_path(signature.petition), archived_petition_url(signature.petition), target: "_blank" %></dd>
     </dl>
@@ -20,7 +20,13 @@
     <p>
       <%= link_to(signature.name, admin_archived_signatures_path(q: signature.name)) %>
       &lt;<%= link_to(signature.account, admin_archived_signatures_path(q: signature.email)) %><%= link_to("@#{signature.domain}", admin_archived_signatures_path(q: "@#{signature.domain}")) %>&gt; –
-      <span><%= signature.location %></span>
+      <span>
+        <% if signature.uk? && signature.postcode? %>
+          <%= link_to(signature.location, admin_archived_signatures_path(q: signature.postcode)) %>
+        <% else %>
+          <%= signature.location %>
+        <% end %>
+      </span>
     </p>
 
     <dl>
@@ -44,11 +50,11 @@
       &nbsp;
     <% else %>
       <% if signature.subscribed? %>
-        <%= button_to 'Unsubscribe', unsubscribe_admin_archived_signature_path(signature, q: params[:q]), method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
+        <%= button_to 'Unsubscribe', unsubscribe_admin_archived_signature_path(signature, search_params), method: :post, class: 'button unsubscribe-action', data: { confirm: 'Unsubscribe signature?' } %>
       <% elsif signature.validated? %>
-        <%= button_to 'Subscribe', subscribe_admin_archived_signature_path(signature, q: params[:q]), method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
+        <%= button_to 'Subscribe', subscribe_admin_archived_signature_path(signature, search_params), method: :post, class: 'button subscribe-action', data: { confirm: 'Subscribe signature?' } %>
       <% end %>
-      <%= button_to 'Delete', admin_archived_signature_path(signature, q: params[:q]), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
+      <%= button_to 'Delete', admin_archived_signature_path(signature, search_params), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete signature?' } %>
     <% end %>
   </td>
 </tr>

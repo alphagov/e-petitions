@@ -55,6 +55,13 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         end
       end
 
+      context "when searching for signatures in a time period" do
+        it "redirects to the signatures search url" do
+          get :show, type: "signature", q: "foo", window: "300"
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=foo&window=300")
+        end
+      end
+
       context "when searching for an unknown type" do
         it "redirects to the admin dashboard url" do
           get :show, q: "foo"

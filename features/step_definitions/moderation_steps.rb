@@ -39,7 +39,7 @@ end
 
 When(/^I flag the petition$/) do
   choose "Flag"
-  click_button "Save without emailing petition creator"
+  click_button "Save without emailing"
 end
 
 Then /^the petition is still available for searching or viewing$/ do

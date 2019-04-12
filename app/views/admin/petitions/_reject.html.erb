@@ -18,15 +18,21 @@
   <% end -%>
 
   <%= f.fields_for :rejection, f.object.rejection do |r| %>
-    <%= r.label :code, 'Rejection reason' %><br />
-    <%= r.select :code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
-    <%= error_messages_for_field r.object, :code %>
-    <div id="rejection_preview" class="reject-flash-notice" style="display:none">
-      <h3>We'll send this standard text to the petition creator:</h3>
+    <%= form_row for: [r.object, :code] do %>
+      <%= r.label :code, 'Rejection reason', class: 'form-label' %>
+      <%= error_messages_for_field r.object, :code %>
+      <%= r.select :code, rejection_reasons, { include_blank: "-- Select a rejection code --" }, class: 'form-control' %>
+    <% end %>
+
+    <div id="rejection_preview" class="reject-flash-notice" style="display: none;">
+      <strong>We'll send this standard text to the petition creator:</strong>
       <div class="content"></div>
     </div>
-    <p>Additional details (optional)</p>
-    <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
-    <%= error_messages_for_field r.object, :details %>
+
+    <%= form_row for: [r.object, :details] do %>
+      <%= r.label :details, 'Additional details (optional)', class: 'form-label' %>
+      <%= error_messages_for_field r.object, :details %>
+      <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
+    <% end %>
   <% end %>
 </div>

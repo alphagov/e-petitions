@@ -30,6 +30,13 @@ Given(/^(\d+) petitions? signed from "([^"]*)"$/) do |petition_count, ip_address
   end
 end
 
+Given(/^(\d+) petitions? signed in "([^"]*)"$/) do |petition_count, postcode|
+  petition_count.times do
+    petition = FactoryBot.create(:open_petition)
+    FactoryBot.create(:signature, postcode: PostcodeSanitizer.call(postcode), petition: petition)
+  end
+end
+
 Given(/^(\d+) petitions? with a (pending|validated) signature by "([^"]*)"$/) do |petition_count, state, email|
   petition_count.times do
     FactoryBot.create(:"#{state}_signature", :petition => FactoryBot.create(:open_petition), :email => email)
@@ -66,6 +73,18 @@ When(/^I search for petitions signed from "([^"]*)"( from the admin hub)?$/) do 
   end
 
   fill_in "Search", with: ip_address
+  click_button 'Search'
+end
+
+When(/^I search for petitions signed in "([^"]*)"( from the admin hub)?$/) do |postcode, from_the_hub|
+  if from_the_hub.blank?
+    visit admin_signatures_url
+  else
+    visit admin_root_url
+    choose "signatures"
+  end
+
+  fill_in "Search", with: postcode
   click_button 'Search'
 end
 
@@ -113,7 +132,7 @@ When(/^I view the petition through the admin interface$/) do
   click_button 'Search'
 end
 
-Then(/^I should see (\d+) petitions? associated with the (?:name|email address|IP address)$/) do |petition_count|
+Then(/^I should see (\d+) petitions? associated with the (?:name|email address|IP address|postcode)$/) do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 
