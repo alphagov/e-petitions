@@ -1,6 +1,5 @@
 class Admin::ModerationController < Admin::AdminController
   before_action :fetch_petition
-  before_action :build_rejection, unless: :rejection_present?
 
   def update
     if @petition.moderate(moderation_params)
@@ -15,14 +14,6 @@ class Admin::ModerationController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.todo_list.find(params[:petition_id])
-  end
-
-  def build_rejection
-    @rejection = @petition.build_rejection
-  end
-
-  def rejection_present?
-    @petition.rejection.present?
   end
 
   def moderation_params

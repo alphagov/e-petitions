@@ -2,7 +2,6 @@ class Admin::PetitionsController < Admin::AdminController
   before_action :redirect_to_show_page, only: [:index], if: :petition_id?
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show]
-  before_action :build_rejection, only: [:show], if: :in_todo_list?
 
   rescue_from ActiveRecord::RecordNotFound do
     redirect_to admin_root_url, alert: "Sorry, we couldn't find petition #{params[:id]}"
@@ -51,14 +50,6 @@ class Admin::PetitionsController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:id])
-  end
-
-  def build_rejection
-    @rejection = @petition.build_rejection
-  end
-
-  def in_todo_list?
-    @petition.in_todo_list?
   end
 
   def render_csv

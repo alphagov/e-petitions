@@ -1,6 +1,5 @@
 class Admin::TakeDownController < Admin::AdminController
   before_action :fetch_petition
-  before_action :build_rejection, unless: :rejection_present?
 
   def show
     render 'admin/petitions/show'
@@ -19,14 +18,6 @@ class Admin::TakeDownController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:petition_id])
-  end
-
-  def build_rejection
-    @rejection = @petition.build_rejection
-  end
-
-  def rejection_present?
-    @petition.rejection.present?
   end
 
   def rejection_params

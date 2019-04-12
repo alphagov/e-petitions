@@ -615,6 +615,10 @@ class Petition < ActiveRecord::Base
     update(state: FLAGGED_STATE)
   end
 
+  def rejection(*args)
+    super || build_rejection
+  end
+
   def close!(time = deadline)
     if open?
       update!(state: CLOSED_STATE, closed_at: time)
