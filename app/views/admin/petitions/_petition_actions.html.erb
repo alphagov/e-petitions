@@ -47,7 +47,7 @@
           <%= render 'petition_action_take_down', petition: @petition %>
         </li>
 
-      <% elsif @petition.rejected? -%>
+      <% elsif @petition.rejected? || @petition.hidden? -%>
         <li class="petition-action">
           <%= render 'petition_action_change_rejection_status', petition: @petition %>
         </li>

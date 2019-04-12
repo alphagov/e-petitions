@@ -22,7 +22,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
       let(:patch_options) { {} }
 
       def do_patch(options = patch_options)
-        params = { petition_id: petition.id }.merge(petition: options)
+        params = { petition_id: petition.id, save_and_email: "Email petition creator" }.merge(petition: options)
         patch :update, params
       end
 
@@ -47,7 +47,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         before do
           perform_enqueued_jobs do
             sponsor.validate!
-            do_patch moderation: 'approve'
+            do_patch moderation: "approve"
             petition.reload
           end
         end

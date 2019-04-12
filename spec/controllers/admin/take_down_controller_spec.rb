@@ -114,7 +114,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
       let!(:pending_sponsor) { FactoryBot.create(:sponsor, :pending, petition: petition, email: "sandyfisher@hotmail.com") }
 
       def do_patch(overrides = {})
-        params = { petition_id: petition.id, petition: take_down_attributes }
+        params = { petition_id: petition.id, petition: take_down_attributes, save_and_email: "Email petition creator" }
         patch :update, params.merge(overrides)
       end
 

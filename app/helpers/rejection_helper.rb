@@ -1,6 +1,8 @@
 module RejectionHelper
   def rejection_reason(code)
-    t(:"#{code}", scope: :"rejections.titles")
+    unless code.blank?
+      t(:"#{code}", scope: :"rejections.titles")
+    end
   end
 
   def rejection_description(code)

@@ -27,8 +27,13 @@
 
   .reject-flash-notice {
     background-color: $flash-blue;
+    clear: both;
     padding: $gutter-half;
-    margin: 5px 0;
+    margin: 5px 0 30px;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .search-petitions, .search-invalidations, .search-signatures {
