@@ -10,8 +10,12 @@ module DateTimeHelper
     date_time && date_time.strftime("%H:%M%P on %-d %B %Y")
   end
 
-  def date_time_format(date_time)
-    date_time && date_time.strftime("%d-%m-%Y %H:%M")
+  def date_time_format(date_time, seconds: false)
+    if seconds
+      date_time && date_time.strftime("%d-%m-%Y %H:%M:%S")
+    else
+      date_time && date_time.strftime("%d-%m-%Y %H:%M")
+    end
   end
 
   def date_format(date_time)

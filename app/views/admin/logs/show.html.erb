@@ -26,10 +26,10 @@
       <% @logs.each do |log| %>
         <tr>
           <td style="white-space: nowrap;"><%= log.ip_address %></td>
-          <td style="white-space: nowrap;"><%= date_time_format(log.timestamp) %></td>
+          <td style="white-space: nowrap;"><%= date_time_format(log.timestamp, seconds: true) %></td>
           <td><%= log.method %></td>
-          <td><%= log.uri %></td>
-          <td><%= log.agent %></td>
+          <td><%= content_tag(:span, truncate(log.uri, length: 40), title: log.uri) %></td>
+          <td><%= content_tag(:span, truncate(log.agent, length: 40), title: log.agent) %></td>
         </tr>
       <% end %>
     </tbody>

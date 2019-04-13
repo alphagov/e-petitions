@@ -44,7 +44,7 @@ RSpec.describe SignatureLogs do
         start_time: 1554850516000,
         end_time: 1554851116000,
         filter_pattern: "192.168.1.1",
-        interleaved: false
+        interleaved: true
       }
     end
 
@@ -58,7 +58,7 @@ RSpec.describe SignatureLogs do
         start_time: 1554851116000,
         end_time: 1554851716000,
         filter_pattern: "192.168.1.2",
-        interleaved: false
+        interleaved: true
       }
     end
 

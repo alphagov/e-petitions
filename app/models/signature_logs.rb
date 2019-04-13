@@ -63,8 +63,7 @@ class SignatureLogs
   delegate :ip_address, to: :signature
   delegate :validated_at, to: :signature
   delegate :validated_ip, to: :signature
-
-  delegate :size, :empty?, to: :events
+  delegate :size, :empty?, to: :logs
 
   class << self
     def find(id)
@@ -77,7 +76,7 @@ class SignatureLogs
   end
 
   def each(&block)
-    events.each { |event| yield Log.new(event.message) }
+    logs.each { |log| yield log }
   end
 
   private
@@ -94,12 +93,24 @@ class SignatureLogs
     (time.to_f * 1000).to_i
   end
 
-  def events
-    @events ||= fetch_events
+  def logs
+    @logs ||= fetch_events.map { |e| Log.new(e.message) }.sort_by(&:timestamp)
   end
 
   def fetch_events
-    fetch_create_events + fetch_validate_events
+    if overlapping?
+      fetch_combined_events
+    else
+      fetch_create_events + fetch_validate_events
+    end
+  end
+
+  def overlapping?
+    return false unless validated_at
+    return false unless validated_ip
+    return false unless ip_address == validated_ip
+
+    (created_at + 5.minutes) >= (validated_at - 5.minutes)
   end
 
   def fetch_create_events
@@ -108,7 +119,7 @@ class SignatureLogs
       start_time: ms(created_at - 5.minutes),
       end_time: ms(created_at + 5.minutes),
       filter_pattern: ip_address,
-      interleaved: false
+      interleaved: true
     }
 
     client.filter_log_events(request).events
@@ -126,10 +137,26 @@ class SignatureLogs
       start_time: ms(validated_at - 5.minutes),
       end_time: ms(validated_at + 5.minutes),
       filter_pattern: validated_ip,
-      interleaved: false
+      interleaved: true
     }
 
     client.filter_log_events(request).events
+
+  rescue Aws::CloudWatchLogs::Errors::ServiceError => e
+    []
+  end
+
+  def fetch_combined_events
+    request = {
+      log_group_name: log_group_name,
+      start_time: ms(created_at - 5.minutes),
+      end_time: ms(validated_at + 5.minutes),
+      filter_pattern: ip_address,
+      interleaved: true
+    }
+
+    client.filter_log_events(request).events
+
   rescue Aws::CloudWatchLogs::Errors::ServiceError => e
     []
   end
