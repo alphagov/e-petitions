@@ -9,7 +9,7 @@ class SponsorsController < SignaturesController
 
   def verify
     unless @signature.validated?
-      @signature.validate!
+      @signature.validate!(request: request)
     end
 
     store_signed_token_in_session

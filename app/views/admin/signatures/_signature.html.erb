@@ -33,7 +33,7 @@
         <dd><%= link_to(signature.ip_location, [:admin, @petition, :signatures, q: signature.ip_address].compact) %></dd>
       <% end %>
       <dt>Created</dt>
-      <dd><%= date_time_format(signature.created_at) %></dd>
+      <dd><%= link_to(date_time_format(signature.created_at), admin_signature_logs_path(signature)) %></dd>
       <% if signature.validated? %>
         <dt>Validated</dt>
         <dd><%= date_time_format(signature.validated_at) %></dd>

@@ -653,6 +653,10 @@ RSpec.describe SponsorsController, type: :controller do
         expect(assigns[:signature].constituency_id).to eq("3415")
       end
 
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
+      end
+
       it "deletes old signed tokens" do
         expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
       end
@@ -709,6 +713,10 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "records the constituency id on the signature" do
         expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
       end
 
       it "deletes old signed tokens" do
@@ -841,6 +849,10 @@ RSpec.describe SponsorsController, type: :controller do
 
       it "records the constituency id on the signature" do
         expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
       end
 
       it "deletes old signed tokens" do

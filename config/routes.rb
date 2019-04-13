@@ -161,6 +161,8 @@ Rails.application.routes.draw do
           post   :subscribe, action: :bulk_subscribe
           post   :unsubscribe, action: :bulk_unsubscribe
         end
+
+        resource :logs, only: :show
       end
 
       resources :tags, except: %i[show]

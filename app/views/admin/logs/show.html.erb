@@ -1,0 +1,39 @@
+<h2>
+  Access logs for
+  <%= link_to admin_petition_signatures_path(@petition, q: @signature.email) do %>
+    <%= @signature.name %>
+    &lt;<%= @signature.email %>&gt;
+  <% end %><br />
+  on <%= link_to admin_petition_path(@petition) do %>
+    <%= @petition.action %>
+  <% end %>
+</h2>
+
+<% if @logs.empty? %>
+  <p>No access logs available</p>
+<% else %>
+  <table class="signature-logs">
+    <thead>
+      <tr>
+        <th>IP</th>
+        <th>Timestamp</th>
+        <th>Method</th>
+        <th>URI</th>
+        <th>User Agent</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @logs.each do |log| %>
+        <tr>
+          <td style="white-space: nowrap;"><%= log.ip_address %></td>
+          <td style="white-space: nowrap;"><%= date_time_format(log.timestamp) %></td>
+          <td><%= log.method %></td>
+          <td><%= log.uri %></td>
+          <td><%= log.agent %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <p><%= link_to "Download CSV", admin_signature_logs_path(@signature, :csv) %></p>
+<% end %>

@@ -1092,7 +1092,8 @@ CREATE TABLE public.signatures (
     email_count integer DEFAULT 0 NOT NULL,
     sponsor boolean DEFAULT false NOT NULL,
     creator boolean DEFAULT false NOT NULL,
-    signed_token character varying
+    signed_token character varying,
+    validated_ip character varying
 );
 
 
@@ -3009,4 +3010,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190405201240');
 INSERT INTO schema_migrations (version) VALUES ('20190411173349');
 
 INSERT INTO schema_migrations (version) VALUES ('20190411174307');
+
+INSERT INTO schema_migrations (version) VALUES ('20190412182125');
 
