@@ -1531,6 +1531,19 @@ RSpec.describe Signature, type: :model do
           end
         end
       end
+
+      describe "using the :request option" do
+        let(:signature) { FactoryBot.create(:pending_signature, attributes) }
+        let(:request) { double(:request, remote_ip: "12.34.56.78") }
+
+        it "records the ip address of the validation request" do
+          expect {
+            signature.validate!(request: request)
+          }.to change {
+            signature.reload.validated_ip
+          }.from(nil).to("12.34.56.78")
+        end
+      end
     end
   end
 

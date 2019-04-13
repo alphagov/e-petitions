@@ -338,12 +338,12 @@ class Signature < ActiveRecord::Base
       end
     end
 
-    def validate!(signature_ids, now = Time.current, force: false)
+    def validate!(signature_ids, now = Time.current, force: false, request: nil)
       signatures = find(signature_ids)
 
       transaction do
         signatures.each do |signature|
-          signature.validate!(now, force: force)
+          signature.validate!(now, force: force, request: request)
         end
       end
     end
@@ -489,7 +489,7 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  def validate!(now = Time.current, force: false)
+  def validate!(now = Time.current, force: false, request: nil)
     update_signature_counts = false
     new_constituency_id = nil
 
@@ -512,6 +512,10 @@ class Signature < ActiveRecord::Base
           invalidated_at:  nil,
           updated_at:   now
         }
+
+        if request
+          attributes[:validated_ip] = request.remote_ip
+        end
 
         if new_constituency_id
           attributes[:constituency_id] = new_constituency_id

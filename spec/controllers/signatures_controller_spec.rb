@@ -559,6 +559,10 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature].constituency_id).to eq("3415")
       end
 
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
+      end
+
       it "saves the signed token in the session" do
         expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
       end
@@ -596,6 +600,10 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "records the constituency id on the signature" do
         expect(assigns[:signature].constituency_id).to eq("3415")
+      end
+
+      it "records the ip address on the signature" do
+        expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
       end
 
       it "deletes old signed tokens" do
