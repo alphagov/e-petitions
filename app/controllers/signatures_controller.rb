@@ -41,6 +41,7 @@ class SignaturesController < ApplicationController
 
   def create
     @signature = build_signature(signature_params_for_create)
+    @signature.image_loaded_at = image_loaded_at
 
     if @signature.save!
       send_email_to_petition_signer
@@ -147,7 +148,7 @@ class SignaturesController < ApplicationController
   end
 
   def build_signature(attributes)
-    @petition.signatures.build(attributes) { |s| s.ip_address = request.remote_ip }
+    @petition.signatures.build(attributes)
   end
 
   def thank_you_url
@@ -199,6 +200,15 @@ class SignaturesController < ApplicationController
   end
 
   def signature_attributes
-    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email]
+    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email form_token form_requested_at_token]
+  end
+
+  def image_loaded_at
+    return nil unless signature_params[:form_token].is_a?(String)
+    return nil unless signature_params[:form_token] =~ /\A[0-9a-zA-Z]{10,20}\z/
+
+    cookies.encrypted[signature_params[:form_token]].tap do |value|
+      cookies.delete(signature_params[:form_token])
+    end
   end
 end

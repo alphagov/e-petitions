@@ -97,4 +97,8 @@ class ApplicationController < ActionController::Base
   def do_not_cache
     response.headers['Cache-Control'] = 'no-store, no-cache'
   end
+
+  def current_time
+    Time.current.getutc.iso8601
+  end
 end

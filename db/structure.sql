@@ -994,7 +994,8 @@ CREATE TABLE public.rate_limits (
     threshold_for_logging_trending_ip integer DEFAULT 100 NOT NULL,
     threshold_for_notifying_trending_ip integer DEFAULT 200 NOT NULL,
     trending_ip_notification_url character varying,
-    ignored_domains character varying(10000) DEFAULT ''::character varying NOT NULL
+    ignored_domains character varying(10000) DEFAULT ''::character varying NOT NULL,
+    threshold_for_form_entry integer DEFAULT 0 NOT NULL
 );
 
 
@@ -1093,7 +1094,10 @@ CREATE TABLE public.signatures (
     sponsor boolean DEFAULT false NOT NULL,
     creator boolean DEFAULT false NOT NULL,
     signed_token character varying,
-    validated_ip character varying
+    validated_ip character varying,
+    form_requested_at timestamp without time zone,
+    image_loaded_at timestamp without time zone,
+    form_token character varying
 );
 
 
@@ -2370,6 +2374,13 @@ CREATE UNIQUE INDEX index_signatures_on_email_and_petition_id_and_name ON public
 
 
 --
+-- Name: index_signatures_on_form_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_form_token ON public.signatures USING btree (form_token);
+
+
+--
 -- Name: index_signatures_on_inet; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3012,4 +3023,14 @@ INSERT INTO schema_migrations (version) VALUES ('20190411173349');
 INSERT INTO schema_migrations (version) VALUES ('20190411174307');
 
 INSERT INTO schema_migrations (version) VALUES ('20190412182125');
+
+INSERT INTO schema_migrations (version) VALUES ('20190413170435');
+
+INSERT INTO schema_migrations (version) VALUES ('20190413170618');
+
+INSERT INTO schema_migrations (version) VALUES ('20190413174332');
+
+INSERT INTO schema_migrations (version) VALUES ('20190414081712');
+
+INSERT INTO schema_migrations (version) VALUES ('20190414083111');
 
