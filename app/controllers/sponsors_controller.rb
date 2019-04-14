@@ -41,7 +41,7 @@ class SponsorsController < SignaturesController
   end
 
   def build_signature(attributes)
-    @petition.sponsors.build(attributes) { |s| s.ip_address = request.remote_ip }
+    @petition.sponsors.build(attributes)
   end
 
   def send_email_to_petition_signer

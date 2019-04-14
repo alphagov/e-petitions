@@ -12,6 +12,9 @@
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
+<%= form.hidden_field :form_token %>
+<%= form.hidden_field :form_requested_at_token %>
+
 <%= form.submit "Yes – this is my email address", class: "button", tabindex: increment %>
 
 <p>If your email address is wrong, just change it above</p>

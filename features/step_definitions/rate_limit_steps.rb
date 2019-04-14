@@ -2,6 +2,10 @@ Given(/^the burst rate limit is (\d+) per minute$/) do |rate|
   RateLimit.first_or_create!.update!(burst_rate: rate, burst_period: 60)
 end
 
+Given(/^the form entry threshold is (\d+) seconds?$/) do |threshold|
+  RateLimit.first_or_create!.update!(threshold_for_form_entry: threshold)
+end
+
 Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
@@ -23,4 +27,16 @@ Given(/^there is a signature already from this IP address$/) do
     Then I am told to check my inbox to complete signing
     And "existing@example.com" should receive 1 email
   )
+end
+
+When(/^I wait (\d+) seconds?$/) do |duration|
+  sleep duration.to_i
+end
+
+Then(/^the signature "([^"]*)" is marked as fraudulent$/) do |email|
+  expect(Signature.for_email(email).last).to be_fraudulent
+end
+
+Then(/^the signature "([^"]*)" is marked as validated$/) do |email|
+  expect(Signature.for_email(email).last).to be_validated
 end

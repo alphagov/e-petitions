@@ -25,3 +25,11 @@
   <%= error_messages_for_field @rate_limit, :sustained_rate %>
   <%= form.text_field :sustained_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
 <% end %>
+
+<h2>Threshold for a valid form entry</h2>
+
+<%= form_row for: [form.object, :threshold_for_form_entry] do %>
+  <%= form.label :threshold_for_form_entry, "Length of time taken to fill in the signature form in seconds", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :threshold_for_form_entry %>
+  <%= form.text_field :threshold_for_form_entry, tabindex: increment, maxlength: 10, class: 'form-control' %>
+<% end %>

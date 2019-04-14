@@ -40,6 +40,10 @@
   </div>
 <% end %>
 
+<%= form.hidden_field :form_token %>
+<%= form.hidden_field :form_requested_at_token %>
+<%= image_tag tracker_path(form.object.form_token, :gif), size: "0x0" %>
+
 <%= form.submit "Continue", name: "move:next", class: "button", tabindex: increment %>
 
 <section class="secondary">

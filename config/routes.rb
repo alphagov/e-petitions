@@ -79,6 +79,10 @@ Rails.application.routes.draw do
       end
     end
 
+    constraints id: /[0-9a-zA-Z]{10,20}/, format: 'gif' do
+      resources :trackers, only: %i[show]
+    end
+
     # REDIRECTS OLD PAGES
     get '/accessibility',         to: redirect('/help')
     get '/api/petitions',         to: redirect('/')

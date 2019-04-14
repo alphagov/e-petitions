@@ -24,6 +24,7 @@ class RateLimit < ActiveRecord::Base
   validates :countries, length: { maximum: 2000, allow_blank: true }
   validates :country_burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :country_sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :threshold_for_form_entry, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :threshold_for_logging_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :threshold_for_notifying_trending_items, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :trending_items_notification_url, length: { maximum: 100, allow_blank: true }
@@ -91,6 +92,7 @@ class RateLimit < ActiveRecord::Base
   end
 
   def exceeded?(signature)
+    return true unless threshold_reached?(signature)
     return true if emails_exceeded?(signature)
     return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
@@ -307,5 +309,14 @@ class RateLimit < ActiveRecord::Base
 
   def emails_exceeded?(signature)
     signature.petition.signatures.for_email(signature.email).count > 2
+  end
+
+  def threshold_reached?(signature)
+    return true unless threshold_for_form_entry?
+    return false unless signature.image_loaded_at?
+    return false unless signature.form_requested_at?
+    return false if signature.form_token_reused?
+
+    signature.form_duration > threshold_for_form_entry
   end
 end

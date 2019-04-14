@@ -190,6 +190,7 @@ Feature: Suzie signs a petition
     When I follow "Do something!"
     Then I should be on the petition page
     And I should see "1 signature"
+    And the signature "womboid@wimbledon.com" is marked as fraudulent
 
   Scenario: Suzie can validate her signature when IP address is rate limited but the domain is allowed
     Given the burst rate limit is 1 per minute
@@ -203,3 +204,64 @@ Feature: Suzie signs a petition
     When I say I am happy with my email address
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "2 signatures"
+    And the signature "womboid@wimbledon.com" is marked as validated
+
+  Scenario: Suzie cannot validate her signature when she doesn't load the tracker
+    Given the form entry threshold is 1 second
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "1 signature"
+    And the signature "womboid@wimbledon.com" is marked as fraudulent
+
+  @javascript
+  Scenario: Suzie can validate her signature when she does load the tracker
+    Given the form entry threshold is 1 second
+    When I am on the new signature page
+    And I wait 2 seconds
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "2 signatures"
+    And the signature "womboid@wimbledon.com" is marked as validated
+
+  @javascript
+  Scenario: Suzie cannot validate her signature when she fills the form too quickly
+    Given the form entry threshold is 60 seconds
+    When I am on the new signature page
+    And I fill in my details
+    And I try to sign
+    Then I should be on the new signature page
+    When I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "womboid@wimbledon.com" should receive 1 email
+    And I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should be on the petition page
+    And I should see "1 signature"
+    And the signature "womboid@wimbledon.com" is marked as fraudulent

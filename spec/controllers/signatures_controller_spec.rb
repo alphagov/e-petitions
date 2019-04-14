@@ -77,7 +77,9 @@ RSpec.describe SignaturesController, type: :controller do
         email: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
-        location_code: "GB"
+        location_code: "GB",
+        form_token: "S7lqpOv8zEvROaq3bJE8",
+        form_requested_at_token: "IjIwMTktMDQtMTRUMTI6MDA6MDBaIg==--698a360130e7442c64cd0b4bed9ae9396ff12a46"
       }
     end
 
@@ -140,6 +142,8 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature].uk_citizenship).to eq("1")
         expect(assigns[:signature].postcode).to eq("SW1A1AA")
         expect(assigns[:signature].location_code).to eq("GB")
+        expect(assigns[:signature].form_token).to eq("S7lqpOv8zEvROaq3bJE8")
+        expect(assigns[:signature].form_requested_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
       end
 
       it "records the IP address on the signature" do
@@ -175,7 +179,9 @@ RSpec.describe SignaturesController, type: :controller do
         email: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
-        location_code: "GB"
+        location_code: "GB",
+        form_token: "S7lqpOv8zEvROaq3bJE8",
+        form_requested_at_token: "IjIwMTktMDQtMTRUMTI6MDA6MDBaIg==--698a360130e7442c64cd0b4bed9ae9396ff12a46"
       }
     end
 
@@ -222,6 +228,8 @@ RSpec.describe SignaturesController, type: :controller do
 
       context "and the signature is not a duplicate" do
         before do
+          cookies.encrypted["S7lqpOv8zEvROaq3bJE8"] = Time.utc(2019, 4, 14, 12, 0, 0).iso8601
+
           perform_enqueued_jobs {
             post :create, petition_id: petition.id, signature: params
           }
@@ -241,10 +249,16 @@ RSpec.describe SignaturesController, type: :controller do
           expect(assigns[:signature].uk_citizenship).to eq("1")
           expect(assigns[:signature].postcode).to eq("SW1A1AA")
           expect(assigns[:signature].location_code).to eq("GB")
+          expect(assigns[:signature].form_token).to eq("S7lqpOv8zEvROaq3bJE8")
+          expect(assigns[:signature].form_requested_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
         end
 
         it "records the IP address on the signature" do
           expect(assigns[:signature].ip_address).to eq("0.0.0.0")
+        end
+
+        it "records the image_loaded_at timestamp on the signature" do
+          expect(assigns[:signature].image_loaded_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
         end
 
         it "sends a confirmation email" do

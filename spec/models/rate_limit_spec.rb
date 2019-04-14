@@ -26,6 +26,8 @@ RSpec.describe RateLimit, type: :model do
     it { is_expected.to validate_presence_of(:threshold_for_notifying_trending_items) }
     it { is_expected.to validate_numericality_of(:threshold_for_notifying_trending_items).only_integer.is_greater_than(0) }
     it { is_expected.to validate_length_of(:ignored_domains).is_at_most(10000) }
+    it { is_expected.to validate_presence_of(:threshold_for_form_entry) }
+    it { is_expected.to validate_numericality_of(:threshold_for_form_entry).only_integer.is_greater_than_or_equal_to(0) }
 
     context "when the sustained rate is less than the burst rate" do
       before do
@@ -453,6 +455,67 @@ RSpec.describe RateLimit, type: :model do
         before do
           FactoryBot.create(:pending_signature, email: "b.ob@example.com", petition: petition)
           FactoryBot.create(:pending_signature, email: "bo.b@example.com", petition: petition)
+        end
+
+        it "returns true" do
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+      end
+    end
+
+    describe "checking form entry duration" do
+      let(:form_token) { "S7lqpOv8zEvROaq3bJE8" }
+
+      before do
+        allow(subject).to receive(:threshold_for_form_entry?).and_return(true)
+        allow(subject).to receive(:threshold_for_form_entry).and_return(5)
+      end
+
+      context "when images haven't been loaded" do
+        let(:signature) do
+          FactoryBot.create(:pending_signature,
+            petition: petition,
+            image_loaded_at: nil,
+            form_token: form_token,
+            form_requested_at: 5.minutes.ago,
+            created_at: 3.minutes.ago
+          )
+        end
+
+        it "returns true" do
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+      end
+
+      context "when the form duration is too short" do
+        let(:signature) do
+          FactoryBot.create(:pending_signature,
+            petition: petition,
+            image_loaded_at: 5.minutes.ago,
+            form_token: form_token,
+            form_requested_at: 5.minutes.ago,
+            created_at: 5.minutes.ago
+          )
+        end
+
+        it "returns true" do
+          expect(subject.exceeded?(signature)).to eq(true)
+        end
+      end
+
+      context "when the form token has been reused" do
+        let(:signature) do
+          FactoryBot.create(:pending_signature,
+            petition: petition,
+            image_loaded_at: 5.minutes.ago,
+            form_token: form_token,
+            form_requested_at: 5.minutes.ago,
+            created_at: 3.minutes.ago
+          )
+        end
+
+        before do
+          FactoryBot.create(:validated_signature, form_token: form_token, petition: petition)
         end
 
         it "returns true" do
