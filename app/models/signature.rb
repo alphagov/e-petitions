@@ -43,7 +43,7 @@ class Signature < ActiveRecord::Base
 
   attr_readonly :sponsor, :creator
 
-  after_initialize do
+  after_initialize unless: :persisted? do
     self.form_token ||= Authlogic::Random.friendly_token
   end
 
