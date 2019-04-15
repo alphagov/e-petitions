@@ -990,10 +990,6 @@ CREATE TABLE public.rate_limits (
     country_burst_rate integer DEFAULT 1 NOT NULL,
     country_sustained_rate integer DEFAULT 60 NOT NULL,
     country_rate_limits_enabled boolean DEFAULT false NOT NULL,
-    enable_logging_of_trending_ips boolean DEFAULT false NOT NULL,
-    threshold_for_logging_trending_ip integer DEFAULT 100 NOT NULL,
-    threshold_for_notifying_trending_ip integer DEFAULT 200 NOT NULL,
-    trending_ip_notification_url character varying,
     ignored_domains character varying(10000) DEFAULT ''::character varying NOT NULL,
     threshold_for_form_entry integer DEFAULT 0 NOT NULL,
     enable_logging_of_trending_items boolean DEFAULT false NOT NULL,
@@ -3039,4 +3035,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190414081712');
 INSERT INTO schema_migrations (version) VALUES ('20190414083111');
 
 INSERT INTO schema_migrations (version) VALUES ('20190414234613');
+
+INSERT INTO schema_migrations (version) VALUES ('20190415015616');
 
