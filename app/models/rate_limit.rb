@@ -8,11 +8,6 @@ class RateLimit < ActiveRecord::Base
   SINGLE_PATTERN = "(?:[-a-z0-9]+\\.)"
   DOMAIN_PATTERN = /^(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.)+[a-z]{2,}$/
 
-  alias_attribute :enable_logging_of_trending_items, :enable_logging_of_trending_ips
-  alias_attribute :threshold_for_logging_trending_items, :threshold_for_logging_trending_ip
-  alias_attribute :threshold_for_notifying_trending_items, :threshold_for_notifying_trending_ip
-  alias_attribute :trending_items_notification_url, :trending_ip_notification_url
-
   validates :burst_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :burst_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :sustained_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
