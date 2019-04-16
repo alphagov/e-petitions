@@ -5,7 +5,7 @@ class NotifyTrendingDomainJob < ApplicationJob
 
   queue_as :low_priority
 
-  delegate :trending_ip_notification_url, to: :rate_limit
+  delegate :trending_items_notification_url, to: :rate_limit
 
   def perform(domain)
     slack.ping(message(domain))
@@ -29,7 +29,7 @@ class NotifyTrendingDomainJob < ApplicationJob
   end
 
   def slack
-    @slack ||= Slack::Notifier.new(trending_ip_notification_url)
+    @slack ||= Slack::Notifier.new(trending_items_notification_url)
   end
 
   def time_format

@@ -16,7 +16,7 @@ RSpec.describe NotifyTrendingDomainJob, type: :job do
 
   before do
     allow(RateLimit).to receive(:first_or_create!).and_return(rate_limits)
-    allow(rate_limits).to receive(:trending_ip_notification_url).and_return(url)
+    allow(rate_limits).to receive(:trending_items_notification_url).and_return(url)
 
     stub_request(:post, "https://hooks.slack.com/services/account/channel/token")
   end

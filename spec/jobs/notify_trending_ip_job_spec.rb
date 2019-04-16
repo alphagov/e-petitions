@@ -28,7 +28,7 @@ RSpec.describe NotifyTrendingIpJob, type: :job do
     allow(geoip_country).to receive(:iso_code).and_return("GB")
 
     allow(RateLimit).to receive(:first_or_create!).and_return(rate_limits)
-    allow(rate_limits).to receive(:trending_ip_notification_url).and_return(url)
+    allow(rate_limits).to receive(:trending_items_notification_url).and_return(url)
 
     stub_request(:post, "https://hooks.slack.com/services/account/channel/token")
   end
