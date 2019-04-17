@@ -15,7 +15,7 @@ class CloudFrontRemoteIp < ActionDispatch::RemoteIp
       # can safely remove the rightmost ip address
       # filtering out the VPC ip address
       if @env.key?(HTTP_X_AMZ_CF_ID)
-        super(ips)[0..-2]
+        super(ips)[1..-1]
       else
         super(ips)
       end
