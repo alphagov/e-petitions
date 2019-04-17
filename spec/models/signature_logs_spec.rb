@@ -7,16 +7,47 @@ RSpec.describe SignatureLogs do
     let(:uri) { "/petitions/200000/signatures/new" }
     let(:request) { "GET #{uri} HTTP/1.1" }
     let(:agent) { "Mozilla/5.0" }
-    let(:message) { %[#{ip} - - #{time} "#{request}" 200 19688 "-" "#{agent}" (via 10.0.7.171)] }
 
     subject(:log) { described_class.new(message) }
 
-    it "parses a log line" do
-      expect(log.ip_address).to eq("192.168.1.1")
-      expect(log.timestamp).to eq(Time.utc(2019, 4, 9, 23, 0, 16))
-      expect(log.method).to eq("GET")
-      expect(log.uri).to eq("/petitions/200000/signatures/new")
-      expect(log.agent).to eq("Mozilla/5.0")
+    context "when not running behind CloudFront" do
+      let(:message) { %[#{ip} - - #{time} "#{request}" 200 19688 "-" "#{agent}" (via 10.0.7.171)] }
+
+      it "parses a log line" do
+        expect(log.ip_address).to eq("192.168.1.1")
+        expect(log.timestamp).to eq(Time.utc(2019, 4, 9, 23, 0, 16))
+        expect(log.method).to eq("GET")
+        expect(log.uri).to eq("/petitions/200000/signatures/new")
+        expect(log.agent).to eq("Mozilla/5.0")
+      end
+    end
+
+    context "when running behind CloudFront" do
+      let(:message) { %[#{ip}, 10.0.1.1 - - #{time} "#{request}" 200 19688 "-" "#{agent}" (via 10.0.7.171)] }
+
+      it "parses a log line" do
+        expect(log.ip_address).to eq("192.168.1.1")
+        expect(log.timestamp).to eq(Time.utc(2019, 4, 9, 23, 0, 16))
+        expect(log.method).to eq("GET")
+        expect(log.uri).to eq("/petitions/200000/signatures/new")
+        expect(log.agent).to eq("Mozilla/5.0")
+      end
+    end
+
+    context "when a message is corrupted" do
+      let(:message) { "foobar" }
+
+      it "doesn't blow up" do
+        expect(log.ip_address).to be_nil
+        expect(log.timestamp).to be_nil
+        expect(log.method).to be_nil
+        expect(log.uri).to be_nil
+        expect(log.agent).to be_nil
+      end
+
+      it "responds as blank" do
+        expect(log).to be_blank
+      end
     end
   end
 
@@ -49,7 +80,7 @@ RSpec.describe SignatureLogs do
     end
 
     let(:create_response) do
-      double(:response, events: [double(message: create_message)])
+      double(:response, events: [double(message: create_message), double(message: "foobar")])
     end
 
     let(:validate_request) do
@@ -63,7 +94,7 @@ RSpec.describe SignatureLogs do
     end
 
     let(:validate_response) do
-      double(:response, events: [double(message: validate_message)])
+      double(:response, events: [double(message: "foobar"), double(message: validate_message)])
     end
 
     let(:signature) do
@@ -85,7 +116,7 @@ RSpec.describe SignatureLogs do
       allow(client).to receive(:filter_log_events).with(validate_request).and_return(validate_response)
     end
 
-    it "yields the log lines" do
+    it "yields the valid log lines" do
       expect { |b| subject.each(&b) }.to yield_successive_args(
         SignatureLogs::Log.new(create_message),
         SignatureLogs::Log.new(validate_message)

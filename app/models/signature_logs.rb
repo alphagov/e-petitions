@@ -3,7 +3,7 @@ require 'ipaddr'
 
 class SignatureLogs
   class Log
-    PATTERN = /(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - .{0}- \[(?<day>[\d]{2})\/(?<month>[\w]+)\/(?<year>[\d]{4})\:(?<hour>[\d]{2})\:(?<min>[\d]{2})\:(?<sec>[\d]{2}) [^$]+\] "(?<method>GET|POST|PUT|DELETE) (?<uri>[^\s]+?) HTTP\/1\.1" (?<response>[\d]+) [\d]+ "(?<referrer>[^\s]+?)" "(?<agent>[^\"]+?)"/
+    PATTERN = /(?<ip>\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})(?:, (\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}))* - .{0}- \[(?<day>[\d]{2})\/(?<month>[\w]+)\/(?<year>[\d]{4})\:(?<hour>[\d]{2})\:(?<min>[\d]{2})\:(?<sec>[\d]{2}) [^$]+\] "(?<method>GET|POST|PUT|DELETE) (?<uri>[^\s]+?) HTTP\/1\.1" (?<response>[\d]+) [\d]+ "(?<referrer>[^\s]+?)" "(?<agent>[^\"]+?)"/
     MONTHS = %w[Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec]
     attr_reader :message, :data
 
@@ -12,32 +12,40 @@ class SignatureLogs
       @data = message.match(PATTERN)
     end
 
+    def blank?
+      data.nil?
+    end
+
     def ip_address
-      @ip_address ||= ::IPAddr.new(data["ip"])
+      if present?
+        @ip_address ||= data && ::IPAddr.new(data["ip"])
+      end
     end
 
     def timestamp
-      @timestamp ||= ::Time.utc(year, month, day, hour, min, sec).in_time_zone
+      if present?
+        @timestamp ||= data && ::Time.utc(year, month, day, hour, min, sec).in_time_zone
+      end
     end
 
     def method
-      data["method"]
+      data["method"] if present?
     end
 
     def uri
-      data["uri"]
+      data["uri"] if present?
     end
 
     def response
-      data["response"]
+      data["response"] if present?
     end
 
     def referrer
-      data["referrer"]
+      data["referrer"] if present?
     end
 
     def agent
-      data["agent"]
+      data["agent"] if present?
     end
 
     def ==(other)
@@ -94,7 +102,7 @@ class SignatureLogs
   end
 
   def logs
-    @logs ||= fetch_events.map { |e| Log.new(e.message) }.sort_by(&:timestamp)
+    @logs ||= fetch_events.map { |e| Log.new(e.message) }.reject(&:blank?).sort_by(&:timestamp)
   end
 
   def fetch_events
