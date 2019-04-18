@@ -1030,6 +1030,22 @@ RSpec.describe Petition, type: :model do
     let(:now) { Time.current.change(sec: 0) }
     let(:yesterday) { now - 24.hours }
 
+    context "when the petition is open" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+
+      it "returns false" do
+        expect(petition.closed_for_signing?(now)).to be_falsey
+      end
+    end
+
+    context "when the petition is rejected" do
+      let(:petition) { FactoryBot.create(:rejected_petition) }
+
+      it "returns true" do
+        expect(petition.closed_for_signing?(now)).to be_truthy
+      end
+    end
+
     context "when the petition closed less than 24 hours ago" do
       let(:petition) { FactoryBot.create(:closed_petition, closed_at: yesterday + 1.second) }
 
