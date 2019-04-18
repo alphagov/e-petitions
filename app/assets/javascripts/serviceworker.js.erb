@@ -1,0 +1,32 @@
+/**
+ * Welcome to your Workbox-powered service worker!
+ *
+ * You'll need to register this file in your web app and you should
+ * disable HTTP caching for this file too.
+ * See https://goo.gl/nhQhGp
+ *
+ * The rest of the code is auto-generated. Please don't update this file
+ * directly; instead, make changes to your Workbox build configuration
+ * and re-run your build process.
+ * See https://goo.gl/2aRDsh
+ */
+
+importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.1.1/workbox-sw.js");
+
+workbox.core.skipWaiting();
+
+workbox.core.clientsClaim();
+
+/**
+ * The workboxSW.precacheAndRoute() method efficiently caches and responds to
+ * requests for URLs in the manifest.
+ * See https://goo.gl/S9QRab
+ */
+self.__precacheManifest = [].concat(self.__precacheManifest || []);
+workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
+
+workbox.routing.registerRoute(/.*.html/, new workbox.strategies.NetworkOnly({ "cacheName":"parliament-petitions-html-cache-", plugins: [] }), 'GET');
+workbox.routing.registerRoute(/https:\/\/www.(?:googletagmanager|google-analytics).com\/(.*)/, new workbox.strategies.NetworkOnly({ "cacheName":"parliament-petitions-analytics-cache-", plugins: [] }), 'GET');
+workbox.routing.registerRoute(/count.json/, new workbox.strategies.NetworkOnly({ "cacheName":"parliament-petitions-data-cache-", plugins: [] }), 'GET');
+workbox.routing.registerRoute(/.*.(?:css|js)/, new workbox.strategies.CacheFirst({ "cacheName":"parliament-petitions-application-cache-", plugins: [new workbox.expiration.Plugin({ maxAgeSeconds: 2592000, purgeOnQuotaError: false })] }), 'GET');
+workbox.routing.registerRoute(/.*.(?:png|jpg|jpeg|ico|gif)/, new workbox.strategies.CacheFirst({ "cacheName":"parliament-petitions-image-cache-", plugins: [new workbox.expiration.Plugin({ maxAgeSeconds: 2592000, purgeOnQuotaError: false })] }), 'GET');

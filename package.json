@@ -1,0 +1,25 @@
+{
+  "name": "e-petitions",
+  "version": "1.0.0",
+  "description": "This is the code base for the UK Government's petitions service (https://petition.parliament.uk). We have open sourced the code for you to use under the terms of licence contained in this repository.",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx workbox generateSW config/workbox-config.js && rails s"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alphagov/e-petitions.git"
+  },
+  "author": "Government Digital Service",
+  "license": "Copyright (C) 2011 Crown Copyright (Government Digital Service)",
+  "bugs": {
+    "url": "https://github.com/alphagov/e-petitions/issues"
+  },
+  "homepage": "https://github.com/alphagov/e-petitions#readme",
+  "devDependencies": {
+    "workbox-cli": "4.1.1"
+  }
+}
