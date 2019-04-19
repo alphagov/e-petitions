@@ -47,8 +47,29 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition) }
+      let(:current_time) { Time.utc(2019, 4, 18, 6, 0, 0) }
+
+      around do |example|
+        travel_to(current_time) { example.run }
+      end
 
       before do
+        allow(Authlogic::Random).to receive(:friendly_token).and_return("D8MxrkwNexP1NgxpZq")
+
+        session[:form_requests] = {
+          "100000" => {
+            "form_token" => "jcr0DcYQXio18qKDBGw",
+            "form_requested_at" => "2019-04-16T06:00:00Z"
+          },
+          "100001" => {
+            "form_token" => "G0WnZSxal6vmZkFYnzY",
+            "form_requested_at" => "2019-04-18T04:00:00Z"
+          }
+        }
+
+        cookies.encrypted["jcr0DcYQXio18qKDBGw"] = "2019-04-16T06:00:00Z"
+        cookies.encrypted["G0WnZSxal6vmZkFYnzY"] = "2019-04-18T04:00:00Z"
+
         get :new, petition_id: petition.id
       end
 
@@ -64,6 +85,34 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature].location_code).to eq("GB")
       end
 
+      it "sets the form token and requested at details in the session" do
+        expect(session[:form_requests]).to match(a_hash_including(
+          "#{petition.id}" => {
+            "form_token" => "D8MxrkwNexP1NgxpZq",
+            "form_requested_at" => "2019-04-18T06:00:00Z"
+          }
+        ))
+      end
+
+      it "sets the signature's form token to the one in the session" do
+        expect(assigns[:signature].form_token).to eq("D8MxrkwNexP1NgxpZq")
+      end
+
+      it "sets the signature's form requested at timestamp to the one in the session" do
+        expect(assigns[:signature].form_requested_at).to eq("2019-04-18T06:00:00Z".in_time_zone)
+      end
+
+      it "expires old form requests" do
+        expect(session[:form_requests]["100000"]).to be_nil
+        expect(cookies.encrypted["jcr0DcYQXio18qKDBGw"]).to be_nil
+      end
+
+      it "leaves current form request untouched" do
+        expect(session[:form_requests]["100001"]["form_token"]).to eq("G0WnZSxal6vmZkFYnzY")
+        expect(session[:form_requests]["100001"]["form_requested_at"]).to eq("2019-04-18T04:00:00Z")
+        expect(cookies.encrypted["G0WnZSxal6vmZkFYnzY"]).to eq("2019-04-18T04:00:00Z")
+      end
+
       it "renders the signatures/new template" do
         expect(response).to render_template("signatures/new")
       end
@@ -77,9 +126,7 @@ RSpec.describe SignaturesController, type: :controller do
         email: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
-        location_code: "GB",
-        form_token: "S7lqpOv8zEvROaq3bJE8",
-        form_requested_at_token: "IjIwMTktMDQtMTRUMTI6MDA6MDBaIg==--698a360130e7442c64cd0b4bed9ae9396ff12a46"
+        location_code: "GB"
       }
     end
 
@@ -123,8 +170,20 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition) }
+      let(:current_time) { Time.utc(2019, 4, 18, 6, 0, 30) }
+
+      around do |example|
+        travel_to(current_time) { example.run }
+      end
 
       before do
+        session[:form_requests] = {
+          "#{petition.id}" => {
+            "form_token" => "wYonHKjTeW7mtTusqDv",
+            "form_requested_at" => "2019-04-18T06:00:00Z"
+          }
+        }
+
         post :confirm, petition_id: petition.id, signature: params
       end
 
@@ -142,8 +201,8 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature].uk_citizenship).to eq("1")
         expect(assigns[:signature].postcode).to eq("SW1A1AA")
         expect(assigns[:signature].location_code).to eq("GB")
-        expect(assigns[:signature].form_token).to eq("S7lqpOv8zEvROaq3bJE8")
-        expect(assigns[:signature].form_requested_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
+        expect(assigns[:signature].form_token).to eq("wYonHKjTeW7mtTusqDv")
+        expect(assigns[:signature].form_requested_at).to eq("2019-04-18T06:00:00Z".in_time_zone)
       end
 
       it "records the IP address on the signature" do
@@ -179,9 +238,7 @@ RSpec.describe SignaturesController, type: :controller do
         email: "ted@example.com",
         uk_citizenship: "1",
         postcode: "SW1A 1AA",
-        location_code: "GB",
-        form_token: "S7lqpOv8zEvROaq3bJE8",
-        form_requested_at_token: "IjIwMTktMDQtMTRUMTI6MDA6MDBaIg==--698a360130e7442c64cd0b4bed9ae9396ff12a46"
+        location_code: "GB"
       }
     end
 
@@ -225,10 +282,22 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition) }
+      let(:current_time) { Time.utc(2019, 4, 18, 6, 1, 0) }
+
+      around do |example|
+        travel_to(current_time) { example.run }
+      end
 
       context "and the signature is not a duplicate" do
         before do
-          cookies.encrypted["S7lqpOv8zEvROaq3bJE8"] = Time.utc(2019, 4, 14, 12, 0, 0).iso8601
+          cookies.encrypted["wYonHKjTeW7mtTusqDv"] = "2019-04-18T06:00:00Z"
+
+          session[:form_requests] = {
+            "#{petition.id}" => {
+              "form_token" => "wYonHKjTeW7mtTusqDv",
+              "form_requested_at" => "2019-04-18T06:00:00Z"
+            }
+          }
 
           perform_enqueued_jobs {
             post :create, petition_id: petition.id, signature: params
@@ -249,16 +318,13 @@ RSpec.describe SignaturesController, type: :controller do
           expect(assigns[:signature].uk_citizenship).to eq("1")
           expect(assigns[:signature].postcode).to eq("SW1A1AA")
           expect(assigns[:signature].location_code).to eq("GB")
-          expect(assigns[:signature].form_token).to eq("S7lqpOv8zEvROaq3bJE8")
-          expect(assigns[:signature].form_requested_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
+          expect(assigns[:signature].form_token).to eq("wYonHKjTeW7mtTusqDv")
+          expect(assigns[:signature].form_requested_at).to eq("2019-04-18T06:00:00Z".in_time_zone)
+          expect(assigns[:signature].image_loaded_at).to eq("2019-04-18T06:00:00Z".in_time_zone)
         end
 
         it "records the IP address on the signature" do
           expect(assigns[:signature].ip_address).to eq("0.0.0.0")
-        end
-
-        it "records the image_loaded_at timestamp on the signature" do
-          expect(assigns[:signature].image_loaded_at).to eq(Time.utc(2019, 4, 14, 12, 0, 0))
         end
 
         it "sends a confirmation email" do
@@ -268,6 +334,11 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "redirects to the thank you page" do
           expect(response).to redirect_to("/petitions/#{petition.id}/signatures/thank-you")
+        end
+
+        it "deletes the form request details" do
+          expect(cookies.encrypted["wYonHKjTeW7mtTusqDv"]).to be_nil
+          expect(session[:form_requests]["#{petition.id}"]).to be_nil
         end
 
         context "and the params are invalid" do

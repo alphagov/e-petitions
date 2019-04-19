@@ -706,7 +706,7 @@ class Petition < ActiveRecord::Base
   end
 
   def closed_for_signing?(now = Time.current)
-    closed_at? && closed_at < 24.hours.ago(now)
+    rejected? || closed_at? && closed_at < 24.hours.ago(now)
   end
 
   def archiving?

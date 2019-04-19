@@ -43,10 +43,6 @@ class Signature < ActiveRecord::Base
 
   attr_readonly :sponsor, :creator
 
-  after_initialize unless: :persisted? do
-    self.form_token ||= Authlogic::Random.friendly_token
-  end
-
   before_create if: :email? do
     if find_duplicate
       raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
@@ -668,39 +664,11 @@ class Signature < ActiveRecord::Base
     form_requested_at? ? created_at - form_requested_at : 0
   end
 
-  def form_token=(value)
-    super if value.to_s =~ /\A[0-9a-zA-Z]{10,20}\z/
-  end
-
   def form_token_reused?
     self.class.where(form_token: form_token).count > 1
   end
 
-  def form_requested_at_token
-    verifier.generate(form_requested_at_value)
-  end
-
-  def form_requested_at_token=(value)
-    self.form_requested_at = verifier.verify(value)
-  end
-
   private
-
-  def secret_key_base
-    Rails.application.secrets.secret_key_base
-  end
-
-  def secret_key
-    "#{secret_key_base}-#{form_token}"
-  end
-
-  def verifier
-    @verifier ||= ActiveSupport::MessageVerifier.new(secret_key, serializer: JSON)
-  end
-
-  def form_requested_at_value
-    (form_requested_at || Time.current).getutc.iso8601
-  end
 
   def formatted_postcode
     if united_kingdom?

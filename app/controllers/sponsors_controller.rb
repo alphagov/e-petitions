@@ -40,8 +40,12 @@ class SponsorsController < SignaturesController
     end
   end
 
-  def build_signature(attributes)
-    @petition.sponsors.build(attributes)
+  def build_signature
+    if action_name == "new"
+      @signature = @petition.sponsors.build(signature_params_for_new)
+    else
+      @signature = @petition.sponsors.build(signature_params_for_create)
+    end
   end
 
   def send_email_to_petition_signer

@@ -69,6 +69,8 @@ Rails.application.routes.draw do
           get 'signed'
         end
       end
+
+      resources :trackers, only: %i[show], format: true, constraints: { id: /[0-9a-zA-Z]{10,20}/, format: 'gif' }
     end
 
     namespace :archived do
@@ -77,10 +79,6 @@ Rails.application.routes.draw do
       resources :signatures, only: [] do
         get 'unsubscribe', on: :member
       end
-    end
-
-    constraints id: /[0-9a-zA-Z]{10,20}/, format: 'gif' do
-      resources :trackers, only: %i[show]
     end
 
     # REDIRECTS OLD PAGES

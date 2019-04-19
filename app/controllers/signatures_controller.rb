@@ -1,6 +1,10 @@
 class SignaturesController < ApplicationController
+  include FormTracking
+
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+  before_action :build_signature, only: [:new, :confirm, :create]
+  before_action :expire_form_requests, only: [:new]
   before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
@@ -12,6 +16,8 @@ class SignaturesController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
     @signature = @signature.find_duplicate!
+
+    delete_form_request
     send_email_to_petition_signer
 
     redirect_to thank_you_url
@@ -24,27 +30,22 @@ class SignaturesController < ApplicationController
   end
 
   def new
-    @signature = build_signature(signature_params_for_new)
-
     respond_to do |format|
       format.html
     end
   end
 
   def confirm
-    @signature = build_signature(signature_params_for_create)
-
     respond_to do |format|
       format.html { render(@signature.valid? ? :confirm : :new) }
     end
   end
 
   def create
-    @signature = build_signature(signature_params_for_create)
-    @signature.image_loaded_at = image_loaded_at
-
     if @signature.save!
+      delete_form_request
       send_email_to_petition_signer
+
       redirect_to thank_you_url
     end
   end
@@ -94,6 +95,28 @@ class SignaturesController < ApplicationController
 
   def token_param
     @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
+  end
+
+  def expire_form_requests
+    expired_form_requests.each do |id, token|
+      cookies.delete(token)
+      form_requests.delete(id)
+    end
+  end
+
+  def expired_form_requests
+    form_requests.each_with_object([]) do |(id, hash), expired|
+      expired << [id, hash["form_token"]] if form_request_expired?(hash)
+    end
+  end
+
+  def form_request_expired?(hash)
+    hash["form_requested_at"].in_time_zone < 1.day.ago
+  end
+
+  def delete_form_request
+    cookies.delete(form_token)
+    form_requests.delete(form_request_id)
   end
 
   def signed_tokens
@@ -147,8 +170,12 @@ class SignaturesController < ApplicationController
     end
   end
 
-  def build_signature(attributes)
-    @petition.signatures.build(attributes)
+  def build_signature
+    if action_name == "new"
+      @signature = @petition.signatures.build(signature_params_for_new)
+    else
+      @signature = @petition.signatures.build(signature_params_for_create)
+    end
   end
 
   def thank_you_url
@@ -188,7 +215,11 @@ class SignaturesController < ApplicationController
   end
 
   def signature_params_for_new
-    { location_code: "GB" }
+    {
+      location_code: "GB",
+      form_token: form_token,
+      form_requested_at: form_requested_at
+    }
   end
 
   def signature_params
@@ -196,19 +227,15 @@ class SignaturesController < ApplicationController
   end
 
   def signature_params_for_create
-    signature_params.merge(ip_address: request.remote_ip)
+    signature_params.merge(
+      ip_address: request.remote_ip,
+      form_token: form_token,
+      form_requested_at: form_requested_at,
+      image_loaded_at: image_loaded_at
+    )
   end
 
   def signature_attributes
-    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email form_token form_requested_at_token]
-  end
-
-  def image_loaded_at
-    return nil unless signature_params[:form_token].is_a?(String)
-    return nil unless signature_params[:form_token] =~ /\A[0-9a-zA-Z]{10,20}\z/
-
-    cookies.encrypted[signature_params[:form_token]].tap do |value|
-      cookies.delete(signature_params[:form_token])
-    end
+    %i[name email email_confirmation postcode location_code uk_citizenship notify_by_email]
   end
 end
