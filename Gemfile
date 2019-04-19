@@ -58,6 +58,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
+  gem 'webdrivers'
   gem 'webmock'
   gem 'test_after_commit'
 end

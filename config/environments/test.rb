@@ -53,7 +53,10 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Use webmock to disable net connections except for localhost and exceptions
-  WebMock.disable_net_connect!(allow_localhost: true)
+  WebMock.disable_net_connect!(
+    allow_localhost: true,
+    allow: 'chromedriver.storage.googleapis.com'
+  )
 
   config.active_job.queue_adapter = :test
 end
