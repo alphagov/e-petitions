@@ -1,9 +1,8 @@
 require 'email_spec/cucumber'
 require 'rspec/core/pending'
 require 'capybara/poltergeist'
-require 'webrick/httpproxy'
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = ENV.fetch("JS_DRIVER", "chrome_headless").to_sym
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 3443
 Capybara.app_host = "https://127.0.0.1:3443"
@@ -11,15 +10,24 @@ Capybara.default_host = "https://petition.parliament.uk"
 Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app,
-    phantomjs_logger: "/dev/null",
-    phantomjs_options: [
-      '--ignore-ssl-errors=yes',
-      '--local-to-remote-url-access=yes',
-      '--proxy=127.0.0.1:8443'
-    ]
-  )
+Capybara.register_driver :chrome do |app|
+  options = ::Selenium::WebDriver::Chrome::Options.new
+  options.args << "--allow-insecure-localhost"
+  options.args << "--window-size=1280,960"
+  options.args << "--proxy-server=127.0.0.1:8443"
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+end
+
+Capybara.register_driver :chrome_headless do |app|
+  options = ::Selenium::WebDriver::Chrome::Options.new
+  options.args << "--headless"
+  options.args << "--allow-insecure-localhost"
+  options.args << "--proxy-server=127.0.0.1:8443"
+  options.args << "--window-size=1280,960"
+  options.args << "--disable-gpu" if Gem.win_platform?
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_server :epets do |app, port|
