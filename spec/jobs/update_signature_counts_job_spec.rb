@@ -170,6 +170,61 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
           }.by(5)
         end
       end
+
+      context "with a petition that's having its count reset" do
+        let(:petition) { FactoryBot.create(:open_petition, signature_count_reset_at: current_time) }
+        let(:attributes) { { petition: petition, location_code: "AA", constituency_id: "9999" } }
+        let(:signatures) { FactoryBot.create_list(:pending_signature, 5, attributes) }
+
+        before do
+          signatures.each do |signature|
+            signature.validate!(current_time - 45.seconds)
+          end
+        end
+
+        it "doesn't update the signature count" do
+          expect {
+            described_class.perform_now(current_time.iso8601)
+          }.not_to change {
+            petition.reload.signature_count
+          }
+        end
+
+        it "doesn't update the country journal signature_count" do
+          expect {
+            described_class.perform_now(current_time.iso8601)
+          }.not_to change {
+            country_journal.reload.signature_count
+          }
+        end
+
+        it "doesn't update the constituency journal signature_count" do
+          expect {
+            described_class.perform_now(current_time.iso8601)
+          }.not_to change {
+            constituency_journal.reload.signature_count
+          }
+        end
+      end
+
+      context "with a petition that's having its count reset for more than 5 minutes" do
+        let(:petition) { FactoryBot.create(:open_petition, signature_count_reset_at: 10.minutes.ago) }
+        let(:attributes) { { petition: petition, location_code: "AA", constituency_id: "9999" } }
+        let(:signatures) { FactoryBot.create_list(:pending_signature, 5, attributes) }
+
+        before do
+          signatures.each do |signature|
+            signature.validate!(current_time - 45.seconds)
+          end
+
+          allow(Appsignal).to receive(:send_exception)
+        end
+
+        it "notifies Appsignal" do
+          described_class.perform_now(current_time.iso8601)
+          expect(Appsignal).to have_received(:send_exception).with(an_instance_of(RuntimeError))
+        end
+      end
     end
   end
 end

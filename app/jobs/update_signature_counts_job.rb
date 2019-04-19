@@ -26,6 +26,19 @@ class UpdateSignatureCountsJob < ApplicationJob
       # Skip this petition if it's been updated since this job was scheduled
       next unless petition.last_signed_at < signature_count_at
 
+      # Check to see if the signature count is being reset
+      if petition.signature_count_reset_at?
+        if petition.signature_count_reset_at < 5.minutes.ago
+          # Something's seriously wrong if a petition is taking
+          # more than 5 minutes to reset its signature count
+          message = "Petition #{petition.id} has been resetting its count for more than 5 minutes"
+          Appsignal.send_exception(RuntimeError.new(message))
+        end
+
+        # Skip this petition as the updates will conflict
+        next
+      end
+
       last_signed_at = petition.last_signed_at
       petition.increment_signature_count!(signature_count_at)
       ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)

@@ -203,9 +203,14 @@ RSpec.describe CountryPetitionJournal, type: :model do
     let!(:petition_2) { FactoryBot.create(:petition, creator_attributes: {location_code: location_code_1}) }
 
     before do
-      described_class.for(petition_1, location_code_1).update_attribute(:signature_count, 20)
-      described_class.for(petition_1, location_code_2).update_attribute(:signature_count, 10)
-      described_class.for(petition_2, location_code_2).update_attribute(:signature_count, 1)
+      # We do this so last_signed_at is not nil
+      petition_1.update_signature_count!
+      petition_2.update_signature_count!
+
+      described_class.for(petition_1, location_code_1).update_columns(signature_count: 20, last_signed_at: 5.minutes.ago)
+      described_class.for(petition_1, location_code_2).update_columns(signature_count: 10, last_signed_at: nil)
+      described_class.for(petition_2, location_code_1).update_columns(signature_count: 1, last_signed_at: 5.minutes.ago)
+      described_class.for(petition_2, location_code_2).update_columns(signature_count: 1, last_signed_at: nil)
     end
 
     context 'when there are no signatures' do
@@ -222,10 +227,10 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
     context 'when there are signatures' do
       before do
-        4.times { FactoryBot.create(:validated_signature, petition: petition_1, location_code: location_code_1) }
+        4.times { FactoryBot.create(:validated_signature, petition: petition_1, location_code: location_code_1, validated_at: 1.minute.ago) }
         2.times { FactoryBot.create(:pending_signature, petition: petition_1, location_code: location_code_1) }
-        3.times { FactoryBot.create(:validated_signature, petition: petition_1, location_code: location_code_2) }
-        2.times { FactoryBot.create(:validated_signature, petition: petition_2, location_code: location_code_1) }
+        3.times { FactoryBot.create(:validated_signature, petition: petition_1, location_code: location_code_2, validated_at: 1.minute.ago) }
+        2.times { FactoryBot.create(:validated_signature, petition: petition_2, location_code: location_code_1, validated_at: 1.minute.ago) }
         5.times { FactoryBot.create(:pending_signature, petition: petition_2, location_code: location_code_2) }
       end
 

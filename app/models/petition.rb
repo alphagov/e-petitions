@@ -437,13 +437,11 @@ class Petition < ActiveRecord::Base
   end
 
   def reset_signature_count!(time = Time.current)
-    if Site.update_signature_counts
-      raise RuntimeError, "Resetting signature counts while updates are running is unsafe"
-    else
-      update_signature_count!(time)
-      ConstituencyPetitionJournal.reset_signature_counts_for(self)
-      CountryPetitionJournal.reset_signature_counts_for(self)
-    end
+    update_column(:signature_count_reset_at, time)
+    update_signature_count!(time)
+    ConstituencyPetitionJournal.reset_signature_counts_for(self)
+    CountryPetitionJournal.reset_signature_counts_for(self)
+    update_column(:signature_count_reset_at, nil)
   end
 
   def update_signature_count!(time = Time.current)
