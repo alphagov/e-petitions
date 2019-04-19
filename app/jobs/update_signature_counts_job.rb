@@ -12,25 +12,55 @@ class UpdateSignatureCountsJob < ApplicationJob
     retry_job(wait: signature_count_interval)
   end
 
-  def perform(now = Time.current)
+  def perform(now = current_time)
+    # Exit if updating signature counts is disabled
     return unless update_signature_counts
 
-    petitions.each do |petition|
-      last_signed_at = petition.last_signed_at
-      petition.increment_signature_count!(now)
+    time = now.in_time_zone
+    signature_count_at = signature_count_interval.seconds.ago(time)
 
+    # Exit if the signature counts have been updated since this job was scheduled
+    return unless signature_count_updated_at < signature_count_at
+
+    petitions.each do |petition|
+      # Skip this petition if it's been updated since this job was scheduled
+      next unless petition.last_signed_at < signature_count_at
+
+      # Check to see if the signature count is being reset
+      if petition.signature_count_reset_at?
+        if petition.signature_count_reset_at < 5.minutes.ago
+          # Something's seriously wrong if a petition is taking
+          # more than 5 minutes to reset its signature count
+          message = "Petition #{petition.id} has been resetting its count for more than 5 minutes"
+          Appsignal.send_exception(RuntimeError.new(message))
+        end
+
+        # Skip this petition as the updates will conflict
+        next
+      end
+
+      last_signed_at = petition.last_signed_at
+      petition.increment_signature_count!(signature_count_at)
       ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
       CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
     end
 
-    signature_count_updated_at!(now)
-    reschedule_job(scheduled_time(now))
+    signature_count_updated_at!(signature_count_at)
+    reschedule_job(scheduled_time(time))
   end
 
   private
 
+  def current_time
+    Time.current.change(usec: 0).iso8601
+  end
+
   def log_exception(exception)
     logger.info(log_message(exception))
+  end
+
+  def log_message(exception)
+    "#{exception.class.name} while running #{self.class.name}"
   end
 
   def petition_ids
@@ -42,7 +72,7 @@ class UpdateSignatureCountsJob < ApplicationJob
   end
 
   def reschedule_job(time)
-    self.class.set(wait_until: time).perform_later
+    self.class.set(wait_until: time).perform_later(time.iso8601)
   end
 
   def scheduled_time(now)

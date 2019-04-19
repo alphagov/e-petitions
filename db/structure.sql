@@ -946,7 +946,8 @@ CREATE TABLE public.petitions (
     tags integer[] DEFAULT '{}'::integer[] NOT NULL,
     locked_at timestamp without time zone,
     locked_by_id integer,
-    moderation_lag integer
+    moderation_lag integer,
+    signature_count_reset_at timestamp without time zone
 );
 
 
@@ -3037,4 +3038,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190414083111');
 INSERT INTO schema_migrations (version) VALUES ('20190414234613');
 
 INSERT INTO schema_migrations (version) VALUES ('20190415015616');
+
+INSERT INTO schema_migrations (version) VALUES ('20190419065717');
 

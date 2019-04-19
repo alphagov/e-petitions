@@ -437,32 +437,29 @@ class Petition < ActiveRecord::Base
   end
 
   def reset_signature_count!(time = Time.current)
-    if Site.update_signature_counts
-      raise RuntimeError, "Resetting signature counts while updates are running is unsafe"
-    else
-      update_columns(signature_count: 0, last_signed_at: created_at)
-      increment_signature_count!(time)
-      ConstituencyPetitionJournal.reset_signature_counts_for(self)
-      CountryPetitionJournal.reset_signature_counts_for(self)
-    end
+    update_column(:signature_count_reset_at, time)
+    update_signature_count!(time)
+    ConstituencyPetitionJournal.reset_signature_counts_for(self)
+    CountryPetitionJournal.reset_signature_counts_for(self)
+    update_column(:signature_count_reset_at, nil)
   end
 
   def update_signature_count!(time = Time.current)
     sql = "signature_count = ?, last_signed_at = ?, updated_at = ?"
-    count, counted_at = signatures.validated_count
+    count = signatures.validated_count(nil, time)
 
-    if update_all([sql, count, counted_at, time]) > 0
+    if update_all([sql, count, time, time]) > 0
       self.reload
     end
   end
 
   def increment_signature_count!(time = Time.current)
     sql = "signature_count = signature_count + ?, last_signed_at = ?, updated_at = ?"
-    count, counted_at = signatures.validated_count(last_signed_at)
+    count = signatures.validated_count(last_signed_at, time)
 
     return true if count.zero?
 
-    if update_all([sql, count, counted_at, time]) > 0
+    if update_all([sql, count, time, time]) > 0
       self.reload
 
       updates = []
@@ -516,8 +513,7 @@ class Petition < ActiveRecord::Base
   end
 
   def valid_signature_count?
-    count, count_at = signatures.validated_count(nil, last_signed_at)
-    signature_count == count && last_signed_at == count_at
+    signature_count == signatures.validated_count(nil, last_signed_at)
   end
 
   def will_reach_threshold_for_moderation?

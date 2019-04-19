@@ -17,6 +17,10 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
       end
     end
 
+    def older_than(time)
+      where(last_signed_at.lt(time).or(last_signed_at.eq(nil)))
+    end
+
     def ordered
       order(signature_count: :desc)
     end
@@ -29,12 +33,12 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     end
 
     def reset_signature_counts_for(petition)
-      petition.constituency_petition_journals.delete_all
-
       signature_counts(petition).each do |constituency_id, count|
         next if constituency_id.blank?
         self.for(petition, constituency_id).reset_signature_count(count, petition)
       end
+
+      petition.constituency_petition_journals.older_than(petition.last_signed_at).delete_all
     end
 
     def invalidate_signature_for(signature, now = Time.current)
@@ -48,6 +52,10 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     end
 
     private
+
+    def last_signed_at
+      arel_table[:last_signed_at]
+    end
 
     def unrecordable?(signature)
       signature.nil? || signature.petition.nil? || signature.constituency_id.blank? || !signature.validated_at?
