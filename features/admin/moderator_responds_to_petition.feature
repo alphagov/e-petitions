@@ -68,6 +68,7 @@ Feature: Moderator respond to petition
     Given I am logged in as a moderator
     When I look at the next petition on my list
     Then I see relevant reason descriptions when I browse different reason codes
+    And I go to the Admin home page
 
   Scenario: Moderator rejects petition with a suitable reason code and text
     Given I am logged in as a moderator
@@ -110,3 +111,4 @@ Feature: Moderator respond to petition
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
     And the petition can no longer be flagged
+    And I go to the Admin home page
