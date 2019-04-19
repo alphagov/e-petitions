@@ -24,6 +24,9 @@
         <% else %>
           <%= signature.location %>
         <% end %>
+        <% if signature.creator? %>
+          <span class="creator">c</span>
+        <% end %>
       </span>
     </p>
 
