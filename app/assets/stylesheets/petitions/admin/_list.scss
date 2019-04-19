@@ -105,6 +105,21 @@
       white-space: nowrap;
     }
 
+    .creator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      background-color: $black;
+      color: $white;
+      font-size: 19px;
+      line-height: 7px;
+      font-weight: bold;
+      border-radius: 50%;
+      text-align: center;
+      padding: 3px;
+      vertical-align: text-top;
+    }
+
     .status {
       background-color: $grey-2;
       color: $white;

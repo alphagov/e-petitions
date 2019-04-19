@@ -26,6 +26,9 @@
         <% else %>
           <%= signature.location %>
         <% end %>
+        <% if signature.creator? %>
+          <span class="creator">c</span>
+        <% end %>
       </span>
     </p>
 
@@ -39,6 +42,9 @@
       <% if signature.validated? %>
         <dt>Validated</dt>
         <dd><%= date_time_format(signature.validated_at) %></dd>
+      <% elsif signature.invalidated? %>
+        <dt>Invalidated</dt>
+        <dd><%= date_time_format(signature.invalidated_at) %></dd>
       <% end %>
     </dl>
   </td>
