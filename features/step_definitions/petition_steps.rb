@@ -359,6 +359,16 @@ Then(/^I can share it via (.+)$/) do |service|
   end
 end
 
+Then(/^I should not see the response "([^"]*)"$/) do |response|
+  details = page.find("//details[contains(., '#{response}')]")
+  expect(details["open"]).to be_nil
+end
+
+Then(/^I should see the response "([^"]*)"$/) do |response|
+  details = page.find("//details[contains(., '#{response}')]")
+  expect(details["open"]).not_to be_nil
+end
+
 Then(/^I expand "([^"]*)"/) do |text|
   page.find("//details/summary[contains(., '#{text}')]").click
 end

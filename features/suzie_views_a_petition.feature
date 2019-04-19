@@ -40,9 +40,9 @@ Feature: Suzie views a petition
     Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"
     When I view the petition
     Then I should see "Oh yes please"
-    And I should not see "Defence is the best Offence"
+    And I should not see the response "Defence is the best Offence"
     When I expand "Read the response in full"
-    Then I should see "Defence is the best Offence"
+    Then I should see the response "Defence is the best Offence"
 
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "We like http://www.google.com and bambi@gmail.com"
@@ -131,9 +131,9 @@ Feature: Suzie views a petition
     Then I should not see "At 10,000 signatures..."
     Then I should see "At 100,000 signatures..."
     Then I should see "Oh yes please"
-    And I should not see "Defence is the best Offence"
+    And I should not see the response "Defence is the best Offence"
     When I expand "Read the response in full"
-    Then I should see "Defence is the best Offence"
+    Then I should see the response "Defence is the best Offence"
 
   @javascript
   Scenario: Suzie does not see information about a future signature targets when viewing an open petition which has passed the threshold for response and debate
