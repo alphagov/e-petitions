@@ -1,11 +1,12 @@
-sudo: false
+dist: xenial
 language: ruby
+sudo: false
 
 cache:
   bundler: true
 
 rvm:
-  - 2.3.8
+  - 2.5.5
 
 services:
   - memcached
@@ -13,10 +14,10 @@ services:
 
 addons:
   chrome: stable
-  postgresql: "9.4"
+  postgresql: "10"
 
 before_install:
-  - gem install bundler -v 1.16.6
+  - gem install bundler -v 1.17.3
 
 before_script:
   - bundle install
