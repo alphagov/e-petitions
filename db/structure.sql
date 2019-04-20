@@ -2060,6 +2060,20 @@ CREATE INDEX index_archived_signatures_on_postcode_and_state_and_petition_id ON 
 
 
 --
+-- Name: index_archived_signatures_on_sector_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_sector_and_petition_id ON public.archived_signatures USING btree ("left"((postcode)::text, '-3'::integer), petition_id);
+
+
+--
+-- Name: index_archived_signatures_on_sector_and_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_archived_signatures_on_sector_and_state_and_petition_id ON public.archived_signatures USING btree ("left"((postcode)::text, '-3'::integer), state, petition_id);
+
+
+--
 -- Name: index_archived_signatures_on_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -2456,6 +2470,20 @@ CREATE INDEX index_signatures_on_postcode_and_petition_id ON public.signatures U
 --
 
 CREATE INDEX index_signatures_on_postcode_and_state_and_petition_id ON public.signatures USING btree (postcode, state, petition_id);
+
+
+--
+-- Name: index_signatures_on_sector_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_sector_and_petition_id ON public.signatures USING btree ("left"((postcode)::text, '-3'::integer), petition_id);
+
+
+--
+-- Name: index_signatures_on_sector_and_state_and_petition_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signatures_on_sector_and_state_and_petition_id ON public.signatures USING btree ("left"((postcode)::text, '-3'::integer), state, petition_id);
 
 
 --
@@ -3040,4 +3068,8 @@ INSERT INTO schema_migrations (version) VALUES ('20190414234613');
 INSERT INTO schema_migrations (version) VALUES ('20190415015616');
 
 INSERT INTO schema_migrations (version) VALUES ('20190419065717');
+
+INSERT INTO schema_migrations (version) VALUES ('20190420112847');
+
+INSERT INTO schema_migrations (version) VALUES ('20190420112856');
 
