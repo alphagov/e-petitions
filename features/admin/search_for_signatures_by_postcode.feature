@@ -15,3 +15,17 @@ Feature: Searching for signatures as Terry
     And I am logged in as a moderator
     When I search for petitions signed in "RG1 9ZZ" from the admin hub
     Then I should see 2 petitions associated with the postcode
+
+  Scenario: A user can search for signatures by sector
+    Given 1 petition signed in "RG1 1AA"
+    And 1 petition signed in "RG1 9ZZ"
+    And I am logged in as a moderator
+    When I search for petitions signed in "RG1 XXX"
+    Then I should see 2 petitions associated with the sector
+
+  Scenario: A user can search for signatures by postcode from the admin hub
+    Given 1 petition signed in "RG1 1AA"
+    And 1 petition signed in "RG1 9ZZ"
+    And I am logged in as a moderator
+    When I search for petitions signed in "RG1 XXX" from the admin hub
+    Then I should see 2 petitions associated with the sector

@@ -132,7 +132,7 @@ When(/^I view the petition through the admin interface$/) do
   click_button 'Search'
 end
 
-Then(/^I should see (\d+) petitions? associated with the (?:name|email address|IP address|postcode)$/) do |petition_count|
+Then(/^I should see (\d+) petitions? associated with the (?:name|email address|IP address|postcode|sector)$/) do |petition_count|
   expect(page).to have_css("tbody tr", :count => petition_count)
 end
 

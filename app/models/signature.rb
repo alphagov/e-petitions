@@ -127,6 +127,10 @@ class Signature < ActiveRecord::Base
       where(postcode: PostcodeSanitizer.call(postcode))
     end
 
+    def for_sector(postcode)
+      where("LEFT(postcode, -3) = ?", PostcodeSanitizer.call(postcode)[0..-4])
+    end
+
     def for_timestamp(timestamp, since:)
       column = arel_table[column_name_for(timestamp)]
       where(column.eq(nil).or(column.lt(since)))
@@ -211,6 +215,8 @@ class Signature < ActiveRecord::Base
         scope = scope.for_petition(query)
       elsif postcode_search?(query)
         scope = scope.for_postcode(query)
+      elsif sector_search?(query)
+        scope = scope.for_sector(query)
       else
         scope = scope.for_name(query)
       end
@@ -393,6 +399,10 @@ class Signature < ActiveRecord::Base
 
     def postcode_search?(query)
       PostcodeSanitizer.call(query) =~ PostcodeValidator::PATTERN
+    end
+
+    def sector_search?(query)
+      PostcodeSanitizer.call(query) =~ /\A[A-Z]{1,2}[0-9][0-9A-Z]?XXX\z/
     end
 
     def validated_at
