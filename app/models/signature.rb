@@ -53,6 +53,13 @@ class Signature < ActiveRecord::Base
     self.uuid = generate_uuid
   end
 
+  before_create if: :email? do
+    if find_similar
+      self.state = INVALIDATED_STATE
+      self.invalidated_at = Time.current
+    end
+  end
+
   before_destroy do
     !creator?
   end
@@ -93,6 +100,10 @@ class Signature < ActiveRecord::Base
 
     def duplicate(id, email)
       where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+    end
+
+    def similar(id, email)
+      for_email(email).where.not(id: id)
     end
 
     def duplicate_emails
@@ -449,6 +460,13 @@ class Signature < ActiveRecord::Base
 
   def find_duplicate!
     find_duplicate || (raise ActiveRecord::RecordNotFound, "Signature not found: #{name}, #{email}, #{postcode}")
+  end
+
+  def find_similar
+    return nil unless petition
+
+    signatures = petition.signatures.similar(id, email)
+    signatures.first if signatures.many?
   end
 
   def name=(value)
