@@ -55,7 +55,7 @@ group :test do
   gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'capybara', '~> 3.13.2'
+  gem 'capybara'
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
