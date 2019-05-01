@@ -3,6 +3,7 @@ class SponsorsController < SignaturesController
   skip_before_filter :redirect_to_petition_page_if_closed
   skip_before_filter :redirect_to_petition_page_if_closed_for_signing
 
+  before_action :redirect_to_new_sponsor_page_if_validated, only: [:verify]
   before_action :redirect_to_petition_page_if_moderated, except: [:thank_you, :signed]
   before_action :redirect_to_moderation_info_page_if_sponsored, except: [:thank_you, :signed]
   before_action :validate_creator, only: [:new]
@@ -62,7 +63,7 @@ class SponsorsController < SignaturesController
     if @petition.collecting_sponsors?
       if @petition.will_reach_threshold_for_moderation?
         SponsorSignedEmailOnThresholdEmailJob.perform_later(@signature)
-      else
+      elsif @signature.just_validated?
         SponsorSignedEmailBelowThresholdEmailJob.perform_later(@signature)
       end
     end
@@ -74,6 +75,12 @@ class SponsorsController < SignaturesController
 
   def signed_token_failure_url
     moderation_info_petition_url(@petition)
+  end
+
+  def redirect_to_new_sponsor_page_if_validated
+    if @signature.validated_before?(15.minutes.ago)
+      redirect_to new_petition_sponsor_url(@petition, token: @petition.sponsor_token)
+    end
   end
 
   def redirect_to_petition_page_if_moderated

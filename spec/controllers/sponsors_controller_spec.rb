@@ -827,6 +827,18 @@ RSpec.describe SponsorsController, type: :controller do
         it "doesn't set the flash :notice message" do
           expect(flash[:notice]).to be_nil
         end
+
+        it "doesn't send another email" do
+          expect(deliveries).to be_empty
+        end
+      end
+
+      context "and the signature has been validated more than 15 minutes ago" do
+        let(:signature) { FactoryBot.create(:validated_signature, validated_at: 30.minutes.ago, petition: petition, sponsor: true) }
+
+        it "redirects to the new sponsor page" do
+          expect(response).to redirect_to("/petitions/#{petition.id}/sponsors/new?token=#{petition.sponsor_token}")
+        end
       end
 
       context "and is at the threshold for moderation" do

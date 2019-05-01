@@ -557,6 +557,10 @@ class Signature < ActiveRecord::Base
       end
     end
 
+    if update_signature_counts
+      @just_validated = true
+    end
+
     if inline_updates? && update_signature_counts
       last_signed_at = petition.last_signed_at
       petition.increment_signature_count!(now)
@@ -564,6 +568,18 @@ class Signature < ActiveRecord::Base
       ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
       CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
     end
+  end
+
+  def just_validated?
+    defined?(@just_validated) ? @just_validated : false
+  end
+
+  def validated_before?(timestamp)
+    validated? && validated_at < timestamp
+  end
+
+  def reload(*)
+    super.tap { @just_validated = false }
   end
 
   def invalidate!(now = Time.current, invalidation_id = nil)

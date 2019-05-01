@@ -1547,6 +1547,69 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe "#just_validated?" do
+    let(:petition) { FactoryBot.create(:petition) }
+    let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+    context "when the signature is pending" do
+      it "returns false" do
+        expect(signature.just_validated?).to eq(false)
+      end
+    end
+
+    context "when the signature has just been validated" do
+      before do
+        signature.validate!
+      end
+
+      it "returns true" do
+        expect(signature.just_validated?).to eq(true)
+      end
+    end
+
+    context "when the signature has been reloaded after validation" do
+      before do
+        signature.validate!
+        signature.reload
+      end
+
+      it "returns false" do
+        expect(signature.just_validated?).to eq(false)
+      end
+    end
+  end
+
+  describe "#validated_before?" do
+    let(:petition) { FactoryBot.create(:petition) }
+    let(:timestamp) { 15.minutes.ago }
+
+    %w[pending fraudulent invalidated].each do |state|
+      context "when the signature is #{state}" do
+        let(:signature) { FactoryBot.create(:"#{state}_signature", petition: petition) }
+
+        it "returns false" do
+          expect(signature.validated_before?(timestamp)).to eq(false)
+        end
+      end
+    end
+
+    context "when the signature has been validated within the last 15 minutes" do
+      let(:signature) { FactoryBot.create(:validated_signature, validated_at: 5.minutes.ago, petition: petition) }
+
+      it "returns false" do
+        expect(signature.validated_before?(timestamp)).to eq(false)
+      end
+    end
+
+    context "when the signature has been validated over 15 minutes ago" do
+      let(:signature) { FactoryBot.create(:validated_signature, validated_at: 30.minutes.ago, petition: petition) }
+
+      it "returns true" do
+        expect(signature.validated_before?(timestamp)).to eq(true)
+      end
+    end
+  end
+
   describe '#invalidate!' do
     let!(:petition) { FactoryBot.create(:open_petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
     let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, created_at: 2.days.ago, updated_at: 2.days.ago) }
