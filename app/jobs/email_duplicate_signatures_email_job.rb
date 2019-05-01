@@ -7,6 +7,10 @@ class EmailDuplicateSignaturesEmailJob < EmailJob
   end
 
   def perform(signature)
+    if rate_limit.exceeded?(signature)
+      signature.fraudulent!
+    end
+
     mailer.send(email, signature).deliver_now
     Signature.increment_counter(:email_count, signature.id)
   end

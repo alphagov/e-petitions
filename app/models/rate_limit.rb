@@ -88,6 +88,7 @@ class RateLimit < ActiveRecord::Base
 
   def exceeded?(signature)
     return true unless threshold_reached?(signature)
+    return true if emails_exceeded?(signature)
     return true if ip_blocked?(signature.ip_address)
     return true if ip_geoblocked?(signature.ip_address)
     return true if domain_blocked?(signature.domain)
@@ -299,6 +300,10 @@ class RateLimit < ActiveRecord::Base
 
   def sustained_rate_exceeded?(signature)
     sustained_rate < signature.rate(sustained_period)
+  end
+
+  def emails_exceeded?(signature)
+    signature.petition.signatures.for_email(signature.email).count > 2
   end
 
   def threshold_reached?(signature)
