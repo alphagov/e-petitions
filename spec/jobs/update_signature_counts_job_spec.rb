@@ -107,6 +107,12 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
           signatures.each do |signature|
             signature.validate!(current_time - 45.seconds)
           end
+
+          # A new petition won't have been counted yet so we need
+          # to reset last_signed_at back to nil after the FIXME above.
+          petition.update_columns(last_signed_at: nil)
+          country_journal.update_columns(last_signed_at: nil)
+          constituency_journal.update_columns(last_signed_at: nil)
         end
 
         it "updates the signature count" do

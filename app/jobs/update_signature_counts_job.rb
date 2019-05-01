@@ -24,7 +24,7 @@ class UpdateSignatureCountsJob < ApplicationJob
 
     petitions.each do |petition|
       # Skip this petition if it's been updated since this job was scheduled
-      next unless petition.last_signed_at < signature_count_at
+      next if petition.last_signed_at? && petition.last_signed_at > signature_count_at
 
       # Check to see if the signature count is being reset
       if petition.signature_count_reset_at?
