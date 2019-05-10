@@ -1,0 +1,67 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="column-half search-inline">
+    <%= link_to "New Domain", new_admin_domain_path, class: "button inline-button" %>
+  </div>
+  <div class="column-half">
+    <%= will_paginate(@domains) %>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="grid-column">
+    <table class="domain-list">
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Strip Characters</th>
+          <th>Strip Extension</th>
+          <th>Alias</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @domains.each do |domain| %>
+          <tr class="domain">
+            <td>
+              <% if domain.name == "*" %>
+                (Default)
+              <% else %>
+                <%= domain.name %>
+              <% end %>
+            </td>
+            <td>
+              <% if domain.alias? %>
+                &nbsp;
+              <% else %>
+                <%= domain.strip_characters? ? content_tag(:code, domain.strip_characters) : "&nbsp;".html_safe %>
+              <% end %>
+            </td>
+            <td>
+              <% if domain.alias? %>
+                &nbsp;
+              <% else %>
+                <%= domain.strip_extension? ? content_tag(:code, domain.strip_extension) : "&nbsp;".html_safe %>
+              <% end %>
+            </td>
+            <td><%= domain.alias? ? domain.alias : "&nbsp;".html_safe %></td>
+            <td>
+              <%= button_to 'Edit', edit_admin_domain_path(domain), method: :get, class: 'button edit-action' %>
+              <%= button_to 'Delete', admin_domain_path(domain), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete domain?' } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="grid-column">
+    <%= will_paginate(@domains) %>
+  </div>
+</div>

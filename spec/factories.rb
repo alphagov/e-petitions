@@ -738,4 +738,10 @@ FactoryBot.define do
     count { 32 }
     starts_at { 1.hour.ago.at_beginning_of_hour }
   end
+
+  factory :domain do
+    sequence(:name) { |n| "example-#{n}.com" }
+    strip_characters { "." }
+    strip_extension { "+" }
+  end
 end

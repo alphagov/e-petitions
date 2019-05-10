@@ -1,0 +1,27 @@
+<%= form_row for: [form.object, :name] do %>
+  <%= form.label :name, class: 'form-label' %>
+  <%= error_messages_for_field @domain, :name %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 100, class: 'form-control' %>
+  <p><small>Use <code>*.example.com</code> to match all subdomains</small></p>
+<% end %>
+
+<%= form_row for: [form.object, :strip_characters] do %>
+  <%= form.label :strip_characters, class: 'form-label' %>
+  <%= error_messages_for_field @domain, :strip_characters %>
+  <%= form.text_field :strip_characters, tabindex: increment, maxlength: 10, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :strip_extension] do %>
+  <%= form.label :strip_extension, class: 'form-label' %>
+  <%= error_messages_for_field @domain, :strip_extension %>
+  <%= form.text_field :strip_extension, tabindex: increment, maxlength: 10, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :aliased_domain] do %>
+  <%= form.label :aliased_domain, class: 'form-label' %>
+  <%= error_messages_for_field @domain, :aliased_domain %>
+  <%= form.text_field :aliased_domain, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_domains_path, class: 'button-secondary' %>

@@ -35,7 +35,8 @@ Feature: Suzie signs a petition
     And I should see my MP
     And I can click on a link to visit my MP
     And I can click on a link to return to the petition
-    And I should see "2 signatures"
+    When I follow "Do something!"
+    Then I should see "2 signatures"
 
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
@@ -75,15 +76,51 @@ Feature: Suzie signs a petition
     And I say I am happy with my email address
     Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
+  Scenario: Suzie receives a duplicate signature email if an alias has been used to sign the petition already
+    Given "wimbledon.com" is configured to normalize email address
+    And I have already signed the petition using an alias
+    When I decide to sign the petition
+    And I fill in my details with postcode "N1 1TY"
+    And I try to sign
+    And I say I am happy with my email address
+    Then "wom.boid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
+
   Scenario: Suzie receives another email if she has already signed but not validated
     When I have already signed the petition but not validated my email
     And I decide to sign the petition
-    And I fill in my details
+    And I fill in my details with postcode "N1 1TY"
     And I try to sign
     And I say I am happy with my email address
     Then the signature count stays at 2
     And I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
+    When I confirm my email address
+    Then I should see "2 signatures"
+    And I should see my constituency "Islington South and Finsbury"
+    And I should see my MP
+    And I can click on a link to visit my MP
+    And I can click on a link to return to the petition
+    When I follow "Do something!"
+    Then I should see "2 signatures"
+
+  Scenario: Suzie receives another email if she has already signed using an alias but not validated
+    Given "wimbledon.com" is configured to normalize email address
+    And I have already signed the petition using an alias but not validated my email
+    When I decide to sign the petition
+    And I fill in my details with postcode "N1 1TY"
+    And I try to sign
+    And I say I am happy with my email address
+    Then the signature count stays at 2
+    And I am told to check my inbox to complete signing
+    And "wom.boid@wimbledon.com" should receive 1 email
+    When I confirm my email address
+    Then I should see "2 signatures"
+    And I should see my constituency "Islington South and Finsbury"
+    And I should see my MP
+    And I can click on a link to visit my MP
+    And I can click on a link to return to the petition
+    When I follow "Do something!"
+    Then I should see "2 signatures"
 
   Scenario: Suzie receives an email if her email has been used to sign the petition already
     When Eric has already signed the petition with Suzies email

@@ -156,4 +156,29 @@
       text-align: left;
     }
   }
+
+  .domain-list {
+    td {
+      padding: 8px 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    th, td {
+      &:last-child {
+        text-align: right;
+      }
+    }
+
+    code {
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 20px;
+      color: $black;
+      background-color: $highlight-colour;
+      border: 1px solid $border-colour;
+      border-radius: 3px;
+      padding: 3px 7px;
+    }
+  }
 }

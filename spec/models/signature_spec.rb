@@ -227,6 +227,25 @@ RSpec.describe Signature, type: :model do
           }.from(nil).to("6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6")
         end
       end
+
+      context "and the email is normalized" do
+        let!(:domain_1) { Domain.create(name: "example.com", strip_extension: "+", strip_characters: ".") }
+        let!(:domain_2) { Domain.create(name: "example.co.uk", canonical_domain: domain_1) }
+
+        let(:email) { "alice.smith+petitions@example.co.uk" }
+
+        before do
+          allow(Site).to receive(:disable_plus_address_check?).and_return(true)
+        end
+
+        it "sets the canonical_email column" do
+          expect {
+            signature.save
+          }.to change {
+            signature.canonical_email
+          }.from(nil).to("alicesmith@example.com")
+        end
+      end
     end
   end
 

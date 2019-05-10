@@ -147,6 +147,8 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :domains, except: %i[show]
+
       resource :rate_limits, path: 'rate-limits', only: %i[edit update]
       resource :site, only: %i[edit update]
       resource :holidays, only: %i[edit update]

@@ -107,7 +107,17 @@ end
 
 And "I have already signed the petition but not validated my email" do
   FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "womboid@wimbledon.com")
+                     :email => "womboid@wimbledon.com", :postcode => "N11TY")
+end
+
+And "I have already signed the petition using an alias" do
+  FactoryBot.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
+                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
+end
+
+And "I have already signed the petition using an alias but not validated my email" do
+  FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
+                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
 end
 
 Given /^Suzie has already signed the petition$/ do
@@ -118,6 +128,10 @@ end
 Given /^Eric has already signed the petition with Suzies email$/ do
   FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
          :postcode => "SW14 9RQ", :name => "Eric Wibbledon")
+end
+
+Given(/^"([^"]*)" is configured to normalize email address$/) do |domain|
+  FactoryBot.create(:domain, name: domain)
 end
 
 Given /^I have signed the petition with a second name$/ do
