@@ -53,12 +53,11 @@ group :test do
   gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'capybara'
-  gem 'poltergeist'
+  gem 'capybara', '~> 3.13.2'
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
-  gem 'webdrivers'
+  gem 'webdrivers', '~> 3.8.1'
   gem 'webmock'
   gem 'test_after_commit'
 end
