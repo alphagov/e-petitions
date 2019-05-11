@@ -1,0 +1,17 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+<h2>New Domain</h2>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for [:admin, @domain] do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>

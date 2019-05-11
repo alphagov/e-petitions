@@ -1,6 +1,8 @@
 require 'email_spec/cucumber'
 require 'rspec/core/pending'
-require 'capybara/poltergeist'
+require 'multi_test'
+
+MultiTest.disable_autorun
 
 Capybara.javascript_driver = ENV.fetch("JS_DRIVER", "chrome_headless").to_sym
 Capybara.default_max_wait_time = 5
@@ -35,6 +37,7 @@ Capybara.register_server :epets do |app, port|
 end
 
 Capybara.server = :epets
+Capybara.default_normalize_ws = true
 
 pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log')
 Process.detach(pid)
@@ -60,3 +63,22 @@ World(RejectionHelper)
 # run background jobs inline with delayed job
 ActiveJob::Base.queue_adapter = :delayed_job
 Delayed::Worker.delay_jobs = false
+
+
+# Monkey patch Cucumber::Rails to accept Capybara 3.x changes
+# https://github.com/cucumber/cucumber-rails/commit/286f37f
+module Cucumber
+  module Rails
+    module Capybara
+      module JavascriptEmulation
+        def click_with_javascript_emulation(*)
+          if link_with_non_get_http_method?
+            ::Capybara::RackTest::Form.new(driver, js_form(element_node.document, self[:href], emulated_method)).submit(self)
+          else
+            click_without_javascript_emulation
+          end
+        end
+      end
+    end
+  end
+end

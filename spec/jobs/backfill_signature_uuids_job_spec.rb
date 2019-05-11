@@ -8,9 +8,11 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
     before do
       signature.update_column(:uuid, nil)
       signature.reload
+
+      expect_any_instance_of(Signature).to receive(:update_uuid).and_call_original
     end
 
-    it "updates the signature column" do
+    it "updates the uuid column" do
       expect {
         described_class.perform_now
       }.to change {
@@ -26,9 +28,11 @@ RSpec.describe BackfillSignatureUuidsJob, type: :job do
     before do
       signature.update_column(:uuid, uuid)
       signature.reload
+
+      expect_any_instance_of(Signature).not_to receive(:update_uuid)
     end
 
-    it "skips updating the uuid" do
+    it "skips updating the uuid column" do
       expect {
         described_class.perform_now
       }.not_to change {

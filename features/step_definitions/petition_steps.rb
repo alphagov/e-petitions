@@ -307,19 +307,11 @@ Then(/^I should see my constituency "([^"]*)"/) do |constituency|
 end
 
 Then(/^I should see my MP/) do
-  signature = Signature.find_by(email: "womboidian@wimbledon.com",
-                                 postcode: "N11TY",
-                                 name: "Womboid Wibbledon",
-                                 petition_id: @petition.id)
-  expect(page).to have_text(signature.constituency.mp_name)
+  expect(page).to have_text("Emily Thornberry MP")
 end
 
 Then(/^I can click on a link to visit my MP$/) do
-  signature = Signature.find_by(email: "womboidian@wimbledon.com",
-                                 postcode: "N11TY",
-                                 name: "Womboid Wibbledon",
-                                 petition_id: @petition.id)
-  expect(page).to have_css("a[href*='#{signature.constituency.mp_url}']")
+  expect(page).to have_css("a[href*='http://www.parliament.uk/biographies/commons/emily-thornberry-mp/1536']")
 end
 
 Then(/^I should not see the text "([^"]*)"/) do |text|

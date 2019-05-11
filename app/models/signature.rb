@@ -44,13 +44,16 @@ class Signature < ActiveRecord::Base
   attr_readonly :sponsor, :creator
 
   before_create if: :email? do
+    self.uuid = generate_uuid
+    self.canonical_email = Domain.normalize(email)
+
     if find_duplicate
       raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
     end
-  end
 
-  before_create if: :email? do
-    self.uuid = generate_uuid
+    if find_similar
+      raise ActiveRecord::RecordNotUnique, "Signature is not unique: #{name}, #{email}, #{postcode}"
+    end
   end
 
   before_destroy do
@@ -97,6 +100,10 @@ class Signature < ActiveRecord::Base
 
     def duplicate_emails
       unscoped.from(validated.select(:uuid).group(:uuid).having(arel_table[Arel.star].count.gt(1))).count
+    end
+
+    def similar(id, email)
+      where(canonical_email: email).where.not(id: id)
     end
 
     def for_domain(domain)
@@ -448,7 +455,22 @@ class Signature < ActiveRecord::Base
   end
 
   def find_duplicate!
-    find_duplicate || (raise ActiveRecord::RecordNotFound, "Signature not found: #{name}, #{email}, #{postcode}")
+    find_duplicate || find_similar || (raise ActiveRecord::RecordNotFound, "Signature not found: #{name}, #{email}, #{postcode}")
+  end
+
+  def find_similar
+    return nil unless petition
+
+    signatures = petition.signatures.similar(id, canonical_email)
+    return signatures.first if signatures.many?
+
+    if signature = signatures.first
+      if sanitized_name == signature.sanitized_name
+        signature
+      elsif postcode != signature.postcode
+        signature
+      end
+    end
   end
 
   def name=(value)
@@ -659,6 +681,10 @@ class Signature < ActiveRecord::Base
 
   def update_uuid
     update_column(:uuid, generate_uuid)
+  end
+
+  def update_canonical_email
+    update_column(:canonical_email, Domain.normalize(email))
   end
 
   def number

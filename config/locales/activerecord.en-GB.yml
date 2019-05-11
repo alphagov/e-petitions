@@ -36,6 +36,11 @@ en-GB:
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
 
+        domain:
+          attributes:
+            aliased_domain:
+              not_found: "The aliased domain was not found - please check the spelling and try again"
+
         petition:
           attributes:
             moderation:
