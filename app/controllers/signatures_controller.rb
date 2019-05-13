@@ -106,12 +106,24 @@ class SignaturesController < ApplicationController
 
   def expired_form_requests
     form_requests.each_with_object([]) do |(id, hash), expired|
-      expired << [id, hash["form_token"]] if form_request_expired?(hash)
+      expired << [id, hash["form_token"]] if form_request_expired?(hash, form_request_max_age)
     end
   end
 
-  def form_request_expired?(hash)
-    hash["form_requested_at"].in_time_zone < 1.day.ago
+  def form_request_timestamps
+    timestamps = form_requests.map { |_, r| r["form_requested_at"].in_time_zone }
+  end
+
+  def last_form_request_timestamp
+    form_request_timestamps.sort[-10]
+  end
+
+  def form_request_max_age
+    [last_form_request_timestamp, 1.day.ago].compact.max
+  end
+
+  def form_request_expired?(hash, max_age = 1.day.ago)
+    hash["form_requested_at"].in_time_zone < max_age
   end
 
   def delete_form_request
