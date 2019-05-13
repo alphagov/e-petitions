@@ -27,3 +27,16 @@
   <%= error_messages_for_field @site, :feedback_email %>
   <%= form.text_field :feedback_email, tabindex: increment, maxlength: 100, class: "form-control" %>
 <% end %>
+
+<%= form_row for: [form.object, :disable_feedback_sending], class: "inline" do %>
+  <%= form.label :disable_feedback_sending, "Disable sending of feedback messages?", class: "form-label" %>
+  <%= error_messages_for_field @site, :disable_feedback_sending %>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_feedback_sending, true %>
+    <%= form.label :disable_feedback_sending, "Yes", for: "site_disable_feedback_sending_true" %>
+  </div>
+  <div class="multiple-choice">
+    <%= form.radio_button :disable_feedback_sending, false %>
+    <%= form.label :disable_feedback_sending, "No", for: "site_disable_feedback_sending_false" %>
+  </div>
+<% end %>
