@@ -63,5 +63,17 @@ RSpec.describe PetitionCountJob, type: :job do
         }.to have_enqueued_job(ResetPetitionSignatureCountJob).with(petition, current_time).on_queue("highest_priority")
       end
     end
+
+    context "and invalid signature count checking is disabled" do
+      before do
+        allow(Site).to receive(:disable_invalid_signature_count_check?).and_return(true)
+      end
+
+      it "doesn't enqueue a ResetPetitionSignatureCountJob job" do
+        expect {
+          described_class.perform_now(current_time)
+        }.not_to have_enqueued_job(ResetPetitionSignatureCountJob)
+      end
+    end
   end
 end

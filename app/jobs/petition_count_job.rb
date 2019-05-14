@@ -5,7 +5,7 @@ class PetitionCountJob < ApplicationJob
   queue_as :highest_priority
 
   def perform(now = current_time)
-    time = signature_count_at(now.in_time_zone)
+    return if disable_invalid_signature_count_check?
 
     unless petitions.empty?
       petitions.each do |petition|
