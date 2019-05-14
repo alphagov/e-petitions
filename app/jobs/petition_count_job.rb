@@ -7,8 +7,8 @@ class PetitionCountJob < ApplicationJob
   def perform(now = current_time)
     return if disable_invalid_signature_count_check?
 
-    unless petitions.empty?
-      petitions.each do |petition|
+    petitions.find_each do |petition|
+      unless petition.valid_signature_count!
         ResetPetitionSignatureCountJob.perform_later(petition, now)
       end
     end
@@ -20,19 +20,7 @@ class PetitionCountJob < ApplicationJob
     Time.current.change(usec: 0).iso8601
   end
 
-  def signature_count_at(time)
-    signature_count_interval.seconds.ago(time)
-  end
-
   def petitions
-    @petitions ||= fetch_petitions
-  end
-
-  def fetch_petitions
-    petitions_scope.reject(&:valid_signature_count?)
-  end
-
-  def petitions_scope
-    Petition.signed_since(36.hours.ago)
+    Petition.in_need_of_validating
   end
 end

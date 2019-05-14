@@ -981,7 +981,8 @@ CREATE TABLE public.petitions (
     locked_at timestamp without time zone,
     locked_by_id integer,
     moderation_lag integer,
-    signature_count_reset_at timestamp without time zone
+    signature_count_reset_at timestamp without time zone,
+    signature_count_validated_at timestamp without time zone
 );
 
 
@@ -2411,6 +2412,13 @@ CREATE INDEX index_petitions_on_tags ON public.petitions USING gin (tags public.
 
 
 --
+-- Name: index_petitions_on_validated_at_and_signed_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_petitions_on_validated_at_and_signed_at ON public.petitions USING btree (((last_signed_at > signature_count_validated_at)));
+
+
+--
 -- Name: index_rejections_on_petition_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -3159,4 +3167,8 @@ INSERT INTO schema_migrations (version) VALUES ('20190502104930');
 INSERT INTO schema_migrations (version) VALUES ('20190502105505');
 
 INSERT INTO schema_migrations (version) VALUES ('20190502105750');
+
+INSERT INTO schema_migrations (version) VALUES ('20190514055139');
+
+INSERT INTO schema_migrations (version) VALUES ('20190514070908');
 

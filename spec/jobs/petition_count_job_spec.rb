@@ -19,12 +19,31 @@ RSpec.describe PetitionCountJob, type: :job do
   end
 
   context "when there are no petitions with invalid signature counts" do
-    let!(:petition) { FactoryBot.create(:open_petition) }
+    let!(:petition) do
+      FactoryBot.create(:open_petition,
+        signature_count_validated_at: 24.hours.ago,
+        last_signed_at: 60.seconds.ago
+      )
+    end
+
+    before do
+      # FIXME: reset the signature count to ensure it's valid because
+      # the factories don't leave the petition in a consistent state.
+      petition.update_signature_count!(60.seconds.ago)
+    end
 
     it "doesn't enqueue a ResetPetitionSignatureCountJob job" do
       expect {
         described_class.perform_now
       }.not_to have_enqueued_job(ResetPetitionSignatureCountJob)
+    end
+
+    it "updates the signature_count_validated_at timestamp" do
+      expect {
+        described_class.perform_now
+      }.to change {
+        petition.reload.signature_count_validated_at
+      }.to be_within(5.seconds).of(Time.current)
     end
   end
 
@@ -34,6 +53,7 @@ RSpec.describe PetitionCountJob, type: :job do
     let!(:petition) do
       FactoryBot.create(:open_petition,
         created_at: 2.days.ago,
+        signature_count_validated_at: 24.hours.ago,
         last_signed_at: 60.seconds.ago,
         signature_count: 100,
         creator_attributes: { validated_at: 60.seconds.ago }
@@ -50,6 +70,14 @@ RSpec.describe PetitionCountJob, type: :job do
           described_class.perform_now(current_time)
         }.to have_enqueued_job(ResetPetitionSignatureCountJob).with(petition, current_time).on_queue("highest_priority")
       end
+
+      it "doesn't update the signature_count_validated_at timestamp" do
+        expect {
+          described_class.perform_now(current_time)
+        }.not_to change {
+          petition.reload.signature_count_validated_at
+        }
+      end
     end
 
     context "and signature count updating is disabled" do
@@ -61,6 +89,14 @@ RSpec.describe PetitionCountJob, type: :job do
         expect {
           described_class.perform_now(current_time)
         }.to have_enqueued_job(ResetPetitionSignatureCountJob).with(petition, current_time).on_queue("highest_priority")
+      end
+
+      it "doesn't update the signature_count_validated_at timestamp" do
+        expect {
+          described_class.perform_now(current_time)
+        }.not_to change {
+          petition.reload.signature_count_validated_at
+        }
       end
     end
 
