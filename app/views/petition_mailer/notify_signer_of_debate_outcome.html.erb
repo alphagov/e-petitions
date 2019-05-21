@@ -42,4 +42,4 @@
 
 <hr>
 <p><small>You’re receiving this email because you signed this petition: “<%= @petition.action %>”.</small></p>
-<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, @signature.unsubscribe_token) %></small></p>
+<p><small>To unsubscribe from getting emails about this petition: <%= link_to nil, unsubscribe_signature_url(@signature, token: @signature.unsubscribe_token) %></small></p>
