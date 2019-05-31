@@ -90,9 +90,9 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_creator_of_validated_petition_being_stopped)
   end
 
-  def gather_sponsors_for_petition(petition)
+  def gather_sponsors_for_petition(petition, bcc = nil)
     @petition, @creator = petition, petition.creator
-    mail to: @creator.email, subject: subject_for(:gather_sponsors_for_petition)
+    mail to: @creator.email, bcc: bcc, subject: subject_for(:gather_sponsors_for_petition)
   end
 
   def notify_signer_of_debate_outcome(petition, signature)

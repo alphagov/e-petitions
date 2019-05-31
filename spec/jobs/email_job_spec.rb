@@ -184,6 +184,16 @@ RSpec.describe GatherSponsorsForPetitionEmailJob, type: :job do
       described_class.perform_later(petition)
     end
   end
+
+  context "when passing a BCC address" do
+    it "sends the PetitionMailer#gather_sponsors_for_petition email with a BCC address" do
+      expect(PetitionMailer).to receive(:gather_sponsors_for_petition).with(petition, Site.feedback_email).and_call_original
+
+      perform_enqueued_jobs do
+        described_class.perform_later(petition, Site.feedback_email)
+      end
+    end
+  end
 end
 
 RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do

@@ -110,5 +110,41 @@ RSpec.describe Admin::PetitionsController, type: :controller, admin: true do
         end
       end
     end
+
+    describe "POST /admin/petitions/:id/resend" do
+      context "when the petition doesn't exist" do
+        before { post :resend, id: "999999" }
+
+        it "redirects to the admin dashboard page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:alert]).to eq("Sorry, we couldn't find petition 999999")
+        end
+      end
+
+      context "when the petition exists" do
+        let!(:petition) { FactoryBot.create(:petition, action: "Do Stuff!", creator_attributes: { email: "bob@example.com" }) }
+
+        before { perform_enqueued_jobs { post :resend, id: petition.to_param } }
+
+        it "redirects to the admin petition page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.to_param}")
+        end
+
+        it "sets the flash alert message" do
+          expect(flash[:notice]).to eq("Resent the email to the petition creator and forwarded a copy to the feedback address")
+        end
+
+        it "resends the email to the petition creator" do
+          expect(mailbox_for("bob@example.com").last).to have_subject("Action required: Petition “Do Stuff!”")
+        end
+
+        it "sends a copy of the email to the feedback address" do
+          expect(mailbox_for("petitionscommittee@parliament.uk").last).to have_subject("Action required: Petition “Do Stuff!”")
+        end
+      end
+    end
   end
 end

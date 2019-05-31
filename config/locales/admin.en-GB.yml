@@ -47,6 +47,7 @@ en-GB:
       domain_updated: "Domain updated successfully"
       domain_deleted: "Domain removed successfully"
       domain_not_deleted: "Domain could not be removed - please contact support"
+      email_resent_to_creator: "Resent the email to the petition creator and forwarded a copy to the feedback address"
       email_sent_overnight: "Email will be sent overnight"
       enqueued_petition_statistics_update: "Updating the petition statistics - please wait a few minutes and then refresh this page"
       government_response_updated: "Updated government response successfully"

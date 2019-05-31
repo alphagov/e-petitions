@@ -1,7 +1,7 @@
 class Admin::PetitionsController < Admin::AdminController
   before_action :redirect_to_show_page, only: [:index], if: :petition_id?
   before_action :fetch_petitions, only: [:index]
-  before_action :fetch_petition, only: [:show]
+  before_action :fetch_petition, only: [:show, :resend]
 
   rescue_from ActiveRecord::RecordNotFound do
     redirect_to admin_root_url, alert: "Sorry, we couldn't find petition #{params[:id]}"
@@ -18,6 +18,11 @@ class Admin::PetitionsController < Admin::AdminController
     respond_to do |format|
       format.html
     end
+  end
+
+  def resend
+    GatherSponsorsForPetitionEmailJob.perform_later(@petition, Site.feedback_email)
+    redirect_to admin_petition_url(@petition), notice: :email_resent_to_creator
   end
 
   protected
