@@ -15,6 +15,12 @@
   <%= auto_link(@petition.creator.email) %>
 </dd>
 
+<% if @petition.collecting_sponsors? %>
+  <dd>
+    <%=  button_to 'Resend email to the creator', resend_admin_petition_url(@petition), method: :post, class: 'button', data: { confirm: "Resend a copy of the email to the petition creator and forward a copy to the feedback address?" } %>
+  </dd>
+<% end %>
+
 <% if @petition.in_todo_list? %>
   <dt>Created on</dt>
   <dd><%= date_time_format(@petition.created_at) %></dd>
@@ -103,6 +109,6 @@
       <% end %>
     </small>
 
-    <%=  button_to 'Refresh', admin_petition_statistics_url(@petition), method: :patch, class: 'button' %>
+    <%=  button_to 'Refresh statistics', admin_petition_statistics_url(@petition), method: :patch, class: 'button' %>
   </div>
 <% end %>

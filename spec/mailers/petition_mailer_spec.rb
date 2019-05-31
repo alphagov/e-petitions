@@ -384,6 +384,14 @@ RSpec.describe PetitionMailer, type: :mailer do
         expect(mail).to have_body_text(%r[however we have a very large number to check])
       end
     end
+
+    context "when a BCC address is passed" do
+      subject(:mail) { described_class.gather_sponsors_for_petition(petition, Site.feedback_email) }
+
+      it "adds the BCC address to the email" do
+        expect(mail).to bcc_to("petitionscommittee@parliament.uk")
+      end
+    end
   end
 
   describe "notifying signature of debate outcome" do

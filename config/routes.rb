@@ -116,6 +116,8 @@ Rails.application.routes.draw do
       resource :moderation_delay, only: %i[new create], path: 'moderation-delay'
 
       resources :petitions, only: %i[show index] do
+        post :resend, on: :member
+
         resources :emails, controller: 'petition_emails', except: %i[index show]
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
