@@ -53,5 +53,10 @@ module Epets
     # to remove the CloudFront ip address from X-Forwarded-For
     config.middleware.insert_before ActionDispatch::RemoteIp, "CloudFrontRemoteIp"
     config.middleware.delete "ActionDispatch::RemoteIp"
+
+    # Don't log certain requests that spam the log files
+    config.middleware.insert_before Rails::Rack::Logger, "QuietLogger", paths: [
+      %r[\A/petitions/\d+/count.json\z], %q[/admin/status.json], %q[/ping]
+    ]
   end
 end
