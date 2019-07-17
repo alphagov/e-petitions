@@ -39,10 +39,18 @@ class UpdateSignatureCountsJob < ApplicationJob
         next
       end
 
+      # Save the current last_signed_at for the start of the journal window
       last_signed_at = petition.last_signed_at
-      petition.increment_signature_count!(signature_count_at)
-      ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
-      CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+
+      # Don't update the journals unless we have updated the signature count
+      # This prevents the journals getting multiple updates before the creator's
+      # signature is added to the count which may not be done immediately as the
+      # main signature count window lags by `signature_count_interval` seconds
+      # to prevent race conditions with validated_at timestamps created in Ruby
+      if petition.increment_signature_count!(signature_count_at)
+        ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+        CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+      end
     end
 
     signature_count_updated_at!(signature_count_at)

@@ -473,9 +473,9 @@ class Petition < ActiveRecord::Base
     sql = "signature_count = signature_count + ?, last_signed_at = ?, updated_at = ?"
     count = signatures.validated_count(last_signed_at, time)
 
-    return true if count.zero?
+    return false if count.zero?
 
-    if update_all([sql, count, time, time]) > 0
+    if result = update_all([sql, count, time, time]) > 0
       self.reload
 
       updates = []
@@ -505,7 +505,7 @@ class Petition < ActiveRecord::Base
       end
     end
 
-    true
+    result
   end
 
   def decrement_signature_count!(time = Time.current)
