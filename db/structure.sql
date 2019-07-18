@@ -924,7 +924,8 @@ CREATE TABLE public.petition_statistics (
     refreshed_at timestamp without time zone,
     duplicate_emails integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    pending_rate numeric
 );
 
 
@@ -3171,4 +3172,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190502105750');
 INSERT INTO schema_migrations (version) VALUES ('20190514055139');
 
 INSERT INTO schema_migrations (version) VALUES ('20190514070908');
+
+INSERT INTO schema_migrations (version) VALUES ('20190718133606');
 

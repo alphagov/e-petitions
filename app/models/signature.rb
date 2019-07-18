@@ -102,6 +102,10 @@ class Signature < ActiveRecord::Base
       unscoped.from(validated.select(:uuid).group(:uuid).having(arel_table[Arel.star].count.gt(1))).count
     end
 
+    def pending_rate
+      (Rational(pending.count, total.count) * 100).to_d(2)
+    end
+
     def similar(id, email)
       where(canonical_email: email).where.not(id: id)
     end
@@ -183,6 +187,10 @@ class Signature < ActiveRecord::Base
 
     def pending
       where(state: PENDING_STATE)
+    end
+
+    def total
+      where(state: [PENDING_STATE, VALIDATED_STATE])
     end
 
     def petition_ids_signed_since(timestamp)
