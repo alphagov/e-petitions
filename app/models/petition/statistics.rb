@@ -9,7 +9,8 @@ class Petition < ActiveRecord::Base
     def refresh!(now = Time.current)
       update!(
         refreshed_at: now,
-        duplicate_emails: refresh_duplicate_emails
+        duplicate_emails: refresh_duplicate_emails,
+        pending_rate: refresh_pending_rate
       )
     end
 
@@ -21,6 +22,10 @@ class Petition < ActiveRecord::Base
 
       def refresh_duplicate_emails
         petition.signatures.duplicate_emails
+      end
+
+      def refresh_pending_rate
+        petition.signatures.pending_rate
       end
   end
 end

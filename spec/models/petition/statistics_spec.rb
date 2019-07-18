@@ -92,5 +92,33 @@ RSpec.describe Petition::Statistics, type: :model do
         }.from(nil).to(1)
       end
     end
+
+    context "when there are no pending signatures" do
+      before do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
+
+      it "updates the pending_rate value" do
+        expect {
+          statistics.refresh!
+        }.to change {
+          statistics.reload.pending_rate
+        }.from(nil).to(0)
+      end
+    end
+
+    context "when there are pending signatures" do
+      before do
+        FactoryBot.create(:pending_signature, petition: petition)
+      end
+
+      it "updates the pending_rate value" do
+        expect {
+          statistics.refresh!
+        }.to change {
+          statistics.reload.pending_rate
+        }.from(nil).to(50)
+      end
+    end
   end
 end

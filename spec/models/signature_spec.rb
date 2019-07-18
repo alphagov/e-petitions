@@ -1165,6 +1165,26 @@ RSpec.describe Signature, type: :model do
     end
   end
 
+  describe ".pending_rate" do
+    let!(:petition) { FactoryBot.create(:open_petition) }
+
+    context "when there are no pending signatures" do
+      it "returns zero" do
+        expect(petition.signatures.pending_rate).to eq(0)
+      end
+    end
+
+    context "when there are pending signatures" do
+      before do
+        FactoryBot.create(:pending_signature, petition: petition)
+      end
+
+      it "returns the number of duplicate emails" do
+        expect(petition.signatures.pending_rate).to eq(50)
+      end
+    end
+  end
+
   describe "#number" do
     let(:attributes) { FactoryBot.attributes_for(:petition) }
     let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
