@@ -48,7 +48,7 @@
     <% if @petition.statistics.refreshed? %>
       <dt>Duplicate emails</dt>
       <dd>
-        <% if @petition.statistics.duplicate_emails? %>
+        <% if @petition.statistics.duplicate_emails.present? %>
           <%= number_with_delimiter(@petition.statistics.duplicate_emails) %>
         <% else %>
           –
@@ -56,7 +56,7 @@
       </dd>
       <dt>Pending rate</dt>
       <dd>
-        <% if @petition.statistics.duplicate_emails? %>
+        <% if @petition.statistics.pending_rate.present? %>
           <%= number_to_percentage(@petition.statistics.pending_rate, precision: 1) %>
         <% else %>
           –

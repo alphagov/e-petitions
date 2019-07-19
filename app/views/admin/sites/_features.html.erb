@@ -41,7 +41,7 @@
 <% end %>
 
 <%= form_row for: [form.object, :disable_daily_update_statistics_job], class: "inline" do %>
-  <%= form.label :disable_daily_update_statistics_job, "Disable updating of duplicate email statistics?", class: "form-label" %>
+  <%= form.label :disable_daily_update_statistics_job, "Disable updating of petition statistics?", class: "form-label" %>
   <%= error_messages_for_field @site, :disable_daily_update_statistics_job %>
   <div class="multiple-choice">
     <%= form.radio_button :disable_daily_update_statistics_job, true %>
