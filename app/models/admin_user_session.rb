@@ -8,6 +8,8 @@ class AdminUserSession < Authlogic::Session::Base
   end
 
   before_destroy do
+    controller.reset_session
+
     if stale?
       stale_record.reset_persistence_token!
     else

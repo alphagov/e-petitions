@@ -2,6 +2,8 @@ class Admin::UserSessionsController < Admin::AdminController
   skip_before_filter :require_admin, only: [:new, :create, :destroy, :status]
   skip_before_filter :check_for_password_change
 
+  before_action :reset_session, only: [:create, :destroy]
+
   def new
     @user_session = AdminUserSession.new
   end
