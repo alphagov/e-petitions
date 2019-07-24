@@ -12,6 +12,16 @@ class ApplicationController < ActionController::Base
 
   hide_action :admin_request?
 
+  after_action do
+    directives = [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' www.googletagmanager.com",
+      "style-src 'self' 'unsafe-inline'"
+    ]
+
+    response.headers["Content-Security-Policy"] = directives.join("; ")
+  end
+
   def admin_request?
     false
   end
