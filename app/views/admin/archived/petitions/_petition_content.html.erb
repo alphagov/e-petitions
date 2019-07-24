@@ -16,5 +16,5 @@
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>
   <p><%= rejection_reason(@petition.rejection.code) %></p>
-  <%= auto_link(simple_format(@petition.rejection.details)) %>
+  <%= auto_link(simple_format(h(@petition.rejection.details))) %>
 <% end -%>

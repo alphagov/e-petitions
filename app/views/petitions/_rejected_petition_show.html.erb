@@ -17,7 +17,7 @@
   <h2>Why was this petition rejected?</h2>
   <%= rejection_description(petition.rejection.code) %>
   <% if petition.rejection.details? %>
-    <p><%= auto_link(simple_format(petition.rejection.details)) %></p>
+    <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
   <% end %>
   <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
 
