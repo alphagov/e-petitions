@@ -93,6 +93,15 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Background is too long"
   And I should see "Additional details is too long"
 
+  When I fill in "What do you want us to do?" with "=cmd"
+  And I fill in "Background" with "@cmd"
+  And I fill in "Additional details" with "+cmd"
+  And I press "Preview petition"
+
+  Then I should see "Action can't start with a '=', '+', '-' or '@'"
+  And I should see "Background can't start with a '=', '+', '-' or '@'"
+  And I should see "Additional details can't start with a '=', '+', '-' or '@'"
+
   When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
   And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
   And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
@@ -119,6 +128,11 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Email must be completed"
   And I should see "You must be a British citizen"
   And I should see "Postcode must be completed"
+
+  When I fill in "Name" with "=cmd"
+  And I press "Continue"
+
+  Then I should see "Name can't start with a '=', '+', '-' or '@'"
 
   When I fill in my details
   And I press "Continue"

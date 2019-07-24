@@ -154,10 +154,13 @@ class PetitionCreator
   end
 
   def validate_petition
+    errors.add(:action, :invalid) if action =~ /\A[-=+@]/
     errors.add(:action, :blank) unless action.present?
     errors.add(:action, :too_long, count: 80) if action.length > 80
+    errors.add(:background, :invalid) if background =~ /\A[-=+@]/
     errors.add(:background, :blank) unless background.present?
     errors.add(:background, :too_long, count: 300) if background.length > 300
+    errors.add(:additional_details, :invalid) if additional_details =~ /\A[-=+@]/
     errors.add(:additional_details, :too_long, count: 800) if additional_details.length > 800
 
     if errors.any?
@@ -166,6 +169,7 @@ class PetitionCreator
   end
 
   def validate_creator
+    errors.add(:name, :invalid) if name =~ /\A[-=+@]/
     errors.add(:name, :blank) unless name.present?
     errors.add(:name, :too_long, count: 255) if action.length > 255
     errors.add(:email, :blank) unless email.present?

@@ -101,16 +101,20 @@ en-GB:
       creator:
         blank: "Creator must be completed"
       action:
+        invalid: "Action can't start with a '=', '+', '-' or '@'"
         blank: "Action must be completed"
         too_long: "Action is too long"
       background:
+        invalid: "Background can't start with a '=', '+', '-' or '@'"
         blank: "Background must be completed"
         too_long: "Background is too long"
       additional_details:
+        invalid: "Additional details can't start with a '=', '+', '-' or '@'"
         too_long: "Additional details is too long"
       comment:
         blank: "Comments must be completed"
       name:
+        invalid: "Name can't start with a '=', '+', '-' or '@'"
         blank: "Name must be completed"
       location_code:
         blank: "Location must be completed"

@@ -41,6 +41,10 @@ class Signature < ActiveRecord::Base
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
+  validate do
+    errors.add(:name, :invalid) if name.to_s =~ /\A[-=+@]/
+  end
+
   attr_readonly :sponsor, :creator
 
   before_create if: :email? do

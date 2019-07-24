@@ -4,7 +4,7 @@ csv_cache [:local_petitions, @constituency], expires_in: 5.minutes do
 
     @petitions.each do |petition|
       csv << [
-        petition.action,
+        csv_escape(petition.action),
         petition_url(petition),
         petition.state,
         petition.constituency_signature_count,

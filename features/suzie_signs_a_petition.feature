@@ -38,6 +38,12 @@ Feature: Suzie signs a petition
     When I follow "Do something!"
     Then I should see "2 signatures"
 
+  Scenario: Suzie signs a petition with an invalid name
+    When I go to the new signature page for "Do something!"
+    And I fill in "Name" with "=cmd"
+    And I press "Continue"
+    Then I should see "Name can't start with a '=', '+', '-' or '@'"
+
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
     And I fill in my details with email "womboid@wimbledon.com"

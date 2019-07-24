@@ -1,6 +1,7 @@
 require 'csv'
 
 class PetitionCSVPresenter
+  include CsvHelper
   include DateTimeHelper
   include Rails.application.routes.url_helpers
 
@@ -57,7 +58,11 @@ class PetitionCSVPresenter
     petition.note.details if petition.note
   end
 
-  delegate *attributes, to: :petition
+  attributes.each do |attribute|
+    define_method attribute do
+      csv_escape petition.send attribute
+    end
+  end
 
   timestamps.each do |timestamp|
     define_method timestamp do
