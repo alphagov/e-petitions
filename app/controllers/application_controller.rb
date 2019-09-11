@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   after_action do
     directives = [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' www.googletagmanager.com",
+      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
       "style-src 'self' 'unsafe-inline'"
     ]
 
