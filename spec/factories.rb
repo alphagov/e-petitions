@@ -1,4 +1,5 @@
 require 'factory_bot'
+require 'active_support/core_ext/digest/uuid'
 
 FactoryBot.define do
   factory :admin_user do
@@ -214,6 +215,7 @@ FactoryBot.define do
     transient do
       admin_notes { nil }
       creator_name { nil }
+      creator_email { nil }
       creator_attributes { {} }
       sponsors_signed nil
       sponsor_count { Site.minimum_number_of_sponsors }
@@ -228,6 +230,10 @@ FactoryBot.define do
 
       if evaluator.creator_name
         petition.creator.name = evaluator.creator_name
+      end
+
+      if evaluator.creator_email
+        petition.creator.email = evaluator.creator_email
       end
 
       if evaluator.admin_notes
@@ -743,5 +749,11 @@ FactoryBot.define do
     sequence(:name) { |n| "example-#{n}.com" }
     strip_characters { "." }
     strip_extension { "+" }
+  end
+
+  factory :dissolution_notification do
+    sequence(:id) do |n|
+      Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com")
+    end
   end
 end

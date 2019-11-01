@@ -211,20 +211,59 @@ RSpec.describe NotifyCreatorThatModerationIsDelayedJob, type: :job do
   end
 end
 
-RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
-  let(:petition) { FactoryBot.create(:petition) }
-  let(:signature) { FactoryBot.create(:signature, petition: petition) }
+RSpec.describe DeliverDissolutionNotificationJob, type: :job do
+  let(:email) { "alice@example.com" }
+  let(:notification) { FactoryBot.create(:dissolution_notification, id: "6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6") }
+  let(:signature) { notification.signature }
+  let(:petitions) { notification.petitions }
+  let(:created_petitions) { notification.created_petitions }
 
   context "when parliament is not dissolving" do
     before do
       allow(Parliament).to receive(:dissolution_announced?).and_return(false)
     end
 
-    it "does not send the PetitionMailer#notify_creator_that_petition_is_published email" do
-      expect(PetitionMailer).not_to receive(:notify_creator_of_closing_date_change).with(signature).and_call_original
+    context "and the email address is a creator" do
+      before do
+        FactoryBot.create(:open_petition, creator_email: email)
+      end
 
-      perform_enqueued_jobs do
-        described_class.perform_later(signature)
+      it "does not send the PetitionMailer#notify_creator_of_closing_date_change email" do
+        expect(PetitionMailer).not_to receive(:notify_creator_of_closing_date_change).with(signature, created_petitions)
+        expect(notification).not_to receive(:touch)
+
+        described_class.perform_now(notification)
+      end
+    end
+
+    context "and the email address is a signer" do
+      before do
+        petition = FactoryBot.create(:open_petition)
+        FactoryBot.create(:validated_signature, email: email, petition: petition)
+      end
+
+      it "does not send the PetitionMailer#notify_signer_of_closing_date_change email" do
+        expect(PetitionMailer).not_to receive(:notify_signer_of_closing_date_change).with(signature, petitions)
+        expect(notification).not_to receive(:touch)
+
+        described_class.perform_now(notification)
+      end
+    end
+
+    context "and the email address is both a creator and a signer" do
+      before do
+        FactoryBot.create(:open_petition, creator_email: email)
+
+        petition = FactoryBot.create(:open_petition)
+        FactoryBot.create(:validated_signature, email: email, petition: petition)
+      end
+
+      it "does not send either email" do
+        expect(PetitionMailer).not_to receive(:notify_creator_of_closing_date_change).with(signature, created_petitions)
+        expect(PetitionMailer).not_to receive(:notify_signer_of_closing_date_change).with(signature, petitions)
+        expect(notification).not_to receive(:touch)
+
+        described_class.perform_now(notification)
       end
     end
   end
@@ -233,13 +272,53 @@ RSpec.describe NotifyCreatorThatParliamentIsDissolvingJob, type: :job do
     before do
       allow(Parliament).to receive(:dissolution_announced?).and_return(true)
       allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
+      allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
+      allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)
     end
 
-    it "sends the PetitionMailer#notify_creator_that_petition_is_published email" do
-      expect(PetitionMailer).to receive(:notify_creator_of_closing_date_change).with(signature).and_call_original
+    context "and the email address is a creator" do
+      before do
+        FactoryBot.create(:open_petition, creator_email: email)
+      end
 
-      perform_enqueued_jobs do
-        described_class.perform_later(signature)
+      it "only sends the PetitionMailer#notify_creator_of_closing_date_change email" do
+        expect(PetitionMailer).to receive(:notify_creator_of_closing_date_change).with(signature, created_petitions, 0).and_call_original
+        expect(PetitionMailer).not_to receive(:notify_signer_of_closing_date_change).with(signature, petitions, 0).and_call_original
+        expect(notification).to receive(:touch).and_call_original
+
+        described_class.perform_now(notification)
+      end
+    end
+
+    context "and the email address is a signer" do
+      before do
+        petition = FactoryBot.create(:open_petition)
+        FactoryBot.create(:validated_signature, email: email, petition: petition)
+      end
+
+      it "only sends the PetitionMailer#notify_signer_of_closing_date_change email" do
+        expect(PetitionMailer).not_to receive(:notify_creator_of_closing_date_change).with(signature, created_petitions, 0).and_call_original
+        expect(PetitionMailer).to receive(:notify_signer_of_closing_date_change).with(signature, petitions, 0).and_call_original
+        expect(notification).to receive(:touch).and_call_original
+
+        described_class.perform_now(notification)
+      end
+    end
+
+    context "and the email address is both a creator and a signer" do
+      before do
+        FactoryBot.create(:open_petition, creator_email: email)
+
+        petition = FactoryBot.create(:open_petition)
+        FactoryBot.create(:validated_signature, email: email, petition: petition)
+      end
+
+      it "sends both emails" do
+        expect(PetitionMailer).to receive(:notify_creator_of_closing_date_change).with(signature, created_petitions, 0).and_call_original
+        expect(PetitionMailer).to receive(:notify_signer_of_closing_date_change).with(signature, petitions, 0).and_call_original
+        expect(notification).to receive(:touch).and_call_original
+
+        described_class.perform_now(notification)
       end
     end
   end

@@ -14,8 +14,8 @@ RSpec.describe PetitionMailer, type: :mailer do
     )
   end
 
-  let(:pending_signature) { FactoryBot.create(:pending_signature, petition: petition) }
-  let(:validated_signature) { FactoryBot.create(:validated_signature, petition: petition) }
+  let(:pending_signature) { FactoryBot.create(:pending_signature, name: "Alice Smith", email: "alice@example.com", petition: petition) }
+  let(:validated_signature) { FactoryBot.create(:validated_signature, name: "Bob Jones", email: "bob@example.com", petition: petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
 
   describe "notifying creator that moderation is delayed" do
@@ -214,11 +214,13 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of closing date change" do
-    let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(creator) }
+    let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(creator, [petition], 3) }
 
     before do
       petition.publish
       allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
+      allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
+      allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)
     end
 
     it "is sent to the right address" do
@@ -237,6 +239,43 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     it "informs the creator of the change" do
       expect(mail).to have_body_text("the closing date for your petition has changed")
+    end
+
+    it "includes the number of remaining petitions" do
+      expect(mail).to have_body_text("Plus another 3 petitions")
+    end
+  end
+
+  describe "notifying signer of closing date change" do
+    let(:mail) { PetitionMailer.notify_signer_of_closing_date_change(validated_signature, [petition], 15) }
+
+    before do
+      petition.publish
+      allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
+      allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
+      allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)
+    end
+
+    it "is sent to the right address" do
+      expect(mail.to).to eq(%w[bob@example.com])
+      expect(mail.cc).to be_blank
+      expect(mail.bcc).to be_blank
+    end
+
+    it "has an appropriate subject heading" do
+      expect(mail).to have_subject("We’re closing petitions early")
+    end
+
+    it "is addressed to the creator" do
+      expect(mail).to have_body_text("Dear Bob Jones,")
+    end
+
+    it "informs the creator of the change" do
+      expect(mail).to have_body_text("the closing date for the petition you signed has changed")
+    end
+
+    it "includes the number of remaining petitions" do
+      expect(mail).to have_body_text("Plus another 15 petitions")
     end
   end
 

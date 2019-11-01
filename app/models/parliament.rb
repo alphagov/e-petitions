@@ -40,6 +40,14 @@ class Parliament < ActiveRecord::Base
       instance.dissolution_at
     end
 
+    def registration_closed_at
+      instance.registration_closed_at
+    end
+
+    def election_date
+      instance.election_date
+    end
+
     def notification_cutoff_at
       instance.notification_cutoff_at
     end
@@ -158,9 +166,9 @@ class Parliament < ActiveRecord::Base
     end
   end
 
-  def notify_creators!
+  def send_emails!
     if dissolution_announced? && !dissolved?
-      NotifyCreatorsThatParliamentIsDissolvingJob.perform_later
+      NotifyPetitionsThatParliamentIsDissolvingJob.perform_later
     end
   end
 

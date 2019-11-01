@@ -10,6 +10,13 @@
         <%= form.datetime_select :registration_closed_at, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
       <% end %>
 
+      <h2>Election date</h2>
+
+      <%= form_row for: [form.object, :election_date] do %>
+        <%= error_messages_for_field @parliament, :election_date %>
+        <%= form.date_select :election_date, { include_blank: true }, tabindex: increment, class: 'form-control auto-width' %>
+      <% end %>
+
       <h2>Government</h2>
 
       <%= form_row for: [form.object, :government] do %>
@@ -80,7 +87,7 @@
             <%= form.submit 'Archive parliament', name: 'archive_parliament', class: 'button-secondary', data: { confirm: 'Archive this parliament and create a new one?' } %>
           <% end %>
         <% else %>
-          <%= form.submit 'Email creators', name: 'email_creators', class: 'button-secondary', data: { confirm: 'Email creators about dissolution?' } %>
+          <%= form.submit 'Send emails', name: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
           <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
         <% end %>
       <% end %>

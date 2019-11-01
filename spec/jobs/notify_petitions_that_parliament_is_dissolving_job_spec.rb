@@ -1,13 +1,12 @@
 require 'rails_helper'
 
-RSpec.describe NotifyCreatorsThatParliamentIsDissolvingJob, type: :job do
+RSpec.describe NotifyPetitionsThatParliamentIsDissolvingJob, type: :job do
   let(:petition) { FactoryBot.create(:open_petition, open_at: 3.months.ago) }
-  let(:signature) { petition.creator }
 
-  let(:notify_creator_job) do
+  let(:notify_petition_job) do
     {
-      job: NotifyCreatorThatParliamentIsDissolvingJob,
-      args: [{ "_aj_globalid" => "gid://epets/Signature/#{signature.id}" }],
+      job: NotifyPetitionThatParliamentIsDissolvingJob,
+      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
       queue: "low_priority"
     }
   end
@@ -21,6 +20,6 @@ RSpec.describe NotifyCreatorsThatParliamentIsDissolvingJob, type: :job do
       described_class.perform_now
     }.to change {
       enqueued_jobs
-    }.from([]).to([notify_creator_job])
+    }.from([]).to([notify_petition_job])
   end
 end

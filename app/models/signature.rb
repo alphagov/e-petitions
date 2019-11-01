@@ -189,6 +189,10 @@ class Signature < ActiveRecord::Base
       validated.subscribed.for_timestamp(timestamp, since: since)
     end
 
+    def open_at_dissolution
+      joins(:petition).merge(Petition.open_at_dissolution)
+    end
+
     def pending
       where(state: PENDING_STATE)
     end
@@ -245,6 +249,10 @@ class Signature < ActiveRecord::Base
 
     def creator
       where(arel_table[:creator].eq(true))
+    end
+
+    def not_creator
+      where(arel_table[:creator].eq(false))
     end
 
     def sponsors

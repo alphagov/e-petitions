@@ -70,14 +70,30 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe: unsubscribe_url
   end
 
-  def notify_creator_of_closing_date_change(signature, dissolution_at = Parliament.dissolution_at)
-    @signature, @petition = signature, signature.petition
+  def notify_creator_of_closing_date_change(signature, petitions, remaining = 0)
+    @signature, @petitions = signature, petitions
+    @count, @remaining = @petitions.size, remaining
 
-    @closing_time = dissolution_at.strftime('%H:%M%P')
-    @closing_date = dissolution_at.strftime('%-d %B')
-    @last_response_date = dissolution_at.yesterday.strftime('%-d %B')
+    @closing_time = Parliament.dissolution_at.strftime('%H:%M%P')
+    @closing_date = Parliament.dissolution_at.strftime('%-d %B')
+    @last_response_date = Parliament.dissolution_at.yesterday.strftime('%-d %B')
+    @registration_deadline = Parliament.registration_closed_at.strftime('%A %-d %B')
+    @election_date = Parliament.election_date.strftime('%-d %B')
 
-    mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change)
+    mail to: @signature.email, subject: subject_for(:notify_creator_of_closing_date_change, count: @count)
+  end
+
+  def notify_signer_of_closing_date_change(signature, petitions, remaining = 0)
+    @signature, @petitions = signature, petitions
+    @count, @remaining = @petitions.size, remaining
+
+    @closing_time = Parliament.dissolution_at.strftime('%H:%M%P')
+    @closing_date = Parliament.dissolution_at.strftime('%-d %B')
+    @last_response_date = Parliament.dissolution_at.yesterday.strftime('%-d %B')
+    @registration_deadline = Parliament.registration_closed_at.strftime('%A %-d %B')
+    @election_date = Parliament.election_date.strftime('%-d %B')
+
+    mail to: @signature.email, subject: subject_for(:notify_signer_of_closing_date_change, count: @count)
   end
 
   def notify_creator_of_sponsored_petition_being_stopped(signature)
