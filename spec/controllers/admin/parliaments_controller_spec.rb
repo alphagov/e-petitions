@@ -103,8 +103,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         end
       end
 
-      context "when clicking the Email Creators button" do
-        before { patch :update, parliament: params, email_creators: "Email Creators" }
+      context "when clicking the 'Send emails' button" do
+        before { patch :update, parliament: params, send_emails: "Send emails" }
 
         context "and the params are invalid" do
           let :params do
@@ -139,8 +139,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          let :notify_creators_job do
-            { job: NotifyCreatorsThatParliamentIsDissolvingJob, args: [], queue: "high_priority" }
+          let :send_emails_job do
+            { job: NotifyPetitionsThatParliamentIsDissolvingJob, args: [], queue: "high_priority" }
           end
 
           it "redirects to the admin dashboard page" do
@@ -148,11 +148,11 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
 
           it "sets the flash notice message" do
-            expect(flash[:notice]).to eq("Petition creators will be notified of the early closing of their petitions")
+            expect(flash[:notice]).to eq("Everyone will be notified of the early closing of their petitions")
           end
 
           it "enqueues a job to notify creators" do
-            expect(enqueued_jobs).to eq([notify_creators_job])
+            expect(enqueued_jobs).to eq([send_emails_job])
           end
         end
 

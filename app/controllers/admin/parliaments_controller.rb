@@ -7,8 +7,8 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def update
     if @parliament.update(parliament_params)
-      if email_creators?
-        @parliament.notify_creators!
+      if send_emails?
+        @parliament.send_emails!
         redirect_to admin_root_url, notice: :creators_emailed
       elsif schedule_closure?
         @parliament.schedule_closure!
@@ -39,12 +39,13 @@ class Admin::ParliamentsController < Admin::AdminController
       :dissolution_heading, :dissolution_message,
       :dissolved_heading, :dissolved_message,
       :dissolution_at, :dissolution_faq_url,
-      :notification_cutoff_at, :registration_closed_at
+      :notification_cutoff_at, :registration_closed_at,
+      :election_date
     )
   end
 
-  def email_creators?
-    params.key?(:email_creators) && @parliament.dissolution_announced?
+  def send_emails?
+    params.key?(:send_emails) && @parliament.dissolution_announced?
   end
 
   def schedule_closure?

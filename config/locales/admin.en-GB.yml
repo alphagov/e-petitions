@@ -40,7 +40,7 @@ en-GB:
       admin_required: "You must be logged in as an administrator to view this page"
       change_password: "Please change your password before continuing"
       closure_scheduled: "Petitions have been scheduled to close early"
-      creators_emailed: "Petition creators will be notified of the early closing of their petitions"
+      creators_emailed: "Everyone will be notified of the early closing of their petitions"
       debate_date_updated: "Updated the scheduled debate date successfully"
       debate_outcome_updated: "Updated debate outcome successfully"
       domain_created: "Domain created successfully"

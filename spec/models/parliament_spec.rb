@@ -833,10 +833,10 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
-  describe "#notify_creators!" do
-    let :notify_creators_job do
+  describe "#send_emails!" do
+    let :send_emails_job do
       {
-        job: NotifyCreatorsThatParliamentIsDissolvingJob,
+        job: NotifyPetitionsThatParliamentIsDissolvingJob,
         args: [],
         queue: "high_priority"
       }
@@ -849,7 +849,7 @@ RSpec.describe Parliament, type: :model do
 
       it "does not schedule a job" do
         expect {
-          subject.notify_creators!
+          subject.send_emails!
         }.not_to change {
           enqueued_jobs
         }
@@ -864,10 +864,10 @@ RSpec.describe Parliament, type: :model do
 
         it "schedules a job" do
           expect {
-            subject.notify_creators!
+            subject.send_emails!
           }.to change {
             enqueued_jobs
-          }.from([]).to([notify_creators_job])
+          }.from([]).to([send_emails_job])
         end
       end
 
@@ -878,7 +878,7 @@ RSpec.describe Parliament, type: :model do
 
         it "does not schedule a job" do
           expect {
-            subject.notify_creators!
+            subject.send_emails!
           }.not_to change {
             enqueued_jobs
           }
