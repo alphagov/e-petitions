@@ -40,6 +40,10 @@ class Parliament < ActiveRecord::Base
       instance.dissolution_at
     end
 
+    def dissolution_at?
+      instance.dissolution_at?
+    end
+
     def registration_closed_at
       instance.registration_closed_at
     end
@@ -133,7 +137,7 @@ class Parliament < ActiveRecord::Base
   end
 
   def dissolution_announced?
-    dissolution_at?
+    dissolution_at? && show_dissolution_notification?
   end
 
   def registration_closed?(now = Time.current)
@@ -167,7 +171,7 @@ class Parliament < ActiveRecord::Base
   end
 
   def send_emails!
-    if dissolution_announced? && !dissolved?
+    if dissolution_at? && !dissolved?
       NotifyPetitionsThatParliamentIsDissolvingJob.perform_later
     end
   end

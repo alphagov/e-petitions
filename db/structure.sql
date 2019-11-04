@@ -870,7 +870,8 @@ CREATE TABLE public.parliaments (
     threshold_for_debate integer DEFAULT 100000 NOT NULL,
     petition_duration integer DEFAULT 6,
     archiving_started_at timestamp without time zone,
-    election_date date
+    election_date date,
+    show_dissolution_notification boolean DEFAULT false NOT NULL
 );
 
 
@@ -3199,4 +3200,6 @@ INSERT INTO schema_migrations (version) VALUES ('20190718133606');
 INSERT INTO schema_migrations (version) VALUES ('20191030172734');
 
 INSERT INTO schema_migrations (version) VALUES ('20191101104438');
+
+INSERT INTO schema_migrations (version) VALUES ('20191104165726');
 

@@ -147,7 +147,8 @@ Given(/^a petition "([^"]*)" has been closed early because of parliament dissolv
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolved_heading: "Parliament has been dissolved",
     dissolved_message: "All petitions have been closed",
-    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+    show_dissolution_notification: true
 
   @petition = FactoryBot.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
 end

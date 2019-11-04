@@ -40,12 +40,12 @@ class Admin::ParliamentsController < Admin::AdminController
       :dissolved_heading, :dissolved_message,
       :dissolution_at, :dissolution_faq_url,
       :notification_cutoff_at, :registration_closed_at,
-      :election_date
+      :election_date, :show_dissolution_notification
     )
   end
 
   def send_emails?
-    params.key?(:send_emails) && @parliament.dissolution_announced?
+    params.key?(:send_emails) && @parliament.dissolution_at?
   end
 
   def schedule_closure?

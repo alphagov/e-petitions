@@ -220,7 +220,7 @@ RSpec.describe DeliverDissolutionNotificationJob, type: :job do
 
   context "when parliament is not dissolving" do
     before do
-      allow(Parliament).to receive(:dissolution_announced?).and_return(false)
+      allow(Parliament).to receive(:dissolution_at?).and_return(false)
     end
 
     context "and the email address is a creator" do
@@ -270,7 +270,7 @@ RSpec.describe DeliverDissolutionNotificationJob, type: :job do
 
   context "when parliament is dissolving" do
     before do
-      allow(Parliament).to receive(:dissolution_announced?).and_return(true)
+      allow(Parliament).to receive(:dissolution_at?).and_return(true)
       allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
       allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
       allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)

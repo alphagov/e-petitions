@@ -2286,6 +2286,19 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "when the dissolution of parliament has been set but not announced" do
+      let(:open_at) { now - duration + 1.month }
+
+      before do
+        allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
+        allow(Parliament).to receive(:dissolution_announced?).and_return(false)
+      end
+
+      it "returns false" do
+        expect(subject.closing_early_for_dissolution?).to eq(false)
+      end
+    end
+
     context "when the dissolution of parliament has been announced" do
       let(:dissolution_at) { 6.weeks.since(now).end_of_day }
 

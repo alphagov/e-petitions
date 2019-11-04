@@ -790,7 +790,11 @@ class Petition < ActiveRecord::Base
   end
 
   def closing_early_for_dissolution?(dissolution_at = Parliament.dissolution_at)
-    open_at && dissolution_at ? deadline > dissolution_at : false
+    if Parliament.dissolution_announced?
+      open_at && dissolution_at ? deadline > dissolution_at : false
+    else
+      false
+    end
   end
 
   def cache_key(*timestamp_names)

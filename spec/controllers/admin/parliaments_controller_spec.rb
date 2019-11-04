@@ -215,7 +215,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
               dissolution_at: dissolution_at.iso8601,
               dissolution_heading: "Parliament is dissolving",
               dissolution_message: "This means all petitions will close in 2 weeks",
-              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+              show_dissolution_notification: "true"
             }
           end
 

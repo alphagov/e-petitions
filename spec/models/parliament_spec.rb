@@ -193,6 +193,11 @@ RSpec.describe Parliament, type: :model do
       expect(Parliament.dissolution_at).to eq(now)
     end
 
+    it "delegates dissolution_at? to the instance" do
+      expect(parliament).to receive(:dissolution_at?).and_return(true)
+      expect(Parliament.dissolution_at?).to eq(true)
+    end
+
     it "delegates notification_cutoff_at to the instance" do
       expect(parliament).to receive(:notification_cutoff_at).and_return(now)
       expect(Parliament.notification_cutoff_at).to eq(now)
@@ -447,8 +452,24 @@ RSpec.describe Parliament, type: :model do
         FactoryBot.create(:parliament, :dissolving)
       end
 
-      it "returns true" do
-        expect(parliament.dissolution_announced?).to eq(true)
+      context "and show_dissolution_notification is false" do
+        before do
+          expect(parliament).to receive(:show_dissolution_notification?).and_return(false)
+        end
+
+        it "returns false" do
+          expect(parliament.dissolution_announced?).to eq(false)
+        end
+      end
+
+      context "and show_dissolution_notification is true" do
+        before do
+          expect(parliament).to receive(:show_dissolution_notification?).and_return(true)
+        end
+
+        it "returns true" do
+          expect(parliament.dissolution_announced?).to eq(true)
+        end
       end
     end
   end
@@ -925,7 +946,7 @@ RSpec.describe Parliament, type: :model do
         let(:dissolution_at) { 2.weeks.from_now }
 
         subject :parliament do
-          FactoryBot.create(:parliament, :dissolving, dissolution_at: dissolution_at)
+          FactoryBot.create(:parliament, :dissolving, dissolution_at: dissolution_at, show_dissolution_notification: true)
         end
 
         it "schedules a job" do

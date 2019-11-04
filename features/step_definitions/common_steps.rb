@@ -18,7 +18,8 @@ Given(/^Parliament is dissolving$/) do
   Parliament.instance.update! dissolution_at: 2.weeks.from_now,
     dissolution_heading: "Parliament is dissolving",
     dissolution_message: "This means all petitions will close in 2 weeks",
-    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+    show_dissolution_notification: true
 end
 
 Given(/^Parliament is dissolved$/) do
@@ -27,7 +28,8 @@ Given(/^Parliament is dissolved$/) do
     dissolution_message: "This means all petitions will close in 2 weeks",
     dissolved_heading: "Parliament has been dissolved",
     dissolved_message: "All petitions have been closed",
-    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing"
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+    show_dissolution_notification: true
 end
 
 Given(/^Parliament is pending$/) do

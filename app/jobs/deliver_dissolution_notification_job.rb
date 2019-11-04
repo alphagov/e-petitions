@@ -2,7 +2,7 @@ class DeliverDissolutionNotificationJob < EmailJob
   queue_as :low_priority
 
   def perform(record)
-    if Parliament.dissolution_announced?
+    if Parliament.dissolution_at?
       send_signer_email(record) if record.signer?
       send_creator_email(record) if record.creator?
 

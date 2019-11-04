@@ -57,6 +57,19 @@
         <%= form.text_field :dissolution_faq_url, tabindex: increment, maxlength: 500, class: 'form-control' %>
       <% end %>
 
+      <%= form_row for: [form.object, :show_dissolution_notification], class: 'inline' do %>
+        <%= form.label :show_dissolution_notification, "Show dissolution notification?", class: 'form-label' %>
+        <%= error_messages_for_field @parliament, :show_dissolution_notification %>
+        <div class="multiple-choice">
+          <%= form.radio_button :show_dissolution_notification, true %>
+          <%= form.label :show_dissolution_notification_true, "Yes", for: "parliament_show_dissolution_notification_true" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :show_dissolution_notification, false %>
+          <%= form.label :show_dissolution_notification_false, "No", for: "parliament_show_dissolution_notification_false" %>
+        </div>
+      <% end %>
+
       <h2>Dissolved</h2>
 
       <%= form_row for: [form.object, :notification_cutoff_at] do %>
@@ -79,7 +92,7 @@
       <% end %>
 
       <%= form.submit 'Save', class: 'button' %>
-      <% if @parliament.dissolution_announced? %>
+      <% if @parliament.dissolution_at? %>
         <% if @parliament.dissolved? %>
           <% if @parliament.can_archive_petitions? %>
             <%= form.submit 'Archive petitions', name: 'archive_petitions', class: 'button-secondary', data: { confirm: 'Copy current petitions to archive?' } %>
@@ -87,8 +100,11 @@
             <%= form.submit 'Archive parliament', name: 'archive_parliament', class: 'button-secondary', data: { confirm: 'Archive this parliament and create a new one?' } %>
           <% end %>
         <% else %>
-          <%= form.submit 'Send emails', name: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
-          <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
+          <% if @parliament.dissolution_announced? %>
+            <%= form.submit 'Schedule closure', name: 'schedule_closure', class: 'button-secondary', data: { confirm: 'Schedule early closure of petitions?' } %>
+          <% else %>
+            <%= form.submit 'Send dissolution emails', name: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
+          <% end %>
         <% end %>
       <% end %>
       <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
