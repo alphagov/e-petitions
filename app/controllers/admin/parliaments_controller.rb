@@ -3,24 +3,27 @@ class Admin::ParliamentsController < Admin::AdminController
   before_action :fetch_parliament
 
   def show
+    respond_to do |format|
+      format.html
+    end
   end
 
   def update
     if @parliament.update(parliament_params)
       if send_emails?
         @parliament.send_emails!
-        redirect_to admin_root_url, notice: :creators_emailed
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :creators_emailed
       elsif schedule_closure?
         @parliament.schedule_closure!
-        redirect_to admin_root_url, notice: :closure_scheduled
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :closure_scheduled
       elsif archive_petitions?
         @parliament.start_archiving!
-        redirect_to admin_root_url, notice: :petitions_archiving
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :petitions_archiving
       elsif archive_parliament?
         @parliament.archive!
-        redirect_to admin_root_url, notice: :parliament_archived
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_archived
       else
-        redirect_to admin_root_url, notice: :parliament_updated
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_updated
       end
     else
       render :show
@@ -40,7 +43,10 @@ class Admin::ParliamentsController < Admin::AdminController
       :dissolved_heading, :dissolved_message,
       :dissolution_at, :dissolution_faq_url,
       :notification_cutoff_at, :registration_closed_at,
-      :election_date, :show_dissolution_notification
+      :election_date, :show_dissolution_notification,
+      :government_response_heading, :government_response_description,
+      :government_response_status, :parliamentary_debate_heading,
+      :parliamentary_debate_description, :parliamentary_debate_status
     )
   end
 

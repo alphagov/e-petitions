@@ -93,8 +93,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -143,8 +143,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             { job: NotifyPetitionsThatParliamentIsDissolvingJob, args: [], queue: "high_priority" }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -168,8 +168,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -238,8 +238,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -267,8 +267,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -328,8 +328,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -357,8 +357,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -424,8 +424,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do
@@ -453,8 +453,8 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          it "redirects to the admin dashboard page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
 
           it "sets the flash notice message" do

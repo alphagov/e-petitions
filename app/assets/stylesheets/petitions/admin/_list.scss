@@ -171,14 +171,20 @@
     }
 
     code {
-      font-family: monospace;
-      font-size: 14px;
-      line-height: 20px;
-      color: $black;
-      background-color: $highlight-colour;
-      border: 1px solid $border-colour;
-      border-radius: 3px;
+      vertical-align: 0px;
       padding: 3px 7px;
     }
+  }
+
+  code {
+    background-color: $highlight-colour;
+    border: 1px solid $border-colour;
+    border-radius: 3px;
+    color: $black;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 3px;
+    vertical-align: 1px;
   }
 }

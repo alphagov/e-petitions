@@ -871,7 +871,13 @@ CREATE TABLE public.parliaments (
     petition_duration integer DEFAULT 6,
     archiving_started_at timestamp without time zone,
     election_date date,
-    show_dissolution_notification boolean DEFAULT false NOT NULL
+    show_dissolution_notification boolean DEFAULT false NOT NULL,
+    government_response_heading character varying,
+    government_response_description text,
+    government_response_status character varying,
+    parliamentary_debate_heading character varying,
+    parliamentary_debate_description text,
+    parliamentary_debate_status character varying
 );
 
 
@@ -3202,4 +3208,6 @@ INSERT INTO schema_migrations (version) VALUES ('20191030172734');
 INSERT INTO schema_migrations (version) VALUES ('20191101104438');
 
 INSERT INTO schema_migrations (version) VALUES ('20191104165726');
+
+INSERT INTO schema_migrations (version) VALUES ('20191107140359');
 

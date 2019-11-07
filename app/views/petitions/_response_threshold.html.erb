@@ -22,9 +22,15 @@
 
   <%# Waiting for a government response #%>
   <% elsif petition.response_threshold_reached_at? -%>
-    <h2 id="response-threshold-heading">Government will respond</h2>
-    <p>Government responds to all petitions that get more than <%= Site.formatted_threshold_for_response %> signatures</p>
-    <p class="secondary"><%= waiting_for_in_words(petition.response_threshold_reached_at) %> for a government response</p>
+    <% if Parliament.closed? %>
+      <h2 id="response-threshold-heading"><%= Parliament.government_response_heading.presence || "Government will respond" %></h2>
+      <p><%= Parliament.government_response_description.presence || "Government responds to all petitions that get more than #{Site.formatted_threshold_for_response} signatures" %></p>
+      <p class="secondary"><%= Parliament.government_response_status.presence || "#{waiting_for_in_words(petition.response_threshold_reached_at)} for a government response" %></p>
+    <% else %>
+      <h2 id="response-threshold-heading">Government will respond</h2>
+      <p>Government responds to all petitions that get more than <%= Site.formatted_threshold_for_response %> signatures</p>
+      <p class="secondary"><%= waiting_for_in_words(petition.response_threshold_reached_at) %> for a government response</p>
+    <% end %>
 
   <%# Needs more signatures #%>
   <% else -%>
