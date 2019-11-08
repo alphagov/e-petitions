@@ -1,0 +1,22 @@
+<%= hidden_field_tag :tab, "debate" %>
+
+<p>Petitions waiting for a debate outcome before a new Petitions Committee is formed should show:</p>
+
+<%= form_row for: [form.object, :parliamentary_debate_heading] do %>
+  <%= form.label :parliamentary_debate_heading, 'Heading', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :parliamentary_debate_heading %>
+  <%= form.text_field :parliamentary_debate_heading, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :parliamentary_debate_description] do %>
+  <%= form.label :parliamentary_debate_description, 'Description', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :parliamentary_debate_description %>
+  <%= form.text_area :parliamentary_debate_description, tabindex: increment, rows: 5, class: 'form-control' %>
+  <small class="form-hint">Use <code>%{count}</code> for the number of required signatures</small>
+<% end %>
+
+<%= form_row for: [form.object, :parliamentary_debate_status] do %>
+  <%= form.label :parliamentary_debate_status, 'Status', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :parliamentary_debate_status %>
+  <%= form.text_field :parliamentary_debate_status, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>

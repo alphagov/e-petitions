@@ -148,9 +148,37 @@ Given(/^a petition "([^"]*)" has been closed early because of parliament dissolv
     dissolved_heading: "Parliament has been dissolved",
     dissolved_message: "All petitions have been closed",
     dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
-    show_dissolution_notification: true
+    show_dissolution_notification: true,
+    government_response_heading: "Government will respond",
+    government_response_description: "Government responds to all petitions that get more than %{count} signatures",
+    government_response_status: "Waiting for a new Petitions Committee after the General Election",
+    parliamentary_debate_heading: "This petition will be considered for debate",
+    parliamentary_debate_description: "All petitions that have more than %{count} signatures will be considered for debate in the new Parliament",
+    parliamentary_debate_status: "Waiting for a new Petitions Committee after the General Election"
 
   @petition = FactoryBot.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
+end
+
+Given(/^the petition "([^"]*)" has been closed early because of parliament dissolving$/) do |petition_action|
+  open_at = 3.months.ago
+  closed_at = 1.month.ago
+
+  Parliament.instance.update! dissolution_at: closed_at,
+    dissolution_heading: "Parliament is dissolving",
+    dissolution_message: "This means all petitions will close in 2 weeks",
+    dissolved_heading: "Parliament has been dissolved",
+    dissolved_message: "All petitions have been closed",
+    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+    show_dissolution_notification: true,
+    government_response_heading: "Government will respond",
+    government_response_description: "Government responds to all petitions that get more than %{count} signatures",
+    government_response_status: "Waiting for a new Petitions Committee after the General Election",
+    parliamentary_debate_heading: "This petition will be considered for debate",
+    parliamentary_debate_description: "All petitions that have more than %{count} signatures will be considered for debate in the new Parliament",
+    parliamentary_debate_status: "Waiting for a new Petitions Committee after the General Election"
+
+  @petition = Petition.find_by!(action: petition_action)
+  @petition.update(state: "closed", open_at: open_at, closed_at: closed_at)
 end
 
 Given(/^the petition has closed$/) do

@@ -36,12 +36,20 @@ class Parliament < ActiveRecord::Base
       instance.opened?(now)
     end
 
+    def closed?(now = Time.current)
+      instance.closed?(now)
+    end
+
     def dissolution_at
       instance.dissolution_at
     end
 
     def dissolution_at?
       instance.dissolution_at?
+    end
+
+    def dissolving?(now = Time.current)
+      instance.dissolving?(now)
     end
 
     def registration_closed_at
@@ -92,6 +100,34 @@ class Parliament < ActiveRecord::Base
       instance.registration_closed?
     end
 
+    def government_response_heading
+      instance.government_response_heading
+    end
+
+    def government_response_description
+      instance.government_response_description.to_s % { count: Site.formatted_threshold_for_response }
+    rescue KeyError => e
+      instance.government_response_description
+    end
+
+    def government_response_status
+      instance.government_response_status
+    end
+
+    def parliamentary_debate_heading
+      instance.parliamentary_debate_heading
+    end
+
+    def parliamentary_debate_description
+      instance.parliamentary_debate_description.to_s % { count: Site.formatted_threshold_for_debate }
+    rescue KeyError => e
+      instance.parliamentary_debate_description
+    end
+
+    def parliamentary_debate_status
+      instance.parliamentary_debate_status
+    end
+
     def reload
       Thread.current[:__parliament__] = nil
     end
@@ -122,6 +158,10 @@ class Parliament < ActiveRecord::Base
     opening_at? && opening_at <= now
   end
 
+  def closed?(now = Time.current)
+    dissolved?(now) || !opened?(now)
+  end
+
   def period
     if opening_at? && dissolution_at?
       "#{opening_at.year}–#{dissolution_at.year}"
@@ -130,6 +170,10 @@ class Parliament < ActiveRecord::Base
 
   def period?
     period.present?
+  end
+
+  def dissolving?(now = Time.current)
+    dissolution_at? && dissolution_at > now
   end
 
   def dissolved?(now = Time.current)

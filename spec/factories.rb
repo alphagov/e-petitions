@@ -692,6 +692,13 @@ FactoryBot.define do
       dissolved_heading "Parliament is dissolved"
       dissolved_message "All petitions are now closed"
       dissolution_at { 2.weeks.ago }
+
+      government_response_heading { "Government will respond" }
+      government_response_description { "Government responds to all petitions that get more than %{count} signatures" }
+      government_response_status { "Waiting for a new Petitions Committee after the General Election" }
+      parliamentary_debate_heading { "This petition will be considered for debate" }
+      parliamentary_debate_description { "All petitions that have more than %{count} signatures will be considered for debate in the new Parliament" }
+      parliamentary_debate_status { "Waiting for a new Petitions Committee after the General Election" }
     end
 
     trait :coalition do

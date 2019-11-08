@@ -188,6 +188,11 @@ RSpec.describe Parliament, type: :model do
       expect(Parliament.opened?).to eq(true)
     end
 
+    it "delegates closed? to the instance" do
+      expect(parliament).to receive(:closed?).and_return(false)
+      expect(Parliament.closed?).to eq(false)
+    end
+
     it "delegates dissolution_at to the instance" do
       expect(parliament).to receive(:dissolution_at).and_return(now)
       expect(Parliament.dissolution_at).to eq(now)
@@ -236,6 +241,11 @@ RSpec.describe Parliament, type: :model do
     it "delegates dissolution_announced? to the instance" do
       expect(parliament).to receive(:dissolution_announced?).and_return(true)
       expect(Parliament.dissolution_announced?).to eq(true)
+    end
+
+    it "delegates dissolving? to the instance" do
+      expect(parliament).to receive(:dissolving?).and_return(true)
+      expect(Parliament.dissolving?).to eq(true)
     end
 
     it "delegates dissolved? to the instance" do
@@ -436,6 +446,50 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
+  describe "#closed?" do
+    context "when Parliament is open" do
+      context "and has not been dissolved" do
+        subject :parliament do
+          FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: nil)
+        end
+
+        it "return false" do
+          expect(parliament.closed?).to eq(false)
+        end
+      end
+
+      context "and is dissolving" do
+        subject :parliament do
+          FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: 1.day.from_now)
+        end
+
+        it "return false" do
+          expect(parliament.closed?).to eq(false)
+        end
+      end
+
+      context "and has been dissolved" do
+        subject :parliament do
+          FactoryBot.build(:parliament, opening_at: 2.years.ago, dissolution_at: 1.day.ago)
+        end
+
+        it "return true" do
+          expect(parliament.closed?).to eq(true)
+        end
+      end
+    end
+
+    context "whem Parliament has not been opened" do
+      subject :parliament do
+        FactoryBot.build(:parliament, opening_at: nil, dissolution_at: nil)
+      end
+
+      it "return true" do
+        expect(parliament.closed?).to eq(true)
+      end
+    end
+  end
+
   describe "#dissolution_announced?" do
     context "when dissolution_at is nil" do
       subject :parliament do
@@ -470,6 +524,38 @@ RSpec.describe Parliament, type: :model do
         it "returns true" do
           expect(parliament.dissolution_announced?).to eq(true)
         end
+      end
+    end
+  end
+
+  describe "#dissolving?" do
+    context "when dissolution_at is nil" do
+      subject :parliament do
+        FactoryBot.create(:parliament)
+      end
+
+      it "returns false" do
+        expect(parliament.dissolving?).to eq(false)
+      end
+    end
+
+    context "when dissolution_at is in the future" do
+      subject :parliament do
+        FactoryBot.create(:parliament, :dissolving)
+      end
+
+      it "returns true" do
+        expect(parliament.dissolving?).to eq(true)
+      end
+    end
+
+    context "when dissolution_at is in the past" do
+      subject :parliament do
+        FactoryBot.create(:parliament, :dissolved)
+      end
+
+      it "returns false" do
+        expect(parliament.dissolving?).to eq(false)
       end
     end
   end

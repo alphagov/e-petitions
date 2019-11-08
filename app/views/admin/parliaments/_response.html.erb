@@ -1,0 +1,22 @@
+<%= hidden_field_tag :tab, "response" %>
+
+<p>Petitions waiting for a government response before a new Petitions Committee is formed should show:</p>
+
+<%= form_row for: [form.object, :government_response_heading] do %>
+  <%= form.label :government_response_heading, 'Heading', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :government_response_heading %>
+  <%= form.text_field :government_response_heading, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :government_response_description] do %>
+  <%= form.label :government_response_description, 'Description', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :government_response_description %>
+  <%= form.text_area :government_response_description, tabindex: increment, rows: 5, class: 'form-control' %>
+  <small class="form-hint">Use <code>%{count}</code> for the number of required signatures</small>
+<% end %>
+
+<%= form_row for: [form.object, :government_response_status] do %>
+  <%= form.label :government_response_status, 'Status', class: 'form-label' %>
+  <%= error_messages_for_field @parliament, :government_response_status %>
+  <%= form.text_field :government_response_status, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>

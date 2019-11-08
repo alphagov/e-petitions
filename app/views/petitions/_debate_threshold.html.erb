@@ -57,12 +57,17 @@
       </p>
     <% end %>
 
-  <%# Waiting for a government response #%>
+  <%# Waiting for a debate date #%>
   <% elsif petition.debate_threshold_reached_at? -%>
-    <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
-    <p>Parliament considers all petitions that get more than <%= Site.formatted_threshold_for_debate %> signatures for a debate</p>
-    <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> for a debate date</p>
-
+    <% if Parliament.closed? %>
+      <h2 id="response-threshold-heading"><%= Parliament.parliamentary_debate_heading.presence || "Parliament will consider this for a debate" %></h2>
+      <p><%= Parliament.parliamentary_debate_description.presence || "Parliament considers all petitions that get more than #{Site.formatted_threshold_for_debate} signatures for a debate" %></p>
+      <p class="secondary"><%= Parliament.parliamentary_debate_status.presence || "#{waiting_for_in_words(petition.debate_threshold_reached_at)} for a debate date" %></p>
+    <% else %>
+      <h2 id="debate-threshold-heading">Parliament will consider this for a debate</h2>
+      <p>Parliament considers all petitions that get more than <%= Site.formatted_threshold_for_debate %> signatures for a debate</p>
+      <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> for a debate date</p>
+    <% end %>
   <%# Needs more signatures #%>
   <% else -%>
     <% if !@petition.closed? %>
