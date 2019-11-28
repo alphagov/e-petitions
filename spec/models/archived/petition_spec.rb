@@ -323,6 +323,14 @@ RSpec.describe Archived::Petition, type: :model do
     it { is_expected.to validate_length_of(:additional_details).is_at_most(1000) }
   end
 
+  describe "#committee_note" do
+    it "defaults to nil" do
+      expect(petition.committee_note).to be_nil
+    end
+
+    it { is_expected.to validate_length_of(:committee_note).is_at_most(800) }
+  end
+
   describe "#state" do
     it "defaults to 'closed'" do
       expect(petition.state).to eq("closed")

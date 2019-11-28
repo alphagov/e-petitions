@@ -35,8 +35,14 @@
         <%= f.fields_for :creator do |c| %>
           <%= c.label :name, "Creator", class: 'form-label' %>
           <%= error_messages_for_field @petition.creator, :name %>
-          <%= c.text_field :name, tabindex: increment, rows: 8, class: 'form-control', disabled: @petition.editing_disabled? %>
+          <%= c.text_field :name, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
         <% end %>
+      <% end %>
+
+      <%= form_row for: [f.object, :committee_note] do %>
+        <%= f.label :committee_note, class: 'form-label' %>
+        <%= error_messages_for_field @petition, :committee_note %>
+        <%= f.text_area :committee_note, tabindex: increment, rows: 7, class: 'form-control', disabled: @petition.editing_disabled? %>
       <% end %>
 
       <%= form_row for: [f.object, :special_consideration] do %>

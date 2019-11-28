@@ -19,7 +19,7 @@ class Admin::Archived::PetitionDetailsController < Admin::AdminController
   end
 
   def petition_attributes
-    %i[action background additional_details special_consideration]
+    %i[action background additional_details committee_note special_consideration]
   end
 
   def petition_params

@@ -90,6 +90,7 @@ class Petition < ActiveRecord::Base
   validates :action, presence: true, length: { maximum: 80, allow_blank: true }
   validates :background, presence: true, length: { maximum: 300, allow_blank: true }
   validates :additional_details, length: { maximum: 800, allow_blank: true }
+  validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true
   validates :state, inclusion: { in: STATES }

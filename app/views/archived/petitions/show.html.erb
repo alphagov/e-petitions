@@ -19,6 +19,12 @@
     <%= @petition.action %>
   </h1>
 
+  <% if @petition.committee_note? %>
+    <div class="committee-note">
+      <%= markdown_to_html(@petition.committee_note) %>
+    </div>
+  <% end %>
+
   <% if @petition.background? %>
     <div><%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %></div>
     <% if @petition.additional_details? %>

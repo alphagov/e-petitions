@@ -100,6 +100,14 @@ p {
   }
 }
 
+.committee-note {
+  background-color: $grey-3;
+  padding: em(18);
+  padding-top: em(9);
+  padding-bottom: em(1);
+  margin-bottom: em(15, 18);
+}
+
 // Link styles
 a {
   color: $link-colour;

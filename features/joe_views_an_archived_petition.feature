@@ -22,9 +22,14 @@ Feature: Joe views an archived petition
   Scenario: Joe views an archived petition containing urls, email addresses and html tags
     Given an archived petition exists with action: "Defence review", background: "<i>We<i> like http://www.google.com and bambi@gmail.com"
     When I go to the archived petition page for "Defence review"
-    And I should see "<i>We<i>"
+    Then I should see "<i>We<i>"
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
+
+  Scenario: Joe views an archived petition with a Petitions Committee note
+    Given an archived petition exists with action: "Defence review", committee_note: "This petition was found to be misleading"
+    When I go to the archived petition page for "Defence review"
+    Then I should see "This petition was found to be misleading"
 
   Scenario: Joe sees reason for rejection if appropriate
     Given an archived petition "Please bring back Eldorado" has been rejected with the reason "<i>We<i> like http://www.google.com and bambi@gmail.com"

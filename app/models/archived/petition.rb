@@ -29,6 +29,7 @@ module Archived
     validates :action, presence: true, length: { maximum: 150 }
     validates :background, length: { maximum: 300 }, allow_blank: true
     validates :additional_details, length: { maximum: 1000 }, allow_blank: true
+    validates :committee_note, length: { maximum: 800 }, allow_blank: true
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, if: :closed?
 

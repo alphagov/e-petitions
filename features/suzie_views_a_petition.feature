@@ -35,6 +35,12 @@ Feature: Suzie views a petition
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
 
+  Scenario: Suzie views a petition with a Petitions Committee note
+    Given an open petition exists with action: "Defence review", committee_note: "This petition was found to be misleading"
+    When I go to the petition page for "Defence review"
+    Then the markup should be valid
+    And I should see "This petition was found to be misleading"
+
   @javascript
   Scenario: Suzie views an open petition that has received a response
     Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"

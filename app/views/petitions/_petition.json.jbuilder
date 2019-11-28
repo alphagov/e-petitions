@@ -9,6 +9,7 @@ json.attributes do
   json.action petition.action
   json.background petition.background
   json.additional_details petition.additional_details
+  json.committee_note petition.committee_note
   json.state petition.state
   json.signature_count petition.signature_count
 

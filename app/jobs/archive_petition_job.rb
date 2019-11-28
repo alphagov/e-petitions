@@ -10,6 +10,7 @@ class ArchivePetitionJob < ApplicationJob
         p.action = petition.action
         p.background = petition.background
         p.additional_details = petition.additional_details
+        p.committee_note = petition.committee_note
         p.state = petition.state
         p.debate_state = petition.debate_state
         p.special_consideration = petition.special_consideration

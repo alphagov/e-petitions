@@ -48,6 +48,7 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
     it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 300, null: true) }
     it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
+    it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
     it "should validate the length of :action to within 80 characters" do
       expect(FactoryBot.build(:petition, :action => 'x' * 80)).to be_valid
@@ -62,6 +63,11 @@ RSpec.describe Petition, type: :model do
     it "should validate the length of :additional_details to within 800 characters" do
       expect(FactoryBot.build(:petition, :additional_details => 'x' * 800)).to be_valid
       expect(FactoryBot.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
+    end
+
+    it "should validate the length of :committee_note to within 800 characters" do
+      expect(FactoryBot.build(:petition, :committee_note => 'x' * 800)).to be_valid
+      expect(FactoryBot.build(:petition, :committee_note => 'x' * 801)).not_to be_valid
     end
 
     it "does not allow a blank state" do
