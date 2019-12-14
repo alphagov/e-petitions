@@ -115,6 +115,9 @@ When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |ta
   else
     visit admin_root_url
   end
+
+  click_details "Tags"
+
   check tag
   click_button 'Search'
 end

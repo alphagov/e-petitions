@@ -237,8 +237,8 @@ end
 
 Then(/^I should see the petition details$/) do
   expect(page).to have_content(@petition.action)
-  expect(page).to have_content(@petition.additional_details)
   expect(page).to have_content(@petition.background) if @petition.background?
+  expect(page).to have_content(@petition.additional_details) if @petition.additional_details?
 end
 
 Then(/^I should see the vote count, closed and open dates$/) do
@@ -380,18 +380,24 @@ Then(/^I can share it via (.+)$/) do |service|
   end
 end
 
-Then(/^I should not see the response "([^"]*)"$/) do |response|
-  details = page.find("//details[contains(., '#{response}')]")
-  expect(details["open"]).to be_nil
+When(/^I expand "([^"]*)"/) do |text|
+  page.find("//details/summary[contains(., '#{text}')]").click
+end
+
+When(/^I click to see more details$/) do
+  click_details "More details"
 end
 
 Then(/^I should see the response "([^"]*)"$/) do |response|
-  details = page.find("//details[contains(., '#{response}')]")
-  expect(details["open"]).not_to be_nil
+  within :xpath, "//details[summary/.='Read the response in full']/div", visible: true do
+    expect(page).to have_content(response)
+  end
 end
 
-Then(/^I expand "([^"]*)"/) do |text|
-  page.find("//details/summary[contains(., '#{text}')]").click
+Then(/^I should not see the response "([^"]*)"$/) do |response|
+  within :xpath, "//details[summary/.='Read the response in full']/div", visible: false do
+    expect(page).to have_content(response)
+  end
 end
 
 Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?signatures$/) do |state, petition_action, signature_state|
