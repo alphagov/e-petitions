@@ -69,8 +69,6 @@ Rails.application.routes.draw do
           get 'signed'
         end
       end
-
-      resources :trackers, only: %i[show], format: true, constraints: { id: /[0-9a-zA-Z]{10,20}/, format: 'gif' }
     end
 
     namespace :archived do

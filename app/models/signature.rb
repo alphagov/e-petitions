@@ -732,14 +732,6 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  def form_duration
-    form_requested_at? ? created_at - form_requested_at : 0
-  end
-
-  def form_token_reused?
-    self.class.where(form_token: form_token).count > 1
-  end
-
   private
 
   def formatted_postcode

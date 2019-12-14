@@ -13,23 +13,36 @@ Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 
 Capybara.register_driver :chrome do |app|
-  options = ::Selenium::WebDriver::Chrome::Options.new
-  options.args << "--allow-insecure-localhost"
-  options.args << "--window-size=1280,960"
-  options.args << "--proxy-server=127.0.0.1:8443"
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: {
+      args: [
+        "allow-insecure-localhost",
+        "window-size=1280,960",
+        "proxy-server=127.0.0.1:8443"
+      ],
+      w3c: false
+    },
+    accept_insecure_certs: true
+  )
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
 end
 
 Capybara.register_driver :chrome_headless do |app|
-  options = ::Selenium::WebDriver::Chrome::Options.new
-  options.args << "--headless"
-  options.args << "--allow-insecure-localhost"
-  options.args << "--proxy-server=127.0.0.1:8443"
-  options.args << "--window-size=1280,960"
-  options.args << "--disable-gpu" if Gem.win_platform?
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: {
+      args: [
+        "headless",
+        "allow-insecure-localhost",
+        "window-size=1280,960",
+        "proxy-server=127.0.0.1:8443"
+      ],
+      w3c: false
+    },
+    accept_insecure_certs: true
+  )
 
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
 end
 
 Capybara.register_server :epets do |app, port|

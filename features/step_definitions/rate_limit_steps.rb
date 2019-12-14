@@ -2,10 +2,6 @@ Given(/^the burst rate limit is (\d+) per minute$/) do |rate|
   RateLimit.first_or_create!.update!(burst_rate: rate, burst_period: 60)
 end
 
-Given(/^the form entry threshold is (\d+) seconds?$/) do |threshold|
-  RateLimit.first_or_create!.update!(threshold_for_form_entry: threshold)
-end
-
 Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
