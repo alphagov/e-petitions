@@ -1,10 +1,7 @@
 class SignaturesController < ApplicationController
-  include FormTracking
-
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
   before_action :build_signature, only: [:new, :confirm, :create]
-  before_action :expire_form_requests, only: [:new]
   before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
@@ -16,8 +13,6 @@ class SignaturesController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
     @signature = @signature.find_duplicate!
-
-    delete_form_request
     send_email_to_petition_signer
 
     redirect_to thank_you_url
@@ -43,9 +38,7 @@ class SignaturesController < ApplicationController
 
   def create
     if @signature.save!
-      delete_form_request
       send_email_to_petition_signer
-
       redirect_to thank_you_url
     end
   end
@@ -95,40 +88,6 @@ class SignaturesController < ApplicationController
 
   def token_param
     @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
-  end
-
-  def expire_form_requests
-    expired_form_requests.each do |id, token|
-      cookies.delete(token)
-      form_requests.delete(id)
-    end
-  end
-
-  def expired_form_requests
-    form_requests.each_with_object([]) do |(id, hash), expired|
-      expired << [id, hash["form_token"]] if form_request_expired?(hash, form_request_max_age)
-    end
-  end
-
-  def form_request_timestamps
-    timestamps = form_requests.map { |_, r| r["form_requested_at"].in_time_zone }
-  end
-
-  def last_form_request_timestamp
-    form_request_timestamps.sort[-10]
-  end
-
-  def form_request_max_age
-    [last_form_request_timestamp, 1.day.ago].compact.max
-  end
-
-  def form_request_expired?(hash, max_age = 1.day.ago)
-    hash["form_requested_at"].in_time_zone < max_age
-  end
-
-  def delete_form_request
-    cookies.delete(form_token)
-    form_requests.delete(form_request_id)
   end
 
   def signed_tokens
@@ -227,11 +186,7 @@ class SignaturesController < ApplicationController
   end
 
   def signature_params_for_new
-    {
-      location_code: "GB",
-      form_token: form_token,
-      form_requested_at: form_requested_at
-    }
+    { location_code: "GB" }
   end
 
   def signature_params
@@ -239,12 +194,7 @@ class SignaturesController < ApplicationController
   end
 
   def signature_params_for_create
-    signature_params.merge(
-      ip_address: request.remote_ip,
-      form_token: form_token,
-      form_requested_at: form_requested_at,
-      image_loaded_at: image_loaded_at
-    )
+    signature_params.merge(ip_address: request.remote_ip)
   end
 
   def signature_attributes
