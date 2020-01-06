@@ -340,7 +340,7 @@ RSpec.describe Invalidation, type: :model do
         {
           job: InvalidateSignaturesJob,
           args: [
-            { "_aj_globalid" => "gid://epets/Invalidation/#{subject.id}" }
+            { "_aj_globalid" => "gid://wpets/Invalidation/#{subject.id}" }
           ],
           queue: "high_priority"
         }

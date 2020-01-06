@@ -10,8 +10,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
     {
       job: ArchiveSignaturesJob,
       args: [
-        { "_aj_globalid" => "gid://epets/Petition/#{petition.id}" },
-        { "_aj_globalid" => "gid://epets/Archived::Petition/#{petition.id}" }
+        { "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" },
+        { "_aj_globalid" => "gid://wpets/Archived::Petition/#{petition.id}" }
       ],
       queue: "low_priority"
     }

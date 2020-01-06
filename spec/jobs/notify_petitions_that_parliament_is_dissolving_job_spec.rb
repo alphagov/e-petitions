@@ -6,7 +6,7 @@ RSpec.describe NotifyPetitionsThatParliamentIsDissolvingJob, type: :job do
   let(:notify_petition_job) do
     {
       job: NotifyPetitionThatParliamentIsDissolvingJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+      args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
       queue: "low_priority"
     }
   end

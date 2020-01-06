@@ -50,7 +50,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       it "enqueues a UpdatePetitionStatisticsJob" do
         update_statistics_job = {
           job: UpdatePetitionStatisticsJob,
-          args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+          args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
           queue: "low_priority"
         }
 

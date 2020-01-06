@@ -2,7 +2,7 @@ require 'fileutils'
 require 'webrick/https'
 require 'rack/handler/webrick'
 
-module Epets
+module Wpets
   class SSLServer
     class << self
       def build(app, port)
