@@ -36,7 +36,7 @@ RSpec.describe SponsorMailer, type: :mailer do
     end
 
     it "includes the verification url for the sponsor's signature" do
-      expect(mail).to have_body_text(%r[https://petition.parliament.uk/sponsors/#{sponsor.id}/verify\?token=#{sponsor.perishable_token}])
+      expect(mail).to have_body_text(%r[https://petition.parliament.wales/sponsors/#{sponsor.id}/verify\?token=#{sponsor.perishable_token}])
     end
 
     it "includes the petition action" do

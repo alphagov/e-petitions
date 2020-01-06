@@ -36,7 +36,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       get "/petitions/#{petition.id}.json"
 
       expect(response).to be_successful
-      expect(links).to include("self" => "https://petition.parliament.uk/petitions/#{petition.id}.json")
+      expect(links).to include("self" => "https://petition.parliament.wales/petitions/#{petition.id}.json")
     end
   end
 

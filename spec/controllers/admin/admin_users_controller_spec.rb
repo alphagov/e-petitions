@@ -5,14 +5,14 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     describe "GET 'index'" do
       it "should redirect to the login page" do
         get 'index'
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
       end
     end
 
     describe "GET 'new'" do
       it "should redirect to the login page" do
         get :new
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
       end
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     describe "GET 'index'" do
       it "should be unsuccessful" do
         get :index
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
       end
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     it "should redirect to edit profile page" do
       expect(user.has_to_change_password?).to be_truthy
       get :index
-      expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
+      expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/profile/#{user.id}/edit")
     end
   end
 

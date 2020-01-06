@@ -24,7 +24,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :new
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
 
@@ -35,7 +35,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :new
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
   end
@@ -69,7 +69,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition.creator).not_to be_nil
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petition.parliament.wales/petitions/#{petition.id}/thank-you")
       end
 
       it "should successfully create a new petition and a signature even when email has white space either end" do
@@ -78,7 +78,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition).not_to be_nil
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petition.parliament.wales/petitions/#{petition.id}/thank-you")
       end
 
       it "should strip a petition action on petition creation" do
@@ -87,7 +87,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition).not_to be_nil
-        expect(response).to redirect_to("https://petition.parliament.uk/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petition.parliament.wales/petitions/#{petition.id}/thank-you")
       end
 
       it "should send gather sponsors email to petition's creator" do
@@ -96,7 +96,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(last_email_sent).to deliver_to("john@example.com")
-        expect(last_email_sent).to deliver_from(%{"Petitions: UK Government and Parliament" <no-reply@petition.parliament.uk>})
+        expect(last_email_sent).to deliver_from(%{"Petitions: Welsh Government and Parliament" <no-reply@petition.parliament.wales>})
         expect(last_email_sent).to have_subject("Action required: Petition “Save the planet”")
       end
 
@@ -258,7 +258,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         post :create, params: { petition: {} }
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
 
@@ -269,7 +269,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         post :create, params: { petition: {} }
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
   end
@@ -303,7 +303,7 @@ RSpec.describe PetitionsController, type: :controller do
       allow(Petition).to receive_message_chain(:show, find: petition)
 
       get :show, params: { id: 1 }
-      expect(response).to redirect_to "https://petition.parliament.uk/"
+      expect(response).to redirect_to "https://petition.parliament.wales/"
     end
 
     context "when the petition is archived" do
@@ -324,7 +324,7 @@ RSpec.describe PetitionsController, type: :controller do
 
         it "redirects to the archived petition page" do
           get :show, params: { id: petition.id }
-          expect(response).to redirect_to "https://petition.parliament.uk/archived/petitions/#{petition.id}"
+          expect(response).to redirect_to "https://petition.parliament.wales/archived/petitions/#{petition.id}"
         end
       end
     end
@@ -347,12 +347,12 @@ RSpec.describe PetitionsController, type: :controller do
       context "but it is not a public facet from the locale file" do
         it "redirects to itself with state=all" do
           get :index, params: { state: "awaiting_monkey" }
-          expect(response).to redirect_to "https://petition.parliament.uk/petitions?state=all"
+          expect(response).to redirect_to "https://petition.parliament.wales/petitions?state=all"
         end
 
         it "preserves other params when it redirects" do
           get :index, params: { q: "what is clocks", state: "awaiting_monkey" }
-          expect(response).to redirect_to "https://petition.parliament.uk/petitions?q=what+is+clocks&state=all"
+          expect(response).to redirect_to "https://petition.parliament.wales/petitions?q=what+is+clocks&state=all"
         end
       end
 
@@ -376,7 +376,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :index
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
   end
@@ -394,7 +394,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :check
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
 
@@ -405,7 +405,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :check
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
   end
@@ -423,7 +423,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :check_results, params: { q: "action" }
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
 
@@ -434,7 +434,7 @@ RSpec.describe PetitionsController, type: :controller do
 
       it "redirects to the home page" do
         get :check_results, params: { q: "action" }
-        expect(response).to redirect_to("https://petition.parliament.uk/")
+        expect(response).to redirect_to("https://petition.parliament.wales/")
       end
     end
   end

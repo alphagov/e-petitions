@@ -22,7 +22,7 @@ RSpec.describe EmailReminder do
       email_no_new = ActionMailer::Base.deliveries.size
       expect(email_no_new - email_no).to eq(1)
       email = ActionMailer::Base.deliveries.last
-      expect(email.from).to eq(["no-reply@petition.parliament.uk"])
+      expect(email.from).to eq(["no-reply@petition.parliament.wales"])
       expect(email.to).to match_array(["peter@directgov.uk", "richard@directgov.uk"])
       expect(email.subject).to eq('Petitions alert')
     end

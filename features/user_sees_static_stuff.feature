@@ -4,7 +4,7 @@ Feature: User views static pages
 
   Scenario: I navigate to the home page
     When I go to the home page
-    Then I should see "Petitions - UK Government and Parliament" in the browser page title
+    Then I should see "Petitions - Welsh Government and Parliament" in the browser page title
     And the markup should be valid
 
   Scenario: I navigate to Help

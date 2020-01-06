@@ -8,7 +8,7 @@ Capybara.javascript_driver = ENV.fetch("JS_DRIVER", "chrome_headless").to_sym
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 3443
 Capybara.app_host = "https://127.0.0.1:3443"
-Capybara.default_host = "https://petition.parliament.uk"
+Capybara.default_host = "https://petition.parliament.wales"
 Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 

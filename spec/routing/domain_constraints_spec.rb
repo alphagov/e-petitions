@@ -36,7 +36,7 @@ RSpec.describe "domain constraints", type: :routes do
 
     context "and making a request for the root path" do
       it "is redirected to /admin" do
-        expect(get("/")).to permanently_redirect_to("https://moderate.petition.parliament.uk/admin")
+        expect(get("/")).to permanently_redirect_to("https://moderate.petition.parliament.wales/admin")
       end
     end
   end

@@ -17,7 +17,7 @@ module Wpets
           SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE,
           SSLPrivateKey:   private_key,
           SSLCertificate:  ssl_certificate,
-          SSLCertName:     [['GB', 'petition.parliament.uk']],
+          SSLCertName:     [['GB', 'petition.parliament.wales']],
           AccessLog:       [],
           Logger:          logger
         }
@@ -60,11 +60,11 @@ module Wpets
 
         details = []
         details << 'C=GB'
-        details << 'ST=London'
-        details << 'L=London'
-        details << 'O=Houses of Parliament'
-        details << 'OU=Parliamentary ICT'
-        details << 'CN=petition.parliament.uk'
+        details << 'ST=Wales'
+        details << 'L=Cardiff'
+        details << 'O=Welsh Parliament'
+        details << 'OU=ICT'
+        details << 'CN=petition.parliament.wales'
 
         args = %w[openssl req -x509]
         args.concat ['-newkey', 'rsa:2048']
