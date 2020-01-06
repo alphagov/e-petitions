@@ -6,7 +6,7 @@ cache:
   bundler: true
 
 rvm:
-  - 2.5.5
+  - 2.5.7
 
 services:
   - memcached
@@ -21,7 +21,7 @@ before_install:
 
 before_script:
   - bundle install
-  - psql -c 'create database wpets_test;' -U postgres
-  - RAILS_ENV=test bundle exec rake db:structure:load
+  - RAILS_ENV=test bundle exec rake db:create
+  - RAILS_ENV=test bundle exec rake db:schema:load
 
 script: RAILS_ENV=test bundle exec rake
