@@ -38,7 +38,7 @@ RSpec.describe Invalidation, type: :model do
     it { is_expected.to validate_presence_of(:summary) }
     it { is_expected.to validate_length_of(:summary).is_at_most(255) }
     it { is_expected.to validate_length_of(:details).is_at_most(10000) }
-    it { is_expected.to validate_numericality_of(:petition_id).only_integer.is_greater_than_or_equal_to(100000) }
+    it { is_expected.to validate_numericality_of(:petition_id).only_integer.is_greater_than_or_equal_to(1) }
     it { is_expected.to validate_length_of(:name).is_at_most(255) }
     it { is_expected.to validate_length_of(:postcode).is_at_most(255) }
     it { is_expected.to validate_length_of(:ip_address).is_at_most(20) }
