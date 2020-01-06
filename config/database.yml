@@ -14,5 +14,5 @@ test:
 
 production:
   <<: *default
-  database: epets_production
-  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
+  database: wpets_production
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i %>

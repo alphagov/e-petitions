@@ -35,7 +35,6 @@ gem 'paperclip'
 gem 'maxminddb'
 gem 'redcarpet'
 
-gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
 gem 'aws-sdk-s3'
 

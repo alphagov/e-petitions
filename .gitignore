@@ -27,9 +27,6 @@
 # Ignore uploaded test files
 /public/test
 
-# Ignore deployment packages
-/pkg
-
 # Dotenv 2.0 uses a .env.local for local overrides
 .env.local
 
