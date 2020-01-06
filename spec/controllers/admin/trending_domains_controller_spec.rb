@@ -4,7 +4,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
   context "when not logged in" do
     describe "GET /admin/petitions/200000/trending-domains" do
       before do
-        get :index, petition_id: "200000"
+        get :index, params: { petition_id: "200000" }
       end
 
       it "redirects to the login page" do
@@ -22,7 +22,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
 
     describe "GET /admin/petitions/200000/trending-domains" do
       before do
-        get :index, petition_id: "200000"
+        get :index, params: { petition_id: "200000" }
       end
 
       it "redirects to edit profile page" do
@@ -69,7 +69,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
       context "when viewing all trending domains" do
         before do
           expect(scope).to receive(:search).with(nil, page: nil).and_return(trending_domains)
-          get :index, petition_id: "200000"
+          get :index, params: { petition_id: "200000" }
         end
 
         include_examples("trending domains index page")
@@ -78,7 +78,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
       context "when viewing page 2 of all trending domains" do
         before do
           expect(scope).to receive(:search).with(nil, page: "2").and_return(trending_domains)
-          get :index, petition_id: "200000", page: "2"
+          get :index, params: { petition_id: "200000", page: "2" }
         end
 
         include_examples("trending domains index page")
@@ -87,7 +87,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
       context "when searching trending domains" do
         before do
           expect(scope).to receive(:search).with("example.com", page: nil).and_return(trending_domains)
-          get :index, petition_id: "200000", q: "example.com"
+          get :index, params: { petition_id: "200000", q: "example.com" }
         end
 
         include_examples("trending domains index page")
@@ -96,7 +96,7 @@ RSpec.describe Admin::TrendingDomainsController, type: :controller, admin: true 
       context "when viewing page 2 of a trending domains search" do
         before do
           expect(scope).to receive(:search).with("example.com", page: "2").and_return(trending_domains)
-          get :index, petition_id: "200000", q: "example.com", page: "2"
+          get :index, params: { petition_id: "200000", q: "example.com", page: "2" }
         end
 
         include_examples("trending domains index page")

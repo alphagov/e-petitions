@@ -1,4 +1,4 @@
-class AddFormRequestedAtToSignatures < ActiveRecord::Migration
+class AddFormRequestedAtToSignatures < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:signatures, :form_requested_at)
       add_column :signatures, :form_requested_at, :datetime

@@ -74,7 +74,7 @@ class Admin::TagsController < Admin::AdminController
   end
 
   def index_url
-    admin_tags_url(params.slice(:q))
+    admin_tags_url(params.permit(:q))
   end
 
   def redirect_to_index_url(options = {})

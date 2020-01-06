@@ -1,4 +1,4 @@
-class AddImageLoadedAtToSignatures < ActiveRecord::Migration
+class AddImageLoadedAtToSignatures < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:signatures, :image_loaded_at)
       add_column :signatures, :image_loaded_at, :datetime

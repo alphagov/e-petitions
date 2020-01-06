@@ -11,13 +11,13 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
   describe "format" do
     it "responds to JSON" do
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "sets CORS headers" do
       get "/archived/petitions/#{petition.id}.json"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(access_control_allow_origin).to eq('*')
       expect(access_control_allow_methods).to eq('GET')
       expect(access_control_allow_headers).to eq('Origin, X-Requested-With, Content-Type, Accept')
@@ -48,7 +48,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
     it "returns a link to itself" do
       get "/archived/petitions/#{petition.id}.json"
 
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(links).to include("self" => "https://petition.parliament.uk/archived/petitions/#{petition.id}.json")
     end
   end
@@ -56,7 +56,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
   describe "data" do
     it "returns the petition with the expected fields" do
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -81,7 +81,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           rejection_details: "This is a duplication of another petition"
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -101,7 +101,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           response_details: "Details of what the government said"
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -125,7 +125,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           debate_threshold_reached_at: 1.day.ago
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -140,7 +140,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       petition = FactoryBot.create :archived_petition, :scheduled_for_debate
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -159,7 +159,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -184,7 +184,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           signatures_by_constituency: { 3427 => 123, 3320 => 456 }
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -215,7 +215,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           signatures_by_constituency: { 3427 => 123, 3320 => 456 }
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes.keys).not_to include("signatures_by_constituency")
     end
@@ -229,7 +229,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           signatures_by_country: { "gb" => 123456, "fr" => 789 }
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes).to match(
         a_hash_including(
@@ -258,7 +258,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
           signatures_by_country: { "gb" => 123456, "fr" => 789 }
 
       get "/archived/petitions/#{petition.id}.json"
-      expect(response).to be_success
+      expect(response).to be_successful
 
       expect(attributes.keys).not_to include("signatures_by_country")
     end

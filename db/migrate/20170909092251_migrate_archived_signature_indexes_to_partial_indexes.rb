@@ -1,4 +1,4 @@
-class MigrateArchivedSignatureIndexesToPartialIndexes < ActiveRecord::Migration
+class MigrateArchivedSignatureIndexesToPartialIndexes < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

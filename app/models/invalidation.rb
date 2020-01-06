@@ -58,7 +58,7 @@ class Invalidation < ActiveRecord::Base
   end
 
   before_destroy do
-    !started?
+    throw :abort if started?
   end
 
   class << self
@@ -177,7 +177,7 @@ class Invalidation < ActiveRecord::Base
     Appsignal.without_instrumentation do
       matching_signatures.find_in_batches(batch_size: 100) do |signatures|
         signatures.each do |signature|
-          signature.invalidate!(Time.current, self)
+          signature.invalidate!(Time.current, id)
           increment!(:invalidated_count)
         end
 
@@ -196,9 +196,9 @@ class Invalidation < ActiveRecord::Base
 
   def name_scope(scope)
     if name =~ /%/
-      scope.where("lower(name) LIKE ?", name.strip.downcase)
+      scope.where(name_index.matches(name.strip.downcase))
     else
-      scope.where("lower(name) = ?", name.strip.downcase)
+      scope.where(name_index.eq(name.strip.downcase))
     end
   end
 
@@ -207,22 +207,22 @@ class Invalidation < ActiveRecord::Base
   end
 
   def ip_address_scope(scope)
-    scope.where(ip_address: ip_address)
+    scope.where(ip_index, ip: ip_address)
   end
 
   def email_scope(scope)
     if email =~ /%/
-      scope.where("email LIKE ?", email)
+      scope.where(email_index.matches(normalize_email(email)))
     else
-      scope.where("email = ?", email)
+      scope.where(email_index.eq(normalize_email(email)))
     end
   end
 
   def domain_scope(scope)
     if domain =~ /%/
-      scope.where("SUBSTRING(email FROM POSITION('@' IN email) + 1) LIKE ?", domain)
+      scope.where(domain_index.matches(domain))
     else
-      scope.where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain)
+      scope.where(domain_index.eq(domain))
     end
   end
 
@@ -260,5 +260,35 @@ class Invalidation < ActiveRecord::Base
 
   def applied_conditions
     CONDITIONS.select{ |c| read_attribute(c).present? }
+  end
+
+  private
+
+  def name_index
+    table[:name].lower
+  end
+
+  def domain_index
+    Arel.sql("SUBSTRING(email FROM POSITION('@' IN email) + 1)")
+  end
+
+  def email_index
+    Arel.sql("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)))")
+  end
+
+  def ip_index
+    Arel.sql("inet(ip_address) <<= inet(:ip)")
+  end
+
+  def normalize_email(email)
+    "#{normalize_user(email)}@#{normalize_domain(email)}"
+  end
+
+  def normalize_user(email)
+    email.split("@").first.split("+").first.tr(".", "").downcase
+  end
+
+  def normalize_domain(email)
+    email.split("@").last.downcase
   end
 end

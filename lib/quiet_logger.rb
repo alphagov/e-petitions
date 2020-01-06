@@ -1,4 +1,6 @@
 class QuietLogger
+  PATH_INFO = 'PATH_INFO'.freeze
+
   attr_reader :app, :options, :paths
 
   def initialize(app, options = {})
@@ -18,7 +20,7 @@ class QuietLogger
   private
 
     def silence_request?(env)
-      paths.any? { |path| path === env['PATH_INFO'] }
+      paths.any? { |path| path === env[PATH_INFO] }
     end
 
     def logger

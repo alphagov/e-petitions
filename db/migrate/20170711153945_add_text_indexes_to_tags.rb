@@ -1,4 +1,4 @@
-class AddTextIndexesToTags < ActiveRecord::Migration
+class AddTextIndexesToTags < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL
       CREATE INDEX index_ft_tags_on_name ON tags

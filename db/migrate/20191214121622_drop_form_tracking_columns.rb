@@ -1,4 +1,4 @@
-class DropFormTrackingColumns < ActiveRecord::Migration
+class DropFormTrackingColumns < ActiveRecord::Migration[4.2]
   disable_ddl_transaction!
 
   def up

@@ -4,14 +4,14 @@ RSpec.describe FeedbackController, type: :controller do
   describe "GET /feedback" do
     it "is successful" do
       get :new
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 
   describe "POST /feedback" do
     def do_post(attributes = {})
       perform_enqueued_jobs do
-        post :create, feedback: attributes
+        post :create, params: { feedback: attributes }
       end
     end
 
@@ -45,7 +45,7 @@ RSpec.describe FeedbackController, type: :controller do
   describe "GET /feedback/thanks" do
     it "is successful" do
       get :thanks
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 end

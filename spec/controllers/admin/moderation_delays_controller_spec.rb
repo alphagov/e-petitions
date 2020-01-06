@@ -8,7 +8,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -28,7 +28,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params }
 
         it "redirects to the admin profile page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{moderator.id}/edit")
@@ -61,7 +61,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
 
         before do
           perform_enqueued_jobs do
-            post :create, moderation_delay: params, email_preview: "Email preview"
+            post :create, params: { moderation_delay: params, email_preview: "Email preview" }
           end
         end
 
@@ -145,7 +145,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
 
         before do
           perform_enqueued_jobs do
-            post :create, moderation_delay: params, email_creators: "Email creators"
+            post :create, params: { moderation_delay: params, email_creators: "Email creators" }
           end
         end
 

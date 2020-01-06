@@ -1,4 +1,4 @@
-class AddSignatureCountValidatedAtToPetitions < ActiveRecord::Migration
+class AddSignatureCountValidatedAtToPetitions < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:petitions, :signature_count_validated_at)
       add_column :petitions, :signature_count_validated_at, :datetime

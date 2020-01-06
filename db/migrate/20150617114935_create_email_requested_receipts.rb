@@ -1,4 +1,4 @@
-class CreateEmailRequestedReceipts < ActiveRecord::Migration
+class CreateEmailRequestedReceipts < ActiveRecord::Migration[4.2]
   def change
     create_table :email_requested_receipts do |t|
       t.references :petition, index: true, foreign_key: true

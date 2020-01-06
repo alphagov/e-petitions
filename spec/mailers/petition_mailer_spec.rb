@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe PetitionMailer, type: :mailer do
   let :creator do
-    FactoryBot.create(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com", creator: true)
+    FactoryBot.build(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com", creator: true)
   end
 
   let :petition do

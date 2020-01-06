@@ -3,7 +3,7 @@ class Admin::GovernmentResponseController < Admin::AdminController
   before_action :fetch_government_response
 
   rescue_from ActiveRecord::RecordNotUnique do
-    @government_response = @petition.government_response(true) and update
+    @government_response = @petition.reload_government_response and update
   end
 
   def show

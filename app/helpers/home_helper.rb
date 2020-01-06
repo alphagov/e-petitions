@@ -76,7 +76,7 @@ module HomeHelper
     Rails.cache.fetch(:trending_petitions, expires_in: 5.minutes) do
       signature_id = Signature.arel_table[:id]
       signature_count = signature_id.count.as("signature_count_in_period")
-      Petition.trending.pluck(:id, :action, signature_count.to_sql)
+      Petition.trending.pluck(:id, :action, signature_count)
     end
   end
   private :fetch_trending_petitions

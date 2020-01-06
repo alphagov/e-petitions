@@ -1,4 +1,4 @@
-class RenameActionToBackground < ActiveRecord::Migration
+class RenameActionToBackground < ActiveRecord::Migration[4.2]
   def change
     rename_column :petitions, :action, :background
     reversible do |dir|

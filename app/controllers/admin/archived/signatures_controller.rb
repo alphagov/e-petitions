@@ -77,6 +77,6 @@ class Admin::Archived::SignaturesController < Admin::AdminController
   end
 
   def search_params
-    params.slice(:q, :page, :state, :window)
+    params.permit(:q, :page, :state, :window).to_h
   end
 end

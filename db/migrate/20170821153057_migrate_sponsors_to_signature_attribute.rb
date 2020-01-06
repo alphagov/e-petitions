@@ -1,4 +1,4 @@
-class MigrateSponsorsToSignatureAttribute < ActiveRecord::Migration
+class MigrateSponsorsToSignatureAttribute < ActiveRecord::Migration[4.2]
   class Sponsor < ActiveRecord::Base; end
   class Signature < ActiveRecord::Base; end
 

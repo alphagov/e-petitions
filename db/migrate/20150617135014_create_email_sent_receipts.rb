@@ -1,4 +1,4 @@
-class CreateEmailSentReceipts < ActiveRecord::Migration
+class CreateEmailSentReceipts < ActiveRecord::Migration[4.2]
   def change
     create_table :email_sent_receipts do |t|
       t.references :signature, index: true, foreign_key: true

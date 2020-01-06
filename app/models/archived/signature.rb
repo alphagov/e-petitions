@@ -38,7 +38,7 @@ module Archived
     attr_readonly :sponsor, :creator
 
     before_destroy do
-      !creator?
+      throw :abort if creator?
     end
 
     class << self
@@ -67,15 +67,15 @@ module Archived
       end
 
       def for_domain(domain)
-        where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain[1..-1])
+        where(domain_index.eq(domain[1..-1]))
       end
 
       def for_email(email)
-        where("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)) = ?)", normalize_email(email))
+        where(email_index.eq(normalize_email(email)))
       end
 
       def for_ip(ip)
-        where("inet(ip_address) <<= inet(?)", ip)
+        where(ip_index, ip: ip)
       end
 
       def for_name(name)
@@ -186,6 +186,18 @@ module Archived
       end
 
       private
+
+      def domain_index
+        Arel.sql("SUBSTRING(email FROM POSITION('@' IN email) + 1)")
+      end
+
+      def email_index
+        Arel.sql("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)))")
+      end
+
+      def ip_index
+        Arel.sql("inet(ip_address) <<= inet(:ip)")
+      end
 
       def ip_search?(query)
         IPAddr.new(query)

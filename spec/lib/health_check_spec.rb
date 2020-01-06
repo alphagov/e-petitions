@@ -75,12 +75,12 @@ RSpec.describe HealthCheck do
 
     describe 'includes database integrity status' do
       it "is ok when we are fully migrated" do
-        expect(ActiveRecord::Migrator).to receive(:needs_migration?).and_return false
+        allow_any_instance_of(ActiveRecord::MigrationContext).to receive(:needs_migration?).and_return(false)
         expect(subject['database_integrity']).to eq 'OK'
       end
 
       it "detects when we are missing some migrations" do
-        expect(ActiveRecord::Migrator).to receive(:needs_migration?).and_return true
+        allow_any_instance_of(ActiveRecord::MigrationContext).to receive(:needs_migration?).and_return(true)
         expect(subject['database_integrity']).to eq 'FAILED'
       end
     end

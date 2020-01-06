@@ -3,14 +3,14 @@ require 'rails_helper'
 RSpec.describe Admin::LocksController, type: :controller, admin: true do
   context "when not logged in" do
     [
-      ["GET", "/admin/petitions/:petition_id/lock.json", :show, { petition_id: "100000", format: :json }],
-      ["POST", "/admin/petitions/:petition_id/lock.json", :create, { petition_id: "100000", format: :json }],
-      ["PATCH", "/admin/petitions/:petition_id/lock.json", :update, { petition_id: "100000", format: :json }],
-      ["DELETE", "/admin/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000", format: :json }]
+      ["GET", "/admin/petitions/:petition_id/lock.json", :show, { petition_id: "100000" }],
+      ["POST", "/admin/petitions/:petition_id/lock.json", :create, { petition_id: "100000" }],
+      ["PATCH", "/admin/petitions/:petition_id/lock.json", :update, { petition_id: "100000" }],
+      ["DELETE", "/admin/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000" }]
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params, format: :json }
 
         it "redirects to the login page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -25,14 +25,14 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
     before { login_as(moderator) }
 
     [
-      ["GET", "/admin/petitions/:petition_id/lock.json", :show, { petition_id: "100000", format: :json }],
-      ["POST", "/admin/petitions/:petition_id/lock.json", :create, { petition_id: "100000", format: :json }],
-      ["PATCH", "/admin/petitions/:petition_id/lock.json", :update, { petition_id: "100000", format: :json }],
-      ["DELETE", "/admin/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000", format: :json }]
+      ["GET", "/admin/petitions/:petition_id/lock.json", :show, { petition_id: "100000" }],
+      ["POST", "/admin/petitions/:petition_id/lock.json", :create, { petition_id: "100000" }],
+      ["PATCH", "/admin/petitions/:petition_id/lock.json", :update, { petition_id: "100000" }],
+      ["DELETE", "/admin/petitions/:petition_id/lock.json", :destroy, { petition_id: "100000" }]
     ].each do |method, path, action, params|
 
       describe "#{method} #{path}" do
-        before { process action, method, params }
+        before { process action, method: method, params: params, format: :json }
 
         it "redirects to the admin profile page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{moderator.id}/edit")
@@ -50,12 +50,12 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
     describe "GET /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :show, petition_id: petition.to_param, format: :json
+        get :show, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :show template" do
-        get :show, petition_id: petition.to_param, format: :json
+        get :show, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/show")
       end
 
@@ -64,7 +64,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :show, petition_id: petition.to_param, format: :json
+            get :show, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -77,7 +77,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :show, petition_id: petition.to_param, format: :json
+            get :show, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
@@ -87,12 +87,12 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
     describe "POST /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :create, petition_id: petition.to_param, format: :json
+        get :create, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :create template" do
-        get :create, petition_id: petition.to_param, format: :json
+        get :create, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/create")
       end
 
@@ -101,7 +101,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(nil).to eq(moderator)
@@ -109,7 +109,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.from(nil).to be_within(1.second).of(Time.current)
@@ -121,7 +121,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -129,7 +129,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -142,7 +142,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -150,7 +150,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :create, petition_id: petition.to_param, format: :json
+            get :create, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
@@ -160,12 +160,12 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
     describe "PATCH /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :update, petition_id: petition.to_param, format: :json
+        get :update, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :update template" do
-        get :update, petition_id: petition.to_param, format: :json
+        get :update, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/update")
       end
 
@@ -174,7 +174,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(nil).to eq(moderator)
@@ -182,7 +182,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.from(nil).to be_within(1.second).of(Time.current)
@@ -194,7 +194,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -202,7 +202,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -215,7 +215,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(other_user).to eq(moderator)
@@ -223,7 +223,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :update, petition_id: petition.to_param, format: :json
+            get :update, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_within(1.second).of(Time.current)
@@ -233,12 +233,12 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
     describe "DELETE /admin/petitions/:petition_id/lock.json" do
       it "returns 200 OK" do
-        get :destroy, petition_id: petition.to_param, format: :json
+        get :destroy, params: { petition_id: petition.to_param }, format: :json
         expect(response).to have_http_status(:ok)
       end
 
       it "renders the :destroy template" do
-        get :destroy, petition_id: petition.to_param, format: :json
+        get :destroy, params: { petition_id: petition.to_param }, format: :json
         expect(response).to render_template("admin/locks/destroy")
       end
 
@@ -247,7 +247,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -255,7 +255,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }
@@ -267,7 +267,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_by association" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_by
           }.from(moderator).to(nil)
@@ -275,7 +275,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "updates the locked_at timestamp" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.to change {
             petition.reload.locked_at
           }.to be_nil
@@ -288,7 +288,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_by association" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_by
           }
@@ -296,7 +296,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
 
         it "doesn't update the locked_at timestamp" do
           expect {
-            get :destroy, petition_id: petition.to_param, format: :json
+            get :destroy, params: { petition_id: petition.to_param }, format: :json
           }.not_to change {
             petition.reload.locked_at
           }

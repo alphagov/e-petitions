@@ -13,8 +13,8 @@ Rails.application.configure do
   config.eager_load = false
 
   # Configure static file server for tests with Cache-Control for performance.
-  config.serve_static_files   = true
-  config.static_cache_control = 'public, max-age=3600'
+  config.public_file_server.enabled = true
+  config.public_file_server.headers = 'public, max-age=3600'
 
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
@@ -57,6 +57,4 @@ Rails.application.configure do
     allow_localhost: true,
     allow: 'chromedriver.storage.googleapis.com'
   )
-
-  config.active_job.queue_adapter = :test
 end

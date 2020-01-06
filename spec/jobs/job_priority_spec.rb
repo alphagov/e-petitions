@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe "setting job priorities" do
-  before do
-    ActiveJob::Base.queue_adapter = :delayed_job
+  around do |example|
+    without_test_adapter { example.run }
   end
 
   describe "default priority" do

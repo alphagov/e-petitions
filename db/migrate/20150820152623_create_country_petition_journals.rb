@@ -1,4 +1,4 @@
-class CreateCountryPetitionJournals < ActiveRecord::Migration
+class CreateCountryPetitionJournals < ActiveRecord::Migration[4.2]
   def change
     create_table :country_petition_journals do |t|
       t.references :petition, null: false

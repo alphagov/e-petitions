@@ -1,4 +1,4 @@
-class DropLegacyArchiveIndexes < ActiveRecord::Migration
+class DropLegacyArchiveIndexes < ActiveRecord::Migration[4.2]
   def up
     execute "DROP INDEX index_archived_petitions_on_title;"
     execute "DROP INDEX index_archived_petitions_on_description;"

@@ -1,4 +1,4 @@
-class CreateInvalidations < ActiveRecord::Migration
+class CreateInvalidations < ActiveRecord::Migration[4.2]
   def change
     create_table :invalidations do |t|
       t.string   :summary, limit: 255, null: false

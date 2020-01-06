@@ -2,7 +2,7 @@ Dear <%= @petition.creator.name %>,
 
 <%= @sponsor.name %> supported your petition – "<%= @petition.action %>".
 
-You have <%= pluralize(@sponsor_count, 'supporter') %> so far. If <%= Site.threshold_for_moderation %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.
+You have <%= pluralize(@sponsor_count, 'supporter', locale: :en) %> so far. If <%= Site.threshold_for_moderation %> people support your petition we’ll check it to make sure it meets the petition standards. If it does, we’ll publish it.
 
 Find out how we check petitions before we publish them:
 <%= help_url(anchor: 'standards') %>

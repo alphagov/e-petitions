@@ -1,4 +1,4 @@
-class ChangeRateLimitColumns < ActiveRecord::Migration
+class ChangeRateLimitColumns < ActiveRecord::Migration[4.2]
   def change
     rename_column(:rate_limits, :domain_whitelist, :allowed_domains)
     rename_column(:rate_limits, :ip_whitelist, :allowed_ips)

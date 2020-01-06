@@ -6,7 +6,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
   context "when not logged in" do
     describe "PATCH /admin/petitions/:petition_id/statistics" do
       before do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
       end
 
       it "redirects to the login page" do
@@ -21,7 +21,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
 
     describe "PATCH /admin/petitions/:petition_id/statistics" do
       before do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
       end
 
       it "redirects to the admin hub page" do
@@ -36,7 +36,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
 
     describe "PATCH /admin/petitions/:petition_id/statistics" do
       before do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
       end
 
       it "redirects to the petition page" do

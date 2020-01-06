@@ -294,7 +294,7 @@ RSpec.describe AutoLinkHelper, type: :helper do
 
     it "auto links email addresses with special chars" do
       text = "andre$la*+r-a.o'rea=l~ly@tenderlovemaking.com"
-      result = "<a href=\"mailto:andre%24la%2A%2Br-a.o%27rea%3Dl%7Ely@tenderlovemaking.com\">andre$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com</a>"
+      result = "<a href=\"mailto:andre%24la%2A%2Br-a.o%27rea%3Dl~ly@tenderlovemaking.com\">andre$la*+r-a.o&#39;rea=l~ly@tenderlovemaking.com</a>"
 
       expect(helper.auto_link(text)).to eq(result)
     end

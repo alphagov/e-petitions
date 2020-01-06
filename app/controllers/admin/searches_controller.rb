@@ -22,14 +22,14 @@ class Admin::SearchesController < Admin::AdminController
   def search_params
     if petition_search?
       if params[:match] == "none"
-        params.slice(:q, :match)
+        params.permit(:q, :match)
       elsif params[:tags].present?
-        params.slice(:q, :tags, :match)
+        params.permit(:q, :match, tags: [])
       else
-        params.slice(:q)
+        params.permit(:q)
       end
     elsif signature_search?
-      params.slice(:q, :window)
+      params.permit(:q, :window)
     else
       {}
     end

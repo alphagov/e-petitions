@@ -61,7 +61,7 @@ class Signature < ActiveRecord::Base
   end
 
   before_destroy do
-    !creator?
+    throw :abort if creator?
   end
 
   after_destroy do
@@ -115,11 +115,11 @@ class Signature < ActiveRecord::Base
     end
 
     def for_domain(domain)
-      where("SUBSTRING(email FROM POSITION('@' IN email) + 1) = ?", domain[1..-1])
+      where(domain_index.eq(domain[1..-1]))
     end
 
     def for_email(email)
-      where("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)) = ?)", normalize_email(email))
+      where(email_index.eq(normalize_email(email)))
     end
 
     def for_invalidating
@@ -127,7 +127,7 @@ class Signature < ActiveRecord::Base
     end
 
     def for_ip(ip)
-      where("inet(ip_address) <<= inet(?)", ip)
+      where(ip_index, ip: ip)
     end
 
     def for_name(name)
@@ -156,11 +156,7 @@ class Signature < ActiveRecord::Base
     end
 
     def fraudulent_domains
-      where(state: FRAUDULENT_STATE).
-      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
-      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
-      order("COUNT(*) DESC").
-      count(:all)
+      where(state: FRAUDULENT_STATE).select(domain_index.as("domain")).group(domain_index).order(count_star.desc).count(:all)
     end
 
     def invalidate!(signature_ids, now = Time.current, invalidation_id = nil)
@@ -264,11 +260,11 @@ class Signature < ActiveRecord::Base
     end
 
     def fraudulent_domains(since: 1.hour.ago, limit: 20)
-      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      select(domain_index.as("domain")).
       where(arel_table[:created_at].gt(since)).
       where(state: FRAUDULENT_STATE).
-      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
-      order("COUNT(*) DESC").
+      group(domain_index).
+      order(count_star.desc).
       limit(limit).
       count(:all)
     end
@@ -278,17 +274,17 @@ class Signature < ActiveRecord::Base
       where(arel_table[:created_at].gt(since)).
       where(state: FRAUDULENT_STATE).
       group(:ip_address).
-      order("COUNT(*) DESC").
+      order(count_star.desc).
       limit(limit).
       count(:all)
     end
 
     def trending_domains(since: 1.hour.ago, limit: 20)
-      select("SUBSTRING(email FROM POSITION('@' IN email) + 1) AS domain").
+      select(domain_index.as("domain")).
       where(arel_table[:validated_at].gt(since)).
       where(arel_table[:invalidated_at].eq(nil)).
-      group("SUBSTRING(email FROM POSITION('@' IN email) + 1)").
-      order("COUNT(*) DESC").
+      group(domain_index).
+      order(count_star.desc).
       limit(limit).
       count(:all)
     end
@@ -298,20 +294,19 @@ class Signature < ActiveRecord::Base
       where(arel_table[:validated_at].gt(since)).
       where(arel_table[:invalidated_at].eq(nil)).
       group(:ip_address).
-      order("COUNT(*) DESC").
+      order(count_star.desc).
       limit(limit).
       count(:all)
     end
 
     def trending_domains_by_petition(window, threshold = 5)
       trending_domains = Hash.new { |h, k| h[k] = {} }
-      domain = "SUBSTRING(email FROM POSITION('@' IN email) + 1)"
 
       where(validated_at: window)
-        .group(:petition_id, domain)
+        .group(:petition_id, domain_index)
         .having(count_star.gteq(threshold))
         .order(:petition_id, count_star.desc)
-        .pluck(:petition_id, domain, count_star.to_sql)
+        .pluck(:petition_id, domain_index.as("domain"), count_star)
         .each_with_object(trending_domains) do |(petition_id, domain, count), hash|
           hash[petition_id][domain] = count
         end
@@ -319,19 +314,18 @@ class Signature < ActiveRecord::Base
 
     def trending_ips_by_petition(window, threshold = 5, ignored_domains = [])
       trending_ips = Hash.new { |h, k| h[k] = {} }
-      domain_not_in = "SUBSTRING(email FROM POSITION('@' IN email) + 1) NOT IN (?)"
 
       scope = where(validated_at: window)
 
       unless ignored_domains.empty?
-        scope = scope.where(domain_not_in, ignored_domains)
+        scope = scope.where(domain_index.not_in(ignored_domains))
       end
 
       scope
         .group(:petition_id, :ip_address)
         .having(count_star.gteq(threshold))
         .order(:petition_id, count_star.desc)
-        .pluck(:petition_id, :ip_address, count_star.to_sql)
+        .pluck(:petition_id, :ip_address, count_star)
         .each_with_object(trending_ips) do |(petition_id, ip_address, count), hash|
           hash[petition_id][ip_address] = count
         end
@@ -389,15 +383,15 @@ class Signature < ActiveRecord::Base
     end
 
     def validated_count(timestamp, upto)
-      validated(since: timestamp, upto: upto).pluck(count_star.to_sql).first
+      validated(since: timestamp, upto: upto).pluck(count_star).first
     end
 
     def validated_count_by_location_code(timestamp, upto)
-      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star.to_sql)
+      validated(since: timestamp, upto: upto).group(:location_code).pluck(:location_code, count_star)
     end
 
     def validated_count_by_constituency_id(timestamp, upto)
-      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star.to_sql)
+      validated(since: timestamp, upto: upto).group(:constituency_id).pluck(:constituency_id, count_star)
     end
 
     def validated?(id)
@@ -436,12 +430,24 @@ class Signature < ActiveRecord::Base
       arel_table[:validated_at]
     end
 
+    def domain_index
+      Arel.sql("SUBSTRING(email FROM POSITION('@' IN email) + 1)")
+    end
+
+    def email_index
+      Arel.sql("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)))")
+    end
+
+    def ip_index
+      Arel.sql("inet(ip_address) <<= inet(:ip)")
+    end
+
     def count_star
       arel_table[Arel.star].count
     end
 
     def max_validated_at
-      arel_table[:validated_at].maximum.to_sql
+      arel_table[:validated_at].maximum
     end
 
     def normalize_email(email)

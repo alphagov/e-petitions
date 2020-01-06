@@ -1,4 +1,4 @@
-class AddRespondedOnToGovernmentResponses < ActiveRecord::Migration
+class AddRespondedOnToGovernmentResponses < ActiveRecord::Migration[4.2]
   def change
     change_table :archived_government_responses do |t|
       t.date :responded_on

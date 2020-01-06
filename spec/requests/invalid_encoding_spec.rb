@@ -7,7 +7,7 @@ RSpec.describe "invalid encoding", type: :request do
     it "raises an ActiveRecord::RecordNotFound exception" do
       expect {
         get "/petitions/#{petition.id}/sponsors/new?token=foobar%91"
-      }.to raise_error(ActiveRecord::RecordNotFound, 'Unable to find Petition with sponsor token: "foobar�"')
+      }.to raise_error(ActionController::BadRequest)
     end
   end
 
@@ -18,7 +18,7 @@ RSpec.describe "invalid encoding", type: :request do
     it "raises an ActiveRecord::RecordNotFound exception" do
       expect {
         get "/sponsors/#{signature.id}/verify?token=foobar%91"
-      }.to raise_error(ActiveRecord::RecordNotFound, 'Unable to find Signature with token: "foobar�"')
+      }.to raise_error(ActionController::BadRequest)
     end
   end
 
@@ -29,7 +29,7 @@ RSpec.describe "invalid encoding", type: :request do
     it "raises an ActiveRecord::RecordNotFound exception" do
       expect {
         get "/signatures/#{signature.id}/verify?token=foobar%91"
-      }.to raise_error(ActiveRecord::RecordNotFound, 'Unable to find Signature with token: "foobar�"')
+      }.to raise_error(ActionController::BadRequest)
     end
   end
 
@@ -40,7 +40,7 @@ RSpec.describe "invalid encoding", type: :request do
     it "raises an ActiveRecord::RecordNotFound exception" do
       expect {
         get "/signatures/#{signature.id}/unsubscribe?token=foobar%91"
-      }.to raise_error(ActiveRecord::RecordNotFound, 'Unable to find Signature with unsubscribe token: "foobar�"')
+      }.to raise_error(ActionController::BadRequest)
     end
   end
 
@@ -51,7 +51,7 @@ RSpec.describe "invalid encoding", type: :request do
     it "raises an ActiveRecord::RecordNotFound exception" do
       expect {
         get "/archived/signatures/#{signature.id}/unsubscribe?token=foobar%91"
-      }.to raise_error(ActiveRecord::RecordNotFound, 'Unable to find Signature with unsubscribe token: "foobar�"')
+      }.to raise_error(ActionController::BadRequest)
     end
   end
 end

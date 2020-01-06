@@ -7,14 +7,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
   describe 'not logged in' do
     describe 'GET /show' do
       it 'redirects to the login page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
     describe 'GET /show' do
       it 'redirects to edit profile page' do
-        get :show, petition_id: petition.id
+        get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
-        patch :update, petition_id: petition.id
+        patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -46,13 +46,13 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
     describe 'GET /show' do
       shared_examples_for 'viewing government response for a petition' do
         it 'fetches the requested petition' do
-          get :show, petition_id: petition.id
+          get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
         end
 
         it 'responds successfully and renders the petitions/show template' do
-          get :show, petition_id: petition.id
-          expect(response).to be_success
+          get :show, params: { petition_id: petition.id }
+          expect(response).to be_successful
           expect(response).to render_template('petitions/show')
         end
       end
@@ -60,7 +60,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
       shared_examples_for 'viewing government response for a petition in the wrong state' do
         it 'throws a 404' do
           expect {
-            get :show, petition_id: petition.id
+            get :show, params: { petition_id: petition.id }
           }.to raise_error(ActiveRecord::RecordNotFound)
         end
       end
@@ -114,7 +114,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             save_and_email: "Email"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'using valid params to add a government response' do
@@ -256,7 +256,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
           it 're-renders the admin/petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('admin/petitions/show')
           end
         end
@@ -266,7 +266,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
           it 're-renders the petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('petitions/show')
           end
 
@@ -368,7 +368,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
             save: "Save"
           }
 
-          patch :update, params.merge(overrides)
+          patch :update, params: params.merge(overrides)
         end
 
         describe 'using valid params to add a government response' do
@@ -480,7 +480,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
           it 're-renders the admin/petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('admin/petitions/show')
           end
         end
@@ -490,7 +490,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
 
           it 're-renders the petitions/show template' do
             do_patch
-            expect(response).to be_success
+            expect(response).to be_successful
             expect(response).to render_template('petitions/show')
           end
 
@@ -603,7 +603,7 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
               details: "details 1"
             }
 
-            patch :update, petition_id: petition.id, government_response: response_attributes, save: "Save"
+            patch :update, params: { petition_id: petition.id, government_response: response_attributes, save: "Save" }
             expect(petition.government_response.summary).to eq("summmary 1")
 
             allow(petition).to receive(:government_response).and_return(nil, petition.government_response)
@@ -615,8 +615,8 @@ RSpec.describe Admin::GovernmentResponseController, type: :controller, admin: tr
               details: "details 2"
             }
 
-            patch :update, petition_id: petition.id, government_response: response_attributes, save: "Save"
-            expect(petition.government_response(true).summary).to eq("summmary 2")
+            patch :update, params: { petition_id: petition.id, government_response: response_attributes, save: "Save" }
+            expect(petition.reload_government_response.summary).to eq("summmary 2")
           }.not_to raise_error
         end
       end

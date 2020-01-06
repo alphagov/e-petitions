@@ -10,16 +10,14 @@ RSpec.describe ClosePetitionsEarlyJob, type: :job do
 
   let!(:petition) { FactoryBot.create(:open_petition, open_at: open_at) }
 
-  before do
-    ActiveJob::Base.queue_adapter = :delayed_job
+  around do |example|
+    without_test_adapter { example.run }
+  end
 
+  before do
     travel_to(scheduled_at) {
       described_class.schedule_for(dissolution_at)
     }
-  end
-
-  after do
-    ActiveJob::Base.queue_adapter = :test
   end
 
   it "enqueues the job" do

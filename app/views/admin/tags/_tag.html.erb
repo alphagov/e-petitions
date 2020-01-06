@@ -6,6 +6,6 @@
     <%= tag.description %>
   </td>
   <td>
-    <%= button_to 'Delete', admin_tag_path(tag, params.slice(:q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete tag?' } %>
+    <%= button_to 'Delete', admin_tag_path(tag, params.permit(:q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete tag?' } %>
   </td>
 </tr>

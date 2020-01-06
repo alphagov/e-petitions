@@ -125,7 +125,7 @@ class Admin::InvalidationsController < Admin::AdminController
   end
 
   def index_url
-    admin_invalidations_url(params.slice(:state, :q))
+    admin_invalidations_url(params.permit(:state, :q))
   end
 
   def redirect_to_index_url(options = {})

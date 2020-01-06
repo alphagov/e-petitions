@@ -57,7 +57,7 @@
       <% end %>
     </ol>
     <%= render 'paginated_results' %>
-    <p>Get this data in <%= link_to "JSON", archived_petitions_path(:json, params.slice(:parliament, :q, :page, :state)) %> or <%= link_to 'CSV', archived_petitions_path(:csv, params.slice(:q, :parliament, :state)) %> format</p>
+    <p>Get this data in <%= link_to "JSON", archived_petitions_path(:json, params.permit(:parliament, :q, :page, :state)) %> or <%= link_to 'CSV', archived_petitions_path(:csv, params.permit(:q, :parliament, :state)) %> format</p>
   <% end %>
 </div>
 

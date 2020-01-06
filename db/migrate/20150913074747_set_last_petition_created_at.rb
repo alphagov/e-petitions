@@ -1,4 +1,4 @@
-class SetLastPetitionCreatedAt < ActiveRecord::Migration
+class SetLastPetitionCreatedAt < ActiveRecord::Migration[4.2]
   class Petition < ActiveRecord::Base; end
   class Site < ActiveRecord::Base; end
 

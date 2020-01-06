@@ -1,4 +1,5 @@
-class MigrateCreatorToSignatureAttribute < ActiveRecord::Migration
+
+class MigrateCreatorToSignatureAttribute < ActiveRecord::Migration[4.2]
   class Petition < ActiveRecord::Base; end
   class Signature < ActiveRecord::Base; end
 

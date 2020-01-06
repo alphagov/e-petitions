@@ -7,14 +7,14 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
   context "not logged in" do
     describe "GET /admin/signatures" do
       it "redirects to the login page" do
-        get :index, q: "Alice"
+        get :index, params: { q: "Alice" }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
 
     describe "DELETE /admin/signatures/:id" do
       it "redirects to the login page" do
-        delete :destroy, id: signature.id
+        delete :destroy, params: { id: signature.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
@@ -26,14 +26,14 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
     describe "GET /admin/signatures" do
       it "redirects to the login page" do
-        get :index, q: "Alice"
+        get :index, params: { q: "Alice" }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
     describe "DELETE /admin/signatures/:id" do
       it "redirects to edit profile page" do
-        delete :destroy, id: signature.id
+        delete :destroy, params: { id: signature.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
     end
 
     describe "GET /admin/signatures" do
-      before { get :index, q: "Alice" }
+      before { get :index, params: { q: "Alice" } }
 
       it "returns 200 OK" do
         expect(response).to have_http_status(:ok)
@@ -67,7 +67,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:validate!).and_return(true)
-          post :validate, id: signature.id, q: "user@example.com"
+          post :validate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -86,7 +86,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:validate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :validate, id: signature.id, q: "user@example.com"
+          post :validate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -104,7 +104,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:invalidate!).and_return(true)
-          post :invalidate, id: signature.id, q: "user@example.com"
+          post :invalidate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -123,7 +123,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:invalidate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :invalidate, id: signature.id, q: "user@example.com"
+          post :invalidate, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -143,18 +143,18 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
       context "and the update succeeds" do
         it "redirects to the search page" do
-          post :subscribe, id: signature.id, q: "user@example.com"
+          post :subscribe, params: { id: signature.id, q: "user@example.com" }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash notice message" do
-          post :subscribe, id: signature.id, q: "user@example.com"
+          post :subscribe, params: { id: signature.id, q: "user@example.com" }
           expect(flash[:notice]).to eq("Signature subscribed successfully")
         end
 
         it "changes the notify_by_email attribute" do
           expect {
-            post :subscribe, id: signature.id, q: "user@example.com"
+            post :subscribe, params: { id: signature.id, q: "user@example.com" }
           }.to change {
             signature.reload.notify_by_email
           }.from(false).to(true)
@@ -168,12 +168,12 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         end
 
         it "redirects to the search page" do
-          post :subscribe, id: signature.id, q: "user@example.com"
+          post :subscribe, params: { id: signature.id, q: "user@example.com" }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash alert message" do
-          post :subscribe, id: signature.id, q: "user@example.com"
+          post :subscribe, params: { id: signature.id, q: "user@example.com" }
           expect(flash[:alert]).to eq("Signature could not be subscribed - please contact support")
         end
       end
@@ -186,18 +186,18 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
       context "and the update succeeds" do
         it "redirects to the search page" do
-          post :unsubscribe, id: signature.id, q: "user@example.com"
+          post :unsubscribe, params: { id: signature.id, q: "user@example.com" }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash notice message" do
-          post :unsubscribe, id: signature.id, q: "user@example.com"
+          post :unsubscribe, params: { id: signature.id, q: "user@example.com" }
           expect(flash[:notice]).to eq("Signature unsubscribed successfully")
         end
 
         it "changes the notify_by_email attribute" do
           expect {
-            post :unsubscribe, id: signature.id, q: "user@example.com"
+            post :unsubscribe, params: { id: signature.id, q: "user@example.com" }
           }.to change {
             signature.reload.notify_by_email
           }.from(true).to(false)
@@ -211,12 +211,12 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         end
 
         it "redirects to the search page" do
-          post :unsubscribe, id: signature.id, q: "user@example.com"
+          post :unsubscribe, params: { id: signature.id, q: "user@example.com" }
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/signatures?q=user%40example.com")
         end
 
         it "sets the flash alert message" do
-          post :unsubscribe, id: signature.id, q: "user@example.com"
+          post :unsubscribe, params: { id: signature.id, q: "user@example.com" }
           expect(flash[:alert]).to eq("Signature could not be unsubscribed - please contact support")
         end
       end
@@ -227,7 +227,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:destroy).and_return(true)
-          delete :destroy, id: signature.id, q: "user@example.com"
+          delete :destroy, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -243,7 +243,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with(signature.id.to_s).and_return(signature)
           expect(signature).to receive(:destroy).and_return(false)
-          delete :destroy, id: signature.id, q: "user@example.com"
+          delete :destroy, params: { id: signature.id, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -261,7 +261,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:validate!).and_return(true)
-          post :bulk_validate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_validate, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -280,7 +280,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:validate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_validate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_validate, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -299,7 +299,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_validate, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+            delete :bulk_validate, params: { selected_ids: signature.id, all_ids: "", q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end
@@ -311,7 +311,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_validate, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+            delete :bulk_validate, params: { selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end
@@ -322,7 +322,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:invalidate!).and_return(true)
-          post :bulk_invalidate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_invalidate, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -341,7 +341,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:invalidate!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_invalidate, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_invalidate, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -360,7 +360,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_invalidate, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+            delete :bulk_invalidate, params: { selected_ids: signature.id, all_ids: "", q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end
@@ -372,7 +372,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_invalidate, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+            delete :bulk_invalidate, params: { selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end
@@ -383,7 +383,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:update!).with(notify_by_email: true).and_return(true)
-          post :bulk_subscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_subscribe, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -402,7 +402,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:update!).with(notify_by_email: true).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_subscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_subscribe, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -421,7 +421,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_subscribe, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+            delete :bulk_subscribe, params: { selected_ids: signature.id, all_ids: "", q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end
@@ -433,7 +433,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_subscribe, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+            delete :bulk_subscribe, params: { selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end
@@ -444,7 +444,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:update!).with(notify_by_email: false).and_return(true)
-          post :bulk_unsubscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_unsubscribe, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -463,7 +463,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:update!).with(notify_by_email: false).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          post :bulk_unsubscribe, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          post :bulk_unsubscribe, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -482,7 +482,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_unsubscribe, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+            delete :bulk_unsubscribe, params: { selected_ids: signature.id, all_ids: "", q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end
@@ -494,7 +494,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_unsubscribe, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+            delete :bulk_unsubscribe, params: { selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end
@@ -505,7 +505,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
         before do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:destroy!).and_return(true)
-          delete :bulk_destroy, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          delete :bulk_destroy, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -524,7 +524,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
           expect(Signature).to receive(:find).with([signature.id]).and_return([signature])
           expect(signature).to receive(:destroy!).and_raise(exception)
           expect(Appsignal).to receive(:send_exception).with(exception)
-          delete :bulk_destroy, selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com"
+          delete :bulk_destroy, params: { selected_ids: signature.id, all_ids: signature_ids, q: "user@example.com" }
         end
 
         it "redirects to the search page" do
@@ -543,7 +543,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_destroy, selected_ids: signature.id, all_ids: "", q: "user@example.com"
+            delete :bulk_destroy, params: { selected_ids: signature.id, all_ids: "", q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request for \[\d+\]/)
         end
       end
@@ -555,7 +555,7 @@ RSpec.describe Admin::SignaturesController, type: :controller, admin: true do
 
         it "returns a 400 Bad Request" do
           expect {
-            delete :bulk_destroy, selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com"
+            delete :bulk_destroy, params: { selected_ids: "1,2", all_ids: signature_ids, q: "user@example.com" }
           }.to raise_error(BulkVerification::InvalidBulkRequest, /Invalid bulk request - \d+ not present in \[\d+\]/)
         end
       end

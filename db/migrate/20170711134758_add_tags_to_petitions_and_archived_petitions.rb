@@ -1,4 +1,4 @@
-class AddTagsToPetitionsAndArchivedPetitions < ActiveRecord::Migration
+class AddTagsToPetitionsAndArchivedPetitions < ActiveRecord::Migration[4.2]
   def up
     add_column :petitions, :tags, :integer, array: true, null: false, default: "{}"
     add_column :archived_petitions, :tags, :integer, array: true, null: false, default: "{}"

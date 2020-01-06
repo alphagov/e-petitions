@@ -1,4 +1,4 @@
-class ChangeSizeOfPetitionBackground < ActiveRecord::Migration
+class ChangeSizeOfPetitionBackground < ActiveRecord::Migration[4.2]
   def up
     change_column :petitions, :background, :string, limit: 300
   end

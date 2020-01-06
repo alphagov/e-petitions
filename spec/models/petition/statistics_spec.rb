@@ -13,7 +13,7 @@ RSpec.describe Petition::Statistics, type: :model do
     it { is_expected.to have_db_index([:petition_id]) }
   end
 
-  describe "callbacks", with_commits: true do
+  describe "callbacks" do
     let!(:petition) { FactoryBot.create(:open_petition) }
 
     it "enqueues a job on create" do

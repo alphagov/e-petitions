@@ -3,10 +3,10 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', :require => 'dotenv/rails-now'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '5.2.4.1'
 
 gem 'rake'
-gem 'pg', '< 0.21'
+gem 'pg'
 gem 'authlogic'
 gem 'will_paginate'
 gem 'json'
@@ -31,11 +31,13 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
-gem 'paperclip', '~> 5.3'
+gem 'paperclip'
 gem 'maxminddb'
 gem 'redcarpet'
 
-gem 'aws-sdk', '~> 2.0'
+gem 'aws-sdk-codedeploy'
+gem 'aws-sdk-cloudwatchlogs'
+gem 'aws-sdk-s3'
 
 group :development, :test do
   gem 'simplecov'
@@ -53,13 +55,13 @@ group :test do
   gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
-  gem 'capybara', '~> 3.13.2'
+  gem 'capybara'
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
   gem 'webdrivers', '~> 3.8.1'
   gem 'webmock'
-  gem 'test_after_commit'
+  gem 'rails-controller-testing'
 end
 
 group :production do

@@ -1,4 +1,4 @@
-class CreateTrendingDomains < ActiveRecord::Migration
+class CreateTrendingDomains < ActiveRecord::Migration[4.2]
   def change
     create_table :trending_domains do |t|
       t.belongs_to :petition, index: true, foreign_key: true

@@ -53,7 +53,7 @@ Rails.application.routes.draw do
 
         member do
           get 'verify'
-          get 'signed', path: 'sponsored'
+          get 'sponsored', action: 'signed', as: :signed
         end
       end
 

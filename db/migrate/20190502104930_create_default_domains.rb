@@ -1,4 +1,4 @@
-class CreateDefaultDomains < ActiveRecord::Migration
+class CreateDefaultDomains < ActiveRecord::Migration[4.2]
   class Domain < ActiveRecord::Base
     has_many :aliases,
       -> { create_with(strip_extension: nil, strip_characters: nil) },

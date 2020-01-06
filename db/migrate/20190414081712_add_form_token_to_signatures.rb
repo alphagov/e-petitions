@@ -1,4 +1,4 @@
-class AddFormTokenToSignatures < ActiveRecord::Migration
+class AddFormTokenToSignatures < ActiveRecord::Migration[4.2]
   def up
     unless column_exists?(:signatures, :form_token)
       add_column :signatures, :form_token, :string

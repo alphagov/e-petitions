@@ -1,4 +1,4 @@
-class InsertInitialCountryPetitionJournals < ActiveRecord::Migration
+class InsertInitialCountryPetitionJournals < ActiveRecord::Migration[4.2]
   def up
     execute <<-SQL.strip_heredoc
       INSERT INTO country_petition_journals
