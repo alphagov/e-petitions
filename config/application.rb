@@ -8,7 +8,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Epets
+module Wpets
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -22,13 +22,10 @@ module Epets
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :'en-GB'
 
-    # Use SQL for the schema format
-    config.active_record.schema_format = :sql
-
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {
-      namespace: 'epets', expires_in: 1.day, compress: true,
-      pool_size: ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i
+      namespace: 'wpets', expires_in: 1.day, compress: true,
+      pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i
     }
 
     # Configure Active Job queue adapter

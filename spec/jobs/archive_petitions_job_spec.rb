@@ -19,7 +19,7 @@ RSpec.describe ArchivePetitionsJob, type: :job do
 
     archive_petition_job = {
       job: ArchivePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+      args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
       queue: "high_priority"
     }
 
@@ -35,7 +35,7 @@ RSpec.describe ArchivePetitionsJob, type: :job do
 
     archive_petition_job = {
       job: ArchivePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+      args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
       queue: "high_priority"
     }
 

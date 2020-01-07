@@ -2,20 +2,20 @@ require 'rails_helper'
 
 RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
   let(:options) do
-    { namespace: "epets_test", expires_in: 2.seconds }
+    { namespace: "wpets_test", expires_in: 2.seconds }
   end
 
   let(:client) { subject.dalli }
   let(:exception) { Dalli::DalliError.new }
 
-  let(:ttl_key) { "epets_test:foo.ttl" }
+  let(:ttl_key) { "wpets_test:foo.ttl" }
   let(:ttl_set_args) { [ttl_key, "", 2.seconds, raw: true] }
   let(:ttl_get_args) { [ttl_key, raw: true] }
   let(:ttl_add_args) { [ttl_key, "", 10, raw: true] }
 
   around do |example|
-    client.delete("epets_test:foo")
-    client.delete("epets_test:foo.ttl")
+    client.delete("wpets_test:foo")
+    client.delete("wpets_test:foo.ttl")
     example.run
   end
 
@@ -38,7 +38,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
         expect {
           subject.fetch("foo", options) { "bar" }
         }.to change {
-          client.get("epets_test:foo")
+          client.get("wpets_test:foo")
         }.from(nil).to("bar")
       end
 
@@ -46,7 +46,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
         expect {
           subject.fetch("foo", options) { "bar" }
         }.to change {
-          client.get("epets_test:foo.ttl")
+          client.get("wpets_test:foo.ttl")
         }.from(nil).to("")
       end
 
@@ -122,7 +122,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
       expect {
         subject.write("foo", "bar", options)
       }.to change {
-        client.get("epets_test:foo")
+        client.get("wpets_test:foo")
       }.from(nil).to("bar")
     end
 
@@ -130,7 +130,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
       expect {
         subject.write("foo", "bar", options)
       }.to change {
-        client.get("epets_test:foo.ttl")
+        client.get("wpets_test:foo.ttl")
       }.from(nil).to("")
     end
 
@@ -149,7 +149,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
       expect {
         subject.delete("foo", options)
       }.to change {
-        client.get("epets_test:foo")
+        client.get("wpets_test:foo")
       }.from("bar").to(nil)
     end
 
@@ -157,7 +157,7 @@ RSpec.describe ActiveSupport::Cache::AtomicDalliStore do
       expect {
         subject.delete("foo", options)
       }.to change {
-        client.get("epets_test:foo.ttl")
+        client.get("wpets_test:foo.ttl")
       }.from("").to(nil)
     end
 

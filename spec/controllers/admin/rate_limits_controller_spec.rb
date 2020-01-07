@@ -11,7 +11,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the login page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
         end
       end
 
@@ -31,7 +31,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
         end
       end
 
@@ -77,7 +77,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do
@@ -91,7 +91,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do
@@ -105,7 +105,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do
@@ -119,7 +119,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do
@@ -133,7 +133,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do
@@ -147,7 +147,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
         end
 
         it "redirects to the edit page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/rate-limits/edit")
+          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/rate-limits/edit")
         end
 
         it "sets the flash notice message" do

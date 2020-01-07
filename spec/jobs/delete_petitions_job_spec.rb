@@ -19,7 +19,7 @@ RSpec.describe DeletePetitionsJob, type: :job do
 
     delete_petition_job = {
       job: DeletePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+      args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
       queue: "high_priority"
     }
 

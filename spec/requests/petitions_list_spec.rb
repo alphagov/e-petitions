@@ -37,35 +37,35 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
       get "/petitions.json"
 
       expect(response).to be_successful
-      expect(links).to include("self" => "https://petition.parliament.uk/petitions.json")
+      expect(links).to include("self" => "https://petition.parliament.wales/petitions.json")
     end
 
     it "returns a link to the first page of results" do
       get "/petitions.json?count=2"
 
       expect(response).to be_successful
-      expect(links).to include("first" => "https://petition.parliament.uk/petitions.json?count=2")
+      expect(links).to include("first" => "https://petition.parliament.wales/petitions.json?count=2")
     end
 
     it "returns a link to the last page of results" do
       get "/petitions.json?count=2"
 
       expect(response).to be_successful
-      expect(links).to include("last" => "https://petition.parliament.uk/petitions.json?count=2&page=2")
+      expect(links).to include("last" => "https://petition.parliament.wales/petitions.json?count=2&page=2")
     end
 
     it "returns a link to the next page of results if there is one" do
       get "/petitions.json?count=2"
 
       expect(response).to be_successful
-      expect(links).to include("next" => "https://petition.parliament.uk/petitions.json?count=2&page=2")
+      expect(links).to include("next" => "https://petition.parliament.wales/petitions.json?count=2&page=2")
     end
 
     it "returns a link to the previous page of results if there is one" do
       get "/petitions.json?count=2&page=2"
 
       expect(response).to be_successful
-      expect(links).to include("prev" => "https://petition.parliament.uk/petitions.json?count=2")
+      expect(links).to include("prev" => "https://petition.parliament.wales/petitions.json?count=2")
     end
 
     it "returns no link to the previous page of results when on the first page of results" do
@@ -86,14 +86,14 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
       get "/petitions.json?count=2&page=2&state=rejected"
 
       expect(response).to be_successful
-      expect(links).to include("last" => "https://petition.parliament.uk/petitions.json?count=2&state=rejected")
+      expect(links).to include("last" => "https://petition.parliament.wales/petitions.json?count=2&state=rejected")
     end
 
     it "returns previous page link == last link when paging off the end of the results" do
       get "/petitions.json?count=2&page=3&state=rejected"
 
       expect(response).to be_successful
-      expect(links).to include("prev" => "https://petition.parliament.uk/petitions.json?count=2&state=rejected")
+      expect(links).to include("prev" => "https://petition.parliament.wales/petitions.json?count=2&state=rejected")
     end
   end
 
@@ -134,7 +134,7 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
         a_collection_containing_exactly(
           a_hash_including(
             "links" => a_hash_including(
-              "self" => "https://petition.parliament.uk/petitions/#{petition.id}.json"
+              "self" => "https://petition.parliament.wales/petitions/#{petition.id}.json"
             )
           )
         )

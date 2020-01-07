@@ -22,41 +22,41 @@
 env :PATH, ENV['PATH']
 
 every :day, at: '1.15am' do
-  rake "epets:countries:fetch", output: nil
+  rake "wpets:countries:fetch", output: nil
 end
 
 every :day, at: '1.45am' do
-  rake "epets:constituencies:refresh", output: nil
+  rake "wpets:constituencies:refresh", output: nil
 end
 
 every :day, at: '2.15am' do
-  rake "epets:constituencies:refresh_party", output: nil
+  rake "wpets:constituencies:refresh_party", output: nil
 end
 
 every :day, at: '2.30am' do
-  rake "epets:petitions:count", output: nil
+  rake "wpets:petitions:count", output: nil
 end
 
 every :day, at: '3.30am' do
-	rake "epets:petitions:update_statistics", output: nil
+	rake "wpets:petitions:update_statistics", output: nil
 end
 
 every :day, at: '7.00am' do
-  rake "epets:petitions:close", output: nil
+  rake "wpets:petitions:close", output: nil
 end
 
 every :day, at: '7.15am' do
-  rake "epets:petitions:debated", output: nil
+  rake "wpets:petitions:debated", output: nil
 end
 
 every 15.minutes do
-  rake "epets:site:signature_counts", output: nil
+  rake "wpets:site:signature_counts", output: nil
 end
 
 every :hour, at: 15 do
-  rake "epets:site:trending_ips", output: nil
+  rake "wpets:site:trending_ips", output: nil
 end
 
 every :hour, at: 10 do
-  rake "epets:site:trending_domains", output: nil
+  rake "wpets:site:trending_domains", output: nil
 end

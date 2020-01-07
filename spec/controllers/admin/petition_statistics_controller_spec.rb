@@ -10,7 +10,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       end
 
       it "redirects to the login page" do
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
       end
     end
   end
@@ -25,7 +25,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       end
 
       it "redirects to the admin hub page" do
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
       end
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       end
 
       it "redirects to the petition page" do
-        expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}")
       end
 
       it "sets the flash notice message" do
@@ -50,7 +50,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       it "enqueues a UpdatePetitionStatisticsJob" do
         update_statistics_job = {
           job: UpdatePetitionStatisticsJob,
-          args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
+          args: [{ "_aj_globalid" => "gid://wpets/Petition/#{petition.id}" }],
           queue: "low_priority"
         }
 

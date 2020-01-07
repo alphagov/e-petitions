@@ -1,4 +1,4 @@
-namespace :epets do
+namespace :wpets do
   desc "Add sysadmin user"
   task :add_sysadmin_user => :environment do
     if AdminUser.find_by(email: 'admin@example.com').nil?
@@ -11,7 +11,7 @@ namespace :epets do
 
   desc "Email threshold users with a list of threshold petitions"
   task :threshold_email_reminder => :environment do
-    Task.run("epets:threshold_email_reminder") do
+    Task.run("wpets:threshold_email_reminder") do
       EmailThresholdReminderJob.perform_later
     end
   end
@@ -27,7 +27,7 @@ namespace :epets do
       Whenever::CommandLine.execute(
         :update => true,
         :set => "environment=#{RAILS_ENV}",
-        :identifier => 'Epets_primary_server'
+        :identifier => 'Wpets_primary_server'
       )
     end
 
@@ -36,7 +36,7 @@ namespace :epets do
       Whenever::CommandLine.execute(
         :update => true,
         :set => "environment=#{RAILS_ENV}",
-        :identifier => 'Epets_all_servers',
+        :identifier => 'Wpets_all_servers',
         :file => 'config/schedule_all_servers.rb'
       )
     end
@@ -72,7 +72,7 @@ namespace :epets do
 
     desc "Start the signature count updater if it's not running"
     task :signature_counts => :environment do
-      Task.run("epets:site:signature_counts", 10.minutes) do
+      Task.run("wpets:site:signature_counts", 10.minutes) do
         break unless Site.update_signature_counts
 
         unless Site.signature_count_updated_at > 15.minutes.ago
@@ -83,14 +83,14 @@ namespace :epets do
 
     desc "Track trending domains"
     task :trending_domains => :environment do
-      Task.run("epets:site:trending_domains", 30.minutes) do
+      Task.run("wpets:site:trending_domains", 30.minutes) do
         TrendingDomainsByPetitionJob.perform_later
       end
     end
 
     desc "Track trending IP addresses"
     task :trending_ips => :environment do
-      Task.run("epets:site:trending_ips", 30.minutes) do
+      Task.run("wpets:site:trending_ips", 30.minutes) do
         TrendingIpsByPetitionJob.perform_later
       end
     end

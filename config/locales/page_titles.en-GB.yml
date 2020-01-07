@@ -1,6 +1,6 @@
 en-GB:
   page_titles:
-    default: "Petitions - UK Government and Parliament"
+    default: "Petitions - Welsh Government and Parliament"
     archived_petitions:
       index: "View archived petitions - Petitions"
       show: "%{petition} - Petitions"
@@ -35,6 +35,6 @@ en-GB:
       signed: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
-      index: "Petitions - UK Government and Parliament"
+      index: "Petitions - Welsh Government and Parliament"
       help: "How petitions work"
       privacy: "Privacy and cookies"

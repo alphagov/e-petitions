@@ -8,7 +8,7 @@ Capybara.javascript_driver = ENV.fetch("JS_DRIVER", "chrome_headless").to_sym
 Capybara.default_max_wait_time = 5
 Capybara.server_port = 3443
 Capybara.app_host = "https://127.0.0.1:3443"
-Capybara.default_host = "https://petition.parliament.uk"
+Capybara.default_host = "https://petition.parliament.wales"
 Capybara.default_selector = :xpath
 Capybara.automatic_label_click = true
 
@@ -45,11 +45,11 @@ Capybara.register_driver :chrome_headless do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities)
 end
 
-Capybara.register_server :epets do |app, port|
-  Epets::SSLServer.build(app, port)
+Capybara.register_server :wpets do |app, port|
+  Wpets::SSLServer.build(app, port)
 end
 
-Capybara.server = :epets
+Capybara.server = :wpets
 Capybara.default_normalize_ws = true
 
 pid = Process.spawn('bin/local_proxy', out: 'log/proxy.log', err: 'log/proxy.log')

@@ -6,13 +6,13 @@ default: &default
 
 development:
   <<: *default
-  database: epets_development
+  database: wpets_development
 
 test:
   <<: *default
-  database: epets_test
+  database: wpets_test
 
 production:
   <<: *default
-  database: epets_production
-  pool: <%= ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i %>
+  database: wpets_production
+  pool: <%= ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i %>

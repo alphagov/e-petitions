@@ -21,6 +21,8 @@ class Site < ActiveRecord::Base
   class << self
     def table_exists?
       @table_exists ||= connection.table_exists?(table_name)
+    rescue ActiveRecord::NoDatabaseError => e
+      false
     end
 
     def before_remove_const
@@ -192,7 +194,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_host
-      ENV.fetch('EPETITIONS_HOST', 'petition.parliament.uk')
+      ENV.fetch('EPETITIONS_HOST', 'petition.parliament.wales')
     end
 
     def default_domain(tld_length = 1)
@@ -212,7 +214,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_moderate_host
-      ENV.fetch('MODERATE_HOST', 'moderate.petition.parliament.uk')
+      ENV.fetch('MODERATE_HOST', 'moderate.petition.parliament.wales')
     end
 
     def default_port
@@ -220,11 +222,11 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from
-      ENV.fetch('EPETITIONS_FROM', %{"Petitions: UK Government and Parliament" <no-reply@#{default_host}>})
+      ENV.fetch('EPETITIONS_FROM', %{"Petitions: Welsh Government and Parliament" <no-reply@#{default_host}>})
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: UK Government and Parliament" <petitionscommittee@#{default_domain}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Welsh Government and Parliament" <petitionscommittee@#{default_domain}>})
     end
 
     def default_username

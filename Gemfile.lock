@@ -57,9 +57,6 @@ GEM
     aws-sdk-cloudwatchlogs (1.6.0)
       aws-sdk-core (~> 3)
       aws-sigv4 (~> 1.0)
-    aws-sdk-codedeploy (1.18.0)
-      aws-sdk-core (~> 3, >= 3.48.2)
-      aws-sigv4 (~> 1.1)
     aws-sdk-core (3.48.3)
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
@@ -348,7 +345,6 @@ DEPENDENCIES
   appsignal
   authlogic
   aws-sdk-cloudwatchlogs
-  aws-sdk-codedeploy
   aws-sdk-s3
   bcrypt
   brakeman

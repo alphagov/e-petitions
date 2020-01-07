@@ -2371,14 +2371,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#id" do
-    let(:petition){ FactoryBot.create(:petition) }
-
-    it "is greater than 100000" do
-      expect(petition.id).to be >= 100000
-    end
-  end
-
   describe '#has_maximum_sponsors?' do
     %w[pending validated sponsored flagged].each do |state|
       let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }

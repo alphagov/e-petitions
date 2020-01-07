@@ -46,10 +46,10 @@ RSpec.describe FeedbackMailer, type: :mailer do
     end
 
     context "when the petition link or title contains a petition url" do
-      let(:title) { "https://petition.parliament.uk/petitions/200000" }
+      let(:title) { "https://petition.parliament.wales/petitions/200000" }
 
       it "creates a link to the petition" do
-        expect(mail.html).to match('<a href="https://petition.parliament.uk/petitions/200000">https://petition.parliament.uk/petitions/200000</a>')
+        expect(mail.html).to match('<a href="https://petition.parliament.wales/petitions/200000">https://petition.parliament.wales/petitions/200000</a>')
       end
     end
 
