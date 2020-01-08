@@ -4,6 +4,7 @@ require 'aws-sdk-codedeploy'
 require 'aws-sdk-s3'
 require 'faraday'
 require 'slack-notifier'
+require 'open3'
 
 class PackageBuilder
   class << self
@@ -20,7 +21,7 @@ class PackageBuilder
 
   def initialize(enviroment)
     @environment = enviroment.to_s
-    @revision    = %x[git rev-parse #{treeish}].strip
+    @revision    = current_revision
     @tmpdir      = Dir.mktmpdir
     @timestamp   = Time.now.getutc
     @release     = @timestamp.strftime('%Y%m%d%H%M%S')
@@ -138,6 +139,16 @@ class PackageBuilder
 
   def credentials
     { region: region, profile: profile }
+  end
+
+  def current_revision
+    output, error, status = Open3.capture3("git", "rev-parse", treeish)
+
+    if status.success?
+      output.strip
+    else
+      raise RuntimeError, error
+    end
   end
 
   def deploy_branch?
