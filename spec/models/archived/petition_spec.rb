@@ -6,7 +6,7 @@ RSpec.describe Archived::Petition, type: :model do
 
   describe "associations" do
     describe "parliament" do
-      it { is_expected.to belong_to(:parliament).inverse_of(:petitions) }
+      it { is_expected.to belong_to(:parliament).required(true).inverse_of(:petitions) }
 
       it "is required" do
         expect {

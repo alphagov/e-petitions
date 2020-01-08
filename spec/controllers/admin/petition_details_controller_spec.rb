@@ -111,7 +111,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
         end
 
         it "are limited to action, background, additional_details and creator name" do
-          is_expected.to permit(:action, :background, :additional_details, :creator_attributes => [:name]).for(:update, params: { params: params }).on(:petition)
+          is_expected.to permit(:action, :background, :additional_details, :creator_attributes => [:name]).for(:update, params: params).on(:petition)
         end
       end
 
