@@ -1,18 +1,13 @@
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 11.3
--- Dumped by pg_dump version 11.3
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: intarray; Type: EXTENSION; Schema: -; Owner: -
@@ -76,6 +71,18 @@ CREATE SEQUENCE public.admin_users_id_seq
 --
 
 ALTER SEQUENCE public.admin_users_id_seq OWNED BY public.admin_users.id;
+
+
+--
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
 
 
 --
@@ -231,7 +238,7 @@ CREATE TABLE public.archived_petitions (
     signature_count integer DEFAULT 0,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    parliament_id integer,
+    parliament_id integer NOT NULL,
     action character varying(255),
     background character varying(300),
     additional_details text,
@@ -1596,6 +1603,14 @@ ALTER TABLE ONLY public.trending_ips ALTER COLUMN id SET DEFAULT nextval('public
 
 ALTER TABLE ONLY public.admin_users
     ADD CONSTRAINT admin_users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
 
 
 --
@@ -3018,5 +3033,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20191104165726'),
 ('20191107140359'),
 ('20191128031502'),
-('20191214121622');
+('20191214121622'),
+('20200108101150');
+
 
