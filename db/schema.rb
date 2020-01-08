@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_06_162218) do
+ActiveRecord::Schema.define(version: 2020_01_08_101150) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -94,7 +94,7 @@ ActiveRecord::Schema.define(version: 2020_01_06_162218) do
     t.integer "signature_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "parliament_id"
+    t.integer "parliament_id", null: false
     t.string "action", limit: 255
     t.string "background", limit: 300
     t.text "additional_details"
