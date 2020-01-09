@@ -995,4 +995,21 @@ RSpec.describe Site, type: :model do
       expect(site.closed_at_for_opening).to eq(3.months.from_now.end_of_day)
     end
   end
+
+  describe "#signature_count_updated_at" do
+    context "when the count has never been updated" do
+      subject :site do
+        described_class.create!(signature_count_updated_at: nil)
+      end
+
+      before do
+        FactoryBot.create(:validated_signature, validated_at: 2.weeks.ago)
+        FactoryBot.create(:validated_signature, validated_at: 4.weeks.ago)
+      end
+
+      it "returns the earliest validated signature timestamp" do
+        expect(site.signature_count_updated_at).to be_within(1.minute).of(4.weeks.ago)
+      end
+    end
+  end
 end

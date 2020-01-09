@@ -19,6 +19,11 @@ class UpdateSignatureCountsJob < ApplicationJob
     time = now.in_time_zone
     signature_count_at = signature_count_interval.seconds.ago(time)
 
+    # Exit if no signatures have been validated yet
+    unless signature_count_updated_at
+      return update_and_reschedule_job(signature_count_at, time)
+    end
+
     # Exit if the signature counts have been updated since this job was scheduled
     return unless signature_count_updated_at < signature_count_at
 
@@ -53,8 +58,7 @@ class UpdateSignatureCountsJob < ApplicationJob
       end
     end
 
-    signature_count_updated_at!(signature_count_at)
-    reschedule_job(scheduled_time(time))
+    update_and_reschedule_job(signature_count_at, time)
   end
 
   private
@@ -85,5 +89,10 @@ class UpdateSignatureCountsJob < ApplicationJob
 
   def scheduled_time(now)
     signature_count_interval.seconds.since(now)
+  end
+
+  def update_and_reschedule_job(signature_count_at, time)
+    signature_count_updated_at!(signature_count_at)
+    reschedule_job(scheduled_time(time))
   end
 end
