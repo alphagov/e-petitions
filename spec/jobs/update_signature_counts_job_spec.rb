@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe UpdateSignatureCountsJob, type: :job do
-  let(:current_time) { Time.current.change(usec: 0) }
   let(:interval) { 30 }
+  let(:current_time) { Time.current.change(usec: 0) }
   let(:scheduled_time) { interval.seconds.since(current_time) }
+  let(:previous_count_updated_at) { current_time - (2 * interval).seconds }
+  let(:current_count_updated_at) { current_time - interval.seconds }
 
   before do
-    Site.signature_count_updated_at!(current_time - 60.seconds)
+    Site.signature_count_updated_at!(previous_count_updated_at)
     allow(Site).to receive(:signature_count_interval).and_return(interval)
     allow(ENV).to receive(:[]).and_call_original
     allow(ENV).to receive(:[]).with("INLINE_UPDATES").and_return("false")
@@ -42,7 +44,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
         described_class.perform_now(current_time.iso8601)
       }.to change {
         Site.signature_count_updated_at
-      }.to(current_time - 30.seconds)
+      }.to(current_count_updated_at)
     end
 
     it "reschedules another job" do
@@ -59,7 +61,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
       before do
         # FIXME: reset the signature count to ensure it's valid because
         # the factories don't leave the petition in a consistent state.
-        petition.update_signature_count!(current_time - 60.seconds)
+        petition.update_signature_count!(previous_count_updated_at)
       end
 
       context "with an open petition" do
@@ -329,6 +331,68 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
         it "notifies Appsignal" do
           described_class.perform_now(current_time.iso8601)
           expect(Appsignal).to have_received(:send_exception).with(an_instance_of(RuntimeError))
+        end
+      end
+
+      context "when the count has never been updated before" do
+        let(:petition) { FactoryBot.create(:pending_petition) }
+
+        before do
+          Site.signature_count_updated_at!(nil)
+        end
+
+        context "and there are no validated signatures" do
+          it "updates Site#signature_count_updated_at" do
+            expect {
+              described_class.perform_now(current_time.iso8601)
+            }.to change {
+              Site.signature_count_updated_at
+            }.from(nil).to(current_count_updated_at)
+          end
+        end
+
+        context "and there are validated signatures" do
+          let(:petition) { FactoryBot.create(:open_petition) }
+          let(:attributes) { { petition: petition, location_code: location.code, constituency_id: "9999" } }
+          let(:signatures) { FactoryBot.create_list(:pending_signature, 5, attributes) }
+
+          before do
+            signatures.each do |signature|
+              signature.validate!(current_time - 45.seconds)
+            end
+          end
+
+          it "updates Site#signature_count_updated_at" do
+            expect {
+              described_class.perform_now(current_time.iso8601)
+            }.to change {
+              Site.signature_count_updated_at
+            }.to(current_count_updated_at)
+          end
+
+          it "updates the signature count" do
+            expect {
+              described_class.perform_now(current_time.iso8601)
+            }.to change {
+              petition.reload.signature_count
+            }.by(5)
+          end
+
+          it "updates the country journal signature_count" do
+            expect {
+              described_class.perform_now(current_time.iso8601)
+            }.to change {
+              country_journal.reload.signature_count
+            }.by(5)
+          end
+
+          it "updates the constituency journal signature_count" do
+            expect {
+              described_class.perform_now(current_time.iso8601)
+            }.to change {
+              constituency_journal.reload.signature_count
+            }.by(5)
+          end
         end
       end
     end

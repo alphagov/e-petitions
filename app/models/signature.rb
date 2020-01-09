@@ -398,6 +398,10 @@ class Signature < ActiveRecord::Base
       where(id: id).where(validated_at.not_eq(nil)).exists?
     end
 
+    def earliest_validation
+      validated.order(validated_at: :asc).limit(1).pluck(:validated_at).first
+    end
+
     private
 
     def ip_search?(query)
