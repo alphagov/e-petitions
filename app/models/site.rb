@@ -400,6 +400,10 @@ class Site < ActiveRecord::Base
     time.end_of_day + petition_duration.months
   end
 
+  def signature_count_updated_at
+    super || Signature.earliest_validation
+  end
+
   validates :title, presence: true, length: { maximum: 50 }
   validates :url, presence: true, length: { maximum: 50 }
   validates :moderate_url, presence: true, length: { maximum: 50 }

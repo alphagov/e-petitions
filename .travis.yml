@@ -6,7 +6,7 @@ cache:
   bundler: true
 
 rvm:
-  - 2.5.7
+  - 2.6.5
 
 services:
   - memcached
