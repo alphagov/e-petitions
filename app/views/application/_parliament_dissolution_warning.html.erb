@@ -9,7 +9,7 @@
       <p class="content"><%= Parliament.dissolution_message %></p>
     <% end %>
     <% if Parliament.dissolution_faq_url? %>
-      <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
+      <p class="content"><%= parliament_dissolution_faq_notice %></p>
     <% end %>
   </div>
 <% end %>

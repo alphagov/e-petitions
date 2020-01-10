@@ -28,7 +28,7 @@
 
     <% if show_cookie_message? %>
       <div id="global-cookie-message">
-        <p>We use cookies to make this service simpler. <a href="/privacy">Find out more about cookies</a></p>
+        <p><%= t(:"ui.application.cookie_message.html", privacy_link: link_to(t(:"ui.application.cookie_message.privacy_link"), privacy_path)) %></p>
       </div>
     <% end %>
 

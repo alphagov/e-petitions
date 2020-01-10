@@ -3,12 +3,12 @@
     <% if actioned[:with_response][:count].zero? %>
       <div class="threshold-panel threshold-panel-response">
         <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+        <p><%= t(:"ui.home_page.thresholds.response", formatted_count: Site.formatted_threshold_for_response) %></p>
       </div>
     <% else %>
       <%= link_to( petitions_path(state: :with_response), class: "threshold-panel threshold-panel-response" ) do %>
         <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-        <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+        <p><%= t(:"ui.home_page.thresholds.response", formatted_count: Site.formatted_threshold_for_response) %></p>
       <% end %>
     <% end %>
     <div class="section-panel-borderless">
@@ -20,12 +20,12 @@
     <% if actioned[:with_debated_outcome][:count].zero? %>
       <div class="threshold-panel threshold-panel-debate">
         <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+        <p><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></p>
       </div>
     <% else %>
       <%= link_to( petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
         <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-        <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+        <p><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></p>
       <% end %>
     <% end %>
     <div class="section-panel-borderless">

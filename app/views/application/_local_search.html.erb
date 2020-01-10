@@ -1,7 +1,7 @@
 <%= form_tag local_petitions_path, method: 'get', enforce_utf8: false do %>
-  <%= label_tag 'postcode', 'UK postcode', class: 'form-label' %>
+  <%= label_tag 'postcode', t(:"ui.local_search.postcode"), class: 'form-label' %>
   <div class="search-inline">
     <%= search_field_tag 'postcode', @postcode, class: 'form-control' %>
-    <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
+    <%= submit_tag t(:"ui.local_search.submit"), class: 'inline-submit', name: nil %>
   </div>
 <% end %>

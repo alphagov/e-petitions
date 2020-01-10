@@ -1,11 +1,11 @@
 <% if actioned[:awaiting_debate][:count].zero? && actioned[:with_debated_outcome][:count].zero? %>
-  <p>Parliament hasn’t debated any petitions yet</p>
+  <p><%= t(:"ui.home_page.debated_petitions.none_debated") %></p>
 <% else %>
   <ol class="threshold-petitions">
     <% actioned[:with_debated_outcome][:list].each.with_index do |petition, index| %>
       <li class="petition-item">
         <h3><%= link_to petition.action, petition_path(petition, anchor: 'debate-threshold') %></h3>
-        <p class="intro">This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
+        <p class="intro"><%= t(:"ui.home_page.debated_petitions.topic_debated_date", date: short_date_format(petition.debate_outcome.debated_on)) %></p>
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, rel: 'external' do %>
             <span class="debate-video" aria-hidden>
@@ -15,13 +15,13 @@
           <% end -%>
         <% end -%>
         <% if petition.debate_outcome.video_url.present? %>
-          <p>Watch the debate on <%= link_to "parliamentlive.tv", petition.debate_outcome.video_url, rel: "external" %></p>
+          <p><%= t(:"ui.home_page.debated_petitions.video.watch_html", link: link_to(t(:"ui.home_page.debated_petitions.video.link"), petition.debate_outcome.video_url, rel: "external")) %></p>
         <% end %>
         <% if petition.debate_outcome.transcript_url.present? %>
-          <p>Read the transcript at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %></p>
+          <p><%= t(:"ui.home_page.debated_petitions.transcript.read_html", link: link_to(t(:"ui.home_page.debated_petitions.transcript.link"), petition.debate_outcome.transcript_url, rel: "external")) %></p>
         <% end %>
         <% if petition.debate_outcome.debate_pack_url.present? %>
-          <p>Read the research at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %></p>
+          <p><%= t(:"ui.home_page.debated_petitions.research.read_html", link: link_to(t(:"ui.home_page.debated_petitions.research.link"), petition.debate_outcome.debate_pack_url, rel: "external")) %></p>
         <% end %>
       </li>
     <% end -%>

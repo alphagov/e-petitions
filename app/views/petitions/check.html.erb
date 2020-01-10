@@ -1,20 +1,19 @@
-<h1 class="page-title">Start a petition</h1>
+<h1 class="page-title"><%= t(:"ui.petitions.check.heading") %></h1>
 
 <%= render 'parliament_dissolution_warning' %>
 
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
-    <label for="action" class="form-label">What do you want us to do?</label>
+    <label for="action" class="form-label"><%= t(:"ui.petitions.action.label") %></label>
     <textarea name="q" id="q" class="form-control" data-max-length="80" rows="3"><%= @new_petition.action %></textarea>
-    <p class="character-count">80 characters max</p>
-    <%= render 'petitions/action_help' %>
+    <%= t(:"ui.petitions.action.help_html") %>
   </div>
 
   <section class="create-warning" aria-labelledby="just-so-you-know-heading">
-    <h2 id="just-so-you-know-heading">Just so you know</h2>
+    <h2 id="just-so-you-know-heading"><%= t(:"ui.petitions.need_sponsors_later_heading") %></h2>
     <span aria-hidden="true"><%= Site.minimum_number_of_sponsors %></span>
-    <p>Later on, you'll need email addresses for <%= Site.minimum_number_of_sponsors %> supporters to get your petition started</p>
+    <p><%= t(:"ui.petitions.need_sponsors_later", count: Site.minimum_number_of_sponsors) %></p>
   </section>
 
-  <input type="submit" value="Continue" class="button" />
+  <input type="submit" value="<%= t(:"ui.application.continue") %>" class="button" />
 </form>

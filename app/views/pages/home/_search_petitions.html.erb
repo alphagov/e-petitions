@@ -1,10 +1,10 @@
 <section class="search-petitions" aria-labelledby="search-petitions-heading">
-  <h2 id="search-petitions-heading">Search petitions</h2>
+  <h2 id="search-petitions-heading"><%= t(:"ui.home_page.search_petitions.heading") %></h2>
 
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <div class="search-inline">
       <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>
-      <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+      <%= submit_tag t(:"ui.home_page.search_petitions.submit_button"), name: nil, class: 'inline-submit' %>
     </div>
   <% end %>
 </section>

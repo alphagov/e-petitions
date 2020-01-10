@@ -3,62 +3,52 @@
 
 <div class="text-page">
 
-<h1 class="page-title">Feedback and contact</h1>
+<h1 class="page-title"><%= t(:"ui.feedback.new.heading") %></h1>
 
-<h2>Feedback</h2>
+<h2><%= t(:"ui.feedback.new.feedback.heading") %></h2>
 
 <%= form_for @feedback, url: feedback_path, html: {class: "wizard_form new_petition_form"} do |f| %>
 
   <%= form_row for: [@feedback, :comment] do %>
-    <%= f.label :comment, "Comments", class: "form-label" %>
+    <%= f.label :comment, t(:"ui.feedback.new.feedback.comments.label"), class: "form-label" %>
     <%= error_messages_for_field @feedback, :comment %>
     <%= f.text_area :comment, tabindex: increment, class: "form-control" %>
   <% end %>
 
   <%= form_row for: [@feedback, :petition_link_or_title] do %>
     <%= f.label :petition_link_or_title, class: "form-label" do %>
-      Petition title/link <span class="optional">optional</span>
+      <%= t(:"ui.feedback.new.feedback.petition_link_or_title.label_html") %>
     <% end %>
     <%= error_messages_for_field @feedback, :petition_link_or_title %>
     <%= f.text_field :petition_link_or_title, tabindex: increment, class: "form-control" %>
   <% end %>
 
-  <h3>Do you want a reply?</h3>
+  <h3><%= t(:"ui.feedback.new.feedback.want_reply.heading") %></h3>
 
   <%= form_row for: [@feedback, :email] do %>
-    <%= f.label :email, "Email address", class: "form-label" %>
+    <%= f.label :email, t(:"ui.feedback.new.feedback.want_reply.email.label"), class: "form-label" %>
     <%= error_messages_for_field @feedback, :email %>
     <%= f.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
   <% end %>
 
-  <%= submit_tag "Send feedback", class: "button", tabindex: increment %>
+  <%= submit_tag t(:"ui.feedback.new.feedback.submit_button"), class: "button", tabindex: increment %>
 
   <section class="inline-terms">
-    <p>We'll only use your email to reply to your message</p>
-    <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
+    <%= t(:"ui.feedback.new.feedback.terms_html") %>
   </section>
 
-<h2>Contact</h2>
+<h2><%= t(:"ui.feedback.new.contact.heading") %></h2>
 
-<h3>Email</h3>
+<h3><%= t(:"ui.feedback.new.contact.email.heading") %></h3>
 
-<p>You can email the <%= link_to 'Petitions Committee', help_url(anchor: 'petitions-committee') %> directly.</p>
+<%= t(
+  :"ui.feedback.new.contact.email.body_html",
+  petitions_committee_link: link_to(t(:"ui.feedback.new.contact.email.petitions_committee_link"), help_url(anchor: 'petitions-committee'))
+) %>
 
-<p>They can help you to understand how Parliament handles petitions. They can also help with some technical problems using this service. They can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+<h3><%= t(:"ui.feedback.new.contact.phone.heading") %></h3>
 
-<p>Email: <a href="mailto:petitionscommittee@parliament.wales">petitionscommittee@parliament.wales</a></p>
-
-<h3>Phone</h3>
-
-<p>Phone calls are handled by the Parliament Enquiry Service.</p>
-
-<p>They can help you to understand how Parliament handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
-
-<ul>
-  <li>Telephone: <a href="tel:+448001124272">0800 112 4272</a> (Freephone) or <a href="tel:+442072194272">020 7219 4272</a></li>
-  <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
-  <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
-</ul>
+<%= t(:"ui.feedback.new.contact.phone.body_html") %>
 
 </div>
 

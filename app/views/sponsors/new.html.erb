@@ -1,4 +1,4 @@
 <%= form_for @signature, url: confirm_petition_sponsors_path(@petition, token: @petition.sponsor_token) do |form| %>
-  <h1 class="page-title">Sign <%= @petition.creator.name %>’s petition</h1>
+  <h1 class="page-title"><%= t(:"ui.sponsors.new.heading", creator_name: @petition.creator.name) %></h1>
   <%= render "form", form: form, signature: @signature %>
 <% end %>

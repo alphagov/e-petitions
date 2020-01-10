@@ -1,4 +1,4 @@
 <h3><%= link_to petition.action, petition_result_path(petition, reveal_response: "yes", anchor: 'response-threshold') %></h3>
-<p>Government responded – <%= short_date_format(petition.government_response.responded_on) %></p>
+<p><%= t(:"ui.petitions.search.results.items.facet_with_response.responded_date", date: short_date_format(petition.government_response.responded_on)) %></p>
 <p><%= petition.government_response.summary %></p>
 <p><%= signature_count(:default, petition.signature_count) %></p>

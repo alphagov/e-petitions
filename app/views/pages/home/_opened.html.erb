@@ -1,6 +1,6 @@
 <% if no_petitions_yet? %>
   <div class="section-panel-borderless no-petitions-yet">
-    <p class="lede">The Petitions service is open</p>
+    <p class="lede"><%= t(:"ui.home_page.opened.lede") %></p>
   </div>
 <% end %>
 
@@ -18,7 +18,7 @@
 <% end %>
 
 <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
-  <h2 id="start-a-petition-heading">Start a petition</h2>
-  <p>Anyone can start a petition as long as they are a British citizen or UK resident</p>
-  <%= link_to "Start a petition", check_petitions_path, :class => 'button' %>
+  <h2 id="start-a-petition-heading"><%= t(:"ui.home_page.opened.start_a_petition.heading") %></h2>
+  <p><%= t(:"ui.home_page.opened.start_a_petition.requirements") %></p>
+  <%= link_to t(:"ui.home_page.opened.start_a_petition.link"), check_petitions_path, :class => 'button' %>
 </section>

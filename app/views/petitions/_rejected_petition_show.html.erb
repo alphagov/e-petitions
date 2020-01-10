@@ -1,6 +1,6 @@
 <%= cache_for :petition do %>
   <h1>
-    <span class="heading-secondary">Rejected petition</span>
+    <span class="heading-secondary"><%= t(:"ui.petitions.heading_rejected") %></span>
     <%= petition.action %>
   </h1>
 
@@ -13,27 +13,27 @@
   <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
   <% unless petition.additional_details.blank? %>
     <details>
-      <summary><span class="summary">More details</span></summary>
+      <summary><span class="summary"><%= t(:"ui.petitions.more_details") %></span></summary>
       <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
   <% end %>
 
-  <p class="flash-notice">This petition was rejected</p>
+  <p class="flash-notice"><%= t(:"ui.petitions.notice_rejected") %></p>
 
-  <h2>Why was this petition rejected?</h2>
+  <h2><%= t(:"ui.petitions.reject_reason_heading") %></h2>
   <%= rejection_description(petition.rejection.code) %>
   <% if petition.rejection.details? %>
     <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
   <% end %>
-  <p>We only reject petitions that don’t meet the <%= link_to 'petition standards', help_url(anchor: 'standards') %>.</p>
+  <p><%= t(:"ui.petitions.reject_reason_standards_html", standards_link: petition_standards_link) %>.</p>
 
   <ul class="petition-meta">
     <li>
-      <span class="label">Date submitted</span> <%= short_date_format petition.created_at %>
+      <span class="label"><%= t(:"ui.petitions.date_submitted") %></span> <%= short_date_format petition.created_at %>
     </li>
     <li class="meta-json">
-      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-      <%= render "about_petition_data" %>
+      <span class="note"><%= link_to t(:"ui.petitions.get_json"), petition_path(petition, :json) %></span>
+      <%= t(:"ui.petitions.about_petition_data_html") %>
     </li>
   </ul>
 <% end %>

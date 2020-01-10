@@ -1,4 +1,4 @@
-<h1 class="page-title">Make sure this is right</h1>
+<h1 class="page-title"><%= t(:"ui.petitions.create.replay_email_stage.heading") %></h1>
 
 <%= form.hidden_field :name %>
 <%= form.hidden_field :uk_citizenship %>
@@ -7,11 +7,11 @@
 <%= form.hidden_field :notify_by_email %>
 
 <%= form_row for: [signature, :email] do %>
-  <%= form.label :email, "Email address", class: "form-label visuallyhidden" %>
+  <%= form.label :email, t(:"ui.petitions.create.creator_stage.email.label"), class: "form-label visuallyhidden" %>
   <%= error_messages_for_field signature, :email %>
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
-<%= form.submit "Yes – this is my email address", class: "button", tabindex: increment %>
+<%= form.submit t(:"ui.petitions.create.replay_email_stage.submit"), class: "button", tabindex: increment %>
 
-<p>If your email address is wrong, just change it above</p>
+<p><%= t(:"ui.petitions.create.replay_email_stage.fix_email_if_wrong") %></p>

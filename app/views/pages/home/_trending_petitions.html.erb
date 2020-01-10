@@ -1,9 +1,9 @@
 <div class="section-panel-borderless">
-  <%= link_to 'View all open petitions', petitions_path(state: 'open'), :class => 'view-all' %>
+  <%= link_to t(:"ui.home_page.trending_petitions.all_open_link"), petitions_path(state: 'open'), :class => 'view-all' %>
 
   <% trending_petitions do |petitions| %>
     <section class="trending" aria-labelledby="trending-heading">
-      <h2 id="trending-heading">Popular petitions</h2>
+      <h2 id="trending-heading"><%= t(:"ui.home_page.trending_petitions.heading") %></h2>
       <ul>
         <% petitions.each do |id, action, signature_count| %>
           <li class="petition-item">

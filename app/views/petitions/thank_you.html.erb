@@ -1,11 +1,11 @@
 <h1 class="page-title page-title-with-icon">
   <span class="icon icon-email"></span>
-  One more step…
+  <%= t(:"ui.petitions.thank_you.heading") %>
 </h1>
 
-<p class="lede">We've emailed you a link to send to your potential supporters</p>
+<p class="lede"><%= t(:"ui.petitions.thank_you.link_emailed") %></p>
 
-<h2>You need <%= Site.minimum_number_of_sponsors %> supporters</h2>
-<p><%= Site.minimum_number_of_sponsors %> people need to click this link and confirm their support for your petition to go live</p>
+<h2><%= t(:"ui.petitions.thank_you.n_sponsors_needed_heading", count: Site.minimum_number_of_sponsors) %></h2>
+<p><%= t(:"ui.petitions.thank_you.n_sponsors_needed", count: Site.minimum_number_of_sponsors) %></p>
 
-<%= render 'notification', message: "Your petition will only go live when #{Site.minimum_number_of_sponsors} people confirm their support" %>
+<%= render 'notification', message: t(:"ui.petitions.thank_you.n_sponsors_needed_notice", count: Site.minimum_number_of_sponsors) %>

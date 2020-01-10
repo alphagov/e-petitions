@@ -1,8 +1,8 @@
-<h1 class="visuallyhidden"><%= number_with_delimiter(@signature.number) %> signatures</h1>
+<h1 class="visuallyhidden"><%= t(:"ui.signatures.signed.heading", count: @signature.number, formatted_count: number_with_delimiter(@signature.number)) %></h1>
 
 <div class="signature-confirmation">
   <%= render 'signature_confirmation' %>
-  <p>We've added your signature to the petition:</p>
+  <p><%= t(:"ui.signatures.signed.added_to_petition") %></p>
   <p><%= link_to @petition.action, petition_path(@petition) %></p>
 </div>
 
@@ -14,16 +14,13 @@
 
 <% if @signature.constituency %>
   <div class="section-panel" aria-labelledby="contact-your-mp-heading">
-    <h2 id="contact-your-mp-heading">Contact your MP</h2>
-    <p>Your constituency is <%= @signature.constituency.name %></p>
+    <h2 id="contact-your-mp-heading"><%= t(:"ui.signatures.signed.contact_mp.heading") %></h2>
+    <p><%= t(:"ui.signatures.signed.contact_mp.constituency_name", constituency_name: @signature.constituency.name) %></p>
     <% if @signature.constituency.mp_id? %>
-      <p>Your local MP is <%= @signature.constituency.mp_name %></p>
-      <p><%= link_to "Contact your MP to let them know you have signed this petition", @signature.constituency.mp_url, rel: "external" %></p>
+      <p><%= t(:"ui.signatures.signed.contact_mp.mp_name", mp_name: @signature.constituency.mp_name) %></p>
+      <p><%= link_to t(:"ui.signatures.signed.contact_mp.mp_link"), @signature.constituency.mp_url, rel: "external" %></p>
     <% end %>
   </div>
 <% end %>
 
-<h2>Register to vote</h2>
-<p>To vote in local, national and EU elections, you must be registered to vote.</p>
-<p>It takes less than 5 minutes.</p>
-<a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+<%= t(:"ui.signatures.signed.register_to_vote_html") %>

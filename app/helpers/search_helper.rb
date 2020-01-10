@@ -16,9 +16,16 @@ module SearchHelper
   end
 
   def filtered_petition_count(petitions)
-    total_entries = petitions.total_entries
-    noun = petitions.search? ? 'result' : 'petition'
-    "#{number_with_delimiter(total_entries)} #{noun.pluralize(total_entries)}"
+    options = {
+      count: petitions.total_entries,
+      num: number_with_delimiter(petitions.total_entries)
+    }
+
+    if petitions.search?
+      t(:"ui.petitions.search.filtered_result_count", options)
+    else
+      t(:"ui.petitions.search.filtered_petition_count", options)
+    end
   end
 
   def petition_result_path(petition, options = {})

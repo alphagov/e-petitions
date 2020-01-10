@@ -1,18 +1,14 @@
 <%= render 'parliament_dissolution_warning' %>
 
 <% if Parliament.registration_closed? %>
-  <a href="https://www.parliament.uk/get-involved/" class="get-involved">
-    Get involved with the UK Parliament
-  </a>
+  <%= t(:"ui.home_page.notice.get_involved_html") %>
 <% else %>
-  <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
-    Register to vote in the General Election
-  </a>
+  <%= t(:"ui.home_page.notice.register_to_vote_html") %>
 <% end %>
 
 <% if any_actioned_petitions? %>
   <div class="section-panel-borderless">
-    <p>During the last parliament</p>
+    <p><%= t(:"ui.home_page.dissolved.during_last_parliament") %></p>
   </div>
 <% end %>
 

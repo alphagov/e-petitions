@@ -1,6 +1,6 @@
 <%= cache_for :petition do %>
   <h1>
-    <span class="heading-secondary">Petition</span>
+    <span class="heading-secondary"><%= t(:"ui.petitions.heading_open") %></span>
     <%= petition.action %>
   </h1>
 
@@ -13,12 +13,12 @@
   <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
   <% unless petition.additional_details.blank? %>
     <details>
-      <summary><span class="summary">More details</span></summary>
+      <summary><span class="summary"><%= t(:"ui.petitions.more_details") %></span></summary>
       <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
     </details>
   <% end %>
 
-  <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
+  <%= link_to t(:"ui.petitions.sign_this_petition"), new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
 
   <div class="signature-count">
     <p class="signature-count-number">
@@ -28,7 +28,7 @@
       <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
     </div>
     <p class="signatures-on-a-map">
-      <a href="https://petitionmap.unboxedconsulting.com/?petition=<%= petition.id %>">Show on a map</a>
+      <%= t(:"ui.petitions.show_on_a_map_html", petition_id: petition.id) %>
     </p>
     <p class="signature-count-goal">
       <%= number_with_delimiter(current_threshold(petition)) %>
@@ -41,21 +41,21 @@
 
   <ul class="petition-meta">
     <li class="meta-created-by">
-      <span class="label">Created by</span> <%= petition.creator.name %>
+      <span class="label"><%= t(:"ui.petitions.created_by") %></span> <%= petition.creator.name %>
     </li>
     <li class="meta-deadline">
       <% if petition.closing_early_for_dissolution? %>
-        <span class="label">Deadline</span> <%= short_date_time_format Parliament.dissolution_at %>
+        <span class="label"><%= t(:"ui.petitions.deadline") %></span> <%= short_date_time_format Parliament.dissolution_at %>
       <% else %>
-        <span class="label">Deadline</span> <%= short_date_format petition.deadline %>
+        <span class="label"><%= t(:"ui.petitions.deadline") %></span> <%= short_date_format petition.deadline %>
       <% end %>
       <% unless Parliament.dissolution_announced? %>
-        <span class="note">All petitions run for 6 months</span>
+        <span class="note"><%= t(:"ui.petitions.petitions_run_6_months") %></span>
       <% end %>
     </li>
     <li class="meta-json">
-      <span class="note"><%= link_to "Get petition data (json format)", petition_path(petition, :json) %></span>
-      <%= render "about_petition_data" %>
+      <span class="note"><%= link_to t(:"ui.petitions.get_json"), petition_path(petition, :json) %></span>
+      <%= t(:"ui.petitions.about_petition_data_html") %>
     </li>
   </ul>
 <% end %>

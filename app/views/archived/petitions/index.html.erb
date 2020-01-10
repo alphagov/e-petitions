@@ -1,30 +1,33 @@
 <div class="notification">
   <span class="icon icon-warning-white"></span>
-  <p class="content">
-    These petitions were submitted during the <%= @parliament.period %> <%= @parliament.government %> government
-  </p>
+  <p class="content"><%= t(
+    :"ui.petitions.archived.government_warning",
+    count: @petitions,
+    period: @parliament.period,
+    government: @parliament.government
+  ) %></p>
 
   <details class="list-of-parliaments">
-    <summary><span class="summary">View petitions from a different government</span></summary>
+    <summary><span class="summary"><%= t(:"ui.petitions.archived.list_of_parliaments.summary") %></span></summary>
     <div>
       <ul>
         <% archived_parliaments.each do |parliament| %>
-          <li><%= link_to "#{parliament.period} #{parliament.government} government", archived_petitions_path(parliament: parliament, state: "published") %></li>
+          <li><%= link_to t(:"ui.petitions.archived.list_of_parliaments.item", period: parliament.period, government: parliament.government), archived_petitions_path(parliament: parliament, state: "published") %></li>
         <% end %>
-        <li><%= link_to "Back to current petitions", petitions_path(state: "open") %></li>
+        <li><%= link_to t(:"ui.petitions.archived.list_of_parliaments.current_petitions_link"), petitions_path(state: "open") %></li>
       </ul>
     </div>
   </details>
 </div>
 
 <details class="lists-of-petitions">
-  <summary><span class="summary">Other lists of petitions</span></summary>
+  <summary><span class="summary"><%= t(:"ui.petitions.other_lists") %></span></summary>
   <div>
     <ul>
     <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
         <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+          <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>
     <% end %>
@@ -32,14 +35,14 @@
   </div>
 </details>
 
-<h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
+<h1 class="page-title"><%= t(@petitions.scope, scope: :"ui.petitions.index.page_titles") %></h1>
 
 <%= form_tag archived_petitions_path, method: 'get', enforce_utf8: false do %>
   <div class="search-inline">
     <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>
     <%= hidden_field_tag 'parliament', @parliament.id %>
-    <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
+    <%= submit_tag t(:"ui.petitions.search.submit"), name: nil, class: 'inline-submit' %>
   </div>
 <% end %>
 
@@ -47,7 +50,7 @@
 
 <div class="search-results section-panel">
   <% if @petitions.empty? %>
-    <p>No archived petitions could be found matching your search terms</p>
+    <p><%= t(:"ui.petitions.archived.search.results.no_match") %></p>
   <% else %>
     <ol>
       <% @petitions.each do |petition| %>
@@ -57,22 +60,26 @@
       <% end %>
     </ol>
     <%= render 'paginated_results' %>
-    <p>Get this data in <%= link_to "JSON", archived_petitions_path(:json, params.permit(:parliament, :q, :page, :state)) %> or <%= link_to 'CSV', archived_petitions_path(:csv, params.permit(:q, :parliament, :state)) %> format</p>
+    <p><%= t(
+      :"ui.application.get_json_csv_html",
+      json_link: link_to("JSON", archived_petitions_path(:json, params.permit(:parliament, :q, :page, :state))),
+      csv_link: link_to('CSV', archived_petitions_path(:csv, params.permit(:q, :parliament, :state)))
+    ) %></p>
   <% end %>
 </div>
 
 <nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
-  <h2 id="other-lists-heading">Other lists of petitions</h2>
+  <h2 id="other-lists-heading"><%= t(:"ui.petitions.other_lists") %></h2>
   <div class="section-panel">
     <ul>
     <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
         <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+          <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>
     <% end %>
     </ul>
   </div>
-  <%= link_to 'Current petitions', petitions_path(state: "open") %>
+  <%= link_to t(:"ui.petitions.current_petitions_link"), petitions_path(state: "open") %>
 </nav>

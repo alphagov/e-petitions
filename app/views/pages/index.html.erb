@@ -1,5 +1,5 @@
 <%= cache_for :home_page do %>
-  <h1 class="visuallyhidden">Petitions – Welsh Parliament</h1>
+  <h1 class="visuallyhidden"><%= t(:"ui.home_page.heading") %></h1>
 
   <% if Parliament.dissolved? %>
     <%= render 'pages/home/dissolved' %>

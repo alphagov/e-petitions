@@ -33,4 +33,8 @@ module PetitionHelper
   def reveal_government_response?
     params[:reveal_response] == "yes"
   end
+
+  def petition_standards_link(*args)
+    link_to(t(:"ui.petitions.standards_link"), help_path(anchor: 'standards'))
+  end
 end

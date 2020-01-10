@@ -6,13 +6,13 @@
 
     <% if home_page? %>
       <span class="proposition">
-        <span class="graphic graphic-portcullis-white"></span> <%= t(:site_title, scope: :ui) %>
+        <span class="graphic graphic-portcullis-white"></span> <%= t(:"ui.header.title") %>
       </span>
     <% else %>
-      <%= link_to(home_path, :title => 'Go to the petitions homepage', :tabindex => 1, :class => 'proposition') do %>
-        <span class="graphic graphic-portcullis-white"></span> <%= t(:site_title, scope: :ui) %>
+      <%= link_to(home_path, :title => t(:"ui.header.tooltip"), :tabindex => 1, :class => 'proposition') do %>
+        <span class="graphic graphic-portcullis-white"></span> <%= t(:"ui.header.title") %>
       <% end %>
     <% end %>
-    <p class="strapline"><%= t(:strapline, scope: :ui) %></p>
+    <p class="strapline"><%= t(:"ui.header.strapline") %></p>
   </div>
 </header>

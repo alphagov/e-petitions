@@ -1,34 +1,34 @@
 <%= form_row for: [signature, :uk_citizenship], class: "uk-citizen" do %>
   <span class="form-label">
-    Only British citizens or UK residents have the right to sign
+    <%= t(:"ui.signatures.citizenship.required") %>
   </span>
   <%= error_messages_for_field signature, :uk_citizenship %>
   <div class="multiple-choice">
     <%= form.check_box :uk_citizenship, tabindex: increment %>
-    <%= form.label :uk_citizenship, "I am a British citizen or UK resident" %>
+    <%= form.label :uk_citizenship, t(:"ui.petitions.create.creator_stage.citizen_or_resident.check_label") %>
   </div>
 <% end %>
 
 <%= form_row for: [signature, :name] do %>
-  <%= form.label :name, class: "form-label" %>
+  <%= form.label :name, t(:"ui.petitions.create.creator_stage.name.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :name %>
   <%= form.text_field :name, tabindex: increment, maxlength: 255, size: nil, class: "form-control"  %>
 <% end %>
 
 <%= form_row for: [signature, :email] do %>
-  <%= form.label :email, "Email address", class: "form-label" %>
+  <%= form.label :email, t(:"ui.petitions.create.creator_stage.email.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :email %>
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
 <%= form_row for: [signature, :location_code] do %>
-  <%= form.label :location_code, "Location", class: "form-label" %>
+  <%= form.label :location_code, t(:"ui.petitions.create.creator_stage.location.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :location_code %>
   <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
 <% end %>
 
 <%= form_row for: [signature, :postcode] do %>
-  <%= form.label :postcode, class: "form-label" %>
+  <%= form.label :postcode, t(:"ui.petitions.create.creator_stage.postcode.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :postcode %>
   <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
 <% end %>
@@ -36,12 +36,10 @@
 <%= form_row for: [signature, :notify_by_email], class: "notify-by-email" do %>
   <div class="multiple-choice">
     <%= form.check_box :notify_by_email, tabindex: increment %>
-    <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
+    <%= form.label :notify_by_email, t(:"ui.petitions.create.creator_stage.notify_by_email.check_label") %>
   </div>
 <% end %>
 
-<%= form.submit "Continue", name: "move:next", class: "button", tabindex: increment %>
+<%= form.submit t(:"ui.petitions.create.creator_stage.continue"), name: "move:next", class: "button", tabindex: increment %>
 
-<section class="secondary">
-  <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
-</section>
+<%= t(:"ui.signatures.privacy_notice_html") %>

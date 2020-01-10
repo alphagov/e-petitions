@@ -1,26 +1,24 @@
-<%= form.submit raw("&#9664; Back"), name: "move_back", class: "back-page" %>
+<%= form.submit raw("&#9664; #{t(:"ui.application.back")}"), name: "move_back", class: "back-page" %>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
 <%= form.hidden_field :additional_details %>
 
-<h1 class="page-title">Check your petition</h1>
+<h1 class="page-title"><%= t(:"ui.petitions.create.replay_petition_stage.heading") %></h1>
 
 <div class="panel-indent">
   <h1><%= petition.action %></h1>
   <div><%= auto_link(simple_format(h(petition.background)), html: { rel: "nofollow" }) %></div>
   <% if petition.additional_details.present? %>
     <details>
-      <summary><span class="summary">More details</span></summary>
+      <summary><span class="summary"><%= t(:"ui.petitions.more_details") %></span></summary>
       <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: "nofollow" }) %></div>
     </details>
   <% end %>
 </div>
 
-<%= form.submit "This looks good", name: "move_next", class: "button", tabindex: increment %>
+<%= form.submit t(:"ui.petitions.create.replay_petition_stage.submit"), name: "move_next", class: "button", tabindex: increment %>
 
-<%= form.submit "Go back and make changes", name: "move_back", class: "button-secondary", tabindex: increment %>
+<%= form.submit t(:"ui.petitions.create.replay_petition_stage.go_back"), name: "move_back", class: "button-secondary", tabindex: increment %>
 
-<p class="secondary">You can’t change your petition after this point.</p>
-<p class="secondary">If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
-<p class="secondary">Published petitions can only be removed from the site with the agreement of the Welsh Petitions Committee.</p>
+<%= t(:"ui.petitions.create.replay_petition_stage.submit_warning_html") %>

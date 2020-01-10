@@ -1,11 +1,11 @@
 <details class="lists-of-petitions">
-  <summary><span class="summary">Other lists of petitions</span></summary>
+  <summary><span class="summary"><%= t(:"ui.petitions.other_lists") %></span></summary>
   <div>
     <ul>
     <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
         <%= link_to petitions_url(state: facet) do %>
-          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+          <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>
     <% end %>
@@ -13,7 +13,7 @@
   </div>
 </details>
 
-<h1 class="page-title"><%= t(@petitions.scope, scope: :"petitions.page_titles") %></h1>
+<h1 class="page-title"><%= t(@petitions.scope, scope: :"ui.petitions.index.page_titles") %></h1>
 
 <% if petition_list_header? %>
   <p class="text-secondary"><%= petition_list_header %></p>

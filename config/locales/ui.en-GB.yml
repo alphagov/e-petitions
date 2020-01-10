@@ -1,7 +1,791 @@
+---
 en-GB:
   ui:
     language_switcher:
       text: "Cymraeg"
       title: "Dangoswch y dudalen hon yn Gymraeg"
-    site_title: "Petitions"
-    strapline: "Welsh Parliament"
+    application:
+      continue: Continue
+      share_this_petition: Share this petition
+      twitter_card_description: Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament
+      back: Back
+      get_json_csv_html: >-
+        Get this data in %{json_link} or %{csv_link} format
+      cookie_message:
+        html: We use cookies to make this service simpler. %{privacy_link}
+        privacy_link: Find out more about cookies
+    footer:
+      copyright_html: |-
+        <span class="graphic graphic-portcullis-large-grey"></span>
+        <span class="graphic graphic-crest-large-grey"></span>
+        <a href="https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm" rel="external">© Crown copyright</a>
+      nav:
+        all_petitions: All petitions
+        feedback: Feedback
+        home: Home
+        how_petitions_work: How petitions work
+        privacy: Privacy and cookies
+        start_a_petition: Start a petition
+      ogl_html: |-
+        <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
+        <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
+    header:
+      strapline: Welsh Government and Parliament
+      title: Petitions
+      tooltip: Go to the petitions homepage
+    local_search:
+      postcode: UK postcode
+      submit: Search
+    os:
+      app_name: Petitions
+      app_tooltip: Welsh Parliament
+    parliament:
+      dissolution_faq_link: Petitions Committee website
+      dissolution_faq_notice_html: Find out more on the %{faq_link}
+    petitions:
+      about_petition_data_html: |-
+        <details role="group">
+          <summary role="button" aria-controls="about-json-content" aria-expanded="true">
+            <span class="summary">About petition data</span>
+          </summary>
+          <div id="about-json-content" aria-hidden="false">
+            <p>
+              The data shows the number of people who have signed the petition
+              by country as well as in the constituency of each Member of Parliament.
+              This data is available for all petitions on the site. It is not a
+              list of people who have signed the petition. The only name
+              that is shared on the site is that of the petition creator.
+            </p>
+          </div>
+        </details>
+      action:
+        label: What do you want us to do?
+        help_html: |-
+          <p class="character-count">80 characters max</p>
+          <p class="form-hint">Example: Make wrongly describing a casserole with a pastry lid as a pie a criminal offence</p>
+          <details class="form-group-help">
+            <summary><span class="summary">Show more examples</span></summary>
+            <div class="panel-indent">
+              <p>Good examples:</p>
+              <ul class="list-bullet">
+                <li>Introduce Black History to the primary curriculum</li>
+                <li>Lower the voting age to 16</li>
+              </ul>
+              <p>Bad examples:</p>
+              <ul class="list-bullet">
+                <li>Russia Problem on US ruling</li>
+                <li>Justice for David Thomas</li>
+              </ul>
+              <p>Good petitions say clearly what they want government or parliament to do.</p>
+            </div>
+          </details>
+      background:
+        label: Background
+        help_html: |-
+          <p class="character-count">300 characters max</p>
+          <details class="form-group-help">
+            <summary><span class="summary">Help writing background</span></summary>
+            <div class="panel-indent">
+              <p>Use this section to back up why you want action. Some people include a personal story here.</p>
+              <p>Remember that people won’t always know that much about the issue you’re petitioning about - explain it.</p>
+            </div>
+          </details>
+      additional_details:
+        label: Additional details
+        hint_optional: Optional - background information, evidence and references
+        help_html: |-
+          <p class="character-count">500 characters max</p>
+      at_threshold_for_debate_ellipsis: At %{threshold} signatures...
+      at_threshold_for_debate_will_be_considered: At %{threshold} signatures, this petition will be considered for debate in Parliament
+      check:
+        heading: Start a petition
+        results:
+          duplicate:
+            heading: We found some similar petitions
+            sign_if_match: If one of these petitions matches yours, sign it and share it instead
+            sign_if_match_reason: Your petition is more likely to get to %{response_threshold} and %{debate_threshold} signatures that way.
+            reject_notice: If there’s already a petition on the same topic, your petition is likely to be rejected
+            continue_btn: My petition is different
+          unique:
+            heading: We checked for similar petitions
+            no_match: We checked for similar petitions and didn't find any.
+            ok_to_continue: So you can go ahead and create a new one.
+            continue: Continue
+      gathering_support:
+        heading: This petition is gathering support
+        supporters_needed_html: "%{creator_name}’s petition needs %{n_sponsors} supporters before we will check that it meets the %{standards_link} and publish it."
+        try_again_later: Please try again in a few days.
+      closed_due_to_election: This petition closed early because of a General Election
+      committee_decided_not_to_debate: The Petitions Committee decided not to debate this petition
+      created_by: Created by
+      date_closed: Date closed
+      date_submitted: Date submitted
+      deadline: Deadline
+      for_debate_date: for a debate date
+      for_parliament_to_publish_debate: for Parliament to publish the debate outcome
+      get_json: Get petition data (json format)
+      heading_closed: Closed petition
+      heading_open: Petition
+      heading_rejected: Rejected petition
+      more_details: More details
+      need_sponsors_later: Later on, you'll need email addresses for %{count} supporters to get your petition started
+      need_sponsors_later_heading: Just so you know
+      notice_rejected: This petition was rejected
+      other_parliamentary_business: Other parliamentary business
+      parliament_debated_on: Parliament debated this petition on %{date}
+      parliament_debated_topic: Parliament debated this topic
+      parliament_will_debate: Parliament will debate this petition
+      parliament_will_debate_on: Parliament will debate this petition on %{date}.
+      parliamentary_debate_description: Parliament considers all petitions that get more than %{threshold} signatures for a debate
+      parliamentary_debate_heading: Parliament will consider this for a debate
+      petition_closed_notice: This petition is closed
+      petitions_run_6_months: All petitions run for 6 months
+      petition_duration: This petition ran for %{duration}
+      reject_reason_heading: Why was this petition rejected?
+      reject_reason_standards_html: We only reject petitions that don’t meet the %{standards_link}
+      response_threshold:
+        needs_more_signatures:
+          heading: At %{threshold} signatures...
+          response_threshold: At %{threshold} signatures, government will respond to this petition
+        responded:
+          heading: Government responded
+          response_given_at: This response was given on %{date}
+          summary: Read the response in full
+        waiting:
+          heading: Government will respond
+          response_threshold: Government responds to all petitions that get more than %{threshold} signatures
+          response_waiting_time: "%{waiting_for_time} for a government response"
+      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show on a map</a>
+      sign_this_petition: Sign this petition
+      topic_debated_on: This topic was debated on %{date}
+      waiting_for_in_words:
+        one: Waiting for 1 day
+        other: Waiting for %{formatted_count} days
+        zero: Waiting for less than a day
+      watch_online_parliamentlive_tv_html: You'll be able to watch the debate online at <a href="https://parliamentlive.tv" rel="external">parliamentlive.tv</a>
+      watch_online_youtube_channel_html: You'll be able to watch online on the <a href="https://www.youtube.com/UKParliament" rel="external">UK Parliament YouTube channel</a>.
+      index:
+        page_titles:
+          all: All petitions
+          open: Open petitions
+          closed: Closed petitions
+          rejected: Rejected petitions
+          published: Published petitions
+          awaiting_response: Petitions waiting for a Government response
+          with_response: Petitions with a Government response
+          debated: Petitions debated in Parliament
+          not_debated: Petitions not debated in Parliament
+          awaiting_debate: Petitions waiting for a debate in Parliament
+      search:
+        submit: Search
+        filtered_petition_count:
+          one: "1 petition"
+          other: "%{num} petitions"
+        filtered_result_count:
+          one: "1 result"
+          other: "%{num} results"
+        results:
+          no_match: No petitions could be found matching your search terms.
+          items:
+            facet_all:
+              closed_html: "%{signature_count}, now closed"
+              rejected: Rejected
+            facet_debated:
+              debated_date: Debated %{date}
+            facet_with_response:
+              responded_date: Government responded – %{date}
+      archived:
+        government_warning:
+          one: This petition was submitted during the %{period} %{government} government
+          other: These petitions were submitted during the %{period} %{government} government
+        show:
+          heading:
+            rejected: Rejected petition
+            default: Petition
+        other_from_government_link: View other petitions from this government
+        list_of_parliaments:
+          summary: View petitions from a different government
+          item: "%{period} %{government} government"
+          current_petitions_link: Back to current petitions
+        search:
+          results:
+            no_match: No archived petitions could be found matching your search terms
+        search_button: Search
+      other_lists: Other lists of petitions
+      archived_petitions_link: Archived petitions
+      current_petitions_link: Current petitions
+      lists:
+        all: All petitions (%{quantity})
+        open: Open petitions (%{quantity})
+        closed: Closed petitions (%{quantity})
+        published: Published petitions (%{quantity})
+        rejected: Rejected petitions (%{quantity})
+        awaiting_response: Awaiting government response (%{quantity})
+        with_response: Government responses (%{quantity})
+        debated: Debated in Parliament (%{quantity})
+        not_debated: Not debated in Parliament (%{quantity})
+        awaiting_debate: Awaiting a debate in Parliament (%{quantity})
+      moderation_info:
+        heading: We’re checking this petition
+        min_supporters_reached: "%{min_supporters} people have already supported %{creator_name}’s petition."
+        checking_standards_html: We need to check it meets the %{standards_link} before we publish it.
+        try_again_later: Please try again in a few days.
+      standards_link: petition standards
+      thank_you:
+        heading: One more step…
+        link_emailed: We've emailed you a link to send to your potential supporters
+        n_sponsors_needed_heading: You need %{count} supporters
+        n_sponsors_needed: "%{count} people need to click this link and confirm their support for your petition to go live"
+        n_sponsors_needed_notice: Your petition will only go live when %{count} people confirm their support
+      create:
+        creator_stage:
+          heading: Sign your petition
+          citizen_or_resident:
+            label: Only British citizens or UK residents have the right to create and sign petitions
+            check_label: I am a British citizen or UK resident
+          name:
+            label: Name
+            hint: You must use your full name
+          email:
+            label: Email address
+          location:
+            label: Location
+          postcode:
+            label: Postcode
+          notify_by_email:
+            check_label: Email me whenever there’s an update about this petition
+          continue: Continue
+          about_published_data_html: |-
+            <div class="secondary">
+              <p>Your name will be published on this petition as the petition creator.</p>
+              <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition.</p>
+            </div>
+        error_summary:
+          heading: We couldn't create this petition
+          prompt:
+            one: "Please fix the following error:"
+            other: "Please fix the following errors:"
+        petition_stage:
+          heading: Start a petition
+          hint_standards_html: Remember, your petition must meet the %{standards_link}.
+          submit: Preview petition
+        replay_email_stage:
+          heading: Make sure this is right
+          submit: Yes – this is my email address
+          fix_email_if_wrong: If your email address is wrong, just change it above
+        replay_petition_stage:
+          heading: Check your petition
+          submit: This looks good
+          go_back: Go back and make changes
+          submit_warning_html: |-
+            <p class="secondary">You can’t change your petition after this point.</p>
+            <p class="secondary">If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
+            <p class="secondary">Published petitions can only be removed from the site with the agreement of the Welsh Petitions Committee.</p>
+      local:
+        all:
+          heading: Popular petitions in the constituency of %{constituency_name}
+          open_popular_link: View open popular petitions in %{constituency_name}
+          mp_name_link_html: Your member of parliament is %{mp_name_link}
+          results:
+            empty: No petitions are popular in your constituency.
+            now_closed: now closed
+        index:
+          postcode_blank:
+            heading: Local to you
+            find_local_petitions: Find petitions about local issues
+          postcode_bad:
+            heading: We couldn't find that postcode
+            couldnt_find_postcode_html: We couldn't find the postcode <q>%{postcode}</q>. Try again?
+        show:
+          heading: Popular open petitions in the constituency of %{constituency_name}
+          all_popular_link: View all popular petitions in %{constituency_name}
+    signatures:
+      unsubscribe:
+        already_html: |-
+          <h1>Already unsubscribed from this petition</h1>
+          <p>You have already unsubscribed from email updates about this petition.</p>
+        failed_html: |-
+          <h1>Failed to unsubscribe</h1>
+          <p>Your unsubscribe link is invalid.</p>
+        success_html: |-
+          <h1>Successfully unsubscribed from this petition</h1>
+          <p>You have unsubscribed from email updates about this petition.</p>
+        back_button: Return to home page
+      citizenship:
+        required: Only British citizens or UK residents have the right to sign
+      privacy_notice_html: |-
+        <section class="secondary">
+          <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
+        </section>
+      confirmation:
+        signatures: signatures
+      new:
+        heading: Sign petition
+      signed:
+        heading:
+          one: "1 signature"
+          other: "%{formatted_count} signatures"
+        added_to_petition: "We've added your signature to the petition:"
+        contact_mp:
+          heading: Contact your MP
+          constituency_name: Your constituency is %{constituency_name}
+          mp_name: Your local MP is %{mp_name}
+          mp_link: Contact your MP to let them know you have signed this petition
+        register_to_vote_html: |-
+          <h2>Register to vote</h2>
+          <p>To vote in local, national and EU elections, you must be registered to vote.</p>
+          <p>It takes less than 5 minutes.</p>
+          <a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+      thank_you:
+        heading: One more step…
+        confirmation:
+          sent: We’ve sent you an email. Please click on the link in the email to confirm your address.
+          required: Your signature will not be counted until you click the link in the email
+          not_received:
+            heading: Not received a confirmation email?
+            instructions_html: |-
+              <p>
+                If you haven’t received a confirmation email:
+              </p>
+
+              <ul class="list-bullet">
+                <li>check your spam or junk mail folders</li>
+                <li>allow up to 24 hours for the email to arrive</li>
+              </ul>
+    sponsors:
+      new:
+        heading: Sign %{creator_name}’s petition
+      signed:
+        heading: Thanks
+        added: Your signature has been added to this petition as a supporter.
+        what_next_html: |-
+          <h2>What next?</h2>
+          <p>This petition needs %{min_sponsors} supporters to go live.</p>
+          <p>When it goes live, we'll email you a link so you can start sharing it.</p>
+    home_page:
+      heading: Petitions – Welsh Parliament
+      archived_petitions:
+        heading: View petitions from a previous government
+      debated_petitions:
+        none_debated: Parliament hasn’t debated any petitions yet
+        topic_debated_date: This topic was debated on %{date}
+        video:
+          watch_html: Watch the debate on %{link}
+          link: parliamentlive.tv
+        transcript:
+          read_html: Read the transcript at %{link}
+          link: parliament.uk
+        research:
+          read_html: Read the research at %{link}
+          link: parliament.uk
+      responded_petitions:
+        none_responded: The government hasn’t responded to any petitions yet
+        response_date: The government responded on %{date}
+        full_response_link: Read the response in full
+      search_petitions:
+        heading: Search petitions
+        submit_button: Search
+      trending_petitions:
+        all_open_link: View all open petitions
+        heading: Popular petitions
+      notice:
+        get_involved_html: |-
+          <a href="https://www.parliament.uk/get-involved/" class="get-involved">
+            Get involved with the UK Parliament
+          </a>
+        register_to_vote_html: |-
+          <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
+            Register to vote in the General Election
+          </a>
+      dissolved:
+        during_last_parliament: During the last parliament
+      thresholds:
+        response: If a petition gets %{formatted_count} signatures, the government will respond
+        debate: If a petition gets %{formatted_count} signatures, it will be considered for debate in Parliament
+      local_petitions:
+        heading: Local to you
+        find_local_petitions: Find petitions being signed by people near you
+      opened:
+        lede: The Petitions service is open
+        start_a_petition:
+          heading: Start a petition
+          requirements: Anyone can start a petition as long as they are a British citizen or UK resident
+          link: Start a petition
+    feedback:
+      new:
+        heading: Feedback and contact
+        feedback:
+          heading: Feedback
+          comments:
+            label: Comments
+          petition_link_or_title:
+            label_html: Petition title/link <span class="optional">optional</span>
+          want_reply:
+            heading: Do you want a reply?
+            email:
+              label: Email address
+          submit_button: Send feedback
+          terms_html: |-
+            <p>We'll only use your email to reply to your message</p>
+            <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
+        contact:
+          heading: Contact
+          email:
+            heading: Email
+            petitions_committee_link: Petitions Committee
+            body_html: |-
+              <p>You can email the %{petitions_committee_link} directly.</p>
+
+              <p>They can help you to understand how Parliament handles petitions. They can also help with some technical problems using this service. They can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+
+              <p>Email: <a href="mailto:petitionscommittee@parliament.wales">petitionscommittee@parliament.wales</a></p>
+          phone:
+            heading: Phone
+            body_html: |-
+              <p>Phone calls are handled by the Parliament Enquiry Service.</p>
+
+              <p>They can help you to understand how Parliament handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+
+              <ul>
+                <li>Telephone: <a href="tel:+448001124272">0800 112 4272</a> (Freephone) or <a href="tel:+442072194272">020 7219 4272</a></li>
+                <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
+                <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
+              </ul>
+      thanks:
+        heading: Your feedback has been sent
+        body_html: |-
+          <p>Thanks for sending us your feedback.</p>
+
+          <p>If you've requested a response, we'll be in touch as soon as we can.</p>
+
+          <p>During busy periods this can take up to 5 working days.</p>
+        back_link: Back to Petitions home
+    help_page:
+      feedback_link: get in touch
+      body_html: |-
+        <h1 class="page-title">How petitions work</h1>
+
+        <ol class="list-number">
+          <li>You create a petition. Only British citizens and UK residents can create a petition.</li>
+          <li>You get 5 people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
+          <li>We check your petition, then publish it. We only reject petitions that don’t meet the standards for petitions.</li>
+          <li>British citizens and UK residents can then sign your petition — and can only sign a petition once.</li>
+          <li>The Petitions Committee reviews all petitions we publish. They select petitions of interest to find out more about the issues raised. They have the power to press for action from government or Parliament.</li>
+          <li>At 10,000 signatures you get a response from the government.</li>
+          <li>At 100,000 signatures your petition will be considered for a debate in Parliament.</li>
+        </ol>
+
+        <h2 id="debates">Debates</h2>
+
+        <p>Petitions which reach 100,000 signatures are almost always debated. But we may decide not to put a petition forward for debate if the issue has already been debated recently or there’s a debate scheduled for the near future. If that’s the case, we’ll tell you how you can find out more about parliamentary debates on the issue raised by your petition.</p>
+
+        <p>MPs might consider your petition for a debate before it reaches 100,000 signatures.</p>
+
+        <p>We may contact you about the issue covered by your petition. For example, we sometimes invite people who create petitions to take part in a discussion with MPs or government ministers, or to give evidence to a select committee. We may also write to other people or organisations to ask them about the issue raised by your petition.</p>
+
+        <h2 id="petitions-committee">The Petitions Committee</h2>
+
+        <p>The <a href="http://www.parliament.uk/petitions-committee">Petitions Committee</a> can:</p>
+
+        <ul class="list-bullet">
+          <li>write to you for more information</li>
+          <li>invite you to talk to the Committee in person about your petition – this could be in Parliament or somewhere else in the UK</li>
+          <li>ask for evidence from the Government or other relevant people or organisations</li>
+          <li>press the government for action</li>
+          <li>ask another parliamentary committee to look into the topic raised by a petition</li>
+          <li>put forward a petition for debate</li>
+        </ul>
+
+        <p>The Petitions Committee is set up by the Welsh Parliament. It comprises up to 11 backbench Members of Parliament from Government and Opposition parties. The number of committee members from each political party is representative of the membership of the Welsh Parliament as a whole.</p>
+
+        <h2 id="standards">Standards for petitions</h2>
+
+        <p>Petitions must call for a specific action from the Welsh Government or Parliament.</p>
+
+        <p>Petitions must be about something that the Government or Parliament is responsible for.</p>
+
+        <p>Petitions can disagree with the Government and can ask for it to change its policies. Petitions can be critical of the Welsh Government or Parliament.</p>
+
+        <p>We reject petitions that don’t meet the rules. If we reject your petition, we’ll tell you why. If we can, we’ll suggest other ways you could raise your issue.</p>
+
+        <p>We’ll have to reject your petition if:</p>
+
+        <ul class="list-bullet">
+          <li>
+            <p>It calls for the same action as a petition that’s already open</p>
+          </li>
+          <li>
+            <p>It doesn’t ask for a clear action from the Welsh Government or Parliament</p>
+          </li>
+          <li>
+            <p>It’s about something the Welsh Government or Parliament is not responsible for.</p>
+            <p>That includes: something that your local council is responsible for; something that another Government (such as the Scottish Government, the Welsh Government or the Northern Ireland Executive) is responsible for; and something that an independent organisation has done.</p>
+          </li>
+          <li>
+            <p>It’s defamatory or libellous, or contains false statements</p>
+          </li>
+          <li>
+            <p>It refers to a case that’s active in the UK courts</p>
+          </li>
+          <li>
+            <p>It contains material that may be protected by an injunction or court order</p>
+          </li>
+          <li>
+            <p>It contains material that could be confidential or commercially sensitive</p>
+          </li>
+          <li>
+            <p>It could cause personal distress or loss. This includes petitions that could intrude into someone’s personal grief or shock without their consent.</p>
+          </li>
+          <li>
+            <p>It accuses an identifiable person or organisation of a crime</p>
+          </li>
+          <li>
+            <p>It names individual officials of public bodies, unless they are senior managers</p>
+          </li>
+          <li>
+            <p>It names family members of elected representatives, eg MPs, or of officials of public bodies</p>
+          </li>
+          <li>
+            <p>It asks for someone to be given an honour, or have an honour taken away. You can nominate someone for an honour here: <a href="https://www.gov.uk/honours">www.gov.uk/honours</a></p>
+          </li>
+          <li>
+            <p>It asks for someone to be given a job, or to lose their job. This includes petitions asking for a vote of no confidence in someone and petitions calling for someone to resign.</p>
+          </li>
+          <li>
+            <p>It contains party political material</p>
+          </li>
+          <li>
+            <p>It’s nonsense or a joke</p>
+          </li>
+          <li>
+            <p>It’s an advert, spam, or promotes a specific product or service</p>
+          </li>
+          <li>
+            <p>It’s a Freedom of Information request</p>
+          </li>
+          <li>
+            <p>It contains swearing or other offensive language</p>
+          </li>
+          <li>
+            <p>It’s offensive or extreme in its views. That includes petitions that attack, criticise or negatively focus on an individual or a group of people because of characteristics such as their age, disability, ethnic origin, gender identity, medical condition, nationality, race, religion, sex, or sexual orientation</p>
+          </li>
+        </ul>
+
+        <p>We publish the text of petitions that we reject, as long as they’re not:</p>
+        <ul class="list-bullet">
+          <li>defamatory, libellous or illegal in another way;</li>
+          <li>about a case that is active in the UK courts or about something that a court has issued an injunction over;</li>
+          <li>offensive or extreme;</li>
+          <li>confidential or likely to cause personal distress. That includes petitions that could intrude into someone’s personal grief or shock without their consent; or</li>
+          <li>a joke, an advert or nonsense.</li>
+        </ul>
+
+        <h2 id="recall">Recall petitions</h2>
+
+        <p>If an MP has been convicted of certain criminal offences or suspended from Parliament for at least 10 sitting days, they may be subject to a recall petition.</p>
+
+        <p>Petitions to recall Members of Parliament do not appear on this website and the Petitions Committee are not responsible for them.
+          They are run locally, by the returning officer for your area, and have to be signed in person, by post or proxy. Your local authority will have issued a “notice of recall petition” on their website.
+          This will tell you how and when you can sign the petition.</p>
+
+        <p>Find out more about <a href="https://researchbriefings.parliament.uk/ResearchBriefing/Summary/SN05089">recall petitions</a> here.</p>
+
+        <p>If you have any other questions, please %{feedback_link}.</p>
+    privacy_page:
+      body_html: |-
+        <h1>Privacy and cookies</h1>
+
+        <section id="privacy" aria-labelledby="privacy-heading">
+
+          <h2 id="privacy-heading">Privacy notice: how we use your data</h2>
+
+          <p>Last update: January 6 2020</p>
+
+          <p>The Petitions site lets you start and sign petitions to raise issues with the Welsh Parliament.</p>
+
+          <p>The Petitions service is provided by the Parliament. We need to collect, process and store some personal data to enable you to do this.</p>
+
+          <p>A data controller determines how and why personal data is processed. The Welsh Parliament is the data controller of this site.</p>
+
+          <p>The data controller for Parliament is the Clerk of the House.</p>
+
+          <h3>What data we collect from you</h3>
+
+          <p>The personal data we collect from people who start and sign petitions will include:</p>
+
+          <ul class="list-bullet">
+            <li>your name</li>
+            <li>your email address</li>
+            <li>your postcode</li>
+            <li>the country you live in</li>
+            <li>whether you are a British citizen</li>
+            <li>the IP address you use when starting or signing a petition</li>
+          </ul>
+
+          <p>The legal basis for processing this data is public task – allowing you to raise issues with the Welsh Parliament.</p>
+
+          <h3>Why we need your data</h3>
+
+          <p>We use this information to:</p>
+
+          <ul class="list-bullet">
+            <li>make sure that people only sign a petition once</li>
+            <li>check that you’re eligible to sign a petition</li>
+            <li>contact you about petitions you start</li>
+            <li>if you consent, email you updates about what happens in Parliament petitions you’ve signed</li>
+          </ul>
+
+          <h3>What we do with your data</h3>
+
+          <p>If you start a petition and we accept it, your name will be published with the petition. We won’t publish any other personal information about you.</p>
+
+          <p>If you’ve signed a petition, we won’t publish any personal information about you.</p>
+
+          <p>We’ll use your postcode to work out how many people in each parliamentary constituency have signed a petition.</p>
+
+          <p>We will not:</p>
+
+          <ul class="list-bullet">
+            <li>sell or rent your data to third parties</li>
+            <li>share your data with third parties for marketing purposes</li>
+          </ul>
+
+          <p>We will share your data if we’re required to do so by law – for example, by court order, or to prevent fraud or other crime.</p>
+
+          <h3>What we’ll email you about</h3>
+
+          <p>If a petition you’ve started or signed gets a response from the Government, we’ll email the response to you.</p>
+
+          <p>If you’ve started or signed a petition, we might contact you to let you know about relevant things that are happening in Parliament and Government. That might include: debates that you can watch or read, chances to respond to a consultation, or ways to let MPs know why the petition is important to you.</p>
+
+          <p>You can stop these emails by clicking the “unsubscribe” link in the email.</p>
+
+          <h3>How long we keep your data</h3>
+
+          <p>We will retain your personal data from the date you start or sign a petition, until 6 months after that petition closes – a maximum of 12 months in total.</p>
+
+          <h3>Where your data is processed and stored</h3>
+
+          <p>We design, build and run our systems to make sure that your data is as safe as possible at any stage, both while it’s processed and when it’s stored.</p>
+
+          <p>All personal data on Petitions is processed, stored and managed entirely in the European Economic Area (EEA), and will not be transferred outside of it. This means that it is covered by EU Data Protection regulations.</p>
+
+          <h3>How we protect your data and keep it secure</h3>
+
+          <p>We are committed to doing all that we can to keep your data secure. We set up systems and processes to prevent unauthorised access or disclosure of the data we collect about you – for example, we protect your data using varying levels of encryption. All third parties who process personal data for us are required to keep that data secure.</p>
+
+          <h3>What are your rights</h3>
+
+          <p>You have the right to request:</p>
+
+          <ul class="list-bullet">
+            <li>information about how your personal data is processed</li>
+            <li>a copy of that personal data - this copy will be provided in a structured, commonly used and machine-readable format</li>
+            <li>that anything inaccurate in your personal data is corrected immediately</li>
+          </ul>
+
+          <p>You can also:</p>
+
+          <ul class="list-bullet">
+            <li>raise an objection about how your personal data is processed</li>
+            <li>request that your personal data is erased if there is no longer a justification for it</li>
+            <li>ask that the processing of your personal data is restricted in certain circumstances</li>
+          </ul>
+
+          <p>If you have any of these requests, please get in touch with us - you can find contact details below.</p>
+
+          <h3>Changes to this notice</h3>
+
+          <p>We may change this privacy notice. In that case the ‘last updated’ date at the top of this page will also change. Any changes to this privacy notice will apply to you and your data immediately. If these changes affect how your personal data is processed, we will take reasonable steps to make sure you know.</p>
+
+          <h3>Questions and complaints</h3>
+
+          <p>Contact us if you either:</p>
+
+          <ul class="list-bullet">
+            <li>have any questions about anything in this document</li>
+            <li>think that your personal data has been misused or mishandled</li>
+          </ul>
+
+          <p>You may make a complaint to the Information Commissioner, who is an independent regulator set up to uphold information rights.</p>
+
+          <p>
+          Information Commissioner's Office<br>
+          casework@ico.org.uk<br>
+          0303 123 1113<br>
+          <br>
+          Wycliffe House<br>
+          Water Lane<br>
+          Wilmslow<br>
+          Cheshire<br>
+          SK9 5AF
+          </p>
+        </section>
+
+        <section id="cookies" aria-labelledby="cookies-heading">
+          <h2 id="cookies-heading">Cookies</h2>
+
+          <p>This website puts small files (known as ‘cookies’) onto your computer to collect information about how you browse the site.</p>
+
+          <p>Cookies are used to:</p>
+
+          <ul class="list-bullet">
+            <li>measure how you use the petitions service so it can be updated and improved based on your needs</li>
+            <li>remember the notifications you’ve seen so that we don’t show them to you again</li>
+            <li>help prevent people from fraudulently signing petitions</li>
+          </ul>
+
+          <p>These cookies aren’t used to identify you personally and are strictly necessary to ensure the secure running of this website.</p>
+
+          <p>Find out more about <a href="http://www.aboutcookies.org/" rel="external">how to manage cookies.</a></p>
+
+          <h3>Google Analytics cookies</h3>
+
+          <p>We use Google Analytics to collect information about how you use the service. This information helps us to improve the service and prevent fraudulent signing.</p>
+          <p>The Google analytics cookie collects and stores information about:</p>
+
+          <ul class="list-bullet">
+              <li>unique users</li>
+              <li>informing referring sites</li>
+              <li>vistor and session counts</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Expires</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>_ga</td>
+                <td>A randomly generated reference is used to identify unique users and inform referring sites, visitor and session counts</td>
+                <td>2 years</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Google isn’t allowed to use or share our analytics data with anyone, but you can opt out of Google Analytics cookies.</p>
+
+          <h3>Session cookies</h3>
+          <p>We store a session cookie on your computer to help keep your information secure while you use the service.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Purpose</th>
+                <th>Expires</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>_wpets_session</td>
+                <td>This keeps your information secure while you use the petitions service</td>
+                <td>When you close your browser</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>

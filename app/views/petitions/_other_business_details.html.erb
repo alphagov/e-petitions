@@ -1,6 +1,6 @@
 <% unless petition.emails.empty? %>
   <section class="about-item about-item-other-business" id="other-business" aria-labelledby="other-business-heading">
-    <h2 id="other-business-heading">Other parliamentary business</h2>
+    <h2 id="other-business-heading"><%= t(:"ui.petitions.other_parliamentary_business") %></h2>
 
     <% petition.emails.each do |email| %>
       <details>

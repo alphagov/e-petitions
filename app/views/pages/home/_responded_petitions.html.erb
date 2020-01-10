@@ -1,13 +1,13 @@
 <% if actioned[:awaiting_response][:count].zero? && actioned[:with_response][:count].zero? %>
-  <p>The government hasn’t responded to any petitions yet</p>
+  <p><%= t(:"ui.home_page.responded_petitions.none_responded") %></p>
 <% else %>
   <ol class="threshold-petitions">
     <% actioned[:with_response][:list].each do |petition| %>
       <li class="petition-item">
         <h3><%= link_to petition.action, petition_path(petition, reveal_response: "yes", anchor: 'response-threshold'), class: "threshold-petition-title" %></h3>
-        <p class="intro">The government responded on <%= short_date_format(petition.government_response_at) %></p>
+        <p class="intro"><%= t(:"ui.home_page.responded_petitions.response_date", date: short_date_format(petition.government_response_at)) %></p>
         <blockquote class="pull-quote"><%= simple_format(h(petition.government_response.summary)) %></blockquote>
-        <p><%= link_to "Read the response in full", petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') %></p>
+        <p><%= link_to t(:"ui.home_page.responded_petitions.full_response_link"), petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') %></p>
       </li>
     <% end -%>
   </ol>

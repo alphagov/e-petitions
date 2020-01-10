@@ -4,10 +4,10 @@
 
 <% if petitions = @new_petition.duplicates %>
 
-  <h1 class="page-title">We found some similar petitions</h1>
-  <p>If one of these petitions matches yours, sign it and share it instead</p>
-  <p>Your petition is more likely to get to <%= Site.formatted_threshold_for_response %> and <%= Site.formatted_threshold_for_debate %> signatures that way.</p>
-  <%= render 'notification', message: "If there’s already a petition on the same topic, your petition is likely to be rejected" %>
+  <h1 class="page-title"><%= t(:"ui.petitions.check.results.duplicate.heading") %></h1>
+  <p><%= t(:"ui.petitions.check.results.duplicate.sign_if_match") %></p>
+  <p><%= t(:"ui.petitions.check.results.duplicate.sign_if_match_reason", response_threshold: Site.formatted_threshold_for_response, debate_threshold: Site.formatted_threshold_for_debate) %></p>
+  <%= render 'notification', message: t(:"ui.petitions.check.results.duplicate.reject_notice") %>
 
   <% petitions.each do |petition| %>
     <ul>
@@ -21,14 +21,14 @@
     </ul>
   <% end %>
 
-  <%= link_to("My petition is different", new_petition_path(q: @new_petition.action), class: "button") %>
+  <%= link_to(t(:"ui.petitions.check.results.duplicate.continue_btn"), new_petition_path(q: @new_petition.action), class: "button") %>
 
 <% else %>
 
-  <h1 class="page-title">We checked for similar petitions</h1>
-  <p>We checked for similar petitions and didn't find any.</p>
-  <p>So you can go ahead and create a new one.<br /></p>
+  <h1 class="page-title"><%= t(:"ui.petitions.check.results.unique.heading") %></h1>
+  <p><%= t(:"ui.petitions.check.results.unique.no_match") %></p>
+  <p><%= t(:"ui.petitions.check.results.unique.ok_to_continue") %><br /></p>
 
-  <%= link_to("Continue", new_petition_path(q: @new_petition.action), class: "button") %>
+  <%= link_to(t(:"ui.petitions.check.results.unique.continue"), new_petition_path(q: @new_petition.action), class: "button") %>
 
 <% end %>

@@ -3,7 +3,7 @@
 <% when "open" %>
   <p><%= signature_count(:default, petition.signature_count) %></p>
 <% when "closed" %>
-  <p><%= signature_count(:default, petition.signature_count) %>, now closed</p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.closed_html", signature_count: signature_count(:default, petition.signature_count)) %></p>
 <% when "rejected" %>
-  <p>Rejected</p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.rejected") %></p>
 <% end %>

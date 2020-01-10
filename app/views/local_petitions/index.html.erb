@@ -1,15 +1,15 @@
 <h1 class="page-title">
   <% if @postcode.present? %>
-    We couldn't find that postcode
+    <%= t(:"ui.petitions.local.index.postcode_bad.heading") %>
   <% else %>
-    Local to you
+    <%= t(:"ui.petitions.local.index.postcode_blank.heading") %>
   <% end %>
 </h1>
 
 <% if @postcode.blank? %>
-  <p>Find petitions about local issues</p>
+  <p><%= t(:"ui.petitions.local.index.postcode_blank.find_local_petitions") %></p>
 <% else %>
-  <p>We couldn't find the postcode <q><%= params[:postcode] %></q>. Try again?</p>
+  <p><%= t(:"ui.petitions.local.index.postcode_bad.couldnt_find_postcode_html", postcode: params[:postcode]) %></p>
 <% end %>
 
 <%= render 'local_search' %>

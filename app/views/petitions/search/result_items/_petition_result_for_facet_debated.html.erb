@@ -1,7 +1,7 @@
 <h3><%= link_to petition.action, petition_result_path(petition, anchor: 'debate-threshold') %></h3>
 <p><%= signature_count(:default, petition.signature_count) %></p>
 <% if debate_outcome = petition.debate_outcome %>
-<p>Debated <%= short_date_format(debate_outcome.debated_on) %></p>
+<p><%= t(:"ui.petitions.search.results.items.facet_debated.debated_date", date: short_date_format(debate_outcome.debated_on)) %></p>
 <% else %>
-<p>Debated <%= short_date_format(petition.scheduled_debate_date) %></p>
+<p><%= t(:"ui.petitions.search.results.items.facet_debated.debated_date", date: short_date_format(petition.scheduled_debate_date)) %></p>
 <% end %>

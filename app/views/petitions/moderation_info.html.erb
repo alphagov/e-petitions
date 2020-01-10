@@ -1,7 +1,7 @@
-<h1>We’re checking this petition</h1>
+<h1><%= t(:"ui.petitions.moderation_info.heading") %></h1>
 
-<p><%= Site.minimum_number_of_sponsors %> people have already supported <%= @petition.creator.name %>’s petition.</p>
+<p><%= t(:"ui.petitions.moderation_info.min_supporters_reached", min_supporters: Site.minimum_number_of_sponsors, creator_name: @petition.creator.name) %></p>
 
-<p>We need to check it meets the <%= link_to "petition standards", help_path(anchor: 'standards') %> before we publish it.</p>
+<p><%= t(:"ui.petitions.moderation_info.checking_standards_html", standards_link: petition_standards_link) %></p>
 
-<p>Please try again in a few days.</p>
+<p><%= t(:"ui.petitions.moderation_info.try_again_later") %></p>

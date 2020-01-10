@@ -1,9 +1,8 @@
 <h1 class="page-title page-title-with-icon">
   <span class="icon icon-confirmation-tick"></span>
-  Thanks
+  <%= t(:"ui.sponsors.signed.heading") %>
 </h1>
 
-<p>Your signature has been added to this petition as a supporter.</p>
-<h2>What next?</h2>
-<p>This petition needs <%= Site.minimum_number_of_sponsors %> supporters to go live.</p>
-<p>When it goes live, we'll email you a link so you can start sharing it.</p>
+<p><%= t(:"ui.sponsors.signed.added") %></p>
+
+<%= t(:"ui.sponsors.signed.what_next_html", min_sponsors: Site.minimum_number_of_sponsors) %>

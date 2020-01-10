@@ -1,23 +1,20 @@
 <footer id="footer" role="contentinfo">
   <div class="wrapper">
     <ul id="footer_nav">
-      <li><%= link_to 'Home', home_path %></li>
-      <li><%= link_to 'All petitions', petitions_path %></li>
-      <li><%= link_to 'Start a petition', check_petitions_path %></li>
-      <li><%= link_to 'How petitions work', help_path %></li>
-      <li><%= link_to 'Privacy and cookies', privacy_path %></li>
-      <li><%= link_to 'Feedback', feedback_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.home"), home_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.all_petitions"), petitions_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.start_a_petition"), check_petitions_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.how_petitions_work"), help_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.privacy"), privacy_path %></li>
+      <li><%= link_to t(:"ui.footer.nav.feedback"), feedback_path %></li>
     </ul>
 
     <div class="open-government-licence">
-      <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
-      <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
+      <%= t(:"ui.footer.ogl_html") %>
     </div>
 
     <div class="copyright">
-      <span class="graphic graphic-portcullis-large-grey"></span>
-      <span class="graphic graphic-crest-large-grey"></span>
-      <a href="https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm" rel="external">© Crown copyright</a>
+      <%= t(:"ui.footer.copyright_html") %>
     </div>
   </div>
 </footer>

@@ -3,13 +3,11 @@
   <h3 class="header"><%= Parliament.dissolved_heading %></h3>
   <p class="content"><%= Parliament.dissolved_message %></p>
   <% if Parliament.dissolution_faq_url? %>
-    <p class="content">Find out more on the <%= link_to 'Petitions Committee website', Parliament.dissolution_faq_url %></p>
+    <p class="content"><%= parliament_dissolution_faq_notice %></p>
   <% end %>
 </div>
 
-<a href="https://www.parliament.uk/get-involved/" class="get-involved">
-  Get involved with the UK Parliament
-</a>
+<%= t(:"ui.home_page.notice.get_involved_html") %>
 
 <%= render "pages/home/search_petitions", search_path: archived_petitions_path(state: 'published') %>
 <%= render "pages/home/archived_petitions" %>
@@ -17,13 +15,13 @@
 <section aria-labelledby="response-threshold-heading" id="petitions-with-response">
   <div class="threshold-panel threshold-panel-response">
     <h2 id="response-threshold-heading"><%= Site.formatted_threshold_for_response %></h2>
-    <p>If a petition gets <%= Site.formatted_threshold_for_response %> signatures, the government will respond</p>
+    <p><%= t(:"ui.home_page.thresholds.response", formatted_count: Site.formatted_threshold_for_response) %></p>
   </div>
 </section>
 
 <section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
   <div class="threshold-panel threshold-panel-debate">
     <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-    <p>If a petition gets <%= Site.formatted_threshold_for_debate %> signatures, it will be considered for debate in Parliament</p>
+    <p><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></p>
   </div>
 </section>

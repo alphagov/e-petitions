@@ -1,19 +1,19 @@
 <%= cache_for :all_local_petitions_page do %>
   <h1 class="page-title">
-    Popular petitions in the constituency of <%= @constituency.name %>
+    <%= t(:"ui.petitions.local.all.heading", constituency_name: @constituency.name) %>
   </h1>
 
   <p class="heading-link">
-    <%= link_to "View open popular petitions in #{@constituency.name}", local_petition_path(@constituency), class: 'view-all' %>
+    <%= link_to t(:"ui.petitions.local.all.open_popular_link", constituency_name: @constituency.name), local_petition_path(@constituency), class: 'view-all' %>
   </p>
 
   <% if @constituency.sitting_mp? %>
-    <p class="lede">Your member of parliament is <%= link_to @constituency.mp_name, @constituency.mp_url, rel: 'external' %></p>
+    <p class="lede"><%= t(:"ui.petitions.local.all.mp_name_link_html", mp_name_link: link_to(@constituency.mp_name, @constituency.mp_url, rel: 'external')) %></p>
   <% end %>
 
   <div class="section-panel local-petitions">
     <% if @petitions.empty? %>
-      <p>No petitions are popular in your constituency.</p>
+      <p><%= t(:"ui.petitions.local.all.results.empty") %></p>
     <% else %>
       <ol>
         <% @petitions.each do |petition| %>
@@ -22,7 +22,7 @@
             <p>
               <%= signature_count(:in_your_constituency, petition.constituency_signature_count, constituency: @constituency.name) %><br/>
               <% if petition.closed? %>
-                (<%= signature_count(:in_total, petition.signature_count) %>, now closed)
+                (<%= signature_count(:in_total, petition.signature_count) %>, <%= t(:"ui.petitions.local.all.results.now_closed") %>)
               <% else %>
                 (<%= signature_count(:in_total, petition.signature_count) %>)
               <% end %>
@@ -35,7 +35,11 @@
 
   <ul class="petition-meta">
     <li class="meta-json">
-      <span class="note">Get this data in <%= link_to 'JSON', all_local_petition_path(@constituency, :json) %> or <%= link_to 'CSV', all_local_petition_path(@constituency, :csv) %> format</span>
+      <span class="note"><%= t(
+        :"ui.application.get_json_csv_html",
+        json_link: link_to("JSON", all_local_petition_path(@constituency, :json)),
+        csv_link: link_to('CSV', all_local_petition_path(@constituency, :csv))
+      ) %></span>
     </li>
   </ul>
 <% end %>

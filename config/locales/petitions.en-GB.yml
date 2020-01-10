@@ -1,23 +1,7 @@
 en-GB:
   petitions:
     errors:
-      prompt:
-        one: "Please fix the following error:"
-        other: "Please fix the following errors:"
-
       invalid_signature_count: "Petition %{id} had an invalid signature count"
-
-    page_titles:
-      all: "All petitions"
-      open: "Open petitions"
-      closed: "Closed petitions"
-      rejected: "Rejected petitions"
-      published: "Published petitions"
-      awaiting_response: "Petitions waiting for a Government response"
-      with_response: "Petitions with a Government response"
-      debated: "Petitions debated in Parliament"
-      not_debated: "Petitions not debated in Parliament"
-      awaiting_debate: "Petitions waiting for a debate in Parliament"
 
     share_title: "Petition: %{petition}"
 
@@ -31,17 +15,6 @@ en-GB:
       whatsapp:
         html: <span class="icon icon-share-whatsapp"></span> Whatsapp
 
-    lists:
-      all: "All petitions (%{quantity})"
-      open: "Open petitions (%{quantity})"
-      closed: "Closed petitions (%{quantity})"
-      published: "Published petitions (%{quantity})"
-      rejected: "Rejected petitions (%{quantity})"
-      awaiting_response: "Awaiting government response (%{quantity})"
-      with_response: "Government responses (%{quantity})"
-      debated: "Debated in Parliament (%{quantity})"
-      not_debated: "Not debated in Parliament (%{quantity})"
-      awaiting_debate: "Awaiting a debate in Parliament (%{quantity})"
 
     list_headers:
       not_debated: "The Petitions Committee decided not to debate these petitions"
@@ -185,11 +158,6 @@ en-GB:
           We’ve stopped your petition early
       signoff_prefix: "The Petitions team"
       signoff_suffix: "Welsh Parliament"
-
-    waiting_for_in_words:
-      zero: "Waiting for less than a day"
-      one: "Waiting for 1 day"
-      other: "Waiting for %{formatted_count} days"
 
     scheduled_for_debate_in_words:
       today: "Scheduled for debate today"

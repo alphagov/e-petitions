@@ -1,5 +1,5 @@
 <%= form_for @signature, url: confirm_petition_signatures_path(@petition) do |form| %>
-  <h1 class="page-title">Sign petition</h1>
+  <h1 class="page-title"><%= t(:"ui.signatures.new.heading") %></h1>
   <h2 class="page-subtitle"><%= @petition.action %></h2>
   <%= render "form", form: form, signature: @signature %>
 <% end %>

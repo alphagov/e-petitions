@@ -1,25 +1,18 @@
 <h1 class="page-title page-title-with-icon">
   <span class="icon icon-email"></span>
-  One more step…
+  <%= t(:"ui.signatures.thank_you.heading") %>
 </h1>
 
 <p>
-  We’ve sent you an email. Please click on the link in the email to confirm your address.
+  <%= t(:"ui.signatures.thank_you.confirmation.sent") %>
 </p>
 
-<%= render "notification", message: "Your signature will not be counted until you click the link in the email" %>
+<%= render "notification", message: t(:"ui.signatures.thank_you.confirmation.required") %>
 
 <details>
-  <summary><span class="summary">Not received a confirmation email?</span></summary>
+  <summary><span class="summary"><%= t(:"ui.signatures.thank_you.confirmation.not_received.heading") %></span></summary>
 
   <div class="panel-indent">
-    <p>
-      If you haven’t received a confirmation email:
-    </p>
-
-    <ul class="list-bullet">
-      <li>check your spam or junk mail folders</li>
-      <li>allow up to 24 hours for the email to arrive</li>
-    </ul>
+    <%= t(:"ui.signatures.thank_you.confirmation.not_received.instructions_html") %>
   </div>
 </details>

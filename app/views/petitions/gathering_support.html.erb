@@ -1,5 +1,5 @@
-<h1>This petition is gathering support</h1>
+<h1><%= t(:"ui.petitions.gathering_support.heading") %></h1>
 
-<p><%= @petition.creator.name %>’s petition needs <%= Site.minimum_number_of_sponsors %> supporters before we will check that it meets the <%= link_to "petition standards", help_path(anchor: 'standards') %> and publish it.</p>
+<p><%= t(:"ui.petitions.gathering_support.supporters_needed_html", creator_name: @petition.creator.name, n_sponsors: Site.minimum_number_of_sponsors, standards_link: petition_standards_link) %></p>
 
-<p>Please try again in a few days.</p>
+<p><%= t(:"ui.petitions.gathering_support.try_again_later") %></p>
