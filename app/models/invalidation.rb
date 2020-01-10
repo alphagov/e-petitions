@@ -22,7 +22,7 @@ class Invalidation < ActiveRecord::Base
 
   validates :summary, presence: true, length: { maximum: 255 }
   validates :details, length: { maximum: 10000 }
-  validates :petition_id, numericality: { only_integer: true, allow_blank: true, greater_than_or_equal_to: 100000 }
+  validates :petition_id, numericality: { only_integer: true, allow_blank: true, greater_than_or_equal_to: 300000 }
   validates :name, length: { maximum: 255, allow_blank: true }
   validates :postcode, length: { maximum: 255, allow_blank: true }
   validates :ip_address, length: { maximum: 20 }, format: { with: /\A\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\z/ }, allow_blank: true

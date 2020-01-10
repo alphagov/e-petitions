@@ -21,6 +21,8 @@ class Site < ActiveRecord::Base
   class << self
     def table_exists?
       @table_exists ||= connection.table_exists?(table_name)
+    rescue ActiveRecord::NoDatabaseError => e
+      false
     end
 
     def before_remove_const

@@ -22,9 +22,6 @@ module Epets
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :'en-GB'
 
-    # Use SQL for the schema format
-    config.active_record.schema_format = :sql
-
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {
       namespace: 'epets', expires_in: 1.day, compress: true,
