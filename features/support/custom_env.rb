@@ -1,6 +1,7 @@
 require 'email_spec/cucumber'
 require 'rspec/core/pending'
 require 'multi_test'
+require 'faker'
 
 MultiTest.disable_autorun
 

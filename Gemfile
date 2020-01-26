@@ -21,7 +21,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'textacular'
 gem 'uglifier'
 gem 'bcrypt'
-gem 'faker'
+gem 'faker', require: false
 gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
