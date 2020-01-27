@@ -1,37 +1,65 @@
 # Petitions
 
-This is the code base for the UK Government's petitions service (https://petition.parliament.uk).
-We have open sourced the code for you to use under the terms of licence contained in this repository.
+This is the code base for the [UK Government and Parliament's petitions service][1].
 
-We hope you enjoy it!
+## Setup
 
-A few things to know:
+We recommend using [Docker Desktop][2] to get setup quickly. If you'd prefer not to use Docker then you'll need Ruby (2.4+), Node (10+), PostgreSQL (9.6+) and Memcached (1.4+) installed.
 
-* You will need `ruby 2.2.2`
-* You will need PostgreSQL and Memcached
+### Create the databases
 
-## Set up your development environment
+```
+docker-compose run --rm web rake db:setup
+```
 
-* Clone the repo to your local machine
-* Install postgres. Easiest with homebrew using `brew install postgres`
-	* If you like you can add postgres to your LaunchAgent. Follow instructions at end of console output
-* Set up your dev and test databases
-	* `$ psql postgres`
-	* `# CREATE USER epets;`
-	* `# GRANT all privileges ON database epets_development TO epets;`
-	* `# GRANT all privileges ON database epets_test TO epets;`
-	* `# ALTER USER epets WITH PASSWORD 'replace_me';`
-	* `# \q` to quit
-* You will need to set up the `config/database.yml`. Set the password you used earlier for the `epets` postgres user
-* Run `$ bin/setup` - installs bundler, bundles, and sets up your dev/test databases
+### Create an admin user
 
-## Run the app
+```
+docker-compose run --rm web rake epets:add_sysadmin_user
+```
 
-* `rails s`
+### Fetch the country list
 
-## Other info
+```
+docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
+```
 
-* If you want jobs (like emails) to be run, use `$ rake jobs:work`
-* For setting up a sysadmin user
-	* `rake epets:add_sysadmin_user` - to set up an admin user with email 'admin@example.com' and password 'Letmein1!'
-	* go to `/admin` and log in. You will be asked to change your password. Remember, the password must contain a mix of upper and lower case letters, numbers and special characters.
+### Enable signature counting
+
+```
+docker-compose run --rm web rails runner 'Site.enable_signature_counts!'
+```
+
+### Start the services
+
+```
+docker-compose up
+```
+
+Once the services have started you can access the [front end][3], [back end][4] and any [emails sent][5].
+
+## Tests
+
+You can run the full test suite using following command:
+
+```
+docker-compose run --rm web rake
+```
+
+Individual specs can be run using the following command:
+
+```
+docker-compose run --rm web rspec spec/models/parliament_spec.rb
+```
+
+Similarly, individual cucumber features can be run using the following command:
+
+```
+docker-compose run --rm web cucumber features/suzie_views_a_petition.feature
+```
+
+[1]: https://petition.parliament.uk
+[2]: https://www.docker.com/products/docker-desktop
+[3]: http://localhost:3000/
+[4]: http://localhost:3000/admin
+[5]: http://localhost:1080/
