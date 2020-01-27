@@ -214,8 +214,4 @@ Rails.application.routes.draw do
   end
 
   get 'ping', to: 'ping#ping'
-
-  if defined?(JasmineRails)
-    mount JasmineRails::Engine, at: '/specs'
-  end
 end
