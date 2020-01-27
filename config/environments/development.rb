@@ -13,8 +13,16 @@ Rails.application.configure do
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = true
 
-  # Tell Action Mailer not to deliver emails to the real world.
-  config.action_mailer.delivery_method = :file
+  # Use mailcatcher to capture all emails, otherwise deliver locally
+  if ENV['SMTP_HOST'] == 'mailcatcher'
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: ENV.fetch('SMTP_HOST'),
+      port: ENV.fetch('SMTP_PORT')
+    }
+  else
+    config.action_mailer.delivery_method = :file
+  end
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
