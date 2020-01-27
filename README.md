@@ -27,7 +27,7 @@ docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
 ### Enable signature counting
 
 ```
-docker-compose run --rm web rails runner 'Site.enable_signature_counts!'
+docker-compose run --rm web rails runner 'Site.enable_signature_counts!(interval: 10)'
 ```
 
 ### Start the services
