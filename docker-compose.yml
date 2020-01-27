@@ -8,9 +8,11 @@ x-application: &application
     - MEMCACHE_SERVERS=memcached:11211
     - SMTP_HOST=mailcatcher
     - SMTP_PORT=1025
+    - SPROCKETS_CACHE=/cache
   volumes:
     - .:/app
     - bundle:/bundle
+    - cache:/cache
   depends_on:
     - postgres
     - mailcatcher
@@ -69,3 +71,4 @@ services:
 volumes:
   bundle:
   db:
+  cache:
