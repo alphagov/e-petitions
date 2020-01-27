@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Load environment variables
-gem 'dotenv-rails', :require => 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/rails-now'
 
 gem 'rails', '5.2.4.1'
 
@@ -21,7 +21,7 @@ gem 'sass-rails', '~> 5.0'
 gem 'textacular'
 gem 'uglifier'
 gem 'bcrypt'
-gem 'faker'
+gem 'faker', require: false
 gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
@@ -43,7 +43,8 @@ group :development, :test do
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
   gem 'rspec-rails'
-  gem 'jasmine-rails'
+  gem 'jasmine'
+  gem 'jasmine_selenium_runner', require: false
   gem 'pry'
 end
 

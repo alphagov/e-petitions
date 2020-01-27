@@ -10,5 +10,5 @@ task(:default).clear_prerequisites
 
 task default: %i[
   bundle:audit brakeman:check
-  spec spec:javascripts cucumber
+  spec jasmine:ci cucumber
 ]

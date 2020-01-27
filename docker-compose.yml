@@ -1,0 +1,74 @@
+version: "3.7"
+
+x-application: &application
+  image: unboxed/epetitions
+  entrypoint: ./docker-entrypoint.sh
+  environment:
+    - DATABASE_URL=postgres://postgres@postgres:5432
+    - MEMCACHE_SERVERS=memcached:11211
+    - SMTP_HOST=mailcatcher
+    - SMTP_PORT=1025
+    - SPROCKETS_CACHE=/cache
+  volumes:
+    - .:/app
+    - bundle:/bundle
+    - cache:/cache
+  depends_on:
+    - postgres
+    - mailcatcher
+    - memcached
+
+services:
+  postgres:
+    image: postgres:10.7
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  mailcatcher:
+    image: unboxed/mailcatcher
+    ports:
+      - "1025:1025"
+      - "1080:1080"
+
+  memcached:
+    image: memcached:1.5.16
+    ports:
+      - "11211:11211"
+
+  web:
+    <<: *application
+    command: [
+      "rails", "server",
+      "-b", "0.0.0.0",
+      "-p", "3000"
+    ]
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+
+  worker:
+    <<: *application
+    command: [
+      "bin/delayed_job", "start",
+      "-p", "worker",
+      "--min-priority", "10",
+      "--daemon_options", "-t"
+    ]
+
+  counter:
+    <<: *application
+    command: [
+      "bin/delayed_job", "start",
+      "-p", "counter",
+      "--max-priority", "5",
+      "--daemon_options", "-t"
+    ]
+
+volumes:
+  bundle:
+  db:
+  cache:
