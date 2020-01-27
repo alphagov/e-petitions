@@ -121,8 +121,11 @@ class Site < ActiveRecord::Base
       instance.update!(update_signature_counts: false)
     end
 
-    def enable_signature_counts!
-      instance.update!(update_signature_counts: true)
+    def enable_signature_counts!(interval: nil)
+      updates = { update_signature_counts: true }
+      updates[:signature_count_interval] = interval if interval
+
+      instance.update!(updates)
     end
 
     def last_checked_at!(timestamp = Time.current)
