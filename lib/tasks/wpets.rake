@@ -21,27 +21,6 @@ namespace :wpets do
     EmailReminder.special_resend_of_signature_email_validation
   end
 
-  namespace :whenever do
-    desc "Update the Primary Server crontab"
-    task :update_crontab_primary => :environment do
-      Whenever::CommandLine.execute(
-        :update => true,
-        :set => "environment=#{RAILS_ENV}",
-        :identifier => 'Wpets_primary_server'
-      )
-    end
-
-    desc "Update the all servers crontab"
-    task :update_crontab_all => :environment do
-      Whenever::CommandLine.execute(
-        :update => true,
-        :set => "environment=#{RAILS_ENV}",
-        :identifier => 'Wpets_all_servers',
-        :file => 'config/schedule_all_servers.rb'
-      )
-    end
-  end
-
   namespace :jobs do
     desc "Unlock all delayed jobs (to be used after a restart)"
     task :unlock_all => :environment do
