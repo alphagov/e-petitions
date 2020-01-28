@@ -10,7 +10,7 @@ RSpec.describe NotifyCreatorsThatModerationIsDelayedJob, type: :job do
     {
       job: NotifyCreatorThatModerationIsDelayedJob,
       args: [
-        { "_aj_globalid" => "gid://wpets/Signature/#{signature.id}" },
+        { "_aj_globalid" => "gid://welsh-pets/Signature/#{signature.id}" },
         "Moderation of your petition is delayed",
         "Sorry, but moderation of your petition is delayed for reasons."
       ],

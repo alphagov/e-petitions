@@ -47,7 +47,7 @@ Capybara.register_driver :chrome_headless do |app|
 end
 
 Capybara.register_server :wpets do |app, port|
-  Wpets::SSLServer.build(app, port)
+  WelshPets::SSLServer.build(app, port)
 end
 
 Capybara.server = :wpets
