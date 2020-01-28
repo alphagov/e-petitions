@@ -30,8 +30,8 @@ RSpec.describe PetitionCSVPresenter do
 
   def csvd_petition(petition)
     [
-      "#{Site.send :default_url}/petitions/#{petition.id}",
-      "#{Site.send :default_moderate_url}/admin/petitions/#{petition.id}",
+      "https://petition.parliament.wales/petitions/#{petition.id}",
+      "https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}",
       petition.id,
       petition.action,
       petition.background,

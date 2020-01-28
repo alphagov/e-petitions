@@ -1,0 +1,19 @@
+<%= hidden_field_tag :tab, "welsh" %>
+
+<%= form_row for: [form.object, :title_cy] do %>
+  <%= form.label :title_en, "Title", class: "form-label" %>
+  <%= error_messages_for_field @site, :title_cy %>
+  <%= form.text_field :title_cy, tabindex: increment, maxlength: 50, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :url_cy] do %>
+  <%= form.label :url_cy, "URL for public website", class: "form-label" %>
+  <%= error_messages_for_field @site, :url_cy %>
+  <%= form.text_field :url_cy, tabindex: increment, maxlength: 50, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [form.object, :email_from_cy] do %>
+  <%= form.label :email_from_cy, "From address for emails", class: "form-label" %>
+  <%= error_messages_for_field @site, :email_from_cy %>
+  <%= form.text_field :email_from_cy, tabindex: increment, maxlength: 100, class: "form-control" %>
+<% end %>

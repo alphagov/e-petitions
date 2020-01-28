@@ -6,6 +6,9 @@ class Site < ActiveRecord::Base
   class ServiceUnavailable < StandardError; end
 
   include ActiveSupport::NumberHelper
+  include Translatable
+
+  translate :title, :url, :email_from
 
   FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
 
@@ -57,19 +60,38 @@ class Site < ActiveRecord::Base
       instance.formatted_threshold_for_debate
     end
 
-    def host
-      instance.host
+    def host_en
+      instance.host_en
+    end
+    alias_method :host, :host_en
+
+    def host_with_port_en
+      instance.host_with_port_en
+    end
+    alias_method :host_with_port, :host_with_port_en
+
+    def host_cy
+      instance.host_cy
     end
 
-    def host_with_port
-      instance.host_with_port
+    def host_with_port_cy
+      instance.host_with_port_cy
     end
 
-    def constraints_for_public
+    def constraints_for_public_en
       if table_exists?
-        instance.constraints_for_public
+        instance.constraints_for_public_en
       else
-        default_constraints_for_public
+        default_constraints_for_public_en
+      end
+    end
+    alias_method :constraints_for_public, :constraints_for_public_en
+
+    def constraints_for_public_cy
+      if table_exists?
+        instance.constraints_for_public_cy
+      else
+        default_constraints_for_public_cy
       end
     end
 
@@ -97,8 +119,13 @@ class Site < ActiveRecord::Base
       instance.closed_at_for_opening(time)
     end
 
-    def port
-      instance.port
+    def port_en
+      instance.port_en
+    end
+    alias_method :port, :port_en
+
+    def port_cy
+      instance.port_cy
     end
 
     def protected?
@@ -150,10 +177,13 @@ class Site < ActiveRecord::Base
 
     def defaults
       {
-        title:                          default_title,
-        url:                            default_url,
+        title_en:                       default_title_en,
+        title_cy:                       default_title_cy,
+        url_en:                         default_url_en,
+        url_cy:                         default_url_cy,
         moderate_url:                   default_moderate_url,
-        email_from:                     default_email_from,
+        email_from_en:                  default_email_from_en,
+        email_from_cy:                  default_email_from_cy,
         feedback_email:                 default_feedback_email,
         username:                       default_username,
         password:                       default_password,
@@ -170,10 +200,32 @@ class Site < ActiveRecord::Base
       }
     end
 
+    %i[title url email_from].each do |method|
+      method_en = :"#{method}_en"
+      method_cy = :"#{method}_cy"
+
+      define_method method do
+        instance.public_send method
+      end
+
+      define_method method_en do
+        instance.public_send method_en
+      end
+
+      define_method method_cy do
+        instance.public_send method_cy
+      end
+    end
+
     private
 
-    def default_title
-      ENV.fetch('SITE_TITLE', 'Petition parliament')
+    def default_title_en
+      ENV.fetch('SITE_TITLE_EN', 'Petition parliament')
+    end
+    alias_method :default_title, :default_title_en
+
+    def default_title_cy
+      ENV.fetch('SITE_TITLE_CY', 'Senedd ddeiseb')
     end
 
     def default_scheme
@@ -184,20 +236,29 @@ class Site < ActiveRecord::Base
       "#{default_scheme}://"
     end
 
-    def default_url
-      if ENV.fetch('EPETITIONS_PROTOCOL', 'https') == 'https'
-        URI::HTTPS.build(default_url_components).to_s
-      else
-        URI::HTTP.build(default_url_components).to_s
-      end
+    def default_uri
+      default_scheme == 'https' ? URI::HTTPS : URI::HTTP
     end
 
-    def default_url_components
-      [nil, default_host, default_port, nil, nil, nil]
+    def default_url_en
+      default_uri.build(default_url_components(default_host_en)).to_s
     end
 
-    def default_host
-      ENV.fetch('EPETITIONS_HOST', 'petition.parliament.wales')
+    def default_url_cy
+      default_uri.build(default_url_components(default_host_cy)).to_s
+    end
+
+    def default_url_components(host)
+      [nil, host, default_port, nil, nil, nil]
+    end
+
+    def default_host_en
+      ENV.fetch('EPETITIONS_HOST_EN', 'petition.parliament.wales')
+    end
+    alias_method :default_host, :default_host_en
+
+    def default_host_cy
+      ENV.fetch('EPETITIONS_HOST_CY', 'deiseb.senedd.cymru')
     end
 
     def default_domain(tld_length = 1)
@@ -205,11 +266,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_moderate_url
-      if ENV.fetch('EPETITIONS_PROTOCOL', 'https') == 'https'
-        URI::HTTPS.build(default_moderate_url_components).to_s
-      else
-        URI::HTTP.build(default_moderate_url_components).to_s
-      end
+      default_uri.build(default_moderate_url_components).to_s
     end
 
     def default_moderate_url_components
@@ -224,8 +281,13 @@ class Site < ActiveRecord::Base
       ENV.fetch('EPETITIONS_PORT', '443').to_i
     end
 
-    def default_email_from
-      ENV.fetch('EPETITIONS_FROM', %{"Petitions: Welsh Government and Parliament" <no-reply@#{default_host}>})
+    def default_email_from_en
+      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Welsh Government and Parliament" <no-reply@#{default_host_en}>})
+    end
+    alias_method :default_email_from, :default_email_from_en
+
+    def default_email_from_cy
+      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Llywodraeth a Senedd Cymru" <dim-ateb@#{default_host_cy}>})
     end
 
     def default_feedback_email
@@ -280,8 +342,13 @@ class Site < ActiveRecord::Base
       ENV.fetch('THRESHOLD_FOR_DEBATE', '100000').to_i
     end
 
-    def default_constraints_for_public
-      { protocol: default_protocol, host: default_host, port: default_port }
+    def default_constraints_for_public_en
+      { protocol: default_protocol, host: default_host_en, port: default_port }
+    end
+    alias_method :default_constraints_for_public, :default_constraints_for_public_en
+
+    def default_constraints_for_public_cy
+      { protocol: default_protocol, host: default_host_cy, port: default_port }
     end
 
     def default_constraints_for_moderation
@@ -333,25 +400,52 @@ class Site < ActiveRecord::Base
     number_to_delimited(threshold_for_debate)
   end
 
-  def host
-    uri.host
+  def host_en
+    uri_en.host
+  end
+  alias_method :host, :host_en
+
+  def host_with_port_en
+    "#{host_en}#{port_string(uri_en)}"
+  end
+  alias_method :host_with_port, :host_with_port_en
+
+  def host_cy
+    uri_cy.host
   end
 
-  def host_with_port
-    "#{host}#{port_string(uri)}"
+  def host_with_port_cy
+    "#{host_cy}#{port_string(uri_cy)}"
   end
 
-  def port
-    uri.port
+  def port_en
+    uri_en.port
+  end
+  alias_method :port, :port_en
+
+  def protocol_en
+    "#{uri_en.scheme}://"
+  end
+  alias_method :protocol, :protocol_en
+
+  def port_cy
+    uri_cy.port
   end
 
-  def protocol
-    "#{uri.scheme}://"
+  def protocol_cy
+    "#{uri_cy.scheme}://"
   end
 
-  def constraints_for_public
+  def constraints_for_public_en
     unless database_migrating?
-      { protocol: protocol, host: host, port: port }
+      { protocol: protocol_en, host: host_en, port: port_en }
+    end
+  end
+  alias_method :constraints_for_public, :constraints_for_public_en
+
+  def constraints_for_public_cy
+    unless database_migrating?
+      { protocol: protocol_cy, host: host_cy, port: port_cy }
     end
   end
 
@@ -407,10 +501,10 @@ class Site < ActiveRecord::Base
     super || Signature.earliest_validation
   end
 
-  validates :title, presence: true, length: { maximum: 50 }
-  validates :url, presence: true, length: { maximum: 50 }
+  validates :title_en, :title_cy, presence: true, length: { maximum: 50 }
+  validates :url_en, :url_cy, presence: true, length: { maximum: 50 }
   validates :moderate_url, presence: true, length: { maximum: 50 }
-  validates :email_from, presence: true, length: { maximum: 100 }
+  validates :email_from_en, :email_from_cy, presence: true, length: { maximum: 100 }
   validates :feedback_email, presence: true, length: { maximum: 100 }
   validates :petition_duration, presence: true, numericality: { only_integer: true }
   validates :minimum_number_of_sponsors, presence: true, numericality: { only_integer: true }
@@ -466,8 +560,13 @@ class Site < ActiveRecord::Base
     uri.port == standard_port(uri)
   end
 
-  def uri
-    @uri ||= URI.parse(url)
+  def uri_en
+    @uri_en ||= URI.parse(url_en)
+  end
+  alias_method :uri, :uri_en
+
+  def uri_cy
+    @uri_cy ||= URI.parse(url_cy)
   end
 
   def moderate_uri

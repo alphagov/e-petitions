@@ -6,10 +6,14 @@
   </div>
 
   <div class="column-two-thirds extra-gutter">
-    <% if params[:tab] == "petitions" %>
+    <% if params[:tab] == "welsh" %>
+      <%= render "form", tab: "welsh" %>
+    <% elsif params[:tab] == "petitions" %>
       <%= render "form", tab: "petitions" %>
     <% elsif params[:tab] == "moderation" %>
       <%= render "form", tab: "moderation" %>
+    <% elsif params[:tab] == "feedback" %>
+      <%= render "form", tab: "feedback" %>
     <% elsif params[:tab] == "access" %>
       <%= render "form", tab: "access" %>
     <% elsif params[:tab] == "features" %>
@@ -17,7 +21,7 @@
     <% elsif params[:tab] == "tasks" %>
       <%= render "tasks" %>
     <% else %>
-      <%= render "form", tab: "description" %>
+      <%= render "form", tab: "english" %>
     <% end %>
   </div>
 </div>

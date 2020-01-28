@@ -38,7 +38,7 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :test
 
   # Set default_url_options for links in emails
-  config.action_mailer.default_url_options = { host: ENV.fetch('EPETITIONS_HOST') }
+  config.action_mailer.default_url_options = { host: ENV.fetch('EPETITIONS_HOST_EN') }
 
   # Randomize the order test cases are executed.
   config.active_support.test_order = :random
