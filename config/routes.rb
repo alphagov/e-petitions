@@ -79,17 +79,6 @@ Rails.application.routes.draw do
       end
     end
 
-    # REDIRECTS OLD PAGES
-    get '/accessibility',         to: redirect('/help')
-    get '/api/petitions',         to: redirect('/')
-    get '/api/petitions/:id',     to: redirect('/')
-    get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
-    get '/departments',           to: redirect('/')
-    get '/departments/:id',       to: redirect('/')
-    get '/how-it-works',          to: redirect('/help')
-    get '/privacy-policy',        to: redirect('/privacy')
-    get '/faq',                   to: redirect('/help')
-    get '/terms-and-conditions',  to: redirect('/help')
   end
 
   constraints Site.constraints_for_moderation do
