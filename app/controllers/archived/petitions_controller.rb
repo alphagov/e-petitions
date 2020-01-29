@@ -76,7 +76,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def search_params(overrides = {})
-    params.permit(:page, :parliament, :q, :state).merge(overrides)
+    params.permit(:page, :parliament, :q, :state).merge(overrides).to_h
   end
 
   def archived_petition_facets

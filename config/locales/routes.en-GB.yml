@@ -1,0 +1,104 @@
+en-GB:
+  routes:
+    "/":
+      en-GB: "/"
+      cy-GB: "/"
+    "/archived/petitions":
+      en-GB: "/archived/petitions"
+      cy-GB: "/archifwyd/deisebau"
+    "/archived/petitions/:id":
+      en-GB: "/archived/petitions/:id"
+      cy-GB: "/archifwyd/deisebau/:id"
+    "/archived/signatures/:id/unsubscribe":
+      en-GB: "/archived/signatures/:id/unsubscribe"
+      cy-GB: "/archifwyd/llofnodion/:id/dad-danysgrifio"
+    "/browserconfig":
+      en-GB: "/browserconfig"
+      cy-GB: "/browserconfig"
+    "/constituencies":
+      en-GB: "/constituencies"
+      cy-GB: "/etholaethau"
+    "/feedback":
+      en-GB: "/feedback"
+      cy-GB: "/adborth"
+    "/feedback/thanks":
+      en-GB: "/feedback/thanks"
+      cy-GB: "/adborth/diolch"
+    "/help":
+      en-GB: "/help"
+      cy-GB: "/help"
+    "/manifest":
+      en-GB: "/manifest"
+      cy-GB: "/manifest"
+    "/petitions":
+      en-GB: "/petitions"
+      cy-GB: "/deisebau"
+    "/petitions/:id":
+      en-GB: "/petitions/:id"
+      cy-GB: "/deisebau/:id"
+    "/petitions/:id/count":
+      en-GB: "/petitions/:id/count"
+      cy-GB: "/deisebau/:id/cyfrif"
+    "/petitions/:id/gathering-support":
+      en-GB: "/petitions/:id/gathering-support"
+      cy-GB: "/deisebau/:id/casglu-cefnogaeth"
+    "/petitions/:id/moderation-info":
+      en-GB: "/petitions/:id/moderation-info"
+      cy-GB: "/deisebau/:id/cymedroli-gwybodaeth"
+    "/petitions/:id/thank-you":
+      en-GB: "/petitions/:id/thank-you"
+      cy-GB: "/deisebau/:id/diolch"
+    "/petitions/:petition_id/signatures":
+      en-GB: "/petitions/:petition_id/signatures"
+      cy-GB: "/deisebau/:petition_id/llofnodion"
+    "/petitions/:petition_id/signatures/new":
+      en-GB: "/petitions/:petition_id/signatures/new"
+      cy-GB: "/deisebau/:petition_id/llofnodion/newydd"
+    "/petitions/:petition_id/signatures/thank-you":
+      en-GB: "/petitions/:petition_id/signatures/thank-you"
+      cy-GB: "/deisebau/:petition_id/llofnodion/diolch"
+    "/petitions/:petition_id/sponsors":
+      en-GB: "/petitions/:petition_id/sponsors"
+      cy-GB: "/deisebau/:petition_id/noddwyr"
+    "/petitions/:petition_id/sponsors/new":
+      en-GB: "/petitions/:petition_id/sponsors/new"
+      cy-GB: "/deisebau/:petition_id/noddwyr/newydd"
+    "/petitions/:petition_id/sponsors/thank-you":
+      en-GB: "/petitions/:petition_id/sponsors/thank-you"
+      cy-GB: "/deisebau/:petition_id/noddwyr/diolch"
+    "/petitions/check_results":
+      en-GB: "/petitions/check_results"
+      cy-GB: "/deisebau/gwirio_canlyniadau"
+    "/petitions/check":
+      en-GB: "/petitions/check"
+      cy-GB: "/deisebau/gwirio"
+    "/petitions/local":
+      en-GB: "/petitions/local"
+      cy-GB: "/deisebau/lleol"
+    "/petitions/local/:id":
+      en-GB: "/petitions/local/:id"
+      cy-GB: "/deisebau/lleol/:id"
+    "/petitions/local/:id/all":
+      en-GB: "/petitions/local/:id/all"
+      cy-GB: "/deisebau/lleol/:id/bob"
+    "/petitions/new":
+      en-GB: "/petitions/new"
+      cy-GB: "/deisebau/newydd"
+    "/privacy":
+      en-GB: "/privacy"
+      cy-GB: "/preifatrwydd"
+    "/signatures/:id/signed":
+      en-GB: "/signatures/:id/signed"
+      cy-GB: "/llofnodion/:id/llofnodwyd"
+    "/signatures/:id/unsubscribe":
+      en-GB: "/signatures/:id/unsubscribe"
+      cy-GB: "/llofnodion/:id/dad-danysgrifio"
+    "/signatures/:id/verify":
+      en-GB: "/signatures/:id/verify"
+      cy-GB: "/llofnodion/:id/gwirio"
+    "/sponsors/:id/sponsored":
+      en-GB: "/sponsors/:id/sponsored"
+      cy-GB: "/noddwyr/:id/noddedig"
+    "/sponsors/:id/verify":
+      en-GB: "/sponsors/:id/verify"
+      cy-GB: "/noddwyr/:id/gwirio"
