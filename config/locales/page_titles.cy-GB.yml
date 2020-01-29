@@ -1,0 +1,40 @@
+cy-GB:
+  page_titles:
+    default: "Deisebau - Llywodraeth a Senedd Cymru"
+    archived_petitions:
+      index: "Gweld deisebau wedi'u harchifo - Deisebau"
+      show: "%{petition} - Deisebau"
+    feedback:
+      index: "Anfon adborth - Deisebau"
+      thanks: "Diolch - Deisebau"
+    local_petitions:
+      index:
+        zero: "Lleol i chi - Deisebau"
+        one: "Deisebau yn %{postcode}"
+      show: "Deisebau yn %{constituency}"
+    petitions:
+      index: "Gweld pob deiseb - Deisebau"
+      check: "Dechreuwch ddeiseb - Deisebau"
+      check_results: "Dechreuwch ddeiseb - Deisebau"
+      create: "Dechreuwch ddeiseb - Deisebau"
+      gathering_support: "Mae'r ddeiseb hon yn casglu cefnogaeth - Deisebau"
+      moderation_info: "Mae'r ddeiseb hon wedi'i hanfon i gymedroli - Deisebau"
+      new: "Start a petition - Deisebau"
+      resend_confirmation_email: "Ail-anfonwyd e-bost cadarnhau - Deisebau"
+      show: "%{petition} - Deisebau"
+      thank_you: "Diolch - Deisebau"
+    signatures:
+      new: "%{petition} - Llofnodwch y ddeiseb hon - Deisebau"
+      confirm: "%{petition} - Llofnodwch y ddeiseb hon - Deisebau"
+      signed: "Diolch - Deisebau"
+      thank_you: "Diolch - Deisebau"
+      unsubscribe: "Dad-danysgrifio o ddiweddariadau e-bost %{petition} - Deisebau"
+    sponsors:
+      new: "Cefnogi Deiseb %{creator} - Deisebau"
+      confirm: "Cefnogi Deiseb %{creator} - Deisebau"
+      signed: "Diolch - Deisebau"
+      thank_you: "%{petition} - Diolch am gefnogi'r ddeiseb hon - Deisebau"
+    pages:
+      index: "Deisebau - Llywodraeth a Senedd Cymru"
+      help: "Sut mae deisebau yn gweithio"
+      privacy: "Preifatrwydd a chwcis"

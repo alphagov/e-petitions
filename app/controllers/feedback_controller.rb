@@ -1,4 +1,4 @@
-class FeedbackController < ApplicationController
+class FeedbackController < LocalizedController
   before_action :build_feedback, only: [:new, :create]
 
   def new

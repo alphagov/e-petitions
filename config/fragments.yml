@@ -1,5 +1,6 @@
 head:
   keys:
+    - :locale
     - :site_updated_at
     - :url
   options:
@@ -7,12 +8,14 @@ head:
 
 header:
   keys:
+    - :locale
     - :home_page
   options:
     expires_in: 300
 
 footer:
   keys:
+    - :locale
     - :create_petition_page
     - :open_petition_page
   options:
@@ -20,6 +23,7 @@ footer:
 
 home_page:
   keys:
+    - :locale
     - :site_updated_at
     - :last_government_response_updated_at
     - :last_debate_outcome_updated_at
@@ -28,18 +32,21 @@ home_page:
 
 local_petitions_page:
   keys:
+    - :locale
     - :constituency
   options:
     expires_in: 300
 
 all_local_petitions_page:
   keys:
+    - :locale
     - :constituency
   options:
     expires_in: 300
 
 petition:
   keys:
+    - :locale
     - :petition
     - :reveal_response
     - :site_updated_at
@@ -48,6 +55,7 @@ petition:
 
 archived_petition:
   keys:
+    - :locale
     - :petition
     - :reveal_response
     - :site_updated_at
@@ -56,6 +64,7 @@ archived_petition:
 
 robots:
   keys:
+    - :locale
     - :last_petition_created_at
   options:
     expires_in: 86400

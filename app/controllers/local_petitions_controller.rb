@@ -1,7 +1,7 @@
 require 'postcode_sanitizer'
 require 'csv'
 
-class LocalPetitionsController < ApplicationController
+class LocalPetitionsController < LocalizedController
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
   before_action :find_by_slug, only: [:show, :all]
