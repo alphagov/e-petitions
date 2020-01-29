@@ -1,5 +1,9 @@
 <header role="banner" id="global-header">
   <div class="wrapper">
+    <% unless request.nil? %>
+      <%= language_switcher_tag %>
+    <% end %>
+
     <% if home_page? %>
       <span class="proposition">
         <span class="graphic graphic-portcullis-white"></span> <%= t(:site_title, scope: :ui) %>

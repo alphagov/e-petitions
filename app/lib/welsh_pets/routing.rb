@@ -100,6 +100,8 @@ module WelshPets
               opts[:constraints] = @options[:constraints]
             end
 
+            opts[:defaults] = { route: name }
+
             if @options.key?(:format)
               opts[:format] = @options[:format]
             end
