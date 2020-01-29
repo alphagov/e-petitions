@@ -138,7 +138,7 @@ class PetitionsController < ApplicationController
   end
 
   def search_params(overrides = {})
-    params.permit(:page, :q, :state).merge(overrides)
+    params.permit(:page, :q, :state).merge(overrides).to_h
   end
 
   def collecting_sponsors?
