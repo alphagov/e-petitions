@@ -1,4 +1,7 @@
 cy-GB:
   ui:
+    language_switcher:
+      text: "English"
+      title: "Show this page in English"
     site_title: "Deisebau"
     strapline: "Llywodraeth a Senedd Cymru"

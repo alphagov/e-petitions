@@ -17,6 +17,7 @@
     vertical-align: baseline;
     line-height: 34px;
     padding-left: $text-indent;
+    margin-right: 80px;
   }
   a {
     text-decoration: none;
@@ -36,6 +37,19 @@
   .strapline {
     color: $white;
     margin: $gutter-one-third -5px 5px $text-indent;
+  }
+
+  .language-switcher {
+    float: right;
+    color: $white;
+    font-size: 16px;
+    text-decoration: underline;
+    margin-top: 10px;
+
+    @include media(mobile) {
+      margin-top: 12px;
+      font-size: 14px;
+    }
   }
 }
 
