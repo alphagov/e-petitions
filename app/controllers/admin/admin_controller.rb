@@ -4,6 +4,7 @@ class Admin::AdminController < ApplicationController
   skip_before_action :service_unavailable
   skip_before_action :authenticate
 
+  before_action :set_locale
   before_action :set_appsignal_namespace
   before_action :do_not_cache
 
@@ -17,6 +18,10 @@ class Admin::AdminController < ApplicationController
   end
 
   private
+
+  def set_locale
+    I18n.locale = :"en-GB"
+  end
 
   def set_appsignal_namespace
     Appsignal.set_namespace("admin")

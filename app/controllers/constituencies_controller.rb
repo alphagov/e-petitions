@@ -1,4 +1,4 @@
-class ConstituenciesController < ApplicationController
+class ConstituenciesController < LocalizedController
   before_action :set_cors_headers, only: [:index], if: :json_request?
 
   def index

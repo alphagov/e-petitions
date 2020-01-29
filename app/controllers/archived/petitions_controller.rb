@@ -1,6 +1,6 @@
 require 'csv'
 
-class Archived::PetitionsController < ApplicationController
+class Archived::PetitionsController < LocalizedController
   before_action :redirect_to_valid_state, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
