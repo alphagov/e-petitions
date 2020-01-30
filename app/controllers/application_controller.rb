@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   after_action do
     directives = [
       "default-src 'self'",
-      "img-src 'self' https://www.google-analytics.com",
-      "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+      "img-src 'self'",
+      "script-src 'self' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'"
     ]
 
