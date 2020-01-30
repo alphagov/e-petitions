@@ -1,6 +1,6 @@
 require 'csv'
 
-class PetitionsController < ApplicationController
+class PetitionsController < LocalizedController
   before_action :redirect_to_valid_state, only: [:index]
   before_action :do_not_cache, except: [:index, :show]
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
@@ -138,7 +138,7 @@ class PetitionsController < ApplicationController
   end
 
   def search_params(overrides = {})
-    params.permit(:page, :q, :state).merge(overrides)
+    params.permit(:page, :q, :state).merge(overrides).to_h
   end
 
   def collecting_sponsors?

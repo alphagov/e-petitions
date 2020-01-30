@@ -1,6 +1,6 @@
 require 'csv'
 
-class Archived::PetitionsController < ApplicationController
+class Archived::PetitionsController < LocalizedController
   before_action :redirect_to_valid_state, only: [:index]
   before_action :fetch_parliament, only: [:index]
   before_action :fetch_petitions, only: [:index]
@@ -76,7 +76,7 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def search_params(overrides = {})
-    params.permit(:page, :parliament, :q, :state).merge(overrides)
+    params.permit(:page, :parliament, :q, :state).merge(overrides).to_h
   end
 
   def archived_petition_facets

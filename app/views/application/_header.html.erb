@@ -1,14 +1,18 @@
 <header role="banner" id="global-header">
   <div class="wrapper">
+    <% unless request.nil? %>
+      <%= language_switcher_tag %>
+    <% end %>
+
     <% if home_page? %>
       <span class="proposition">
-        <span class="graphic graphic-portcullis-white"></span> Petitions
+        <span class="graphic graphic-portcullis-white"></span> <%= t(:site_title, scope: :ui) %>
       </span>
     <% else %>
       <%= link_to(home_path, :title => 'Go to the petitions homepage', :tabindex => 1, :class => 'proposition') do %>
-        <span class="graphic graphic-portcullis-white"></span> Petitions
+        <span class="graphic graphic-portcullis-white"></span> <%= t(:site_title, scope: :ui) %>
       <% end %>
     <% end %>
-    <p class="strapline">Welsh Government and Parliament</p>
+    <p class="strapline"><%= t(:strapline, scope: :ui) %></p>
   </div>
 </header>

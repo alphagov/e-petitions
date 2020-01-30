@@ -8,7 +8,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Wpets
+module WelshPets
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
@@ -21,6 +21,7 @@ module Wpets
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :'en-GB'
+    config.i18n.fallbacks = %i[en-GB]
 
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {

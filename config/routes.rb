@@ -1,98 +1,91 @@
 Rails.application.routes.draw do
-  constraints Site.constraints_for_public do
-    controller 'constituencies' do
+  extend WelshPets::Routing
+
+  public_scope do
+    scope controller: 'constituencies' do
       get '/constituencies', action: 'index', as: :constituencies
     end
 
-    controller 'pages' do
-      get '/',        action: 'index', as: :home
-      get '/help',    action: 'help'
-      get '/privacy', action: 'privacy'
+    scope controller: 'pages' do
+      get '/',        action: 'index',   as: :home
+      get '/help',    action: 'help',    as: :help
+      get '/privacy', action: 'privacy', as: :privacy
 
-      scope format: true do
-        get '/browserconfig', action: 'browserconfig', constraints: { format: 'xml'  }
-        get '/manifest',      action: 'manifest',      constraints: { format: 'json' }
+      scope format: true, localized: false do
+        get '/browserconfig', action: 'browserconfig', as: :browserconfig, constraints: { format: 'xml' }
+        get '/manifest',      action: 'manifest',      as: :manifest,      constraints: { format: 'json' }
       end
     end
 
-    controller 'feedback' do
-      scope '/feedback' do
-        get  '/',       action: 'new',    as: :feedback
-        post '/',       action: 'create', as: nil
-        get  '/thanks', action: 'thanks', as: :thanks_feedback
-      end
+    scope '/feedback', controller: 'feedback' do
+      get  '/',       action: 'new',    as: :feedback
+      post '/',       action: 'create', as: :create_feedback
+      get  '/thanks', action: 'thanks', as: :thanks_feedback
     end
 
-    controller 'local_petitions' do
-      scope '/petitions/local' do
-        get '/',        action: 'index', as: :local_petitions
-        get '/:id',     action: 'show',  as: :local_petition
-        get '/:id/all', action: 'all',   as: :all_local_petition
-      end
+    scope '/petitions/local', controller: 'local_petitions' do
+      get  '/',        action: 'index', as: :local_petitions
+      get  '/:id',     action: 'show',  as: :local_petition
+      get  '/:id/all', action: 'all',   as: :all_local_petition
     end
 
-    resources :petitions, only: %i[new show index] do
-      collection do
-        get  'check'
-        get  'check_results'
-        post 'new', action: 'create', as: nil
+    scope '/petitions', controller: 'petitions' do
+      get  '/check',         action: 'check',         as: :check_petitions
+      get  '/check_results', action: 'check_results', as: :check_results_petitions
+      post '/new',           action: 'create',        as: :create_petition
+
+      scope '/:id' do
+        get '/count',             action: 'count',             as: :count_petition
+        get '/thank-you',         action: 'thank_you',         as: :thank_you_petition
+        get '/gathering-support', action: 'gathering_support', as: :gathering_support_petition
+        get '/moderation-info',   action: 'moderation_info',   as: :moderation_info_petition
       end
 
-      member do
-        get 'count'
-        get 'thank-you'
-        get 'gathering-support'
-        get 'moderation-info'
-      end
-
-      resources :sponsors, only: %i[new create], shallow: true do
-        collection do
-          post 'new', action: 'confirm', as: :confirm
-          get  'thank-you'
+      scope '/:petition_id' do
+        scope '/sponsors', controller: 'sponsors' do
+          post '/new',       action: 'confirm',   as: :confirm_petition_sponsors
+          get  '/thank-you', action: 'thank_you', as: :thank_you_petition_sponsors
+          post '/',          action: 'create',    as: :petition_sponsors
+          get  '/new',       action: 'new',       as: :new_petition_sponsor
         end
 
-        member do
-          get 'verify'
-          get 'sponsored', action: 'signed', as: :signed
+        scope '/signatures', controller: 'signatures' do
+          post '/new',       action: 'confirm',   as: :confirm_petition_signatures
+          get  '/thank-you', action: 'thank_you', as: :thank_you_petition_signatures
+          post '/',          action: 'create',    as: :petition_signatures
+          get  '/new',       action: 'new',       as: :new_petition_signature
         end
       end
 
-      resources :signatures, only: %i[new create], shallow: true do
-        collection do
-          post 'new', action: 'confirm', as: :confirm
-          get  'thank-you'
-        end
-
-        member do
-          get 'verify'
-          get 'unsubscribe'
-          get 'signed'
-        end
-      end
+      get '/',    action: 'index', as: :petitions
+      get '/new', action: 'new',   as: :new_petition
+      get '/:id', action: 'show',  as: :petition
     end
 
-    namespace :archived do
-      resources :petitions, only: %i[index show]
-
-      resources :signatures, only: [] do
-        get 'unsubscribe', on: :member
-      end
+    scope '/sponsors', controller: 'sponsors' do
+      get '/:id/verify',    action: 'verify', as: :verify_sponsor
+      get '/:id/sponsored', action: 'signed', as: :signed_sponsor
     end
 
-    # REDIRECTS OLD PAGES
-    get '/accessibility',         to: redirect('/help')
-    get '/api/petitions',         to: redirect('/')
-    get '/api/petitions/:id',     to: redirect('/')
-    get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')
-    get '/departments',           to: redirect('/')
-    get '/departments/:id',       to: redirect('/')
-    get '/how-it-works',          to: redirect('/help')
-    get '/privacy-policy',        to: redirect('/privacy')
-    get '/faq',                   to: redirect('/help')
-    get '/terms-and-conditions',  to: redirect('/help')
+    scope '/signatures', controller: 'signatures' do
+      get '/:id/verify',      action: 'verify',      as: :verify_signature
+      get '/:id/unsubscribe', action: 'unsubscribe', as: :unsubscribe_signature
+      get '/:id/signed',      action: 'signed',      as: :signed_signature
+    end
+
+    scope '/archived' do
+      scope '/petitions', controller: 'archived/petitions' do
+        get '/', action: 'index', as: :archived_petitions
+        get '/:id', action: 'show', as: :archived_petition
+      end
+
+      scope '/signatures', controller: 'archived/signatures' do
+        get '/:id/unsubscribe', action: 'unsubscribe', as: :unsubscribe_archived_signature
+      end
+    end
   end
 
-  constraints Site.constraints_for_moderation do
+  moderation_scope do
     get '/', to: redirect('/admin')
 
     namespace :admin do

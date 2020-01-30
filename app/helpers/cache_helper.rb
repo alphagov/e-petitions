@@ -40,6 +40,10 @@ module CacheHelper
         @template = template
       end
 
+      def locale
+        I18n.locale
+      end
+
       def archived_petition_page
         archived_petition_page?
       end

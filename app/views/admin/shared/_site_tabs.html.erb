@@ -1,71 +1,109 @@
 <p class="tabs">
-  <% if params[:tab] == "petitions" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+  <% if params[:tab] == "welsh"  %>
+    <%= link_to "English", edit_admin_site_path %> |
+    Welsh |
+    <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+    <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
+    <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+    <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+    <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
+    <%= link_to "Holidays", edit_admin_holidays_path %> |
+    <%= link_to "Domains", admin_domains_path %>
+  <% elsif params[:tab] == "petitions" %>
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     Petitions |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif params[:tab] == "moderation" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     Moderation |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
+    <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+    <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+    <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
+    <%= link_to "Holidays", edit_admin_holidays_path %> |
+    <%= link_to "Domains", admin_domains_path %>
+  <% elsif params[:tab] == "feedback" %>
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
+    <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+    <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    Feedback |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif params[:tab] == "access" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     Access |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif params[:tab] == "features" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     Features |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif params[:tab] == "tasks" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     Tasks |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif controller_name == "holidays" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     Holidays |
     <%= link_to "Domains", admin_domains_path %>
   <% elsif controller_name == "domains" %>
-    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "English", edit_admin_site_path %> |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     Domains
   <% else %>
-    Description |
+    English |
+    <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
     <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Feedback", edit_admin_site_path(tab: 'feedback') %> |
     <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |

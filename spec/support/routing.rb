@@ -128,7 +128,11 @@ module RequestRoutingMatchers
     end
 
     def matches_location?
-      response.location == location
+      if path?
+        response_path == location
+      else
+        response_location == location
+      end
     end
 
     def matches_status?
@@ -165,6 +169,22 @@ module RequestRoutingMatchers
     def path_params
       params.except(*URL_PARAMS)
     end
+
+    def path?
+      location.first == "/"
+    end
+
+    def response_uri
+      @response_uri ||= URI.parse(response.location)
+    end
+
+    def response_path
+      response_uri.request_uri
+    end
+
+    def response_location
+      response_uri.to_s
+    end
   end
 
   def redirect_to(location, status = nil)
@@ -181,14 +201,16 @@ module RequestRoutingMatchers
 end
 
 RSpec.configure do |config|
-  config.include(RequestRoutingMatchers, type: :routes)
   config.include(RSpec::Rails::RequestExampleGroup, type: :routes)
+  config.include(RequestRoutingMatchers, type: :routes)
 
   config.before(:each, type: :routes) do |example|
     if example.metadata[:admin]
       host! Site.moderate_host_with_port
+    elsif example.metadata[:welsh]
+      host! Site.host_with_port_cy
     else
-      host! Site.host_with_port
+      host! Site.host_with_port_en
     end
 
     https!
@@ -202,6 +224,14 @@ RSpec.configure do |config|
       example.run
     ensure
       env_config['action_dispatch.show_exceptions'] = show_exceptions
+    end
+  end
+
+  config.around(:each, type: :routes) do |example|
+    if example.metadata[:welsh]
+      I18n.with_locale(:"cy-GB") { example.run }
+    else
+      I18n.with_locale(:"en-GB") { example.run }
     end
   end
 

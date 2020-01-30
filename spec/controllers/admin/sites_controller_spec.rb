@@ -59,7 +59,7 @@ RSpec.describe Admin::SitesController, type: :controller, admin: true do
 
       context "when the params are invalid" do
         let :params do
-          { title: "" }
+          { title_en: "" }
         end
 
         it "returns 200 OK" do
