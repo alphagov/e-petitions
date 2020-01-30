@@ -1,12 +1,12 @@
 en-GB:
   metadata:
     open_graph:
-      site_name: "Deisebau - Llywodraeth a Senedd Cymru"
-      default_title: "Deisebau - Llywodraeth a Senedd Cymru"
+      site_name: "Deisebau - Senedd Cymru"
+      default_title: "Deisebau - Senedd Cymru"
       title: "Deiseb: %{petition}"
       archived_title: "Deiseb wedi'i Archifo: %{petition}"
 
     twitter:
-      default_title: "Deisebau - Llywodraeth a Senedd Cymru"
+      default_title: "Deisebau - Senedd Cymru"
       title: "Deiseb: %{petition}"
       archived_title: "Deiseb wedi'i Archifo: %{petition}"

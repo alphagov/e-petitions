@@ -282,16 +282,16 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from_en
-      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Welsh Government and Parliament" <no-reply@#{default_host_en}>})
+      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Welsh Parliament" <no-reply@#{default_host_en}>})
     end
     alias_method :default_email_from, :default_email_from_en
 
     def default_email_from_cy
-      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Llywodraeth a Senedd Cymru" <dim-ateb@#{default_host_cy}>})
+      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Senedd Cymru" <dim-ateb@#{default_host_cy}>})
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Welsh Government and Parliament" <petitionscommittee@#{default_domain}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Welsh Parliament" <petitionscommittee@#{default_domain}>})
     end
 
     def default_username
