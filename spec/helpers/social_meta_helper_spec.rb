@@ -20,7 +20,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - Welsh Government and Parliament" />})
+        expect(subject).to match(%r{<meta property="og:site_name" content="Petitions - Welsh Parliament" />})
       end
     end
 
@@ -68,7 +68,7 @@ RSpec.describe SocialMetaHelper, type: :helper do
       end
 
       it "generates a meta tag with the i18n content" do
-        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - Welsh Government and Parliament" />})
+        expect(subject).to match(%r{<meta name="twitter:title" content="Petitions - Welsh Parliament" />})
       end
     end
 

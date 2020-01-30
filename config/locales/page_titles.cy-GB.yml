@@ -1,6 +1,6 @@
 cy-GB:
   page_titles:
-    default: "Deisebau - Llywodraeth a Senedd Cymru"
+    default: "Deisebau - Senedd Cymru"
     archived_petitions:
       index: "Gweld deisebau wedi'u harchifo - Deisebau"
       show: "%{petition} - Deisebau"
@@ -35,6 +35,6 @@ cy-GB:
       signed: "Diolch - Deisebau"
       thank_you: "%{petition} - Diolch am gefnogi'r ddeiseb hon - Deisebau"
     pages:
-      index: "Deisebau - Llywodraeth a Senedd Cymru"
+      index: "Deisebau - Senedd Cymru"
       help: "Sut mae deisebau yn gweithio"
       privacy: "Preifatrwydd a chwcis"
