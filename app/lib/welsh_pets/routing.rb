@@ -34,8 +34,6 @@ module WelshPets
                   @options[option]
                 end
               elsif options.key?(option)
-
-
                 options[option]
               else
                 POISON

@@ -41,7 +41,7 @@ module CacheHelper
       end
 
       def locale
-        @locale = I18n.locale
+        I18n.locale
       end
 
       def archived_petition_page
