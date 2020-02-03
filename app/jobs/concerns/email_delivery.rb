@@ -1,3 +1,5 @@
+require 'net/smtp'
+
 module EmailDelivery
   # Send a single email to a recipient informing them about a petition that they have signed
   # Implemented as a custom job rather than using action mailers #deliver_later so we can do

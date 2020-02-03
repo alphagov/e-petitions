@@ -362,6 +362,16 @@ class Site < ActiveRecord::Base
         instance.public_send(column, *args, &block)
       end
     end
+  else
+    class << self
+      def threshold_for_response
+        default_threshold_for_response
+      end
+
+      def threshold_for_debate
+        default_threshold_for_debate
+      end
+    end
   end
 
   FEATURE_FLAGS.each do |feature_flag|
