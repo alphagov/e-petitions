@@ -1,3 +1,5 @@
+require 'net/smtp'
+
 class EmailReminder
   # email out a list of all petitions that have reached the threshold or that have been marked for a response
   def self.threshold_email_reminder
