@@ -1,5 +1,5 @@
 <%= link_to check_petitions_path(q: @new_petition.action), class: "back-page" do %>
-  &#9664; Back
+  <%= t(:"ui.petitions.check.results.back") %>
 <% end %>
 
 <% if petitions = @new_petition.duplicates %>
@@ -21,7 +21,9 @@
     </ul>
   <% end %>
 
-  <%= link_to(t(:"ui.petitions.check.results.duplicate.continue_btn"), new_petition_path(q: @new_petition.action), class: "button") %>
+  <%= link_to(new_petition_path(q: @new_petition.action), class: "button") do %>
+    <%= t(:"ui.petitions.check.results.duplicate.continue_btn") %>
+  <% end %>
 
 <% else %>
 
@@ -29,6 +31,8 @@
   <p><%= t(:"ui.petitions.check.results.unique.no_match") %></p>
   <p><%= t(:"ui.petitions.check.results.unique.ok_to_continue") %><br /></p>
 
-  <%= link_to(t(:"ui.petitions.check.results.unique.continue"), new_petition_path(q: @new_petition.action), class: "button") %>
+  <%= link_to(new_petition_path(q: @new_petition.action), class: "button") do %>
+    <%= t(:"ui.petitions.check.results.unique.continue") %>
+  <% end %>
 
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_30_001830) do
+ActiveRecord::Schema.define(version: 2020_02_03_190532) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -344,6 +344,16 @@ ActiveRecord::Schema.define(version: 2020_01_30_001830) do
     t.index ["started_at"], name: "index_invalidations_on_started_at"
   end
 
+  create_table "languages", force: :cascade do |t|
+    t.string "locale", limit: 10, null: false
+    t.string "name", limit: 30, null: false
+    t.jsonb "translations", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["locale"], name: "index_languages_on_locale", unique: true
+    t.index ["name"], name: "index_languages_on_name", unique: true
+  end
+
   create_table "locations", id: :serial, force: :cascade do |t|
     t.string "code", limit: 30, null: false
     t.string "name", limit: 100, null: false
@@ -577,6 +587,7 @@ ActiveRecord::Schema.define(version: 2020_01_30_001830) do
     t.string "title_cy", limit: 50, default: "Senedd ddeiseb", null: false
     t.string "url_cy", limit: 50, default: "https://deiseb.senedd.cymru", null: false
     t.string "email_from_cy", limit: 100, default: "\"Deisebau: Senedd Cymru\" <dim-ateb@deiseb.senedd.cymru>", null: false
+    t.datetime "translations_updated_at"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|

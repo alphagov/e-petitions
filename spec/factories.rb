@@ -763,4 +763,26 @@ FactoryBot.define do
       Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com")
     end
   end
+
+  factory :language do
+    translations { Hash.new }
+
+    trait :english do
+      locale { "en-GB" }
+      name   { "English" }
+
+      translations do
+        { "en-GB" => { "title" => "Petitions" } }
+      end
+    end
+
+    trait :welsh do
+      locale { "cy-GB" }
+      name   { "Welsh" }
+
+      translations do
+        { "cy-GB" => { "title" => "Deisebau" } }
+      end
+    end
+  end
 end

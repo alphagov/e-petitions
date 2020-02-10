@@ -2,8 +2,7 @@ module TranslationHelper
   class LanguageSwitcherTag
     attr_reader :template
 
-    delegate :link_to, :t, to: :template
-    delegate :request, to: :template
+    delegate :t, :request, to: :template
     delegate :path_parameters, to: :request
     delegate :query_parameters, to: :request
     delegate :locale, to: :I18n
@@ -13,18 +12,10 @@ module TranslationHelper
     end
 
     def render
-      link_to(text, url, class: "language-switcher", title: title, tabindex: -1)
+      t(:language_switcher_html, scope: :"ui.header", url: url)
     end
 
     private
-
-    def text
-      t(:text, scope: :"ui.language_switcher")
-    end
-
-    def title
-      t(:title, scope: :"ui.language_switcher")
-    end
 
     def url
       template.public_send(helper, query_parameters)
@@ -41,5 +32,27 @@ module TranslationHelper
 
   def language_switcher_tag
     LanguageSwitcherTag.new(self).render
+  end
+
+  if ENV['TRANSLATION_ENABLED'].present?
+    def t(key, options = {})
+      keys = I18n.normalize_keys(I18n.locale, key, options[:scope])
+      scope = keys[1]
+
+      return super unless scope == :ui
+
+      url  = edit_admin_language_url(keys.shift, keys.join("."))
+      data = { translation_link: url }
+
+      content_tag(:span, "", data: data) + h(super)
+    end
+
+    def translation_enabled?
+      true
+    end
+  else
+    def translation_enabled?
+      false
+    end
   end
 end

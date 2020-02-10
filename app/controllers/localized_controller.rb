@@ -1,4 +1,10 @@
 class LocalizedController < ApplicationController
+  if ENV['TRANSLATION_ENABLED'].present?
+    before_action do
+      Language.reload_translations
+    end
+  end
+
   before_action :set_locale
 
   private

@@ -12,6 +12,8 @@
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
-<%= form.submit t(:"ui.petitions.create.replay_email_stage.submit"), class: "button", tabindex: increment %>
+<span>
+   <%= t(:"ui.signatures.confirm.email_form.submit_html", tabindex: increment) %>
+</span>
 
-<p><%= t(:"ui.petitions.create.replay_email_stage.fix_email_if_wrong") %></p>
+<p><%= t(:"ui.signatures.confirm.email_form.fix_email_if_wrong") %></p>

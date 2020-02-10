@@ -6,12 +6,12 @@
 
     <% if home_page? %>
       <span class="proposition">
-        <span class="graphic graphic-portcullis-white"></span> <%= t(:"ui.header.title") %>
+        <span class="graphic graphic-dragon-white"></span> <%= t(:"ui.header.title") %>
       </span>
     <% else %>
-      <%= link_to(home_path, :title => t(:"ui.header.tooltip"), :tabindex => 1, :class => 'proposition') do %>
-        <span class="graphic graphic-portcullis-white"></span> <%= t(:"ui.header.title") %>
-      <% end %>
+      <span>
+        <%= t(:"ui.header.title_link_html", url: home_path) %>
+      </span>
     <% end %>
     <p class="strapline"><%= t(:"ui.header.strapline") %></p>
   </div>

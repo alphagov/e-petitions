@@ -84,6 +84,10 @@ module CacheHelper
         Site.updated_at
       end
 
+      def translations_updated_at
+        Site.translations_updated_at
+      end
+
       def url
         request.original_url.force_encoding('utf-8')
       end

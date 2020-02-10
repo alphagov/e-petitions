@@ -11,7 +11,6 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   let(:cache_control) { response.headers['Cache-Control'] }
-  let(:x_ua_compatible) { response.headers['X-UA-Compatible'] }
 
   let(:access_control_allow_origin) { response.headers['Access-Control-Allow-Origin'] }
   let(:access_control_allow_methods) { response.headers['Access-Control-Allow-Methods'] }
@@ -30,11 +29,6 @@ RSpec.describe ApplicationController, type: :controller do
   it "sets cache control headers when asked" do
     get :index
     expect(cache_control).to eq('no-cache, no-store')
-  end
-
-  it "sets X-UA-Compatible control headers" do
-    get :index
-    expect(x_ua_compatible).to eq('IE=edge')
   end
 
   it "sets CORS headers for json requests" do

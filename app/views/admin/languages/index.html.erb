@@ -1,0 +1,26 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+<table class="language-list">
+  <thead>
+    <tr>
+      <th>Language</th>
+      <th>Locale</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @languages.present? %>
+      <%= render @languages.to_a %>
+    <% else %>
+      <tr>
+        <td colspan="3">No languages defined</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

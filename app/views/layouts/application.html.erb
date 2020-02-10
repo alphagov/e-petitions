@@ -21,11 +21,6 @@
       <meta name="theme-color" content="#080">
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQJ6XZ5"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <% if show_cookie_message? %>
       <div id="global-cookie-message">
         <p><%= t(:"ui.application.cookie_message.html", privacy_link: link_to(t(:"ui.application.cookie_message.privacy_link"), privacy_path)) %></p>
@@ -50,6 +45,10 @@
       <% if create_petition_page? %>
         <%= javascript_include_tag 'character-counter' %>
       <% end %>
+    <% end %>
+
+    <% if translation_enabled? %>
+      <%= javascript_include_tag admin_translations_url(:js), crossorigin: 'use-credentials' %>
     <% end %>
   </body>
 </html>

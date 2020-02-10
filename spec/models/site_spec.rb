@@ -679,6 +679,21 @@ RSpec.describe Site, type: :model do
     end
   end
 
+  describe ".urls" do
+    let(:site) { Site.first_or_create(Site.defaults) }
+
+    before do
+      expect(Site).to receive(:first_or_create).and_return(site)
+    end
+
+    it "returns an array of valid origin urls" do
+      expect(Site.urls).to eq %w[
+        https://petition.parliament.wales
+        https://deiseb.senedd.cymru
+      ]
+    end
+  end
+
   describe ".reload" do
     let(:site) { Site.first_or_create(Site.defaults) }
 
@@ -1195,6 +1210,20 @@ RSpec.describe Site, type: :model do
 
       it "returns the earliest validated signature timestamp" do
         expect(site.signature_count_updated_at).to be_within(1.minute).of(4.weeks.ago)
+      end
+    end
+  end
+
+  describe "#translations_updated_at" do
+    context "when the translations have never been updated" do
+      let(:updated_at) { Time.current.beginning_of_hour }
+
+      subject :site do
+        described_class.create!(translations_updated_at: nil, updated_at: updated_at)
+      end
+
+      it "returns the updated_at timestamp" do
+        expect(site.translations_updated_at).to eq(updated_at)
       end
     end
   end

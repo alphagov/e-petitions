@@ -32,4 +32,6 @@
   <%= t(:"ui.petitions.additional_details.help_html") %>
 <% end %>
 
-<%= form.submit t(:"ui.petitions.create.petition_stage.submit"), name: "move_next", class: "button", tabindex: increment %>
+<span>
+  <%= t(:"ui.petitions.create.petition_stage.submit_html", tabindex: increment) %>
+</span>
