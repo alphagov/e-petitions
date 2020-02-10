@@ -34,6 +34,17 @@
   @include inline-block;
 }
 
+.graphic-dragon-white {
+  width: 67px;
+  height: 34px;
+  background-image: image-url("graphics/graphic-dragon-white.png");
+
+  @include device-pixel-ratio() {
+    background-image: image-url("graphics/graphic-dragon-white-2x.png");
+    background-size: 100%;
+  }
+}
+
 .graphic-portcullis {
   width: 26px;
   height: 32px;
