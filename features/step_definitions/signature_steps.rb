@@ -35,17 +35,11 @@ Then /^I should have signed the petition$/ do
   should_be_signature_count_of(2)
 end
 
-When /^I fill in my non\-UK details$/ do
-  step "I fill in my details"
-  uncheck "I am a British citizen or UK resident"
-end
-
 When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
   email_address ||= "womboid@wimbledon.com"
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "#{email_address}"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "SW14 9RQ"
     And I select "United Kingdom" from "Location"
     And I check "Email me whenever there’s an update about this petition"
@@ -56,7 +50,6 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
-    And I check "I am a British citizen or UK resident"
     And I fill in my postcode with "#{postcode}"
     And I select "United Kingdom" from "Location"
     And I check "Email me whenever there’s an update about this petition"

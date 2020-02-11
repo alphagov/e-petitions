@@ -189,8 +189,7 @@ RSpec.describe Signature, type: :model do
           name: "Suzy Signer",
           email: email,
           postcode: postcode,
-          location_code: location_code,
-          uk_citizenship: "1"
+          location_code: location_code
         }
       end
 
@@ -322,21 +321,6 @@ RSpec.describe Signature, type: :model do
       it "does not allow postcodes longer than 255 characters for non-UK addresses" do
         s = FactoryBot.build(:signature, :location_code => "US", :postcode => "1" * 256)
         expect(s).not_to have_valid(:postcode)
-      end
-    end
-
-    describe "uk_citizenship" do
-      it "requires acceptance of uk_citizenship for a new record" do
-        expect(FactoryBot.build(:signature, :uk_citizenship => '1')).to be_valid
-        expect(FactoryBot.build(:signature, :uk_citizenship => '0')).not_to be_valid
-        expect(FactoryBot.build(:signature, :uk_citizenship => nil)).not_to be_valid
-      end
-
-      it "does not require acceptance of uk_citizenship for old records" do
-        sig = FactoryBot.create(:signature)
-        sig.reload
-        sig.uk_citizenship = '0'
-        expect(sig).to be_valid
       end
     end
   end
@@ -1353,7 +1337,6 @@ RSpec.describe Signature, type: :model do
         email: "suzy@example.com",
         postcode: postcode,
         location_code: location_code,
-        uk_citizenship: "1",
         created_at: 2.days.ago,
         updated_at: 2.days.ago
       }
@@ -2162,8 +2145,7 @@ RSpec.describe Signature, type: :model do
         name: name,
         email: email,
         postcode: postcode,
-        location_code: "GB",
-        uk_citizenship: "1"
+        location_code: "GB"
       }
     end
 
@@ -2179,8 +2161,7 @@ RSpec.describe Signature, type: :model do
           name: "Suzy Signer",
           email: "foo@example.com",
           postcode: "SW1A 1AA",
-          location_code: "GB",
-          uk_citizenship: "1"
+          location_code: "GB"
         )
       end
 
@@ -2254,16 +2235,14 @@ RSpec.describe Signature, type: :model do
           name: "Suzy Signer",
           email: "foo@example.com",
           postcode: "SW1A 1AA",
-          location_code: "GB",
-          uk_citizenship: "1"
+          location_code: "GB"
         )
 
         petition.signatures.create!(
           name: "Sam Signer",
           email: "foo@example.com",
           postcode: "SW1A 1AA",
-          location_code: "GB",
-          uk_citizenship: "1"
+          location_code: "GB"
         )
       end
 
@@ -2292,8 +2271,7 @@ RSpec.describe Signature, type: :model do
         name: "Suzy Signer",
         email: "foo@example.com",
         postcode: "SW1A 1AA",
-        location_code: "GB",
-        uk_citizenship: "1"
+        location_code: "GB"
       }
     end
 

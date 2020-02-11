@@ -58,12 +58,6 @@ Feature: Suzie signs a petition
     And I should not see the text "Your constituency is"
     And I should not see the text "Your MP is"
 
-  Scenario: Suzie cannot sign if she is not a UK citizen
-    When I decide to sign the petition
-    And I fill in my non-UK details
-    And I try to sign
-    Then I should see an error
-
   Scenario: Suzie receives a duplicate signature email if she tries to sign but she has already signed and validated
     When I have already signed the petition with an uppercase email
     And I decide to sign the petition

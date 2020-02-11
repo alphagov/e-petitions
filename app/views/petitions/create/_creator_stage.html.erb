@@ -9,15 +9,6 @@
 
 <%= render "petitions/create/error_summary", form: form %>
 
-<%= form_row for: [petition, :uk_citizenship], class: "uk-citizen" do %>
-  <span class="form-label"><%= t(:"ui.petitions.create.creator_stage.citizen_or_resident.label") %></span>
-  <%= error_messages_for_field petition, :uk_citizenship %>
-  <div class="multiple-choice">
-    <%= form.check_box :uk_citizenship, tabindex: increment %>
-    <%= form.label :uk_citizenship, t(:"ui.petitions.create.creator_stage.citizen_or_resident.check_label") %>
-  </div>
-<% end %>
-
 <%= form_row for: [petition, :name] do %>
   <%= form.label :name, t(:"ui.petitions.create.creator_stage.name.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :name %>

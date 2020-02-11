@@ -116,7 +116,6 @@ RSpec.describe SponsorsController, type: :controller do
       {
         name: "Ted Berry",
         email: "ted@example.com",
-        uk_citizenship: "1",
         postcode: "SW1A 1AA",
         location_code: "GB"
       }
@@ -189,7 +188,6 @@ RSpec.describe SponsorsController, type: :controller do
         it "sets the signature's params" do
           expect(assigns[:signature].name).to eq("Ted Berry")
           expect(assigns[:signature].email).to eq("ted@example.com")
-          expect(assigns[:signature].uk_citizenship).to eq("1")
           expect(assigns[:signature].postcode).to eq("SW1A1AA")
           expect(assigns[:signature].location_code).to eq("GB")
         end
@@ -207,7 +205,6 @@ RSpec.describe SponsorsController, type: :controller do
             {
               name: "Ted Berry",
               email: "",
-              uk_citizenship: "1",
               postcode: "12345",
               location_code: "GB"
             }
@@ -242,7 +239,6 @@ RSpec.describe SponsorsController, type: :controller do
       {
         name: "Ted Berry",
         email: "ted@example.com",
-        uk_citizenship: "1",
         postcode: "SW1A 1AA",
         location_code: "GB"
       }
@@ -318,7 +314,6 @@ RSpec.describe SponsorsController, type: :controller do
           it "sets the signature's params" do
             expect(assigns[:signature].name).to eq("Ted Berry")
             expect(assigns[:signature].email).to eq("ted@example.com")
-            expect(assigns[:signature].uk_citizenship).to eq("1")
             expect(assigns[:signature].postcode).to eq("SW1A1AA")
             expect(assigns[:signature].location_code).to eq("GB")
           end
@@ -341,7 +336,6 @@ RSpec.describe SponsorsController, type: :controller do
               {
                 name: "Ted Berry",
                 email: "",
-                uk_citizenship: "1",
                 postcode: "SW1A 1AA",
                 location_code: "GB"
               }

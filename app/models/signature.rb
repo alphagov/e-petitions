@@ -38,7 +38,6 @@ class Signature < ActiveRecord::Base
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :postcode, length: { maximum: 255 }, allow_blank: true
-  validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
   validates :constituency_id, length: { maximum: 255 }
 
   validate do
@@ -466,8 +465,6 @@ class Signature < ActiveRecord::Base
       email.split("@").last.downcase
     end
   end
-
-  attr_accessor :uk_citizenship
 
   def find_duplicate
     return nil unless petition

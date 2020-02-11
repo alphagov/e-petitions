@@ -8,7 +8,7 @@ class PetitionCreator
   STAGES = %w[petition replay_petition creator replay_email]
 
   PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email]
+  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :notify_by_email]
   PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
@@ -55,7 +55,6 @@ class PetitionCreator
           c.email = email
           c.postcode = postcode
           c.location_code = location_code
-          c.uk_citizenship = uk_citizenship
           c.constituency_id = constituency_id
           c.notify_by_email = notify_by_email
           c.ip_address = request.remote_ip
@@ -115,10 +114,6 @@ class PetitionCreator
     petition_creator_params[:location_code] || "GB"
   end
 
-  def uk_citizenship
-    petition_creator_params[:uk_citizenship] || "0"
-  end
-
   def notify_by_email
     petition_creator_params[:notify_by_email] || "0"
   end
@@ -174,7 +169,6 @@ class PetitionCreator
     errors.add(:name, :too_long, count: 255) if action.length > 255
     errors.add(:email, :blank) unless email.present?
     errors.add(:location_code, :blank) unless location_code.present?
-    errors.add(:uk_citizenship, :accepted) unless uk_citizenship == "1"
     errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
 
     if email.present?

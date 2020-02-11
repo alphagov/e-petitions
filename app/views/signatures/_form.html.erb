@@ -1,14 +1,3 @@
-<%= form_row for: [signature, :uk_citizenship], class: "uk-citizen" do %>
-  <span class="form-label">
-    <%= t(:"ui.signatures.citizenship.required") %>
-  </span>
-  <%= error_messages_for_field signature, :uk_citizenship %>
-  <div class="multiple-choice">
-    <%= form.check_box :uk_citizenship, tabindex: increment %>
-    <%= form.label :uk_citizenship, t(:"ui.petitions.create.creator_stage.citizen_or_resident.check_label") %>
-  </div>
-<% end %>
-
 <%= form_row for: [signature, :name] do %>
   <%= form.label :name, t(:"ui.petitions.create.creator_stage.name.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :name %>

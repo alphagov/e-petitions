@@ -440,7 +440,6 @@ FactoryBot.define do
     sequence(:email) {|n| "jo#{n}@public.com" }
     postcode              "SW1A 1AA"
     location_code         "GB"
-    uk_citizenship        "1"
     notify_by_email       "1"
     state                 Signature::VALIDATED_STATE
 
