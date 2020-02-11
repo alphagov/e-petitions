@@ -1,0 +1,63 @@
+duplicate:
+  code: "duplicate"
+  title: "Duplicate petition"
+  hidden: false
+  description: |-
+    There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue.
+
+    You are more likely to get action on this issue if you sign and share a single petition.
+
+irrelevant:
+  code: "irrelevant"
+  title: "Not the Government/Parliament’s responsibility"
+  hidden: false
+  description: |-
+    It’s about something that the UK Government or Parliament is not responsible for.
+
+no-action:
+  code: "no-action"
+  title: "Action unclear"
+  hidden: false
+  description: |-
+    It’s not clear what the petition is asking the UK Government or Parliament to do.
+
+honours:
+  code: "honours"
+  title: "Honours or appointments"
+  hidden: false
+  description: |-
+    It’s about honours or appointments.
+
+fake-name:
+  code: "fake-name"
+  title: "Fake name"
+  hidden: false
+  description: |-
+    It was created using a fake or incomplete name.
+
+    The text of your petition meets our terms and conditions.
+
+    However, people who create petitions are required to give their full, real name. Sorry if this wasn’t clear to you.
+
+    We are rejecting your petition for that reason, but if you resubmit your petition using your full name, we’ll be able to approve it.
+
+foi:
+  code: "foi"
+  title: "FOI request"
+  hidden: false
+  description: |-
+    It’s an FOI request.
+
+libellous:
+  code: "libellous"
+  title: "Confidential, libellous, false, defamatory or references a court case"
+  hidden: true
+  description: |-
+    It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.
+
+offensive:
+  code: "offensive"
+  title: "Offensive, joke, nonsense or advert"
+  hidden: true
+  description: |-
+    It’s offensive, nonsense, a joke, or an advert.

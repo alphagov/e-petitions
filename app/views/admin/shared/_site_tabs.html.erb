@@ -7,7 +7,8 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif params[:tab] == "moderation" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -16,7 +17,8 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif params[:tab] == "access" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -25,7 +27,8 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif params[:tab] == "features" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -34,7 +37,8 @@
     Features |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif params[:tab] == "tasks" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -43,7 +47,8 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     Tasks |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif controller_name == "holidays" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -52,7 +57,8 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     Holidays |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% elsif controller_name == "domains" %>
     <%= link_to "Description", edit_admin_site_path %> |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -61,7 +67,18 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    Domains
+    Domains |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+  <% elsif controller_name == "rejection_reasons" %>
+    <%= link_to "Description", edit_admin_site_path %> |
+    <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
+    <%= link_to "Moderation", edit_admin_site_path(tab: 'moderation') %> |
+    <%= link_to "Access", edit_admin_site_path(tab: 'access') %> |
+    <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
+    <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
+    <%= link_to "Holidays", edit_admin_holidays_path %> |
+    <%= link_to "Domains", admin_domains_path %> |
+    Rejection Reasons
   <% else %>
     Description |
     <%= link_to "Petitions", edit_admin_site_path(tab: 'petitions') %> |
@@ -70,6 +87,7 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Tasks", edit_admin_site_path(tab: 'tasks') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
-    <%= link_to "Domains", admin_domains_path %>
+    <%= link_to "Domains", admin_domains_path %> |
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
   <% end %>
 </p>

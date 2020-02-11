@@ -26,7 +26,7 @@ RSpec.describe Archived::Rejection, type: :model do
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:code) }
-    it { is_expected.to validate_inclusion_of(:code).in_array(Archived::Rejection::CODES) }
+    it { is_expected.to validate_inclusion_of(:code).in_array(%w[duplicate irrelevant no-action honours fake-name foi libellous offensive]) }
     it { is_expected.to validate_length_of(:details).is_at_most(4000) }
   end
 
@@ -79,7 +79,7 @@ RSpec.describe Archived::Rejection, type: :model do
   end
 
   describe "#hide_petition?" do
-    Archived::Rejection::HIDDEN_CODES.each do |code|
+    %w[libellous offensive].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -89,7 +89,7 @@ RSpec.describe Archived::Rejection, type: :model do
       end
     end
 
-    (Archived::Rejection::CODES - Archived::Rejection::HIDDEN_CODES).each do |code|
+    %w[duplicate irrelevant no-action honours fake-name foi].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -101,7 +101,7 @@ RSpec.describe Archived::Rejection, type: :model do
   end
 
   describe "#state_for_petition" do
-    Archived::Rejection::HIDDEN_CODES.each do |code|
+    %w[libellous offensive].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -111,7 +111,7 @@ RSpec.describe Archived::Rejection, type: :model do
       end
     end
 
-    (Archived::Rejection::CODES - Archived::Rejection::HIDDEN_CODES).each do |code|
+    %w[duplicate irrelevant no-action honours fake-name foi].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 

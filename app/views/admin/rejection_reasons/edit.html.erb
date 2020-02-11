@@ -1,0 +1,17 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+<h2>Edit Rejection Reason</h2>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for [:admin, @rejection_reason] do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>
