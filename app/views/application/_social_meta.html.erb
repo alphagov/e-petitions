@@ -31,5 +31,5 @@
 <%= twitter_card_tag 'description', @petition.background %>
 <% else %>
 <%= twitter_card_tag 'title', page_title %>
-<%= twitter_card_tag 'description', t(:"ui.application.twitter_card_description") %>
+<%= twitter_card_tag 'description', I18n.t(:"ui.application.twitter_card_description") %>
 <% end %>

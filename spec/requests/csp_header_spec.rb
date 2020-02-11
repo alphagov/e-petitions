@@ -11,12 +11,12 @@ RSpec.describe "Content Security Policy header", type: :request do
     expect(subject).to match(/\Adefault-src 'self';/)
   end
 
-  it "sets img-src to 'self'" do
-    expect(subject).to match(/img-src 'self';/)
+  it "sets img-src to 'self' data:" do
+    expect(subject).to match(/img-src 'self' data:;/)
   end
 
   it "sets script-src to 'self' and 'unsafe-inline'" do
-    expect(subject).to match(/script-src 'self' 'unsafe-inline';/)
+    expect(subject).to match(/script-src 'self' 'unsafe-inline' https:\/\/moderate\.petition\.parliament\.wales;/)
   end
 
   it "sets style-src to 'self' and 'unsafe-inline'" do

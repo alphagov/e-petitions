@@ -9,7 +9,9 @@
       <p class="content"><%= Parliament.dissolution_message %></p>
     <% end %>
     <% if Parliament.dissolution_faq_url? %>
-      <p class="content"><%= parliament_dissolution_faq_notice %></p>
+      <p class="content">
+        <%= t(:"ui.parliament.dissolution_faq_html", url: Parliament.dissolution_faq_url) %>
+      </p>
     <% end %>
   </div>
 <% end %>

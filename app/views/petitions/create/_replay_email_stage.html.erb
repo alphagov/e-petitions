@@ -1,4 +1,4 @@
-<%= form.submit raw("&#9664; #{t(:"ui.application.back")}"), name: "move_back", class: "back-page" %>
+<span><%= t(:"ui.application.back_html") %></span>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -18,6 +18,8 @@
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
-<%= form.submit t(:"ui.petitions.create.replay_email_stage.submit"), name: "move_next", class: "button", tabindex: increment %>
+<span>
+   <%= t(:"ui.petitions.create.replay_email_stage.submit_html", tabindex: increment) %>
+</span>
 
 <p><%= t(:"ui.petitions.create.replay_email_stage.fix_email_if_wrong") %></p>

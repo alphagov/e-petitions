@@ -1,0 +1,17 @@
+<tr>
+  <td>
+    <%= language.name %>
+  </td>
+  <td>
+    <%= language.locale %>
+  </td>
+  <td nowrap="true" class="">
+    <div class="button_to">
+      <%= link_to 'Edit', admin_language_path(language.locale), class: 'button' %>
+    </div>
+    <div class="button_to">
+      <%= link_to 'Download', admin_language_path(language.locale, :yml), class: 'button-secondary' %>
+    </div>
+    <%= button_to 'Reload', reload_admin_language_path(language.locale), method: :post, class: 'button-warning', data: { confirm: 'Reload translations? This will reset the translations for this language.' } %>
+  </td>
+</tr>

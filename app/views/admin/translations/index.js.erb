@@ -1,0 +1,33 @@
+<% if logged_in? %>
+window.addEventListener('DOMContentLoaded', (event) => {
+  var translations = document.querySelectorAll('span[data-translation-link]');
+
+  translations.forEach((translation) => {
+    var parent = translation.parentElement;
+    parent.dataset.translationLink = translation.dataset.translationLink;
+
+    parent.addEventListener('click', (event) => {
+      if (event.altKey) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        window.open(parent.dataset.translationLink, '_blank');
+      }
+    });
+
+    translation.remove();
+  })
+
+  console.log('Translation helper loaded');
+});
+<% else %>
+window.addEventListener('DOMContentLoaded', (event) => {
+  var translations = document.querySelectorAll('span[data-translation-link]');
+
+  translations.forEach((translation) => {
+    translation.remove();
+  })
+
+  console.log('Translation tags removed');
+});
+<% end %>

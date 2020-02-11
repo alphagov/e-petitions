@@ -6,7 +6,7 @@ module Authentication
     before_action :logout_stale_session
 
     before_action :require_admin
-    before_action :check_for_password_change
+    before_action :check_for_password_change, if: :logged_in?
 
     helper_method :current_user, :current_session, :logged_in?
   end

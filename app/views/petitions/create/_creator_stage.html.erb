@@ -1,4 +1,4 @@
-<%= form.submit raw("&#9664; #{t(:"ui.application.back")}"), name: "move_back", class: "back-page" %>
+<span><%= t(:"ui.application.back_html") %></span>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -50,6 +50,10 @@
   </div>
 <% end %>
 
-<%= form.submit t("ui.petitions.create.creator_stage.continue"), name: "move_next", class: "button", tabindex: increment %>
+<span>
+  <%= t(:"ui.petitions.create.creator_stage.continue_html", tabindex: increment) %>
+</span>
 
-<%= t(:"ui.petitions.create.creator_stage.about_published_data_html") %>
+<div>
+  <%= t(:"ui.petitions.create.creator_stage.about_published_data_html") %>
+</div>

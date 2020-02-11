@@ -1,0 +1,40 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+<table class="language-list">
+  <thead>
+    <tr>
+      <th><%= @language.name %></th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @language.keys.each do |key| %>
+      <tr>
+        <td><%= key %></td>
+        <td>
+          <div class="button_to">
+            <%= link_to 'Edit', edit_admin_language_path(@language.locale, key), class: 'button' %>
+          </div>
+
+          <% if @language.english? %>
+            <div class="button_to">
+              <%= link_to 'Translate', edit_admin_language_path("cy-GB", key), class: 'button-secondary' %>
+            </div>
+          <% end %>
+
+          <%= button_to 'Delete', destroy_admin_language_path(@language.locale, key), method: :delete, class: 'button-warning', data: { confirm: 'Delete translation?' } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p class="petition-actions">
+  <%= link_to 'Back', admin_languages_path, class: 'button-secondary' %>
+</p>

@@ -40,6 +40,8 @@
   </div>
 <% end %>
 
-<%= form.submit t(:"ui.petitions.create.creator_stage.continue"), name: "move:next", class: "button", tabindex: increment %>
+<span>
+  <%= t(:"ui.signatures.new.continue_html", tabindex: increment) %>
+</span>
 
 <%= t(:"ui.signatures.privacy_notice_html") %>

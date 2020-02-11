@@ -1,14 +1,12 @@
----
 en-GB:
   ui:
-    language_switcher:
-      text: "Cymraeg"
-      title: "Dangoswch y dudalen hon yn Gymraeg"
     application:
-      continue: Continue
+      continue_html: |-
+        <input type="submit" value="Continue" class="button" />
       share_this_petition: Share this petition
       twitter_card_description: Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament
-      back: Back
+      back_html: |-
+        <input type="submit" name="move_back" value="◀ Back" class="back-page" data-disable-with="◀ Back">
       get_json_csv_html: >-
         Get this data in %{json_link} or %{csv_link} format
       cookie_message:
@@ -30,8 +28,14 @@ en-GB:
         <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
     header:
-      strapline: Welsh Government and Parliament
+      language_switcher_html: |-
+        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
+      strapline: Welsh Parliament
       title: Petitions
+      title_link_html: |-
+        <a title="Go to the Petitions homepage" tabindex="1" class="proposition" href="%{url}">
+          <span class="graphic graphic-dragon-white"></span> Petitions
+        </a>
       tooltip: Go to the petitions homepage
     local_search:
       postcode: UK postcode
@@ -40,8 +44,8 @@ en-GB:
       app_name: Petitions
       app_tooltip: Welsh Parliament
     parliament:
-      dissolution_faq_link: Petitions Committee website
-      dissolution_faq_notice_html: Find out more on the %{faq_link}
+      dissolution_faq_html: |-
+        Find out more on the <a href="%{url}">Petitions Committee website</a>
     petitions:
       about_petition_data_html: |-
         <details role="group">
@@ -100,6 +104,7 @@ en-GB:
       check:
         heading: Start a petition
         results:
+          back: "◀ Back"
           duplicate:
             heading: We found some similar petitions
             sign_if_match: If one of these petitions matches yours, sign it and share it instead
@@ -254,7 +259,8 @@ en-GB:
             label: Postcode
           notify_by_email:
             check_label: Email me whenever there’s an update about this petition
-          continue: Continue
+          continue_html: |-
+            <input type="submit" name="move_next" value="Continue" class="button" tabindex="%{tabindex}" data-disable-with="Continue">
           about_published_data_html: |-
             <div class="secondary">
               <p>Your name will be published on this petition as the petition creator.</p>
@@ -268,15 +274,19 @@ en-GB:
         petition_stage:
           heading: Start a petition
           hint_standards_html: Remember, your petition must meet the %{standards_link}.
-          submit: Preview petition
+          submit_html: |-
+            <input type="submit" name="move_next" value="Preview petition" class="button" tabindex="%{tabindex}" data-disable-with="Preview petition">
         replay_email_stage:
           heading: Make sure this is right
-          submit: Yes – this is my email address
           fix_email_if_wrong: If your email address is wrong, just change it above
+          submit_html: |-
+            <input type="submit" name="move_next" value="Yes – this is my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">
         replay_petition_stage:
           heading: Check your petition
-          submit: This looks good
-          go_back: Go back and make changes
+          submit_html: |-
+            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
+          go_back_html: |-
+            <input type="submit" name="move_back" value="Go back and make changes" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and make changes">
           submit_warning_html: |-
             <p class="secondary">You can’t change your petition after this point.</p>
             <p class="secondary">If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
@@ -321,6 +331,13 @@ en-GB:
         signatures: signatures
       new:
         heading: Sign petition
+        continue_html: |-
+          <input type="submit" name="move_next" value="Continue" class="button" tabindex="%{tabindex}" data-disable-with="Continue">
+      confirm:
+        email_form:
+          submit_html: |-
+            <input type="submit" name="move_next" value="Yes – this is my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">
+          fix_email_if_wrong: If your email address is wrong, just change it above
       signed:
         heading:
           one: "1 signature"

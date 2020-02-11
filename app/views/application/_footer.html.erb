@@ -1,12 +1,36 @@
 <footer id="footer" role="contentinfo">
   <div class="wrapper">
     <ul id="footer_nav">
-      <li><%= link_to t(:"ui.footer.nav.home"), home_path %></li>
-      <li><%= link_to t(:"ui.footer.nav.all_petitions"), petitions_path %></li>
-      <li><%= link_to t(:"ui.footer.nav.start_a_petition"), check_petitions_path %></li>
-      <li><%= link_to t(:"ui.footer.nav.how_petitions_work"), help_path %></li>
-      <li><%= link_to t(:"ui.footer.nav.privacy"), privacy_path %></li>
-      <li><%= link_to t(:"ui.footer.nav.feedback"), feedback_path %></li>
+      <li>
+        <%= link_to home_path do %>
+          <%= t(:"ui.footer.nav.home") %>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to petitions_path do %>
+          <%= t(:"ui.footer.nav.all_petitions") %>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to check_petitions_path do %>
+          <%= t(:"ui.footer.nav.start_a_petition") %>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to help_path do %>
+          <%= t(:"ui.footer.nav.how_petitions_work") %>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to privacy_path do %>
+          <%= t(:"ui.footer.nav.privacy") %>
+        <% end %>
+      </li>
+      <li>
+        <%= link_to feedback_path do %>
+          <%= t(:"ui.footer.nav.feedback") %>
+        <% end %>
+      </li>
     </ul>
 
     <div class="open-government-licence">

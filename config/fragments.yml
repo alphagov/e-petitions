@@ -1,5 +1,6 @@
 head:
   keys:
+    - :translations_updated_at
     - :locale
     - :site_updated_at
     - :url
@@ -8,6 +9,7 @@ head:
 
 header:
   keys:
+    - :translations_updated_at
     - :locale
     - :home_page
   options:
@@ -15,6 +17,7 @@ header:
 
 footer:
   keys:
+    - :translations_updated_at
     - :locale
     - :create_petition_page
     - :open_petition_page
@@ -23,6 +26,7 @@ footer:
 
 home_page:
   keys:
+    - :translations_updated_at
     - :locale
     - :site_updated_at
     - :last_government_response_updated_at
@@ -32,6 +36,7 @@ home_page:
 
 local_petitions_page:
   keys:
+    - :translations_updated_at
     - :locale
     - :constituency
   options:
@@ -39,6 +44,7 @@ local_petitions_page:
 
 all_local_petitions_page:
   keys:
+    - :translations_updated_at
     - :locale
     - :constituency
   options:
@@ -46,6 +52,7 @@ all_local_petitions_page:
 
 petition:
   keys:
+    - :translations_updated_at
     - :locale
     - :petition
     - :reveal_response
@@ -55,6 +62,7 @@ petition:
 
 archived_petition:
   keys:
+    - :translations_updated_at
     - :locale
     - :petition
     - :reveal_response
@@ -64,6 +72,7 @@ archived_petition:
 
 robots:
   keys:
+    - :translations_updated_at
     - :locale
     - :last_petition_created_at
   options:

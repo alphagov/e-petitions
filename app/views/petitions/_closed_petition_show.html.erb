@@ -24,7 +24,9 @@
       <%= t(:"ui.petitions.closed_due_to_election") %>
 
       <% if Parliament.dissolution_faq_url? %>
-        <span><%= parliament_dissolution_faq_notice %></span>
+        <span>
+          <%= t(:"ui.parliament.dissolution_faq_html", url: Parliament.dissolution_faq_url) %>
+        </span>
       <% end %>
     </p>
   <% else %>

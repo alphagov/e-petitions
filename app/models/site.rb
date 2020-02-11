@@ -167,6 +167,10 @@ class Site < ActiveRecord::Base
       instance.update_all(signature_count_updated_at: timestamp)
     end
 
+    def translations_updated_at!(timestamp = Time.current)
+      instance.update_all(translations_updated_at: timestamp)
+    end
+
     def moderation_overdue_in_days
       7.days
     end
@@ -215,6 +219,10 @@ class Site < ActiveRecord::Base
       define_method method_cy do
         instance.public_send method_cy
       end
+    end
+
+    def urls
+      [url_en, url_cy]
     end
 
     private
@@ -509,6 +517,10 @@ class Site < ActiveRecord::Base
 
   def signature_count_updated_at
     super || Signature.earliest_validation
+  end
+
+  def translations_updated_at
+    super || updated_at
   end
 
   validates :title_en, :title_cy, presence: true, length: { maximum: 50 }

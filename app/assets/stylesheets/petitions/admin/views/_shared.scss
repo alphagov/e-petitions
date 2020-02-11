@@ -93,7 +93,7 @@
   .button_to {
     display: inline-block;
 
-    input[type=submit] {
+    input[type=submit], a {
       margin: 0;
       font-size: 12px;
       padding: 2px 8px;

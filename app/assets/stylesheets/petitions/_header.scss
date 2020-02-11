@@ -16,7 +16,7 @@
     overflow: visible;
     vertical-align: baseline;
     line-height: 34px;
-    padding-left: $text-indent;
+    padding-left: 80px;
     margin-right: 80px;
   }
   a {
@@ -30,13 +30,13 @@
     position: absolute;
     left: 0;
     top: 0;
-    width: 28px;
+    width: 67px;
     height: 34px;
   }
 
   .strapline {
     color: $white;
-    margin: $gutter-one-third -5px 5px $text-indent;
+    margin: $gutter-one-third -5px 5px 80px;
   }
 
   .language-switcher {

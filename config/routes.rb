@@ -100,6 +100,22 @@ Rails.application.routes.draw do
       resources :profile, only: %i[edit update]
       resources :user_sessions, only: %i[create]
 
+      resources :languages, only: %i[index show], param: 'locale' do
+        member do
+          post :reload
+
+          constraints key: /[-_a-z0-9.]+/ do
+            scope format: false do
+              get    '/:key', action: 'edit', as: :edit
+              patch  '/:key', action: 'update', as: :update
+              delete '/:key', action: 'destroy', as: :destroy
+            end
+          end
+        end
+      end
+
+      get '/translations', to: 'translations#index', as: :translations
+
       resources :invalidations, except: %i[show] do
         post :cancel, :count, :start, on: :member
       end

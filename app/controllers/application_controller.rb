@@ -13,8 +13,8 @@ class ApplicationController < ActionController::Base
   after_action do
     directives = [
       "default-src 'self'",
-      "img-src 'self'",
-      "script-src 'self' 'unsafe-inline'",
+      "img-src 'self' data:",
+      "script-src 'self' 'unsafe-inline' #{Site.moderate_url}",
       "style-src 'self' 'unsafe-inline'"
     ]
 

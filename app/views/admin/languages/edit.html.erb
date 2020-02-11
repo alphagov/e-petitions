@@ -1,0 +1,30 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+
+
+<%= form_tag update_admin_language_path(@language.locale, @key), method: :patch do %>
+  <h2>
+    <label for="translation"><%= @language.name %><br /><%= @key %></label>
+  </h2>
+
+  <div class="form-group">
+    <%= text_area_tag :translation, @translation, rows: 10, class: "form-control" %>
+
+    <% if @key.ends_with?("_html") %>
+      <p>
+        <small>This text contains HTML, please be careful not to break it when translating.</small>
+      </p>
+      <p>
+        <small>Only translate things which appear to be visible text and not attributes of the HTML tags unless they're obviously to be translated such as <code>title</code> and <code>value</code> attributes. If you are in any doubt about what needs to be translated, please contact support.</small>
+      </p>
+    <% end %>
+  </div>
+
+  <%= submit_tag 'Save', class: 'button' %>
+  <%= link_to 'Cancel', admin_language_path(@language.locale), class: 'button-secondary' %>
+<% end %>
