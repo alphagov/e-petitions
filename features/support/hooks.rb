@@ -41,3 +41,11 @@ end
 Before('@skip') do
   skip_this_scenario
 end
+
+Before do
+  ActiveRecord::FixtureSet.create_fixtures("#{::Rails.root}/spec/fixtures", ["rejection_reasons"])
+end
+
+After do
+  ActiveRecord::FixtureSet.reset_cache
+end

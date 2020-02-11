@@ -1,0 +1,36 @@
+<%= form_row for: [form.object, :code] do %>
+  <%= form.label :code, class: 'form-label' %>
+  <%= error_messages_for_field @rejection_reason, :code %>
+  <%= form.text_field :code, tabindex: increment, maxlength: 30, class: 'form-control' %>
+  <p><small>Use <code>a-z</code> and <code>-</code> characters only</small></p>
+<% end %>
+
+<%= form_row for: [form.object, :title] do %>
+  <%= form.label :title, class: 'form-label' %>
+  <%= error_messages_for_field @rejection_reason, :title %>
+  <%= form.text_field :title, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :description] do %>
+  <%= form.label :description, class: 'form-label' %>
+  <%= error_messages_for_field @rejection_reason, :description %>
+  <%= form.text_area :description, tabindex: increment, rows: 8, class: 'form-control' %>
+<% end %>
+
+<h3>Should this rejection reason hide the petition?</h3>
+
+<%= form_row class: 'inline' do %>
+  <div class="multiple-choice">
+    <%= form.radio_button :hidden, true %>
+    <%= form.label :hidden_true, "Yes", for: "hidden_true" %>
+  </div>
+
+  <div class="multiple-choice">
+    <%= form.radio_button :hidden, false %>
+    <%= form.label :hidden_false, "No", for: "hidden_false" %>
+  </div>
+  <%= error_messages_for_field @rejection_reason, :hidden %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_rejection_reasons_path, class: 'button-secondary' %>

@@ -1,0 +1,53 @@
+<h1>Edit Site</h1>
+
+<div class="grid-row">
+  <div class="grid-column">
+    <%= render "admin/shared/site_tabs" %>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="column-half search-inline">
+    <%= link_to "New Rejection Reason", new_admin_rejection_reason_path, class: "button inline-button" %>
+  </div>
+  <div class="column-half">
+    <%= will_paginate(@rejection_reasons) %>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="grid-column">
+    <table class="rejection-reason-list">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Title</th>
+          <th style="text-align: center;">Hidden</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @rejection_reasons.each do |rejection_reason| %>
+          <tr class="rejection-reason">
+            <td><%= rejection_reason.code %></td>
+            <td><%= rejection_reason.title %></td>
+            <td style="text-align: center;">
+              <% if rejection_reason.hidden? %>
+                &#x2714;
+              <% else %>
+                &nbsp;
+              <% end %>
+            </td>
+            <td>
+              <%= button_to 'Edit', edit_admin_rejection_reason_path(rejection_reason), method: :get, class: 'button edit-action' %>
+              <%= button_to 'Delete', admin_rejection_reason_path(rejection_reason), method: :delete, class: 'button-warning delete-action', data: { confirm: 'Delete rejection reason?' } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="grid-row">
+  <div class="grid-column">
+    <%= will_paginate(@rejection_reasons) %>
+  </div>
+</div>

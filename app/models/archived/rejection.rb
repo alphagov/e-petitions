@@ -2,13 +2,10 @@ require_dependency 'archived'
 
 module Archived
   class Rejection < ActiveRecord::Base
-    CODES = %w[duplicate irrelevant no-action honours fake-name foi libellous offensive]
-    HIDDEN_CODES = %w[libellous offensive]
-
     belongs_to :petition, touch: true
 
     validates :petition, presence: true
-    validates :code, presence: true, inclusion: { in: CODES }
+    validates :code, presence: true, inclusion: { in: :rejection_codes }
     validates :details, length: { maximum: 4000 }, allow_blank: true
 
     after_create do
@@ -23,12 +20,28 @@ module Archived
       end
     end
 
+    class << self
+      def used?(code)
+        where(code: code).any?
+      end
+    end
+
     def hide_petition?
-      code.in?(HIDDEN_CODES)
+      code.in?(hidden_codes)
     end
 
     def state_for_petition
       hide_petition? ? Petition::HIDDEN_STATE : Petition::REJECTED_STATE
+    end
+
+    private
+
+    def rejection_codes
+      @rejection_codes ||= RejectionReason.codes
+    end
+
+    def hidden_codes
+      @hidden_codes ||= RejectionReason.hidden_codes
     end
   end
 end

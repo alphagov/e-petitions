@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_08_101150) do
+ActiveRecord::Schema.define(version: 2020_02_11_022417) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -483,6 +483,17 @@ ActiveRecord::Schema.define(version: 2020_01_08_101150) do
     t.string "trending_items_notification_url"
   end
 
+  create_table "rejection_reasons", force: :cascade do |t|
+    t.string "code", limit: 30, null: false
+    t.string "title", limit: 100, null: false
+    t.string "description", limit: 2000, null: false
+    t.boolean "hidden", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_rejection_reasons_on_code", unique: true
+    t.index ["title"], name: "index_rejection_reasons_on_title", unique: true
+  end
+
   create_table "rejections", id: :serial, force: :cascade do |t|
     t.integer "petition_id"
     t.string "code", limit: 50, null: false
@@ -624,6 +635,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_101150) do
   add_foreign_key "archived_petition_emails", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_petitions", "parliaments"
   add_foreign_key "archived_rejections", "archived_petitions", column: "petition_id", on_delete: :cascade
+  add_foreign_key "archived_rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "archived_signatures", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "constituency_petition_journals", "petitions", on_delete: :cascade
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
@@ -634,6 +646,7 @@ ActiveRecord::Schema.define(version: 2020_01_08_101150) do
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"
   add_foreign_key "rejections", "petitions", on_delete: :cascade
+  add_foreign_key "rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "signatures", "petitions", on_delete: :cascade
   add_foreign_key "trending_domains", "petitions"
   add_foreign_key "trending_ips", "petitions"

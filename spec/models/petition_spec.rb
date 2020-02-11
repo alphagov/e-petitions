@@ -2044,7 +2044,7 @@ RSpec.describe Petition, type: :model do
   describe "#reject" do
     subject(:petition) { FactoryBot.create(:petition) }
 
-    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |rejection_code|
+    %w[duplicate irrelevant no-action honours fake-name foi].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
           petition.reject(code: rejection_code)
@@ -2061,7 +2061,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    Rejection::HIDDEN_CODES.each do |rejection_code|
+    %w[libellous offensive].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
           petition.reject(code: rejection_code)

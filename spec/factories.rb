@@ -763,4 +763,15 @@ FactoryBot.define do
       Digest::UUID.uuid_v5(Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com")
     end
   end
+
+  factory :rejection_reason do
+    code { Faker::Lorem.unique.word.dasherize }
+    title { Faker::Lorem.unique.sentence }
+    description { Faker::Lorem.paragraph }
+    hidden { false }
+
+    trait :hidden do
+      hidden { true }
+    end
+  end
 end

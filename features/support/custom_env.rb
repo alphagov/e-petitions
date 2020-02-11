@@ -83,6 +83,7 @@ end
 World(CucumberI18n)
 World(CucumberHelpers)
 World(CucumberSanitizer)
+World(MarkdownHelper)
 World(RejectionHelper)
 
 # run background jobs inline with delayed job
