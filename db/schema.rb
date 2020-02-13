@@ -483,7 +483,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_022417) do
     t.string "trending_items_notification_url"
   end
 
-  create_table "rejection_reasons", force: :cascade do |t|
+  create_table "rejection_reasons", id: :serial, force: :cascade do |t|
     t.string "code", limit: 30, null: false
     t.string "title", limit: 100, null: false
     t.string "description", limit: 2000, null: false
