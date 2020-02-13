@@ -163,12 +163,12 @@ class PetitionCreator
   def validate_petition
     errors.add(:action, :invalid) if action =~ /\A[-=+@]/
     errors.add(:action, :blank) unless action.present?
-    errors.add(:action, :too_long, count: 80) if action.length > 80
+    errors.add(:action, :too_long, count: 100) if action.length > 100
     errors.add(:background, :invalid) if background =~ /\A[-=+@]/
     errors.add(:background, :blank) unless background.present?
-    errors.add(:background, :too_long, count: 300) if background.length > 300
+    errors.add(:background, :too_long, count: 500) if background.length > 500
     errors.add(:additional_details, :invalid) if additional_details =~ /\A[-=+@]/
-    errors.add(:additional_details, :too_long, count: 800) if additional_details.length > 800
+    errors.add(:additional_details, :too_long, count: 1100) if additional_details.length > 1100
 
     if errors.any?
       @stage = "petition"

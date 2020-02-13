@@ -50,9 +50,9 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
-    it { is_expected.to validate_length_of(:action).is_at_most(80) }
-    it { is_expected.to validate_length_of(:background).is_at_most(300) }
-    it { is_expected.to validate_length_of(:additional_details).is_at_most(800) }
+    it { is_expected.to validate_length_of(:action).is_at_most(100) }
+    it { is_expected.to validate_length_of(:background).is_at_most(500) }
+    it { is_expected.to validate_length_of(:additional_details).is_at_most(1100) }
     it { is_expected.to validate_length_of(:committee_note).is_at_most(800) }
 
     it { is_expected.to validate_presence_of(:state).with_message("State '' not recognised") }

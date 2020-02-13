@@ -86,9 +86,9 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Background must be completed"
 
   When I am allowed to make the petition action too long
-  When I fill in "What do you want us to do?" with text longer than 80 characters
-  And I fill in "Background" with text longer than 300 characters
-  And I fill in "Additional details" with text longer than 800 characters
+  When I fill in "What do you want us to do?" with text longer than 100 characters
+  And I fill in "Background" with text longer than 500 characters
+  And I fill in "Additional details" with text longer than 1100 characters
   And I press "Preview petition"
 
   Then I should see "Action is too long"

@@ -186,7 +186,7 @@ RSpec.describe PetitionsController, type: :controller do
 
         it "has stage of 'petition' if there is an error on additional_details" do
           perform_enqueued_jobs do
-            post :create, params: { stage: "replay_email", petition_creator: params.merge(additional_details: "a" * 801) }
+            post :create, params: { stage: "replay_email", petition_creator: params.merge(additional_details: "a" * 1101) }
           end
 
           expect(assigns[:new_petition].stage).to eq "petition"
