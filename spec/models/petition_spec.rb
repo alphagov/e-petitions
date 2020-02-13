@@ -50,62 +50,27 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
-    it "should validate the length of :action to within 80 characters" do
-      expect(FactoryBot.build(:petition, :action => 'x' * 80)).to be_valid
-      expect(FactoryBot.build(:petition, :action => 'x' * 81)).not_to be_valid
-    end
+    it { is_expected.to validate_length_of(:action).is_at_most(80) }
+    it { is_expected.to validate_length_of(:background).is_at_most(300) }
+    it { is_expected.to validate_length_of(:additional_details).is_at_most(800) }
+    it { is_expected.to validate_length_of(:committee_note).is_at_most(800) }
 
-    it "should validate the length of :background to within 300 characters" do
-      expect(FactoryBot.build(:petition, :background => 'x' * 300)).to be_valid
-      expect(FactoryBot.build(:petition, :background => 'x' * 301)).not_to be_valid
-    end
+    it { is_expected.to validate_presence_of(:state).with_message("State '' not recognised") }
+    it { is_expected.not_to allow_value("unknown").for(:state) }
 
-    it "should validate the length of :additional_details to within 800 characters" do
-      expect(FactoryBot.build(:petition, :additional_details => 'x' * 800)).to be_valid
-      expect(FactoryBot.build(:petition, :additional_details => 'x' * 801)).not_to be_valid
-    end
-
-    it "should validate the length of :committee_note to within 800 characters" do
-      expect(FactoryBot.build(:petition, :committee_note => 'x' * 800)).to be_valid
-      expect(FactoryBot.build(:petition, :committee_note => 'x' * 801)).not_to be_valid
-    end
-
-    it "does not allow a blank state" do
-      petition = FactoryBot.build(:petition, state: '')
-
-      expect(petition).not_to be_valid
-      expect(petition.errors[:state]).not_to be_empty
-    end
-
-    it "does not allow an unknown state" do
-      petition = FactoryBot.build(:petition, state: 'unknown')
-
-      expect(petition).not_to be_valid
-      expect(petition.errors[:state]).not_to be_empty
-    end
-
-    %w(pending validated sponsored flagged open rejected hidden).each do |state|
-      it "allows state: #{state}" do
-        petition = FactoryBot.build(:"#{state}_petition")
-
-        expect(petition).to be_valid
-        expect(petition.state).to eq(state)
-        expect(petition.errors[:state]).to be_empty
-      end
-    end
+    it { is_expected.to allow_value("pending").for(:state) }
+    it { is_expected.to allow_value("validated").for(:state) }
+    it { is_expected.to allow_value("sponsored").for(:state) }
+    it { is_expected.to allow_value("flagged").for(:state) }
+    it { is_expected.to allow_value("open").for(:state) }
+    it { is_expected.to allow_value("rejected").for(:state) }
+    it { is_expected.to allow_value("hidden").for(:state) }
 
     context "when state is open" do
-      let(:petition) { FactoryBot.build(:open_petition, open_at: nil, closed_at: nil) }
+      subject { FactoryBot.build(:open_petition) }
 
-      it "checks petition is invalid if no open_at date" do
-        expect(petition).not_to be_valid
-        expect(petition.errors[:open_at]).not_to be_empty
-      end
-
-      it "checks petition is valid if there is an open_at date" do
-        petition.open_at = Time.current
-        expect(petition).to be_valid
-      end
+      it { is_expected.not_to allow_value(nil).for(:open_at) }
+      it { is_expected.to allow_value(Time.current).for(:open_at) }
     end
   end
 
