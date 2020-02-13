@@ -12,6 +12,7 @@ en-GB:
       cookie_message:
         html: We use cookies to make this service simpler. %{privacy_link}
         privacy_link: Find out more about cookies
+      character_count: "%{count} characters max"
     footer:
       copyright_html: |-
         <span class="graphic graphic-portcullis-large-grey"></span>
@@ -65,7 +66,6 @@ en-GB:
       action:
         label: What do you want us to do?
         help_html: |-
-          <p class="character-count">80 characters max</p>
           <p class="form-hint">Example: Make wrongly describing a casserole with a pastry lid as a pie a criminal offence</p>
           <details class="form-group-help">
             <summary><span class="summary">Show more examples</span></summary>
@@ -86,7 +86,6 @@ en-GB:
       background:
         label: Background
         help_html: |-
-          <p class="character-count">300 characters max</p>
           <details class="form-group-help">
             <summary><span class="summary">Help writing background</span></summary>
             <div class="panel-indent">
@@ -98,7 +97,6 @@ en-GB:
         label: Additional details
         hint_optional: Optional - background information, evidence and references
         help_html: |-
-          <p class="character-count">500 characters max</p>
       at_threshold_for_debate_ellipsis: At %{threshold} signatures...
       at_threshold_for_debate_will_be_considered: At %{threshold} signatures, this petition will be considered for debate in Parliament
       check:

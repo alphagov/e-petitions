@@ -12,6 +12,7 @@
   <%= form.label :action, t(:"ui.petitions.action.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :action %>
   <%= form.text_area :action, tabindex: increment, rows: 3, data: { max_length: 80 }, class: "form-control" %>
+  <p class="character-count"><%= t(:"ui.application.character_count", count: 80) %></p>
   <%= t(:"ui.petitions.action.help_html") %>
 <% end %>
 
@@ -19,6 +20,7 @@
   <%= form.label :background, t(:"ui.petitions.background.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :background %>
   <%= form.text_area :background, tabindex: increment, rows: 5, data: { max_length: 300 }, class: "form-control" %>
+  <p class="character-count"><%= t(:"ui.application.character_count", count: 300) %></p>
   <%= t(:"ui.petitions.background.help_html") %>
 <% end %>
 
@@ -29,6 +31,7 @@
   <% end %>
   <%= error_messages_for_field petition, :additional_details %>
   <%= form.text_area :additional_details, tabindex: increment, rows: 7, data: { max_length: 500 }, class: "form-control" %>
+  <p class="character-count"><%= t(:"ui.application.character_count", count: 500) %></p>
   <%= t(:"ui.petitions.additional_details.help_html") %>
 <% end %>
 
