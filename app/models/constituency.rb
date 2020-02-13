@@ -2,7 +2,7 @@ require_dependency 'constituency/api_client'
 require_dependency 'constituency/api_query'
 
 class Constituency < ActiveRecord::Base
-  MP_URL = "http://www.parliament.uk/biographies/commons"
+  MP_URL = "https://members.parliament.uk/member/%{mp_id}/contact"
 
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
@@ -72,7 +72,7 @@ class Constituency < ActiveRecord::Base
   end
 
   def mp_url
-    "#{MP_URL}/#{mp_name.parameterize}/#{mp_id}"
+    MP_URL % { mp_id: mp_id }
   end
 
   def to_param

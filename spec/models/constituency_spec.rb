@@ -278,7 +278,7 @@ RSpec.describe Constituency, type: :model do
 
     it "generates a valid link to the MP on the parliament.uk website" do
       expect(constituency.mp_url).to eq <<-URL.strip
-        http://www.parliament.uk/biographies/commons/the-rt-hon-duncan-short-mp/2564
+        https://members.parliament.uk/member/2564/contact
       URL
     end
   end
