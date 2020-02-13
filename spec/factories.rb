@@ -435,6 +435,12 @@ FactoryBot.define do
     end
   end
 
+  factory :contact do
+    association :signature
+    phone_number { "0300 200 6565" }
+    address { "Pierhead St, Cardiff" }
+  end
+
   factory :signature do
     sequence(:name)  {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
@@ -442,6 +448,10 @@ FactoryBot.define do
     location_code         "GB"
     notify_by_email       "1"
     state                 Signature::VALIDATED_STATE
+
+    after(:build) do |signature, evaluator|
+      build(:contact, signature: signature) if signature.creator?
+    end
 
     after(:create) do |signature, evaluator|
       if signature.petition && signature.validated?

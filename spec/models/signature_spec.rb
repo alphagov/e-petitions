@@ -80,6 +80,7 @@ RSpec.describe Signature, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:petition) }
     it { is_expected.to belong_to(:invalidation) }
+    it { is_expected.to have_one(:contact) }
   end
 
   describe "callbacks" do

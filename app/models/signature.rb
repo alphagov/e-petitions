@@ -31,6 +31,7 @@ class Signature < ActiveRecord::Base
 
   belongs_to :petition
   belongs_to :invalidation
+  has_one :contact # on_delete: :cascade
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }

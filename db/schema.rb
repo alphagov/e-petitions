@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_14_030610) do
+ActiveRecord::Schema.define(version: 2020_02_17_115335) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -212,6 +212,15 @@ ActiveRecord::Schema.define(version: 2020_02_14_030610) do
     t.datetime "updated_at", null: false
     t.datetime "last_signed_at"
     t.index ["petition_id", "constituency_id"], name: "idx_constituency_petition_journal_uniqueness", unique: true
+  end
+
+  create_table "contacts", force: :cascade do |t|
+    t.bigint "signature_id", null: false
+    t.string "address"
+    t.string "phone_number", limit: 255
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["signature_id"], name: "index_contacts_on_signature_id"
   end
 
   create_table "country_petition_journals", id: :serial, force: :cascade do |t|
@@ -640,6 +649,7 @@ ActiveRecord::Schema.define(version: 2020_02_14_030610) do
   add_foreign_key "archived_rejections", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_signatures", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "constituency_petition_journals", "petitions", on_delete: :cascade
+  add_foreign_key "contacts", "signatures", on_delete: :cascade
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
   add_foreign_key "domains", "domains", column: "canonical_domain_id"
   add_foreign_key "email_requested_receipts", "petitions"

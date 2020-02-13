@@ -13,6 +13,11 @@
 <dd>
   <%=  @petition.creator.name %><br />
   <%= auto_link(@petition.creator.email) %>
+  <% @petition.creator.contact&.tap do |contact| %>
+    <br />
+    <%= contact.phone_number %><br />
+    <%= simple_format(h(contact.address)) %>
+  <% end %>
 </dd>
 
 <% if @petition.collecting_sponsors? %>

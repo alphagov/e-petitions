@@ -51,6 +51,7 @@ Scenario: Charlie creates a petition
   And I press "Preview petition"
   And I press "This looks good"
   And I fill in my details
+  And I fill in my creator contact details
   When I press "Continue"
   Then the markup should be valid
   And I am asked to review my email address
@@ -72,6 +73,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I press "Preview petition"
   And I press "This looks good"
   And I fill in my details with postcode "SW14 9RQ"
+  And I fill in my creator contact details
   And I press "Continue"
   Then I should not see the text "Your constituency is"
 
@@ -127,6 +129,14 @@ Scenario: Charlie tries to submit an invalid petition
   Then I should see "Name must be completed"
   And I should see "Email must be completed"
   And I should see "Postcode must be completed"
+  And I should see "Phone number must be completed"
+  And I should see "Address must be completed"
+
+  When I fill in "Address" with text longer than 500 characters
+  And I fill in "Phone number" with "32000000000000000000000000000000"
+  And I press "Continue"
+  Then I should see "Phone number is too long"
+  And I should see "Address is too long"
 
   When I fill in "Name" with "=cmd"
   And I press "Continue"
@@ -134,6 +144,7 @@ Scenario: Charlie tries to submit an invalid petition
   Then I should see "Name can't start with a '=', '+', '-' or '@'"
 
   When I fill in my details
+  And I fill in my creator contact details
   And I press "Continue"
 
   Then I should see a heading called "Make sure this is right"

@@ -8,7 +8,7 @@ class PetitionCreator
   STAGES = %w[petition replay_petition creator replay_email]
 
   PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :notify_by_email]
+  SIGNATURE_PARAMS = [:name, :email, :phone_number, :address, :postcode, :location_code, :notify_by_email]
   PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
@@ -53,6 +53,10 @@ class PetitionCreator
         p.build_creator do |c|
           c.name = name
           c.email = email
+          c.build_contact do |contact|
+            contact.phone_number = phone_number
+            contact.address = address
+          end
           c.postcode = postcode
           c.location_code = location_code
           c.constituency_id = constituency_id
@@ -104,6 +108,14 @@ class PetitionCreator
 
   def email
     petition_creator_params[:email].to_s.strip
+  end
+
+  def phone_number
+    petition_creator_params[:phone_number].to_s.tr('^1234567890', '')
+  end
+
+  def address
+    petition_creator_params[:address].to_s.strip
   end
 
   def postcode
@@ -168,7 +180,11 @@ class PetitionCreator
     errors.add(:name, :blank) unless name.present?
     errors.add(:name, :too_long, count: 255) if action.length > 255
     errors.add(:email, :blank) unless email.present?
+    errors.add(:phone_number, :blank) unless phone_number.present?
+    errors.add(:phone_number, :too_long, count: 31) if phone_number.length > 31
     errors.add(:location_code, :blank) unless location_code.present?
+    errors.add(:address, :blank) unless address.present?
+    errors.add(:address, :too_long, count: 500) if address.length > 500
     errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
 
     if email.present?

@@ -251,6 +251,11 @@ en-GB:
             hint: You must use your full name
           email:
             label: Email address
+          phone_number:
+            label: Phone number
+          address:
+            label: Address
+            hint: You must provide a valid address in Wales
           location:
             label: Location
           postcode:

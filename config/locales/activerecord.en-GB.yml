@@ -123,3 +123,9 @@ en-GB:
       postcode:
         blank: "Postcode must be completed"
         invalid: "Postcode not recognised"
+      phone_number:
+        blank: "Phone number must be completed"
+        too_long: "Phone number is too long"
+      address:
+        blank: "Address must be completed"
+        too_long: "Address is too long"

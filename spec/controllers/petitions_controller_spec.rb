@@ -47,6 +47,7 @@ RSpec.describe PetitionsController, type: :controller do
         background: "Limit temperature rise at two degrees",
         additional_details: "Global warming is upon us",
         name: "John Mcenroe", email: "john@example.com",
+        phone_number: "0300 200 6565", address: "Pierhead St, Cardiff",
         postcode: "SE3 4LL", location_code: "GB"
       }
     end

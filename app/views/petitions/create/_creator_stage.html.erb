@@ -22,10 +22,24 @@
   <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
+<%= form_row for: [petition, :phone_number] do %>
+  <%= form.label :phone_number, t(:"ui.petitions.create.creator_stage.phone_number.label"), class: "form-label" %>
+  <%= error_messages_for_field petition, :phone_number %>
+  <%= form.text_field :phone_number, tabindex: increment, class: "form-control" %>
+<% end %>
+
 <%= form_row for: [petition, :location_code] do %>
   <%= form.label :location_code, t(:"ui.petitions.create.creator_stage.location.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :location_code %>
   <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
+<% end %>
+
+<%= form_row for: [petition, :address] do %>
+  <%= form.label :address, t(:"ui.petitions.create.creator_stage.address.label"), class: "form-label" %>
+  <%= error_messages_for_field petition, :address %>
+  <%= form.text_area :address, tabindex: increment, rows: 4, data: { max_length: 500 }, class: "form-control" %>
+  <p class="character-count"><%= t(:"ui.application.character_count", count: 500) %></p>
+  <span class="form-hint"><%= t(:"ui.petitions.create.creator_stage.address.hint") %></span>
 <% end %>
 
 <%= form_row for: [petition, :postcode] do %>

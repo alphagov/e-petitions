@@ -56,6 +56,13 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
   )
 end
 
+When(/^I fill in my creator contact details$/) do
+  steps %Q(
+    And I fill in "Phone number" with "0300 200 6565"
+    And I fill in "Address" with "Pierhead St, Cardiff"
+  )
+end
+
 When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
   sanitized_postcode = PostcodeSanitizer.call(postcode)
