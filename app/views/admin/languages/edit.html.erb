@@ -12,18 +12,27 @@
     <label for="translation"><%= @language.name %><br /><%= @key %></label>
   </h2>
 
-  <div class="form-group">
-    <%= text_area_tag :translation, @translation, rows: 10, class: "form-control" %>
-
-    <% if @key.ends_with?("_html") %>
-      <p>
-        <small>This text contains HTML, please be careful not to break it when translating.</small>
-      </p>
-      <p>
-        <small>Only translate things which appear to be visible text and not attributes of the HTML tags unless they're obviously to be translated such as <code>title</code> and <code>value</code> attributes. If you are in any doubt about what needs to be translated, please contact support.</small>
-      </p>
+  <% if @translation.is_a?(Hash) %>
+    <% @translation.each do |key, value| %>
+      <div class="form-group">
+        <%= label_tag key, nil, for: "translation_#{key}", class: "form-label" %>
+        <%= text_field_tag :"translation[#{key}]", value, tabindex: increment, class: "form-control", autocomplete: 'off' %>
+      </div>
     <% end %>
-  </div>
+  <% else %>
+    <div class="form-group">
+      <%= text_area_tag :translation, @translation, rows: 10, class: "form-control" %>
+
+      <% if @key.ends_with?("_html") %>
+        <p>
+          <small>This text contains HTML, please be careful not to break it when translating.</small>
+        </p>
+        <p>
+          <small>Only translate things which appear to be visible text and not attributes of the HTML tags unless they're obviously to be translated such as <code>title</code> and <code>value</code> attributes. If you are in any doubt about what needs to be translated, please contact support.</small>
+        </p>
+      <% end %>
+    </div>
+  <% end %>
 
   <%= submit_tag 'Save', class: 'button' %>
   <%= link_to 'Cancel', admin_language_path(@language.locale), class: 'button-secondary' %>

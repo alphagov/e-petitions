@@ -79,6 +79,6 @@ class Admin::LanguagesController < Admin::AdminController
   end
 
   def set_translation
-    @translation = params[:translation].to_s
+    @translation = params[:translation]
   end
 end

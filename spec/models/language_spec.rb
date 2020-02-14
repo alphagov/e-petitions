@@ -250,7 +250,12 @@ RSpec.describe Language, type: :model do
   describe "#lookup" do
     let(:language) { FactoryBot.create(:language, :english, translations: translations) }
     let(:translations) do
-      { "en-GB" => { "header" => { "title" => "Welsh Petitions" } } }
+      {
+        "en-GB" => {
+          "header" => { "title" => "Welsh Petitions" },
+          "signature_count" => { "one" => "1 signature", "other" => "%{count} signatures" }
+        }
+      }
     end
 
     context "a nested key" do
@@ -278,6 +283,12 @@ RSpec.describe Language, type: :model do
         it "returns nil" do
           expect(language.lookup(:"en-GB", :title, :header, {})).to eq("Welsh Petitions")
         end
+      end
+    end
+
+    context "a key that returns a hash" do
+      it "returns a hash with symbol keys" do
+        expect(language.lookup(:"en-GB", :signature_count, [], {})).to eq(one: "1 signature", other: "%{count} signatures")
       end
     end
   end
