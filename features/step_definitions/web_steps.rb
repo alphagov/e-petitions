@@ -49,6 +49,10 @@ When /^(?:|I )fill in "([^"]*)" for "([^"]*)"(?: within "([^"]*)")?$/ do |value,
   end
 end
 
+When /^I fill in "([^"]+)" with text longer than (\d+) characters$/ do |field, count|
+  fill_in field, with: ?a * (count + 1)
+end
+
 # Use this to fill in an entire form with data from a table. Example:
 #
 #   When I fill in the following:
