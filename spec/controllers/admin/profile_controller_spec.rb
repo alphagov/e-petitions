@@ -10,7 +10,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
     describe "GET 'edit'" do
       it "should redirect to the login page" do
         get 'edit', params: { id: @user.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
+        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
       end
     end
   end
@@ -71,7 +71,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
 
         it "should redirect" do
           do_patch('Letmein1!', 'Letmeout1!', 'Letmeout1!')
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin")
         end
       end
 

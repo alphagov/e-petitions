@@ -18,7 +18,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the login page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
         end
       end
 
@@ -45,7 +45,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin")
         end
       end
 
@@ -103,7 +103,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -131,7 +131,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         let(:invalidation) { FactoryBot.create(:invalidation, :completed, email: "user@example.com") }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -166,7 +166,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
           end
 
           it "redirects to the index page" do
-            expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+            expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
           end
 
           it "sets the flash notice message" do
@@ -183,7 +183,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -199,7 +199,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -213,7 +213,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -227,7 +227,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { delete :destroy, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -246,7 +246,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash alert message" do
@@ -262,7 +262,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :cancel, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -276,7 +276,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :cancel, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -295,7 +295,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash alert message" do
@@ -311,7 +311,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :count, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -325,7 +325,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :count, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -344,7 +344,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash alert message" do
@@ -360,7 +360,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :start, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -374,7 +374,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         before { post :start, params: { id: invalidation.id } }
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash notice message" do
@@ -393,7 +393,7 @@ RSpec.describe Admin::InvalidationsController, type: :controller, admin: true do
         end
 
         it "redirects to the index page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/invalidations")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/invalidations")
         end
 
         it "sets the flash alert message" do

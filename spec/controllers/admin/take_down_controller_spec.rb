@@ -15,14 +15,14 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, params: { petition_id: petition.id }
-        expect(response).to redirect_to('https://moderate.petition.parliament.wales/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.senedd.wales/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to('https://moderate.petition.parliament.wales/admin/login')
+        expect(response).to redirect_to('https://moderate.petition.senedd.wales/admin/login')
       end
     end
   end
@@ -34,14 +34,14 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
     describe 'GET /show' do
       it 'redirects to edit profile page' do
         get :show, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -137,7 +137,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
           end
 
           it 'redirects to the admin show page for the petition' do
-            expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do
@@ -178,7 +178,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
           end
 
           it 'redirects to the admin show page for the petition' do
-            expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}")
+            expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}")
           end
 
           it "sends an email to the petition creator" do

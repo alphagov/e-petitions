@@ -10,7 +10,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the login page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
         end
       end
 
@@ -29,7 +29,7 @@ RSpec.describe Admin::TasksController, type: :controller, admin: true do
         before { process action, method: method, params: params }
 
         it "redirects to the admin hub page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin")
         end
       end
 

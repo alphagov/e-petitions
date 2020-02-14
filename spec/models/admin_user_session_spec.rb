@@ -7,7 +7,7 @@ RSpec.describe AdminUserSession do
       FactoryBot.create(:moderator_user, email: email)
     end
 
-    let(:email) { "admin@petition.parliament.wales" }
+    let(:email) { "admin@petition.senedd.wales" }
     let(:params) { { email: email, password: "password" } }
     let(:user_session) { described_class.new(params) }
     let(:user) { AdminUser.find_by!(email: email) }

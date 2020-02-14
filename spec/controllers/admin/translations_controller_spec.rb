@@ -32,7 +32,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
 
     context "and the Origin header is set to the english domain" do
       before do
-        request.set_header "HTTP_ORIGIN", "https://petition.parliament.wales"
+        request.set_header "HTTP_ORIGIN", "https://petition.senedd.wales"
       end
 
       describe "GET /admin/translations" do
@@ -62,7 +62,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
           get :index, as: :js
 
           expect(response.status).to eq(200)
-          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://petition.parliament.wales")
+          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://petition.senedd.wales")
           expect(response.headers["Access-Control-Allow-Methods"]).to eq("GET")
           expect(response.headers["Access-Control-Allow-Headers"]).to eq("Origin, X-Requested-With, Content-Type, Accept")
           expect(response.headers["Access-Control-Allow-Credentials"]).to eq("true")

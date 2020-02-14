@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_03_190532) do
+ActiveRecord::Schema.define(version: 2020_02_14_030610) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -560,8 +560,8 @@ ActiveRecord::Schema.define(version: 2020_02_03_190532) do
 
   create_table "sites", id: :serial, force: :cascade do |t|
     t.string "title_en", limit: 50, default: "Petition parliament", null: false
-    t.string "url_en", limit: 50, default: "https://petition.parliament.wales", null: false
-    t.string "email_from_en", limit: 100, default: "\"Petitions: Welsh Parliament\" <no-reply@petition.parliament.wales>", null: false
+    t.string "url_en", limit: 50, default: "https://petition.senedd.wales", null: false
+    t.string "email_from_en", limit: 100, default: "\"Petitions: Welsh Parliament\" <no-reply@petition.senedd.wales>", null: false
     t.string "username", limit: 30
     t.string "password_digest", limit: 60
     t.boolean "enabled", default: true, null: false
@@ -575,8 +575,8 @@ ActiveRecord::Schema.define(version: 2020_02_03_190532) do
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "feedback_email", limit: 100, default: "\"Petitions: Welsh Parliament\" <petitionscommittee@parliament.wales>", null: false
-    t.string "moderate_url", limit: 50, default: "https://moderate.petition.parliament.wales", null: false
+    t.string "feedback_email", limit: 100, default: "\"Petitions: Welsh Parliament\" <petitionscommittee@senedd.wales>", null: false
+    t.string "moderate_url", limit: 50, default: "https://moderate.petition.senedd.wales", null: false
     t.datetime "last_petition_created_at"
     t.integer "login_timeout", default: 1800, null: false
     t.jsonb "feature_flags", default: {}, null: false
