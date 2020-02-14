@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xml:base="http://data.parliament.uk/MembersDataPlatform/open/OData.svc/" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <id>http://data.parliament.uk/membersdataplatform/open/OData.svc/Constituencies</id>
+    <title type="text">Constituencies</title>
+    <updated>2020-02-13T16:18:25Z</updated>
+    <link rel="self" title="Constituencies" href="Constituencies" />
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Constituencies(3320)</id>
+        <category term="MNISModel.Constituency" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Constituency" href="Constituencies(3320)" />
+        <title />
+        <updated>2020-02-13T17:00:20Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3320</d:Constituency_Id>
+                <d:Name>Bethnal Green and Bow</d:Name>
+                <d:ONSCode>E14000555</d:ONSCode>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Constituencies(3427)</id>
+        <category term="MNISModel.Constituency" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Constituency" href="Constituencies(3427)" />
+        <title />
+        <updated>2020-02-13T17:01:03Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3427</d:Constituency_Id>
+                <d:Name>Coventry North East</d:Name>
+                <d:ONSCode>E14000649</d:ONSCode>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Constituencies(3724)</id>
+        <category term="MNISModel.Constituency" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Constituency" href="Constituencies(3724)" />
+        <title />
+        <updated>2020-02-13T17:01:54Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3724</d:Constituency_Id>
+                <d:Name>Sheffield, Brightside and Hillsborough</d:Name>
+                <d:ONSCode>E14000921</d:ONSCode>
+            </m:properties>
+        </content>
+    </entry>
+</feed>

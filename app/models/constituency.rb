@@ -34,6 +34,10 @@ class Constituency < ActiveRecord::Base
   end
 
   class << self
+    def for(external_id, &block)
+      find_or_initialize_by(external_id: external_id).tap(&block)
+    end
+
     def by_ons_code
       order(ons_code: :asc)
     end
@@ -52,10 +56,6 @@ class Constituency < ActiveRecord::Base
 
         constituency
       end
-    end
-
-    def refresh!
-      find_each { |c| c.refresh! }
     end
 
     def query
@@ -77,41 +77,5 @@ class Constituency < ActiveRecord::Base
 
   def to_param
     slug
-  end
-
-  def refresh!
-    return unless example_postcode?
-
-    results = query.fetch(example_postcode)
-    attributes = results.first
-
-    if attributes.nil?
-      raise empty_results_exception
-    elsif external_id != attributes[:external_id]
-      raise mismatched_results_exception(attributes)
-    else
-      self.mp_id = attributes[:mp_id]
-      self.mp_name = attributes[:mp_name]
-      self.mp_date = attributes[:mp_date]
-
-      save! if changed?
-    end
-  end
-
-  private
-
-  def empty_results_exception
-    RuntimeError.new <<-ERROR.squish
-      empty results from API when refreshing
-      with example_postcode #{example_postcode.inspect}
-    ERROR
-  end
-
-  def mismatched_results_exception(attributes)
-    RuntimeError.new <<-ERROR.squish
-      mismatched constituencies when refreshing
-      with example postcode #{example_postcode.inspect}
-      - expected: #{external_id}, actual: #{attributes[:external_id]}
-    ERROR
   end
 end
