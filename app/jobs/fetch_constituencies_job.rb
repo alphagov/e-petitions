@@ -10,6 +10,7 @@ class FetchConstituenciesJob < ApplicationJob
           constituency.name = name
           constituency.ons_code = ons_code
           constituency.example_postcode = example_postcodes[ons_code]
+          constituency.region_id = regions[external_id]
 
           if mp = mps[external_id]
             constituency.mp_id = mp.id
@@ -43,6 +44,14 @@ class FetchConstituenciesJob < ApplicationJob
 
   def mps
     @mps ||= members.inject({}) { |h, m| h[m.constituency_id] = m; h }
+  end
+
+  def constituency_regions
+    @constituency_regions ||= Feed::ConstituencyRegions.new
+  end
+
+  def regions
+    @regions ||= constituency_regions.inject({}) { |h, c| h[c.constituency_id] = c.region_id; h }
   end
 
   def example_postcodes

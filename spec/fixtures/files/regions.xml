@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xml:base="http://data.parliament.uk/MembersDataPlatform/open/OData.svc/" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <id>http://data.parliament.uk/membersdataplatform/open/OData.svc/Areas</id>
+    <title type="text">Areas</title>
+    <updated>2020-02-14T04:02:25Z</updated>
+    <link rel="self" title="Areas" href="Areas" />
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Areas(109)</id>
+        <category term="MNISModel.Area" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Area" href="Areas(109)" />
+        <title />
+        <updated>2020-02-14T04:02:25Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Area_Id m:type="Edm.Int32">109</d:Area_Id>
+                <d:Name>Yorkshire and The Humber</d:Name>
+                <d:OnsAreaId>D</d:OnsAreaId>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Areas(111)</id>
+        <category term="MNISModel.Area" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Area" href="Areas(111)" />
+        <title />
+        <updated>2020-02-14T04:02:25Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Area_Id m:type="Edm.Int32">111</d:Area_Id>
+                <d:Name>West Midlands</d:Name>
+                <d:OnsAreaId>F</d:OnsAreaId>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Areas(113)</id>
+        <category term="MNISModel.Area" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Area" href="Areas(113)" />
+        <title />
+        <updated>2020-02-14T04:02:25Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Area_Id m:type="Edm.Int32">113</d:Area_Id>
+                <d:Name>London</d:Name>
+                <d:OnsAreaId>H</d:OnsAreaId>
+            </m:properties>
+        </content>
+    </entry>
+</feed>

@@ -24,6 +24,12 @@ docker-compose run --rm web rake epets:add_sysadmin_user
 docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
 ```
 
+### Fetch the regions list
+
+```
+docker-compose run --rm web rails runner 'FetchRegionsJob.perform_now'
+```
+
 ### Fetch the constituencies list
 
 ```

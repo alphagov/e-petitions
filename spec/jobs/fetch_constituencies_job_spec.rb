@@ -6,6 +6,8 @@ RSpec.describe FetchConstituenciesJob, type: :job do
   let(:stub_constituency_api) { stub_request(:get, constituency_api) }
   let(:member_api) { "#{url}/Members?$filter=CurrentStatusActive%20eq%20true%20and%20House_Id%20eq%201&$select=Member_Id,NameFullTitle,Party,MembershipFrom_Id,StartDate" }
   let(:stub_member_api) { stub_request(:get, member_api) }
+  let(:regions_api) { "#{url}/ConstituencyAreas?$filter=Area/AreaType_Id%20eq%208%20and%20Constituency/EndDate%20eq%20null&$select=Area_Id,Constituency_Id"}
+  let(:stub_regions_api) { stub_request(:get, regions_api) }
 
   def odata_response(status, body = nil, &block)
     status = Rack::Utils.status_code(status)
@@ -26,6 +28,10 @@ RSpec.describe FetchConstituenciesJob, type: :job do
     end
 
     { status: status, headers: headers, body: body }
+  end
+
+  before do
+    stub_regions_api.to_return(odata_response(:ok, "constituency_regions"))
   end
 
   context "when the request is successful" do

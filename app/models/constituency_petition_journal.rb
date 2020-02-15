@@ -7,6 +7,8 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   validates :signature_count, presence: true
 
   delegate :name, :ons_code, :mp_name, to: :constituency
+  delegate :region_id, :region, to: :constituency
+  delegate :ons_code, to: :region, prefix: true
 
   class << self
     def for(petition, constituency_id)

@@ -4,6 +4,7 @@ require_dependency 'constituency/api_query'
 class Constituency < ActiveRecord::Base
   MP_URL = "https://members.parliament.uk/member/%{mp_id}/contact"
 
+  belongs_to :region, primary_key: :external_id
   has_many :signatures, primary_key: :external_id
   has_many :petitions, through: :signatures
 

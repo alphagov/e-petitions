@@ -61,5 +61,6 @@ json.attributes do
   if archived_petition_page? && petition.published?
     json.signatures_by_country petition.signatures_by_country
     json.signatures_by_constituency petition.signatures_by_constituency
+    json.signatures_by_region petition.signatures_by_region
   end
 end
