@@ -36,6 +36,12 @@ docker-compose run --rm web rails runner 'FetchRegionsJob.perform_now'
 docker-compose run --rm web rails runner 'FetchConstituenciesJob.perform_now'
 ```
 
+### Fetch the department list
+
+```
+docker-compose run --rm web rails runner 'FetchDepartmentsJob.perform_now'
+```
+
 ### Enable signature counting
 
 ```

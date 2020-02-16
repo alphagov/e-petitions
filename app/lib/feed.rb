@@ -140,6 +140,8 @@ module Feed
     end
 
     def type_cast(value, name)
+      return nil unless value.present?
+
       case attribute_type[name]
       when :integer
         Integer(value)

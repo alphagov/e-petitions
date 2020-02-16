@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '../department_examples'
 require_relative '../taggable_examples'
 
 RSpec.describe Archived::Petition, type: :model do
@@ -296,7 +297,10 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
-  it_behaves_like "a taggable model"
+  describe "concerns" do
+    it_behaves_like "a taggable model"
+    it_behaves_like "a model with departments"
+  end
 
   describe "#action" do
     it "defaults to nil" do

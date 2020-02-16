@@ -131,6 +131,7 @@ Rails.application.routes.draw do
           resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
           resource :tags, controller: 'petition_tags'
           resource :take_down, path: 'take-down', controller: 'take_down'
+          resource :departments, controller: 'petition_departments'
         end
 
         resources :signatures, only: %i[index destroy] do
@@ -186,6 +187,7 @@ Rails.application.routes.draw do
             resource :details, controller: 'petition_details'
             resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
             resource :tags, controller: 'petition_tags'
+            resource :departments, controller: 'petition_departments'
           end
         end
 
