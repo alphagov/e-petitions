@@ -71,7 +71,7 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
         end
       end
 
-      context "and the params are valid" do
+      context "and the params are empty" do
         let :params do
           { tags: [""] }
         end
@@ -82,6 +82,26 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
 
         it "sets the flash notice message" do
           expect(flash[:notice]).to eq("Petition has been successfully updated")
+        end
+      end
+
+      context "and the params are valid" do
+        let(:tag) { FactoryBot.create(:tag, name: "Foo") }
+
+        let :params do
+          { tags: [tag.id] }
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+        end
+
+        it "sets the flash notice message" do
+          expect(flash[:notice]).to eq("Petition has been successfully updated")
+        end
+
+        it "sets the tags attribute" do
+          expect(petition.reload.tags).to eq([tag.id])
         end
       end
     end
