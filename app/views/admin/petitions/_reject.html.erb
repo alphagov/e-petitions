@@ -17,7 +17,7 @@
     });
   <% end -%>
 
-  <%= f.fields_for :rejection, f.object.rejection do |r| %>
+  <%= f.fields_for :rejection, f.object.rejection || f.object.build_rejection do |r| %>
     <%= form_row for: [r.object, :code] do %>
       <%= r.label :code, 'Rejection reason', class: 'form-label' %>
       <%= error_messages_for_field r.object, :code %>

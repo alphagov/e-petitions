@@ -169,6 +169,24 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
       end
     end
 
+    it "doesn't include the rejection section for non-rejected petitions" do
+      petition = FactoryBot.create :open_petition
+
+      get "/petitions.json"
+      expect(response).to be_successful
+
+      expect(data).to match(
+        a_collection_containing_exactly(
+          a_hash_including(
+            "attributes" => a_hash_including(
+              "rejected_at" => nil,
+              "rejection" => nil
+            )
+          )
+        )
+      )
+    end
+
     it "includes the rejection section for rejected petitions" do
       petition = \
         FactoryBot.create :rejected_petition,

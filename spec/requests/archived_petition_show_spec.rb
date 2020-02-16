@@ -74,6 +74,20 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       )
     end
 
+    it "doesn't include the rejection section for non-rejected petitions" do
+      petition = FactoryBot.create :archived_petition
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "rejected_at" => nil,
+          "rejection" => nil
+        )
+      )
+    end
+
     it "includes the rejection section for rejected petitions" do
       petition = \
         FactoryBot.create :archived_petition, :rejected,
