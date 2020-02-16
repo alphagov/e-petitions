@@ -742,6 +742,48 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe "#signatures_by_region" do
+    let(:petition) { FactoryBot.create(:archived_petition, signatures_by_constituency: signatures_by_constituency) }
+
+    let(:signatures_by_constituency) do
+      { "3427" => 123, "3320" => 456 }
+    end
+
+    before do
+      FactoryBot.create(:constituency, :coventry_north_east)
+      FactoryBot.create(:constituency, :bethnal_green_and_bow)
+    end
+
+    it "returns an array of region signature details" do
+      expect(petition.signatures_by_region).to eq [
+        {
+          name: "West Midlands",
+          ons_code: "F",
+          signature_count: 123
+        },
+        {
+          name: "London",
+          ons_code: "H",
+          signature_count: 456
+        }
+      ]
+    end
+
+    it "only finds the constituencies once" do
+      expect(Constituency).to receive(:where).with(external_id: %w[3427 3320]).once.and_call_original
+
+      petition.signatures_by_region
+      petition.signatures_by_region
+    end
+
+    it "only finds the regions once" do
+      expect(Region).to receive(:where).with(external_id: %w[111 113]).once.and_call_original
+
+      petition.signatures_by_region
+      petition.signatures_by_region
+    end
+  end
+
   describe "#get_email_requested_at_for" do
     let(:requested_at) { Time.current }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_022417) do
+ActiveRecord::Schema.define(version: 2020_02_11_160620) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -200,7 +200,9 @@ ActiveRecord::Schema.define(version: 2020_02_11_022417) do
     t.datetime "updated_at", null: false
     t.string "example_postcode", limit: 30
     t.string "party", limit: 100
+    t.string "region_id", limit: 30
     t.index ["external_id"], name: "index_constituencies_on_external_id", unique: true
+    t.index ["region_id"], name: "index_constituencies_on_region_id"
     t.index ["slug"], name: "index_constituencies_on_slug", unique: true
   end
 
@@ -483,7 +485,18 @@ ActiveRecord::Schema.define(version: 2020_02_11_022417) do
     t.string "trending_items_notification_url"
   end
 
-  create_table "rejection_reasons", force: :cascade do |t|
+  create_table "regions", id: :serial, force: :cascade do |t|
+    t.string "external_id", limit: 30, null: false
+    t.string "name", limit: 50, null: false
+    t.string "ons_code", limit: 10, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_id"], name: "index_regions_on_external_id", unique: true
+    t.index ["name"], name: "index_regions_on_name", unique: true
+    t.index ["ons_code"], name: "index_regions_on_ons_code", unique: true
+  end
+
+  create_table "rejection_reasons", id: :serial, force: :cascade do |t|
     t.string "code", limit: 30, null: false
     t.string "title", limit: 100, null: false
     t.string "description", limit: 2000, null: false
@@ -637,6 +650,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_022417) do
   add_foreign_key "archived_rejections", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "archived_signatures", "archived_petitions", column: "petition_id", on_delete: :cascade
+  add_foreign_key "constituencies", "regions", primary_key: "external_id"
   add_foreign_key "constituency_petition_journals", "petitions", on_delete: :cascade
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
   add_foreign_key "domains", "domains", column: "canonical_domain_id"

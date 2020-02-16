@@ -87,6 +87,9 @@ class Petition < ActiveRecord::Base
   has_many :trending_ips, dependent: :delete_all
   has_many :trending_domains, dependent: :delete_all
 
+  has_many :signatures_by_country, -> { preload(:location) }, class_name: "CountryPetitionJournal"
+  has_many :signatures_by_constituency, -> { preload(constituency: :region) }, class_name: "ConstituencyPetitionJournal"
+
   validates :action, presence: true, length: { maximum: 80, allow_blank: true }
   validates :background, presence: true, length: { maximum: 300, allow_blank: true }
   validates :additional_details, length: { maximum: 800, allow_blank: true }
@@ -578,11 +581,20 @@ class Petition < ActiveRecord::Base
   end
 
   def signatures_by_country
-    country_petition_journals.joins(:location).preload(:location).to_a.sort_by(&:name)
+    super.sort_by(&:name)
   end
 
   def signatures_by_constituency
-    constituency_petition_journals.preload(:constituency).to_a.sort_by(&:constituency_id)
+    super.sort_by(&:ons_code)
+  end
+
+  def signatures_by_region
+    signatures_by_constituency
+    .sort_by(&:region_ons_code)
+    .group_by(&:region)
+    .map do |region, journals|
+      RegionPetitionJournal.new(region, journals.sum(&:signature_count))
+    end
   end
 
   def approve?

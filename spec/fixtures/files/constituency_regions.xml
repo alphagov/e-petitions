@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xml:base="http://data.parliament.uk/MembersDataPlatform/open/OData.svc/" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <id>http://data.parliament.uk/membersdataplatform/open/OData.svc/ConstituencyAreas</id>
+    <title type="text">ConstituencyAreas</title>
+    <updated>2020-02-14T03:33:55Z</updated>
+    <link rel="self" title="ConstituencyAreas" href="ConstituencyAreas" />
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/ConstituencyAreas(7855)</id>
+        <category term="MNISModel.ConstituencyArea" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="ConstituencyArea" href="ConstituencyAreas(7855)" />
+        <title />
+        <updated>2020-02-14T03:33:55Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3320</d:Constituency_Id>
+                <d:Area_Id m:type="Edm.Int32">113</d:Area_Id>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/ConstituencyAreas(8243)</id>
+        <category term="MNISModel.ConstituencyArea" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="ConstituencyArea" href="ConstituencyAreas(8243)" />
+        <title />
+        <updated>2020-02-14T03:33:55Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3427</d:Constituency_Id>
+                <d:Area_Id m:type="Edm.Int32">111</d:Area_Id>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/ConstituencyAreas(9307)</id>
+        <category term="MNISModel.ConstituencyArea" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="ConstituencyArea" href="ConstituencyAreas(9307)" />
+        <title />
+        <updated>2020-02-14T03:33:55Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Constituency_Id m:type="Edm.Int32">3724</d:Constituency_Id>
+                <d:Area_Id m:type="Edm.Int32">109</d:Area_Id>
+            </m:properties>
+        </content>
+    </entry>
+</feed>

@@ -1,0 +1,59 @@
+north_east:
+  external_id: "107"
+  name: "North East"
+  ons_code: "A"
+
+north_west:
+  external_id: "108"
+  name: "North West"
+  ons_code: "B"
+
+yorkshire_and_the_humber:
+  external_id: "109"
+  name: "Yorkshire and The Humber"
+  ons_code: "D"
+
+east_midlands:
+  external_id: "110"
+  name: "East Midlands"
+  ons_code: "E"
+
+west_midlands:
+  external_id: "111"
+  name: "West Midlands"
+  ons_code: "F"
+
+east_of_england:
+  external_id: 112
+  name: "East of England"
+  ons_code: "G"
+
+london:
+  external_id: "113"
+  name: "London"
+  ons_code: "H"
+
+south_east:
+  external_id: "114"
+  name: "South East"
+  ons_code: "J"
+
+south_west:
+  external_id: "115"
+  name: "South West"
+  ons_code: "K"
+
+wales:
+  external_id: "116"
+  name: "Wales"
+  ons_code: "L"
+
+scotland:
+  external_id: "117"
+  name: "Scotland"
+  ons_code: "M"
+
+northern_ireland:
+  external_id: "118"
+  name: "Northern Ireland"
+  ons_code: "N"

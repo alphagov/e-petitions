@@ -522,7 +522,9 @@ FactoryBot.define do
       mp_id "4378"
       mp_name "Colleen Fletcher MP"
       mp_date "2015-05-07"
-      example_postcode "CV21PH"
+      party "Labour"
+      example_postcode "CV21HN"
+      region_id "111"
     end
 
     trait(:bethnal_green_and_bow) do
@@ -532,8 +534,10 @@ FactoryBot.define do
       ons_code "E14000555"
       mp_id "4138"
       mp_name "Rushanara Ali MP"
-      mp_date "2015-05-07"
-      example_postcode "E27AX"
+      mp_date "2010-05-06"
+      party "Labour"
+      example_postcode "E18FF"
+      region_id "113"
     end
 
     trait(:romford) do
@@ -543,8 +547,10 @@ FactoryBot.define do
       ons_code "E14000900"
       mp_id "1447"
       mp_name "Andrew Rosindell"
-      mp_date "2015-05-07"
+      mp_date "2001-06-07"
+      party "Conservative"
       example_postcode "RM53FZ"
+      region_id "113"
     end
 
     trait(:sheffield_brightside_and_hillsborough) do
@@ -555,7 +561,9 @@ FactoryBot.define do
       mp_id "4571"
       mp_name "Gill Furniss"
       mp_date "2016-05-05"
-      example_postcode "S61AR"
+      party "Labour"
+      example_postcode "S56BY"
+      region_id "109"
     end
 
     trait(:london_and_westminster) do
@@ -565,8 +573,10 @@ FactoryBot.define do
       ons_code "E14000639"
       mp_id "1405"
       mp_name "Rt Hon Mark Field MP"
-      mp_date "2017-06-08"
-      example_postcode "SW1A1AA"
+      mp_date "2001-06-07"
+      party "Conservative"
+      example_postcode "W1H5TN"
+      region_id "113"
     end
 
     england
@@ -772,6 +782,18 @@ FactoryBot.define do
 
     trait :hidden do
       hidden { true }
+    end
+  end
+
+  factory :region do
+    external_id { Faker::Number.unique.rand_in_range(100,200) }
+    name { Faker::Address.unique.county }
+    ons_code { Faker::Number.unique.rand_in_range(65,90).chr }
+
+    trait :yorkshire_and_the_humber do
+      external_id { "109" }
+      name { "Yorkshire and The Humber" }
+      ons_code { "D" }
     end
   end
 end

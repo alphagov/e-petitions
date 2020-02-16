@@ -11,6 +11,6 @@ ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
-  config.global_fixtures = %i[rejection_reasons]
+  config.global_fixtures = %i[rejection_reasons regions]
   config.include Requests::JsonHelpers, type: :request
 end

@@ -181,7 +181,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
       petition = \
         FactoryBot.create :archived_petition,
-          signatures_by_constituency: { 3427 => 123, 3320 => 456 }
+          signatures_by_constituency: { "3427" => 123, "3320" => 456 }
 
       get "/archived/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -212,7 +212,7 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
       petition = \
         FactoryBot.create :archived_petition, :rejected,
-          signatures_by_constituency: { 3427 => 123, 3320 => 456 }
+          signatures_by_constituency: { "3427" => 123, "3320" => 456 }
 
       get "/archived/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -261,6 +261,49 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       expect(response).to be_successful
 
       expect(attributes.keys).not_to include("signatures_by_country")
+    end
+
+    it "includes the signatures by region data" do
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
+
+      petition = \
+        FactoryBot.create :archived_petition,
+          signatures_by_constituency: { "3427" => 123, "3320" => 456 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "signatures_by_region" => a_collection_containing_exactly(
+            {
+              "name" => "West Midlands",
+              "ons_code" => "F",
+              "signature_count" => 123
+            },
+            {
+              "name" => "London",
+              "ons_code" => "H",
+              "signature_count" => 456
+            }
+          )
+        )
+      )
+    end
+
+    it "doesn't include the signatures by region data in rejected petitions" do
+      FactoryBot.create :constituency, :coventry_north_east
+      FactoryBot.create :constituency, :bethnal_green_and_bow
+
+      petition = \
+        FactoryBot.create :archived_petition, :rejected,
+          signatures_by_constituency: { "3427" => 123, "3320" => 456 }
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes.keys).not_to include("signatures_by_region")
     end
   end
 end

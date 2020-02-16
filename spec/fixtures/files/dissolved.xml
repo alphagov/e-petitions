@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xml:base="http://data.parliament.uk/MembersDataPlatform/open/OData.svc/" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <id>http://data.parliament.uk/membersdataplatform/open/OData.svc/Members</id>
+    <title type="text">Members</title>
+    <updated>2020-02-13T17:26:46Z</updated>
+    <link rel="self" title="Members" href="Members" />
+    <author>
+        <name />
+    </author>
+</feed>

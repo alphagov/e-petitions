@@ -26,11 +26,7 @@ every :day, at: '1.15am' do
 end
 
 every :day, at: '1.45am' do
-  rake "epets:constituencies:refresh", output: nil
-end
-
-every :day, at: '2.15am' do
-  rake "epets:constituencies:refresh_party", output: nil
+  rake "epets:constituencies:fetch", output: nil
 end
 
 every :day, at: '2.30am' do

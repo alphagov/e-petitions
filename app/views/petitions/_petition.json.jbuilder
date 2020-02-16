@@ -77,5 +77,11 @@ json.attributes do
       json.mp constituency.mp_name
       json.signature_count constituency.signature_count
     end
+
+    json.signatures_by_region petition.signatures_by_region do |region|
+      json.name region.name
+      json.ons_code region.ons_code
+      json.signature_count region.signature_count
+    end
   end
 end

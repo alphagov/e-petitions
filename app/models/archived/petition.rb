@@ -271,7 +271,7 @@ module Archived
         @_signatures_by_constituency
       else
         if signatures_by_constituency?
-          @_signatures_by_constituency = calculate_signatures_by_constituency(super)
+          @_signatures_by_constituency = calculate_signatures_by_constituency
         else
           []
         end
@@ -283,7 +283,19 @@ module Archived
         @_signatures_by_country
       else
         if signatures_by_country?
-          @_signatures_by_country = calculate_signatures_by_country(super)
+          @_signatures_by_country = calculate_signatures_by_country
+        else
+          []
+        end
+      end
+    end
+
+    def signatures_by_region
+      if defined?(@_signatures_by_region)
+        @_signatures_by_region
+      else
+        if signatures_by_constituency?
+          @_signatures_by_region = calculate_signatures_by_region
         else
           []
         end
@@ -362,12 +374,18 @@ module Archived
       end
     end
 
-    def constituencies(external_ids)
-      Constituency.where(external_id: external_ids).order(:name)
+    def constituency_ids
+      self[:signatures_by_constituency].keys
     end
 
-    def calculate_signatures_by_constituency(hash)
-      constituencies(hash.keys).map do |constituency|
+    def constituencies
+      @constituencies ||= Constituency.where(external_id: constituency_ids).order(:name)
+    end
+
+    def calculate_signatures_by_constituency
+      hash = self[:signatures_by_constituency]
+
+      constituencies.map do |constituency|
         {
           name: constituency.name,
           ons_code: constituency.ons_code,
@@ -377,16 +395,48 @@ module Archived
       end
     end
 
-    def locations(codes)
-      Location.where(code: codes).order(:name)
+    def location_codes
+      self[:signatures_by_country].keys
     end
 
-    def calculate_signatures_by_country(hash)
-      locations(hash.keys).map do |location|
+    def locations
+      @locations ||= Location.where(code: location_codes).order(:name)
+    end
+
+    def calculate_signatures_by_country
+      hash = self[:signatures_by_country]
+
+      locations.map do |location|
         {
           name: location.name,
           code: location.code,
           signature_count: hash[location.code]
+        }
+      end
+    end
+
+    def regions(external_ids)
+      Region.where(external_id: external_ids).order(:ons_code)
+    end
+
+    def constituency_map
+      @constituency_map ||= constituencies.map { |c| [c.external_id, c.region_id] }.to_h
+    end
+
+    def calculate_signatures_by_region
+      by_region = Hash.new(0)
+      by_constituency = self[:signatures_by_constituency]
+
+      by_constituency.inject(by_region) do |hash, (id, count)|
+        hash[constituency_map[id]] += count
+        hash
+      end
+
+      regions(by_region.keys).map do |region|
+        {
+          name: region.name,
+          ons_code: region.ons_code,
+          signature_count: by_region[region.external_id]
         }
       end
     end

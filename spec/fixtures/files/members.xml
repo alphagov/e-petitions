@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xml:base="http://data.parliament.uk/MembersDataPlatform/open/OData.svc/" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <id>http://data.parliament.uk/membersdataplatform/open/OData.svc/Members</id>
+    <title type="text">Members</title>
+    <updated>2020-02-13T16:56:30Z</updated>
+    <link rel="self" title="Members" href="Members" />
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Members(4138)</id>
+        <category term="MNISModel.Member" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Member" href="Members(4138)" />
+        <title />
+        <updated>2020-02-13T16:56:30Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Member_Id m:type="Edm.Int32">4138</d:Member_Id>
+                <d:NameFullTitle>Rushanara Ali MP</d:NameFullTitle>
+                <d:Party>Labour</d:Party>
+                <d:StartDate m:type="Edm.DateTime">2010-05-06T00:00:00</d:StartDate>
+                <d:MembershipFrom_Id m:type="Edm.Int32">3320</d:MembershipFrom_Id>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Members(4378)</id>
+        <category term="MNISModel.Member" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Member" href="Members(4378)" />
+        <title />
+        <updated>2020-02-13T16:56:30Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Member_Id m:type="Edm.Int32">4378</d:Member_Id>
+                <d:NameFullTitle>Colleen Fletcher MP</d:NameFullTitle>
+                <d:Party>Labour</d:Party>
+                <d:StartDate m:type="Edm.DateTime">2015-05-07T00:00:00</d:StartDate>
+                <d:MembershipFrom_Id m:type="Edm.Int32">3427</d:MembershipFrom_Id>
+            </m:properties>
+        </content>
+    </entry>
+    <entry>
+        <id>http://data.parliament.uk/MembersDataPlatform/open/OData.svc/Members(4571)</id>
+        <category term="MNISModel.Member" scheme="http://schemas.microsoft.com/ado/2007/08/dataservices/scheme" />
+        <link rel="edit" title="Member" href="Members(4571)" />
+        <title />
+        <updated>2020-02-13T16:56:30Z</updated>
+        <author>
+            <name />
+        </author>
+        <content type="application/xml">
+            <m:properties>
+                <d:Member_Id m:type="Edm.Int32">4571</d:Member_Id>
+                <d:NameFullTitle>Gill Furniss MP</d:NameFullTitle>
+                <d:Party>Labour</d:Party>
+                <d:StartDate m:type="Edm.DateTime">2016-05-05T00:00:00</d:StartDate>
+                <d:MembershipFrom_Id m:type="Edm.Int32">3724</d:MembershipFrom_Id>
+            </m:properties>
+        </content>
+    </entry>
+</feed>

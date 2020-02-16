@@ -2,7 +2,7 @@ class CreateRejectionReasons < ActiveRecord::Migration[5.2]
   class RejectionReason < ActiveRecord::Base; end
 
   def change
-    create_table :rejection_reasons do |t|
+    create_table :rejection_reasons, id: :serial do |t|
       t.string :code, limit: 30, null: false
       t.string :title, limit: 100, null: false
       t.string :description, limit: 2000, null: false
