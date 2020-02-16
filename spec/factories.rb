@@ -786,7 +786,7 @@ FactoryBot.define do
   end
 
   factory :region do
-    external_id { Faker::Number.unique.rand_in_range(100,200) }
+    external_id { Faker::Number.unique.rand_in_range(100,200).to_s }
     name { Faker::Address.unique.county }
     ons_code { Faker::Number.unique.rand_in_range(65,90).chr }
 
