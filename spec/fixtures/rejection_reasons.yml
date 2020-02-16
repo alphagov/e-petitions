@@ -1,4 +1,5 @@
 duplicate:
+  created_at: "2015-07-20T10:00:01Z"
   code: "duplicate"
   title: "Duplicate petition"
   hidden: false
@@ -8,6 +9,7 @@ duplicate:
     You are more likely to get action on this issue if you sign and share a single petition.
 
 irrelevant:
+  created_at: "2015-07-20T10:00:02Z"
   code: "irrelevant"
   title: "Not the Government/Parliament’s responsibility"
   hidden: false
@@ -15,6 +17,7 @@ irrelevant:
     It’s about something that the UK Government or Parliament is not responsible for.
 
 no-action:
+  created_at: "2015-07-20T10:00:03Z"
   code: "no-action"
   title: "Action unclear"
   hidden: false
@@ -22,6 +25,7 @@ no-action:
     It’s not clear what the petition is asking the UK Government or Parliament to do.
 
 honours:
+  created_at: "2015-07-20T10:00:04Z"
   code: "honours"
   title: "Honours or appointments"
   hidden: false
@@ -29,6 +33,7 @@ honours:
     It’s about honours or appointments.
 
 fake-name:
+  created_at: "2015-07-20T10:00:05Z"
   code: "fake-name"
   title: "Fake name"
   hidden: false
@@ -42,6 +47,7 @@ fake-name:
     We are rejecting your petition for that reason, but if you resubmit your petition using your full name, we’ll be able to approve it.
 
 foi:
+  created_at: "2015-07-20T10:00:06Z"
   code: "foi"
   title: "FOI request"
   hidden: false
@@ -49,6 +55,7 @@ foi:
     It’s an FOI request.
 
 libellous:
+  created_at: "2015-07-20T10:00:07Z"
   code: "libellous"
   title: "Confidential, libellous, false, defamatory or references a court case"
   hidden: true
@@ -56,6 +63,7 @@ libellous:
     It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.
 
 offensive:
+  created_at: "2015-07-20T10:00:08Z"
   code: "offensive"
   title: "Offensive, joke, nonsense or advert"
   hidden: true

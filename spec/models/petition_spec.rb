@@ -2051,10 +2051,10 @@ RSpec.describe Petition, type: :model do
           p1 = described_class.find(petition.id)
           p2 = described_class.find(petition.id)
 
-          expect(p1.rejection).not_to be_persisted
+          expect(p1.rejection).to be_nil
           expect(p1.association(:rejection)).to be_loaded
 
-          expect(p2.rejection).not_to be_persisted
+          expect(p2.rejection).to be_nil
           expect(p2.association(:rejection)).to be_loaded
 
           p1.reject(code: "duplicate")
