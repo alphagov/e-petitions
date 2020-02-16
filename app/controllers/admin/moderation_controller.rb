@@ -4,7 +4,7 @@ class Admin::ModerationController < Admin::AdminController
   def update
     if @petition.moderate(moderation_params)
       send_notifications
-      redirect_to [:admin, @petition]
+      redirect_to [:admin, @petition], notice: :petition_updated
     else
       render 'admin/petitions/show'
     end

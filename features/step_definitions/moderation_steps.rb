@@ -42,6 +42,11 @@ When(/^I flag the petition$/) do
   click_button "Save without emailing"
 end
 
+When(/^I mark the petition as dormant$/) do
+  choose "Dormant"
+  click_button "Save without emailing"
+end
+
 Then /^the petition is still available for searching or viewing$/ do
   step %{I search for "Rejected petitions" with "#{@petition.action}"}
   step %{I should see the petition "#{@petition.action}"}
@@ -70,8 +75,30 @@ Then /^the petition should be visible on the site for signing$/ do
 end
 
 Then(/^the petition can no longer be flagged$/) do
+  expect(page).to have_no_field('Flag', visible: false)
+end
+
+Then(/^the petition can no longer be marked as dormant$/) do
+  expect(page).to have_no_field('Dormant', visible: false)
+end
+
+When(/^I revisit the petition$/) do
   visit admin_petition_url(@petition)
-  expect(page).to have_no_field('Flag')
+end
+
+Then(/^it can still be approved$/) do
+  expect(page).to have_field('Approve', visible: false)
+end
+
+Then(/^it can still be rejected$/) do
+  expect(page).to have_field('Reject', visible: false)
+end
+
+Then(/^it can be restored to a sponsored state$/) do
+  choose "Restore"
+  click_button "Save without emailing"
+  expect(page).to have_content("Petition has been successfully updated")
+  expect(page).to have_content("Status Sponsored")
 end
 
 Then(/^the creator should receive a notification email$/) do

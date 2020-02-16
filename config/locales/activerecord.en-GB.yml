@@ -48,7 +48,8 @@ en-GB:
         petition:
           attributes:
             moderation:
-              blank: "You must choose to approve, reject or flag"
+              blank: "You must choose to approve, reject, flag or mark as dormant"
+              invalid: "You must choose to approve, reject or restore the petition to the sponsored state"
             creator_signature:
               blank: "%{attribute} must be completed"
             state:

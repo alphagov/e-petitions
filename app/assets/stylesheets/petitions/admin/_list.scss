@@ -26,6 +26,16 @@
     background-color: $mellow-red-25;
   }
 
+  .petition-list-petition-state-dormant {
+    td {
+      color: $grey-2;
+
+      a {
+        color: $grey-2;
+      }
+    }
+  }
+
   th:last-child, td:last-child {
     padding-right: 0;
   }
