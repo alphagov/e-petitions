@@ -174,6 +174,35 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "includes the departments data" do
+      fco = FactoryBot.create :department, :fco
+      dfid = FactoryBot.create :department, :dfid
+
+      petition = \
+        FactoryBot.create :open_petition,
+          departments: [fco.id, dfid.id]
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "departments" => a_collection_containing_exactly(
+            {
+              "acronym" => "DfID",
+              "name" => "Department for International Development",
+              "url" => "https://www.gov.uk/government/organisations/department-for-international-development"
+            },
+            {
+              "acronym" => "FCO",
+              "name" => "Foreign and Commonwealth Office",
+              "url" => "https://www.gov.uk/government/organisations/foreign-commonwealth-office"
+            }
+          )
+        )
+      )
+    end
+
     it "includes the signatures by constituency data" do
       petition = FactoryBot.create :open_petition
 

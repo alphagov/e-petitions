@@ -786,7 +786,7 @@ FactoryBot.define do
   end
 
   factory :region do
-    external_id { Faker::Number.unique.rand_in_range(100,200) }
+    external_id { Faker::Number.unique.rand_in_range(100,200).to_s }
     name { Faker::Address.unique.county }
     ons_code { Faker::Number.unique.rand_in_range(65,90).chr }
 
@@ -794,6 +794,27 @@ FactoryBot.define do
       external_id { "109" }
       name { "Yorkshire and The Humber" }
       ons_code { "D" }
+    end
+  end
+
+  factory :department do
+    external_id { Faker::Number.unique.rand_in_range(100,999).to_s }
+    acronym { Faker::Name.unique.initials }
+    name { Faker::Name.unique.name }
+    start_date { Date.civil(1900, 1, 1) }
+
+    trait :fco do
+      external_id { "45" }
+      acronym { "FCO" }
+      name { "Foreign and Commonwealth Office" }
+      url { "https://www.gov.uk/government/organisations/foreign-commonwealth-office" }
+    end
+
+    trait :dfid do
+      external_id { "45" }
+      acronym { "DfID" }
+      name { "Department for International Development" }
+      url { "https://www.gov.uk/government/organisations/department-for-international-development" }
     end
   end
 end

@@ -36,9 +36,7 @@ module Archived
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)
-    include Browseable, Taggable
-
-    filter :parliament
+    include Browseable, Taggable, Departments
 
     facet :all, -> { visible.by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }

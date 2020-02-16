@@ -147,6 +147,20 @@ RSpec.shared_examples_for "a taggable model" do
     end
   end
 
+  describe ".tagged" do
+    let!(:tag) { FactoryBot.create(:tag) }
+    let!(:model_1) { FactoryBot.create(factory, tags: [tag.id]) }
+    let!(:model_2) { FactoryBot.create(factory, tags: []) }
+
+    it "returns tagged models" do
+      expect(described_class.tagged).to include(model_1)
+    end
+
+    it "doesn't return untagged models" do
+      expect(described_class.tagged).not_to include(model_2)
+    end
+  end
+
   describe ".untagged" do
     let!(:tag) { FactoryBot.create(:tag) }
     let!(:model_1) { FactoryBot.create(factory, tags: []) }

@@ -1,17 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
+RSpec.describe Admin::PetitionDepartmentsController, type: :controller, admin: true do
   let!(:petition) { FactoryBot.create(:open_petition) }
 
   context "when not logged in" do
-    describe "GET /admin/petitions/:petition_id/tags" do
+    describe "GET /admin/petitions/:petition_id/departments" do
       it "redirects to the login page" do
         get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
       end
     end
 
-    describe "PATCH /admin/petitions/:petition_id/tags" do
+    describe "PATCH /admin/petitions/:petition_id/departments" do
       it "redirects to the login page" do
         patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/login")
@@ -23,14 +23,14 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
     let(:user) { FactoryBot.create(:moderator_user, force_password_reset: true) }
     before { login_as(user) }
 
-    describe "GET /admin/petitions/:petition_id/tags" do
+    describe "GET /admin/petitions/:petition_id/departments" do
       it "redirects to the edit profile page" do
         get :show, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
       end
     end
 
-    describe "PATCH /admin/petitions/:petition_id/tags" do
+    describe "PATCH /admin/petitions/:petition_id/departments" do
       it "redirects to the edit profile page" do
         patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/profile/#{user.id}/edit")
@@ -42,7 +42,7 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
-    describe "GET /admin/petitions/:petition_id/tags" do
+    describe "GET /admin/petitions/:petition_id/departments" do
       before { get :show, params: { petition_id: petition.id } }
 
       it "returns 200 OK" do
@@ -54,12 +54,12 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
       end
     end
 
-    describe "PATCH /admin/petitions/:petition_id/tags" do
+    describe "PATCH /admin/petitions/:petition_id/departments" do
       before { patch :update, params: { petition_id: petition.id, petition: params } }
 
       context "and the params are invalid" do
         let :params do
-          { tags: ["999"] }
+          { departments: ["999"] }
         end
 
         it "returns 200 OK" do
@@ -73,7 +73,7 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
 
       context "and the params are empty" do
         let :params do
-          { tags: [""] }
+          { departments: [""] }
         end
 
         it "redirects to the petition page" do
@@ -86,10 +86,10 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
       end
 
       context "and the params are valid" do
-        let(:tag) { FactoryBot.create(:tag, name: "Foo") }
+        let(:department) { FactoryBot.create(:department) }
 
         let :params do
-          { tags: [tag.id] }
+          { departments: [department.id] }
         end
 
         it "redirects to the petition page" do
@@ -100,8 +100,8 @@ RSpec.describe Admin::PetitionTagsController, type: :controller, admin: true do
           expect(flash[:notice]).to eq("Petition has been successfully updated")
         end
 
-        it "sets the tags attribute" do
-          expect(petition.reload.tags).to eq([tag.id])
+        it "sets the departments attribute" do
+          expect(petition.reload[:departments]).to eq([department.id])
         end
       end
     end

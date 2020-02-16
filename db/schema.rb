@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_160620) do
+ActiveRecord::Schema.define(version: 2020_02_16_110841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -120,9 +120,11 @@ ActiveRecord::Schema.define(version: 2020_02_11_160620) do
     t.integer "locked_by_id"
     t.integer "moderation_lag"
     t.text "committee_note"
+    t.integer "departments", default: [], null: false, array: true
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
+    t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
     t.index ["locked_by_id"], name: "index_archived_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["parliament_id"], name: "index_archived_petitions_on_parliament_id"
@@ -258,6 +260,17 @@ ActiveRecord::Schema.define(version: 2020_02_11_160620) do
     t.datetime "updated_at"
     t.string "queue", limit: 255
     t.index ["priority", "run_at"], name: "index_delayed_jobs_on_priority_and_run_at"
+  end
+
+  create_table "departments", id: :serial, force: :cascade do |t|
+    t.string "external_id", limit: 30, null: false
+    t.string "name", limit: 100, null: false
+    t.string "acronym", limit: 10
+    t.string "url", limit: 100
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "dissolution_notifications", id: :uuid, default: nil, force: :cascade do |t|
@@ -446,6 +459,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_160620) do
     t.datetime "signature_count_reset_at"
     t.datetime "signature_count_validated_at"
     t.text "committee_note"
+    t.integer "departments", default: [], null: false, array: true
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -454,6 +468,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_160620) do
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"
+    t.index ["departments"], name: "index_petitions_on_departments", opclass: :gin__int_ops, using: :gin
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"

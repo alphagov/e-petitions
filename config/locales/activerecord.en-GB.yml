@@ -37,6 +37,8 @@ en-GB:
               required: "Parliament can't be blank"
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
+            departments:
+              invalid: "The submitted departments were invalid - please reselect and try again"
 
         domain:
           attributes:
@@ -53,6 +55,8 @@ en-GB:
               inclusion: "State '%{value}' not recognised"
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
+            departments:
+              invalid: "The submitted departments were invalid - please reselect and try again"
 
         signature:
           attributes:

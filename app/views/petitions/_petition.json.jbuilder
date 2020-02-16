@@ -64,6 +64,12 @@ json.attributes do
     json.debate nil
   end
 
+  json.departments petition.departments do |department|
+    json.acronym department.acronym
+    json.name department.name
+    json.url department.url
+  end
+
   if petition_page? && petition.published?
     json.signatures_by_country petition.signatures_by_country do |country|
       json.name country.name

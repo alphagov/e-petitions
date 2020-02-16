@@ -220,5 +220,38 @@ RSpec.describe "API request to list archived petitions", type: :request, show_ex
         )
       )
     end
+
+    it "includes the departments data" do
+      fco = FactoryBot.create :department, :fco
+      dfid = FactoryBot.create :department, :dfid
+
+      petition = \
+        FactoryBot.create :archived_petition,
+          departments: [fco.id, dfid.id]
+
+      get "/archived/petitions.json"
+      expect(response).to be_successful
+
+      expect(data).to match(
+        a_collection_containing_exactly(
+          a_hash_including(
+            "attributes" => a_hash_including(
+              "departments" => a_collection_containing_exactly(
+                {
+                  "acronym" => "DfID",
+                  "name" => "Department for International Development",
+                  "url" => "https://www.gov.uk/government/organisations/department-for-international-development"
+                },
+                {
+                  "acronym" => "FCO",
+                  "name" => "Foreign and Commonwealth Office",
+                  "url" => "https://www.gov.uk/government/organisations/foreign-commonwealth-office"
+                }
+              )
+            )
+          )
+        )
+      )
+    end
   end
 end
