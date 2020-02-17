@@ -64,10 +64,10 @@ json.attributes do
     json.debate nil
   end
 
-  json.departments petition.departments do |department|
-    json.acronym department.acronym
-    json.name department.name
-    json.url department.url
+  json.departments petition.depts do |dept|
+    json.acronym dept.acronym
+    json.name dept.name
+    json.url dept.url
   end
 
   if petition_page? && petition.published?

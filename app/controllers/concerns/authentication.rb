@@ -42,6 +42,12 @@ module Authentication
     end
   end
 
+  def require_moderator
+    unless current_user.is_a_moderator? || current_user.is_a_sysadmin?
+      redirect_to admin_root_url, alert: :moderator_required
+    end
+  end
+
   def require_sysadmin
     unless current_user.is_a_sysadmin?
       redirect_to admin_root_url, alert: :sysadmin_required

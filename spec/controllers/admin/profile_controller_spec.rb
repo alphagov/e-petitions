@@ -6,7 +6,7 @@ RSpec.describe Admin::ProfileController, type: :controller, admin: true do
                            :password_confirmation => 'Letmein1!', :force_password_reset => true)
   end
 
-  describe "not logged in" do
+  context "not logged in" do
     describe "GET 'edit'" do
       it "should redirect to the login page" do
         get 'edit', params: { id: @user.id }

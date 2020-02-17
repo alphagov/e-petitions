@@ -102,7 +102,7 @@ RSpec.describe Admin::Archived::PetitionDepartmentsController, type: :controller
         end
 
         it "sets the departments attribute" do
-          expect(petition.reload[:departments]).to eq([department.id])
+          expect(petition.reload.departments).to eq([department.id])
         end
       end
     end

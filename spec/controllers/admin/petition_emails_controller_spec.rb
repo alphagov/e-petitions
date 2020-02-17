@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true do
   let!(:petition) { FactoryBot.create(:open_petition) }
 
-  describe 'not logged in' do
+  context 'not logged in' do
     let(:email) { FactoryBot.create(:petition_email, petition: petition) }
 
     describe 'GET /new' do
@@ -38,6 +38,53 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
       it 'redirects to the login page' do
         patch :destroy, params: { petition_id: petition.id, id: email.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
+      end
+    end
+  end
+
+  context 'logged in as a reviewer user' do
+    let(:email) { FactoryBot.create(:petition_email, petition: petition) }
+    let(:user) { FactoryBot.create(:reviewer_user) }
+
+    before { login_as(user) }
+
+    describe 'GET /new' do
+      it 'redirects to the admin hub page' do
+        get :new, params: { petition_id: petition.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+
+    describe 'POST /' do
+      it 'redirects to the admin hub page' do
+        post :create, params: { petition_id: petition.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+
+    describe 'GET /:id/edit' do
+      it 'redirects to the admin hub page' do
+        get :edit, params: { petition_id: petition.id, id: email.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+
+    describe 'PATCH /:id' do
+      it 'redirects to the admin hub page' do
+        patch :update, params: { petition_id: petition.id, id: email.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+
+    describe 'DELETE /:id' do
+      it 'redirects to the admin hub page' do
+        patch :destroy, params: { petition_id: petition.id, id: email.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
       end
     end
   end
@@ -84,7 +131,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
     end
   end
 
-  describe "logged in as moderator user" do
+  context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 

@@ -71,6 +71,7 @@ en-GB:
       disabled_login: "Failed login limit exceeded, your account has been temporarily disabled"
       invalid_login: "Invalid email/password combination"
       logged_out: "You have been logged out"
+      moderator_required: "You must be logged in as a moderator or system administrator to view this page"
       moderation_delay_sent: "An email has been sent to creators that moderation has been delayed"
       moderation_delay_preview_sent: "A preview email of the moderation delay has been sent to the feedback address"
       missing_tasks: "Please select one or more tasks to execute"

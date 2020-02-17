@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
-  describe "not logged in" do
+  context "not logged in" do
     describe "GET 'index'" do
       it "should redirect to the login page" do
         get 'index'
@@ -17,7 +17,7 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
     end
   end
 
-  describe "logged in as moderator user" do
+  context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before :each do
       login_as(user)
