@@ -119,7 +119,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
   steps %Q(
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
-    Then they should see "We rejected the petition you created" in the email body
+    Then they should see "Sorry, we can’t accept your petition" in the email body
     And they should see "#{strip_tags(rejection_description(@petition.rejection.code)).split("\n").first}" in the email body
     And they should see /We rejected your petition/ in the email subject
   )

@@ -1,6 +1,6 @@
 <p>Dear <%= @signature.name %>,</p>
 
-<p>We rejected the petition you created – “<%= @petition.action %>”.
+<p>Sorry, we can’t accept your petition – “<%= @petition.action %>”.
 
 <%= rejection_description(@rejection.code) %>
 <% if @rejection.details? -%>
