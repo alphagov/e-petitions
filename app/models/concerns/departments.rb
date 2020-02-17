@@ -42,16 +42,16 @@ module Departments
     super(normalize_departments(departments))
   end
 
-  def departments
-    Department.where(id: super).order(:name).to_a
+  def depts
+    Department.where(id: departments).order(:name).to_a
   end
 
   def department_names
-    Department.where(id: self[:departments]).order(:name).pluck(:name)
+    Department.where(id: departments).order(:name).pluck(:name)
   end
 
   def departments_exist
-    unless self[:departments].all? { |department| Department.exists?(department) }
+    unless departments.all? { |department| Department.exists?(department) }
       errors.add :departments, :invalid
     end
   end

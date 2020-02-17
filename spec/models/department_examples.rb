@@ -200,7 +200,7 @@ RSpec.shared_examples_for "a model with departments" do
     end
   end
 
-  describe "#departments" do
+  describe "#depts" do
     before do
       fco = FactoryBot.create(:department, :fco)
       dfid = FactoryBot.create(:department, :dfid)
