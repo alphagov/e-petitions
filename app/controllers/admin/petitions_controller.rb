@@ -3,6 +3,8 @@ class Admin::PetitionsController < Admin::AdminController
   before_action :fetch_petitions, only: [:index]
   before_action :fetch_petition, only: [:show, :resend]
 
+  after_action :set_back_location, only: [:index]
+
   rescue_from ActiveRecord::RecordNotFound do
     redirect_to admin_root_url, alert: "Sorry, we couldn't find petition #{params[:id]}"
   end
@@ -55,6 +57,10 @@ class Admin::PetitionsController < Admin::AdminController
 
   def fetch_petition
     @petition = Petition.find(params[:id])
+  end
+
+  def set_back_location
+    session[:back_location] = request.original_fullpath
   end
 
   def render_csv

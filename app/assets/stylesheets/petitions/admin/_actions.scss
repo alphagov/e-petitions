@@ -21,4 +21,36 @@
       margin-top: 0;
     }
   }
+
+  .back-link {
+    display: inline-block;
+    @include core-14;
+    position: relative;
+    margin: 0;
+    padding-left: 14px;
+    color: $black;
+    border-bottom: 1px solid $black;
+
+    &:before {
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-color: transparent;
+      -webkit-clip-path: polygon(0% 50%, 100% 100%, 100% 0%);
+      clip-path: polygon(0% 50%, 100% 100%, 100% 0%);
+      border-width: 5px 6px 5px 0;
+      border-right-color: inherit;
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      margin: auto;
+    }
+  }
+
+  .back-link + h1 {
+    margin-top: $gutter-two-thirds;
+  }
 }
