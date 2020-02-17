@@ -34,3 +34,13 @@ end
 Then(/^I should see my search term "(.*?)" filled in the search field$/) do |search_term|
   expect(page).to have_field('q', with: search_term)
 end
+
+Then(/^I should see the following similar petitions:$/) do |table|
+  table.raw.each_with_index do |row, index|
+    within :xpath, "(.//li[contains(@class, 'petition-item-existing')])[#{index + 1}]" do
+      row.each do |column|
+        expect(page).to have_content(column)
+      end
+    end
+  end
+end
