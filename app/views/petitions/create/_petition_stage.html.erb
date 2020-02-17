@@ -17,7 +17,7 @@
 <% end %>
 
 <%= form_row for: [petition, :background] do %>
-  <%= form.label :background, "Background", class: "form-label" %>
+  <%= form.label :background, "Tell us more about what you want the Government or Parliament to do", class: "form-label" %>
   <%= error_messages_for_field petition, :background %>
   <%= form.text_area :background, tabindex: increment, rows: 5, data: { max_length: 300 }, class: "form-control" %>
   <p class="character-count">300 characters max</p>
@@ -31,13 +31,16 @@
 <% end %>
 
 <%= form_row for: [petition, :additional_details] do %>
-  <%= form.label :additional_details, class: "form-label" do %>
-    Additional details
-    <span class="form-hint">Optional - background information, evidence and references</span>
-  <% end %>
+  <%= form.label :additional_details, "Tell us more about why you want the Government or Parliament to do it", class: "form-label" %>
   <%= error_messages_for_field petition, :additional_details %>
   <%= form.text_area :additional_details, tabindex: increment, rows: 7, data: { max_length: 500 }, class: "form-control" %>
   <p class="character-count">500 characters max</p>
+  <details class="form-group-help">
+    <summary><span class="summary">Help writing additional info</span></summary>
+    <div class="panel-indent">
+      <p>Optional - background information, evidence and references.</p>
+    </div>
+  </details>
 <% end %>
 
 <%= form.submit "Preview petition", name: "move_next", class: "button", tabindex: increment %>
