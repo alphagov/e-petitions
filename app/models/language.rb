@@ -112,11 +112,18 @@ class Language < ActiveRecord::Base
   def lookup(locale, key, scope, options = {})
     keys = normalize_keys(locale, key, scope)
 
-    keys.reduce(translations) do |result, k|
+    value = keys.reduce(translations) do |result, k|
       return nil unless result.is_a?(Hash)
       return nil unless result.key?(k)
 
       result[k]
+    end
+
+    case value
+    when Hash
+      value.deep_symbolize_keys
+    else
+      value
     end
   end
 
