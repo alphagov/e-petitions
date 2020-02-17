@@ -223,7 +223,7 @@ When /^I view all petitions from the home page$/ do
 end
 
 When(/^I check for similar petitions$/) do
-  fill_in "q", :with => "Rioters should loose benefits"
+  fill_in "q", :with => "rioters benefits"
   click_button("Continue")
 end
 
@@ -282,7 +282,7 @@ Then(/^I should see a list of (\d+) petitions$/) do |petition_count|
 end
 
 Then(/^I should see my search query already filled in as the action of the petition$/) do
-  expect(page).to have_field("What do you want us to do?", text: "Rioters should loose benefits")
+  expect(page).to have_field("What do you want us to do?", text: "rioters benefits")
 end
 
 Then(/^I can click on a link to return to the petition$/) do
@@ -326,8 +326,8 @@ end
 When(/^I fill in the petition details/) do
   steps %Q(
     When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
-    And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    And I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+    And I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   )
 end
 

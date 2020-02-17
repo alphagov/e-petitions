@@ -133,7 +133,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
 
       it "informs the creator of the rejection" do
-        expect(mail).to have_body_text("We rejected the petition you created")
+        expect(mail).to have_body_text("Sorry, we can’t accept your petition")
       end
     end
 
@@ -188,7 +188,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
 
       it "informs the sponsor of the publication" do
-        expect(mail).to have_body_text("We rejected the petition you supported")
+        expect(mail).to have_body_text("Sorry, we can’t accept the petition you supported")
       end
     end
 

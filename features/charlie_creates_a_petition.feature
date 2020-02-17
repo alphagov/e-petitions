@@ -4,14 +4,18 @@ Feature: As Charlie
 
 @search
 Scenario: Charlie has to search for a petition before creating one
-  Given a petition "Rioters should loose benefits"
-  And a rejected petition "Rioters must loose benefits"
-  Given I am on the home page
+  Given the following petitions exist:
+    | action                         | state    | signature_count | open_at    |
+    | Rioters should loose benefits  | open     |             835 | 2011-08-11 |
+    | Rioters must loose benefits    | rejected |               5 |            |
+    | Do not remove rioters benefits | open     |            1023 | 2011-08-21 |
+  And I am on the home page
   When I follow "Start a petition" within ".//main"
   Then I should be asked to search for a new petition
   When I check for similar petitions
-  Then I should see "Rioters should loose benefits"
-  Then I should not see "Rioters must loose benefits"
+  Then I should see the following similar petitions:
+    | Do not remove rioters benefits | 1,023 signatures |
+    | Rioters should loose benefits  | 835 signatures   |
   When I choose to create a petition anyway
   Then I should be on the new petition page
   And I should see my search query already filled in as the action of the petition
@@ -85,8 +89,8 @@ Scenario: Charlie tries to submit an invalid petition
 
   When I am allowed to make the petition action too long
   When I fill in "What do you want us to do?" with text longer than 80 characters
-  And I fill in "Background" with text longer than 300 characters
-  And I fill in "Additional details" with text longer than 800 characters
+  And I fill in "Tell us more about what you want the Government or Parliament to do" with text longer than 300 characters
+  And I fill in "Tell us more about why you want the Government or Parliament to do it" with text longer than 800 characters
   And I press "Preview petition"
 
   Then I should see "Action is too long"
@@ -94,8 +98,8 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Additional details is too long"
 
   When I fill in "What do you want us to do?" with "=cmd"
-  And I fill in "Background" with "@cmd"
-  And I fill in "Additional details" with "+cmd"
+  And I fill in "Tell us more about what you want the Government or Parliament to do" with "@cmd"
+  And I fill in "Tell us more about why you want the Government or Parliament to do it" with "+cmd"
   And I press "Preview petition"
 
   Then I should see "Action can't start with a '=', '+', '-' or '@'"
@@ -103,8 +107,8 @@ Scenario: Charlie tries to submit an invalid petition
   And I should see "Additional details can't start with a '=', '+', '-' or '@'"
 
   When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
-  And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
-  And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And I fill in "Tell us more about what you want the Government or Parliament to do" with "Give half of Wimbledon rock to wombats!"
+  And I fill in "Tell us more about why you want the Government or Parliament to do it" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
   And I press "Preview petition"
 
   Then I should see a heading called "Check your petition"
@@ -115,8 +119,8 @@ Scenario: Charlie tries to submit an invalid petition
 
   And I press "Go back and make changes"
   And the "What do you want us to do?" field should contain "The wombats of wimbledon rock."
-  And the "Background" field should contain "Give half of Wimbledon rock to wombats!"
-  And the "Additional details" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+  And the "Tell us more about what you want the Government or Parliament to do" field should contain "Give half of Wimbledon rock to wombats!"
+  And the "Tell us more about why you want the Government or Parliament to do it" field should contain "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
 
   And I press "Preview petition"
   And I press "This looks good"
