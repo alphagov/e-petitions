@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_152332) do
+ActiveRecord::Schema.define(version: 2020_02_20_152906) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -250,7 +250,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152332) do
   end
 
   create_table "petitions", id: :serial, force: :cascade do |t|
-    t.string "action", limit: 255, null: false
+    t.string "action", limit: 255
     t.text "additional_details"
     t.string "state", limit: 10, default: "pending", null: false
     t.datetime "open_at"
@@ -279,10 +279,23 @@ ActiveRecord::Schema.define(version: 2020_02_20_152332) do
     t.datetime "signature_count_reset_at"
     t.datetime "signature_count_validated_at"
     t.text "committee_note"
+    t.string "locale", limit: 7, default: "en-GB", null: false
+    t.string "action_en", limit: 255
+    t.string "action_cy", limit: 255
+    t.text "additional_details_en"
+    t.text "additional_details_cy"
+    t.string "background_en", limit: 500
+    t.string "background_cy", limit: 500
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
+    t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
+    t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_petitions_on_additional_details", using: :gin
+    t.index "to_tsvector('english'::regconfig, additional_details_en)", name: "index_petitions_on_additional_details_en", using: :gin
+    t.index "to_tsvector('simple'::regconfig, (action_cy)::text)", name: "index_petitions_on_action_cy", using: :gin
+    t.index "to_tsvector('simple'::regconfig, (background_cy)::text)", name: "index_petitions_on_background_cy", using: :gin
+    t.index "to_tsvector('simple'::regconfig, additional_details_cy)", name: "index_petitions_on_additional_details_cy", using: :gin
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"

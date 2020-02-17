@@ -39,7 +39,7 @@ RSpec.describe PetitionsController, type: :controller do
     end
 
     context "valid post" do
-      let(:petition) { Petition.find_by_action("Save the planet") }
+      let(:petition) { Petition.find_by(action: "Save the planet") }
 
       it "should successfully create a new petition and a signature" do
         perform_enqueued_jobs do

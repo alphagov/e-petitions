@@ -64,7 +64,7 @@
   <tbody>
     <% @petitions.each do |petition| -%>
       <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
-        <td class="petition-list-petition-action"><%= link_to petition.action, admin_petition_path(petition) %></td>
+        <td class="petition-list-petition-action"><%= link_to (petition.action_en || petition.action_cy), admin_petition_path(petition) %></td>
         <td class="petition-list-petition-creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
         <td class="petition-list-petition-id"><%= petition.id %></td>
         <td><%= petition.state.humanize %></td>

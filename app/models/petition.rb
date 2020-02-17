@@ -2,6 +2,7 @@ require 'textacular/searchable'
 
 class Petition < ActiveRecord::Base
   include PerishableTokenGenerator
+  include Translatable
 
   PENDING_STATE     = 'pending'
   VALIDATED_STATE   = 'validated'
@@ -29,11 +30,13 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
+  translate :action, :additional_details, :background
+
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
   before_save :update_moderation_lag, unless: :moderation_lag?
   after_create :update_last_petition_created_at
 
-  extend Searchable(:action, :background, :additional_details)
+  extend Searchable(:action_en, :action_cy, :background_en, :background_cy, :additional_details_en, :additional_details_cy)
   include Browseable, Taggable
 
   facet :all,      -> { by_most_popular }
@@ -101,6 +104,7 @@ class Petition < ActiveRecord::Base
   end
 
   alias_attribute :opened_at, :open_at
+  attribute :locale, :string, default: -> { I18n.locale }
 
   class << self
     def by_most_popular

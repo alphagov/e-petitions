@@ -45,9 +45,13 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
     it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
 
-    it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
-    it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 500, null: true) }
-    it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
+    it { is_expected.to have_db_column(:locale).of_type(:string).with_options(limit: 7, null: false, default: "en-GB") }
+    it { is_expected.to have_db_column(:action_en).of_type(:string).with_options(limit: 255, null: true) }
+    it { is_expected.to have_db_column(:action_cy).of_type(:string).with_options(limit: 255, null: true) }
+    it { is_expected.to have_db_column(:background_en).of_type(:string).with_options(limit: 500, null: true) }
+    it { is_expected.to have_db_column(:background_cy).of_type(:string).with_options(limit: 500, null: true) }
+    it { is_expected.to have_db_column(:additional_details_en).of_type(:text).with_options(null: true) }
+    it { is_expected.to have_db_column(:additional_details_cy).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
     it { is_expected.to validate_length_of(:action).is_at_most(100) }
@@ -2509,6 +2513,13 @@ RSpec.describe Petition, type: :model do
           petition.reload.locked_at
         }.to be_nil
       end
+    end
+  end
+
+  describe "#locale" do
+    specify do
+      I18n.with_locale(:"en-GB") { expect(Petition.new.locale).to eq("en-GB") }
+      I18n.with_locale(:"cy-GB") { expect(Petition.new.locale).to eq("cy-GB") }
     end
   end
 end

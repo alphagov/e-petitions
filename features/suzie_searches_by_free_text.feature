@@ -6,15 +6,15 @@ Feature: Suzy Singer searches by free text
 
   Background:
     Given the date is the "21 April 2011 12:00"
-    And a pending petition exists with action: "Wombles are great"
-    And a validated petition exists with action: "The Wombles of Wimbledon"
-    And an open petition exists with action: "Uncle Bulgaria", additional_details: "The Wombles are here", closed_at: "1 minute from now"
-    And an open petition exists with action: "Common People", background: "The Wombles belong to us all", closed_at: "11 days from now"
-    And an open petition exists with action: "Overthrow the Wombles", closed_at: "1 year from now"
-    And a closed petition exists with action: "The Wombles will rock Glasto", closed_at: "1 minute ago"
-    And a rejected petition exists with action: "Eavis vs the Wombles"
-    And a hidden petition exists with action: "The Wombles are profane"
-    And an open petition exists with action: "Wombles", closed_at: "10 days from now"
+    And a pending petition exists with action_en: "Wombles are great", action_cy: "Mae Wombles yn wych"
+    And a validated petition exists with action_en: "The Wombles of Wimbledon", action_cy: "Wombles Wimbledon"
+    And an open petition exists with action_en: "Uncle Bulgaria", additional_details: "The Wombles are here", action_cy: "Yncl Bwlgaria", additional_details_cy: "Mae'r Wombles yma", closed_at: "1 minute from now"
+    And an open petition exists with action_en: "Common People", background: "The Wombles belong to us all", action_cy: "Pobl Gyffredin", background_cy: "Mae'r Wombles yn perthyn i ni i gyd", closed_at: "11 days from now"
+    And an open petition exists with action_en: "Overthrow the Wombles", action_cy: "Goresgyn y Wombles", closed_at: "1 year from now"
+    And a closed petition exists with action_en: "The Wombles will rock Glasto", action_cy: "Bydd y Wombles yn siglo Glasto", closed_at: "1 minute ago"
+    And a rejected petition exists with action_en: "Eavis vs the Wombles", action_cy: "Eavis vs y Wombles"
+    And a hidden petition exists with action_en: "The Wombles are profane", action_cy: "Mae'r Wombles yn halogedig"
+    And an open petition exists with action_en: "Wombles", action_cy: "Wombles", closed_at: "10 days from now"
 
     # waiting for govts response
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
@@ -39,6 +39,20 @@ Feature: Suzy Singer searches by free text
       | Common People                      | 1 signature             |
       | The Wombles will rock Glasto       | 1 signature, now closed |
       | Eavis vs the Wombles               | Rejected                |
+    And the markup should be valid
+
+  @welsh
+  Scenario: Search for all visible petitions in Welsh
+    When I search for "All petitions" with "Wombles"
+    Then I should see my search term "Wombles" filled in the search field
+    And I should see "6 results"
+    And I should see the following search results:
+      | Wombles                            | 1 signature             |
+      | Goresgyn y Wombles                 | 1 signature             |
+      | Yncl Bwlgaria                      | 1 signature             |
+      | Pobl Gyffredin                     | 1 signature             |
+      | Bydd y Wombles yn siglo Glasto     | 1 signature, now closed |
+      | Eavis vs y Wombles                 | Rejected                |
     And the markup should be valid
 
   Scenario: Search for open petitions
@@ -66,6 +80,12 @@ Feature: Suzy Singer searches by free text
     When I search for "Open petitions" with "overthrow the"
     Then I should see the following search results:
       | Overthrow the Wombles | 1 signature |
+
+  @welsh
+  Scenario: Search for open petitions using multiple search terms in Welsh
+    When I search for "Open petitions" with "goresgyn y"
+    Then I should see the following search results:
+      | Goresgyn y Wombles    | 1 signature |
 
   Scenario: Search for rejected petitions
     When I search for "Rejected petitions" with "WOMBLES"

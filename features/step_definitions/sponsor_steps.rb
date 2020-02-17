@@ -138,6 +138,7 @@ Then(/^(I|they|".*?") should be emailed a link for gathering support from sponso
     Then #{address} should receive an email with subject "Action required: Petition"
     When they open the email with subject "Action required: Petition"
     Then they should see /\/petitions\/\\d+\/sponsors\/[A-Za-z0-9]+/ in the email body
+    Then they should see /\/deisebau\/\\d+\/noddwyr\/[A-Za-z0-9]+/ in the email body
   }
 end
 

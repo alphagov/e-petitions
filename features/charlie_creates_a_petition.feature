@@ -35,7 +35,24 @@ Scenario: Charlie creates a petition
   Then the markup should be valid
   And I am asked to review my email address
   When I press "Yes – this is my email address"
-  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
+  Then a petition should exist with action_en: "The wombats of wimbledon rock.", action_cy: nil, state: "pending"
+  And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
+  And "Womboid Wibbledon" wants to be notified about the petition's progress
+  And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
+
+@welsh
+Scenario: Charlie creates a petition in Welsh
+  Given I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  And I fill in my details
+  And I fill in my creator contact details
+  When I press "Continue"
+  Then the markup should be valid
+  And I am asked to review my email address
+  When I press "Yes – this is my email address"
+  Then a petition should exist with action_cy: "The wombats of wimbledon rock.", action_en: nil, state: "pending"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
   And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors

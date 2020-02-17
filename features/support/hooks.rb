@@ -27,6 +27,14 @@ After do
   Site.reload
 end
 
+Before('@welsh') do
+  I18n.locale = :"cy-GB"
+end
+
+Before('~@welsh') do
+  I18n.locale = :"en-GB"
+end
+
 Before('@admin') do
   Capybara.app_host = 'https://moderate.petition.senedd.wales'
   Capybara.default_host = 'https://moderate.petition.senedd.wales'

@@ -242,7 +242,7 @@ end
 When(/^I start a new petition/) do
   steps %Q(
     Given I am on the new petition page
-    Then I should see "Start a petition - Petitions" in the browser page title
+    Then I should see "#{I18n.t(:"page_titles.petitions.check")}" in the browser page title
     And I should be connected to the server via an ssl connection
   )
 end
