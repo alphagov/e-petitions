@@ -14,7 +14,7 @@ When(/^I navigate to the next page of petitions$/) do
   click_link "Next"
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|flagged|open|rejected)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
+Given(/^a(n)? ?(pending|validated|sponsored|flagged|dormant|open|rejected)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
   petition_args = {
     :action => petition_action,
     :closed_at => 1.day.from_now,
@@ -448,7 +448,7 @@ Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
   @petition = FactoryBot.create(:open_petition, action: action, admin_notes: notes)
 end
 
-Given(/^an? ?(pending|validated|sponsored|flagged|open)? petition "(.*?)" exists with tags "([^"]*)"$/) do |state, action, tags|
+Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open)? petition "(.*?)" exists with tags "([^"]*)"$/) do |state, action, tags|
   tags = tags.split(",").map(&:strip)
   state ||= "open"
   tag_ids = tags.map { |tag| Tag.find_or_create_by(name: tag).id }

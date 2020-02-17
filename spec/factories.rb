@@ -336,6 +336,10 @@ FactoryBot.define do
     state  Petition::FLAGGED_STATE
   end
 
+  factory :dormant_petition, :parent => :petition do
+    state  Petition::DORMANT_STATE
+  end
+
   factory :open_petition, :parent => :sponsored_petition do
     state  Petition::OPEN_STATE
     open_at { Time.current }

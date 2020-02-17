@@ -69,7 +69,7 @@ RSpec.describe DissolutionNotification, type: :model do
       expect(subject.petitions).not_to include(petition)
     end
 
-    %w[pending validated sponsored flagged rejected hidden closed].each do |state|
+    %w[pending validated sponsored flagged dormant rejected hidden closed].each do |state|
       it "doesn't include #{state} petitions" do
         petition = FactoryBot.create(:"#{state}_petition")
         FactoryBot.create(:validated_signature, email: email, petition: petition)
@@ -114,7 +114,7 @@ RSpec.describe DissolutionNotification, type: :model do
       expect(subject.created_petitions).not_to include(petition)
     end
 
-    %w[pending validated sponsored flagged rejected hidden closed].each do |state|
+    %w[pending validated sponsored flagged dormant rejected hidden closed].each do |state|
       it "doesn't include #{state} petitions that I created" do
         petition = FactoryBot.create(:"#{state}_petition", creator_email: email)
 

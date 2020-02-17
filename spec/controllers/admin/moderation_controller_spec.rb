@@ -246,6 +246,39 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(email).to be_nil
         end
       end
+
+      context "when moderation param is 'dormant'" do
+        let(:email) { ActionMailer::Base.deliveries.last }
+
+        before do
+          do_patch moderation: 'dormant'
+          petition.reload
+        end
+
+        it "marks the petition as dormant" do
+          expect(petition.state).to eq(Petition::DORMANT_STATE)
+        end
+
+        it "does not set the open date" do
+          expect(petition.open_at).to be_nil
+        end
+
+        it "does not set the rejected date" do
+          expect(petition.rejected_at).to be_nil
+        end
+
+        it "does not set the moderation lag" do
+          expect(petition.moderation_lag).to be_nil
+        end
+
+        it "redirects to the admin show page for the petition page" do
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
+        end
+
+        it "does not send an email to the petition creator" do
+          expect(email).to be_nil
+        end
+      end
     end
   end
 end

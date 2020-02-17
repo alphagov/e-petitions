@@ -63,6 +63,7 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to allow_value("validated").for(:state) }
     it { is_expected.to allow_value("sponsored").for(:state) }
     it { is_expected.to allow_value("flagged").for(:state) }
+    it { is_expected.to allow_value("dormant").for(:state) }
     it { is_expected.to allow_value("open").for(:state) }
     it { is_expected.to allow_value("rejected").for(:state) }
     it { is_expected.to allow_value("hidden").for(:state) }
@@ -149,6 +150,7 @@ RSpec.describe Petition, type: :model do
         @p6 = FactoryBot.create(:closed_petition, :closed_at => 1.day.ago)
         @p7 = FactoryBot.create(:petition, :state => Petition::SPONSORED_STATE)
         @p8 = FactoryBot.create(:petition, :state => Petition::FLAGGED_STATE)
+        @p9 = FactoryBot.create(:petition, :state => Petition::DORMANT_STATE)
       end
 
       it "returns 2 pending petitions" do
@@ -157,10 +159,13 @@ RSpec.describe Petition, type: :model do
         expect(petitions).to include(@p1, @p3)
       end
 
-      it "returns 1 validated, sponsored, flagged, open, closed and hidden petitions" do
-        [[Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE, @p4],
-         [Petition::HIDDEN_STATE, @p5], [Petition::CLOSED_STATE, @p6],
-         [Petition::SPONSORED_STATE, @p7], [Petition::FLAGGED_STATE, @p8]].each do |state_and_petition|
+      it "returns 1 validated, sponsored, flagged, dormant, open, closed and hidden petitions" do
+        [
+          [Petition::VALIDATED_STATE, @p2], [Petition::OPEN_STATE,    @p4],
+          [Petition::HIDDEN_STATE,    @p5], [Petition::CLOSED_STATE,  @p6],
+          [Petition::SPONSORED_STATE, @p7], [Petition::FLAGGED_STATE, @p8],
+          [Petition::DORMANT_STATE,   @p9]
+       ].each do |state_and_petition|
           petitions = Petition.for_state(state_and_petition[0])
           expect(petitions.size).to eq(1)
           expect(petitions).to eq([state_and_petition[1]])
@@ -175,6 +180,7 @@ RSpec.describe Petition, type: :model do
         @hidden_petition_3 = FactoryBot.create(:petition, :state => Petition::HIDDEN_STATE)
         @hidden_petition_4 = FactoryBot.create(:petition, :state => Petition::SPONSORED_STATE)
         @hidden_petition_5 = FactoryBot.create(:petition, :state => Petition::FLAGGED_STATE)
+        @hidden_petition_6 = FactoryBot.create(:petition, :state => Petition::DORMANT_STATE)
         @visible_petition_1 = FactoryBot.create(:open_petition)
         @visible_petition_2 = FactoryBot.create(:rejected_petition)
         @visible_petition_3 = FactoryBot.create(:open_petition, :closed_at => 1.day.ago)
@@ -438,8 +444,9 @@ RSpec.describe Petition, type: :model do
       let!(:stoppable_2) { FactoryBot.create(:validated_petition) }
       let!(:stoppable_3) { FactoryBot.create(:sponsored_petition) }
       let!(:stoppable_4) { FactoryBot.create(:flagged_petition) }
+      let!(:stoppable_5) { FactoryBot.create(:dormant_petition) }
 
-      let(:stoppable_petitions) { [stoppable_1, stoppable_2, stoppable_3, stoppable_4] }
+      let(:stoppable_petitions) { [stoppable_1, stoppable_2, stoppable_3, stoppable_4, stoppable_5] }
 
       it "returns only stoppable petitions" do
         expect(Petition.stoppable).to include(*stoppable_petitions)
@@ -1146,6 +1153,26 @@ RSpec.describe Petition, type: :model do
     end
   end
 
+  describe "#dormant?" do
+    context "when the state is dormant" do
+      let(:petition) { FactoryBot.build(:petition, state: Petition::DORMANT_STATE) }
+
+      it "returns true" do
+        expect(petition.dormant?).to be_truthy
+      end
+    end
+
+    context "for other states" do
+      (Petition::STATES - [Petition::DORMANT_STATE]).each do |state|
+        let(:petition) { FactoryBot.build(:petition, state: state) }
+
+        it "is not open when state is #{state}" do
+          expect(petition.dormant?).to be_falsey
+        end
+      end
+    end
+  end
+
   describe "#in_moderation?" do
     context "for in moderation states" do
       Petition::IN_MODERATION_STATES.each do |state|
@@ -1314,7 +1341,8 @@ RSpec.describe Petition, type: :model do
     let!(:validated_petition) { FactoryBot.create(:validated_petition, created_at: 2.weeks.ago) }
     let!(:sponsored_petition) { FactoryBot.create(:sponsored_petition, created_at: 6.weeks.ago) }
     let!(:flagged_petition) { FactoryBot.create(:flagged_petition, created_at: 2.weeks.ago) }
-    let!(:stoppable_petitions) { [pending_petition, validated_petition, sponsored_petition, flagged_petition] }
+    let!(:dormant_petition) { FactoryBot.create(:dormant_petition, created_at: 2.months.ago) }
+    let!(:stoppable_petitions) { [pending_petition, validated_petition, sponsored_petition, flagged_petition, dormant_petition] }
     let!(:recent_petitions) { [validated_petition, flagged_petition] }
 
     context "when not passing a date" do
@@ -2194,18 +2222,6 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe '#flag' do
-    subject(:petition) { FactoryBot.create(:petition) }
-
-    before do
-      petition.flag
-    end
-
-    it "sets the state to FLAGGED" do
-      expect(petition.state).to eq(Petition::FLAGGED_STATE)
-    end
-  end
-
   describe '#deadline' do
     let(:now) { Time.current }
 
@@ -2349,7 +2365,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#has_maximum_sponsors?' do
-    %w[pending validated sponsored flagged].each do |state|
+    %w[pending validated sponsored flagged dormant].each do |state|
       let(:petition) { FactoryBot.create(:"#{state}_petition", sponsor_count: sponor_count, sponsors_signed: sponsors_signed) }
 
       context "when petition is #{state}" do

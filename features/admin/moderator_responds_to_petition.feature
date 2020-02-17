@@ -110,5 +110,25 @@ Feature: Moderator respond to petition
     And the creator should not receive a notification email
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
-    And the petition can no longer be flagged
-    And I go to the Admin home page
+    When I revisit the petition
+    Then the petition can no longer be flagged
+    And the petition can no longer be marked as dormant
+    But it can still be approved
+    And it can still be rejected
+    And it can be restored to a sponsored state
+
+  @javascript
+  Scenario: Moderator marks a petition as dormant
+    Given I am logged in as a moderator
+    When I look at the next petition on my list
+    And I mark the petition as dormant
+    Then the petition is not available for searching or viewing
+    And the creator should not receive a notification email
+    And the creator should not receive a rejection notification email
+    But the petition will still show up in the back-end reporting
+    When I revisit the petition
+    Then the petition can no longer be flagged
+    And the petition can no longer be marked as dormant
+    But it can still be approved
+    And it can still be rejected
+    And it can be restored to a sponsored state

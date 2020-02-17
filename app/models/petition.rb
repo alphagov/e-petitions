@@ -7,26 +7,27 @@ class Petition < ActiveRecord::Base
   VALIDATED_STATE   = 'validated'
   SPONSORED_STATE   = 'sponsored'
   FLAGGED_STATE     = 'flagged'
+  DORMANT_STATE     = 'dormant'
   OPEN_STATE        = 'open'
   CLOSED_STATE      = 'closed'
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
   STOPPED_STATE     = 'stopped'
 
-  STATES            = %w[pending validated sponsored flagged open closed rejected hidden stopped]
+  STATES            = %w[pending validated sponsored flagged dormant open closed rejected hidden stopped]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
-  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected stopped]
+  SHOW_STATES       = %w[pending validated sponsored flagged dormant open closed rejected stopped]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
-  STOPPABLE_STATES  = %w[pending validated sponsored flagged]
+  STOPPABLE_STATES  = %w[pending validated sponsored flagged dormant]
 
   IN_MODERATION_STATES       = %w[sponsored flagged]
-  TODO_LIST_STATES           = %w[pending validated sponsored flagged]
+  TODO_LIST_STATES           = %w[pending validated sponsored flagged dormant]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
-  STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged]
+  STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged dormant]
 
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
@@ -597,20 +598,8 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def approve?
-    moderation == 'approve'
-  end
-
-  def reject?
-    moderation == 'reject'
-  end
-
-  def flag?
-    moderation == 'flag'
-  end
-
   def moderation=(value)
-    @moderation = value if value.in?(%w[approve reject flag])
+    @moderation = value if value.in?(%w[approve reject flag dormant restore])
   end
 
   def moderation
@@ -620,14 +609,24 @@ class Petition < ActiveRecord::Base
   def moderate(params)
     self.moderation = params[:moderation]
 
-    if approve?
+    case moderation
+    when 'approve'
       publish
-    elsif reject?
+    when 'reject'
       reject(params[:rejection])
-    elsif flag?
-      flag
+    when 'flag'
+      update(state: FLAGGED_STATE)
+    when 'dormant'
+      update(state: DORMANT_STATE)
+    when 'restore'
+      update(state: SPONSORED_STATE)
     else
-      errors.add :moderation, :blank
+      if flagged? || dormant?
+        errors.add :moderation, :invalid
+      else
+        errors.add :moderation, :blank
+      end
+
       false
     end
   end
@@ -642,10 +641,6 @@ class Petition < ActiveRecord::Base
     rescue ActiveRecord::RecordNotUnique => e
       reload_rejection.update(attributes)
     end
-  end
-
-  def flag
-    update(state: FLAGGED_STATE)
   end
 
   def close!(time = deadline)
@@ -716,6 +711,10 @@ class Petition < ActiveRecord::Base
 
   def flagged?
     state == FLAGGED_STATE
+  end
+
+  def dormant?
+    state == DORMANT_STATE
   end
 
   def pending?
