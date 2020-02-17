@@ -109,6 +109,16 @@ module AdminHelper
     }
   end
 
+  def back_link
+    if session[:back_location]
+      link_to "Back", session[:back_location], class: "back-link"
+    elsif @petition
+      link_to "Back", admin_petitions_path, class: "back-link"
+    else
+      link_to "Back", admin_root_path, class: "back-link"
+    end
+  end
+
   private
 
   def admin_petition_facets
