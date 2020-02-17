@@ -5,14 +5,14 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
     {
       first_name: "System",
       last_name: "Administrator",
-      email: "admin@petition.parliament.wales",
+      email: "admin@petition.senedd.wales",
       password: "L3tme1n!",
       password_confirmation: "L3tme1n!"
     }
   end
 
   let(:login_params) do
-    { email: "admin@petition.parliament.wales", password: "L3tme1n!" }
+    { email: "admin@petition.senedd.wales", password: "L3tme1n!" }
   end
 
   before do
@@ -22,7 +22,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
   def new_browser
     open_session do |s|
       s.reset!
-      s.host! "moderate.petition.parliament.wales"
+      s.host! "moderate.petition.senedd.wales"
       s.https!
     end
   end
@@ -33,18 +33,18 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       s1.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s1.response.status).to eq(302)
-      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin")
+      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin")
 
       s2 = new_browser
       s2.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s2.response.status).to eq(302)
-      expect(s2.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin")
+      expect(s2.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin")
 
       s1.get("/admin")
 
       expect(s1.response.status).to eq(302)
-      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin/login")
+      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin/login")
     end
   end
 
@@ -54,7 +54,7 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       s1.post "/admin/user_sessions", params: { admin_user_session: login_params }
 
       expect(s1.response.status).to eq(302)
-      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin")
+      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin")
 
       s2 = new_browser
       s2.cookies["admin_user_credentials"] = s1.cookies["admin_user_credentials"]
@@ -62,18 +62,18 @@ RSpec.describe "admin user persistence token", type: :request, csrf: false do
       s1.get("/admin/logout")
 
       expect(s1.response.status).to eq(302)
-      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin/login")
+      expect(s1.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin/login")
 
       s2.get("/admin")
 
       expect(s2.response.status).to eq(302)
-      expect(s2.response.headers["Location"]).to eq("https://moderate.petition.parliament.wales/admin/login")
+      expect(s2.response.headers["Location"]).to eq("https://moderate.petition.senedd.wales/admin/login")
     end
   end
 
   context "when a session is stale" do
     before do
-      host! "moderate.petition.parliament.wales"
+      host! "moderate.petition.senedd.wales"
       https!
     end
 

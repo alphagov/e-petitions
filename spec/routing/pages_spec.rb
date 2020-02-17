@@ -23,16 +23,16 @@ RSpec.describe "pages", type: :routes do
     end
 
     describe "helpers" do
-      it "#home_url generates https://petition.parliament.wales/" do
-        expect(home_url).to eq("https://petition.parliament.wales/")
+      it "#home_url generates https://petition.senedd.wales/" do
+        expect(home_url).to eq("https://petition.senedd.wales/")
       end
 
-      it "#help_url generates https://petition.parliament.wales/help" do
-        expect(help_url).to eq("https://petition.parliament.wales/help")
+      it "#help_url generates https://petition.senedd.wales/help" do
+        expect(help_url).to eq("https://petition.senedd.wales/help")
       end
 
-      it "#privacy_url generates https://petition.parliament.wales/privacy" do
-        expect(privacy_url).to eq("https://petition.parliament.wales/privacy")
+      it "#privacy_url generates https://petition.senedd.wales/privacy" do
+        expect(privacy_url).to eq("https://petition.senedd.wales/privacy")
       end
     end
   end

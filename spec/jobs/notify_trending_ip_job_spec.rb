@@ -37,8 +37,8 @@ RSpec.describe NotifyTrendingIpJob, type: :job do
     described_class.perform_now(trending_ip)
 
     message = "32 signatures between 5:00pm and 6:00pm on "
-    message << "<https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}|Do Stuff!> "
-    message << "from <https://moderate.petition.parliament.wales/admin/petitions/#{petition.id}/signatures?q=127.0.0.1&window=2019-03-31T16%3A00%3A00Z|127.0.0.1>"
+    message << "<https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}|Do Stuff!> "
+    message << "from <https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}/signatures?q=127.0.0.1&window=2019-03-31T16%3A00%3A00Z|127.0.0.1>"
 
     body = { payload: { text: message }.to_json }.to_query
 

@@ -13,7 +13,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
         before { process action, method: method, params: params, format: :json }
 
         it "redirects to the login page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/login")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
         end
       end
 
@@ -35,7 +35,7 @@ RSpec.describe Admin::LocksController, type: :controller, admin: true do
         before { process action, method: method, params: params, format: :json }
 
         it "redirects to the admin profile page" do
-          expect(response).to redirect_to("https://moderate.petition.parliament.wales/admin/profile/#{moderator.id}/edit")
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{moderator.id}/edit")
         end
       end
 

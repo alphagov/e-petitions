@@ -1,6 +1,6 @@
 # Welsh Parliament Petitions
 
-This is the code base for the Welsh Parliament's petitions service (https://petition.parliament.wales).
+This is the code base for the Welsh Parliament's petitions service (https://petition.senedd.wales).
 
 ## Setup
 
