@@ -46,7 +46,7 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
 
     it { is_expected.to have_db_column(:action).of_type(:string).with_options(limit: 255, null: false) }
-    it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 300, null: true) }
+    it { is_expected.to have_db_column(:background).of_type(:string).with_options(limit: 500, null: true) }
     it { is_expected.to have_db_column(:additional_details).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
