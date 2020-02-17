@@ -94,7 +94,7 @@ RSpec.describe HomeHelper, type: :helper do
     let!(:hidden_petition) { FactoryBot.create :hidden_petition }
     let!(:open_petition) { FactoryBot.create :open_petition }
 
-    describe "when there is an actioned petition" do
+    context "when there is an actioned petition" do
       let!(:responded_petition) { FactoryBot.create :responded_petition }
 
       it "returns true" do
@@ -102,7 +102,7 @@ RSpec.describe HomeHelper, type: :helper do
       end
     end
 
-    describe "when there are no actioned petitions" do
+    context "when there are no actioned petitions" do
       it "returns false" do
         expect(helper.any_actioned_petitions?).to eq false
       end

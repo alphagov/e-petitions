@@ -23,7 +23,7 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "callbacks" do
-    describe "when the parliament is updated" do
+    context "when the parliament is updated" do
       let(:parliament) { FactoryBot.create(:parliament, :dissolving, dissolution_at: 3.weeks.from_now) }
       let(:site) { Site.instance }
 

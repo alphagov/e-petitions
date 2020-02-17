@@ -4,7 +4,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
 
   let(:petition) { FactoryBot.create(:sponsored_petition) }
 
-  describe 'not logged in' do
+  context 'not logged in' do
     describe 'GET #show' do
       it 'redirects to the login page' do
         get :show, params: { petition_id: petition.id }
@@ -39,7 +39,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
     end
   end
 
-  describe 'logged in as moderator user' do
+  context 'logged in as moderator user' do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 

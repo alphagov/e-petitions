@@ -12,26 +12,28 @@
       <%= render 'petition_action_notes', petition: @petition %>
     </li>
 
-    <% if @petition.moderated? %>
-      <li class="petition-action">
-        <%= render 'petition_action_government_response', petition: @petition %>
-      </li>
-    <% end %>
+    <% unless current_user.is_a_reviewer? %>
+      <% if @petition.moderated? %>
+        <li class="petition-action">
+          <%= render 'petition_action_government_response', petition: @petition %>
+        </li>
+      <% end %>
 
-    <% if @petition.can_have_debate_added? %>
-      <li class="petition-action">
-        <%= render 'petition_action_debate_date', petition: @petition %>
-      </li>
+      <% if @petition.can_have_debate_added? %>
+        <li class="petition-action">
+          <%= render 'petition_action_debate_date', petition: @petition %>
+        </li>
 
-      <li class="petition-action">
-        <%= render 'petition_action_debate_outcome', petition: @petition %>
-      </li>
-    <% end %>
+        <li class="petition-action">
+          <%= render 'petition_action_debate_outcome', petition: @petition %>
+        </li>
+      <% end %>
 
-    <% if @petition.moderated? %>
-      <li class="petition-action">
-        <%= render 'petition_action_email_petitioners', petition: @petition %>
-      </li>
+      <% if @petition.moderated? %>
+        <li class="petition-action">
+          <%= render 'petition_action_email_petitioners', petition: @petition %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </nav>

@@ -2,7 +2,8 @@ class AdminUser < ActiveRecord::Base
   DISABLED_LOGIN_COUNT = 5
   SYSADMIN_ROLE = 'sysadmin'
   MODERATOR_ROLE = 'moderator'
-  ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE]
+  REVIEWER_ROLE = 'reviewer'
+  ROLES = [SYSADMIN_ROLE, MODERATOR_ROLE, REVIEWER_ROLE]
   PASSWORD_REGEX = /\A.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*\z/
 
   class CannotDeleteCurrentUser < RuntimeError; end
@@ -93,6 +94,10 @@ class AdminUser < ActiveRecord::Base
     self.role == 'moderator'
   end
 
+  def is_a_reviewer?
+    self.role == 'reviewer'
+  end
+
   def has_to_change_password?
     self.force_password_reset or (self.password_changed_at and self.password_changed_at < 9.months.ago)
   end
@@ -102,6 +107,10 @@ class AdminUser < ActiveRecord::Base
   end
 
   def can_edit_responses?
+    is_a_sysadmin? || is_a_moderator?
+  end
+
+  def can_moderate_petitions?
     is_a_sysadmin? || is_a_moderator?
   end
 

@@ -23,7 +23,7 @@ RSpec.describe Rejection, type: :model do
   end
 
   describe "callbacks" do
-    describe "when the rejection is created" do
+    context "when the rejection is created" do
       let(:petition) { FactoryBot.create(:validated_petition) }
       let(:rejection) { FactoryBot.build(:rejection, code: rejection_code, petition: petition) }
       let(:now) { Time.current }

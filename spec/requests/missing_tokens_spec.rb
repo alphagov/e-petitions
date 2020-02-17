@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "missing a 'token'", type: :request, show_exceptions: true do
   let(:petition) { FactoryBot.create(:open_petition) }
 
-  describe "when verifying the signature" do
+  context "when verifying the signature" do
     let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
     before do
@@ -15,7 +15,7 @@ RSpec.describe "missing a 'token'", type: :request, show_exceptions: true do
     end
   end
 
-  describe "when viewing the signed page" do
+  context "when viewing the signed page" do
     let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
 
     before do
@@ -27,7 +27,7 @@ RSpec.describe "missing a 'token'", type: :request, show_exceptions: true do
     end
   end
 
-  describe "when unsubscribing" do
+  context "when unsubscribing" do
     let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
     before do

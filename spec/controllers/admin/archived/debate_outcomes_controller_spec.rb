@@ -4,7 +4,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
   let!(:petition) { FactoryBot.create(:archived_petition) }
   let!(:creator) { FactoryBot.create(:archived_signature, :validated, creator: true, petition: petition) }
 
-  describe 'not logged in' do
+  context 'not logged in' do
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, params: { petition_id: petition.id }
@@ -16,6 +16,27 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
       it 'redirects to the login page' do
         patch :update, params: { petition_id: petition.id }
         expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin/login')
+      end
+    end
+  end
+
+  context 'logged in as reviewer user' do
+    let(:user) { FactoryBot.create(:reviewer_user) }
+    before { login_as(user) }
+
+    describe 'GET /show' do
+      it 'redirects to the admin hub page' do
+        get :show, params: { petition_id: petition.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+
+    describe 'PATCH /update' do
+      it 'redirects to the admin hub page' do
+        patch :update, params: { petition_id: petition.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
       end
     end
   end
@@ -39,7 +60,7 @@ RSpec.describe Admin::Archived::DebateOutcomesController, type: :controller, adm
     end
   end
 
-  describe "logged in as moderator user" do
+  context "logged in as moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 

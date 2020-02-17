@@ -109,7 +109,7 @@ RSpec.describe Archived::DebateOutcome, type: :model do
   end
 
   describe "callbacks" do
-    describe "when the debate outcome is created" do
+    context "when the debate outcome is created" do
       let(:petition) { FactoryBot.create(:archived_petition, debate_state: "awaiting") }
       let(:debate_outcome) { FactoryBot.build(:archived_debate_outcome, petition: petition) }
       let(:now) { Time.current }
@@ -131,7 +131,7 @@ RSpec.describe Archived::DebateOutcome, type: :model do
       end
     end
 
-    describe "when the debate outcome is updated" do
+    context "when the debate outcome is updated" do
       let(:petition) { FactoryBot.create(:awaiting_debate_petition) }
       let(:debate_outcome) { FactoryBot.build(:debate_outcome, petition: petition) }
 

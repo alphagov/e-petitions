@@ -19,6 +19,10 @@ FactoryBot.define do
     role "moderator"
   end
 
+  factory :reviewer_user, :parent => :admin_user do
+    role "reviewer"
+  end
+
   factory :archived_debate_outcome, class: "Archived::DebateOutcome" do
     association :petition, factory: :archived_petition
     debated_on { 1.year.ago.to_date }

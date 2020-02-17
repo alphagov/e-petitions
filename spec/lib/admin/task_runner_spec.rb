@@ -19,7 +19,7 @@ RSpec.describe Admin::TaskRunner do
       expect(described_class.run(params)).to eq(false)
     end
 
-    describe "when calling #run raises an error" do
+    context "when calling #run raises an error" do
       let(:exception) { StandardError.new("Something bad happened") }
 
       it "returns false" do

@@ -1,4 +1,5 @@
 class Admin::PetitionEmailsController < Admin::AdminController
+  before_action :require_moderator
   before_action :fetch_petition
   before_action :build_email, only: [:new, :create]
   before_action :fetch_email, only: [:edit, :update, :destroy]

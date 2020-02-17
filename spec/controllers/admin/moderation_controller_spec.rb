@@ -1,8 +1,31 @@
 require 'rails_helper'
 
 RSpec.describe Admin::ModerationController, type: :controller, admin: true do
+  context "logged in as reviewer user" do
+    let(:user) { FactoryBot.create(:reviewer_user) }
+    before { login_as(user) }
 
-  describe "logged in" do
+    let(:petition) do
+      FactoryBot.create(:sponsored_petition,
+        creator_attributes: {
+          name: "Barry Butler",
+          email: "bazbutler@gmail.com"
+        },
+        sponsor_count: 5,
+        moderation_threshold_reached_at: 4.days.ago
+      )
+    end
+
+    describe 'PATCH /update' do
+      it 'redirects to the admin hub page' do
+        patch :update, params: { petition_id: petition.id }
+        expect(response).to redirect_to('https://moderate.petition.parliament.uk/admin')
+        expect(controller).to set_flash[:alert].to("You must be logged in as a moderator or system administrator to view this page")
+      end
+    end
+  end
+
+  context "logged in as a moderator user" do
     let(:user) { FactoryBot.create(:moderator_user) }
     before { login_as(user) }
 
@@ -17,7 +40,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
       )
     end
 
-    context "update" do
+    describe "update" do
       before { ActionMailer::Base.deliveries.clear }
       let(:patch_options) { {} }
 

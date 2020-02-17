@@ -1,4 +1,5 @@
 class Admin::ScheduleDebateController < Admin::AdminController
+  before_action :require_moderator
   before_action :fetch_petition
 
   def show

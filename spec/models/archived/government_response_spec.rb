@@ -32,7 +32,7 @@ RSpec.describe Archived::GovernmentResponse, type: :model do
   end
 
   describe "callbacks" do
-    describe "when the government response is created" do
+    context "when the government response is created" do
       let(:petition) { FactoryBot.create(:archived_petition) }
       let(:government_response) { FactoryBot.build(:archived_government_response, petition: petition) }
       let(:now) { Time.current }
