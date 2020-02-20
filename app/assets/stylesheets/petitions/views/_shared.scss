@@ -127,20 +127,6 @@ input.back-page {
   .summary {
     text-decoration: underline;
   }
-
-  .list-of-parliaments {
-    margin-top: $gutter-half;
-    display: block;
-    @include core-16();
-
-    ul {
-      padding: $gutter/6;
-    }
-
-    li {
-      padding: $gutter/6 0;
-    }
-  }
 }
 
 // Flash messages

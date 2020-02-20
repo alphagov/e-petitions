@@ -1,6 +1,6 @@
 module Statistics
   class << self
-    def moderation(by: "month", parliament: nil)
+    def moderation(by: "month")
       table_name = "petitions"
 
       unless by.in?(%w[week month])
