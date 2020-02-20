@@ -135,7 +135,33 @@ class Language < ActiveRecord::Base
     locale == "cy-GB"
   end
 
+  def translated?(key)
+    other_translations.key?(key)
+  end
+
+  def changed?(key)
+    if value = get(key)
+      value != default_value(key)
+    end
+  end
+
   private
+
+  def default_value(key)
+    simple_backend.translate(locale, key, default: nil)
+  end
+
+  def simple_backend
+    @simple_backend ||= I18n.backend.backends.last
+  end
+
+  def other_locale
+    locale == "en-GB" ? "cy-GB" : "en-GB"
+  end
+
+  def other_translations
+    @other_translations ||= self.class.find_by!(locale: other_locale)
+  end
 
   def load_yaml
     YAML.safe_load(File.read(yaml_file))

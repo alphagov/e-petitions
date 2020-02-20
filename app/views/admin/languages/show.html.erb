@@ -16,15 +16,33 @@
   <tbody>
     <% @language.keys.each do |key| %>
       <tr>
-        <td><%= key %></td>
         <td>
-          <div class="button_to">
-            <%= link_to 'Edit', edit_admin_language_path(@language.locale, key), class: 'button' %>
-          </div>
-
+          <% if @language.changed?(key) %>
+            <strong><%= key %></strong>
+          <% else %>
+            <%= key %>
+          <% end %>
+        </td>
+        <td>
           <% if @language.english? %>
+            <% if @language.translated?(key) %>
+              <div class="button_to">
+                <%= link_to 'Edit', edit_admin_language_path(@language.locale, key), class: 'button' %>
+              </div>
+              <div class="button_to">
+                <%= link_to 'Translate', edit_admin_language_path("cy-GB", key), class: 'button-secondary' %>
+              </div>
+            <% else %>
+              <div class="button_to">
+                <%= link_to 'Edit', edit_admin_language_path(@language.locale, key), class: 'button-secondary' %>
+              </div>
+              <div class="button_to">
+                <%= link_to 'Translate', edit_admin_language_path("cy-GB", key), class: 'button' %>
+              </div>
+            <% end %>
+          <% else %>
             <div class="button_to">
-              <%= link_to 'Translate', edit_admin_language_path("cy-GB", key), class: 'button-secondary' %>
+              <%= link_to 'Edit', edit_admin_language_path(@language.locale, key), class: 'button' %>
             </div>
           <% end %>
 

@@ -130,6 +130,66 @@ RSpec.describe Language, type: :model do
     end
   end
 
+  describe "#translated?" do
+    let!(:english) { FactoryBot.create(:language, :english) }
+    let!(:welsh) { FactoryBot.create(:language, :welsh) }
+
+    context "when the key exists in the other language" do
+      it "returns true" do
+        expect(english.translated?(:title)).to eq(true)
+      end
+    end
+
+    context "when the key doesn't exist in the other language" do
+      it "returns false" do
+        expect(english.translated?(:strapline)).to eq(false)
+      end
+    end
+  end
+
+  describe "#changed?" do
+    let!(:language) { FactoryBot.create(:language, :english, translations: translations) }
+
+    around do |example|
+      backend = I18n.backend
+      I18n.backend = I18n::Backend::Chain.new(backend)
+
+      example.run
+    ensure
+      I18n.backend = backend
+    end
+
+    context "when the key doesn't exist" do
+      let(:translations) do
+        { "en-GB" => {} }
+      end
+
+      it "returns false" do
+        expect(language.changed?("ui.header.title")).to be_falsey
+      end
+    end
+
+    context "when the key exists but is the same as in the YAML file" do
+      let(:translations) do
+        {  "en-GB" => { "ui" => { "header" => { "title" => "Petitions" } } } }
+      end
+
+      it "returns false" do
+        expect(language.changed?("ui.header.title")).to be_falsey
+      end
+    end
+
+    context "when the key exists and is different from the YAML file" do
+      let(:translations) do
+        { "en-GB" => { "ui" => { "header" => { "title" => "Welsh Petitions" } } } }
+      end
+
+      it "returns true" do
+        expect(language.changed?("ui.header.title")).to be_truthy
+      end
+    end
+  end
+
   describe "#get" do
     let(:language) { FactoryBot.create(:language, :english, translations: translations) }
     let(:translations) do
