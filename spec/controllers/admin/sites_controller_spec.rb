@@ -73,7 +73,7 @@ RSpec.describe Admin::SitesController, type: :controller, admin: true do
 
       context "when the params are valid" do
         let :params do
-          { title: "Petition parliament" }
+          { title: "Petition the Senedd" }
         end
 
         it "redirects to the edit page" do

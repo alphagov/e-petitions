@@ -113,10 +113,10 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
       let(:debate_outcome_attributes) do
         {
           debated_on: '2014-12-01',
-          overview: 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?',
-          transcript_url: 'http://www.publications.parliament.uk/pa/cm201415/cmhansrd/cm141218/debtext/141218-0003.htm#14121849000001',
-          video_url: 'http://parliamentlive.tv/event/index/f9eb68af-6a5c-4a94-95d3-6108aa87e9d7?in=13:57:00',
-          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+          overview: 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets',
+          transcript_url: 'https://record.assembly.wales/Plenary/5667#A51756',
+          video_url: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
+          debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
         }
       end
 

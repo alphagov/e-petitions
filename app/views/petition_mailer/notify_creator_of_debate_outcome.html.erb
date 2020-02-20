@@ -5,7 +5,7 @@
 <p>Dear <%= @signature.name %>,</p>
 
 <% if @debate_outcome.debated? %>
-<p>Parliament debated your petition – “<%= @petition.action %>”</p>
+<p>Senedd debated your petition – “<%= @petition.action %>”</p>
 <% if @debate_outcome.overview? %>
 
 <blockquote><%= auto_link(simple_format(h(@debate_outcome.overview))) %></blockquote>

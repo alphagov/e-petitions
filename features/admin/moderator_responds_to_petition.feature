@@ -59,7 +59,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And I reject the petition with a reason code "Not the Government/Parliament’s responsibility"
+    And I reject the petition with a reason code "Not the Government/Senedd’s responsibility"
     Then the petition is not available for signing
     But the petition is still available for searching or viewing
 

@@ -318,7 +318,7 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   @petition.update_signature_count!
 end
 
-Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
+Given(/^the threshold for a Senedd debate is "(.*?)"$/) do |amount|
   Site.instance.update!(threshold_for_debate: amount)
 end
 
@@ -368,7 +368,7 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
-Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
+Given(/^a petition "(.*?)" has other business$/) do |petition_action|
   @petition = FactoryBot.create(:open_petition, action: petition_action)
   @email = FactoryBot.create(:petition_email,
     petition: @petition,
@@ -379,7 +379,7 @@ end
 
 Then(/^I should see the other business items$/) do
   steps %Q(
-    Then I should see "Other parliamentary business"
+    Then I should see "Other business"
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )

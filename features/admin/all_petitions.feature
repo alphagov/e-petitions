@@ -84,11 +84,11 @@ Feature: A moderator user views all petitions
     Then I should see the following list of petitions:
      | My referred petition |
 
-    And I filter the list to show "Awaiting a debate in parliament" petitions
+    And I filter the list to show "Awaiting a debate in the Senedd" petitions
     Then I should see the following list of petitions:
      | My open petition awaiting debate date |
 
-    And I filter the list to show "Has been debated in parliament" petitions
+    And I filter the list to show "Has been debated in the Senedd" petitions
     Then I should see the following list of petitions:
      | My open petition with debate outcome |
 

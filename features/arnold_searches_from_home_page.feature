@@ -2,7 +2,7 @@
 Feature: Arnold searches from the home page
   In order to reduce the likelihood of a duplicate petition being made
   As a petition moderator
-  I want to prominently show a petition search for the current parliament from the home page
+  I want to prominently show a petition search for the current petitions from the home page
 
 Background:
     Given a pending petition exists with action_en: "Wombles are great", action_cy: "Mae Wombles yn wych"
@@ -15,7 +15,7 @@ Background:
     And a hidden petition exists with action_en: "The Wombles are profane", action_cy: "Mae'r Wombles yn halogedig"
     And an open petition exists with action_en: "Wombles", action_cy: "Wombles", closed_at: "10 days from now"
 
-Scenario: Arnold searches for petitions
+Scenario: Arnold searches for petitions in English
   Given I am on the home page
   When I search all petitions for "Wombles"
   Then I should be on the all petitions page

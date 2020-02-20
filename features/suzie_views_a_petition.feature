@@ -70,13 +70,13 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should not see the petition creator
 
-  Scenario: Suzie does not see information about other parliamentary business when there is none
+  Scenario: Suzie does not see information about other business when there is none
     Given an open petition "Ban Badger Baiting"
     When I view the petition
-    Then I should not see "Other parliamentary business"
+    Then I should not see "Other business"
 
-  Scenario: Suzie sees information about other parliamentary business when there is some
-    Given a petition "Ban Badger Baiting" has other parliamentary business
+  Scenario: Suzie sees information about other business when there is some
+    Given a petition "Ban Badger Baiting" has other business
     When I view the petition
     Then I should see the other business items
 
@@ -91,7 +91,7 @@ Feature: Suzie views a petition
     Given the date is the "01/08/2015"
     And an open petition "Spend more money on Defence" with scheduled debate date of "18/08/2015"
     When I view the petition
-    Then I should see "Parliament will debate this petition on 18 August 2015. You'll be able to watch online on the UK Parliament YouTube channel."
+    Then I should see "Senedd will debate this petition on 18 August 2015. You'll be able to watch online on the Senedd YouTube channel."
 
   Scenario: Suzie views a petition which will not be debated
     Given a petition "Spend more money on Defence" with a negative debate outcome
@@ -102,8 +102,8 @@ Feature: Suzie views a petition
     Given the date is the "27/10/2015"
     And a petition "Free the wombles" has been debated yesterday
     When I view the petition
-    Then I should see "Parliament debated this petition on 26 October 2015"
-    And I should see "Waiting 1 day for Parliament to publish the debate outcome"
+    Then I should see "Senedd debated this petition on 26 October 2015"
+    And I should see "Waiting 1 day for the Senedd to publish the debate outcome"
 
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed

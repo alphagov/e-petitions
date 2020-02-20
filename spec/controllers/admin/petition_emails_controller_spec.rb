@@ -234,7 +234,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     ['laura_0@example.com'],
                     ['laura_1@example.com'],
                     ['laura_2@example.com'],
-                    ['petitionscommittee@senedd.wales']
+                    ['petitions@senedd.wales']
                   ])
                 end
               end
@@ -321,7 +321,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
             it 'tells the moderator that their changes were saved' do
               do_post
-              expect(flash[:notice]).to eq 'Created other parliamentary business successfully'
+              expect(flash[:notice]).to eq 'Created other business successfully'
             end
 
             it 'stores the supplied email details in the db' do
@@ -744,7 +744,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                     ['laura_0@example.com'],
                     ['laura_1@example.com'],
                     ['laura_2@example.com'],
-                    ['petitionscommittee@senedd.wales']
+                    ['petitions@senedd.wales']
                   ])
                 end
               end
@@ -841,7 +841,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
             it 'tells the moderator that their changes were saved' do
               do_patch
-              expect(flash[:notice]).to eq 'Updated other parliamentary business successfully'
+              expect(flash[:notice]).to eq 'Updated other business successfully'
             end
 
             it 'stores the supplied email details in the db' do
@@ -1043,7 +1043,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                 do_patch
                 expect(deliveries.length).to eq 1
                 expect(deliveries.map(&:to)).to eq([
-                  ['petitionscommittee@senedd.wales']
+                  ['petitions@senedd.wales']
                 ])
               end
             end
@@ -1155,7 +1155,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
           it 'tells the moderator that the record was deleted' do
             do_delete
-            expect(flash[:notice]).to eq 'Deleted other parliamentary business successfully'
+            expect(flash[:notice]).to eq 'Deleted other business successfully'
           end
         end
 
@@ -1171,7 +1171,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
           it 'tells the moderator to contact support' do
             do_delete
-            expect(flash[:notice]).to eq 'Unable to delete other parliamentary business - please contact support'
+            expect(flash[:notice]).to eq 'Unable to delete other business - please contact support'
           end
         end
       end

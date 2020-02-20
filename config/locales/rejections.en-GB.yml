@@ -3,7 +3,7 @@ en-GB:
     titles:
       insufficient: "Insufficient signatures"
       duplicate: "Duplicate petition"
-      irrelevant: "Not the Government/Parliament’s responsibility"
+      irrelevant: "Not the Government/Senedd’s responsibility"
       no-action: "Action unclear"
       honours: "Honours or appointments"
       fake-name: "Fake name"
@@ -17,9 +17,9 @@ en-GB:
         <p>There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue.</p>
         <p>You are more likely to get action on this issue if you sign and share a single petition.</p>
       irrelevant: |-
-        <p>It’s about something that the Welsh Government or Parliament is not responsible for.</p>
+        <p>It’s about something that the Welsh Government or Senedd is not responsible for.</p>
       no-action: |-
-        <p>It’s not clear what the petition is asking the Welsh Government or Parliament to do.</p>
+        <p>It’s not clear what the petition is asking the Welsh Government or Senedd to do.</p>
       honours: |-
         <p>It’s about honours or appointments.</p>
       fake-name: |-

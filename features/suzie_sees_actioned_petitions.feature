@@ -17,29 +17,29 @@ Feature: Suzie sees actioned petitions
     And I should see 2 petitions listed in the referral threshold section
     And I should see an empty debate threshold section
 
-  Scenario: There are petitions debated in parliament
-    Given there are 3 petitions debated in parliament
+  Scenario: There are petitions debated in the Senedd
+    Given there are 3 petitions debated in the Senedd
     And I am on the home page
-    Then I should see a total showing 3 petitions debated in parliament
+    Then I should see a total showing 3 petitions debated in the Senedd
     And I should see an empty referral threshold section
     And I should see 3 petitions counted in the debate threshold section
     And I should see 3 petitions listed in the debate threshold section
 
-  Scenario: There are petitions referred to the committee and petitions debated in parliament
+  Scenario: There are petitions referred to the committee and petitions debated in the Senedd
     Given there are 5 petitions that have been referred to the committee
-    And there are 2 petitions debated in parliament
+    And there are 2 petitions debated in the Senedd
     And I am on the home page
     Then I should see a total showing 5 petitions referred to the committee
-    And I should see a total showing 2 petitions debated in parliament
+    And I should see a total showing 2 petitions debated in the Senedd
     And I should see 5 petitions counted in the referral threshold section
     And I should see 3 petitions listed in the referral threshold section
     And I should see 2 petitions counted in the debate threshold section
     And I should see 2 petitions listed in the debate threshold section
 
-  Scenario: There are petitions debated in parliament with video, transcript and debate pack urls
-    Given there is 1 petition debated in parliament with a transcript url
-    And there is 1 petition debated in parliament with both video and transcript urls
-    And there is 1 petition debated in parliament with all debate outcome urls
+  Scenario: There are petitions debated in the Senedd with video, transcript and debate pack urls
+    Given there is 1 petition debated in the Senedd with a transcript url
+    And there is 1 petition debated in the Senedd with both video and transcript urls
+    And there is 1 petition debated in the Senedd with all debate outcome urls
     And I am on the home page
     Then I should see 2 debated petition video links
     And I should see 3 debated petition transcript links

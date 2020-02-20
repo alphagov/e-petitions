@@ -1,6 +1,6 @@
 @admin
 Feature: Providing debate outcome information
-  In order to keep petition supporters up-to-date on what parliament said about their petition
+  In order to keep petition supporters up-to-date on what Senedd said about their petition
   As an admin user
   I want to store information about debates on the petition
 

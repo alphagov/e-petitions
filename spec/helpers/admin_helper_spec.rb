@@ -70,11 +70,11 @@ RSpec.describe AdminHelper, type: :helper do
     end
 
     it "generates the correct option for 'awaiting_debate_date'" do
-      expect(subject).to have_css("option:nth-of-type(13)[value='awaiting_debate_date']", text: "Awaiting a debate in parliament (13)")
+      expect(subject).to have_css("option:nth-of-type(13)[value='awaiting_debate_date']", text: "Awaiting a debate in the Senedd (13)")
     end
 
     it "generates the correct option for 'with_debate_outcome'" do
-      expect(subject).to have_css("option:nth-of-type(14)[value='with_debate_outcome']", text: "Has been debated in parliament (14)")
+      expect(subject).to have_css("option:nth-of-type(14)[value='with_debate_outcome']", text: "Has been debated in the Senedd (14)")
     end
 
     it "generates the correct option for 'in_debate_queue'" do

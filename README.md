@@ -1,6 +1,6 @@
-# Welsh Parliament Petitions
+# Senedd Petitions
 
-This is the code base for the Welsh Parliament's petitions service (https://petition.senedd.wales).
+This is the code base for the Senedd's petitions service (https://petition.senedd.wales).
 
 ## Setup
 
@@ -69,7 +69,7 @@ docker-compose run --rm web rake
 Individual specs can be run using the following command:
 
 ```
-docker-compose run --rm web rspec spec/models/parliament_spec.rb
+docker-compose run --rm web rspec spec/models/site_spec.rb
 ```
 
 Similarly, individual cucumber features can be run using the following command:
@@ -78,9 +78,9 @@ Similarly, individual cucumber features can be run using the following command:
 docker-compose run --rm web cucumber features/suzie_views_a_petition.feature
 ```
 
-# Deisebau Senedd Cymru
+# Deisebau Senedd 
 
-Dyma sylfaen cod gwasanaeth deisebau Senedd Cymru (https://deiseb.senedd.cymru).
+Dyma sylfaen cod gwasanaeth deisebau Senedd (https://deiseb.senedd.cymru).
 
 ## Setup
 
@@ -149,7 +149,7 @@ docker-compose run --rm web rake
 Gellir rhedeg specs unigol gan ddefnyddio'r gorchymyn canlynol:
 
 ```
-docker-compose run --rm web rspec spec/models/parliament_spec.rb
+docker-compose run --rm web rspec spec/models/site_spec.rb
 ```
 
 Yn yr un modd, gellir rhedeg nodweddion ciwcymbr unigol gan ddefnyddio'r gorchymyn canlynol:

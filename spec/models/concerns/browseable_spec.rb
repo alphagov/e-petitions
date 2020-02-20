@@ -29,8 +29,8 @@ RSpec.describe Browseable, type: :model do
 
   describe ".filter" do
     it "adds a filter key to the filter_definitions class attribute" do
-      browseable.filter(:parliament)
-      expect(browseable.filter_definitions).to eq([:parliament])
+      browseable.filter(:senedd)
+      expect(browseable.filter_definitions).to eq([:senedd])
     end
   end
 
@@ -169,11 +169,11 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
-        let(:filters) { [:parliament] }
+        let(:params) { { q: 'search', page: '3', senedd: '1' } }
+        let(:filters) { [:senedd] }
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, parliament: '1' })
+          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, senedd: '1' })
         end
       end
     end
@@ -212,11 +212,11 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
-        let(:filters) { [:parliament] }
+        let(:params) { { q: 'search', page: '3', senedd: '1' } }
+        let(:filters) { [:senedd] }
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, parliament: '1' })
+          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, senedd: '1' })
         end
       end
     end
@@ -523,7 +523,7 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#to_hash" do
-      let(:filter_definitions) { [:parliament] }
+      let(:filter_definitions) { [:senedd] }
 
       context "when the key is not present in the params hash" do
         let(:params) { Hash.new }
@@ -534,10 +534,10 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "when the key is present in the params hash" do
-        let(:params) { { parliament: 1 } }
+        let(:params) { { senedd: 1 } }
 
         it "returns a hash with the filter key" do
-          expect(filters.to_hash).to eq({ parliament: 1 })
+          expect(filters.to_hash).to eq({ senedd: 1 })
         end
       end
     end

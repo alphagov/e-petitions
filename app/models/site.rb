@@ -228,12 +228,12 @@ class Site < ActiveRecord::Base
     private
 
     def default_title_en
-      ENV.fetch('SITE_TITLE_EN', 'Petition parliament')
+      ENV.fetch('SITE_TITLE_EN', "Petition the Senedd")
     end
     alias_method :default_title, :default_title_en
 
     def default_title_cy
-      ENV.fetch('SITE_TITLE_CY', 'Senedd ddeiseb')
+      ENV.fetch('SITE_TITLE_CY', "Deisebu'r Senedd")
     end
 
     def default_scheme
@@ -290,16 +290,16 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from_en
-      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Welsh Parliament" <no-reply@#{default_host_en}>})
+      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Senedd" <no-reply@#{default_host_en}>})
     end
     alias_method :default_email_from, :default_email_from_en
 
     def default_email_from_cy
-      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Senedd Cymru" <dim-ateb@#{default_host_cy}>})
+      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Senedd" <dim-ateb@#{default_host_cy}>})
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Welsh Parliament" <petitionscommittee@#{default_domain}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Senedd" <petitions@#{default_domain}>})
     end
 
     def default_username

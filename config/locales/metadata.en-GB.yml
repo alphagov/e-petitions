@@ -1,10 +1,10 @@
 en-GB:
   metadata:
     open_graph:
-      site_name: "Petitions - Welsh Parliament"
-      default_title: "Petitions - Welsh Parliament"
+      site_name: "Petitions - Senedd"
+      default_title: "Petitions - Senedd"
       title: "Petition: %{petition}"
 
     twitter:
-      default_title: "Petitions - Welsh Parliament"
+      default_title: "Petitions - Senedd"
       title: "Petition: %{petition}"

@@ -398,15 +398,15 @@ FactoryBot.define do
     debated true
 
     trait :fully_specified do
-      overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
+      overview { 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets' }
       sequence(:transcript_url) { |n|
-        "http://www.publications.parliament.uk/pa/cm#{debated_on.strftime('%Y%m')}/cmhansrd/cm#{debated_on.strftime('%y%m%d')}/debtext/#{debated_on.strftime('%y%m%d')}-0003.htm##{debated_on.strftime('%y%m%d')}49#{ '%06d' % n }"
+        "https://record.assembly.wales/Plenary/5667#A51756"
       }
       video_url {
-        "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
+        "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True"
       }
       sequence(:debate_pack_url) { |n|
-        "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
+        "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
       }
     end
   end

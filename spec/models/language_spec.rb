@@ -282,13 +282,13 @@ RSpec.describe Language, type: :model do
   describe "#flatten" do
     let(:language) { FactoryBot.create(:language, :english, translations: translations) }
     let(:translations) do
-      { "en-GB" => { "header" => { "title" => "Petitions", "strapline" => "Welsh Parliament" } } }
+      { "en-GB" => { "header" => { "title" => "Petitions", "strapline" => "Senedd" } } }
     end
 
     it "returns a flattened hash" do
       expect(language.flatten).to eq(
         "header.title" => "Petitions",
-        "header.strapline" => "Welsh Parliament"
+        "header.strapline" => "Senedd"
       )
     end
   end
@@ -296,7 +296,7 @@ RSpec.describe Language, type: :model do
   describe "#keys" do
     let(:language) { FactoryBot.create(:language, :english, translations: translations) }
     let(:translations) do
-      { "en-GB" => { "header" => { "title" => "Petitions", "strapline" => "Welsh Parliament" } } }
+      { "en-GB" => { "header" => { "title" => "Petitions", "strapline" => "Senedd" } } }
     end
 
     it "returns a sorted list of flattened keys" do

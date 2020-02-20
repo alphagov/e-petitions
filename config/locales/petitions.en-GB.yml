@@ -58,8 +58,8 @@ en-GB:
           referred: "Referred (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
-          awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
-          with_debate_outcome: "Has been debated in parliament (%{quantity})"
+          awaiting_debate_date: "Awaiting a debate in the Senedd (%{quantity})"
+          with_debate_outcome: "Has been debated in the Senedd (%{quantity})"
           in_debate_queue: "In debate queue (%{quantity})"
 
     emails:
@@ -72,21 +72,21 @@ en-GB:
         email_duplicate_signatures: |-
           Duplicate signature of petition
         notify_signer_of_positive_debate_outcome: |-
-          Parliament debated “%{action}”
+          Senedd debated “%{action}”
         notify_signer_of_negative_debate_outcome: |-
-          Parliament didn’t debate “%{action}”
+          Senedd didn’t debate “%{action}”
         notify_signer_of_debate_scheduled: |-
-          Parliament will debate “%{action}”
+          Senedd will debate “%{action}”
 
         # Emails to people who create petitions
         email_creator: |-
           %{subject}
         notify_creator_of_positive_debate_outcome: |-
-          Parliament debated “%{action}”
+          Senedd debated “%{action}”
         notify_creator_of_negative_debate_outcome: |-
-          Parliament didn’t debate “%{action}”
+          Senedd didn’t debate “%{action}”
         notify_creator_of_debate_scheduled: |-
-          Parliament will debate “%{action}”
+          Senedd will debate “%{action}”
         notify_creator_that_moderation_is_delayed: |-
           %{subject}
 
@@ -106,7 +106,7 @@ en-GB:
         special_resend_of_email_confirmation_for_signer: |-
           Please confirm your email address
       signoff_prefix: "The Petitions team"
-      signoff_suffix: "Welsh Parliament"
+      signoff_suffix: "Senedd"
 
     scheduled_for_debate_in_words:
       today: "Scheduled for debate today"
@@ -144,14 +144,14 @@ en-GB:
           other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
       with_debated_outcome:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
+          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the Senedd"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the Senedd"
       awaiting_debate_explanation:
         html: "See all petitions waiting for a debate (%{formatted_count})"
       debated_explanation:
-        html: "See all petitions debated in parliament (%{formatted_count})"
+        html: "See all petitions debated in the Senedd (%{formatted_count})"
       not_debated_explanation:
-        html: "See all petitions not debated in parliament (%{formatted_count})"
+        html: "See all petitions not debated in the Senedd (%{formatted_count})"
 
     action_counts:
       in_moderation:
