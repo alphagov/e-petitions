@@ -1,9 +1,6 @@
 en-GB:
   page_titles:
     default: "Petitions - Welsh Parliament"
-    archived_petitions:
-      index: "View archived petitions - Petitions"
-      show: "%{petition} - Petitions"
     feedback:
       index: "Send feedback - Petitions"
       thanks: "Thank you - Petitions"

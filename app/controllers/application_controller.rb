@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :reload_site
-  before_action :reload_parliament
   before_action :service_unavailable, unless: :site_enabled?
   before_action :authenticate, if: :site_protected?
   before_action :redirect_to_url_without_format, if: :unknown_format?
@@ -61,10 +60,6 @@ class ApplicationController < ActionController::Base
     Site.reload
   end
 
-  def reload_parliament
-    Parliament.reload
-  end
-
   def service_unavailable
     raise Site::ServiceUnavailable, "Sorry, the website is temporarily unavailable"
   end
@@ -75,10 +70,6 @@ class ApplicationController < ActionController::Base
 
   def site_protected?
     Site.protected? unless request.local?
-  end
-
-  def parliament_dissolved?
-    Parliament.dissolved?
   end
 
   def redirect_to_home_page

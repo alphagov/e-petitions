@@ -5,13 +5,6 @@ When(/^I browse to see only "([^"]*)" petitions$/) do |facet|
   end
 end
 
-When(/^I browse to see only "([^"]*)" archived petitions$/) do |facet|
-  step "I go to the archived petitions page"
-  within :css, '#other-search-lists' do
-    click_on facet
-  end
-end
-
 When(/^I search for "([^"]*)" with "([^"]*)"$/) do |facet, term|
   step %{I browse to see only "#{facet}" petitions}
   step %{I fill in "#{term}" as my search term}

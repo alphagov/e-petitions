@@ -9,9 +9,7 @@ module ApplicationHelper
     %w[local_petitions show],
     %w[petitions index],
     %w[petitions show],
-    %w[petitions new],
-    %w[archived/petitions index],
-    %w[archived/petitions show]
+    %w[petitions new]
   ]
 
   def increment(amount = 1)
@@ -33,10 +31,6 @@ module ApplicationHelper
 
   def open_petition_page?
     petition_page? && @petition.open?
-  end
-
-  def archived_petition_page?
-    params[:controller] == 'archived/petitions' && params[:action] == 'show'
   end
 
   def back_url

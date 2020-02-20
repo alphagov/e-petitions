@@ -33,13 +33,6 @@ RSpec.describe CacheHelper, type: :helper do
     let(:klass) { CacheHelper::CacheKey::Keys }
     let(:keys) { klass.new(helper) }
 
-    describe "#archived_petition_page" do
-      it "delegates to the template context" do
-        expect(helper).to receive(:archived_petition_page?).and_return(true)
-        expect(keys.archived_petition_page).to eq(true)
-      end
-    end
-
     describe "#constituency" do
       context "when the @constituency instance variable is not set" do
         it "returns nil" do

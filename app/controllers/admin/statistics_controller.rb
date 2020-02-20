@@ -19,22 +19,13 @@ class Admin::StatisticsController < Admin::AdminController
 
   private
 
-  def parliament
-    if params.key?(:parliament)
-      Parliament.find(params[:parliament])
-    end
-  end
 
   def period
     params[:period]
   end
 
   def csv_filename
-    if params.key?(:parliament)
-      "#{action_name}-#{parliament.period}-by-#{period}.csv"
-    else
-      "#{action_name}-by-#{period}.csv"
-    end
+    "#{action_name}-by-#{period}.csv"
   end
 
   def set_content_disposition

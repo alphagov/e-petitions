@@ -20,13 +20,6 @@ en-GB:
       not_debated: "The Petitions Committee decided not to debate these petitions"
 
     facets:
-      archived:
-        - :all
-        - :published
-        - :rejected
-        - :with_response
-        - :debated
-        - :not_debated
       public:
         - :all
         - :open
@@ -50,18 +43,6 @@ en-GB:
         - :closed
         - :rejected
         - :hidden
-        - :stopped
-        - :awaiting_response
-        - :with_response
-        - :awaiting_debate_date
-        - :with_debate_outcome
-        - :in_debate_queue
-      admin_archived:
-        - :all
-        - :published
-        - :rejected
-        - :hidden
-        - :stopped
         - :awaiting_response
         - :with_response
         - :awaiting_debate_date
@@ -81,18 +62,6 @@ en-GB:
           closed: "Closed (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
-          stopped: "Stopped (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
-          awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
-          with_debate_outcome: "Has been debated in parliament (%{quantity})"
-          in_debate_queue: "In debate queue (%{quantity})"
-        admin_archived:
-          all: "All petitions (%{quantity})"
-          published: "Published (%{quantity})"
-          rejected: "Rejected (%{quantity})"
-          hidden: "Hidden (%{quantity})"
-          stopped: "Stopped (%{quantity})"
           awaiting_response: "Awaiting a government response (%{quantity})"
           with_response: "With a government response (%{quantity})"
           awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
@@ -146,16 +115,6 @@ en-GB:
         # Re-send confirmation emails
         special_resend_of_email_confirmation_for_signer: |-
           Please confirm your email address
-        notify_creator_of_closing_date_change:
-          one: We’re closing your petition early
-          other: We’re closing your petitions early
-        notify_signer_of_closing_date_change:
-          one: We’re closing petitions early
-          other: We’re closing petitions early
-        notify_creator_of_sponsored_petition_being_stopped: |-
-          We’ve stopped your petition early
-        notify_creator_of_validated_petition_being_stopped: |-
-          We’ve stopped your petition early
       signoff_prefix: "The Petitions team"
       signoff_suffix: "Welsh Parliament"
 

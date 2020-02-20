@@ -3,10 +3,10 @@
   <%= form_row :for => [f.object, :admin_notes] do %>
     <%= f.label :details, 'Notes', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :admin_notes %>
-    <%= f.text_area :details, tabindex: increment, rows: 10, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <%= f.text_area :details, tabindex: increment, rows: 10, class: 'form-control' %>
   <% end %>
 
-  <%= f.submit 'Save notes', class: 'button', disabled: @petition.editing_disabled? %>
+  <%= f.submit 'Save notes', class: 'button' %>
   <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 
 <% end -%>

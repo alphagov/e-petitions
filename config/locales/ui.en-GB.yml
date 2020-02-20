@@ -44,9 +44,6 @@ en-GB:
     os:
       app_name: Petitions
       app_tooltip: Welsh Parliament
-    parliament:
-      dissolution_faq_html: |-
-        Find out more on the <a href="%{url}">Petitions Committee website</a>
     petitions:
       about_petition_data_html: |-
         <details role="group">
@@ -197,26 +194,7 @@ en-GB:
               debated_date: Debated %{date}
             facet_with_response:
               responded_date: Government responded – %{date}
-      archived:
-        government_warning:
-          one: This petition was submitted during the %{period} %{government} government
-          other: These petitions were submitted during the %{period} %{government} government
-        show:
-          heading:
-            rejected: Rejected petition
-            default: Petition
-        other_from_government_link: View other petitions from this government
-        list_of_parliaments:
-          summary: View petitions from a different government
-          item: "%{period} %{government} government"
-          current_petitions_link: Back to current petitions
-        search:
-          results:
-            no_match: No archived petitions could be found matching your search terms
-        search_button: Search
       other_lists: Other lists of petitions
-      archived_petitions_link: Archived petitions
-      current_petitions_link: Current petitions
       lists:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
@@ -384,8 +362,6 @@ en-GB:
           <p>When it goes live, we'll email you a link so you can start sharing it.</p>
     home_page:
       heading: Petitions – Welsh Parliament
-      archived_petitions:
-        heading: View petitions from a previous government
       debated_petitions:
         none_debated: Parliament hasn’t debated any petitions yet
         topic_debated_date: This topic was debated on %{date}
@@ -417,8 +393,6 @@ en-GB:
           <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
             Register to vote in the General Election
           </a>
-      dissolved:
-        during_last_parliament: During the last parliament
       thresholds:
         response: If a petition gets %{formatted_count} signatures, the government will respond
         debate: If a petition gets %{formatted_count} signatures, it will be considered for debate in Parliament

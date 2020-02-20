@@ -74,27 +74,6 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should see "This petition is closed"
 
-  Scenario: Suzie sees a special 'closed' message when viewing a petition closed early due to parliament being dissolved
-    Given a petition "Spend more money on Defence" has been closed early because of parliament dissolving
-    When I view the petition
-    Then I should see "This petition closed early because of a General Election"
-
-  Scenario: Suzie sees a special message when viewing a petition closed early due to parliament being dissolved and awaiting a government response
-    Given a petition "Spend more money on Defence" exists and passed the threshold for a response 14 days ago
-    And the petition "Spend more money on Defence" has been closed early because of parliament dissolving
-    When I view the petition
-    Then I should see "Government will respond"
-    Then I should see "Government responds to all petitions that get more than 10,000 signatures"
-    Then I should see "Waiting for a new Petitions Committee after the General Election"
-
-  Scenario: Suzie sees a special message when viewing a petition closed early due to parliament being dissolved and awaiting a debate
-    Given a petition "Spend more money on Defence" passed the threshold for a debate 14 days ago and has no debate date set
-    And the petition "Spend more money on Defence" has been closed early because of parliament dissolving
-    When I view the petition
-    Then I should see "This petition will be considered for debate"
-    Then I should see "All petitions that have more than 100,000 signatures will be considered for debate in the new Parliament"
-    Then I should see "Waiting for a new Petitions Committee after the General Election"
-
   Scenario: Suzie does not see the creator when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition

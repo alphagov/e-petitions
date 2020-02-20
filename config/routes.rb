@@ -72,17 +72,6 @@ Rails.application.routes.draw do
       get '/:id/unsubscribe', action: 'unsubscribe', as: :unsubscribe_signature
       get '/:id/signed',      action: 'signed',      as: :signed_signature
     end
-
-    scope '/archived' do
-      scope '/petitions', controller: 'archived/petitions' do
-        get '/', action: 'index', as: :archived_petitions
-        get '/:id', action: 'show', as: :archived_petition
-      end
-
-      scope '/signatures', controller: 'archived/signatures' do
-        get '/:id/unsubscribe', action: 'unsubscribe', as: :unsubscribe_archived_signature
-      end
-    end
   end
 
   moderation_scope do
@@ -93,7 +82,6 @@ Rails.application.routes.draw do
 
       root to: 'admin#index'
 
-      resource :parliament, only: %i[show update]
       resource :search, only: %i[show]
 
       resources :admin_users
@@ -179,34 +167,6 @@ Rails.application.routes.draw do
       end
 
       resources :tags, except: %i[show]
-
-      namespace :archived do
-        root to: redirect('/admin/archived/petitions')
-
-        resources :petitions, only: %i[show index] do
-          resources :emails, controller: 'petition_emails', except: %i[index show]
-          resource  :lock, only: %i[show create update destroy]
-
-          scope only: %i[show update] do
-            resource :debate_outcome, path: 'debate-outcome'
-            resource :government_response, path: 'government-response', controller: 'government_response'
-            resource :notes
-            resource :details, controller: 'petition_details'
-            resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
-            resource :tags, controller: 'petition_tags'
-          end
-        end
-
-        resources :signatures, only: %i[index destroy] do
-          post :subscribe, :unsubscribe, on: :member
-
-          collection do
-            delete :destroy, action: :bulk_destroy
-            post   :subscribe, action: :bulk_subscribe
-            post   :unsubscribe, action: :bulk_unsubscribe
-          end
-        end
-      end
 
       scope 'stats', controller: 'statistics' do
         get '/', action: 'index', as: :stats

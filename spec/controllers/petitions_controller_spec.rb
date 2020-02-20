@@ -16,28 +16,6 @@ RSpec.describe PetitionsController, type: :controller do
       get :new, params: { q: "my fancy new action" }
       expect(assigns[:new_petition].action).to eq("my fancy new action")
     end
-
-    context "when parliament is dissolved" do
-      before do
-        allow(Parliament).to receive(:dissolved?).and_return(true)
-      end
-
-      it "redirects to the home page" do
-        get :new
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
-
-    context "when parliament has not yet opened" do
-      before do
-        allow(Parliament).to receive(:opened?).and_return(false)
-      end
-
-      it "redirects to the home page" do
-        get :new
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
   end
 
   describe "POST /petitions/new" do
@@ -233,35 +211,12 @@ RSpec.describe PetitionsController, type: :controller do
         end
       end
     end
-
-    context "when parliament is dissolved" do
-      before do
-        allow(Parliament).to receive(:dissolved?).and_return(true)
-      end
-
-      it "redirects to the home page" do
-        post :create, params: { petition: {} }
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
-
-    context "when parliament has not yet opened" do
-      before do
-        allow(Parliament).to receive(:opened?).and_return(false)
-      end
-
-      it "redirects to the home page" do
-        post :create, params: { petition: {} }
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
   end
 
   describe "GET /petitions/:id" do
     let(:petition) { double }
 
     it "assigns the given petition" do
-      allow(petition).to receive(:stopped?).and_return(false)
       allow(petition).to receive(:collecting_sponsors?).and_return(false)
       allow(petition).to receive(:in_moderation?).and_return(false)
       allow(petition).to receive(:moderated?).and_return(true)
@@ -276,40 +231,6 @@ RSpec.describe PetitionsController, type: :controller do
         allow(Petition).to receive_message_chain(:visible, :find).and_raise ActiveRecord::RecordNotFound
         get :show, params: { id: 1 }
       }.to raise_error(ActiveRecord::RecordNotFound)
-    end
-
-    it "does not allow stopped petitions to be shown" do
-      allow(petition).to receive(:stopped?).and_return(true)
-      allow(petition).to receive(:collecting_sponsors?).and_return(false)
-      allow(petition).to receive(:in_moderation?).and_return(false)
-      allow(petition).to receive(:moderated?).and_return(false)
-      allow(Petition).to receive_message_chain(:show, find: petition)
-
-      get :show, params: { id: 1 }
-      expect(response).to redirect_to "https://petition.senedd.wales/"
-    end
-
-    context "when the petition is archived" do
-      let!(:petition) { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
-      let!(:archived_petition) { FactoryBot.create(:archived_petition, id: petition.id, parliament: parliament) }
-
-      context "and the parliament is not archived" do
-        let!(:parliament) { FactoryBot.create(:parliament, archived_at: nil) }
-
-        it "assigns the given petition" do
-          get :show, params: { id: petition.id }
-          expect(assigns(:petition)).to eq(petition)
-        end
-      end
-
-      context "and the parliament is archived" do
-        let(:parliament) { FactoryBot.create(:parliament, archived_at: 1.hour.ago) }
-
-        it "redirects to the archived petition page" do
-          get :show, params: { id: petition.id }
-          expect(response).to redirect_to "https://petition.senedd.wales/archived/petitions/#{petition.id}"
-        end
-      end
     end
   end
 
@@ -351,17 +272,6 @@ RSpec.describe PetitionsController, type: :controller do
         end
       end
     end
-
-    context "when parliament has not yet opened" do
-      before do
-        allow(Parliament).to receive(:opened?).and_return(false)
-      end
-
-      it "redirects to the home page" do
-        get :index
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
   end
 
   describe "GET /petitions/check" do
@@ -369,56 +279,12 @@ RSpec.describe PetitionsController, type: :controller do
       get :check
       expect(response).to be_successful
     end
-
-    context "when parliament is dissolved" do
-      before do
-        allow(Parliament).to receive(:dissolved?).and_return(true)
-      end
-
-      it "redirects to the home page" do
-        get :check
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
-
-    context "when parliament has not yet opened" do
-      before do
-        allow(Parliament).to receive(:opened?).and_return(false)
-      end
-
-      it "redirects to the home page" do
-        get :check
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
   end
 
   describe "GET /petitions/check_results" do
     it "is successful" do
       get :check_results, params: { q: "action" }
       expect(response).to be_successful
-    end
-
-    context "when parliament is dissolved" do
-      before do
-        allow(Parliament).to receive(:dissolved?).and_return(true)
-      end
-
-      it "redirects to the home page" do
-        get :check_results, params: { q: "action" }
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
-    end
-
-    context "when parliament has not yet opened" do
-      before do
-        allow(Parliament).to receive(:opened?).and_return(false)
-      end
-
-      it "redirects to the home page" do
-        get :check_results, params: { q: "action" }
-        expect(response).to redirect_to("https://petition.senedd.wales/")
-      end
     end
   end
 end

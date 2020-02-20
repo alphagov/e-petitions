@@ -14,12 +14,4 @@ RSpec.describe ApplicationJob, type: :job do
       AnApplicationJob.perform_later
     }
   end
-
-  it "reloads the parliament instance" do
-    expect(Parliament).to receive(:reload).and_call_original
-
-    perform_enqueued_jobs {
-      AnApplicationJob.perform_later
-    }
-  end
 end
