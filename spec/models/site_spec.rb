@@ -13,12 +13,12 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:enabled).of_type(:boolean).with_options(null: false, default: true) }
     it { is_expected.to have_db_column(:protected).of_type(:boolean).with_options(null: false, default: false) }
     it { is_expected.to have_db_column(:petition_duration).of_type(:integer).with_options(null: false, default: 6) }
-    it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
-    it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:threshold_for_moderation_delay).of_type(:integer).with_options(null: false, default: 500) }
-    it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 10000) }
-    it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 100000) }
+    it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 50) }
+    it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 5000) }
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -219,8 +219,8 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates formatted_threshold_for_response to the instance" do
-      expect(site).to receive(:formatted_threshold_for_response).and_return("10,000")
-      expect(Site.formatted_threshold_for_response).to eq("10,000")
+      expect(site).to receive(:formatted_threshold_for_response).and_return("50")
+      expect(Site.formatted_threshold_for_response).to eq("50")
     end
 
     it "delegates threshold_for_debate to the instance" do
@@ -229,8 +229,8 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates formatted_threshold_for_debate to the instance" do
-      expect(site).to receive(:formatted_threshold_for_debate).and_return("100,000")
-      expect(Site.formatted_threshold_for_debate).to eq("100,000")
+      expect(site).to receive(:formatted_threshold_for_debate).and_return("5,000")
+      expect(Site.formatted_threshold_for_debate).to eq("5,000")
     end
 
     it "delegates last_checked_at to the instance" do
@@ -506,14 +506,14 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for minimum_number_of_sponsors" do
-      it "defaults to 5" do
-        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("5")
-        expect(defaults[:minimum_number_of_sponsors]).to eq(5)
+      it "defaults to 2" do
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '2').and_return("2")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(2)
       end
 
       it "can be overridden with the MINIMUM_NUMBER_OF_SPONSORS environment variable" do
-        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("3")
-        expect(defaults[:minimum_number_of_sponsors]).to eq(3)
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '2').and_return("5")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(5)
       end
     end
 
@@ -530,14 +530,14 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for threshold_for_moderation" do
-      it "defaults to 5" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("5")
-        expect(defaults[:threshold_for_moderation]).to eq(5)
+      it "defaults to 2" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '2').and_return("2")
+        expect(defaults[:threshold_for_moderation]).to eq(2)
       end
 
       it "can be overridden with the THRESHOLD_FOR_MODERATION environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("10")
-        expect(defaults[:threshold_for_moderation]).to eq(10)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '2').and_return("5")
+        expect(defaults[:threshold_for_moderation]).to eq(5)
       end
     end
 
@@ -554,26 +554,26 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for threshold_for_response" do
-      it "defaults to 10000" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("10000")
-        expect(defaults[:threshold_for_response]).to eq(10000)
+      it "defaults to 50" do
+        allow(ENV).to receive(:fetch).with("threshold_for_response", '50').and_return("50")
+        expect(defaults[:threshold_for_response]).to eq(50)
       end
 
       it "can be overridden with the THRESHOLD_FOR_RESPONSE environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("5000")
-        expect(defaults[:threshold_for_response]).to eq(5000)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '50').and_return("25")
+        expect(defaults[:threshold_for_response]).to eq(25)
       end
     end
 
     describe "for threshold_for_debate" do
-      it "defaults to 10000" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("100000")
-        expect(defaults[:threshold_for_debate]).to eq(100000)
+      it "defaults to 5000" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '5000').and_return("5000")
+        expect(defaults[:threshold_for_debate]).to eq(5000)
       end
 
       it "can be overridden with the THRESHOLD_FOR_DEBATE environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("50000")
-        expect(defaults[:threshold_for_debate]).to eq(50000)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '5000').and_return("2500")
+        expect(defaults[:threshold_for_debate]).to eq(2500)
       end
     end
   end
@@ -823,21 +823,21 @@ RSpec.describe Site, type: :model do
 
   describe "#formatted_threshold_for_response" do
     subject :site do
-      described_class.create!(threshold_for_response: 10000)
+      described_class.create!(threshold_for_response: 50)
     end
 
     it "returns a formatted number" do
-      expect(site.formatted_threshold_for_response).to eq("10,000")
+      expect(site.formatted_threshold_for_response).to eq("50")
     end
   end
 
   describe "#formatted_threshold_for_debate" do
     subject :site do
-      described_class.create!(threshold_for_debate: 100000)
+      described_class.create!(threshold_for_debate: 5000)
     end
 
     it "returns a formatted number" do
-      expect(site.formatted_threshold_for_debate).to eq("100,000")
+      expect(site.formatted_threshold_for_debate).to eq("5,000")
     end
   end
 

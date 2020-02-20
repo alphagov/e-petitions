@@ -117,21 +117,21 @@ Feature: Suzie views a petition
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
-    Then I should not see "At 10,000 signatures..."
-    Then I should not see "At 100,000 signatures..."
+    Then I should not see "At 50 signatures..."
+    Then I should not see "At 5,000 signatures..."
 
   Scenario: Suzie sees information about future signature targets when viewing an open petition which has not passed the threshold for response or debate
     Given an open petition "Spend more money on Defence"
     When I view the petition
-    Then I should see "At 10,000 signatures..."
-    Then I should see "At 100,000 signatures..."
+    Then I should see "At 50 signatures..."
+    Then I should see "At 5,000 signatures..."
 
   @javascript
   Scenario: Suzie sees information about a future signature target when viewing an open petition which has passed the threshold for response
     Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"
     When I view the petition
-    Then I should not see "At 10,000 signatures..."
-    Then I should see "At 100,000 signatures..."
+    Then I should not see "At 50 signatures..."
+    Then I should see "At 5,000 signatures..."
     Then I should see "Oh yes please"
     And I should not see the response "Defence is the best Offence"
     When I expand "Read the response in full"
@@ -141,6 +141,6 @@ Feature: Suzie views a petition
   Scenario: Suzie does not see information about a future signature targets when viewing an open petition which has passed the threshold for response and debate
     Given a petition "Spend more money on Defence" exists with a debate outcome and with response threshold met
     When I view the petition
-    Then I should not see "At 10,000 signatures..."
-    Then I should not see "At 100,000 signatures..."
+    Then I should not see "At 50 signatures..."
+    Then I should not see "At 5,000 signatures..."
     And I should see a summary of the debate outcome

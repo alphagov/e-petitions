@@ -402,11 +402,11 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.boolean "enabled", default: true, null: false
     t.boolean "protected", default: false, null: false
     t.integer "petition_duration", default: 6, null: false
-    t.integer "minimum_number_of_sponsors", default: 5, null: false
+    t.integer "minimum_number_of_sponsors", default: 2, null: false
     t.integer "maximum_number_of_sponsors", default: 20, null: false
-    t.integer "threshold_for_moderation", default: 5, null: false
-    t.integer "threshold_for_response", default: 10000, null: false
-    t.integer "threshold_for_debate", default: 100000, null: false
+    t.integer "threshold_for_moderation", default: 2, null: false
+    t.integer "threshold_for_response", default: 50, null: false
+    t.integer "threshold_for_debate", default: 5000, null: false
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -327,7 +327,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_minimum_number_of_sponsors
-      ENV.fetch('MINIMUM_NUMBER_OF_SPONSORS', '5').to_i
+      ENV.fetch('MINIMUM_NUMBER_OF_SPONSORS', '2').to_i
     end
 
     def default_maximum_number_of_sponsors
@@ -335,7 +335,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_threshold_for_moderation
-      ENV.fetch('THRESHOLD_FOR_MODERATION', '5').to_i
+      ENV.fetch('THRESHOLD_FOR_MODERATION', '2').to_i
     end
 
     def default_threshold_for_moderation_delay
@@ -343,11 +343,11 @@ class Site < ActiveRecord::Base
     end
 
     def default_threshold_for_response
-      ENV.fetch('THRESHOLD_FOR_RESPONSE', '10000').to_i
+      ENV.fetch('THRESHOLD_FOR_RESPONSE', '50').to_i
     end
 
     def default_threshold_for_debate
-      ENV.fetch('THRESHOLD_FOR_DEBATE', '100000').to_i
+      ENV.fetch('THRESHOLD_FOR_DEBATE', '5000').to_i
     end
 
     def default_constraints_for_public_en
