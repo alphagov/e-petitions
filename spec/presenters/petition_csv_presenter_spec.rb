@@ -57,6 +57,7 @@ RSpec.describe PetitionCSVPresenter do
       timestampify(petition.rejected_at),
       timestampify(petition.debate_outcome_at),
       timestampify(petition.moderation_threshold_reached_at),
+      timestampify(petition.completed_at),
       petition.note.try(:details)
     ].join(",") + "\n"
   end

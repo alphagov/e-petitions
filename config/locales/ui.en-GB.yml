@@ -186,9 +186,9 @@ en-GB:
               closed_html: "%{signature_count}, now closed"
               rejected: Rejected
             facet_debated:
-              debated_date: Debated %{date}
-            facet_with_response:
-              responded_date: Government responded – %{date}
+              debated_date: Debated on %{date}
+            facet_completed:
+              completed_date: Completed on %{date}
       other_lists: Other lists of petitions
       lists:
         all: All petitions (%{quantity})

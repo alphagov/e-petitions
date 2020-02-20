@@ -10,17 +10,18 @@ class Petition < ActiveRecord::Base
   FLAGGED_STATE     = 'flagged'
   OPEN_STATE        = 'open'
   CLOSED_STATE      = 'closed'
+  COMPLETED_STATE   = 'completed'
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
 
-  STATES            = %w[pending validated sponsored flagged open closed rejected hidden]
+  STATES            = %w[pending validated sponsored flagged open closed completed rejected hidden]
   DEBATABLE_STATES  = %w[open closed]
-  VISIBLE_STATES    = %w[open closed rejected]
-  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected]
-  MODERATED_STATES  = %w[open closed hidden rejected]
-  PUBLISHED_STATES  = %w[open closed]
-  SELECTABLE_STATES = %w[open closed rejected hidden]
-  SEARCHABLE_STATES = %w[open closed rejected]
+  VISIBLE_STATES    = %w[open closed completed rejected]
+  SHOW_STATES       = %w[pending validated sponsored flagged open closed completed rejected]
+  MODERATED_STATES  = %w[open closed completed hidden rejected]
+  PUBLISHED_STATES  = %w[open closed completed]
+  SELECTABLE_STATES = %w[open closed completed rejected hidden]
+  SEARCHABLE_STATES = %w[open closed completed rejected]
 
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
@@ -43,6 +44,7 @@ class Petition < ActiveRecord::Base
   facet :open,     -> { open_state.by_most_popular }
   facet :rejected, -> { rejected_state.by_most_recent }
   facet :closed,   -> { closed_state.by_most_popular }
+  facet :completed,   -> { completed_state.by_most_popular }
   facet :hidden,   -> { hidden_state.by_most_recent }
 
   facet :referred,    -> { referred.by_referred_longest }
@@ -148,6 +150,10 @@ class Petition < ActiveRecord::Base
       where(state: CLOSED_STATE)
     end
 
+    def completed_state
+      where(state: COMPLETED_STATE)
+    end
+
     def hidden_state
       where(state: HIDDEN_STATE)
     end
@@ -210,6 +216,10 @@ class Petition < ActiveRecord::Base
 
     def moderated
       where(state: MODERATED_STATES)
+    end
+
+    def not_completed
+      where.not(state: COMPLETED_STATE)
     end
 
     def not_debated
@@ -576,6 +586,10 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def complete(time = Time.current)
+    update(state: COMPLETED_STATE, completed_at: time)
+  end
+
   def flag
     update(state: FLAGGED_STATE)
   end
@@ -641,6 +655,10 @@ class Petition < ActiveRecord::Base
 
   def closed?
     state == CLOSED_STATE
+  end
+
+  def completed?
+    state == COMPLETED_STATE
   end
 
   def will_be_referred?

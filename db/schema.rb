@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_152906) do
+ActiveRecord::Schema.define(version: 2020_02_20_222249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -273,6 +273,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.text "additional_details_cy"
     t.string "background_en", limit: 500
     t.string "background_cy", limit: 500
+    t.datetime "completed_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin

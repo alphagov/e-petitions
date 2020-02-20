@@ -129,6 +129,8 @@ Rails.application.routes.draw do
           resource :take_down, path: 'take-down', controller: 'take_down'
         end
 
+        resource :completion, controller: 'completion', only: %i[update]
+
         resources :signatures, only: %i[index destroy] do
           post :validate, :invalidate, on: :member
           post :subscribe, :unsubscribe, on: :member

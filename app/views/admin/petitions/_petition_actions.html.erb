@@ -47,6 +47,13 @@
         </li>
       <% end -%>
 
+      <% if @petition.closed? %>
+        <li class="petition-action">
+          <%= form_for @petition, url: admin_petition_completion_path(@petition), method: :patch do |f| -%>
+            <%= f.submit "Mark this petition as completed", class: 'button', style: "font-size: 16px;", data: { confirm: "Are you sure?" } %>
+          <% end -%>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </nav>

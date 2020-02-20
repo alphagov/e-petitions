@@ -18,6 +18,7 @@ json.attributes do
   json.rejected_at api_date_format(petition.rejected_at)
   json.opened_at api_date_format(petition.opened_at)
   json.closed_at api_date_format(petition.closed_at)
+  json.completed_at api_date_format(petition.closed_at)
   json.moderation_threshold_reached_at api_date_format(petition.moderation_threshold_reached_at)
   json.referral_threshold_reached_at api_date_format(petition.referral_threshold_reached_at)
   json.debate_threshold_reached_at api_date_format(petition.debate_threshold_reached_at)
