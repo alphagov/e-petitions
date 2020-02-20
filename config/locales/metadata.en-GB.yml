@@ -4,9 +4,7 @@ en-GB:
       site_name: "Petitions - Welsh Parliament"
       default_title: "Petitions - Welsh Parliament"
       title: "Petition: %{petition}"
-      archived_title: "Archived Petition: %{petition}"
 
     twitter:
       default_title: "Petitions - Welsh Parliament"
       title: "Petition: %{petition}"
-      archived_title: "Archived Petition: %{petition}"

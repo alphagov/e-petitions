@@ -5,7 +5,7 @@
     <% if Tag.any? %>
       <%= collection_check_boxes(:petition, :tags, Tag.by_name, :id, :name) do |b| %>
         <div class="multiple-choice">
-          <%= b.check_box disabled: @petition.editing_disabled? %>
+          <%= b.check_box %>
           <%= b.label title: b.object.description %>
         </div>
       <% end %>
@@ -19,7 +19,7 @@
       </p>
     <% end %>
   <% end %>
-  <%= f.submit 'Save tags', class: 'button', disabled: @petition.editing_disabled? %>
+  <%= f.submit 'Save tags', class: 'button' %>
   <%= link_to 'Cancel', admin_petition_path(petition), class: 'button-secondary' %>
 <% end %>
 

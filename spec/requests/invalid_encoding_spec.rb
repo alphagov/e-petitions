@@ -43,15 +43,4 @@ RSpec.describe "invalid encoding", type: :request do
       }.to raise_error(ActionController::BadRequest)
     end
   end
-
-  describe "when unsubscribing an archived signature" do
-    let(:petition) { FactoryBot.create(:archived_petition) }
-    let(:signature) { FactoryBot.create(:archived_signature, unsubscribe_token: "foobar", petition: petition)}
-
-    it "raises an ActiveRecord::RecordNotFound exception" do
-      expect {
-        get "/archived/signatures/#{signature.id}/unsubscribe?token=foobar%91"
-      }.to raise_error(ActionController::BadRequest)
-    end
-  end
 end

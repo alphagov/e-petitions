@@ -38,15 +38,6 @@ module NavigationHelpers
     when /^the petition page for "([^\"]*)"$/
       petition_url(Petition.find_by(action: $1))
 
-    when /^the archived petitions page$/
-      archived_petitions_url
-
-    when /^the archived petitions JSON page$/
-      archived_petitions_url(:json)
-
-    when /^the archived petition page for "([^\"]*)"$/
-      archived_petition_url(Archived::Petition.find_by(action: $1))
-
     when /^the new signature page$/
       new_petition_signature_url(@petition.id)
 

@@ -22,7 +22,7 @@ RSpec.describe NotifyCreatorsThatModerationIsDelayedJob, type: :job do
     expect(Petition).to receive_message_chain(:overdue_in_moderation, :find_each).and_yield(petition)
   end
 
-  it "enqueues a job for every petition that is open at dissolution" do
+  it "enqueues a job for every petition that is overdue" do
     expect {
       described_class.perform_now(subject, body)
     }.to change {

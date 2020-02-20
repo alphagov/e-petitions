@@ -12,7 +12,6 @@ class Tag < ActiveRecord::Base
   facet :all, -> { by_name }
 
   after_destroy :remove_tag_from_petitions
-  after_destroy :remove_tag_from_archived_petitions
 
   class << self
     def by_name
@@ -24,9 +23,5 @@ class Tag < ActiveRecord::Base
 
   def remove_tag_from_petitions
     Petition.tagged_with(id).update_all(["tags = array_remove(tags, ?)", id])
-  end
-
-  def remove_tag_from_archived_petitions
-    Archived::Petition.tagged_with(id).update_all(["tags = array_remove(tags, ?)", id])
   end
 end

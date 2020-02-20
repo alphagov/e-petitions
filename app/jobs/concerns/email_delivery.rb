@@ -72,8 +72,6 @@ module EmailDelivery
 
   def mailer
     case petition
-    when Archived::Petition
-      Archived::PetitionMailer
     when Petition
       PetitionMailer
     else

@@ -32,23 +32,10 @@ Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
   @petition = FactoryBot.create(:not_debated_petition, action: action)
 end
 
-Given(/^an archived petition "([^"]*)" with a negative debate outcome$/) do |action|
-  @petition = FactoryBot.create(:archived_petition, :not_debated, action: action)
-end
-
-Given(/^a(n)? ?(archived|pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
+Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
   step "an #{state} petition \"#{petition_title}\""
   @petition.scheduled_debate_date = scheduled_debate_date.to_date
   @petition.save
-end
-
-Given(/^an archived petition "([^"]*)"$/) do |action|
-  @parliament = FactoryBot.create(:parliament, :coalition)
-  @petition = FactoryBot.create(:archived_petition, :closed, parliament: @parliament, action: action)
-end
-
-Given(/^a (stopped|rejected|hidden) archived petition exists with action: "(.*?)"$/) do |state, action|
-  @petition = FactoryBot.create(:archived_petition, state.to_sym, action: action)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
@@ -138,49 +125,6 @@ Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryBot.create(:closed_petition, :action => petition_action)
 end
 
-Given(/^a petition "([^"]*)" has been closed early because of parliament dissolving$/) do |petition_action|
-  open_at = 3.months.ago
-  closed_at = 1.month.ago
-
-  Parliament.instance.update! dissolution_at: closed_at,
-    dissolution_heading: "Parliament is dissolving",
-    dissolution_message: "This means all petitions will close in 2 weeks",
-    dissolved_heading: "Parliament has been dissolved",
-    dissolved_message: "All petitions have been closed",
-    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
-    show_dissolution_notification: true,
-    government_response_heading: "Government will respond",
-    government_response_description: "Government responds to all petitions that get more than %{count} signatures",
-    government_response_status: "Waiting for a new Petitions Committee after the General Election",
-    parliamentary_debate_heading: "This petition will be considered for debate",
-    parliamentary_debate_description: "All petitions that have more than %{count} signatures will be considered for debate in the new Parliament",
-    parliamentary_debate_status: "Waiting for a new Petitions Committee after the General Election"
-
-  @petition = FactoryBot.create(:closed_petition, action: petition_action, open_at: open_at, closed_at: closed_at)
-end
-
-Given(/^the petition "([^"]*)" has been closed early because of parliament dissolving$/) do |petition_action|
-  open_at = 3.months.ago
-  closed_at = 1.month.ago
-
-  Parliament.instance.update! dissolution_at: closed_at,
-    dissolution_heading: "Parliament is dissolving",
-    dissolution_message: "This means all petitions will close in 2 weeks",
-    dissolved_heading: "Parliament has been dissolved",
-    dissolved_message: "All petitions have been closed",
-    dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
-    show_dissolution_notification: true,
-    government_response_heading: "Government will respond",
-    government_response_description: "Government responds to all petitions that get more than %{count} signatures",
-    government_response_status: "Waiting for a new Petitions Committee after the General Election",
-    parliamentary_debate_heading: "This petition will be considered for debate",
-    parliamentary_debate_description: "All petitions that have more than %{count} signatures will be considered for debate in the new Parliament",
-    parliamentary_debate_status: "Waiting for a new Petitions Committee after the General Election"
-
-  @petition = Petition.find_by!(action: petition_action)
-  @petition.update(state: "closed", open_at: open_at, closed_at: closed_at)
-end
-
 Given(/^the petition has closed$/) do
   @petition.close!
 end
@@ -197,24 +141,8 @@ Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) d
     :rejection_details => reason_text)
 end
 
-Given(/^an archived petition "([^"]*)" has been rejected with the reason "([^"]*)"$/) do |action, rejection_details|
-  @petition = FactoryBot.create(:archived_petition, :rejected, action: action, rejection_details: rejection_details)
-end
-
 When(/^I view the petition$/) do
-  if @petition.is_a?(Archived::Petition)
-    visit archived_petition_url(@petition)
-  else
-    visit petition_url(@petition)
-  end
-end
-
-When(/^I view the petition at the old url$/) do
   visit petition_url(@petition)
-end
-
-Then(/^I should be redirected to the archived url$/) do
-  expect(current_path).to eq(archived_petition_path(@petition))
 end
 
 When /^I view all petitions from the home page$/ do
@@ -245,12 +173,8 @@ Then(/^I should see the vote count, closed and open dates$/) do
   @petition.reload
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
-  if @petition.is_a?(Archived::Petition)
-    expect(page).to have_css("ul.petition-meta", :text => "Date closed " + @petition.closed_at.strftime("%e %B %Y").squish)
-  else
-    expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
-    expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator.name)
-  end
+  expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
+  expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator.name)
 end
 
 Then(/^I should not see the vote count$/) do
@@ -477,37 +401,12 @@ Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_acti
   )
 end
 
-Given(/^an archived petition "(.*?)" has other parliamentary business$/) do |petition_action|
-  @petition = FactoryBot.create(:archived_petition, action: petition_action)
-  @email = FactoryBot.create(:archived_petition_email,
-    petition: @petition,
-    subject: "Committee to discuss #{petition_action}",
-    body: "The Petition Committee will discuss #{petition_action} on the #{Date.tomorrow}"
-  )
-end
-
 Then(/^I should see the other business items$/) do
   steps %Q(
     Then I should see "Other parliamentary business"
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )
-end
-
-Given(/^these archived petitions? exist?:?$/) do |table|
-  parliament = FactoryBot.create(:parliament, :coalition)
-
-  table.raw[1..-1].each do |petition|
-    attributes = {
-      parliament:      parliament,
-      action:          petition[0],
-      state:           petition[1],
-      signature_count: petition[2],
-      created_at:      petition[3]
-    }
-
-    FactoryBot.create(:archived_petition, attributes)
-  end
 end
 
 When (/^I search all petitions for "(.*?)"$/) do |search_term|

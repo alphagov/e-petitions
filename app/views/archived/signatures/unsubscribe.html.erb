@@ -1,9 +1,0 @@
-<% if @signature.already_unsubscribed? %>
-  <%= t(:"ui.signatures.unsubscribe.already_html") %>
-<% elsif @signature.invalid_unsubscribe_token? %>
-  <%= t(:"ui.signatures.unsubscribe.failed_html") %>
-<% else %>
-  <%= t(:"ui.signatures.unsubscribe.success_html") %>
-<% end %>
-
-<%= link_to t(:"ui.signatures.unsubscribe.back_button"), home_path %>

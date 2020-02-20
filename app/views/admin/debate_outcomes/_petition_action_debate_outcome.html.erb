@@ -3,7 +3,7 @@
   <%= form_row for: [f.object, :overview] do %>
     <%= f.label :overview, class: 'form-label' %>
     <%= error_messages_for_field f.object, :overview %>
-    <%= f.text_area :overview, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <%= f.text_area :overview, tabindex: increment, class: 'form-control' %>
   <% end %>
 
   <h3 class="petition-action-subheading">Was this petition debated?</h3>
@@ -25,41 +25,37 @@
     <%= form_row :for => [f.object, :debated_on] do %>
       <%= f.label :debated_on, class: 'form-label' %>
       <%= error_messages_for_field f.object, :debated_on %>
-      <%= f.date_field :debated_on, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+      <%= f.date_field :debated_on, tabindex: increment, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [f.object, :transcript_url] do %>
       <%= f.label :transcript_url, 'Transcript URL', class: 'form-label' %>
       <%= error_messages_for_field f.object, :transcript_url %>
-      <%= f.url_field :transcript_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+      <%= f.url_field :transcript_url, tabindex: increment, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [f.object, :video_url] do %>
       <%= f.label :video_url, 'Video URL', class: 'form-label' %>
       <%= error_messages_for_field f.object, :video_url %>
-      <%= f.url_field :video_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+      <%= f.url_field :video_url, tabindex: increment, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [f.object, :debate_pack_url] do %>
       <%= f.label :debate_pack_url, 'Debate Pack URL', class: 'form-label' %>
       <%= error_messages_for_field f.object, :debate_pack_url %>
-      <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+      <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [f.object, :commons_image] do %>
       <%= f.label :commons_image, 'Commons Image', class: 'form-label' %>
       <%= error_messages_for_field f.object, :commons_image %>
-      <%= f.file_field :commons_image, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+      <%= f.file_field :commons_image, tabindex: increment, class: 'form-control' %>
     <% end %>
   </div>
 
-  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
+  <%= email_petitioners_with_count_submit_button(f, petition) %>
 
-  <% if @petition.editing_disabled? %>
-    <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
-  <% else %>
-    <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
-  <% end %>
+  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
 <% end -%>
 
 <%= javascript_tag do %>

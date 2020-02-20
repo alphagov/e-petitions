@@ -1,11 +1,7 @@
 module Statistics
   class << self
     def moderation(by: "month", parliament: nil)
-      if parliament
-        table_name = "archived_petitions"
-      else
-        table_name = "petitions"
-      end
+      table_name = "petitions"
 
       unless by.in?(%w[week month])
         raise ArgumentError, "invalid value for by: #{by.inspect} - must be either week or month"
@@ -25,10 +21,6 @@ module Statistics
       conditions = []
       conditions << "moderation_threshold_reached_at IS NOT NULL"
       conditions << "moderation_lag IS NOT NULL"
-
-      if parliament
-        conditions << "parliament_id = #{parliament.id}"
-      end
 
       select_rows <<-SQL.strip_heredoc
         SELECT

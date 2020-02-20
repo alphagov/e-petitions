@@ -12,10 +12,6 @@
 
 <script>
   $(document).ready(function() {
-    <% if @petition.is_a?(::Archived::Petition) %>
-      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/archived/petitions', true);
-    <% else %>
-      $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions', <%= @petition.moderated? %>);
-    <% end %>
+    $("#edit-lock").editLock(<%= @petition.id %>, <%= current_user.id %>, '/admin/petitions', <%= @petition.moderated? %>);
   });
 </script>

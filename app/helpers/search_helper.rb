@@ -27,12 +27,4 @@ module SearchHelper
       t(:"ui.petitions.search.filtered_petition_count", options)
     end
   end
-
-  def petition_result_path(petition, options = {})
-    if petition.is_a?(Archived::Petition)
-      archived_petition_path(petition, options)
-    else
-      petition_path(petition, options)
-    end
-  end
 end

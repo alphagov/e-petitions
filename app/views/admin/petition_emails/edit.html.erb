@@ -6,25 +6,21 @@
       <%= form_row :for => [f.object, :subject] do %>
         <%= f.label :subject, 'Subject', class: 'form-label' %>
         <%= error_messages_for_field f.object, :subject %>
-        <%= f.text_area :subject, rows: 2, cols: 70, tabindex: increment, data: { max_length: 100 }, class: 'form-control', disabled: @petition.editing_disabled? %>
+        <%= f.text_area :subject, rows: 2, cols: 70, tabindex: increment, data: { max_length: 100 }, class: 'form-control' %>
         <p class="character-count">100 characters max</p>
       <% end %>
 
       <%= form_row :for => [f.object, :body] do %>
         <%= f.label :body, 'Body', class: 'form-label' %>
         <%= error_messages_for_field f.object, :body %>
-        <%= f.text_area :body, rows: 8, cols: 70, tabindex: increment, data: { max_length: 5000 }, class: 'form-control', disabled: @petition.editing_disabled? %>
+        <%= f.text_area :body, rows: 8, cols: 70, tabindex: increment, data: { max_length: 5000 }, class: 'form-control' %>
         <p class="character-count">5000 characters max</p>
       <% end %>
 
-      <%= email_petitioners_with_count_submit_button(f, @petition, disabled: @petition.editing_disabled?) %>
+      <%= email_petitioners_with_count_submit_button(f, @petition) %>
 
-      <% if @petition.editing_disabled? %>
-        <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
-      <% else %>
-        <%= f.submit "Save and preview", name: 'save_and_preview', class: 'button-secondary' %>
-        <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
-      <% end %>
+      <%= f.submit "Save and preview", name: 'save_and_preview', class: 'button-secondary' %>
+      <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
     <% end -%>
   </div>
   <div class="petition-meta column-third">

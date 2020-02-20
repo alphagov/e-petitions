@@ -32,44 +32,42 @@ namespace :wpets do
 
     desc "Backfill moderation lag"
     task :backfill_moderation_lag => :environment do
-      %w[petitions archived_petitions].each do |table_name|
-        klass = Class.new(ActiveRecord::Base) do
-          self.table_name = table_name
+      klass = Class.new(ActiveRecord::Base) do
+        self.table_name = "petitions"
 
-          def self.default_scope
-            where(moderation_lag: nil).where.not(moderation_threshold_reached_at: nil)
-          end
+        def self.default_scope
+          where(moderation_lag: nil).where.not(moderation_threshold_reached_at: nil)
+        end
 
-          def moderated?
-            if respond_to?(:open_at)
-              open_at? || rejected_at?
-            else
-              opened_at? || rejected_at?
-            end
-          end
-
-          def moderated_at
-            if respond_to?(:open_at)
-              [open_at, rejected_at].compact.min
-            else
-              [opened_at, rejected_at].compact.min
-            end
-          end
-
-          def moderation_lag
-            moderated_at.to_date - moderation_threshold_reached_at.to_date
-          end
-
-          def update_moderation_lag
-            update_column(:moderation_lag, moderation_lag)
+        def moderated?
+          if respond_to?(:open_at)
+            open_at? || rejected_at?
+          else
+            opened_at? || rejected_at?
           end
         end
 
-        klass.find_each do |petition|
-          next unless petition.moderated?
-
-          petition.update_column(:moderation_lag, petition.moderation_lag)
+        def moderated_at
+          if respond_to?(:open_at)
+            [open_at, rejected_at].compact.min
+          else
+            [opened_at, rejected_at].compact.min
+          end
         end
+
+        def moderation_lag
+          moderated_at.to_date - moderation_threshold_reached_at.to_date
+        end
+
+        def update_moderation_lag
+          update_column(:moderation_lag, moderation_lag)
+        end
+      end
+
+      klass.find_each do |petition|
+        next unless petition.moderated?
+
+        petition.update_column(:moderation_lag, petition.moderation_lag)
       end
     end
   end

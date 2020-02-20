@@ -1,9 +1,6 @@
 cy-GB:
   page_titles:
     default: "Deisebau - Senedd Cymru"
-    archived_petitions:
-      index: "Gweld deisebau wedi'u harchifo - Deisebau"
-      show: "%{petition} - Deisebau"
     feedback:
       index: "Anfon adborth - Deisebau"
       thanks: "Diolch - Deisebau"

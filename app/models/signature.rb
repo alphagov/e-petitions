@@ -185,10 +185,6 @@ class Signature < ActiveRecord::Base
       validated.subscribed.for_timestamp(timestamp, since: since)
     end
 
-    def open_at_dissolution
-      joins(:petition).merge(Petition.open_at_dissolution)
-    end
-
     def pending
       where(state: PENDING_STATE)
     end
@@ -333,10 +329,6 @@ class Signature < ActiveRecord::Base
 
     def uk
       where(location_code: "GB")
-    end
-
-    def unarchived
-      where(archived_at: nil)
     end
 
     def subscribe!(signature_ids)

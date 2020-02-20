@@ -22,11 +22,9 @@
   <% end %>
 <% end %>
 
-<% unless @petition.editing_disabled? %>
-  <p class="edit-petition-link">
-    <%= link_to 'Edit petition', admin_petition_details_path(@petition) %>
-  </p>
-<% end %>
+<p class="edit-petition-link">
+  <%= link_to 'Edit petition', admin_petition_details_path(@petition) %>
+</p>
 
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>

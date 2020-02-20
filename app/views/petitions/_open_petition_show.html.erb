@@ -44,14 +44,8 @@
       <span class="label"><%= t(:"ui.petitions.created_by") %></span> <%= petition.creator.name %>
     </li>
     <li class="meta-deadline">
-      <% if petition.closing_early_for_dissolution? %>
-        <span class="label"><%= t(:"ui.petitions.deadline") %></span> <%= short_date_time_format Parliament.dissolution_at %>
-      <% else %>
-        <span class="label"><%= t(:"ui.petitions.deadline") %></span> <%= short_date_format petition.deadline %>
-      <% end %>
-      <% unless Parliament.dissolution_announced? %>
-        <span class="note"><%= t(:"ui.petitions.petitions_run_6_months") %></span>
-      <% end %>
+      <span class="label"><%= t(:"ui.petitions.deadline") %></span> <%= short_date_format petition.deadline %>
+      <span class="note"><%= t(:"ui.petitions.petitions_run_6_months") %></span>
     </li>
     <li class="meta-json">
       <span class="note"><%= link_to t(:"ui.petitions.get_json"), petition_path(petition, :json) %></span>

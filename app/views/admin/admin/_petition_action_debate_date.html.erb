@@ -1,5 +1,1 @@
-<% if @petition.is_a?(::Archived::Petition) %>
-  <%= link_to 'Scheduled debate date', admin_archived_petition_schedule_debate_path(@petition), class: 'petition-action-heading' %>
-<% else %>
-  <%= link_to 'Scheduled debate date', admin_petition_schedule_debate_path(@petition), class: 'petition-action-heading' %>
-<% end %>
+<%= link_to 'Scheduled debate date', admin_petition_schedule_debate_path(@petition), class: 'petition-action-heading' %>

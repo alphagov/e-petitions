@@ -25,21 +25,12 @@ RSpec.describe Tag, type: :model do
     context "when a tag is destroyed" do
       let!(:tag) { FactoryBot.create(:tag) }
       let!(:petition) { FactoryBot.create(:petition, tags: [tag.id]) }
-      let!(:archived_petition) { FactoryBot.create(:archived_petition, tags: [tag.id]) }
 
       it "removes tags from petitions" do
         expect {
           tag.destroy
         }.to change {
           petition.reload.tags
-        }.from([tag.id]).to([])
-      end
-
-      it "removes tags from archived petitions" do
-        expect {
-          tag.destroy
-        }.to change {
-          archived_petition.reload.tags
         }.from([tag.id]).to([])
       end
     end

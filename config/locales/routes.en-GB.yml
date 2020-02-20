@@ -3,15 +3,6 @@ en-GB:
     "/":
       en-GB: "/"
       cy-GB: "/"
-    "/archived/petitions":
-      en-GB: "/archived/petitions"
-      cy-GB: "/archifwyd/deisebau"
-    "/archived/petitions/:id":
-      en-GB: "/archived/petitions/:id"
-      cy-GB: "/archifwyd/deisebau/:id"
-    "/archived/signatures/:id/unsubscribe":
-      en-GB: "/archived/signatures/:id/unsubscribe"
-      cy-GB: "/archifwyd/llofnodion/:id/dad-danysgrifio"
     "/browserconfig":
       en-GB: "/browserconfig"
       cy-GB: "/browserconfig"

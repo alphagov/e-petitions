@@ -11,22 +11,19 @@ class Petition < ActiveRecord::Base
   CLOSED_STATE      = 'closed'
   REJECTED_STATE    = 'rejected'
   HIDDEN_STATE      = 'hidden'
-  STOPPED_STATE     = 'stopped'
 
-  STATES            = %w[pending validated sponsored flagged open closed rejected hidden stopped]
+  STATES            = %w[pending validated sponsored flagged open closed rejected hidden]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
-  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected stopped]
+  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
-  STOPPABLE_STATES  = %w[pending validated sponsored flagged]
 
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
-  STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged]
 
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
@@ -44,7 +41,6 @@ class Petition < ActiveRecord::Base
   facet :rejected, -> { rejected_state.by_most_recent }
   facet :closed,   -> { closed_state.by_most_popular }
   facet :hidden,   -> { hidden_state.by_most_recent }
-  facet :stopped,  -> { stopped_state.by_most_recent }
 
   facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
   facet :with_response,        -> { with_response.by_most_recent_response }
@@ -167,10 +163,6 @@ class Petition < ActiveRecord::Base
       where(state: SPONSORED_STATE)
     end
 
-    def stopped_state
-      where(state: STOPPED_STATE)
-    end
-
     def awaiting_debate
       where(debate_state: %w[awaiting scheduled])
     end
@@ -251,10 +243,6 @@ class Petition < ActiveRecord::Base
       where(state: SELECTABLE_STATES)
     end
 
-    def stoppable
-      where(state: STOPPABLE_STATES)
-    end
-
     def show
       where(state: SHOW_STATES)
     end
@@ -300,44 +288,12 @@ class Petition < ActiveRecord::Base
       end
     end
 
-    def close_petitions_early!(time = Parliament.dissolution_at)
-      open_at_dissolution(time).find_each do |petition|
-        petition.close!(time)
-      end
-    end
-
-    def stop_petitions_early!(time = Parliament.dissolution_at)
-      in_need_of_stopping.find_each do |petition|
-        petition.stop!(time)
-      end
-    end
-
     def in_need_of_closing(time = Time.current)
       where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
     end
 
-    def in_need_of_stopping(time = nil)
-      scope = preload(:creator)
-      time ? scope.stoppable.created_after(time) : scope.stoppable
-    end
-
     def created_after(time)
       where(arel_table[:created_at].gteq(time))
-    end
-
-    def open_at_dissolution(dissolution_at = Parliament.dissolution_at)
-      if dissolution_at
-        opened_at_for_closing = Site.opened_at_for_closing(dissolution_at)
-
-        where(
-          arel_table[:state].eq(OPEN_STATE).
-          and(arel_table[:open_at].gteq(opened_at_for_closing).
-          and(arel_table[:closed_at].eq(nil)).
-          or(arel_table[:closed_at].gteq(dissolution_at)))
-        )
-      else
-        none
-      end
     end
 
     def popular_in_constituency(constituency_id, count = 50)
@@ -358,10 +314,6 @@ class Petition < ActiveRecord::Base
 
     def mark_petitions_as_debated!(date = Date.current)
       in_need_of_marking_as_debated(date).update_all(debate_state: 'debated')
-    end
-
-    def unarchived
-      where(archived_at: nil)
     end
 
     def recently_in_moderation
@@ -645,15 +597,7 @@ class Petition < ActiveRecord::Base
     if open?
       update!(state: CLOSED_STATE, closed_at: time)
     else
-      raise RuntimeError, "can't stop a petition that is in the #{state} state"
-    end
-  end
-
-  def stop!(time = Time.current)
-    if state.in?(STOPPABLE_STATES)
-      update!(state: STOPPED_STATE, stopped_at: time)
-    else
-      raise RuntimeError, "can't stop a petition that is in the #{state} state"
+      raise RuntimeError, "can't close a petition that is in the #{state} state"
     end
   end
 
@@ -703,10 +647,6 @@ class Petition < ActiveRecord::Base
     state == CLOSED_STATE
   end
 
-  def stopped?
-    state == STOPPED_STATE
-  end
-
   def flagged?
     state == FLAGGED_STATE
   end
@@ -729,18 +669,6 @@ class Petition < ActiveRecord::Base
 
   def closed_for_signing?(now = Time.current)
     rejected? || closed_at? && closed_at < 24.hours.ago(now)
-  end
-
-  def archiving?
-    archiving_started_at? && !archived_at?
-  end
-
-  def archived?
-    archived_at?
-  end
-
-  def editing_disabled?
-    archiving_started_at? || archived_at?
   end
 
   def update_lock!(user, now = Time.current)
@@ -789,14 +717,6 @@ class Petition < ActiveRecord::Base
 
   def deadline
     open_at && (closed_at || Site.closed_at_for_opening(open_at))
-  end
-
-  def closing_early_for_dissolution?(dissolution_at = Parliament.dissolution_at)
-    if Parliament.dissolution_announced?
-      open_at && dissolution_at ? deadline > dissolution_at : false
-    else
-      false
-    end
   end
 
   def cache_key(*timestamp_names)
@@ -877,10 +797,6 @@ class Petition < ActiveRecord::Base
 
   def fraudulent_domains?
     !fraudulent_domains.empty?
-  end
-
-  def closed_early_due_to_election?(dissolution_at = Parliament.dissolution_at)
-    closed_at == dissolution_at
   end
 
   def update_moderation_lag

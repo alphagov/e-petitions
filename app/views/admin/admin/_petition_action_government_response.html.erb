@@ -1,5 +1,1 @@
-<% if @petition.is_a?(::Archived::Petition) %>
-  <%= link_to 'Government response', admin_archived_petition_government_response_path(@petition), class: 'petition-action-heading' %>
-<% else %>
-  <%= link_to 'Government response', admin_petition_government_response_path(@petition), class: 'petition-action-heading' %>
-<% end %>
+<%= link_to 'Government response', admin_petition_government_response_path(@petition), class: 'petition-action-heading' %>

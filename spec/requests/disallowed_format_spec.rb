@@ -4,10 +4,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
 
   let(:petition) { FactoryBot.create :open_petition }
 
-  before do
-    FactoryBot.create(:parliament, :archived)
-  end
-
   shared_examples 'a route that only supports html formats' do |headers_only: false|
     unless headers_only
       it 'does not support json via extension' do
@@ -178,13 +174,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that supports html, json and csv formats'
   end
 
-  context "the archived/petitions url" do
-    let(:url) { "/archived/petitions" }
-    let(:params) { {} }
-
-    it_behaves_like 'a route that supports html and json formats'
-  end
-
   context 'the petitions/local results url' do
     let(:url) { "/petitions/local/#{constituency.slug}" }
     let(:constituency) { FactoryBot.create(:constituency) }
@@ -314,14 +303,6 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     }
 
     it_behaves_like 'a route that only supports html formats'
-  end
-
-  context 'the archived/petitions show url' do
-    let(:url) { "/archived/petitions/#{petition.id}" }
-    let(:petition) { FactoryBot.create(:archived_petition) }
-    let(:params) { {} }
-
-    it_behaves_like 'a route that supports html and json formats'
   end
 
   context 'the browserconfig url' do

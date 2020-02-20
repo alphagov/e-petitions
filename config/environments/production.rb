@@ -61,10 +61,6 @@ Rails.application.configure do
     Admin::LocksController#create
     Admin::LocksController#update
     Admin::LocksController#destroy
-    Admin::Archived::LocksController#show
-    Admin::Archived::LocksController#create
-    Admin::Archived::LocksController#update
-    Admin::Archived::LocksController#destroy
   ]
 
   config.lograge.custom_payload do |controller|

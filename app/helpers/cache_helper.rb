@@ -25,7 +25,6 @@ module CacheHelper
       attr_reader :template
 
       delegate :assigns, :params, to: :template
-      delegate :archived_petition_page?, to: :template
       delegate :create_petition_page?, to: :template
       delegate :open_petition_page?, to: :template
       delegate :home_page?, to: :template
@@ -42,10 +41,6 @@ module CacheHelper
 
       def locale
         I18n.locale
-      end
-
-      def archived_petition_page
-        archived_petition_page?
       end
 
       def constituency
@@ -69,7 +64,7 @@ module CacheHelper
       end
 
       def petition
-        assigns['petition'] if petition_page? || archived_petition_page?
+        assigns['petition'] if petition_page?
       end
 
       def petition_page
