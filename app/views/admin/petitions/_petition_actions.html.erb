@@ -20,12 +20,6 @@
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
-      <% if @petition.moderated? %>
-        <li class="petition-action">
-          <%= render 'petition_action_government_response', petition: @petition %>
-        </li>
-      <% end %>
-
       <% if @petition.can_have_debate_added? %>
         <li class="petition-action">
           <%= render 'petition_action_debate_date', petition: @petition %>

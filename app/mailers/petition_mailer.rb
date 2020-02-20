@@ -54,22 +54,6 @@ class PetitionMailer < ApplicationMailer
     mail to: @signature.email, subject: subject_for(:notify_sponsor_that_petition_was_rejected)
   end
 
-  def notify_signer_of_threshold_response(petition, signature)
-    @petition, @signature, @government_response = petition, signature, petition.government_response
-
-    mail to: @signature.email,
-      subject: subject_for(:notify_signer_of_threshold_response),
-      list_unsubscribe: unsubscribe_url
-  end
-
-  def notify_creator_of_threshold_response(petition, signature)
-    @petition, @signature, @government_response = petition, signature, petition.government_response
-
-    mail to: @signature.email,
-      subject: subject_for(:notify_creator_of_threshold_response),
-      list_unsubscribe: unsubscribe_url
-  end
-
   def gather_sponsors_for_petition(petition, bcc = nil)
     @petition, @creator = petition, petition.creator
     mail to: @creator.email, bcc: bcc, subject: subject_for(:gather_sponsors_for_petition)

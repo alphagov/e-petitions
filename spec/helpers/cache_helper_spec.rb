@@ -85,15 +85,6 @@ RSpec.describe CacheHelper, type: :helper do
       end
     end
 
-    describe "#last_government_response_updated_at" do
-      let(:now) { Time.current }
-
-      it "delegates to the template context" do
-        expect(helper).to receive(:last_government_response_updated_at).and_return(now)
-        expect(keys.last_government_response_updated_at).to eq(now)
-      end
-    end
-
     describe "#last_debate_outcome_updated_at" do
       let(:now) { Time.current }
 
@@ -138,42 +129,6 @@ RSpec.describe CacheHelper, type: :helper do
 
         it "returns the petition" do
           expect(keys.petition).to eq(petition)
-        end
-      end
-    end
-
-    describe "#reveal_response" do
-      before do
-        expect(helper).to receive(:params).and_return(params)
-      end
-
-      context "when 'reveal_response' is set to 'yes'" do
-        let(:params) do
-          { reveal_response: 'yes' }.with_indifferent_access
-        end
-
-        it "returns true" do
-          expect(keys.reveal_response).to eq(true)
-        end
-      end
-
-      context "when 'reveal_response' is set to 'no'" do
-        let(:params) do
-          { reveal_response: 'no' }.with_indifferent_access
-        end
-
-        it "returns false" do
-          expect(keys.reveal_response).to eq(false)
-        end
-      end
-
-      context "when 'reveal_response' is not set" do
-        let(:params) do
-          {}.with_indifferent_access
-        end
-
-        it "returns false" do
-          expect(keys.reveal_response).to eq(false)
         end
       end
     end

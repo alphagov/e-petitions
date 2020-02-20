@@ -23,13 +23,11 @@ en-GB:
       public:
         - :all
         - :open
-        - :closed
-        - :rejected
-        - :awaiting_response
-        - :with_response
-        - :awaiting_debate
+        - :referred
         - :debated
         - :not_debated
+        - :completed
+        - :rejected
       admin:
         - :all
         - :collecting_sponsors
@@ -40,11 +38,9 @@ en-GB:
         - :tagged_in_moderation
         - :untagged_in_moderation
         - :open
-        - :closed
+        - :referred
         - :rejected
         - :hidden
-        - :awaiting_response
-        - :with_response
         - :awaiting_debate_date
         - :with_debate_outcome
         - :in_debate_queue
@@ -59,11 +55,9 @@ en-GB:
           tagged_in_moderation: "Awaiting moderation - tagged (%{quantity})"
           untagged_in_moderation: "Awaiting moderation - untagged (%{quantity})"
           open: "Open (%{quantity})"
-          closed: "Closed (%{quantity})"
+          referred: "Referred (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
-          awaiting_response: "Awaiting a government response (%{quantity})"
-          with_response: "With a government response (%{quantity})"
           awaiting_debate_date: "Awaiting a debate in parliament (%{quantity})"
           with_debate_outcome: "Has been debated in parliament (%{quantity})"
           in_debate_queue: "In debate queue (%{quantity})"
@@ -83,8 +77,6 @@ en-GB:
           Parliament didn’t debate “%{action}”
         notify_signer_of_debate_scheduled: |-
           Parliament will debate “%{action}”
-        notify_signer_of_threshold_response: |-
-          Government responded to “%{action}”
 
         # Emails to people who create petitions
         email_creator: |-
@@ -95,8 +87,6 @@ en-GB:
           Parliament didn’t debate “%{action}”
         notify_creator_of_debate_scheduled: |-
           Parliament will debate “%{action}”
-        notify_creator_of_threshold_response: |-
-          Government responded to “%{action}”
         notify_creator_that_moderation_is_delayed: |-
           %{subject}
 
@@ -142,14 +132,12 @@ en-GB:
           other: "%{formatted_count} signatures total"
 
     counts:
-      awaiting_response:
+      referred:
         html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting for a response from the Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting for responses from the Government"
-      with_response:
-        html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition got a response from the Government"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions got a response from the Government"
+          one: "<span class=\"count\">%{formatted_count}</span> petition was referred to the Petitions Committee"
+          other: "<span class=\"count\">%{formatted_count}</span> petitions were referred to the Petitions Committee"
+      referred_explanation:
+        html: "See all petitions referred to the Petitions Committee (%{formatted_count})"
       awaiting_debate:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
@@ -158,10 +146,6 @@ en-GB:
         html:
           one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the House of Commons"
           other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the House of Commons"
-      awaiting_response_explanation:
-        html: "See all petitions waiting for a government response (%{formatted_count})"
-      with_response_explanation:
-        html: "See all petitions with a government response (%{formatted_count})"
       awaiting_debate_explanation:
         html: "See all petitions waiting for a debate (%{formatted_count})"
       debated_explanation:
@@ -173,9 +157,9 @@ en-GB:
       in_moderation:
         html:
           "<span class=\"count\">%{formatted_count}</span> Moderation queue"
-      awaiting_response:
+      referred:
         html:
-          "<span class=\"count\">%{formatted_count}</span> Government response queue"
+          "<span class=\"count\">%{formatted_count}</span> Referred queue"
       in_debate_queue:
         html:
           "<span class=\"count\">%{formatted_count}</span> Debate queue"

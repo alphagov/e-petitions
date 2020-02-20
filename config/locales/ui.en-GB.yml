@@ -4,7 +4,7 @@ en-GB:
       continue_html: |-
         <input type="submit" value="Continue" class="button" />
       share_this_petition: Share this petition
-      twitter_card_description: Official online petitions in response to issues of the day, listing the number that got a Government response, and those that have been debated in the House of Parliament
+      twitter_card_description: Official online petitions in response to issues of the day, listing the number that were referred to the Petitions Committee, and those that have been debated in the House of Parliament
       back_html: |-
         <input type="submit" name="move_back" value="◀ Back" class="back-page" data-disable-with="◀ Back">
       get_json_csv_html: >-
@@ -103,7 +103,7 @@ en-GB:
           duplicate:
             heading: We found some similar petitions
             sign_if_match: If one of these petitions matches yours, sign it and share it instead
-            sign_if_match_reason: Your petition is more likely to get to %{response_threshold} and %{debate_threshold} signatures that way.
+            sign_if_match_reason: Your petition is more likely to get to %{referral_threshold} and %{debate_threshold} signatures that way.
             reject_notice: If there’s already a petition on the same topic, your petition is likely to be rejected
             continue_btn: My petition is different
           unique:
@@ -143,25 +143,21 @@ en-GB:
       petition_duration: This petition ran for %{duration}
       reject_reason_heading: Why was this petition rejected?
       reject_reason_standards_html: We only reject petitions that don’t meet the %{standards_link}
-      response_threshold:
+      referral_threshold:
         needs_more_signatures:
           heading: At %{threshold} signatures...
-          response_threshold: At %{threshold} signatures, government will respond to this petition
-        responded:
-          heading: Government responded
-          response_given_at: This response was given on %{date}
-          summary: Read the response in full
+          referral_threshold: All petitions with more than %{threshold} signatures are referred to the Petitions Committee
         waiting:
-          heading: Government will respond
-          response_threshold: Government responds to all petitions that get more than %{threshold} signatures
-          response_waiting_time: "%{waiting_for_time} for a government response"
+          heading: The Petitions Committee will consider this petition
+          referral_waiting_time: for the Petitions Committee to consider this petition
+          referral_threshold: All petitions with more than %{threshold} signatures are referred to the Petitions Committee
       show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show on a map</a>
       sign_this_petition: Sign this petition
       topic_debated_on: This topic was debated on %{date}
       waiting_for_in_words:
-        one: Waiting for 1 day
-        other: Waiting for %{formatted_count} days
-        zero: Waiting for less than a day
+        one: Waiting 1 day
+        other: Waiting %{formatted_count} days
+        zero: Waiting less than a day
       watch_online_parliamentlive_tv_html: You'll be able to watch the debate online at <a href="https://parliamentlive.tv" rel="external">parliamentlive.tv</a>
       watch_online_youtube_channel_html: You'll be able to watch online on the <a href="https://www.youtube.com/UKParliament" rel="external">UK Parliament YouTube channel</a>.
       index:
@@ -171,11 +167,10 @@ en-GB:
           closed: Closed petitions
           rejected: Rejected petitions
           published: Published petitions
-          awaiting_response: Petitions waiting for a Government response
-          with_response: Petitions with a Government response
           debated: Petitions debated in Parliament
           not_debated: Petitions not debated in Parliament
           awaiting_debate: Petitions waiting for a debate in Parliament
+          referred: Petitions referred to the Petitions Committee
       search:
         submit: Search
         filtered_petition_count:
@@ -198,11 +193,8 @@ en-GB:
       lists:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
-        closed: Closed petitions (%{quantity})
-        published: Published petitions (%{quantity})
+        referred: Referred to the committee (%{quantity})
         rejected: Rejected petitions (%{quantity})
-        awaiting_response: Awaiting government response (%{quantity})
-        with_response: Government responses (%{quantity})
         debated: Debated in Parliament (%{quantity})
         not_debated: Not debated in Parliament (%{quantity})
         awaiting_debate: Awaiting a debate in Parliament (%{quantity})
@@ -374,10 +366,9 @@ en-GB:
         research:
           read_html: Read the research at %{link}
           link: parliament.uk
-      responded_petitions:
-        none_responded: The government hasn’t responded to any petitions yet
-        response_date: The government responded on %{date}
-        full_response_link: Read the response in full
+      referred_petitions:
+        none_referred: No petitions have been referred to the Petitions Committee yet
+        referred_date: The petition was referred on %{date}
       search_petitions:
         heading: Search petitions
         submit_button: Search
@@ -394,8 +385,8 @@ en-GB:
             Register to vote in the General Election
           </a>
       thresholds:
-        response: If a petition gets %{formatted_count} signatures, the government will respond
         debate: If a petition gets %{formatted_count} signatures, it will be considered for debate in Parliament
+        referred: All petitions with more than %{formatted_count} signatures are referred to the Petitions Committee
       local_petitions:
         heading: Local to you
         find_local_petitions: Find petitions being signed by people near you

@@ -77,7 +77,6 @@ FactoryBot.define do
 
     trait :email_requested do
       transient do
-        email_requested_for_government_response_at { nil }
         email_requested_for_debate_scheduled_at { nil }
         email_requested_for_debate_outcome_at { nil }
         email_requested_for_petition_email_at { nil }
@@ -85,7 +84,6 @@ FactoryBot.define do
 
       after(:build) do |petition, evaluator|
         petition.build_email_requested_receipt do |r|
-          r.government_response = evaluator.email_requested_for_government_response_at
           r.debate_scheduled = evaluator.email_requested_for_debate_scheduled_at
           r.debate_outcome = evaluator.email_requested_for_debate_outcome_at
           r.petition_email = evaluator.email_requested_for_petition_email_at
@@ -147,6 +145,16 @@ FactoryBot.define do
   factory :open_petition, :parent => :sponsored_petition do
     state  Petition::OPEN_STATE
     open_at { Time.current }
+
+    transient do
+      referred { false }
+    end
+
+    after(:build) do |petition, evaluator|
+      if evaluator.referred
+        petition.referral_threshold_reached_at = petition.open_at + 2.month
+      end
+    end
   end
 
   factory :closed_petition, :parent => :petition do
@@ -175,24 +183,8 @@ FactoryBot.define do
     state Petition::HIDDEN_STATE
   end
 
-  factory :awaiting_petition, :parent => :open_petition do
-    response_threshold_reached_at { 1.week.ago }
-  end
-
-  factory :responded_petition, :parent => :awaiting_petition do
-    government_response_at { 1.week.ago }
-
-    transient do
-      response_summary { "Response Summary" }
-      response_details { "Response Details" }
-    end
-
-    after(:create) do |petition, evaluator|
-      petition.create_government_response! do |r|
-        r.summary = evaluator.response_summary
-        r.details = evaluator.response_details
-      end
-    end
+  factory :referred_petition, :parent => :closed_petition do
+    referral_threshold_reached_at { 1.week.ago }
   end
 
   factory :awaiting_debate_petition, :parent => :open_petition do
@@ -417,13 +409,6 @@ FactoryBot.define do
         "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
       }
     end
-  end
-
-  factory :government_response do
-    association :petition, factory: :awaiting_petition
-    responded_on { 1.day.ago.to_date }
-    details "Government Response Details"
-    summary "Government Response Summary"
   end
 
   factory :note do

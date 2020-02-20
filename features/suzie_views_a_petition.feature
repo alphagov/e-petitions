@@ -42,15 +42,6 @@ Feature: Suzie views a petition
     Then the markup should be valid
     And I should see "This petition was found to be misleading"
 
-  @javascript
-  Scenario: Suzie views an open petition that has received a response
-    Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"
-    When I view the petition
-    Then I should see "Oh yes please"
-    And I should not see the response "Defence is the best Offence"
-    When I expand "Read the response in full"
-    Then I should see the response "Defence is the best Offence"
-
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "We like http://www.google.com and bambi@gmail.com"
     When I view the petition
@@ -112,7 +103,7 @@ Feature: Suzie views a petition
     And a petition "Free the wombles" has been debated yesterday
     When I view the petition
     Then I should see "Parliament debated this petition on 26 October 2015"
-    And I should see "Waiting for 1 day for Parliament to publish the debate outcome"
+    And I should see "Waiting 1 day for Parliament to publish the debate outcome"
 
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
@@ -127,19 +118,8 @@ Feature: Suzie views a petition
     Then I should see "At 5,000 signatures..."
 
   @javascript
-  Scenario: Suzie sees information about a future signature target when viewing an open petition which has passed the threshold for response
-    Given an open petition "Spend more money on Defence" with response "Defence is the best Offence" and response summary "Oh yes please"
-    When I view the petition
-    Then I should not see "At 50 signatures..."
-    Then I should see "At 5,000 signatures..."
-    Then I should see "Oh yes please"
-    And I should not see the response "Defence is the best Offence"
-    When I expand "Read the response in full"
-    Then I should see the response "Defence is the best Offence"
-
-  @javascript
-  Scenario: Suzie does not see information about a future signature targets when viewing an open petition which has passed the threshold for response and debate
-    Given a petition "Spend more money on Defence" exists with a debate outcome and with response threshold met
+  Scenario: Suzie does not see information about a future signature targets when viewing an open petition which has passed the threshold for referral and debate
+    Given a petition "Spend more money on Defence" exists with a debate outcome and with referral threshold met
     When I view the petition
     Then I should not see "At 50 signatures..."
     Then I should not see "At 5,000 signatures..."

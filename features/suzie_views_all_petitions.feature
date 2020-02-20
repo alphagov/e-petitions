@@ -33,31 +33,6 @@ Feature: Suzy Signer views all petitions
      | Free the wombles                                    |
     And the markup should be valid
 
-  Scenario: Suzie browses petitions awaiting a goverment response
-    Given a petition "Abolish bank holidays" exists and hasn't passed the threshold for a response
-    And a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
-    And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
-    And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
-    When I browse to see only "Awaiting government response" petitions
-    Then I should see "3 petitions"
-    And I should see the following ordered list of petitions:
-     | Make every monday bank holiday                      |
-     | Force supermarkets to give unsold food to charities |
-     | Free the wombles                                    |
-    And the markup should be valid
-
-  Scenario: Suzie browses petitions with a goverment response
-    Given a closed petition "Free the wombles" exists and has received a government response 100 days ago
-    And a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
-    And a petition "Make every monday bank holiday" exists and has received a government response 1 days ago
-    When I browse to see only "Government responses" petitions
-    Then I should see "3 petitions"
-    And I should see the following ordered list of petitions:
-     | Make every monday bank holiday                      |
-     | Force supermarkets to give unsold food to charities |
-     | Free the wombles                                    |
-    And the markup should be valid
-
   Scenario: Suzie browses petitions which have been debated
     Given a petition "Free the wombles" has been debated yesterday
     And a petition "Ban Badger Baiting" has been debated 2 days ago

@@ -87,7 +87,7 @@ RSpec.describe Admin::SitesController, type: :controller, admin: true do
 
       context "when submitting just the petitions params" do
         let :params do
-          { petition_duration: "6", threshold_for_response: "50", threshold_for_debate: "5000" }
+          { petition_duration: "6", threshold_for_referral: "50", threshold_for_debate: "5000" }
         end
 
         it "redirects to the edit page" do

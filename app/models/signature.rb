@@ -23,7 +23,6 @@ class Signature < ActiveRecord::Base
   ]
 
   TIMESTAMPS = {
-    'government_response' => :government_response_email_at,
     'debate_scheduled'    => :debate_scheduled_email_at,
     'debate_outcome'      => :debate_outcome_email_at,
     'petition_email'      => :petition_email_at

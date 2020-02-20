@@ -2014,7 +2014,6 @@ RSpec.describe Signature, type: :model do
       let(:the_stored_time) { 6.days.ago }
 
       [
-        %w[government_response government_response_email_at],
         %w[debate_scheduled debate_scheduled_email_at],
         %w[debate_outcome debate_outcome_email_at],
         %w[petition_email petition_email_at]
@@ -2044,7 +2043,6 @@ RSpec.describe Signature, type: :model do
       let(:the_stored_time) { 6.days.ago }
 
       [
-        %w[government_response government_response_email_at],
         %w[debate_scheduled debate_scheduled_email_at],
         %w[debate_outcome debate_outcome_email_at],
         %w[petition_email petition_email_at]
@@ -2078,7 +2076,7 @@ RSpec.describe Signature, type: :model do
       let!(:another_signature) { FactoryBot.create(:validated_signature) }
       let(:since_timestamp) { 5.days.ago }
 
-      subject { Signature.need_emailing_for('government_response', since: since_timestamp) }
+      subject { Signature.need_emailing_for('petition_email', since: since_timestamp) }
 
       it "does not return those that do not want to be emailed" do
         a_signature.update_attribute(:notify_by_email, false)
@@ -2091,22 +2089,22 @@ RSpec.describe Signature, type: :model do
       end
 
       it "does not return signatures that have a sent timestamp newer than the petitions requested receipt" do
-        another_signature.set_email_sent_at_for('government_response', to: since_timestamp + 1.day)
+        another_signature.set_email_sent_at_for('petition_email', to: since_timestamp + 1.day)
         expect(subject).not_to include another_signature
       end
 
       it "does not return signatures that have a sent timestamp equal to the petitions requested receipt" do
-        another_signature.set_email_sent_at_for('government_response', to: since_timestamp)
+        another_signature.set_email_sent_at_for('petition_email', to: since_timestamp)
         expect(subject).not_to include another_signature
       end
 
       it "does return signatures that have a sent timestamp older than the petitions requested receipt" do
-        another_signature.set_email_sent_at_for('government_response', to: since_timestamp - 1.day)
+        another_signature.set_email_sent_at_for('petition_email', to: since_timestamp - 1.day)
         expect(subject).to include another_signature
       end
 
       it "returns signatures that have null for the requested timestamp" do
-        a_signature.update_column(:government_response_email_at, nil)
+        a_signature.update_column(:petition_email_at, nil)
         expect(subject).to match_array [a_signature, another_signature]
       end
     end

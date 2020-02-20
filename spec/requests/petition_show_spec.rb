@@ -93,34 +93,11 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
-    it "includes the government_response section for petitions with a government_response" do
-      petition = \
-        FactoryBot.create :responded_petition,
-          response_summary: "Summary of what the government said",
-          response_details: "Details of what the government said"
-
-      get "/petitions/#{petition.id}.json"
-      expect(response).to be_successful
-
-      expect(attributes).to match(
-        a_hash_including(
-          "government_response_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-          "government_response" => a_hash_including(
-            "responded_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
-            "summary" => "Summary of what the government said",
-            "details" => "Details of what the government said",
-            "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-            "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
-          )
-        )
-      )
-    end
-
     it "includes the date and time at which the thresholds were reached" do
       petition = \
         FactoryBot.create :open_petition,
           moderation_threshold_reached_at: 1.month.ago,
-          response_threshold_reached_at: 1.weeks.ago,
+          referral_threshold_reached_at: 1.weeks.ago,
           debate_threshold_reached_at: 1.day.ago
 
       get "/petitions/#{petition.id}.json"
@@ -129,7 +106,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       expect(attributes).to match(
         a_hash_including(
           "moderation_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-          "response_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "referral_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "debate_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
         )
       )

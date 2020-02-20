@@ -131,7 +131,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
 
   create_table "email_requested_receipts", id: :serial, force: :cascade do |t|
     t.integer "petition_id"
-    t.datetime "government_response"
     t.datetime "debate_outcome"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -145,17 +144,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.string "petition_link_or_title"
     t.string "email"
     t.string "user_agent"
-  end
-
-  create_table "government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
-    t.string "summary", limit: 500, null: false
-    t.text "details"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.date "responded_on"
-    t.index ["petition_id"], name: "index_government_responses_on_petition_id", unique: true
-    t.index ["updated_at"], name: "index_government_responses_on_updated_at"
   end
 
   create_table "holidays", id: :serial, force: :cascade do |t|
@@ -261,10 +249,9 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.boolean "notified_by_email", default: false
     t.string "background", limit: 500
     t.string "sponsor_token", limit: 255
-    t.datetime "government_response_at"
     t.date "scheduled_debate_date"
     t.datetime "last_signed_at"
-    t.datetime "response_threshold_reached_at"
+    t.datetime "referral_threshold_reached_at"
     t.datetime "debate_threshold_reached_at"
     t.datetime "rejected_at"
     t.datetime "debate_outcome_at"
@@ -302,7 +289,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
-    t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
+    t.index ["referral_threshold_reached_at"], name: "index_petitions_on_referral_threshold_reached_at"
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
   end
@@ -358,7 +345,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.string "location_code", limit: 30
     t.datetime "invalidated_at"
     t.integer "invalidation_id"
-    t.datetime "government_response_email_at"
     t.datetime "debate_scheduled_email_at"
     t.datetime "debate_outcome_email_at"
     t.datetime "petition_email_at"
@@ -405,7 +391,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.integer "minimum_number_of_sponsors", default: 2, null: false
     t.integer "maximum_number_of_sponsors", default: 20, null: false
     t.integer "threshold_for_moderation", default: 2, null: false
-    t.integer "threshold_for_response", default: 50, null: false
+    t.integer "threshold_for_referral", default: 50, null: false
     t.integer "threshold_for_debate", default: 5000, null: false
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
@@ -472,7 +458,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
   add_foreign_key "domains", "domains", column: "canonical_domain_id"
   add_foreign_key "email_requested_receipts", "petitions"
-  add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ClosePetitionsJob, type: :job do
   context "for a petition opened in the winter" do
     let!(:petition) {
-      FactoryBot.create(:open_petition, open_at: "2015-12-29T10:00:00Z")
+      FactoryBot.create(:open_petition, referred: true, open_at: "2015-12-29T10:00:00Z")
     }
 
     around do |example|
@@ -39,7 +39,7 @@ RSpec.describe ClosePetitionsJob, type: :job do
 
   context "for a petition opened in the summer" do
     let!(:petition) {
-      FactoryBot.create(:open_petition, open_at: "2016-06-29T10:00:00Z")
+      FactoryBot.create(:open_petition, referred: true, open_at: "2016-06-29T10:00:00Z")
     }
 
     around do |example|

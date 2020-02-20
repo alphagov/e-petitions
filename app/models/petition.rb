@@ -45,8 +45,7 @@ class Petition < ActiveRecord::Base
   facet :closed,   -> { closed_state.by_most_popular }
   facet :hidden,   -> { hidden_state.by_most_recent }
 
-  facet :awaiting_response,    -> { awaiting_response.by_waiting_for_response_longest }
-  facet :with_response,        -> { with_response.by_most_recent_response }
+  facet :referred,    -> { referred.by_referred_longest }
 
   facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
   facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
@@ -72,7 +71,6 @@ class Petition < ActiveRecord::Base
 
   has_one :debate_outcome, dependent: :destroy
   has_one :email_requested_receipt, dependent: :destroy
-  has_one :government_response, dependent: :destroy
   has_one :note, dependent: :destroy
   has_one :rejection, dependent: :destroy
   has_one :statistics, dependent: :destroy
@@ -98,7 +96,6 @@ class Petition < ActiveRecord::Base
   with_options allow_nil: true, prefix: true do
     delegate :name, :email, to: :creator
     delegate :code, :details, to: :rejection
-    delegate :summary, :details, :created_at, :updated_at, to: :government_response
     delegate :date, :transcript_url, :video_url, :overview, to: :debate_outcome, prefix: :debate
     delegate :debate_pack_url, to: :debate_outcome, prefix: false
   end
@@ -123,10 +120,6 @@ class Petition < ActiveRecord::Base
       reorder(moderation_threshold_reached_at: :desc, created_at: :desc)
     end
 
-    def by_most_recent_response
-      reorder(government_response_at: :desc, created_at: :desc)
-    end
-
     def by_most_relevant_debate_date
       reorder('scheduled_debate_date ASC NULLS LAST, debate_threshold_reached_at ASC NULLS FIRST')
     end
@@ -139,8 +132,8 @@ class Petition < ActiveRecord::Base
       reorder(debate_threshold_reached_at: :asc, created_at: :desc)
     end
 
-    def by_waiting_for_response_longest
-      reorder(response_threshold_reached_at: :asc, created_at: :desc)
+    def by_referred_longest
+      reorder(referral_threshold_reached_at: :asc, created_at: :desc)
     end
 
     def current
@@ -175,8 +168,8 @@ class Petition < ActiveRecord::Base
       debate_threshold_reached.not_scheduled
     end
 
-    def awaiting_response
-      response_threshold_reached.not_responded
+    def referred
+      referral_threshold_reached.not_completed
     end
 
     def collecting_sponsors
@@ -227,20 +220,12 @@ class Petition < ActiveRecord::Base
       where.not(state: HIDDEN_STATE)
     end
 
-    def not_responded
-      where(government_response_at: nil)
-    end
-
     def not_scheduled
       where(scheduled_debate_date: nil)
     end
 
-    def respondable
-      where(state: RESPONDABLE_STATES)
-    end
-
-    def response_threshold_reached
-      where.not(response_threshold_reached_at: nil)
+    def referral_threshold_reached
+      where.not(referral_threshold_reached_at: nil)
     end
 
     def selectable
@@ -269,10 +254,6 @@ class Petition < ActiveRecord::Base
 
     def with_debated_outcome
       debated.where.not(debate_outcome_at: nil)
-    end
-
-    def with_response
-      where.not(government_response_at: nil).preload(:government_response)
     end
 
     def trending(since = 1.hour.ago, limit = 3)
@@ -445,8 +426,8 @@ class Petition < ActiveRecord::Base
         updates << "state = '#{VALIDATED_STATE}'"
       end
 
-      if at_threshold_for_response?
-        updates << "response_threshold_reached_at = :now"
+      if at_threshold_for_referral?
+        updates << "referral_threshold_reached_at = :now"
       end
 
       if at_threshold_for_debate?
@@ -474,8 +455,8 @@ class Petition < ActiveRecord::Base
       updates << "debate_state = 'pending', "
     end
 
-    if below_threshold_for_response?
-      updates << "response_threshold_reached_at = NULL, "
+    if below_threshold_for_referral?
+      updates << "referral_threshold_reached_at = NULL, "
     end
 
     updates << "signature_count = greatest(signature_count - 1, 1), "
@@ -510,9 +491,9 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def at_threshold_for_response?
-    unless response_threshold_reached_at?
-      signature_count >= Site.threshold_for_response - 1
+  def at_threshold_for_referral?
+    unless referral_threshold_reached_at?
+      signature_count >= Site.threshold_for_referral - 1
     end
   end
 
@@ -522,9 +503,9 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def below_threshold_for_response?
-    if response_threshold_reached_at?
-      signature_count <= Site.threshold_for_response
+  def below_threshold_for_referral?
+    if referral_threshold_reached_at?
+      signature_count <= Site.threshold_for_referral
     end
   end
 
@@ -589,6 +570,12 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def reject!(attributes)
+    unless reject(attributes)
+      raise ActiveRecord::RecordNotSaved, "Failed to save the rejection details"
+    end
+  end
+
   def flag
     update(state: FLAGGED_STATE)
   end
@@ -599,7 +586,12 @@ class Petition < ActiveRecord::Base
 
   def close!(time = deadline)
     if open?
-      update!(state: CLOSED_STATE, closed_at: time)
+      if will_be_referred?
+        update!(state: CLOSED_STATE, closed_at: time)
+      else
+        reject!(code: "insufficient", rejected_at: time)
+        NotifyEveryoneOfFailureToGetEnoughSignaturesJob.perform_later(self)
+      end
     else
       raise RuntimeError, "can't close a petition that is in the #{state} state"
     end
@@ -649,6 +641,10 @@ class Petition < ActiveRecord::Base
 
   def closed?
     state == CLOSED_STATE
+  end
+
+  def will_be_referred?
+    referral_threshold_reached_at?
   end
 
   def flagged?
@@ -709,10 +705,6 @@ class Petition < ActiveRecord::Base
 
   def in_todo_list?
     state.in?(TODO_LIST_STATES)
-  end
-
-  def government_response?
-    government_response_at? && government_response
   end
 
   def debate_outcome?

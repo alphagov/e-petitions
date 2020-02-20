@@ -7,10 +7,6 @@ en-GB:
       one: "Are you sure you want to do this and email the petitioner?"
       other: "Are you sure you want to do this and email all %{formatted_count} petitioners?"
 
-    threshold_reminder:
-      one: "%{count} petition requires action"
-      other: "%{count} petitions require action"
-
     invalidations:
       facets:
         keys:
@@ -50,7 +46,6 @@ en-GB:
       email_resent_to_creator: "Resent the email to the petition creator and forwarded a copy to the feedback address"
       email_sent_overnight: "Email will be sent overnight"
       enqueued_petition_statistics_update: "Updating the petition statistics - please wait a few minutes and then refresh this page"
-      government_response_updated: "Updated government response successfully"
       failed_tasks: "There was a problem starting the tasks - please contact support"
       invalidation_cant_be_cancelled: "Can't cancel invalidations that have completed"
       invalidation_cant_be_counted: "Can't count invalidations that aren't pending"

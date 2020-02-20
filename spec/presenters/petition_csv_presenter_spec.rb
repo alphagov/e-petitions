@@ -42,8 +42,6 @@ RSpec.describe PetitionCSVPresenter do
       petition.signature_count,
       petition.rejection_code,
       petition.rejection_details,
-      petition.government_response_summary,
-      petition.government_response_details,
       petition.debate_date,
       petition.debate_transcript_url,
       petition.debate_video_url,
@@ -53,15 +51,12 @@ RSpec.describe PetitionCSVPresenter do
       timestampify(petition.updated_at),
       timestampify(petition.open_at),
       timestampify(petition.closed_at),
-      timestampify(petition.government_response_at),
       datestampify(petition.scheduled_debate_date),
-      timestampify(petition.response_threshold_reached_at),
+      timestampify(petition.referral_threshold_reached_at),
       timestampify(petition.debate_threshold_reached_at),
       timestampify(petition.rejected_at),
       timestampify(petition.debate_outcome_at),
       timestampify(petition.moderation_threshold_reached_at),
-      timestampify(petition.government_response_created_at),
-      timestampify(petition.government_response_updated_at),
       petition.note.try(:details)
     ].join(",") + "\n"
   end

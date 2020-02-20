@@ -19,8 +19,7 @@ json.attributes do
   json.opened_at api_date_format(petition.opened_at)
   json.closed_at api_date_format(petition.closed_at)
   json.moderation_threshold_reached_at api_date_format(petition.moderation_threshold_reached_at)
-  json.response_threshold_reached_at api_date_format(petition.response_threshold_reached_at)
-  json.government_response_at api_date_format(petition.government_response_at)
+  json.referral_threshold_reached_at api_date_format(petition.referral_threshold_reached_at)
   json.debate_threshold_reached_at api_date_format(petition.debate_threshold_reached_at)
   json.scheduled_debate_date api_date_format(petition.scheduled_debate_date)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)
@@ -38,18 +37,6 @@ json.attributes do
     end
   else
     json.rejection nil
-  end
-
-  if response = petition.government_response
-    json.government_response do
-      json.responded_on api_date_format(response.responded_on)
-      json.summary response.summary
-      json.details response.details
-      json.created_at api_date_format(response.created_at)
-      json.updated_at api_date_format(response.updated_at)
-    end
-  else
-    json.government_response nil
   end
 
   if debate_outcome = petition.debate_outcome

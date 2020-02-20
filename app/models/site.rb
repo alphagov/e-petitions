@@ -52,8 +52,8 @@ class Site < ActiveRecord::Base
       instance.formatted_threshold_for_moderation
     end
 
-    def formatted_threshold_for_response
-      instance.formatted_threshold_for_response
+    def formatted_threshold_for_referral
+      instance.formatted_threshold_for_referral
     end
 
     def formatted_threshold_for_debate
@@ -199,7 +199,7 @@ class Site < ActiveRecord::Base
         maximum_number_of_sponsors:     default_maximum_number_of_sponsors,
         threshold_for_moderation:       default_threshold_for_moderation,
         threshold_for_moderation_delay: default_threshold_for_moderation_delay,
-        threshold_for_response:         default_threshold_for_response,
+        threshold_for_referral:         default_threshold_for_referral,
         threshold_for_debate:           default_threshold_for_debate
       }
     end
@@ -342,7 +342,7 @@ class Site < ActiveRecord::Base
       ENV.fetch('THRESHOLD_FOR_MODERATION_DELAY', '500').to_i
     end
 
-    def default_threshold_for_response
+    def default_threshold_for_referral
       ENV.fetch('THRESHOLD_FOR_RESPONSE', '50').to_i
     end
 
@@ -372,8 +372,8 @@ class Site < ActiveRecord::Base
     end
   else
     class << self
-      def threshold_for_response
-        default_threshold_for_response
+      def threshold_for_referral
+        default_threshold_for_referral
       end
 
       def threshold_for_debate
@@ -410,8 +410,8 @@ class Site < ActiveRecord::Base
     number_to_delimited(threshold_for_moderation)
   end
 
-  def formatted_threshold_for_response
-    number_to_delimited(threshold_for_response)
+  def formatted_threshold_for_referral
+    number_to_delimited(threshold_for_referral)
   end
 
   def formatted_threshold_for_debate
@@ -533,7 +533,7 @@ class Site < ActiveRecord::Base
   validates :maximum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :threshold_for_moderation, presence: true, numericality: { only_integer: true }
   validates :threshold_for_moderation_delay, presence: true, numericality: { only_integer: true }
-  validates :threshold_for_response, presence: true, numericality: { only_integer: true }
+  validates :threshold_for_referral, presence: true, numericality: { only_integer: true }
   validates :threshold_for_debate, presence: true, numericality: { only_integer: true }
   validates :username, presence: true, length: { maximum: 30 }, if: :protected?
   validates :password, length: { maximum: 30 }, confirmation: true, if: :protected?

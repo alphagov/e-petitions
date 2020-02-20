@@ -122,7 +122,6 @@ Rails.application.routes.draw do
 
         scope only: %i[show update] do
           resource :debate_outcome, path: 'debate-outcome'
-          resource :government_response, path: 'government-response', controller: 'government_response'
           resource :notes
           resource :details, controller: 'petition_details'
           resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'

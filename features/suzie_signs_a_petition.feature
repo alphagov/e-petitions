@@ -156,13 +156,15 @@ Feature: Suzie signs a petition
     Then I should see "Sign this petition"
 
   Scenario: Suzie cannot start a new signature when the petition has closed
-    Given the petition has closed
+	Given the petition has reached the referral threshold    
+    And the petition has closed
     When I go to the new signature page
     Then I should be on the petition page
     And I should see "This petition is closed"
 
   Scenario: Suzie cannot create a new signature when the petition has closed
     Given I am on the new signature page
+	And the petition has reached the referral threshold    
     And the petition has closed
     When I fill in my details
     And I try to sign
@@ -174,7 +176,8 @@ Feature: Suzie signs a petition
     When I fill in my details
     And I try to sign
     Then I should be on the new signature page
-    When the petition has closed
+    When the petition has reached the referral threshold    
+	And the petition has closed
     And I say I am happy with my email address
     Then I should be on the petition page
     And I should see "This petition is closed"
@@ -187,7 +190,8 @@ Feature: Suzie signs a petition
     When I say I am happy with my email address
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
-    When the petition has closed some time ago
+	When the petition has reached the referral threshold    
+    And the petition has closed some time ago
     And I confirm my email address
     Then I should be on the petition page
     And I should see "This petition is closed"
@@ -201,7 +205,8 @@ Feature: Suzie signs a petition
     When I say I am happy with my email address
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
-    When the petition has closed
+	When the petition has reached the referral threshold    
+    And the petition has closed
     And I confirm my email address
     Then I should see "We've added your signature to the petition"
     And I should see "2 signatures"

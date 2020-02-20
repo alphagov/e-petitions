@@ -192,30 +192,6 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
       )
     end
 
-    it "includes the government_response section for petitions with a government_response" do
-      petition = \
-        FactoryBot.create :responded_petition,
-          response_summary: "Summary of what the government said",
-          response_details: "Details of what the government said"
-
-      get "/petitions.json"
-      expect(response).to be_successful
-
-      expect(data).to match(
-        a_collection_containing_exactly(
-          a_hash_including(
-            "attributes" => a_hash_including(
-              "government_response" => a_hash_including(
-                "responded_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
-                "summary" => "Summary of what the government said",
-                "details" => "Details of what the government said"
-              )
-            )
-          )
-        )
-      )
-    end
-
     it "includes the debate section for petitions that have been debated" do
       petition = \
         FactoryBot.create :debated_petition,

@@ -1,42 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe EmailReminder do
-  describe "threshold_email_reminders" do
-    before :each do
-      @user1 = FactoryBot.create(:moderator_user, :email => 'peter@directgov.uk')
-      @user2 = FactoryBot.create(:moderator_user, :email => 'richard@directgov.uk')
-      @p1 = FactoryBot.create(:open_petition)
-      @p1.update_attribute(:signature_count, 11)
-      @p2 = FactoryBot.create(:closed_petition)
-      @p2.update_attribute(:signature_count, 10)
-      @p3 = FactoryBot.create(:open_petition)
-      @p3.update_attribute(:signature_count, 9)
-      @p4 = FactoryBot.create(:open_petition, :notified_by_email => true)
-
-      allow(Site).to receive(:threshold_for_debate).and_return(10)
-    end
-
-    it "should email out an alert to moderator users for petitions that have reached their threshold or have been marked as requiring a response" do
-      email_no = ActionMailer::Base.deliveries.size
-      EmailReminder.threshold_email_reminder
-      email_no_new = ActionMailer::Base.deliveries.size
-      expect(email_no_new - email_no).to eq(1)
-      email = ActionMailer::Base.deliveries.last
-      expect(email.from).to eq(["no-reply@petition.senedd.wales"])
-      expect(email.to).to match_array(["peter@directgov.uk", "richard@directgov.uk"])
-      expect(email.subject).to eq('Petitions alert')
-    end
-
-    it "should email out details of three petitions and set the notified_by_email flag to true" do
-      expect(AdminMailer).to receive(:threshold_email_reminder).with([@user1, @user2], [@p2, @p1]).and_return(double('email', :deliver_now => nil))
-      EmailReminder.threshold_email_reminder
-      [@p2, @p1].each do |petition|
-        petition.reload
-        expect(petition.notified_by_email).to be_truthy
-      end
-    end
-  end
-
   describe "special_resend_of_signature_email_validation" do
 
     let(:beginning_of_september) { Time.parse("2011-09-01 00:00") }

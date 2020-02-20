@@ -17,7 +17,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
     it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:threshold_for_moderation_delay).of_type(:integer).with_options(null: false, default: 500) }
-    it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 50) }
+    it { is_expected.to have_db_column(:threshold_for_referral).of_type(:integer).with_options(null: false, default: 50) }
     it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 5000) }
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
@@ -54,7 +54,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_presence_of(:maximum_number_of_sponsors) }
     it { is_expected.to validate_presence_of(:threshold_for_moderation) }
     it { is_expected.to validate_presence_of(:threshold_for_moderation_delay) }
-    it { is_expected.to validate_presence_of(:threshold_for_response) }
+    it { is_expected.to validate_presence_of(:threshold_for_referral) }
     it { is_expected.to validate_presence_of(:threshold_for_debate) }
     it { is_expected.to validate_presence_of(:login_timeout) }
 
@@ -68,7 +68,7 @@ RSpec.describe Site, type: :model do
 
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
-      threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
+      threshold_for_moderation_delay threshold_for_referral threshold_for_debate login_timeout
     ].each do |attribute|
       describe attribute do
         let(:errors) { subject.errors[attribute] }
@@ -213,14 +213,14 @@ RSpec.describe Site, type: :model do
       expect(Site.formatted_threshold_for_moderation).to eq("5,000")
     end
 
-    it "delegates threshold_for_response to the instance" do
-      expect(site).to receive(:threshold_for_response).and_return(10)
-      expect(Site.threshold_for_response).to eq(10)
+    it "delegates threshold_for_referral to the instance" do
+      expect(site).to receive(:threshold_for_referral).and_return(10)
+      expect(Site.threshold_for_referral).to eq(10)
     end
 
-    it "delegates formatted_threshold_for_response to the instance" do
-      expect(site).to receive(:formatted_threshold_for_response).and_return("50")
-      expect(Site.formatted_threshold_for_response).to eq("50")
+    it "delegates formatted_threshold_for_referral to the instance" do
+      expect(site).to receive(:formatted_threshold_for_referral).and_return("50")
+      expect(Site.formatted_threshold_for_referral).to eq("50")
     end
 
     it "delegates threshold_for_debate to the instance" do
@@ -553,15 +553,15 @@ RSpec.describe Site, type: :model do
       end
     end
 
-    describe "for threshold_for_response" do
+    describe "for threshold_for_referral" do
       it "defaults to 50" do
-        allow(ENV).to receive(:fetch).with("threshold_for_response", '50').and_return("50")
-        expect(defaults[:threshold_for_response]).to eq(50)
+        allow(ENV).to receive(:fetch).with("threshold_for_referral", '50').and_return("50")
+        expect(defaults[:threshold_for_referral]).to eq(50)
       end
 
       it "can be overridden with the THRESHOLD_FOR_RESPONSE environment variable" do
         allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '50').and_return("25")
-        expect(defaults[:threshold_for_response]).to eq(25)
+        expect(defaults[:threshold_for_referral]).to eq(25)
       end
     end
 
@@ -821,13 +821,13 @@ RSpec.describe Site, type: :model do
     end
   end
 
-  describe "#formatted_threshold_for_response" do
+  describe "#formatted_threshold_for_referral" do
     subject :site do
-      described_class.create!(threshold_for_response: 50)
+      described_class.create!(threshold_for_referral: 50)
     end
 
     it "returns a formatted number" do
-      expect(site.formatted_threshold_for_response).to eq("50")
+      expect(site.formatted_threshold_for_referral).to eq("50")
     end
   end
 
