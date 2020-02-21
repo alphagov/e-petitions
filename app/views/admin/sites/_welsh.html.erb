@@ -1,7 +1,7 @@
 <%= hidden_field_tag :tab, "welsh" %>
 
 <%= form_row for: [form.object, :title_cy] do %>
-  <%= form.label :title_en, "Title", class: "form-label" %>
+  <%= form.label :title_cy, "Title", class: "form-label" %>
   <%= error_messages_for_field @site, :title_cy %>
   <%= form.text_field :title_cy, tabindex: increment, maxlength: 50, class: "form-control" %>
 <% end %>
