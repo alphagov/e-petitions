@@ -96,7 +96,7 @@ Feature: Suzie views a petition
   Scenario: Suzie views a petition which will not be debated
     Given a petition "Spend more money on Defence" with a negative debate outcome
     When I view the petition
-    Then I should see "The Petitions Committee decided not to debate this petition"
+    Then I should see "The Petitions Committee decided not to refer this petition for a debate"
 
   Scenario: Suzie views a petition which was debated yesterday
     Given the date is the "27/10/2015"

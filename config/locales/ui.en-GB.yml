@@ -115,8 +115,8 @@ en-GB:
         heading: This petition is gathering support
         supporters_needed_html: "%{creator_name}’s petition needs %{n_sponsors} supporters before we will check that it meets the %{standards_link} and publish it."
         try_again_later: Please try again in a few days.
-      closed_due_to_election: This petition closed early because of a General Election
-      committee_decided_not_to_debate: The Petitions Committee decided not to debate this petition
+      closed_due_to_election: This petition closed early because of a Senedd election
+      committee_decided_not_to_debate: The Petitions Committee decided not to refer this petition for a debate
       created_by: Created by
       date_closed: Date closed
       date_submitted: Date submitted
@@ -131,13 +131,13 @@ en-GB:
       need_sponsors_later: Later on, you'll need email addresses for %{count} supporters to get your petition started
       need_sponsors_later_heading: Just so you know
       notice_rejected: This petition was rejected
-      senedd_debated_on: Senedd debated this petition on %{date}
-      senedd_debated_topic: Senedd debated this topic
-      senedd_will_debate: Senedd will debate this petition
-      senedd_will_debate_on: Senedd will debate this petition on %{date}.
-      senedd_debate_description: Senedd considers all petitions that get more than %{threshold} signatures for a debate
-      senedd_debate_heading: Senedd will consider this for a debate
       other_senedd_business: Other Senedd business
+      senedd_debated_on: The Senedd debated this petition on %{date}
+      senedd_debated_topic: The Senedd debated this topic
+      senedd_will_debate: The Senedd will debate this petition
+      senedd_will_debate_on: The Senedd will debate this petition on %{date}.
+      senedd_debate_description: The Petitions Committee considers all petitions that get more than %{threshold} signatures for a debate
+      senedd_debate_heading: The Petitions Committee will consider this for a debate
       petition_closed_notice: This petition is closed
       petitions_run_6_months: Petitions can collect signatures for a maximum of 6 months
       petition_duration: This petition ran for %{duration}
@@ -194,8 +194,8 @@ en-GB:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
         referred: Referred to the committee (%{quantity})
-        debated: Debated in the Senedd (%{quantity})
-        not_debated: Not debated in the Senedd (%{quantity})
+        debated: Debated in the Senedd (%{quantity})
+        not_debated: Not debated in the Senedd (%{quantity})
         completed: Completed petitions (%{quantity})
         rejected: Rejected petitions (%{quantity})
       moderation_info:
@@ -262,7 +262,7 @@ en-GB:
             <input type="submit" name="move_back" value="Go back and make changes" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and make changes">
           submit_warning_html: |-
             <p class="secondary">You can’t change your petition after this point.</p>
-            <p class="secondary">If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
+            <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
             <p class="secondary">Published petitions can only be removed from the site with the agreement of the Petitions Committee.</p>
       local:
         all:
@@ -364,7 +364,7 @@ en-GB:
           read_html: Read the transcript at %{link}
           link: senedd.wales
         research:
-          read_html: Read the research at %{link}
+          read_html: Find details of the petition at %{link}
           link: senedd.wales
       referred_petitions:
         none_referred: No petitions have been referred to the Petitions Committee yet
@@ -428,14 +428,14 @@ en-GB:
           phone:
             heading: Phone
             body_html: |-
-              <p>Phone calls are handled by the Parliament Enquiry Service.</p>
+              <p>Phone calls are handled by the Senedd Contact Centre.</p>
 
-              <p>They can help you to understand how Parliament handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+              <p>They can help you to understand how the Senedd handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
 
               <ul>
-                <li>Telephone: <a href="tel:+448001124272">0800 112 4272</a> (Freephone) or <a href="tel:+442072194272">020 7219 4272</a></li>
-                <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+442072194272">020 7219 4272</a></li>
-                <li>Monday to Friday, 10am&ndash;12pm and 2pm&ndash;4pm</li>
+                <li>Telephone: <a href="tel:+443002006565">0300 200 6565</a> (local rate) or SMS: <a href="tel:+447970493958">07970 493958</a></li>
+                <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+443002006565">0300 200 6565</a></li>
+                <li>Monday to Friday, 08:30am&ndash;17:30</li>
               </ul>
       thanks:
         heading: Your feedback has been sent

@@ -171,7 +171,7 @@ en-GB:
       link_titles:
         video_url: "Watch the debate"
         transcript_url: "Read the transcript"
-        debate_pack_url: "Read the research"
+        debate_pack_url: "Find details of the petition"
 
     pagination:
       previous_html: |-

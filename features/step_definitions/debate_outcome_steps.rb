@@ -28,7 +28,7 @@ Then(/^I should see links to the transcript, video and research$/) do
   within :css, '.debate-outcome' do
     expect(page).to have_link('Watch the debate', href: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True')
     expect(page).to have_link('Read the transcript', href: 'https://record.assembly.wales/Plenary/5667#A51756')
-    expect(page).to have_link('Read the research', href: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667')
+    expect(page).to have_link('Find details of the petition', href: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667')
   end
 end
 
