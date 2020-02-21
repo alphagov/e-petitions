@@ -1,4 +1,4 @@
-<h2 class="petition-action-heading">Other business</h2>
+<h2 class="petition-action-heading">Other Senedd business</h2>
 
 <% if petition.emails.any?(&:persisted?) %>
   <table class="petition-list petition-emails">
@@ -14,7 +14,7 @@
           <td><%= email.subject %></td>
           <td>
             <%= button_to 'Edit', edit_admin_petition_email_path(petition, email), method: :get, class: 'button' %>
-            <%= button_to 'Delete', admin_petition_email_path(petition, email), method: :delete, class: 'button-warning', data: { confirm: 'Delete other business?' } %>
+            <%= button_to 'Delete', admin_petition_email_path(petition, email), method: :delete, class: 'button-warning', data: { confirm: 'Delete other Senedd business?' } %>
           </td>
         </tr>
       <% end %>

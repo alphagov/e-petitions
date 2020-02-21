@@ -141,7 +141,7 @@ Given(/^a moderator updates the petition activity$/) do
     Given I am logged in as a moderator
     And I view all petitions
     And I follow "#{@petition.action}"
-    And I follow "Other business"
+    And I follow "Other Senedd business"
     And I fill in "Subject" with "Get ready"
     And I fill in "Body" with "Senedd here it comes"
     And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"

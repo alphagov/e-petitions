@@ -131,13 +131,13 @@ en-GB:
       need_sponsors_later: Later on, you'll need email addresses for %{count} supporters to get your petition started
       need_sponsors_later_heading: Just so you know
       notice_rejected: This petition was rejected
-      other_business: Other business
       senedd_debated_on: Senedd debated this petition on %{date}
       senedd_debated_topic: Senedd debated this topic
       senedd_will_debate: Senedd will debate this petition
       senedd_will_debate_on: Senedd will debate this petition on %{date}.
       senedd_debate_description: Senedd considers all petitions that get more than %{threshold} signatures for a debate
       senedd_debate_heading: Senedd will consider this for a debate
+      other_senedd_business: Other Senedd business
       petition_closed_notice: This petition is closed
       petitions_run_6_months: Petitions can collect signatures for a maximum of 6 months
       petition_duration: This petition ran for %{duration}

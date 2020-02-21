@@ -368,7 +368,7 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
-Given(/^a petition "(.*?)" has other business$/) do |petition_action|
+Given(/^a petition "(.*?)" has other Senedd business$/) do |petition_action|
   @petition = FactoryBot.create(:open_petition, action: petition_action)
   @email = FactoryBot.create(:petition_email,
     petition: @petition,
@@ -377,9 +377,9 @@ Given(/^a petition "(.*?)" has other business$/) do |petition_action|
   )
 end
 
-Then(/^I should see the other business items$/) do
+Then(/^I should see the other Senedd business items$/) do
   steps %Q(
-    Then I should see "Other business"
+    Then I should see "Other Senedd business"
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )

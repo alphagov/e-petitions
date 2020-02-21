@@ -321,7 +321,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
             it 'tells the moderator that their changes were saved' do
               do_post
-              expect(flash[:notice]).to eq 'Created other business successfully'
+              expect(flash[:notice]).to eq 'Created other Senedd business successfully'
             end
 
             it 'stores the supplied email details in the db' do
@@ -841,7 +841,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
             it 'tells the moderator that their changes were saved' do
               do_patch
-              expect(flash[:notice]).to eq 'Updated other business successfully'
+              expect(flash[:notice]).to eq 'Updated other Senedd business successfully'
             end
 
             it 'stores the supplied email details in the db' do
@@ -1155,7 +1155,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
           it 'tells the moderator that the record was deleted' do
             do_delete
-            expect(flash[:notice]).to eq 'Deleted other business successfully'
+            expect(flash[:notice]).to eq 'Deleted other Senedd business successfully'
           end
         end
 
@@ -1171,7 +1171,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
 
           it 'tells the moderator to contact support' do
             do_delete
-            expect(flash[:notice]).to eq 'Unable to delete other business - please contact support'
+            expect(flash[:notice]).to eq 'Unable to delete other Senedd business - please contact support'
           end
         end
       end

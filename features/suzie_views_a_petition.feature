@@ -70,15 +70,15 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should not see the petition creator
 
-  Scenario: Suzie does not see information about other business when there is none
+  Scenario: Suzie does not see information about other Senedd business when there is none
     Given an open petition "Ban Badger Baiting"
     When I view the petition
-    Then I should not see "Other business"
+    Then I should not see "Other Senedd business"
 
-  Scenario: Suzie sees information about other business when there is some
-    Given a petition "Ban Badger Baiting" has other business
+  Scenario: Suzie sees information about other Senedd business when there is some
+    Given a petition "Ban Badger Baiting" has other Senedd business
     When I view the petition
-    Then I should see the other business items
+    Then I should see the other Senedd business items
 
   Scenario: Suzie sees information about the outcomes when viewing a debated petition
     Given a petition "Ban Badger Baiting" has been debated 2 days ago
