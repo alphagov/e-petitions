@@ -40,8 +40,26 @@ RSpec.describe Petition, type: :model do
   end
 
   context "validations" do
-    it { is_expected.to validate_presence_of(:action).with_message(/must be completed/) }
-    it { is_expected.to validate_presence_of(:background).with_message(/must be completed/) }
+    %i[en-GB cy-GB].each do |locale|
+      context "when editing #{locale}" do
+        subject { Petition.new(editing: locale) }
+        around(:example) {|ex| I18n.with_locale(locale) { ex.run }}
+        it { is_expected.to validate_presence_of(:action) }
+        it { is_expected.to validate_presence_of(:background) }
+        it { is_expected.to validate_length_of(:action).is_at_most(100) }
+        it { is_expected.to validate_length_of(:background).is_at_most(500) }
+        it { is_expected.to validate_length_of(:additional_details).is_at_most(1100) }
+      end
+    end
+
+    context "when not editing" do
+      it { is_expected.not_to validate_presence_of(:action) }
+      it { is_expected.not_to validate_presence_of(:background) }
+      it { is_expected.not_to validate_length_of(:action).is_at_most(100) }
+      it { is_expected.not_to validate_length_of(:background).is_at_most(500) }
+      it { is_expected.not_to validate_length_of(:additional_details).is_at_most(1100) }
+    end
+
     it { is_expected.to validate_presence_of(:creator).with_message(/must be completed/) }
 
     it { is_expected.to have_db_column(:locale).of_type(:string).with_options(limit: 7, null: false, default: "en-GB") }
@@ -53,9 +71,6 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_db_column(:additional_details_cy).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }
 
-    it { is_expected.to validate_length_of(:action).is_at_most(100) }
-    it { is_expected.to validate_length_of(:background).is_at_most(500) }
-    it { is_expected.to validate_length_of(:additional_details).is_at_most(1100) }
     it { is_expected.to validate_length_of(:committee_note).is_at_most(800) }
 
     it { is_expected.to validate_presence_of(:state).with_message("State '' not recognised") }

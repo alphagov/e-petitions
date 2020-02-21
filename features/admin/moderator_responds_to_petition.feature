@@ -15,7 +15,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator edits petition before publishing
     Given I am logged in as a moderator
     And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
-    And I follow "Edit petition"
+    And I follow "English"
     Then I am on the admin petition edit details page for "wee need to save our plaanet"
     And the markup should be valid
     And the "Action" field should contain "wee need to save our plaanet"
@@ -30,10 +30,20 @@ Feature: Moderator respond to petition
     And I should see "Reduce pollution"
     And I should see "Enforce Kyoto Protocol in more countries"
 
+  Scenario: Moderator translates petition
+    Given I am logged in as a moderator
+    And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
+    And I follow "Welsh"
+    And I fill in "Action" with "Mae angen i ni achub ein planed"
+    And I fill in "Background" with "Lleihau llygredd"
+    And I fill in "Additional details" with "Gorfodi Protocol Kyoto mewn mwy o wledydd"
+    And I press "Save"
+    Then I am on the admin petition page for "wee need to save our plaanet"
+
   Scenario: Moderator edits and tries to save an invalid petition
     Given I am logged in as a moderator
     And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
-    And I follow "Edit petition"
+    And I follow "English"
     Then I fill in "Action" with ""
     And I fill in "Background" with ""
     And I fill in "Additional details" with ""
@@ -44,7 +54,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator cancel editing petition
     Given I am logged in as a moderator
     And I visit a sponsored petition with action: "Blah", that has background: "Blah" and additional details: "Blah"
-    And I follow "Edit petition"
+    And I follow "English"
     Then I am on the admin petition edit details page for "Blah"
     When I follow "Cancel"
     Then I am on the admin petition page for "Blah"

@@ -86,10 +86,36 @@ class Petition < ActiveRecord::Base
   has_many :trending_ips, dependent: :delete_all
   has_many :trending_domains, dependent: :delete_all
 
-  validates :action, presence: true, length: { maximum: 100, allow_blank: true }
-  validates :background, presence: true, length: { maximum: 500, allow_blank: true }
-  # allow extra 100 chars to account for carriage returns
-  validates :additional_details, length: { maximum: 1100, allow_blank: true }
+  Translation = Struct.new(:petition, :locale) do
+    %i[action background additional_details].each do |name|
+      define_method name do
+        translated_method(name)
+      end
+    end
+
+    private
+
+    def suffix
+      locale == :"cy-GB" ? "cy" : "en"
+    end
+
+    def translated_method(name)
+      petition.public_send(:"#{name}_#{suffix}").to_s
+    end
+  end
+
+  attr_accessor :editing
+
+  validate if: :editing do
+    t = Translation.new(self, editing)
+    errors.add :action, :blank unless t.action.present?
+    errors.add :action, :too_long, count: 100 if t.action.length > 100
+    errors.add :background, :blank unless t.background.present?
+    # allow extra characters to account for carriage returns
+    errors.add :background, :too_long, count: 500 if t.background.length > 500
+    errors.add :additional_details, :too_long, count: 1100 if t.additional_details.length > 1100
+  end
+
   validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true

@@ -5,24 +5,39 @@
   <div class="column-two-thirds extra-gutter">
     <h2 class="petition-action-heading">Edit petition</h2>
 
+    <p class="tabs">
+      <% if petition_locale == :"en-GB" %>
+        English | <%= link_to "Welsh", admin_petition_details_path(locale: "cy-GB") %>
+      <% else %>
+        <%= link_to "English", admin_petition_details_path(locale: "en-GB") %> | Welsh
+      <% end %>
+    </p>
+
     <%= form_for @petition, url: admin_petition_details_path(@petition), method: :patch do |f| %>
+      <%= hidden_field_tag :locale, petition_locale %>
 
       <%= form_row for: [f.object, :action] do %>
         <%= f.label :action, class: 'form-label' %>
         <%= error_messages_for_field @petition, :action %>
-        <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+        <% I18n.with_locale petition_locale do %>
+          <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+        <% end %>
       <% end %>
 
       <%= form_row for: [f.object, :background] do %>
         <%= f.label :background, class: 'form-label' %>
         <%= error_messages_for_field @petition, :background %>
-        <%= f.text_area :background, tabindex: increment, rows: 5, class: 'form-control' %>
+        <% I18n.with_locale petition_locale do %>
+          <%= f.text_area :background, tabindex: increment, rows: 5, class: 'form-control' %>
+        <% end %>
       <% end %>
 
       <%= form_row for: [f.object, :additional_details] do %>
         <%= f.label :additional_details, class: 'form-label' %>
         <%= error_messages_for_field @petition, :additional_details %>
-        <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
+        <% I18n.with_locale petition_locale do %>
+          <%= f.text_area :additional_details, tabindex: increment, rows: 7, class: 'form-control' %>
+        <% end %>
       <% end %>
 
       <%= form_row for: [@petition.creator, :name] do %>
@@ -48,9 +63,7 @@
       <% end %>
 
       <%= f.submit 'Save', class: 'button' %>
-
       <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
-
     <% end %>
   </div>
 

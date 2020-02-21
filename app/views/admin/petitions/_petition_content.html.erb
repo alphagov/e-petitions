@@ -23,7 +23,9 @@
 <% end %>
 
 <p class="edit-petition-link">
-  <%= link_to 'Edit petition', admin_petition_details_path(@petition) %>
+  Edit petition:
+  <%= link_to 'English', admin_petition_details_path(@petition, locale: "en-GB") %> |
+  <%= link_to 'Welsh', admin_petition_details_path(@petition, locale: "cy-GB") %>
 </p>
 
 <% if @petition.rejected? or @petition.hidden? -%>
