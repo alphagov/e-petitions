@@ -18,11 +18,11 @@ RSpec.describe Constituency::ApiQuery, type: :model do
     context "when the request is successful" do
       context "and an invalid postcode is supplied" do
         before do
-          stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+          stub_api_request_for("CF991ZZ").to_return(api_response(:ok, "no_results"))
         end
 
         it "returns an empty array" do
-          expect(query.fetch("SW149RQ")).to eq([])
+          expect(query.fetch("CF991ZZ")).to eq([])
         end
       end
 

@@ -893,15 +893,13 @@ RSpec.describe Invalidation, type: :model do
 
       context "when filtering by location_code" do
         let!(:petition) { FactoryBot.create(:open_petition) }
-        let!(:united_kingdom) { FactoryBot.create(:location, code: "GB", name: "United Kingdom") }
-        let!(:australia) { FactoryBot.create(:location, code: "AU", name: "Australia") }
-        let!(:signature_1) { FactoryBot.create(:validated_signature, location_code: "GB", petition: petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, location_code: "GB-WLS", petition: petition) }
         let!(:signature_2) { FactoryBot.create(:validated_signature, location_code: "AU", petition: petition) }
-        let!(:signature_3) { FactoryBot.create(:pending_signature, location_code: "GB", petition: petition) }
-        let!(:signature_4) { FactoryBot.create(:invalidated_signature, location_code: "GB", petition: petition) }
-        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, location_code: "GB", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, location_code: "GB-WLS", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, location_code: "GB-WLS", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, location_code: "GB-WLS", petition: petition) }
 
-        subject { FactoryBot.create(:invalidation, location_code: "GB") }
+        subject { FactoryBot.create(:invalidation, location_code: "GB-WLS") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)

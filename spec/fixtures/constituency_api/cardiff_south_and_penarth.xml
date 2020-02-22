@@ -1,0 +1,39 @@
+<Constituencies>
+  <Constituency>
+    <Constituency_Id>3391</Constituency_Id>
+    <Name>Cardiff South and Penarth</Name>
+    <ONSCode>W07000080</ONSCode>
+    <RepresentingMembers>
+      <RepresentingMember>
+        <Member_Id>4264</Member_Id>
+        <Member>Stephen Doughty MP</Member>
+        <StartDate>2019-12-12T00:00:00</StartDate>
+        <EndDate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="true"/>
+      </RepresentingMember>
+      <RepresentingMember>
+        <Member_Id>4264</Member_Id>
+        <Member>Stephen Doughty MP</Member>
+        <StartDate>2017-06-08T00:00:00</StartDate>
+        <EndDate>2019-11-06T00:00:00</EndDate>
+      </RepresentingMember>
+      <RepresentingMember>
+        <Member_Id>4264</Member_Id>
+        <Member>Stephen Doughty MP</Member>
+        <StartDate>2015-05-07T00:00:00</StartDate>
+        <EndDate>2017-05-03T00:00:00</EndDate>
+      </RepresentingMember>
+      <RepresentingMember>
+        <Member_Id>4264</Member_Id>
+        <Member>Stephen Doughty MP</Member>
+        <StartDate>2012-11-15T00:00:00</StartDate>
+        <EndDate>2015-03-30T00:00:00</EndDate>
+      </RepresentingMember>
+      <RepresentingMember>
+        <Member_Id>562</Member_Id>
+        <Member>Rt Hon Alun Michael</Member>
+        <StartDate>2010-05-06T00:00:00</StartDate>
+        <EndDate>2012-10-22T00:00:00</EndDate>
+      </RepresentingMembers>
+    </RepresentingMember>
+  </Constituency>
+</Constituencies>

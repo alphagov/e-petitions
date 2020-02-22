@@ -22,12 +22,12 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
     context "when the postcode is invalid" do
       before do
-        expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(nil)
-        get :index, params: { postcode: "sw1a 1aa" }
+        expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(nil)
+        get :index, params: { postcode: "cf99 1na" }
       end
 
       it "assigns the sanitized postcode" do
-        expect(assigns(:postcode)).to eq("SW1A1AA")
+        expect(assigns(:postcode)).to eq("CF991NA")
       end
 
       it "responds successfully" do

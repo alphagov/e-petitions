@@ -186,7 +186,7 @@ class SignaturesController < LocalizedController
   end
 
   def signature_params_for_new
-    { location_code: "GB" }
+    { location_code: "GB-WLS" }
   end
 
   def signature_params

@@ -1,0 +1,414 @@
+cy-GB:
+  priority_countries:
+    - ["Cymru", "GB-WLS"]
+    - ["Lloegr", "GB-ENG"]
+    - ["Yr Alban", "GB-SCT"]
+    - ["Gogledd Iwerddon", "GB-NIR"]
+
+  countries:
+    - ["Ynysoedd Falkland", "FK"]
+    - ["Gibraltar", "GI"]
+    - ["Guernsey", "GG"]
+    - ["Ynys Manaw", "IM"]
+    - ["Jersey", "JE"]
+    - ["Affganistan", "AF"]
+    - ["Albania", "AL"]
+    - ["Algeria", "DZ"]
+    - ["Andorra", "AD"]
+    - ["Angola", "AO"]
+    - ["Antigua a Barbuda", "AG"]
+    - ["Yr Ariannin", "AR"]
+    - ["Armenia", "AM"]
+    - ["Awstralia", "AU"]
+    - ["Awstria", "AT"]
+    - ["Azerbaijan", "AZ"]
+    - ["Bahrain", "BH"]
+    - ["Bangladesh", "BD"]
+    - ["Barbados", "BB"]
+    - ["Belarws", "BY"]
+    - ["Gwlad Belg", "BE"]
+    - ["Belize", "BZ"]
+    - ["Benin", "BJ"]
+    - ["Bhutan", "BT"]
+    - ["Bolifia", "BO"]
+    - ["Bosnia-Herzegovina", "BA"]
+    - ["Botswana", "BW"]
+    - ["Brasil", "BR"]
+    - ["Brunei", "BN"]
+    - ["Bwlgaria", "BG"]
+    - ["Burkina Faso", "BF"]
+    - ["Burundi", "BI"]
+    - ["Cambodia", "KH"]
+    - ["Camerŵn", "CM"]
+    - ["Canada", "CA"]
+    - ["Cape Verde", "CV"]
+    - ["Gweriniaeth Canolbarth Affrica", "CF"]
+    - ["Chad", "TD"]
+    - ["Chile", "CL"]
+    - ["Tsieina", "CN"]
+    - ["Colombia", "CO"]
+    - ["Comoros", "KM"]
+    - ["Congo", "CG"]
+    - ["Congo (Gweriniaeth Ddemocrataidd) ", "CD"]
+    - ["Costa Rica", "CR"]
+    - ["Croatia", "HR"]
+    - ["Cuba", "CU"]
+    - ["Cyprus", "CY"]
+    - ["Tsiecia ", "CZ"]
+    - ["Denmarc", "DK"]
+    - ["Djibouti", "DJ"]
+    - ["Dominica", "DM"]
+    - ["Y Weriniaeth Ddominicaidd", "DO"]
+    - ["Dwyrain Timor", "TL"]
+    - ["Ecuador", "EC"]
+    - ["Yr Aifft", "EG"]
+    - ["El Salvador", "SV"]
+    - ["Guinea Gyhydeddol", "GQ"]
+    - ["Eritrea", "ER"]
+    - ["Estonia", "EE"]
+    - ["Eswatini", "SZ"]
+    - ["Ethiopia", "ET"]
+    - ["Ffiji", "FJ"]
+    - ["Y Ffindir", "FI"]
+    - ["Ffrainc", "FR"]
+    - ["Gabon", "GA"]
+    - ["Georgia", "GE"]
+    - ["Yr Almaen", "DE"]
+    - ["Ghana", "GH"]
+    - ["Gwlad Groeg", "GR"]
+    - ["Grenada", "GD"]
+    - ["Guatemala", "GT"]
+    - ["Guinea", "GN"]
+    - ["Guinea-Bissau", "GW"]
+    - ["Guyana", "GY"]
+    - ["Haïti", "HT"]
+    - ["Honduras", "HN"]
+    - ["Hwngari", "HU"]
+    - ["Gwlad yr Iâ", "IS"]
+    - ["India", "IN"]
+    - ["Indonesia", "ID"]
+    - ["Iran", "IR"]
+    - ["Irac", "IQ"]
+    - ["Iwerddon", "IE"]
+    - ["Israel", "IL"]
+    - ["Yr Eidal", "IT"]
+    - ["Côte d'Ivoire", "CI"]
+    - ["Jamaica", "JM"]
+    - ["Japan", "JP"]
+    - ["Gwlad yr Iorddonen", "JO"]
+    - ["Kazakhstan", "KZ"]
+    - ["Kenya", "KE"]
+    - ["Kiribati", "KI"]
+    - ["Kosovo", "XK"]
+    - ["Kuwait", "KW"]
+    - ["Kyrgyzstan", "KG"]
+    - ["Laos", "LA"]
+    - ["Latfia", "LV"]
+    - ["Libanus", "LB"]
+    - ["Lesotho", "LS"]
+    - ["Liberia", "LR"]
+    - ["Libya", "LY"]
+    - ["Liechtenstein", "LI"]
+    - ["Lithiwania", "LT"]
+    - ["Lwcsembwrg", "LU"]
+    - ["Madagascar", "MG"]
+    - ["Malawi", "MW"]
+    - ["Malaysia", "MY"]
+    - ["Maldives", "MV"]
+    - ["Mali", "ML"]
+    - ["Malta", "MT"]
+    - ["Ynysoedd Marshall", "MH"]
+    - ["Ynysoedd Marshall", "MH"]
+    - ["Mauritania", "MR"]
+    - ["Mauritius", "MU"]
+    - ["Mecsico", "MX"]
+    - ["Micronesia", "FM"]
+    - ["Moldofa", "MD"]
+    - ["Monaco", "MC"]
+    - ["Mongolia", "MN"]
+    - ["Montenegro", "ME"]
+    - ["Morocco", "MA"]
+    - ["Mozambique", "MZ"]
+    - ["Myanmar (Burma)", "MM"]
+    - ["Namibia", "NA"]
+    - ["Nauru", "NR"]
+    - ["Nepal", "NP"]
+    - ["Yr Iseldiroedd", "NL"]
+    - ["Seland Newydd", "NZ"]
+    - ["Nicaragua", "NI"]
+    - ["Niger", "NE"]
+    - ["Nigeria", "NG"]
+    - ["Gogledd Korea", "KP"]
+    - ["Gogledd Macedonia", "MK"]
+    - ["Norwy", "NO"]
+    - ["Oman", "OM"]
+    - ["Pacistan", "PK"]
+    - ["Palau", "PW"]
+    - ["Panama", "PA"]
+    - ["Papua Guinea Newydd", "PG"]
+    - ["Paraguay", "PY"]
+    - ["Periw", "PE"]
+    - ["Pilipinas (Ynysoedd Philippines)", "PH"]
+    - ["Gwlad Pwyl", "PL"]
+    - ["Portiwgal", "PT"]
+    - ["Qatar", "QA"]
+    - ["Rwmania", "RO"]
+    - ["Rwsia", "RU"]
+    - ["Rwanda", "RW"]
+    - ["Samoa", "WS"]
+    - ["San Marino", "SM"]
+    - ["São Tomé a Príncipe", "ST"]
+    - ["Saudi Arabia", "SA"]
+    - ["Senegal", "SN"]
+    - ["Serbia", "RS"]
+    - ["Seychelles", "SC"]
+    - ["Sierra Leone", "SL"]
+    - ["Singapôr", "SG"]
+    - ["Slofacia", "SK"]
+    - ["Slofenia", "SI"]
+    - ["Ynysoedd Solomon", "SB"]
+    - ["Somalia", "SO"]
+    - ["De Affrica", "ZA"]
+    - ["De Korea", "KR"]
+    - ["De Sudan", "SS"]
+    - ["Sbaen", "ES"]
+    - ["Sri Lanka", "LK"]
+    - ["St Kitts a Nevis", "KN"]
+    - ["St Lucia", "LC"]
+    - ["St Vincent", "VC"]
+    - ["Sudan", "SD"]
+    - ["Surinam", "SR"]
+    - ["Sweden", "SE"]
+    - ["Y Swistir", "CH"]
+    - ["Syria", "SY"]
+    - ["Tajikistan", "TJ"]
+    - ["Tanzania", "TZ"]
+    - ["Gwlad Thai", "TH"]
+    - ["Y Bahamas", "BS"]
+    - ["Gambia", "GM"]
+    - ["Togo", "TG"]
+    - ["Tonga", "TO"]
+    - ["Trinidad a Tobago", "TT"]
+    - ["Tunisia", "TN"]
+    - ["Twrci", "TR"]
+    - ["Turkmenistan", "TM"]
+    - ["Tuvalu", "TV"]
+    - ["Uganda", "UG"]
+    - ["Ukrain", "UA"]
+    - ["Yr Emiraethau Arabaidd Unedig", "AE"]
+    - ["Unol Daleithiau America", "US"]
+    - ["Uruguay", "UY"]
+    - ["Uzbekistan", "UZ"]
+    - ["Vanuatu", "VU"]
+    - ["Dinas y Fatican", "VA"]
+    - ["Venezuela", "VE"]
+    - ["Fiet-nam", "VN"]
+    - ["Yemen", "YE"]
+    - ["Zambia", "ZM"]
+    - ["Zimbabwe", "ZW"]
+
+  country_name:
+    "GB": "Y Deyrnas Unedig"
+    "GB-WLS": "Cymru"
+    "GB-ENG": "Lloegr"
+    "GB-SCT": "Yr Alban"
+    "GB-NIR": "Gogledd Iwerddon"
+    "FK": "Ynysoedd Falkland"
+    "GI": "Gibraltar"
+    "GG": "Guernsey"
+    "IM": "Ynys Manaw"
+    "JE": "Jersey"
+    "AF": "Affganistan"
+    "AL": "Albania"
+    "DZ": "Algeria"
+    "AD": "Andorra"
+    "AO": "Angola"
+    "AG": "Antigua a Barbuda"
+    "AR": "Yr Ariannin"
+    "AM": "Armenia"
+    "AU": "Awstralia"
+    "AT": "Awstria"
+    "AZ": "Azerbaijan"
+    "BH": "Bahrain"
+    "BD": "Bangladesh"
+    "BB": "Barbados"
+    "BY": "Belarws"
+    "BE": "Gwlad Belg"
+    "BZ": "Belize"
+    "BJ": "Benin"
+    "BT": "Bhutan"
+    "BO": "Bolifia"
+    "BA": "Bosnia-Herzegovina"
+    "BW": "Botswana"
+    "BR": "Brasil"
+    "BN": "Brunei"
+    "BG": "Bwlgaria"
+    "BF": "Burkina Faso"
+    "BI": "Burundi"
+    "KH": "Cambodia"
+    "CM": "Camerŵn"
+    "CA": "Canada"
+    "CV": "Cape Verde"
+    "CF": "Gweriniaeth Canolbarth Affrica"
+    "TD": "Chad"
+    "CL": "Chile"
+    "CN": "Tsieina"
+    "CO": "Colombia"
+    "KM": "Comoros"
+    "CG": "Congo"
+    "CD": "Congo (Gweriniaeth Ddemocrataidd)"
+    "CR": "Costa Rica"
+    "HR": "Croatia"
+    "CU": "Cuba"
+    "CY": "Cyprus"
+    "CZ": "Tsiecia"
+    "DK": "Denmarc"
+    "DJ": "Djibouti"
+    "DM": "Dominica"
+    "DO": "Y Weriniaeth Ddominicaidd"
+    "TL": "Dwyrain Timor"
+    "EC": "Ecuador"
+    "EG": "Yr Aifft"
+    "SV": "El Salvador"
+    "GQ": "Guinea Gyhydeddol"
+    "ER": "Eritrea"
+    "EE": "Estonia"
+    "SZ": "Eswatini"
+    "ET": "Ethiopia"
+    "FJ": "Ffiji"
+    "FI": "Y Ffindir"
+    "FR": "Ffrainc"
+    "GA": "Gabon"
+    "GE": "Georgia"
+    "DE": "Yr Almaen"
+    "GH": "Ghana"
+    "GR": "Gwlad Groeg"
+    "GD": "Grenada"
+    "GT": "Guatemala"
+    "GN": "Guinea"
+    "GW": "Guinea-Bissau"
+    "GY": "Guyana"
+    "HT": "Haïti"
+    "HN": "Honduras"
+    "HU": "Hwngari"
+    "IS": "Gwlad yr Iâ"
+    "IN": "India"
+    "ID": "Indonesia"
+    "IR": "Iran"
+    "IQ": "Irac"
+    "IE": "Iwerddon"
+    "IL": "Israel"
+    "IT": "Yr Eidal"
+    "CI": "Côte d'Ivoire"
+    "JM": "Jamaica"
+    "JP": "Japan"
+    "JO": "Gwlad yr Iorddonen"
+    "KZ": "Kazakhstan"
+    "KE": "Kenya"
+    "KI": "Kiribati"
+    "XK": "Kosovo"
+    "KW": "Kuwait"
+    "KG": "Kyrgyzstan"
+    "LA": "Laos"
+    "LV": "Latfia"
+    "LB": "Libanus"
+    "LS": "Lesotho"
+    "LR": "Liberia"
+    "LY": "Libya"
+    "LI": "Liechtenstein"
+    "LT": "Lithiwania"
+    "LU": "Lwcsembwrg"
+    "MG": "Madagascar"
+    "MW": "Malawi"
+    "MY": "Malaysia"
+    "MV": "Maldives"
+    "ML": "Mali"
+    "MT": "Malta"
+    "MH": "Ynysoedd Marshall"
+    "MR": "Mauritania"
+    "MU": "Mauritius"
+    "MX": "Mecsico"
+    "FM": "Micronesia"
+    "MD": "Moldofa"
+    "MC": "Monaco"
+    "MN": "Mongolia"
+    "ME": "Montenegro"
+    "MA": "Morocco"
+    "MZ": "Mozambique"
+    "MM": "Myanmar (Burma)"
+    "NA": "Namibia"
+    "NR": "Nauru"
+    "NP": "Nepal"
+    "NL": "Yr Iseldiroedd"
+    "NZ": "Seland Newydd"
+    "NI": "Nicaragua"
+    "NE": "Niger"
+    "NG": "Nigeria"
+    "KP": "Gogledd Korea"
+    "MK": "Gogledd Macedonia"
+    "NO": "Norwy"
+    "OM": "Oman"
+    "PK": "Pacistan"
+    "PW": "Palau"
+    "PA": "Panama"
+    "PG": "Papua Guinea Newydd"
+    "PY": "Paraguay"
+    "PE": "Periw"
+    "PH": "Pilipinas (Ynysoedd Philippines)"
+    "PL": "Gwlad Pwyl"
+    "PT": "Portiwgal"
+    "QA": "Qatar"
+    "RO": "Rwmania"
+    "RU": "Rwsia"
+    "RW": "Rwanda"
+    "WS": "Samoa"
+    "SM": "San Marino"
+    "ST": "São Tomé a Príncipe"
+    "SA": "Saudi Arabia"
+    "SN": "Senegal"
+    "RS": "Serbia"
+    "SC": "Seychelles"
+    "SL": "Sierra Leone"
+    "SG": "Singapôr"
+    "SK": "Slofacia"
+    "SI": "Slofenia"
+    "SB": "Ynysoedd Solomon"
+    "SO": "Somalia"
+    "ZA": "De Affrica"
+    "KR": "De Korea"
+    "SS": "De Sudan"
+    "ES": "Sbaen"
+    "LK": "Sri Lanka"
+    "KN": "St Kitts a Nevis"
+    "LC": "St Lucia"
+    "VC": "St Vincent"
+    "SD": "Sudan"
+    "SR": "Surinam"
+    "SE": "Sweden"
+    "CH": "Y Swistir"
+    "SY": "Syria"
+    "TJ": "Tajikistan"
+    "TZ": "Tanzania"
+    "TH": "Gwlad Thai"
+    "BS": "Y Bahamas"
+    "GM": "Gambia"
+    "TG": "Togo"
+    "TO": "Tonga"
+    "TT": "Trinidad a Tobago"
+    "TN": "Tunisia"
+    "TR": "Twrci"
+    "TM": "Turkmenistan"
+    "TV": "Tuvalu"
+    "UG": "Uganda"
+    "UA": "Ukrain"
+    "AE": "Yr Emiraethau Arabaidd Unedig"
+    "US": "Unol Daleithiau America"
+    "UY": "Uruguay"
+    "UZ": "Uzbekistan"
+    "VU": "Vanuatu"
+    "VA": "Dinas y Fatican"
+    "VE": "Venezuela"
+    "VN": "Fiet-nam"
+    "YE": "Yemen"
+    "ZM": "Zambia"
+    "ZW": "Zimbabwe"

@@ -243,8 +243,8 @@ FactoryBot.define do
   factory :signature do
     sequence(:name)  {|n| "Jo Public #{n}" }
     sequence(:email) {|n| "jo#{n}@public.com" }
-    postcode              "SW1A 1AA"
-    location_code         "GB"
+    postcode              "CF99 1NA"
+    location_code         "GB-WLS"
     notify_by_email       "1"
     state                 Signature::VALIDATED_STATE
 
@@ -377,6 +377,17 @@ FactoryBot.define do
       example_postcode "SW1A1AA"
     end
 
+    trait(:cardiff_south_and_penarth) do
+      name "Cardiff South and Penarth"
+      slug "cardiff-south-and-penarth"
+      external_id "3391"
+      ons_code "W07000080"
+      mp_id "4264"
+      mp_name "Stephen Doughty MP"
+      mp_date "2017-06-08"
+      example_postcode "CF991NA"
+    end
+
     england
 
     name { Faker::Address.county }
@@ -392,7 +403,7 @@ FactoryBot.define do
   end
 
   factory :country_petition_journal do
-    location_code "GB"
+    location_code "GB-WLS"
     association :petition
   end
 
@@ -438,19 +449,6 @@ FactoryBot.define do
 
   factory :email_requested_receipt do
     association :petition, factory: :open_petition
-  end
-
-  factory :location do
-    code { Faker::Address.country_code }
-    name { Faker::Address.country }
-
-    trait :pending do
-      start_date { 3.months.from_now }
-    end
-
-    trait :expired do
-      end_date { 2.years.ago }
-    end
   end
 
   factory :feedback do
