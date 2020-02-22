@@ -49,7 +49,7 @@ class Invalidation < ActiveRecord::Base
     end
 
     if location_code?
-      errors.add :location_code, "Location doesn't exist" unless Location.exists?(code: location_code)
+      errors.add :location_code, "Location doesn't exist" unless location_code_exists?(location_code)
     end
 
     if created_before? && created_after?
@@ -190,6 +190,18 @@ class Invalidation < ActiveRecord::Base
 
   private
 
+  def location_code_exists?(code)
+    (priority_country_codes + country_codes).include?(code)
+  end
+
+  def priority_country_codes
+    I18n.t(:priority_countries, default: []).map(&:last)
+  end
+
+  def country_codes
+    I18n.t(:countries, default: []).map(&:last)
+  end
+
   def petition_scope(scope)
     scope.where(petition_id: petition_id)
   end
@@ -261,8 +273,6 @@ class Invalidation < ActiveRecord::Base
   def applied_conditions
     CONDITIONS.select{ |c| read_attribute(c).present? }
   end
-
-  private
 
   def name_index
     table[:name].lower

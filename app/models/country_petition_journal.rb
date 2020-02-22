@@ -1,12 +1,9 @@
 class CountryPetitionJournal < ActiveRecord::Base
   belongs_to :petition
-  belongs_to :location, foreign_key: :location_code, primary_key: :code
 
   validates :petition, presence: true
-  validates :location, presence: true
+  validates :location_code, presence: true, inclusion: { in: :location_codes }
   validates :signature_count, presence: true
-
-  delegate :name, :code, to: :location
 
   class << self
     def for(petition, location_code)
@@ -73,7 +70,27 @@ class CountryPetitionJournal < ActiveRecord::Base
     update_all([sql, count, now])
   end
 
+  def code
+    location_code
+  end
+
+  def name
+    I18n.t(location_code, scope: :country_name)
+  end
+
   private
+
+  def location_codes
+    priority_country_codes + country_codes
+  end
+
+  def priority_country_codes
+    I18n.t(:priority_countries, default: []).map(&:last)
+  end
+
+  def country_codes
+    I18n.t(:countries, default: []).map(&:last)
+  end
 
   def update_all(updates)
     self.class.unscoped.where(id: id).update_all(updates)

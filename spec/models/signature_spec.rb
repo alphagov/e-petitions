@@ -13,7 +13,6 @@ RSpec.describe Signature, type: :model do
 
   before do
     FactoryBot.create(:constituency, :london_and_westminster)
-    FactoryBot.create(:location, code: "GB", name: "United Kingdom")
   end
 
   context "defaults" do
@@ -109,7 +108,7 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the signature is not the creator" do
-        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
         let(:signature) {
@@ -117,7 +116,7 @@ RSpec.describe Signature, type: :model do
             :pending_signature,
             petition: petition,
             constituency_id: "3415",
-            location_code: "GB"
+            location_code: "GB-WLS"
           )
         }
 
@@ -143,7 +142,7 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the signature is invalidated" do
-        let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+        let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
         let(:signature) {
@@ -182,8 +181,8 @@ RSpec.describe Signature, type: :model do
       let!(:petition) { FactoryBot.create(:open_petition) }
       let!(:signature) { petition.signatures.build(attributes) }
       let(:email) { "foo@example.com" }
-      let(:location_code) { "GB" }
-      let(:postcode) { "SW1A 1AA" }
+      let(:location_code) { "GB-WLS" }
+      let(:postcode) { "CF99 1NA" }
 
       let(:attributes) do
         {
@@ -289,17 +288,17 @@ RSpec.describe Signature, type: :model do
 
     describe "postcode" do
       it "requires a postcode for a UK address" do
-        expect(FactoryBot.build(:signature, :postcode => 'SW1A 1AA')).to be_valid
+        expect(FactoryBot.build(:signature, :postcode => 'CF99 1NA')).to be_valid
         expect(FactoryBot.build(:signature, :postcode => '')).not_to be_valid
       end
 
       it "does not require a postcode for non-UK addresses" do
-        expect(FactoryBot.build(:signature, :location_code => "GB", :postcode => '')).not_to be_valid
+        expect(FactoryBot.build(:signature, :location_code => "GB-WLS", :postcode => '')).not_to be_valid
         expect(FactoryBot.build(:signature, :location_code => "US", :postcode => '')).to be_valid
       end
 
       it "checks the format of postcode" do
-        s = FactoryBot.build(:signature, :postcode => 'SW1A1AA')
+        s = FactoryBot.build(:signature, :postcode => 'CF99 1NA')
         expect(s).to have_valid(:postcode)
       end
 
@@ -911,7 +910,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when the signature is not the creator" do
-      let(:country_journal) { CountryPetitionJournal.for(petition, "GB") }
+      let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
       let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
 
       let(:signature) {
@@ -919,7 +918,7 @@ RSpec.describe Signature, type: :model do
           :pending_signature,
           petition: petition,
           constituency_id: "3415",
-          location_code: "GB"
+          location_code: "GB-WLS"
         )
       }
 
@@ -1328,8 +1327,8 @@ RSpec.describe Signature, type: :model do
 
   describe '#validate!' do
     let(:signature) { FactoryBot.create(:pending_signature, attributes) }
-    let(:location_code) { "GB" }
-    let(:postcode) { "SW1A 1AA" }
+    let(:location_code) { "GB-WLS" }
+    let(:postcode) { "CF99 1NA" }
 
     let (:attributes) do
       {
@@ -1414,26 +1413,26 @@ RSpec.describe Signature, type: :model do
       end
 
       context "and the signer is from the UK" do
-        let(:location_code) { "GB" }
+        let(:location_code) { "GB-WLS" }
 
         context "and the postcode is valid" do
-          let(:postcode) { "SW1A 1AA" }
+          let(:postcode) { "CF99 1NA" }
 
           it "calls the Constituency API and sets the constituency_id" do
-            expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_call_original
+            expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_call_original
 
             signature.validate!
 
             expect(signature).to be_validated
-            expect(signature.constituency_id).to eq("3415")
+            expect(signature.constituency_id).to eq("3391")
           end
         end
 
         context "and the postcode is invalid" do
-          let(:postcode) { "SW14 9RQ" }
+          let(:postcode) { "CF99 1ZZ" }
 
           it "calls the Constituency API but doesn't set constituency_id" do
-            expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
+            expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_call_original
 
             signature.validate!
 
@@ -1891,7 +1890,7 @@ RSpec.describe Signature, type: :model do
   describe "#constituency" do
     let(:signature) { FactoryBot.build(:signature, attributes) }
     let(:constituency) { signature.constituency }
-    let(:location_code) { "GB" }
+    let(:location_code) { "GB-WLS" }
 
     let(:attributes) do
       { postcode: postcode, constituency_id: constituency_id }
@@ -1938,14 +1937,14 @@ RSpec.describe Signature, type: :model do
 
 
       context "and the API returns no results" do
-        let(:postcode) { "SW14 9RQ" }
+        let(:postcode) { "CF99 1ZZ" }
 
         before do
-          stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+          stub_api_request_for("CF991ZZ").to_return(api_response(:ok, "no_results"))
         end
 
         it "returns nil" do
-          expect(Constituency).to receive(:find_by_postcode).with("SW149RQ").and_call_original
+          expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_call_original
           expect(constituency).to be_nil
         end
       end
@@ -1966,7 +1965,7 @@ RSpec.describe Signature, type: :model do
 
     context "when the constituency_id is set" do
       let(:constituency_id) { "3415" }
-      let(:postcode) { "SW1A 1AA" }
+      let(:postcode) { "CF99 1NA" }
 
       it "searches the database for the constituency" do
         expect(Constituency).not_to receive(:find_by_postcode)
@@ -2136,7 +2135,7 @@ RSpec.describe Signature, type: :model do
     let(:other_petition) { FactoryBot.create(:open_petition) }
     let(:signature) { petition.signatures.build(attributes) }
     let(:name) { "Suzy Signer" }
-    let(:postcode) { "SW1A 1AA" }
+    let(:postcode) { "CF99 1NA" }
     let(:email) { "foo@example.com" }
 
     let(:attributes) do
@@ -2144,7 +2143,7 @@ RSpec.describe Signature, type: :model do
         name: name,
         email: email,
         postcode: postcode,
-        location_code: "GB"
+        location_code: "GB-WLS"
       }
     end
 
@@ -2159,8 +2158,8 @@ RSpec.describe Signature, type: :model do
         petition.signatures.create!(
           name: "Suzy Signer",
           email: "foo@example.com",
-          postcode: "SW1A 1AA",
-          location_code: "GB"
+          postcode: "CF99 1NA",
+          location_code: "GB-WLS"
         )
       end
 
@@ -2233,15 +2232,15 @@ RSpec.describe Signature, type: :model do
         petition.signatures.create!(
           name: "Suzy Signer",
           email: "foo@example.com",
-          postcode: "SW1A 1AA",
-          location_code: "GB"
+          postcode: "CF99 1NA",
+          location_code: "GB-WLS"
         )
 
         petition.signatures.create!(
           name: "Sam Signer",
           email: "foo@example.com",
-          postcode: "SW1A 1AA",
-          location_code: "GB"
+          postcode: "CF99 1NA",
+          location_code: "GB-WLS"
         )
       end
 
@@ -2269,8 +2268,8 @@ RSpec.describe Signature, type: :model do
       {
         name: "Suzy Signer",
         email: "foo@example.com",
-        postcode: "SW1A 1AA",
-        location_code: "GB"
+        postcode: "CF99 1NA",
+        location_code: "GB-WLS"
       }
     end
 

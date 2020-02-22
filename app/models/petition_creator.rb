@@ -123,7 +123,7 @@ class PetitionCreator
   end
 
   def location_code
-    petition_creator_params[:location_code] || "GB"
+    petition_creator_params[:location_code] || "GB-WLS"
   end
 
   def notify_by_email
@@ -191,7 +191,7 @@ class PetitionCreator
       email_validator.validate(self)
     end
 
-    if location_code == "GB"
+    if location_code.in?(Signature::UK_COUNTRY_CODES)
       errors.add(:postcode, :blank) unless postcode.present?
 
       if postcode.present?

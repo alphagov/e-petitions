@@ -9,7 +9,7 @@ RSpec.describe BackfillConstituenciesJob, type: :job do
         described_class.perform_now
       }.to change {
         signature.reload.constituency_id
-      }.from(nil).to("3415")
+      }.from(nil).to("3391")
     end
   end
 
@@ -34,7 +34,7 @@ RSpec.describe BackfillConstituenciesJob, type: :job do
         described_class.perform_now(id: signature_1.id)
       }.to change {
         signature_2.reload.constituency_id
-      }.from(nil).to("3415")
+      }.from(nil).to("3391")
     end
 
     it "doesn't update those out of scope" do
@@ -55,7 +55,7 @@ RSpec.describe BackfillConstituenciesJob, type: :job do
         described_class.perform_now(since: 1.week.ago)
       }.to change {
         signature_2.reload.constituency_id
-      }.from(nil).to("3415")
+      }.from(nil).to("3391")
     end
 
     it "doesn't update those out of scope" do
@@ -77,7 +77,7 @@ RSpec.describe BackfillConstituenciesJob, type: :job do
         described_class.perform_now(id: signature_2.id, since: 1.week.ago)
       }.to change {
         signature_3.reload.constituency_id
-      }.from(nil).to("3415")
+      }.from(nil).to("3391")
     end
 
     it "doesn't update those out of scope" do

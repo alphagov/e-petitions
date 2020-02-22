@@ -25,7 +25,7 @@ RSpec.describe PostcodeValidator do
     end
 
     describe "with a valid postcode" do
-      let(:postcode) { "SW1A1AA" }
+      let(:postcode) { "CF991NA" }
 
       it "doesn't add an error" do
         expect(errors).to be_empty
@@ -49,7 +49,7 @@ RSpec.describe PostcodeValidator do
     end
 
     describe "with an invalid postcode" do
-      let(:postcode) { "SW1A" }
+      let(:postcode) { "CF99" }
 
       it "adds an error" do
         expect(errors).to include("Postcode not recognised")
@@ -74,7 +74,7 @@ RSpec.describe PostcodeValidator do
     end
 
     describe "with a valid postcode" do
-      let(:postcode) { "SW1A1AA" }
+      let(:postcode) { "CF991NA" }
 
       it "doesn't add an error" do
         expect(errors).to be_empty
@@ -98,7 +98,7 @@ RSpec.describe PostcodeValidator do
     end
 
     describe "with an invalid postcode" do
-      let(:postcode) { "SW1A" }
+      let(:postcode) { "CF99" }
 
       it "adds an error" do
         expect(errors).to include("That postcode is not allowed")

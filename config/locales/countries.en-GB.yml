@@ -1,0 +1,414 @@
+en-GB:
+  priority_countries:
+    - ["Wales", "GB-WLS"]
+    - ["England", "GB-ENG"]
+    - ["Scotland", "GB-SCT"]
+    - ["Northern Ireland", "GB-NIR"]
+  
+  countries:
+    - ["Falkland Islands", "FK"]
+    - ["Gibraltar", "GI"]
+    - ["Guernsey", "GG"]
+    - ["Isle of Man", "IM"]
+    - ["Jersey", "JE"]
+    - ["Afghanistan", "AF"]
+    - ["Albania", "AL"]
+    - ["Algeria", "DZ"]
+    - ["Andorra", "AD"]
+    - ["Angola", "AO"]
+    - ["Antigua and Barbuda", "AG"]
+    - ["Argentina", "AR"]
+    - ["Armenia", "AM"]
+    - ["Australia", "AU"]
+    - ["Austria", "AT"]
+    - ["Azerbaijan", "AZ"]
+    - ["Bahrain", "BH"]
+    - ["Bangladesh", "BD"]
+    - ["Barbados", "BB"]
+    - ["Belarus", "BY"]
+    - ["Belgium", "BE"]
+    - ["Belize", "BZ"]
+    - ["Benin", "BJ"]
+    - ["Bhutan", "BT"]
+    - ["Bolivia", "BO"]
+    - ["Bosnia and Herzegovina", "BA"]
+    - ["Botswana", "BW"]
+    - ["Brazil", "BR"]
+    - ["Brunei", "BN"]
+    - ["Bulgaria", "BG"]
+    - ["Burkina Faso", "BF"]
+    - ["Burundi", "BI"]
+    - ["Cambodia", "KH"]
+    - ["Cameroon", "CM"]
+    - ["Canada", "CA"]
+    - ["Cape Verde", "CV"]
+    - ["Central African Republic", "CF"]
+    - ["Chad", "TD"]
+    - ["Chile", "CL"]
+    - ["China", "CN"]
+    - ["Colombia", "CO"]
+    - ["Comoros", "KM"]
+    - ["Congo", "CG"]
+    - ["Congo (Democratic Republic)", "CD"]
+    - ["Costa Rica", "CR"]
+    - ["Croatia", "HR"]
+    - ["Cuba", "CU"]
+    - ["Cyprus", "CY"]
+    - ["Czechia", "CZ"]
+    - ["Denmark", "DK"]
+    - ["Djibouti", "DJ"]
+    - ["Dominica", "DM"]
+    - ["Dominican Republic", "DO"]
+    - ["East Timor", "TL"]
+    - ["Ecuador", "EC"]
+    - ["Egypt", "EG"]
+    - ["El Salvador", "SV"]
+    - ["Equatorial Guinea", "GQ"]
+    - ["Eritrea", "ER"]
+    - ["Estonia", "EE"]
+    - ["Eswatini", "SZ"]
+    - ["Ethiopia", "ET"]
+    - ["Fiji", "FJ"]
+    - ["Finland", "FI"]
+    - ["France", "FR"]
+    - ["Gabon", "GA"]
+    - ["Georgia", "GE"]
+    - ["Germany", "DE"]
+    - ["Ghana", "GH"]
+    - ["Greece", "GR"]
+    - ["Grenada", "GD"]
+    - ["Guatemala", "GT"]
+    - ["Guinea", "GN"]
+    - ["Guinea-Bissau", "GW"]
+    - ["Guyana", "GY"]
+    - ["Haiti", "HT"]
+    - ["Honduras", "HN"]
+    - ["Hungary", "HU"]
+    - ["Iceland", "IS"]
+    - ["India", "IN"]
+    - ["Indonesia", "ID"]
+    - ["Iran", "IR"]
+    - ["Iraq", "IQ"]
+    - ["Ireland", "IE"]
+    - ["Israel", "IL"]
+    - ["Italy", "IT"]
+    - ["Ivory Coast", "CI"]
+    - ["Jamaica", "JM"]
+    - ["Japan", "JP"]
+    - ["Jordan", "JO"]
+    - ["Kazakhstan", "KZ"]
+    - ["Kenya", "KE"]
+    - ["Kiribati", "KI"]
+    - ["Kosovo", "XK"]
+    - ["Kuwait", "KW"]
+    - ["Kyrgyzstan", "KG"]
+    - ["Laos", "LA"]
+    - ["Latvia", "LV"]
+    - ["Lebanon", "LB"]
+    - ["Lesotho", "LS"]
+    - ["Liberia", "LR"]
+    - ["Libya", "LY"]
+    - ["Liechtenstein", "LI"]
+    - ["Lithuania", "LT"]
+    - ["Luxembourg", "LU"]
+    - ["Madagascar", "MG"]
+    - ["Malawi", "MW"]
+    - ["Malaysia", "MY"]
+    - ["Maldives", "MV"]
+    - ["Mali", "ML"]
+    - ["Malta", "MT"]
+    - ["Marshall Islands", "MH"]
+    - ["Marshall Islands", "MH"]
+    - ["Mauritania", "MR"]
+    - ["Mauritius", "MU"]
+    - ["Mexico", "MX"]
+    - ["Micronesia", "FM"]
+    - ["Moldova", "MD"]
+    - ["Monaco", "MC"]
+    - ["Mongolia", "MN"]
+    - ["Montenegro", "ME"]
+    - ["Morocco", "MA"]
+    - ["Mozambique", "MZ"]
+    - ["Myanmar (Burma)", "MM"]
+    - ["Namibia", "NA"]
+    - ["Nauru", "NR"]
+    - ["Nepal", "NP"]
+    - ["Netherlands", "NL"]
+    - ["New Zealand", "NZ"]
+    - ["Nicaragua", "NI"]
+    - ["Niger", "NE"]
+    - ["Nigeria", "NG"]
+    - ["North Korea", "KP"]
+    - ["North Macedonia", "MK"]
+    - ["Norway", "NO"]
+    - ["Oman", "OM"]
+    - ["Pakistan", "PK"]
+    - ["Palau", "PW"]
+    - ["Panama", "PA"]
+    - ["Papua New Guinea", "PG"]
+    - ["Paraguay", "PY"]
+    - ["Peru", "PE"]
+    - ["Philippines", "PH"]
+    - ["Poland", "PL"]
+    - ["Portugal", "PT"]
+    - ["Qatar", "QA"]
+    - ["Romania", "RO"]
+    - ["Russia", "RU"]
+    - ["Rwanda", "RW"]
+    - ["Samoa", "WS"]
+    - ["San Marino", "SM"]
+    - ["Sao Tome and Principe", "ST"]
+    - ["Saudi Arabia", "SA"]
+    - ["Senegal", "SN"]
+    - ["Serbia", "RS"]
+    - ["Seychelles", "SC"]
+    - ["Sierra Leone", "SL"]
+    - ["Singapore", "SG"]
+    - ["Slovakia", "SK"]
+    - ["Slovenia", "SI"]
+    - ["Solomon Islands", "SB"]
+    - ["Somalia", "SO"]
+    - ["South Africa", "ZA"]
+    - ["South Korea", "KR"]
+    - ["South Sudan", "SS"]
+    - ["Spain", "ES"]
+    - ["Sri Lanka", "LK"]
+    - ["St Kitts and Nevis", "KN"]
+    - ["St Lucia", "LC"]
+    - ["St Vincent", "VC"]
+    - ["Sudan", "SD"]
+    - ["Suriname", "SR"]
+    - ["Sweden", "SE"]
+    - ["Switzerland", "CH"]
+    - ["Syria", "SY"]
+    - ["Tajikistan", "TJ"]
+    - ["Tanzania", "TZ"]
+    - ["Thailand", "TH"]
+    - ["The Bahamas", "BS"]
+    - ["The Gambia", "GM"]
+    - ["Togo", "TG"]
+    - ["Tonga", "TO"]
+    - ["Trinidad and Tobago", "TT"]
+    - ["Tunisia", "TN"]
+    - ["Turkey", "TR"]
+    - ["Turkmenistan", "TM"]
+    - ["Tuvalu", "TV"]
+    - ["Uganda", "UG"]
+    - ["Ukraine", "UA"]
+    - ["United Arab Emirates", "AE"]
+    - ["United States", "US"]
+    - ["Uruguay", "UY"]
+    - ["Uzbekistan", "UZ"]
+    - ["Vanuatu", "VU"]
+    - ["Vatican City", "VA"]
+    - ["Venezuela", "VE"]
+    - ["Vietnam", "VN"]
+    - ["Yemen", "YE"]
+    - ["Zambia", "ZM"]
+    - ["Zimbabwe", "ZW"]
+
+  country_name:
+    "GB": "United Kindom"
+    "GB-WLS": "Wales"
+    "GB-ENG": "England"
+    "GB-SCT": "Scotland"
+    "GB-NIR": "Northern Ireland"
+    "FK": "Falkland Islands"
+    "GI": "Gibraltar"
+    "GG": "Guernsey"
+    "IM": "Isle of Man"
+    "JE": "Jersey"
+    "AF": "Afghanistan"
+    "AL": "Albania"
+    "DZ": "Algeria"
+    "AD": "Andorra"
+    "AO": "Angola"
+    "AG": "Antigua and Barbuda"
+    "AR": "Argentina"
+    "AM": "Armenia"
+    "AU": "Australia"
+    "AT": "Austria"
+    "AZ": "Azerbaijan"
+    "BH": "Bahrain"
+    "BD": "Bangladesh"
+    "BB": "Barbados"
+    "BY": "Belarus"
+    "BE": "Belgium"
+    "BZ": "Belize"
+    "BJ": "Benin"
+    "BT": "Bhutan"
+    "BO": "Bolivia"
+    "BA": "Bosnia and Herzegovina"
+    "BW": "Botswana"
+    "BR": "Brazil"
+    "BN": "Brunei"
+    "BG": "Bulgaria"
+    "BF": "Burkina Faso"
+    "BI": "Burundi"
+    "KH": "Cambodia"
+    "CM": "Cameroon"
+    "CA": "Canada"
+    "CV": "Cape Verde"
+    "CF": "Central African Republic"
+    "TD": "Chad"
+    "CL": "Chile"
+    "CN": "China"
+    "CO": "Colombia"
+    "KM": "Comoros"
+    "CG": "Congo"
+    "CD": "Congo (Democratic Republic)"
+    "CR": "Costa Rica"
+    "HR": "Croatia"
+    "CU": "Cuba"
+    "CY": "Cyprus"
+    "CZ": "Czechia"
+    "DK": "Denmark"
+    "DJ": "Djibouti"
+    "DM": "Dominica"
+    "DO": "Dominican Republic"
+    "TL": "East Timor"
+    "EC": "Ecuador"
+    "EG": "Egypt"
+    "SV": "El Salvador"
+    "GQ": "Equatorial Guinea"
+    "ER": "Eritrea"
+    "EE": "Estonia"
+    "SZ": "Eswatini"
+    "ET": "Ethiopia"
+    "FJ": "Fiji"
+    "FI": "Finland"
+    "FR": "France"
+    "GA": "Gabon"
+    "GE": "Georgia"
+    "DE": "Germany"
+    "GH": "Ghana"
+    "GR": "Greece"
+    "GD": "Grenada"
+    "GT": "Guatemala"
+    "GN": "Guinea"
+    "GW": "Guinea-Bissau"
+    "GY": "Guyana"
+    "HT": "Haiti"
+    "HN": "Honduras"
+    "HU": "Hungary"
+    "IS": "Iceland"
+    "IN": "India"
+    "ID": "Indonesia"
+    "IR": "Iran"
+    "IQ": "Iraq"
+    "IE": "Ireland"
+    "IL": "Israel"
+    "IT": "Italy"
+    "CI": "Ivory Coast"
+    "JM": "Jamaica"
+    "JP": "Japan"
+    "JO": "Jordan"
+    "KZ": "Kazakhstan"
+    "KE": "Kenya"
+    "KI": "Kiribati"
+    "XK": "Kosovo"
+    "KW": "Kuwait"
+    "KG": "Kyrgyzstan"
+    "LA": "Laos"
+    "LV": "Latvia"
+    "LB": "Lebanon"
+    "LS": "Lesotho"
+    "LR": "Liberia"
+    "LY": "Libya"
+    "LI": "Liechtenstein"
+    "LT": "Lithuania"
+    "LU": "Luxembourg"
+    "MG": "Madagascar"
+    "MW": "Malawi"
+    "MY": "Malaysia"
+    "MV": "Maldives"
+    "ML": "Mali"
+    "MT": "Malta"
+    "MH": "Marshall Islands"
+    "MR": "Mauritania"
+    "MU": "Mauritius"
+    "MX": "Mexico"
+    "FM": "Micronesia"
+    "MD": "Moldova"
+    "MC": "Monaco"
+    "MN": "Mongolia"
+    "ME": "Montenegro"
+    "MA": "Morocco"
+    "MZ": "Mozambique"
+    "MM": "Myanmar (Burma)"
+    "NA": "Namibia"
+    "NR": "Nauru"
+    "NP": "Nepal"
+    "NL": "Netherlands"
+    "NZ": "New Zealand"
+    "NI": "Nicaragua"
+    "NE": "Niger"
+    "NG": "Nigeria"
+    "KP": "North Korea"
+    "MK": "North Macedonia"
+    "NO": "Norway"
+    "OM": "Oman"
+    "PK": "Pakistan"
+    "PW": "Palau"
+    "PA": "Panama"
+    "PG": "Papua New Guinea"
+    "PY": "Paraguay"
+    "PE": "Peru"
+    "PH": "Philippines"
+    "PL": "Poland"
+    "PT": "Portugal"
+    "QA": "Qatar"
+    "RO": "Romania"
+    "RU": "Russia"
+    "RW": "Rwanda"
+    "WS": "Samoa"
+    "SM": "San Marino"
+    "ST": "Sao Tome and Principe"
+    "SA": "Saudi Arabia"
+    "SN": "Senegal"
+    "RS": "Serbia"
+    "SC": "Seychelles"
+    "SL": "Sierra Leone"
+    "SG": "Singapore"
+    "SK": "Slovakia"
+    "SI": "Slovenia"
+    "SB": "Solomon Islands"
+    "SO": "Somalia"
+    "ZA": "South Africa"
+    "KR": "South Korea"
+    "SS": "South Sudan"
+    "ES": "Spain"
+    "LK": "Sri Lanka"
+    "KN": "St Kitts and Nevis"
+    "LC": "St Lucia"
+    "VC": "St Vincent"
+    "SD": "Sudan"
+    "SR": "Suriname"
+    "SE": "Sweden"
+    "CH": "Switzerland"
+    "SY": "Syria"
+    "TJ": "Tajikistan"
+    "TZ": "Tanzania"
+    "TH": "Thailand"
+    "BS": "The Bahamas"
+    "GM": "The Gambia"
+    "TG": "Togo"
+    "TO": "Tonga"
+    "TT": "Trinidad and Tobago"
+    "TN": "Tunisia"
+    "TR": "Turkey"
+    "TM": "Turkmenistan"
+    "TV": "Tuvalu"
+    "UG": "Uganda"
+    "UA": "Ukraine"
+    "AE": "United Arab Emirates"
+    "US": "United States"
+    "UY": "Uruguay"
+    "UZ": "Uzbekistan"
+    "VU": "Vanuatu"
+    "VA": "Vatican City"
+    "VE": "Venezuela"
+    "VN": "Vietnam"
+    "YE": "Yemen"
+    "ZM": "Zambia"
+    "ZW": "Zimbabwe"

@@ -3,12 +3,8 @@ Before do
 end
 
 Before do
-  Location.create!(code: 'GB', name: 'United Kingdom')
-end
-
-Before do
-  stub_api_request_for("SW1A1AA").to_return(api_response(:ok, "london_and_westminster"))
-  stub_api_request_for("SW149RQ").to_return(api_response(:ok, "no_results"))
+  stub_api_request_for("CF991NA").to_return(api_response(:ok, "cardiff_south_and_penarth"))
+  stub_api_request_for("CF991ZZ").to_return(api_response(:ok, "no_results"))
 end
 
 Before do

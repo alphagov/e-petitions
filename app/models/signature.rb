@@ -10,6 +10,8 @@ class Signature < ActiveRecord::Base
   has_perishable_token called: 'signed_token'
   has_perishable_token called: 'unsubscribe_token'
 
+  UK_COUNTRY_CODES = %w[GB GB-WLS GB-ENG GB-SCT GB-NIR]
+
   ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 
   PENDING_STATE = 'pending'
@@ -327,7 +329,7 @@ class Signature < ActiveRecord::Base
     end
 
     def uk
-      where(location_code: "GB")
+      where(location_code: UK_COUNTRY_CODES)
     end
 
     def subscribe!(signature_ids)
@@ -715,7 +717,7 @@ class Signature < ActiveRecord::Base
   end
 
   def united_kingdom?
-    location_code == 'GB'
+    location_code.in?(UK_COUNTRY_CODES)
   end
   alias_method :uk?, :united_kingdom?
 

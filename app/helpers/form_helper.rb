@@ -1,4 +1,6 @@
 module FormHelper
+  COUNTRY_DIVIDER = [["--------------------", "", { disabled: true }]]
+
   def form_row opts={}, &block
     css_classes = ['form-group']
     css_classes.push opts[:class] if opts[:class]
@@ -7,7 +9,7 @@ module FormHelper
   end
 
   def countries_for_select
-    Location.menu
+    t(:priority_countries) + COUNTRY_DIVIDER + t(:countries)
   end
 
   def error_messages_for_field(object, field_name, options = {})

@@ -16,7 +16,7 @@ Given(/^there is a signature already from this IP address$/) do
     And I fill in "Name" with "Existing Signer"
     And I fill in "Email" with "existing@example.com"
     And I fill in my postcode with "SW14 9RQ"
-    And I select "United Kingdom" from "Location"
+    And I select "Wales" from "Location"
     And I try to sign
     And I say I am happy with my email address
     Then I am told to check my inbox to complete signing
