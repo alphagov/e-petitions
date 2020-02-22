@@ -38,12 +38,6 @@ docker-compose run --rm web rake db:setup
 docker-compose run --rm web rake wpets:add_sysadmin_user
 ```
 
-### Fetch the country list
-
-```
-docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
-```
-
 ### Enable signature counting
 
 ```
@@ -116,12 +110,6 @@ docker-compose run --rm web rake db:setup
 
 ```
 docker-compose run --rm web rake wpets:add_sysadmin_user
-```
-
-### Chwiliwch am y rhestr gwledydd
-
-```
-docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
 ```
 
 ### Galluogi cyfrif llofnod
