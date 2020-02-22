@@ -108,20 +108,20 @@ RSpec.describe AdminHubHelper, type: :helper do
       end
     end
 
-    describe "for counting the government response queue" do
+    describe "for counting the referred queue" do
       it "returns a HTML-safe string" do
-        expect(helper.action_count(:awaiting_response, 1)).to be_an(ActiveSupport::SafeBuffer)
+        expect(helper.action_count(:referred, 1)).to be_an(ActiveSupport::SafeBuffer)
       end
 
       context "when the action count is 1" do
         it "returns a correctly formatted action count" do
-          expect(helper.action_count(:awaiting_response, 1)).to eq("<span class=\"count\">1</span> Government response queue")
+          expect(helper.action_count(:referred, 1)).to eq("<span class=\"count\">1</span> Referred queue")
         end
       end
 
       context "when the action count is 1000" do
         it "returns a correctly formatted action count" do
-          expect(helper.action_count(:awaiting_response, 1000)).to eq("<span class=\"count\">1,000</span> Government response queue")
+          expect(helper.action_count(:referred, 1000)).to eq("<span class=\"count\">1,000</span> Referred queue")
         end
       end
     end

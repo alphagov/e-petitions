@@ -2,7 +2,7 @@
   <%# Has debate outcome details #%>
   <% if debate_outcome = petition.debate_outcome? -%>
     <% if debate_outcome.debated? %>
-      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.parliament_debated_topic") %></h2>
+      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.senedd_debated_topic") %></h2>
       <section class="debate-outcome">
         <p class="secondary"><%= t(:"ui.petitions.topic_debated_on", date: short_date_format(debate_outcome.debated_on)) %></p>
         <% if debate_outcome.video_url? -%>
@@ -37,20 +37,20 @@
 
     <%# Waiting for a debate outcome #%>
     <% if petition.scheduled_debate_date.past? %>
-      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.parliament_debated_topic") %></h2>
+      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.senedd_debated_topic") %></h2>
       <p class="about-item-scheduled-debate-date">
-        <%= t(:"ui.petitions.parliament_debated_on", date: short_date_format(petition.scheduled_debate_date)) %>
+        <%= t(:"ui.petitions.senedd_debated_on", date: short_date_format(petition.scheduled_debate_date)) %>
       </p>
       <p>
-        <%= t(:"ui.petitions.watch_online_parliamentlive_tv_html") %>
+        <%= t(:"ui.petitions.watch_online_senedd_tv_html") %>
       </p>
-      <p class="secondary"><%= waiting_for_in_words(petition.scheduled_debate_date) %> <%= t(:"ui.petitions.for_parliament_to_publish_debate") %></p>
+      <p class="secondary"><%= waiting_for_in_words(petition.scheduled_debate_date) %> <%= t(:"ui.petitions.for_senedd_to_publish_debate") %></p>
 
     <%# Debate is still to come #%>
     <% else %>
-      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.parliament_will_debate") %></h2>
+      <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.senedd_will_debate") %></h2>
       <p class="about-item-scheduled-debate-date">
-        <%= t(:"ui.petitions.parliament_will_debate_on", date: short_date_format(petition.scheduled_debate_date)) %>
+        <%= t(:"ui.petitions.senedd_will_debate_on", date: short_date_format(petition.scheduled_debate_date)) %>
       </p>
       <p>
         <%= t(:"ui.petitions.watch_online_youtube_channel_html") %>
@@ -59,8 +59,8 @@
 
   <%# Waiting for a debate date #%>
   <% elsif petition.debate_threshold_reached_at? -%>
-    <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.parliamentary_debate_heading") %></h2>
-    <p><%= t(:"ui.petitions.parliamentary_debate_description", threshold: Site.formatted_threshold_for_debate) %></p>
+    <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.senedd_debate_heading") %></h2>
+    <p><%= t(:"ui.petitions.senedd_debate_description", threshold: Site.formatted_threshold_for_debate) %></p>
     <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> <%= t(:"ui.petitions.for_debate_date") %></p>
   <%# Needs more signatures #%>
   <% else -%>

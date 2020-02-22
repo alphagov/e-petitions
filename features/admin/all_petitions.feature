@@ -27,26 +27,22 @@ Feature: A moderator user views all petitions
     And a flagged petition "My flagged petition" reached threshold 3 days ago
 
     And an open petition exists with action: "My open petition"
-    And a closed petition exists with action: "My closed petition"
+    And a referred petition exists with action: "My referred petition"
     And a rejected petition exists with action: "My rejected petition"
     And a hidden petition exists with action: "My hidden petition"
 
     And a petition "My open petition with debate outcome" exists with a debate outcome
     And a petition "My open petition awaiting debate date" exists awaiting debate date
-    And a petition "My open petition with government response" exists with government response
-    And a petition "My open petition awaiting government response" exists awaiting government response
     And a petition "My open petition with scheduled debate date" with scheduled debate date of "23/10/2010"
 
     When I view all petitions
     Then I should see the following list of petitions:
      | My open petition with scheduled debate date   |
-     | My open petition awaiting government response |
-     | My open petition with government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
      | My hidden petition                            |
      | My rejected petition                          |
-     | My closed petition                            |
+     | My referred petition                          |
      | My open petition                              |
      | My flagged petition                           |
      | My other sponsored petition                   |
@@ -68,15 +64,13 @@ Feature: A moderator user views all petitions
     And I filter the list to show "Open" petitions
     Then I should see the following list of petitions:
      | My open petition with scheduled debate date   |
-     | My open petition awaiting government response |
-     | My open petition with government response     |
      | My open petition awaiting debate date         |
      | My open petition with debate outcome          |
      | My open petition                              |
 
-    And I filter the list to show "Closed" petitions
+    And I filter the list to show "Referred" petitions
     Then I should see the following list of petitions:
-     | My closed petition |
+     | My referred petition |
 
     And I filter the list to show "Rejected" petitions
     Then I should see the following list of petitions:
@@ -86,19 +80,15 @@ Feature: A moderator user views all petitions
     Then I should see the following list of petitions:
      | My hidden petition |
 
-    And I filter the list to show "Awaiting a government response" petitions
+    And I filter the list to show "Referred" petitions
     Then I should see the following list of petitions:
-     | My open petition awaiting government response |
+     | My referred petition |
 
-    And I filter the list to show "With a government response" petitions
-    Then I should see the following list of petitions:
-     | My open petition with government response |
-
-    And I filter the list to show "Awaiting a debate in parliament" petitions
+    And I filter the list to show "Awaiting a debate in the Senedd" petitions
     Then I should see the following list of petitions:
      | My open petition awaiting debate date |
 
-    And I filter the list to show "Has been debated in parliament" petitions
+    And I filter the list to show "Has been debated in the Senedd" petitions
     Then I should see the following list of petitions:
      | My open petition with debate outcome |
 

@@ -2,8 +2,6 @@
 # Petition state    PET_STATE=rejected    default open
 # Petition count    PET_COUNT=20          default 100
 # Signature count   SIG_COUNT=25          default 100
-# Random response   RANDOM_RESP=true      default false
-#                   If true will create 10K sigs for every 5th petition and add response
 
 namespace :data do
   desc "Generate random petitions with signatures. PET_STATE=open, PET_COUNT=100, SIG_COUNT=100"
@@ -18,7 +16,6 @@ namespace :data do
     PETITION_STATE  = ENV.fetch('PET_STATE', 'open')
     PETITION_COUNT  = ENV.fetch('PET_COUNT', '100')
     SIGNATURE_COUNT = ENV.fetch('SIG_COUNT', '100')
-    RANDOM_RESPONSE = ENV.fetch('RANDOM_RESP', 'false')
 
 
     if VALID_STATES.exclude?(PETITION_STATE)
@@ -81,11 +78,6 @@ namespace :data do
           )
         end
 
-
-        # Should we create a petition with response and 10K signatures
-        @should_create_response = (((idx+1) % 5) == 0 && RANDOM_RESPONSE == 'true')
-        @signature_count = Site.threshold_for_response + 1 if @should_create_response
-
         @signature_count.to_i.times do
           signature = petition.signatures.create!(
             uk_citizenship: '1',
@@ -96,11 +88,6 @@ namespace :data do
           )
           signature.validate!
         end
-
-        # Add responses on random petitions when 10,000 signatures
-        petition.update_attributes(
-          response: Faker::Lorem.paragraph(rand(10..30))
-        ) if @should_create_response
       end
     end
   end

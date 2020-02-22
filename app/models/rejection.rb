@@ -1,5 +1,5 @@
 class Rejection < ActiveRecord::Base
-  CODES = %w[duplicate irrelevant no-action honours fake-name foi libellous offensive]
+  CODES = %w[insufficient duplicate irrelevant no-action honours fake-name foi libellous offensive]
   HIDDEN_CODES = %w[libellous offensive]
 
   belongs_to :petition, touch: true
@@ -7,6 +7,8 @@ class Rejection < ActiveRecord::Base
   validates :petition, presence: true
   validates :code, presence: true, inclusion: { in: CODES }
   validates :details, length: { maximum: 4000 }, allow_blank: true
+
+  attr_writer :rejected_at
 
   after_create do
     # Prevent deprecation warnings about the
@@ -16,8 +18,12 @@ class Rejection < ActiveRecord::Base
     if petition.rejected_at?
       petition.update!(state: state_for_petition)
     else
-      petition.update!(state: state_for_petition, rejected_at: Time.current)
+      petition.update!(state: state_for_petition, rejected_at: rejected_at)
     end
+  end
+
+  def rejected_at
+    @rejected_at || Time.current
   end
 
   def hide_petition?

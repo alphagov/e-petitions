@@ -136,14 +136,14 @@ Then /^I see relevant reason descriptions when I browse different reason codes$/
   expect(page).to have_content "It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts."
 end
 
-Given(/^a moderator responds to the petition$/) do
+Given(/^a moderator updates the petition activity$/) do
   steps %Q(
     Given I am logged in as a moderator
     And I view all petitions
     And I follow "#{@petition.action}"
-    And I follow "Government response"
-    And I fill in "Summary quote" with "Get ready"
-    And I fill in "Response in full" with "Parliament here it comes"
+    And I follow "Other Senedd business"
+    And I fill in "Subject" with "Get ready"
+    And I fill in "Body" with "Senedd here it comes"
     And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"
   )
 end

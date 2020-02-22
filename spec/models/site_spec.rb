@@ -2,27 +2,27 @@ require 'rails_helper'
 
 RSpec.describe Site, type: :model do
   describe "schema" do
-    it { is_expected.to have_db_column(:title_en).of_type(:string).with_options(limit: 50, null: false, default: "Petition parliament") }
-    it { is_expected.to have_db_column(:title_cy).of_type(:string).with_options(limit: 50, null: false, default: "Senedd ddeiseb") }
+    it { is_expected.to have_db_column(:title_en).of_type(:string).with_options(limit: 50, null: false, default: "Petition the Senedd") }
+    it { is_expected.to have_db_column(:title_cy).of_type(:string).with_options(limit: 50, null: false, default: "Deisebu'r Senedd") }
     it { is_expected.to have_db_column(:url_en).of_type(:string).with_options(limit: 50, null: false, default: "https://petition.senedd.wales") }
     it { is_expected.to have_db_column(:url_cy).of_type(:string).with_options(limit: 50, null: false, default: "https://deiseb.senedd.cymru") }
-    it { is_expected.to have_db_column(:email_from_en).of_type(:string).with_options(limit: 100, null: false, default: %{"Petitions: Welsh Parliament" <no-reply@petition.senedd.wales>}) }
-    it { is_expected.to have_db_column(:email_from_cy).of_type(:string).with_options(limit: 100, null: false, default: %{"Deisebau: Senedd Cymru" <dim-ateb@deiseb.senedd.cymru>}) }
+    it { is_expected.to have_db_column(:email_from_en).of_type(:string).with_options(limit: 100, null: false, default: %{"Petitions: Senedd" <no-reply@petition.senedd.wales>}) }
+    it { is_expected.to have_db_column(:email_from_cy).of_type(:string).with_options(limit: 100, null: false, default: %{"Deisebau: Senedd" <dim-ateb@deiseb.senedd.cymru>}) }
     it { is_expected.to have_db_column(:username).of_type(:string).with_options(limit: 30) }
     it { is_expected.to have_db_column(:password_digest).of_type(:string).with_options(limit: 60) }
     it { is_expected.to have_db_column(:enabled).of_type(:boolean).with_options(null: false, default: true) }
     it { is_expected.to have_db_column(:protected).of_type(:boolean).with_options(null: false, default: false) }
     it { is_expected.to have_db_column(:petition_duration).of_type(:integer).with_options(null: false, default: 6) }
-    it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:minimum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
-    it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 5) }
+    it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:threshold_for_moderation_delay).of_type(:integer).with_options(null: false, default: 500) }
-    it { is_expected.to have_db_column(:threshold_for_response).of_type(:integer).with_options(null: false, default: 10000) }
-    it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 100000) }
+    it { is_expected.to have_db_column(:threshold_for_referral).of_type(:integer).with_options(null: false, default: 50) }
+    it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 5000) }
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
-    it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: Welsh Parliament" <petitionscommittee@senedd.wales>') }
+    it { is_expected.to have_db_column(:feedback_email).of_type(:string).with_options(limit: 100, default: '"Petitions: Senedd" <petitions@senedd.wales>') }
     it { is_expected.to have_db_column(:last_petition_created_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:login_timeout).of_type(:integer).with_options(null: false, default: 1800) }
     it { is_expected.to have_db_column(:signature_count_updated_at).of_type(:datetime).with_options(null: true, default: nil) }
@@ -54,7 +54,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_presence_of(:maximum_number_of_sponsors) }
     it { is_expected.to validate_presence_of(:threshold_for_moderation) }
     it { is_expected.to validate_presence_of(:threshold_for_moderation_delay) }
-    it { is_expected.to validate_presence_of(:threshold_for_response) }
+    it { is_expected.to validate_presence_of(:threshold_for_referral) }
     it { is_expected.to validate_presence_of(:threshold_for_debate) }
     it { is_expected.to validate_presence_of(:login_timeout) }
 
@@ -68,7 +68,7 @@ RSpec.describe Site, type: :model do
 
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
-      threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
+      threshold_for_moderation_delay threshold_for_referral threshold_for_debate login_timeout
     ].each do |attribute|
       describe attribute do
         let(:errors) { subject.errors[attribute] }
@@ -104,18 +104,18 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates title to the instance" do
-      expect(site).to receive(:title).and_return("Petition parliament (Test)")
-      expect(Site.title).to eq("Petition parliament (Test)")
+      expect(site).to receive(:title).and_return("Petition the Senedd (Test)")
+      expect(Site.title).to eq("Petition the Senedd (Test)")
     end
 
     it "delegates url to the instance" do
-      expect(site).to receive(:url).and_return("https://petition.parliament.test")
-      expect(Site.url).to eq("https://petition.parliament.test")
+      expect(site).to receive(:url).and_return("https://petition.senedd.test")
+      expect(Site.url).to eq("https://petition.senedd.test")
     end
 
     it "delegates email_from to the instance" do
-      expect(site).to receive(:email_from).and_return("no-reply@petition.parliament.test")
-      expect(Site.email_from).to eq("no-reply@petition.parliament.test")
+      expect(site).to receive(:email_from).and_return("no-reply@petition.senedd.test")
+      expect(Site.email_from).to eq("no-reply@petition.senedd.test")
     end
 
     it "delegates username to the instance" do
@@ -135,42 +135,42 @@ RSpec.describe Site, type: :model do
 
     it "delegates constraints_for_public to the instance" do
       expect(site).to receive(:constraints_for_public_en).and_return(
-        protocol: "https://", host: "petition.parliament.test", port: 443
+        protocol: "https://", host: "petition.senedd.test", port: 443
       )
 
       expect(Site.constraints_for_public).to eq(
-        protocol: "https://", host: "petition.parliament.test", port: 443
+        protocol: "https://", host: "petition.senedd.test", port: 443
       )
     end
 
     it "delegates constraints_for_moderation to the instance" do
       expect(site).to receive(:constraints_for_moderation).and_return(
-        protocol: "https://", host: "moderate.petition.parliament.test", port: 443
+        protocol: "https://", host: "moderate.petition.senedd.test", port: 443
       )
 
       expect(Site.constraints_for_moderation).to eq(
-        protocol: "https://", host: "moderate.petition.parliament.test", port: 443
+        protocol: "https://", host: "moderate.petition.senedd.test", port: 443
       )
     end
 
     it "delegates host to the instance" do
-      expect(site).to receive(:host_en).and_return("petition.parliament.test")
-      expect(Site.host).to eq("petition.parliament.test")
+      expect(site).to receive(:host_en).and_return("petition.senedd.test")
+      expect(Site.host).to eq("petition.senedd.test")
     end
 
     it "delegates host_with_port to the instance" do
-      expect(site).to receive(:host_with_port_en).and_return("petition.parliament.test:8443")
-      expect(Site.host_with_port).to eq("petition.parliament.test:8443")
+      expect(site).to receive(:host_with_port_en).and_return("petition.senedd.test:8443")
+      expect(Site.host_with_port).to eq("petition.senedd.test:8443")
     end
 
     it "delegates moderate_host to the instance" do
-      expect(site).to receive(:moderate_host).and_return("moderate.petition.parliament.test")
-      expect(Site.moderate_host).to eq("moderate.petition.parliament.test")
+      expect(site).to receive(:moderate_host).and_return("moderate.petition.senedd.test")
+      expect(Site.moderate_host).to eq("moderate.petition.senedd.test")
     end
 
     it "delegates moderate_host_with_port to the instance" do
-      expect(site).to receive(:moderate_host_with_port).and_return("moderate.petition.parliament.test:8443")
-      expect(Site.moderate_host_with_port).to eq("moderate.petition.parliament.test:8443")
+      expect(site).to receive(:moderate_host_with_port).and_return("moderate.petition.senedd.test:8443")
+      expect(Site.moderate_host_with_port).to eq("moderate.petition.senedd.test:8443")
     end
 
     it "delegates port to the instance" do
@@ -213,14 +213,14 @@ RSpec.describe Site, type: :model do
       expect(Site.formatted_threshold_for_moderation).to eq("5,000")
     end
 
-    it "delegates threshold_for_response to the instance" do
-      expect(site).to receive(:threshold_for_response).and_return(10)
-      expect(Site.threshold_for_response).to eq(10)
+    it "delegates threshold_for_referral to the instance" do
+      expect(site).to receive(:threshold_for_referral).and_return(10)
+      expect(Site.threshold_for_referral).to eq(10)
     end
 
-    it "delegates formatted_threshold_for_response to the instance" do
-      expect(site).to receive(:formatted_threshold_for_response).and_return("10,000")
-      expect(Site.formatted_threshold_for_response).to eq("10,000")
+    it "delegates formatted_threshold_for_referral to the instance" do
+      expect(site).to receive(:formatted_threshold_for_referral).and_return("50")
+      expect(Site.formatted_threshold_for_referral).to eq("50")
     end
 
     it "delegates threshold_for_debate to the instance" do
@@ -229,8 +229,8 @@ RSpec.describe Site, type: :model do
     end
 
     it "delegates formatted_threshold_for_debate to the instance" do
-      expect(site).to receive(:formatted_threshold_for_debate).and_return("100,000")
-      expect(Site.formatted_threshold_for_debate).to eq("100,000")
+      expect(site).to receive(:formatted_threshold_for_debate).and_return("5,000")
+      expect(Site.formatted_threshold_for_debate).to eq("5,000")
     end
 
     it "delegates last_checked_at to the instance" do
@@ -277,26 +277,26 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for title_en" do
-      it "defaults to 'Petition parliament'" do
-        allow(ENV).to receive(:fetch).with("SITE_TITLE_EN", "Petition parliament").and_return("Petition parliament")
-        expect(defaults[:title_en]).to eq("Petition parliament")
+      it "defaults to 'Petition the Senedd'" do
+        allow(ENV).to receive(:fetch).with("SITE_TITLE_EN", "Petition the Senedd").and_return("Petition the Senedd")
+        expect(defaults[:title_en]).to eq("Petition the Senedd")
       end
 
       it "can be overridden with the SITE_TITLE_EN environment variable" do
-        allow(ENV).to receive(:fetch).with("SITE_TITLE_EN", "Petition parliament").and_return("Petition parliament (Test)")
-        expect(defaults[:title_en]).to eq("Petition parliament (Test)")
+        allow(ENV).to receive(:fetch).with("SITE_TITLE_EN", "Petition the Senedd").and_return("Petition the Senedd (Test)")
+        expect(defaults[:title_en]).to eq("Petition the Senedd (Test)")
       end
     end
 
     describe "for title_cy" do
-      it "defaults to 'Petition parliament'" do
-        allow(ENV).to receive(:fetch).with("SITE_TITLE_CY", "Senedd ddeiseb").and_return("Senedd ddeiseb")
-        expect(defaults[:title_cy]).to eq("Senedd ddeiseb")
+      it "defaults to 'Deisebu'r Senedd'" do
+        allow(ENV).to receive(:fetch).with("SITE_TITLE_CY", "Deisebu'r Senedd").and_return("Deisebu'r Senedd")
+        expect(defaults[:title_cy]).to eq("Deisebu'r Senedd")
       end
 
       it "can be overridden with the SITE_TITLE_CY environment variable" do
-        allow(ENV).to receive(:fetch).with("SITE_TITLE_CY", "Senedd ddeiseb").and_return("Senedd ddeiseb (Prawf)")
-        expect(defaults[:title_cy]).to eq("Senedd ddeiseb (Prawf)")
+        allow(ENV).to receive(:fetch).with("SITE_TITLE_CY", "Deisebu'r Senedd").and_return("Deisebu'r Senedd (Prawf)")
+        expect(defaults[:title_cy]).to eq("Deisebu'r Senedd (Prawf)")
       end
     end
 
@@ -360,7 +360,7 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_EN", "petition.senedd.wales").and_return("petition.senedd.wales")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
 
-        expect(defaults[:email_from_en]).to eq(%{"Petitions: Welsh Parliament" <no-reply@petition.senedd.wales>})
+        expect(defaults[:email_from_en]).to eq(%{"Petitions: Senedd" <no-reply@petition.senedd.wales>})
       end
 
       it "allows overriding via the url environment variables" do
@@ -368,11 +368,11 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_EN", "petition.senedd.wales").and_return("localhost")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
 
-        expect(defaults[:email_from_en]).to eq(%{"Petitions: Welsh Parliament" <no-reply@localhost>})
+        expect(defaults[:email_from_en]).to eq(%{"Petitions: Senedd" <no-reply@localhost>})
       end
 
       it "allows overriding via the EPETITIONS_FROM_EN environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM_EN", %{"Petitions: Welsh Parliament" <no-reply@petition.senedd.wales>}).and_return("no-reply@downingstreet.gov.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM_EN", %{"Petitions: Senedd" <no-reply@petition.senedd.wales>}).and_return("no-reply@downingstreet.gov.uk")
         expect(defaults[:email_from_en]).to eq("no-reply@downingstreet.gov.uk")
       end
     end
@@ -383,7 +383,7 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_CY", "deiseb.senedd.cymru").and_return("deiseb.senedd.cymru")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
 
-        expect(defaults[:email_from_cy]).to eq(%{"Deisebau: Senedd Cymru" <dim-ateb@deiseb.senedd.cymru>})
+        expect(defaults[:email_from_cy]).to eq(%{"Deisebau: Senedd" <dim-ateb@deiseb.senedd.cymru>})
       end
 
       it "allows overriding via the url environment variables" do
@@ -391,22 +391,22 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_CY", "deiseb.senedd.cymru").and_return("localhost")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
 
-        expect(defaults[:email_from_cy]).to eq(%{"Deisebau: Senedd Cymru" <dim-ateb@localhost>})
+        expect(defaults[:email_from_cy]).to eq(%{"Deisebau: Senedd" <dim-ateb@localhost>})
       end
 
       it "allows overriding via the EPETITIONS_FROM_CY environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM_CY", %{"Deisebau: Senedd Cymru" <dim-ateb@deiseb.senedd.cymru>}).and_return("no-reply@downingstreet.gov.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FROM_CY", %{"Deisebau: Senedd" <dim-ateb@deiseb.senedd.cymru>}).and_return("no-reply@downingstreet.gov.uk")
         expect(defaults[:email_from_cy]).to eq("no-reply@downingstreet.gov.uk")
       end
     end
 
     describe "for feedback_email" do
-      it "defaults to 'petitionscommittee@senedd.wales'" do
+      it "defaults to 'petitions@senedd.wales'" do
         allow(ENV).to receive(:fetch).with("EPETITIONS_PROTOCOL", "https").and_return("https")
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_EN", "petition.senedd.wales").and_return("petition.senedd.wales")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return(443)
 
-        expect(defaults[:feedback_email]).to eq(%{"Petitions: Welsh Parliament" <petitionscommittee@senedd.wales>})
+        expect(defaults[:feedback_email]).to eq(%{"Petitions: Senedd" <petitions@senedd.wales>})
       end
 
       it "allows overriding via the url environment variables" do
@@ -414,12 +414,12 @@ RSpec.describe Site, type: :model do
         allow(ENV).to receive(:fetch).with("EPETITIONS_HOST_EN", "petition.senedd.wales").and_return("localhost")
         allow(ENV).to receive(:fetch).with("EPETITIONS_PORT", '443').and_return("3000")
 
-        expect(defaults[:feedback_email]).to eq(%{"Petitions: Welsh Parliament" <petitionscommittee@localhost>})
+        expect(defaults[:feedback_email]).to eq(%{"Petitions: Senedd" <petitions@localhost>})
       end
 
       it "allows overriding via the EPETITIONS_FEEDBACK environment variables" do
-        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", %{"Petitions: Welsh Parliament" <petitionscommittee@senedd.wales>}).and_return("petitions@downingstreet.gov.uk")
-        expect(defaults[:feedback_email]).to eq("petitions@downingstreet.gov.uk")
+        allow(ENV).to receive(:fetch).with("EPETITIONS_FEEDBACK", %{"Petitions: Senedd" <petitions@senedd.wales>}).and_return("petitions@assembly.wales")
+        expect(defaults[:feedback_email]).to eq("petitions@assembly.wales")
       end
     end
 
@@ -506,14 +506,14 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for minimum_number_of_sponsors" do
-      it "defaults to 5" do
-        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("5")
-        expect(defaults[:minimum_number_of_sponsors]).to eq(5)
+      it "defaults to 2" do
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '2').and_return("2")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(2)
       end
 
       it "can be overridden with the MINIMUM_NUMBER_OF_SPONSORS environment variable" do
-        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '5').and_return("3")
-        expect(defaults[:minimum_number_of_sponsors]).to eq(3)
+        allow(ENV).to receive(:fetch).with("MINIMUM_NUMBER_OF_SPONSORS", '2').and_return("5")
+        expect(defaults[:minimum_number_of_sponsors]).to eq(5)
       end
     end
 
@@ -530,14 +530,14 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for threshold_for_moderation" do
-      it "defaults to 5" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("5")
-        expect(defaults[:threshold_for_moderation]).to eq(5)
+      it "defaults to 2" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '2').and_return("2")
+        expect(defaults[:threshold_for_moderation]).to eq(2)
       end
 
       it "can be overridden with the THRESHOLD_FOR_MODERATION environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '5').and_return("10")
-        expect(defaults[:threshold_for_moderation]).to eq(10)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_MODERATION", '2').and_return("5")
+        expect(defaults[:threshold_for_moderation]).to eq(5)
       end
     end
 
@@ -553,27 +553,27 @@ RSpec.describe Site, type: :model do
       end
     end
 
-    describe "for threshold_for_response" do
-      it "defaults to 10000" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("10000")
-        expect(defaults[:threshold_for_response]).to eq(10000)
+    describe "for threshold_for_referral" do
+      it "defaults to 50" do
+        allow(ENV).to receive(:fetch).with("threshold_for_referral", '50').and_return("50")
+        expect(defaults[:threshold_for_referral]).to eq(50)
       end
 
       it "can be overridden with the THRESHOLD_FOR_RESPONSE environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '10000').and_return("5000")
-        expect(defaults[:threshold_for_response]).to eq(5000)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '50').and_return("25")
+        expect(defaults[:threshold_for_referral]).to eq(25)
       end
     end
 
     describe "for threshold_for_debate" do
-      it "defaults to 10000" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("100000")
-        expect(defaults[:threshold_for_debate]).to eq(100000)
+      it "defaults to 5000" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '5000').and_return("5000")
+        expect(defaults[:threshold_for_debate]).to eq(5000)
       end
 
       it "can be overridden with the THRESHOLD_FOR_DEBATE environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '100000').and_return("50000")
-        expect(defaults[:threshold_for_debate]).to eq(50000)
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_DEBATE", '5000').and_return("2500")
+        expect(defaults[:threshold_for_debate]).to eq(2500)
       end
     end
   end
@@ -803,7 +803,7 @@ RSpec.describe Site, type: :model do
 
   describe "#email_protocol" do
     subject :site do
-      described_class.create!(url: "https://petition.parliament.test")
+      described_class.create!(url: "https://petition.senedd.test")
     end
 
     it "the protocol of the url" do
@@ -821,34 +821,34 @@ RSpec.describe Site, type: :model do
     end
   end
 
-  describe "#formatted_threshold_for_response" do
+  describe "#formatted_threshold_for_referral" do
     subject :site do
-      described_class.create!(threshold_for_response: 10000)
+      described_class.create!(threshold_for_referral: 50)
     end
 
     it "returns a formatted number" do
-      expect(site.formatted_threshold_for_response).to eq("10,000")
+      expect(site.formatted_threshold_for_referral).to eq("50")
     end
   end
 
   describe "#formatted_threshold_for_debate" do
     subject :site do
-      described_class.create!(threshold_for_debate: 100000)
+      described_class.create!(threshold_for_debate: 5000)
     end
 
     it "returns a formatted number" do
-      expect(site.formatted_threshold_for_debate).to eq("100,000")
+      expect(site.formatted_threshold_for_debate).to eq("5,000")
     end
   end
 
   describe "#constraints_for_public_en" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "a hash of routing constraints" do
       expect(site.constraints_for_public_en).to eq(
-        protocol: "https://", host: "petition.parliament.test", port: 443
+        protocol: "https://", host: "petition.senedd.test", port: 443
       )
     end
   end
@@ -867,7 +867,7 @@ RSpec.describe Site, type: :model do
 
   describe "#constraints_for_public" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "is aliased to #constraints_for_public_en" do
@@ -877,23 +877,23 @@ RSpec.describe Site, type: :model do
 
   describe "#constraints_for_moderation" do
     subject :site do
-      described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
+      described_class.create!(moderate_url: "https://moderate.petition.senedd.test")
     end
 
     it "a hash of routing constraints" do
       expect(site.constraints_for_moderation).to eq(
-        protocol: "https://", host: "moderate.petition.parliament.test", port: 443
+        protocol: "https://", host: "moderate.petition.senedd.test", port: 443
       )
     end
   end
 
   describe "#host_en" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "the host of the url" do
-      expect(site.host_en).to eq("petition.parliament.test")
+      expect(site.host_en).to eq("petition.senedd.test")
     end
   end
 
@@ -909,7 +909,7 @@ RSpec.describe Site, type: :model do
 
   describe "#host" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "is aliased to #host_en" do
@@ -920,21 +920,21 @@ RSpec.describe Site, type: :model do
   describe "#host_with_port_en" do
     context "when the port is the default port" do
       subject :site do
-        described_class.create!(url_en: "https://petition.parliament.test")
+        described_class.create!(url_en: "https://petition.senedd.test")
       end
 
       it "the host without the port of the url" do
-        expect(site.host_with_port_en).to eq("petition.parliament.test")
+        expect(site.host_with_port_en).to eq("petition.senedd.test")
       end
     end
 
     context "when the port is not the default port" do
       subject :site do
-        described_class.create!(url_en: "https://petition.parliament.test:8443")
+        described_class.create!(url_en: "https://petition.senedd.test:8443")
       end
 
       it "the host with the port of the url" do
-        expect(site.host_with_port_en).to eq("petition.parliament.test:8443")
+        expect(site.host_with_port_en).to eq("petition.senedd.test:8443")
       end
     end
   end
@@ -963,7 +963,7 @@ RSpec.describe Site, type: :model do
 
   describe "#host_with_port" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "is aliased to #host_with_port_en" do
@@ -973,39 +973,39 @@ RSpec.describe Site, type: :model do
 
   describe "#moderate_host" do
     subject :site do
-      described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
+      described_class.create!(moderate_url: "https://moderate.petition.senedd.test")
     end
 
     it "the moderation host of the url" do
-      expect(site.moderate_host).to eq("moderate.petition.parliament.test")
+      expect(site.moderate_host).to eq("moderate.petition.senedd.test")
     end
   end
 
   describe "#moderate_host_with_port" do
     context "when the port is the default port" do
       subject :site do
-        described_class.create!(moderate_url: "https://moderate.petition.parliament.test")
+        described_class.create!(moderate_url: "https://moderate.petition.senedd.test")
       end
 
       it "the moderation host without the port of the url" do
-        expect(site.moderate_host_with_port).to eq("moderate.petition.parliament.test")
+        expect(site.moderate_host_with_port).to eq("moderate.petition.senedd.test")
       end
     end
 
     context "when the port is not the default port" do
       subject :site do
-        described_class.create!(moderate_url: "https://moderate.petition.parliament.test:8443")
+        described_class.create!(moderate_url: "https://moderate.petition.senedd.test:8443")
       end
 
       it "the moderation host with the port of the url" do
-        expect(site.moderate_host_with_port).to eq("moderate.petition.parliament.test:8443")
+        expect(site.moderate_host_with_port).to eq("moderate.petition.senedd.test:8443")
       end
     end
   end
 
   describe "#port_en" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "the port of the url" do
@@ -1025,7 +1025,7 @@ RSpec.describe Site, type: :model do
 
   describe "#port" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "is aliased to #port_en" do
@@ -1035,7 +1035,7 @@ RSpec.describe Site, type: :model do
 
   describe "#protocol_en" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "the protocol of the url" do
@@ -1055,7 +1055,7 @@ RSpec.describe Site, type: :model do
 
   describe "#protocol" do
     subject :site do
-      described_class.create!(url_en: "https://petition.parliament.test")
+      described_class.create!(url_en: "https://petition.senedd.test")
     end
 
     it "is aliased to #protocol_en" do

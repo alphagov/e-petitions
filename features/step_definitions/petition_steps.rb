@@ -61,27 +61,16 @@ Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*
   @petition = FactoryBot.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
 end
 
-Given(/^a ?(open|closed)? petition "([^"]*)" exists and has received a government response (\d+) days ago$/) do |state, petition_action, parliament_response_days_ago |
-  petition_attributes = {
-    action: petition_action,
-    closed_at: state == 'closed' ? 1.day.ago : 6.months.from_now,
-    response_summary: 'Response Summary',
-    response_details: 'Government Response',
-    government_response_at: parliament_response_days_ago.to_i.days.ago
-  }
-  FactoryBot.create(:responded_petition, petition_attributes)
-end
-
 Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
   FactoryBot.create(:open_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
-  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: 2.hours.ago)
+  FactoryBot.create(:open_petition, action: action, referral_threshold_reached_at: 2.hours.ago)
 end
 
 Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
-  FactoryBot.create(:open_petition, action: action, response_threshold_reached_at: amount.days.ago)
+  FactoryBot.create(:open_petition, action: action, referral_threshold_reached_at: amount.days.ago)
 end
 
 Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
@@ -123,6 +112,10 @@ end
 
 Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryBot.create(:closed_petition, :action => petition_action)
+end
+
+Given(/^the petition has reached the referral threshold$/) do
+  @petition.update!(referral_threshold_reached_at: @petition.open_at + 2.months)
 end
 
 Given(/^the petition has closed$/) do
@@ -226,19 +219,6 @@ When(/^I am allowed to make the petition action too long$/) do
   page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
-Then(/^the petition with action: "(.*?)" should have requested a government response email after "(.*?)"$/) do |petition_action, timestamp|
-  petition = Petition.find_by!(action: petition_action)
-  email_requested_at = petition.get_email_requested_at_for('government_response')
-  expect(email_requested_at).to be_present
-  expect(email_requested_at).to be >= timestamp.in_time_zone
-end
-
-Then(/^the petition with action: "(.*?)" should not have requested a government response email$/) do |petition_action|
-  petition = Petition.find_by!(action: petition_action)
-  email_requested_at = petition.get_email_requested_at_for('government_response')
-  expect(email_requested_at).to be_nil
-end
-
 When(/^I start a new petition/) do
   steps %Q(
     Given I am on the new petition page
@@ -338,13 +318,13 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   @petition.update_signature_count!
 end
 
-Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|
+Given(/^the threshold for a Senedd debate is "(.*?)"$/) do |amount|
   Site.instance.update!(threshold_for_debate: amount)
 end
 
-Given(/^there are (\d+) petitions awaiting a government response$/) do |response_count|
-  response_count.times do |count|
-    petition = FactoryBot.create(:awaiting_petition, :action => "Petition #{count}")
+Given(/^there are (\d+) petitions that have been referred to the committee$/) do |referred_count|
+  referred_count.times do |count|
+    petition = FactoryBot.create(:referred_petition, :action => "Petition #{count}")
   end
 end
 
@@ -352,20 +332,16 @@ Given(/^a petition "(.*?)" exists with a debate outcome$/) do |action|
   @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago)
 end
 
-Given(/^a petition "(.*?)" exists with a debate outcome and with response threshold met$/) do |action|
-  @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', response_threshold_reached_at: 30.days.ago)
+Given(/^a petition "(.*?)" exists with a debate outcome and with referral threshold met$/) do |action|
+  @petition = FactoryBot.create(:debated_petition, action: action, debated_on: 1.day.ago, overview: 'Everyone was in agreement, this petition must be made law!', referral_threshold_reached_at: 30.days.ago)
 end
 
 Given(/^a petition "(.*?)" exists awaiting debate date$/) do |action|
   @petition = FactoryBot.create(:awaiting_debate_petition, action: action)
 end
 
-Given(/^a petition "(.*?)" exists with government response$/) do |action|
-  @petition = FactoryBot.create(:responded_petition, action: action)
-end
-
-Given(/^a petition "(.*?)" exists awaiting government response$/) do |action|
-  @petition = FactoryBot.create(:awaiting_petition, action: action)
+Given(/^a petition "(.*?)" exists that has been referred$/) do |action|
+  @petition = FactoryBot.create(:referred_petition, action: action)
 end
 
 Given(/^a petition "(.*?)" exists with notes "([^"]*)"$/) do |action, notes|
@@ -392,7 +368,7 @@ Given(/^there are (\d+) petitions with enough signatures to require a debate$/) 
   end
 end
 
-Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_action|
+Given(/^a petition "(.*?)" has other Senedd business$/) do |petition_action|
   @petition = FactoryBot.create(:open_petition, action: petition_action)
   @email = FactoryBot.create(:petition_email,
     petition: @petition,
@@ -401,9 +377,9 @@ Given(/^a petition "(.*?)" has other parliamentary business$/) do |petition_acti
   )
 end
 
-Then(/^I should see the other business items$/) do
+Then(/^I should see the other Senedd business items$/) do
   steps %Q(
-    Then I should see "Other parliamentary business"
+    Then I should see "Other Senedd business"
     And I should see "Committee to discuss #{@petition.action}"
     And I should see "The Petition Committee will discuss #{@petition.action} on the #{Date.tomorrow}"
   )

@@ -6,7 +6,7 @@
   'use strict';
 
   var JSON_URL = window.location.pathname + '/count.json',
-      THRESHOLD_RESPONSE = <%= Site.threshold_for_response %>,
+      THRESHOLD_REFERRAL = <%= Site.threshold_for_referral %>,
       THRESHOLD_DEBATE = <%= Site.threshold_for_debate %>,
       TIMEOUT = 10000;
 
@@ -15,17 +15,17 @@
   }
 
   function update_progress_bar(value) {
-    var pc = value / (value >= THRESHOLD_RESPONSE ? THRESHOLD_DEBATE : THRESHOLD_RESPONSE) * 100;
+    var pc = value / (value >= THRESHOLD_REFERRAL ? THRESHOLD_DEBATE : THRESHOLD_REFERRAL) * 100;
     if (pc > 100) {
       pc = 100;
     } else if (pc < 1) {
       pc = 1;
     }
     $('.signature-count-current').width(pc + '%');
-    if (value >= THRESHOLD_RESPONSE) {
+    if (value >= THRESHOLD_REFERRAL) {
       $('.signature-count-goal').text(add_commas(THRESHOLD_DEBATE));
     } else {
-      $('.signature-count-goal').text(add_commas(THRESHOLD_RESPONSE));
+      $('.signature-count-goal').text(add_commas(THRESHOLD_REFERRAL));
     }
   }
 

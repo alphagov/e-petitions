@@ -127,20 +127,6 @@ input.back-page {
   .summary {
     text-decoration: underline;
   }
-
-  .list-of-parliaments {
-    margin-top: $gutter-half;
-    display: block;
-    @include core-16();
-
-    ul {
-      padding: $gutter/6;
-    }
-
-    li {
-      padding: $gutter/6 0;
-    }
-  }
 }
 
 // Flash messages
@@ -285,14 +271,14 @@ input.back-page {
     }
   }
 }
-.about-item-count-response h2, .about-item-count-debate h2, .about-item-other-business h2 {
+.about-item-count-response h2, .about-item-count-debate h2, .about-item-other-senedd-business h2 {
   background-repeat: no-repeat;
 }
 .about-item-count-response h2 {
   background-position: 0 6px;
   @include background-image("graphics/graphic_crown", 36px, 25px);
 }
-.about-item-count-debate h2, .about-item-other-business h2 {
+.about-item-count-debate h2, .about-item-other-senedd-business h2 {
   background-position: 4px 0;
   @include background-image("graphics/graphic_portcullis", 26px, 32px);
 }

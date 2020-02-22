@@ -108,7 +108,7 @@ RSpec.describe Admin::ModerationDelaysController, type: :controller, admin: true
           end
 
           it "sends an email to the feedback address" do
-            expect(email).to deliver_to("petitionscommittee@senedd.wales")
+            expect(email).to deliver_to("petitions@senedd.wales")
           end
 
           it "sets the moderation_delay attributes in the session" do

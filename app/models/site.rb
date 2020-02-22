@@ -52,8 +52,8 @@ class Site < ActiveRecord::Base
       instance.formatted_threshold_for_moderation
     end
 
-    def formatted_threshold_for_response
-      instance.formatted_threshold_for_response
+    def formatted_threshold_for_referral
+      instance.formatted_threshold_for_referral
     end
 
     def formatted_threshold_for_debate
@@ -199,7 +199,7 @@ class Site < ActiveRecord::Base
         maximum_number_of_sponsors:     default_maximum_number_of_sponsors,
         threshold_for_moderation:       default_threshold_for_moderation,
         threshold_for_moderation_delay: default_threshold_for_moderation_delay,
-        threshold_for_response:         default_threshold_for_response,
+        threshold_for_referral:         default_threshold_for_referral,
         threshold_for_debate:           default_threshold_for_debate
       }
     end
@@ -228,12 +228,12 @@ class Site < ActiveRecord::Base
     private
 
     def default_title_en
-      ENV.fetch('SITE_TITLE_EN', 'Petition parliament')
+      ENV.fetch('SITE_TITLE_EN', "Petition the Senedd")
     end
     alias_method :default_title, :default_title_en
 
     def default_title_cy
-      ENV.fetch('SITE_TITLE_CY', 'Senedd ddeiseb')
+      ENV.fetch('SITE_TITLE_CY', "Deisebu'r Senedd")
     end
 
     def default_scheme
@@ -290,16 +290,16 @@ class Site < ActiveRecord::Base
     end
 
     def default_email_from_en
-      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Welsh Parliament" <no-reply@#{default_host_en}>})
+      ENV.fetch('EPETITIONS_FROM_EN', %{"Petitions: Senedd" <no-reply@#{default_host_en}>})
     end
     alias_method :default_email_from, :default_email_from_en
 
     def default_email_from_cy
-      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Senedd Cymru" <dim-ateb@#{default_host_cy}>})
+      ENV.fetch('EPETITIONS_FROM_CY', %{"Deisebau: Senedd" <dim-ateb@#{default_host_cy}>})
     end
 
     def default_feedback_email
-      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Welsh Parliament" <petitionscommittee@#{default_domain}>})
+      ENV.fetch('EPETITIONS_FEEDBACK', %{"Petitions: Senedd" <petitions@#{default_domain}>})
     end
 
     def default_username
@@ -327,7 +327,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_minimum_number_of_sponsors
-      ENV.fetch('MINIMUM_NUMBER_OF_SPONSORS', '5').to_i
+      ENV.fetch('MINIMUM_NUMBER_OF_SPONSORS', '2').to_i
     end
 
     def default_maximum_number_of_sponsors
@@ -335,19 +335,19 @@ class Site < ActiveRecord::Base
     end
 
     def default_threshold_for_moderation
-      ENV.fetch('THRESHOLD_FOR_MODERATION', '5').to_i
+      ENV.fetch('THRESHOLD_FOR_MODERATION', '2').to_i
     end
 
     def default_threshold_for_moderation_delay
       ENV.fetch('THRESHOLD_FOR_MODERATION_DELAY', '500').to_i
     end
 
-    def default_threshold_for_response
-      ENV.fetch('THRESHOLD_FOR_RESPONSE', '10000').to_i
+    def default_threshold_for_referral
+      ENV.fetch('THRESHOLD_FOR_RESPONSE', '50').to_i
     end
 
     def default_threshold_for_debate
-      ENV.fetch('THRESHOLD_FOR_DEBATE', '100000').to_i
+      ENV.fetch('THRESHOLD_FOR_DEBATE', '5000').to_i
     end
 
     def default_constraints_for_public_en
@@ -372,8 +372,8 @@ class Site < ActiveRecord::Base
     end
   else
     class << self
-      def threshold_for_response
-        default_threshold_for_response
+      def threshold_for_referral
+        default_threshold_for_referral
       end
 
       def threshold_for_debate
@@ -410,8 +410,8 @@ class Site < ActiveRecord::Base
     number_to_delimited(threshold_for_moderation)
   end
 
-  def formatted_threshold_for_response
-    number_to_delimited(threshold_for_response)
+  def formatted_threshold_for_referral
+    number_to_delimited(threshold_for_referral)
   end
 
   def formatted_threshold_for_debate
@@ -533,7 +533,7 @@ class Site < ActiveRecord::Base
   validates :maximum_number_of_sponsors, presence: true, numericality: { only_integer: true }
   validates :threshold_for_moderation, presence: true, numericality: { only_integer: true }
   validates :threshold_for_moderation_delay, presence: true, numericality: { only_integer: true }
-  validates :threshold_for_response, presence: true, numericality: { only_integer: true }
+  validates :threshold_for_referral, presence: true, numericality: { only_integer: true }
   validates :threshold_for_debate, presence: true, numericality: { only_integer: true }
   validates :username, presence: true, length: { maximum: 30 }, if: :protected?
   validates :password, length: { maximum: 30 }, confirmation: true, if: :protected?

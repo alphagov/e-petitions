@@ -16,7 +16,6 @@ RSpec.describe Petition, type: :model do
 
   describe "associations" do
     it { is_expected.to have_one(:debate_outcome).dependent(:destroy) }
-    it { is_expected.to have_one(:government_response).dependent(:destroy) }
 
     it { is_expected.to have_many(:emails).dependent(:destroy) }
     it { is_expected.to have_many(:invalidations) }
@@ -213,45 +212,6 @@ RSpec.describe Petition, type: :model do
 
       it "returns only petitions that are not hidden" do
         expect(Petition.not_hidden).not_to include(petition)
-      end
-    end
-
-    context "awaiting_response" do
-      context "when the petition has not reached the response threshold" do
-        let(:petition) { FactoryBot.create(:open_petition) }
-
-        it "is not included in the list" do
-          expect(Petition.awaiting_response).not_to include(petition)
-        end
-      end
-
-      context "when a petition has reached the response threshold" do
-        let(:petition) { FactoryBot.create(:awaiting_petition) }
-
-        it "is included in the list" do
-          expect(Petition.awaiting_response).to include(petition)
-        end
-      end
-
-      context "when a petition has a response" do
-        let(:petition) { FactoryBot.create(:responded_petition) }
-
-        it "is not included in the list" do
-          expect(Petition.awaiting_response).not_to include(petition)
-        end
-      end
-    end
-
-    context "with_response" do
-      before do
-        @p1 = FactoryBot.create(:responded_petition)
-        @p2 = FactoryBot.create(:open_petition)
-        @p3 = FactoryBot.create(:responded_petition)
-        @p4 = FactoryBot.create(:open_petition)
-      end
-
-      it "returns only the petitions have a government response timestamp" do
-        expect(Petition.with_response).to match_array([@p1, @p3])
       end
     end
 
@@ -1197,7 +1157,7 @@ RSpec.describe Petition, type: :model do
 
     context "when a petition is in the open state and closed_at has passed" do
       let(:open_at) { Site.opened_at_for_closing - 1.day }
-      let!(:petition) { FactoryBot.create(:open_petition, open_at: open_at) }
+      let!(:petition) { FactoryBot.create(:open_petition, referred: true, open_at: open_at) }
 
       it "does close the petition" do
         expect{
@@ -1445,7 +1405,7 @@ RSpec.describe Petition, type: :model do
       let(:signature_count) { 4 }
 
       before do
-        expect(Site).to receive(:threshold_for_response).and_return(5)
+        expect(Site).to receive(:threshold_for_referral).and_return(5)
         FactoryBot.create(:validated_signature, petition: petition)
       end
 
@@ -1537,7 +1497,7 @@ RSpec.describe Petition, type: :model do
       let(:signature_count) { 9 }
 
       before do
-        expect(Site).to receive(:threshold_for_response).and_return(10)
+        expect(Site).to receive(:threshold_for_referral).and_return(10)
         FactoryBot.create(:validated_signature, petition: petition)
       end
 
@@ -1545,7 +1505,7 @@ RSpec.describe Petition, type: :model do
         expect {
           petition.increment_signature_count!
         }.to change {
-          petition.response_threshold_reached_at
+          petition.referral_threshold_reached_at
         }.to be_within(1.second).of(Time.current)
       end
     end
@@ -1583,7 +1543,7 @@ RSpec.describe Petition, type: :model do
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
         updated_at: 2.days.ago,
-        response_threshold_reached_at: 2.days.ago,
+        referral_threshold_reached_at: 2.days.ago,
         debate_threshold_reached_at: 2.days.ago,
         debate_state: 'awaiting'
       })
@@ -1614,12 +1574,12 @@ RSpec.describe Petition, type: :model do
       let(:signature_count) { 10 }
 
       before do
-        expect(Site).to receive(:threshold_for_response).and_return(10)
+        expect(Site).to receive(:threshold_for_referral).and_return(10)
       end
 
       it "resets the timestamp" do
         petition.decrement_signature_count!
-        expect(petition.response_threshold_reached_at).to be_nil
+        expect(petition.referral_threshold_reached_at).to be_nil
       end
     end
 
@@ -1679,7 +1639,7 @@ RSpec.describe Petition, type: :model do
       let(:petition) { FactoryBot.create(:sponsored_petition) }
 
       before do
-        expect(Site).not_to receive(:threshold_for_response)
+        expect(Site).not_to receive(:threshold_for_referral)
       end
 
       it "is falsey" do
@@ -1725,7 +1685,7 @@ RSpec.describe Petition, type: :model do
       let(:petition) { FactoryBot.create(:sponsored_petition) }
 
       before do
-        expect(Site).not_to receive(:threshold_for_response)
+        expect(Site).not_to receive(:threshold_for_referral)
       end
 
       it "is falsey" do
@@ -1734,19 +1694,19 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "at_threshold_for_response?" do
-    context "when response_threshold_reached_at is not present" do
+  describe "at_threshold_for_referral?" do
+    context "when referral_threshold_reached_at is not present" do
       let(:petition) { FactoryBot.create(:open_petition, signature_count: signature_count) }
 
       before do
-        expect(Site).to receive(:threshold_for_response).and_return(10)
+        expect(Site).to receive(:threshold_for_referral).and_return(10)
       end
 
       context "and the signature count is 2 or more less than the threshold" do
         let(:signature_count) { 8 }
 
         it "is falsey" do
-          expect(petition.at_threshold_for_response?).to be_falsey
+          expect(petition.at_threshold_for_referral?).to be_falsey
         end
       end
 
@@ -1754,7 +1714,7 @@ RSpec.describe Petition, type: :model do
         let(:signature_count) { 9 }
 
         it "is truthy" do
-          expect(petition.at_threshold_for_response?).to be_truthy
+          expect(petition.at_threshold_for_referral?).to be_truthy
         end
       end
 
@@ -1762,7 +1722,7 @@ RSpec.describe Petition, type: :model do
         let(:signature_count) { 10 }
 
         it "is truthy" do
-          expect(petition.at_threshold_for_response?).to be_truthy
+          expect(petition.at_threshold_for_referral?).to be_truthy
         end
       end
 
@@ -1770,20 +1730,20 @@ RSpec.describe Petition, type: :model do
         let(:signature_count) { 10 }
 
         it "is truthy" do
-          expect(petition.at_threshold_for_response?).to be_truthy
+          expect(petition.at_threshold_for_referral?).to be_truthy
         end
       end
     end
 
-    context "when response_threshold_reached_at is present" do
-      let(:petition) { FactoryBot.create(:awaiting_petition) }
+    context "when referral_threshold_reached_at is present" do
+      let(:petition) { FactoryBot.create(:referred_petition) }
 
       before do
-        expect(Site).not_to receive(:threshold_for_response)
+        expect(Site).not_to receive(:threshold_for_referral)
       end
 
       it "is falsey" do
-        expect(petition.at_threshold_for_response?).to be_falsey
+        expect(petition.at_threshold_for_referral?).to be_falsey
       end
     end
   end
@@ -1912,7 +1872,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#close!' do
-    subject(:petition) { FactoryBot.create(:open_petition, debate_state: debate_state) }
+    subject(:petition) { FactoryBot.create(:open_petition, referred: true, debate_state: debate_state) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
@@ -1955,6 +1915,32 @@ RSpec.describe Petition, type: :model do
         }.to change {
           petition.closed_at
         }.from(nil).to(petition.deadline)
+      end
+    end
+
+    context "when the petition failed to get enough signatures" do
+      subject(:petition) { FactoryBot.create(:open_petition, referred: false, debate_state: debate_state) }
+
+      it "sets the state to REJECTED" do
+        expect {
+          petition.close!(now)
+        }.to change {
+          petition.state
+        }.from(Petition::OPEN_STATE).to(Petition::REJECTED_STATE)
+      end
+
+      it "sets the rejected date to now" do
+        expect {
+          petition.close!(now)
+        }.to change {
+          petition.rejected_at
+        }.from(nil).to(now)
+      end
+
+      it "enqueues a notification job" do
+        expect {
+          petition.close!(now)
+        }.to have_enqueued_job(NotifyEveryoneOfFailureToGetEnoughSignaturesJob).with(petition)
       end
     end
 
@@ -2137,12 +2123,12 @@ RSpec.describe Petition, type: :model do
     let(:the_stored_time) { 6.days.ago }
 
     it 'returns nil when nothing has been stamped for the supplied name' do
-      expect(petition.get_email_requested_at_for('government_response')).to be_nil
+      expect(petition.get_email_requested_at_for('petition_email')).to be_nil
     end
 
     it 'returns the stored timestamp for the supplied name' do
-      receipt.update_column('government_response', the_stored_time)
-      expect(petition.get_email_requested_at_for('government_response')).to eq the_stored_time
+      receipt.update_column('petition_email', the_stored_time)
+      expect(petition.get_email_requested_at_for('petition_email')).to eq the_stored_time
     end
   end
 
@@ -2152,14 +2138,14 @@ RSpec.describe Petition, type: :model do
     let(:the_stored_time) { 6.days.ago }
 
     it 'sets the stored timestamp for the supplied name to the supplied time' do
-      petition.set_email_requested_at_for('government_response', to: the_stored_time)
-      expect(receipt.government_response).to eq the_stored_time
+      petition.set_email_requested_at_for('petition_email', to: the_stored_time)
+      expect(receipt.petition_email).to eq the_stored_time
     end
 
     it 'sets the stored timestamp for the supplied name to the current time if none is supplied' do
       travel_to the_stored_time do
-        petition.set_email_requested_at_for('government_response')
-        expect(receipt.government_response).to eq Time.current
+        petition.set_email_requested_at_for('petition_email')
+        expect(receipt.petition_email).to eq Time.current
       end
     end
   end
@@ -2170,45 +2156,45 @@ RSpec.describe Petition, type: :model do
     let!(:other_signature) { FactoryBot.create(:validated_signature, petition: petition) }
     let(:petition_timestamp) { 5.days.ago }
 
-    before { petition.set_email_requested_at_for('government_response', to: petition_timestamp) }
+    before { petition.set_email_requested_at_for('petition_email', to: petition_timestamp) }
 
     it 'raises an error if the petition does not have an email requested receipt' do
       petition.email_requested_receipt.destroy && petition.reload
-      expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+      expect { petition.signatures_to_email_for('petition_email') }.to raise_error ArgumentError
     end
 
     it 'raises an error if the petition does not have the requested timestamp in its email requested receipt' do
-      petition.email_requested_receipt.update_column('government_response', nil)
-      expect { petition.signatures_to_email_for('government_response') }.to raise_error ArgumentError
+      petition.email_requested_receipt.update_column('petition_email', nil)
+      expect { petition.signatures_to_email_for('petition_email') }.to raise_error ArgumentError
     end
 
     it "does not return those that do not want to be emailed" do
       petition.creator.update_attribute(:notify_by_email, false)
-      expect(petition.signatures_to_email_for('government_response')).not_to include creator
+      expect(petition.signatures_to_email_for('petition_email')).not_to include creator
     end
 
     it 'does not return unvalidated signatures' do
       other_signature.update_column(:state, Signature::PENDING_STATE)
-      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      expect(petition.signatures_to_email_for('petition_email')).not_to include other_signature
     end
 
     it 'does not return signatures that have a sent timestamp newer than the petitions requested receipt' do
-      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp + 1.day)
-      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      other_signature.set_email_sent_at_for('petition_email', to: petition_timestamp + 1.day)
+      expect(petition.signatures_to_email_for('petition_email')).not_to include other_signature
     end
 
     it 'does not return signatures that have a sent timestamp equal to the petitions requested receipt' do
-      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp)
-      expect(petition.signatures_to_email_for('government_response')).not_to include other_signature
+      other_signature.set_email_sent_at_for('petition_email', to: petition_timestamp)
+      expect(petition.signatures_to_email_for('petition_email')).not_to include other_signature
     end
 
     it 'does return signatures that have a sent timestamp older than the petitions requested receipt' do
-      other_signature.set_email_sent_at_for('government_response', to: petition_timestamp - 1.day)
-      expect(petition.signatures_to_email_for('government_response')).to include other_signature
+      other_signature.set_email_sent_at_for('petition_email', to: petition_timestamp - 1.day)
+      expect(petition.signatures_to_email_for('petition_email')).to include other_signature
     end
 
     it 'returns signatures that have no sent timestamp, or null for the requested timestamp in their receipt' do
-      expect(petition.signatures_to_email_for('government_response')).to match_array [creator, other_signature]
+      expect(petition.signatures_to_email_for('petition_email')).to match_array [creator, other_signature]
     end
   end
 

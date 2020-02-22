@@ -1,0 +1,13 @@
+<% if actioned[:referred][:count].zero? %>
+  <p><%= t(:"ui.home_page.referred_petitions.none_referred") %></p>
+<% else %>
+  <ol class="threshold-petitions">
+    <% actioned[:referred][:list].each do |petition| %>
+      <li class="petition-item">
+        <h3><%= link_to petition.action, petition_path(petition), class: "threshold-petition-title" %></h3>
+        <p class="intro"><%= t(:"ui.home_page.referred_petitions.referred_date", date: short_date_format(petition.referral_threshold_reached_at)) %></p>
+      </li>
+    <% end -%>
+  </ol>
+  <p><%= link_to petition_count(:referred_explanation, actioned[:referred][:count]), petitions_path(state: :referred), class: "view-all" %></p>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_20_152906) do
+ActiveRecord::Schema.define(version: 2020_02_20_222249) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -131,7 +131,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
 
   create_table "email_requested_receipts", id: :serial, force: :cascade do |t|
     t.integer "petition_id"
-    t.datetime "government_response"
     t.datetime "debate_outcome"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -145,17 +144,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.string "petition_link_or_title"
     t.string "email"
     t.string "user_agent"
-  end
-
-  create_table "government_responses", id: :serial, force: :cascade do |t|
-    t.integer "petition_id"
-    t.string "summary", limit: 500, null: false
-    t.text "details"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.date "responded_on"
-    t.index ["petition_id"], name: "index_government_responses_on_petition_id", unique: true
-    t.index ["updated_at"], name: "index_government_responses_on_updated_at"
   end
 
   create_table "holidays", id: :serial, force: :cascade do |t|
@@ -261,10 +249,9 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.boolean "notified_by_email", default: false
     t.string "background", limit: 500
     t.string "sponsor_token", limit: 255
-    t.datetime "government_response_at"
     t.date "scheduled_debate_date"
     t.datetime "last_signed_at"
-    t.datetime "response_threshold_reached_at"
+    t.datetime "referral_threshold_reached_at"
     t.datetime "debate_threshold_reached_at"
     t.datetime "rejected_at"
     t.datetime "debate_outcome_at"
@@ -286,6 +273,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.text "additional_details_cy"
     t.string "background_en", limit: 500
     t.string "background_cy", limit: 500
+    t.datetime "completed_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
@@ -302,7 +290,7 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
-    t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
+    t.index ["referral_threshold_reached_at"], name: "index_petitions_on_referral_threshold_reached_at"
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
   end
@@ -358,7 +346,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.string "location_code", limit: 30
     t.datetime "invalidated_at"
     t.integer "invalidation_id"
-    t.datetime "government_response_email_at"
     t.datetime "debate_scheduled_email_at"
     t.datetime "debate_outcome_email_at"
     t.datetime "petition_email_at"
@@ -394,23 +381,23 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
   end
 
   create_table "sites", id: :serial, force: :cascade do |t|
-    t.string "title_en", limit: 50, default: "Petition parliament", null: false
+    t.string "title_en", limit: 50, default: "Petition the Senedd", null: false
     t.string "url_en", limit: 50, default: "https://petition.senedd.wales", null: false
-    t.string "email_from_en", limit: 100, default: "\"Petitions: Welsh Parliament\" <no-reply@petition.senedd.wales>", null: false
+    t.string "email_from_en", limit: 100, default: "\"Petitions: Senedd\" <no-reply@petition.senedd.wales>", null: false
     t.string "username", limit: 30
     t.string "password_digest", limit: 60
     t.boolean "enabled", default: true, null: false
     t.boolean "protected", default: false, null: false
     t.integer "petition_duration", default: 6, null: false
-    t.integer "minimum_number_of_sponsors", default: 5, null: false
+    t.integer "minimum_number_of_sponsors", default: 2, null: false
     t.integer "maximum_number_of_sponsors", default: 20, null: false
-    t.integer "threshold_for_moderation", default: 5, null: false
-    t.integer "threshold_for_response", default: 10000, null: false
-    t.integer "threshold_for_debate", default: 100000, null: false
+    t.integer "threshold_for_moderation", default: 2, null: false
+    t.integer "threshold_for_referral", default: 50, null: false
+    t.integer "threshold_for_debate", default: 5000, null: false
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "feedback_email", limit: 100, default: "\"Petitions: Welsh Parliament\" <petitionscommittee@senedd.wales>", null: false
+    t.string "feedback_email", limit: 100, default: "\"Petitions: Senedd\" <petitions@senedd.wales>", null: false
     t.string "moderate_url", limit: 50, default: "https://moderate.petition.senedd.wales", null: false
     t.datetime "last_petition_created_at"
     t.integer "login_timeout", default: 1800, null: false
@@ -419,9 +406,9 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
     t.integer "signature_count_interval", default: 60, null: false
     t.boolean "update_signature_counts", default: false, null: false
     t.integer "threshold_for_moderation_delay", default: 500, null: false
-    t.string "title_cy", limit: 50, default: "Senedd ddeiseb", null: false
+    t.string "title_cy", limit: 50, default: "Deisebu'r Senedd", null: false
     t.string "url_cy", limit: 50, default: "https://deiseb.senedd.cymru", null: false
-    t.string "email_from_cy", limit: 100, default: "\"Deisebau: Senedd Cymru\" <dim-ateb@deiseb.senedd.cymru>", null: false
+    t.string "email_from_cy", limit: 100, default: "\"Deisebau: Senedd\" <dim-ateb@deiseb.senedd.cymru>", null: false
     t.datetime "translations_updated_at"
   end
 
@@ -472,7 +459,6 @@ ActiveRecord::Schema.define(version: 2020_02_20_152906) do
   add_foreign_key "debate_outcomes", "petitions", on_delete: :cascade
   add_foreign_key "domains", "domains", column: "canonical_domain_id"
   add_foreign_key "email_requested_receipts", "petitions"
-  add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"

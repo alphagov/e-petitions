@@ -20,12 +20,6 @@
         <%= render 'petition_action_notes', petition: @petition %>
       </li>
 
-      <% if @petition.moderated? %>
-        <li class="petition-action">
-          <%= render 'petition_action_government_response', petition: @petition %>
-        </li>
-      <% end %>
-
       <% if @petition.can_have_debate_added? %>
         <li class="petition-action">
           <%= render 'petition_action_debate_date', petition: @petition %>
@@ -53,6 +47,13 @@
         </li>
       <% end -%>
 
+      <% if @petition.closed? %>
+        <li class="petition-action">
+          <%= form_for @petition, url: admin_petition_completion_path(@petition), method: :patch do |f| -%>
+            <%= f.submit "Mark this petition as completed", class: 'button', style: "font-size: 16px;", data: { confirm: "Are you sure?" } %>
+          <% end -%>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </nav>

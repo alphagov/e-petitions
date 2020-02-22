@@ -4,10 +4,10 @@ module PetitionHelper
   end
 
   def current_threshold(petition)
-    if petition.response_threshold_reached_at? || petition.government_response_at?
+    if petition.referral_threshold_reached_at?
       Site.threshold_for_debate
     else
-      Site.threshold_for_response
+      Site.threshold_for_referral
     end
   end
 
@@ -28,10 +28,6 @@ module PetitionHelper
 
   def petition_list_header?
     petition_list_header.present?
-  end
-
-  def reveal_government_response?
-    params[:reveal_response] == "yes"
   end
 
   def petition_standards_link(*args)

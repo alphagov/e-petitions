@@ -62,7 +62,7 @@ module WelshPets
         details << 'C=GB'
         details << 'ST=Wales'
         details << 'L=Cardiff'
-        details << 'O=Welsh Parliament'
+        details << 'O=Senedd'
         details << 'OU=ICT'
         details << 'CN=petition.senedd.wales'
 

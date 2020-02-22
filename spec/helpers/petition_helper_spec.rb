@@ -41,16 +41,16 @@ RSpec.describe PetitionHelper, type: :helper do
   end
 
   describe "#current_threshold" do
-    context "when the response threshold has never been reached" do
+    context "when the referral threshold has never been reached" do
       let(:petition) { FactoryBot.create(:petition) }
 
-      it "returns the response threshold" do
-        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_response)
+      it "returns the referral threshold" do
+        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_referral)
       end
     end
 
-    context "when the response threshold was reached recently" do
-      let(:petition) { FactoryBot.create(:petition, response_threshold_reached_at: 1.days.ago )}
+    context "when the referral threshold was reached recently" do
+      let(:petition) { FactoryBot.create(:petition, referral_threshold_reached_at: 1.days.ago )}
 
       it "returns the debate threshold" do
         expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
@@ -58,15 +58,7 @@ RSpec.describe PetitionHelper, type: :helper do
     end
 
     context "when the debate threshold was reached recently" do
-      let(:petition) { FactoryBot.create(:petition, response_threshold_reached_at: 2.months.ago, debate_threshold_reached_at: 1.days.ago )}
-
-      it "returns the debate threshold" do
-        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
-      end
-    end
-
-    context "when the response threshold was not reached but government has responded" do
-      let(:petition) { FactoryBot.create(:petition, government_response_at: 2.days.ago) }
+      let(:petition) { FactoryBot.create(:petition, referral_threshold_reached_at: 2.months.ago, debate_threshold_reached_at: 1.days.ago )}
 
       it "returns the debate threshold" do
         expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
@@ -76,20 +68,20 @@ RSpec.describe PetitionHelper, type: :helper do
 
   describe "#signatures_threshold_percentage" do
     before do
-      allow(Site).to receive(:threshold_for_response).and_return(10000)
-      allow(Site).to receive(:threshold_for_debate).and_return(100000)
+      allow(Site).to receive(:threshold_for_referral).and_return(50)
+      allow(Site).to receive(:threshold_for_debate).and_return(5000)
     end
 
-    context "when the signature count is less than the response threshold" do
-      let(:petition) { FactoryBot.create(:petition, signature_count: (Site.threshold_for_response / 100) * 2.39) }
+    context "when the signature count is less than the referral threshold" do
+      let(:petition) { FactoryBot.create(:petition, signature_count: 17) }
 
-      it "returns a percentage relative to the response threshold" do
-        expect(helper.signatures_threshold_percentage(petition)).to eq("2.39%")
+      it "returns a percentage relative to the referral threshold" do
+        expect(helper.signatures_threshold_percentage(petition)).to eq("34.00%")
       end
     end
 
-    context "when the signature count is greater than the response threshold and less than the debate threshold" do
-      let(:petition) { FactoryBot.create(:petition, signature_count: (Site.threshold_for_debate / 100) * 76.24, response_threshold_reached_at: 1.day.ago) }
+    context "when the signature count is greater than the referral threshold and less than the debate threshold" do
+      let(:petition) { FactoryBot.create(:petition, signature_count: 3812, referral_threshold_reached_at: 1.day.ago) }
 
       it "returns a percentage relative to the debate threshold" do
         expect(helper.signatures_threshold_percentage(petition)).to eq("76.24%")
@@ -97,54 +89,10 @@ RSpec.describe PetitionHelper, type: :helper do
     end
 
     context "when the signature count is greater than the debate threshold" do
-      let(:petition) { FactoryBot.create(:petition, signature_count: Site.threshold_for_debate + 1000, debate_threshold_reached_at: 1.day.ago) }
+      let(:petition) { FactoryBot.create(:petition, signature_count: 6000, debate_threshold_reached_at: 1.day.ago) }
 
       it "returns 100 percent" do
         expect(helper.signatures_threshold_percentage(petition)).to eq("100.00%")
-      end
-    end
-
-    context "when the response threshold was not reached but government has responded" do
-      let(:petition) { FactoryBot.create(:petition, signature_count: (Site.threshold_for_response / 100) * 98.8, government_response_at: 2.days.ago) }
-
-      it "returns a percentage relative to the debate threshold" do
-        expect(helper.signatures_threshold_percentage(petition)).to eq("9.88%")
-      end
-    end
-
-    context "when the actual percentage is less than 1" do
-      let(:petition) { FactoryBot.create(:petition, signature_count: (Site.threshold_for_debate / 100) * 0.05) }
-
-      it "returns 1%" do
-        expect(helper.signatures_threshold_percentage(petition)).to eq("1.00%")
-      end
-    end
-  end
-
-  describe "#reveal_government_response?" do
-    context "when the param 'reveal_response' isn't set" do
-      it "returns false" do
-        expect(helper.reveal_government_response?).to eq(false)
-      end
-    end
-
-    context "when the param 'reveal_response' is set to 'no'" do
-      before do
-        params[:reveal_response] = "no"
-      end
-
-      it "returns false" do
-        expect(helper.reveal_government_response?).to eq(false)
-      end
-    end
-
-    context "when the param 'reveal_response' is set to 'yes'" do
-      before do
-        params[:reveal_response] = "yes"
-      end
-
-      it "returns true" do
-        expect(helper.reveal_government_response?).to eq(true)
       end
     end
   end

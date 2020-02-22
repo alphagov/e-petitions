@@ -21,12 +21,12 @@ RSpec.describe EmailRequestedReceipt, type: :model do
     let(:the_stored_time) { 6.days.ago }
 
     it 'returns nil when nothing has been stamped for the supplied name' do
-      expect(receipt.get('government_response')).to be_nil
+      expect(receipt.get('petition_email')).to be_nil
     end
 
     it 'returns the stored timestamp for the supplied name' do
-      receipt.government_response = the_stored_time
-      expect(receipt.get('government_response')).to be_usec_precise_with the_stored_time
+      receipt.petition_email = the_stored_time
+      expect(receipt.get('petition_email')).to be_usec_precise_with the_stored_time
     end
 
     it 'raises an error if the supplied name is not a valid timestamp' do
@@ -50,9 +50,9 @@ RSpec.describe EmailRequestedReceipt, type: :model do
     let(:the_stored_time) { 6.days.ago }
 
     it 'saves the stored timestamp for the supplied name in the db to the supplied time' do
-      receipt.set('government_response', the_stored_time)
+      receipt.set('petition_email', the_stored_time)
       receipt.reload
-      expect(receipt.government_response).to be_usec_precise_with the_stored_time
+      expect(receipt.petition_email).to be_usec_precise_with the_stored_time
     end
 
     it 'raises an error if the supplied name is not a valid timestamp' do

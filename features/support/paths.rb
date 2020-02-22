@@ -113,9 +113,6 @@ module NavigationHelpers
     when /^email petitioners form page for "([^\"]*)"$/
       new_admin_petition_email_url(Petition.find_by(action: $1))
 
-    when /^government response page for "([^\"]*)"$/
-      admin_petition_government_response_url(Petition.find_by(action: $1))
-
     when /^petition edit details page for "([^\"]*)"$/
       admin_petition_details_url(Petition.find_by(action: $1))
 

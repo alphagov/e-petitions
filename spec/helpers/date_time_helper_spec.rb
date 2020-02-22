@@ -46,7 +46,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       let(:date) { 2.hours.ago(now) }
 
       it "returns 'Waiting for less than a day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for less than a day")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting less than a day")
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       let(:date) { 1.day.ago(now) }
 
       it "returns 'Waiting for 1 day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 1 day")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1 day")
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       let(:date) { 7.days.ago(now) }
 
       it "returns 'Waiting for 7 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 7 days")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 7 days")
       end
     end
 
@@ -70,7 +70,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       let(:date) { 30.days.ago(now) }
 
       it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
       end
     end
 
@@ -83,7 +83,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
 
       it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
       end
     end
 
@@ -96,7 +96,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
 
       it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 30 days")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
       end
     end
 
@@ -104,7 +104,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       let(:date) { 1095.days.ago(now) }
 
       it "returns 'Waiting for 1,095 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting for 1,095 days")
+        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1,095 days")
       end
     end
   end

@@ -1,0 +1,15 @@
+<section class="about-item about-item-count-response" id="referral-threshold" aria-labelledby="referral-threshold-heading">
+  <%# Referred to the Petitions Committee #%>
+  <% if petition.referral_threshold_reached_at? -%>
+    <h2 id="referral-threshold-heading"><%= t(:"ui.petitions.referral_threshold.waiting.heading") %></h2>
+    <p><%= t(:"ui.petitions.referral_threshold.waiting.referral_threshold", threshold: Site.formatted_threshold_for_referral) %></p>
+    <p class="secondary"><%= waiting_for_in_words(petition.closed_at) %> <%= t(:"ui.petitions.referral_threshold.waiting.referral_waiting_time") %></p>
+
+  <%# Needs more signatures #%>
+  <% else -%>
+    <% if !@petition.closed? %>
+      <h2 id="referral-threshold-heading"><%= t(:"ui.petitions.referral_threshold.needs_more_signatures.heading", threshold: Site.formatted_threshold_for_referral) %></h2>
+      <p><%= t(:"ui.petitions.referral_threshold.needs_more_signatures.referral_threshold", threshold: Site.formatted_threshold_for_referral) %></p>
+    <% end %>
+  <% end -%>
+</section>

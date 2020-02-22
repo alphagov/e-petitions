@@ -99,18 +99,18 @@ RSpec.describe ApplicationHelper, type: :helper do
     let(:headers) { helper.request.env }
 
     before do
-      headers["HTTP_HOST"]   = "petition.parliament.test"
+      headers["HTTP_HOST"]   = "petition.senedd.test"
       headers["HTTPS"]       = "on"
       headers["SERVER_PORT"] = 443
     end
 
     context "when the referer is an internal url" do
       before do
-        headers["HTTP_REFERER"] = "https://petition.parliament.test/petitions/new"
+        headers["HTTP_REFERER"] = "https://petition.senedd.test/petitions/new"
       end
 
       it "returns the referer url" do
-        expect(helper.back_url).to eq("https://petition.parliament.test/petitions/new")
+        expect(helper.back_url).to eq("https://petition.senedd.test/petitions/new")
       end
     end
 
@@ -126,7 +126,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     context "when the scheme doesn't match" do
       before do
-        headers["HTTP_REFERER"] = "http://petition.parliament.test/petitions/new"
+        headers["HTTP_REFERER"] = "http://petition.senedd.test/petitions/new"
       end
 
       it "returns 'javascript:history.back()'" do
@@ -146,7 +146,7 @@ RSpec.describe ApplicationHelper, type: :helper do
 
     context "when the port doesn't match" do
       before do
-        headers["HTTP_REFERER"] = "http://petition.parliament.test:8443/petitions/new"
+        headers["HTTP_REFERER"] = "http://petition.senedd.test:8443/petitions/new"
       end
 
       it "returns 'javascript:history.back()'" do

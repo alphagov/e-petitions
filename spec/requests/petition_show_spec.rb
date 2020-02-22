@@ -93,34 +93,11 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
-    it "includes the government_response section for petitions with a government_response" do
-      petition = \
-        FactoryBot.create :responded_petition,
-          response_summary: "Summary of what the government said",
-          response_details: "Details of what the government said"
-
-      get "/petitions/#{petition.id}.json"
-      expect(response).to be_successful
-
-      expect(attributes).to match(
-        a_hash_including(
-          "government_response_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-          "government_response" => a_hash_including(
-            "responded_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
-            "summary" => "Summary of what the government said",
-            "details" => "Details of what the government said",
-            "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-            "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
-          )
-        )
-      )
-    end
-
     it "includes the date and time at which the thresholds were reached" do
       petition = \
         FactoryBot.create :open_petition,
           moderation_threshold_reached_at: 1.month.ago,
-          response_threshold_reached_at: 1.weeks.ago,
+          referral_threshold_reached_at: 1.weeks.ago,
           debate_threshold_reached_at: 1.day.ago
 
       get "/petitions/#{petition.id}.json"
@@ -129,7 +106,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       expect(attributes).to match(
         a_hash_including(
           "moderation_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
-          "response_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+          "referral_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "debate_threshold_reached_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
         )
       )
@@ -153,9 +130,9 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
         FactoryBot.create :debated_petition,
           debated_on: 1.day.ago,
           overview: "What happened in the debate",
-          transcript_url: "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
-          video_url: "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
-          debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+          transcript_url: "https://record.assembly.wales/Plenary/5667#A51756",
+          video_url: "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
+          debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -166,9 +143,9 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           "debate" => a_hash_including(
             "debated_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z]),
             "overview" => "What happened in the debate",
-            "transcript_url" => "http://www.publications.parliament.uk/pa/cm201212/cmhansrd/cm120313/debtext/120313-0001.htm#12031360000001",
-            "video_url" => "http://parliamentlive.tv/event/index/da084e18-0e48-4d0a-9aa5-be27f57d5a71?in=16:31:00",
-            "debate_pack_url" => "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234"
+            "transcript_url" => "https://record.assembly.wales/Plenary/5667#A51756",
+            "video_url" => "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
+            "debate_pack_url" => "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
           )
         )
       )

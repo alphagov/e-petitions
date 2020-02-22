@@ -40,26 +40,26 @@ RSpec.describe HomeHelper, type: :helper do
   end
 
   describe "#petition_count" do
-    describe "for counting government responses" do
+    describe "for counting referred petitions" do
       it "returns a HTML-safe string" do
-        expect(helper.petition_count(:with_response, 1)).to be_an(ActiveSupport::SafeBuffer)
+        expect(helper.petition_count(:referred, 1)).to be_an(ActiveSupport::SafeBuffer)
       end
 
       context "when the petition count is 1" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 1)).to eq("<span class=\"count\">1</span> petition got a response from the Government")
+          expect(helper.petition_count(:referred, 1)).to eq("<span class=\"count\">1</span> petition was referred to the Petitions Committee")
         end
       end
 
       context "when the petition count is 100" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 100)).to eq("<span class=\"count\">100</span> petitions got a response from the Government")
+          expect(helper.petition_count(:referred, 100)).to eq("<span class=\"count\">100</span> petitions were referred to the Petitions Committee")
         end
       end
 
       context "when the petition count is 1000" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_response, 1000)).to eq("<span class=\"count\">1,000</span> petitions got a response from the Government")
+          expect(helper.petition_count(:referred, 1000)).to eq("<span class=\"count\">1,000</span> petitions were referred to the Petitions Committee")
         end
       end
     end
@@ -71,19 +71,19 @@ RSpec.describe HomeHelper, type: :helper do
 
       context "when the petition count is 1" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> petition was debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> petition was debated in the Senedd")
         end
       end
 
       context "when the petition count is 100" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> petitions were debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> petitions were debated in the Senedd")
         end
       end
 
       context "when the petition count is 1000" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> petitions were debated in the House of Commons")
+          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> petitions were debated in the Senedd")
         end
       end
     end
@@ -95,7 +95,7 @@ RSpec.describe HomeHelper, type: :helper do
     let!(:open_petition) { FactoryBot.create :open_petition }
 
     describe "when there is an actioned petition" do
-      let!(:responded_petition) { FactoryBot.create :responded_petition }
+      let!(:referred_petition) { FactoryBot.create :referred_petition }
 
       it "returns true" do
         expect(helper.any_actioned_petitions?).to eq true

@@ -1,5 +1,5 @@
 Feature: As Charlie
-  In order to have an issue discussed in parliament
+  In order to have an issue discussed in the Senedd
   I want to be able to create a petition and verify my email address.
 
 @search

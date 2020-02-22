@@ -74,7 +74,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(last_email_sent).to deliver_to("john@example.com")
-        expect(last_email_sent).to deliver_from(%{"Petitions: Welsh Parliament" <no-reply@petition.senedd.wales>})
+        expect(last_email_sent).to deliver_from(%{"Petitions: Senedd" <no-reply@petition.senedd.wales>})
         expect(last_email_sent).to have_subject("Action required: Petition “Save the planet”")
       end
 

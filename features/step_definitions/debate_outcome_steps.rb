@@ -3,9 +3,9 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
     action: petition_action,
     debated_on: debated_days_ago.days.ago.to_date,
     overview: 'Everyone was in agreement, this petition must be made law!',
-    transcript_url: 'http://transcripts.parliament.example.com/2.html',
-    video_url: 'http://videos.parliament.example.com/2.avi',
-    debate_pack_url: 'http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234'
+    transcript_url: 'https://record.assembly.wales/Plenary/5667#A51756',
+    video_url: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
+    debate_pack_url: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
   )
   @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
@@ -26,9 +26,9 @@ end
 
 Then(/^I should see links to the transcript, video and research$/) do
   within :css, '.debate-outcome' do
-    expect(page).to have_link('Watch the debate', href: 'http://videos.parliament.example.com/2.avi')
-    expect(page).to have_link('Read the transcript', href: 'http://transcripts.parliament.example.com/2.html')
-    expect(page).to have_link('Read the research', href: 'http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234')
+    expect(page).to have_link('Watch the debate', href: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True')
+    expect(page).to have_link('Read the transcript', href: 'https://record.assembly.wales/Plenary/5667#A51756')
+    expect(page).to have_link('Find details of the petition', href: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667')
   end
 end
 
@@ -46,9 +46,9 @@ end
 When(/^I fill in the debate outcome details$/) do
   fill_in 'Debated on', with: '18/12/2014'
   fill_in 'Overview', with: 'Lots of people spoke about it, no consensus achieved.'
-  fill_in 'Transcript URL', with: 'http://transcripts.parliament.example.com/1.html'
-  fill_in 'Video URL', with: 'http://videos.parliament.example.com/1.mp4'
-  fill_in 'Debate Pack URL', with: 'http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234'
+  fill_in 'Transcript URL', with: 'https://record.assembly.wales/Plenary/5667#A51756'
+  fill_in 'Video URL', with: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
+  fill_in 'Debate Pack URL', with: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
 end
 
 Then(/^the petition should have the debate details I provided$/) do
@@ -57,9 +57,9 @@ Then(/^the petition should have the debate details I provided$/) do
   expect(@petition.debate_outcome).to be_persisted
   expect(@petition.debate_outcome.debated_on).to eq '18/12/2014'.to_date
   expect(@petition.debate_outcome.overview).to eq 'Lots of people spoke about it, no consensus achieved.'
-  expect(@petition.debate_outcome.transcript_url).to eq 'http://transcripts.parliament.example.com/1.html'
-  expect(@petition.debate_outcome.video_url).to eq 'http://videos.parliament.example.com/1.mp4'
-  expect(@petition.debate_outcome.debate_pack_url).to eq 'http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2014-1234'
+  expect(@petition.debate_outcome.transcript_url).to eq 'https://record.assembly.wales/Plenary/5667#A51756'
+  expect(@petition.debate_outcome.video_url).to eq 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
+  expect(@petition.debate_outcome.debate_pack_url).to eq 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
 end
 
 Then(/^the petition creator should have been emailed about the debate$/) do
@@ -67,7 +67,7 @@ Then(/^the petition creator should have been emailed about the debate$/) do
   steps %Q(
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
-    Then they should see "Parliament debated your petition" in the email body
+    Then they should see "Senedd debated your petition" in the email body
     When they follow "#{petition_url(@petition)}" in the email
     Then I should be on the petition page for "#{@petition.action}"
   )
@@ -79,7 +79,7 @@ Then(/^all the signatories of the petition should have been emailed about the de
     steps %Q(
       Then "#{signatory.email}" should receive an email
       When they open the email
-      Then they should see "Parliament debated the petition you signed" in the email body
+      Then they should see "Senedd debated the petition you signed" in the email body
       When they follow "#{petition_url(@petition)}" in the email
       Then I should be on the petition page for "#{@petition.action}"
     )

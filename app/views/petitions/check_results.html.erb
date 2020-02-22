@@ -6,7 +6,7 @@
 
   <h1 class="page-title"><%= t(:"ui.petitions.check.results.duplicate.heading") %></h1>
   <p><%= t(:"ui.petitions.check.results.duplicate.sign_if_match") %></p>
-  <p><%= t(:"ui.petitions.check.results.duplicate.sign_if_match_reason", response_threshold: Site.formatted_threshold_for_response, debate_threshold: Site.formatted_threshold_for_debate) %></p>
+  <p><%= t(:"ui.petitions.check.results.duplicate.sign_if_match_reason", referral_threshold: Site.formatted_threshold_for_referral, debate_threshold: Site.formatted_threshold_for_debate) %></p>
   <%= render 'notification', message: t(:"ui.petitions.check.results.duplicate.reject_notice") %>
 
   <% petitions.each do |petition| %>

@@ -9,12 +9,12 @@ Feature: Admin hub page
 
   Scenario: I can see a total of petitions needing moderation and link to them
     Given 20 petitions exist with state: "sponsored"
-    And there are 12 petitions awaiting a government response
+    And there are 12 petitions that have been referred to the committee
     And there are 5 petitions with a scheduled debate date
     And there are 3 petitions with enough signatures to require a debate
     When I go to the Admin home page
     Then I should see "20 Moderation queue"
-    And I should see "12 Government response queue"
+    And I should see "12 Referred queue"
     And I should see "8 Debate queue"
     And I should see a link called "All Petitions" linking to "/admin/petitions?state=all"
     And I should see a link called "Statistics" linking to "/admin/stats"

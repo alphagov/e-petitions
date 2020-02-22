@@ -29,7 +29,6 @@ home_page:
     - :translations_updated_at
     - :locale
     - :site_updated_at
-    - :last_government_response_updated_at
     - :last_debate_outcome_updated_at
   options:
     expires_in: 300
@@ -55,7 +54,6 @@ petition:
     - :translations_updated_at
     - :locale
     - :petition
-    - :reveal_response
     - :site_updated_at
   options:
     expires_in: 300

@@ -10,7 +10,7 @@ class Admin::StatisticsController < Admin::AdminController
   end
 
   def moderation
-    @rows = Statistics.moderation(by: period, parliament: parliament)
+    @rows = Statistics.moderation(by: period)
 
     respond_to do |format|
       format.csv

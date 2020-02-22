@@ -1,6 +1,6 @@
 <div class="grid-row">
   <div class="column-two-thirds extra-gutter">
-    <h1>Edit other parliamentary business</h1>
+    <h1>Edit other Senedd business</h1>
 
     <%= form_for @email, url: admin_petition_email_path(@petition, @email), method: :patch do |f| -%>
       <%= form_row :for => [f.object, :subject] do %>

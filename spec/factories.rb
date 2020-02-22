@@ -77,7 +77,6 @@ FactoryBot.define do
 
     trait :email_requested do
       transient do
-        email_requested_for_government_response_at { nil }
         email_requested_for_debate_scheduled_at { nil }
         email_requested_for_debate_outcome_at { nil }
         email_requested_for_petition_email_at { nil }
@@ -85,7 +84,6 @@ FactoryBot.define do
 
       after(:build) do |petition, evaluator|
         petition.build_email_requested_receipt do |r|
-          r.government_response = evaluator.email_requested_for_government_response_at
           r.debate_scheduled = evaluator.email_requested_for_debate_scheduled_at
           r.debate_outcome = evaluator.email_requested_for_debate_outcome_at
           r.petition_email = evaluator.email_requested_for_petition_email_at
@@ -147,6 +145,16 @@ FactoryBot.define do
   factory :open_petition, :parent => :sponsored_petition do
     state  Petition::OPEN_STATE
     open_at { Time.current }
+
+    transient do
+      referred { false }
+    end
+
+    after(:build) do |petition, evaluator|
+      if evaluator.referred
+        petition.referral_threshold_reached_at = petition.open_at + 2.month
+      end
+    end
   end
 
   factory :closed_petition, :parent => :petition do
@@ -175,24 +183,8 @@ FactoryBot.define do
     state Petition::HIDDEN_STATE
   end
 
-  factory :awaiting_petition, :parent => :open_petition do
-    response_threshold_reached_at { 1.week.ago }
-  end
-
-  factory :responded_petition, :parent => :awaiting_petition do
-    government_response_at { 1.week.ago }
-
-    transient do
-      response_summary { "Response Summary" }
-      response_details { "Response Details" }
-    end
-
-    after(:create) do |petition, evaluator|
-      petition.create_government_response! do |r|
-        r.summary = evaluator.response_summary
-        r.details = evaluator.response_details
-      end
-    end
+  factory :referred_petition, :parent => :closed_petition do
+    referral_threshold_reached_at { 1.week.ago }
   end
 
   factory :awaiting_debate_petition, :parent => :open_petition do
@@ -236,6 +228,10 @@ FactoryBot.define do
     after(:create) do |petition, evaluator|
       petition.create_debate_outcome(debated: false)
     end
+  end
+
+  factory :completed_petition, :parent => :closed_petition do
+    completed_at { 1.week.ago }
   end
 
   factory :contact do
@@ -406,24 +402,17 @@ FactoryBot.define do
     debated true
 
     trait :fully_specified do
-      overview { 'Discussion of the 2014 Christmas Adjournment - has the house considered everything it needs to before it closes for the festive period?' }
+      overview { 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets' }
       sequence(:transcript_url) { |n|
-        "http://www.publications.parliament.uk/pa/cm#{debated_on.strftime('%Y%m')}/cmhansrd/cm#{debated_on.strftime('%y%m%d')}/debtext/#{debated_on.strftime('%y%m%d')}-0003.htm##{debated_on.strftime('%y%m%d')}49#{ '%06d' % n }"
+        "https://record.assembly.wales/Plenary/5667#A51756"
       }
       video_url {
-        "http://parliamentlive.tv/event/index/#{SecureRandom.uuid}"
+        "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True"
       }
       sequence(:debate_pack_url) { |n|
-        "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-#{debated_on.strftime('%Y')}-#{ '%04d' % n }"
+        "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
       }
     end
-  end
-
-  factory :government_response do
-    association :petition, factory: :awaiting_petition
-    responded_on { 1.day.ago.to_date }
-    details "Government Response Details"
-    summary "Government Response Summary"
   end
 
   factory :note do

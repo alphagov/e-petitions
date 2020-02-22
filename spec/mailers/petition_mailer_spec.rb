@@ -16,7 +16,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
   let(:pending_signature) { FactoryBot.create(:pending_signature, name: "Alice Smith", email: "alice@example.com", petition: petition) }
   let(:validated_signature) { FactoryBot.create(:validated_signature, name: "Bob Jones", email: "bob@example.com", petition: petition) }
-  let(:subject_prefix) { "HM Government & Parliament Petitions" }
+  let(:subject_prefix) { "Senedd Petitions" }
 
   describe "notifying creator that moderation is delayed" do
     let! :petition do
@@ -300,7 +300,7 @@ RSpec.describe PetitionMailer, type: :mailer do
       subject(:mail) { described_class.gather_sponsors_for_petition(petition, Site.feedback_email) }
 
       it "adds the BCC address to the email" do
-        expect(mail).to bcc_to("petitionscommittee@senedd.wales")
+        expect(mail).to bcc_to("petitions@senedd.wales")
       end
     end
   end
@@ -340,17 +340,17 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a positive debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
+          expect(mail).to have_subject("Senedd debated “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the positive message in the body" do
-          expect(mail).to have_body_text("Parliament debated your petition")
+          expect(mail).to have_body_text("Senedd debated your petition")
         end
       end
 
       shared_examples_for "a negative debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject('Parliament didn’t debate “Allow organic vegetable vans to use red diesel”')
+          expect(mail).to have_subject('Senedd didn’t debate “Allow organic vegetable vans to use red diesel”')
         end
 
         it "has the negative message in the body" do
@@ -372,10 +372,10 @@ RSpec.describe PetitionMailer, type: :mailer do
           before do
             FactoryBot.create(:debate_outcome,
               debated_on: "2015-09-24",
-              overview: "Discussion of the 2015 Christmas Adjournment",
-              transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
-              video_url: "http://parliamentlive.tv/event/index/20150924000001",
-              debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+              overview: "Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets",
+              transcript_url: "https://record.assembly.wales/Plenary/5667#A51756",
+              video_url: "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
+              debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667",
               petition: petition
             )
           end
@@ -384,15 +384,15 @@ RSpec.describe PetitionMailer, type: :mailer do
           it_behaves_like "a positive debate outcome email"
 
           it "includes the debate outcome overview" do
-            expect(mail).to have_body_text(%r[Discussion of the 2015 Christmas Adjournment])
+            expect(mail).to have_body_text(%r[Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets])
           end
 
           it "includes a link to the transcript of the debate" do
-            expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+            expect(mail).to have_body_text(%r[https://record.assembly.wales/Plenary/5667#A51756])
           end
 
           it "includes a link to the video of the debate" do
-            expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+            expect(mail).to have_body_text(%r[http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c\?autostart=True])
           end
         end
       end
@@ -460,17 +460,17 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       shared_examples_for "a positive debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament debated “Allow organic vegetable vans to use red diesel”")
+          expect(mail).to have_subject("Senedd debated “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the positive message in the body" do
-          expect(mail).to have_body_text("Parliament debated the petition you signed")
+          expect(mail).to have_body_text("Senedd debated the petition you signed")
         end
       end
 
       shared_examples_for "a negative debate outcome email" do
         it "has the correct subject" do
-          expect(mail).to have_subject("Parliament didn’t debate “Allow organic vegetable vans to use red diesel”")
+          expect(mail).to have_subject("Senedd didn’t debate “Allow organic vegetable vans to use red diesel”")
         end
 
         it "has the negative message in the body" do
@@ -493,9 +493,9 @@ RSpec.describe PetitionMailer, type: :mailer do
             FactoryBot.create(:debate_outcome,
               debated_on: "2015-09-24",
               overview: "Discussion of the 2015 Christmas Adjournment",
-              transcript_url: "http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001",
-              video_url: "http://parliamentlive.tv/event/index/20150924000001",
-              debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
+              transcript_url: "https://record.assembly.wales/Plenary/5667#A51756",
+              video_url: "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
+              debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667",
               petition: petition
             )
           end
@@ -508,11 +508,11 @@ RSpec.describe PetitionMailer, type: :mailer do
           end
 
           it "includes a link to the transcript of the debate" do
-            expect(mail).to have_body_text(%r[http://www.publications.parliament.uk/pa/cm201509/cmhansrd/cm20150924/debtext/20150924-0003.htm#2015092449#000001])
+            expect(mail).to have_body_text(%r[https://record.assembly.wales/Plenary/5667#A51756])
           end
 
           it "includes a link to the video of the debate" do
-            expect(mail).to have_body_text(%r[http://parliamentlive.tv/event/index/20150924000001])
+            expect(mail).to have_body_text(%r[http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c\?autostart=True])
           end
         end
       end
@@ -581,11 +581,11 @@ RSpec.describe PetitionMailer, type: :mailer do
       it_behaves_like "a debate scheduled email"
 
       it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
+        expect(mail).to have_subject("Senedd will debate “Allow organic vegetable vans to use red diesel”")
       end
 
       it "identifies them as the creator" do
-        expect(mail).to have_body_text(%[Parliament is going to debate your petition])
+        expect(mail).to have_body_text(%[Senedd is going to debate your petition])
       end
     end
 
@@ -596,11 +596,11 @@ RSpec.describe PetitionMailer, type: :mailer do
       it_behaves_like "a debate scheduled email"
 
       it "has the correct subject" do
-        expect(mail).to have_subject("Parliament will debate “Allow organic vegetable vans to use red diesel”")
+        expect(mail).to have_subject("Senedd will debate “Allow organic vegetable vans to use red diesel”")
       end
 
       it "identifies them as a ordinary signature" do
-        expect(mail).to have_body_text(%[Parliament is going to debate the petition you signed])
+        expect(mail).to have_body_text(%[Senedd is going to debate the petition you signed])
       end
     end
   end
