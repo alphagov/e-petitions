@@ -1,7 +1,7 @@
 module SearchHelper
   def paginate(petitions)
     options = {
-      scope: :"petitions.pagination",
+      scope: :"ui.pagination",
       previous_page: petitions.previous_page,
       next_page: petitions.next_page,
       total_pages: petitions.total_pages,
@@ -10,8 +10,8 @@ module SearchHelper
     }
 
     capture do
-      concat t(:previous_html, options) unless petitions.first_page?
-      concat t(:next_html, options) unless petitions.last_page?
+      concat content_tag(:span, t(:previous_html, options)) unless petitions.first_page?
+      concat content_tag(:span, t(:next_html, options)) unless petitions.last_page?
     end
   end
 

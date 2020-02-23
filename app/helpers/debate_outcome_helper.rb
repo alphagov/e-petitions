@@ -16,7 +16,7 @@ module DebateOutcomeHelper
     DEBATE_OUTCOME_URLS.map do |url|
       if debate_outcome.public_send(:"#{url}?")
         OpenStruct.new(
-          title: I18n.t(url, scope: :"petitions.debate_outcomes.link_titles"),
+          title: I18n.t(url, scope: :"ui.debate_outcomes.link_titles"),
           url: debate_outcome.public_send(:"#{url}")
         )
       end

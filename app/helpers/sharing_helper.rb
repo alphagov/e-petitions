@@ -50,7 +50,7 @@ module SharingHelper
   end
 
   def share_title(petition)
-    t(:share_title, scope: :petitions, petition: petition.action)
+    t(:share_title, scope: :ui, petition: petition.action)
   end
 
   def share_params(hash)
@@ -58,6 +58,6 @@ module SharingHelper
   end
 
   def share_button(service)
-    t(:"#{service}.html", scope: :"petitions.sharing")
+    t(:"#{service}_html", scope: :"ui.sharing")
   end
 end
