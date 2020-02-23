@@ -32,7 +32,8 @@ en-GB:
         petition:
           attributes:
             moderation:
-              blank: "You must choose to approve, reject or flag"
+              blank: "You must choose to approve, reject or %{action}"
+              translation_missing: "The petition must be fully translated first before being made public"
             creator_signature:
               blank: "%{attribute} must be completed"
             state:

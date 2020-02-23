@@ -70,8 +70,7 @@ Then /^the petition should be visible on the site for signing$/ do
 end
 
 Then(/^the petition can no longer be flagged$/) do
-  visit admin_petition_url(@petition)
-  expect(page).to have_no_field('Flag')
+  expect(page).to have_no_field('Flag', visible: false)
 end
 
 Then(/^the creator should receive a notification email$/) do
@@ -146,4 +145,63 @@ Given(/^a moderator updates the petition activity$/) do
     And I fill in "Body" with "Senedd here it comes"
     And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"
   )
+end
+
+Given /^the petition is translated$/ do
+  (@sponsored_petition || @petition).tap do |petition|
+    if petition.english?
+      petition.update!(
+        action_cy: petition.action_en,
+        background_cy: petition.background_en,
+        additional_details_cy: petition.additional_details_en
+      )
+    else
+      petition.update!(
+        action_en: petition.action_cy,
+        background_en: petition.background_cy,
+        additional_details_en: petition.additional_details_cy
+      )
+    end
+  end
+end
+
+Given /^the petition "([^"]*)" is translated$/ do |action|
+  (Petition.find_by!(action: action)).tap do |petition|
+    if petition.english?
+      petition.update!(
+        action_cy: petition.action_en,
+        background_cy: petition.background_en,
+        additional_details_cy: petition.additional_details_en
+      )
+    else
+      petition.update!(
+        action_en: petition.action_cy,
+        background_en: petition.background_cy,
+        additional_details_en: petition.additional_details_cy
+      )
+    end
+  end
+end
+
+When /^I revisit the petition$/ do
+  visit admin_petition_url(@petition)
+end
+
+Then /^it can still be approved$/ do
+  expect(page).to have_field('Approve', visible: false)
+end
+
+Then /^it can still be rejected$/ do
+  expect(page).to have_field('Reject', visible: false)
+end
+
+Then /^it can be restored to a sponsored state$/ do
+  choose "Unflag"
+  click_button "Save without emailing"
+  expect(page).to have_content("Petition has been successfully updated")
+  expect(page).to have_content("Status Sponsored")
+end
+
+Then /^the petition should still be unmoderated$/ do
+  expect(@petition).not_to be_visible
 end

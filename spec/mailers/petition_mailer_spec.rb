@@ -6,7 +6,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   let :petition do
-    FactoryBot.create(:pending_petition,
+    FactoryBot.create(:pending_petition, :translated,
       creator: creator,
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",

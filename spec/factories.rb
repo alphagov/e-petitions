@@ -29,8 +29,16 @@ FactoryBot.define do
       sponsor_count { Site.minimum_number_of_sponsors }
     end
 
-    sequence(:action) {|n| "Petition #{n}" }
+    sequence(:action) { |n| "Petition #{n}" }
     background "Petition background"
+
+    trait :english do
+      locale { "en-GB" }
+    end
+
+    trait :welsh do
+      locale { "cy-GB" }
+    end
 
     after(:build) do |petition, evaluator|
       petition.creator ||= FactoryBot.build(:validated_signature, creator: true)
@@ -64,6 +72,20 @@ FactoryBot.define do
         end
 
         petition.update_signature_count!
+      end
+    end
+
+    trait :translated do
+      after(:build) do |petition, evaluator|
+        if petition.english?
+          petition.action_cy ||= petition.action_en
+          petition.background_cy ||= petition.background_en
+          petition.additional_details_cy ||= petition.additional_details_en
+        else
+          petition.action_en ||= petition.action_cy
+          petition.background_en ||= petition.background_cy
+          petition.additional_details_en ||= petition.additional_details_cy
+        end
       end
     end
 
@@ -146,6 +168,8 @@ FactoryBot.define do
     state  Petition::OPEN_STATE
     open_at { Time.current }
 
+    translated
+
     transient do
       referred { false }
     end
@@ -157,7 +181,7 @@ FactoryBot.define do
     end
   end
 
-  factory :closed_petition, :parent => :petition do
+  factory :closed_petition, :parent => :open_petition do
     state      Petition::CLOSED_STATE
     open_at    { 10.days.ago }
     closed_at  { 1.day.ago }
@@ -165,6 +189,8 @@ FactoryBot.define do
 
   factory :rejected_petition, :parent => :petition do
     state Petition::REJECTED_STATE
+
+    translated
 
     transient do
       rejection_code { "duplicate" }

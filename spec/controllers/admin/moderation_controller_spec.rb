@@ -7,7 +7,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
     before { login_as(user) }
 
     let(:petition) do
-      FactoryBot.create(:sponsored_petition,
+      FactoryBot.create(:sponsored_petition, :translated,
         creator_attributes: {
           name: "Barry Butler",
           email: "bazbutler@gmail.com"
@@ -224,6 +224,39 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         it "flags the petition" do
           expect(petition.state).to eq(Petition::FLAGGED_STATE)
+        end
+
+        it "does not set the open date" do
+          expect(petition.open_at).to be_nil
+        end
+
+        it "does not set the rejected date" do
+          expect(petition.rejected_at).to be_nil
+        end
+
+        it "does not set the moderation lag" do
+          expect(petition.moderation_lag).to be_nil
+        end
+
+        it "redirects to the admin show page for the petition page" do
+          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}")
+        end
+
+        it "does not send an email to the petition creator" do
+          expect(email).to be_nil
+        end
+      end
+
+      context "when moderation param is 'unflag'" do
+        let(:email) { ActionMailer::Base.deliveries.last }
+
+        before do
+          do_patch moderation: 'unflag'
+          petition.reload
+        end
+
+        it "unflags the petition" do
+          expect(petition.state).to eq(Petition::SPONSORED_STATE)
         end
 
         it "does not set the open date" do

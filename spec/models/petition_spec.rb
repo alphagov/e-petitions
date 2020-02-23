@@ -1793,7 +1793,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#publish' do
-    subject(:petition) { FactoryBot.create(:petition) }
+    subject(:petition) { FactoryBot.create(:petition, :translated) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
@@ -1812,7 +1812,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#reject" do
-    subject(:petition) { FactoryBot.create(:petition) }
+    subject(:petition) { FactoryBot.create(:petition, :translated) }
 
     (Rejection::CODES - Rejection::HIDDEN_CODES).each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
@@ -1856,10 +1856,10 @@ RSpec.describe Petition, type: :model do
           p1 = described_class.find(petition.id)
           p2 = described_class.find(petition.id)
 
-          expect(p1.rejection).not_to be_persisted
+          expect(p1.rejection).to be_nil
           expect(p1.association(:rejection)).to be_loaded
 
-          expect(p2.rejection).not_to be_persisted
+          expect(p2.rejection).to be_nil
           expect(p2.association(:rejection)).to be_loaded
 
           p1.reject(code: "duplicate")
@@ -1919,7 +1919,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the petition failed to get enough signatures" do
-      subject(:petition) { FactoryBot.create(:open_petition, referred: false, debate_state: debate_state) }
+      subject(:petition) { FactoryBot.create(:open_petition, :translated, referred: false, debate_state: debate_state) }
 
       it "sets the state to REJECTED" do
         expect {
@@ -1952,18 +1952,6 @@ RSpec.describe Petition, type: :model do
           expect { petition.close! }.to raise_error(RuntimeError)
         end
       end
-    end
-  end
-
-  describe '#flag' do
-    subject(:petition) { FactoryBot.create(:petition) }
-
-    before do
-      petition.flag
-    end
-
-    it "sets the state to FLAGGED" do
-      expect(petition.state).to eq(Petition::FLAGGED_STATE)
     end
   end
 

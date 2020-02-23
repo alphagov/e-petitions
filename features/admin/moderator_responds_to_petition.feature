@@ -52,16 +52,34 @@ Feature: Moderator respond to petition
   Scenario: Moderator publishes petition
     Given I am logged in as a moderator
     When I look at the next petition on my list
+    And the petition is translated
     And I publish the petition
     Then the petition should be visible on the site for signing
     And the creator should receive a notification email
 
+  Scenario: Moderator tries to publish a petition before translation
+    Given I am logged in as a moderator
+    When I look at the next petition on my list
+    And I publish the petition
+    Then the petition should still be unmoderated
+    And the creator should not receive a notification email
+    And I should see "The petition must be fully translated first before being made public"
+
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator
     When I look at the next petition on my list
+    And the petition is translated
     And I reject the petition with a reason code "Not the Government/Senedd’s responsibility"
     Then the petition is not available for signing
     But the petition is still available for searching or viewing
+
+  Scenario: Moderator tries to reject a petition before translation
+    Given I am logged in as a moderator
+    When I look at the next petition on my list
+    And I reject the petition with a reason code "Not the Government/Senedd’s responsibility"
+    Then the petition should still be unmoderated
+    And the creator should not receive a notification email
+    And I should see "The petition must be fully translated first before being made public"
 
   @javascript
   Scenario: Moderator previews reason description
@@ -73,6 +91,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code and text
     Given I am logged in as a moderator
     When I look at the next petition on my list
+    And the petition is translated
     And I reject the petition with a reason code "Duplicate petition" and some explanatory text
     Then the explanation is displayed on the petition for viewing by the public
     And the creator should receive a rejection notification email
@@ -88,6 +107,7 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition but with no reason code
     Given I am logged in as a moderator
     And a sponsored petition exists with action: "Rupert Murdoch is on the run"
+    And the petition "Rupert Murdoch is on the run" is translated
     When I go to the admin petition page for "Rupert Murdoch is on the run"
     And I reject the petition with a reason code "-- Select a rejection code --"
     Then a petition should exist with action: "Rupert Murdoch is on the run", state: "sponsored"
@@ -110,5 +130,8 @@ Feature: Moderator respond to petition
     And the creator should not receive a notification email
     And the creator should not receive a rejection notification email
     But the petition will still show up in the back-end reporting
-    And the petition can no longer be flagged
-    And I go to the Admin home page
+    When I revisit the petition
+    Then the petition can no longer be flagged
+    But it can still be approved
+    And it can still be rejected
+    And it can be restored to a sponsored state

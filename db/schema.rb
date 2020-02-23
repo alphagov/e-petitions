@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_22_191801) do
+ActiveRecord::Schema.define(version: 2020_02_23_100232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -226,8 +226,6 @@ ActiveRecord::Schema.define(version: 2020_02_22_191801) do
   end
 
   create_table "petitions", id: :serial, force: :cascade do |t|
-    t.string "action", limit: 255
-    t.text "additional_details"
     t.string "state", limit: 10, default: "pending", null: false
     t.datetime "open_at"
     t.datetime "created_at"
@@ -235,7 +233,6 @@ ActiveRecord::Schema.define(version: 2020_02_22_191801) do
     t.datetime "closed_at"
     t.integer "signature_count", default: 0
     t.boolean "notified_by_email", default: false
-    t.string "background", limit: 500
     t.string "sponsor_token", limit: 255
     t.date "scheduled_debate_date"
     t.datetime "last_signed_at"
@@ -263,11 +260,8 @@ ActiveRecord::Schema.define(version: 2020_02_22_191801) do
     t.string "background_cy", limit: 500
     t.datetime "completed_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
-    t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
-    t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
-    t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_petitions_on_additional_details", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details_en)", name: "index_petitions_on_additional_details_en", using: :gin
     t.index "to_tsvector('simple'::regconfig, (action_cy)::text)", name: "index_petitions_on_action_cy", using: :gin
     t.index "to_tsvector('simple'::regconfig, (background_cy)::text)", name: "index_petitions_on_background_cy", using: :gin
