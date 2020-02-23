@@ -61,7 +61,7 @@ module HomeHelper
   end
 
   def petition_count(key, count)
-    t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
+    t(:"#{key}_html", scope: :"ui.counts", count: count, num: number_with_delimiter(count))
   end
 
   def trending_petitions

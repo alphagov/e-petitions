@@ -93,7 +93,7 @@ en-GB:
       additional_details:
         label: Additional details
         hint_optional: Optional - background information, evidence and references
-        help_html: |-
+        help_html: 
       at_threshold_for_debate_ellipsis: At %{threshold} signatures...
       at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold} signatures will be considered for a debate in the Senedd
       check:
@@ -775,3 +775,58 @@ en-GB:
             </tbody>
           </table>
         </section>
+    signature_counts:
+      default_html:
+        one: "<span class=\"count\" data-count=\"%{count}\">%{num}</span> <span class=\"text\">signature</span>"
+        other: "<span class=\"count\" data-count=\"%{count}\">%{num}</span> <span class=\"text\">signatures</span>"
+      trending_html:
+        one: "<span class=\"count\">%{num}</span> signature in the last hour"
+        other: "<span class=\"count\">%{num}</span> signatures in the last hour"
+      in_your_constituency_html:
+        one: "%{num} signature from %{constituency}"
+        other: "%{num} signatures from %{constituency}"
+      in_total_html:
+        one: "%{num} signature total"
+        other: "%{num} signatures total"
+    scheduled_for_debate_in_words:
+      today: "Scheduled for debate today"
+      tomorrow: "Scheduled for debate tomorrow"
+      other: "Scheduled for debate on %{date}"
+    pagination:
+      previous_html: |-
+        <a class="previous" href="%{previous_link}">
+          <span class="paginate-label">Previous</span>
+          <span class="paginate page-count">%{previous_page} of %{total_pages}</span>
+        </a>
+      next_html: |-
+        <a class="next" href="%{next_link}">
+          <span class="paginate-label">Next</span>
+          <span class="paginate page-count">%{next_page} of %{total_pages}</span>
+        </a>
+    debate_outcomes:
+      link_titles:
+        video_url: "Watch the debate"
+        transcript_url: "Read the transcript"
+        debate_pack_url: "Find details of the petition"
+    share_title: "Petition: %{petition}"
+    list_headers:
+      not_debated: "The Petitions Committee decided not to debate these petitions"
+    sharing:
+      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
+      email_html: <span class="icon icon-share-email"></span> Email
+      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
+      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+    counts:
+      referred_html:
+        one: "<span class=\"count\">%{num}</span> petition was referred to the Petitions Committee"
+        other: "<span class=\"count\">%{num}</span> petitions were referred to the Petitions Committee"
+      referred_explanation_html: "See all petitions referred to the Petitions Committee (%{num})"
+      awaiting_debate_html:
+        one: "<span class=\"count\">%{num}</span> petition is waiting to be considered for debate"
+        other: "<span class=\"count\">%{num}</span> petitions are waiting to be considered for debate"
+      with_debated_outcome_html:
+        one: "<span class=\"count\">%{num}</span> petition was debated in the Senedd"
+        other: "<span class=\"count\">%{num}</span> petitions were debated in the Senedd"
+      awaiting_debate_explanation_html: "See all petitions waiting for a debate (%{num})"
+      debated_explanation_html: "See all petitions debated in the Senedd (%{num})"
+      not_debated_explanation_html: "See all petitions not debated in the Senedd (%{num})"

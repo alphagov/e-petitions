@@ -23,7 +23,7 @@ module PetitionHelper
   end
 
   def petition_list_header
-    @_petition_list_header ||= t(@petitions.scope, scope: :"petitions.list_headers", default: "")
+    @_petition_list_header ||= t(@petitions.scope, scope: :"ui.list_headers", default: "")
   end
 
   def petition_list_header?

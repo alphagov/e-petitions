@@ -55,11 +55,11 @@ module DateTimeHelper
   end
 
   def scheduled_for_debate_in_words(date, today = Date.current)
-    scope = :"petitions.scheduled_for_debate_in_words"
+    scope = :"ui.scheduled_for_debate_in_words"
     days  = (date - today).to_i
     key   = TO_BE_DEBATED_KEYS[days]
 
-    t(key, scope: scope, formatted_date: short_date_format(date))
+    t(key, scope: scope, date: short_date_format(date))
   end
 
   def christmas_period?(today = Date.current)

@@ -3,22 +3,6 @@ en-GB:
     errors:
       invalid_signature_count: "Petition %{id} had an invalid signature count"
 
-    share_title: "Petition: %{petition}"
-
-    sharing:
-      facebook:
-        html: <span class="icon icon-share-facebook"></span> Facebook
-      email:
-        html: <span class="icon icon-share-email"></span> Email
-      twitter:
-        html: <span class="icon icon-share-twitter"></span> Twitter
-      whatsapp:
-        html: <span class="icon icon-share-whatsapp"></span> Whatsapp
-
-
-    list_headers:
-      not_debated: "The Petitions Committee decided not to debate these petitions"
-
     facets:
       public:
         - :all
@@ -108,79 +92,8 @@ en-GB:
       signoff_prefix: "The Petitions team"
       signoff_suffix: "Senedd"
 
-    scheduled_for_debate_in_words:
-      today: "Scheduled for debate today"
-      tomorrow: "Scheduled for debate tomorrow"
-      other: "Scheduled for debate on %{formatted_date}"
-
-    signature_counts:
-      default:
-        html:
-          one: "<span class=\"count\" data-count=\"%{count}\">%{formatted_count}</span> <span class=\"text\">signature</span>"
-          other: "<span class=\"count\" data-count=\"%{count}\">%{formatted_count}</span> <span class=\"text\">signatures</span>"
-      trending:
-        html:
-          one: "<span class=\"count\">%{formatted_count}</span> signature in the last hour"
-          other: "<span class=\"count\">%{formatted_count}</span> signatures in the last hour"
-      in_your_constituency:
-        html:
-          one: "%{formatted_count} signature from %{constituency}"
-          other: "%{formatted_count} signatures from %{constituency}"
-      in_total:
-        html:
-          one: "%{formatted_count} signature total"
-          other: "%{formatted_count} signatures total"
-
-    counts:
-      referred:
-        html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition was referred to the Petitions Committee"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions were referred to the Petitions Committee"
-      referred_explanation:
-        html: "See all petitions referred to the Petitions Committee (%{formatted_count})"
-      awaiting_debate:
-        html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition is waiting to be considered for debate"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions are waiting to be considered for debate"
-      with_debated_outcome:
-        html:
-          one: "<span class=\"count\">%{formatted_count}</span> petition was debated in the Senedd"
-          other: "<span class=\"count\">%{formatted_count}</span> petitions were debated in the Senedd"
-      awaiting_debate_explanation:
-        html: "See all petitions waiting for a debate (%{formatted_count})"
-      debated_explanation:
-        html: "See all petitions debated in the Senedd (%{formatted_count})"
-      not_debated_explanation:
-        html: "See all petitions not debated in the Senedd (%{formatted_count})"
-
     action_counts:
-      in_moderation:
-        html:
-          "<span class=\"count\">%{formatted_count}</span> Moderation queue"
-      referred:
-        html:
-          "<span class=\"count\">%{formatted_count}</span> Referred queue"
-      in_debate_queue:
-        html:
-          "<span class=\"count\">%{formatted_count}</span> Debate queue"
-      all:
-        html:
-          "<span class=\"count\">%{formatted_count}</span> All petitions"
-
-    debate_outcomes:
-      link_titles:
-        video_url: "Watch the debate"
-        transcript_url: "Read the transcript"
-        debate_pack_url: "Find details of the petition"
-
-    pagination:
-      previous_html: |-
-        <a class="previous" href="%{previous_link}">
-          <span class="paginate-label">Previous</span>
-          <span class="paginate page-count">%{previous_page} of %{total_pages}</span>
-        </a>
-      next_html: |-
-        <a class="next" href="%{next_link}">
-          <span class="paginate-label">Next</span>
-          <span class="paginate page-count">%{next_page} of %{total_pages}</span>
-        </a>
+      in_moderation_html: "<span class=\"count\">%{formatted_count}</span> Moderation queue"
+      referred_html: "<span class=\"count\">%{formatted_count}</span> Referred queue"
+      in_debate_queue_html: "<span class=\"count\">%{formatted_count}</span> Debate queue"
+      all_html: "<span class=\"count\">%{formatted_count}</span> All petitions"

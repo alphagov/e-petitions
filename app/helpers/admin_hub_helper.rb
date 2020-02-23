@@ -71,6 +71,6 @@ module AdminHubHelper
   end
 
   def action_count(key, count)
-    t(:"#{key}.html", scope: :"petitions.action_counts", formatted_count: number_with_delimiter(count))
+    t(:"#{key}_html", scope: :"petitions.action_counts", formatted_count: number_with_delimiter(count))
   end
 end
