@@ -10,7 +10,7 @@ class Rejection < ActiveRecord::Base
 
   attr_writer :rejected_at
 
-  after_create do
+  after_save do
     # Prevent deprecation warnings about the
     # upcoming new behaviour of attribute_changed?
     petition.reload

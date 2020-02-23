@@ -10,7 +10,12 @@
       <%= f.radio_button :moderation, 'reject' %>
       <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
     </div>
-    <% unless f.object.flagged? %>
+    <% if f.object.flagged? %>
+      <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'unflag' %>
+        <%= f.label :moderation_unflag, "Unflag", for: "petition_moderation_unflag" %>
+      </div>
+    <% else %>
       <div class="multiple-choice">
         <%= f.radio_button :moderation, 'flag' %>
         <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
@@ -27,10 +32,12 @@
     $().ready(function() {
       var $rejection_controls = $('.petition-rejection-controls'),
           $reject_control = $('#petition_moderation_reject'),
-          $flag_control = $('#petition_moderation_flag'),
           $all_controls = $('.edit_petition input[name="petition[moderation]"][type=radio]');
-      // Hide it straight away if there were no errors displayed
-      if ($rejection_controls.find('.error-message').size() === 0) {
+      if ($reject_control.is(':checked')) {
+        // Display if the rejection control was checked
+        $rejection_controls.show();
+      } else if ($rejection_controls.find('.error-message').size() === 0) {
+        // Hide it straight away if there were no errors displayed
         $rejection_controls.hide();
       }
 

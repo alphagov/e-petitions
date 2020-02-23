@@ -533,48 +533,92 @@ class Petition < ActiveRecord::Base
     constituency_petition_journals.preload(:constituency).to_a.sort_by(&:constituency_id)
   end
 
-  def approve?
-    moderation == 'approve'
-  end
-
-  def reject?
-    moderation == 'reject'
-  end
-
-  def flag?
-    moderation == 'flag'
-  end
-
   def moderation=(value)
-    @moderation = value if value.in?(%w[approve reject flag])
+    @moderation = value if value.in?(%w[approve reject flag unflag])
   end
 
   def moderation
     @moderation
   end
 
+  def english?
+    locale == "en-GB"
+  end
+
+  def welsh?
+    locale == "cy-GB"
+  end
+
+  def translated?
+    english_translated? && welsh_translated?
+  end
+
+  def english_translated?
+    action_en? && background_en? && additional_details_en_translated?
+  end
+
+  def additional_details_en_translated?
+    english? ? true : !additional_details_cy? || additional_details_en?
+  end
+
+  def welsh_translated?
+    action_cy? && background_cy? && additional_details_cy_translated?
+  end
+
+  def additional_details_cy_translated?
+    welsh? ? true : !additional_details_en? || additional_details_cy?
+  end
+
+  def will_be_hidden?
+    rejection && rejection.hide_petition?
+  end
+
   def moderate(params)
     self.moderation = params[:moderation]
 
-    if approve?
+    case moderation
+    when 'approve'
       publish
-    elsif reject?
+    when 'reject'
       reject(params[:rejection])
-    elsif flag?
-      flag
+    when 'flag'
+      update(state: FLAGGED_STATE)
+    when 'unflag'
+      update(state: SPONSORED_STATE)
     else
-      errors.add :moderation, :blank
-      false
+      if flagged?
+        errors.add :moderation, :blank, action: 'unflag'
+      else
+        errors.add :moderation, :blank, action: 'flag'
+      end
+
+      return false
     end
   end
 
   def publish(time = Time.current)
+    unless translated?
+      errors.add :moderation, :translation_missing
+      return false
+    end
+
     update(state: OPEN_STATE, open_at: time)
   end
 
   def reject(attributes)
     begin
-      build_rejection(attributes) && rejection.save
+      if rejection.present?
+        rejection.attributes = attributes
+      else
+        build_rejection(attributes)
+      end
+
+      unless translated? || rejection.hide_petition?
+        errors.add :moderation, :translation_missing
+        return false
+      end
+
+      rejection.save
     rescue ActiveRecord::RecordNotUnique => e
       reload_rejection.update(attributes)
     end
@@ -588,14 +632,6 @@ class Petition < ActiveRecord::Base
 
   def complete(time = Time.current)
     update(state: COMPLETED_STATE, completed_at: time)
-  end
-
-  def flag
-    update(state: FLAGGED_STATE)
-  end
-
-  def rejection(*args)
-    super || build_rejection
   end
 
   def close!(time = deadline)
