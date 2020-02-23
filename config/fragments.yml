@@ -7,14 +7,6 @@ head:
   options:
     expires_in: 300
 
-header:
-  keys:
-    - :translations_updated_at
-    - :locale
-    - :home_page
-  options:
-    expires_in: 300
-
 footer:
   keys:
     - :translations_updated_at
