@@ -126,6 +126,19 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "includes the date and time at which the petition was referred" do
+      petition = FactoryBot.create :referred_petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "referred_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+        )
+      )
+    end
+
     it "includes the date when a petition is scheduled for a debate" do
       petition = FactoryBot.create :scheduled_debate_petition
 

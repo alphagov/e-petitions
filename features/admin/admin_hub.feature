@@ -14,7 +14,7 @@ Feature: Admin hub page
     And there are 3 petitions with enough signatures to require a debate
     When I go to the Admin home page
     Then I should see "20 Moderation queue"
-    And I should see "12 Referred queue"
+    And I should see "20 Referred queue"
     And I should see "8 Debate queue"
     And I should see a link called "All Petitions" linking to "/admin/petitions?state=all"
     And I should see a link called "Statistics" linking to "/admin/stats"

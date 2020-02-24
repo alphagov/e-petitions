@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_100232) do
+ActiveRecord::Schema.define(version: 2020_02_23_210547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -259,6 +259,7 @@ ActiveRecord::Schema.define(version: 2020_02_23_100232) do
     t.string "background_en", limit: 500
     t.string "background_cy", limit: 500
     t.datetime "completed_at"
+    t.datetime "referred_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
@@ -273,6 +274,7 @@ ActiveRecord::Schema.define(version: 2020_02_23_100232) do
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["referral_threshold_reached_at"], name: "index_petitions_on_referral_threshold_reached_at"
+    t.index ["referred_at", "created_at"], name: "index_petitions_on_referred_at_and_created_at", order: { created_at: :desc }
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
   end

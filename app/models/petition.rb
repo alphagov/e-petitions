@@ -161,7 +161,7 @@ class Petition < ActiveRecord::Base
     end
 
     def by_referred_longest
-      reorder(referral_threshold_reached_at: :asc, created_at: :desc)
+      reorder(referred_at: :asc, created_at: :desc)
     end
 
     def current
@@ -201,7 +201,7 @@ class Petition < ActiveRecord::Base
     end
 
     def referred
-      referral_threshold_reached.not_completed
+      closed_state
     end
 
     def collecting_sponsors
@@ -628,7 +628,7 @@ class Petition < ActiveRecord::Base
       return false
     end
 
-    update(state: OPEN_STATE, open_at: time)
+    update(state: OPEN_STATE, open_at: time, closed_at: Site.closed_at_for_opening(time))
   end
 
   def reject(attributes)
@@ -663,7 +663,7 @@ class Petition < ActiveRecord::Base
   def close!(time = deadline)
     if open?
       if will_be_referred?
-        update!(state: CLOSED_STATE, closed_at: time)
+        update!(state: CLOSED_STATE, closed_at: time, referred_at: time)
       else
         reject!(code: "insufficient", rejected_at: time)
         NotifyEveryoneOfFailureToGetEnoughSignaturesJob.perform_later(self)

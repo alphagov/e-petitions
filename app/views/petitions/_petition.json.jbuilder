@@ -21,6 +21,7 @@ json.attributes do
   json.completed_at api_date_format(petition.closed_at)
   json.moderation_threshold_reached_at api_date_format(petition.moderation_threshold_reached_at)
   json.referral_threshold_reached_at api_date_format(petition.referral_threshold_reached_at)
+  json.referred_at api_date_format(petition.referral_threshold_reached_at)
   json.debate_threshold_reached_at api_date_format(petition.debate_threshold_reached_at)
   json.scheduled_debate_date api_date_format(petition.scheduled_debate_date)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)

@@ -32,10 +32,8 @@ Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
   @petition = FactoryBot.create(:not_debated_petition, action: action)
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
-  step "an #{state} petition \"#{petition_title}\""
-  @petition.scheduled_debate_date = scheduled_debate_date.to_date
-  @petition.save
+Given(/^a petition "([^"]*)" with a scheduled debate date of "(.*?)"$/) do |action, date|
+  @petition = FactoryBot.create(:scheduled_debate_petition, action: action, scheduled_debate_date: date)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
@@ -358,7 +356,7 @@ end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
   scheduled_debate_petitions_count.times do |count|
-    FactoryBot.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")
+    FactoryBot.create(:scheduled_debate_petition, action: "Petition #{count}")
   end
 end
 

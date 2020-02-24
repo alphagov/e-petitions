@@ -60,7 +60,7 @@ module AdminHubHelper
 
     def generate_counts
       counts = []
-      counts << [:referred, Petition.visible.referred.count]
+      counts << [:referred, Petition.referred.count]
       counts << [:in_debate_queue, Petition.in_debate_queue.count]
     end
   end
