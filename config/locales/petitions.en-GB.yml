@@ -67,6 +67,8 @@ en-GB:
       admin:
         - :all
         - :collecting_sponsors
+        - :flagged
+        - :dormant
         - :in_moderation
         - :recently_in_moderation
         - :nearly_overdue_in_moderation
@@ -98,6 +100,8 @@ en-GB:
         admin:
           all: "All petitions (%{quantity})"
           collecting_sponsors: "Collecting sponsors (%{quantity})"
+          flagged: "Flagged (%{quantity})"
+          dormant: "Dormant (%{quantity})"
           in_moderation: "Awaiting moderation (%{quantity})"
           recently_in_moderation: "Awaiting moderation - recent (%{quantity})"
           nearly_overdue_in_moderation: "Awaiting moderation - nearly overdue (%{quantity})"
