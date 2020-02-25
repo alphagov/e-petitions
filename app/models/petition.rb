@@ -67,6 +67,9 @@ class Petition < ActiveRecord::Base
   facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :untagged_in_moderation,       -> { untagged_in_moderation.by_most_recent_moderation_threshold_reached }
 
+  facet :flagged, -> { flagged_state.by_most_recent_moderation_threshold_reached }
+  facet :dormant, -> { dormant_state.by_most_recent_moderation_threshold_reached }
+
   has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true
 
@@ -156,6 +159,14 @@ class Petition < ActiveRecord::Base
 
     def closed_state
       where(state: CLOSED_STATE)
+    end
+
+    def dormant_state
+      where(state: DORMANT_STATE)
+    end
+
+    def flagged_state
+      where(state: FLAGGED_STATE)
     end
 
     def hidden_state

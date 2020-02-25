@@ -19,7 +19,9 @@ class CreateRejectionReasons < ActiveRecord::Migration[5.2]
         "fake-name"  => ["Fake name", "It was created using a fake or incomplete name.\n\nThe text of your petition meets our terms and conditions.\n\nHowever, people who create petitions are required to give their full, real name. Sorry if this wasn’t clear to you.\n\nWe are rejecting your petition for that reason, but if you resubmit your petition using your full name, we’ll be able to approve it.", false],
         "foi"        => ["FOI request", "It’s an FOI request.", false],
         "libellous"  => ["Confidential, libellous, false, defamatory or references a court case", "It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.", true],
-        "offensive"  => ["Offensive, joke, nonsense or advert", "It’s offensive, nonsense, a joke, or an advert.", true]
+        "offensive"  => ["Offensive or a joke", "It’s offensive, extreme or a joke.", true],
+        "advert"     => ["Advert", "It’s an advert or promotes a specific business or product.", true],
+        "removed"    => ["We’ve removed this petition from the site", "The petition creator requested that this petition not be published.", true]
       }.each do |code, (title, description, hidden)|
         RejectionReason.create!(code: code, title: title, description: description, hidden: hidden)
       end

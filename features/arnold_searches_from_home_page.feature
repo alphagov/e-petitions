@@ -26,50 +26,59 @@ Scenario: Arnold searches for petitions when parliament is opened
   Given I am on the home page
   When I search all petitions for "Wombles"
   Then I should be on the all petitions page
+  And I should have the following query string:
+    | state | open    |
+    | q     | Wombles |
   And I should see my search term "Wombles" filled in the search field
-  And I should see "6 results"
+  And I should see "4 results"
   And I should see the following search results:
     | Wombles                            | 1 signature             |
     | Overthrow the Wombles              | 1 signature             |
     | Uncle Bulgaria                     | 1 signature             |
     | Common People                      | 1 signature             |
-    | The Wombles will rock Glasto       | 1 signature, now closed |
-    | Eavis vs the Wombles               | Rejected                |
 
 Scenario: Arnold searches for petitions when parliament is dissolving
   Given Parliament is dissolving
   When I am on the home page
   And I search all petitions for "Wombles"
   Then I should be on the all petitions page
+  And I should have the following query string:
+    | state | open    |
+    | q     | Wombles |
   And I should see my search term "Wombles" filled in the search field
-  And I should see "6 results"
+  And I should see "4 results"
   And I should see the following search results:
     | Wombles                            | 1 signature             |
     | Overthrow the Wombles              | 1 signature             |
     | Uncle Bulgaria                     | 1 signature             |
     | Common People                      | 1 signature             |
-    | The Wombles will rock Glasto       | 1 signature, now closed |
-    | Eavis vs the Wombles               | Rejected                |
 
 Scenario: Arnold searches for petitions when parliament is dissolved
   Given Parliament is dissolved
+  And all the open petitions have been closed
   When I am on the home page
   And I search all petitions for "Wombles"
   Then I should be on the all petitions page
+  And I should have the following query string:
+    | state | closed  |
+    | q     | Wombles |
   And I should see my search term "Wombles" filled in the search field
+  And I should see "5 results"
   And I should see the following search results:
-    | Wombles                            | 1 signature             |
-    | Overthrow the Wombles              | 1 signature             |
-    | Uncle Bulgaria                     | 1 signature             |
-    | Common People                      | 1 signature             |
-    | The Wombles will rock Glasto       | 1 signature, now closed |
-    | Eavis vs the Wombles               | Rejected                |
+    | Wombles                            | 1 signature |
+    | Overthrow the Wombles              | 1 signature |
+    | Uncle Bulgaria                     | 1 signature |
+    | Common People                      | 1 signature |
+    | The Wombles will rock Glasto       | 1 signature |
 
 Scenario: Arnold searches for petitions when parliament is pending
   Given Parliament is pending
   When I am on the home page
   And I search all petitions for "Rivers"
   Then I should be on the archived petitions page
+  And I should have the following query string:
+    | state | published |
+    | q     | Rivers    |
   And I should see my search term "Rivers" filled in the search field
   And I should see "3 results"
   And I should see the following search results:
