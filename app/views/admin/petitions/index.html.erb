@@ -68,7 +68,7 @@
         <td class="petition-list-petition-creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
         <td class="petition-list-petition-id"><%= petition.id %></td>
         <td><%= petition.state.humanize %></td>
-        <td class="date"><%= date_format(petition.deadline) %></td>
+        <td class="date"><%= date_format(petition.deadline || petition.closed_at) %></td>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
     <% end -%>

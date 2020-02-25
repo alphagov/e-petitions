@@ -1,0 +1,33 @@
+<span><%= t(:"ui.application.back_html") %></span>
+
+<%= form.hidden_field :action %>
+<%= form.hidden_field :background %>
+<%= form.hidden_field :additional_details %>
+<%= form.hidden_field :duration %>
+<%= form.hidden_field :day %>
+<%= form.hidden_field :month %>
+<%= form.hidden_field :year %>
+
+<h1 class="page-title"><%= t(:"ui.petitions.create.replay_closing_date_stage.heading") %></h1>
+
+<%= render "petitions/create/error_summary", form: form %>
+
+<div class="panel-indent">
+  <% if petition.closing_date.custom? %>
+    <%= t(:"ui.petitions.create.replay_closing_date_stage.custom_message_html", num: Site.formatted_threshold_for_referral, date: short_date_format(petition.closing_at), action: petition.action) %>
+  <% else %>
+    <%= t(:"ui.petitions.create.replay_closing_date_stage.default_message_html", num: Site.formatted_threshold_for_referral, action: petition.action) %>
+  <% end %>
+</div>
+
+<span>
+  <%= t(:"ui.petitions.create.replay_closing_date_stage.submit_html", tabindex: increment) %>
+</span>
+
+<span>
+  <%= t(:"ui.petitions.create.replay_closing_date_stage.go_back_html", tabindex: increment) %>
+</span>
+
+<div>
+  <%= t(:"ui.petitions.create.replay_closing_date_stage.submit_warning_html") %>
+</div>

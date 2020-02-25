@@ -29,6 +29,12 @@ details {
   .form-group:last-child {
     margin-bottom: 0;
   }
+
+  h1 {
+    .heading-secondary {
+      padding-top: 0;
+    }
+  }
 }
 
 .panel-no-border {

@@ -233,6 +233,30 @@ When(/^I fill in the petition details/) do
   )
 end
 
+When(/^I choose the default closing date$/) do
+  steps %Q(
+    When I press "Check closing date"
+    Then I should see "Six months from publication"
+    When I press "This looks good"
+    Then I should see "Sign your petition"
+  )
+end
+
+When(/^I fill in the closing date with a date (\d+) ((?:day|month)s?) from today$/) do |number, period|
+  closing_date = number.public_send(period).from_now
+
+  fill_in "Day", with: closing_date.day
+  fill_in "Month", with: closing_date.month
+  fill_in "Year", with: closing_date.year
+end
+
+Then(/^the petition "([^"]*)" should exist with a closing date of "([^"]*)"$/) do |action, closing_date|
+  closing_date = closing_date.in_time_zone.end_of_day
+  petition = Petition.find_by!(action: action)
+
+  expect(petition.closed_at).to be_within(1.second).of(closing_date)
+end
+
 Then(/^I should see my constituency "([^"]*)"/) do |constituency|
   expect(page).to have_text(constituency)
 end

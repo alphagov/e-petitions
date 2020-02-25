@@ -40,6 +40,15 @@
         <% end %>
       <% end %>
 
+      <%= form_row for: [f.object, :closed_at] do %>
+        <%= f.label :closed_at, "Closing date", class: 'form-label' %>
+        <%= error_messages_for_field @petition, :closed_at %>
+        <%= f.date_select :closed_at, { include_blank: true }, tabindex: increment, class: 'form-control form-control-auto' %>
+        <%= hidden_field_tag "petition[closed_at(4i)]", "23" %>
+        <%= hidden_field_tag "petition[closed_at(5i)]", "59" %>
+        <%= hidden_field_tag "petition[closed_at(6f)]", "59.999999999" %>
+      <% end %>
+
       <%= form_row for: [@petition.creator, :name] do %>
         <%= f.fields_for :creator do |c| %>
           <%= c.label :name, "Creator", class: 'form-label' %>

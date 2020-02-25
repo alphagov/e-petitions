@@ -211,6 +211,30 @@ en-GB:
         n_sponsors_needed: "%{count} people need to click this link and confirm their support for your petition to go live. Once this has happened the Petitions team will check that it meets the petitions standards, and arrange for it to be translated, before it is published."
         n_sponsors_needed_notice: Your petition will only go live after %{count} people confirm their support
       create:
+        closing_date_stage:
+          heading: When should your petition close?
+          help_html: |-
+            <p>
+              By default petitions gather signatures for six months from the date
+              that the petition is published. However, you can choose an earlier
+              closing date if you want so that you can co-ordinate campaigning
+              via other means.
+            </p>
+          day:
+            label: "Day"
+          month:
+            label: "Month"
+          year:
+            label: "Year"
+          duration:
+            label:
+              default: "I want to gather signatures for as long as possible"
+              custom: "I want to stop gathering signatures on a specific date"
+            hint:
+              default: "Your petition will run until six months after it’s published."
+              custom: "Your petition will run until the date you specify (but not longer than six months from today)."
+          submit_html: |-
+            <input type="submit" name="move_next" value="Check closing date" class="button" tabindex="%{tabindex}" data-disable-with="Check closing date">
         creator_stage:
           heading: Sign your petition
           citizen_or_resident:
@@ -249,6 +273,20 @@ en-GB:
           hint_standards_html: Remember, your petition must meet the %{standards_link}.
           submit_html: |-
             <input type="submit" name="move_next" value="Preview petition" class="button" tabindex="%{tabindex}" data-disable-with="Preview petition">
+        replay_closing_date_stage:
+          heading: Check your closing date
+          custom_message_html: |-
+            <h1><span class="heading-secondary">Deadline</span>%{date}</h1>
+            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
+          default_message_html: |-
+            <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
+            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
+          submit_html: |-
+            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
+          go_back_html: |-
+            <input type="submit" name="move_back" value="Go back and change it" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and change it">
+          submit_warning_html: |-
+            <p class="secondary">You can’t change the closing date after this point.</p>
         replay_email_stage:
           heading: Make sure this is right
           fix_email_if_wrong: If your email address is wrong, just change it above
