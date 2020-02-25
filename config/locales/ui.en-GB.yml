@@ -447,7 +447,8 @@ en-GB:
             heading: Do you want a reply?
             email:
               label: Email address
-          submit_button: Send feedback
+          submit_html: |-
+            <input type="submit" value="Send feedback" class="button" tabindex="%{tabindex}" data-disable-with="Send feedback">
           terms_html: |-
             <p>We'll only use your email to reply to your message</p>
             <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
