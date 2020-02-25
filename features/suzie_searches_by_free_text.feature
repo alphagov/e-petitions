@@ -64,8 +64,8 @@ Feature: Suzy Singer searches by free text
     When I go to the petitions page
     And I fill in "Wombles" as my search term
     And I press "Search"
-    Then I should see an "open" petition count of 6
-    Then I should see a "referred" petition count of 1
+    Then I should see an "open" petition count of 4
+    Then I should see a "referred" petition count of 3
     Then I should see a "rejected" petition count of 1
 
   Scenario: Search for open petitions using multiple search terms

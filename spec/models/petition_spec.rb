@@ -388,6 +388,39 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "referred" do
+      let!(:p1) { FactoryBot.create(:open_petition, referral_threshold_reached_at: 1.day.ago) }
+      let!(:p2) { FactoryBot.create(:rejected_petition) }
+      let!(:p3) { FactoryBot.create(:referred_petition) }
+      let!(:p4) { FactoryBot.create(:debated_petition) }
+
+      it "doesn't include petitions that are still open" do
+        expect(Petition.referred).not_to include(p1)
+      end
+
+      it "doesn't include petitions that are rejected" do
+        expect(Petition.referred).not_to include(p2)
+      end
+
+      it "includes petitions that are referred" do
+        expect(Petition.referred).to include(p3)
+      end
+
+      it "includes petitions that are debated" do
+        expect(Petition.referred).to include(p4)
+      end
+    end
+
+    context "by_referred_longest" do
+      let!(:p1) { FactoryBot.create(:referred_petition, referred_at: 1.week.ago) }
+      let!(:p2) { FactoryBot.create(:referred_petition, referred_at: 1.month.ago) }
+      let!(:p3) { FactoryBot.create(:referred_petition, referred_at: 1.year.ago) }
+
+      it "returns the petitions in the correct order" do
+        expect(Petition.by_referred_longest.to_a).to eq([p3, p2, p1])
+      end
+    end
+
     context "selectable" do
       before :each do
         @non_selectable_petition_1 = FactoryBot.create(:petition, :state => Petition::PENDING_STATE)
@@ -1887,7 +1920,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#close!' do
-    subject(:petition) { FactoryBot.create(:open_petition, referred: true, debate_state: debate_state) }
+    subject(:petition) { FactoryBot.create(:open_petition, referred: true, debate_state: debate_state, closed_at: closing_date) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
@@ -1906,6 +1939,14 @@ RSpec.describe Petition, type: :model do
         petition.close!(now)
       }.to change {
         petition.closed_at
+      }.from(petition.closed_at).to(now)
+    end
+
+    it "sets the referral date to now" do
+      expect {
+        petition.close!(now)
+      }.to change {
+        petition.referred_at
       }.from(nil).to(now)
     end
 
@@ -1924,12 +1965,20 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when called without an argument" do
-      it "sets the closing date to the deadline" do
+      it "doesn't change the closing date" do
+        expect {
+          petition.close!
+        }.not_to change {
+          petition.closed_at
+        }
+      end
+
+      it "sets the referral date to the closing date" do
         expect {
           petition.close!
         }.to change {
-          petition.closed_at
-        }.from(nil).to(petition.deadline)
+          petition.referred_at
+        }.from(nil).to(petition.closed_at)
       end
     end
 

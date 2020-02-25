@@ -2,7 +2,6 @@
 
 // By default, multiple choice inputs stack vertically
 .multiple-choice {
-
   display: block;
   float: none;
   clear: left;
@@ -16,7 +15,7 @@
   }
 
   // Absolutely position inputs within label, to allow text to wrap
-  input {
+  input[type=radio], input[type=checkbox] {
     position: absolute;
     cursor: pointer;
     left: 0;
@@ -45,6 +44,21 @@
       float: left;
       padding-top: 7px;
       padding-bottom: 7px;
+    }
+  }
+
+  .form-hint {
+    float: left;
+    clear: left;
+    margin-top: -3px;
+    padding: 0px $gutter-one-third 15px 12px;
+  }
+
+  .form-date {
+    padding: 0px $gutter-one-third 15px 12px;
+
+    label {
+      padding: 0;
     }
   }
 

@@ -5,13 +5,78 @@ class PetitionCreator
   extend ActiveModel::Translation
   include ActiveModel::Conversion
 
-  STAGES = %w[petition replay_petition creator replay_email]
+  ClosingDate = Struct.new(:duration, :year, :month, :day) do
+    include Comparable
 
-  PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :phone_number, :address, :postcode, :location_code, :notify_by_email]
-  PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
+    def duration
+      self[:duration] == 'custom' ? 'custom' : 'default'
+    end
+
+    def custom?
+      duration == 'custom'
+    end
+
+    def blank?
+      values.any?(&:blank?)
+    end
+
+    def invalid?
+      date.blank?
+    rescue TypeError, ArgumentError => e
+      true
+    end
+
+    def past?
+      date.past?
+    end
+
+    def <=>(other)
+      if other.respond_to?(:to_date)
+        date <=> other.to_date
+      else
+        raise ArgumentError, "Unable to compare #{date.inspect} with #{other.inspect}"
+      end
+    end
+
+    def to_date
+      date
+    end
+
+    def to_time
+      date.end_of_day
+    end
+
+    def in_time_zone
+      to_time.in_time_zone
+    end
+
+    private
+
+    def date
+      @date ||= Date.civil(*values)
+    end
+
+    def values
+      @values ||= values_at(1, 2, 3).map(&method(:parse_integer))
+    end
+
+    def parse_integer(value)
+      Integer(value.to_s)
+    rescue ArgumentError => e
+      nil
+    end
+  end
+
+  STAGES = %w[petition replay_petition closing_date replay_closing_date creator replay_email]
+
+  PETITION_PARAMS     = [:action, :background, :additional_details]
+  CLOSING_DATE_PARAMS = [:duration, :year, :month, :day]
+  SIGNATURE_PARAMS    = [:name, :email, :phone_number, :address, :postcode, :location_code, :notify_by_email]
+  PERMITTED_PARAMS    = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + CLOSING_DATE_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
+
+  delegate :duration, :day, :month, :year, to: :closing_date
 
   def initialize(params, request)
     @params = params.permit(*PERMITTED_PARAMS)
@@ -49,6 +114,10 @@ class PetitionCreator
         p.action = action
         p.background = background
         p.additional_details = additional_details
+
+        if closing_date.custom?
+          p.closed_at = closing_date
+        end
 
         p.build_creator do |c|
           c.name = name
@@ -102,6 +171,14 @@ class PetitionCreator
     petition_creator_params[:additional_details].to_s.strip
   end
 
+  def closing_date
+    @closing_date ||= ClosingDate.new(*closing_date_params)
+  end
+
+  def closing_at
+    closing_date.to_time
+  end
+
   def name
     petition_creator_params[:name].to_s.strip
   end
@@ -144,6 +221,10 @@ class PetitionCreator
     params[:petition_creator] || {}
   end
 
+  def closing_date_params
+    petition_creator_params.values_at(*CLOSING_DATE_PARAMS)
+  end
+
   def moving_backwards?
     params.key?(:move_back)
   end
@@ -157,7 +238,7 @@ class PetitionCreator
   end
 
   def next_stage
-    STAGES[[stage_index + 1, 3].min]
+    STAGES[[stage_index + 1, 5].min]
   end
 
   def validate_petition
@@ -172,6 +253,26 @@ class PetitionCreator
 
     if errors.any?
       @stage = "petition"
+    end
+  end
+
+  def validate_closing_date
+    if closing_date.custom?
+      if closing_date.blank?
+        errors.add(:closing_date, :blank)
+      elsif closing_date.invalid?
+        errors.add(:closing_date, :invalid)
+      elsif closing_date.past?
+        errors.add(:closing_date, :past)
+      elsif closing_date < 30.days.from_now
+        errors.add(:closing_date, :too_short)
+      elsif closing_date > 6.months.from_now
+        errors.add(:closing_date, :too_long)
+      end
+    end
+
+    if errors.any?
+      @stage = "closing_date"
     end
   end
 
@@ -210,6 +311,10 @@ class PetitionCreator
     validate_petition
 
     if errors.empty? && stage_index > 1
+      validate_closing_date
+    end
+
+    if errors.empty? && stage_index > 3
       validate_creator
     end
   end

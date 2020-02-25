@@ -29,6 +29,7 @@ Scenario: Charlie creates a petition
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
+  And I choose the default closing date
   And I fill in my details
   And I fill in my creator contact details
   When I press "Continue"
@@ -40,12 +41,33 @@ Scenario: Charlie creates a petition
   And "Womboid Wibbledon" wants to be notified about the petition's progress
   And "womboid@wimbledon.com" should be emailed a link for gathering support from sponsors
 
+Scenario: Charlie creates a petition with a custom closing date
+  Given the date is the "20 April, 2020"
+  And I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  And I choose "I want to stop gathering signatures on a specific date"
+  And I fill in "Day" with "30"
+  And I fill in "Month" with "06"
+  And I fill in "Year" with "2020"
+  And I press "Check closing date"
+  Then I should see "30 June 2020"
+  When I press "This looks good"
+  And I fill in my details
+  And I fill in my creator contact details
+  And I press "Continue"
+  Then I am asked to review my email address
+  When I press "Yes – this is my email address"
+  Then the petition "The wombats of wimbledon rock." should exist with a closing date of "2020-06-30"
+
 @welsh
 Scenario: Charlie creates a petition in Welsh
   Given I start a new petition
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
+  And I choose the default closing date
   And I fill in my details
   And I fill in my creator contact details
   When I press "Continue"
@@ -68,6 +90,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
+  And I choose the default closing date
   And I fill in my details with postcode "SW14 9RQ"
   And I fill in my creator contact details
   And I press "Continue"
@@ -119,6 +142,43 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Preview petition"
   And I press "This looks good"
 
+  Then I should see a heading called "When should your petition close?"
+
+  When I choose "I want to stop gathering signatures on a specific date"
+  And I press "Check closing date"
+
+  Then I should see "Closing date must be completed"
+
+  When I fill in "Day" with "0"
+  And I fill in "Month" with "0"
+  And I fill in "Year" with "0"
+  And I press "Check closing date"
+
+  Then I should see "Closing date not recognised"
+
+  When I fill in "Day" with "31"
+  And I fill in "Month" with "10"
+  And I fill in "Year" with "1968"
+  And I press "Check closing date"
+
+  Then I should see "Closing date is in the past"
+
+  When I fill in the closing date with a date 20 days from today
+  And I press "Check closing date"
+
+  Then I should see "Closing date must be at least 30 days from today"
+
+  When I fill in the closing date with a date 9 months from today
+  And I press "Check closing date"
+
+  Then I should see "Closing date must be no more than 6 months from today"
+
+  When I fill in the closing date with a date 3 months from today
+  And I press "Check closing date"
+
+  Then I should see a heading called "Check your closing date"
+
+  When I press "This looks good"
   Then I should see a heading called "Sign your petition"
 
   When I press "Continue"

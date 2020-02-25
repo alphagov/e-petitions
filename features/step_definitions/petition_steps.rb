@@ -32,10 +32,8 @@ Given(/^a petition "([^"]*)" with a negative debate outcome$/) do |action|
   @petition = FactoryBot.create(:not_debated_petition, action: action)
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|open)? petition "([^"]*)" with scheduled debate date of "(.*?)"$/) do |_, state, petition_title, scheduled_debate_date|
-  step "an #{state} petition \"#{petition_title}\""
-  @petition.scheduled_debate_date = scheduled_debate_date.to_date
-  @petition.save
+Given(/^a petition "([^"]*)" with a scheduled debate date of "(.*?)"$/) do |action, date|
+  @petition = FactoryBot.create(:scheduled_debate_petition, action: action, scheduled_debate_date: date)
 end
 
 Given(/^the petition "([^"]*)" has (\d+) validated and (\d+) pending signatures$/) do |petition_action, no_validated, no_pending|
@@ -235,6 +233,30 @@ When(/^I fill in the petition details/) do
   )
 end
 
+When(/^I choose the default closing date$/) do
+  steps %Q(
+    When I press "Check closing date"
+    Then I should see "Six months from publication"
+    When I press "This looks good"
+    Then I should see "Sign your petition"
+  )
+end
+
+When(/^I fill in the closing date with a date (\d+) ((?:day|month)s?) from today$/) do |number, period|
+  closing_date = number.public_send(period).from_now
+
+  fill_in "Day", with: closing_date.day
+  fill_in "Month", with: closing_date.month
+  fill_in "Year", with: closing_date.year
+end
+
+Then(/^the petition "([^"]*)" should exist with a closing date of "([^"]*)"$/) do |action, closing_date|
+  closing_date = closing_date.in_time_zone.end_of_day
+  petition = Petition.find_by!(action: action)
+
+  expect(petition.closed_at).to be_within(1.second).of(closing_date)
+end
+
 Then(/^I should see my constituency "([^"]*)"/) do |constituency|
   expect(page).to have_text(constituency)
 end
@@ -358,7 +380,7 @@ end
 
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
   scheduled_debate_petitions_count.times do |count|
-    FactoryBot.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")
+    FactoryBot.create(:scheduled_debate_petition, action: "Petition #{count}")
   end
 end
 

@@ -2,6 +2,17 @@
   <dt>Status</dt>
   <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
+  <% if @petition.deadline %>
+    <dt>Deadline</dt>
+    <dd><%= date_format_admin(@petition.deadline) %></dd>
+  <% elsif @petition.closed_at? %>
+    <dt>Deadline</dt>
+    <dd><%= date_format_admin(@petition.closed_at) %></dd>
+  <% else %>
+    <dt>Deadline</dt>
+    <dd>TBC</dd>
+  <% end %>
+
 <% unless @petition.in_todo_list? %>
   <%= link_to admin_petition_signatures_url(@petition) do %>
     <dt>Signatures</dt>
@@ -11,7 +22,7 @@
 
 <dt>Creator</dt>
 <dd>
-  <%=  @petition.creator.name %><br />
+  <%= @petition.creator.name %><br />
   <%= auto_link(@petition.creator.email) %>
   <% @petition.creator.contact&.tap do |contact| %>
     <br />
@@ -24,7 +35,7 @@
 
 <% if @petition.collecting_sponsors? %>
   <dd>
-    <%=  button_to 'Resend email to the creator', resend_admin_petition_url(@petition), method: :post, class: 'button', data: { confirm: "Resend a copy of the email to the petition creator and forward a copy to the feedback address?" } %>
+    <%= button_to 'Resend email to the creator', resend_admin_petition_url(@petition), method: :post, class: 'button', data: { confirm: "Resend a copy of the email to the petition creator and forward a copy to the feedback address?" } %>
   </dd>
 <% end %>
 
@@ -37,9 +48,6 @@
     <dd><%= date_time_format(@petition.moderation_threshold_reached_at) %></dd>
   <% end %>
 <% else %>
-  <dt>Deadline</dt>
-  <dd><%= date_format_admin(@petition.deadline) %></dd>
-
   <dt>Link to petition</dt>
   <dd><%= link_to petition_path(@petition), petition_url(@petition), target: "_blank" %></dd>
 

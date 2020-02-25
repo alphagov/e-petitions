@@ -100,6 +100,12 @@ en-GB:
       additional_details:
         invalid: "Additional details can't start with a '=', '+', '-' or '@'"
         too_long: "Additional details is too long"
+      closing_date:
+        blank: "Closing date must be completed"
+        invalid: "Closing date not recognised"
+        past: "Closing date is in the past"
+        too_short: "Closing date must be at least 30 days from today"
+        too_long: "Closing date must be no more than 6 months from today"
       comment:
         blank: "Comments must be completed"
       name:
