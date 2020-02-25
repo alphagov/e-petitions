@@ -16,7 +16,9 @@
   <% @petition.creator.contact&.tap do |contact| %>
     <br />
     <%= contact.phone_number %><br />
-    <%= simple_format(h(contact.address)) %>
+    <%= link_to "https://www.google.com/maps/search/?api=1&query=#{URI.escape("#{contact.address.squish}, Wales, #{contact.signature.postcode}")}" do %>
+      <%= simple_format(h(contact.address)) %>
+    <% end %>
   <% end %>
 </dd>
 
