@@ -77,8 +77,8 @@ RSpec.describe RejectionReason, type: :model do
   describe ".codes" do
     it "returns a list of all codes" do
       expect(RejectionReason.codes).to eq %w[
-        duplicate irrelevant no-action honours
-        fake-name foi libellous offensive
+        duplicate irrelevant no-action honours fake-name
+        foi libellous offensive advert removed
       ]
     end
   end
@@ -86,7 +86,7 @@ RSpec.describe RejectionReason, type: :model do
   describe ".hidden_codes" do
     it "returns a list of hidden codes" do
       expect(RejectionReason.hidden_codes).to eq %w[
-        libellous offensive
+        libellous offensive advert removed
       ]
     end
   end
@@ -104,7 +104,7 @@ RSpec.describe RejectionReason, type: :model do
       let(:reason) { rejection_reasons(:offensive) }
 
       it "appends (will be hidden) to the title" do
-        expect(reason.label).to eq("Offensive, joke, nonsense or advert (will be hidden)")
+        expect(reason.label).to eq("Offensive or a joke (will be hidden)")
       end
     end
   end

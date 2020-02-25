@@ -65,7 +65,23 @@ libellous:
 offensive:
   created_at: "2015-07-20T10:00:08Z"
   code: "offensive"
-  title: "Offensive, joke, nonsense or advert"
+  title: "Offensive or a joke"
   hidden: true
   description: |-
-    It’s offensive, nonsense, a joke, or an advert.
+    It’s offensive, extreme or a joke.
+
+advert:
+  created_at: "2015-07-20T10:00:09Z"
+  code: "advert"
+  title: "Advert"
+  hidden: true
+  description: |-
+    It’s an advert or promotes a specific business or product.
+
+removed:
+  created_at: "2015-07-20T10:00:10Z"
+  code: "removed"
+  title: "We’ve removed this petition from the site"
+  hidden: true
+  description: |-
+    The petition creator requested that this petition not be published.
