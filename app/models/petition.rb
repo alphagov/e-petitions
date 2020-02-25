@@ -639,9 +639,20 @@ class Petition < ActiveRecord::Base
         build_rejection(attributes)
       end
 
-      unless translated? || rejection.hide_petition?
-        errors.add :moderation, :translation_missing
-        return false
+      unless translated?
+        if english?
+          update_columns(
+            action_cy: action_en,
+            background_cy: background_en,
+            additional_details_cy: additional_details_en
+          )
+        else
+          update_columns(
+            action_en: action_cy,
+            background_en: background_cy,
+            additional_details_en: additional_details_cy
+          )
+        end
       end
 
       rejection.save
