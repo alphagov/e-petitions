@@ -517,3 +517,8 @@ When (/^I search all petitions for "(.*?)"$/) do |search_term|
   end
 end
 
+Given(/^all the open petitions have been closed$/) do
+  Petition.open_state.find_each do |petition|
+    petition.close!(1.day.ago)
+  end
+end

@@ -2,6 +2,16 @@
   <h2 id="search-petitions-heading">Search petitions</h2>
 
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
+    <% if Parliament.dissolved? %>
+      <input type="hidden" name="state" value="closed">
+    <% elsif Parliament.dissolution_announced? %>
+      <input type="hidden" name="state" value="open">
+    <% elsif Parliament.opened? %>
+      <input type="hidden" name="state" value="open">
+    <% else %>
+      <input type="hidden" name="state" value="published">
+    <% end %>
+
     <div class="search-inline">
       <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>
       <%= submit_tag 'Search', name: nil, class: 'inline-submit' %>
