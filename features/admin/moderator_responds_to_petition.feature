@@ -78,18 +78,9 @@ Feature: Moderator respond to petition
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator
     When I look at the next petition on my list
-    And the petition is translated
     And I reject the petition with a reason code "Not the Government/Senedd’s responsibility"
     Then the petition is not available for signing
     But the petition is still available for searching or viewing
-
-  Scenario: Moderator tries to reject a petition before translation
-    Given I am logged in as a moderator
-    When I look at the next petition on my list
-    And I reject the petition with a reason code "Not the Government/Senedd’s responsibility"
-    Then the petition should still be unmoderated
-    And the creator should not receive a notification email
-    And I should see "The petition must be fully translated first before being made public"
 
   @javascript
   Scenario: Moderator previews reason description
