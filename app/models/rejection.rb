@@ -1,6 +1,6 @@
 class Rejection < ActiveRecord::Base
-  CODES = %w[insufficient duplicate irrelevant no-action honours fake-name foi libellous offensive]
-  HIDDEN_CODES = %w[libellous offensive]
+  CODES = %w[insufficient duplicate irrelevant no-action fake-name libellous offensive bad-address not-suitable]
+  HIDDEN_CODES = %w[libellous offensive not-suitable]
 
   belongs_to :petition, touch: true
 
