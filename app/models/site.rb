@@ -148,6 +148,10 @@ class Site < ActiveRecord::Base
       5.days
     end
 
+    def maximum_number_of_signatures
+      maximum_number_of_sponsors + 1
+    end
+
     def defaults
       {
         title:                          default_title,
