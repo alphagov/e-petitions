@@ -20,7 +20,7 @@
         <%= f.label :action, class: 'form-label' %>
         <%= error_messages_for_field @petition, :action %>
         <% I18n.with_locale petition_locale do %>
-          <%= f.text_area :action, tabindex: increment, rows: 3, maxlength: 80, class: 'form-control' %>
+          <%= f.text_area :action, tabindex: increment, rows: 3, class: 'form-control' %>
         <% end %>
       <% end %>
 
