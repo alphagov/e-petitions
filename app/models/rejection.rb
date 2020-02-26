@@ -1,12 +1,16 @@
 class Rejection < ActiveRecord::Base
+  include Translatable
+
   CODES = %w[insufficient duplicate irrelevant no-action fake-name libellous offensive bad-address not-suitable]
   HIDDEN_CODES = %w[libellous offensive not-suitable]
+
+  translate :details
 
   belongs_to :petition, touch: true
 
   validates :petition, presence: true
   validates :code, presence: true, inclusion: { in: CODES }
-  validates :details, length: { maximum: 4000 }, allow_blank: true
+  validates :details_en, :details_cy, length: { maximum: 4000 }, allow_blank: true
 
   attr_writer :rejected_at
 

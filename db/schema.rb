@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_23_210547) do
+ActiveRecord::Schema.define(version: 2020_02_26_141745) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -308,6 +308,8 @@ ActiveRecord::Schema.define(version: 2020_02_23_210547) do
     t.text "details"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "details_en"
+    t.text "details_cy"
     t.index ["petition_id"], name: "index_rejections_on_petition_id", unique: true
   end
 

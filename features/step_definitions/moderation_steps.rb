@@ -23,7 +23,8 @@ end
 When(/^I reject the petition with a reason code "([^"]*)" and some explanatory text$/) do |reason_code|
   choose "Reject"
   select reason_code, :from => :petition_rejection_code
-  fill_in :petition_rejection_details, :with => "See guidelines at http://direct.gov.uk"
+  fill_in :petition_rejection_details_en, :with => "See guidelines at http://direct.gov.uk"
+  fill_in :petition_rejection_details_cy, :with => "Gweler y canllawiau yn http://direct.gov.uk"
   click_button "Email petition creator"
 end
 

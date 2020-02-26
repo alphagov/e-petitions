@@ -1,6 +1,7 @@
 <div class="petition-rejection-controls">
   <%= javascript_tag do %>
-    var rejection_descriptions = <%= raw rejection_descriptions.to_json %>;
+    var rejection_descriptions_en = <%= raw I18n.with_locale(:"en-GB") { rejection_descriptions.to_json } %>;
+    var rejection_descriptions_cy = <%= raw I18n.with_locale(:"cy-GB") { rejection_descriptions.to_json } %>;
 
     $().ready(function() {
       // Ensure that we get the onchange event when the users uses the keyboard
@@ -12,7 +13,8 @@
 
       $('#petition_rejection_code').change(function() {
         $('#rejection_preview').show();
-        $('#rejection_preview .content').html(rejection_descriptions[$(this).val()]);
+        $('#rejection_preview .en .content').html(rejection_descriptions_en[$(this).val()]);
+        $('#rejection_preview .cy .content').html(rejection_descriptions_cy[$(this).val()]);
       });
     });
   <% end -%>
@@ -26,13 +28,26 @@
 
     <div id="rejection_preview" class="reject-flash-notice" style="display: none;">
       <strong>We'll send this standard text to the petition creator:</strong>
-      <div class="content"></div>
+      <div class="en">
+        <strong>English:</strong>
+        <div class="content"></div>
+      </div>
+      <div class="cy">
+        <strong>Welsh:</strong>
+        <div class="content"></div>
+      </div>
     </div>
 
-    <%= form_row for: [r.object, :details] do %>
-      <%= r.label :details, 'Additional details (optional)', class: 'form-label' %>
-      <%= error_messages_for_field r.object, :details %>
-      <%= r.text_area :details, rows: 8, cols: 70, class: 'form-control' %>
+    <%= form_row for: [r.object, :details_en] do %>
+      <%= r.label :details_en, 'Additional details in english (optional)', class: 'form-label' %>
+      <%= error_messages_for_field r.object, :details_en %>
+      <%= r.text_area :details_en, rows: 8, cols: 70, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [r.object, :details_cy] do %>
+      <%= r.label :details_cy, 'Additional details in welsh (optional)', class: 'form-label' %>
+      <%= error_messages_for_field r.object, :details_cy %>
+      <%= r.text_area :details_cy, rows: 8, cols: 70, class: 'form-control' %>
     <% end %>
   <% end %>
 </div>
