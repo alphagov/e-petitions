@@ -265,9 +265,9 @@ class PetitionCreator
       elsif closing_date.past?
         errors.add(:closing_date, :past)
       elsif closing_date < 30.days.from_now
-        errors.add(:closing_date, :too_short)
+        errors.add(:closing_date, :too_near)
       elsif closing_date > 6.months.from_now
-        errors.add(:closing_date, :too_long)
+        errors.add(:closing_date, :too_far)
       end
     end
 
