@@ -628,7 +628,7 @@ class Petition < ActiveRecord::Base
       return false
     end
 
-    update(state: OPEN_STATE, open_at: time, closed_at: Site.closed_at_for_opening(time))
+    update(state: OPEN_STATE, open_at: time, closed_at: closing_date(time))
   end
 
   def reject(attributes)
@@ -898,5 +898,9 @@ class Petition < ActiveRecord::Base
     else
       0
     end
+  end
+
+  def closing_date(time)
+    closed_at || Site.closed_at_for_opening(time)
   end
 end
