@@ -1,35 +1,38 @@
 en-GB:
   rejections:
+    will_be_hidden: will be hidden
     titles:
-      insufficient: "Insufficient signatures"
-      duplicate: "Duplicate petition"
-      irrelevant: "Not the Government/Senedd’s responsibility"
-      no-action: "Action unclear"
-      honours: "Honours or appointments"
-      fake-name: "Fake name"
-      foi: "FOI request"
-      libellous: "Confidential, libellous, false, defamatory or references a court case"
-      offensive: "Offensive, joke, nonsense or advert"
+      irrelevant: Not the Senedd/Government’s responsibility
+      duplicate: Duplicate petition
+      no-action: Action unclear
+      bad-address: Petitioner location
+      fake-name: Incomplete name or details
+      insufficient: Not enough signatures
+      not-suitable: Not suitable
+      libellous: Confidential, libellous, false, defamatory or references a court case
+      offensive: Offensive, nonsense, joke or advert
     descriptions:
-      insufficient: |-
-        <p>It failed to get the required number of signatures to be referred to the Petitions Committee.</p>
-      duplicate: |-
-        <p>There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue.</p>
-        <p>You are more likely to get action on this issue if you sign and share a single petition.</p>
       irrelevant: |-
-        <p>It’s about something that the Welsh Government or Senedd is not responsible for.</p>
+        It’s about something that the Senedd or Welsh Government is not responsible for.
+      duplicate: |-
+        There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue, or if the Petitions Committee has considered one in the last year.
       no-action: |-
-        <p>It’s not clear what the petition is asking the Welsh Government or Senedd to do.</p>
-      honours: |-
-        <p>It’s about honours or appointments.</p>
+        It’s not clear what the petition is asking the Senedd or Welsh Government to do.
+
+        Petitions need to call on the Senedd or Government to take a specific action.
+      bad-address: |-
+        We can only accept petitions from people who live in Wales or organisations with a base in Wales.
       fake-name: |-
-        <p>It was created using a fake or incomplete name.</p>
-        <p>The text of your petition meets our terms and conditions.</p>
-        <p>However, people who create petitions are required to give their full, real name. Sorry if this wasn’t clear to you.</p>
-        <p>We are rejecting your petition for that reason, but if you resubmit your petition using your full name, we’ll be able to approve it.</p>
-      foi: |-
-        <p>It’s an FOI request.</p>
+        People who create petitions are required to provide a full, real name, as well as their address and contact details. Sorry if this wasn’t clear to you.
+
+        We are rejecting your petition for that reason, but if you resubmit your petition with a full name and contact details, we may able to approve it.
+      insufficient: |-
+        It did not collect enough signatures to be referred to the Petitions Committee.
+
+        Petitions need to receive at least %{threshold_for_referral} signatures before they can be considered in the Senedd.
+      not-suitable: |-
+        It included issues relating to an issue for which a petition is not the appropriate channel, or personal information which it would not be appropriate to publish.
       libellous: |-
-        <p>It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.</p>
+        It included potentially confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.
       offensive: |-
-        <p>It’s offensive, nonsense, a joke, or an advert.</p>
+        It’s offensive, nonsense, a joke, or an advert.

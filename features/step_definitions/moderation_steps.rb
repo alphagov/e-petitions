@@ -92,7 +92,7 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "We rejected the petition you created" in the email body
-    And they should see "#{strip_tags(rejection_description(@petition.rejection.code)).split("\n").first}" in the email body
+    And they should see "#{I18n.t(@petition.rejection.code, scope: :"rejections.descriptions")}" in the email body
     And they should see /We rejected your petition/ in the email subject
   )
   if petition_is_libellous
@@ -132,7 +132,7 @@ Then /^I see relevant reason descriptions when I browse different reason codes$/
   select "Duplicate petition", :from => :petition_rejection_code
   expect(page).to have_content "already a petition"
   select "Confidential, libellous, false, defamatory or references a court case", :from => :petition_rejection_code
-  expect(page).to have_content "It included confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts."
+  expect(page).to have_content I18n.t(:"rejections.descriptions.libellous")
 end
 
 Given(/^a moderator updates the petition activity$/) do
