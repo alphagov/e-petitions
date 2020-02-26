@@ -252,6 +252,7 @@ en-GB:
             hint: You must provide a valid address in Wales to create a petition. Anyone can sign your petition.
           location:
             label: Location
+            hint: Only people in Wales can create a petition.
           postcode:
             label: Postcode
           notify_by_email:

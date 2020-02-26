@@ -12,6 +12,10 @@ module FormHelper
     t(:priority_countries) + COUNTRY_DIVIDER + t(:countries)
   end
 
+  def countries_for_create
+    [[t(:"country_name.GB-WLS"), "GB-WLS"]]
+  end
+
   def error_messages_for_field(object, field_name, options = {})
     if errors = object && object.errors[field_name].presence
       content_tag :span, errors.first, { class: 'error-message' }.merge(options)

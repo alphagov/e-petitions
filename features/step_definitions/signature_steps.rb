@@ -41,7 +41,7 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "#{email_address}"
     And I fill in my postcode with "SW14 9RQ"
-    And I select "#{I18n.t(:"GB-ENG", scope: :country_name)}" from "Location"
+    And I select "#{I18n.t(:"GB-WLS", scope: :country_name)}" from "Location"
     And I check "Email me whenever there’s an update about this petition"
   )
 end
@@ -51,7 +51,7 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
     When I fill in "Name" with "Womboid Wibbledon"
     And I fill in "Email" with "womboid@wimbledon.com"
     And I fill in my postcode with "#{postcode}"
-    And I select "England" from "Location"
+    And I select "Wales" from "Location"
     And I check "Email me whenever there’s an update about this petition"
   )
 end
