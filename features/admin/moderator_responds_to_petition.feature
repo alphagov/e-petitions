@@ -67,6 +67,16 @@ Feature: Moderator respond to petition
     Then the petition should be visible on the site for signing
     And the creator should receive a notification email
 
+  Scenario: Moderator publishes petition with a custom closing date
+    Given the date is the "20 April 2020"
+    And I am logged in as a moderator
+    And a sponsored petition "Remove tolls on the bridge" exists with a custom closing date "30 June 2020"
+    And the petition is translated
+    When I go to the admin petition page for "Remove tolls on the bridge"
+    And I publish the petition
+    Then the petition should be visible on the site for signing
+    And I should see "Deadline 30 June 2020"
+
   Scenario: Moderator tries to publish a petition before translation
     Given I am logged in as a moderator
     When I look at the next petition on my list
