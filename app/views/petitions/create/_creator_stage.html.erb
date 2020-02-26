@@ -35,7 +35,8 @@
 <%= form_row for: [petition, :location_code] do %>
   <%= form.label :location_code, t(:"ui.petitions.create.creator_stage.location.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :location_code %>
-  <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
+  <%= form.select :location_code, countries_for_create, {}, tabindex: increment, class: "form-control" %>
+  <p class="form-hint"><%= t(:"ui.petitions.create.creator_stage.location.hint") %></p>
 <% end %>
 
 <%= form_row for: [petition, :address] do %>
