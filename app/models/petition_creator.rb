@@ -279,7 +279,7 @@ class PetitionCreator
   def validate_creator
     errors.add(:name, :invalid) if name =~ /\A[-=+@]/
     errors.add(:name, :blank) unless name.present?
-    errors.add(:name, :too_long, count: 255) if action.length > 255
+    errors.add(:name, :too_long, count: 255) if name.length > 255
     errors.add(:email, :blank) unless email.present?
     errors.add(:phone_number, :blank) unless phone_number.present?
     errors.add(:phone_number, :too_long, count: 31) if phone_number.length > 31
