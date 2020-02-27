@@ -791,4 +791,25 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
     end
   end
+
+  describe "skipping anonymized signatures" do
+    let(:email) { FactoryBot.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
+    subject(:mail) { described_class.email_signer(petition, signature, email) }
+
+    context "when the signature is not anonymized" do
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+
+      it "will deliver the email" do
+        expect(mail.perform_deliveries).to eq(true)
+      end
+    end
+
+    context "when the signature is anonymized" do
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, created_at: 13.months.ago, anonymized_at: 1.month.ago) }
+
+      it "will not deliver the email" do
+        expect(mail.perform_deliveries).to eq(false)
+      end
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_16_110841) do
+ActiveRecord::Schema.define(version: 2020_02_26_175149) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -121,9 +121,11 @@ ActiveRecord::Schema.define(version: 2020_02_16_110841) do
     t.integer "moderation_lag"
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
+    t.datetime "anonymized_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
+    t.index ["anonymized_at"], name: "index_archived_petitions_on_anonymized_at"
     t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
     t.index ["locked_by_id"], name: "index_archived_petitions_on_locked_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
@@ -167,12 +169,14 @@ ActiveRecord::Schema.define(version: 2020_02_16_110841) do
     t.uuid "uuid"
     t.boolean "creator", default: false, null: false
     t.boolean "sponsor", default: false, null: false
+    t.datetime "anonymized_at"
     t.index "((ip_address)::inet)", name: "index_archived_signatures_on_inet"
     t.index "((regexp_replace(\"left\"((email)::text, (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"((email)::text, \"position\"((email)::text, '@'::text))))", name: "index_archived_signatures_on_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_archived_signatures_on_sector_and_petition_id"
     t.index "\"left\"((postcode)::text, '-3'::integer), state, petition_id", name: "index_archived_signatures_on_sector_and_state_and_petition_id"
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_archived_signatures_on_domain"
     t.index "lower((name)::text)", name: "index_archived_signatures_on_name"
+    t.index ["anonymized_at", "petition_id"], name: "index_archived_signatures_on_anonymized_at_and_petition_id"
     t.index ["constituency_id"], name: "index_archived_signatures_on_constituency_id"
     t.index ["created_at", "ip_address", "petition_id"], name: "index_archived_signatures_on_creation_ip_and_petition_id"
     t.index ["email", "petition_id", "name"], name: "index_archived_signatures_on_email_and_petition_id_and_name", unique: true
@@ -460,10 +464,12 @@ ActiveRecord::Schema.define(version: 2020_02_16_110841) do
     t.datetime "signature_count_validated_at"
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
+    t.datetime "anonymized_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_petitions_on_additional_details", using: :gin
+    t.index ["anonymized_at"], name: "index_petitions_on_anonymized_at"
     t.index ["archived_at"], name: "index_petitions_on_archived_at"
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
@@ -562,12 +568,14 @@ ActiveRecord::Schema.define(version: 2020_02_16_110841) do
     t.string "signed_token"
     t.string "validated_ip"
     t.string "canonical_email"
+    t.datetime "anonymized_at"
     t.index "((ip_address)::inet)", name: "index_signatures_on_inet"
     t.index "((regexp_replace(\"left\"((email)::text, (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"((email)::text, \"position\"((email)::text, '@'::text))))", name: "index_signatures_on_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_signatures_on_sector_and_petition_id"
     t.index "\"left\"((postcode)::text, '-3'::integer), state, petition_id", name: "index_signatures_on_sector_and_state_and_petition_id"
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_signatures_on_domain"
     t.index "lower((name)::text)", name: "index_signatures_on_name"
+    t.index ["anonymized_at", "petition_id"], name: "index_signatures_on_anonymized_at_and_petition_id"
     t.index ["archived_at", "petition_id"], name: "index_signatures_on_archived_at_and_petition_id"
     t.index ["canonical_email"], name: "index_signatures_on_canonical_email"
     t.index ["constituency_id"], name: "index_signatures_on_constituency_id"

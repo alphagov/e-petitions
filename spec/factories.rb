@@ -62,6 +62,10 @@ FactoryBot.define do
   end
 
   factory :archived_petition, class: "Archived::Petition" do
+    transient do
+      sponsors_signed nil
+    end
+
     sequence(:action) { |n| "Petition #{n}" }
     state "closed"
     background "Petition background"
@@ -71,6 +75,14 @@ FactoryBot.define do
 
     after(:build) do |petition, evaluator|
       petition.parliament ||= Parliament.archived.first || FactoryBot.create(:parliament, :archived)
+
+      if evaluator.sponsors_signed
+        petition.creator ||= FactoryBot.build(:archived_signature, :validated, :creator, petition: petition)
+
+        Site.minimum_number_of_sponsors.times do
+          petition.signatures << FactoryBot.build(:archived_signature, :validated, :sponsor, petition: petition)
+        end
+      end
     end
 
     trait :response do
@@ -197,6 +209,14 @@ FactoryBot.define do
     state               Archived::Signature::VALIDATED_STATE
     unsubscribe_token { Authlogic::Random.friendly_token }
     notify_by_email     true
+
+    trait :creator do
+      creator { true }
+    end
+
+    trait :sponsor do
+      sponsor { true }
+    end
 
     trait :fraudulent do
       state Archived::Signature::FRAUDULENT_STATE

@@ -4,7 +4,7 @@ require 'ipaddr'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator
-  include GeoipLookup
+  include GeoipLookup, Anonymize
 
   has_perishable_token
   has_perishable_token called: 'signed_token'

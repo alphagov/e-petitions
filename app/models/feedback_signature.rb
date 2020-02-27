@@ -15,6 +15,10 @@ FeedbackSignature = Struct.new(:petition) do
     '0'
   end
 
+  def anonymized?
+    false
+  end
+
   private
 
   def rfc2822

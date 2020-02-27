@@ -1,5 +1,14 @@
 namespace :epets do
   namespace :petitions do
+    desc "Add a task to the queue to anonymize petitions at midnight"
+    task :anonymize => :environment do
+      Task.run("epets:petitions:anonymize") do
+        time = Date.tomorrow.beginning_of_day
+        AnonymizePetitionsJob.set(wait_until: time).perform_later(time.iso8601)
+        Archived::AnonymizePetitionsJob.set(wait_until: time).perform_later(time.iso8601)
+      end
+    end
+
     desc "Add a task to the queue to close petitions at midnight"
     task :close => :environment do
       Task.run("epets:petitions:close") do

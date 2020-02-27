@@ -32,4 +32,9 @@
     <dt>Tags</dt>
     <dd><%= @petition.tag_names.join(", ") %></dd>
   <% end %>
+
+  <% if @petition.anonymized? %>
+    <dt>Anonymized</dt>
+    <dd><%= date_time_format(@petition.anonymized_at) %></dd>
+  <% end %>
 </dl>

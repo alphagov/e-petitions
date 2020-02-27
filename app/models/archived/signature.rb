@@ -4,7 +4,7 @@ require_dependency 'archived'
 
 module Archived
   class Signature < ActiveRecord::Base
-    include GeoipLookup
+    include GeoipLookup, Anonymize
 
     ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 

@@ -1,6 +1,12 @@
 class PetitionMailer < ApplicationMailer
   include ActiveSupport::NumberHelper
 
+  after_action do
+    if @signature && @signature.anonymized?
+      mail.perform_deliveries = false
+    end
+  end
+
   def email_confirmation_for_signer(signature)
     @signature, @petition = signature, signature.petition
     mail to: @signature.email, subject: subject_for(:email_confirmation_for_signer)

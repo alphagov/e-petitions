@@ -38,7 +38,7 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
-  include Browseable, Taggable, Departments
+  include Browseable, Taggable, Departments, Anonymization
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }

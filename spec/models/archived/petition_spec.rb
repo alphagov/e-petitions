@@ -297,6 +297,60 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".anonymize_petitions!" do
+    context "when a petition has closed less than six months ago" do
+      let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 5.months.ago) }
+
+      it "does not anonymize the petition" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change{ petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition has closed more than six months ago" do
+      let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 7.months.ago) }
+
+      it "does anonymize the petition" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.to change{ petition.reload.anonymized? }.from(false).to(true)
+      end
+    end
+  end
+
+  describe ".in_need_of_anonymizing" do
+    context "when a petition is anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 7.months.ago, anonymized_at: 1.week.ago) }
+
+      it "doesn't return the petition" do
+        expect(described_class.in_need_of_anonymizing).not_to include(petition)
+      end
+    end
+
+    context "when a petition is not anonymized" do
+      context "and it has been closed for less than six months" do
+        let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 5.months.ago, anonymized_at: nil) }
+
+        it "doesn't return the petition" do
+          expect(described_class.in_need_of_anonymizing).not_to include(petition)
+        end
+      end
+
+      context "and it has been closed for more than six months" do
+        let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 7.months.ago, anonymized_at: nil) }
+
+        it "returns the petition" do
+          expect(described_class.in_need_of_anonymizing).to include(petition)
+        end
+      end
+    end
+  end
+
   describe "concerns" do
     it_behaves_like "a taggable model"
     it_behaves_like "a model with departments"
@@ -899,6 +953,36 @@ RSpec.describe Archived::Petition, type: :model do
             expect(petition.signatures_to_email_for(timestamp)).not_to include(subscribed)
           end
         end
+      end
+    end
+  end
+
+  describe "#anonymize!" do
+    let(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: "2018-06-30T00:00:00Z") }
+
+    it "enqueues an Archived::AnonymizePetitionJob" do
+      expect {
+        petition.anonymize!("2018-12-31T00:00:00Z".in_time_zone)
+      }.to have_enqueued_job(Archived::AnonymizePetitionJob)
+        .with(petition, "2018-12-31T00:00:00+00:00")
+        .on_queue("high_priority")
+    end
+  end
+
+  describe "#anonymized?" do
+    context "when anonymized_at is nil" do
+      let(:petition) { FactoryBot.build(:archived_petition, :closed, anonymized_at: nil) }
+
+      it "return false" do
+        expect(petition.anonymized?).to eq(false)
+      end
+    end
+
+    context "when anonymized_at is not nil" do
+      let(:petition) { FactoryBot.build(:archived_petition, :closed, anonymized_at: 1.week.ago) }
+
+      it "return true" do
+        expect(petition.anonymized?).to eq(true)
       end
     end
   end
