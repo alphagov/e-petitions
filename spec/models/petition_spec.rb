@@ -1225,8 +1225,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and the closing date has not passed" do
-      let(:open_at) { Site.opened_at_for_closing(1.day.from_now) }
-      let!(:petition) { FactoryBot.create(:open_petition, open_at: open_at) }
+      let!(:petition) { FactoryBot.create(:open_petition, open_at: 1.month.ago, closed_at: 1.day.from_now) }
 
       it "does not find the petition" do
         expect(described_class.in_need_of_closing.to_a).not_to include(petition)
@@ -1234,8 +1233,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the open state and the closing date has passed" do
-      let(:open_at) { Site.opened_at_for_closing - 1.day }
-      let!(:petition) { FactoryBot.create(:open_petition, open_at: open_at) }
+      let!(:petition) { FactoryBot.create(:open_petition, open_at: 1.month.ago, closed_at: 1.day.ago) }
 
       it "finds the petition" do
         expect(described_class.in_need_of_closing.to_a).to include(petition)
