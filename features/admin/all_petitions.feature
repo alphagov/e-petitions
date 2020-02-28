@@ -67,10 +67,10 @@ Feature: A moderator user views all petitions
 
     And I filter the list to show "Referred" petitions
     Then I should see the following list of petitions:
-     | My referred petition                            |
-     | My referred petition with debate outcome        |
-     | My referred petition awaiting debate date       |
      | My referred petition with scheduled debate date |
+     | My referred petition awaiting debate date       |
+     | My referred petition with debate outcome        |
+     | My referred petition                            |
 
     And I filter the list to show "Rejected" petitions
     Then I should see the following list of petitions:

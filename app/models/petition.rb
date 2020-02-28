@@ -40,14 +40,14 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action_en, :action_cy, :background_en, :background_cy, :additional_details_en, :additional_details_cy)
   include Browseable, Taggable
 
-  facet :all,      -> { by_most_popular }
+  facet :all,      -> { by_most_recent }
   facet :open,     -> { open_state.by_most_popular }
   facet :rejected, -> { rejected_state.by_most_recent }
   facet :closed,   -> { closed_state.by_most_popular }
-  facet :completed,   -> { completed_state.by_most_popular }
+  facet :completed,   -> { completed_state.by_most_recently_closed }
   facet :hidden,   -> { hidden_state.by_most_recent }
 
-  facet :referred,    -> { referred.by_referred_longest }
+  facet :referred,    -> { referred.by_most_recently_closed }
 
   facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
   facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
@@ -141,6 +141,10 @@ class Petition < ActiveRecord::Base
 
     def by_most_recent
       reorder(created_at: :desc)
+    end
+
+    def by_most_recently_closed
+      reorder(closed_at: :desc)
     end
 
     def by_most_recent_debate_outcome
