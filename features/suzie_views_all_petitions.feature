@@ -13,7 +13,7 @@ Feature: Suzy Signer views all petitions
     Given a petition "Free the wombles" exists with a signature count of 500
     And a petition "Force supermarkets to give unsold food to charities" exists with a signature count of 500000
     And a petition "Make every monday bank holiday" exists with a signature count of 1000
-    When I view all petitions from the home page
+    When I browse to see only "Open" petitions
     Then I should see "3 petitions"
     And I should see the following ordered list of petitions:
      | Force supermarkets to give unsold food to charities |
