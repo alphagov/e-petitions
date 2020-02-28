@@ -12,7 +12,8 @@ RSpec.describe Signature, type: :model do
   end
 
   before do
-    FactoryBot.create(:constituency, :london_and_westminster)
+    FactoryBot.create(:constituency, :cardiff_south_and_penarth)
+    FactoryBot.create(:postcode, :cardiff_south_and_penarth)
   end
 
   context "defaults" do
@@ -109,13 +110,13 @@ RSpec.describe Signature, type: :model do
 
       context "and the signature is not the creator" do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
-        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
         let(:signature) {
           FactoryBot.create(
             :pending_signature,
             petition: petition,
-            constituency_id: "3415",
+            constituency_id: "W09000043",
             location_code: "GB-WLS"
           )
         }
@@ -143,13 +144,13 @@ RSpec.describe Signature, type: :model do
 
       context "and the signature is invalidated" do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
-        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
+        let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
         let(:signature) {
           FactoryBot.create(
             :pending_signature,
             petition: petition,
-            constituency_id: "3415",
+            constituency_id: "W09000043",
             location_code: "GB"
           )
         }
@@ -911,13 +912,13 @@ RSpec.describe Signature, type: :model do
 
     context "when the signature is not the creator" do
       let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
-      let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "3415") }
+      let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
       let(:signature) {
         FactoryBot.create(
           :pending_signature,
           petition: petition,
-          constituency_id: "3415",
+          constituency_id: "W09000043",
           location_code: "GB-WLS"
         )
       }
@@ -976,39 +977,6 @@ RSpec.describe Signature, type: :model do
         }.not_to change {
           petition.reload.signatures.count
         }
-      end
-    end
-  end
-
-  describe ".missing_constituency_id" do
-    let!(:signature_1) { FactoryBot.create(:validated_signature, validated_at: 2.weeks.ago) }
-    let!(:signature_2) { FactoryBot.create(:validated_signature, constituency_id: "3415") }
-    let!(:signature_3) { FactoryBot.create(:validated_signature, location_code: "US") }
-    let!(:signature_4) { FactoryBot.create(:validated_signature) }
-
-    subject { described_class.missing_constituency_id(since: 1.week.ago) }
-
-    it "doesn't include signatures from before the cut-off date" do
-      expect(subject).not_to include(signature_1)
-    end
-
-    it "doesn't include signatures that have a constituency_id" do
-      expect(subject).not_to include(signature_2)
-    end
-
-    it "doesn't include signatures that are not in the UK" do
-      expect(subject).not_to include(signature_3)
-    end
-
-    it "includes signatures that need their constituency_id set" do
-      expect(subject).to include(signature_4)
-    end
-
-    context "when not supplying the cut-off date" do
-      subject { described_class.missing_constituency_id }
-
-      it "includes all signatures that need their constituency_id set" do
-        expect(subject).to include(signature_1)
       end
     end
   end
@@ -1418,21 +1386,21 @@ RSpec.describe Signature, type: :model do
         context "and the postcode is valid" do
           let(:postcode) { "CF99 1NA" }
 
-          it "calls the Constituency API and sets the constituency_id" do
+          it "searches for the constituency and sets the constituency_id" do
             expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_call_original
 
             signature.validate!
 
             expect(signature).to be_validated
-            expect(signature.constituency_id).to eq("3391")
+            expect(signature.constituency_id).to eq("W09000043")
           end
         end
 
         context "and the postcode is invalid" do
           let(:postcode) { "CF99 1ZZ" }
 
-          it "calls the Constituency API but doesn't set constituency_id" do
-            expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_call_original
+          it "searches for the constituency but doesn't set constituency_id" do
+            expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_return(nil)
 
             signature.validate!
 
@@ -1448,7 +1416,7 @@ RSpec.describe Signature, type: :model do
         context "and the postcode is set" do
           let(:postcode) { "12345" }
 
-          it "doesn't call the Constituency API and doesn't set constituency_id" do
+          it "doesn't search for the constituency and doesn't set constituency_id" do
             expect(Constituency).not_to receive(:find_by_postcode)
 
             signature.validate!
@@ -1461,7 +1429,7 @@ RSpec.describe Signature, type: :model do
         context "and the postcode is blank" do
           let(:postcode) { "" }
 
-          it "doesn't call the Constituency API and doesn't set constituency_id" do
+          it "doesn't search for the constituency and doesn't set constituency_id" do
             expect(Constituency).not_to receive(:find_by_postcode)
 
             signature.validate!
@@ -1896,6 +1864,8 @@ RSpec.describe Signature, type: :model do
       { postcode: postcode, constituency_id: constituency_id }
     end
 
+
+
     context "when the constituency_id is not set" do
       let(:constituency_id) { nil }
 
@@ -1909,68 +1879,33 @@ RSpec.describe Signature, type: :model do
         end
       end
 
-      context "and the API returns a single result" do
-        let(:postcode) { "N1 1TY" }
-
-        before do
-          stub_api_request_for("N11TY").to_return(api_response(:ok, "single"))
-        end
+      context "and the signature is from the UK" do
+        let(:postcode) { "CF99 1NA" }
 
         it "returns the correct constituency" do
-          expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_call_original
-          expect(constituency.name).to eq("Islington South and Finsbury")
+          expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_call_original
+          expect(constituency.name).to eq("Cardiff South and Penarth")
         end
       end
 
-      context "and the API returns multiple result" do
-        let(:postcode) { "N1" }
-
-        before do
-          stub_api_request_for("N1").to_return(api_response(:ok, "multiple"))
-        end
-
-        it "returns the correct constituency" do
-          expect(Constituency).to receive(:find_by_postcode).with("N1").and_call_original
-          expect(constituency.name).to eq("Hackney North and Stoke Newington")
-        end
-      end
-
-
-      context "and the API returns no results" do
+      context "and postcode is not found" do
         let(:postcode) { "CF99 1ZZ" }
 
-        before do
-          stub_api_request_for("CF991ZZ").to_return(api_response(:ok, "no_results"))
-        end
-
         it "returns nil" do
-          expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_call_original
-          expect(constituency).to be_nil
-        end
-      end
-
-      context "and the API raises an error" do
-        let(:postcode) { "N1 1TY" }
-
-        before do
-          stub_api_request_for("N11TY").to_timeout
-        end
-
-        it "returns nil" do
-          expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_call_original
+          expect(Constituency).to receive(:find_by_postcode).with("CF991ZZ").and_return(nil)
           expect(constituency).to be_nil
         end
       end
     end
 
     context "when the constituency_id is set" do
-      let(:constituency_id) { "3415" }
+      let(:constituency_id) { "W09000043" }
       let(:postcode) { "CF99 1NA" }
 
       it "searches the database for the constituency" do
         expect(Constituency).not_to receive(:find_by_postcode)
-        expect(Constituency).to receive(:find_by_external_id).with("3415").and_call_original
-        expect(constituency.name).to eq("Cities of London and Westminster")
+        expect(Constituency).to receive(:find_by_id).with("W09000043").and_call_original
+        expect(constituency.name).to eq("Cardiff South and Penarth")
       end
     end
   end

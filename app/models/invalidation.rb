@@ -45,7 +45,7 @@ class Invalidation < ActiveRecord::Base
     end
 
     if constituency_id?
-      errors.add :constituency_id, "Constituency doesn't exist" unless Constituency.exists?(external_id: constituency_id)
+      errors.add :constituency_id, "Constituency doesn't exist" unless Constituency.exists?(constituency_id)
     end
 
     if location_code?

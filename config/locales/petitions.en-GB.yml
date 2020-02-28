@@ -1,4 +1,9 @@
 en-GB:
+  local_petitions:
+    csv_filename:
+      all: "all-popular-petitions-in-%{constituency}.csv"
+      open: "open-popular-petitions-in-%{constituency}.csv"
+
   petitions:
     errors:
       invalid_signature_count: "Petition %{id} had an invalid signature count"

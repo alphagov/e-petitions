@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe SignaturesController, type: :controller do
   before do
-    constituency = FactoryBot.create(:constituency, :london_and_westminster)
+    constituency = FactoryBot.create(:constituency, :cardiff_south_and_penarth)
     allow(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(constituency)
   end
 
@@ -608,7 +608,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "records the constituency id on the signature" do
-        expect(assigns[:signature].constituency_id).to eq("3415")
+        expect(assigns[:signature].constituency_id).to eq("W09000043")
       end
 
       it "records the ip address on the signature" do
@@ -651,7 +651,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "records the constituency id on the signature" do
-        expect(assigns[:signature].constituency_id).to eq("3415")
+        expect(assigns[:signature].constituency_id).to eq("W09000043")
       end
 
       it "records the ip address on the signature" do

@@ -10,6 +10,10 @@ class LanguageBackend
       Language.available_locales
     end
 
+    def initialized?
+      true
+    end
+
     protected
 
     def lookup(locale, key, scope = [], options = {})

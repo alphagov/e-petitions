@@ -175,7 +175,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   end
 
   context 'the petitions/local results url' do
-    let(:url) { "/petitions/local/#{constituency.slug}" }
+    let(:url) { "/petitions/local/#{constituency.id}" }
     let(:constituency) { FactoryBot.create(:constituency) }
     let(:params) { {} }
 
@@ -183,7 +183,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   end
 
   context 'the petitions/local/all results url' do
-    let(:url) { "/petitions/local/#{constituency.slug}/all" }
+    let(:url) { "/petitions/local/#{constituency.id}/all" }
     let(:constituency) { FactoryBot.create(:constituency) }
     let(:params) { {} }
 

@@ -50,5 +50,10 @@ module WelshPets
     config.middleware.insert_before Rails::Rack::Logger, QuietLogger, paths: [
       %r[\A/petitions/\d+/count.json\z], %q[/admin/status.json], %q[/ping]
     ]
+
+    # Generate integer primary keys
+    config.generators do |generator|
+      generator.orm :active_record, primary_key_type: :serial
+    end
   end
 end

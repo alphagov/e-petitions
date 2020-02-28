@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_141745) do
+ActiveRecord::Schema.define(version: 2020_02_27_175418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -39,20 +39,16 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.index ["last_name", "first_name"], name: "index_admin_users_on_last_name_and_first_name"
   end
 
-  create_table "constituencies", id: :serial, force: :cascade do |t|
-    t.string "name", limit: 100, null: false
-    t.string "slug", limit: 100, null: false
-    t.string "external_id", limit: 30, null: false
-    t.string "ons_code", limit: 10, null: false
-    t.string "mp_id", limit: 30
-    t.string "mp_name", limit: 100
-    t.date "mp_date"
+  create_table "constituencies", id: :string, limit: 9, force: :cascade do |t|
+    t.string "region_id", limit: 9, null: false
+    t.string "name_en", limit: 100, null: false
+    t.string "name_cy", limit: 100, null: false
+    t.string "example_postcode", limit: 7, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "example_postcode", limit: 30
-    t.string "party", limit: 100
-    t.index ["external_id"], name: "index_constituencies_on_external_id", unique: true
-    t.index ["slug"], name: "index_constituencies_on_slug", unique: true
+    t.index ["name_cy"], name: "index_constituencies_on_name_cy", unique: true
+    t.index ["name_en"], name: "index_constituencies_on_name_en", unique: true
+    t.index ["region_id"], name: "index_constituencies_on_region_id"
   end
 
   create_table "constituency_petition_journals", id: :serial, force: :cascade do |t|
@@ -65,8 +61,8 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.index ["petition_id", "constituency_id"], name: "idx_constituency_petition_journal_uniqueness", unique: true
   end
 
-  create_table "contacts", force: :cascade do |t|
-    t.bigint "signature_id", null: false
+  create_table "contacts", id: :serial, force: :cascade do |t|
+    t.integer "signature_id", null: false
     t.string "address"
     t.string "phone_number", limit: 255
     t.datetime "created_at", null: false
@@ -187,7 +183,7 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.index ["started_at"], name: "index_invalidations_on_started_at"
   end
 
-  create_table "languages", force: :cascade do |t|
+  create_table "languages", id: :serial, force: :cascade do |t|
     t.string "locale", limit: 10, null: false
     t.string "name", limit: 30, null: false
     t.jsonb "translations", default: {}, null: false
@@ -195,6 +191,19 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.datetime "updated_at", null: false
     t.index ["locale"], name: "index_languages_on_locale", unique: true
     t.index ["name"], name: "index_languages_on_name", unique: true
+  end
+
+  create_table "members", id: :serial, force: :cascade do |t|
+    t.string "region_id", limit: 9
+    t.string "constituency_id", limit: 9
+    t.string "name_en", limit: 100, null: false
+    t.string "name_cy", limit: 100, null: false
+    t.string "party_en", limit: 100, null: false
+    t.string "party_cy", limit: 100, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["constituency_id"], name: "index_members_on_constituency_id", unique: true
+    t.index ["region_id"], name: "index_members_on_region_id"
   end
 
   create_table "notes", id: :serial, force: :cascade do |t|
@@ -279,6 +288,11 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
   end
 
+  create_table "postcodes", id: :string, limit: 7, force: :cascade do |t|
+    t.string "constituency_id", limit: 9, null: false
+    t.index ["constituency_id"], name: "index_postcodes_on_constituency_id"
+  end
+
   create_table "rate_limits", id: :serial, force: :cascade do |t|
     t.integer "burst_rate", default: 1, null: false
     t.integer "burst_period", default: 60, null: false
@@ -300,6 +314,15 @@ ActiveRecord::Schema.define(version: 2020_02_26_141745) do
     t.integer "threshold_for_logging_trending_items", default: 100, null: false
     t.integer "threshold_for_notifying_trending_items", default: 200, null: false
     t.string "trending_items_notification_url"
+  end
+
+  create_table "regions", id: :string, limit: 9, force: :cascade do |t|
+    t.string "name_en", limit: 100, null: false
+    t.string "name_cy", limit: 100, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name_cy"], name: "index_regions_on_name_cy", unique: true
+    t.index ["name_en"], name: "index_regions_on_name_en", unique: true
   end
 
   create_table "rejections", id: :serial, force: :cascade do |t|

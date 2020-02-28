@@ -7,8 +7,17 @@
     <%= link_to t(:"ui.petitions.local.show.all_popular_link", constituency_name: @constituency.name), all_local_petition_path(@constituency), class: 'view-all' %>
   </p>
 
-  <% if @constituency.sitting_mp? %>
-    <p class="lede"><%= t(:"ui.petitions.local.all.mp_name_link_html", mp_name_link: link_to(@constituency.mp_name, @constituency.mp_url, rel: 'external')) %></p>
+  <% if @member.present? %>
+    <p class="lede"><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(@member.name, @member.url, rel: 'external')) %></p>
+  <% end %>
+
+  <% if @members.any? %>
+    <p><%= t(:"ui.petitions.local.regional_members.heading_html", region: @region.name) %></p>
+    <ul class="member-list">
+      <% @members.each do |member| %>
+        <li><%= link_to(member.name, member.url) %></li>
+      <% end %>
+    </ul>
   <% end %>
 
   <div class="section-panel local-petitions">

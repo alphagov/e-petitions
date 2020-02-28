@@ -1,13 +1,28 @@
-json.constituency constituency.name
+json.constituency do
+  json.id @constituency.id
+  json.name @constituency.name
 
-if constituency.sitting_mp?
-  json.mp do
-    json.name constituency.mp_name
-    json.url constituency.mp_url
+  if @member.present?
+    json.member do
+      json.name @member.name
+      json.party @member.party
+      json.url @member.url
+    end
+  end
+
+  json.region do
+    json.id @region.id
+    json.name @region.name
+
+    json.members @members do |member|
+      json.name member.name
+      json.party member.party
+      json.url member.url
+    end
   end
 end
 
-json.petitions petitions do |petition|
+json.petitions @petitions do |petition|
   json.action petition.action
   json.url petition_url(petition)
   json.state petition.state

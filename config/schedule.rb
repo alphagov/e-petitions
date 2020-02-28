@@ -21,18 +21,6 @@
 
 env :PATH, ENV['PATH']
 
-every :day, at: '1.15am' do
-  rake "wpets:countries:fetch", output: nil
-end
-
-every :day, at: '1.45am' do
-  rake "wpets:constituencies:refresh", output: nil
-end
-
-every :day, at: '2.15am' do
-  rake "wpets:constituencies:refresh_party", output: nil
-end
-
 every :day, at: '2.30am' do
   rake "wpets:petitions:count", output: nil
 end

@@ -174,14 +174,6 @@ class Signature < ActiveRecord::Base
       where(state: INVALIDATED_STATE)
     end
 
-    def missing_constituency_id(since: nil)
-      if since
-        uk.validated(since: since).where(constituency_id: nil)
-      else
-        uk.validated.where(constituency_id: nil)
-      end
-    end
-
     def need_emailing_for(timestamp, since:)
       validated.subscribed.for_timestamp(timestamp, since: since)
     end
@@ -548,7 +540,7 @@ class Signature < ActiveRecord::Base
 
     unless constituency_id?
       if united_kingdom? && postcode?
-        new_constituency_id = constituency.try(:external_id)
+        new_constituency_id = constituency.try(:id)
       end
     end
 
@@ -665,7 +657,7 @@ class Signature < ActiveRecord::Base
 
   def constituency
     if constituency_id?
-      @constituency ||= Constituency.find_by_external_id(constituency_id)
+      @constituency ||= Constituency.find_by_id(constituency_id)
     elsif united_kingdom?
       @constituency ||= Constituency.find_by_postcode(postcode)
     end

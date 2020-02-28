@@ -9,7 +9,7 @@ module Translatable
         def where(opts = :chain, *rest)
           opts =
             if opts.is_a?(Hash)
-              opts.transform_keys {|k| translated_method_name(k) }
+              opts.transform_keys { |k| translated_method_name(k) }
             else
               opts
             end
@@ -17,13 +17,20 @@ module Translatable
         end
 
         def pluck(*names)
-          super(*names.map {|k| translated_method_name(k) })
+          super(*names.map { |k| translated_method_name(k) })
+        end
+
+        def order(*names)
+          super(*names.map { |k| translated_method_name(k) })
         end
       end
     end
   end
 
   module ClassMethods
+    EN_SUFFIX = "_en"
+    CY_SUFFIX = "_cy"
+
     def translate(*names)
       names.each do |name|
         translated_methods << name.to_sym
@@ -43,15 +50,29 @@ module Translatable
       end
     end
 
-    def translated_method_name(k, locale = I18n.locale)
-      case k
+    def translated_method_name(key)
+      case key
+      when Hash
+        k, dir = key.flatten
+        if translated_methods.include?(k)
+          return { translated_key(k) => dir }
+        end
       when String, Symbol
-        if translated_methods.include?(k.to_sym)
-          suffix = locale == :"en-GB" ? "_en" : "_cy"
-          return (k.to_s + suffix).to_sym
+        if translated_methods.include?(key.to_sym)
+          return translated_key(key)
         end
       end
-      return k
+      return key
+    end
+
+    private
+
+    def translated_suffix
+      I18n.locale == :"en-GB" ? EN_SUFFIX : CY_SUFFIX
+    end
+
+    def translated_key(key)
+      (key.to_s + translated_suffix).to_sym
     end
   end
 
