@@ -607,18 +607,21 @@ RSpec.describe Invalidation, type: :model do
 
       context "when filtering by postcode" do
         before do
-          stub_api_request_for("SW1A0AA").to_return(api_response(:ok, "london_and_westminster"))
-          stub_api_request_for("E16PL").to_return(api_response(:ok, "bethnal_green_and_bow"))
+          FactoryBot.create(:constituency, :cardiff_south_and_penarth)
+          FactoryBot.create(:postcode, :cardiff_south_and_penarth)
+
+          FactoryBot.create(:constituency, :swansea_west)
+          FactoryBot.create(:postcode, :swansea_west)
         end
 
         let!(:petition) { FactoryBot.create(:open_petition) }
-        let!(:signature_1) { FactoryBot.create(:validated_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_2) { FactoryBot.create(:validated_signature, postcode: "E1 6PL", petition: petition) }
-        let!(:signature_3) { FactoryBot.create(:pending_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_4) { FactoryBot.create(:invalidated_signature, postcode: "SW1A 0AA", petition: petition) }
-        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, postcode: "SW1A 0AA", petition: petition) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, postcode: "CF99 1NA", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, postcode: "SA11 BD", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, postcode: "CF99 1NA", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, postcode: "CF99 1NA", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, postcode: "CF99 1NA", petition: petition) }
 
-        subject { FactoryBot.create(:invalidation, postcode: "SW1A0AA") }
+        subject { FactoryBot.create(:invalidation, postcode: "CF991NA") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)
@@ -860,15 +863,15 @@ RSpec.describe Invalidation, type: :model do
 
       context "when filtering by constituency_id" do
         let!(:petition) { FactoryBot.create(:open_petition) }
-        let!(:coventry) { FactoryBot.create(:constituency, :coventry_north_east) }
-        let!(:bethnal) { FactoryBot.create(:constituency, :bethnal_green_and_bow) }
-        let!(:signature_1) { FactoryBot.create(:validated_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_2) { FactoryBot.create(:validated_signature, constituency_id: "3320", petition: petition) }
-        let!(:signature_3) { FactoryBot.create(:pending_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_4) { FactoryBot.create(:invalidated_signature, constituency_id: "3427", petition: petition) }
-        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, constituency_id: "3427", petition: petition) }
+        let!(:cardiff) { FactoryBot.create(:constituency, :cardiff_south_and_penarth) }
+        let!(:swansea) { FactoryBot.create(:constituency, :swansea_west) }
+        let!(:signature_1) { FactoryBot.create(:validated_signature, constituency_id: "W09000043", petition: petition) }
+        let!(:signature_2) { FactoryBot.create(:validated_signature, constituency_id: "W09000019", petition: petition) }
+        let!(:signature_3) { FactoryBot.create(:pending_signature, constituency_id: "W09000043", petition: petition) }
+        let!(:signature_4) { FactoryBot.create(:invalidated_signature, constituency_id: "W09000043", petition: petition) }
+        let!(:signature_5) { FactoryBot.create(:fraudulent_signature, constituency_id: "W09000043", petition: petition) }
 
-        subject { FactoryBot.create(:invalidation, constituency_id: "3427") }
+        subject { FactoryBot.create(:invalidation, constituency_id: "W09000043") }
 
         it "includes validated signatures that match" do
           expect(subject.matching_signatures).to include(signature_1)

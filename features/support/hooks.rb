@@ -3,8 +3,9 @@ Before do
 end
 
 Before do
-  stub_api_request_for("CF991NA").to_return(api_response(:ok, "cardiff_south_and_penarth"))
-  stub_api_request_for("CF991ZZ").to_return(api_response(:ok, "no_results"))
+  FactoryBot.create(:constituency, :cardiff_south_and_penarth)
+  FactoryBot.create(:postcode, :cardiff_south_and_penarth)
+  FactoryBot.create(:member, :cardiff_south_and_penarth)
 end
 
 Before do
@@ -13,6 +14,16 @@ Before do
     sustained_rate: 20, sustained_period: 300,
     allowed_domains: "example.com", allowed_ips: "127.0.0.1"
   )
+end
+
+Before do
+  ::RSpec::Mocks.setup
+end
+
+After do
+  ::RSpec::Mocks.verify
+ensure
+  ::RSpec::Mocks.teardown
 end
 
 Before do

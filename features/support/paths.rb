@@ -48,16 +48,16 @@ module NavigationHelpers
       admin_url($1)
 
     when /^the local petitions results page$/
-      local_petition_url(@my_constituency.slug)
+      local_petition_url(@my_constituency.id)
 
     when /^the local petitions JSON page$/
-      local_petition_url(@my_constituency.slug, :json)
+      local_petition_url(@my_constituency.id, :json)
 
     when /^the all local petitions results page$/
-      all_local_petition_url(@my_constituency.slug)
+      all_local_petition_url(@my_constituency.id)
 
     when /^the all local petitions JSON page$/
-      all_local_petition_url(@my_constituency.slug, :json)
+      all_local_petition_url(@my_constituency.id, :json)
 
     else
       begin

@@ -702,7 +702,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
 
       it "records the constituency id on the signature" do
-        expect(assigns[:signature].constituency_id).to eq("3391")
+        expect(assigns[:signature].constituency_id).to eq("W09000043")
       end
 
       it "records the ip address on the signature" do
@@ -764,7 +764,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
 
       it "records the constituency id on the signature" do
-        expect(assigns[:signature].constituency_id).to eq("3391")
+        expect(assigns[:signature].constituency_id).to eq("W09000043")
       end
 
       it "records the ip address on the signature" do
@@ -824,7 +824,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         it "records the constituency id on the signature" do
-          expect(assigns[:signature].constituency_id).to eq("3391")
+          expect(assigns[:signature].constituency_id).to eq("W09000043")
         end
 
         it "saves the signed token in the session" do
@@ -857,7 +857,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         it "records the constituency id on the signature" do
-          expect(assigns[:signature].constituency_id).to eq("3391")
+          expect(assigns[:signature].constituency_id).to eq("W09000043")
         end
 
         it "saves the signed token in the session" do
@@ -912,7 +912,7 @@ RSpec.describe SponsorsController, type: :controller do
       end
 
       it "records the constituency id on the signature" do
-        expect(assigns[:signature].constituency_id).to eq("3391")
+        expect(assigns[:signature].constituency_id).to eq("W09000043")
       end
 
       it "records the ip address on the signature" do
@@ -959,7 +959,7 @@ RSpec.describe SponsorsController, type: :controller do
         end
 
         it "records the constituency id on the signature" do
-          expect(assigns[:signature].constituency_id).to eq("3391")
+          expect(assigns[:signature].constituency_id).to eq("W09000043")
         end
 
         it "saves the signed token in the session" do

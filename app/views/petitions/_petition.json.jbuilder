@@ -61,10 +61,15 @@ json.attributes do
     end
 
     json.signatures_by_constituency petition.signatures_by_constituency do |constituency|
+      json.id constituency.constituency_id
       json.name constituency.name
-      json.ons_code constituency.ons_code
-      json.mp constituency.mp_name
       json.signature_count constituency.signature_count
+    end
+
+    json.signatures_by_region petition.signatures_by_region do |region|
+      json.id region.id
+      json.name region.name
+      json.signature_count region.signature_count
     end
   end
 end

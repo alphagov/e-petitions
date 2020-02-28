@@ -1,0 +1,5 @@
+cy-GB:
+  local_petitions:
+    csv_filename:
+      all: "all-popular-petitions-in-%{constituency}.csv"
+      open: "open-popular-petitions-in-%{constituency}.csv"

@@ -261,12 +261,12 @@ Then(/^I should see my constituency "([^"]*)"/) do |constituency|
   expect(page).to have_text(constituency)
 end
 
-Then(/^I should see my MP/) do
-  expect(page).to have_text("Emily Thornberry MP")
+Then(/^I should see my Member of the Senedd/) do
+  expect(page).to have_text("Vaughan Gething AM")
 end
 
-Then(/^I can click on a link to visit my MP$/) do
-  expect(page).to have_css("a[href*='http://www.parliament.uk/biographies/commons/emily-thornberry-mp/1536']")
+Then(/^I can click on a link to visit my Member of the Senedd$/) do
+  expect(page).to have_css("a[href*='https://www.assembly.wales/en/memhome/Pages/MemberProfile.aspx?mid=249']")
 end
 
 Then(/^I should not see the text "([^"]*)"/) do |text|

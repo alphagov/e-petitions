@@ -1,33 +1,33 @@
 require 'rails_helper'
 
 RSpec.describe LocalPetitionsController, type: :controller do
-  let(:constituency) { FactoryBot.create(:constituency, external_id: "99999", name: "Holborn") }
+  let(:constituency) { FactoryBot.create(:constituency, :cardiff_south_and_penarth) }
 
   describe "GET /petitions/local" do
     context "when the postcode is valid" do
       before do
-        expect(Constituency).to receive(:find_by_postcode).with("N11TY").and_return(constituency)
+        expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(constituency)
 
-        get :index, params: { postcode: "n1 1ty" }
-      end
-
-      it "assigns the sanitized postcode" do
-        expect(assigns(:postcode)).to eq("N11TY")
-      end
-
-      it "redirects to the constituency page for current popular petitions" do
-        expect(response).to redirect_to("/petitions/local/holborn")
-      end
-    end
-
-    context "when the postcode is invalid" do
-      before do
-        expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(nil)
         get :index, params: { postcode: "cf99 1na" }
       end
 
       it "assigns the sanitized postcode" do
         expect(assigns(:postcode)).to eq("CF991NA")
+      end
+
+      it "redirects to the constituency page for current popular petitions" do
+        expect(response).to redirect_to("/petitions/local/W09000043")
+      end
+    end
+
+    context "when the postcode is invalid" do
+      before do
+        expect(Constituency).to receive(:find_by_postcode).with("SW1A1AA").and_return(nil)
+        get :index, params: { postcode: "sw1a 1aa" }
+      end
+
+      it "assigns the sanitized postcode" do
+        expect(assigns(:postcode)).to eq("SW1A1AA")
       end
 
       it "responds successfully" do
@@ -38,11 +38,11 @@ RSpec.describe LocalPetitionsController, type: :controller do
         expect(response).to render_template("local_petitions/index")
       end
 
-      it "doesn't assign the constituency" do
+      it "doesn't assign the instance variables" do
         expect(assigns(:constituency)).to be_nil
-      end
-
-      it "doesn't assign the petitions" do
+        expect(assigns(:member)).to be_nil
+        expect(assigns(:region)).to be_nil
+        expect(assigns(:members)).to be_nil
         expect(assigns(:petitions)).to be_nil
       end
     end
@@ -80,46 +80,58 @@ RSpec.describe LocalPetitionsController, type: :controller do
 
   describe "GET /petitions/local/:id" do
     let(:petitions) { double(:petitions) }
+    let(:member) { double(:member) }
+    let(:region) { double(:region) }
+    let(:members) { double(:members) }
 
     before do
-      expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
-      expect(Petition).to receive(:popular_in_constituency).with("99999", 50).and_return(petitions)
+      expect(Constituency).to receive(:find).with("W09000043").and_return(constituency)
+      expect(constituency).to receive(:member).and_return(member)
+      expect(constituency).to receive(:region).and_return(region)
+      expect(region).to receive(:members).and_return(members)
+      expect(Petition).to receive(:popular_in_constituency).with("W09000043", 50).and_return(petitions)
 
-      get :show, params: { id: "holborn" }
+      get :show, params: { id: "W09000043" }
     end
 
-    it "renders the show template" do
+    it "renders the all template" do
       expect(response).to render_template("local_petitions/show")
     end
 
-    it "assigns the constituency" do
+    it "assigns the instance variables" do
       expect(assigns(:constituency)).to eq(constituency)
-    end
-
-    it "assigns the petitions" do
+      expect(assigns(:member)).to eq(member)
+      expect(assigns(:region)).to eq(region)
+      expect(assigns(:members)).to eq(members)
       expect(assigns(:petitions)).to eq(petitions)
     end
   end
 
   describe "GET /petitions/local/:id/all" do
     let(:petitions) { double(:petitions) }
+    let(:member) { double(:member) }
+    let(:region) { double(:region) }
+    let(:members) { double(:members) }
 
     before do
-      expect(Constituency).to receive(:find_by_slug!).with("holborn").and_return(constituency)
-      expect(Petition).to receive(:all_popular_in_constituency).with("99999", 50).and_return(petitions)
+      expect(Constituency).to receive(:find).with("W09000043").and_return(constituency)
+      expect(constituency).to receive(:member).and_return(member)
+      expect(constituency).to receive(:region).and_return(region)
+      expect(region).to receive(:members).and_return(members)
+      expect(Petition).to receive(:all_popular_in_constituency).with("W09000043", 50).and_return(petitions)
 
-      get :all, params: { id: "holborn" }
+      get :all, params: { id: "W09000043" }
     end
 
     it "renders the all template" do
       expect(response).to render_template("local_petitions/all")
     end
 
-    it "assigns the constituency" do
+    it "assigns the instance variables" do
       expect(assigns(:constituency)).to eq(constituency)
-    end
-
-    it "assigns the petitions" do
+      expect(assigns(:member)).to eq(member)
+      expect(assigns(:region)).to eq(region)
+      expect(assigns(:members)).to eq(members)
       expect(assigns(:petitions)).to eq(petitions)
     end
   end

@@ -3,38 +3,31 @@
     {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
-      "fingerprint": "07b7188ce44b7041f5729077eea749b2def4b8e62736ba248267e3c96c1ca927",
+      "fingerprint": "ec90a43d600ec1cef6f6f0ff5eeebb9f29380fd1f4b005edc2c7b4393ef73a47",
       "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in link_to href",
-      "file": "app/views/local_petitions/all.html.erb",
-      "line": 11,
-      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(Constituency.find_by_slug!(params[:id]).mp_name, Constituency.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
-      "render_path": [{"type":"controller","class":"LocalPetitionsController","method":"all","line":30,"file":"app/controllers/local_petitions_controller.rb"}],
-      "location": {
-        "type": "template",
-        "template": "local_petitions/all"
-      },
-      "user_input": "Constituency.find_by_slug!(params[:id]).mp_url",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
-      "warning_type": "Cross-Site Scripting",
-      "warning_code": 4,
-      "fingerprint": "22e002a1359fd28418d81e2cadeb49195a5597840a43d97787ac79a868acb51f",
-      "check_name": "LinkToHref",
-      "message": "Potentially unsafe model attribute in link_to href",
+      "message": "Potentially unsafe model attribute in `link_to` href",
       "file": "app/views/local_petitions/show.html.erb",
-      "line": 11,
+      "line": 18,
       "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
-      "code": "link_to(Constituency.find_by_slug!(params[:id]).mp_name, Constituency.find_by_slug!(params[:id]).mp_url, :rel => \"external\")",
-      "render_path": [{"type":"controller","class":"LocalPetitionsController","method":"show","line":22,"file":"app/controllers/local_petitions_controller.rb"}],
+      "code": "link_to((Unresolved Model).new.name, (Unresolved Model).new.url)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "LocalPetitionsController",
+          "method": "show",
+          "line": 25,
+          "file": "app/controllers/local_petitions_controller.rb",
+          "rendered": {
+            "name": "local_petitions/show",
+            "file": "app/views/local_petitions/show.html.erb"
+          }
+        }
+      ],
       "location": {
         "type": "template",
         "template": "local_petitions/show"
       },
-      "user_input": "Constituency.find_by_slug!(params[:id]).mp_url",
+      "user_input": "(Unresolved Model).new.url",
       "confidence": "Weak",
       "note": ""
     },
@@ -57,8 +50,39 @@
       "user_input": ":role",
       "confidence": "Medium",
       "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 4,
+      "fingerprint": "fcba9d7cf6497695c27711ea24c55c03f15dab032fe7256f1b5da8680620a2da",
+      "check_name": "LinkToHref",
+      "message": "Potentially unsafe model attribute in `link_to` href",
+      "file": "app/views/local_petitions/all.html.erb",
+      "line": 18,
+      "link": "https://brakemanscanner.org/docs/warning_types/link_to_href",
+      "code": "link_to((Unresolved Model).new.name, (Unresolved Model).new.url)",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "LocalPetitionsController",
+          "method": "all",
+          "line": 33,
+          "file": "app/controllers/local_petitions_controller.rb",
+          "rendered": {
+            "name": "local_petitions/all",
+            "file": "app/views/local_petitions/all.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "local_petitions/all"
+      },
+      "user_input": "(Unresolved Model).new.url",
+      "confidence": "Weak",
+      "note": ""
     }
   ],
-  "updated": "2018-10-31 03:32:07 +0000",
-  "brakeman_version": "4.2.1"
+  "updated": "2020-02-28 07:57:10 +0000",
+  "brakeman_version": "4.7.2"
 }

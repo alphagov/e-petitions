@@ -1,0 +1,16 @@
+.member-list {
+  @extend %contain-floats;
+
+  li {
+    float: left;
+    width: 100%;
+    @include box-sizing(border-box);
+    margin: 0 0 $gutter/4 0;
+  }
+
+  @include media(desktop) {
+    li {
+      width: 50%;
+    }
+  }
+}

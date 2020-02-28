@@ -19,7 +19,7 @@ module RateLimiting
 
     if constituency = signature.constituency
       updates << "constituency_id = :constituency_id"
-      params[:constituency_id] = constituency.external_id
+      params[:constituency_id] = constituency.id
     end
 
     signature.update_all([updates.join(", "), params])

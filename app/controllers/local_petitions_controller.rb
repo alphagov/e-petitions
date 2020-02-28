@@ -4,7 +4,10 @@ require 'csv'
 class LocalPetitionsController < LocalizedController
   before_action :sanitize_postcode, only: :index
   before_action :find_by_postcode, if: :postcode?, only: :index
-  before_action :find_by_slug, only: [:show, :all]
+  before_action :find_by_id, only: [:show, :all]
+  before_action :find_member, only: [:show, :all]
+  before_action :find_region, only: [:show, :all]
+  before_action :find_regional_members, only: [:show, :all]
   before_action :find_petitions, if: :constituency?, only: :show
   before_action :find_all_petitions, if: :constituency?, only: :all
   before_action :redirect_to_constituency, if: :constituency?, only: :index
@@ -47,8 +50,20 @@ class LocalPetitionsController < LocalizedController
     @constituency = Constituency.find_by_postcode(@postcode)
   end
 
-  def find_by_slug
-    @constituency = Constituency.find_by_slug!(params[:id])
+  def find_by_id
+    @constituency = Constituency.find(params[:id])
+  end
+
+  def find_member
+    @member = @constituency.member
+  end
+
+  def find_region
+    @region = @constituency.region
+  end
+
+  def find_regional_members
+    @members = @region.members
   end
 
   def constituency?
@@ -56,22 +71,22 @@ class LocalPetitionsController < LocalizedController
   end
 
   def find_petitions
-    @petitions = Petition.popular_in_constituency(@constituency.external_id, 50)
+    @petitions = Petition.popular_in_constituency(@constituency.id, 50)
   end
 
   def find_all_petitions
-    @petitions = Petition.all_popular_in_constituency(@constituency.external_id, 50)
+    @petitions = Petition.all_popular_in_constituency(@constituency.id, 50)
   end
 
   def redirect_to_constituency
-    redirect_to local_petition_url(@constituency.slug)
+    redirect_to local_petition_url(@constituency.id)
   end
 
   def csv_filename
     if action_name == 'all'
-      "all-popular-petitions-in-#{@constituency.slug}.csv"
+      I18n.t :"local_petitions.csv_filename.all", constituency: @constituency.slug
     else
-      "open-popular-petitions-in-#{@constituency.slug}.csv"
+      I18n.t :"local_petitions.csv_filename.open", constituency: @constituency.slug
     end
   end
 

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<councillorsbyward>
+    <wards>
+        <ward>
+            <wardtitle>Cardiff South and Penarth</wardtitle>
+            <councillors>
+                <councillorcount> 1</councillorcount>
+                <councillor>
+                    <councillorid>249</councillorid>
+                    <fullusername>Vaughan Gething AM</fullusername>
+                    <photosmallurl>http://www.senedd.assembly.wales/UserData/9/4/2/Info00000249/smallpic.jpg</photosmallurl>
+                    <photobigurl>http://www.senedd.assembly.wales/UserData/9/4/2/Info00000249/bigpic.jpg</photobigurl>
+                    <politicalpartytitle>Welsh Labour</politicalpartytitle>
+                    <districttitle>
+          </districttitle>
+                    <representing>
+          </representing>
+                    <keyposts>Minister for Health and Social Services</keyposts>
+                    <workaddress>
+                        <line1>National Assembly for Wales</line1>
+                        <line2>Cardiff Bay</line2>
+                        <line3>Cardiff</line3>
+                        <postcode>CF99 1NA</postcode>
+                        <phone>0300 200 7150</phone>
+                        <email>Vaughan.Gething@assembly.wales</email>
+                    </workaddress>
+                    <homeaddress>
+          </homeaddress>
+                    <termsofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2011</startdate>
+                            <enddate>05/04/2016</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2016</startdate>
+                            <enddate>unspecified</enddate>
+                        </termofoffice>
+                    </termsofoffice>
+                </councillor>
+            </councillors>
+        </ward>
+        <ward>
+            <wardtitle>No Ward</wardtitle>
+            <councillors>
+                <councillorcount>4</councillorcount>
+                <councillor>
+                    <councillorid>143</councillorid>
+                    <fullusername>Andrew RT Davies AM</fullusername>
+                    <photosmallurl>http://www.senedd.assembly.wales/UserData/3/4/1/Info00000143/smallpic.jpg</photosmallurl>
+                    <photobigurl>http://www.senedd.assembly.wales/UserData/3/4/1/Info00000143/bigpic.jpg</photobigurl>
+                    <politicalpartytitle>Welsh Conservative Party</politicalpartytitle>
+                    <districttitle>South Wales Central</districttitle>
+                    <representing></representing>
+                    <keyposts></keyposts>
+                    <workaddress>
+                        <line1>National Assembly for Wales</line1>
+                        <line2>Cardiff Bay</line2>
+                        <line3>Cardiff</line3>
+                        <postcode>CF99 1NA</postcode>
+                        <phone>0300 200 7227</phone>
+                        <email>AndrewRT.Davies@assembly.wales</email>
+                    </workaddress>
+                    <homeaddress></homeaddress>
+                    <termsofoffice>
+                        <termofoffice>
+                            <startdate>04/05/2007</startdate>
+                            <enddate>31/03/2011</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2011</startdate>
+                            <enddate>05/04/2016</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2016</startdate>
+                            <enddate>unspecified</enddate>
+                        </termofoffice>
+                    </termsofoffice>
+                </councillor>
+                <councillor>
+                    <councillorid>169</councillorid>
+                    <fullusername>David Melding AM</fullusername>
+                    <photosmallurl>http://www.senedd.assembly.wales/UserData/9/6/1/Info00000169/smallpic.jpg</photosmallurl>
+                    <photobigurl>http://www.senedd.assembly.wales/UserData/9/6/1/Info00000169/bigpic.jpg</photobigurl>
+                    <politicalpartytitle>Welsh Conservative Party</politicalpartytitle>
+                    <districttitle>South Wales Central</districttitle>
+                    <representing></representing>
+                    <keyposts></keyposts>
+                    <workaddress>
+                        <line1>National Assembly for Wales</line1>
+                        <line2>Cardiff Bay</line2>
+                        <line3>Cardiff</line3>
+                        <postcode>CF99 1NA</postcode>
+                        <phone>0300 200 7220</phone>
+                        <email>David.Melding@assembly.wales</email>
+                    </workaddress>
+                    <homeaddress>
+                        <line1>Office 2</line1>
+                        <line2>20 Pantbach Road</line2>
+                        <line3>Birchgrove</line3>
+                        <line4>Cardiff</line4>
+                        <postcode>CF14 1UA</postcode>
+                        <phone>029 2062 3088</phone>
+                    </homeaddress>
+                    <termsofoffice>
+                        <termofoffice>
+                            <startdate>07/05/1999</startdate>
+                            <enddate>30/04/2003</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>02/05/2003</startdate>
+                            <enddate>02/05/2007</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>04/05/2007</startdate>
+                            <enddate>31/03/2011</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2011</startdate>
+                            <enddate>05/04/2016</enddate>
+                        </termofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2016</startdate>
+                            <enddate>unspecified</enddate>
+                        </termofoffice>
+                    </termsofoffice>
+                </councillor>
+                <councillor>
+                    <councillorid>255</councillorid>
+                    <fullusername>Neil McEvoy AM</fullusername>
+                    <photosmallurl>http://www.senedd.assembly.wales/UserData/5/5/2/Info00000255/smallpic.jpg</photosmallurl>
+                    <photobigurl>http://www.senedd.assembly.wales/UserData/5/5/2/Info00000255/bigpic.jpg</photobigurl>
+                    <politicalpartytitle>Welsh National Party</politicalpartytitle>
+                    <districttitle>South Wales Central</districttitle>
+                    <representing></representing>
+                    <keyposts></keyposts>
+                    <workaddress>
+                        <line1>National Assembly for Wales</line1>
+                        <line2>Cardiff Bay</line2>
+                        <line3>Cardiff</line3>
+                        <postcode>CF99 1NA</postcode>
+                        <email>Neil.McEvoy@assembly.wales</email>
+                    </workaddress>
+                    <homeaddress>
+                        <line1>321 Cowbridge Road East</line1>
+                        <line2>Canton</line2>
+                        <line3>Cardiff</line3>
+                        <postcode>CF5 1JD</postcode>
+                        <phone>0300 200 7434</phone>
+                    </homeaddress>
+                    <termsofoffice>
+                        <termofoffice>
+                            <startdate>06/05/2016</startdate>
+                            <enddate>unspecified</enddate>
+                        </termofoffice>
+                    </termsofoffice>
+                </councillor>
+				<councillor>
+					<councillorid>5040</councillorid>
+					<fullusername>Gareth Bennett AM</fullusername>
+					<photosmallurl>http://www.senedd.assembly.wales/UserData/0/4/0/Info00005040/smallpic.jpg</photosmallurl>
+					<photobigurl>http://www.senedd.assembly.wales/UserData/0/4/0/Info00005040/bigpic.jpg</photobigurl>
+					<politicalpartytitle>Independent</politicalpartytitle>
+					<districttitle>South Wales Central</districttitle>
+					<representing></representing>
+					<keyposts></keyposts>
+					<workaddress>
+						<line1>National Assembly for Wales</line1>
+						<line2>Cardiff Bay</line2>
+						<line3>Cardiff</line3>
+						<postcode>CF99 1NA</postcode>
+						<phone>0300 200 7263</phone>
+						<email>Gareth.Bennett@assembly.wales</email>
+					</workaddress>
+					<homeaddress></homeaddress>
+					<termsofoffice>
+						<termofoffice>
+							<startdate>06/05/2016</startdate>
+							<enddate>unspecified</enddate>
+						</termofoffice>
+					</termsofoffice>
+				</councillor>
+            </councillors>
+        </ward>
+    </wards>
+</councillorsbyward>

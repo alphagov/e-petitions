@@ -123,7 +123,7 @@ RSpec.describe PetitionsController, type: :controller do
           post :create, params: { stage: "replay_email", petition_creator: params.merge(state: Signature::VALIDATED_STATE) }
         end
 
-        expect(petition.creator.constituency_id).to eq("3391")
+        expect(petition.creator.constituency_id).to eq("W09000043")
       end
 
       context "invalid post" do

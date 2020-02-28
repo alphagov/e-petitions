@@ -346,7 +346,7 @@ class PetitionCreator
   end
 
   def constituency_id
-    constituency.try(:external_id)
+    constituency.try(:id)
   end
 
   def send_email_to_gather_sponsors(petition)

@@ -181,11 +181,11 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     it "includes the signatures by constituency data" do
       petition = FactoryBot.create :open_petition
 
-      FactoryBot.create :constituency, :coventry_north_east
-      FactoryBot.create :constituency, :bethnal_green_and_bow
+      FactoryBot.create :constituency, :cardiff_south_and_penarth
+      FactoryBot.create :constituency, :swansea_west
 
-      FactoryBot.create :constituency_petition_journal, constituency_id: 3427, signature_count: 123, petition: petition
-      FactoryBot.create :constituency_petition_journal, constituency_id: 3320, signature_count: 456, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000043", signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000019", signature_count: 456, petition: petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -194,16 +194,14 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
         a_hash_including(
           "signatures_by_constituency" => a_collection_containing_exactly(
             {
-              "name" => "Coventry North East",
-              "ons_code" => "E14000649",
-              "mp" => "Colleen Fletcher MP",
-              "signature_count" => 123
+              "id" => "W09000019",
+              "name" => "Swansea West",
+              "signature_count" => 456
             },
             {
-              "name" => "Bethnal Green and Bow",
-              "ons_code" => "E14000555",
-              "mp" => "Rushanara Ali MP",
-              "signature_count" => 456
+              "id" => "W09000043",
+              "name" => "Cardiff South and Penarth",
+              "signature_count" => 123
             }
           )
         )
@@ -213,11 +211,11 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
     it "doesn't include the signatures by constituency data in rejected petitions" do
       petition = FactoryBot.create :rejected_petition
 
-      FactoryBot.create :constituency, :coventry_north_east
-      FactoryBot.create :constituency, :bethnal_green_and_bow
+      FactoryBot.create :constituency, :cardiff_south_and_penarth
+      FactoryBot.create :constituency, :swansea_west
 
-      FactoryBot.create :constituency_petition_journal, constituency_id: 3427, signature_count: 123, petition: petition
-      FactoryBot.create :constituency_petition_journal, constituency_id: 3320, signature_count: 456, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000043", signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000019", signature_count: 456, petition: petition
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -262,6 +260,51 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       expect(response).to be_successful
 
       expect(attributes.keys).not_to include("signatures_by_country")
+    end
+
+    it "includes the signatures by region data" do
+      petition = FactoryBot.create :open_petition
+
+      FactoryBot.create :constituency, :cardiff_south_and_penarth
+      FactoryBot.create :constituency, :swansea_west
+
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000043", signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000019", signature_count: 456, petition: petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "signatures_by_region" => a_collection_containing_exactly(
+            {
+              "id" => "W10000007",
+              "name" => "South Wales Central",
+              "signature_count" => 123
+            },
+            {
+              "id" => "W10000009",
+              "name" => "South Wales West",
+              "signature_count" => 456
+            }
+          )
+        )
+      )
+    end
+
+    it "doesn't include the signatures by constituency data in rejected petitions" do
+      petition = FactoryBot.create :rejected_petition
+
+      FactoryBot.create :constituency, :cardiff_south_and_penarth
+      FactoryBot.create :constituency, :swansea_west
+
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000043", signature_count: 123, petition: petition
+      FactoryBot.create :constituency_petition_journal, constituency_id: "W09000019", signature_count: 456, petition: petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes.keys).not_to include("signatures_by_region")
     end
   end
 end

@@ -146,7 +146,7 @@ RSpec.describe EmailConfirmationForSignerEmailJob, type: :job do
   it "sets the constituency_id" do
     expect(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(constituency)
 
-    expect{ run_jobs_and_reload_signature }.to change{ signature.reload.constituency_id }.from(nil).to("3391")
+    expect{ run_jobs_and_reload_signature }.to change{ signature.reload.constituency_id }.from(nil).to("W09000043")
   end
 end
 

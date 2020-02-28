@@ -1,10 +1,12 @@
-Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"$/) do |constituency_name, mp_name, postcode|
+Given(/^a constituency "(.*?)"(?: with Member "(.*?)")? is found by postcode "(.*?)"$/) do |constituency_name, member_name, postcode|
   @constituencies ||= {}
   constituency = @constituencies[constituency_name]
 
   if constituency.nil?
-    mp_name = mp_name.present? ? mp_name : 'Rye Tonnemem-Burr MP'
-    constituency = FactoryBot.create(:constituency, name: constituency_name, mp_name: mp_name, mp_date: 3.years.ago)
+    member_name = member_name.present? ? member_name : 'Rye Tonnemem-Burr AM'
+    constituency = FactoryBot.create(:constituency, name: constituency_name)
+    FactoryBot.create(:postcode, id: postcode.tr(' ', ''), constituency_id: constituency.id)
+    FactoryBot.create(:member, constituency_id: constituency.id, name_en: member_name, name_cy: member_name)
     @constituencies[constituency.name] = constituency
   end
 
@@ -19,8 +21,8 @@ Given(/^a constituency "(.*?)"(?: with MP "(.*?)")? is found by postcode "(.*?)"
   end
 end
 
-Given(/^the MP has passed away$/) do
-  @mp_passed_away = true
+Given(/^the Member has passed away$/) do
+  @member_passed_away = true
 end
 
 Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_many, constituency, petition_action|
@@ -35,62 +37,23 @@ Given(/^(a|few|some|many) constituents? in "(.*?)" supports? "(.*?)"$/) do |how_
     end
 
   how_many.times do
-    FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency.external_id).validate!
+    FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency.id).validate!
   end
 end
 
 When(/^I search for petitions local to me in "(.*?)"$/) do |postcode|
+  sanitized_postcode = PostcodeSanitizer.call(postcode)
   @my_constituency = @constituencies.fetch(postcode)
+  @my_member = @my_constituency.member
 
-  if @constituency_api_down
-    stub_any_api_request.to_return(api_response(:internal_server_error))
-  else
-    sanitized_postcode = PostcodeSanitizer.call(postcode)
+  expect(Constituency).to receive(:find_by_postcode).with(sanitized_postcode).and_return(@my_constituency)
 
-    if @mp_passed_away
-      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
-        <<-XML.strip
-          <Constituencies>
-            <Constituency>
-              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
-              <Name>#{@my_constituency.name}</Name>
-              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
-              <RepresentingMembers>
-                <RepresentingMember>
-                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
-                  <Member>#{@my_constituency.mp_name}</Member>
-                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
-                  <EndDate>#{1.day.ago.iso8601}</EndDate>
-                </RepresentingMember>
-            </Constituency>
-          </Constituencies>
-        XML
-      })
-    else
-      stub_api_request_for(sanitized_postcode).to_return(api_response(:ok) {
-        <<-XML.strip
-          <Constituencies>
-            <Constituency>
-              <Constituency_Id>#{@my_constituency.external_id}</Constituency_Id>
-              <Name>#{@my_constituency.name}</Name>
-              <ONSCode>#{@my_constituency.ons_code}</ONSCode>
-              <RepresentingMembers>
-                <RepresentingMember>
-                  <Member_Id>#{@my_constituency.mp_id}</Member_Id>
-                  <Member>#{@my_constituency.mp_name}</Member>
-                  <StartDate>#{@my_constituency.mp_date.iso8601}</StartDate>
-                  <EndDate xsi:nil="true"
-                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
-                </RepresentingMember>
-            </Constituency>
-          </Constituencies>
-        XML
-      })
-    end
+  if @member_passed_away
+    @my_member.destroy
   end
 
   within :css, '.local-to-you' do
-    fill_in "UK postcode", with: postcode
+    fill_in "Welsh postcode", with: postcode
     click_on "Search"
   end
 end
@@ -98,7 +61,7 @@ end
 Then(/^I should see that my fellow constituents support "(.*?)"$/) do |petition_action|
   petition = Petition.find_by!(action: petition_action)
   all_signature_count = petition.signatures.validated.count
-  local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.external_id).count
+  local_signature_count = petition.signatures.validated.where(constituency_id: @my_constituency.id).count
   within :css, '.local-petitions' do
     within ".//*#{XPathHelpers.class_matching('petition-item')}[.//a[.='#{petition_action}']]" do
       expect(page).to have_text("#{local_signature_count} #{'signature'.pluralize(local_signature_count)} from #{@my_constituency.name}")
@@ -111,10 +74,6 @@ Then(/^I should not see that my fellow constituents support "(.*?)"$/) do |petit
   within :css, '.local-petitions' do |list|
     expect(list).not_to have_selector(".//*#{XPathHelpers.class_matching('petition-item')}[a[.='#{petition_action}']]")
   end
-end
-
-Given(/^the constituency api is down$/) do
-  @constituency_api_down = true
 end
 
 Then(/^I should see an explanation that my constituency couldn't be found$/) do
@@ -137,12 +96,12 @@ Then(/^the petitions I see should be ordered by my fellow constituents level of 
   end
 end
 
-Then(/^I should see a link to the MP for my constituency$/) do
-  expect(page).to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
+Then(/^I should see a link to the Member for my constituency$/) do
+  expect(page).to have_link(@my_member.name, href: @my_member.url)
 end
 
-Then(/^I should not see a link to the MP for my constituency$/) do
-  expect(page).not_to have_link(@my_constituency.mp_name, href: @my_constituency.mp_url)
+Then(/^I should not see a link to the Member for my constituency$/) do
+  expect(page).not_to have_link(@my_member.name, href: @my_member.url)
 end
 
 Then(/^I should see a link to view all local petitions$/) do

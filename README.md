@@ -38,6 +38,18 @@ docker-compose run --rm web rake db:setup
 docker-compose run --rm web rake wpets:add_sysadmin_user
 ```
 
+### Load the postcode, constituency and region data
+
+```
+docker-compose run --rm web rake wpets:geography:import
+```
+
+### Fetch the member list
+
+```
+docker-compose run --rm web rails runner 'FetchMembersJob.perform_now'
+```
+
 ### Enable signature counting
 
 ```

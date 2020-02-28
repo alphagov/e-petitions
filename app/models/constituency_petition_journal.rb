@@ -1,12 +1,12 @@
 class ConstituencyPetitionJournal < ActiveRecord::Base
   belongs_to :petition
-  belongs_to :constituency, primary_key: :external_id
+  belongs_to :constituency
 
   validates :petition, presence: true
   validates :constituency_id, presence: true, length: { maximum: 255 }
   validates :signature_count, presence: true
 
-  delegate :name, :ons_code, :mp_name, to: :constituency
+  delegate :name, :region_id, :region, to: :constituency
 
   class << self
     def for(petition, constituency_id)

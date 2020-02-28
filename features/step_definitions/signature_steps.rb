@@ -65,9 +65,6 @@ end
 
 When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
   step %{I fill in "Postcode" with "#{postcode}"}
-  sanitized_postcode = PostcodeSanitizer.call(postcode)
-  fixture_file = sanitized_postcode == "N11TY" ? "single" : "no_results"
-  stub_api_request_for(sanitized_postcode).to_return(api_response(:ok, fixture_file))
 end
 
 When /^I fill in my details and sign a petition$/ do
@@ -107,17 +104,17 @@ end
 
 And "I have already signed the petition but not validated my email" do
   FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "womboid@wimbledon.com", :postcode => "N11TY")
+                     :email => "womboid@wimbledon.com", :postcode => "CF991NA")
 end
 
 And "I have already signed the petition using an alias" do
   FactoryBot.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
+                     :email => "wom.boid@wimbledon.com", :postcode => "CF991NA")
 end
 
 And "I have already signed the petition using an alias but not validated my email" do
   FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
+                     :email => "wom.boid@wimbledon.com", :postcode => "CF991NA")
 end
 
 Given /^Suzie has already signed the petition$/ do

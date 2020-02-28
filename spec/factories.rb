@@ -1,4 +1,5 @@
 require 'factory_bot'
+require 'faker'
 require 'active_support/core_ext/digest/uuid'
 
 FactoryBot.define do
@@ -330,104 +331,93 @@ FactoryBot.define do
     end
   end
 
-  sequence(:constituency_id) { |n| (1234 + n).to_s }
-  sequence(:mp_id) { |n| (4321 + n).to_s }
-  sequence(:ons_code) { |n| '%08d' % n }
+  sequence(:constituency_id) { |n| "W09%06d" % n }
 
   factory :constituency do
-    trait(:england) do
-      ons_code{ "E#{generate(:ons_code)}" }
+    trait :cardiff_south_and_penarth do
+      id { "W09000043" }
+      association :region, :south_wales_central
+      name_en { "Cardiff South and Penarth" }
+      name_cy { "De Caerdydd a Phenarth" }
+      example_postcode { "CF119WE" }
     end
 
-    trait(:scotland) do
-      ons_code{ "S#{generate(:ons_code)}" }
+    trait :swansea_west do
+      id { "W09000019" }
+      association :region, :south_wales_west
+      name_en { "Swansea West" }
+      name_cy { "Gorllewin Abertawe" }
+      example_postcode { "SA16UD" }
     end
 
-    trait(:wales) do
-      ons_code{ "W#{generate(:ons_code)}" }
+    sequence(:id) { |n| "W19%06d" % n }
+    association :region
+    sequence(:name_en) { |n| "Constituency #{n}" }
+    sequence(:name_cy) { |n| "Etholaeth #{n}" }
+    example_postcode { Faker::Address.postcode.tr(" ", "") }
+  end
+
+  factory :region do
+    trait :south_wales_central do
+      id { "W10000007" }
+      name_en { "South Wales Central" }
+      name_cy { "Canol De Cymru" }
     end
 
-    trait(:northern_ireland) do
-      ons_code{ "N#{generate(:ons_code)}" }
+    trait :south_wales_west do
+      id { "W10000009" }
+      name_en { "South Wales West" }
+      name_cy { "Gorllewin De Cymru" }
     end
 
-    trait(:coventry_north_east) do
-      name "Coventry North East"
-      slug "coventry-north-east"
-      external_id "3427"
-      ons_code "E14000649"
-      mp_id "4378"
-      mp_name "Colleen Fletcher MP"
-      mp_date "2015-05-07"
-      example_postcode "CV21PH"
+    sequence(:id) { |n| "W11%06d" % n }
+    sequence(:name_en) { |n| "Region #{n}" }
+    sequence(:name_cy) { |n| "Rhanbarth #{n}" }
+  end
+
+  factory :member do
+    region_id { nil }
+    constituency_id { nil }
+    name_en { Faker::Name.name }
+    name_cy { Faker::Name.name }
+    party_en { "Welsh Labour" }
+    party_cy { "Llafur Cymru" }
+
+    trait :region do
+      association :region
     end
 
-    trait(:bethnal_green_and_bow) do
-      name "Bethnal Green and Bow"
-      slug "bethnal-green-and-bow"
-      external_id "3320"
-      ons_code "E14000555"
-      mp_id "4138"
-      mp_name "Rushanara Ali MP"
-      mp_date "2015-05-07"
-      example_postcode "E27AX"
+    trait :constituency do
+      association :constituency
     end
 
-    trait(:romford) do
-      name "Romford"
-      slug "romford"
-      external_id "3703"
-      ons_code "E14000900"
-      mp_id "1447"
-      mp_name "Andrew Rosindell"
-      mp_date "2015-05-07"
-      example_postcode "RM53FZ"
+    trait :cardiff_south_and_penarth do
+      id { 249 }
+      constituency_id { "W09000043" }
+      name_en { "Vaughan Gething AM" }
+      name_cy { "Vaughan Gething AC" }
+      party_en { "Welsh Labour" }
+      party_cy { "Llafur Cymru" }
+    end
+  end
+
+  factory :postcode do
+    id { Faker::Address.postcode.tr(" ", "") }
+    sequence(:constituency_id) { |n| "W09%06d" % n }
+
+    trait :cardiff_south_and_penarth do
+      id { "CF991NA" }
+      constituency_id { "W09000043" }
     end
 
-    trait(:sheffield_brightside_and_hillsborough) do
-      name "Sheffield, Brightside and Hillsborough"
-      slug "sheffield-brightside-and-hillsborough"
-      external_id "3724"
-      ons_code "E14000921"
-      mp_id "4571"
-      mp_name "Gill Furniss"
-      mp_date "2016-05-05"
-      example_postcode "S61AR"
+    trait :swansea_west do
+      id { "SA11BD" }
+      constituency_id { "W09000019" }
     end
-
-    trait(:london_and_westminster) do
-      name "Cities of London and Westminster"
-      slug "cities-of-london-and-westminster"
-      external_id "3415"
-      ons_code "E14000639"
-      mp_id "1405"
-      mp_name "Rt Hon Mark Field MP"
-      mp_date "2017-06-08"
-      example_postcode "SW1A1AA"
-    end
-
-    trait(:cardiff_south_and_penarth) do
-      name "Cardiff South and Penarth"
-      slug "cardiff-south-and-penarth"
-      external_id "3391"
-      ons_code "W07000080"
-      mp_id "4264"
-      mp_name "Stephen Doughty MP"
-      mp_date "2017-06-08"
-      example_postcode "CF991NA"
-    end
-
-    england
-
-    name { Faker::Address.county }
-    external_id { generate(:constituency_id) }
-    mp_name { "#{Faker::Name.name} MP" }
-    mp_id { generate(:mp_id) }
-    example_postcode { Faker::Address.postcode }
   end
 
   factory :constituency_petition_journal do
-    constituency_id "3415"
+    constituency_id "W09000043"
     association :petition
   end
 
