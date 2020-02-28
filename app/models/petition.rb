@@ -313,7 +313,7 @@ class Petition < ActiveRecord::Base
     end
 
     def in_need_of_closing(time = Time.current)
-      where(state: OPEN_STATE).where(arel_table[:open_at].lt(Site.opened_at_for_closing(time)))
+      where(state: OPEN_STATE).where(arel_table[:closed_at].lt(time))
     end
 
     def created_after(time)
