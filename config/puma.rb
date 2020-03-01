@@ -12,6 +12,8 @@ if ENV["RAILS_ENV"] == "production"
   threads(concurrency[:min_threads], concurrency[:max_threads])
   preload_app!
 
+  plugin :appsignal
+
   on_worker_boot do
     # Reset the connection to the cache if we can
     ::Rails.cache.reset if ::Rails.cache.respond_to?(:reset)
