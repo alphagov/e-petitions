@@ -261,7 +261,7 @@ class PackageBuilder
 
         request.params = {
           api_key: appsignal_push_api_key,
-          name: application_name,
+          name: appsignal_app_name,
           environment: 'production'
         }
 
@@ -278,6 +278,10 @@ class PackageBuilder
         info "Notified AppSignal of deployment of #{revision}"
       end
     end
+  end
+
+  def appsignal_app_name
+    ENV.fetch('APPSIGNAL_APP_NAME', "epetitions-#{environment}")
   end
 
   def appsignal_push_api_key
