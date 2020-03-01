@@ -9,11 +9,16 @@
   <% end %>
 <% end %>
 
-<dt>Creator</dt>
-<dd>
-  <%=  @petition.creator.name %><br />
-  <%= auto_link(@petition.creator.email) %>
-</dd>
+<% if @petition.anonymized? %>
+  <dt>Anonymized</dt>
+  <dd><%= date_time_format(@petition.anonymized_at) %></dd>
+<% else %>
+  <dt>Creator</dt>
+  <dd>
+    <%=  @petition.creator.name %><br />
+    <%= auto_link(@petition.creator.email) %>
+  </dd>
+<% end %>
 
 <% if @petition.collecting_sponsors? %>
   <dd>
@@ -42,11 +47,6 @@
   <% if @petition.tags? %>
     <dt>Tags</dt>
     <dd><%= @petition.tag_names.join(", ") %></dd>
-  <% end %>
-
-  <% if @petition.anonymized? %>
-    <dt>Anonymized</dt>
-    <dd><%= date_time_format(@petition.anonymized_at) %></dd>
   <% end %>
 
   <% if current_user.is_a_sysadmin? %>

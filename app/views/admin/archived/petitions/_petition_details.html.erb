@@ -5,14 +5,16 @@
   <dt>Signatures</dt>
   <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %> </dd>
 
-  <% if @petition.creator %>
+  <% if @petition.anonymized? %>
+    <dt>Anonymized</dt>
+    <dd><%= date_time_format(@petition.anonymized_at) %></dd>
+  <% elsif @petition.creator %>
     <dt>Creator</dt>
     <dd>
-      <%=  @petition.creator.name %><br />
+      <%= @petition.creator.name %><br />
       <%= auto_link(@petition.creator.email) %>
     </dd>
   <% end %>
-
 
   <% if @petition.closed? %>
     <dt>Closed</dt>
@@ -31,10 +33,5 @@
   <% if @petition.tags? %>
     <dt>Tags</dt>
     <dd><%= @petition.tag_names.join(", ") %></dd>
-  <% end %>
-
-  <% if @petition.anonymized? %>
-    <dt>Anonymized</dt>
-    <dd><%= date_time_format(@petition.anonymized_at) %></dd>
   <% end %>
 </dl>
