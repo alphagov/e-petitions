@@ -25,15 +25,36 @@
         </p>
       </div>
 
+      <details class="department-selector">
+        <summary><span>Departments</span></summary>
+        <div class="inline department-list">
+          <div class="panel-indent">
+            <p>
+              <small>
+                Match <label><input type="radio" name="dmatch" value="any" checked /> any selected departments</label>
+                <label><input type="radio" name="dmatch" value="all" /> all selected departments</label>
+                <label><input type="radio" name="dmatch" value="none" /> no departments</label>
+              </small>
+            </p>
+            <% Department.by_name.each do |dept| %>
+              <div class="multiple-choice">
+                <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>" />
+                <label for="depts_<%= dept.id %>" title="<%= dept.name %>"><%= dept.label %></label>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </details>
+
       <details class="tag-selector">
         <summary><span>Tags</span></summary>
         <div class="inline tag-list">
           <div class="panel-indent">
             <p>
               <small>
-                Match <label><input type="radio" name="match" value="any" checked /> any selected tags</label>
-                <label><input type="radio" name="match" value="all" /> all selected tags</label>
-                <label><input type="radio" name="match" value="none" /> no tags</label>
+                Match <label><input type="radio" name="tmatch" value="any" checked /> any selected tags</label>
+                <label><input type="radio" name="tmatch" value="all" /> all selected tags</label>
+                <label><input type="radio" name="tmatch" value="none" /> no tags</label>
               </small>
             </p>
             <% Tag.by_name.each do |tag| %>

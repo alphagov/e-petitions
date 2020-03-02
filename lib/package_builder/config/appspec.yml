@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+files:
+  - source: ./source
+    destination: /home/deploy/epetitions/releases/<%= release %>
+
+hooks:
+  ApplicationStop:
+    - location: scripts/application_stop
+      runas: root
+  BeforeInstall:
+    - location: scripts/before_install
+      runas: root
+  AfterInstall:
+    - location: scripts/after_install
+      runas: root
+  ApplicationStart:
+    - location: scripts/application_start
+      runas: root

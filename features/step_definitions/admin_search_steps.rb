@@ -122,6 +122,19 @@ When(/^I search for petitions with tag "([^"]*)"( from the admin hub)?$/) do |ta
   click_button 'Search'
 end
 
+When(/^I search for petitions with department "([^"]*)"( from the admin hub)?$/) do |department, from_the_hub|
+  if from_the_hub.blank?
+    visit admin_petitions_url
+  else
+    visit admin_root_url
+  end
+
+  click_details "Departments"
+
+  check department
+  click_button 'Search'
+end
+
 When(/^I search for the petition creator from the admin hub$/) do
   visit admin_root_url
   choose "signatures"

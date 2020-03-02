@@ -2,7 +2,7 @@ module Archived
   class AnonymizePetitionJob < ApplicationJob
     queue_as :high_priority
 
-    rescue_from ActiveRecord::RecordInvalid do exception
+    rescue_from ActiveRecord::RecordInvalid do |exception|
       Appsignal.send_exception exception
     end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_26_175149) do
+ActiveRecord::Schema.define(version: 2020_03_02_141009) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -267,11 +267,11 @@ ActiveRecord::Schema.define(version: 2020_02_26_175149) do
   end
 
   create_table "departments", id: :serial, force: :cascade do |t|
-    t.string "external_id", limit: 30, null: false
+    t.string "external_id", limit: 30
     t.string "name", limit: 100, null: false
     t.string "acronym", limit: 10
     t.string "url", limit: 100
-    t.date "start_date", null: false
+    t.date "start_date"
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -148,6 +148,16 @@ RSpec.describe AdminHelper, type: :helper do
     end
   end
 
+  describe "#selected_depts" do
+    before do
+      params[:depts] = ["foo", nil, "0", "1", 2]
+    end
+
+    it "sanitizes the depts param" do
+      expect(helper.selected_depts).to eq([1, 2])
+    end
+  end
+
   describe "#selected_tags" do
     before do
       params[:tags] = ["foo", nil, "0", "1", 2]

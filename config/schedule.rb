@@ -29,10 +29,6 @@ every :day, at: '1.45am' do
   rake "epets:constituencies:fetch", output: nil
 end
 
-every :day, at: '2.00am' do
-  rake "epets:departments:fetch", output: nil
-end
-
 every :day, at: '2.30am' do
   rake "epets:petitions:count", output: nil
 end

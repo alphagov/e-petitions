@@ -37,18 +37,36 @@ class Admin::PetitionsController < Admin::AdminController
     redirect_to admin_petition_url(params[:q].to_i)
   end
 
-  def scope
-    if params[:match] == "none"
-      Petition.untagged
-    elsif params[:tags].present?
-      if params[:match] == "all"
-        Petition.tagged_with_all(params[:tags])
+  def department_scope(current)
+    if params[:dmatch] == "none"
+      current.without_department
+    elsif params[:depts].present?
+      if params[:dmatch] == "all"
+        current.all_departments(params[:depts])
       else
-        Petition.tagged_with_any(params[:tags])
+        current.any_departments(params[:depts])
       end
     else
-      Petition.all
+      current
     end
+  end
+
+  def tag_scope(current)
+    if params[:tmatch] == "none"
+      current.untagged
+    elsif params[:tags].present?
+      if params[:tmatch] == "all"
+        current.tagged_with_all(params[:tags])
+      else
+        current.tagged_with_any(params[:tags])
+      end
+    else
+      current
+    end
+  end
+
+  def scope
+    tag_scope(department_scope(Petition.all))
   end
 
   def fetch_petitions

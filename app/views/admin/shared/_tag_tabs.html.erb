@@ -1,0 +1,9 @@
+<h1 class="tabs">
+  <% if controller_name == "departments" %>
+    <%= link_to "Tags", admin_tags_path %> |
+    Departments
+  <% else %>
+    Tags |
+    <%= link_to "Departments", admin_departments_path %>
+  <% end %>
+</h1>

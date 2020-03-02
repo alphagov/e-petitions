@@ -1,12 +1,12 @@
 Feature: Maggie searches for petitions by tag
-  In order to find petitions with tags in the notes field
+  In order to find petitions with tags
   As Maggie
-  I would like to be able to enter a structured tag and see all petitions that have that tag in their notes
+  I would like to be able to select a tag and see all the petitions tagged with that tag
 
   Background:
     Given I am logged in as a moderator
 
-  Scenario: When searching for tag, it returns all petitions with keyword in action OR background OR additional_details
+  Scenario: When searching for tag, it returns all petitions with that tag
     Given a petition "Raise benefits" exists with tags "DWP, benefits"
     And a petition "Help the poor" exists with tags "benefits"
     And a petition "Help the homeless" exists with tags "home less"

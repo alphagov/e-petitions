@@ -1,11 +1,18 @@
+require 'textacular/searchable'
+
 class Department < ActiveRecord::Base
-  validates :external_id, presence: true, length: { maximum: 30 }
+  extend Searchable(:name, :acronym)
+  include Browseable
+
+  validates :external_id, length: { maximum: 30 }
   validates :name, presence: true, length: { maximum: 100 }
   validates :acronym, length: { maximum: 10 }
   validates :url, length: { maximum: 100 }
 
   after_destroy :remove_department_from_petitions
   after_destroy :remove_department_from_archived_petitions
+
+  facet :all, -> { by_name }
 
   class << self
     def by_name
