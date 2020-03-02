@@ -18,21 +18,46 @@
       </div>
     </div>
     <div class="column-third actions-right">
-      <%= link_to "Download CSV", admin_archived_petitions_path(params.permit(:state, :q, :match, tags: []).merge(format: "csv")) %>
+      <%= link_to "Download CSV", admin_archived_petitions_path(params.permit(:state, :q, :tmatch, tags: []).merge(format: "csv")) %>
     </div>
   </div>
 
   <div class="grid-row">
     <div class="column-two-thirds">
-      <%= content_tag(:details, class: "tag-selector", open: selected_tags.present? || params[:match] == "none") do %>
+      <%= content_tag(:details, class: "department-selector", open: selected_depts.present? || params[:dmatch] == "none") do %>
+        <summary><span>Departments</span></summary>
+        <div class="inline department-list">
+          <div class="panel-indent">
+            <p>
+              <small>
+                Match <label><%= radio_button_tag :dmatch, "any", %w[all none].exclude?(params[:dmatch]) %> any selected departments</label>
+                <label><%= radio_button_tag :dmatch, "all", params[:dmatch] == "all" %> all selected departments</label>
+                <label><%= radio_button_tag :dmatch, "none", params[:dmatch] == "none" %> no departments</label>
+              </small>
+            </p>
+            <% Department.by_name.each do |dept| %>
+              <div class="multiple-choice">
+                <% if selected_depts.include?(dept.id) %>
+                  <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>" checked />
+                <% else %>
+                  <input type="checkbox" name="depts[]" value="<%= dept.id %>" id="depts_<%= dept.id %>" />
+                <% end %>
+                <label for="depts_<%= dept.id %>" title="<%= dept.name %>"><%= dept.label %></label>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= content_tag(:details, class: "tag-selector", open: selected_tags.present? || params[:tmatch] == "none") do %>
         <summary><span>Tags</span></summary>
         <div class="inline tag-list">
           <div class="panel-indent">
             <p>
               <small>
-                Match <label><%= radio_button_tag :match, "any", %w[all none].exclude?(params[:match]) %> any selected tags</label>
-                <label><%= radio_button_tag :match, "all", params[:match] == "all" %> all selected tags</label>
-                <label><%= radio_button_tag :match, "none", params[:match] == "none" %> no tags</label>
+                Match <label><%= radio_button_tag :tmatch, "any", %w[all none].exclude?(params[:tmatch]) %> any selected tags</label>
+                <label><%= radio_button_tag :tmatch, "all", params[:tmatch] == "all" %> all selected tags</label>
+                <label><%= radio_button_tag :tmatch, "none", params[:tmatch] == "none" %> no tags</label>
               </small>
             </p>
             <% Tag.by_name.each do |tag| %>

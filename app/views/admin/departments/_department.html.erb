@@ -1,0 +1,11 @@
+<tr>
+  <td>
+    <%= link_to department.name, edit_admin_department_path(department) %>
+  </td>
+  <td>
+    <%= department.acronym.presence || "–" %>
+  </td>
+  <td>
+    <%= button_to 'Delete', admin_department_path(department, params.permit(:q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete department?' } %>
+  </td>
+</tr>

@@ -171,6 +171,7 @@ Rails.application.routes.draw do
         resource :logs, only: :show
       end
 
+      resources :departments, except: %i[show]
       resources :tags, except: %i[show]
 
       namespace :archived do

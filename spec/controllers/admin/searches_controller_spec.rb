@@ -34,17 +34,45 @@ RSpec.describe Admin::SearchesController, type: :controller, admin: true do
         end
       end
 
+      context "when searching for petitions with departments" do
+        it "redirects to the petitions search url" do
+          get :show, params: { type: "petition", q: "foo", depts: ["1"], dmatch: "any" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?depts%5B%5D=1&dmatch=any&q=foo")
+        end
+      end
+
+      context "when searching for petitions with no departments" do
+        it "redirects to the petitions search url" do
+          get :show, params: { type: "petition", q: "foo", dmatch: "none" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?dmatch=none&q=foo")
+        end
+      end
+
       context "when searching for petitions with tags" do
         it "redirects to the petitions search url" do
-          get :show, params: { type: "petition", q: "foo", tags: ["1"], match: "any" }
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?match=any&q=foo&tags%5B%5D=1")
+          get :show, params: { type: "petition", q: "foo", tags: ["1"], tmatch: "any" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=foo&tags%5B%5D=1&tmatch=any")
         end
       end
 
       context "when searching for petitions with no tags" do
         it "redirects to the petitions search url" do
-          get :show, params: { type: "petition", q: "foo", match: "none" }
-          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?match=none&q=foo")
+          get :show, params: { type: "petition", q: "foo", tmatch: "none" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?q=foo&tmatch=none")
+        end
+      end
+
+      context "when searching for petitions with departments and tags" do
+        it "redirects to the petitions search url" do
+          get :show, params: { type: "petition", q: "foo", depts: ["1"], dmatch: "any", tags: ["1"], tmatch: "any" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?depts%5B%5D=1&dmatch=any&q=foo&tags%5B%5D=1&tmatch=any")
+        end
+      end
+
+      context "when searching for petitions with no departments and tags" do
+        it "redirects to the petitions search url" do
+          get :show, params: { type: "petition", q: "foo", dmatch: "none", tmatch: "none" }
+          expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions?dmatch=none&q=foo&tmatch=none")
         end
       end
 

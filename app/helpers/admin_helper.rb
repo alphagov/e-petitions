@@ -1,6 +1,10 @@
 module AdminHelper
   ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 
+  def selected_depts
+    @selected_depts ||= Array(params[:depts]).flatten.map(&:to_i).compact.reject(&:zero?)
+  end
+
   def selected_tags
     @selected_tags ||= Array(params[:tags]).flatten.map(&:to_i).compact.reject(&:zero?)
   end

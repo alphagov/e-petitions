@@ -456,6 +456,14 @@ Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open)? petition "(.*?)
   @petition = FactoryBot.create(:open_petition, state: state, action: action, tags: tag_ids)
 end
 
+Given(/^an? ?(pending|validated|sponsored|flagged|dormant|open)? petition "(.*?)" exists with departments "([^"]*)"$/) do |state, action, depts|
+  depts = depts.split(",").map(&:strip)
+  state ||= "open"
+  dept_ids = depts.map { |dept| Department.find_or_create_by(name: dept).id }
+
+  @petition = FactoryBot.create(:open_petition, state: state, action: action, departments: dept_ids)
+end
+
 Given(/^there are (\d+) petitions with a scheduled debate date$/) do |scheduled_debate_petitions_count|
   scheduled_debate_petitions_count.times do |count|
     FactoryBot.create(:open_petition, :scheduled_for_debate, action: "Petition #{count}")

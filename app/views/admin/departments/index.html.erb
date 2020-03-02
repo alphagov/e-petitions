@@ -1,39 +1,39 @@
 <%= render "admin/shared/tag_tabs" %>
 
 <div class="grid-row">
-  <%= form_tag admin_tags_path, method: :get, class: 'search-tags' do %>
+  <%= form_tag admin_departments_path, method: :get, class: 'search-departments' do %>
     <div class="column-half">
       <div class="search-inline">
-        <%= label_tag :q, "Search tags", class: "visuallyhidden" %>
+        <%= label_tag :q, "Search departments", class: "visuallyhidden" %>
         <%= search_field_tag 'q', params[:q], class: 'form-control', placeholder:"Enter a search query" %>
         <%= submit_tag 'Search', class: 'inline-submit', name: nil %>
       </div>
     </div>
     <div class="column-half actions-right search-inline">
-      <%= link_to "New Tag", new_admin_tag_path, class: 'button inline-button' %>
+      <%= link_to "New Department", new_admin_department_path, class: 'button inline-button' %>
     </div>
   <% end %>
 </div>
 
-<%= will_paginate @tags %>
+<%= will_paginate @departments %>
 
-<table class="tag-list">
+<table class="department-list">
   <thead>
     <tr>
-      <th>Tag</th>
-      <th>Description</th>
+      <th>Name</th>
+      <th>Acronym</th>
       <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <% if @tags.present? %>
-      <%= render @tags.to_a %>
+    <% if @departments.present? %>
+      <%= render @departments.to_a %>
     <% else %>
       <tr>
-        <td colspan="3">No tags defined</td>
+        <td colspan="3">No departments defined</td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= will_paginate @tags %>
+<%= will_paginate @departments %>

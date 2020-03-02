@@ -42,18 +42,36 @@ class Admin::Archived::PetitionsController < Admin::AdminController
     redirect_to admin_root_url, notice: "There are no archived petitions"
   end
 
-  def scope
-    if params[:match] == "none"
-      @parliament.petitions.untagged
-    elsif params[:tags].present?
-      if params[:match] == "all"
-        @parliament.petitions.tagged_with_all(params[:tags])
+  def department_scope(current)
+    if params[:dmatch] == "none"
+      current.without_department
+    elsif params[:depts].present?
+      if params[:dmatch] == "all"
+        current.all_departments(params[:depts])
       else
-        @parliament.petitions.tagged_with_any(params[:tags])
+        current.any_departments(params[:depts])
       end
     else
-      @parliament.petitions.all
+      current
     end
+  end
+
+  def tag_scope(current)
+    if params[:tmatch] == "none"
+      current.untagged
+    elsif params[:tags].present?
+      if params[:tmatch] == "all"
+        current.tagged_with_all(params[:tags])
+      else
+        current.tagged_with_any(params[:tags])
+      end
+    else
+      current
+    end
+  end
+
+  def scope
+    tag_scope(department_scope(@parliament.petitions.all))
   end
 
   def parliament_id

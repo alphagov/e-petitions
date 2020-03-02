@@ -1,0 +1,32 @@
+<%= form_row for: [form.object, :name] do %>
+  <%= form.label :name, class: 'form-label' %>
+  <%= error_messages_for_field @department, :name %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :acronym] do %>
+  <%= form.label :acronym, class: 'form-label' %>
+  <%= error_messages_for_field @department, :acronym %>
+  <%= form.text_field :acronym, tabindex: increment, maxlength: 10, class: 'form-control form-control-1-4' %>
+<% end %>
+
+<%= form_row for: [form.object, :url] do %>
+  <%= form.label :url, "URL", class: 'form-label' %>
+  <%= error_messages_for_field @department, :url %>
+  <%= form.text_field :url, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :start_date] do %>
+  <%= form.label :start_date, class: 'form-label' %>
+  <%= error_messages_for_field @department, :start_date %>
+  <%= form.date_select :start_date, { include_blank: true }, tabindex: increment, class: 'form-control form-control-auto' %>
+<% end %>
+
+<%= form_row for: [form.object, :end_date] do %>
+  <%= form.label :end_date, class: 'form-label' %>
+  <%= error_messages_for_field @department, :end_date %>
+  <%= form.date_select :end_date, { include_blank: true }, tabindex: increment, class: 'form-control form-control-auto' %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_departments_path, class: 'button-secondary' %>
