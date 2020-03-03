@@ -74,11 +74,15 @@
               if (this.value == 'signature') {
                 $('.search-petitions .tag-selector').hide();
                 $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', true);
+                $('.search-petitions .department-selector').hide();
+                $('.search-petitions .department-selector input[type="checkbox"]').prop('disabled', true);
                 $('.search-petitions .search-period').show();
                 $('.search-petitions .search-period input[type="radio"]').prop('disabled', false);
               } else {
                 $('.search-petitions .tag-selector').show();
                 $('.search-petitions .tag-selector input[type="checkbox"]').prop('disabled', false);
+                $('.search-petitions .department-selector').show();
+                $('.search-petitions .department-selector input[type="checkbox"]').prop('disabled', false);
                 $('.search-petitions .search-period').hide();
                 $('.search-petitions .search-period input[type="radio"]').prop('disabled', true);
               }
