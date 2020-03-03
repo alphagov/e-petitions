@@ -94,7 +94,7 @@ class SignatureLogs
   end
 
   def log_group_name
-    ENV.fetch("NGINX_LOG_GROUP_NAME", "nginx-access-logs")
+    ENV.fetch("NGINX_LOG_GROUP_NAME", "#{Site.host}-nginx-access-logs")
   end
 
   def ms(time)
