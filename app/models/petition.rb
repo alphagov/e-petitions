@@ -25,6 +25,7 @@ class Petition < ActiveRecord::Base
   CURRENT_STATES    = %w[open closed]
   ARCHIVABLE_STATES = %w[completed rejected hidden]
 
+  PUBLISHABLE_STATES         = %w[validated sponsored flagged]
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
@@ -75,7 +76,10 @@ class Petition < ActiveRecord::Base
   has_one :creator, -> { creator }, class_name: 'Signature', inverse_of: :petition
   accepts_nested_attributes_for :creator, update_only: true
 
-  belongs_to :locked_by, class_name: 'AdminUser', optional: true
+  with_options class_name: 'AdminUser' do
+    belongs_to :locked_by, optional: true
+    belongs_to :moderated_by, optional: true
+  end
 
   has_one :debate_outcome, dependent: :destroy
   has_one :email_requested_receipt, dependent: :destroy
@@ -142,6 +146,10 @@ class Petition < ActiveRecord::Base
 
   after_create do
     Appsignal.increment_counter("petition.created")
+  end
+
+  before_update if: :moderating? do
+    self.moderated_by = Admin::Current.user
   end
 
   class << self
@@ -693,6 +701,18 @@ class Petition < ActiveRecord::Base
 
       return false
     end
+  end
+
+  def moderating?
+    publishing? || hiding?
+  end
+
+  def publishing?
+    state.in?(MODERATED_STATES) && state_was.in?(PUBLISHABLE_STATES)
+  end
+
+  def hiding?
+    hidden? && state_was.in?(VISIBLE_STATES)
   end
 
   def publish(time = Time.current)

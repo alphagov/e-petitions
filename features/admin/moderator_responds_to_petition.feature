@@ -13,7 +13,7 @@ Feature: Moderator respond to petition
     And I should see the petition details
 
   Scenario: Moderator edits petition before publishing
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "English"
     Then I am on the admin petition edit details page for "wee need to save our plaanet"
@@ -41,7 +41,7 @@ Feature: Moderator respond to petition
     Then I am on the admin petition page for "wee need to save our plaanet"
 
   Scenario: Moderator edits and tries to save an invalid petition
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     And I visit a sponsored petition with action: "wee need to save our plaanet", that has background: "Reduce polootion" and additional details: "Enforce Kyotoe protocol in more countries"
     And I follow "English"
     Then I fill in "Action" with ""
@@ -52,7 +52,7 @@ Feature: Moderator respond to petition
     And I should see "Background must be completed"
 
   Scenario: Moderator cancel editing petition
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     And I visit a sponsored petition with action: "Blah", that has background: "Blah" and additional details: "Blah"
     And I follow "English"
     Then I am on the admin petition edit details page for "Blah"
@@ -60,10 +60,11 @@ Feature: Moderator respond to petition
     Then I am on the admin petition page for "Blah"
 
   Scenario: Moderator publishes petition
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And the petition is translated
     And I publish the petition
+    Then I should see "Published by Ben Macintosh"
     Then the petition should be visible on the site for signing
     And the creator should receive a notification email
 
@@ -86,37 +87,40 @@ Feature: Moderator respond to petition
     And I should see "The petition must be fully translated first before being made public"
 
   Scenario: Moderator rejects petition with a suitable reason code
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition with a reason code "Not the Senedd/Government’s responsibility"
-    Then the petition is not available for signing
+    Then I should see "Rejected by Ben Macintosh"
+    And the petition is not available for signing
     But the petition is still available for searching or viewing
 
   @javascript
   Scenario: Moderator previews reason description
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     Then I see relevant reason descriptions when I browse different reason codes
     And I go to the Admin home page
 
   Scenario: Moderator rejects petition with a suitable reason code and text
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And the petition is translated
     And I reject the petition with a reason code "Duplicate petition" and some explanatory text
-    Then the explanation is displayed on the petition for viewing by the public
+    Then I should see "Rejected by Ben Macintosh"
+    And the explanation is displayed on the petition for viewing by the public
     And the creator should receive a rejection notification email
 
   Scenario: Moderator rejects petition with a reason code which precludes public searching or viewing
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
+    Then I should see "Hidden by Ben Macintosh"
     And the creator should receive a libel/profanity rejection notification email
     And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
   Scenario: Moderator rejects petition but with no reason code
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     And a sponsored petition exists with action: "Rupert Murdoch is on the run"
     And the petition "Rupert Murdoch is on the run" is translated
     When I go to the admin petition page for "Rupert Murdoch is on the run"
@@ -125,16 +129,17 @@ Feature: Moderator respond to petition
     And I should see "can't be blank"
 
   Scenario: Moderator rejects and hides previously rejected (and public) petition
-    And I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     And a petition "actually libellous" has been rejected with the reason "duplicate"
     When I go to the admin petition page for "actually libellous"
     And I change the rejection status of the petition with a reason code "Confidential, libellous, false, defamatory or references a court case"
-    Then the petition is not available for searching or viewing
+    Then I should see "Hidden by Ben Macintosh"
+    And the petition is not available for searching or viewing
     But the petition will still show up in the back-end reporting
 
   @javascript
   Scenario: Moderator flags petition
-    Given I am logged in as a moderator
+    Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
     And I flag the petition
     Then the petition is not available for searching or viewing

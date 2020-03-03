@@ -75,6 +75,22 @@
     <dd><%= @petition.tag_names.join(", ") %></dd>
   <% end %>
 
+  <% if moderator = @petition.moderated_by %>
+    <% if @petition.rejected? %>
+      <dt>Rejected by</dt>
+      <dd><%= moderator.pretty_name %></dd>
+    <% elsif @petition.hidden? %>
+      <dt>Hidden by</dt>
+      <dd><%= moderator.pretty_name %></dd>
+    <% elsif @petition.published? %>
+      <dt>Published by</dt>
+      <dd><%= moderator.pretty_name %></dd>
+    <% else %>
+      <dt>Moderated by</dt>
+      <dd><%= moderator.pretty_name %></dd>
+    <% end %>
+  <% end %>
+
   <% if current_user.is_a_sysadmin? %>
     <% if @petition.statistics.refreshed? %>
       <dt>Duplicate emails</dt>

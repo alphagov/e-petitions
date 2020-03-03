@@ -10,6 +10,10 @@ class Admin::AdminUsersController < Admin::AdminController
     redirect_to admin_admin_users_url, alert: :user_count_is_too_low
   end
 
+  rescue_from ActiveRecord::DeleteRestrictionError do
+    redirect_to admin_admin_users_url, alert: :user_has_moderated_petitions
+  end
+
   def index
     @users = AdminUser.by_name.paginate(page: params[:page], per_page: 50)
   end

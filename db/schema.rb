@@ -310,6 +310,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
     t.boolean "use_markdown", default: false, null: false
     t.datetime "anonymized_at"
     t.integer "topics", default: [], null: false, array: true
+    t.integer "moderated_by_id"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
@@ -324,6 +325,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
+    t.index ["moderated_by_id"], name: "index_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["referral_threshold_reached_at"], name: "index_petitions_on_referral_threshold_reached_at"
     t.index ["referred_at", "created_at"], name: "index_petitions_on_referred_at_and_created_at", order: { created_at: :desc }
@@ -549,6 +551,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"
+  add_foreign_key "petitions", "admin_users", column: "moderated_by_id"
   add_foreign_key "rejections", "petitions", on_delete: :cascade
   add_foreign_key "rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "signatures", "petitions", on_delete: :cascade
