@@ -71,7 +71,7 @@ RSpec.describe SignatureLogs do
 
     let(:create_request) do
       {
-        log_group_name: "nginx-access-logs",
+        log_group_name: "petitions.senedd.wales-nginx-access-logs",
         start_time: 1554850516000,
         end_time: 1554851116000,
         filter_pattern: "192.168.1.1",
@@ -85,7 +85,7 @@ RSpec.describe SignatureLogs do
 
     let(:validate_request) do
       {
-        log_group_name: "nginx-access-logs",
+        log_group_name: "petitions.senedd.wales-nginx-access-logs",
         start_time: 1554851116000,
         end_time: 1554851716000,
         filter_pattern: "192.168.1.2",
