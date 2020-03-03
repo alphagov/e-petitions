@@ -128,3 +128,4 @@ en-GB:
       user_not_deleted: "User could not be deleted - please contact support"
       user_is_current_user: "You are not allowed to delete yourself!"
       user_count_is_too_low: "There needs to be at least one admin user"
+      user_has_moderated_petitions: "The user has moderated petitions so you can only deactivate their account"

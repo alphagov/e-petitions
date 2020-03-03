@@ -23,6 +23,13 @@ class AdminUser < ActiveRecord::Base
     config.merge_validates_confirmation_of_password_field_options unless: ->(u) { u.password.blank? }
   end
 
+  with_options dependent: :restrict_with_exception do
+    with_options foreign_key: :moderated_by_id do
+      has_many :petitions
+      has_many :archived_petitions, class_name: "Archived::Petition"
+    end
+  end
+
   # = Validations =
   validates_presence_of :email, :first_name, :last_name
   validates_presence_of :password, on: :create

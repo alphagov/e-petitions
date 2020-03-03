@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_02_141009) do
+ActiveRecord::Schema.define(version: 2020_03_03_062655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -122,12 +122,14 @@ ActiveRecord::Schema.define(version: 2020_03_02_141009) do
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at"
+    t.integer "moderated_by_id"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
     t.index ["anonymized_at"], name: "index_archived_petitions_on_anonymized_at"
     t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
     t.index ["locked_by_id"], name: "index_archived_petitions_on_locked_by_id"
+    t.index ["moderated_by_id"], name: "index_archived_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["parliament_id"], name: "index_archived_petitions_on_parliament_id"
     t.index ["signature_count"], name: "index_archived_petitions_on_signature_count"
@@ -465,6 +467,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_141009) do
     t.text "committee_note"
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at"
+    t.integer "moderated_by_id"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -477,6 +480,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_141009) do
     t.index ["departments"], name: "index_petitions_on_departments", opclass: :gin__int_ops, using: :gin
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
+    t.index ["moderated_by_id"], name: "index_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
@@ -669,6 +673,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_141009) do
   add_foreign_key "archived_government_responses", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_notes", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_petition_emails", "archived_petitions", column: "petition_id", on_delete: :cascade
+  add_foreign_key "archived_petitions", "admin_users", column: "moderated_by_id"
   add_foreign_key "archived_petitions", "parliaments"
   add_foreign_key "archived_rejections", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_rejections", "rejection_reasons", column: "code", primary_key: "code"
@@ -682,6 +687,7 @@ ActiveRecord::Schema.define(version: 2020_03_02_141009) do
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"
+  add_foreign_key "petitions", "admin_users", column: "moderated_by_id"
   add_foreign_key "rejections", "petitions", on_delete: :cascade
   add_foreign_key "rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "signatures", "petitions", on_delete: :cascade

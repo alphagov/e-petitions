@@ -24,6 +24,7 @@ class Petition < ActiveRecord::Base
   SEARCHABLE_STATES = %w[open closed rejected]
   STOPPABLE_STATES  = %w[pending validated sponsored flagged dormant]
 
+  PUBLISHABLE_STATES         = %w[validated sponsored flagged dormant]
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged dormant]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
@@ -73,7 +74,10 @@ class Petition < ActiveRecord::Base
   has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true
 
-  belongs_to :locked_by, class_name: 'AdminUser'
+  with_options class_name: 'AdminUser' do
+    belongs_to :locked_by
+    belongs_to :moderated_by
+  end
 
   has_one :debate_outcome, dependent: :destroy
   has_one :email_requested_receipt, dependent: :destroy
@@ -111,6 +115,10 @@ class Petition < ActiveRecord::Base
   end
 
   alias_attribute :opened_at, :open_at
+
+  before_update if: :moderating? do
+    self.moderated_by = Admin::Current.user
+  end
 
   class << self
     def by_most_popular
@@ -640,6 +648,18 @@ class Petition < ActiveRecord::Base
 
       false
     end
+  end
+
+  def moderating?
+    publishing? || hiding?
+  end
+
+  def publishing?
+    state.in?(MODERATED_STATES) && state_was.in?(PUBLISHABLE_STATES)
+  end
+
+  def hiding?
+    hidden? && state_was.in?(VISIBLE_STATES)
   end
 
   def publish(time = Time.current)

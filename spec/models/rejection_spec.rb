@@ -23,6 +23,12 @@ RSpec.describe Rejection, type: :model do
   end
 
   describe "callbacks" do
+    let(:user) { FactoryBot.create(:moderator_user) }
+
+    before do
+      Admin::Current.user = user
+    end
+
     context "when the rejection is created" do
       let(:petition) { FactoryBot.create(:validated_petition) }
       let(:rejection) { FactoryBot.build(:rejection, code: rejection_code, petition: petition) }

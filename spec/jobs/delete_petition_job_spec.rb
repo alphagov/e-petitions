@@ -156,7 +156,8 @@ RSpec.describe DeletePetitionJob, type: :job do
   end
 
   context "with a hidden petition" do
-    let!(:petition) { FactoryBot.create(:rejected_petition, rejection_code: "libellous") }
+    let!(:user) { FactoryBot.create(:moderator_user) }
+    let!(:petition) { FactoryBot.create(:rejected_petition, rejection_code: "libellous", moderated_by: user) }
 
     it "destroys the petition" do
       expect {

@@ -39,6 +39,95 @@ RSpec.describe Petition, type: :model do
         }.from(nil).to(be_within(1.second).of(now))
       end
     end
+
+    context "when the state changes" do
+      let(:user) { FactoryBot.create(:moderator_user) }
+
+      before do
+        Admin::Current.user = user
+      end
+
+      [
+        %w[pending validated],
+        %w[pending stopped],
+        %w[validated sponsored],
+        %w[validated stopped],
+        %w[validated flagged],
+        %w[validated dormant],
+        %w[sponsored flagged],
+        %w[sponsored dormant],
+        %w[sponsored stopped],
+        %w[dormant sponsored],
+        %w[dormant stopped],
+        %w[flagged sponsored],
+        %w[flagged stopped],
+        %w[open closed]
+      ].each do |initial, desired|
+        context "from '#{initial}' to '#{desired}'" do
+          let(:petition) { FactoryBot.create(:"#{initial}_petition", state: initial) }
+
+          before do
+            expect(Admin::Current).not_to receive(:user)
+          end
+
+          it "doesn't update the moderated by user" do
+            expect {
+              petition.update!(state: desired)
+            }.not_to change {
+              petition.moderated_by
+            }.from(nil)
+          end
+
+          it "updates the state" do
+            expect {
+              petition.update!(state: desired)
+            }.to change {
+              petition.state
+            }.from(initial).to(desired)
+          end
+        end
+      end
+
+      [
+        %w[validated open],
+        %w[validated rejected],
+        %w[validated hidden],
+        %w[sponsored open],
+        %w[sponsored rejected],
+        %w[sponsored hidden],
+        %w[dormant open],
+        %w[dormant rejected],
+        %w[dormant hidden],
+        %w[flagged open],
+        %w[flagged rejected],
+        %w[flagged hidden],
+        %w[rejected hidden]
+      ].each do |initial, desired|
+        context "from '#{initial}' to '#{desired}'" do
+          let(:petition) { FactoryBot.create(:"#{initial}_petition", state: initial) }
+
+          before do
+            expect(Admin::Current).to receive(:user).and_return(user)
+          end
+
+          it "updates the moderated by user" do
+            expect {
+              petition.update!(state: desired, open_at: Time.current)
+            }.to change {
+              petition.moderated_by
+            }.from(nil).to(user)
+          end
+
+          it "updates the state" do
+            expect {
+              petition.update!(state: desired, open_at: Time.current)
+            }.to change {
+              petition.state
+            }.from(initial).to(desired)
+          end
+        end
+      end
+    end
   end
 
   context "validations" do

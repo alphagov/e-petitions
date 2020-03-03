@@ -87,6 +87,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(petition.moderation_lag).to eq(4)
         end
 
+        it "sets the moderated by user" do
+          expect(petition.moderated_by).to eq(user)
+        end
+
         it "redirects to the admin show page for the petition page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
@@ -141,6 +145,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
           it "sets the moderation lag" do
             expect(petition.moderation_lag).to eq(4)
+          end
+
+          it "sets the moderated by user" do
+            expect(petition.moderated_by).to eq(user)
           end
 
           it 'sets the rejection code to the supplied code' do
@@ -261,6 +269,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect(petition.moderation_lag).to be_nil
         end
 
+        it "does not set the moderated by user" do
+          expect(petition.moderated_by).to be_nil
+        end
+
         it "redirects to the admin show page for the petition page" do
           expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/petitions/#{petition.id}")
         end
@@ -292,6 +304,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         it "does not set the moderation lag" do
           expect(petition.moderation_lag).to be_nil
+        end
+
+        it "does not set the moderated by user" do
+          expect(petition.moderated_by).to be_nil
         end
 
         it "redirects to the admin show page for the petition page" do

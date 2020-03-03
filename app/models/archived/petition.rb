@@ -14,7 +14,11 @@ module Archived
     DEBATABLE_STATES = [CLOSED_STATE]
 
     belongs_to :parliament, inverse_of: :petitions, required: true
-    belongs_to :locked_by, class_name: 'AdminUser'
+
+    with_options class_name: 'AdminUser' do
+      belongs_to :locked_by
+      belongs_to :moderated_by
+    end
 
     has_one :creator, -> { creator }, class_name: "Signature"
     has_one :debate_outcome, dependent: :destroy
