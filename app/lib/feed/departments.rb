@@ -11,7 +11,7 @@ module Feed
 
     self.model   = "Departments"
     self.columns = "Department_Id,Name,Acronym,Url,StartDate,EndDate"
-    self.filter  = "EndDate%20eq%20null%20or%20year(EndDate)%20gt%202010"
+    self.filter  = "EndDate%20eq%20null%20"
     self.klass   = Department
   end
 end
