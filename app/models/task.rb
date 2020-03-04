@@ -37,7 +37,7 @@ class Task < ActiveRecord::Base
 
     begin
       with_lock { yield }
-    rescue PG::InFailedSqlTransaction => e
+    rescue ActiveRecord::PreparedStatementCacheExpired => e
       if retried
         raise e
       else

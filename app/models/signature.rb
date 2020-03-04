@@ -454,17 +454,21 @@ class Signature < ActiveRecord::Base
   end
 
   def find_duplicate
-    return nil unless petition
+    begin
+      return nil unless petition
 
-    signatures = petition.signatures.duplicate(id, email)
-    return signatures.first if signatures.many?
+      signatures = petition.signatures.duplicate(id, email)
+      return signatures.first if signatures.many?
 
-    if signature = signatures.first
-      if sanitized_name == signature.sanitized_name
-        signature
-      elsif postcode != signature.postcode
-        signature
+      if signature = signatures.first
+        if sanitized_name == signature.sanitized_name
+          signature
+        elsif postcode != signature.postcode
+          signature
+        end
       end
+    rescue ActiveRecord::PreparedStatementCacheExpired => e
+      retry
     end
   end
 
@@ -473,17 +477,21 @@ class Signature < ActiveRecord::Base
   end
 
   def find_similar
-    return nil unless petition
+    begin
+      return nil unless petition
 
-    signatures = petition.signatures.similar(id, canonical_email)
-    return signatures.first if signatures.many?
+      signatures = petition.signatures.similar(id, canonical_email)
+      return signatures.first if signatures.many?
 
-    if signature = signatures.first
-      if sanitized_name == signature.sanitized_name
-        signature
-      elsif postcode != signature.postcode
-        signature
+      if signature = signatures.first
+        if sanitized_name == signature.sanitized_name
+          signature
+        elsif postcode != signature.postcode
+          signature
+        end
       end
+    rescue ActiveRecord::PreparedStatementCacheExpired => e
+      retry
     end
   end
 
@@ -767,7 +775,7 @@ class Signature < ActiveRecord::Base
 
     begin
       with_lock { yield }
-    rescue PG::InFailedSqlTransaction => e
+    rescue ActiveRecord::PreparedStatementCacheExpired => e
       if retried
         raise e
       else
