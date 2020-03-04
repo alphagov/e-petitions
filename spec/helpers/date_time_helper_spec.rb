@@ -1,6 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe DateTimeHelper, type: :helper do
+  describe "#short_date_format" do
+    let(:date) { Date.civil(2020, 10, 31) }
+
+    context "in English" do
+      around do |example|
+        I18n.with_locale(:"en-GB") { example.run }
+      end
+
+      it "returns the correct date format" do
+        expect(helper.short_date_format(date)).to eq("31 October 2020")
+      end
+    end
+
+    context "in Welsh" do
+      around do |example|
+        I18n.with_locale(:"cy-GB") { example.run }
+      end
+
+      it "returns the correct date format" do
+        expect(helper.short_date_format(date)).to eq("31 Hydref 2020")
+      end
+    end
+  end
+
   describe "#local_date_time" do
     it "displays nothing if the date is nil" do
       expect(helper.local_date_time_format(nil)).to be_nil
@@ -36,101 +60,221 @@ RSpec.describe DateTimeHelper, type: :helper do
   describe "#waiting_for_in_words" do
     let(:now) { Time.current.noon }
 
-    context "when the date is nil" do
-      it "returns nil" do
-        expect(helper.waiting_for_in_words(nil)).to be_nil
-      end
-    end
-
-    context "when the date is today" do
-      let(:date) { 2.hours.ago(now) }
-
-      it "returns 'Waiting for less than a day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting less than a day")
-      end
-    end
-
-    context "when the date is yesterday" do
-      let(:date) { 1.day.ago(now) }
-
-      it "returns 'Waiting for 1 day'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1 day")
-      end
-    end
-
-    context "when the date is last week" do
-      let(:date) { 7.days.ago(now) }
-
-      it "returns 'Waiting for 7 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 7 days")
-      end
-    end
-
-    context "when the response threshold was reached last month" do
-      let(:date) { 30.days.ago(now) }
-
-      it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
-      end
-    end
-
-    context "when the time span crosses the spring DST boundary" do
-      let(:now) { Time.utc(2016, 4, 11, 11, 0, 0).in_time_zone }
-      let(:date) { 30.days.ago(now) }
-
+    context "in English" do
       around do |example|
-        travel_to(now) { example.run }
+        I18n.with_locale(:"en-GB") { example.run }
       end
 
-      it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+      context "when the date is nil" do
+        it "returns nil" do
+          expect(helper.waiting_for_in_words(nil)).to be_nil
+        end
+      end
+
+      context "when the date is today" do
+        let(:date) { 2.hours.ago(now) }
+
+        it "returns 'Waiting less than a day'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting less than a day")
+        end
+      end
+
+      context "when the date is yesterday" do
+        let(:date) { 1.day.ago(now) }
+
+        it "returns 'Waiting 1 day'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 1 day")
+        end
+      end
+
+      context "when the date is last week" do
+        let(:date) { 7.days.ago(now) }
+
+        it "returns 'Waiting 7 days'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 7 days")
+        end
+      end
+
+      context "when the response threshold was reached last month" do
+        let(:date) { 30.days.ago(now) }
+
+        it "returns 'Waiting 30 days'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+        end
+      end
+
+      context "when the time span crosses the spring DST boundary" do
+        let(:now) { Time.utc(2016, 4, 11, 11, 0, 0).in_time_zone }
+        let(:date) { 30.days.ago(now) }
+
+        around do |example|
+          travel_to(now) { example.run }
+        end
+
+        it "returns 'Waiting 30 days'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+        end
+      end
+
+      context "when the time span crosses the autumn DST boundary" do
+        let(:now) { Time.utc(2016, 11, 11, 12, 0, 0).in_time_zone }
+        let(:date) { 30.days.ago(now) }
+
+        around do |example|
+          travel_to(now) { example.run }
+        end
+
+        it "returns 'Waiting 30 days'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+        end
+      end
+
+      context "when the response threshold was reached 3 years ago" do
+        let(:date) { 1095.days.ago(now) }
+
+        it "returns 'Waiting 1,095 days'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Waiting 1,095 days")
+        end
       end
     end
 
-    context "when the time span crosses the autumn DST boundary" do
-      let(:now) { Time.utc(2016, 11, 11, 12, 0, 0).in_time_zone }
-      let(:date) { 30.days.ago(now) }
-
+    context "in Welsh" do
       around do |example|
-        travel_to(now) { example.run }
+        I18n.with_locale(:"cy-GB") { example.run }
       end
 
-      it "returns 'Waiting for 30 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 30 days")
+      context "when the date is nil" do
+        it "returns nil" do
+          expect(helper.waiting_for_in_words(nil)).to be_nil
+        end
       end
-    end
 
-    context "when the response threshold was reached 3 years ago" do
-      let(:date) { 1095.days.ago(now) }
+      context "when the date is today" do
+        let(:date) { 2.hours.ago(now) }
 
-      it "returns 'Waiting for 1,095 days'" do
-        expect(helper.waiting_for_in_words(date)).to eq("Waiting 1,095 days")
+        it "returns 'Aros llai na diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros llai na diwrnod")
+        end
+      end
+
+      context "when the date is yesterday" do
+        let(:date) { 1.day.ago(now) }
+
+        it "returns 'Aros am 1 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 1 diwrnod")
+        end
+      end
+
+      context "when the date is last week" do
+        let(:date) { 7.days.ago(now) }
+
+        it "returns 'Aros am 7 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 7 diwrnod")
+        end
+      end
+
+      context "when the response threshold was reached last month" do
+        let(:date) { 30.days.ago(now) }
+
+        it "returns 'Aros am 30 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 30 diwrnod")
+        end
+      end
+
+      context "when the time span crosses the spring DST boundary" do
+        let(:now) { Time.utc(2016, 4, 11, 11, 0, 0).in_time_zone }
+        let(:date) { 30.days.ago(now) }
+
+        around do |example|
+          travel_to(now) { example.run }
+        end
+
+        it "returns 'Aros am 30 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 30 diwrnod")
+        end
+      end
+
+      context "when the time span crosses the autumn DST boundary" do
+        let(:now) { Time.utc(2016, 11, 11, 12, 0, 0).in_time_zone }
+        let(:date) { 30.days.ago(now) }
+
+        around do |example|
+          travel_to(now) { example.run }
+        end
+
+        it "returns 'Aros am 30 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 30 diwrnod")
+        end
+      end
+
+      context "when the response threshold was reached 3 years ago" do
+        let(:date) { 1095.days.ago(now) }
+
+        it "returns 'Aros am 1,095 diwrnod'" do
+          expect(helper.waiting_for_in_words(date)).to eq("Aros am 1,095 diwrnod")
+        end
       end
     end
   end
 
   describe "#scheduled_for_debate_in_words" do
-    context "when the date is today" do
-      let(:date) { Date.parse("11/11/2016") }
+    context "in English" do
+      around do |example|
+        I18n.with_locale(:"en-GB") { example.run }
+      end
 
-      it "returns 'Scheduled for debate on 11 November 2016'" do
-        expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate on 11 November 2016")
+      context "when the date is in the future" do
+        let(:date) { Date.parse("11/11/2016") }
+
+        it "returns 'Scheduled for debate on 11 November 2016'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate on 11 November 2016")
+        end
+      end
+
+      context "when the date is today" do
+        let(:date) { Date.current }
+
+        it "returns 'Scheduled for debate today'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate today")
+        end
+      end
+
+      context "when the date is tomorrow" do
+        let(:date) { Date.tomorrow }
+
+        it "returns 'Scheduled for debate tomorrow'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate tomorrow")
+        end
       end
     end
 
-    context "when the date is today" do
-      let(:date) { Date.current }
-
-      it "returns 'Scheduled for debate today'" do
-        expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate today")
+    context "in Welsh" do
+      around do |example|
+        I18n.with_locale(:"cy-GB") { example.run }
       end
-    end
 
-    context "when the date is tomorrow" do
-      let(:date) { Date.tomorrow }
+      context "when the date is in the future" do
+        let(:date) { Date.parse("11/11/2016") }
 
-      it "returns 'Scheduled for debate tomorrow'" do
-        expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate tomorrow")
+        it "returns 'Trefnwyd dadl ar gyfer 11 Tachwedd 2016'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Trefnwyd dadl ar gyfer 11 Tachwedd 2016")
+        end
+      end
+
+      context "when the date is today" do
+        let(:date) { Date.current }
+
+        it "returns 'Trefnwyd cynnal dadl heddiw'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Trefnwyd cynnal dadl heddiw")
+        end
+      end
+
+      context "when the date is tomorrow" do
+        let(:date) { Date.tomorrow }
+
+        it "returns 'Trefnwyd cynnal dadl yfory'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Trefnwyd cynnal dadl yfory")
+        end
       end
     end
   end

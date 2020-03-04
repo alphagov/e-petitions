@@ -3,11 +3,11 @@ module DateTimeHelper
   TO_BE_DEBATED_KEYS = Hash.new(:other).merge(0 => :today, 1 => :tomorrow)
 
   def short_date_format(date_time)
-    date_time && date_time.strftime("%-d %B %Y")
+    date_time && I18n.l(date_time, format: "%-d %B %Y")
   end
 
   def short_date_time_format(date_time)
-    date_time && date_time.strftime("%H:%M%P on %-d %B %Y")
+    date_time && I18n.l(date_time, format: "%H:%M%P on %-d %B %Y")
   end
 
   def date_time_format(date_time, seconds: false)

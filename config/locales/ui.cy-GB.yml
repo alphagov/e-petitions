@@ -1,2 +1,11 @@
 cy-GB:
-  ui: {}
+  ui:
+    petitions:
+      waiting_for_in_words:
+        zero: "Aros llai na diwrnod"
+        one: "Aros am 1 diwrnod"
+        other: "Aros am %{formatted_count} diwrnod"
+    scheduled_for_debate_in_words:
+      today: "Trefnwyd cynnal dadl heddiw"
+      tomorrow: "Trefnwyd cynnal dadl yfory"
+      other: "Trefnwyd dadl ar gyfer %{date}"
