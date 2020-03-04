@@ -1367,7 +1367,7 @@ RSpec.describe Signature, type: :model do
       end
 
       it "retries if the schema has changed" do
-        expect(signature).to receive(:lock!).once.and_raise(PG::InFailedSqlTransaction)
+        expect(signature).to receive(:lock!).once.and_raise(ActiveRecord::PreparedStatementCacheExpired)
         expect(signature).to receive(:lock!).once.and_call_original
         expect(signature.class.connection).to receive(:clear_cache!).once
 
@@ -1375,9 +1375,9 @@ RSpec.describe Signature, type: :model do
         expect(signature).to be_validated
       end
 
-      it "raises PG::InFailedSqlTransaction if it fails twice" do
-        expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
-        expect{ signature.validate! }.to raise_error(PG::InFailedSqlTransaction)
+      it "raises ActiveRecord::PreparedStatementCacheExpired if it fails twice" do
+        expect(signature).to receive(:lock!).twice.and_raise(ActiveRecord::PreparedStatementCacheExpired)
+        expect{ signature.validate! }.to raise_error(ActiveRecord::PreparedStatementCacheExpired)
       end
 
       context "and the signer is from the UK" do
@@ -1665,7 +1665,7 @@ RSpec.describe Signature, type: :model do
     end
 
     it "retries if the schema has changed" do
-      expect(signature).to receive(:lock!).once.and_raise(PG::InFailedSqlTransaction)
+      expect(signature).to receive(:lock!).once.and_raise(ActiveRecord::PreparedStatementCacheExpired)
       expect(signature).to receive(:lock!).once.and_call_original
       expect(signature.class.connection).to receive(:clear_cache!).once
 
@@ -1673,9 +1673,9 @@ RSpec.describe Signature, type: :model do
       expect(signature).to be_invalidated
     end
 
-    it "raises PG::InFailedSqlTransaction if it fails twice" do
-      expect(signature).to receive(:lock!).twice.and_raise(PG::InFailedSqlTransaction)
-      expect{ signature.invalidate! }.to raise_error(PG::InFailedSqlTransaction)
+    it "raises ActiveRecord::PreparedStatementCacheExpired if it fails twice" do
+      expect(signature).to receive(:lock!).twice.and_raise(ActiveRecord::PreparedStatementCacheExpired)
+      expect{ signature.invalidate! }.to raise_error(ActiveRecord::PreparedStatementCacheExpired)
     end
 
     context "when the signature is pending" do
