@@ -155,9 +155,10 @@ en-GB:
       sign_this_petition: Sign this petition
       topic_debated_on: This topic was debated on %{date}
       waiting_for_in_words:
-        one: Waiting 1 day
-        other: Waiting %{formatted_count} days
         zero: Waiting less than a day
+        one: Waiting 1 day
+        two: Waiting 2 days
+        other: Waiting %{formatted_count} days
       watch_online_senedd_tv_html: You'll be able to watch the debate online at <a href="https://senedd.tv" rel="external">senedd.tv</a>
       watch_online_youtube_channel_html: You'll be able to watch online on the <a href="https://www.youtube.com/AssemblyCynulliad" rel="external">Senedd YouTube channel</a>.
       index:
@@ -174,10 +175,14 @@ en-GB:
       search:
         submit: Search
         filtered_petition_count:
+          zero: "0 petitions"
           one: "1 petition"
+          two: "2 petitions"
           other: "%{num} petitions"
         filtered_result_count:
+          zero: "0 results"
           one: "1 result"
+          two: "2 results"
           other: "%{num} results"
         results:
           no_match: No petitions could be found matching your search terms.
@@ -194,6 +199,7 @@ en-GB:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
         referred: Referred to the committee (%{quantity})
+        awaiting_debate: Awaiting a debate in the Senedd (%{quantity})
         debated: Debated in the Senedd (%{quantity})
         not_debated: Not debated in the Senedd (%{quantity})
         completed: Completed petitions (%{quantity})
@@ -268,6 +274,7 @@ en-GB:
           heading: We couldn't create this petition
           prompt:
             one: "Please fix the following error:"
+            two: "Please fix the following errors:"
             other: "Please fix the following errors:"
         petition_stage:
           heading: Start a petition
@@ -354,7 +361,9 @@ en-GB:
           fix_email_if_wrong: If your email address is wrong, just change it above
       signed:
         heading:
+          zero: "0 signatures"
           one: "1 signature"
+          two: "2 signatures"
           other: "%{formatted_count} signatures"
         added_to_petition: "We've added your signature to the petition:"
         contact_member:
@@ -819,16 +828,24 @@ en-GB:
         </section>
     signature_counts:
       default_html:
-        one: "<span class=\"count\" data-count=\"%{count}\">%{num}</span> <span class=\"text\">signature</span>"
+        zero: "<span class=\"count\" data-count=\"%{count}\">0</span> <span class=\"text\">signatures</span>"
+        one: "<span class=\"count\" data-count=\"%{count}\">1</span> <span class=\"text\">signature</span>"
+        two: "<span class=\"count\" data-count=\"%{count}\">2</span> <span class=\"text\">signatures</span>"
         other: "<span class=\"count\" data-count=\"%{count}\">%{num}</span> <span class=\"text\">signatures</span>"
       trending_html:
-        one: "<span class=\"count\">%{num}</span> signature in the last hour"
+        zero: "<span class=\"count\">0</span> signatures in the last hour"
+        one: "<span class=\"count\">1</span> signature in the last hour"
+        two: "<span class=\"count\">2</span> signatures in the last hour"
         other: "<span class=\"count\">%{num}</span> signatures in the last hour"
       in_your_constituency_html:
-        one: "%{num} signature from %{constituency}"
+        zero: "0 signatures from %{constituency}"
+        one: "1 signature from %{constituency}"
+        two: "2 signatures from %{constituency}"
         other: "%{num} signatures from %{constituency}"
       in_total_html:
-        one: "%{num} signature total"
+        zero: "0 signatures total"
+        one: "1 signature total"
+        two: "2 signatures total"
         other: "%{num} signatures total"
     scheduled_for_debate_in_words:
       today: "Scheduled for debate today"
@@ -860,15 +877,21 @@ en-GB:
       whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
     counts:
       referred_html:
-        one: "<span class=\"count\">%{num}</span> petition was referred to the Petitions Committee"
+        zero: "<span class=\"count\">0</span> petitions were referred to the Petitions Committee"
+        one: "<span class=\"count\">1</span> petition was referred to the Petitions Committee"
+        two: "<span class=\"count\">2</span> petitions were referred to the Petitions Committee"
         other: "<span class=\"count\">%{num}</span> petitions were referred to the Petitions Committee"
       referred_explanation_html: "See all petitions referred to the Petitions Committee (%{num})"
       awaiting_debate_html:
-        one: "<span class=\"count\">%{num}</span> petition is waiting to be considered for debate"
+        zero: "<span class=\"count\">0</span> petitions are waiting to be considered for debate"
+        one: "<span class=\"count\">1</span> petition is waiting to be considered for debate"
+        two: "<span class=\"count\">2</span> petitions are waiting to be considered for debate"
         other: "<span class=\"count\">%{num}</span> petitions are waiting to be considered for debate"
       with_debated_outcome_html:
-        one: "<span class=\"count\">%{num}</span> petition was debated in the Senedd"
+        zero: "<span class=\"count\">0</span> petitions were debated in the Senedd"
+        one: "<span class=\"count\">1</span> petition was debated in the Senedd"
+        two: "<span class=\"count\">2</span> petitions were debated in the Senedd"
         other: "<span class=\"count\">%{num}</span> petitions were debated in the Senedd"
-      awaiting_debate_explanation_html: "See all petitions waiting for a debate (%{num})"
+      awaiting_debate_explanation_html: "See all petitions waiting for a debate in the Senedd (%{num})"
       debated_explanation_html: "See all petitions debated in the Senedd (%{num})"
       not_debated_explanation_html: "See all petitions not debated in the Senedd (%{num})"

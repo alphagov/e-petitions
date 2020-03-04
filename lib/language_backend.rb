@@ -5,6 +5,7 @@ class LanguageBackend
 
   module Implementation
     include I18n::Backend::Base
+    include I18n::Backend::Pluralization
 
     def available_locales
       Language.available_locales
