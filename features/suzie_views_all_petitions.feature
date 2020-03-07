@@ -1,5 +1,5 @@
 Feature: Suzy Signer views all petitions
-  In order to find interesting petitions to sign for a particular area of goverment
+  In order to find interesting petitions to sign for a particular area of government
   As Suzy the signer
   I want to look through all the petitions
 
@@ -33,7 +33,7 @@ Feature: Suzy Signer views all petitions
      | Free the wombles                                    |
     And the markup should be valid
 
-  Scenario: Suzie browses petitions awaiting a goverment response
+  Scenario: Suzie browses petitions awaiting a government response
     Given a petition "Abolish bank holidays" exists and hasn't passed the threshold for a response
     And a petition "Free the wombles" exists and passed the threshold for a response less than a day ago
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
@@ -46,7 +46,7 @@ Feature: Suzy Signer views all petitions
      | Free the wombles                                    |
     And the markup should be valid
 
-  Scenario: Suzie browses petitions with a goverment response
+  Scenario: Suzie browses petitions with a government response
     Given a closed petition "Free the wombles" exists and has received a government response 100 days ago
     And a petition "Force supermarkets to give unsold food to charities" exists and has received a government response 10 days ago
     And a petition "Make every monday bank holiday" exists and has received a government response 1 days ago

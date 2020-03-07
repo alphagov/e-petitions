@@ -1,6 +1,6 @@
 @search
 Feature: Suzy Singer searches by free text
-  In order to find interesting petitions to sign for a particular area of goverment
+  In order to find interesting petitions to sign for a particular area of government
   As Suzy the signer
   I want to search against petition action, background, supporting details
 
@@ -16,7 +16,7 @@ Feature: Suzy Singer searches by free text
     And a hidden petition exists with action: "The Wombles are profane"
     And an open petition exists with action: "Wombles", closed_at: "10 days from now"
 
-    # waiting for govts response
+    # waiting for governments response
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
     And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
 
@@ -77,12 +77,12 @@ Feature: Suzy Singer searches by free text
     Then I should see the following search results:
       | The Wombles will rock Glasto | 1 signature          |
 
-  Scenario: Search for petitions awaiting a goverment response
+  Scenario: Search for petitions awaiting a government response
     When I search for "Awaiting government response" with "Monday"
     Then I should see the following search results:
       | Make every monday bank holiday | 1 signature |
 
-  Scenario: Search for petitions having a goverment response
+  Scenario: Search for petitions having a government response
     When I search for "Government responses" with "foxes"
     Then I should see the following search results:
       | Save the city foxes            | 1 signature |
