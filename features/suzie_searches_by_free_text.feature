@@ -16,7 +16,7 @@ Feature: Suzy Singer searches by free text
     And a hidden petition exists with action: "The Wombles are profane"
     And an open petition exists with action: "Wombles", closed_at: "10 days from now"
 
-    # waiting for govts response
+    # waiting for governments response
     And a petition "Force supermarkets to give unsold food to charities" exists and passed the threshold for a response 1 day ago
     And a petition "Make every monday bank holiday" exists and passed the threshold for a response 10 days ago
 
