@@ -823,7 +823,9 @@ class Petition < ActiveRecord::Base
   end
 
   def deadline
-    open_at && (closed_at || Site.closed_at_for_opening(open_at))
+    if published?
+      (closed_at || Site.closed_at_for_opening(open_at))
+    end
   end
 
   def cache_key(*timestamp_names)
