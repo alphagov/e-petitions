@@ -21,8 +21,8 @@ class PackageBuilder
   attr_reader :environment, :release, :revision, :tmpdir, :timestamp
   attr_reader :client, :completed
 
-  def initialize(enviroment)
-    @environment = enviroment.to_s
+  def initialize(environment)
+    @environment = environment.to_s
     @revision    = current_revision
     @tmpdir      = Dir.mktmpdir
     @timestamp   = Time.current.getutc

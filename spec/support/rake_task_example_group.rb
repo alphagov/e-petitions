@@ -25,7 +25,7 @@ module RakeTaskExampleGroup
     new_rake = Rake::Application.new
     old_rake, Rake.application = Rake.application, new_rake
 
-    # The Rails enviroment is already loaded so we define an
+    # The Rails environment is already loaded so we define an
     # empty environment task to fufill the prerequisites.
     Rake::Task.define_task(:environment)
 
