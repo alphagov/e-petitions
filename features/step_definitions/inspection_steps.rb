@@ -78,10 +78,10 @@ end
 
 Then(/^I should see the following list of petitions:$/) do |table|
   expected_petitions = table.raw.flatten
-  expect(page).to have_selector(:css, '.petition-list-petition', count: expected_petitions.size)
+  expect(page).to have_selector(:css, '.petition-list tbody tr', count: expected_petitions.size)
 
   expected_petitions.each.with_index do |expected_petition, idx|
-    expect(page).to have_selector(:css, ".petition-list-petition:nth-child(#{idx+1}) .petition-list-petition-action", text: expected_petition)
+    expect(page).to have_selector(:css, ".petition-list tbody tr:nth-child(#{idx+1}) .action", text: expected_petition)
   end
 end
 

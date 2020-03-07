@@ -82,27 +82,27 @@
 <table class="petition-list">
   <thead>
     <tr>
-      <th class="petition-list-petition-action">Action</th>
-      <th class="petition-list-petition-creator">Creator</th>
-      <th class="petition-list-petition-id">Id</th>
-      <th>State</th>
+      <th class="action">Action</th>
+      <th class="creator">Creator</th>
+      <th class="petition-id">ID</th>
+      <th class="state">State</th>
       <th class="date">Closed At</th>
       <th class="numeric last">Signatures</th>
     </tr>
   </thead>
   <tbody>
     <% @petitions.each do |petition| -%>
-      <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
-        <td class="petition-list-petition-action"><%= link_to petition.action, admin_archived_petition_path(petition) %></td>
-        <td class="petition-list-petition-creator">
+      <tr class="<%= petition.state.dasherize %>">
+        <td class="action"><%= link_to petition.action, admin_archived_petition_path(petition) %></td>
+        <td class="creator">
           <% if petition.creator.present? && !petition.creator.anonymized? %>
             <%= mail_to petition.creator.email, petition.creator.name %>
           <% else %>
             –
           <% end %>
         </td>
-        <td class="petition-list-petition-id"><%= petition.id %></td>
-        <td><%= petition.state.humanize %></td>
+        <td class="petition-id"><%= petition.id %></td>
+        <td class="state"><%= petition.state.humanize %></td>
         <td class="date"><%= date_format(petition.closed_at) %></td>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
