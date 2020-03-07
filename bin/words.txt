@@ -81,7 +81,7 @@ words
 in
 this
 file
-beacuse
+because
 this
 is
 getting
