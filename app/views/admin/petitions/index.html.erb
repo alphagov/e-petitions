@@ -82,10 +82,10 @@
       <th class="creator">Creator</th>
       <th class="petition-id">ID</th>
       <th class="state">State</th>
-      <th class="date">Closing</th>
       <% if show_tags_column?(@petitions.scope) %>
         <th class="tags">Tags</th>
       <% else %>
+        <th class="date">Closing</th>
       <% end %>
       <th class="numeric last">Signatures</th>
     </tr>
@@ -97,10 +97,10 @@
         <td class="creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
         <td class="petition-id"><%= petition.id %></td>
         <td class="state"><%= petition.state.humanize %></td>
-        <td class="date"><%= date_format(petition.deadline) %></td>
         <% if show_tags_column?(@petitions.scope) %>
           <td class="tags"><%= tag_names(petition.tags) %></td>
         <% else %>
+          <td class="date"><%= date_format(petition.deadline) %></td>
         <% end %>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
