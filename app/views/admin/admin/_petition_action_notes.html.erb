@@ -1,5 +1,7 @@
 <% if @petition.is_a?(::Archived::Petition) %>
   <%= link_to 'Notes', admin_archived_petition_notes_path(@petition), class: 'petition-action-heading' %>
+<% elsif @petition.notes? %>
+  <%= link_to 'Notes', admin_petition_notes_path(@petition), class: 'petition-action-heading present' %>
 <% else %>
   <%= link_to 'Notes', admin_petition_notes_path(@petition), class: 'petition-action-heading' %>
 <% end %>

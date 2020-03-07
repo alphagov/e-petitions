@@ -933,4 +933,8 @@ class Petition < ActiveRecord::Base
       0
     end
   end
+
+  def notes?
+    note && note.details.present?
+  end
 end
