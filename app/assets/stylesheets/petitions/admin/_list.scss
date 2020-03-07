@@ -6,24 +6,33 @@
   .petition-list {
     margin-bottom: em(24, 16);
 
+    .flagged {
+      background-color: $mellow-red-25;
+    }
+
     th, td {
       width: 12.5%;
       text-align: right;
     }
-  }
 
-  th.petition-list-petition-action, td.petition-list-petition-action {
-    width: 37.5%;
-    text-align: left;
-    padding-right: $gutter;
-  }
+    .action {
+      width: 37.5%;
+      text-align: left;
+      padding-right: $gutter;
+    }
 
-  th.petition-list-petition-creator, td.petition-list-petition-creator {
-    text-align: left;
-  }
+    .creator {
+      text-align: left;
+    }
 
-  .petition-list-petition-state-flagged {
-    background-color: $mellow-red-25;
+    .petition-id, .state {
+      text-align: center;
+    }
+
+    .date {
+      text-align: center;
+      white-space: nowrap;
+    }
   }
 
   th:last-child, td:last-child {

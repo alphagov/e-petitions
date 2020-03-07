@@ -53,22 +53,30 @@
 <table class="petition-list">
   <thead>
     <tr>
-      <th class="petition-list-petition-action">Action</th>
-      <th class="petition-list-petition-creator">Creator</th>
-      <th class="petition-list-petition-id">Id</th>
-      <th>State</th>
+      <th class="action">Action</th>
+      <th class="creator">Creator</th>
+      <th class="petition-id">ID</th>
+      <th class="state">State</th>
       <th class="date">Closing</th>
+      <% if show_tags_column?(@petitions.scope) %>
+        <th class="tags">Tags</th>
+      <% else %>
+      <% end %>
       <th class="numeric last">Signatures</th>
     </tr>
   </thead>
   <tbody>
     <% @petitions.each do |petition| -%>
-      <tr class="petition-list-petition petition-list-petition-state-<%= petition.state.dasherize %>">
-        <td class="petition-list-petition-action"><%= link_to (petition.action_en || petition.action_cy), admin_petition_path(petition) %></td>
-        <td class="petition-list-petition-creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
-        <td class="petition-list-petition-id"><%= petition.id %></td>
-        <td><%= petition.state.humanize %></td>
+      <tr class="<%= petition.state.dasherize %>">
+        <td class="action"><%= link_to (petition.action_en || petition.action_cy), admin_petition_path(petition) %></td>
+        <td class="creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
+        <td class="petition-id"><%= petition.id %></td>
+        <td class="state"><%= petition.state.humanize %></td>
         <td class="date"><%= date_format(petition.deadline || petition.closed_at) %></td>
+        <% if show_tags_column?(@petitions.scope) %>
+          <td class="tags"><%= tag_names(petition.tags) %></td>
+        <% else %>
+        <% end %>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
     <% end -%>
