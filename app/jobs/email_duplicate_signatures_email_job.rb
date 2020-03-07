@@ -10,10 +10,4 @@ class EmailDuplicateSignaturesEmailJob < EmailJob
     mailer.send(email, signature).deliver_now
     Signature.increment_counter(:email_count, signature.id)
   end
-
-  private
-
-  def rate_limit
-    @rate_limit ||= RateLimit.first_or_create!
-  end
 end
