@@ -1,4 +1,4 @@
-Feature: Unsubscribing from petiton updates as Suzie
+Feature: Unsubscribing from petition updates as Suzie
   In order to not receive any more emails regarding the petition
   As Suzie
   I want to be able to unsubscribe from petition updates
