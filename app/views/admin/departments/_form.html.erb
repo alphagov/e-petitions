@@ -1,7 +1,7 @@
 <%= form_row for: [form.object, :name] do %>
   <%= form.label :name, class: 'form-label' %>
   <%= error_messages_for_field @department, :name %>
-  <%= form.text_field :name, tabindex: increment, maxlength: 100, class: 'form-control' %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 100, autofocus: true, class: 'form-control' %>
 <% end %>
 
 <%= form_row for: [form.object, :acronym] do %>
