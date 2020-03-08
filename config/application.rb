@@ -24,7 +24,8 @@ module Epets
 
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {
-      namespace: 'epets', expires_in: 1.day, compress: true,
+      expires_in: 1.day, compress: true,
+      namespace: ENV.fetch('MEMCACHE_NAMESPACE') { 'epets' },
       pool_size: ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i
     }
 
