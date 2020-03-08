@@ -25,7 +25,8 @@ module WelshPets
 
     # Configure the cache store
     config.cache_store = :atomic_dalli_store, nil, {
-      namespace: 'wpets', expires_in: 1.day, compress: true,
+      expires_in: 1.day, compress: true,
+      namespace: ENV.fetch('MEMCACHE_NAMESPACE') { 'wpets' },
       pool_size: ENV.fetch('RAILS_MAX_THREADS') { 5 }.to_i
     }
 
