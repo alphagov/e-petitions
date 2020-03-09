@@ -2,7 +2,6 @@ Feature: As Charlie
   In order to have an issue discussed in parliament
   I want to be able to create a petition and verify my email address.
 
-@search
 Scenario: Charlie has to search for a petition before creating one
   Given the following petitions exist:
     | action                         | state    | signature_count | open_at    |
@@ -41,7 +40,6 @@ Scenario: Charlie starts to create a petition when parliament is dissolved
   When I am on the help page
   Then I should see the Parliament dissolved warning message
 
-@search
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
   When I follow "Start a petition" within ".//main"
@@ -158,3 +156,28 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
   Then there should be a "pending" signature with email "womboid@wimbledon.com" and name "Mr. Wibbledon"
+
+Scenario: Charlie creates a petition with a typo in his email
+  Given I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  And I fill in my details with email "charlie@hotmial.com"
+  And I press "Continue"
+  Then my email is autocorrected to "charlie@hotmail.com"
+  When I press "Yes – this is my email address"
+  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
+  And a signature should exist with email: "charlie@hotmail.com", state: "pending"
+
+Scenario: Charlie creates a petition when his email is autocorrected wrongly
+  Given I start a new petition
+  And I fill in the petition details
+  And I press "Preview petition"
+  And I press "This looks good"
+  And I fill in my details with email "charlie@hotmial.com"
+  And I press "Continue"
+  Then my email is autocorrected to "charlie@hotmail.com"
+  When I fill in "Email" with "charlie@hotmial.com"
+  And I press "Yes – this is my email address"
+  Then a petition should exist with action: "The wombats of wimbledon rock.", state: "pending"
+  And a signature should exist with email: "charlie@hotmial.com", state: "pending"
