@@ -1,5 +1,7 @@
 <% if @petition.is_a?(::Archived::Petition) %>
   <%= link_to 'Departments', admin_archived_petition_departments_path(@petition), class: 'petition-action-heading' %>
+<% elsif @petition.departments? %>
+  <%= link_to 'Departments', admin_petition_departments_path(@petition), class: 'petition-action-heading present' %>
 <% else %>
   <%= link_to 'Departments', admin_petition_departments_path(@petition), class: 'petition-action-heading' %>
 <% end %>
