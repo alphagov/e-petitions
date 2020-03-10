@@ -1,4 +1,3 @@
-@search
 Feature: Suzy Singer searches by free text
   In order to find interesting petitions to sign for a particular area of government
   As Suzy the signer

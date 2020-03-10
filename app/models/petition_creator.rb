@@ -1,3 +1,4 @@
+require 'domain_autocorrect'
 require 'postcode_sanitizer'
 
 class PetitionCreator
@@ -187,6 +188,10 @@ class PetitionCreator
     petition_creator_params[:email].to_s.strip
   end
 
+  def email=(value)
+    petition_creator_params[:email] = value
+  end
+
   def phone_number
     petition_creator_params[:phone_number].to_s.tr('^1234567890', '')
   end
@@ -277,6 +282,10 @@ class PetitionCreator
   end
 
   def validate_creator
+    if stage == "creator"
+      self.email = DomainAutocorrect.call(email)
+    end
+
     errors.add(:name, :invalid) if name =~ /\A[-=+@]/
     errors.add(:name, :blank) unless name.present?
     errors.add(:name, :too_long, count: 255) if name.length > 255

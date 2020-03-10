@@ -1,3 +1,5 @@
+<%= form.hidden_field :autocorrect_domain, value: "1" %>
+
 <%= form_row for: [signature, :name] do %>
   <%= form.label :name, t(:"ui.petitions.create.creator_stage.name.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :name %>

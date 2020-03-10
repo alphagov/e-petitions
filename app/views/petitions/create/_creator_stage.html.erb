@@ -7,6 +7,7 @@
 <%= form.hidden_field :day %>
 <%= form.hidden_field :month %>
 <%= form.hidden_field :year %>
+<%= form.hidden_field :autocorrect_domain, value: "1" %>
 
 <h1 class="page-title"><%= t(:"ui.petitions.create.creator_stage.heading") %></h1>
 <h2 class="page-subtitle"><%= petition.action %></h2>

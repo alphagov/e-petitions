@@ -93,7 +93,7 @@ en-GB:
       additional_details:
         label: Additional details
         hint_optional: Optional - background information, evidence and references
-        help_html: 
+        help_html: ""
       at_threshold_for_debate_ellipsis: At %{threshold} signatures...
       at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold} signatures will be considered for a debate in the Senedd
       check:

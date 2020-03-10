@@ -1,4 +1,5 @@
 require 'active_support/core_ext/digest/uuid'
+require 'domain_autocorrect'
 require 'postcode_sanitizer'
 require 'ipaddr'
 
@@ -48,6 +49,10 @@ class Signature < ActiveRecord::Base
 
   attr_readonly :sponsor, :creator
   attribute :locale, :string, default: -> { I18n.locale }
+
+  before_validation if: :autocorrect_domain do
+    self.email = DomainAutocorrect.call(email)
+  end
 
   before_create if: :email? do
     self.uuid = generate_uuid
@@ -451,6 +456,12 @@ class Signature < ActiveRecord::Base
     def normalize_domain(email)
       email.split("@").last.downcase
     end
+  end
+
+  attr_reader :autocorrect_domain
+
+  def autocorrect_domain=(value)
+    @autocorrect_domain = value.present?
   end
 
   def find_duplicate

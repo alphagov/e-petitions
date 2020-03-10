@@ -69,7 +69,6 @@ Feature: Suzie signs a petition
   Scenario: Suzie receives a duplicate signature email if she changes to her original email but she has already signed and validated
     When I have already signed the petition with an uppercase email
     And I decide to sign the petition
-    And I fill in my details
     And I fill in my details with email "womboidian@wimbledon.com"
     And I try to sign
     When I change my email address to "womboid@wimbledon.com"
@@ -253,3 +252,28 @@ Feature: Suzie signs a petition
     Then I should be on the petition page
     And I should see "2 signatures"
     And the signature "womboid@wimbledon.com" is marked as validated
+
+  Scenario: Suzie signs a petition with a typo in her email
+    Given I am on the new signature page
+    When I fill in my details with email "suzie@gmial.com"
+    And I try to sign
+    Then my email is autocorrected to "suzie@gmail.com"
+    When I say I am happy with my email address
+    Then a signature should exist with email: "suzie@gmail.com", state: "pending"
+    And "suzie@gmail.com" should receive 1 email
+    When I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And a signature should exist with email: "suzie@gmail.com", state: "validated"
+
+  Scenario: Suzie signs a petition when her email is autocorrected wrongly
+    Given I am on the new signature page
+    When I fill in my details with email "suzie@gmial.com"
+    And I try to sign
+    Then my email is autocorrected to "suzie@gmail.com"
+    When I fill in "Email" with "suzie@gmial.com"
+    And I say I am happy with my email address
+    Then a signature should exist with email: "suzie@gmial.com", state: "pending"
+    And "suzie@gmial.com" should receive 1 email
+    When I confirm my email address
+    Then I should see "We've added your signature to the petition"
+    And a signature should exist with email: "suzie@gmial.com", state: "validated"
