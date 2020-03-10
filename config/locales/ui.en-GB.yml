@@ -197,6 +197,8 @@ en-GB:
                 two: "With the Petitions Committee. Received 2 signatures."
                 other: "With the Petitions Committee. Received %{num} signatures."
               rejected: Rejected
+            facet_referred:
+              referred_date: Referred to the Petitions Committee on %{date}
             facet_debated:
               debated_date: Debated on %{date}
             facet_completed:
