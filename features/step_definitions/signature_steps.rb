@@ -92,6 +92,10 @@ Then(/^I am asked to review my email address$/) do
   expect(page).to have_field('Email')
 end
 
+Then(/^my email is autocorrected to "([^"]+)"/) do |email|
+  expect(page).to have_field('Email', with: email)
+end
+
 When(/^I change my email address to "(.*?)"$/) do |email_address|
   fill_in 'Email', with: email_address
 end
