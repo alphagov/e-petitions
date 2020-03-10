@@ -149,8 +149,11 @@ en-GB:
           referral_threshold: All petitions with more than %{threshold} signatures are referred to the Petitions Committee
         waiting:
           heading: The Petitions Committee will consider this petition
-          referral_waiting_time: for the Petitions Committee to consider this petition
-          referral_threshold: All petitions with more than %{threshold} signatures are referred to the Petitions Committee
+          referral_threshold: All petitions with more than %{threshold} signatures will be discussed by the Petitions Committee after they have finished collecting signatures
+        referred:
+          heading: This petition is now under consideration by the Petitions Committee
+          referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
+          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
       show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show on a map</a>
       sign_this_petition: Sign this petition
       topic_debated_on: This topic was debated on %{date}

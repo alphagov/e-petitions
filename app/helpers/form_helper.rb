@@ -5,7 +5,7 @@ module FormHelper
     css_classes = ['form-group']
     css_classes.push opts[:class] if opts[:class]
     css_classes.push 'error' if opts[:for] && opts[:for][0].errors[opts[:for][1]].any?
-    content_tag :div, capture(&block), :class => css_classes.join(' ')
+    content_tag :div, capture(&block), :class => css_classes.join(' '), style: opts[:style]
   end
 
   def countries_for_select

@@ -31,7 +31,7 @@ class Petition < ActiveRecord::Base
 
   has_perishable_token called: 'sponsor_token'
 
-  translate :action, :additional_details, :background
+  translate :action, :additional_details, :background, :abms_link
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
   before_save :update_moderation_lag, unless: :moderation_lag?
@@ -752,6 +752,10 @@ class Petition < ActiveRecord::Base
 
   def will_be_referred?
     referral_threshold_reached_at?
+  end
+
+  def referred?
+    closed? || completed?
   end
 
   def flagged?

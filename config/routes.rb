@@ -121,6 +121,7 @@ Rails.application.routes.draw do
         resources :trending_domains, path: 'trending-domains', only: %i[index]
 
         scope only: %i[show update] do
+          resource :abms_link, path: 'abms-link', controller: 'abms_link'
           resource :debate_outcome, path: 'debate-outcome'
           resource :notes
           resource :details, controller: 'petition_details'

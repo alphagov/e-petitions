@@ -1,0 +1,21 @@
+<h2 class="petition-action-heading">Update ABMS link</h2>
+
+<%= form_for petition, url: admin_petition_abms_link_path(petition), method: :patch do |f| %>
+
+  <%= form_row :for => [f.object, :abms_link_en] do %>
+    <%= f.label :abms_link_en, "English", class: 'form-label' %>
+    <%= error_messages_for_field f.object, :abms_link_en %>
+    <%= f.text_field :abms_link_en, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row :for => [f.object, :abms_link_cy], style: "margin-top: -15px;" do %>
+    <%= f.label :abms_link_cy, "Welsh", class: 'form-label' %>
+    <%= error_messages_for_field f.object, :abms_link_cy %>
+    <%= f.text_field :abms_link_cy, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= f.submit "Save", name: 'save', class: 'button' %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
+<% end %>
+
+<%= render 'edit_lock' %>
