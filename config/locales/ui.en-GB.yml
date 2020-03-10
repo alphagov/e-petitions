@@ -188,7 +188,11 @@ en-GB:
           no_match: No petitions could be found matching your search terms.
           items:
             facet_all:
-              closed_html: "%{signature_count}, now closed"
+              closed_html:
+                zero: "With the Petitions Committee. Received 0 signatures."
+                one: "With the Petitions Committee. Received 1 signature."
+                two: "With the Petitions Committee. Received 2 signatures."
+                other: "With the Petitions Committee. Received %{num} signatures."
               rejected: Rejected
             facet_debated:
               debated_date: Debated on %{date}

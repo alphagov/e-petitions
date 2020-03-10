@@ -25,12 +25,12 @@ Feature: Suzy Singer searches by free text
     Then I should see my search term "Wombles" filled in the search field
     And I should see "6 results"
     And I should see the following search results:
-      | Wombles                            | 1 signature             |
-      | Overthrow the Wombles              | 1 signature             |
-      | Uncle Bulgaria                     | 1 signature             |
-      | Common People                      | 1 signature             |
-      | The Wombles will rock Glasto       | 1 signature, now closed |
-      | Eavis vs the Wombles               | Rejected                |
+      | Wombles                            | 1 signature                                         |
+      | Overthrow the Wombles              | 1 signature                                         |
+      | Uncle Bulgaria                     | 1 signature                                         |
+      | Common People                      | 1 signature                                         |
+      | The Wombles will rock Glasto       | With the Petitions Committee. Received 1 signature. |
+      | Eavis vs the Wombles               | Rejected                                            |
     And the markup should be valid
 
   @welsh
@@ -39,12 +39,12 @@ Feature: Suzy Singer searches by free text
     Then I should see my search term "Wombles" filled in the search field
     And I should see "6 results"
     And I should see the following search results:
-      | Wombles                            | 1 signature             |
-      | Goresgyn y Wombles                 | 1 signature             |
-      | Yncl Bwlgaria                      | 1 signature             |
-      | Pobl Gyffredin                     | 1 signature             |
-      | Bydd y Wombles yn siglo Glasto     | 1 signature, now closed |
-      | Eavis vs y Wombles                 | Rejected                |
+      | Wombles                            | 1 signature                                         |
+      | Goresgyn y Wombles                 | 1 signature                                         |
+      | Yncl Bwlgaria                      | 1 signature                                         |
+      | Pobl Gyffredin                     | 1 signature                                         |
+      | Bydd y Wombles yn siglo Glasto     | With the Petitions Committee. Received 1 signature. |
+      | Eavis vs y Wombles                 | Rejected                                            |
     And the markup should be valid
 
   Scenario: Search for open petitions
