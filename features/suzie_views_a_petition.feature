@@ -54,7 +54,7 @@ Feature: Suzie views a petition
     And I should see submitted date
     And I cannot sign the petition
 
-  Scenario: Suzie cannot sign closed petition
+  Scenario: Suzie cannot sign a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
     Then I should see the petition details
@@ -69,6 +69,12 @@ Feature: Suzie views a petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
     Then I should not see the petition creator
+
+  Scenario: Suzie cannot sign a completed petition
+    Given a petition "Spend more money on Defence" has been completed
+    When I view the petition
+    Then I should see the petition details
+    And I cannot sign the petition
 
   Scenario: Suzie sees a 'closed' message when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed

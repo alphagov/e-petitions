@@ -9,6 +9,7 @@ class SignaturesController < LocalizedController
   before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
   before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
   before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
+  before_action :redirect_to_petition_page_if_completed, only: [:new, :confirm, :create, :thank_you]
   before_action :do_not_cache
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
@@ -172,6 +173,12 @@ class SignaturesController < LocalizedController
   def redirect_to_petition_page_if_closed_for_signing
     if @petition.closed_for_signing?
       redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+    end
+  end
+
+  def redirect_to_petition_page_if_completed
+    if @petition.completed?
+      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been completed"
     end
   end
 
