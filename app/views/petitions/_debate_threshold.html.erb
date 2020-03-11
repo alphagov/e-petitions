@@ -64,7 +64,7 @@
     <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> <%= t(:"ui.petitions.for_debate_date") %></p>
   <%# Needs more signatures #%>
   <% else -%>
-    <% if !@petition.closed? %>
+    <% if @petition.open? %>
       <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.at_threshold_for_debate_ellipsis", threshold: Site.formatted_threshold_for_debate) %></h2>
       <p><%= t(:"ui.petitions.at_threshold_for_debate_will_be_considered", threshold: Site.formatted_threshold_for_debate) %></p>
     <% end %>

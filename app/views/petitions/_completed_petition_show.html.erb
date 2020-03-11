@@ -1,6 +1,6 @@
 <%= cache_for :petition do %>
   <h1>
-    <span class="heading-secondary"><%= t(:"ui.petitions.heading_closed") %></span>
+    <span class="heading-secondary"><%= t(:"ui.petitions.heading_completed") %></span>
     <%= petition.action %>
   </h1>
 
@@ -41,7 +41,7 @@
 
   <ul class="petition-meta">
     <li>
-      <span class="label"><%= t(:"ui.petitions.date_closed") %></span> <%= short_date_format petition.closed_at %>
+      <span class="label"><%= t(:"ui.petitions.date_completed") %></span> <%= short_date_format petition.completed_at %>
     </li>
     <li class="meta-json">
       <span class="note"><%= link_to t(:"ui.petitions.get_json"), petition_path(petition, :json) %></span>

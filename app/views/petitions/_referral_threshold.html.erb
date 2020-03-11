@@ -1,5 +1,10 @@
 <section class="about-item about-item-count-response" id="referral-threshold" aria-labelledby="referral-threshold-heading">
-  <% if @petition.referred? -%>
+  <% if @petition.completed? %>
+    <h2 id="referral-threshold-heading"><%= t(:"ui.petitions.referral_threshold.completed.heading") %></h2>
+    <% if @petition.abms_link? %>
+      <p class="secondary"><%= t(:"ui.petitions.referral_threshold.referred.link_html", link: @petition.abms_link) %></p>
+    <% end %>
+  <% elsif @petition.referred? -%>
     <h2 id="referral-threshold-heading"><%= t(:"ui.petitions.referral_threshold.referred.heading") %></h2>
     <p><%= t(:"ui.petitions.referral_threshold.referred.referral_threshold", threshold: Site.formatted_threshold_for_referral) %></p>
     <% if @petition.abms_link? %>

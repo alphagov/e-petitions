@@ -70,6 +70,16 @@ Feature: Suzie views a petition
     When I view the petition
     Then I should not see the petition creator
 
+  Scenario: Suzie sees a 'closed' message when viewing a completed petition
+    Given a petition "Spend more money on Defence" has been completed
+    When I view the petition
+    Then I should see "This petition is closed"
+
+  Scenario: Suzie does not see the creator when viewing a completed petition
+    Given a petition "Spend more money on Defence" has been completed
+    When I view the petition
+    Then I should not see the petition creator
+
   Scenario: Suzie does not see information about other Senedd business when there is none
     Given an open petition "Ban Badger Baiting"
     When I view the petition
@@ -107,6 +117,12 @@ Feature: Suzie views a petition
 
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
+    When I view the petition
+    Then I should not see "At 50 signatures..."
+    Then I should not see "At 5,000 signatures..."
+
+  Scenario: Suzie does not see information about future signature targets when viewing a completed petition
+    Given a petition "Spend more money on Defence" has been completed
     When I view the petition
     Then I should not see "At 50 signatures..."
     Then I should not see "At 5,000 signatures..."

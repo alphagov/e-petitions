@@ -119,6 +119,7 @@ en-GB:
       committee_decided_not_to_debate: The Petitions Committee decided not to refer this petition for a debate
       created_by: Created by
       date_closed: Date closed
+      date_completed: Date completed
       date_submitted: Date submitted
       deadline: Deadline
       for_debate_date: for a debate date
@@ -127,6 +128,7 @@ en-GB:
       heading_closed: Closed petition
       heading_open: Petition
       heading_rejected: Rejected petition
+      heading_completed: Completed petition
       more_details: More details
       need_sponsors_later: Later on, you'll need email addresses for %{count} supporters to get your petition started
       need_sponsors_later_heading: Just so you know
@@ -153,6 +155,9 @@ en-GB:
         referred:
           heading: This petition is now under consideration by the Petitions Committee
           referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
+          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
+        completed:
+          heading: This petition was considered by the Petitions Committee
           link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
       show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show on a map</a>
       sign_this_petition: Sign this petition

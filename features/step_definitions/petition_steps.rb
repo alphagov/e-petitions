@@ -112,6 +112,10 @@ Given(/^a petition "([^"]*)" has been closed$/) do |petition_action|
   @petition = FactoryBot.create(:closed_petition, :action => petition_action)
 end
 
+Given(/^a petition "([^"]*)" has been completed$/) do |petition_action|
+  @petition = FactoryBot.create(:completed_petition, :action => petition_action)
+end
+
 Given(/^the petition has reached the referral threshold$/) do
   @petition.update!(referral_threshold_reached_at: @petition.open_at + 2.months)
 end
