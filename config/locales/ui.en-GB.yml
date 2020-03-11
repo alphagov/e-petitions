@@ -201,13 +201,14 @@ en-GB:
                 one: "With the Petitions Committee. Received 1 signature."
                 two: "With the Petitions Committee. Received 2 signatures."
                 other: "With the Petitions Committee. Received %{num} signatures."
+              completed: Completed by the Petitions Committee on %{date}
               rejected: Rejected
             facet_referred:
               referred_date: Referred to the Petitions Committee on %{date}
             facet_debated:
               debated_date: Debated on %{date}
             facet_completed:
-              completed_date: Completed on %{date}
+              completed_date: Completed by the Petitions Committee on %{date}
       other_lists: Other lists of petitions
       lists:
         all: All petitions (%{quantity})
