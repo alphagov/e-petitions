@@ -386,6 +386,9 @@ en-GB:
           constituency_name: Your constituency is %{constituency}
           member_name: Your local Member of the Senedd is %{member}
           member_link: Contact your Member of the Senedd to let them know you have signed this petition
+        regional_members:
+          region_html: |-
+            Your Members of the Senedd for the <strong>%{region}</strong> region are:
         register_to_vote_html: |-
           <h2>Register to vote</h2>
           <p>To vote in the Senedd elections, you must be registered to vote.</p>

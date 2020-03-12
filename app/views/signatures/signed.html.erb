@@ -23,7 +23,7 @@
     <% end %>
 
     <% if region = constituency.region %>
-      <p>Your Members of the Senedd for the <strong><%= region.name %></strong> region are:</p>
+      <p><%= t(:"ui.signatures.signed.regional_members.region_html", region: region.name) %></p>
       <ul class="member-list">
         <% region.members.each do |member| %>
           <li><%= link_to(member.name, member.url) %></li>
