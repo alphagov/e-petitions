@@ -30,7 +30,7 @@ RSpec.describe EmailValidator do
   describe "with a simple email address" do
     let(:email) { "laura@example.com" }
 
-    it "doesn't add an error" do
+    it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
@@ -38,7 +38,7 @@ RSpec.describe EmailValidator do
   describe "with a subdomain email address" do
     let(:email) { "laura@subdomain.example.com" }
 
-    it "doesn't add an error" do
+    it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe EmailValidator do
   describe "with an email address on a new top-level domain" do
     let(:email) { "laura@example.photography" }
 
-    it "doesn't add an error" do
+    it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
@@ -54,7 +54,7 @@ RSpec.describe EmailValidator do
   describe "with a single character email address" do
     let(:email) { "l@s.c" }
 
-    it "doesn't add an error" do
+    it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
@@ -63,7 +63,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@example" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@example' not recognised")
+      expect(errors).to include("Email ‘laura@example’ not recognised")
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe EmailValidator do
     let(:email) { "@example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email '@example.com' not recognised")
+      expect(errors).to include("Email ‘@example.com’ not recognised")
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura.example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura.example.com' not recognised")
+      expect(errors).to include("Email ‘laura.example.com’ not recognised")
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura @example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura @example.com' not recognised")
+      expect(errors).to include("Email ‘laura @example.com’ not recognised")
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@ example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@ example.com' not recognised")
+      expect(errors).to include("Email ‘laura@ example.com’ not recognised")
     end
   end
 
@@ -103,7 +103,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@ example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@ example.com' not recognised")
+      expect(errors).to include("Email ‘laura@ example.com’ not recognised")
     end
   end
 
@@ -111,7 +111,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@home@example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@home@example.com' not recognised")
+      expect(errors).to include("Email ‘laura@home@example.com’ not recognised")
     end
   end
 
@@ -119,7 +119,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@example.@com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@example.@com' not recognised")
+      expect(errors).to include("Email ‘laura@example.@com’ not recognised")
     end
   end
 
@@ -137,7 +137,7 @@ RSpec.describe EmailValidator do
     context "when plus addressing is allowed" do
       let(:disable_plus_address_check) { true }
 
-      it "doesn't add an error" do
+      it "doesn’t add an error" do
         expect(errors).to be_empty
       end
     end

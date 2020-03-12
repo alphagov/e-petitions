@@ -1,0 +1,42 @@
+cy-GB:
+  errors:
+    attributes:
+      email:
+        blank: "Rhaid nodi cyfeiriad e-bost"
+        invalid: "Nid yw’r system yn adnabod y cyfeiriad e-bost ‘%{value}’"
+        plus_address: "Ni chewch chi ddefnyddio ‘plus addressing’ yn eich cyfeiriad e-bost"
+      creator:
+        blank: "Rhaid llenwi’r blwch crëwr"
+      action:
+        invalid: "Ni chaiff y cam gweithredu ddechrau â symbol ‘=’, ‘+’, ‘-’ na ’@’"
+        blank: "Rhaid nodi beth ydych chi am i ni ei wneud"
+        too_long: "Mae’r cam gweithredu yn rhy hir"
+      background:
+        invalid: "Ni chaiff y cefndir ddechrau â symbol ‘=’, ‘+’, ‘-’ na ‘@’"
+        blank: "Rhaid llenwi’r blwch cefndir"
+        too_long: "Mae’r cefndir yn rhy hir"
+      additional_details:
+        invalid: "Ni chaiff y manylion ychwanegol ddechrau â symbol ‘=’, ‘+’, ‘-’ na ‘@’"
+        too_long: "Mae’r manylion ychwanegol yn rhy hir"
+      closing_date:
+        blank: "Rhaid nodi dyddiad cau"
+        invalid: "Nid yw’r system yn adnabod y dyddiad cau"
+        past: "Mae’r dyddiad cau yn y gorffennol"
+        too_near: "Rhaid i’r dyddiad cau fod o leiaf 30 diwrnod i heddiw"
+        too_far: "Ni chaiff y dyddiad cau fod yn hwyrach na 6 mis i heddiw"
+      comment:
+        blank: "Rhaid nodi sylwadau"
+      name:
+        invalid: "Ni chaiff yr enw ddechrau â symbol ‘=’, ‘+’, ‘-’ na ‘@’"
+        blank: "Rhaid nodi enw"
+      location_code:
+        blank: "Rhaid nodi lleoliad"
+      postcode:
+        blank: "Rhaid nodi cod post"
+        invalid: "Nid yw’r system yn adnabod y cod post"
+      phone_number:
+        blank: "Rhaid nodi rhif ffôn"
+        too_long: "Mae’r rhif ffôn yn rhy hir"
+      address:
+        blank: "Rhaid nodi cyfeiriad"
+        too_long: "Mae’r cyfeiriad yn rhy hir"

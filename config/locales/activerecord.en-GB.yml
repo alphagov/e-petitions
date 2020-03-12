@@ -1,14 +1,4 @@
 en-GB:
-  activemodel:
-    errors:
-      models:
-        feedback:
-          attributes:
-            comment:
-              blank: "Comment must be completed"
-            email:
-              invalid: "Email not recognised."
-
   activerecord:
     errors:
       models:
@@ -80,45 +70,3 @@ en-GB:
               too_long:
                 one: "Tag is too long (maximum is 1 character)"
                 other: "Tag is too long (maximum is %{count} characters)"
-
-  errors:
-    attributes:
-      email:
-        blank: "Email must be completed"
-        invalid: "Email '%{value}' not recognised"
-        plus_address: "You can’t use ‘plus addressing’ in your email address"
-      creator:
-        blank: "Creator must be completed"
-      action:
-        invalid: "Action can't start with a '=', '+', '-' or '@'"
-        blank: "Action must be completed"
-        too_long: "Action is too long"
-      background:
-        invalid: "Background can't start with a '=', '+', '-' or '@'"
-        blank: "Background must be completed"
-        too_long: "Background is too long"
-      additional_details:
-        invalid: "Additional details can't start with a '=', '+', '-' or '@'"
-        too_long: "Additional details is too long"
-      closing_date:
-        blank: "Closing date must be completed"
-        invalid: "Closing date not recognised"
-        past: "Closing date is in the past"
-        too_near: "Closing date must be at least 30 days from today"
-        too_far: "Closing date must be no more than 6 months from today"
-      comment:
-        blank: "Comments must be completed"
-      name:
-        invalid: "Name can't start with a '=', '+', '-' or '@'"
-        blank: "Name must be completed"
-      location_code:
-        blank: "Location must be completed"
-      postcode:
-        blank: "Postcode must be completed"
-        invalid: "Postcode not recognised"
-      phone_number:
-        blank: "Phone number must be completed"
-        too_long: "Phone number is too long"
-      address:
-        blank: "Address must be completed"
-        too_long: "Address is too long"

@@ -119,9 +119,9 @@ Scenario: Charlie tries to submit an invalid petition
   And I fill in "Additional details" with "+cmd"
   And I press "Preview petition"
 
-  Then I should see "Action can't start with a '=', '+', '-' or '@'"
-  And I should see "Background can't start with a '=', '+', '-' or '@'"
-  And I should see "Additional details can't start with a '=', '+', '-' or '@'"
+  Then I should see "Action can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+  And I should see "Background can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+  And I should see "Additional details can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
   When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
   And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
@@ -197,7 +197,7 @@ Scenario: Charlie tries to submit an invalid petition
   When I fill in "Name" with "=cmd"
   And I press "Continue"
 
-  Then I should see "Name can't start with a '=', '+', '-' or '@'"
+  Then I should see "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
   When I fill in my details
   And I fill in my creator contact details

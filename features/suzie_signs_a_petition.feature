@@ -42,7 +42,7 @@ Feature: Suzie signs a petition
     When I go to the new signature page for "Do something!"
     And I fill in "Name" with "=cmd"
     And I press "Continue"
-    Then I should see "Name can't start with a '=', '+', '-' or '@'"
+    Then I should see "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
