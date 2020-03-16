@@ -1,5 +1,6 @@
 require 'email_spec/cucumber'
 require 'rspec/core/pending'
+require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
 
@@ -85,6 +86,7 @@ World(CucumberHelpers)
 World(CucumberSanitizer)
 World(MarkdownHelper)
 World(RejectionHelper)
+World(RSpec::Mocks::ExampleMethods)
 
 # run background jobs inline with delayed job
 ActiveJob::Base.queue_adapter = :delayed_job

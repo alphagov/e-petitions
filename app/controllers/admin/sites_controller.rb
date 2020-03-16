@@ -34,7 +34,10 @@ class Admin::SitesController < Admin::AdminController
       :signature_count_interval, :update_signature_counts,
       :disable_trending_petitions, :threshold_for_moderation_delay,
       :disable_invalid_signature_count_check, :disable_daily_update_statistics_job,
-      :disable_plus_address_check, :disable_feedback_sending
+      :disable_plus_address_check, :disable_feedback_sending,
+      :show_home_page_message, :home_page_message,
+      :show_petition_page_message, :petition_page_message,
+      :disable_collecting_signatures
     )
   end
 end

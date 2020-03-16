@@ -5,7 +5,7 @@
     <%= render "admin/shared/site_tabs" %>
   </div>
 
-  <div class="column-two-thirds extra-gutter">
+  <div class="grid-column extra-gutter">
     <% if params[:tab] == "petitions" %>
       <%= render "form", tab: "petitions" %>
     <% elsif params[:tab] == "moderation" %>

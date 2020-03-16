@@ -1,50 +1,55 @@
 <%= hidden_field_tag :tab, "access" %>
 
-<%= form_row for: [form.object, :enabled], class: "inline" do %>
-  <%= form.label :enabled, "Disable public website?", class: "form-label" %>
-  <%= error_messages_for_field @site, :enabled %>
-  <div class="multiple-choice">
-    <%= form.radio_button :enabled, false %>
-    <%= form.label :enabled, "Yes", for: "site_enabled_false" %>
-  </div>
-  <div class="multiple-choice">
-    <%= form.radio_button :enabled, true %>
-    <%= form.label :enabled, "No", for: "site_enabled_true" %>
-  </div>
-<% end %>
+<div class="grid-row">
+  <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :enabled], class: "inline" do %>
+      <%= form.label :enabled, "Disable public website?", class: "form-label" %>
+      <%= error_messages_for_field @site, :enabled %>
+      <div class="multiple-choice">
+        <%= form.radio_button :enabled, false %>
+        <%= form.label :enabled, "Yes", for: "site_enabled_false" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :enabled, true %>
+        <%= form.label :enabled, "No", for: "site_enabled_true" %>
+      </div>
+    <% end %>
 
-<%= form_row for: [form.object, :protected], class: "inline" do %>
-  <%= form.label :protected, "Password protect public website?", class: "form-label" %>
-  <%= error_messages_for_field @site, :protected %>
-  <div class="multiple-choice">
-    <%= form.radio_button :protected, true %>
-    <%= form.label :protected, "Yes", for: "site_protected_true" %>
-  </div>
-  <div class="multiple-choice">
-    <%= form.radio_button :protected, false %>
-    <%= form.label :protected, "No", for: "site_protected_false" %>
-  </div>
-<% end %>
+    <%= form_row for: [form.object, :protected], class: "inline" do %>
+      <%= form.label :protected, "Password protect public website?", class: "form-label" %>
+      <%= error_messages_for_field @site, :protected %>
+      <div class="multiple-choice">
+        <%= form.radio_button :protected, true %>
+        <%= form.label :protected, "Yes", for: "site_protected_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :protected, false %>
+        <%= form.label :protected, "No", for: "site_protected_false" %>
+      </div>
+    <% end %>
 
-<div id="protected-fields">
-  <%= form_row for: [form.object, :username] do %>
-    <%= form.label :username, class: "form-label" %>
-    <%= error_messages_for_field @site, :username %>
-    <%= form.text_field :username, tabindex: increment, maxlength: 50, class: "form-control" %>
-  <% end %>
+    <div id="protected-fields">
+      <%= form_row for: [form.object, :username] do %>
+        <%= form.label :username, class: "form-label" %>
+        <%= error_messages_for_field @site, :username %>
+        <%= form.text_field :username, tabindex: increment, maxlength: 50, class: "form-control" %>
+      <% end %>
 
-  <%= form_row for: [form.object, :password] do %>
-    <%= form.label :password, class: "form-label" %>
-    <%= error_messages_for_field @site, :password %>
-    <%= form.password_field :password, tabindex: increment, maxlength: 50, class: "form-control" %>
-  <% end %>
+      <%= form_row for: [form.object, :password] do %>
+        <%= form.label :password, class: "form-label" %>
+        <%= error_messages_for_field @site, :password %>
+        <%= form.password_field :password, tabindex: increment, maxlength: 50, class: "form-control" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :login_timeout] do %>
+      <%= form.label :login_timeout, "Login timeout for moderation users", class: "form-label" %>
+      <%= error_messages_for_field @site, :login_timeout %>
+      <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">seconds</span>
+    <% end %>
+  </div>
 </div>
-
-<%= form_row for: [form.object, :login_timeout] do %>
-  <%= form.label :login_timeout, "Login timeout for moderation users", class: "form-label" %>
-  <%= error_messages_for_field @site, :login_timeout %>
-  <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">seconds</span>
-<% end %>
 
 <%= javascript_tag do %>
   $().ready(function() {

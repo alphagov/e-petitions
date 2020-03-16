@@ -20,6 +20,16 @@ Before do
 end
 
 Before do
+  ::RSpec::Mocks.setup
+end
+
+After do
+  ::RSpec::Mocks.verify
+ensure
+  ::RSpec::Mocks.teardown
+end
+
+Before do
   Rails.cache.clear
 end
 

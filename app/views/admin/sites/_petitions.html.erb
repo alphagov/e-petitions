@@ -1,19 +1,136 @@
 <%= hidden_field_tag :tab, "petitions" %>
 
-<%= form_row for: [form.object, :petition_duration] do %>
-  <%= form.label :petition_duration, "Duration", class: "form-label" %>
-  <%= error_messages_for_field @site, :petition_duration %>
-  <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">months</span>
-<% end %>
+<div class="grid-row">
+  <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :disable_collecting_signatures], class: "inline" do %>
+      <%= form.label :disable_collecting_signatures, "Pause all petitions?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_collecting_signatures %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_collecting_signatures, true %>
+        <%= form.label :disable_collecting_signatures, "Yes", for: "site_disable_collecting_signatures_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_collecting_signatures, false %>
+        <%= form.label :disable_collecting_signatures, "No", for: "site_disable_collecting_signatures_false" %>
+      </div>
+    <% end %>
 
-<%= form_row for: [form.object, :threshold_for_response] do %>
-  <%= form.label :threshold_for_response, "Threshold for government response", class: "form-label" %>
-  <%= error_messages_for_field @site, :threshold_for_response %>
-  <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
-<% end %>
+    <%= form_row for: [form.object, :show_home_page_message], class: "inline message-control" do %>
+      <%= form.label :show_home_page_message, "Show message on the home page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_home_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_home_page_message, true %>
+        <%= form.label :show_home_page_message, "Show", for: "site_show_home_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_home_page_message, false %>
+        <%= form.label :show_home_page_message, "Hide", for: "site_show_home_page_message_false" %>
+      </div>
+    <% end %>
 
-<%= form_row for: [form.object, :threshold_for_debate] do %>
-  <%= form.label :threshold_for_debate, "Threshold for consideration for a debate", class: "form-label" %>
-  <%= error_messages_for_field @site, :threshold_for_debate %>
-  <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
-<% end %>
+    <%= form_row for: [form.object, :home_page_message], id: "home-page-message", class: "message-field", style: "display: none;" do %>
+      <%= form.label :home_page_message, "Message for the home page", class: "form-label message-label", style: "display: none;" %>
+      <%= error_messages_for_field @site, :home_page_message %>
+      <%= form.text_area :home_page_message, tabindex: increment, rows: 7, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [form.object, :show_petition_page_message], class: "inline message-control" do %>
+      <%= form.label :show_petition_page_message, "Show message on the petition page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_petition_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_petition_page_message, true %>
+        <%= form.label :show_petition_page_message, "Show", for: "site_show_petition_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_petition_page_message, false %>
+        <%= form.label :show_petition_page_message, "Hide", for: "site_show_petition_page_message_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :petition_page_message], id: "petition-page-message", class: "message-field", style: "display: none;" do %>
+      <%= form.label :petition_page_message, "Message for the petition page", class: "form-label message-label", style: "display: none;" %>
+      <%= error_messages_for_field @site, :petition_page_message %>
+      <%= form.text_area :petition_page_message, tabindex: increment, rows: 10, class: 'form-control' %>
+    <% end %>
+  </div>
+
+  <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :petition_duration] do %>
+      <%= form.label :petition_duration, "Duration", class: "form-label" %>
+      <%= error_messages_for_field @site, :petition_duration %>
+      <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">months</span>
+    <% end %>
+
+    <%= form_row for: [form.object, :threshold_for_response] do %>
+      <%= form.label :threshold_for_response, "Threshold for a response", class: "form-label" %>
+      <%= error_messages_for_field @site, :threshold_for_response %>
+      <%= form.text_field :threshold_for_response, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :threshold_for_debate] do %>
+      <%= form.label :threshold_for_debate, "Threshold for a debate", class: "form-label" %>
+      <%= error_messages_for_field @site, :threshold_for_debate %>
+      <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %>
+    <% end %>
+  </div>
+</div>
+
+<%= javascript_tag do %>
+  $().ready(function() {
+    var $disabled_true = $('input[name="site[disable_collecting_signatures]"][value=true]');
+    var $disabled = $('input[name="site[disable_collecting_signatures]"]');
+    var $show_home_page_true = $('input[name="site[show_home_page_message]"][value=true]');
+    var $show_home_page = $('input[name="site[show_home_page_message]"]');
+    var $home_page_msg = $('#home-page-message');
+    var $show_petition_page_true = $('input[name="site[show_petition_page_message]"][value=true]');
+    var $show_petition_page = $('input[name="site[show_petition_page_message]"]');
+    var $petition_page_msg = $('#petition-page-message');
+    var $message_fields = $('.message-field');
+    var $message_controls = $('.message-control');
+    var $message_labels = $('.message-label');
+
+    var blurAndFocus = function() {
+      this.blur();
+      this.focus();
+    }
+
+    var toggleMessageField = function(control, field) {
+      if (control.is(':checked')) {
+        field.show();
+      } else {
+        field.hide();
+      }
+    }
+
+    toggleMessageField($show_home_page_true, $home_page_msg);
+    toggleMessageField($show_petition_page_true, $petition_page_msg);
+
+    if ($disabled_true.is(':checked')) {
+      $message_controls.hide();
+      $message_labels.show();
+      $message_fields.show();
+    }
+
+    $disabled.keyup(blurAndFocus).change(function() {
+      if ($disabled_true.is(':checked')) {
+        $message_controls.hide();
+        $message_labels.show();
+        $message_fields.show();
+      } else {
+        $message_controls.show();
+        $message_labels.hide();
+
+        toggleMessageField($show_home_page_true, $home_page_msg);
+        toggleMessageField($show_petition_page_true, $petition_page_msg);
+      }
+    });
+
+    $show_home_page.keyup(blurAndFocus).change(function() {
+      toggleMessageField($show_home_page_true, $home_page_msg);
+    });
+
+    $show_petition_page.keyup(blurAndFocus).change(function() {
+      toggleMessageField($show_petition_page_true, $petition_page_msg);
+    });
+  });
+<% end -%>
