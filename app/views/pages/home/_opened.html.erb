@@ -4,6 +4,13 @@
   </div>
 <% end %>
 
+<% if Site.show_home_page_message? %>
+  <div class="notification">
+    <span class="icon icon-warning-white"></span>
+    <%= markdown_to_html(Site.home_page_message) %>
+  </div>
+<% end %>
+
 <%= render "pages/home/actioned_petitions" %>
 
 <% unless no_petitions_yet? %>

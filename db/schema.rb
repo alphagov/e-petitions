@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_03_062655) do
+ActiveRecord::Schema.define(version: 2020_03_16_072107) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -468,6 +468,7 @@ ActiveRecord::Schema.define(version: 2020_03_03_062655) do
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at"
     t.integer "moderated_by_id"
+    t.integer "deadline_extension", default: 0, null: false
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin

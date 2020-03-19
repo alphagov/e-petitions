@@ -318,13 +318,13 @@ class Petition < ActiveRecord::Base
 
     def close_petitions!(time = Time.current)
       in_need_of_closing(time).find_each do |petition|
-        petition.close!
+        petition.close!(time)
       end
     end
 
     def close_petitions_early!(time = Parliament.dissolution_at)
       open_at_dissolution(time).find_each do |petition|
-        petition.close!(time)
+        petition.close_early!(time)
       end
     end
 
@@ -674,11 +674,21 @@ class Petition < ActiveRecord::Base
     end
   end
 
-  def close!(time = deadline)
+  def close!(time)
+    unless open?
+      raise RuntimeError, "can't close a petition that is in the #{state} state"
+    end
+
+    if deadline <= time
+      update!(state: CLOSED_STATE, closed_at: deadline)
+    end
+  end
+
+  def close_early!(time)
     if open?
       update!(state: CLOSED_STATE, closed_at: time)
     else
-      raise RuntimeError, "can't stop a petition that is in the #{state} state"
+      raise RuntimeError, "can't close a petition that is in the #{state} state"
     end
   end
 
@@ -825,7 +835,15 @@ class Petition < ActiveRecord::Base
   end
 
   def deadline
-    open_at && (closed_at || Site.closed_at_for_opening(open_at))
+    open_at && (closed_at || Site.closed_at_for_opening(open_at) + deadline_extension)
+  end
+
+  def deadline_extension
+    super.days
+  end
+
+  def extend_deadline!
+    self.class.update_counters(id, deadline_extension: 1, touch: touch)
   end
 
   def closing_early_for_dissolution?(dissolution_at = Parliament.dissolution_at)

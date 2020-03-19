@@ -57,6 +57,9 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_length_of(:email_from).is_at_most(100) }
     it { is_expected.to validate_length_of(:feedback_email).is_at_most(100) }
 
+    it { is_expected.to validate_length_of(:home_page_message).is_at_most(800) }
+    it { is_expected.to validate_length_of(:petition_page_message).is_at_most(800) }
+
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
       threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
@@ -83,6 +86,13 @@ RSpec.describe Site, type: :model do
       it { is_expected.to validate_length_of(:username).is_at_most(30) }
       it { is_expected.to validate_length_of(:password).is_at_most(30) }
       it { is_expected.to validate_confirmation_of(:password) }
+    end
+
+    context "when signature collection is disabled" do
+      subject { described_class.new(disable_collecting_signatures: true) }
+
+      it { is_expected.to validate_presence_of(:home_page_message) }
+      it { is_expected.to validate_presence_of(:petition_page_message) }
     end
   end
 
@@ -257,6 +267,26 @@ RSpec.describe Site, type: :model do
     it "delegates signature_count_interval to the instance" do
       expect(site).to receive(:update_signature_counts).and_return(true)
       expect(Site.update_signature_counts).to eq(true)
+    end
+
+    it "delegates show_home_page_message? to the instance" do
+      expect(site).to receive(:show_home_page_message?).and_return(true)
+      expect(Site.show_home_page_message?).to eq(true)
+    end
+
+    it "delegates home_page_message to the instance" do
+      expect(site).to receive(:home_page_message).and_return("Message")
+      expect(Site.home_page_message).to eq("Message")
+    end
+
+    it "delegates show_petition_page_message? to the instance" do
+      expect(site).to receive(:show_petition_page_message?).and_return(true)
+      expect(Site.show_petition_page_message?).to eq(true)
+    end
+
+    it "delegates petition_page_message to the instance" do
+      expect(site).to receive(:petition_page_message).and_return("Message")
+      expect(Site.petition_page_message).to eq("Message")
     end
   end
 

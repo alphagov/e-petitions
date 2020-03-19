@@ -182,11 +182,11 @@ Given(/^the petition "([^"]*)" has been closed early because of parliament disso
 end
 
 Given(/^the petition has closed$/) do
-  @petition.close!
+  @petition.close!(@petition.deadline)
 end
 
 Given(/^the petition has closed some time ago$/) do
-  @petition.close!(2.days.ago)
+  @petition.close_early!(2.days.ago)
 end
 
 Given(/^a petition "([^"]*)" has been rejected( with the reason "([^"]*)")?$/) do |petition_action, reason_or_not, reason|
@@ -527,6 +527,6 @@ end
 
 Given(/^all the open petitions have been closed$/) do
   Petition.open_state.find_each do |petition|
-    petition.close!(1.day.ago)
+    petition.close_early!(1.day.ago)
   end
 end
