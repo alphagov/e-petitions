@@ -26,6 +26,6 @@ RSpec.describe 'session cookie', type: :request, show_exceptions: true do
   end
 
   it "should set the expiry to 2 weeks from now" do
-    expect(subject).to match(/; expires=Tue, 26 Apr 2016 12:59:59 -0000/)
+    expect(subject).to match(/; expires=Tue, 26 Apr 2016 12:59:59 GMT/)
   end
 end

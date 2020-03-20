@@ -25,6 +25,6 @@ RSpec.describe 'seen_cookie_message cookie', type: :request, show_exceptions: tr
   end
 
   it "should set the expiry to 1 year from now" do
-    expect(subject).to match(/; expires=Thu, 02 Jul 2015 10:09:09 -0000/)
+    expect(subject).to match(/; expires=Thu, 02 Jul 2015 10:09:09 GMT/)
   end
 end
