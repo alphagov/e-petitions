@@ -28,6 +28,12 @@
       </div>
     <% end %>
 
+    <%= form_row for: [form.object, :home_page_message_colour], id: "home-page-message-colour", class: "message-field" do %>
+      <%= form.label :home_page_message_colour, "Background", class: "form-label form-label-inline" %>
+      <%= error_messages_for_field @site, :home_page_message_colour %>
+      <%= form.select :home_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
+    <% end %>
+
     <%= form_row for: [form.object, :home_page_message], id: "home-page-message", class: "message-field", style: "display: none;" do %>
       <%= form.label :home_page_message, "Message for the home page", class: "form-label message-label", style: "display: none;" %>
       <%= error_messages_for_field @site, :home_page_message %>
@@ -45,6 +51,12 @@
         <%= form.radio_button :show_petition_page_message, false %>
         <%= form.label :show_petition_page_message, "Hide", for: "site_show_petition_page_message_false" %>
       </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :petition_page_message_colour], id: "petition-page-message-colour", class: "message-field" do %>
+      <%= form.label :petition_page_message_colour, "Background", class: "form-label form-label-inline" %>
+      <%= error_messages_for_field @site, :petition_page_message_colour %>
+      <%= form.select :petition_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
     <% end %>
 
     <%= form_row for: [form.object, :petition_page_message], id: "petition-page-message", class: "message-field", style: "display: none;" do %>
@@ -82,9 +94,11 @@
     var $show_home_page_true = $('input[name="site[show_home_page_message]"][value=true]');
     var $show_home_page = $('input[name="site[show_home_page_message]"]');
     var $home_page_msg = $('#home-page-message');
+    var $home_page_msg_colour = $('#home-page-message-colour');
     var $show_petition_page_true = $('input[name="site[show_petition_page_message]"][value=true]');
     var $show_petition_page = $('input[name="site[show_petition_page_message]"]');
     var $petition_page_msg = $('#petition-page-message');
+    var $petition_page_msg_colour = $('#petition-page-message-colour');
     var $message_fields = $('.message-field');
     var $message_controls = $('.message-control');
     var $message_labels = $('.message-label');
@@ -102,8 +116,22 @@
       }
     }
 
-    toggleMessageField($show_home_page_true, $home_page_msg);
-    toggleMessageField($show_petition_page_true, $petition_page_msg);
+    var toggleHomePageMessageFields = function() {
+      toggleMessageField($show_home_page_true, $home_page_msg);
+      toggleMessageField($show_home_page_true, $home_page_msg_colour);
+    }
+
+    var togglePetitionPageMessageFields = function() {
+      toggleMessageField($show_petition_page_true, $petition_page_msg);
+      toggleMessageField($show_petition_page_true, $petition_page_msg_colour);
+    }
+
+    var toggleMessageFields = function() {
+      toggleHomePageMessageFields();
+      togglePetitionPageMessageFields();
+    }
+
+    toggleMessageFields();
 
     if ($disabled_true.is(':checked')) {
       $message_controls.hide();
@@ -120,17 +148,16 @@
         $message_controls.show();
         $message_labels.hide();
 
-        toggleMessageField($show_home_page_true, $home_page_msg);
-        toggleMessageField($show_petition_page_true, $petition_page_msg);
+        toggleMessageFields();
       }
     });
 
     $show_home_page.keyup(blurAndFocus).change(function() {
-      toggleMessageField($show_home_page_true, $home_page_msg);
+      toggleHomePageMessageFields();
     });
 
     $show_petition_page.keyup(blurAndFocus).change(function() {
-      toggleMessageField($show_petition_page_true, $petition_page_msg);
+      togglePetitionPageMessageFields();
     });
   });
 <% end -%>

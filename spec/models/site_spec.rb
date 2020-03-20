@@ -60,6 +60,9 @@ RSpec.describe Site, type: :model do
     it { is_expected.to validate_length_of(:home_page_message).is_at_most(800) }
     it { is_expected.to validate_length_of(:petition_page_message).is_at_most(800) }
 
+    it { is_expected.to validate_inclusion_of(:home_page_message_colour).in_array(Site::MESSAGE_COLOURS).allow_blank }
+    it { is_expected.to validate_inclusion_of(:petition_page_message_colour).in_array(Site::MESSAGE_COLOURS).allow_blank }
+
     %w[
       petition_duration minimum_number_of_sponsors maximum_number_of_sponsors threshold_for_moderation
       threshold_for_moderation_delay threshold_for_response threshold_for_debate login_timeout
@@ -279,6 +282,11 @@ RSpec.describe Site, type: :model do
       expect(Site.home_page_message).to eq("Message")
     end
 
+    it "delegates home_page_message_colour to the instance" do
+      expect(site).to receive(:home_page_message_colour).and_return("black")
+      expect(Site.home_page_message_colour).to eq("black")
+    end
+
     it "delegates show_petition_page_message? to the instance" do
       expect(site).to receive(:show_petition_page_message?).and_return(true)
       expect(Site.show_petition_page_message?).to eq(true)
@@ -287,6 +295,11 @@ RSpec.describe Site, type: :model do
     it "delegates petition_page_message to the instance" do
       expect(site).to receive(:petition_page_message).and_return("Message")
       expect(Site.petition_page_message).to eq("Message")
+    end
+
+    it "delegates petition_page_message_colour to the instance" do
+      expect(site).to receive(:petition_page_message_colour).and_return("black")
+      expect(Site.petition_page_message_colour).to eq("black")
     end
   end
 

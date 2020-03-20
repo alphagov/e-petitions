@@ -1,6 +1,16 @@
 module AdminHelper
   ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
 
+  def message_colours
+    [
+      %w[Default default],
+      %w[Grey grey],
+      %w[Orange orange],
+      %w[Red red],
+      %w[Black black]
+    ]
+  end
+
   def selected_depts
     @selected_depts ||= Array(params[:depts]).flatten.map(&:to_i).compact.reject(&:zero?)
   end

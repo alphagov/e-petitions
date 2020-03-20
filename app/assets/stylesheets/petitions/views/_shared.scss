@@ -147,6 +147,22 @@ input.back-page {
   }
 }
 
+.notification-grey {
+  background-color: $grey-1;
+}
+
+.notification-orange {
+  background-color: $orange;
+}
+
+.notification-red {
+  background-color: $red;
+}
+
+.notification-black {
+  background-color: $black;
+}
+
 // Flash messages
 // =========
 .flash-notice {

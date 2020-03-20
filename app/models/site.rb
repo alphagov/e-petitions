@@ -7,6 +7,8 @@ class Site < ActiveRecord::Base
 
   include ActiveSupport::NumberHelper
 
+  MESSAGE_COLOURS = %w[default grey orange red black]
+
   FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
 
   FEATURE_FLAGS = %w[
@@ -128,8 +130,16 @@ class Site < ActiveRecord::Base
       instance.home_page_message
     end
 
+    def home_page_message_colour
+      instance.home_page_message_colour
+    end
+
     def petition_page_message
       instance.petition_page_message
+    end
+
+    def petition_page_message_colour
+      instance.petition_page_message_colour
     end
 
     def show_home_page_message?
@@ -339,11 +349,17 @@ class Site < ActiveRecord::Base
   end
 
   store_accessor :feature_flags, :home_page_message
+  store_accessor :feature_flags, :home_page_message_colour
   store_accessor :feature_flags, :show_home_page_message
   store_accessor :feature_flags, :petition_page_message
+  store_accessor :feature_flags, :petition_page_message_colour
   store_accessor :feature_flags, :show_petition_page_message
 
   attr_reader :password
+
+  def home_page_message_colour
+    super || 'default'
+  end
 
   def show_home_page_message?
     disable_collecting_signatures || show_home_page_message
@@ -351,6 +367,10 @@ class Site < ActiveRecord::Base
 
   def show_home_page_message=(value)
     super(type_cast_feature_flag(value))
+  end
+
+  def petition_page_message_colour
+    super || 'default'
   end
 
   def show_petition_page_message?
@@ -472,8 +492,10 @@ class Site < ActiveRecord::Base
   validates :login_timeout, presence: true, numericality: { only_integer: true }
   validates :home_page_message, presence: true, if: -> { disable_collecting_signatures || show_home_page_message? }
   validates :home_page_message, length: { maximum: 800 }
+  validates :home_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
   validates :petition_page_message, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
   validates :petition_page_message, length: { maximum: 800 }
+  validates :petition_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
