@@ -47,6 +47,7 @@ class Signature < ActiveRecord::Base
   end
 
   attr_readonly :sponsor, :creator
+  attribute :locale, :string, default: -> { I18n.locale }
 
   before_create if: :email? do
     self.uuid = generate_uuid

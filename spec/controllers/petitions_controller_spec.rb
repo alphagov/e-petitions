@@ -126,6 +126,26 @@ RSpec.describe PetitionsController, type: :controller do
         expect(petition.creator.constituency_id).to eq("W09000043")
       end
 
+      context "when creator is on the English domain" do
+        it "records the English locale on the creator's signature" do
+          perform_enqueued_jobs do
+            post :create, params: { stage: "replay_email", locale: "en-GB", petition_creator: params.merge(state: Signature::VALIDATED_STATE) }
+          end
+
+          expect(petition.creator.locale).to eq("en-GB")
+        end
+      end
+
+      context "when creator is on the Welsh domain" do
+        it "records the Welsh locale on the creator's signature" do
+          perform_enqueued_jobs do
+            post :create, params: { stage: "replay_email", locale: "cy-GB", petition_creator: params.merge(state: Signature::VALIDATED_STATE) }
+          end
+
+          expect(petition.creator.locale).to eq("cy-GB")
+        end
+      end
+
       context "invalid post" do
         it "should not create a new petition if no action is given" do
           perform_enqueued_jobs do

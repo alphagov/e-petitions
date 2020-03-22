@@ -120,9 +120,10 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition) }
+      let(:locale) { "en-GB" }
 
       before do
-        post :confirm, params: { petition_id: petition.id, signature: params }
+        post :confirm, params: { petition_id: petition.id, locale: locale, signature: params }
       end
 
       it "assigns the @petition instance variable" do
@@ -146,6 +147,22 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "renders the signatures/confirm template" do
         expect(response).to render_template("signatures/confirm")
+      end
+
+      context "and the user is on the English domain" do
+        let(:locale) { "en-GB" }
+
+        it "records the English locale on the signature" do
+          expect(assigns[:signature].locale).to eq("en-GB")
+        end
+      end
+
+      context "and the user is on the English domain" do
+        let(:locale) { "cy-GB" }
+
+        it "records the English locale on the signature" do
+          expect(assigns[:signature].locale).to eq("cy-GB")
+        end
       end
 
       context "and the params are invalid" do
@@ -215,11 +232,12 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition is open" do
       let(:petition) { FactoryBot.create(:open_petition) }
+      let(:locale) { "en-GB" }
 
       context "and the signature is not a duplicate" do
         before do
           perform_enqueued_jobs {
-            post :create, params: { petition_id: petition.id, signature: params }
+            post :create, params: { petition_id: petition.id, locale: locale, signature: params }
           }
         end
 
@@ -249,6 +267,22 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "redirects to the thank you page" do
           expect(response).to redirect_to("/petitions/#{petition.id}/signatures/thank-you")
+        end
+
+        context "and the user is on the English domain" do
+          let(:locale) { "en-GB" }
+
+          it "records the English locale on the signature" do
+            expect(assigns[:signature].locale).to eq("en-GB")
+          end
+        end
+
+        context "and the user is on the English domain" do
+          let(:locale) { "cy-GB" }
+
+          it "records the English locale on the signature" do
+            expect(assigns[:signature].locale).to eq("cy-GB")
+          end
         end
 
         context "and the params are invalid" do

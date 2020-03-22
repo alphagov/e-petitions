@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_10_064816) do
+ActiveRecord::Schema.define(version: 2020_03_22_084847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -367,6 +367,7 @@ ActiveRecord::Schema.define(version: 2020_03_10_064816) do
     t.string "signed_token"
     t.string "validated_ip"
     t.string "canonical_email"
+    t.string "locale", limit: 10, default: "en-GB", null: false
     t.index "((ip_address)::inet)", name: "index_signatures_on_inet"
     t.index "((regexp_replace(\"left\"((email)::text, (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"((email)::text, \"position\"((email)::text, '@'::text))))", name: "index_signatures_on_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_signatures_on_sector_and_petition_id"
