@@ -9,7 +9,7 @@ RSpec.describe Admin::CompletionController, type: :controller, admin: true do
     describe "PATCH /admin/petitions/:petition_id/completion" do
       it "redirects to the login page" do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/login")
       end
     end
   end
@@ -21,7 +21,7 @@ RSpec.describe Admin::CompletionController, type: :controller, admin: true do
     describe "PATCH /admin/petitions/:petition_id/completion" do
       it "redirects to edit profile page" do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
   end

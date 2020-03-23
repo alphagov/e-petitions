@@ -23,7 +23,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { process action, method: method, params: params, as: format }
 
         it "redirects to the login page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/login")
         end
       end
 
@@ -48,7 +48,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { process action, method: method, params: params, as: format }
 
         it "redirects to the admin hub page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin")
         end
       end
 
@@ -120,7 +120,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { patch :update, params: { locale: "en-GB", key: "title", translation: "Welsh Petitions" } }
 
         it "redirects to the show page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/languages/en-GB/title")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/languages/en-GB/title")
         end
 
         it "sets the flash notice message" do
@@ -150,7 +150,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { delete :destroy, params: { locale: "en-GB", key: "title" } }
 
         it "redirects to the show page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/languages/en-GB")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/languages/en-GB")
         end
 
         it "sets the flash notice message" do
@@ -166,7 +166,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { delete :destroy, params: { locale: "en-GB", key: "title" } }
 
         it "redirects to the show page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/languages/en-GB")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/languages/en-GB")
         end
 
         it "sets the flash alert message" do
@@ -180,7 +180,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { post :reload, params: { locale: "en-GB" } }
 
         it "redirects to the show page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/languages")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/languages")
         end
 
         it "sets the flash notice message" do
@@ -196,7 +196,7 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
         before { post :reload, params: { locale: "en-GB" } }
 
         it "redirects to the show page" do
-          expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/languages")
+          expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/languages")
         end
 
         it "sets the flash alert message" do

@@ -32,7 +32,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
 
     context "and the Origin header is set to the english domain" do
       before do
-        request.set_header "HTTP_ORIGIN", "https://petition.senedd.wales"
+        request.set_header "HTTP_ORIGIN", "https://petitions.senedd.wales"
       end
 
       describe "GET /admin/translations" do
@@ -62,7 +62,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
           get :index, as: :js
 
           expect(response.status).to eq(200)
-          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://petition.senedd.wales")
+          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://petitions.senedd.wales")
           expect(response.headers["Access-Control-Allow-Methods"]).to eq("GET")
           expect(response.headers["Access-Control-Allow-Headers"]).to eq("Origin, X-Requested-With, Content-Type, Accept")
           expect(response.headers["Access-Control-Allow-Credentials"]).to eq("true")
@@ -73,7 +73,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
 
     context "and the Origin header is set to the welsh domain" do
       before do
-        request.set_header "HTTP_ORIGIN", "https://deiseb.senedd.cymru"
+        request.set_header "HTTP_ORIGIN", "https://deisebau.senedd.cymru"
       end
 
       describe "GET /admin/translations" do
@@ -102,7 +102,7 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
           get :index, as: :js
 
           expect(response.status).to eq(200)
-          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://deiseb.senedd.cymru")
+          expect(response.headers["Access-Control-Allow-Origin"]).to eq("https://deisebau.senedd.cymru")
           expect(response.headers["Access-Control-Allow-Methods"]).to eq("GET")
           expect(response.headers["Access-Control-Allow-Headers"]).to eq("Origin, X-Requested-With, Content-Type, Accept")
           expect(response.headers["Access-Control-Allow-Credentials"]).to eq("true")

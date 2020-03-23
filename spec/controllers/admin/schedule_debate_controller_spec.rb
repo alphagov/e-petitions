@@ -8,14 +8,14 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
     describe 'GET /show' do
       it 'redirects to the login page' do
         get :show, params: { petition_id: petition.id }
-        expect(response).to redirect_to('https://moderate.petition.senedd.wales/admin/login')
+        expect(response).to redirect_to('https://moderate.petitions.senedd.wales/admin/login')
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to the login page' do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to('https://moderate.petition.senedd.wales/admin/login')
+        expect(response).to redirect_to('https://moderate.petitions.senedd.wales/admin/login')
       end
     end
   end
@@ -27,14 +27,14 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
     describe 'GET /show' do
       it 'redirects to edit profile page' do
         get :show, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
 
     describe 'PATCH /update' do
       it 'redirects to edit profile page' do
         patch :update, params: { petition_id: petition.id }
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
   end
@@ -114,7 +114,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
           describe 'with valid params' do
             it 'redirects to the petition show page' do
               do_patch
-              expect(response).to redirect_to "https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}"
+              expect(response).to redirect_to "https://moderate.petitions.senedd.wales/admin/petitions/#{petition.id}"
             end
 
             it 'tells the moderator that their email will be sent overnight' do
@@ -288,7 +288,7 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
           describe 'with valid params' do
             it 'redirects to the petition show page' do
               do_patch
-              expect(response).to redirect_to "https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}"
+              expect(response).to redirect_to "https://moderate.petitions.senedd.wales/admin/petitions/#{petition.id}"
             end
 
             it 'tells the moderator that their changes were saved' do

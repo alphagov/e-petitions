@@ -1,6 +1,6 @@
 # Senedd Petitions
 
-This is the code base for the Senedd's petitions service (https://petition.senedd.wales).
+This is the code base for the Senedd's petitions service (https://petitions.senedd.wales).
 
 ## Setup
 
@@ -86,7 +86,7 @@ docker-compose run --rm web cucumber features/suzie_views_a_petition.feature
 
 # Deisebau Senedd 
 
-Dyma sylfaen cod gwasanaeth deisebau Senedd (https://deiseb.senedd.cymru).
+Dyma sylfaen cod gwasanaeth deisebau Senedd (https://deisebau.senedd.cymru).
 
 ## Setup
 

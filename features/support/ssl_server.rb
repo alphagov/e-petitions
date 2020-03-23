@@ -17,7 +17,7 @@ module WelshPets
           SSLVerifyClient: OpenSSL::SSL::VERIFY_NONE,
           SSLPrivateKey:   private_key,
           SSLCertificate:  ssl_certificate,
-          SSLCertName:     [['GB', 'petition.senedd.wales']],
+          SSLCertName:     [['GB', 'petitions.senedd.wales']],
           AccessLog:       [],
           Logger:          logger
         }
@@ -64,7 +64,7 @@ module WelshPets
         details << 'L=Cardiff'
         details << 'O=Senedd'
         details << 'OU=ICT'
-        details << 'CN=petition.senedd.wales'
+        details << 'CN=petitions.senedd.wales'
 
         args = %w[openssl req -x509]
         args.concat ['-newkey', 'rsa:2048']

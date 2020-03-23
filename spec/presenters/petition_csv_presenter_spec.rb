@@ -30,8 +30,8 @@ RSpec.describe PetitionCSVPresenter do
 
   def csvd_petition(petition)
     [
-      "https://petition.senedd.wales/petitions/#{petition.id}",
-      "https://moderate.petition.senedd.wales/admin/petitions/#{petition.id}",
+      "https://petitions.senedd.wales/petitions/#{petition.id}",
+      "https://moderate.petitions.senedd.wales/admin/petitions/#{petition.id}",
       petition.id,
       petition.action,
       petition.background,

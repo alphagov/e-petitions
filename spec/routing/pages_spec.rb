@@ -23,16 +23,16 @@ RSpec.describe "pages", type: :routes do
     end
 
     describe "helpers" do
-      it "#home_url generates https://petition.senedd.wales/" do
-        expect(home_url).to eq("https://petition.senedd.wales/")
+      it "#home_url generates https://petitions.senedd.wales/" do
+        expect(home_url).to eq("https://petitions.senedd.wales/")
       end
 
-      it "#help_url generates https://petition.senedd.wales/help" do
-        expect(help_url).to eq("https://petition.senedd.wales/help")
+      it "#help_url generates https://petitions.senedd.wales/help" do
+        expect(help_url).to eq("https://petitions.senedd.wales/help")
       end
 
-      it "#privacy_url generates https://petition.senedd.wales/privacy" do
-        expect(privacy_url).to eq("https://petition.senedd.wales/privacy")
+      it "#privacy_url generates https://petitions.senedd.wales/privacy" do
+        expect(privacy_url).to eq("https://petitions.senedd.wales/privacy")
       end
     end
   end
@@ -59,16 +59,16 @@ RSpec.describe "pages", type: :routes do
     end
 
     describe "helpers" do
-      it "#home_url generates https://deiseb.senedd.cymru/" do
-        expect(home_url).to eq("https://deiseb.senedd.cymru/")
+      it "#home_url generates https://deisebau.senedd.cymru/" do
+        expect(home_url).to eq("https://deisebau.senedd.cymru/")
       end
 
-      it "#help_url generates https://deiseb.senedd.cymru/help" do
-        expect(help_url).to eq("https://deiseb.senedd.cymru/help")
+      it "#help_url generates https://deisebau.senedd.cymru/help" do
+        expect(help_url).to eq("https://deisebau.senedd.cymru/help")
       end
 
-      it "#privacy_url generates https://deiseb.senedd.cymru/preifatrwydd" do
-        expect(privacy_url).to eq("https://deiseb.senedd.cymru/preifatrwydd")
+      it "#privacy_url generates https://deisebau.senedd.cymru/preifatrwydd" do
+        expect(privacy_url).to eq("https://deisebau.senedd.cymru/preifatrwydd")
       end
     end
   end

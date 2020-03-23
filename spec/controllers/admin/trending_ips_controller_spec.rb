@@ -8,7 +8,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       end
 
       it "redirects to the login page" do
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/login")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/login")
       end
     end
   end
@@ -26,7 +26,7 @@ RSpec.describe Admin::TrendingIpsController, type: :controller, admin: true do
       end
 
       it "redirects to edit profile page" do
-        expect(response).to redirect_to("https://moderate.petition.senedd.wales/admin/profile/#{user.id}/edit")
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin/profile/#{user.id}/edit")
       end
     end
   end

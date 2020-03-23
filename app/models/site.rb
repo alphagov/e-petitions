@@ -261,12 +261,12 @@ class Site < ActiveRecord::Base
     end
 
     def default_host_en
-      ENV.fetch('EPETITIONS_HOST_EN', 'petition.senedd.wales')
+      ENV.fetch('EPETITIONS_HOST_EN', 'petitions.senedd.wales')
     end
     alias_method :default_host, :default_host_en
 
     def default_host_cy
-      ENV.fetch('EPETITIONS_HOST_CY', 'deiseb.senedd.cymru')
+      ENV.fetch('EPETITIONS_HOST_CY', 'deisebau.senedd.cymru')
     end
 
     def default_domain(tld_length = 1)
@@ -282,7 +282,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_moderate_host
-      ENV.fetch('MODERATE_HOST', 'moderate.petition.senedd.wales')
+      ENV.fetch('MODERATE_HOST', 'moderate.petitions.senedd.wales')
     end
 
     def default_port

@@ -18,7 +18,7 @@ RSpec.describe FeedbackController, type: :controller do
     context "with valid input" do
       it "is successful" do
         do_post comment: "This website is great!"
-        expect(response).to redirect_to("https://petition.senedd.wales/feedback/thanks")
+        expect(response).to redirect_to("https://petitions.senedd.wales/feedback/thanks")
       end
 
       it "sends an email" do
