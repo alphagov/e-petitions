@@ -103,7 +103,7 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
       let(:rejection_code) { 'duplicate' }
       let(:emails) { ActionMailer::Base.deliveries.map{ |email| email.to.first } }
       let(:take_down_attributes) do
-        { rejection: { code: rejection_code, details: 'bad things' } }
+        { rejection: { code: rejection_code, details_en: 'bad things', details_cy: 'pethau drwg' } }
       end
 
       let(:deliveries) { ActionMailer::Base.deliveries }
@@ -133,7 +133,8 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
 
           it 'sets the rejection code and description to the supplied params' do
             expect(petition.rejection.code).to eq(rejection_code)
-            expect(petition.rejection.details).to eq("bad things")
+            expect(petition.rejection.details_en).to eq("bad things")
+            expect(petition.rejection.details_cy).to eq("pethau drwg")
           end
 
           it 'redirects to the admin show page for the petition' do
@@ -245,7 +246,8 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
         it 'performs the requested take down on the petition' do
           expect(petition.state).to eq Petition::REJECTED_STATE
           expect(petition.rejection.code).to eq(take_down_attributes[:rejection][:code])
-          expect(petition.rejection.details).to eq(take_down_attributes[:rejection][:details])
+          expect(petition.rejection.details_en).to eq(take_down_attributes[:rejection][:details_en])
+          expect(petition.rejection.details_cy).to eq(take_down_attributes[:rejection][:details_cy])
         end
       end
 
