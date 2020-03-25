@@ -31,6 +31,25 @@ en-GB:
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
 
+        petition/email:
+          attributes:
+            subject_en:
+              blank: "Subject must be completed"
+              too_long:
+                other: "Subject is too long (maximum is %{count} characters)"
+            subject_cy:
+              blank: "Subject must be completed"
+              too_long:
+                other: "Subject is too long (maximum is %{count} characters)"
+            body_en:
+              blank: "Body must be completed"
+              too_long:
+                other: "Body is too long (maximum is %{count} characters)"
+            body_cy:
+              blank: "Body must be completed"
+              too_long:
+                other: "Body is too long (maximum is %{count} characters)"
+
         signature:
           attributes:
             state:

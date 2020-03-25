@@ -1,8 +1,8 @@
 <div class="grid-row">
   <div class="column-two-thirds extra-gutter">
-    <h1>Edit other Senedd business</h1>
+    <h1>Create other Senedd business</h1>
 
-    <%= form_for @email, url: admin_petition_email_path(@petition, @email), method: :patch do |form| -%>
+    <%= form_for @email, url: admin_petition_emails_path(@petition), method: :post do |form| -%>
       <%= render "form", form: form %>
     <% end -%>
   </div>

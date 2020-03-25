@@ -17,9 +17,15 @@ RSpec.describe Petition::Email, type: :model do
     subject { FactoryBot.build(:petition_email) }
 
     it { is_expected.to validate_presence_of(:petition) }
-    it { is_expected.to validate_presence_of(:subject) }
-    it { is_expected.to validate_length_of(:subject).is_at_most(100) }
-    it { is_expected.to validate_presence_of(:body) }
-    it { is_expected.to validate_length_of(:body).is_at_most(5000) }
+
+    it { is_expected.to validate_presence_of(:subject_en) }
+    it { is_expected.to validate_length_of(:subject_en).is_at_most(100) }
+    it { is_expected.to validate_presence_of(:body_en) }
+    it { is_expected.to validate_length_of(:body_en).is_at_most(5000) }
+
+    it { is_expected.to validate_presence_of(:subject_cy) }
+    it { is_expected.to validate_length_of(:subject_cy).is_at_most(100) }
+    it { is_expected.to validate_presence_of(:body_cy) }
+    it { is_expected.to validate_length_of(:body_cy).is_at_most(5000) }
   end
 end

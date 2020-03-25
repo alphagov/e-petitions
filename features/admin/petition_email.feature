@@ -10,13 +10,14 @@ Feature: Emailing petitioner supporters
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
     And I follow "Other Senedd business"
+    And I follow "New other Senedd business"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
-    When I press "Email 6 petitioners"
+    When I press "Send email"
     Then the petition should not have any emails
     And I should see an error
     When I fill in the email details
-    And press "Email 6 petitioners"
+    And press "Send email"
     Then the petition should have the email details I provided
     And the petition creator should have been emailed with the update
     And all the signatories of the petition should have been emailed with the update
@@ -28,6 +29,7 @@ Feature: Emailing petitioner supporters
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
     And I follow "Other Senedd business"
+    And I follow "New other Senedd business"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Save"
@@ -46,6 +48,7 @@ Feature: Emailing petitioner supporters
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
     And I follow "Other Senedd business"
+    And I follow "New other Senedd business"
     Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
     And the markup should be valid
     When I press "Save"
@@ -65,16 +68,14 @@ Feature: Emailing petitioner supporters
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
     And I follow "Other Senedd business"
-    Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
+    Then I should see "This will be debated"
     And the markup should be valid
-    And I should see "This will be debated"
     When I press "Edit"
     Then I should see "Edit other Senedd business"
-    When I fill in "Subject" with "This will not be debated"
+    When I fill in "Subject in English" with "This will not be debated"
     And I press "Save"
     Then I should see "Updated other Senedd business successfully"
-    When I follow "Other Senedd business"
-    Then I should see "This will not be debated"
+    And I should see "This will not be debated"
 
   Scenario: Deleting an email to all petitioners
     Given an open petition "Ban Badger Baiting" with some signatures
@@ -83,10 +84,8 @@ Feature: Emailing petitioner supporters
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"
     And I follow "Other Senedd business"
-    Then I should be on the admin email petitioners form page for "Ban Badger Baiting"
+    Then I should see "This will be debated"
     And the markup should be valid
-    And I should see "This will be debated"
     When I press "Delete"
     Then I should see "Deleted other Senedd business successfully"
-    When I follow "Other Senedd business"
-    Then I should not see "This will be debated"
+    And I should not see "This will be debated"

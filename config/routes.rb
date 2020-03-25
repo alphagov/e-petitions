@@ -113,7 +113,7 @@ Rails.application.routes.draw do
       resources :petitions, only: %i[show index] do
         post :resend, on: :member
 
-        resources :emails, controller: 'petition_emails', except: %i[index show]
+        resources :emails, controller: 'petition_emails', except: %i[show]
         resource  :lock, only: %i[show create update destroy]
         resource  :moderation, controller: 'moderation', only: %i[update]
         resource  :statistics, controller: 'petition_statistics', only: %i[update]

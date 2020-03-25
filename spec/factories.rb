@@ -452,8 +452,10 @@ FactoryBot.define do
 
   factory :petition_email, class: "Petition::Email" do
     association :petition, factory: :petition
-    subject "Message Subject"
-    body "Message body"
+    subject_en "Message Subject"
+    body_en "Message body"
+    subject_cy "Pwnc Neges"
+    body_cy "Corff neges"
     sent_by "Admin User"
   end
 

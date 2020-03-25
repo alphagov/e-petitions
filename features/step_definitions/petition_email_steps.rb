@@ -1,6 +1,8 @@
 When(/^I fill in the email details$/) do
-  fill_in "Subject", :with => "Petition email subject"
-  fill_in "Body", :with => "Petition email body"
+  fill_in "Subject in English", :with => "Petition email subject"
+  fill_in "Body in English", :with => "Petition email body"
+  fill_in "Subject in Welsh", :with => "Testun e-bost y ddeiseb"
+  fill_in "Body in Welsh", :with => "Corff e-bost deiseb"
 end
 
 Given(/^it has an existing petition email "(.*?)"$/) do |subject|

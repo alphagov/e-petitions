@@ -39,13 +39,13 @@
     </div>
 
     <%= form_row for: [r.object, :details_en] do %>
-      <%= r.label :details_en, 'Additional details in english (optional)', class: 'form-label' %>
+      <%= r.label :details_en, 'Additional details in English (optional)', class: 'form-label' %>
       <%= error_messages_for_field r.object, :details_en %>
       <%= r.text_area :details_en, rows: 8, cols: 70, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [r.object, :details_cy] do %>
-      <%= r.label :details_cy, 'Additional details in welsh (optional)', class: 'form-label' %>
+      <%= r.label :details_cy, 'Additional details in Welsh (optional)', class: 'form-label' %>
       <%= error_messages_for_field r.object, :details_cy %>
       <%= r.text_area :details_cy, rows: 8, cols: 70, class: 'form-control' %>
     <% end %>

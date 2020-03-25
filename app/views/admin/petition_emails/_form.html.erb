@@ -1,0 +1,32 @@
+<%= form_row for: [form.object, :subject_en] do %>
+  <%= form.label :subject_en, "Subject in English", class: "form-label" %>
+  <%= error_messages_for_field form.object, :subject_en %>
+  <%= form.text_area :subject_en, rows: 2, cols: 70, tabindex: increment, data: { max_length: 100 }, class: "form-control" %>
+  <p class="character-count">100 characters max</p>
+<% end %>
+
+<%= form_row for: [form.object, :subject_cy] do %>
+  <%= form.label :subject_cy, "Subject in Welsh", class: "form-label" %>
+  <%= error_messages_for_field form.object, :subject_cy %>
+  <%= form.text_area :subject_cy, rows: 2, cols: 70, tabindex: increment, data: { max_length: 100 }, class: "form-control" %>
+  <p class="character-count">100 characters max</p>
+<% end %>
+
+<%= form_row for: [form.object, :body_en] do %>
+  <%= form.label :body_en, "Body in English", class: "form-label" %>
+  <%= error_messages_for_field form.object, :body_en %>
+  <%= form.text_area :body_en, rows: 8, cols: 70, tabindex: increment, data: { max_length: 5000 }, class: "form-control" %>
+  <p class="character-count">5000 characters max</p>
+<% end %>
+
+<%= form_row for: [form.object, :body_cy] do %>
+  <%= form.label :body_cy, "Body in Welsh", class: "form-label" %>
+  <%= error_messages_for_field form.object, :body_cy %>
+  <%= form.text_area :body_cy, rows: 8, cols: 70, tabindex: increment, data: { max_length: 5000 }, class: "form-control" %>
+  <p class="character-count">5000 characters max</p>
+<% end %>
+
+<%= form.submit "Send email", name: "save_and_email", class: "button" %>
+<%= form.submit "Save and preview", name: "save_and_preview", class: "button-secondary" %>
+<%= form.submit "Save", name: "save", class: "button-secondary" %>
+<%= link_to "Cancel", admin_petition_emails_path(@petition), class: "button-secondary" %>

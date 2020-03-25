@@ -142,9 +142,12 @@ Given(/^a moderator updates the petition activity$/) do
     And I view all petitions
     And I follow "#{@petition.action}"
     And I follow "Other Senedd business"
-    And I fill in "Subject" with "Get ready"
-    And I fill in "Body" with "Senedd here it comes"
-    And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"
+    And I follow "New other Senedd business"
+    And I fill in "Subject in English" with "Get ready"
+    And I fill in "Subject in Welsh" with "Paratowch"
+    And I fill in "Body in English" with "Senedd here it comes"
+    And I fill in "Body in Welsh" with "Senedd yma mae'n dod"
+    And I press "Send email"
   )
 end
 

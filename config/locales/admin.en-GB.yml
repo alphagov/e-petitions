@@ -1,10 +1,14 @@
 en-GB:
   admin:
     email_button:
-      one: "Email %{formatted_count} petitioner"
+      zero: "Email 0 petitioners"
+      one: "Email 1 petitioner"
+      two: "Email 2 petitioners"
       other: "Email %{formatted_count} petitioners"
     email_confirm:
+      zero: "Are you sure you want to do this"
       one: "Are you sure you want to do this and email the petitioner?"
+      two: "Are you sure you want to do this and email the 2 petitioners?"
       other: "Are you sure you want to do this and email all %{formatted_count} petitioners?"
 
     invalidations:
