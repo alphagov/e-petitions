@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_24_063114) do
+ActiveRecord::Schema.define(version: 2020_03_25_104700) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -216,15 +216,13 @@ ActiveRecord::Schema.define(version: 2020_03_24_063114) do
 
   create_table "petition_emails", id: :serial, force: :cascade do |t|
     t.integer "petition_id"
-    t.string "subject"
-    t.text "body"
     t.string "sent_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "subject_en", null: false
     t.string "subject_cy", null: false
-    t.string "body_en"
-    t.string "body_cy"
+    t.text "body_en"
+    t.text "body_cy"
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
   end
 

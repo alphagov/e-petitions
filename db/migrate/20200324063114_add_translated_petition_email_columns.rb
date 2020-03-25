@@ -7,8 +7,8 @@ class AddTranslatedPetitionEmailColumns < ActiveRecord::Migration[5.2]
     add_column :petition_emails, :subject_en, :string
     add_column :petition_emails, :subject_cy, :string
 
-    add_column :petition_emails, :body_en, :string
-    add_column :petition_emails, :body_cy, :string
+    add_column :petition_emails, :body_en, :text
+    add_column :petition_emails, :body_cy, :text
 
     change_column_null :petition_emails, :subject, true
 
