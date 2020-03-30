@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_25_104700) do
+ActiveRecord::Schema.define(version: 2020_03_30_103325) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -94,6 +94,14 @@ ActiveRecord::Schema.define(version: 2020_03_25_104700) do
     t.integer "commons_image_file_size"
     t.datetime "commons_image_updated_at"
     t.string "debate_pack_url", limit: 500
+    t.string "transcript_url_en", limit: 500
+    t.string "transcript_url_cy", limit: 500
+    t.string "video_url_en", limit: 500
+    t.string "video_url_cy", limit: 500
+    t.string "debate_pack_url_en", limit: 500
+    t.string "debate_pack_url_cy", limit: 500
+    t.text "overview_en"
+    t.text "overview_cy"
     t.index ["petition_id", "debated_on"], name: "index_debate_outcomes_on_petition_id_and_debated_on"
     t.index ["petition_id"], name: "index_debate_outcomes_on_petition_id", unique: true
     t.index ["updated_at"], name: "index_debate_outcomes_on_updated_at"

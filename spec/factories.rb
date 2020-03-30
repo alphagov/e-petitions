@@ -244,10 +244,14 @@ FactoryBot.define do
       debate_outcome_attributes = { petition: petition }
 
       debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
-      debate_outcome_attributes[:overview] = evaluator.overview if evaluator.overview.present?
-      debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
-      debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
-      debate_outcome_attributes[:debate_pack_url] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
+      debate_outcome_attributes[:overview_en] = evaluator.overview if evaluator.overview.present?
+      debate_outcome_attributes[:overview_cy] = evaluator.overview if evaluator.overview.present?
+      debate_outcome_attributes[:transcript_url_en] = evaluator.transcript_url if evaluator.transcript_url.present?
+      debate_outcome_attributes[:transcript_url_cy] = evaluator.transcript_url if evaluator.transcript_url.present?
+      debate_outcome_attributes[:video_url_en] = evaluator.video_url if evaluator.video_url.present?
+      debate_outcome_attributes[:video_url_cy] = evaluator.video_url if evaluator.video_url.present?
+      debate_outcome_attributes[:debate_pack_url_en] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
+      debate_outcome_attributes[:debate_pack_url_cy] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
       debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
 
       petition.build_debate_outcome(debate_outcome_attributes)

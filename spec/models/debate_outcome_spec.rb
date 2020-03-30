@@ -18,9 +18,12 @@ RSpec.describe DebateOutcome, type: :model do
     subject { FactoryBot.build(:debate_outcome) }
 
     it { is_expected.to validate_presence_of(:petition) }
-    it { is_expected.to validate_length_of(:transcript_url).is_at_most(500) }
-    it { is_expected.to validate_length_of(:video_url).is_at_most(500) }
-    it { is_expected.to validate_length_of(:debate_pack_url).is_at_most(500) }
+    it { is_expected.to validate_length_of(:transcript_url_en).is_at_most(500) }
+    it { is_expected.to validate_length_of(:video_url_en).is_at_most(500) }
+    it { is_expected.to validate_length_of(:debate_pack_url_en).is_at_most(500) }
+    it { is_expected.to validate_length_of(:transcript_url_cy).is_at_most(500) }
+    it { is_expected.to validate_length_of(:video_url_cy).is_at_most(500) }
+    it { is_expected.to validate_length_of(:debate_pack_url_cy).is_at_most(500) }
 
     context "when then petition was debated" do
       subject { described_class.new(debated: true) }

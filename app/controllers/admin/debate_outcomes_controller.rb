@@ -40,7 +40,11 @@ class Admin::DebateOutcomesController < Admin::AdminController
   end
 
   def debate_outcome_attributes
-    %i[debated_on overview transcript_url video_url debate_pack_url debated commons_image]
+    %i[
+      debated_on debated commons_image
+      overview_en transcript_url_en video_url_en debate_pack_url_en
+      overview_cy transcript_url_cy video_url_cy debate_pack_url_cy
+    ]
   end
 
   def send_email_to_petitioners?

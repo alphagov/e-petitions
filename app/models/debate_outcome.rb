@@ -1,4 +1,8 @@
 class DebateOutcome < ActiveRecord::Base
+  include Translatable
+
+  translate :overview, :transcript_url, :video_url, :debate_pack_url
+
   # By default we want the user to upload a '2x' style image, and we can then
   # resize it down with Imagemagick
   COMMONS_IMAGE_SIZE = { w: 1260.0, h: 710.0 }
@@ -7,7 +11,8 @@ class DebateOutcome < ActiveRecord::Base
 
   validates :petition, presence: true
   validates :debated_on, presence: true, if: :debated?
-  validates :transcript_url, :video_url, :debate_pack_url, length: { maximum: 500 }
+  validates :transcript_url_en, :video_url_en, :debate_pack_url_en, length: { maximum: 500 }
+  validates :transcript_url_cy, :video_url_cy, :debate_pack_url_cy, length: { maximum: 500 }
 
   has_attached_file :commons_image,
     # default_url needs to be a lambda - this way the generated image url will

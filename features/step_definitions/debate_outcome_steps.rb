@@ -45,10 +45,10 @@ end
 
 When(/^I fill in the debate outcome details$/) do
   fill_in 'Debated on', with: '18/12/2014'
-  fill_in 'Overview', with: 'Lots of people spoke about it, no consensus achieved.'
-  fill_in 'Transcript URL', with: 'https://record.assembly.wales/Plenary/5667#A51756'
-  fill_in 'Video URL', with: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
-  fill_in 'Debate Pack URL', with: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
+  fill_in 'Overview (English)', with: 'Lots of people spoke about it, no consensus achieved.'
+  fill_in 'Transcript URL (English)', with: 'https://record.assembly.wales/Plenary/5667#A51756'
+  fill_in 'Video URL (English)', with: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
+  fill_in 'Debate Pack URL (English)', with: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
 end
 
 Then(/^the petition should have the debate details I provided$/) do

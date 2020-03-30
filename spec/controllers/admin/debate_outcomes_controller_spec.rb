@@ -113,10 +113,14 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
       let(:debate_outcome_attributes) do
         {
           debated_on: '2014-12-01',
-          overview: 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets',
-          transcript_url: 'https://record.assembly.wales/Plenary/5667#A51756',
-          video_url: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
-          debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
+          overview_en: 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets',
+          overview_cy: 'Dadl ar Ddeiseb P-05-869: Datgan Argyfwng Hinsawdd a gosod targedau di-garbon ar bob polisi',
+          transcript_url_en: 'https://record.assembly.wales/Plenary/5667#A51756',
+          transcript_url_cy: 'https://cofnod.cynulliad.cymru/Plenary/5667#A51756',
+          video_url_en: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
+          video_url_cy: 'http://www.senedd.tv/Meeting/Archive/c36fbd6a-d3b8-40dd-9567-ac1bef6caa84?autostart=True',
+          debate_pack_url_en: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667",
+          debate_pack_url_cy: "http://www.senedd.cynulliad.cymru/ieListDocuments.aspx?CId=401&MId=5667"
         }
       end
 
@@ -153,10 +157,14 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               petition.reload
               expect(petition.debate_outcome).to be_present
               expect(petition.debate_outcome.debated_on).to eq debate_outcome_attributes[:debated_on].to_date
-              expect(petition.debate_outcome.overview).to eq debate_outcome_attributes[:overview]
-              expect(petition.debate_outcome.transcript_url).to eq debate_outcome_attributes[:transcript_url]
-              expect(petition.debate_outcome.video_url).to eq debate_outcome_attributes[:video_url]
-              expect(petition.debate_outcome.debate_pack_url).to eq debate_outcome_attributes[:debate_pack_url]
+              expect(petition.debate_outcome.overview_en).to eq debate_outcome_attributes[:overview_en]
+              expect(petition.debate_outcome.overview_cy).to eq debate_outcome_attributes[:overview_cy]
+              expect(petition.debate_outcome.transcript_url_en).to eq debate_outcome_attributes[:transcript_url_en]
+              expect(petition.debate_outcome.transcript_url_cy).to eq debate_outcome_attributes[:transcript_url_cy]
+              expect(petition.debate_outcome.video_url_en).to eq debate_outcome_attributes[:video_url_en]
+              expect(petition.debate_outcome.video_url_cy).to eq debate_outcome_attributes[:video_url_cy]
+              expect(petition.debate_outcome.debate_pack_url_en).to eq debate_outcome_attributes[:debate_pack_url_en]
+              expect(petition.debate_outcome.debate_pack_url_cy).to eq debate_outcome_attributes[:debate_pack_url_cy]
             end
 
             describe "emails out a debate outcome response" do
@@ -361,10 +369,14 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               petition.reload
               expect(petition.debate_outcome).to be_present
               expect(petition.debate_outcome.debated_on).to eq debate_outcome_attributes[:debated_on].to_date
-              expect(petition.debate_outcome.overview).to eq debate_outcome_attributes[:overview]
-              expect(petition.debate_outcome.transcript_url).to eq debate_outcome_attributes[:transcript_url]
-              expect(petition.debate_outcome.video_url).to eq debate_outcome_attributes[:video_url]
-              expect(petition.debate_outcome.debate_pack_url).to eq debate_outcome_attributes[:debate_pack_url]
+              expect(petition.debate_outcome.overview_en).to eq debate_outcome_attributes[:overview_en]
+              expect(petition.debate_outcome.overview_cy).to eq debate_outcome_attributes[:overview_cy]
+              expect(petition.debate_outcome.transcript_url_en).to eq debate_outcome_attributes[:transcript_url_en]
+              expect(petition.debate_outcome.transcript_url_cy).to eq debate_outcome_attributes[:transcript_url_cy]
+              expect(petition.debate_outcome.video_url_en).to eq debate_outcome_attributes[:video_url_en]
+              expect(petition.debate_outcome.video_url_cy).to eq debate_outcome_attributes[:video_url_cy]
+              expect(petition.debate_outcome.debate_pack_url_en).to eq debate_outcome_attributes[:debate_pack_url_en]
+              expect(petition.debate_outcome.debate_pack_url_cy).to eq debate_outcome_attributes[:debate_pack_url_cy]
             end
 
             describe "does not email out debate outcome response" do
@@ -475,7 +487,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
 
       context "when two moderators update the debate outcome for the first time simultaneously" do
         let(:debate_outcome) do
-          FactoryBot.build(:debate_outcome, overview: "", debated: false, petition: petition)
+          FactoryBot.build(:debate_outcome, overview_en: "", debated: false, petition: petition)
         end
 
         before do
@@ -489,7 +501,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
             expect(petition.debate_outcome).to be_nil
 
             outcome_attributes = {
-              overview: "overview 1",
+              overview_en: "overview 1",
               debated: false
             }
 
@@ -500,7 +512,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
             allow(petition).to receive(:build_debate_outcome).and_return(debate_outcome)
 
             outcome_attributes = {
-              overview: "overview 2",
+              overview_en: "overview 2",
               debated: false
             }
 

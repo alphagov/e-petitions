@@ -1,9 +1,15 @@
 <h2 class="petition-action-heading">Debate Outcome</h2>
 <%= form_for petition.debate_outcome, url: admin_petition_debate_outcome_path(petition), method: :patch do |f| -%>
-  <%= form_row for: [f.object, :overview] do %>
-    <%= f.label :overview, class: 'form-label' %>
-    <%= error_messages_for_field f.object, :overview %>
-    <%= f.text_area :overview, tabindex: increment, class: 'form-control' %>
+  <%= form_row for: [f.object, :overview_en] do %>
+    <%= f.label :overview_en, "Overview  (English)", class: 'form-label' %>
+    <%= error_messages_for_field f.object, :overview_en %>
+    <%= f.text_area :overview_en, tabindex: increment, class: 'form-control' %>
+  <% end %>
+
+  <%= form_row for: [f.object, :overview_cy] do %>
+    <%= f.label :overview_cy, "Overview  (Welsh)", class: 'form-label' %>
+    <%= error_messages_for_field f.object, :overview_cy %>
+    <%= f.text_area :overview_cy, tabindex: increment, class: 'form-control' %>
   <% end %>
 
   <h3 class="petition-action-subheading">Was this petition debated?</h3>
@@ -28,22 +34,40 @@
       <%= f.date_field :debated_on, tabindex: increment, class: 'form-control' %>
     <% end %>
 
-    <%= form_row for: [f.object, :transcript_url] do %>
-      <%= f.label :transcript_url, 'Transcript URL', class: 'form-label' %>
-      <%= error_messages_for_field f.object, :transcript_url %>
-      <%= f.url_field :transcript_url, tabindex: increment, class: 'form-control' %>
+    <%= form_row for: [f.object, :transcript_url_en] do %>
+      <%= f.label :transcript_url_en, 'Transcript URL (English)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :transcript_url_en %>
+      <%= f.url_field :transcript_url_en, tabindex: increment, class: 'form-control' %>
     <% end %>
 
-    <%= form_row for: [f.object, :video_url] do %>
-      <%= f.label :video_url, 'Video URL', class: 'form-label' %>
-      <%= error_messages_for_field f.object, :video_url %>
-      <%= f.url_field :video_url, tabindex: increment, class: 'form-control' %>
+    <%= form_row for: [f.object, :transcript_url_cy] do %>
+      <%= f.label :transcript_url_cy, 'Transcript URL (Welsh)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :transcript_url_cy %>
+      <%= f.url_field :transcript_url_cy, tabindex: increment, class: 'form-control' %>
     <% end %>
 
-    <%= form_row for: [f.object, :debate_pack_url] do %>
-      <%= f.label :debate_pack_url, 'Debate Pack URL', class: 'form-label' %>
-      <%= error_messages_for_field f.object, :debate_pack_url %>
-      <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control' %>
+    <%= form_row for: [f.object, :video_url_en] do %>
+      <%= f.label :video_url_en, 'Video URL (English)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :video_url_en %>
+      <%= f.url_field :video_url_en, tabindex: increment, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [f.object, :video_url_cy] do %>
+      <%= f.label :video_url_cy, 'Video URL (Welsh)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :video_url_cy %>
+      <%= f.url_field :video_url_cy, tabindex: increment, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [f.object, :debate_pack_url_en] do %>
+      <%= f.label :debate_pack_url_en, 'Debate Pack URL (English)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :debate_pack_url_en %>
+      <%= f.url_field :debate_pack_url_en, tabindex: increment, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [f.object, :debate_pack_url_cy] do %>
+      <%= f.label :debate_pack_url_cy, 'Debate Pack URL (Welsh)', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :debate_pack_url_cy %>
+      <%= f.url_field :debate_pack_url_cy, tabindex: increment, class: 'form-control' %>
     <% end %>
 
     <%= form_row for: [f.object, :commons_image] do %>
