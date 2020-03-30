@@ -22,8 +22,8 @@ class AddTranslatedDebateOutcomeColumns < ActiveRecord::Migration[5.2]
           video_url_cy: outcome.video_url,
           debate_pack_url_en: outcome.debate_pack_url,
           debate_pack_url_cy: outcome.debate_pack_url,
-          overview_en: email.overview,
-          overview_cy: email.overview
+          overview_en: outcome.overview,
+          overview_cy: outcome.overview
         )
       end
     end
