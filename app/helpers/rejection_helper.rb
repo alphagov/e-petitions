@@ -1,29 +1,33 @@
 module RejectionHelper
   def rejection_reason(code)
-    unless code.blank?
-      t(:"#{code}", scope: :"rejections.titles")
+    @rejection_reason ||= RejectionReason.find_by(code: code)
+
+    if @rejection_reason.present?
+      @rejection_reason.title
     end
   end
 
   def rejection_description(code)
-    unless code.blank?
-      simple_format(h(t(:"#{code}", scope: :"rejections.descriptions", threshold_for_referral: Site.formatted_threshold_for_referral)))
+    @rejection_reason ||= RejectionReason.find_by(code: code)
+
+    if @rejection_reason.present?
+      markdown_to_html(@rejection_reason.description)
     end
   end
 
   def rejection_reasons
-    t(:"rejections.titles").map do |value, label|
-      if value.to_s.in?(Rejection::HIDDEN_CODES)
-        ["#{label} (#{t(:"rejections.will_be_hidden")})", value]
-      else
-        [label, value]
-      end
+    @rejection_reasons ||= RejectionReason.all
+
+    @rejection_reasons.map do |reason|
+      [reason.label, reason.code]
     end
   end
 
   def rejection_descriptions
-    Rejection::CODES.map do |code|
-      [code, rejection_description(code)]
-    end.to_h
+    @rejection_reasons ||= RejectionReason.all
+
+    @rejection_reasons.each_with_object({}) do |reason, hash|
+      hash[reason.code] = markdown_to_html(reason.description)
+    end
   end
 end

@@ -89,11 +89,13 @@ end
 
 Then(/^the creator should receive a (libel\/profanity )?rejection notification email$/) do |petition_is_libellous|
   @petition.reload
+  @rejection_reason = RejectionReason.find_by!(code: @petition.rejection.code)
+
   steps %Q(
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
     Then they should see "We rejected the petition you created" in the email body
-    And they should see "#{I18n.t(@petition.rejection.code, scope: :"rejections.descriptions")}" in the email body
+    And they should see "#{@rejection_reason.description}" in the email body
     And they should see /We rejected your petition/ in the email subject
   )
   if petition_is_libellous
@@ -133,7 +135,7 @@ Then /^I see relevant reason descriptions when I browse different reason codes$/
   select "Duplicate petition", :from => :petition_rejection_code
   expect(page).to have_content "already a petition"
   select "Confidential, libellous, false, defamatory or references a court case", :from => :petition_rejection_code
-  expect(page).to have_content I18n.t(:"rejections.descriptions.libellous")
+  expect(page).to have_content "It included potentially confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts."
 end
 
 Given(/^a moderator updates the petition activity$/) do

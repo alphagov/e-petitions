@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_30_121153) do
+ActiveRecord::Schema.define(version: 2020_03_30_160750) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -333,6 +333,18 @@ ActiveRecord::Schema.define(version: 2020_03_30_121153) do
     t.index ["name_en"], name: "index_regions_on_name_en", unique: true
   end
 
+  create_table "rejection_reasons", id: :serial, force: :cascade do |t|
+    t.string "code", limit: 30, null: false
+    t.string "title", limit: 100, null: false
+    t.string "description_en", limit: 2000, null: false
+    t.string "description_cy", limit: 2000, null: false
+    t.boolean "hidden", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_rejection_reasons_on_code", unique: true
+    t.index ["title"], name: "index_rejection_reasons_on_title", unique: true
+  end
+
   create_table "rejections", id: :serial, force: :cascade do |t|
     t.integer "petition_id"
     t.string "code", limit: 50, null: false
@@ -482,6 +494,7 @@ ActiveRecord::Schema.define(version: 2020_03_30_121153) do
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
   add_foreign_key "petition_statistics", "petitions"
   add_foreign_key "rejections", "petitions", on_delete: :cascade
+  add_foreign_key "rejections", "rejection_reasons", column: "code", primary_key: "code"
   add_foreign_key "signatures", "petitions", on_delete: :cascade
   add_foreign_key "trending_domains", "petitions"
   add_foreign_key "trending_ips", "petitions"

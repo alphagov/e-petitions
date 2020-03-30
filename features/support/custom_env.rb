@@ -84,6 +84,7 @@ end
 World(CucumberI18n)
 World(CucumberHelpers)
 World(CucumberSanitizer)
+World(MarkdownHelper)
 World(RejectionHelper)
 World(RSpec::Mocks::ExampleMethods)
 

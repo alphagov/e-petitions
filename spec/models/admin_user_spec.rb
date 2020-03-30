@@ -256,7 +256,7 @@ RSpec.describe AdminUser, type: :model do
 
         it "adds an error" do
           user.update_with_password(params)
-          expect(user.errors[:password_confirmation]).to eq(["Password confirmation doesn't match password"])
+          expect(user.errors[:password_confirmation]).to eq(["Password confirmation doesn’t match password"])
         end
 
         it "doesn't clear the force password reset flag" do

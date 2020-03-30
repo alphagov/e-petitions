@@ -73,7 +73,7 @@ RSpec.describe Petition, type: :model do
 
     it { is_expected.to validate_length_of(:committee_note).is_at_most(800) }
 
-    it { is_expected.to validate_presence_of(:state).with_message("State '' not recognised") }
+    it { is_expected.to validate_presence_of(:state).with_message("State ‘’ not recognised") }
     it { is_expected.not_to allow_value("unknown").for(:state) }
 
     it { is_expected.to allow_value("pending").for(:state) }
@@ -1860,7 +1860,7 @@ RSpec.describe Petition, type: :model do
   describe "#reject" do
     subject(:petition) { FactoryBot.create(:petition, :translated) }
 
-    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |rejection_code|
+    %w[insufficient duplicate irrelevant no-action fake-name bad-address].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
           petition.reject(code: rejection_code)
@@ -1877,7 +1877,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    Rejection::HIDDEN_CODES.each do |rejection_code|
+    %w[libellous offensive not-suitable].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
           petition.reject(code: rejection_code)

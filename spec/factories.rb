@@ -546,4 +546,16 @@ FactoryBot.define do
       end
     end
   end
+
+  factory :rejection_reason do
+    code { Faker::Lorem.unique.word.dasherize }
+    title { Faker::Lorem.unique.sentence }
+    description_en { Faker::Lorem.paragraph }
+    description_cy { Faker::Lorem.paragraph }
+    hidden { false }
+
+    trait :hidden do
+      hidden { true }
+    end
+  end
 end

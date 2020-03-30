@@ -10,9 +10,9 @@ en-GB:
               invalid: "Password must contain at least one digit, a lower and upper case letter and a special character"
               taken: "Password is the same as the current password"
             password_confirmation:
-              confirmation: "Password confirmation doesn't match password"
+              confirmation: "Password confirmation doesn’t match password"
             role:
-              inclusion: "Role '%{value}' is invalid"
+              inclusion: "Role ‘%{value}’ is invalid"
 
         domain:
           attributes:
@@ -27,7 +27,7 @@ en-GB:
             creator_signature:
               blank: "%{attribute} must be completed"
             state:
-              inclusion: "State '%{value}' not recognised"
+              inclusion: "State ‘%{value}’ not recognised"
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
 
@@ -53,7 +53,7 @@ en-GB:
         signature:
           attributes:
             state:
-              inclusion: "State '%{value}' not recognised"
+              inclusion: "State ‘%{value}’ not recognised"
             name:
               already_signed: "%{name} has already signed this petition using %{email}"
 
@@ -81,6 +81,26 @@ en-GB:
               invalid: "Blocked IPs list is invalid"
             ignored_domains:
               invalid: "Ignored domains list is invalid"
+
+        rejection_reason:
+          attributes:
+            code:
+              blank: "Code must be completed"
+              invalid: "Code ‘%{value}’ is invalid - use ‘a-z’ and ‘-’ characters only"
+              too_long:
+                other: "Code is too long (maximum is %{count} characters)"
+            title:
+              blank: "Title must be completed"
+              too_long:
+                other: "Title is too long (maximum is %{count} characters)"
+            description_en:
+              blank: "Description must be completed"
+              too_long:
+                other: "Description is too long (maximum is %{count} characters)"
+            description_cy:
+              blank: "Description must be completed"
+              too_long:
+                other: "Description is too long (maximum is %{count} characters)"
 
         tag:
           attributes:

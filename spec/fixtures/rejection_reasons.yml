@@ -1,0 +1,101 @@
+insufficient:
+  created_at: "2020-03-30T10:00:01Z"
+  code: "insufficient"
+  title: "Not enough signatures"
+  description_en: |-
+    It did not collect enough signatures to be referred to the Petitions Committee.
+
+    Petitions need to receive at least 50 signatures before they can be considered in the Senedd.
+  description_cy: |-
+    Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.
+
+    Mae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.
+  hidden: false
+
+duplicate:
+  created_at: "2020-03-30T10:00:02Z"
+  code: "duplicate"
+  title: "Duplicate petition"
+  description_en: |-
+    There’s already a petition about this issue. We cannot accept a new petition when we already have one about a very similar issue, or if the Petitions Committee has considered one in the last year.
+  description_cy: |-
+    Mae deiseb yn bodoli eisoes ar y mater hwn. Ni allwn dderbyn deiseb newydd os oes un yn bodoli eisoes ar fater tebyg iawn, neu os yw’r Pwyllgor Deisebau wedi ystyried deiseb debyg yn ystod y flwyddyn ddiwethaf.
+  hidden: false
+
+irrelevant:
+  created_at: "2020-03-30T10:00:03Z"
+  code: "irrelevant"
+  title: "Not the Senedd/Government’s responsibility"
+  description_en: |-
+    It’s about something that the Senedd or Welsh Government is not responsible for.
+  description_cy: |-
+    Mae’n ymwneud â rhywbeth nad yw’r Senedd na Llywodraeth Cymru yn gyfrifol amdano.
+  hidden: false
+
+no_action:
+  created_at: "2020-03-30T10:00:04Z"
+  code: "no-action"
+  title: "Action unclear"
+  description_en: |-
+    It’s not clear what the petition is asking the Senedd or Welsh Government to do.
+
+    Petitions need to call on the Senedd or Government to take a specific action.
+  description_cy: |-
+    Nid yw’n glir beth mae’r ddeiseb yn gofyn i’r Senedd neu Lywodraeth Cymru ei wneud.
+
+    Mae angen i ddeisebau alw ar y Senedd neu’r Llywodraeth i gymryd camau penodol.
+  hidden: false
+
+fake_name:
+  created_at: "2020-03-30T10:00:05Z"
+  code: "fake-name"
+  title: "Incomplete name or details"
+  description_en: |-
+    People who create petitions are required to provide a full, real name, as well as their address and contact details. Sorry if this wasn’t clear to you.
+
+    We are rejecting your petition for that reason, but if you resubmit your petition with a full name and contact details, we may able to approve it.
+  description_cy: |-
+    Rhaid i unrhyw un sy’n creu deiseb nodi ei enw go iawn yn llawn, ynghyd â’i gyfeiriad a’i fanylion cyswllt. Mae’n ddrwg gennym os nad oedd hynny’n glir i chi.
+
+    Rydym yn gwrthod eich deiseb am y rheswm hwnnw, ond os byddwch chi’n ailgyflwyno’ch deiseb gydag enw llawn a manylion cyswllt, efallai y gallwn ei chymeradwyo.
+  hidden: false
+
+libellous:
+  created_at: "2020-03-30T10:00:06Z"
+  code: "libellous"
+  title: "Confidential, libellous, false, defamatory or references a court case"
+  description_en: |-
+    It included potentially confidential, libellous, false or defamatory information, or a reference to a case which is active in the UK courts.
+  description_cy: |-
+    Roedd yn cynnwys gwybodaeth a allai fod yn gyfrinachol, yn enllibus, yn ffug neu’n ddifenwol, neu’n cyfeirio at achos sy’n weithredol yn llysoedd y DU.
+  hidden: true
+
+offensive:
+  created_at: "2020-03-30T10:00:07Z"
+  code: "offensive"
+  title: "Offensive, nonsense, joke or advert"
+  description_en: |-
+    It’s offensive, nonsense, a joke, or an advert.
+  description_cy: |-
+    Mae’n sarhaus, yn nonsens, yn jôc neu’n hysbyseb.
+  hidden: true
+
+bad_address:
+  created_at: "2020-03-30T10:00:08Z"
+  code: "bad-address"
+  title: "Petitioner location"
+  description_en: |-
+    We can only accept petitions from people who live in Wales or organisations with a base in Wales.
+  description_cy: |-
+    Dim ond deisebau a gyflwynir gan bobl sy’n byw yng Nghymru neu sefydliadau sydd â chanolfan yng Nghymru y gallwn ni eu derbyn.
+  hidden: false
+
+not_suitable:
+  created_at: "2020-03-30T10:00:09Z"
+  code: "not-suitable"
+  title: "Not suitable"
+  description_en: |-
+    It included issues relating to an issue for which a petition is not the appropriate channel, or personal information which it would not be appropriate to publish.
+  description_cy: |-
+    Roedd yn ymwneud â materion nad yw’n briodol ymdrin â nhw mewn deiseb, neu’n cynnwys gwybodaeth bersonol na fyddai’n briodol ei chyhoeddi.
+  hidden: true

@@ -18,7 +18,7 @@ RSpec.describe Rejection, type: :model do
 
     it { is_expected.to validate_presence_of(:petition) }
     it { is_expected.to validate_presence_of(:code) }
-    it { is_expected.to validate_inclusion_of(:code).in_array(Rejection::CODES) }
+    it { is_expected.to validate_inclusion_of(:code).in_array(%w[insufficient duplicate irrelevant no-action fake-name libellous offensive bad-address not-suitable]) }
     it { is_expected.to validate_length_of(:details_en).is_at_most(4000) }
     it { is_expected.to validate_length_of(:details_cy).is_at_most(4000) }
   end
@@ -72,7 +72,7 @@ RSpec.describe Rejection, type: :model do
   end
 
   describe "#hide_petition?" do
-    Rejection::HIDDEN_CODES.each do |code|
+    %w[libellous offensive not-suitable].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -82,7 +82,7 @@ RSpec.describe Rejection, type: :model do
       end
     end
 
-    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |code|
+    %w[insufficient duplicate irrelevant no-action fake-name bad-address].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -94,7 +94,7 @@ RSpec.describe Rejection, type: :model do
   end
 
   describe "#state_for_petition" do
-    Rejection::HIDDEN_CODES.each do |code|
+    %w[libellous offensive not-suitable].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 
@@ -104,7 +104,7 @@ RSpec.describe Rejection, type: :model do
       end
     end
 
-    (Rejection::CODES - Rejection::HIDDEN_CODES).each do |code|
+    %w[insufficient duplicate irrelevant no-action fake-name bad-address].each do |code|
       context "when the rejection code is #{code}" do
         let(:rejection) { described_class.new(code: code) }
 

@@ -157,7 +157,11 @@
     }
   }
 
-  .domain-list {
+  .domain-list, .rejection-reason-list {
+    th {
+      padding: 8px 0;
+    }
+
     td {
       padding: 8px 0;
       font-size: 14px;
