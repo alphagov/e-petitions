@@ -1,5 +1,5 @@
 Feature: Sam signs a petition
-  In order to have my say as well as Suzie without needing a seperate email address
+  In order to have my say as well as Suzie without needing a separate email address
   As Sam, Suzie's partner
   I want to sign a petition that has already been signed by Suzie
 

@@ -1,6 +1,6 @@
 @search
 Feature: Suzy Singer searches by free text
-  In order to find interesting petitions to sign for a particular area of goverment
+  In order to find interesting petitions to sign for a particular area of government
   As Suzy the signer
   I want to search against petition action, background, supporting details
 

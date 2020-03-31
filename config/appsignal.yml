@@ -6,7 +6,7 @@ default: &defaults
   # Your app's name
   name: "<%= ENV['APPSIGNAL_APP_NAME'] %>"
 
-  # The cuttoff point in ms above which a request is considered slow, default is 200
+  # The cut-off point in ms above which a request is considered slow, default is 200
   # slow_request_threshold: 200
 
   # Actions that should not be monitored by AppSignal

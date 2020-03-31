@@ -1,5 +1,5 @@
 Feature: Suzy Signer views all petitions
-  In order to find interesting petitions to sign for a particular area of goverment
+  In order to find interesting petitions to sign for a particular area of government
   As Suzy the signer
   I want to look through all the petitions
 
