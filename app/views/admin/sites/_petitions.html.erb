@@ -28,7 +28,7 @@
       </div>
     <% end %>
 
-    <%= form_row for: [form.object, :home_page_message_colour], id: "home-page-message-colour", class: "message-field" do %>
+    <%= form_row for: [form.object, :home_page_message_colour], id: "home-page-message-colour", class: "message-field", style: "display: none;" do %>
       <%= form.label :home_page_message_colour, "Background", class: "form-label form-label-inline" %>
       <%= error_messages_for_field @site, :home_page_message_colour %>
       <%= form.select :home_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
@@ -53,7 +53,7 @@
       </div>
     <% end %>
 
-    <%= form_row for: [form.object, :petition_page_message_colour], id: "petition-page-message-colour", class: "message-field" do %>
+    <%= form_row for: [form.object, :petition_page_message_colour], id: "petition-page-message-colour", class: "message-field", style: "display: none;" do %>
       <%= form.label :petition_page_message_colour, "Background", class: "form-label form-label-inline" %>
       <%= error_messages_for_field @site, :petition_page_message_colour %>
       <%= form.select :petition_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>

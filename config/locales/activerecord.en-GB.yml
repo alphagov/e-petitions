@@ -113,6 +113,12 @@ en-GB:
                 one: "Message is too long (maximum is 1 character)"
                 other: "Message is too long (maximum is %{count} characters)"
 
+            feedback_page_message:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
   errors:
     attributes:
       email:

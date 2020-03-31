@@ -17,14 +17,14 @@
       <%= error_messages_for_field @site, :moderate_url %>
       <%= form.text_field :moderate_url, tabindex: increment, maxlength: 50, class: "form-control" %>
     <% end %>
-  </div>
-  <div class="column-half extra-gutter">
+
     <%= form_row for: [form.object, :email_from] do %>
       <%= form.label :email_from, "From address for emails", class: "form-label" %>
       <%= error_messages_for_field @site, :email_from %>
       <%= form.text_field :email_from, tabindex: increment, maxlength: 100, class: "form-control" %>
     <% end %>
-
+  </div>
+  <div class="column-half extra-gutter">
     <%= form_row for: [form.object, :feedback_email] do %>
       <%= form.label :feedback_email, "Email address for feedback messages", class: "form-label" %>
       <%= error_messages_for_field @site, :feedback_email %>
@@ -43,5 +43,63 @@
         <%= form.label :disable_feedback_sending, "No", for: "site_disable_feedback_sending_false" %>
       </div>
     <% end %>
+
+    <%= form_row for: [form.object, :show_feedback_page_message], class: "inline message-control" do %>
+      <%= form.label :show_feedback_page_message, "Show message on the feedback page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_feedback_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_feedback_page_message, true %>
+        <%= form.label :show_feedback_page_message, "Show", for: "site_show_feedback_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_feedback_page_message, false %>
+        <%= form.label :show_feedback_page_message, "Hide", for: "site_show_feedback_page_message_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :feedback_page_message_colour], id: "feedback-page-message-colour", class: "message-field", style: "display: none;" do %>
+      <%= form.label :feedback_page_message_colour, "Background", class: "form-label form-label-inline" %>
+      <%= error_messages_for_field @site, :feedback_page_message_colour %>
+      <%= form.select :feedback_page_message_colour, message_colours, {}, class: "form-control form-control-1-4" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :feedback_page_message], id: "feedback-page-message", class: "message-field", style: "display: none;" do %>
+      <%= form.label :feedback_page_message, "Message for the feedback page", class: "form-label message-label", style: "display: none;" %>
+      <%= error_messages_for_field @site, :feedback_page_message %>
+      <%= form.text_area :feedback_page_message, tabindex: increment, rows: 10, class: 'form-control' %>
+    <% end %>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  $().ready(function() {
+    var $show_feedback_page_true = $('input[name="site[show_feedback_page_message]"][value=true]');
+    var $show_feedback_page = $('input[name="site[show_feedback_page_message]"]');
+    var $feedback_page_msg = $('#feedback-page-message');
+    var $feedback_page_msg_colour = $('#feedback-page-message-colour');
+
+    var blurAndFocus = function() {
+      this.blur();
+      this.focus();
+    }
+
+    var toggleMessageField = function(control, field) {
+      if (control.is(':checked')) {
+        field.show();
+      } else {
+        field.hide();
+      }
+    }
+
+    var toggleMessageFields = function() {
+      toggleMessageField($show_feedback_page_true, $feedback_page_msg);
+      toggleMessageField($show_feedback_page_true, $feedback_page_msg_colour);
+    }
+
+    toggleMessageFields();
+
+    $show_feedback_page.keyup(blurAndFocus).change(function() {
+      toggleMessageFields();
+    });
+  });
+<% end -%>

@@ -142,12 +142,24 @@ class Site < ActiveRecord::Base
       instance.petition_page_message_colour
     end
 
+    def feedback_page_message
+      instance.feedback_page_message
+    end
+
+    def feedback_page_message_colour
+      instance.feedback_page_message_colour
+    end
+
     def show_home_page_message?
       instance.show_home_page_message?
     end
 
     def show_petition_page_message?
       instance.show_petition_page_message?
+    end
+
+    def show_feedback_page_message?
+      instance.show_feedback_page_message?
     end
 
     def disable_signature_counts!
@@ -354,6 +366,9 @@ class Site < ActiveRecord::Base
   store_accessor :feature_flags, :petition_page_message
   store_accessor :feature_flags, :petition_page_message_colour
   store_accessor :feature_flags, :show_petition_page_message
+  store_accessor :feature_flags, :feedback_page_message
+  store_accessor :feature_flags, :feedback_page_message_colour
+  store_accessor :feature_flags, :show_feedback_page_message
 
   attr_reader :password
 
@@ -378,6 +393,18 @@ class Site < ActiveRecord::Base
   end
 
   def show_petition_page_message=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def feedback_page_message_colour
+    super || 'default'
+  end
+
+  def show_feedback_page_message?
+    show_feedback_page_message
+  end
+
+  def show_feedback_page_message=(value)
     super(type_cast_feature_flag(value))
   end
 
@@ -496,6 +523,9 @@ class Site < ActiveRecord::Base
   validates :petition_page_message, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
   validates :petition_page_message, length: { maximum: 800 }
   validates :petition_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
+  validates :feedback_page_message, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
+  validates :feedback_page_message, length: { maximum: 800 }
+  validates :feedback_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?
