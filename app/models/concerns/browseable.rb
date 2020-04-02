@@ -12,13 +12,13 @@ module Browseable
   class Facets
     include Enumerable
 
-    attr_reader :klass
+    attr_reader :klass, :filters
 
     delegate :facet_definitions, to: :klass
     delegate :key?, :has_key?, :keys, to: :facet_definitions
 
-    def initialize(klass)
-      @klass = klass
+    def initialize(klass, filters)
+      @klass, @filters = klass, filters
     end
 
     def [](key)
@@ -54,7 +54,7 @@ module Browseable
     end
 
     def facet_scope(key)
-      klass.instance_exec(&facet_definitions.fetch(key))
+      filters.apply(klass).instance_exec(&facet_definitions.fetch(key))
     end
   end
 
@@ -126,7 +126,7 @@ module Browseable
     end
 
     def facets
-      @facets ||= Facets.new(klass)
+      @facets ||= Facets.new(klass, filters)
     end
 
     def filters
@@ -159,6 +159,14 @@ module Browseable
 
     def next_params
       new_params(next_page)
+    end
+
+    def facet_params(facet, options = {})
+      {}.tap do |new_params|
+        new_params[:state] = facet
+        new_params.merge!(filters)
+        new_params.merge!(options)
+      end
     end
 
     def scope

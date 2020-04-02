@@ -440,11 +440,12 @@ RSpec.describe Browseable, type: :model do
   end
 
   describe Browseable::Facets do
-    let(:scope)  { ->{ where(state: 'open') } }
-    let(:query)  { double(:query) }
-    let(:scopes) { { open: scope } }
-    let(:klass)  { double(:klass, facet_definitions: scopes) }
-    let(:facets) { described_class.new(klass) }
+    let(:scope)   { ->{ where(state: 'open') } }
+    let(:query)   { double(:query) }
+    let(:scopes)  { { open: scope } }
+    let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: {}) }
+    let(:facets)  { described_class.new(klass, filters) }
+    let(:filters) { Browseable::Filters.new(klass, {}) }
 
     describe "delegated methods" do
       subject{ facets }

@@ -4,7 +4,7 @@
     <ul>
     <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
-        <%= link_to petitions_url(state: facet) do %>
+        <%= link_to petitions_url(@petitions.facet_params(facet)) do %>
           <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>

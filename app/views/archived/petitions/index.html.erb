@@ -23,7 +23,7 @@
     <ul>
     <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
-        <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
+        <%= link_to archived_petitions_path(@petitions.facet_params(facet, parliament: @parliament)) do %>
           <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>
@@ -67,7 +67,7 @@
     <ul>
     <% archived_petition_facets_with_counts(@petitions).each do |facet, count| %>
       <li>
-        <%= link_to archived_petitions_path(parliament: @parliament, state: facet) do %>
+        <%= link_to archived_petitions_path(@petitions.facet_params(facet, parliament: @parliament)) do %>
           <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
         <% end %>
       </li>
