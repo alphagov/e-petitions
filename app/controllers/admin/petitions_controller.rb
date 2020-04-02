@@ -95,9 +95,9 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def set_streaming_headers
-    #nginx doc: Setting this to "no" will allow unbuffered responses suitable for Comet and HTTP streaming applications
-    headers['X-Accel-Buffering'] = 'no'
+    headers["X-Accel-Buffering"] = "no"
     headers["Cache-Control"] ||= "no-cache"
+    headers["Last-Modified"] = Time.current.httpdate
     headers.delete("Content-Length")
   end
 

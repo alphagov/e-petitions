@@ -69,8 +69,9 @@ RSpec.describe Admin::Archived::PetitionsController, type: :controller, admin: t
         end
 
         it "sets the streaming headers" do
-          expect(response["Cache-Control"]).to match(/no-cache/)
           expect(response["X-Accel-Buffering"]).to eq("no")
+          expect(response["Cache-Control"]).to match(/no-cache/)
+          expect(response["Last-Modified"]).to match(/\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/)
         end
 
         it "sets the content disposition" do
