@@ -1,0 +1,7 @@
+<% if @petition.is_a?(::Archived::Petition) %>
+  <%= link_to 'Topics', admin_archived_petition_topics_path(@petition), class: 'petition-action-heading' %>
+<% elsif @petition.topics? %>
+  <%= link_to 'Topics', admin_petition_topics_path(@petition), class: 'petition-action-heading present' %>
+<% else %>
+  <%= link_to 'Topics', admin_petition_topics_path(@petition), class: 'petition-action-heading' %>
+<% end %>

@@ -45,6 +45,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         committee_note: "This petition action was found to be false",
         tags: tags.map(&:id),
         departments: departments.map(&:id),
+        topics: topics.map(&:id),
         opened_at: 6.months.ago,
         closed_at: 2.months.ago,
         signature_count: 1234,
@@ -58,6 +59,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
     let(:departments) { FactoryBot.create_list(:department, 3) }
     let(:tags) { FactoryBot.create_list(:tag, 3) }
+    let(:topics) { FactoryBot.create_list(:topic, 3) }
 
     let(:signatures_by_constituency) do
       archived_petition.read_attribute(:signatures_by_constituency)
@@ -77,6 +79,8 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.tags).not_to be_empty
       expect(archived_petition.departments).to eq(petition.departments)
       expect(archived_petition.departments).not_to be_empty
+      expect(archived_petition.topics).to eq(petition.topics)
+      expect(archived_petition.topics).not_to be_empty
       expect(archived_petition.state).to eq(petition.state)
       expect(archived_petition.opened_at).to be_usec_precise_with(petition.opened_at)
       expect(archived_petition.closed_at).to be_usec_precise_with(petition.closed_at)

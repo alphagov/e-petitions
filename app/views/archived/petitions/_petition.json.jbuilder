@@ -64,6 +64,8 @@ json.attributes do
     json.url department.url
   end
 
+  json.topics topic_codes(petition.topics)
+
   if archived_petition_page? && petition.published?
     json.signatures_by_country petition.signatures_by_country
     json.signatures_by_constituency petition.signatures_by_constituency

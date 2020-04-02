@@ -218,6 +218,21 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
       )
     end
 
+    it "includes the topics data" do
+      topic = FactoryBot.create :topic, code: "covid-19", name: "COVID-19"
+
+      petition = \
+        FactoryBot.create :archived_petition,
+          topics: [topic.id]
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including("topics" => %w[covid-19])
+      )
+    end
+
     it "includes the signatures by constituency data" do
       FactoryBot.create :constituency, :coventry_north_east
       FactoryBot.create :constituency, :bethnal_green_and_bow

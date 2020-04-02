@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_16_072107) do
+ActiveRecord::Schema.define(version: 2020_04_01_153958) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -123,6 +123,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_072107) do
     t.integer "departments", default: [], null: false, array: true
     t.datetime "anonymized_at"
     t.integer "moderated_by_id"
+    t.integer "topics", default: [], null: false, array: true
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_072107) do
     t.index ["signature_count"], name: "index_archived_petitions_on_signature_count"
     t.index ["state", "closed_at"], name: "index_archived_petitions_on_state_and_closed_at"
     t.index ["tags"], name: "index_archived_petitions_on_tags", opclass: :gin__int_ops, using: :gin
+    t.index ["topics"], name: "index_archived_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
 
   create_table "archived_rejections", id: :serial, force: :cascade do |t|
@@ -469,6 +471,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_072107) do
     t.datetime "anonymized_at"
     t.integer "moderated_by_id"
     t.integer "deadline_extension", default: 0, null: false
+    t.integer "topics", default: [], null: false, array: true
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -486,6 +489,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_072107) do
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
+    t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
 
   create_table "rate_limits", id: :serial, force: :cascade do |t|
@@ -643,6 +647,15 @@ ActiveRecord::Schema.define(version: 2020_03_16_072107) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tasks_on_name", unique: true
+  end
+
+  create_table "topics", id: :serial, force: :cascade do |t|
+    t.string "code", limit: 100, null: false
+    t.string "name", limit: 100, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_topics_on_code", unique: true
+    t.index ["name"], name: "index_topics_on_name", unique: true
   end
 
   create_table "trending_domains", id: :serial, force: :cascade do |t|

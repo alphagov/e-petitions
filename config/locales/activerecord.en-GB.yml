@@ -39,6 +39,8 @@ en-GB:
               invalid: "The submitted tags were invalid - please reselect and try again"
             departments:
               invalid: "The submitted departments were invalid - please reselect and try again"
+            topics:
+              invalid: "The submitted topics were invalid - please reselect and try again"
 
         domain:
           attributes:
@@ -58,6 +60,8 @@ en-GB:
               invalid: "The submitted tags were invalid - please reselect and try again"
             departments:
               invalid: "The submitted departments were invalid - please reselect and try again"
+            topics:
+              invalid: "The submitted topics were invalid - please reselect and try again"
 
         signature:
           attributes:

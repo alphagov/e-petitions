@@ -28,14 +28,16 @@ RSpec.describe Browseable, type: :model do
   end
 
   describe ".filter" do
-    it "adds a filter key to the filter_definitions class attribute" do
-      browseable.filter(:parliament)
-      expect(browseable.filter_definitions).to eq([:parliament])
+    let(:scope) { ->(param){ double(:scope) } }
+
+    it "adds a filter scope to the filter_definitions class attribute" do
+      browseable.filter(:topics, scope)
+      expect(browseable.filter_definitions).to eq({ topics: scope })
     end
   end
 
   describe ".search" do
-    let(:params) { Hash.new }
+    let(:params) { {} }
     let(:search) { browseable.search(params) }
 
     it "returns an instance of Browseable::Search" do
@@ -45,7 +47,7 @@ RSpec.describe Browseable, type: :model do
 
   describe Browseable::Search do
     let(:scopes)  { { all: -> { self }, open: -> { self } } }
-    let(:filters) { [] }
+    let(:filters) { {} }
     let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters) }
     let(:params)  { { q: 'search', page: '3'} }
     let(:search)  { described_class.new(klass, params) }
@@ -169,11 +171,16 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
-        let(:filters) { [:parliament] }
+        let(:params) { { q: 'search', page: '3', topics: 'covid-19' } }
+        let(:scope) { ->(param){ topics(param) } }
+        let(:filters) { { topics: scope } }
+
+        before do
+          expect(klass).to receive(:topics).with('covid-19').and_return(klass)
+        end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, parliament: '1' })
+          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, topics: 'covid-19' })
         end
       end
     end
@@ -212,11 +219,16 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', parliament: '1' } }
-        let(:filters) { [:parliament] }
+        let(:params) { { q: 'search', page: '3', topics: 'covid-19' } }
+        let(:scope) { ->(param){ topics(param) } }
+        let(:filters) { { topics: scope } }
+
+        before do
+          expect(klass).to receive(:topics).with('covid-19').and_return(klass)
+        end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, parliament: '1' })
+          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, topics: 'covid-19' })
         end
       end
     end
@@ -514,8 +526,8 @@ RSpec.describe Browseable, type: :model do
     let(:filters) { described_class.new(klass, params) }
 
     describe "implicit conversion" do
-      let(:filter_definitions) { [] }
-      let(:params) { Hash.new }
+      let(:filter_definitions) { {} }
+      let(:params) { {} }
 
       it "can be merged with another hash" do
         expect{ {}.merge(filters) }.not_to raise_error
@@ -523,10 +535,11 @@ RSpec.describe Browseable, type: :model do
     end
 
     describe "#to_hash" do
-      let(:filter_definitions) { [:parliament] }
+      let(:scope) { ->{ double(:scope) } }
+      let(:filter_definitions) { { topics: scope } }
 
       context "when the key is not present in the params hash" do
-        let(:params) { Hash.new }
+        let(:params) { {} }
 
         it "returns a hash without the filter key" do
           expect(filters.to_hash).to eq({})
@@ -534,10 +547,10 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "when the key is present in the params hash" do
-        let(:params) { { parliament: 1 } }
+        let(:params) { { topics: "covid-19" } }
 
         it "returns a hash with the filter key" do
-          expect(filters.to_hash).to eq({ parliament: 1 })
+          expect(filters.to_hash).to eq({ topics: "covid-19" })
         end
       end
     end

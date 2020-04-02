@@ -4,6 +4,10 @@ Rails.application.routes.draw do
       get '/constituencies', action: 'index', as: :constituencies
     end
 
+    controller 'topics' do
+      get '/topics', action: 'index', as: :topics
+    end
+
     controller 'pages' do
       get '/',        action: 'index', as: :home
       get '/help',    action: 'help'
@@ -132,6 +136,7 @@ Rails.application.routes.draw do
           resource :tags, controller: 'petition_tags'
           resource :take_down, path: 'take-down', controller: 'take_down'
           resource :departments, controller: 'petition_departments'
+          resource :topics, controller: 'petition_topics'
         end
 
         resources :signatures, only: %i[index destroy] do
@@ -173,6 +178,7 @@ Rails.application.routes.draw do
 
       resources :departments, except: %i[show]
       resources :tags, except: %i[show]
+      resources :topics, except: %i[show]
 
       namespace :archived do
         root to: redirect('/admin/archived/petitions')
@@ -189,6 +195,7 @@ Rails.application.routes.draw do
             resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
             resource :tags, controller: 'petition_tags'
             resource :departments, controller: 'petition_departments'
+            resource :topics, controller: 'petition_topics'
           end
         end
 

@@ -1,0 +1,9 @@
+<h1>Edit Topic</h1>
+
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_for [:admin, @topic] do |form| %>
+      <%= render 'form', form: form %>
+    <% end %>
+  </div>
+</div>

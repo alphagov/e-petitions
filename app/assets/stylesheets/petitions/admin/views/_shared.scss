@@ -123,7 +123,7 @@
     }
   }
 
-  .department-list, .tag-list {
+  .department-list, .tag-list, .topic-list {
     label {
       font-size: 14px;
       padding: 2px 0 0 0;
@@ -164,7 +164,8 @@
   }
 
   .department-selector,
-  .tag-selector {
+  .tag-selector,
+  .topic-selector {
     padding-top: 10px;
     clear: both;
 
@@ -176,7 +177,7 @@
       font-size: 16px;
     }
 
-    .department-list, .tag-list {
+    .department-list, .tag-list, .topic-list {
       margin-top: 5px;
     }
   }

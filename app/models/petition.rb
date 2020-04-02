@@ -39,7 +39,7 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action, :background, :additional_details)
-  include Browseable, Taggable, Departments, Anonymization
+  include Browseable, Taggable, Departments, Topics, Anonymization
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }
@@ -70,6 +70,8 @@ class Petition < ActiveRecord::Base
 
   facet :flagged, -> { flagged_state.by_most_recent_moderation_threshold_reached }
   facet :dormant, -> { dormant_state.by_most_recent_moderation_threshold_reached }
+
+  filter :topics, ->(codes) { topics(codes) }
 
   has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true

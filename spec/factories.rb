@@ -775,6 +775,11 @@ FactoryBot.define do
     sequence(:name) { |n| "Tag #{n}" }
   end
 
+  factory :topic do
+    sequence(:code) { |n| "topic-#{n}" }
+    sequence(:name) { |n| "Topic #{n}" }
+  end
+
   factory :trending_ip do
     association :petition, factory: :open_petition
     ip_address { "127.0.0.1" }

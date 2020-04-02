@@ -8,6 +8,10 @@
       <%= render 'petition_action_departments', petition: @petition %>
     </li>
 
+    <li class="petition-action">
+      <%= render 'petition_action_topics', petition: @petition %>
+    </li>
+
     <%# If petition is awaiting moderation %>
     <% if @petition.in_todo_list? %>
       <% if current_user.can_moderate_petitions? %>

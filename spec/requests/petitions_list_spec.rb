@@ -295,6 +295,25 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
         )
       )
     end
+
+    it "includes the topics data" do
+      topic = FactoryBot.create :topic, code: "covid-19", name: "COVID-19"
+
+      petition = \
+        FactoryBot.create :open_petition,
+          topics: [topic.id]
+
+      get "/petitions.json"
+      expect(response).to be_successful
+
+      expect(data).to match(
+        a_collection_containing_exactly(
+          a_hash_including(
+            "attributes" => a_hash_including("topics" => %w[covid-19])
+          )
+        )
+      )
+    end
   end
 end
 

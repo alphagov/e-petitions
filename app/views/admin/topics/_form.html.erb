@@ -1,0 +1,14 @@
+<%= form_row for: [form.object, :code] do %>
+  <%= form.label :code, class: 'form-label' %>
+  <%= error_messages_for_field @topic, :code %>
+  <%= form.text_field :code, tabindex: increment, maxlength: 100, autofocus: true, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :name] do %>
+  <%= form.label :name, class: 'form-label' %>
+  <%= error_messages_for_field @topic, :name %>
+  <%= form.text_field :name, tabindex: increment, maxlength: 100, class: 'form-control' %>
+<% end %>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_tags_path, class: 'button-secondary' %>

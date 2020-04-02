@@ -1,9 +1,15 @@
 <h1 class="tabs">
-  <% if controller_name == "departments" %>
+  <% if controller_name == "topics" %>
     <%= link_to "Tags", admin_tags_path %> |
-    Departments
+    <%= link_to "Departments", admin_departments_path %> |
+    Topics
+  <% elsif controller_name == "departments" %>
+    <%= link_to "Tags", admin_tags_path %> |
+    Departments |
+    <%= link_to "Topics", admin_topics_path %>
   <% else %>
     Tags |
-    <%= link_to "Departments", admin_departments_path %>
+    <%= link_to "Departments", admin_departments_path %> |
+    <%= link_to "Topics", admin_topics_path %>
   <% end %>
 </h1>

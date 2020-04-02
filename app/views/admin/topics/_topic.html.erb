@@ -1,0 +1,11 @@
+<tr>
+  <td>
+    <%= link_to topic.code, edit_admin_topic_path(topic) %>
+  </td>
+  <td>
+    <%= topic.name %>
+  </td>
+  <td>
+    <%= button_to 'Delete', admin_topic_path(topic, params.permit(:q)), method: :delete, class: 'button-warning', data: { confirm: 'Delete topic?' } %>
+  </td>
+</tr>

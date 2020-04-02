@@ -1,6 +1,7 @@
 require 'rails_helper'
 require_relative '../department_examples'
 require_relative '../taggable_examples'
+require_relative '../topic_examples'
 
 RSpec.describe Archived::Petition, type: :model do
   subject(:petition){ described_class.new }
@@ -354,6 +355,7 @@ RSpec.describe Archived::Petition, type: :model do
   describe "concerns" do
     it_behaves_like "a taggable model"
     it_behaves_like "a model with departments"
+    it_behaves_like "a model with topics"
   end
 
   describe "#action" do
