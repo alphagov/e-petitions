@@ -112,7 +112,13 @@ class PetitionsController < ApplicationController
   end
 
   def retrieve_petitions
-    @petitions = Petition.visible.search(params)
+    scope = Petition.visible
+
+    if json_request?
+      scope = scope.preload(:rejection, :government_response, :debate_outcome)
+    end
+
+    @petitions = scope.search(params)
   end
 
   def retrieve_petition

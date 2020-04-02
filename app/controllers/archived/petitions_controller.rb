@@ -45,7 +45,13 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petitions
-    @petitions = @parliament.petitions.search(params)
+    scope = @parliament.petitions
+
+    if json_request?
+      scope = scope.preload(:rejection, :government_response, :debate_outcome)
+    end
+
+    @petitions = scope.search(params)
   end
 
   def fetch_petition
