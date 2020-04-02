@@ -71,7 +71,7 @@ class Petition < ActiveRecord::Base
   facet :flagged, -> { flagged_state.by_most_recent_moderation_threshold_reached }
   facet :dormant, -> { dormant_state.by_most_recent_moderation_threshold_reached }
 
-  filter :topics, ->(codes) { topics(codes) }
+  filter :topic, ->(code) { topics(code) }
 
   has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true

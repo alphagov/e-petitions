@@ -27,6 +27,7 @@ module Topics
         where(topics_column.contains(ids))
       end
     end
+    alias_method :topic, :topics
 
     def any_topics(*topics)
       where(topics_column.overlaps(normalize_topics(topics)))

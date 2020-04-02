@@ -31,8 +31,8 @@ RSpec.describe Browseable, type: :model do
     let(:scope) { ->(param){ double(:scope) } }
 
     it "adds a filter scope to the filter_definitions class attribute" do
-      browseable.filter(:topics, scope)
-      expect(browseable.filter_definitions).to eq({ topics: scope })
+      browseable.filter(:topic, scope)
+      expect(browseable.filter_definitions).to eq({ topic: scope })
     end
   end
 
@@ -171,16 +171,16 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', topics: 'covid-19' } }
-        let(:scope) { ->(param){ topics(param) } }
-        let(:filters) { { topics: scope } }
+        let(:params) { { q: 'search', page: '3', topic: 'covid-19' } }
+        let(:scope) { ->(param){ topic(param) } }
+        let(:filters) { { topic: scope } }
 
         before do
-          expect(klass).to receive(:topics).with('covid-19').and_return(klass)
+          expect(klass).to receive(:topic).with('covid-19').and_return(klass)
         end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, topics: 'covid-19' })
+          expect(search.previous_params).to eq({ q: 'search', state: :all, page: 2, topic: 'covid-19' })
         end
       end
     end
@@ -219,16 +219,16 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "with a filter param" do
-        let(:params) { { q: 'search', page: '3', topics: 'covid-19' } }
-        let(:scope) { ->(param){ topics(param) } }
-        let(:filters) { { topics: scope } }
+        let(:params) { { q: 'search', page: '3', topic: 'covid-19' } }
+        let(:scope) { ->(param){ topic(param) } }
+        let(:filters) { { topic: scope } }
 
         before do
-          expect(klass).to receive(:topics).with('covid-19').and_return(klass)
+          expect(klass).to receive(:topic).with('covid-19').and_return(klass)
         end
 
         it "returns a hash of params for building the previous page link" do
-          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, topics: 'covid-19' })
+          expect(search.next_params).to eq({ q: 'search', state: :all, page: 4, topic: 'covid-19' })
         end
       end
     end
@@ -537,7 +537,7 @@ RSpec.describe Browseable, type: :model do
 
     describe "#to_hash" do
       let(:scope) { ->{ double(:scope) } }
-      let(:filter_definitions) { { topics: scope } }
+      let(:filter_definitions) { { topic: scope } }
 
       context "when the key is not present in the params hash" do
         let(:params) { {} }
@@ -548,10 +548,10 @@ RSpec.describe Browseable, type: :model do
       end
 
       context "when the key is present in the params hash" do
-        let(:params) { { topics: "covid-19" } }
+        let(:params) { { topic: "covid-19" } }
 
         it "returns a hash with the filter key" do
-          expect(filters.to_hash).to eq({ topics: "covid-19" })
+          expect(filters.to_hash).to eq({ topic: "covid-19" })
         end
       end
     end
