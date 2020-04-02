@@ -30,7 +30,7 @@ module Departments
     end
 
     def normalize_departments(departments)
-      Array(departments).flatten.map(&:to_i).compact.reject(&:zero?)
+      Array(departments).flatten.map(&:to_i).reject(&:zero?)
     end
   end
 
@@ -40,14 +40,6 @@ module Departments
 
   def departments=(departments)
     super(normalize_departments(departments))
-  end
-
-  def depts
-    Department.where(id: departments).order(:name).to_a
-  end
-
-  def department_names
-    Department.where(id: departments).order(:name).pluck(:name)
   end
 
   def departments_exist

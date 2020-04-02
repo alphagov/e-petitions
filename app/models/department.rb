@@ -19,6 +19,10 @@ class Department < ActiveRecord::Base
       order(name: :asc)
     end
 
+    def map
+      all.map { |d| [d.id, d] }.to_h
+    end
+
     def for(external_id, &block)
       find_or_initialize_by(external_id: external_id).tap(&block)
     end

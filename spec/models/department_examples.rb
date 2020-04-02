@@ -200,42 +200,10 @@ RSpec.shared_examples_for "a model with departments" do
     end
   end
 
-  describe "#depts" do
-    before do
-      fco = FactoryBot.create(:department, :fco)
-      dfid = FactoryBot.create(:department, :dfid)
-
-      subject.departments = [fco.id, dfid.id]
-    end
-
-    it "returns an array of Department instances" do
-      expect(subject.depts).to contain_exactly(
-        an_object_having_attributes(name: "Department for International Development"),
-        an_object_having_attributes(name: "Foreign and Commonwealth Office")
-      )
-    end
-  end
-
   describe "#departments=" do
     it "normalizes department values" do
       subject.departments = ["foo", nil, "0", 0, "1", 2]
       expect(subject.departments).to eq([1, 2])
-    end
-  end
-
-  describe "#department_names" do
-    before do
-      fco = FactoryBot.create(:department, :fco)
-      dfid = FactoryBot.create(:department, :dfid)
-
-      subject.departments = [fco.id, dfid.id]
-    end
-
-    it "returns the array of department names" do
-      expect(subject.department_names).to eq([
-        "Department for International Development",
-        "Foreign and Commonwealth Office"
-      ])
     end
   end
 end
