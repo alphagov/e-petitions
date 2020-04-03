@@ -32,37 +32,6 @@
       "note": ""
     },
     {
-      "warning_type": "Dynamic Render Path",
-      "warning_code": 15,
-      "fingerprint": "16486b92b9f08bbefe8c475c33892104ae0793fb62844fd2181ce5dcff9901ba",
-      "check_name": "Render",
-      "message": "Render path contains parameter value",
-      "file": "app/views/archived/petitions/index.html.erb",
-      "line": 55,
-      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{(Parliament.archived.find(parliament_id) or Parliament.archived.first).petitions.preload(:rejection, :government_response, :debate_outcome).search(params).scope}\", { :petition => petition })",
-      "render_path": [
-        {
-          "type": "controller",
-          "class": "Archived::PetitionsController",
-          "method": "index",
-          "line": 16,
-          "file": "app/controllers/archived/petitions_controller.rb",
-          "rendered": {
-            "name": "archived/petitions/index",
-            "file": "app/views/archived/petitions/index.html.erb"
-          }
-        }
-      ],
-      "location": {
-        "type": "template",
-        "template": "archived/petitions/index"
-      },
-      "user_input": "params",
-      "confidence": "Weak",
-      "note": ""
-    },
-    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "22e002a1359fd28418d81e2cadeb49195a5597840a43d97787ac79a868acb51f",
@@ -96,13 +65,13 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "6b3d9e4c27392114f0f7e5860cf88d7c2b2e884e2bf440e29605b28d0f47970e",
+      "fingerprint": "4bfc7269c3f64d0e3c9a7f1bc8c9c4b4feb4346a6f1fc0d88ffc84666f6bd2ba",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/petitions/search/_results.html.erb",
       "line": 8,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{Petition.visible.preload(:rejection, :government_response, :debate_outcome).search(params).scope}\", { :petition => petition })",
+      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{Petition.visible.preload(:creator, :rejection, :government_response, :debate_outcome).search(params).scope}\", { :petition => petition })",
       "render_path": [
         {
           "type": "controller",
@@ -135,6 +104,37 @@
       "note": ""
     },
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "bae72b69e2d60cb0fe53dc0be0a1c8be941cf69f8292091d14ecf41cfa379767",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/archived/petitions/index.html.erb",
+      "line": 55,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{(Parliament.archived.find(parliament_id) or Parliament.archived.first).petitions.preload(:creator, :rejection, :government_response, :debate_outcome).search(params).scope}\", { :petition => petition })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "Archived::PetitionsController",
+          "method": "index",
+          "line": 16,
+          "file": "app/controllers/archived/petitions_controller.rb",
+          "rendered": {
+            "name": "archived/petitions/index",
+            "file": "app/views/archived/petitions/index.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "archived/petitions/index"
+      },
+      "user_input": "params",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Mass Assignment",
       "warning_code": 105,
       "fingerprint": "f523941f55e48c9af1dda1b71dd47c35e8cd6bce092c90e04bc940d257bf44e8",
@@ -155,6 +155,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-04-01 20:35:00 +0100",
+  "updated": "2020-04-03 11:33:23 +0100",
   "brakeman_version": "4.7.2"
 }

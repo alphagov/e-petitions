@@ -115,7 +115,7 @@ class PetitionsController < ApplicationController
     scope = Petition.visible
 
     if json_request?
-      scope = scope.preload(:rejection, :government_response, :debate_outcome)
+      scope = scope.preload(:creator, :rejection, :government_response, :debate_outcome)
     end
 
     @petitions = scope.search(params)
