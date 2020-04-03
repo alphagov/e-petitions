@@ -70,8 +70,12 @@ class Admin::Archived::PetitionsController < Admin::AdminController
     end
   end
 
+  def preload_scope(current)
+    current.preload(:creator, :rejection, :government_response, :debate_outcome, :note)
+  end
+
   def scope
-    tag_scope(department_scope(@parliament.petitions.all))
+    preload_scope(tag_scope(department_scope(@parliament.petitions.all)))
   end
 
   def parliament_id

@@ -65,8 +65,12 @@ class Admin::PetitionsController < Admin::AdminController
     end
   end
 
+  def preload_scope(current)
+    current.preload(:creator, :rejection, :government_response, :debate_outcome, :note)
+  end
+
   def scope
-    tag_scope(department_scope(Petition.all))
+    preload_scope(tag_scope(department_scope(Petition.all)))
   end
 
   def fetch_petitions
