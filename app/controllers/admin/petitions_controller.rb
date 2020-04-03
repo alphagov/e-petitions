@@ -37,18 +37,26 @@ class Admin::PetitionsController < Admin::AdminController
     redirect_to admin_petition_url(params[:q].to_i)
   end
 
-  def scope
+  def tag_scope(current)
     if params[:match] == "none"
-      Petition.untagged
+      current.untagged
     elsif params[:tags].present?
       if params[:match] == "all"
-        Petition.tagged_with_all(params[:tags])
+        current.tagged_with_all(params[:tags])
       else
-        Petition.tagged_with_any(params[:tags])
+        current.tagged_with_any(params[:tags])
       end
     else
-      Petition.all
+      current
     end
+  end
+
+  def preload_scope(current)
+    current.preload(:creator, :rejection, :debate_outcome, :note)
+  end
+
+  def scope
+    preload_scope(tag_scope(Petition.all))
   end
 
   def fetch_petitions
