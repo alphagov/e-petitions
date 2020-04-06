@@ -9,11 +9,6 @@ namespace :wpets do
      end
   end
 
-  desc "Special resend of signature email validation"
-  task :special_resend_of_signature_email_validation => :environment do
-    EmailReminder.special_resend_of_signature_email_validation
-  end
-
   namespace :jobs do
     desc "Unlock all delayed jobs (to be used after a restart)"
     task :unlock_all => :environment do
