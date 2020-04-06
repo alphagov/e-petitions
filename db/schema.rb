@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_01_153958) do
+ActiveRecord::Schema.define(version: 2020_04_06_065248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -128,13 +128,16 @@ ActiveRecord::Schema.define(version: 2020_04_01_153958) do
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
     t.index ["anonymized_at"], name: "index_archived_petitions_on_anonymized_at"
+    t.index ["debate_state", "parliament_id"], name: "index_archived_petitions_on_debate_state_and_parliament_id"
     t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
+    t.index ["government_response_at", "parliament_id"], name: "index_archived_petitions_on_response_at_and_parliament_id"
     t.index ["locked_by_id"], name: "index_archived_petitions_on_locked_by_id"
     t.index ["moderated_by_id"], name: "index_archived_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["parliament_id"], name: "index_archived_petitions_on_parliament_id"
     t.index ["signature_count"], name: "index_archived_petitions_on_signature_count"
     t.index ["state", "closed_at"], name: "index_archived_petitions_on_state_and_closed_at"
+    t.index ["state", "parliament_id"], name: "index_archived_petitions_on_state_and_parliament_id"
     t.index ["tags"], name: "index_archived_petitions_on_tags", opclass: :gin__int_ops, using: :gin
     t.index ["topics"], name: "index_archived_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
