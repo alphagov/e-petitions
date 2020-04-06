@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_06_065248) do
+ActiveRecord::Schema.define(version: 2020_04_06_191233) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -485,12 +485,14 @@ ActiveRecord::Schema.define(version: 2020_04_06_065248) do
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"
     t.index ["departments"], name: "index_petitions_on_departments", opclass: :gin__int_ops, using: :gin
+    t.index ["government_response_at", "state"], name: "index_petitions_on_government_response_at_and_state"
     t.index ["last_signed_at"], name: "index_petitions_on_last_signed_at"
     t.index ["locked_by_id"], name: "index_petitions_on_locked_by_id"
     t.index ["moderated_by_id"], name: "index_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
+    t.index ["state"], name: "index_petitions_on_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
     t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
