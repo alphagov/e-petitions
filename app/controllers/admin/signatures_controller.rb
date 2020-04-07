@@ -2,14 +2,32 @@ class Admin::SignaturesController < Admin::AdminController
   include BulkVerification
 
   before_action :fetch_petition, if: :petition_scope?
-  before_action :fetch_signature, except: [:index, :bulk_validate, :bulk_invalidate, :bulk_subscribe, :bulk_unsubscribe, :bulk_destroy]
   before_action :fetch_signatures, only: [:index]
+  before_action :fetch_signature, except: [:index, :new, :create, :bulk_validate, :bulk_invalidate, :bulk_subscribe, :bulk_unsubscribe, :bulk_destroy]
+  before_action :build_signature, only: [:new, :create]
 
   helper_method :search_params
 
   def index
     respond_to do |format|
       format.html
+    end
+  end
+
+  def new
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def create
+    if @signature.save
+      @signature.validate!(force: true)
+      redirect_to admin_petition_url(@petition), notice: :signature_added
+    else
+      respond_to do |format|
+        format.html { render :new }
+      end
     end
   end
 
@@ -127,6 +145,30 @@ class Admin::SignaturesController < Admin::AdminController
 
   def fetch_signature
     @signature = scope.find(params[:id])
+  end
+
+  def build_signature
+    if action_name == "new"
+      @signature = @petition.signatures.build(signature_params_for_new)
+    else
+      @signature = @petition.signatures.build(signature_params_for_create)
+    end
+  end
+
+  def signature_params_for_new
+    { location_code: "GB-WLS" }
+  end
+
+  def signature_params
+    params.require(:signature).permit(*signature_attributes)
+  end
+
+  def signature_params_for_create
+    signature_params.merge(ip_address: request.remote_ip)
+  end
+
+  def signature_attributes
+    %i[name postcode location_code autogenerate_email]
   end
 
   def search_params

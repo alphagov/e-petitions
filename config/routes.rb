@@ -132,7 +132,7 @@ Rails.application.routes.draw do
 
         resource :completion, controller: 'completion', only: %i[update]
 
-        resources :signatures, only: %i[index destroy] do
+        resources :signatures, except: %i[show edit update] do
           post :validate, :invalidate, on: :member
           post :subscribe, :unsubscribe, on: :member
 

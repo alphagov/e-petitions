@@ -1,5 +1,11 @@
 <nav class="petition-actions" role="navigation">
   <ul>
+    <% if @petition.open? %>
+      <li class="petition-action">
+        <%= render 'petition_action_signature', petition: @petition %>
+      </li>
+    <% end %>
+
     <li class="petition-action">
       <%= render 'petition_action_tags', petition: @petition %>
     </li>

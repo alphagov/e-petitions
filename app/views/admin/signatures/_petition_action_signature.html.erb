@@ -1,0 +1,27 @@
+<h2 class="petition-action-heading">Add a signature</h2>
+
+<%= form_for @signature, url: admin_petition_signatures_path(@petition), method: :post do |form| -%>
+  <%= form.hidden_field :autogenerate_email, value: "1" %>
+
+  <%= form_row for: [@signature, :name] do %>
+    <%= form.label :name, "Name", class: "form-label" %>
+    <%= error_messages_for_field @signature, :name %>
+    <%= form.text_field :name, tabindex: increment, maxlength: 255, size: nil, class: "form-control"  %>
+  <% end %>
+
+  <%= form_row for: [@signature, :location_code] do %>
+    <%= form.label :location_code, "Location", class: "form-label" %>
+    <%= error_messages_for_field @signature, :location_code %>
+    <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
+  <% end %>
+
+  <%= form_row for: [@signature, :postcode] do %>
+    <%= form.label :postcode, "Postcode", class: "form-label" %>
+    <%= error_messages_for_field @signature, :postcode %>
+    <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
+  <% end %>
+
+  <%= form.submit 'Create signature', class: 'button' %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
+
+<% end -%>

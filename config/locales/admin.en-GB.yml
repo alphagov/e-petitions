@@ -90,6 +90,7 @@ en-GB:
       rejection_reason_updated: "Rejection reason updated successfully"
       rejection_reason_deleted: "Rejection reason removed successfully"
       rejection_reason_not_deleted: "Rejection reason could not be removed - please contact support"
+      signature_added: "Signature added to the petition successfully"
       signature_validated: "Signature validated successfully"
       signature_not_validated: "Signature could not be validated - please contact support"
       signature_invalidated: "Signature invalidated successfully"

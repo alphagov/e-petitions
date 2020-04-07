@@ -205,6 +205,6 @@ class SignaturesController < LocalizedController
   end
 
   def signature_attributes
-    %i[name email email_confirmation postcode location_code notify_by_email autocorrect_domain]
+    %i[name email postcode location_code notify_by_email autocorrect_domain]
   end
 end
