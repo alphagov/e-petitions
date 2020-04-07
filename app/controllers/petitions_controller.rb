@@ -93,7 +93,13 @@ class PetitionsController < LocalizedController
   end
 
   def retrieve_petitions
-    @petitions = Petition.visible.search(params)
+    scope = Petition.visible
+
+    if json_request?
+      scope = scope.preload(:creator, :rejection, :debate_outcome)
+    end
+
+    @petitions = scope.search(params)
   end
 
   def retrieve_petition

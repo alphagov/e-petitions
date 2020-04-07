@@ -1,6 +1,47 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "Dynamic Render Path",
+      "warning_code": 15,
+      "fingerprint": "e4468e7b1ded3f96a11a705b7a7563f47e7ea0c618d55c372a188b4f0f61ba38",
+      "check_name": "Render",
+      "message": "Render path contains parameter value",
+      "file": "app/views/petitions/search/_results.html.erb",
+      "line": 8,
+      "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
+      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{Petition.visible.preload(:creator, :rejection, :debate_outcome).search(params).scope}\", { :petition => petition })",
+      "render_path": [
+        {
+          "type": "controller",
+          "class": "PetitionsController",
+          "method": "index",
+          "line": 20,
+          "file": "app/controllers/petitions_controller.rb",
+          "rendered": {
+            "name": "petitions/index",
+            "file": "app/views/petitions/index.html.erb"
+          }
+        },
+        {
+          "type": "template",
+          "name": "petitions/index",
+          "line": 32,
+          "file": "app/views/petitions/index.html.erb",
+          "rendered": {
+            "name": "petitions/search/_results",
+            "file": "app/views/petitions/search/_results.html.erb"
+          }
+        }
+      ],
+      "location": {
+        "type": "template",
+        "template": "petitions/search/_results"
+      },
+      "user_input": "params",
+      "confidence": "Weak",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "ec90a43d600ec1cef6f6f0ff5eeebb9f29380fd1f4b005edc2c7b4393ef73a47",
@@ -83,6 +124,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-02-28 07:57:10 +0000",
+  "updated": "2020-04-07 15:45:01 +0100",
   "brakeman_version": "4.7.2"
 }
