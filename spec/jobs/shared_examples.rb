@@ -129,6 +129,10 @@ RSpec.shared_examples_for "a job to send an signatory email" do
       shared_examples_for "catching errors during individual email sending" do
         let(:logger) { job.logger }
 
+        before do
+          allow(logger).to receive(:info).and_call_original
+        end
+
         it "captures the error and doesn't re-raise it" do
           job.perform_now
         end
