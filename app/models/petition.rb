@@ -580,13 +580,13 @@ class Petition < ActiveRecord::Base
 
   def at_threshold_for_response?
     unless response_threshold_reached_at?
-      signature_count >= Site.threshold_for_response - 1
+      signature_count >= Site.threshold_for_response
     end
   end
 
   def at_threshold_for_debate?
     unless debate_threshold_reached_at?
-      signature_count >= Site.threshold_for_debate - 1
+      signature_count >= Site.threshold_for_debate
     end
   end
 

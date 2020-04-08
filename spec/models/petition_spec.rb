@@ -2115,8 +2115,8 @@ RSpec.describe Petition, type: :model do
       context "and the signature count is 1 less than the threshold" do
         let(:signature_count) { 9 }
 
-        it "is truthy" do
-          expect(petition.at_threshold_for_response?).to be_truthy
+        it "is falsey" do
+          expect(petition.at_threshold_for_response?).to be_falsey
         end
       end
 
@@ -2156,8 +2156,8 @@ RSpec.describe Petition, type: :model do
     context 'when signature count is 1 less than the threshold' do
       let(:signature_count) { Site.threshold_for_debate - 1 }
 
-      it 'is truthy' do
-        expect(petition.at_threshold_for_debate?).to be_truthy
+      it 'is falsey' do
+        expect(petition.at_threshold_for_debate?).to be_falsey
       end
     end
 
