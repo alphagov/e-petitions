@@ -28,29 +28,6 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.email_creator(petition, signature, email)
   end
 
-  def notify_creator_that_moderation_is_delayed
-    petition = Petition.overdue_in_moderation.last
-    signature = petition.creator
-    subject = "Moderation of your petition has been delayed"
-    body = "We are sorry, but moderation of your petition has been delayed due to an overwhelming number of requests."
-
-    PetitionMailer.notify_creator_that_moderation_is_delayed(signature, subject, body)
-  end
-
-  def notify_signer_of_threshold_response
-    petition = Petition.with_response.last
-    signature = petition.signatures.validated.last
-
-    PetitionMailer.notify_signer_of_threshold_response(petition, signature)
-  end
-
-  def notify_creator_of_threshold_response
-    petition = Petition.with_response.last
-    signature = petition.creator
-
-    PetitionMailer.notify_creator_of_threshold_response(petition, signature)
-  end
-
   def debated_petition_signer_notification
     petition = Petition.debated.last
     signature = petition.signatures.validated.last

@@ -108,8 +108,6 @@ Rails.application.routes.draw do
         post :cancel, :count, :start, on: :member
       end
 
-      resource :moderation_delay, only: %i[new create], path: 'moderation-delay'
-
       resources :petitions, only: %i[show index] do
         post :resend, on: :member
 
