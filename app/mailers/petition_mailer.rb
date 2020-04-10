@@ -26,11 +26,6 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe: unsubscribe_url
   end
 
-  def special_resend_of_email_confirmation_for_signer(signature)
-    @signature, @petition = signature, signature.petition
-    mail to: @signature.email, subject: subject_for(:special_resend_of_email_confirmation_for_signer)
-  end
-
   def notify_creator_that_petition_is_published(signature)
     @signature, @petition = signature, signature.petition
 

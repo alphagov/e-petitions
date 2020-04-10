@@ -91,9 +91,6 @@ en-GB:
         notify_sponsor_that_petition_was_rejected: |-
           We rejected the petition “%{action}” that you supported
 
-        # Re-send confirmation emails
-        special_resend_of_email_confirmation_for_signer: |-
-          Please confirm your email address
       signoff_prefix: "The Petitions team"
       signoff_suffix: "Senedd"
 
