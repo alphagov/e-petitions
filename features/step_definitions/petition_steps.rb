@@ -55,22 +55,6 @@ Given(/^a petition "([^"]*)" exists with a signature count of (\d+)$/) do |petit
   @petition.update_attribute(:signature_count, count)
 end
 
-Given(/^an open petition "(.*?)" with response "(.*?)" and response summary "(.*?)"$/) do |petition_action, details, summary|
-  @petition = FactoryBot.create(:responded_petition, action: petition_action, response_details: details, response_summary: summary)
-end
-
-Given(/^a petition "(.*?)" exists and hasn't passed the threshold for a ?(response|debate)?$/) do |action, response_or_debate|
-  FactoryBot.create(:open_petition, action: action)
-end
-
-Given(/^a petition "(.*?)" exists and passed the threshold for a response less than a day ago$/) do |action|
-  FactoryBot.create(:open_petition, action: action, referral_threshold_reached_at: 2.hours.ago)
-end
-
-Given(/^a petition "(.*?)" exists and passed the threshold for a response (\d+) days? ago$/) do |action, amount|
-  FactoryBot.create(:open_petition, action: action, referral_threshold_reached_at: amount.days.ago)
-end
-
 Given(/^a petition "(.*?)" passed the threshold for a debate less than a day ago and has no debate date set$/) do |action|
   petition = FactoryBot.create(:awaiting_debate_petition, action: action, debate_threshold_reached_at: 2.hours.ago)
   petition.debate_outcome = nil
@@ -316,18 +300,6 @@ end
 
 When(/^I click to see more details$/) do
   click_details "More details"
-end
-
-Then(/^I should see the response "([^"]*)"$/) do |response|
-  within :xpath, "//details[summary/.='Read the response in full']/div", visible: true do
-    expect(page).to have_content(response)
-  end
-end
-
-Then(/^I should not see the response "([^"]*)"$/) do |response|
-  within :xpath, "//details[summary/.='Read the response in full']/div", visible: false do
-    expect(page).to have_content(response)
-  end
 end
 
 Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?signatures$/) do |state, petition_action, signature_state|

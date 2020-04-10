@@ -343,7 +343,7 @@ class Site < ActiveRecord::Base
     end
 
     def default_threshold_for_referral
-      ENV.fetch('THRESHOLD_FOR_RESPONSE', '50').to_i
+      ENV.fetch('THRESHOLD_FOR_REFERRAL', '50').to_i
     end
 
     def default_threshold_for_debate

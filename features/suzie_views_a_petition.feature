@@ -133,7 +133,7 @@ Feature: Suzie views a petition
     Then I should not see "At 50 signatures..."
     Then I should not see "At 5,000 signatures..."
 
-  Scenario: Suzie sees information about future signature targets when viewing an open petition which has not passed the threshold for response or debate
+  Scenario: Suzie sees information about future signature targets when viewing an open petition which has not passed the threshold for referral or debate
     Given an open petition "Spend more money on Defence"
     When I view the petition
     Then I should see "At 50 signatures..."

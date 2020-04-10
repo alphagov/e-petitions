@@ -559,8 +559,8 @@ RSpec.describe Site, type: :model do
         expect(defaults[:threshold_for_referral]).to eq(50)
       end
 
-      it "can be overridden with the THRESHOLD_FOR_RESPONSE environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_RESPONSE", '50').and_return("25")
+      it "can be overridden with the THRESHOLD_FOR_REFERRAL environment variable" do
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_REFERRAL", '50').and_return("25")
         expect(defaults[:threshold_for_referral]).to eq(25)
       end
     end

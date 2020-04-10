@@ -80,7 +80,7 @@
 a.threshold-panel:hover, a.threshold-panel:focus {
   background-color: darken($petitions-panel-colour, 5%);
 }
-.threshold-panel-response {
+.threshold-panel-referral {
   background-image: image-url("graphics/graphic_crown-white.png");
   @include device-pixel-ratio() {
     background-image: image-url("graphics/graphic_crown-white-2x.png");
