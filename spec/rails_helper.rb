@@ -13,4 +13,6 @@ RSpec.configure do |config|
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
   config.global_fixtures = %i[rejection_reasons]
   config.include Requests::JsonHelpers, type: :request
+
+  config.backtrace_exclusion_patterns << /gems/
 end
