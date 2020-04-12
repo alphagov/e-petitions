@@ -34,6 +34,7 @@ gem 'jbuilder'
 gem 'paperclip'
 gem 'maxminddb'
 gem 'redcarpet'
+gem 'notifications-ruby-client'
 
 gem 'aws-sdk-cloudwatchlogs'
 gem 'aws-sdk-s3'
