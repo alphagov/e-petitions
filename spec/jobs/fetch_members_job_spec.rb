@@ -113,8 +113,8 @@ RSpec.describe FetchMembersJob, type: :job do
 
     context "because the API connection is blocked" do
       before do
-        stub_members_en_api.to_timeout.to_return(xml_response(:proxy_authentication_required))
-        stub_members_cy_api.to_timeout.to_return(xml_response(:proxy_authentication_required))
+        stub_members_en_api.to_return(xml_response(:proxy_authentication_required))
+        stub_members_cy_api.to_return(xml_response(:proxy_authentication_required))
       end
 
       it "doesn't import any members" do
@@ -124,8 +124,8 @@ RSpec.describe FetchMembersJob, type: :job do
 
     context "because the API can't be found" do
       before do
-        stub_members_en_api.to_timeout.to_return(xml_response(:not_found))
-        stub_members_cy_api.to_timeout.to_return(xml_response(:not_found))
+        stub_members_en_api.to_return(xml_response(:not_found))
+        stub_members_cy_api.to_return(xml_response(:not_found))
       end
 
       it "doesn't import any members" do
@@ -135,8 +135,8 @@ RSpec.describe FetchMembersJob, type: :job do
 
     context "because the API can't find the resource" do
       before do
-        stub_members_en_api.to_timeout.to_return(xml_response(:not_acceptable))
-        stub_members_cy_api.to_timeout.to_return(xml_response(:not_acceptable))
+        stub_members_en_api.to_return(xml_response(:not_acceptable))
+        stub_members_cy_api.to_return(xml_response(:not_acceptable))
       end
 
       it "doesn't import any members" do
@@ -146,8 +146,8 @@ RSpec.describe FetchMembersJob, type: :job do
 
     context "because the API is returning an internal server error" do
       before do
-        stub_members_en_api.to_timeout.to_return(xml_response(:internal_server_error))
-        stub_members_cy_api.to_timeout.to_return(xml_response(:internal_server_error))
+        stub_members_en_api.to_return(xml_response(:internal_server_error))
+        stub_members_cy_api.to_return(xml_response(:internal_server_error))
       end
 
       it "doesn't import any constituencies" do
