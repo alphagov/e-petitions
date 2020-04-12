@@ -1,0 +1,35 @@
+en-GB:
+  notify:
+    templates:
+      email_confirmation_for_signer: "a33e91d1-808a-4a85-abcc-8a4c62266789"
+      email_creator_about_other_business: "5b75b985-fc6e-4473-8b51-0958818bea63"
+      email_duplicate_signatures: "e4beb5af-0db1-406b-9c03-a8c8b65f27fd"
+      email_signer_about_other_business: "fdc05cf0-81d1-4a28-933c-65b8e10666dd"
+      gather_sponsors_for_petition_christmas: "f7965a34-6f8e-4aa3-97fe-51e8f465d264"
+      gather_sponsors_for_petition_easter: "ed21ff1d-b718-4cef-9491-451f443f9a1d"
+      gather_sponsors_for_petition_moderation_delay: "c93ca86b-b508-417c-a4b5-28ec33047b2e"
+      gather_sponsors_for_petition: "7e098470-4a73-435c-bd8c-9f0d9d9ba010"
+      notify_creator_of_debate_scheduled: "085e81e4-5ced-4cfe-b142-a03f8b5ffb08"
+      notify_creator_of_negative_debate_outcome: "41021e4a-70d7-43ec-b98e-14ca5e8e0835"
+      notify_creator_of_positive_debate_outcome: "929f4523-ee7d-4895-a9e5-32f9fff0c41a"
+      notify_creator_that_petition_is_published: "dc337901-65b0-4e76-b1d5-b14b90e7ee3e"
+      notify_creator_that_petition_was_rejected_hidden: "0e9af1c3-17b2-4af6-9440-5fce1f5eb7bb"
+      notify_creator_that_petition_was_rejected: "262dc874-cba2-4aef-888d-b6fcd23401a8"
+      notify_signer_of_debate_scheduled: "824662f6-2cb1-4da8-b65d-6b071c569d0e"
+      notify_signer_of_negative_debate_outcome: "865e3a66-6b98-406d-8883-04dd7d35a580"
+      notify_signer_of_positive_debate_outcome: "4254e36c-b0bc-48ad-9a8c-62d59d16d0ce"
+      notify_sponsor_that_petition_is_published: "a8557cbf-a889-4392-88a1-988634169d69"
+      notify_sponsor_that_petition_was_rejected_hidden: "69e7f6e1-da4c-4b1e-95d5-e687a62c2cc7"
+      notify_sponsor_that_petition_was_rejected: "0a9de360-8eab-4e81-946b-7fe2146b6b1e"
+      petition_and_email_confirmation_for_sponsor: "0f912b39-37e2-4de0-886a-28c3e529d139"
+      sponsor_signed_email_below_threshold: "32eabf04-06e7-4e80-9be4-f425321419c1"
+      sponsor_signed_email_on_threshold_christmas: "f6ea7df0-9cb1-4895-941a-183ddd0e79db"
+      sponsor_signed_email_on_threshold_easter: "6fbe2afa-0ee5-4dec-adab-1a7518cbee33"
+      sponsor_signed_email_on_threshold: "b0bbd8f3-ad81-4095-a01d-68d979775418"
+
+    strings:
+      sponsor_count:
+        zero: "You have 0 supporters so far"
+        one: "You have 1 supporter so far"
+        two: "You have 2 supporters so far"
+        other: "You have %{count} supporters so far"

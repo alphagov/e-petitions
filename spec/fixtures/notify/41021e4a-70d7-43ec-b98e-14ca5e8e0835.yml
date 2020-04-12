@@ -1,0 +1,39 @@
+id: "41021e4a-70d7-43ec-b98e-14ca5e8e0835"
+name: "notify_creator_of_negative_debate_outcome_en"
+subject: "Senedd didn’t debate “((action_en))” | Ni thrafododd y Senedd “((action_cy))”"
+body: |-
+  Dear ((name)),
+  
+  The Petitions Committee decided not to debate your petition – “((action_en))”
+  
+  ((overview_en))
+  
+  The petition: ((petition_url_en))
+  
+  Find out more about the Petitions Committee: ((petitions_committee_url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  You’re receiving this email because you created this petition: “((action_en))”.
+  To unsubscribe from getting emails about this petition: ((unsubscribe_url_en))
+  
+  ---
+  
+  Annwyl ((name)),
+  
+  Penderfynodd y Pwyllgor Deisebau beidio â thrafod eich deiseb - “((action_cy))”
+  
+  ((overview_cy))
+  
+  Y ddeiseb: ((petition_url_cy))
+  
+  Darganfyddwch fwy am y Pwyllgor Deisebau: ((petitions_committee_url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_cy))”.
+  Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))

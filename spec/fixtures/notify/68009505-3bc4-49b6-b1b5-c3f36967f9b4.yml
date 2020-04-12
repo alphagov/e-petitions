@@ -1,0 +1,18 @@
+id: "68009505-3bc4-49b6-b1b5-c3f36967f9b4"
+name: "feedback_email"
+subject: "Feedback from the Petitions service"
+body: |-
+  # Comments:
+  
+  ((comment))
+  
+  ---
+  
+  Link or title:
+  ((link_or_title))
+  
+  Email:
+  ((email))
+  
+  Browser:
+  ((user_agent))

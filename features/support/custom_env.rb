@@ -3,6 +3,7 @@ require 'rspec/core/pending'
 require 'rspec/mocks'
 require 'multi_test'
 require 'faker'
+require 'notify_mock'
 
 MultiTest.disable_autorun
 

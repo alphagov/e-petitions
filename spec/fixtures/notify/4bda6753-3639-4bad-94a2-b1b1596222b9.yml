@@ -1,0 +1,47 @@
+id: "4bda6753-3639-4bad-94a2-b1b1596222b9"
+name: "notify_creator_of_positive_debate_outcome_cy"
+subject: "Trafododd y Senedd “((action_cy))” | Senedd debated “((action_en))”"
+body: |-
+  Annwyl ((name)),
+  
+  Trafododd y Senedd eich deiseb - “((action_cy))”
+  
+  ((overview_cy))
+  
+  Gwyliwch y ddadl: ((video_url_cy))
+  
+  Darllenwch y trawsgrifiad: ((transcript_url_cy))
+  
+  Dewch o hyd i fanylion y ddeiseb: ((debate_pack_url_cy))
+  
+  Y ddeiseb: ((petition_url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_cy))”.
+  Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))
+  
+  ---
+  
+  Dear ((name)),
+  
+  Senedd debated your petition – “((action_en))”
+  
+  ((overview_en))
+  
+  Watch the debate: ((video_url_en))
+  
+  Read the transcript: ((transcript_url_en))
+  
+  Find details of the petition: ((debate_pack_url_en))
+  
+  The petition: ((petition_url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  You’re receiving this email because you created this petition: “((action_en))”.
+  To unsubscribe from getting emails about this petition: ((unsubscribe_url_en))

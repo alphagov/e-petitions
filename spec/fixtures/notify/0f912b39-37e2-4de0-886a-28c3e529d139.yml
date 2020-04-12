@@ -1,0 +1,33 @@
+id: "0f912b39-37e2-4de0-886a-28c3e529d139"
+name: "petition_and_email_confirmation_for_sponsor_en"
+subject: "Please confirm your email address | Cadarnhewch eich cyfeiriad e-bost"
+body: |-
+  Click this link to sign the petition:
+  ((url_en))
+  
+  ((creator))’s petition:
+  
+  # ((action))
+  
+  ((content))
+  
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  ---
+  
+  Cliciwch ar y linc i lofnodi’r ddeiseb:
+  ((url_cy))
+  
+  Deiseb ((creator))
+  
+  #  ((action))
+  
+  ((content))
+  
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd

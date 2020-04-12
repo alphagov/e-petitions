@@ -17,6 +17,10 @@ Before do
 end
 
 Before do
+  stub_request(:post, NotifyMock.url).to_rack(NotifyMock.app)
+end
+
+Before do
   ::RSpec::Mocks.setup
 end
 

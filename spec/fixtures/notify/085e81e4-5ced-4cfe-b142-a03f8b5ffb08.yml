@@ -1,0 +1,39 @@
+id: "085e81e4-5ced-4cfe-b142-a03f8b5ffb08"
+name: "notify_creator_of_debate_scheduled_en"
+subject: "Senedd will debate “((action_en))” | Bydd y Senedd yn trafod “((action_cy))”"
+body: |-
+  Dear ((name)),
+  
+  Senedd is going to debate your petition – “((action_en))”.
+  
+  ((petition_url_en))
+  
+  The debate is scheduled for ((debate_date_en)).
+  
+  Once the debate has happened, we’ll email you a video and transcript.
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  You’re receiving this email because you created this petition: “((action_en))”.
+  To unsubscribe from getting emails about this petition: ((unsubscribe_url_en))
+  
+  ---
+  
+  Annwyl ((name)),
+  
+  Mae'r Senedd yn mynd i drafod eich deiseb - “((action_cy))”.
+  
+  ((petition_url_cy))
+  
+  Mae'r ddadl wedi'i hamserlennu ar gyfer ((debate_date_cy)).
+  
+  Ar ôl i'r ddadl ddigwydd, byddwn yn e-bostio fideo a thrawsgrifiad atoch.
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_cy))”.
+  Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))

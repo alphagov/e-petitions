@@ -1,0 +1,35 @@
+id: "fffa81d1-0625-44a1-af7b-780dd27a7719"
+name: "sponsor_signed_email_on_threshold_easter_cy"
+subject: "Rydym yn gwirio'ch deiseb | We’re checking your petition"
+body: |-
+  Annwyl ((creator)),
+  
+  Mae eich deiseb bron yn barod.
+  
+  Cefnogodd ((sponsor)) eich deiseb - “((action))”.
+  
+  Mae ((moderation_threshold)) berson wedi cefnogi eich deiseb. Rydym ni’n gwirio'ch deiseb i sicrhau ei bod yn bodloni’r meini prawf ar gyfer deisebau. Os felly, byddwn ni’n cyhoeddi’r ddeiseb ac yn rhoi gwybod i chi. Mae hyn fel arfer yn cymryd hyd at wythnos ond bydd yn cymryd ychydig mwy o amser nag arfer i ni dros gyfnod y Pasg. Byddwn ni’n gwirio'ch deiseb cyn gynted ag y gallwn.
+  
+  Dyma wybodaeth am sut rydym ni’n gwirio deisebau cyn eu cyhoeddi:
+  ((url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  ---
+  
+  Dear ((creator)),
+  
+  Your petition is nearly ready to go.
+  
+  ((sponsor)) supported your petition – “((action))”.
+  
+  ((moderation_threshold)) people have supported your petition. We’re checking your petition to make sure it meets the petition criteria. If it does, we’ll publish it and let you know. This usually takes a week or less but over the Easter period it will take us a little longer than usual. We’ll check your petition as quickly as we can.
+  
+  Find out how we check petitions before we publish them:
+  ((url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd

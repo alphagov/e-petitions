@@ -1,0 +1,33 @@
+id: "86b5dee8-ca22-45be-af00-d74d601e656d"
+name: "email_creator_about_other_business_cy"
+subject: "((subject_cy)) | ((subject_en))"
+body: |-
+  Annwyl ((name)),
+  
+  Yn ddiweddar fe wnaethoch chi greu'r ddeiseb “((action_cy))”:
+  ((petition_url_cy))
+  
+  ((body_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_en))”.
+  Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))
+  
+  ---
+  
+  Dear ((name)),
+  
+  You recently created the petition “((action_en))”:
+  ((petition_url_en))
+  
+  ((body_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  You’re receiving this email because you created this petition: “((action_en))”.
+  To unsubscribe from getting emails about this petition: ((unsubscribe_url_en))

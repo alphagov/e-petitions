@@ -1,0 +1,31 @@
+id: "46f90a8f-eb76-4ed7-b24f-c657560c5c41"
+name: "notify_sponsor_that_petition_is_published_cy"
+subject: "Cyhoeddwyd y ddeiseb “((action_cy))” y gwnaethoch chi ei chefnogi | We published the petition “((action_en))” that you supported"
+body: |-
+  Annwyl ((sponsor)),
+  
+  Mae'r ddeiseb y gwnaethoch chi ei chefnogi – “((action_cy))”, bellach wedi ei chyhoeddi.
+  
+  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i'r Pwyllgor Deisebau ei hystyried.
+  
+  Cliciwch ar y linc i weld y ddeiseb a dechrau ei rhannu:
+  ((url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  ---
+  
+  Dear ((sponsor)),
+  
+  The petition you supported – “((action_en))”, has now been published.
+  
+  Petitions need to collect ((referral_threshold)) signatures in order to be considered by the Petitions Committee.
+  
+  Click this link to see the petition and start sharing it:
+  ((url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd

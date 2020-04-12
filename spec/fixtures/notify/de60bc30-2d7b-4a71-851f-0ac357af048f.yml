@@ -1,0 +1,25 @@
+id: "de60bc30-2d7b-4a71-851f-0ac357af048f"
+name: "email_confirmation_for_signer_cy"
+subject: "Cadarnhewch eich cyfeiriad e-bost | Please confirm your email address"
+body: |-
+  Cliciwch ar y linc i lofnodi’r ddeiseb:
+  
+  #  ((action_cy))
+  
+  ((url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  ---
+  
+  Click this link to sign the petition:
+  
+  # ((action_en))
+  
+  ((url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd

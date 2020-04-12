@@ -1,0 +1,23 @@
+id: "8d63e92e-1591-420d-a8ec-1df6ecf6a34c"
+name: "email_duplicate_signatures_cy"
+subject: "Llofnod dyblyg ar ddeiseb | Duplicate signature of petition"
+body: |-
+  Rydych chi wedi cael y neges e-bost hon am fod eich cyfeiriad e-bost wedi'i ddefnyddio i lofnodi’r ddeiseb “((action_cy))”, ond rydych chi eisoes wedi llofnodi'r ddeiseb hon.
+  
+  Gallwch weld y ddeiseb “((action_cy))” yn:
+  ((url_cy))
+  
+  Diolch,
+  Tîm Deisebau 
+  Y Senedd
+  
+  ---
+  
+  You’re receiving this email because your email has been used to sign the petition “((action_en))”, but you have already signed this petition.
+  
+  View the petition “((action_en))” at: 
+  ((url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd

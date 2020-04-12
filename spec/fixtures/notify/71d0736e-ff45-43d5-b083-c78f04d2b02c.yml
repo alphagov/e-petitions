@@ -1,0 +1,55 @@
+id: "71d0736e-ff45-43d5-b083-c78f04d2b02c"
+name: "notify_creator_that_petition_was_rejected_cy"
+subject: "Gwrthodwyd eich deiseb “((action))” | We rejected your petition “((action))”"
+body: |-
+  Annwyl ((creator)),
+  
+  Diolch am gyflwyno deiseb i'r Senedd.  
+  
+  Cyn cyhoeddi deiseb ar ein gwefan a dechrau casglu llofnodion, mae angen i ni sicrhau ei bod yn bodloni’r rheolau ar gyfer deisebau. 
+  
+  Yn anffodus, ni allwn dderbyn y ddeiseb a gynigiwyd gennych “((action))”.
+  
+  ((content_cy))
+   
+  Cliciwch ar y linc i weld y ddeiseb a wrthodwyd:
+  ((url_cy))
+  
+  Dim ond deisebau nad ydynt yn bodloni'r safonau y byddwn yn eu gwrthod:
+  ((standards_url_cy))
+  
+  Os hoffech roi cynnig arall arni, cliciwch yma i ddechrau deiseb:
+  ((new_petition_url_cy))
+  
+  Mae'n ddrwg gennym na allwn fwrw ymlaen â'ch deiseb y tro hwn. 
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  ---
+  
+  Dear ((creator)),
+  
+  Thank you for submitting a petition to the Senedd.  
+  
+  Before we can publish a petition on our website and it can begin to collect signatures, we need to ensure that it meets the petition rules. 
+  
+  Unfortunately, we are not able to accept your proposed petition “((action))”. 
+  
+  ((content_en))
+  
+  Click this link to see your rejected petition:
+  ((url_en))
+  
+  We only reject petitions that don’t meet the petition standards:
+  ((standards_url_en))
+  
+  If you want to try again, click here to start a petition:
+  ((new_petition_url_en))
+  
+  We’re sorry that we’re not able to take your petition forward on this occasion.
+  
+  Thanks,
+  The Petitions team
+  Senedd

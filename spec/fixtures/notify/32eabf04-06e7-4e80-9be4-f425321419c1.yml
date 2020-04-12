@@ -1,0 +1,31 @@
+id: "32eabf04-06e7-4e80-9be4-f425321419c1"
+name: "sponsor_signed_email_below_threshold_en"
+subject: "((sponsor)) supported your petition | Cefnogodd ((sponsor)) eich deiseb"
+body: |-
+  Dear ((creator)),
+  
+  ((sponsor)) supported your petition – “((action))”.
+  
+  ((sponsor_count_en)). If ((moderation_threshold)) people support your petition, we’ll check it to make sure it meets the petition criteria. If it does, we’ll publish it and let you know.
+  
+  Find out how we check petitions before we publish them:
+  ((url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  ---
+  
+  Annwyl ((creator)),
+  
+  Cefnogodd ((sponsor)) eich deiseb - “((action))”.
+  
+  ((sponsor_count_cy)). Os bydd ((moderation_threshold)) berson yn cefnogi eich deiseb, byddwn ni’n ei gwirio i sicrhau ei bod yn bodloni’r meini prawf ar gyfer deisebau. Os felly, byddwn ni’n cyhoeddi’r ddeiseb ac yn rhoi gwybod i chi.
+  
+  Dyma wybodaeth am sut rydym ni'n gwirio deisebau cyn eu cyhoeddi:
+  ((url_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd

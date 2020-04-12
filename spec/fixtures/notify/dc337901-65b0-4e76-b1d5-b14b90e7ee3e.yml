@@ -1,0 +1,51 @@
+id: "dc337901-65b0-4e76-b1d5-b14b90e7ee3e"
+name: "notify_creator_that_petition_is_published_en"
+subject: "We published your petition “((action_en))” | Cyhoeddwyd eich deiseb “((action_cy))”"
+body: |-
+  Dear ((creator)),
+  
+  Your petition “((action_en))” is now published and ready to collect signatures. 
+  
+  Click this link to see your petition and start sharing it:
+  ((url_en))
+  
+  Petitions need to collect ((referral_threshold)) signatures in order to be considered by the Petitions Committee. This does not happen until after the petition has finished collecting signatures. Please let us know if you would like to change the closing date of your petition.
+  
+  If your petition collects more that ((debate_threshold)) signatures, the Committee will consider referring it for a debate in the Senedd. In doing so, the Committee will consider a range of factors including the subject-matter of the petition and the percentage of signatures gathered from within Wales.
+  
+  Should you also wish to collect signatures on paper, we can provide a template on request.
+  
+  If your petition collects ((referral_threshold)) signatures you can arrange to come to the Senedd to formally hand in your petition to the Committee. This is an informal opportunity to speak to the Chair and other Members of the Committee about your petition. It is entirely optional.
+  
+  Handovers take place at 12.30pm on Tuesdays and Wednesdays when the Senedd is sitting and last approximately 10 – 15 minutes. These opportunities are often taken up quickly, so please contact us at your earliest convenience if you would like to arrange one.
+  
+  Finally, should you require any further information in the meantime, please do not hesitate to contact us.
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  ---
+  
+  Annwyl ((creator)),
+  
+  Mae eich deiseb “((action_cy))” bellach wedi'i chyhoeddi ac yn barod i gasglu llofnodion. 
+  
+  Cliciwch ar y linc i weld eich deiseb a dechrau ei rhannu:
+  ((url_cy))
+  
+  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i'r Pwyllgor Deisebau ei hystyried. Ni fydd hyn yn digwydd tan ar ôl i'r ddeiseb orffen casglu llofnodion. Rhowch wybod i ni os hoffech newid dyddiad cau eich deiseb.
+  
+  Os bydd eich deiseb yn casglu mwy na ((debate_threshold)) llofnod, bydd y Pwyllgor yn ystyried ei chyfeirio ar gyfer dadl yn y Senedd. Wrth wneud hynny, bydd y Pwyllgor yn ystyried nifer o ffactorau gan gynnwys pwnc y ddeiseb a chanran y llofnodion a gasglwyd yng Nghymru.
+  
+  Os hoffech gasglu llofnodion ar bapur hefyd, gallwn ddarparu templed ar gais.
+  
+  Os bydd eich deiseb yn casglu ((referral_threshold)) llofnod gallwch drefnu dod i'r Senedd i gyflwyno'ch deiseb yn ffurfiol i'r Pwyllgor. Bydd hwn yn gyfle anffurfiol i drafod eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor. Mae'n gwbl ddewisol.
+  
+  Caiff deisebau eu cyflwyno am 12.30 ar ddydd Mawrth a dydd Mercher yn ystod tymor y Senedd ac mae’r broses yn para tua 10-15 munud. Mae pobl yn manteisio ar y cyfleoedd hyn yn gyflym fel arfer, felly cysylltwch â ni cyn gynted â phosibl os hoffech drefnu i gyflwyno deiseb.
+  
+  Yn olaf, mae croeso i chi gysylltu â ni os bydd angen rhagor o wybodaeth arnoch yn y cyfamser.
+  
+  Diolch,
+  Tîm Deisebau 
+  Y Senedd

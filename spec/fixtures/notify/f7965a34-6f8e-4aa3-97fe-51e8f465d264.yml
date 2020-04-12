@@ -1,0 +1,65 @@
+id: "f7965a34-6f8e-4aa3-97fe-51e8f465d264"
+name: "gather_sponsors_for_petition_christmas_en"
+subject: "Action required: Petition “((action))” | Cam i'w gymryd: Deiseb “((action))”"
+body: |-
+  Dear ((creator)),
+  
+  You’re not done yet!
+  
+  Forward the email below to your potential supporters.
+  
+  ((moderation_threshold)) people need to click the link and confirm their support for us to publish your petition.
+  
+  Once you’ve gained the required number of supporters, we’ll check your petition to make sure it meets the petition criteria. If it does we’ll publish it and let you know. This usually takes a week or less but over the Christmas period it will take us a little longer than usual. We’ll check your petition as quickly as we can.
+  
+  Thanks, 
+  The Petitions team
+  Senedd
+  
+  ---
+  
+  I’ve made a petition – will you sign it?
+  
+  Click this link to sign the petition: 
+  ((url_en))
+  
+  My petition:
+  
+  # ((action))
+  
+  ((content))
+  
+  Click this link to sign the petition:
+  ((url_en))
+  
+  ---
+  
+  Annwyl ((creator)),
+  
+  Dydych chi ddim wedi gorffen eto!
+  
+  Anfonwch y neges e-bost isod ymlaen at eich darpar gefnogwyr.
+  
+  Mae angen I ((moderation_threshold)) berson glicio ar y linc a chadarnhau eu cefnogaeth er mwyn i ni gyhoeddi eich deiseb.
+  
+  Ar ôl i chi sicrhau’r nifer ofynnol o gefnogwyr, byddwn ni’n gwirio'ch deiseb i sicrhau ei bod yn bodloni’r meini prawf ar gyfer deisebau. Os felly, byddwn ni’n cyhoeddi’r ddeiseb ac yn rhoi gwybod i chi. Mae hyn fel arfer yn cymryd hyd at wythnos ond bydd yn cymryd ychydig mwy o amser nag arfer i ni dros gyfnod y Nadolig. Byddwn ni’n gwirio'ch deiseb cyn gynted ag y gallwn.
+  
+  Diolch, 
+  Tîm Deisebau
+  Y Senedd 
+  
+  ---
+  
+  Rydw i wedi creu deiseb – a wnewch chi ei llofnodi?
+  
+  Cliciwch ar y linc i lofnodi’r ddeiseb: 
+  ((url_cy))
+  
+  Fy neiseb I:
+  
+  # ((action))
+  
+  ((content))
+  
+  Cliciwch ar y linc i lofnodi’r ddeiseb: 
+  ((url_cy))

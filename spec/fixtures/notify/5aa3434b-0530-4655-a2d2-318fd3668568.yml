@@ -1,0 +1,33 @@
+id: "5aa3434b-0530-4655-a2d2-318fd3668568"
+name: "email_signer_about_other_business_cy"
+subject: "((subject_cy)) | ((subject_en))"
+body: |-
+  Annwyl ((name)),
+  
+  Yn ddiweddar gwnaethoch lofnodi'r ddeiseb “((action_cy))”:
+  ((petition_url_cy))
+  
+  ((body_cy))
+  
+  Diolch,
+  Tîm Deisebau
+  Y Senedd
+  
+  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi lofnodi'r ddeiseb hon: “((action_cy))”.
+  Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))
+  
+  ---
+  
+  Dear ((name)),
+  
+  You recently signed the petition “((action_en))”:
+  ((petition_url_en))
+  
+  ((body_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
+  
+  You’re receiving this email because you signed this petition: “((action_en))”.
+  To unsubscribe from getting emails about this petition: ((unsubscribe_url_en))
