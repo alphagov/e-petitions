@@ -225,6 +225,10 @@ class Site < ActiveRecord::Base
       [url_en, url_cy]
     end
 
+    def feedback_address
+      instance.feedback_address
+    end
+
     private
 
     def default_title_en
@@ -521,6 +525,10 @@ class Site < ActiveRecord::Base
 
   def translations_updated_at
     super || updated_at
+  end
+
+  def feedback_address
+    @feedback_address ||= Mail::Address.new(feedback_email).address
   end
 
   validates :title_en, :title_cy, presence: true, length: { maximum: 50 }
