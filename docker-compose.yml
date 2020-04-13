@@ -6,8 +6,6 @@ x-application: &application
   environment:
     - DATABASE_URL=postgres://postgres@postgres:5432
     - MEMCACHE_SERVERS=memcached:11211
-    - SMTP_HOST=mailcatcher
-    - SMTP_PORT=1025
     - SPROCKETS_CACHE=/cache
   volumes:
     - .:/app
@@ -15,7 +13,6 @@ x-application: &application
     - cache:/cache
   depends_on:
     - postgres
-    - mailcatcher
     - memcached
 
 services:
@@ -26,12 +23,6 @@ services:
       - "5432:5432"
     volumes:
       - db:/var/lib/postgresql/data
-
-  mailcatcher:
-    image: unboxed/mailcatcher
-    ports:
-      - "1025:1025"
-      - "1080:1080"
 
   memcached:
     image: memcached:1.5.16
