@@ -1,8 +1,5 @@
-class FeedbackEmailJob < EmailJob
+class FeedbackEmailJob < NotifyJob
   class SendingDisabledError < RuntimeError; end
-
-  self.mailer = FeedbackMailer
-  self.email = :send_feedback
 
   rescue_from SendingDisabledError do
     reschedule_job
@@ -12,11 +9,21 @@ class FeedbackEmailJob < EmailJob
     raise SendingDisabledError, "Feedback sending is currently disabled"
   end
 
-  private
-
-  def reschedule_job(time = 1.hour.from_now)
-    self.class.set(wait_until: time).perform_later(*arguments)
+  def perform(feedback)
+    client.send_email(
+      email_address: Site.feedback_address,
+      template_id: "68009505-3bc4-49b6-b1b5-c3f36967f9b4",
+      reference: feedback.to_gid_param,
+      personalisation: {
+        comment: feedback.comment,
+        link_or_title: feedback.petition_link_or_title,
+        email: feedback.email,
+        user_agent: feedback.user_agent
+      }
+    )
   end
+
+  private
 
   def feedback_sending_disabled?
     Site.disable_feedback_sending?

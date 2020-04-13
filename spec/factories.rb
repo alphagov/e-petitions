@@ -193,8 +193,6 @@ FactoryBot.define do
   factory :rejected_petition, :parent => :petition do
     state Petition::REJECTED_STATE
 
-    translated
-
     transient do
       rejection_code { "duplicate" }
       rejection_details { nil }
@@ -210,6 +208,18 @@ FactoryBot.define do
 
   factory :hidden_petition, :parent => :petition do
     state Petition::HIDDEN_STATE
+
+    transient do
+      rejection_code { "offensive" }
+      rejection_details { nil }
+    end
+
+    after(:create) do |petition, evaluator|
+      petition.create_rejection! do |r|
+        r.code = evaluator.rejection_code
+        r.details = evaluator.rejection_details
+      end
+    end
   end
 
   factory :referred_petition, :parent => :closed_petition do
@@ -232,35 +242,115 @@ FactoryBot.define do
     transient do
       debated_on { 1.day.ago }
       overview { nil }
+      overview_en { nil }
+      overview_cy { nil }
       transcript_url { nil }
+      transcript_url_en { nil }
+      transcript_url_cy { nil }
       video_url { nil }
+      video_url_en { nil }
+      video_url_cy { nil }
       debate_pack_url { nil }
+      debate_pack_url_en { nil }
+      debate_pack_url_cy { nil }
       commons_image { nil }
     end
 
     debate_state 'debated'
 
     after(:build) do |petition, evaluator|
-      debate_outcome_attributes = { petition: petition }
+      debate_outcome_attributes = { debated: true }
 
-      debate_outcome_attributes[:debated_on] = evaluator.debated_on if evaluator.debated_on.present?
-      debate_outcome_attributes[:overview_en] = evaluator.overview if evaluator.overview.present?
-      debate_outcome_attributes[:overview_cy] = evaluator.overview if evaluator.overview.present?
-      debate_outcome_attributes[:transcript_url_en] = evaluator.transcript_url if evaluator.transcript_url.present?
-      debate_outcome_attributes[:transcript_url_cy] = evaluator.transcript_url if evaluator.transcript_url.present?
-      debate_outcome_attributes[:video_url_en] = evaluator.video_url if evaluator.video_url.present?
-      debate_outcome_attributes[:video_url_cy] = evaluator.video_url if evaluator.video_url.present?
-      debate_outcome_attributes[:debate_pack_url_en] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
-      debate_outcome_attributes[:debate_pack_url_cy] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
-      debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
+      if evaluator.debated_on.present?
+        debate_outcome_attributes[:debated_on] = evaluator.debated_on
+      end
+
+      if evaluator.overview.present?
+        debate_outcome_attributes[:overview_en] = evaluator.overview
+        debate_outcome_attributes[:overview_cy] = evaluator.overview
+      end
+
+      if evaluator.overview_en.present?
+        debate_outcome_attributes[:overview_en] = evaluator.overview_en
+      end
+
+      if evaluator.overview_cy.present?
+        debate_outcome_attributes[:overview_cy] = evaluator.overview_cy
+      end
+
+      if evaluator.transcript_url.present?
+        debate_outcome_attributes[:transcript_url_en] = evaluator.transcript_url
+        debate_outcome_attributes[:transcript_url_cy] = evaluator.transcript_url
+      end
+
+      if evaluator.transcript_url_en.present?
+        debate_outcome_attributes[:transcript_url_en] = evaluator.transcript_url_en
+      end
+
+      if evaluator.transcript_url_cy.present?
+        debate_outcome_attributes[:transcript_url_cy] = evaluator.transcript_url_cy
+      end
+
+      if evaluator.video_url.present?
+        debate_outcome_attributes[:video_url_en] = evaluator.video_url
+        debate_outcome_attributes[:video_url_cy] = evaluator.video_url
+      end
+
+      if evaluator.video_url_en.present?
+        debate_outcome_attributes[:video_url_en] = evaluator.video_url_en
+      end
+
+      if evaluator.video_url_cy.present?
+        debate_outcome_attributes[:video_url_cy] = evaluator.video_url_cy
+      end
+
+      if evaluator.debate_pack_url.present?
+        debate_outcome_attributes[:debate_pack_url_en] = evaluator.debate_pack_url
+        debate_outcome_attributes[:debate_pack_url_cy] = evaluator.debate_pack_url
+      end
+
+      if evaluator.debate_pack_url_en.present?
+        debate_outcome_attributes[:debate_pack_url_en] = evaluator.debate_pack_url_en
+      end
+
+      if evaluator.debate_pack_url_cy.present?
+        debate_outcome_attributes[:debate_pack_url_cy] = evaluator.debate_pack_url_cy
+      end
+
+      if evaluator.commons_image.present?
+        debate_outcome_attributes[:commons_image] = evaluator.commons_image
+      end
 
       petition.build_debate_outcome(debate_outcome_attributes)
     end
   end
 
   factory :not_debated_petition, :parent => :referred_petition do
-    after(:create) do |petition, evaluator|
-      petition.create_debate_outcome(debated: false)
+    transient do
+      overview { nil }
+      overview_en { nil }
+      overview_cy { nil }
+    end
+
+    debate_state 'not_debated'
+
+    after(:build) do |petition, evaluator|
+      debate_outcome_attributes = { debated: false }
+
+      if evaluator.overview.present?
+        debate_outcome_attributes[:overview_en] = evaluator.overview
+        debate_outcome_attributes[:overview_cy] = evaluator.overview
+      end
+
+      if evaluator.overview_en.present?
+        debate_outcome_attributes[:overview_en] = evaluator.overview_en
+      end
+
+      if evaluator.overview_cy.present?
+        debate_outcome_attributes[:overview_cy] = evaluator.overview_cy
+      end
+
+      petition.build_debate_outcome(debate_outcome_attributes)
     end
   end
 

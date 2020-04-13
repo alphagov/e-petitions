@@ -264,9 +264,15 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
               end
 
               it "queues a job to process the emails" do
-                assert_enqueued_jobs 1 do
+                expect {
                   do_post
-                end
+                }.to have_enqueued_job(EmailPetitionersJob)
+              end
+
+              it "queues a job to send a copy to the feedback address" do
+                expect {
+                  do_post
+                }.to have_enqueued_job(EmailSignerAboutOtherBusinessEmailJob)
               end
 
               it "stamps the 'petition_email' email sent timestamp on each signature when the job runs" do
@@ -565,10 +571,10 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                 petition.reload
               end
 
-              it "does not queue a job to process the emails" do
-                assert_enqueued_jobs 0 do
+              it "enqueues a job to process the email" do
+                expect {
                   do_post
-                end
+                }.to have_enqueued_job(EmailSignerAboutOtherBusinessEmailJob)
               end
             end
           end
@@ -786,9 +792,15 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
               end
 
               it "queues a job to process the emails" do
-                assert_enqueued_jobs 1 do
+                expect {
                   do_patch
-                end
+                }.to have_enqueued_job(EmailPetitionersJob)
+              end
+
+              it "queues a job to send a copy to the feedback address" do
+                expect {
+                  do_patch
+                }.to have_enqueued_job(EmailSignerAboutOtherBusinessEmailJob)
               end
 
               it "stamps the 'petition_email' email sent timestamp on each signature when the job runs" do
@@ -1099,10 +1111,10 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
                 petition.reload
               end
 
-              it "does not queue a job to process the emails" do
-                assert_enqueued_jobs 0 do
+              it "enqueues a job to process the email" do
+                expect {
                   do_patch
-                end
+                }.to have_enqueued_job(EmailSignerAboutOtherBusinessEmailJob)
               end
             end
 

@@ -52,7 +52,7 @@ module EmailAllPetitionSignatories
     # If the petition has been updated since the job
     # was queued then don't send the emails.
     unless petition_has_been_updated?
-      enqueue_send_email_jobs
+      enqueue_send_email_jobs(**args)
     end
   end
 
@@ -60,21 +60,12 @@ module EmailAllPetitionSignatories
 
   # Batches the signataries to send emails to in groups of 1000
   # and enqueues a job to do the actual sending
-  def enqueue_send_email_jobs
+  def enqueue_send_email_jobs(**args)
     Appsignal.without_instrumentation do
       signatures_to_email.find_each do |signature|
-        email_delivery_job_class.perform_later(**mailer_arguments(signature))
+        email_delivery_job_class.perform_later(**args.merge(signature: signature, timestamp_name: timestamp_name))
       end
     end
-  end
-
-  def mailer_arguments(signature)
-    {
-      signature:      signature,
-      timestamp_name: timestamp_name,
-      petition:       petition,
-      requested_at:   requested_at
-    }
   end
 
   # admins can ask to send the email multiple times and each time they
@@ -94,5 +85,13 @@ module EmailAllPetitionSignatories
 
   def set_appsignal_namespace
     Appsignal.set_namespace("email")
+  end
+
+  def log_exception(exception)
+    logger.info(log_message(exception))
+  end
+
+  def log_message(exception)
+    "#{exception.class.name} while running #{self.class.name}"
   end
 end

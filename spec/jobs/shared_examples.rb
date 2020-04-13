@@ -84,24 +84,26 @@ RSpec.shared_examples_for "a job to send an signatory email" do
   context "when the petition has not been updated" do
     let(:mail_object) { double(:mail_object) }
 
-    it "uses the correct mailer to generate the email" do
+    it "uses the correct notify job to generate the email" do
       expect(job).to receive(:create_email).and_call_original
-      job.perform_now
+      perform_enqueued_jobs { job.perform_now }
     end
 
     it "delivers the email returned by #create_email" do
       expect(job).to receive(:create_email).and_return(mail_object)
-      expect(mail_object).to receive(:deliver_now)
-      job.perform_now
+      expect(mail_object).to receive(:enqueue)
+      perform_enqueued_jobs { job.perform_now }
     end
 
     it "does sends the email" do
-      expect { job.perform_now }.to change(ActionMailer::Base.deliveries, :size).by(1)
+      expect {
+        perform_enqueued_jobs { job.perform_now }
+      }.to change(ActionMailer::Base.deliveries, :size).by(1)
     end
 
     it "records the email being sent" do
       expect {
-        job.perform_now
+        perform_enqueued_jobs { job.perform_now }
       }.to change {
         signature.reload.get_email_sent_at_for(timestamp_name)
       }.from(nil).to(requested_at)
@@ -113,130 +115,17 @@ RSpec.shared_examples_for "a job to send an signatory email" do
       end
 
       it "does not send any email" do
-        expect { job.perform_now }.not_to change(ActionMailer::Base.deliveries, :size)
+        expect {
+          perform_enqueued_jobs { job.perform_now }
+        }.not_to change(ActionMailer::Base.deliveries, :size)
       end
 
       it "does not record any email being sent" do
         expect {
-          job.perform_now
+          perform_enqueued_jobs { job.perform_now }
         }.not_to change {
           signature.reload.get_email_sent_at_for(timestamp_name)
         }
-      end
-    end
-
-    context "email sending fails" do
-      shared_examples_for "catching errors during individual email sending" do
-        let(:logger) { job.logger }
-
-        before do
-          allow(logger).to receive(:info).and_call_original
-        end
-
-        it "captures the error and doesn't re-raise it" do
-          job.perform_now
-        end
-
-        it "logs the email sending error as information" do
-          expect(logger).to receive(:info).with(/#{Regexp.escape(exception_class.name)}/)
-          job.perform_now
-        end
-
-        it "does not mark the signature" do
-          expect {
-            job.perform_now
-          }.not_to change {
-            signature.reload.get_email_sent_at_for(timestamp_name)
-          }
-        end
-      end
-
-      shared_examples_for "retrying the email delivery" do
-        it "retries the job" do
-          expect(job).to receive(:retry_job)
-          job.perform_now
-        end
-      end
-
-      shared_examples_for "not retrying the email delivery" do
-        it "doesn't retry the job" do
-          expect(job).not_to receive(:retry_job)
-          job.perform_now
-        end
-      end
-
-      before do
-        expect(job).to receive(:create_email).and_raise(exception_class)
-      end
-
-      context "with a fatal SMTP error" do
-        let(:exception_class) { Net::SMTPFatalError }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "not retrying the email delivery"
-      end
-
-      context "with a SMTP syntax error" do
-        let(:exception_class) { Net::SMTPSyntaxError }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "not retrying the email delivery"
-      end
-
-      context "with SMTP authentication error" do
-        let(:exception_class) { Net::SMTPAuthenticationError }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with SMTP connection timeout" do
-        let(:exception_class) { Net::OpenTimeout }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with SMTP server busy" do
-        let(:exception_class) { Net::SMTPServerBusy }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with connection reset" do
-        let(:exception_class) { Errno::ECONNRESET }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with connection refused" do
-        let(:exception_class) { Errno::ECONNREFUSED }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with connection timeout" do
-        let(:exception_class) { Errno::ETIMEDOUT }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with timeout error" do
-        let(:exception_class) { Timeout::Error }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
-      end
-
-      context "with socket error" do
-        let(:exception_class) { SocketError }
-
-        it_behaves_like "catching errors during individual email sending"
-        it_behaves_like "retrying the email delivery"
       end
     end
   end
@@ -247,12 +136,14 @@ RSpec.shared_examples_for "a job to send an signatory email" do
     end
 
     it "does not send any email" do
-      expect { job.perform_now }.not_to change(ActionMailer::Base.deliveries, :size)
+      expect {
+        perform_enqueued_jobs { job.perform_now }
+      }.not_to change(ActionMailer::Base.deliveries, :size)
     end
 
     it "does not record any email being sent" do
       expect {
-        job.perform_now
+        perform_enqueued_jobs { job.perform_now }
       }.not_to change {
         signature.reload.get_email_sent_at_for(timestamp_name)
       }

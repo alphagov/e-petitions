@@ -583,6 +583,18 @@ class Petition < ActiveRecord::Base
     @moderation
   end
 
+  def content
+    translated_method(:content_en, :content_cy)
+  end
+
+  def content_en
+    [background_en, additional_details_en].reject(&:blank?).join("\n\n")
+  end
+
+  def content_cy
+    [background_cy, additional_details_cy].reject(&:blank?).join("\n\n")
+  end
+
   def english?
     locale == "en-GB"
   end
@@ -924,5 +936,9 @@ class Petition < ActiveRecord::Base
 
   def closing_date(time)
     closed_at || Site.closed_at_for_opening(time)
+  end
+
+  def sponsor_count
+    @sponsor_count ||= sponsors.validated.count
   end
 end

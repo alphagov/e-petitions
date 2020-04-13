@@ -94,9 +94,9 @@ Then(/^the creator should receive a (libel\/profanity )?rejection notification e
   steps %Q(
     Then "#{@petition.creator.email}" should receive an email
     When they open the email
-    Then they should see "We rejected the petition you created" in the email body
+    Then they should see "Unfortunately, we are not able to accept your proposed petition" in the email body
     And they should see "#{@rejection_reason.description}" in the email body
-    And they should see /We rejected your petition/ in the email subject
+    And they should see "We rejected your petition" in the email subject
   )
   if petition_is_libellous
     step %{they should not see "#{petition_url(@petition)}" in the email body}

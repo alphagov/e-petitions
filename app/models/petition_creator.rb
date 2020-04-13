@@ -359,6 +359,6 @@ class PetitionCreator
   end
 
   def send_email_to_gather_sponsors(petition)
-    GatherSponsorsForPetitionEmailJob.perform_later(petition)
+    GatherSponsorsForPetitionEmailJob.perform_later(petition.creator)
   end
 end

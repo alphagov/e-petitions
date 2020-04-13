@@ -100,6 +100,6 @@ class Admin::PetitionEmailsController < Admin::AdminController
   end
 
   def send_preview_email
-    PetitionMailer.email_signer(@petition, feedback_signature, @email).deliver_now
+    EmailSignerAboutOtherBusinessEmailJob.perform_later(feedback_signature, @email)
   end
 end

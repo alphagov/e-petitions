@@ -1,18 +1,13 @@
 class DeliverPetitionEmailJob < ApplicationJob
   include EmailDelivery
 
-  attr_reader :email
+  private
 
-  def perform(**args)
-    @email = args[:email]
-    super
-  end
-
-  def create_email
+  def create_email(signature:, email:, **args)
     if signature.creator?
-      mailer.email_creator petition, signature, email
+      EmailCreatorAboutOtherBusinessEmailJob.new(signature, email)
     else
-      mailer.email_signer petition, signature, email
+      EmailSignerAboutOtherBusinessEmailJob.new(signature, email)
     end
   end
 end

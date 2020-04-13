@@ -25,6 +25,6 @@ Then(/^the sponsor threshold notification email should tell me about my petition
   email = open_last_email_for("charlie.the.creator@example.com")
   expect(email.subject).to match /We’re checking your petition/
   mail_body = email.default_part_body.to_s
-  expect(mail_body).to include "#{threshold} people have supported your petition so far"
+  expect(mail_body).to include "#{threshold} people have supported your petition"
   expect(mail_body).not_to match /support from \d+ of your nominated sponsors/
 end

@@ -1,5 +1,3 @@
-require 'net/smtp'
-
 module EmailDelivery
   # Send a single email to a recipient informing them about a petition that they have signed
   # Implemented as a custom job rather than using action mailers #deliver_later so we can do
@@ -7,37 +5,11 @@ module EmailDelivery
 
   extend ActiveSupport::Concern
 
-  PERMANENT_FAILURES = [
-    Net::SMTPFatalError,
-    Net::SMTPSyntaxError
-  ]
-
-  TEMPORARY_FAILURES = [
-    Net::SMTPAuthenticationError,
-    Net::OpenTimeout,
-    Net::SMTPServerBusy,
-    Errno::ECONNRESET,
-    Errno::ECONNREFUSED,
-    Errno::ETIMEDOUT,
-    Timeout::Error,
-    EOFError,
-    SocketError
-  ]
-
   included do
     before_perform :set_appsignal_namespace
 
     attr_reader :signature, :timestamp_name, :petition, :requested_at
     queue_as :low_priority
-
-    rescue_from *PERMANENT_FAILURES do |exception|
-      log_exception(exception)
-    end
-
-    rescue_from *TEMPORARY_FAILURES do |exception|
-      log_exception(exception)
-      retry_job
-    end
   end
 
   def perform(**args)
@@ -47,40 +19,19 @@ module EmailDelivery
     @timestamp_name = args[:timestamp_name]
 
     if can_send_email?
-      send_email
+      create_email(**args).enqueue
       record_email_sent
     end
   end
 
   private
 
-  def log_exception(exception)
-    logger.info(log_message(exception))
-  end
-
-  def log_message(exception)
-    "#{exception.class.name} while sending email for #{self.class.name} to: #{signature.email} for #{petition.action}"
+  def create_email(**args)
+    raise NotImplementedError.new "Including classes must implement #create_email method"
   end
 
   def can_send_email?
     petition_has_not_been_updated? && email_not_previously_sent?
-  end
-
-  def send_email
-    create_email.deliver_now
-  end
-
-  def mailer
-    case petition
-    when Petition
-      PetitionMailer
-    else
-      raise ArgumentError, "Unknown petition type: #{petition.class}"
-    end
-  end
-
-  def create_email
-    raise NotImplementedError.new "Including classes must implement #create_email method"
   end
 
   def record_email_sent

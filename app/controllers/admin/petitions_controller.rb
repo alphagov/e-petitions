@@ -23,11 +23,17 @@ class Admin::PetitionsController < Admin::AdminController
   end
 
   def resend
-    GatherSponsorsForPetitionEmailJob.perform_later(@petition, Site.feedback_email)
+    GatherSponsorsForPetitionEmailJob.perform_later(@petition.creator)
+    GatherSponsorsForPetitionEmailJob.perform_later(feedback_signature)
+
     redirect_to admin_petition_url(@petition), notice: :email_resent_to_creator
   end
 
   protected
+
+  def feedback_signature
+    FeedbackSignature.new(@petition)
+  end
 
   def petition_id?
     /^\d+$/ =~ params[:q].to_s

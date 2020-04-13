@@ -7,10 +7,10 @@ class NotifyEveryoneOfFailureToGetEnoughSignaturesJob < ApplicationJob
     creator = petition.creator
     sponsors = petition.sponsors.validated
 
-    NotifyCreatorThatPetitionWasRejectedEmailJob.perform_later(creator)
+    NotifyCreatorThatPetitionWasRejectedEmailJob.perform_later(creator, petition.rejection)
 
     sponsors.each do |sponsor|
-      NotifySponsorThatPetitionWasRejectedEmailJob.perform_later(sponsor)
+      NotifySponsorThatPetitionWasRejectedEmailJob.perform_later(sponsor, petition.rejection)
     end
   end
 end

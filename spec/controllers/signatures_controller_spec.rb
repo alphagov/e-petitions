@@ -262,7 +262,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "sends a confirmation email" do
           expect(last_email_sent).to deliver_to("ted@example.com")
-          expect(last_email_sent).to have_subject("Please confirm your email address")
+          expect(last_email_sent).to have_subject(/Please confirm your email address/)
         end
 
         it "redirects to the thank you page" do
@@ -320,7 +320,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "re-sends the confirmation email" do
           expect(last_email_sent).to deliver_to("ted@example.com")
-          expect(last_email_sent).to have_subject("Please confirm your email address")
+          expect(last_email_sent).to have_subject(/Please confirm your email address/)
         end
 
         it "redirects to the thank you page" do
@@ -349,7 +349,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "re-sends the confirmation email" do
           expect(last_email_sent).to deliver_to("ted@example.com")
-          expect(last_email_sent).to have_subject("Please confirm your email address")
+          expect(last_email_sent).to have_subject(/Please confirm your email address/)
         end
 
         it "redirects to the thank you page" do
@@ -376,7 +376,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "sends a duplicate signature email" do
           expect(last_email_sent).to deliver_to("ted@example.com")
-          expect(last_email_sent).to have_subject("Duplicate signature of petition")
+          expect(last_email_sent).to have_subject(/Duplicate signature of petition/)
         end
 
         it "redirects to the thank you page" do
@@ -405,7 +405,7 @@ RSpec.describe SignaturesController, type: :controller do
 
         it "sends a duplicate signature email" do
           expect(last_email_sent).to deliver_to("ted@example.com")
-          expect(last_email_sent).to have_subject("Duplicate signature of petition")
+          expect(last_email_sent).to have_subject(/Duplicate signature of petition/)
         end
 
         it "redirects to the thank you page" do

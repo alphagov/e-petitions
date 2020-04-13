@@ -1,11 +1,11 @@
 class DeliverDebateScheduledEmailJob < ApplicationJob
   include EmailDelivery
 
-  def create_email
+  def create_email(signature:, **args)
     if signature.creator?
-      mailer.notify_creator_of_debate_scheduled signature.petition, signature
+      NotifyCreatorOfDebateScheduledEmailJob.new(signature)
     else
-      mailer.notify_signer_of_debate_scheduled signature.petition, signature
+      NotifySignerOfDebateScheduledEmailJob.new(signature)
     end
   end
 end

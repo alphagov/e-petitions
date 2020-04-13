@@ -75,7 +75,7 @@ RSpec.describe PetitionsController, type: :controller do
 
         expect(last_email_sent).to deliver_to("john@example.com")
         expect(last_email_sent).to deliver_from(%{"Petitions: Senedd" <no-reply@petitions.senedd.wales>})
-        expect(last_email_sent).to have_subject("Action required: Petition “Save the planet”")
+        expect(last_email_sent).to have_subject(/Action required: Petition “Save the planet”/)
       end
 
       it "should successfully point the signature at the petition" do

@@ -6,6 +6,7 @@ RSpec.describe DeliverDebateOutcomeEmailJob, type: :job do
   let(:requested_at_as_string) { requested_at.getutc.iso8601(6) }
 
   let(:petition) { FactoryBot.create(:debated_petition) }
+  let(:outcome) { petition.debate_outcome }
   let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
   let(:timestamp_name) { 'debate_outcome' }
 
@@ -24,25 +25,59 @@ RSpec.describe DeliverDebateOutcomeEmailJob, type: :job do
 
   it_behaves_like "a job to send an signatory email"
 
-  context "when the signature is the creator" do
-    before do
-      allow(signature).to receive(:creator?).and_return(true)
+  context "when the petition was debated" do
+    let(:petition) { FactoryBot.create(:debated_petition) }
+
+    context "when the signature is the creator" do
+      before do
+        allow(signature).to receive(:creator?).and_return(true)
+      end
+
+      it "uses the correct notify job to generate the email" do
+        expect {
+          subject.perform(**arguments)
+        }.to have_enqueued_job(NotifyCreatorOfPositiveDebateOutcomeEmailJob).with(signature, outcome)
+      end
     end
 
-    it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :notify_creator_of_debate_outcome).with(petition, signature).and_return double.as_null_object
-      subject.perform(**arguments)
+    context "when the signature is not the creator" do
+      before do
+        allow(signature).to receive(:creator?).and_return(false)
+      end
+
+      it "uses the correct notify job to generate the email" do
+        expect {
+          subject.perform(**arguments)
+        }.to have_enqueued_job(NotifySignerOfPositiveDebateOutcomeEmailJob).with(signature, outcome)
+      end
     end
   end
 
-  context "when the signature is not the creator" do
-    before do
-      allow(signature).to receive(:creator?).and_return(false)
+  context "when the petition wasn't debated" do
+    let(:petition) { FactoryBot.create(:not_debated_petition) }
+
+    context "when the signature is the creator" do
+      before do
+        allow(signature).to receive(:creator?).and_return(true)
+      end
+
+      it "uses the correct notify job to generate the email" do
+        expect {
+          subject.perform(**arguments)
+        }.to have_enqueued_job(NotifyCreatorOfNegativeDebateOutcomeEmailJob).with(signature, outcome)
+      end
     end
 
-    it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :notify_signer_of_debate_outcome).with(petition, signature).and_return double.as_null_object
-      subject.perform(**arguments)
+    context "when the signature is not the creator" do
+      before do
+        allow(signature).to receive(:creator?).and_return(false)
+      end
+
+      it "uses the correct notify job to generate the email" do
+        expect {
+          subject.perform(**arguments)
+        }.to have_enqueued_job(NotifySignerOfNegativeDebateOutcomeEmailJob).with(signature, outcome)
+      end
     end
   end
 end

@@ -1,4 +1,11 @@
-class NotifyCreatorThatPetitionIsPublishedEmailJob < EmailJob
-  self.mailer = PetitionMailer
-  self.email = :notify_creator_that_petition_is_published
+class NotifyCreatorThatPetitionIsPublishedEmailJob < NotifyJob
+  self.template = :notify_creator_that_petition_is_published
+
+  def personalisation(signature, petition)
+    {
+      creator: signature.name,
+      action_en:  petition.action_en, action_cy: petition.action_cy,
+      url_en:  petition_en_url(petition), url_cy:  petition_cy_url(petition)
+    }
+  end
 end

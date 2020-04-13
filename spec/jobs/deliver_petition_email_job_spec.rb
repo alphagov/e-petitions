@@ -31,9 +31,10 @@ RSpec.describe DeliverPetitionEmailJob, type: :job do
       allow(signature).to receive(:creator?).and_return(true)
     end
 
-    it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :email_creator).with(petition, signature, email).and_return double.as_null_object
-      subject.perform(**arguments)
+    it "uses the correct notify job to generate the email" do
+      expect {
+        subject.perform(**arguments)
+      }.to have_enqueued_job(EmailCreatorAboutOtherBusinessEmailJob).with(signature, email)
     end
   end
 
@@ -43,8 +44,9 @@ RSpec.describe DeliverPetitionEmailJob, type: :job do
     end
 
     it "uses the correct mailer method to generate the email" do
-      expect(subject).to receive_message_chain(:mailer, :email_signer).with(petition, signature, email).and_return double.as_null_object
-      subject.perform(**arguments)
+      expect {
+        subject.perform(**arguments)
+      }.to have_enqueued_job(EmailSignerAboutOtherBusinessEmailJob).with(signature, email)
     end
   end
 end

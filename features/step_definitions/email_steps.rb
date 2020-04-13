@@ -95,7 +95,7 @@ end
 #
 
 Then /^(?:I|they) should see "([^"]*?)" in the email subject$/ do |text|
-  expect(current_email).to have_subject(text)
+  expect(current_email).to have_subject(Regexp.new(text))
 end
 
 Then /^(?:I|they) should see \/([^"]*?)\/ in the email subject$/ do |text|

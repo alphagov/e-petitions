@@ -1,18 +1,12 @@
 module RateLimiting
   extend ActiveSupport::Concern
 
-  included do
-    rescue_from(ActiveJob::DeserializationError) do |exception|
-      Appsignal.send_exception exception
-    end
-  end
-
   def perform(signature)
     if rate_limit.exceeded?(signature)
       signature.fraudulent!
     end
 
-    mailer.send(email, signature).deliver_now
+    super
 
     updates, params = [], {}
     updates << "email_count = COALESCE(email_count, 0) + 1"
