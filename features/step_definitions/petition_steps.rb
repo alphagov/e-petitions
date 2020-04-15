@@ -152,7 +152,7 @@ Then(/^I should see the vote count, closed and open dates$/) do
   @petition.reload
   expect(page).to have_css("p.signature-count-number", :text => "#{@petition.signature_count} #{'signature'.pluralize(@petition.signature_count)}")
 
-  expect(page).to have_css("li.meta-deadline", :text => "Deadline " + @petition.deadline.strftime("%e %B %Y").squish)
+  expect(page).to have_css("li.meta-deadline", :text => "Collecting signatures until " + @petition.deadline.strftime("%e %B %Y").squish)
   expect(page).to have_css("li.meta-created-by", :text => "Created by " + @petition.creator.name)
 end
 
@@ -214,20 +214,37 @@ When(/^I start a new petition/) do
 end
 
 When(/^I fill in the petition details/) do
-  steps %Q(
-    When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
-    And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
-    And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
-  )
+  if I18n.locale == :"en-GB"
+    steps %Q(
+      When I fill in "What do you want us to do?" with "The wombats of wimbledon rock."
+      And I fill in "Background" with "Give half of Wimbledon rock to wombats!"
+      And I fill in "Additional details" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    )
+  else
+    steps %Q(
+      When I fill in "Beth ydych chi am i ni ei wneud?" with "The wombats of wimbledon rock."
+      And I fill in "Cefndir" with "Give half of Wimbledon rock to wombats!"
+      And I fill in "Rhagor o fanylion" with "The racial tensions between the wombles and the wombats are heating up. Racial attacks are a regular occurrence and the death count is already in 5 figures. The only resolution to this crisis is to give half of Wimbledon common to the Wombats and to recognise them as their own independent state."
+    )
+  end
 end
 
 When(/^I choose the default closing date$/) do
-  steps %Q(
-    When I press "Check closing date"
-    Then I should see "Six months from publication"
-    When I press "This looks good"
-    Then I should see "Sign your petition"
-  )
+  if I18n.locale == :"en-GB"
+    steps %Q(
+      When I press "Check closing date"
+      Then I should see "Six months from publication"
+      When I press "This looks good"
+      Then I should see "Sign your petition"
+    )
+  else
+    steps %Q(
+      When I press "Gwirio'r dyddiad cau"
+      Then I should see "Chwe mis o'i gyhoeddi"
+      When I press "Mae'n edrych yn iawn"
+      Then I should see "Llofnodwch eich deiseb"
+    )
+  end
 end
 
 When(/^I fill in the closing date with a date (\d+) ((?:day|month)s?) from today$/) do |number, period|
@@ -390,7 +407,12 @@ end
 When (/^I search all petitions for "(.*?)"$/) do |search_term|
   within :css, '.search-petitions' do
     fill_in :search, with: search_term
-    step %{I press "Search"}
+
+    if I18n.locale == :"en-GB"
+      step %{I press "Search"}
+    else
+      step %{I press "Chwilio"}
+    end
   end
 end
 

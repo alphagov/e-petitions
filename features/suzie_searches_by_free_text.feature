@@ -22,34 +22,34 @@ Feature: Suzy Singer searches by free text
   Scenario: Search for all visible petitions
     When I search for "All petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
-    And I should see "6 results"
+    And I should see "6 petitions"
     And I should see the following search results:
-      | Wombles                            | 1 signature                                         |
-      | Overthrow the Wombles              | 1 signature                                         |
-      | Uncle Bulgaria                     | 1 signature                                         |
-      | Common People                      | 1 signature                                         |
-      | The Wombles will rock Glasto       | With the Petitions Committee. Received 1 signature. |
-      | Eavis vs the Wombles               | Rejected                                            |
+      | Wombles                            | 1 signature                                      |
+      | Overthrow the Wombles              | 1 signature                                      |
+      | Uncle Bulgaria                     | 1 signature                                      |
+      | Common People                      | 1 signature                                      |
+      | The Wombles will rock Glasto       | Referred to the Petitions Committee. 1 signature |
+      | Eavis vs the Wombles               | Rejected                                         |
     And the markup should be valid
 
   @welsh
   Scenario: Search for all visible petitions in Welsh
-    When I search for "All petitions" with "Wombles"
+    When I search for "Pob deiseb" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
-    And I should see "6 results"
+    And I should see "6 deiseb"
     And I should see the following search results:
-      | Wombles                            | 1 signature                                         |
-      | Goresgyn y Wombles                 | 1 signature                                         |
-      | Yncl Bwlgaria                      | 1 signature                                         |
-      | Pobl Gyffredin                     | 1 signature                                         |
-      | Bydd y Wombles yn siglo Glasto     | With the Petitions Committee. Received 1 signature. |
-      | Eavis vs y Wombles                 | Rejected                                            |
+      | Wombles                            | 1 llofnod                                    |
+      | Goresgyn y Wombles                 | 1 llofnod                                    |
+      | Yncl Bwlgaria                      | 1 llofnod                                    |
+      | Pobl Gyffredin                     | 1 llofnod                                    |
+      | Bydd y Wombles yn siglo Glasto     | Cyfeiriwyd at y Pwyllgor Deisebau. 1 llofnod |
+      | Eavis vs y Wombles                 | Gwrthodwyd                                   |
     And the markup should be valid
 
   Scenario: Search for open petitions
     When I search for "Open petitions" with "Wombles"
     Then I should see my search term "Wombles" filled in the search field
-    And I should see "4 results"
+    And I should see "4 petitions"
     And I should not see "Wombles are great"
     And I should not see "The Wombles of Wimbledon"
     But I should see the following search results:
@@ -74,9 +74,9 @@ Feature: Suzy Singer searches by free text
 
   @welsh
   Scenario: Search for open petitions using multiple search terms in Welsh
-    When I search for "Open petitions" with "goresgyn y"
+    When I search for "Pob deiseb" with "goresgyn y"
     Then I should see the following search results:
-      | Goresgyn y Wombles    | 1 signature |
+      | Goresgyn y Wombles    | 1 llofnod |
 
   Scenario: Search for rejected petitions
     When I search for "Rejected petitions" with "WOMBLES"
@@ -84,7 +84,7 @@ Feature: Suzy Singer searches by free text
       | Eavis vs the Wombles |
 
   Scenario: Search for referred petitions
-    When I search for "Referred to the committee" with "WOMBLES"
+    When I search for "Referred to the Committee" with "WOMBLES"
     Then I should see the following search results:
       | The Wombles will rock Glasto | 1 signature          |
 

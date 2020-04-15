@@ -9,8 +9,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif params[:tab] == "petitions" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -21,8 +23,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif params[:tab] == "moderation" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -33,8 +37,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif params[:tab] == "feedback" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -45,8 +51,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif params[:tab] == "access" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -57,8 +65,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif params[:tab] == "features" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -69,8 +79,10 @@
     Features |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif controller_name == "holidays" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -81,8 +93,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     Holidays |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif controller_name == "domains" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -93,8 +107,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     Domains |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif controller_name == "rejection_reasons" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -105,8 +121,10 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    Rejection Reasons |
-    <%= link_to "Languages", admin_languages_path %>
+    Rejection Reasons
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% elsif controller_name == "languages" %>
     <%= link_to "English", edit_admin_site_path %> |
     <%= link_to "Welsh", edit_admin_site_path(tab: 'welsh') %> |
@@ -129,7 +147,9 @@
     <%= link_to "Features", edit_admin_site_path(tab: 'features') %> |
     <%= link_to "Holidays", edit_admin_holidays_path %> |
     <%= link_to "Domains", admin_domains_path %> |
-    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %> |
-    <%= link_to "Languages", admin_languages_path %>
+    <%= link_to "Rejection Reasons", admin_rejection_reasons_path %>
+    <% if Site.translation_enabled? %>
+    | <%= link_to "Languages", admin_languages_path %>
+    <% end %>
   <% end %>
 </p>

@@ -13,9 +13,14 @@ class ApplicationController < ActionController::Base
     directives = [
       "default-src 'self'",
       "img-src 'self' data:",
-      "script-src 'self' 'unsafe-inline' #{Site.moderate_url}",
       "style-src 'self' 'unsafe-inline'"
     ]
+
+    if Site.translation_enabled?
+      directives << "script-src 'self' 'unsafe-inline' #{Site.moderate_url}"
+    else
+      directives << "script-src 'self' 'unsafe-inline'"
+    end
 
     response.headers["Content-Security-Policy"] = directives.join("; ")
   end

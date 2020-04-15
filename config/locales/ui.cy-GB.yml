@@ -1,11 +1,710 @@
+---
 cy-GB:
   ui:
+    os:
+      app_name: Deisebau
+      app_tooltip: Senedd
+    counts:
+      referred_html:
+        one: 'Cyfeiriwyd <span class="count">%{num}</span> ddeiseb at y Pwyllgor Deisebau '
+        two: Cyfeiriwyd <span class="count">2</span> deiseb at y Pwyllgor Deisebau
+        zero: Cyfeiriwyd <span class="count">0</span> deiseb at y Pwyllgor Deisebau
+        other: Cyfeiriwyd <span class="count">%{num}</span> deiseb at y Pwyllgor Deisebau
+      awaiting_debate_html:
+        one: 'Mae <span class="count">%{num}</span> ddeiseb yn aros i gael ei hystyried
+          ar gyfer dadl '
+        two: 'Mae <span class="count">2</span> deiseb yn aros i gael eu hystyried
+          ar gyfer dadl '
+        zero: 'Mae <span class="count">0</span> deiseb yn aros i gael eu hystyried
+          ar gyfer dadl '
+        other: 'Mae <span class="count">%{num}</span> deiseb yn aros i gael eu hystyried
+          ar gyfer dadl '
+      debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni yn y Senedd (%{num})
+      referred_explanation_html: Gweld pob deiseb a gyfeiriwyd at y Pwyllgor Deisebau (%{num})
+      with_debated_outcome_html:
+        one: 'Cynhaliwyd dadl ar <span class="count">%{num}</span> ddeiseb yn y Senedd '
+        two: Cynhaliwyd dadl ar <span class="count">2</span> deiseb yn y Senedd
+        zero: Cynhaliwyd dadl ar <span class="count">0</span> deiseb yn y Senedd
+        other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb yn y Senedd
+      not_debated_explanation_html: Gweld pob deiseb na chynhaliwyd dadl arni yn y
+        Senedd (%{num})
+      awaiting_debate_explanation_html: Gweld pob deiseb sy'n aros am ddadl (%{num})
+    footer:
+      nav:
+        home: Hafan
+        privacy: Preifatrwydd a chwcis
+        feedback: Adborth
+        all_petitions: Pob deiseb
+        start_a_petition: Dechrau deiseb
+        how_petitions_work: Sut mae deisebau yn gweithio
+      ogl_html: "<p class=\"logo\"><a href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\"
+        rel=\"external license\">Drwydded Llywodraeth Agored</a></p>\r\n<p>Mae'r holl
+        gynnwys ar gael o dan <a href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\"
+        rel=\"external license\">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio
+        lle nodir yn wahanol</p>\r\n"
+      copyright_html: "<span class=\"graphic graphic-portcullis-large-grey\"></span>\r\n<span
+        class=\"graphic graphic-crest-large-grey\"></span>\r\n<a href=\"https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm\"
+        rel=\"external\">© Hawlfraint y Goron</a>"
+    header:
+      title: Deisebau
+      tooltip: Mynd i'r hafan Ddeisebau
+      strapline: Senedd
+      title_link_html: "<a title=\"Ewch i hafan y Deisebau\" tabindex=\"1\" class=\"proposition\"
+        href=\"%{url}\">\r\n  <span class=\"graphic graphic-dragon-white\"></span>
+        Deisebau\r\n</a>"
+      language_switcher_html: <a class="language-switcher" title="Show this page in
+        English" tabindex="-1" href="%{url}">English</a>
+    sharing:
+      email_html: <span class="icon icon-share-email"></span> E-bost
+      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
+      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
+      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+    feedback:
+      new:
+        contact:
+          email:
+            heading: E-bost
+            body_html: "<p>Gallwch anfon e-bost uniongyrchol at y %{petitions_committee_link}.</p>\r\n\r\n<p>Gallant
+              eich helpu i ddeall sut mae'r Senedd yn ymdrin â deisebau. Gallant hefyd
+              ddarparu templed i chi ei ddefnyddio wrth gasglu llofnodion ar bapur
+              a helpu gyda rhai o'r problemau technegol allai godi wrth i chi ddefnyddio'r
+              gwasanaeth hwn. Ni allant anfon eich adborth ymlaen at y bobl wnaeth
+              ddechrau deiseb na roi sylwadau ar y syniadau sy'n cael eu trafod mewn
+              deiseb benodol.</p>\r\n\r\n<p>E-bost: <a href=\"mailto:petitions@senedd.wales\">deisebau@senedd.cymru</a></p>"
+            petitions_committee_link: Pwyllgor Deisebau
+          phone:
+            heading: Ffôn
+            body_html: "<p>Canolfan Gyswllt y Senedd sy'n ymdrin â galwadau ffôn.</p>\r\n\r\n<p>Gallant
+              eich helpu i ddeall sut mae'r Senedd yn ymdrin â deisebau. Ni allant
+              helpu gyda phroblemau technegol wrth i chi ddefnyddio'r gwasanaeth hwn,
+              anfon eich adborth ymlaen at y bobl wnaeth ddechrau deiseb na roi sylwadau
+              ar y syniadau sy'n cael eu trafod mewn deiseb benodol.</p>\r\n\r\n<ul>\r\n
+              \ <li>Ffôn: <a href=\"tel:+443002006565\">0300 200 6565</a> (cyfradd
+              leol) neu SMS: <a href=\"tel:+447970493958\">07970 493958</a></li>\r\n
+              \ <li>Ffôn testun gan ddefnyddio Text Relay: <a href=\"tel:+4418001\">18001</a>
+              ac yna <a href=\"tel:+443002006565\">0300 200 6565</a></li>\r\n  <li>Dydd
+              Llun i ddydd Gwener, 08:30&ndash;17:30</li>\r\n</ul>"
+          heading: Cysylltu
+        heading: 'Adborth a chysylltu '
+        feedback:
+          heading: Adborth
+          comments:
+            label: Sylwadau
+          terms_html: "<p>Dim ond i ateb eich neges y byddwn ni'n defnyddio eich cyfeiriad
+            e-bost</p>\r\n<p>Ni allwn anfon eich adborth ymlaen at y bobl wnaeth ddechrau
+            deiseb na roi sylwadau ar y syniadau sy'n cael eu trafod mewn deiseb benodol</p>"
+          want_reply:
+            email:
+              label: Cyfeiriad e-bost
+            heading: A ydych chi am gael ateb?
+          submit_html: <input type="submit" value="Anfon adborth" class="button" tabindex="%{tabindex}"
+            data-disable-with="Anfon adborth">
+          submit_button: Anfon adborth
+          petition_link_or_title:
+            label_html: Teitl y ddeiseb/linc <span class="optional">dewisol</span>
+      thanks:
+        heading: Anfonwyd eich adborth
+        back_link: 'Yn ôl i''r hafan Ddeisebau '
+        body_html: "<p>Diolch am anfon eich adborth atom.</p>\r\n\r\n<p>Os ydych chi
+          wedi gofyn am gael ymateb, byddwn ni'n cysylltu â chi cyn cynted â phosibl.</p>\r\n\r\n<p>Gall
+          gymryd hyd at 5 diwrnod gwaith yn ystod cyfnodau prysur.</p>"
+    sponsors:
+      new:
+        heading: Llofnodi deiseb %{creator_name}
+      signed:
+        added: Mae eich llofnod wedi cael ei ychwanegu at y ddeiseb hon fel cefnogwr.
+        heading: Diolch
+        what_next_html: "<h2>Beth nesaf?</h2>\r\n<p>Mae angen o leiaf %{min_sponsors}
+          gefnogwr ar y ddeiseb hon er mwyn iddi fynd yn fyw.</p>\r\n<p>Pan fydd y
+          ddeiseb yn fyw, byddwn ni'n anfon linc atoch mewn neges e-bost fel y gallwch
+          chi ddechrau ei rhannu.</p>"
+    help_page:
+      body_html: "<h1 class=\"page-title\" id=\"creating-a-petition\">Creu deiseb</h1>\r\n\r\n<p>Deisebau
+        yw un o'r ffyrdd mwyaf uniongyrchol o awgrymu sut y gellir newid rhywbeth.
+        Mae deisebau’n gallu:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>codi
+        ymwybyddiaeth o fater;</li>\r\n  <li>arwain at newid polisi Llywodraeth Cymru
+        neu ddarparu gwasanaethau mewn ffordd wahanol;</li>\r\n  <li>cynnig neu ddylanwadu
+        ar gyfraith newydd;</li>\r\n  <li>annog un o bwyllgorau’r Senedd i gynnal
+        ymchwiliad;</li>\r\n  <li>arwain at ddadl yn y Senedd neu ddylanwadu ar ddadl
+        a drefnwyd eisoes;</li>\r\n  <li>annog pwyllgorau neu Aelodau unigol o'r Senedd
+        i gymryd camau pellach eu hunain, er enghraifft drwy ofyn cwestiynau.</li>\r\n</ul>\r\n\r\n<p>Gallwch
+        gyflwyno deiseb drwy ddefnyddio ein system ddeisebau ar-lein, ar bapur, neu
+        gyfuniad o'r ddwy.</p>\r\n\r\n<p><u>Nid yw’r Pwyllgor Deisebau yn derbyn deisebau
+        o wefannau eraill.</u></p>\r\n\r\n<p>Os ydych chi'n ystyried casglu llofnodion
+        ar bapur, dylech <b>gysylltu â ni</b> ymlaen llaw i gael cyngor. Gallwn ddarparu
+        templed hefyd.</p>\r\n\r\n<h1 class=\"page-title\" id=\"how-petitions-work\">Sut
+        mae deisebau’n gweithio</h1>\r\n\r\n<ol class=\"list-number\">\r\n  <li>Rydych
+        chi'n creu deiseb. Dim ond pobl neu sefydliadau sydd â chyfeiriad yng Nghymru
+        sy’n gallu creu deiseb.</li>\r\n  <li>Mae angen i 2 berson gefnogi'ch deiseb.
+        Byddwn ni’n dweud wrthych sut i wneud hyn ar ôl i chi greu eich deiseb.</li>\r\n
+        \ <li>Rydym ni’n gwirio'ch deiseb, yna'n ei chyhoeddi yn Gymraeg ac yn Saesneg.
+        Dim ond deisebau nad ydynt yn bodloni’r safonau ar gyfer deisebau y byddwn
+        yn eu gwrthod (gweler isod).</li>\r\n  <li>Dim ond unwaith y gall pobl lofnodi
+        deiseb. Os byddant yn llofnodi'r ddeiseb ar-lein, anfonir e-bost atynt i wirio
+        eu llofnod. Ni all pobl lofnodi deiseb ar-lein a deiseb bapur.</li>\r\n  <li>Mae'r
+        Pwyllgor Deisebau yn adolygu'r holl ddeisebau sy'n casglu mwy na 50 llofnod.
+        Bydd y Pwyllgor yn penderfynu beth i’w wneud er mwyn helpu i symud ymlaen
+        â’r ddeiseb. Gall hyn gynnwys trafod y mater a phwyso ar Lywodraeth Cymru
+        ac eraill i weithredu.</li>\r\n  <li>Os bydd eich deiseb yn casglu dros 5,000
+        llofnod, bydd y Pwyllgor Deisebau yn ystyried gofyn am ddadl yn Siambr y Senedd.
+        Bydd y Pwyllgor yn ystyried nifer o ffactorau, gan gynnwys y materion a godir
+        yn y ddeiseb, pa mor ddybryd yw’r sefyllfa a chyfran y llofnodion sy'n dod
+        o Gymru.</li>\r\n</ol>\r\n\r\n<h2 id=\"the-petitions-committee\">Y Pwyllgor
+        Deisebau</h2>\r\n\r\n<p>Fel rhan o'r broses o drafod eich deiseb, mae'r <a
+        href=\"https://www.assembly.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430\">Pwyllgor
+        Deisebau</a> yn gallu:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>ysgrifennu
+        atoch i gael rhagor o wybodaeth;</li>\r\n  <li>eich gwahodd i siarad â'r Pwyllgor
+        am y ddeiseb;</li>\r\n  <li>gofyn am dystiolaeth gan Lywodraeth Cymru neu
+        bobl neu sefydliadau perthnasol eraill;</li>\r\n  <li>pwyso ar Lywodraeth
+        Cymru i weithredu;</li>\r\n  <li>tynnu sylw un o bwyllgorau eraill y Senedd
+        at y ddeiseb;</li>\r\n  <li>cynnig cyflwyno’r ddeiseb ar gyfer dadl;</li>\r\n
+        \ <li>cynnal ymchwiliad manwl a chyhoeddi adroddiad ar y pwnc.</li>\r\n</ul>\r\n\r\n<h2
+        id=\"standards\">Safonau ar gyfer deisebau</h2>\r\n\r\n<p>Gallwch gyflwyno
+        deiseb ar unrhyw fater mae’r Senedd neu Lywodraeth Cymru yn gyfrifol amdano.</p>\r\n\r\n<p>Rhaid
+        i ddeisebau alw am gamau penodol gan y Senedd neu Lywodraeth Cymru.</p>\r\n\r\n<p>Gall
+        deisebau anghytuno â Llywodraeth Cymru a gallant ofyn iddi newid ei pholisïau.
+        Gall deisebau fod yn feirniadol o'r Senedd neu Lywodraeth Cymru.</p>\r\n\r\n<p>Rydym
+        yn gwrthod deisebau nad ydynt yn bodloni’r rheolau. Os byddwn ni’n gwrthod
+        eich deiseb, byddwn ni’n dweud wrthych pam. Os yw’n bosibl, byddwn ni’n awgrymu
+        ffyrdd eraill y gallech godi’r mater.</p>\r\n\r\n<p>Bydd yn rhaid i ni wrthod
+        eich deiseb:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>os yw'n galw am
+        yr un cam gweithredu â deiseb sydd eisoes ar agor, neu un a gaewyd gan y Pwyllgor
+        Deisebau lai na blwyddyn ynghynt;</li>\r\n  <li>os nad yw'n gofyn am gamau
+        clir gan y Senedd neu gan Lywodraeth Cymru;</li>\r\n  <li>\r\n    <p>os yw'n
+        ymwneud â rhywbeth nad yw'r Senedd na Llywodraeth Cymru yn gyfrifol amdano;</p>\r\n
+        \   <p>Mae hynny'n cynnwys: rhywbeth y mae eich cyngor lleol yn gyfrifol amdano
+        (gan gynnwys penderfyniadau cynllunio); rhywbeth y mae Llywodraeth y DU neu
+        Senedd y DU yn gyfrifol amdano; a rhywbeth y mae sefydliad annibynnol wedi'i
+        wneud.</p>\r\n  </li>\r\n  <li>os yw’n cynnwys iaith sy'n peri tramgwydd,
+        sy'n eithafol neu sy'n herfeiddiol. Mae hyn yn cynnwys rhegfeydd a geiriau
+        sarhaus amlwg, ac unrhyw iaith sy’n dramgwyddol ym marn person rhesymol;</li>\r\n
+        \ <li>os yw’n cynnwys datganiadau ffug neu ddifrïol posibl;</li>\r\n  <li>os
+        yw'n cyfeirio at achos sy'n weithredol yn llysoedd y DU;</li>\r\n  <li>os
+        yw’n cynnwys gwybodaeth a waherddir rhag cael ei chyhoeddi gan orchymyn llys
+        neu gorff neu berson sydd â phŵer tebyg;</li>\r\n  <li>os yw'n cyhuddo unigolyn
+        neu sefydliad y gellir ei adnabod o drosedd;</li>\r\n  <li>os yw'n cynnwys
+        deunydd a allai fod yn gyfrinachol neu'n sensitif yn fasnachol;</li>\r\n  <li>os
+        gallai achosi trallod neu golled bersonol;</li>\r\n  <li>os yw'n enwi swyddogion
+        unigol cyrff cyhoeddus, oni bai eu bod yn uwch-reolwyr;</li>\r\n  <li>os yw’n
+        cynnwys enwau aelodau o deuluoedd cynrychiolwyr etholedig neu swyddogion cyrff
+        cyhoeddus;</li>\r\n  <li>os yw'n hysbyseb, yn sbam, neu'n hyrwyddo cynnyrch
+        neu wasanaeth penodol;</li>\r\n  <li>os yw'n nonsens neu'n jôc;</li>\r\n  <li>\r\n
+        \   <p>os yw'n ymwneud â mater nad yw’n briodol ymdrin ag ef mewn deiseb</p>\r\n
+        \   <p>Mae hynny'n cynnwys: gohebiaeth am fater personol a deisebau sy’n gofyn
+        am i rywun gael swydd, colli ei swydd neu ymddiswyddo, neu sy'n galw am bleidlais
+        o ddiffyg hyder.</p>\r\n  </li>\r\n</ul>\r\n\r\n<p>Byddwn yn cyhoeddi testun
+        y deisebau rydym ni'n eu gwrthod, ar yr amod nad ydynt:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n
+        \ <li>yn ddifenwol, yn enllibus neu’n anghyfreithlon mewn ffordd arall;</li>\r\n
+        \ <li>yn ymwneud ag achos sy'n mynd rhagddo yn llysoedd y DU neu am rywbeth
+        y mae llys wedi cyhoeddi gwaharddeb yn ei gylch;</li>\r\n  <li>yn sarhaus
+        neu’n eithafol;</li>\r\n  <li>yn gyfrinachol neu'n debygol o achosi trallod
+        personol; neu</li>\r\n  <li>yn jôc, yn hysbyseb neu’n nonsens.</li>\r\n</ul>\r\n\r\n<p>Mae'r
+        rheolau llawn ynghylch y broses ddeisebau ar gael <a href=\"https://www.assembly.wales/cy/gethome/e-petitions/how-to-petition/Pages/PO-Determination-Petitions.aspx\">yma</a>.</p>\r\n\r\n<h2
+        id=\"handing-in-your-petition\">Cyflwyno eich deiseb</h2>\r\n\r\n<p>Rydym
+        yn cynnig cyfle i chi gyflwyno'ch deiseb ar ôl iddi orffen casglu llofnodion,
+        a chyn iddi gael ei thrafod gan y Pwyllgor Deisebau. Mae’n gyfle anffurfiol
+        i drafod cefndir eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor.</p>\r\n\r\n<p>Caiff
+        deisebau eu cyflwyno yn y Senedd ar ddydd Mawrth a dydd Mercher yn ystod tymor
+        y Senedd ac mae’r broses yn para tua 10-15 munud. Bydd ffotograffau yn cael
+        eu tynnu a gellir eu cyhoeddi ar dudalennau’r Pwyllgor ar y we ac ar y cyfryngau
+        cymdeithasol.</p>\r\n\r\n<p>Os oes gennych ragor o gwestiynau, mae croeso
+        i chi %{feedback_link}.</p>\r\n"
+      feedback_link: cysylltu
+    home_page:
+      notice:
+        get_involved_html: "<a href=\"https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx\"
+          class=\"get-involved\">\r\n  Cymryd rhan yng ngwaith y Senedd\r\n</a>"
+        register_to_vote_html: "<a href=\"https://www.gov.uk/register-to-vote\" class=\"register-to-vote\">\r\n
+          \ Cofrestru i bleidleisio yn etholiadau'r Senedd\r\n</a>"
+      opened:
+        lede: Mae'r gwasanaeth Deisebau ar agor
+        start_a_petition:
+          link: Dechrau deiseb
+          heading: Dechrau deiseb
+          requirements: Gall unrhyw berson neu sefydliad sydd â chyfeiriad yng Nghymru
+            ddechrau deiseb
+      heading: Deisebau – Senedd
+      thresholds:
+        debate: Os bydd deiseb yn casglu %{formatted_count} llofnod, caiff ei hystyried
+          ar gyfer dadl yn y Senedd
+        referred: Caiff pob deiseb sydd â mwy na %{formatted_count} llofnod ei thrafod
+          gan y Pwyllgor Deisebau
+        response: Caiff pob deiseb sydd â mwy na %{formatted_count} llofnod ei chyfeirio
+          i'r Pwyllgor Deisebau
+      local_petitions:
+        heading: Lleol i chi
+        find_local_petitions: 'Dod o hyd i ddeisebau a lofnodwyd gan bobl sy''n byw
+          yn lleol i chi '
+      search_petitions:
+        heading: Chwilio am ddeiseb
+        submit_button_html: |-      
+          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">
+      debated_petitions:
+        video:
+          link: senedd.tv
+          watch_html: Gwyliwch y ddadl ar %{link}
+        research:
+          link: senedd.cymru
+          read_html: Darllenwch y gwaith ymchwil yn %{link}
+        transcript:
+          link: senedd.cymru
+          read_html: Darllenwch y trawsgrifiad yn %{link}
+        none_debated: Nid yw'r Senedd wedi cynnal dadl ar unrhyw ddeisebau eto
+        topic_debated_date: Cynhaliwyd dadl ar y pwnc hwn ar %{date}
+      referred_petitions:
+        none_referred: Does dim deisebau wedi'u cyfeirio at y Pwyllgor Deisebau eto
+        referred_date: Cafodd y ddeiseb hon ei chyfeirio ar %{date}
+      trending_petitions:
+        heading: Deisebau poblogaidd
+        all_open_link: Gweld pob deiseb sydd ar agor
+      responded_petitions:
+        none_responded: Nid oes unrhyw ddeisebau wedi'u cyfeirio i'r Pwyllgor Deisebau
+          eto
     petitions:
+      check:
+        heading: Dechrau deiseb
+        results:
+          back: "◀ Nôl"
+          unique:
+            heading: Rydym wedi chwilio am ddeisebau tebyg
+            continue: Parhau
+            no_match: Rydym wedi chwilio ac nid ydym wedi dod o hyd i unrhyw ddeisebau
+              tebyg
+            ok_to_continue: Felly gallwch fynd ati i greu deiseb newydd.
+          duplicate:
+            heading: Daethom o hyd i ddeisebau tebyg
+            continue_btn: Mae fy neiseb i'n wahanol
+            reject_notice: Os oes deiseb ar yr un pwnc ar gael eisoes, mae eich deiseb
+              chi yn debygol o gael ei gwrthod
+            sign_if_match: Os oes un o'r deisebau hyn yr un fath â'ch un chi, dylech
+              lofnodi a rhannu'r ddeiseb honno yn lle dechrau un newydd.
+            sign_if_match_reason: Mae eich deseb chi yn fwy tebygol o gasglu %{referral_threshold}
+              a %{debate_threshold} llofnod y ffordd honno.
+      index:
+        page_titles:
+          all: Pob deiseb
+          open: Deisebau sydd ar agor
+          closed: Deisebau a gaewyd
+          debated: Deisebau y cynhaliwyd dadl arnynt yn y Senedd
+          referred: Deisebau a gyfeiriwyd at y Pwyllgor Deisebau
+          rejected: Deisebau a wrthodwyd
+          completed: Deisebau a gwblhawyd
+          published: Deisbau a gyhoeddwyd
+          not_debated: Deisebau na chynhaliwyd dadl arnynt yn y Senedd
+          awaiting_debate: 'Deisbau sy''n aros am ddadl yn y Senedd '
+      lists:
+        all: Pob deiseb (%{quantity})
+        open: Deisebau sydd ar agor (%{quantity})
+        debated: Cynhaliwyd dadl yn y Senedd (%{quantity})
+        referred: Cyfeiriwyd at y Pwyllgor (%{quantity})
+        rejected: Deisebau a wrthodwyd (%{quantity})
+        completed: Deisebau a gwblhawyd (%{quantity})
+        not_debated: Ni chynhaliwyd dadl yn y Senedd (%{quantity})
+      local:
+        all:
+          heading: Deisebau poblogaidd yn etholaeth %{constituency_name}
+          results:
+            empty: Does dim deisebau poblogaidd yn eich etholaeth chi.
+            now_closed: bellach ar gau
+          mp_name_link_html: Eich Aelod o'r Senedd yw %{mp_name_link}
+          open_popular_link: Gweld deisebau poblogaidd sydd ar agor yn %{constituency_name}
+        show:
+          heading: Deisebau poblogaidd sydd ar agor yn etholaeth %{constituency_name}
+          all_popular_link: Gweld pob deiseb boblogaidd yn etholaeth %{constituency_name}
+        index:
+          postcode_bad:
+            heading: Nid ydym wedi dod o hyd i'r cod post hwnnw
+            couldnt_find_postcode_html: Nid ydym wedi dod o hyd i'r cod post <q>%{postcode}</q>.
+              Beth am roi cynnig arall arni?
+          postcode_blank:
+            heading: Lleol i chi
+            find_local_petitions: Dod o hyd i ddeisebau am faterion lleol
+        regional_members:
+          heading_html: 'Eich Aelodau o''r Senedd ar gyfer rhanbarth <strong>%{region}</strong>
+            yw:'
+        member_name_link_html: Eich Aelod o'r Senedd yw %{member_name_link}
+      action:
+        label: Beth ydych chi am i ni ei wneud?
+        help_html: "<p class=\"form-hint\">Enghraifft: Cyflwynwch dâl 10 ceiniog ar
+          gyfer bagiau plastig untro </p>\r\n<details class=\"form-group-help\">\r\n
+          \ <summary><span class=\"summary\">Dangos rhagor o enghreifftiau</span></summary>\r\n
+          \ <div class=\"panel-indent\">   <p>Mae deisebau da yn dweud yn glir beth
+          maen nhw am i'r Senedd neu Lywodraeth Cymru ei wneud.</p>\r\n    <p>Enghreifftiau
+          da:</p>\r\n    <ul class=\"list-bullet\">\r\n      <li>Rhaid gwahardd y
+          defnydd o anifeiliaid gwyllt mewn syrcasau</li>\r\n      <li>Dylid gostwng
+          yr oedran pleidleisio i 16 ar gyfer etholiadau'r Senedd</li>\r\n    </ul>\r\n
+          \   <p>Enghreifftiau gwael:</p>\r\n    <ul class=\"list-bullet\">\r\n      <li>Helpu
+          pobl ifanc</li>\r\n      <li>Cyfiawnder i Stephen</li>\r\n    </ul>\r\n
+          \   \r\n  </div>\r\n</details>"
+      create:
+        creator_stage:
+          name:
+            hint: Rhaid i chi ddefnyddio eich enw llawn
+            label: Enw
+          email:
+            label: Cyfeiriad e-bost
+          address:
+            hint: 'Rhaid i chi roi cyfeiriad dilys yng Nghymru er mwyn creu deiseb.
+              Gall unrhyw un lofnodi eich deiseb. '
+            label: Cyfeiriad
+          heading: Llofnodwch eich deiseb
+          location:
+            hint: 'Dim ond pobl yng Nghymru sy''n gallu creu deiseb. '
+            label: Lleoliad
+          postcode:
+            label: Cod post
+          phone_number:
+            label: Rhif ffôn
+          continue_html: <input type="submit" name="move_next" value="Parhau" class="button"
+            tabindex="%{tabindex}" data-disable-with="Parhau">
+          notify_by_email:
+            check_label: 'Anfonwch neges e-bost ataf pryd bynnag y bydd diweddariad
+              ynghylch y ddeiseb hon '
+          about_published_data_html: "<div class=\"secondary\">\r\n  <p>Bydd eich
+            enw yn cael ei gyhoeddi ar y ddeiseb hon fel y person wnaeth greu'r ddeiseb.</p>\r\n
+            \ <p>Oni bai am hynny, ni fyddwn ni'n cyhoeddi eich manylion personol
+            mewn unrhyw le nac yn eu defnyddio ar gyfer unrhyw beth heblaw am y ddeiseb
+            hon.  </p>\r\n</div>"
+        error_summary:
+          prompt:
+            one: 'Cywirwch y gwall a ganlyn:'
+            two: 'Cywirwch y gwallau a ganlyn:'
+            zero: 'Cywirwch y gwall a ganlyn:'
+            other: 'Cywirwch y gwallau a ganlyn:'
+          heading: Nid oeddem yn gallu creu'r ddeiseb hon
+        petition_stage:
+          heading: Dechrau deiseb
+          submit_html: <input type="submit" name="move_next" value="Gweld rhagolwg
+            o'r ddeiseb" class="button" tabindex="%{tabindex}" data-disable-with="Gweld
+            rhagolwg o'r ddeiseb">
+          hint_standards_html: Cofiwch, rhaid i'ch deiseb chi fodloni'r %{standards_link}.
+        closing_date_stage:
+          day:
+            label: Dydd
+          year:
+            label: Blwyddyn
+          month:
+            label: Mis
+          heading: 'Am ba hyd hoffech chi gasglu llofnodion? '
+          duration:
+            hint:
+              custom: 'Bydd eich deiseb ar agor hyd at y dyddiad rydych chi''n ei
+                nodi (o leiaf 30 diwrnod, uchafswm o chwe mis). '
+              default: Bydd eich deiseb ar agor am chwe mis ar ôl iddi gael ei chyhoeddi.
+            label:
+              custom: 'Rydw i am stopio casglu llofnodion ar ddyddiad penodol '
+              default: 'Rydw i am gasglu llofnodion cyhyd ag sy''n bosibl '
+          help_html: "<p>\r\n  Bydd deiseb fel arfer yn casglu llofnodion am chwe
+            mis i'r dyddiad y mae'n cael ei chyhoeddi ac ni fydd y Pwyllgor Deisebau
+            yn trafod unrhyw ddeiseb tan <b>ar ôl</b> iddi orffen casglu llofnodion.
+            </li>\r\n<p>\r\nGallwch chi ddewis dyddiad cau cynharach os ydych chi
+            am i'r Pwyllgor drafod eich deiseb cyn hynny. \r\n</p>"
+          submit_html: <input type="submit" name="move_next" value="Gwirio'r dyddiad
+            cau" class="button" tabindex="%{tabindex}" data-disable-with="Gwirio'r dyddiad
+            cau">
+        replay_email_stage:
+          heading: Gwnewch yn siŵr fod hyn yn gywir
+          submit_html: <input type="submit" name="move_next" value="Ie – dyma fy nghyfeiriad
+            e-bsot i" class="button" tabindex="%{tabindex}" data-disable-with="Ie
+            – dyma fy nghyfeiriad e-bsot i">
+          fix_email_if_wrong: 'Os yw eich cyfeiriad e-bost yn anghywir, newidiwch
+            y manylion uchod '
+        replay_petition_stage:
+          heading: Gwirio eich deiseb
+          submit_html: <input type="submit" name="move_next" value="Mae'n edrych yn
+            iawn" class="button" tabindex="%{tabindex}" data-disable-with="Mae'n edrych yn
+            iawn">
+          go_back_html: <input type="submit" name="move_back" value="Mynd yn ôl i
+            wneud newidiadau" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
+            back and make changes">
+          submit_warning_html: "<p class=\"secondary\">Gallwch chi ddim newid eich
+            deiseb ar ôl y cam yma.</p>\r\n<p class=\"secondary\">Dyma'r amser i wneud
+            yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol,
+            fel manylion am eich iechyd, eich teulu neu'ch swydd, meddyliwch yn ofalus
+            a ydych chi'n hapus i gyhoeddi'r manylion hynny.</p>\r\n<p class=\"secondary\">Gallwn
+            ni ddim tynnu deisebau sydd wedi'u cyhoeddi oddi ar y wefan oni bai fod
+            y Pwyllgor Deisebau yn cytuno. </p>"
+        replay_closing_date_stage:
+          heading: Gwirio eich dyddiad cau
+          submit_html: <input type="submit" name="move_next" value="Mae'n edrych yn
+            iawn" class="button" tabindex="%{tabindex}" data-disable-with="This looks
+            good">
+          go_back_html: <input type="submit" name="move_back" value="Mynd yn ôl i'w
+            newid" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
+            back and change it">
+          default_message_html: |-
+            <h1><span class="heading-secondary">Dyddiad cau</span>Chwe mis o'i gyhoeddi</h1>
+            <p>Bydd eich deiseb “%{action}” yn cau am hanner nos ar y dyddiad hwn. Os bydd eich deiseb wedi casglu %{num} neu fwy o lofnodion bydd yn cael ei chyfeirio at y Pwyllgor Deisebau.</p>
+          custom_message_html: |-
+            <h1><span class="heading-secondary">Dyddiad cau</span>%{date}</h1>
+            <p>Bydd eich deiseb “%{action}” yn cau am hanner nos ar y dyddiad hwn. Os bydd eich deiseb wedi casglu %{num} neu fwy o lofnodion bydd yn cael ei chyfeirio at y Pwyllgor Deisebau.</p>
+          submit_warning_html: <p class="secondary">Ar ôl y cam yma, dim ond drwy
+            gysylltu â'r <a href="https://welsh.epetitions.website/feedback#contact">tîm
+            deisebau</a> y byddwch chi'n gallu newid y dyddiad cau.</p>
+      search:
+        submit_button_html: |-      
+          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">      
+        results:
+          items:
+            facet_all:
+              rejected: Gwrthodwyd
+              completed: Cwblhawyd gan y Pwyllgor Deisebau ar %{date}
+              closed_html:
+                one: Cyfeiriwyd at y Pwyllgor Deisebau. 1 llofnod
+                two: Cyfeiriwyd at y Pwyllgor Deisebau. 2 lofnod
+                zero: Cyfeiriwyd at y Pwyllgor Deisebau. 0 llofnod
+                other: Cyfeiriwyd at y Pwyllgor Deisebau. %{num} llofnod
+            facet_debated:
+              debated_date: Cynhaliwyd dadl ar %{date}
+            facet_referred:
+              referred_date: Cyfeiriwyd at y Pwyllgor Deisebau ar %{date}
+            facet_completed:
+              completed_date: Caewyd gan y Pwyllgor Deisebau ar %{date}
+          no_match: Does dim deisebau sy'n cynnwys eich termau chwilio.
+        filtered_result_count:
+          one: 1 ddeiseb
+          two: 2 ddeiseb
+          zero: 0 deiseb
+          other: "%{num} deiseb"
+        filtered_petition_count:
+          one: 1 ddeiseb
+          two: 2 deiseb
+          zero: 0 deiseb
+          other: "%{num} deiseb"
+      deadline: Casglu llofnodion hyd at
+      get_json: Gweld data ynghylch y ddeiseb (fformat json)
+      thank_you:
+        heading: Un cam arall…
+        link_emailed: Rydym ni wedi anfon neges e-bost atoch yn cynnwys linc i'w anfon
+          ymlaen at gefnogwyr posibl
+        n_sponsors_needed: Mae angen i %{count} berson glicio'r linc a chadarnhau
+          eu cefnogaeth er mwyn i'ch deiseb fynd yn fyw. Ar ôl i hynny ddigwydd, bydd
+          y tîm Deisebau yn cadarnhau ei bod yn bodloni'r safonau ar gyfer deisebau
+          ac yn trefnu i'w chyfieithu. Byddwch chi'n cael neges e-bost pan fydd y
+          ddeiseb yn cael ei chyhoeddi.
+        n_sponsors_needed_notice: Ni fydd eich deiseb yn mynd yn fyw tan fod %{count}
+          berson yn cadarnhau eu cefnogaeth
+        n_sponsors_needed_heading: Mae angen %{count} gefnogwr arnoch
+      background:
+        label: Cefndir
+        help_html: "<details class=\"form-group-help\">\r\n  <summary><span class=\"summary\">Help
+          i ysgrifennu am gefndir y ddeiseb</span></summary>\r\n  <div class=\"panel-indent\">\r\n
+          \   <p>Defnyddiwch yr adran hon i esbonio pam rydych chi am weld camau gweithredu.
+          Mae rhai pobl yn cynnwys stori bersonol yn yr adran hon.</p>\r\n    <p>Cofiwch
+          efallai na fydd pobl yn gwybod rhyw lawer am destun eich deiseb - esboniwch
+          y sefyllfa.</p>\r\n  </div>\r\n</details>"
+      created_by: Crëwyd gan
+      date_closed: Dyddiad cau
+      other_lists: Rhestrau eraill o ddeisebau
+      heading_open: Deiseb
+      more_details: Rhagor o fanylion
+      date_completed: Dyddiad cwblhau
+      date_submitted: Dyddiad cyflwyno
+      heading_closed: Deiseb a gaewyd
+      standards_link: safonau ar gyfer deisebau
+      for_debate_date: i gael dyddiad ar gyfer dadl
+      moderation_info:
+        heading: Rydym ni wrthi'n gwirio'r ddeiseb hon
+        try_again_later: Rhowch gynnig arall arni mewn ychydig ddyddiau.
+        min_supporters_reached: Mae %{min_supporters} person eisoes wedi cefnogi deiseb
+          %{creator_name}.
+        checking_standards_html: 'Mae angen i ni gadarnhau bod y ddeiseb yn bodloni''r
+          %{standards_link} cyn ei chyhoeddi. '
+      notice_rejected: Gwrthodwyd y ddeiseb hon
+      heading_rejected: Deiseb a wrthodwyd
+      topic_debated_on: Cynhaliwyd dadl ar y pwnc hwn ar %{date}
+      gathering_support:
+        heading: Mae'r ddeiseb hon yn denu cefnogwyr
+        try_again_later: Rhowch gynnig arall arni mewn ychydig ddyddiau.
+        supporters_needed_html: Mae angen %{n_sponsors} gefnogwr ar ddeiseb %{creator_name}
+          cyn i ni wirio a yw'n bodloni'r %{standards_link} a'i chyhoeddi.
+      heading_completed: Deiseb a gwblhawyd
+      petition_duration: Roedd y ddeiseb hon ar agor am %{duration}
+      senedd_debated_on: Cynhaliwyd dadl yn y Senedd ar y ddeiseb hon ar %{date}
+      additional_details:
+        label: Rhagor o fanylion
+        help_html: ''
+        hint_optional: Dewisol - gwybodaeth gefndir, tystiolaeth a chyfeiriadau
+      referral_threshold:
+        waiting:
+          heading: Bydd y Pwyllgor Deisebau yn trafod y ddeiseb hon
+          referral_threshold: Caiff pob deiseb â mwy na %{threshold} llofnod ei thrafod
+            gan y Pwyllgor Deisebau ar ôl iddi orffen casglu llofnodion
+          referral_waiting_time: i'r Pwyllgor Deisebau drafod y ddeiseb hon
+        referred:
+          heading: Mae'r Pwyllgor Deisebau bellach yn ystyried y ddeiseb hon
+          link_html: <a href="%{link}">Rhagor o wybodaeth am drafodaethau'r Pwyllgor
+            Deisebau ynghylch y ddeiseb hon</a>
+          referral_threshold: Bydd y Pwyllgor Deisebau yn trafod pob deiseb sydd â
+            mwy na %{threshold} llofnod
+        completed:
+          heading: 'Mae''r Pwyllgor Deisebau wedi trafod y ddeiseb hon '
+        needs_more_signatures:
+          heading: Ar ôl casglu %{threshold} llofnod...
+          referral_threshold: Caiff pob deiseb sydd â mwy na %{threshold} llofnod
+            ei chyfeirio at y Pwyllgor Deisebau
+      senedd_will_debate: Bydd y Senedd yn cynnal dadl ar y ddeiseb hon
+      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Dangos
+        ar fap</a>
+      sign_this_petition: Llofnodi'r ddeiseb hon
+      need_sponsors_later: 'Nes ymlaen, bydd angen cyfeiriadau e-bost arnoch ar gyfer
+        %{count} gefnogwr i ddechrau eich deiseb '
+      senedd_debated_topic: Cynhaliwyd dadl yn y Senedd ar y pwnc hwn
       waiting_for_in_words:
-        zero: "Aros llai na diwrnod"
-        one: "Aros am 1 diwrnod"
-        other: "Aros am %{formatted_count} diwrnod"
+        one: Aros am 1 diwrnod
+        two: Aros am 2 diwrnod
+        zero: Aros llai na diwrnod
+        other: Aros am %{formatted_count} diwrnod
+      other_senedd_business: Busnes arall y Senedd
+      reject_reason_heading: Pam gwrthodwyd y ddeiseb hon?
+      senedd_debate_heading: Bydd y Pwyllgor Deisebau yn ystyried y ddeiseb hon ar
+        gyfer dadl
+      senedd_will_debate_on: Bydd y Senedd yn cynnal dadl ar y ddeiseb hon ar %{date}.
+      closed_due_to_election: Cafodd y ddeiseb hon ei chau'n gynnar oherwydd etholiad
+        y Senedd
+      petition_closed_notice: Mae'r ddeiseb hon wedi'i chau
+      petitions_run_6_months: Mae modd ychwanegu llofnodion at ddeisebau am hyd at
+        6 mis
+      about_petition_data_html: "<details role=\"group\">\r\n  <summary role=\"button\"
+        aria-controls=\"about-json-content\" aria-expanded=\"true\">\r\n    <span
+        class=\"summary\">Data ynghylch deisebau</span>\r\n  </summary>\r\n  <div
+        id=\"about-json-content\" aria-hidden=\"false\">\r\n    <p>\r\n      Mae'r
+        data hyn yn dangos sawl person sydd wedi llofnodi'r ddeiseb yn ôl gwlad ac
+        yn ôl etholaeth pob Aelod o'r Senedd.\r\n      Mae'r data hyn ar gael ar gyfer
+        pob deiseb ar y safle. Nid yw'n rhoi rhestr o'r bobl sydd wedi llofnodi'r
+        ddeiseb. Yr unig enw sy'n cael ei rannu ar y safle yw enw'r person a greodd
+        y ddeiseb.\r\n    </p>\r\n  </div>\r\n</details>"
+      senedd_debate_description: Mae'r Pwyllgor Deisebau yn ystyried pob deiseb sy'n
+        casglu mwy na %{threshold} llofnod ar gyfer dadl
+      need_sponsors_later_heading: Rhywbeth i'w gadw mewn cof
+      watch_online_senedd_tv_html: Gallwch chi wylio'r ddadl ar-lein yn <a href="https://senedd.tv"
+        rel="external">senedd.tv</a>
+      for_senedd_to_publish_debate: 'i''r Senedd gyhoeddi canlyniad y ddadl '
+      reject_reason_standards_html: "<br>Dim ond deisebau nad ydynt yn bodloni’r %{standards_link}
+        y byddwn yn eu gwrthod<br>\r\n<br>\r\nMae deisebau a wrthodwyd yn cael eu
+        cyhoeddi yn yr iaith y cawsant eu cyflwyno ynddi"
+      committee_decided_not_to_debate: Penderfynodd y Pwyllgor Deisebau beidio â chyfeirio'r
+        ddeiseb hon ar gyfer dadl
+      at_threshold_for_debate_ellipsis: Ar ôl %{threshold} llofnod...
+      watch_online_youtube_channel_html: Gallwch chi wylio'r ddadl ar-lein ar <a href="https://www.senedd.tv"
+        rel="external">Senedd TV</a>.
+      at_threshold_for_debate_will_be_considered: Caiff deisebau sydd â mwy na %{threshold}
+        llofnod eu hystyried ar gyfer dadl yn y Senedd
+    pagination:
+      next_html: "<a class=\"next\" href=\"%{next_link}\">\r\n  <span class=\"paginate-label\">Nesaf</span>\r\n
+        \ <span class=\"paginate page-count\">%{next_page} of %{total_pages}</span>\r\n</a>"
+      previous_html: "<a class=\"previous\" href=\"%{previous_link}\">\r\n  <span
+        class=\"paginate-label\">Blaenorol</span>\r\n  <span class=\"paginate page-count\">%{previous_page}
+        of %{total_pages}</span>\r\n</a>"
+    signatures:
+      new:
+        heading: Llofnodi'r ddeiseb
+        continue_html: <input type="submit" name="move_next" value="Parhau" class="button"
+          tabindex="%{tabindex}" data-disable-with="Parhau">
+      signed:
+        heading:
+          one: 1 llofnod
+          two: 2 llofnod
+          zero: 0 llofnod
+          other: "%{formatted_count} llofnod"
+        contact_member:
+          heading: Cysylltu â'ch Aelod o'r Senedd
+          member_link: Cysylltu â'ch Aelod o'r Senedd i ddweud eich bod wedi llofnodi'r
+            ddeiseb hon
+          member_name: Eich Aelod lleol o'r Senedd yw %{member}
+          constituency_name: Eich etholaeth yw %{constituency}
+        regional_members:
+          region_html: 'Eich Aelodau o''r Senedd ar gyfer rhanbarth <strong>%{region}</strong>
+            yw:'
+        added_to_petition: 'Rydym ni wedi ychwanegu eich enw at y ddeiseb:'
+        register_to_vote_html: "<h2>Cofrestru i bleidleisio</h2>\r\n<p>Er mwyn pleidleisio
+          yn etholiadau'r Senedd, rhaid i chi fod wedi'ch cofrestru i bleidleisio.</p>\r\n<p>Mae'n
+          cymryd llai na 5 munud.</p>\r\n<a href=\"https://www.gov.uk/register-to-vote\"
+          rel=\"external\">Cofrestru i bleidleisio</a>"
+      confirm:
+        email_form:
+          submit_html: <input type="submit" name="move_next" value="Ie – dyma fy nghyfeiriad
+            e-bost i" class="button" tabindex="%{tabindex}" data-disable-with="Ie
+            – dyma fy nghyfeiriad e-bost i">
+          fix_email_if_wrong: 'Os yw eich cyfeiriad e-bost yn anghywir, newidiwch
+            y manylion uchod '
+      thank_you:
+        heading: Un cam arall…
+        confirmation:
+          sent: Rydym ni wedi anfon neges e-bost atoch. Cliciwch ar y linc yn y neges
+            e-bost i gadarnhau eich cyfeiriad.
+          required: 'Ni fydd eich llofnod yn cael ei chyfrif tan y byddwch chi wedi
+            clicio''r linc yn y neges e-bost '
+          not_received:
+            heading: Heb gael neges e-bost gadarnhad?
+            instructions_html: "<p>\r\n  Os nad ydych chi wedi cael neges e-bost gadarnhad:\r\n</p>\r\n\r\n<ul
+              class=\"list-bullet\">\r\n  <li>edrychwch yn eich ffolder sbam neu'ch
+              ffolder sothach</li>\r\n  <li>dylech ganiatáu hyd at 24 awr i'r neges
+              e-bost gyrraedd</li>\r\n</ul>"
+      unsubscribe:
+        back_button: Mynd yn ôl i'r hafanddalen
+        failed_html: "<h1>Methu dad-danysgrifio</h1>\r\n<p>Nid yw eich linc dad-danysgrifio
+          yn ddilys.</p>"
+        already_html: "<h1>Rydych chi eisoes wedi dad-danysgrifio o'r ddeiseb hon</h1>\r\n<p>Rydych
+          chi eisoes wedi dad-danysgrifio o'r negeseuon e-bost sy'n rhoi'r wybodaeth
+          ddiweddaraf am y ddeiseb hon.</p>"
+        success_html: "<h1>Rydych chi wedi dad-danysgrifio'n llwyddiannus o'r ddeiseb
+          hon</h1>\r\n<p>Rydych chi wedi dad-danysgrifio o'r negeseuon e-bost sy'n
+          rhoi'r wybodaeth ddiweddaraf am y ddeiseb hon.</p>"
+      confirmation:
+        signatures: llofnodion
+      privacy_notice_html: "<section class=\"secondary\">\r\n  <p>Ni fyddwn yn cyhoeddi
+        eich manylion personol mewn unrhyw le arall nac yn eu defnyddio ar gyfer unrhyw
+        beth heblaw'r ddeiseb hon.</p>\r\n</section>"
+    application:
+      back: Nôl
+      back_html: <input type="submit" name="move_back" value="◀ Nôl" class="back-page"
+        data-disable-with="◀ Nôl">
+      continue_html: <input type="submit" value="Parhau" class="button" />
+      cookie_message:
+        html: Rydym yn defnyddio cwcis i wneud y gwasanaeth hwn yn symlach. %{privacy_link}
+        privacy_link: Rhagor o wybodaeth am gwcis
+      character_count: hyd at %{count} nod
+      get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
+      share_this_petition: Rhannu'r ddeiseb hon
+      twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion
+        cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a'r rhai
+        y cynhaliwyd dadl arnynt yn y Senedd
+    share_title: 'Deiseb: %{petition}'
+    list_headers:
+      not_debated: Penderfynodd y Pwyllgor Deisebau beidio â thrafod y ddeiseb hon
+    local_search:
+      submit_button_html: |-      
+        <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">      
+      postcode: Cod post y DU
+    debate_outcomes:
+      link_titles:
+        video_url: Gwylio'r ddadl
+        transcript_url: Darllen y trawsgrifiad
+        debate_pack_url: Dod o hyd i fanylion y ddeiseb
+    signature_counts:
+      default_html:
+        one: <span class="count" data-count="%{count}">%{num}</span> <span class="text">llofnod</span>
+        two: <span class="count" data-count="%{count}">2</span> <span class="text">llofnod</span>
+        zero: <span class="count" data-count="%{count}">0</span> <span class="text">llofnod</span>
+        other: <span class="count" data-count="%{count}">%{num}</span> <span class="text">llofnod</span>
+      in_total_html:
+        one: Cyfanswm o %{num} llofnod
+        two: Cyfanswm o 2 llofnod
+        zero: Cyfanswm o 0 llofnod
+        other: Cyfanswm o %{num} llofnod
+      trending_html:
+        one: <span class="count">%{num}</span> llofnod yn yr awr ddiwethaf
+        two: <span class="count">2</span> llofnod yn yr awr ddiwethaf
+        zero: <span class="count">0</span> llofnod yn yr awr ddiwethaf
+        other: <span class="count">%{num}</span> llofnod yn yr awr ddiwethaf
+      in_your_constituency_html:
+        one: "%{num} llofnod o %{constituency}"
+        two: 2 llofnod o %{constituency}
+        zero: 0 llofnod o %{constituency}
+        other: "%{num} llofnod o %{constituency}"
     scheduled_for_debate_in_words:
-      today: "Trefnwyd cynnal dadl heddiw"
-      tomorrow: "Trefnwyd cynnal dadl yfory"
-      other: "Trefnwyd dadl ar gyfer %{date}"
+      other: Trefnwyd dadl ar gyfer %{date}
+      today: Trefnwyd cynnal dadl heddiw
+      tomorrow: Trefnwyd cynnal dadl yfory
+

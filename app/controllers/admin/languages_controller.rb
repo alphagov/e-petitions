@@ -1,5 +1,6 @@
 class Admin::LanguagesController < Admin::AdminController
   before_action :require_sysadmin
+  before_action :redirect_to_admin_hub, unless: :translation_enabled?
   before_action :fetch_languages, only: %i[index]
   before_action :fetch_language, only: %i[show edit update destroy reload]
   before_action :fetch_key, only: %i[edit update destroy]
@@ -57,6 +58,14 @@ class Admin::LanguagesController < Admin::AdminController
   end
 
   private
+
+  def translation_enabled?
+    Site.translation_enabled?
+  end
+
+  def redirect_to_admin_hub
+    redirect_to admin_root_url, notice: "Editing of languages is disabled"
+  end
 
   def fetch_languages
     @languages = Language.by_name

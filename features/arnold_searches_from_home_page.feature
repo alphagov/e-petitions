@@ -19,26 +19,26 @@ Scenario: Arnold searches for petitions in English
   When I search all petitions for "Wombles"
   Then I should be on the all petitions page
   And I should see my search term "Wombles" filled in the search field
-  And I should see "6 results"
+  And I should see "6 petitions"
   And I should see the following search results:
-    | Wombles                            | 1 signature                                         |
-    | Overthrow the Wombles              | 1 signature                                         |
-    | Uncle Bulgaria                     | 1 signature                                         |
-    | Common People                      | 1 signature                                         |
-    | The Wombles will rock Glasto       | With the Petitions Committee. Received 1 signature. |
-    | Eavis vs the Wombles               | Rejected                                            |
+    | Wombles                            | 1 signature                                      |
+    | Overthrow the Wombles              | 1 signature                                      |
+    | Uncle Bulgaria                     | 1 signature                                      |
+    | Common People                      | 1 signature                                      |
+    | The Wombles will rock Glasto       | Referred to the Petitions Committee. 1 signature |
+    | Eavis vs the Wombles               | Rejected                                         |
 
 @welsh
 Scenario: Arnold searches for petitions in Welsh
   Given I am on the home page
   When I search all petitions for "Wombles"
   Then I should see my search term "Wombles" filled in the search field
-  And I should see "6 results"
+  And I should see "6 deiseb"
   And I should see the following search results:
-    | Wombles                            | 1 signature                                         |
-    | Goresgyn y Wombles                 | 1 signature                                         |
-    | Yncl Bwlgaria                      | 1 signature                                         |
-    | Pobl Gyffredin                     | 1 signature                                         |
-    | Bydd y Wombles yn siglo Glasto     | With the Petitions Committee. Received 1 signature. |
-    | Eavis vs y Wombles                 | Rejected                                            |
+    | Wombles                            | 1 llofnod                                    |
+    | Goresgyn y Wombles                 | 1 llofnod                                    |
+    | Yncl Bwlgaria                      | 1 llofnod                                    |
+    | Pobl Gyffredin                     | 1 llofnod                                    |
+    | Bydd y Wombles yn siglo Glasto     | Cyfeiriwyd at y Pwyllgor Deisebau. 1 llofnod |
+    | Eavis vs y Wombles                 | Gwrthodwyd                                   |
   And the markup should be valid

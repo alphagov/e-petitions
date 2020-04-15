@@ -34,7 +34,7 @@ module TranslationHelper
     LanguageSwitcherTag.new(self).render
   end
 
-  if ENV['TRANSLATION_ENABLED'].present?
+  if Site.translation_enabled?
     def t(key, options = {})
       keys = I18n.normalize_keys(I18n.locale, key, options[:scope])
       scope = keys[1]
@@ -45,14 +45,6 @@ module TranslationHelper
       data = { translation_link: url }
 
       content_tag(:span, "", data: data) + h(super)
-    end
-
-    def translation_enabled?
-      true
-    end
-  else
-    def translation_enabled?
-      false
     end
   end
 end

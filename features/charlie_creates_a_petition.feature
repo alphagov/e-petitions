@@ -45,7 +45,7 @@ Scenario: Charlie creates a petition with a custom closing date
   And I fill in the petition details
   And I press "Preview petition"
   And I press "This looks good"
-  And I choose "I want to stop gathering signatures on a specific date"
+  And I choose "I want to stop collecting signatures on a specific date"
   And I fill in "Day" with "30"
   And I fill in "Month" with "06"
   And I fill in "Year" with "2020"
@@ -63,15 +63,15 @@ Scenario: Charlie creates a petition with a custom closing date
 Scenario: Charlie creates a petition in Welsh
   Given I start a new petition
   And I fill in the petition details
-  And I press "Preview petition"
-  And I press "This looks good"
+  And I press "Gweld rhagolwg o'r ddeiseb"
+  And I press "Mae'n edrych yn iawn"
   And I choose the default closing date
   And I fill in my details
   And I fill in my creator contact details
-  When I press "Continue"
+  When I press "Parhau"
   Then the markup should be valid
   And I am asked to review my email address
-  When I press "Yes – this is my email address"
+  When I press "Ie – dyma fy nghyfeiriad e-bsot i"
   Then a petition should exist with action_cy: "The wombats of wimbledon rock.", action_en: nil, state: "pending", locale: "cy-GB"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress
@@ -140,9 +140,9 @@ Scenario: Charlie tries to submit an invalid petition
   And I press "Preview petition"
   And I press "This looks good"
 
-  Then I should see a heading called "When should your petition close?"
+  Then I should see a heading called "How long would you like to collect signatures for?"
 
-  When I choose "I want to stop gathering signatures on a specific date"
+  When I choose "I want to stop collecting signatures on a specific date"
   And I press "Check closing date"
 
   Then I should see "Closing date must be completed"

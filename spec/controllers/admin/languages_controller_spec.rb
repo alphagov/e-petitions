@@ -57,7 +57,12 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
 
   context "when logged in as a sysadmin" do
     let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
-    before { login_as(sysadmin) }
+
+    before do
+      allow(Site).to receive(:translation_enabled?).and_return(true)
+
+      login_as(sysadmin)
+    end
 
     describe "GET /admin/languages" do
       before { get :index }
@@ -203,6 +208,61 @@ RSpec.describe Admin::LanguagesController, type: :controller, admin: true do
           expect(flash[:alert]).to eq("Translations could not be reloaded - please contact support")
         end
       end
+    end
+  end
+
+  context "when language editing is disabled" do
+    let(:sysadmin) { FactoryBot.create(:sysadmin_user) }
+
+    before do
+      allow(Site).to receive(:translation_enabled?).and_return(false)
+
+      login_as(sysadmin)
+    end
+
+    shared_examples_for "an action when language editing is disabled" do
+      it "redirects to the admin hub page" do
+        expect(response).to redirect_to("https://moderate.petitions.senedd.wales/admin")
+      end
+
+      it "sets the flash notice message" do
+        expect(flash[:notice]).to eq("Editing of languages is disabled")
+      end
+    end
+
+    describe "GET /admin/languages" do
+      before { get :index }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "GET /admin/languages/en-GB" do
+      before { get :show, params: { locale: "en-GB" } }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "GET /admin/languages/en-GB.yml" do
+      before { get :show, params: { locale: "en-GB" }, as: :yaml }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "GET /admin/languages/en-GB/title" do
+      before { get :edit, params: { locale: "en-GB", key: "title" } }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "PATCH /admin/languages/en-GB/title" do
+      before { patch :update, params: { locale: "en-GB", key: "title", translation: "Welsh Petitions" } }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "DELETE /admin/languages/en-GB/title" do
+      before { delete :destroy, params: { locale: "en-GB", key: "title" } }
+      it_behaves_like "an action when language editing is disabled"
+    end
+
+    describe "POST /admin/languages/en-GB/reload" do
+      before { post :reload, params: { locale: "en-GB" } }
+      it_behaves_like "an action when language editing is disabled"
     end
   end
 end

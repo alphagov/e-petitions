@@ -75,7 +75,7 @@ Feature: Moderator respond to petition
     When I go to the admin petition page for "Remove tolls on the bridge"
     And I publish the petition
     Then the petition should be visible on the site for signing
-    And I should see "Deadline 30 June 2020"
+    And I should see "Collecting signatures until 30 June 2020"
 
   Scenario: Moderator tries to publish a petition before translation
     Given I am logged in as a moderator

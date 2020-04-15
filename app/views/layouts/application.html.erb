@@ -45,7 +45,7 @@
       <% end %>
     <% end %>
 
-    <% if translation_enabled? %>
+    <% if Site.translation_enabled? %>
       <%= javascript_include_tag admin_translations_url(:js), crossorigin: 'use-credentials' %>
     <% end %>
   </body>

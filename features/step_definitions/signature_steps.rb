@@ -37,13 +37,24 @@ end
 
 When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
   email_address ||= "womboid@wimbledon.com"
-  steps %Q(
-    When I fill in "Name" with "Womboid Wibbledon"
-    And I fill in "Email" with "#{email_address}"
-    And I fill in my postcode with "SW14 9RQ"
-    And I select "#{I18n.t(:"GB-WLS", scope: :country_name)}" from "Location"
-    And I check "Email me whenever there’s an update about this petition"
-  )
+
+  if I18n.locale == :"en-GB"
+    steps %Q(
+      When I fill in "Name" with "Womboid Wibbledon"
+      And I fill in "Email" with "#{email_address}"
+      And I fill in my postcode with "SW14 9RQ"
+      And I select "Wales" from "Location"
+      And I check "Email me whenever there’s an update about this petition"
+    )
+  else
+    steps %Q(
+      When I fill in "Enw" with "Womboid Wibbledon"
+      And I fill in "Cyfeiriad e-bost" with "#{email_address}"
+      And I fill in my postcode with "SW14 9RQ"
+      And I select "Cymru" from "Lleoliad"
+      And I check "Anfonwch neges e-bost ataf pryd bynnag y bydd diweddariad ynghylch y ddeiseb hon"
+    )
+  end
 end
 
 When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
@@ -57,14 +68,25 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
 end
 
 When(/^I fill in my creator contact details$/) do
-  steps %Q(
-    And I fill in "Phone number" with "0300 200 6565"
-    And I fill in "Address" with "Pierhead St, Cardiff"
-  )
+  if I18n.locale == :"en-GB"
+    steps %Q(
+      And I fill in "Phone number" with "0300 200 6565"
+      And I fill in "Address" with "Pierhead St, Cardiff"
+    )
+  else
+    steps %Q(
+      And I fill in "Rhif ffôn" with "0300 200 6565"
+      And I fill in "Cyfeiriad" with "Pierhead St, Cardiff"
+    )
+  end
 end
 
 When(/^I fill in my postcode with "(.*?)"$/) do |postcode|
-  step %{I fill in "Postcode" with "#{postcode}"}
+  if I18n.locale == :"en-GB"
+    step %{I fill in "Postcode" with "#{postcode}"}
+  else
+    step %{I fill in "Cod post" with "#{postcode}"}
+  end
 end
 
 When /^I fill in my details and sign a petition$/ do
@@ -85,8 +107,13 @@ Then /^I should see that I have already signed the petition$/ do
 end
 
 Then(/^I am asked to review my email address$/) do
-  expect(page).to have_content 'Make sure this is right'
-  expect(page).to have_field('Email')
+  if I18n.locale == :"en-GB"
+    expect(page).to have_content 'Make sure this is right'
+    expect(page).to have_field('Email')
+  else
+    expect(page).to have_content 'Gwnewch yn siŵr fod hyn yn gywir'
+    expect(page).to have_field('Cyfeiriad e-bost')
+  end
 end
 
 Then(/^my email is autocorrected to "([^"]+)"/) do |email|

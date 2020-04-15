@@ -1,50 +1,545 @@
+---
 en-GB:
   ui:
-    application:
-      continue_html: |-
-        <input type="submit" value="Continue" class="button" />
-      share_this_petition: Share this petition
-      twitter_card_description: Official online petitions in response to issues of the day, listing the number that were referred to the Petitions Committee, and those that have been debated in the Senedd
-      back_html: |-
-        <input type="submit" name="move_back" value="◀ Back" class="back-page" data-disable-with="◀ Back">
-      get_json_csv_html: >-
-        Get this data in %{json_link} or %{csv_link} format
-      cookie_message:
-        html: We use cookies to make this service simpler. %{privacy_link}
-        privacy_link: Find out more about cookies
-      character_count: "%{count} characters max"
+    os:
+      app_name: Petitions
+      app_tooltip: Senedd
+    counts:
+      referred_html:
+        one: <span class="count">1</span> petition was referred to the Petitions Committee
+        two: <span class="count">2</span> petitions were referred to the Petitions
+          Committee
+        zero: <span class="count">0</span> petitions were referred to the Petitions
+          Committee
+        other: <span class="count">%{num}</span> petitions were referred to the Petitions
+          Committee
+      awaiting_debate_html:
+        one: <span class="count">1</span> petition is waiting to be considered for
+          debate
+        two: <span class="count">2</span> petitions are waiting to be considered for
+          debate
+        zero: <span class="count">0</span> petitions are waiting to be considered
+          for debate
+        other: <span class="count">%{num}</span> petitions are waiting to be considered
+          for debate
+      debated_explanation_html: See all petitions debated in the Senedd (%{num})
+      referred_explanation_html: See all petitions referred to the Petitions Committee (%{num})
+      with_debated_outcome_html:
+        one: <span class="count">%{num}</span> petition was debated in the Senedd
+        two: <span class="count">2</span> petitions were debated in the Senedd
+        zero: <span class="count">0</span> petitions were debated in the Senedd
+        other: <span class="count">%{num}</span> petitions were debated in the Senedd
+      not_debated_explanation_html: See all petitions not debated in the Senedd (%{num})
     footer:
+      nav:
+        home: Home
+        privacy: Privacy and cookies
+        feedback: Feedback
+        all_petitions: All petitions
+        start_a_petition: Start a petition
+        how_petitions_work: How petitions work
+      ogl_html: |-
+        <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
+        <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
       copyright_html: |-
         <span class="graphic graphic-portcullis-large-grey"></span>
         <span class="graphic graphic-crest-large-grey"></span>
         <a href="https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm" rel="external">© Crown copyright</a>
-      nav:
-        all_petitions: All petitions
-        feedback: Feedback
-        home: Home
-        how_petitions_work: How petitions work
-        privacy: Privacy and cookies
-        start_a_petition: Start a petition
-      ogl_html: |-
-        <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
-        <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
     header:
-      language_switcher_html: |-
-        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
-      strapline: Senedd
       title: Petitions
+      tooltip: Go to the Petitions homepage
+      strapline: Senedd
       title_link_html: |-
         <a title="Go to the Petitions homepage" tabindex="1" class="proposition" href="%{url}">
           <span class="graphic graphic-dragon-white"></span> Petitions
         </a>
-      tooltip: Go to the Petitions homepage
-    local_search:
-      postcode: Welsh postcode
-      submit: Search
-    os:
-      app_name: Petitions
-      app_tooltip: Senedd
+      language_switcher_html: <a class="language-switcher" title="Dangoswch y dudalen
+        hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
+    sharing:
+      email_html: <span class="icon icon-share-email"></span> Email
+      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
+      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
+      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+    feedback:
+      new:
+        contact:
+          email:
+            heading: Email
+            body_html: "<p>You can email the %{petitions_committee_link} directly.</p>\r\n\r\n<p>They
+              can help you to understand how the Senedd handles petitions. They can
+              also provide a template for you to use to collect signatures on paper
+              and help with some technical problems using this service. They can't
+              forward your feedback to the people who started a petition or comment
+              on the ideas raised in a specific petition.</p>\r\n\r\n<p>Email: <a
+              href=\"mailto:petitions@senedd.wales\">petitions@senedd.wales</a></p>"
+            petitions_committee_link: Petitions Committee
+          phone:
+            heading: Phone
+            body_html: "<p>Phone calls are handled by the Senedd Contact Centre.</p>\r\n\r\n<p>They
+              can help you to understand how the Senedd handles petitions. They can’t
+              help with any technical problems with this service, forward your feedback
+              to the people who started a petition or comment on the ideas raised
+              in a specific petition.</p>\r\n\r\n<ul>\r\n  <li>Telephone: <a href=\"tel:+443002006565\">0300
+              200 6565</a> (local rate) or SMS: <a href=\"tel:+447970493958\">07970
+              493958</a></li>\r\n  <li>Textphone via Text Relay: <a href=\"tel:+4418001\">18001</a>
+              followed by <a href=\"tel:+443002006565\">0300 200 6565</a></li>\r\n
+              \ <li>Monday to Friday, 08:30&ndash;17:30</li>\r\n</ul>"
+          heading: Contact
+        heading: Feedback and contact
+        feedback:
+          heading: Feedback
+          comments:
+            label: Comments
+          terms_html: |-
+            <p>We'll only use your email to reply to your message</p>
+            <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
+          want_reply:
+            email:
+              label: Email address
+            heading: Do you want a reply?
+          submit_html: <input type="submit" value="Send feedback" class="button" tabindex="%{tabindex}"
+            data-disable-with="Send feedback">
+          submit_button: Send feedback
+          petition_link_or_title:
+            label_html: Petition title/link <span class="optional">optional</span>
+      thanks:
+        heading: Your feedback has been sent
+        back_link: Back to Petitions home
+        body_html: |-
+          <p>Thanks for sending us your feedback.</p>
+
+          <p>If you've requested a response, we'll be in touch as soon as we can.</p>
+
+          <p>During busy periods this can take up to 5 working days.</p>
+    sponsors:
+      new:
+        heading: Sign %{creator_name}’s petition
+      signed:
+        added: Your signature has been added to this petition as a supporter.
+        heading: Thanks
+        what_next_html: |-
+          <h2>What next?</h2>
+          <p>This petition needs %{min_sponsors} supporters to go live.</p>
+          <p>When it goes live, we'll email you a link so you can start sharing it.</p>
+    help_page:
+      body_html: "<h1 class=\"page-title\" id=\"creating-a-petition\">Creating a petition</h1>\r\n\r\n<p>Petitioning
+        is one of the most direct ways to suggest how something could change. Petitions
+        can:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>Raise awareness of an
+        issue;</li>\r\n  <li>Bring about a change in Welsh Government policy or a
+        different way of delivering services;</li>\r\n  <li>Propose or influence a
+        new law;</li>\r\n  <li>Prompt a Senedd Committee to hold an inquiry;</li>\r\n
+        \ <li>Lead to, or influence, a debate in the Senedd;</li>\r\n  <li>Prompt
+        a Committee or individual Members of the Senedd to take further action themselves,
+        for instance by asking questions.</li>\r\n</ul>\r\n\r\n<p>You can submit a
+        petition using our online petitions system, on paper, or a combination of
+        the two.</p>\r\n\r\n<p><u>Petitions from other websites are not accepted by
+        the Petitions Committee.</u></p>\r\n\r\n<p>If you are considering collecting
+        signatures on paper, you should <b>contact us</b> in advance for advice. A
+        template can also be provided.</p>\r\n\r\n<h1 class=\"page-title\" id=\"how-petitions-work\">How
+        petitions work</h1>\r\n\r\n<ol class=\"list-number\">\r\n  <li>You create
+        a petition. Only people or organisations with an address in Wales can create
+        a petition.</li>\r\n  <li>You get 2 people to support your petition. We’ll
+        tell you how to do this when you’ve created your petition.</li>\r\n  <li>We
+        check your petition, then publish it in Welsh and English. We only reject
+        petitions that don’t meet the standards for petitions (see below).</li>\r\n
+        \ <li>People can only sign a petition once. If they sign the petition online,
+        they will be sent an email to verify their signature. People cannot sign both
+        an online and a paper petition.</li>\r\n  <li>The Petitions Committee reviews
+        all petitions that collect over 50 signatures. They will decide what they
+        can do to help take the petition forward. This can include exploring the issue
+        and pressing for action from the Welsh Government and others.</li>\r\n  <li>If
+        your petition gets over 5,000 signatures, the Petitions Committee will consider
+        asking for a debate in the Senedd chamber. The Committee will consider a number
+        of factors, including the issues raised by the petition, the urgency of the
+        situation and the proportion of signatures which come from within Wales.</li>\r\n</ol>\r\n\r\n<h2
+        id=\"the-petitions-committee\">The Petitions Committee</h2>\r\n\r\n<p>As part
+        of their consideration of your petition, the <a href=\"https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430\">Petitions
+        Committee</a> can:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>write to
+        you for more information;</li>\r\n  <li>invite you to talk to the Committee
+        in person about the petition;</li>\r\n  <li>ask for evidence from the Welsh
+        Government or other relevant people or organisations;</li>\r\n  <li>press
+        the Welsh Government for action;</li>\r\n  <li>raise the petition with another
+        Senedd committee;</li>\r\n  <li>put forward the petition for debate;</li>\r\n
+        \ <li>run a detailed inquiry and publish a report on the topic.</li>\r\n</ul>\r\n\r\n<h2
+        id=\"standards\">Standards for petitions</h2>\r\n\r\n<p>You can submit a petition
+        on any issue that is the responsibility of the Senedd or the Welsh Government.</p>\r\n\r\n<p>Petitions
+        must call for a specific action from the Senedd or Welsh Government.</p>\r\n\r\n<p>Petitions
+        can disagree with the Welsh Government and can ask for it to change its policies.
+        Petitions can be critical of the Senedd or Welsh Government.</p>\r\n\r\n<p>We
+        reject petitions that don’t meet the rules. If we reject your petition, we
+        will tell you why. If we can, we will suggest other ways you could raise your
+        issue.</p>\r\n\r\n<p>We’ll have to reject your petition if:</p>\r\n\r\n<ul
+        class=\"list-bullet\">\r\n  <li>It calls for the same action as a petition
+        that’s already open, or one which was closed by the Petitions Committee less
+        than a year earlier;</li>\r\n  <li>It doesn’t ask for a clear action from
+        the Senedd or Welsh Government;</li>\r\n  <li>\r\n    <p>It’s about something
+        the Welsh Government or Parliament is not responsible for;</p>\r\n    <p>That
+        includes: something that your local council is responsible for (including
+        planning decisions); something that the UK Government or Parliament is responsible
+        for; and something that an independent organisation has done.</p>\r\n  </li>\r\n
+        \ <li>It contains language which is offensive, intemperate, or provocative.
+        This not only includes obvious profanities, swear words and insults, but any
+        language which a reasonable person would regard as offensive;</li>\r\n  <li>It
+        contains potentially false or potentially defamatory statements;</li>\r\n
+        \ <li>It refers to a case that’s active in the UK courts;</li>\r\n  <li>It
+        contains material that is prohibited from being published by an order of a
+        court or a body or person with similar power;</li>\r\n  <li>It accuses an
+        identifiable person or organisation of a crime;</li>\r\n  <li>It contains
+        material that could be confidential or commercially sensitive;</li>\r\n  <li>It
+        could cause personal distress or loss;</li>\r\n  <li>It names individual officials
+        of public bodies, unless they are senior managers;</li>\r\n  <li>It names
+        family members of elected representatives or officials of public bodies;</li>\r\n
+        \ <li>It’s an advert, spam, or promotes a specific product or service;</li>\r\n
+        \ <li>It’s nonsense or a joke;</li>\r\n  <li>\r\n    <p>It concerns an issue
+        for which a petition is not the appropriate channel.</p>\r\n    <p>That includes:
+        correspondence about a personal issue and petitions which ask for someone
+        to be given a job, lose their job or resign, or which call for a vote of no
+        confidence.</p>\r\n  </li>\r\n</ul>\r\n\r\n<p>We publish the text of petitions
+        that we reject, as long as they’re not:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n
+        \ <li>defamatory, libellous or illegal in another way;</li>\r\n  <li>about
+        a case that is active in the UK courts or about something that a court has
+        issued an injunction over;</li>\r\n  <li>offensive or extreme;</li>\r\n  <li>confidential
+        or likely to cause personal distress; or</li>\r\n  <li>a joke, an advert or
+        nonsense.</li>\r\n</ul>\r\n\r\n<p>You can find the full rules governing the
+        petitions process <a href=\"https://www.assembly.wales/en/gethome/e-petitions/how-to-petition/Pages/PO-Determination-Petitions.aspx\">here</a>.</p>\r\n\r\n<h2
+        id=\"handing-in-your-petition\">Handing in your petition</h2>\r\n\r\n<p>We
+        offer the opportunity for you to hand in your petition once it has finished
+        collecting signatures, and before it is discussed by the Petitions Committee.
+        This is an informal occasion to speak to the Chair and other Members of the
+        Committee about the background to the petition.</p>\r\n\r\n<p>Petition handovers
+        take place at the Senedd on Tuesdays and Wednesdays when the Senedd is sitting
+        and last approximately 10 - 15 minutes. Photographs are taken and can be published
+        on the Committee’s webpage and social media.</p>\r\n\r\n<p>If you have any
+        other questions, please %{feedback_link}.</p>\r\n"
+      feedback_link: get in touch
+    home_page:
+      notice:
+        get_involved_html: |-
+          <a href="https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx" class="get-involved">
+            Get involved with the Senedd
+          </a>
+        register_to_vote_html: |-
+          <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
+            Register to vote in the Senedd elections
+          </a>
+      opened:
+        lede: The Petitions service is open
+        start_a_petition:
+          link: Start a petition
+          heading: Start a petition
+          requirements: Any person or organisation with an address in Wales can start
+            a petition
+      heading: Petitions – Senedd
+      thresholds:
+        debate: If a petition gets %{formatted_count} signatures, it will be considered
+          for a debate in the Senedd
+        referred: All petitions with more than %{formatted_count} signatures are discussed
+          by the Petitions Committee
+      local_petitions:
+        heading: Local to you
+        find_local_petitions: Find petitions being signed by people near you
+      search_petitions:
+        heading: Search petitions
+        submit_button_html: |-      
+          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">
+      debated_petitions:
+        video:
+          link: senedd.tv
+          watch_html: Watch the debate on %{link}
+        research:
+          link: senedd.wales
+          read_html: Find details of the petition at %{link}
+        transcript:
+          link: senedd.wales
+          read_html: Read the transcript at %{link}
+        none_debated: The Senedd has not debated any petitions yet
+        topic_debated_date: This topic was debated on %{date}
+      referred_petitions:
+        none_referred: No petitions have been referred to the Petitions Committee
+          yet
+        referred_date: The petition was referred on %{date}
+      trending_petitions:
+        heading: Popular petitions
+        all_open_link: View all open petitions
     petitions:
+      check:
+        heading: Start a petition
+        results:
+          back: "◀ Back"
+          unique:
+            heading: We checked for similar petitions
+            continue: Continue
+            no_match: We checked for similar petitions and didn't find any.
+            ok_to_continue: So you can go ahead and create a new one.
+          duplicate:
+            heading: We found some similar petitions
+            continue_btn: My petition is different
+            reject_notice: If there’s already a petition on the same topic, your petition
+              is likely to be rejected
+            sign_if_match: If one of these petitions matches yours, sign it and share
+              it instead.
+            sign_if_match_reason: Your petition is more likely to get to %{referral_threshold}
+              and %{debate_threshold} signatures that way.
+      index:
+        page_titles:
+          all: All petitions
+          open: Open petitions
+          closed: Closed petitions
+          debated: Petitions debated in the Senedd
+          referred: Petitions referred to the Petitions Committee
+          rejected: Rejected petitions
+          completed: Completed petitions
+          published: Published petitions
+          not_debated: Petitions not debated in the Senedd
+          awaiting_debate: Petitions waiting for a debate in the Senedd
+      lists:
+        all: All petitions (%{quantity})
+        open: Open petitions (%{quantity})
+        debated: Debated in the Senedd (%{quantity})
+        referred: Referred to the Committee (%{quantity})
+        rejected: Rejected petitions (%{quantity})
+        completed: Completed petitions (%{quantity})
+        not_debated: Not debated in the Senedd (%{quantity})
+      local:
+        all:
+          heading: Popular petitions in the constituency of %{constituency_name}
+          results:
+            empty: No petitions are popular in your constituency.
+            now_closed: now closed
+          mp_name_link_html: Your Member of the Senedd is %{mp_name_link}
+          open_popular_link: View open popular petitions in %{constituency_name}
+        show:
+          heading: Popular open petitions in the constituency of %{constituency_name}
+          all_popular_link: View all popular petitions in %{constituency_name}
+        index:
+          postcode_bad:
+            heading: We couldn't find that postcode
+            couldnt_find_postcode_html: We couldn't find the postcode <q>%{postcode}</q>.
+              Try again?
+          postcode_blank:
+            heading: Local to you
+            find_local_petitions: Find petitions about local issues
+        regional_members:
+          heading_html: 'Your Members of the Senedd for the <strong>%{region}</strong>
+            region are:'
+        member_name_link_html: Your Member of the Senedd is %{member_name_link}
+      action:
+        label: What do you want us to do?
+        help_html: "<p class=\"form-hint\">Example: Introduce a 10p charge for single
+          use plastic bags</p>\r\n<details class=\"form-group-help\">\r\n  <summary><span
+          class=\"summary\">Show more examples</span></summary>\r\n  <div class=\"panel-indent\">\r\n
+          \   <p>Good petitions say clearly what they want the Senedd or Welsh Government
+          to do.</p>   \r\n <p>Good examples:</p>\r\n    <ul class=\"list-bullet\">\r\n
+          \     <li>Ban the use of wild animals in circuses</li>\r\n      <li>Lower
+          the voting age to 16 for Senedd elections</li>\r\n    </ul>\r\n    <p>Bad
+          examples:</p>\r\n    <ul class=\"list-bullet\">\r\n      <li>Help young
+          people</li>\r\n      <li>Justice for Stephen</li>\r\n    </ul>\r\n  </div>\r\n</details>"
+      create:
+        creator_stage:
+          name:
+            hint: You must use your full name
+            label: Name
+          email:
+            label: Email address
+          address:
+            hint: You must provide a valid address in Wales to create a petition.
+              Anyone can sign your petition.
+            label: Address
+          heading: Sign your petition
+          location:
+            hint: Only people in Wales can create a petition.
+            label: Location
+          postcode:
+            label: Postcode
+          phone_number:
+            label: Phone number
+          continue_html: <input type="submit" name="move_next" value="Continue" class="button"
+            tabindex="%{tabindex}" data-disable-with="Continue">
+          notify_by_email:
+            check_label: Email me whenever there’s an update about this petition
+          about_published_data_html: |-
+            <div class="secondary">
+              <p>Your name will be published on this petition as the petition creator.</p>
+              <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition.</p>
+            </div>
+        error_summary:
+          prompt:
+            one: 'Please fix the following error:'
+            two: 'Please fix the following errors:'
+            zero: 'Please fix the following error:'
+            other: 'Please fix the following errors:'
+          heading: We couldn't create this petition
+        petition_stage:
+          heading: Start a petition
+          submit_html: <input type="submit" name="move_next" value="Preview petition"
+            class="button" tabindex="%{tabindex}" data-disable-with="Preview petition">
+          hint_standards_html: Remember, your petition must meet the %{standards_link}.
+        closing_date_stage:
+          heading: How long would you like to collect signatures for?
+          duration:
+            hint:
+              custom: Your petition will run until the date you specify (minimum 30
+                days, maximum six months).
+              default: Your petition will run for six months after it’s published.
+            label:
+              custom: I want to stop collecting signatures on a specific date
+              default: I want to collect signatures for as long as possible
+          day:
+            label: "Day"
+          month:
+            label: "Month"
+          year:
+            label: "Year"
+          help_html: "<p>\r\n  By default, petitions collect signatures for six months
+            from the date\r\n  that the petition is published. However, petitions
+            are not considered by the Petitions Committee until <b>after</b> they
+            have finished collecting signatures. </li>\r\n<p>\r\nYou can choose an
+            earlier closing date if you would like your petition to be discussed sooner.\r\n</p>"
+          submit_html: |-
+            <input type="submit" name="move_next" value="Check closing date" class="button" tabindex="%{tabindex}" data-disable-with="Check closing date">
+        replay_email_stage:
+          heading: Make sure this is right
+          submit_html: <input type="submit" name="move_next" value="Yes – this is
+            my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes
+            – this is my email address">
+          fix_email_if_wrong: If your email address is wrong, just change it above
+        replay_petition_stage:
+          heading: Check your petition
+          submit_html: <input type="submit" name="move_next" value="This looks good"
+            class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
+          go_back_html: <input type="submit" name="move_back" value="Go back and make
+            changes" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
+            back and make changes">
+          submit_warning_html: |-
+            <p class="secondary">You can’t change your petition after this point.</p>
+            <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
+            <p class="secondary">Published petitions can only be removed from the site with the agreement of the Petitions Committee.</p>
+        replay_closing_date_stage:
+          heading: Check your closing date
+          custom_message_html: |-
+            <h1><span class="heading-secondary">Deadline</span>%{date}</h1>
+            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
+          default_message_html: |-
+            <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
+            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
+          submit_html: |-
+            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
+          go_back_html: |-
+            <input type="submit" name="move_back" value="Go back and change it" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and change it">
+          submit_warning_html: |-
+            <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
+      search:
+        submit_button_html: |-      
+          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">      
+        results:
+          items:
+            facet_all:
+              rejected: Rejected
+              closed_html:
+                one: Referred to the Petitions Committee. 1 signature
+                two: Referred to the Petitions Committee. 2 signatures
+                zero: Referred to the Petitions Committee. 0 signatures
+                other: Referred to the Petitions Committee. %{num} signatures
+            facet_debated:
+              debated_date: Debated on %{date}
+            facet_referred:
+              referred_date: Referred to the Petitions Committee on %{date}
+            facet_completed:
+              completed_date: Closed by the Petitions Committee on %{date}
+          no_match: No petitions could be found matching your search terms.
+        filtered_result_count:
+          one: 1 petition
+          two: 2 petitions
+          zero: 0 petitions
+          other: "%{num} petitions"
+        filtered_petition_count:
+          one: 1 petition
+          two: 2 petitions
+          zero: 0 petitions
+          other: "%{num} petitions"
+      deadline: Collecting signatures until
+      get_json: Get petition data (json format)
+      thank_you:
+        heading: One more step…
+        link_emailed: We've emailed you a link to send to your potential supporters
+        n_sponsors_needed: "%{count} people need to click this link and confirm their
+          support for your petition to go live. Once this has happened the Petitions
+          team will check that it meets the petitions standards and arrange for it
+          to be translated. You will receive an email when it is published."
+        n_sponsors_needed_notice: Your petition will only go live after %{count} people
+          confirm their support
+        n_sponsors_needed_heading: You need %{count} supporters
+      background:
+        label: Background
+        help_html: |-
+          <details class="form-group-help">
+            <summary><span class="summary">Help writing background</span></summary>
+            <div class="panel-indent">
+              <p>Use this section to back up why you want action. Some people include a personal story here.</p>
+              <p>Remember that people won’t always know that much about the issue you’re petitioning about - explain it.</p>
+            </div>
+          </details>
+      created_by: Created by
+      date_closed: Date closed
+      other_lists: Other lists of petitions
+      heading_open: Petition
+      more_details: More details
+      date_submitted: Date submitted
+      heading_closed: Closed petition
+      standards_link: petition standards
+      for_debate_date: for a debate date
+      moderation_info:
+        heading: We’re checking this petition
+        try_again_later: Please try again in a few days.
+        min_supporters_reached: "%{min_supporters} people have already supported %{creator_name}’s
+          petition."
+        checking_standards_html: We need to check it meets the %{standards_link} before
+          we publish it.
+      notice_rejected: This petition was rejected
+      heading_rejected: Rejected petition
+      topic_debated_on: This topic was debated on %{date}
+      gathering_support:
+        heading: This petition is gathering support
+        try_again_later: Please try again in a few days.
+        supporters_needed_html: "%{creator_name}’s petition needs %{n_sponsors} supporters
+          before we will check that it meets the %{standards_link} and publish it."
+      petition_duration: This petition ran for %{duration}
+      senedd_debated_on: The Senedd debated this petition on %{date}
+      additional_details:
+        label: Additional details
+        help_html: ''
+        hint_optional: Optional - background information, evidence and references
+      referral_threshold:
+        waiting:
+          heading: The Petitions Committee will consider this petition
+          referral_threshold: All petitions with more than %{threshold} signatures
+            will be discussed by the Petitions Committee after they have finished
+            collecting signatures
+          referral_waiting_time: for the Petitions Committee to consider this petition
+        needs_more_signatures:
+          heading: At %{threshold} signatures...
+          referral_threshold: All petitions with more than %{threshold} signatures
+            will be discussed by the Petitions Committee
+      senedd_will_debate: The Senedd will debate this petition
+      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show
+        on a map</a>
+      sign_this_petition: Sign this petition
+      need_sponsors_later: Later on, you'll need email addresses for %{count} supporters
+        to get your petition started
+      senedd_debated_topic: The Senedd debated this topic
+      waiting_for_in_words:
+        one: Waiting 1 day
+        two: Waiting 2 days
+        zero: Waiting less than a day
+        other: Waiting %{formatted_count} days
+      other_senedd_business: Other Senedd business
+      reject_reason_heading: Why was this petition rejected?
+      senedd_debate_heading: The Petitions Committee will consider this for a debate
+      senedd_will_debate_on: The Senedd will debate this petition on %{date}.
+      closed_due_to_election: This petition closed early because of a Senedd election
+      petition_closed_notice: This petition is closed
+      petitions_run_6_months: Petitions can collect signatures for a maximum of 6
+        months
       about_petition_data_html: |-
         <details role="group">
           <summary role="button" aria-controls="about-json-content" aria-expanded="true">
@@ -60,345 +555,68 @@ en-GB:
             </p>
           </div>
         </details>
-      action:
-        label: What do you want us to do?
-        help_html: |-
-          <p class="form-hint">Example: Make wrongly describing a casserole with a pastry lid as a pie a criminal offence</p>
-          <details class="form-group-help">
-            <summary><span class="summary">Show more examples</span></summary>
-            <div class="panel-indent">
-              <p>Good examples:</p>
-              <ul class="list-bullet">
-                <li>Introduce Black History to the primary curriculum</li>
-                <li>Lower the voting age to 16</li>
-              </ul>
-              <p>Bad examples:</p>
-              <ul class="list-bullet">
-                <li>Russia Problem on US ruling</li>
-                <li>Justice for David Thomas</li>
-              </ul>
-              <p>Good petitions say clearly what they want the Senedd or Welsh Government to do.</p>
-            </div>
-          </details>
-      background:
-        label: Background
-        help_html: |-
-          <details class="form-group-help">
-            <summary><span class="summary">Help writing background</span></summary>
-            <div class="panel-indent">
-              <p>Use this section to back up why you want action. Some people include a personal story here.</p>
-              <p>Remember that people won’t always know that much about the issue you’re petitioning about - explain it.</p>
-            </div>
-          </details>
-      additional_details:
-        label: Additional details
-        hint_optional: Optional - background information, evidence and references
-        help_html: ""
-      at_threshold_for_debate_ellipsis: At %{threshold} signatures...
-      at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold} signatures will be considered for a debate in the Senedd
-      check:
-        heading: Start a petition
-        results:
-          back: "◀ Back"
-          duplicate:
-            heading: We found some similar petitions
-            sign_if_match: If one of these petitions matches yours, sign it and share it instead
-            sign_if_match_reason: Your petition is more likely to get to %{referral_threshold} and %{debate_threshold} signatures that way.
-            reject_notice: If there’s already a petition on the same topic, your petition is likely to be rejected
-            continue_btn: My petition is different
-          unique:
-            heading: We checked for similar petitions
-            no_match: We checked for similar petitions and didn't find any.
-            ok_to_continue: So you can go ahead and create a new one.
-            continue: Continue
-      gathering_support:
-        heading: This petition is gathering support
-        supporters_needed_html: "%{creator_name}’s petition needs %{n_sponsors} supporters before we will check that it meets the %{standards_link} and publish it."
-        try_again_later: Please try again in a few days.
-      closed_due_to_election: This petition closed early because of a Senedd election
-      committee_decided_not_to_debate: The Petitions Committee decided not to refer this petition for a debate
-      created_by: Created by
-      date_closed: Date closed
-      date_completed: Date completed
-      date_submitted: Date submitted
-      deadline: Deadline
-      for_debate_date: for a debate date
-      for_senedd_to_publish_debate: for the Senedd to publish the debate outcome
-      get_json: Get petition data (json format)
-      heading_closed: Closed petition
-      heading_open: Petition
-      heading_rejected: Rejected petition
-      heading_completed: Completed petition
-      more_details: More details
-      need_sponsors_later: Later on, you'll need email addresses for %{count} supporters to get your petition started
+      senedd_debate_description: The Petitions Committee considers all petitions that
+        get more than %{threshold} signatures for a debate
       need_sponsors_later_heading: Just so you know
-      notice_rejected: This petition was rejected
-      other_senedd_business: Other Senedd business
-      senedd_debated_on: The Senedd debated this petition on %{date}
-      senedd_debated_topic: The Senedd debated this topic
-      senedd_will_debate: The Senedd will debate this petition
-      senedd_will_debate_on: The Senedd will debate this petition on %{date}.
-      senedd_debate_description: The Petitions Committee considers all petitions that get more than %{threshold} signatures for a debate
-      senedd_debate_heading: The Petitions Committee will consider this for a debate
-      petition_closed_notice: This petition is closed
-      petitions_run_6_months: Petitions can collect signatures for a maximum of 6 months
-      petition_duration: This petition ran for %{duration}
-      reject_reason_heading: Why was this petition rejected?
-      reject_reason_standards_html: We only reject petitions that don’t meet the %{standards_link}
-      referral_threshold:
-        needs_more_signatures:
-          heading: At %{threshold} signatures...
-          referral_threshold: All petitions with more than %{threshold} signatures are referred to the Petitions Committee
-        waiting:
-          heading: The Petitions Committee will consider this petition
-          referral_threshold: All petitions with more than %{threshold} signatures will be discussed by the Petitions Committee after they have finished collecting signatures
-        referred:
-          heading: This petition is now under consideration by the Petitions Committee
-          referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
-          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
-        completed:
-          heading: This petition was considered by the Petitions Committee
-          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
-      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show on a map</a>
-      sign_this_petition: Sign this petition
-      topic_debated_on: This topic was debated on %{date}
-      waiting_for_in_words:
-        zero: Waiting less than a day
-        one: Waiting 1 day
-        two: Waiting 2 days
-        other: Waiting %{formatted_count} days
-      watch_online_senedd_tv_html: You'll be able to watch the debate online at <a href="https://senedd.tv" rel="external">senedd.tv</a>
-      watch_online_youtube_channel_html: You'll be able to watch online on the <a href="https://www.youtube.com/AssemblyCynulliad" rel="external">Senedd YouTube channel</a>.
-      index:
-        page_titles:
-          all: All petitions
-          open: Open petitions
-          closed: Closed petitions
-          rejected: Rejected petitions
-          published: Published petitions
-          referred: Petitions referred to the Petitions Committee
-          debated: Petitions debated in the Senedd
-          not_debated: Petitions not debated in the Senedd
-          awaiting_debate: Petitions waiting for a debate in the Senedd
-      search:
-        submit: Search
-        filtered_petition_count:
-          zero: "0 petitions"
-          one: "1 petition"
-          two: "2 petitions"
-          other: "%{num} petitions"
-        filtered_result_count:
-          zero: "0 results"
-          one: "1 result"
-          two: "2 results"
-          other: "%{num} results"
-        results:
-          no_match: No petitions could be found matching your search terms.
-          items:
-            facet_all:
-              closed_html:
-                zero: "With the Petitions Committee. Received 0 signatures."
-                one: "With the Petitions Committee. Received 1 signature."
-                two: "With the Petitions Committee. Received 2 signatures."
-                other: "With the Petitions Committee. Received %{num} signatures."
-              completed: Completed by the Petitions Committee on %{date}
-              rejected: Rejected
-            facet_referred:
-              referred_date: Referred to the Petitions Committee on %{date}
-            facet_debated:
-              debated_date: Debated on %{date}
-            facet_completed:
-              completed_date: Completed by the Petitions Committee on %{date}
-      other_lists: Other lists of petitions
-      lists:
-        all: All petitions (%{quantity})
-        open: Open petitions (%{quantity})
-        referred: Referred to the committee (%{quantity})
-        awaiting_debate: Awaiting a debate in the Senedd (%{quantity})
-        debated: Debated in the Senedd (%{quantity})
-        not_debated: Not debated in the Senedd (%{quantity})
-        completed: Completed petitions (%{quantity})
-        rejected: Rejected petitions (%{quantity})
-      moderation_info:
-        heading: We’re checking this petition
-        min_supporters_reached: "%{min_supporters} people have already supported %{creator_name}’s petition."
-        checking_standards_html: We need to check it meets the %{standards_link} before we publish it.
-        try_again_later: Please try again in a few days.
-      standards_link: petition standards
-      thank_you:
-        heading: One more step…
-        link_emailed: We've emailed you a link to send to your potential supporters
-        n_sponsors_needed_heading: You need %{count} supporters
-        n_sponsors_needed: "%{count} people need to click this link and confirm their support for your petition to go live. Once this has happened the Petitions team will check that it meets the petitions standards, and arrange for it to be translated, before it is published."
-        n_sponsors_needed_notice: Your petition will only go live after %{count} people confirm their support
-      create:
-        closing_date_stage:
-          heading: When should your petition close?
-          help_html: |-
-            <p>
-              By default petitions gather signatures for six months from the date
-              that the petition is published. However, you can choose an earlier
-              closing date if you want so that you can co-ordinate campaigning
-              via other means.
-            </p>
-          day:
-            label: "Day"
-          month:
-            label: "Month"
-          year:
-            label: "Year"
-          duration:
-            label:
-              default: "I want to gather signatures for as long as possible"
-              custom: "I want to stop gathering signatures on a specific date"
-            hint:
-              default: "Your petition will run until six months after it’s published."
-              custom: "Your petition will run until the date you specify (but not longer than six months from today)."
-          submit_html: |-
-            <input type="submit" name="move_next" value="Check closing date" class="button" tabindex="%{tabindex}" data-disable-with="Check closing date">
-        creator_stage:
-          heading: Sign your petition
-          citizen_or_resident:
-            label: Only British citizens or UK residents have the right to create and sign petitions
-            check_label: I am a British citizen or UK resident
-          name:
-            label: Name
-            hint: You must use your full name
-          email:
-            label: Email address
-          phone_number:
-            label: Phone number
-          address:
-            label: Address
-            hint: You must provide a valid address in Wales to create a petition. Anyone can sign your petition.
-          location:
-            label: Location
-            hint: Only people in Wales can create a petition.
-          postcode:
-            label: Postcode
-          notify_by_email:
-            check_label: Email me whenever there’s an update about this petition
-          continue_html: |-
-            <input type="submit" name="move_next" value="Continue" class="button" tabindex="%{tabindex}" data-disable-with="Continue">
-          about_published_data_html: |-
-            <div class="secondary">
-              <p>Your name will be published on this petition as the petition creator.</p>
-              <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition.</p>
-            </div>
-        error_summary:
-          heading: We couldn't create this petition
-          prompt:
-            one: "Please fix the following error:"
-            two: "Please fix the following errors:"
-            other: "Please fix the following errors:"
-        petition_stage:
-          heading: Start a petition
-          hint_standards_html: Remember, your petition must meet the %{standards_link}.
-          submit_html: |-
-            <input type="submit" name="move_next" value="Preview petition" class="button" tabindex="%{tabindex}" data-disable-with="Preview petition">
-        replay_closing_date_stage:
-          heading: Check your closing date
-          custom_message_html: |-
-            <h1><span class="heading-secondary">Deadline</span>%{date}</h1>
-            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
-          default_message_html: |-
-            <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
-            <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
-          submit_html: |-
-            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
-          go_back_html: |-
-            <input type="submit" name="move_back" value="Go back and change it" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and change it">
-          submit_warning_html: |-
-            <p class="secondary">You can’t change the closing date after this point.</p>
-        replay_email_stage:
-          heading: Make sure this is right
-          fix_email_if_wrong: If your email address is wrong, just change it above
-          submit_html: |-
-            <input type="submit" name="move_next" value="Yes – this is my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">
-        replay_petition_stage:
-          heading: Check your petition
-          submit_html: |-
-            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
-          go_back_html: |-
-            <input type="submit" name="move_back" value="Go back and make changes" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and make changes">
-          submit_warning_html: |-
-            <p class="secondary">You can’t change your petition after this point.</p>
-            <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
-            <p class="secondary">Published petitions can only be removed from the site with the agreement of the Petitions Committee.</p>
-      local:
-        member_name_link_html: Your Member of the Senedd is %{member_name_link}
-        regional_members:
-          heading_html: "Your Members of the Senedd for the <strong>%{region}</strong> region are:"
-        all:
-          heading: Popular petitions in the constituency of %{constituency_name}
-          open_popular_link: View open popular petitions in %{constituency_name}
-          results:
-            empty: No petitions are popular in your constituency.
-            now_closed: now closed
-        index:
-          postcode_blank:
-            heading: Local to you
-            find_local_petitions: Find petitions about local issues
-          postcode_bad:
-            heading: We couldn't find that postcode
-            couldnt_find_postcode_html: We couldn't find the postcode <q>%{postcode}</q>. Try again?
-        show:
-          heading: Popular open petitions in the constituency of %{constituency_name}
-          all_popular_link: View all popular petitions in %{constituency_name}
+      watch_online_senedd_tv_html: You'll be able to watch the debate online at <a
+        href="https://senedd.tv" rel="external">senedd.tv</a>
+      for_senedd_to_publish_debate: for the Senedd to publish the debate outcome
+      reject_reason_standards_html: "<br> We only reject petitions that don’t meet
+        the %{standards_link} <br>\r\n<br>\r\nRejected petitions are published in
+        the language in which they were submitted"
+      committee_decided_not_to_debate: The Petitions Committee decided not to refer
+        this petition for a debate
+      at_threshold_for_debate_ellipsis: At %{threshold} signatures...
+      watch_online_youtube_channel_html: You'll be able to watch online on <a href="https://www.senedd.tv"
+        rel="external">Senedd TV</a>.
+      at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold}
+        signatures will be considered for a debate in the Senedd
+    pagination:
+      next_html: |-
+        <a class="next" href="%{next_link}">
+          <span class="paginate-label">Next</span>
+          <span class="paginate page-count">%{next_page} of %{total_pages}</span>
+        </a>
+      previous_html: |-
+        <a class="previous" href="%{previous_link}">
+          <span class="paginate-label">Previous</span>
+          <span class="paginate page-count">%{previous_page} of %{total_pages}</span>
+        </a>
     signatures:
-      unsubscribe:
-        already_html: |-
-          <h1>Already unsubscribed from this petition</h1>
-          <p>You have already unsubscribed from email updates about this petition.</p>
-        failed_html: |-
-          <h1>Failed to unsubscribe</h1>
-          <p>Your unsubscribe link is invalid.</p>
-        success_html: |-
-          <h1>Successfully unsubscribed from this petition</h1>
-          <p>You have unsubscribed from email updates about this petition.</p>
-        back_button: Return to home page
-      citizenship:
-        required: Only British citizens or UK residents have the right to sign
-      privacy_notice_html: |-
-        <section class="secondary">
-          <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
-        </section>
-      confirmation:
-        signatures: signatures
       new:
         heading: Sign petition
-        continue_html: |-
-          <input type="submit" name="move_next" value="Continue" class="button" tabindex="%{tabindex}" data-disable-with="Continue">
-      confirm:
-        email_form:
-          submit_html: |-
-            <input type="submit" name="move_next" value="Yes – this is my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">
-          fix_email_if_wrong: If your email address is wrong, just change it above
+        continue_html: <input type="submit" name="move_next" value="Continue" class="button"
+          tabindex="%{tabindex}" data-disable-with="Continue">
       signed:
         heading:
-          zero: "0 signatures"
-          one: "1 signature"
-          two: "2 signatures"
+          one: 1 signature
+          two: 2 signatures
+          zero: 0 signatures
           other: "%{formatted_count} signatures"
-        added_to_petition: "We've added your signature to the petition:"
         contact_member:
-          heading: Contact your Member of the Senedd
-          constituency_name: Your constituency is %{constituency}
+          heading: Contact your Members of the Senedd
           member_name: Your local Member of the Senedd is %{member}
           member_link: Contact your Member of the Senedd to let them know you have signed this petition
-        regional_members:
-          region_html: |-
-            Your Members of the Senedd for the <strong>%{region}</strong> region are:
+          constituency_name: Your constituency is %{constituency}
+        added_to_petition: 'We''ve added your signature to the petition:'
         register_to_vote_html: |-
           <h2>Register to vote</h2>
           <p>To vote in the Senedd elections, you must be registered to vote.</p>
           <p>It takes less than 5 minutes.</p>
           <a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+      confirm:
+        email_form:
+          submit_html: <input type="submit" name="move_next" value="Yes – this is
+            my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes
+            – this is my email address">
+          fix_email_if_wrong: If your email address is wrong, just change it above
       thank_you:
         heading: One more step…
         confirmation:
-          sent: We’ve sent you an email. Please click on the link in the email to confirm your address.
-          required: Your signature will not be counted until you click the link in the email
+          sent: We’ve sent you an email. Please click on the link in the email to
+            confirm your address.
+          required: Your signature will not be counted until you click the link in
+            the email
           not_received:
             heading: Not received a confirmation email?
             instructions_html: |-
@@ -410,242 +628,44 @@ en-GB:
                 <li>check your spam or junk mail folders</li>
                 <li>allow up to 24 hours for the email to arrive</li>
               </ul>
-    sponsors:
-      new:
-        heading: Sign %{creator_name}’s petition
-      signed:
-        heading: Thanks
-        added: Your signature has been added to this petition as a supporter.
-        what_next_html: |-
-          <h2>What next?</h2>
-          <p>This petition needs %{min_sponsors} supporters to go live.</p>
-          <p>When it goes live, we'll email you a link so you can start sharing it.</p>
-    home_page:
-      heading: Petitions – Senedd
-      debated_petitions:
-        none_debated: The Senedd has not debated any petitions yet
-        topic_debated_date: This topic was debated on %{date}
-        video:
-          watch_html: Watch the debate on %{link}
-          link: senedd.tv
-        transcript:
-          read_html: Read the transcript at %{link}
-          link: senedd.wales
-        research:
-          read_html: Find details of the petition at %{link}
-          link: senedd.wales
-      referred_petitions:
-        none_referred: No petitions have been referred to the Petitions Committee yet
-        referred_date: The petition was referred on %{date}
-      search_petitions:
-        heading: Search petitions
-        submit_button: Search
-      trending_petitions:
-        all_open_link: View all open petitions
-        heading: Popular petitions
-      notice:
-        get_involved_html: |-
-          <a href="https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx" class="get-involved">
-            Get involved with the Senedd
-          </a>
-        register_to_vote_html: |-
-          <a href="https://www.gov.uk/register-to-vote" class="register-to-vote">
-            Register to vote in the Senedd elections
-          </a>
-      thresholds:
-        referred: All petitions with more than %{formatted_count} signatures are referred to the Petitions Committee
-        debate: If a petition gets %{formatted_count} signatures, it will be considered for a debate in the Senedd
-      local_petitions:
-        heading: Local to you
-        find_local_petitions: Find petitions being signed by people near you
-      opened:
-        lede: The Petitions service is open
-        start_a_petition:
-          heading: Start a petition
-          requirements: Any person or organisation with an address in Wales can start a petition
-          link: Start a petition
-    feedback:
-      new:
-        heading: Feedback and contact
-        feedback:
-          heading: Feedback
-          comments:
-            label: Comments
-          petition_link_or_title:
-            label_html: Petition title/link <span class="optional">optional</span>
-          want_reply:
-            heading: Do you want a reply?
-            email:
-              label: Email address
-          submit_html: |-
-            <input type="submit" value="Send feedback" class="button" tabindex="%{tabindex}" data-disable-with="Send feedback">
-          terms_html: |-
-            <p>We'll only use your email to reply to your message</p>
-            <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
-        contact:
-          heading: Contact
-          email:
-            heading: Email
-            petitions_committee_link: Petitions Committee
-            body_html: |-
-              <p>You can email the %{petitions_committee_link} directly.</p>
-
-              <p>They can help you to understand how the Senedd handles petitions. They can also help with some technical problems using this service. They can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
-
-              <p>Email: <a href="mailto:petitions@senedd.wales">petitions@senedd.wales</a></p>
-
-          phone:
-            heading: Phone
-            body_html: |-
-              <p>Phone calls are handled by the Senedd Contact Centre.</p>
-
-              <p>They can help you to understand how the Senedd handles petitions. They can’t help with any technical problems with this service, forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
-
-              <ul>
-                <li>Telephone: <a href="tel:+443002006565">0300 200 6565</a> (local rate) or SMS: <a href="tel:+447970493958">07970 493958</a></li>
-                <li>Textphone via Text Relay: <a href="tel:+4418001">18001</a> followed by <a href="tel:+443002006565">0300 200 6565</a></li>
-                <li>Monday to Friday, 08:30am&ndash;17:30</li>
-              </ul>
-      thanks:
-        heading: Your feedback has been sent
-        body_html: |-
-          <p>Thanks for sending us your feedback.</p>
-
-          <p>If you've requested a response, we'll be in touch as soon as we can.</p>
-
-          <p>During busy periods this can take up to 5 working days.</p>
-        back_link: Back to Petitions home
-    help_page:
-      feedback_link: get in touch
-      body_html: |-
-        <h1 class="page-title">How petitions work</h1>
-
-        <ol class="list-number">
-          <li>You create a petition. Only British citizens and UK residents can create a petition.</li>
-          <li>You get 5 people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
-          <li>We check your petition, then publish it. We only reject petitions that don’t meet the standards for petitions.</li>
-          <li>British citizens and UK residents can then sign your petition — and can only sign a petition once.</li>
-          <li>The Petitions Committee reviews all petitions we publish. They select petitions of interest to find out more about the issues raised. They have the power to press for action from government or Parliament.</li>
-          <li>At 10,000 signatures you get a response from the government.</li>
-          <li>At 100,000 signatures your petition will be considered for a debate in Parliament.</li>
-        </ol>
-
-        <h2 id="debates">Debates</h2>
-
-        <p>Petitions which reach 100,000 signatures are almost always debated. But we may decide not to put a petition forward for debate if the issue has already been debated recently or there’s a debate scheduled for the near future. If that’s the case, we’ll tell you how you can find out more about parliamentary debates on the issue raised by your petition.</p>
-
-        <p>MPs might consider your petition for a debate before it reaches 100,000 signatures.</p>
-
-        <p>We may contact you about the issue covered by your petition. For example, we sometimes invite people who create petitions to take part in a discussion with MPs or government ministers, or to give evidence to a select committee. We may also write to other people or organisations to ask them about the issue raised by your petition.</p>
-
-        <h2 id="petitions-committee">The Petitions Committee</h2>
-
-        <p>The <a href="http://www.parliament.uk/petitions-committee">Petitions Committee</a> can:</p>
-
-        <ul class="list-bullet">
-          <li>write to you for more information</li>
-          <li>invite you to talk to the Committee in person about your petition – this could be in Parliament or somewhere else in the UK</li>
-          <li>ask for evidence from the Government or other relevant people or organisations</li>
-          <li>press the government for action</li>
-          <li>ask another parliamentary committee to look into the topic raised by a petition</li>
-          <li>put forward a petition for debate</li>
-        </ul>
-
-        <p>The Petitions Committee is set up by the Welsh Parliament. It comprises up to 11 backbench Members of Parliament from Government and Opposition parties. The number of committee members from each political party is representative of the membership of the Welsh Parliament as a whole.</p>
-
-        <h2 id="standards">Standards for petitions</h2>
-
-        <p>Petitions must call for a specific action from the Welsh Government or Parliament.</p>
-
-        <p>Petitions must be about something that the Government or Parliament is responsible for.</p>
-
-        <p>Petitions can disagree with the Government and can ask for it to change its policies. Petitions can be critical of the Welsh Government or Parliament.</p>
-
-        <p>We reject petitions that don’t meet the rules. If we reject your petition, we’ll tell you why. If we can, we’ll suggest other ways you could raise your issue.</p>
-
-        <p>We’ll have to reject your petition if:</p>
-
-        <ul class="list-bullet">
-          <li>
-            <p>It calls for the same action as a petition that’s already open</p>
-          </li>
-          <li>
-            <p>It doesn’t ask for a clear action from the Welsh Government or Parliament</p>
-          </li>
-          <li>
-            <p>It’s about something the Welsh Government or Parliament is not responsible for.</p>
-            <p>That includes: something that your local council is responsible for; something that another Government (such as the Scottish Government, the Welsh Government or the Northern Ireland Executive) is responsible for; and something that an independent organisation has done.</p>
-          </li>
-          <li>
-            <p>It’s defamatory or libellous, or contains false statements</p>
-          </li>
-          <li>
-            <p>It refers to a case that’s active in the UK courts</p>
-          </li>
-          <li>
-            <p>It contains material that may be protected by an injunction or court order</p>
-          </li>
-          <li>
-            <p>It contains material that could be confidential or commercially sensitive</p>
-          </li>
-          <li>
-            <p>It could cause personal distress or loss. This includes petitions that could intrude into someone’s personal grief or shock without their consent.</p>
-          </li>
-          <li>
-            <p>It accuses an identifiable person or organisation of a crime</p>
-          </li>
-          <li>
-            <p>It names individual officials of public bodies, unless they are senior managers</p>
-          </li>
-          <li>
-            <p>It names family members of elected representatives, eg MPs, or of officials of public bodies</p>
-          </li>
-          <li>
-            <p>It asks for someone to be given an honour, or have an honour taken away. You can nominate someone for an honour here: <a href="https://www.gov.uk/honours">www.gov.uk/honours</a></p>
-          </li>
-          <li>
-            <p>It asks for someone to be given a job, or to lose their job. This includes petitions asking for a vote of no confidence in someone and petitions calling for someone to resign.</p>
-          </li>
-          <li>
-            <p>It contains party political material</p>
-          </li>
-          <li>
-            <p>It’s nonsense or a joke</p>
-          </li>
-          <li>
-            <p>It’s an advert, spam, or promotes a specific product or service</p>
-          </li>
-          <li>
-            <p>It’s a Freedom of Information request</p>
-          </li>
-          <li>
-            <p>It contains swearing or other offensive language</p>
-          </li>
-          <li>
-            <p>It’s offensive or extreme in its views. That includes petitions that attack, criticise or negatively focus on an individual or a group of people because of characteristics such as their age, disability, ethnic origin, gender identity, medical condition, nationality, race, religion, sex, or sexual orientation</p>
-          </li>
-        </ul>
-
-        <p>We publish the text of petitions that we reject, as long as they’re not:</p>
-        <ul class="list-bullet">
-          <li>defamatory, libellous or illegal in another way;</li>
-          <li>about a case that is active in the UK courts or about something that a court has issued an injunction over;</li>
-          <li>offensive or extreme;</li>
-          <li>confidential or likely to cause personal distress. That includes petitions that could intrude into someone’s personal grief or shock without their consent; or</li>
-          <li>a joke, an advert or nonsense.</li>
-        </ul>
-
-        <h2 id="recall">Recall petitions</h2>
-
-        <p>If an MP has been convicted of certain criminal offences or suspended from Parliament for at least 10 sitting days, they may be subject to a recall petition.</p>
-
-        <p>Petitions to recall Members of Parliament do not appear on this website and the Petitions Committee are not responsible for them.
-          They are run locally, by the returning officer for your area, and have to be signed in person, by post or proxy. Your local authority will have issued a “notice of recall petition” on their website.
-          This will tell you how and when you can sign the petition.</p>
-
-        <p>Find out more about <a href="https://researchbriefings.parliament.uk/ResearchBriefing/Summary/SN05089">recall petitions</a> here.</p>
-
-        <p>If you have any other questions, please %{feedback_link}.</p>
+      unsubscribe:
+        back_button: Return to home page
+        failed_html: |-
+          <h1>Failed to unsubscribe</h1>
+          <p>Your unsubscribe link is invalid.</p>
+        already_html: |-
+          <h1>Already unsubscribed from this petition</h1>
+          <p>You have already unsubscribed from email updates about this petition.</p>
+        success_html: |-
+          <h1>Successfully unsubscribed from this petition</h1>
+          <p>You have unsubscribed from email updates about this petition.</p>
+      confirmation:
+        signatures: signatures
+      privacy_notice_html: |-
+        <section class="secondary">
+          <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
+        </section>
+    application:
+      back: Back
+      back_html: <input type="submit" name="move_back" value="◀ Back" class="back-page"
+        data-disable-with="◀ Back">
+      continue_html: <input type="submit" value="Continue" class="button" />
+      cookie_message:
+        html: We use cookies to make this service simpler. %{privacy_link}
+        privacy_link: Find out more about cookies
+      character_count: "%{count} characters max"
+      get_json_csv_html: Get this data in %{json_link} or %{csv_link} format
+      share_this_petition: Share this petition
+      twitter_card_description: Official online petitions in response to issues of
+        the day, listing the number that were referred to the Petitions Committee,
+        and those that have been debated in the Senedd
+    share_title: 'Petition: %{petition}'
+    list_headers:
+      not_debated: The Petitions Committee decided not to debate these petitions
+    local_search:
+      submit_button_html: |-      
+        <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">      
+      postcode: Welsh postcode
     privacy_page:
       body_html: |-
         <h1>Privacy and cookies</h1>
@@ -844,72 +864,34 @@ en-GB:
             </tbody>
           </table>
         </section>
-    signature_counts:
-      default_html:
-        zero: "<span class=\"count\" data-count=\"%{count}\">0</span> <span class=\"text\">signatures</span>"
-        one: "<span class=\"count\" data-count=\"%{count}\">1</span> <span class=\"text\">signature</span>"
-        two: "<span class=\"count\" data-count=\"%{count}\">2</span> <span class=\"text\">signatures</span>"
-        other: "<span class=\"count\" data-count=\"%{count}\">%{num}</span> <span class=\"text\">signatures</span>"
-      trending_html:
-        zero: "<span class=\"count\">0</span> signatures in the last hour"
-        one: "<span class=\"count\">1</span> signature in the last hour"
-        two: "<span class=\"count\">2</span> signatures in the last hour"
-        other: "<span class=\"count\">%{num}</span> signatures in the last hour"
-      in_your_constituency_html:
-        zero: "0 signatures from %{constituency}"
-        one: "1 signature from %{constituency}"
-        two: "2 signatures from %{constituency}"
-        other: "%{num} signatures from %{constituency}"
-      in_total_html:
-        zero: "0 signatures total"
-        one: "1 signature total"
-        two: "2 signatures total"
-        other: "%{num} signatures total"
-    scheduled_for_debate_in_words:
-      today: "Scheduled for debate today"
-      tomorrow: "Scheduled for debate tomorrow"
-      other: "Scheduled for debate on %{date}"
-    pagination:
-      previous_html: |-
-        <a class="previous" href="%{previous_link}">
-          <span class="paginate-label">Previous</span>
-          <span class="paginate page-count">%{previous_page} of %{total_pages}</span>
-        </a>
-      next_html: |-
-        <a class="next" href="%{next_link}">
-          <span class="paginate-label">Next</span>
-          <span class="paginate page-count">%{next_page} of %{total_pages}</span>
-        </a>
     debate_outcomes:
       link_titles:
-        video_url: "Watch the debate"
-        transcript_url: "Read the transcript"
-        debate_pack_url: "Find details of the petition"
-    share_title: "Petition: %{petition}"
-    list_headers:
-      not_debated: "The Petitions Committee decided not to debate these petitions"
-    sharing:
-      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
-      email_html: <span class="icon icon-share-email"></span> Email
-      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
-      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
-    counts:
-      referred_html:
-        zero: "<span class=\"count\">0</span> petitions were referred to the Petitions Committee"
-        one: "<span class=\"count\">1</span> petition was referred to the Petitions Committee"
-        two: "<span class=\"count\">2</span> petitions were referred to the Petitions Committee"
-        other: "<span class=\"count\">%{num}</span> petitions were referred to the Petitions Committee"
-      referred_explanation_html: "See all petitions referred to the Petitions Committee (%{num})"
-      awaiting_debate_html:
-        zero: "<span class=\"count\">0</span> petitions are waiting to be considered for debate"
-        one: "<span class=\"count\">1</span> petition is waiting to be considered for debate"
-        two: "<span class=\"count\">2</span> petitions are waiting to be considered for debate"
-        other: "<span class=\"count\">%{num}</span> petitions are waiting to be considered for debate"
-      with_debated_outcome_html:
-        zero: "<span class=\"count\">0</span> petitions were debated in the Senedd"
-        one: "<span class=\"count\">1</span> petition was debated in the Senedd"
-        two: "<span class=\"count\">2</span> petitions were debated in the Senedd"
-        other: "<span class=\"count\">%{num}</span> petitions were debated in the Senedd"
-      awaiting_debate_explanation_html: "See all petitions waiting for a debate in the Senedd (%{num})"
-      debated_explanation_html: "See all petitions debated in the Senedd (%{num})"
-      not_debated_explanation_html: "See all petitions not debated in the Senedd (%{num})"
+        video_url: Watch the debate
+        transcript_url: Read the transcript
+        debate_pack_url: Find details of the petition
+    signature_counts:
+      default_html:
+        one: <span class="count" data-count="%{count}">%{num}</span> <span class="text">signature</span>
+        two: <span class="count" data-count="%{count}">2</span> <span class="text">signatures</span>
+        zero: <span class="count" data-count="%{count}">0</span> <span class="text">signatures</span>
+        other: <span class="count" data-count="%{count}">%{num}</span> <span class="text">signatures</span>
+      in_total_html:
+        one: "%{num} signature total"
+        two: 2 signatures total
+        zero: 0 signatures total
+        other: "%{num} signatures total"
+      trending_html:
+        one: <span class="count">%{num}</span> signature in the last hour
+        two: <span class="count">2</span> signatures in the last hour
+        zero: <span class="count">0</span> signatures in the last hour
+        other: <span class="count">%{num}</span> signatures in the last hour
+      in_your_constituency_html:
+        one: "%{num} signature from %{constituency}"
+        two: 2 signatures from %{constituency}
+        zero: 0 signatures from %{constituency}
+        other: "%{num} signatures from %{constituency}"
+    scheduled_for_debate_in_words:
+      other: Scheduled for debate on %{date}
+      today: Scheduled for debate today
+      tomorrow: Scheduled for debate tomorrow
+

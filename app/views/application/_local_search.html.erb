@@ -2,6 +2,6 @@
   <%= label_tag 'postcode', t(:"ui.local_search.postcode"), class: 'form-label' %>
   <div class="search-inline">
     <%= search_field_tag 'postcode', @postcode, class: 'form-control' %>
-    <%= submit_tag t(:"ui.local_search.submit"), class: 'inline-submit', name: nil %>
+    <%= t(:"ui.local_search.submit_button_html") %>
   </div>
 <% end %>

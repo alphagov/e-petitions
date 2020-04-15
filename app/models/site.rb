@@ -171,6 +171,10 @@ class Site < ActiveRecord::Base
       instance.update_all(translations_updated_at: timestamp)
     end
 
+    def translation_enabled?
+      ENV['TRANSLATION_ENABLED'] == 'true'
+    end
+
     def moderation_overdue_in_days
       7.days
     end
