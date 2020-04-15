@@ -6,8 +6,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate, if: :site_protected?
   before_action :redirect_to_url_without_format, if: :unknown_format?
 
-  before_action :set_seen_cookie_message, if: :show_cookie_message?
-  helper_method :show_cookie_message?, :public_petition_facets
+  helper_method :public_petition_facets
 
   after_action do
     directives = [

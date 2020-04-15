@@ -661,9 +661,6 @@ cy-GB:
       back_html: <input type="submit" name="move_back" value="◀ Nôl" class="back-page"
         data-disable-with="◀ Nôl">
       continue_html: <input type="submit" value="Parhau" class="button" />
-      cookie_message:
-        html: Rydym yn defnyddio cwcis i wneud y gwasanaeth hwn yn symlach. %{privacy_link}
-        privacy_link: Rhagor o wybodaeth am gwcis
       character_count: hyd at %{count} nod
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu'r ddeiseb hon

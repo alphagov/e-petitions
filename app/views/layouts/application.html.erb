@@ -21,12 +21,6 @@
       <meta name="theme-color" content="#080">
   </head>
   <body>
-    <% if show_cookie_message? %>
-      <div id="global-cookie-message">
-        <p><%= t(:"ui.application.cookie_message.html", privacy_link: link_to(t(:"ui.application.cookie_message.privacy_link"), privacy_path)) %></p>
-      </div>
-    <% end %>
-
     <%= render 'application/header' %>
 
     <main id="content" role="main">

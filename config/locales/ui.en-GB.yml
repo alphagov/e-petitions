@@ -650,9 +650,6 @@ en-GB:
       back_html: <input type="submit" name="move_back" value="◀ Back" class="back-page"
         data-disable-with="◀ Back">
       continue_html: <input type="submit" value="Continue" class="button" />
-      cookie_message:
-        html: We use cookies to make this service simpler. %{privacy_link}
-        privacy_link: Find out more about cookies
       character_count: "%{count} characters max"
       get_json_csv_html: Get this data in %{json_link} or %{csv_link} format
       share_this_petition: Share this petition
