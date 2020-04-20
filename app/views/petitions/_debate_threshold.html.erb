@@ -17,7 +17,7 @@
         <% if debate_outcome_links?(debate_outcome) %>
           <ul class="debate-outcome-links">
             <% debate_outcome_links(debate_outcome).each do |link| %>
-              <li><%= link_to link.title, link.url, rel: 'external' %></li>
+              <li><%= link_to link.title, link.url, class: link.style, rel: 'external' %></li>
             <% end %>
           </ul>
         <% end %>

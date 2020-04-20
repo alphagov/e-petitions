@@ -14,14 +14,13 @@
             </span>
           <% end -%>
         <% end -%>
-        <% if petition.debate_outcome.video_url.present? %>
-          <p><%= t(:"ui.home_page.debated_petitions.video.watch_html", link: link_to(t(:"ui.home_page.debated_petitions.video.link"), petition.debate_outcome.video_url, rel: "external")) %></p>
-        <% end %>
-        <% if petition.debate_outcome.transcript_url.present? %>
-          <p><%= t(:"ui.home_page.debated_petitions.transcript.read_html", link: link_to(t(:"ui.home_page.debated_petitions.transcript.link"), petition.debate_outcome.transcript_url, rel: "external")) %></p>
-        <% end %>
-        <% if petition.debate_outcome.debate_pack_url.present? %>
-          <p><%= t(:"ui.home_page.debated_petitions.research.read_html", link: link_to(t(:"ui.home_page.debated_petitions.research.link"), petition.debate_outcome.debate_pack_url, rel: "external")) %></p>
+
+        <% if debate_outcome = petition.debate_outcome %>
+          <% debate_outcome_links(debate_outcome).each do |link| %>
+            <%= content_tag(:p, class: link.style) do %>
+              <%= t(:"ui.home_page.debated_petitions.#{link.name}.title_html", link: link_to(t(:"ui.home_page.debated_petitions.#{link.name}.link"), link.url, rel: "external")) %>
+            <% end %>
+          <% end %>
         <% end %>
       </li>
     <% end -%>

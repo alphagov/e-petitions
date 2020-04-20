@@ -1,25 +1,36 @@
-require 'ostruct'
-
 module DebateOutcomeHelper
-  DEBATE_OUTCOME_URLS = %i[video_url transcript_url debate_pack_url]
+  Url = Struct.new(:name, :url) do
+    def title
+      I18n.t(name, scope: :"ui.debate_outcomes.link_titles")
+    end
 
-  def debate_outcome_image(debate_outcome)
-    sources = ['1x', '2x'].map { |size| "#{debate_outcome.commons_image.url(size)} #{size}" }
-    image_tag(debate_outcome.commons_image.url('2x'), 'aria-hidden': '', srcset: sources.join(', '))
+    def style
+      name.to_s.dasherize
+    end
   end
 
-  def debate_outcome_links?(debate_outcome)
-    DEBATE_OUTCOME_URLS.any? { |url| debate_outcome.public_send(:"#{url}?") }
+  def debate_outcome_image(outcome)
+    sources = ['1x', '2x'].map { |size| "#{outcome.commons_image.url(size)} #{size}" }
+    image_tag(outcome.commons_image.url('2x'), 'aria-hidden': '', srcset: sources.join(', '))
   end
 
-  def debate_outcome_links(debate_outcome)
-    DEBATE_OUTCOME_URLS.map do |url|
-      if debate_outcome.public_send(:"#{url}?")
-        OpenStruct.new(
-          title: I18n.t(url, scope: :"ui.debate_outcomes.link_titles"),
-          url: debate_outcome.public_send(:"#{url}")
-        )
+  def debate_outcome_links?(outcome)
+    debate_outcome_links(outcome).any?
+  end
+
+  def debate_outcome_links(outcome)
+    [].tap do |urls|
+      if outcome.video_url?
+        urls << Url.new(:video_url, outcome.video_url)
       end
-    end.compact
+
+      if outcome.transcript_url?
+        urls << Url.new(:transcript_url, outcome.transcript_url)
+      end
+
+      if outcome.debate_pack_url?
+        urls << Url.new(:debate_pack_url, outcome.debate_pack_url)
+      end
+    end
   end
 end
