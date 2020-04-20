@@ -233,15 +233,15 @@ cy-GB:
         submit_button_html: |-      
           <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio" tabindex="%{tabindex}">
       debated_petitions:
-        video:
+        video_url:
+          title_html: Gwyliwch y ddadl ar %{link}
           link: senedd.tv
-          watch_html: Gwyliwch y ddadl ar %{link}
-        research:
+        debate_pack_url:
+          title_html: Darllenwch y gwaith ymchwil yn %{link}
           link: senedd.cymru
-          read_html: Darllenwch y gwaith ymchwil yn %{link}
-        transcript:
+        transcript_url:
+          title_html: Darllenwch y trawsgrifiad yn %{link}
           link: senedd.cymru
-          read_html: Darllenwch y trawsgrifiad yn %{link}
         none_debated: Nid yw'r Senedd wedi cynnal dadl ar unrhyw ddeisebau eto
         topic_debated_date: Cynhaliwyd dadl ar y pwnc hwn ar %{date}
       referred_petitions:
