@@ -61,6 +61,7 @@ h2 {
 
 .form-control {
   border: 2px solid;
+  border-radius: 0;
   box-sizing: border-box;
   font-size: 1rem;
   line-height: 1.25;
@@ -147,6 +148,7 @@ select, input[type=text] {
   position: relative;
   -moz-outline-offset: -2px;
   outline-offset: -2px;
+  border-radius: 0;
   text-align: center;
   text-decoration: none;
 }
