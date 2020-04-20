@@ -1,0 +1,217 @@
+.lists-of-petitions {
+  @include hover-links($link-color);
+
+  a:focus {
+    color: $white;
+  }
+
+  border: 2px solid $border-color;
+  margin: 18px 0;
+  padding: 9px;
+
+  summary {
+    color: $text-color;
+    display: block;
+
+    &::after {
+      @extend %icon-chevron-down-dark-grey;
+    }
+  }
+
+  ul {
+    margin: 0;
+    margin-top: 12px;
+
+    li {
+      margin-top: 6px;
+    }
+  }
+
+  &[open] {
+    summary {
+      &::after {
+        @extend %icon-chevron-up-dark-grey;
+      }
+    }
+  }
+}
+
+#other-search-lists {
+  @include hover-links($link-color);
+
+  a:focus {
+    color: $white;
+    text-decoration: none;
+  }
+}
+
+.notification {
+  @extend %animated;
+  @extend %bounce;
+
+  border: 2px solid $border-color;
+  color: $text-color;
+  font-weight: 600;
+  margin: 24px 0;
+  padding: 12px;
+  padding-left: 48px;
+  position: relative;
+
+  &::after {
+    @extend %icon-info;
+
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    height: 24px;
+    width: 24px;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.search-results, .local-petitions {
+  padding-top: 12px;
+}
+
+.petition-item {
+  h3 {
+    @include font-size(1rem, 1.1875rem);
+
+    line-height: 1.25;
+    margin: 12px 0 0 0;
+
+    a {
+      text-decoration: none;
+    }
+
+    a:hover, a:active {
+      color: $dark-pink;
+    }
+
+    a:focus {
+      color: $white;
+    }
+  }
+
+  p {
+    color: $secondary-text-color;
+    margin-bottom: 0;
+  }
+
+  span {
+    color: $secondary-text-color;
+  }
+
+  .count {
+    font-size: 1.5rem;
+  }
+}
+
+.search-pagination {
+  @extend %contain-floats;
+
+  margin: 24px 0;
+
+  @include media(tablet) {
+    margin-bottom: 36px;
+  }
+
+  a {
+    position: relative;
+    text-decoration: none;
+
+    span {
+      display: block;
+      font-weight: 600;
+
+      &.paginate-label {
+        @include font-size(1.25rem, 1.5rem);
+      }
+
+      &.page-count {
+        @include font-size(0.75rem, 0.875rem);
+      }
+    }
+
+    &:hover {
+      color: $dark-pink;
+    }
+
+    &:active, &:focus {
+      color: $white;
+    }
+
+    &::before, &::after  {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 22px;
+      height: 44px;
+
+      @include media(tablet) {
+        width: 27px;
+        height: 54px;
+      }
+    }
+  }
+
+  .previous {
+    float: left;
+    padding-left: 30px;
+    text-align: left;
+
+    @include media(tablet) {
+      padding-left: 36px;
+    }
+
+    &::before {
+      @extend %icon-previous-pink;
+
+      left: 0;
+    }
+
+    &:hover {
+      &::before {
+        @extend %icon-previous-dark-pink;
+      }
+    }
+
+    &:active, &:focus {
+      &::before {
+        @extend %icon-previous-white;
+      }
+    }
+  }
+
+  .next {
+    float: right;
+    padding-right: 30px;
+    text-align: right;
+
+    @include media(tablet) {
+      padding-right: 36px;
+    }
+
+    &::after {
+      @extend %icon-next-pink;
+
+      right: 0;
+    }
+
+    &:hover {
+      &::after {
+        @extend %icon-next-dark-pink;
+      }
+    }
+
+    &:active, &:focus {
+      &::after {
+        @extend %icon-next-white;
+      }
+    }
+  }
+}

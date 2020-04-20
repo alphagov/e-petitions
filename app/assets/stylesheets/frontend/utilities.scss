@@ -1,0 +1,262 @@
+.visuallyhidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+
+  // If margin is set to a negative value it can cause text to be announced in
+  // the wrong order in VoiceOver for OSX
+  margin: 0;
+  padding: 0;
+
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+
+  border: 0;
+
+  // For long content, line feeds are not interpreted as spaces and small width
+  // causes content to wrap 1 word per line:
+  // https://medium.com/@jessebeach/beware-smushed-off-screen-accessible-text-5952a4c2cbfe
+  white-space: nowrap;
+}
+
+%contain-floats {
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+}
+
+%image-replacement {
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+  text-indent: -999em;
+}
+
+@mixin font-size($mobile, $desktop) {
+  font-size: $mobile;
+
+  @include media(tablet) {
+    font-size: $desktop;
+  }
+}
+
+@mixin hover-links($color) {
+  a {
+    color: $color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@mixin padding-left($mobile, $desktop) {
+  padding-left: $mobile;
+
+  @include media(tablet) {
+    padding-left: $desktop;
+  }
+}
+
+/*!
+Animate.css - http://daneden.me/animate
+Licensed under the MIT license - http://opensource.org/licenses/MIT
+
+Copyright (c) 2015 Daniel Eden
+*/
+
+/*
+// Usage
+.thing-you-want-to-animate {
+  @extend %animated;
+  @extend %fadeInLeft;
+}
+*/
+
+%animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+}
+
+@-webkit-keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+  }
+
+  40%, 43% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0,-4px,0);
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    -webkit-animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+    -webkit-transform: translate3d(0,0,0);
+    transform: translate3d(0,0,0);
+  }
+
+  40%, 43% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -30px, 0);
+    transform: translate3d(0, -30px, 0);
+  }
+
+  70% {
+    -webkit-animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    animation-timing-function: cubic-bezier(0.755, 0.050, 0.855, 0.060);
+    -webkit-transform: translate3d(0, -15px, 0);
+    transform: translate3d(0, -15px, 0);
+  }
+
+  90% {
+    -webkit-transform: translate3d(0,-4px,0);
+    transform: translate3d(0,-4px,0);
+  }
+}
+
+%bounce {
+  -webkit-animation-name: bounce;
+  animation-name: bounce;
+  -webkit-transform-origin: center bottom;
+  transform-origin: center bottom;
+}
+
+@-webkit-keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  100% {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+%fadeInLeft {
+  -webkit-animation-name: fadeInLeft;
+  animation-name: fadeInLeft;
+}
+
+// tumblingNumbers animation
+@-webkit-keyframes tumblingNumbers {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes tumblingNumbers {
+  0% {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+    transform: translateY(0%);
+  }
+}
+%tumblingNumbers {
+  -webkit-animation-name: tumblingNumbers;
+  animation-name: tumblingNumbers;
+}
+
+// tumble styles
+// Adapted from https://github.com/HubSpot/odometer
+
+.tumble {
+  display: inline-block;
+  position: relative;
+}
+
+.tumble-digit {
+  display: inline-block;
+  position: relative;
+  margin-right: -0.25em;
+}
+
+.tumble-digit-spacer {
+  display: inline-block;
+  visibility: hidden;
+}
+
+.tumble-digit-inner {
+  text-align: left;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.tumble-ribbon {
+  display: block;
+}
+
+.tumble-ribbon-inner {
+  display: block;
+  -webkit-backface-visibility: hidden;
+  @extend %animated;
+  @extend %tumblingNumbers;
+  -webkit-animation-delay: 0.1s;
+  animation-delay: 0.1s;
+}
+
+.tumble-value {
+  display: block;
+  text-align: center;
+}
+
+.tumble-first-value {
+  position: absolute;
+}
+

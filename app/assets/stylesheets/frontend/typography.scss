@@ -1,0 +1,193 @@
+body {
+  font-size: 16px;
+  line-height: 1.375;
+}
+
+*:focus {
+  outline: none;
+}
+
+header, main, section, div, footer, form, p {
+  @include font-size(0.875rem, 1rem);
+}
+
+h1 {
+  @include font-size(1.5rem, 2rem);
+  line-height: 1.125;
+  margin: 24px 0 12px 0;
+}
+
+h2 {
+  @include font-size(1.25rem, 1.5rem);
+  line-height: 1.25;
+  margin: 24px 0 6px 0;
+}
+
+h3 {
+  @include font-size(0.875rem, 1rem);
+  line-height: 1.375;
+  margin: 24px 0 6px 0;
+}
+
+p {
+  margin: 0 0 12px 0;
+}
+
+ul, ol {
+  list-style: none;
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+li {
+  margin-top: 12px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: 0 0 12px 0
+}
+
+th, td {
+  border-bottom: 2px solid $light-grey;
+  padding: 9px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th:first-child,
+td:first-child {
+  padding-left: 0;
+}
+
+details {
+  margin-bottom: 24px;
+
+  summary {
+    color: $link-color;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: 600;
+    padding-right: 18px;
+    position: relative;
+
+    &:focus {
+      background-color: $focus-color;
+      color: $white;
+      outline: none;
+
+      &::after {
+        @extend %icon-chevron-down-white;
+      }
+    }
+
+    &::after {
+      @extend %icon-chevron-down-pink;
+
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 0;
+      height: 100%;
+      width: 12px;
+    }
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  &[open] {
+    summary {
+      &:focus {
+        &::after {
+          @extend %icon-chevron-up-white;
+        }
+      }
+
+      &::after {
+        @extend %icon-chevron-up-pink;
+      }
+    }
+  }
+
+  summary + * {
+    margin-top: 6px;
+  }
+}
+
+.page-title {
+  margin-bottom: 24px;
+}
+
+.page-subtitle {
+  margin-bottom: 24px;
+}
+
+.panel-indent {
+  border-left: 4px solid $light-grey;
+  padding-left: 12px;
+  margin-top: 12px;
+  margin-bottom: 24px;
+}
+
+.section-panel {
+  border-top: 2px solid $light-grey;
+  margin: 24px -18px;
+  padding: 0 18px;
+
+  @include media(tablet) {
+    margin: 24px 0;
+    padding: 0;
+  }
+}
+
+.secondary {
+  color: $secondary-text-color;
+}
+
+.list-bullet {
+  margin-top: -6px;
+
+  li {
+    margin-top: 6px;
+    padding-left: 18px;
+    position: relative;
+
+    &::before {
+      background-color: $text-color;
+      content: "";
+      position: absolute;
+      left: 0;
+      border-radius: 3px;
+      height: 6px;
+      width: 6px;
+      top: 6px;
+
+      @include media(tablet) {
+        border-radius: 4px;
+        height: 7px;
+        width: 7px;
+        top: 7px;
+      }
+    }
+  }
+}
+
+.list-number {
+  counter-reset: ordered-list;
+
+  li {
+    margin-top: 12px;
+    padding-left: 18px;
+    position: relative;
+
+    &::before {
+      counter-increment: ordered-list;
+      content: counter(ordered-list) ".";
+      position: absolute;
+      left: 0;
+    }
+  }
+}

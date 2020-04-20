@@ -1,0 +1,43 @@
+body > footer {
+  padding: 24px 0;
+  @include hover-links($white);
+
+  a:focus {
+    color: $white;
+    text-decoration: none;
+  }
+
+  li {
+    font-weight: 600;
+    margin: 0 0 9px 0;
+  }
+
+  h3, p {
+    margin: 0;
+  }
+
+  .open-government-licence {
+    margin-top: 36px;
+
+    h3 {
+      margin-bottom: 3px;
+    }
+
+    p {
+      @include font-size(0.625rem, 0.75rem);
+    }
+  }
+
+  .logo {
+    @extend %icon-ogl;
+    display: inline-block;
+    height: 17px;
+    width: 41px;
+
+    &:focus {
+      background-color: $focus-color;
+    }
+
+    @extend %image-replacement;
+  }
+}

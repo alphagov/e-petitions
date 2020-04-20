@@ -1,0 +1,54 @@
+body > header {
+  position: relative;
+  margin: -1px 0;
+  padding: 18px 0;
+
+  @include hover-links($white);
+
+  .language-switcher {
+    @extend %icon-globe;
+
+    background-position: left center;
+    font-size: 0.625rem;
+    font-weight: bold;
+    line-height: 1;
+    padding: 1px 0 0 14px;
+    position: absolute;
+    right: 0;
+    text-transform: uppercase;
+
+    @include media(tablet) {
+      font-size: 0.75rem;
+      padding: 1px 0 0 16px;
+    }
+  }
+
+  .brand {
+    font-weight: bold;
+
+    p {
+      line-height: 1;
+      margin: 0;
+    }
+
+    .logo {
+      @extend %icon-dragon;
+
+      background-position: left top;
+      padding-top: 1px;
+
+      p {
+        margin: 3px 0;
+        @include font-size(0.75rem, 0.875rem);
+        @include padding-left(72px, 84px);
+      }
+    }
+
+    .service {
+      font-weight: 800;
+      margin-top: 12px;
+      @include font-size(1.25rem, 1.5rem);
+      @include padding-left(72px, 84px);
+    }
+  }
+}

@@ -1,0 +1,42 @@
+$black: #000000;
+$dark-grey: #3C3C3B;
+$mid-grey: #747474;
+$light-grey: #E6E6E6;
+$pink: #C9187E;
+$dark-pink: #B31570;
+$white: #FFFFFF;
+
+$text-color: $dark-grey;
+$secondary-text-color: $mid-grey;
+$link-color: $pink;
+$button-color: $pink;
+$border-color: $mid-grey;
+$panel-color: $light-grey;
+$brand-color: $pink;
+$focus-color: $pink;
+$error-color: $pink;
+
+html {
+  background-color: $dark-grey;
+}
+
+body {
+  background-color: $white;
+  color: $text-color;
+}
+
+body > header,
+body > footer {
+  background-color: $dark-grey;
+  color: $white;
+}
+
+a {
+  color: $pink;
+}
+
+a:focus {
+  background-color: $pink;
+  color: $white;
+  text-decoration: none;
+}

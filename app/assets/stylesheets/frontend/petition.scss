@@ -1,0 +1,625 @@
+.create-warning {
+  margin-bottom: 24px;
+  position: relative;
+
+  h2 {
+    margin-bottom: 6px;
+  }
+
+  p {
+    padding-left: 42px;
+  }
+
+  span {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 0.9;
+    margin-right: 12px;
+    position: absolute;
+  }
+}
+
+.heading-secondary {
+  color: $secondary-text-color;
+  display: block;
+  font-weight: normal;
+  margin-bottom: 3px;
+
+  @include font-size(1.125rem, 1.5rem);
+}
+
+.signature-count {
+  @extend %contain-floats;
+
+  .signature-count-number {
+    @include font-size(2rem, 3rem);
+
+    font-weight: bold;
+    margin: 0 0 0;
+
+    @include media(tablet) {
+      margin: 0 0 0;
+    }
+
+    span.text {
+      @include font-size(1.25rem, 1.6875rem);
+    }
+  }
+
+  .signatures-on-a-map, .signature-count-goal {
+    margin: 9px 0 -6px;
+  }
+
+  .signatures-on-a-map {
+    float: left;
+    @extend %contain-floats;
+  }
+
+  .signature-count-goal {
+    width: 30%;
+    float: right;
+    text-align: right;
+    color: $secondary-text-color;
+    @extend %contain-floats;
+  }
+
+  .signature-count-graph {
+    clear: both;
+    width: 100%;
+    height: 10px;
+    overflow: hidden;
+    background-color: $panel-color;
+    padding: 0;
+
+    .signature-count-current {
+      display: block;
+      height: 10px;
+      background-color: $brand-color;
+      @extend %animated;
+      @extend %fadeInLeft;
+    }
+  }
+}
+
+.petition-meta {
+  li {
+    font-weight: bold;
+    margin-top: 18px;
+
+    @include font-size(1rem, 1.125rem);
+
+    .label, .note {
+      color: $secondary-text-color;
+      display: block;
+      margin-top: 6px;
+    }
+
+    .label {
+      @include font-size(0.875rem, 1rem);
+      font-weight: 600;
+    }
+
+    .note {
+      @include font-size(0.75rem, 0.875rem);
+      font-weight: normal;
+    }
+  }
+
+  .meta-json {
+    @include font-size(0.75rem, 0.875rem);
+    @include hover-links($link-color);
+
+    a:focus {
+      color: $white;
+      text-decoration: none;
+    }
+
+    details {
+      font-weight: normal;
+      margin-top: 12px;
+
+      summary {
+        font-weight: normal;
+      }
+
+      p {
+        @include font-size(0.75rem, 0.875rem);
+      }
+    }
+  }
+}
+
+.debate-video {
+  display: block;
+  margin: 12px 0;
+  position: relative;
+
+  &::after {
+    @extend %icon-play;
+
+    background-color: $link-color;
+    background-size: 18px 18px;
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 48px;
+    height: 36px;
+  }
+
+  &:focus, &:hover, &:active {
+    outline: 2px solid $focus-color;
+    outline-offset: -2px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    vertical-align: bottom;
+  }
+}
+
+.debate-outcome-links {
+  margin: 12px 0;
+
+  li {
+    margin: 0;
+
+    a {
+      text-decoration: none;
+      padding-right: 12px;
+
+      &::before {
+        height: 13px !important;
+      }
+
+      @include media(tablet) {
+        &::before {
+          height: 15px !important;
+        }
+      }
+
+      &::after {
+        @extend %icon-chevron-right-pink;
+
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 8px;
+        height: 100%;
+      }
+
+      &:focus {
+        &::after {
+          @extend %icon-chevron-right-white;
+        }
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.video-url,
+.transcript-url,
+.debate-pack-url {
+  @include font-size(0.75rem, 0.875rem);
+
+  line-height: 1.1;
+  margin: 3px 0 6px;
+  margin-top: 3px;
+  padding-left: 18px;
+  position: relative;
+
+  &::before {
+    position: absolute;
+    content: "";
+    left: 0;
+    top: 1px;
+    height: 12px;
+    width: 12px;
+  }
+}
+
+.video-url {
+  &::before {
+    @extend %icon-tv;
+  }
+
+  &:focus {
+    &::before {
+      @extend %icon-tv-white;
+    }
+  }
+}
+
+.transcript-url {
+  &::before {
+    @extend %icon-clipboard;
+  }
+
+  &:focus {
+    &::before {
+      @extend %icon-clipboard-white;
+    }
+  }
+}
+
+.debate-pack-url {
+  &::before {
+    @extend %icon-book;
+  }
+
+  &:focus {
+    &::before {
+      @extend %icon-book-white;
+    }
+  }
+}
+
+.rejection-reason {
+  @extend %animated;
+  @extend %bounce;
+
+  border: 2px solid $border-color;
+  margin: 24px 0;
+  padding: 12px;
+
+  h2 {
+    @include font-size(1rem, 1.125rem);
+
+    margin: 0 0 12px;
+    padding-left: 24px;
+    position: relative;
+
+    &::before {
+      @extend %icon-info;
+
+      background-position: center left;
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 18px;
+      width: 16px;
+    }
+
+    @include media(tablet) {
+      &::before {
+        height: 20px;
+        width: 16px;
+      }
+    }
+  }
+
+  p {
+    margin: 6px 0 0;
+  }
+}
+
+.referral-notice {
+  background-color: $border-color;
+  color: $white;
+  margin: 24px 0;
+  padding: 12px 18px;
+  text-align: center;
+
+  h2 {
+    @include font-size(0.875rem, 1rem);
+    margin: 0;
+  }
+
+  p {
+    @include font-size(0.75rem, 0.875rem);
+    margin: 6px 0 0;
+  }
+
+  a {
+    color: $white;
+  }
+}
+
+.page-title-with-email-icon,
+.page-title-with-tick-icon {
+  padding-left: 36px;
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 100%;
+  }
+}
+
+.page-title-with-email-icon {
+  &::before {
+    @extend %icon-email;
+  }
+}
+
+.page-title-with-tick-icon {
+  &::before {
+    @extend %icon-tick;
+  }
+}
+
+.about-item {
+  h2 {
+    padding-left: 36px;
+    position: relative;
+
+    @include media(tablet) {
+      padding-left: 42px;
+    }
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 24px;
+      height: 24px;
+
+      @include media(tablet) {
+        width: 28px;
+        height: 28px;
+      }
+    }
+  }
+}
+
+.about-item-count-referral {
+  h2 {
+    &::before {
+      @extend %icon-users;
+    }
+  }
+}
+
+.about-item-count-debate {
+  h2 {
+    &::before {
+      @extend %icon-podium;
+    }
+  }
+}
+
+.about-item-other-senedd-business {
+  h2 {
+    &::before {
+      @extend %icon-calendar;
+    }
+  }
+}
+
+.signature-confirmation {
+  padding-left: 36px;
+  position: relative;
+  margin-bottom: 36px;
+
+
+
+  &::before {
+    @extend %icon-tick;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 24px;
+    height: 24px;
+  }
+
+  @include media(tablet) {
+    padding-left: 54px;
+
+    &::before {
+      top: 14px;
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .signature-number {
+    font-weight: bold;
+    margin: 24px 0 6px;
+
+    @include media(tablet) {
+      margin: 36px 0 6px;
+    }
+
+    .tumble {
+      @include font-size(2rem, 3rem);
+      padding-right: 12px;
+
+      @include media(tablet) {
+        padding-right: 18px;
+      }
+    }
+
+    .signatures {
+      @include font-size(1.25rem, 2rem);
+    }
+  }
+}
+
+.petition-share {
+  @extend %contain-floats;
+
+  margin: 0 -6px;
+
+  li {
+    box-sizing: border-box;
+    float: left;
+    margin: 0;
+    padding: 6px;
+    width: 50%;
+
+    a {
+      box-sizing: border-box;
+      color: $text-color;
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      height: 30px;
+      line-height: 2.5;
+      outline: 2px solid $text-color;
+      outline-offset: -2px;
+      padding-left: 36px;
+      position: relative;
+      text-decoration: none;
+
+      &::before {
+        background-color: $white;
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 30px;
+        height: 30px;
+      }
+
+      &:hover {
+        color: $link-color;
+        outline: 2px solid $link-color;
+      }
+
+      &:active, &:focus {
+        background-color: $link-color;
+        color: $white;
+        outline: 2px solid $link-color;
+      }
+
+      @include media(tablet) {
+        font-size: 0.9375rem;
+        line-height: 2.4;
+        height: 36px;
+        padding-left: 42px;
+
+        &::before {
+          width: 36px;
+          height: 36px;
+        }
+      }
+    }
+
+    @include media(tablet) {
+      width: 25%;
+    }
+  }
+
+  .facebook {
+    a {
+      &::before {
+        @extend %icon-share-facebook-grey;
+      }
+
+      &:active, &:focus, &:hover {
+        &::before {
+          @extend %icon-share-facebook-pink;
+        }
+      }
+    }
+  }
+
+  .twitter {
+    a {
+      &::before {
+        @extend %icon-share-twitter-grey;
+      }
+
+      &:active, &:focus, &:hover {
+        &::before {
+          @extend %icon-share-twitter-pink;
+        }
+      }
+    }
+  }
+
+  .whatsapp {
+    a {
+      &::before {
+        @extend %icon-share-whatsapp-grey;
+      }
+
+      &:active, &:focus, &:hover {
+        &::before {
+          @extend %icon-share-whatsapp-pink;
+        }
+      }
+    }
+  }
+
+  .email {
+    a {
+      &::before {
+        @extend %icon-share-email-grey;
+      }
+
+      &:active, &:focus, &:hover {
+        &::before {
+          @extend %icon-share-email-pink;
+        }
+      }
+    }
+  }
+
+//   $icon-size: 19px;
+//   @extend %contain-floats;
+//   @extend %mobile-outdent;
+//   border-bottom: 1px solid $panel-colour;
+//   li {
+//     float: left;
+//     @include box-sizing(border-box);
+//     width: 50%;
+//     border-top: 1px solid $panel-colour;
+//     padding: 10px $gutter-half;
+//   }
+//   li:nth-child(even) {
+//     border-left: 1px solid $panel-colour;
+//   }
+//   a {
+//     color: $text-colour;
+//     display: block;
+//     line-height: 1.8;
+//     padding-left: $icon-size + 10;
+//     position: relative;
+//   }
+//   a:hover {
+//     color: $secondary-text-colour;
+//   }
+//   .icon {
+//     margin-right: 5px;
+//     width: $icon-size;
+//     height: $icon-size;
+//     position: absolute;
+//     top: 50%;
+//     left: 0;
+//     margin-top: $icon-size / 2 * -1;
+//     background-position: center left;
+//   }
+//   @include media(tablet) {
+//     li {
+//       width: 25%;
+//       border-left: 1px solid $panel-colour;
+//       border-right: none;
+//     }
+//     li:first-child {
+//       border-left: none;
+//     }
+//   }
+//   @include media(desktop) {
+//     li {
+//       width: 33.3333%;
+//     }
+//     .petition-share-whatsapp {
+//       display: none;
+//     }
+//   }
+}
+
