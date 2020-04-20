@@ -1,17 +1,13 @@
-<div class="section-panel-borderless">
-  <%= link_to t(:"ui.home_page.trending_petitions.all_open_link"), petitions_path(state: 'open'), :class => 'view-all' %>
-
-  <% trending_petitions do |petitions| %>
-    <section class="trending" aria-labelledby="trending-heading">
-      <h2 id="trending-heading"><%= t(:"ui.home_page.trending_petitions.heading") %></h2>
-      <ul>
-        <% petitions.each do |id, action, signature_count| %>
-          <li class="petition-item">
-            <h3><%= link_to truncate(action, length: 100), petition_path(id) %></h3>
-            <p><%= signature_count(:trending, signature_count) %></p>
-          </li>
-        <% end %>
-      </ul>
-    </section>
-  <% end %>
-</div>
+<% trending_petitions do |petitions| %>
+  <section class="trending" aria-labelledby="trending-heading">
+    <h2 id="trending-heading"><%= t(:"ui.home_page.trending_petitions.heading") %></h2>
+    <ul>
+      <% petitions.each do |id, action, signature_count| %>
+        <li class="petition-item">
+          <h3><%= link_to truncate(action, length: 100), petition_path(id) %></h3>
+          <p><%= signature_count(:trending, signature_count) %></p>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>

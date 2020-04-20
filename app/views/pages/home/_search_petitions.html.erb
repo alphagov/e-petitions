@@ -9,4 +9,6 @@
       <%= t(:"ui.home_page.search_petitions.submit_button_html", tabindex: increment) %>
     </div>
   <% end %>
+
+  <%= link_to t(:"ui.home_page.trending_petitions.all_open_link"), petitions_path(state: 'open'), :class => 'view-all' %>
 </section>
