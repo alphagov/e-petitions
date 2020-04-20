@@ -5,24 +5,20 @@ Feature: Suzie sees actioned petitions
 
   Scenario: There are no actioned petitions
     Given I am on the home page
-    Then I should not see the actioned petitions totals section
-    But I should see an empty referral threshold section
+    Then I should see an empty referral threshold section
     And I should see an empty debate threshold section
 
   Scenario: There are petitions referred to the committee
     Given there are 2 petitions that have been referred to the committee
     And I am on the home page
-    Then I should see a total showing 2 petitions referred to the committee
-    And I should see 2 petitions counted in the referral threshold section
+    Then I should see 2 petitions counted in the referral threshold section
     And I should see 2 petitions listed in the referral threshold section
     And I should see an empty debate threshold section
 
   Scenario: There are petitions debated in the Senedd
     Given there are 3 petitions debated in the Senedd
     And I am on the home page
-    Then I should see a total showing 3 petitions referred to the committee
-    And I should see a total showing 3 petitions debated in the Senedd
-    And I should see 3 petitions counted in the referral threshold section
+    Then I should see 3 petitions counted in the referral threshold section
     And I should see 3 petitions listed in the referral threshold section
     And I should see 3 petitions counted in the debate threshold section
     And I should see 3 petitions listed in the debate threshold section
@@ -31,9 +27,7 @@ Feature: Suzie sees actioned petitions
     Given there are 5 petitions that have been referred to the committee
     And there are 2 petitions debated in the Senedd
     And I am on the home page
-    Then I should see a total showing 7 petitions referred to the committee
-    And I should see a total showing 2 petitions debated in the Senedd
-    And I should see 7 petitions counted in the referral threshold section
+    Then I should see 7 petitions counted in the referral threshold section
     And I should see 3 petitions listed in the referral threshold section
     And I should see 2 petitions counted in the debate threshold section
     And I should see 2 petitions listed in the debate threshold section
