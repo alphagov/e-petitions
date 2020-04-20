@@ -10,7 +10,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
 
       it "returns the correct date format" do
-        expect(helper.short_date_format(date)).to eq("31 October 2020")
+        expect(helper.short_date_format(date)).to eq("31 October 2020")
       end
     end
 
@@ -20,7 +20,7 @@ RSpec.describe DateTimeHelper, type: :helper do
       end
 
       it "returns the correct date format" do
-        expect(helper.short_date_format(date)).to eq("31 Hydref 2020")
+        expect(helper.short_date_format(date)).to eq("31 Hydref 2020")
       end
     end
   end
@@ -226,8 +226,8 @@ RSpec.describe DateTimeHelper, type: :helper do
       context "when the date is in the future" do
         let(:date) { Date.parse("11/11/2016") }
 
-        it "returns 'Scheduled for debate on 11 November 2016'" do
-          expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate on 11 November 2016")
+        it "returns 'Scheduled for debate on 11 November 2016'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Scheduled for debate on 11 November 2016")
         end
       end
 
@@ -256,8 +256,8 @@ RSpec.describe DateTimeHelper, type: :helper do
       context "when the date is in the future" do
         let(:date) { Date.parse("11/11/2016") }
 
-        it "returns 'Trefnwyd dadl ar gyfer 11 Tachwedd 2016'" do
-          expect(helper.scheduled_for_debate_in_words(date)).to eq("Trefnwyd dadl ar gyfer 11 Tachwedd 2016")
+        it "returns 'Trefnwyd dadl ar gyfer 11 Tachwedd 2016'" do
+          expect(helper.scheduled_for_debate_in_words(date)).to eq("Trefnwyd dadl ar gyfer 11 Tachwedd 2016")
         end
       end
 
