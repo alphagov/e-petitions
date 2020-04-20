@@ -21,7 +21,7 @@ Feature: Suzie views a petition
     Then I should see the petition details
     And I should see "Spend more money on Defence - Petitions" in the browser page title
     And I should see the vote count, closed and open dates
-    And I should not see "This petition is closed"
+    And I should not see "Closed petition"
     And I can share it via Email
     And I can share it via Facebook
     And I can share it via Twitter
@@ -63,7 +63,7 @@ Feature: Suzie views a petition
   Scenario: Suzie sees a 'closed' message when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
-    Then I should see "This petition is closed"
+    Then I should see "Closed petition"
 
   Scenario: Suzie does not see the creator when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
@@ -79,7 +79,7 @@ Feature: Suzie views a petition
   Scenario: Suzie sees a 'closed' message when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed
     When I view the petition
-    Then I should see "This petition is closed"
+    Then I should see "Closed petition"
 
   Scenario: Suzie does not see the creator when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed

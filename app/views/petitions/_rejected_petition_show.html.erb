@@ -18,14 +18,14 @@
     </details>
   <% end %>
 
-  <p class="flash-notice"><%= t(:"ui.petitions.notice_rejected") %></p>
-
-  <h2><%= t(:"ui.petitions.reject_reason_heading") %></h2>
-  <%= rejection_description(petition.rejection.code) %>
-  <% if petition.rejection.details? %>
-    <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
-  <% end %>
-  <p><%= t(:"ui.petitions.reject_reason_standards_html", standards_link: petition_standards_link) %>.</p>
+  <section class="rejection-reason" aria-labelledby="rejection-reason-heading">
+    <h2 id="rejection-reason-heading"><%= t(:"ui.petitions.reject_reason_heading") %></h2>
+    <%= rejection_description(petition.rejection.code) %>
+    <% if petition.rejection.details? %>
+      <p><%= auto_link(simple_format(h(petition.rejection.details))) %></p>
+    <% end %>
+    <%= t(:"ui.petitions.reject_reason_standards_html", standards_link: petition_standards_link) %>
+  </section>
 
   <ul class="petition-meta">
     <li>

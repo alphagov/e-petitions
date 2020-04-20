@@ -1,6 +1,10 @@
 <%= cache_for :petition do %>
   <h1>
-    <span class="heading-secondary"><%= t(:"ui.petitions.heading_closed") %></span>
+    <% if @petition.completed? %>
+      <span class="heading-secondary"><%= t(:"ui.petitions.heading_completed") %></span>
+    <% else %>
+      <span class="heading-secondary"><%= t(:"ui.petitions.heading_closed") %></span>
+    <% end %>
     <%= petition.action %>
   </h1>
 
@@ -18,19 +22,31 @@
     </details>
   <% end %>
 
-  <p class="flash-notice">
-    <%= t(:"ui.petitions.petition_closed_notice") %>
-    <span><%= t(:"ui.petitions.petitions_run_6_months") %></span>
-  </p>
+  <% if @petition.referred? %>
+    <section class="referral-notice" aria-labelledby="referral-notice-heading">
+      <h2 id="referral-notice-heading">
+        <% if @petition.completed? %>
+          <%= t(:"ui.petitions.referral_threshold.completed.heading") %>
+        <% else %>
+          <%= t(:"ui.petitions.referral_threshold.referred.heading") %>
+        <% end %>
+      </h2>
+
+      <% unless @petition.completed? %>
+        <p><%= t(:"ui.petitions.referral_threshold.referred.referral_threshold", threshold: Site.formatted_threshold_for_referral) %></p>
+      <% end %>
+
+      <% if @petition.abms_link? %>
+        <p class="secondary"><%= t(:"ui.petitions.referral_threshold.referred.link_html", link: @petition.abms_link) %></p>
+      <% end %>
+    </section>
+  <% end %>
 
   <div class="signature-count">
     <p class="signature-count-number"><%= signature_count(:default, petition.signature_count) %></p>
     <div class="signature-count-graph" aria-hidden="true">
       <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
     </div>
-    <p class="signatures-on-a-map">
-      <%= t(:"ui.petitions.show_on_a_map_html", petition_id: petition.id) %>
-    </p>
     <p class="signature-count-goal">
       <%= number_with_delimiter(current_threshold(petition)) %>
     </p>
@@ -41,7 +57,11 @@
 
   <ul class="petition-meta">
     <li>
-      <span class="label"><%= t(:"ui.petitions.date_closed") %></span> <%= short_date_format petition.closed_at %>
+      <% if @petition.completed? %>
+        <span class="label"><%= t(:"ui.petitions.date_completed") %></span> <%= short_date_format petition.completed_at %>
+      <% else %>
+        <span class="label"><%= t(:"ui.petitions.date_closed") %></span> <%= short_date_format petition.closed_at %>
+      <% end %>
     </li>
     <li class="meta-json">
       <span class="note"><%= link_to t(:"ui.petitions.get_json"), petition_path(petition, :json) %></span>

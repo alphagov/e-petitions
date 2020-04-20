@@ -1,9 +1,7 @@
-<% if @petition.completed? %>
-  <%= render 'completed_petition_show', petition: @petition %>
+<% if @petition.open? %>
+  <%= render 'open_petition_show', petition: @petition %>
 <% elsif @petition.rejected? %>
   <%= render 'rejected_petition_show', petition: @petition %>
-<% elsif @petition.closed? %>
-  <%= render 'closed_petition_show', petition: @petition %>
 <% else %>
-  <%= render 'open_petition_show', petition: @petition %>
+  <%= render 'closed_petition_show', petition: @petition %>
 <% end %>
