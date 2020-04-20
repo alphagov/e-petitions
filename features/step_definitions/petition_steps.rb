@@ -240,7 +240,7 @@ When(/^I choose the default closing date$/) do
   else
     steps %Q(
       When I press "Gwirio’r dyddiad cau"
-      Then I should see "Chwe mis o'i gyhoeddi"
+      Then I should see "Chwe mis o’i gyhoeddi"
       When I press "Mae’n edrych yn iawn"
       Then I should see "Llofnodwch eich deiseb"
     )

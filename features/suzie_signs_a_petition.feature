@@ -140,12 +140,12 @@ Feature: Suzie signs a petition
     When I fill in my details and sign a petition
     And I confirm my email address
     And I should see "2 signatures"
-    And I should see "We've added your signature to the petition"
+    And I should see "We’ve added your signature to the petition"
     And I can click on a link to return to the petition
     And I should have signed the petition
     When I confirm my email address again
     And I should see "2 signatures"
-    And I should see "We've added your signature to the petition"
+    And I should see "We’ve added your signature to the petition"
     And I can click on a link to return to the petition
 
   Scenario: Eric clicks the link shared to him by Suzie
@@ -207,7 +207,7 @@ Feature: Suzie signs a petition
 	When the petition has reached the referral threshold
     And the petition has closed
     And I confirm my email address
-    Then I should see "We've added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
@@ -226,7 +226,7 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
-    Then I should see "We've added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
@@ -246,7 +246,7 @@ Feature: Suzie signs a petition
     Then I am told to check my inbox to complete signing
     And "womboid@wimbledon.com" should receive 1 email
     And I confirm my email address
-    Then I should see "We've added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And I should see "2 signatures"
     When I follow "Do something!"
     Then I should be on the petition page
@@ -262,7 +262,7 @@ Feature: Suzie signs a petition
     Then a signature should exist with email: "suzie@gmail.com", state: "pending"
     And "suzie@gmail.com" should receive 1 email
     When I confirm my email address
-    Then I should see "We've added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And a signature should exist with email: "suzie@gmail.com", state: "validated"
 
   Scenario: Suzie signs a petition when her email is autocorrected wrongly
@@ -275,5 +275,5 @@ Feature: Suzie signs a petition
     Then a signature should exist with email: "suzie@gmial.com", state: "pending"
     And "suzie@gmial.com" should receive 1 email
     When I confirm my email address
-    Then I should see "We've added your signature to the petition"
+    Then I should see "We’ve added your signature to the petition"
     And a signature should exist with email: "suzie@gmial.com", state: "validated"

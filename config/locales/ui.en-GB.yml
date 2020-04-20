@@ -63,7 +63,7 @@ en-GB:
             body_html: "<p>You can email the %{petitions_committee_link} directly.</p>\r\n\r\n<p>They
               can help you to understand how the Senedd handles petitions. They can
               also provide a template for you to use to collect signatures on paper
-              and help with some technical problems using this service. They can't
+              and help with some technical problems using this service. They can’t
               forward your feedback to the people who started a petition or comment
               on the ideas raised in a specific petition.</p>\r\n\r\n<p>Email: <a
               href=\"mailto:petitions@senedd.wales\">petitions@senedd.wales</a></p>"
@@ -86,8 +86,8 @@ en-GB:
           comments:
             label: Comments
           terms_html: |-
-            <p>We'll only use your email to reply to your message</p>
-            <p>We can't forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
+            <p>We’ll only use your email to reply to your message</p>
+            <p>We can’t forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition</p>
           want_reply:
             email:
               label: Email address
@@ -102,7 +102,7 @@ en-GB:
         body_html: |-
           <p>Thanks for sending us your feedback.</p>
 
-          <p>If you've requested a response, we'll be in touch as soon as we can.</p>
+          <p>If you’ve requested a response, we’ll be in touch as soon as we can.</p>
 
           <p>During busy periods this can take up to 5 working days.</p>
     sponsors:
@@ -114,7 +114,7 @@ en-GB:
         what_next_html: |-
           <h2>What next?</h2>
           <p>This petition needs %{min_sponsors} supporters to go live.</p>
-          <p>When it goes live, we'll email you a link so you can start sharing it.</p>
+          <p>When it goes live, we’ll email you a link so you can start sharing it.</p>
     help_page:
       body_html: "<h1 class=\"page-title\" id=\"creating-a-petition\">Creating a petition</h1>\r\n\r\n<p>Petitioning
         is one of the most direct ways to suggest how something could change. Petitions
@@ -263,7 +263,7 @@ en-GB:
           unique:
             heading: We checked for similar petitions
             continue: Continue
-            no_match: We checked for similar petitions and didn't find any.
+            no_match: We checked for similar petitions and didn’t find any.
             ok_to_continue: So you can go ahead and create a new one.
           duplicate:
             heading: We found some similar petitions
@@ -307,8 +307,8 @@ en-GB:
           all_popular_link: View all popular petitions in %{constituency_name}
         index:
           postcode_bad:
-            heading: We couldn't find that postcode
-            couldnt_find_postcode_html: We couldn't find the postcode <q>%{postcode}</q>.
+            heading: We couldn’t find that postcode
+            couldnt_find_postcode_html: We couldn’t find the postcode <q>%{postcode}</q>.
               Try again?
           postcode_blank:
             heading: Local to you
@@ -362,7 +362,7 @@ en-GB:
             two: 'Please fix the following errors:'
             zero: 'Please fix the following error:'
             other: 'Please fix the following errors:'
-          heading: We couldn't create this petition
+          heading: We couldn’t create this petition
         petition_stage:
           heading: Start a petition
           submit_html: |-
@@ -450,7 +450,7 @@ en-GB:
       get_json: Get petition data (JSON format)
       thank_you:
         heading: One more step…
-        link_emailed: We've emailed you a link to send to your potential supporters
+        link_emailed: We’ve emailed you a link to send to your potential supporters
         n_sponsors_needed: "%{count} people need to click this link and confirm their
           support for your petition to go live. Once this has happened the Petitions
           team will check that it meets the petitions standards and arrange for it
@@ -519,7 +519,7 @@ en-GB:
             will be discussed by the Petitions Committee
       senedd_will_debate: The Senedd will debate this petition
       sign_this_petition: Sign this petition
-      need_sponsors_later: Later on, you'll need email addresses for %{count} supporters
+      need_sponsors_later: Later on, you’ll need email addresses for %{count} supporters
         to get your petition started
       senedd_debated_topic: The Senedd debated this topic
       waiting_for_in_words:
@@ -553,7 +553,7 @@ en-GB:
       senedd_debate_description: The Petitions Committee considers all petitions that
         get more than %{threshold} signatures for a debate
       need_sponsors_later_heading: Just so you know
-      watch_online_senedd_tv_html: You'll be able to watch the debate online at <a
+      watch_online_senedd_tv_html: You’ll be able to watch the debate online at <a
         href="https://senedd.tv" rel="external">senedd.tv</a>
       for_senedd_to_publish_debate: for the Senedd to publish the debate outcome
       reject_reason_standards_html: |-
@@ -562,7 +562,7 @@ en-GB:
       committee_decided_not_to_debate: The Petitions Committee decided not to refer
         this petition for a debate
       at_threshold_for_debate_ellipsis: At %{threshold} signatures...
-      watch_online_youtube_channel_html: You'll be able to watch online on <a href="https://www.senedd.tv"
+      watch_online_youtube_channel_html: You’ll be able to watch online on <a href="https://www.senedd.tv"
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold}
         signatures will be considered for a debate in the Senedd
@@ -593,7 +593,7 @@ en-GB:
           member_name: Your local Member of the Senedd is %{member}
           member_link: Contact your Member of the Senedd to let them know you have signed this petition
           constituency_name: Your constituency is %{constituency}
-        added_to_petition: 'We''ve added your signature to the petition:'
+        added_to_petition: 'We’ve added your signature to the petition:'
         register_to_vote_html: |-
           <h2>Register to vote</h2>
           <p>To vote in the Senedd elections, you must be registered to vote.</p>
@@ -637,7 +637,7 @@ en-GB:
         signatures: signatures
       privacy_notice_html: |-
         <section class="secondary">
-          <p>We won't publish your personal details anywhere or use them for anything other than this petition.</p>
+          <p>We won’t publish your personal details anywhere or use them for anything other than this petition.</p>
         </section>
     application:
       back: Back
@@ -777,7 +777,7 @@ en-GB:
           <p>You may make a complaint to the Information Commissioner, who is an independent regulator set up to uphold information rights.</p>
 
           <p>
-          Information Commissioner's Office<br>
+          Information Commissioner’s Office<br>
           casework@ico.org.uk<br>
           0303 123 1113<br>
           <br>
