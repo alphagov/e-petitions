@@ -1,4 +1,4 @@
-<span><%= t(:"ui.application.back_html") %></span>
+<span><%= t(:"ui.application.back_html", tabindex: increment) %></span>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -21,11 +21,11 @@
 </div>
 
 <span>
-  <%= t(:"ui.petitions.create.replay_closing_date_stage.submit_html", tabindex: increment) %>
+  <%= t(:"ui.petitions.create.replay_closing_date_stage.go_back_html", tabindex: increment) %>
 </span>
 
 <span>
-  <%= t(:"ui.petitions.create.replay_closing_date_stage.go_back_html", tabindex: increment) %>
+  <%= t(:"ui.petitions.create.replay_closing_date_stage.submit_html", tabindex: increment) %>
 </span>
 
 <div>

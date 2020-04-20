@@ -21,7 +21,7 @@
     </ul>
   <% end %>
 
-  <%= link_to(new_petition_path(q: @new_petition.action), class: "button") do %>
+  <%= link_to(new_petition_path(q: @new_petition.action), class: "button forward") do %>
     <%= t(:"ui.petitions.check.results.duplicate.continue_btn") %>
   <% end %>
 
@@ -31,7 +31,7 @@
   <p><%= t(:"ui.petitions.check.results.unique.no_match") %></p>
   <p><%= t(:"ui.petitions.check.results.unique.ok_to_continue") %><br /></p>
 
-  <%= link_to(new_petition_path(q: @new_petition.action), class: "button") do %>
+  <%= link_to(new_petition_path(q: @new_petition.action), class: "button forward") do %>
     <%= t(:"ui.petitions.check.results.unique.continue") %>
   <% end %>
 

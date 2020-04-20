@@ -9,7 +9,7 @@
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, t(:"ui.petitions.create.creator_stage.email.label"), class: "form-label" %>
   <%= error_messages_for_field signature, :email %>
-  <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+  <%= form.text_field :email, inputmode: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
 <%= form_row for: [signature, :location_code] do %>

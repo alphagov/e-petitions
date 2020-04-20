@@ -1,4 +1,4 @@
-<span><%= t(:"ui.application.back_html") %></span>
+<span><%= t(:"ui.application.back_html", tabindex: increment) %></span>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -20,7 +20,7 @@
 <%= form_row for: [petition, :email] do %>
   <%= form.label :email, t(:"ui.petitions.create.creator_stage.email.label"), class: "form-label" %>
   <%= error_messages_for_field petition, :email %>
-  <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+  <%= form.text_field :email, inputmode: "email", tabindex: increment, class: "form-control" %>
 <% end %>
 
 <span>

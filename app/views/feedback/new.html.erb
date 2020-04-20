@@ -7,7 +7,7 @@
     <%= form_row for: [@feedback, :comment] do %>
       <%= f.label :comment, t(:"ui.feedback.new.feedback.comments.label"), class: "form-label" %>
       <%= error_messages_for_field @feedback, :comment %>
-      <%= f.text_area :comment, tabindex: increment, class: "form-control" %>
+      <%= f.text_area :comment, rows: 6, tabindex: increment, class: "form-control" %>
     <% end %>
 
     <%= form_row for: [@feedback, :petition_link_or_title] do %>
@@ -23,7 +23,7 @@
     <%= form_row for: [@feedback, :email] do %>
       <%= f.label :email, t(:"ui.feedback.new.feedback.want_reply.email.label"), class: "form-label" %>
       <%= error_messages_for_field @feedback, :email %>
-      <%= f.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+      <%= f.text_field :email, inputmode: "email", tabindex: increment, class: "form-control" %>
     <% end %>
 
     <div>
