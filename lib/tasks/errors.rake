@@ -13,7 +13,11 @@ namespace :errors do
       include Rails.application.routes.url_helpers
 
       def data_uri(path)
-        "data:image/png;base64,#{Base64.strict_encode64(asset_data(path))}"
+        if path =~ /svg\z/
+          "data:image/svg+xml;base64,#{Base64.strict_encode64(asset_data(path))}"
+        else
+          "data:image/png;base64,#{Base64.strict_encode64(asset_data(path))}"
+        end
       end
 
       def asset_data(path)
