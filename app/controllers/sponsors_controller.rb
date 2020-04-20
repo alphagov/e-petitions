@@ -54,7 +54,7 @@ class SponsorsController < SignaturesController
       if @signature.pending?
         PetitionAndEmailConfirmationForSponsorEmailJob.perform_later(@signature)
       else
-        EmailDuplicateSignaturesEmailJob.perform_later(@signature)
+        EmailDuplicateSponsorEmailJob.perform_later(@signature)
       end
     end
   end

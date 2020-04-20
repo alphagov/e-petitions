@@ -13,6 +13,11 @@ Given(/^I have created a petition and told people to sponsor it$/) do
     creator_attributes: { email: 'charlie.the.creator@example.com' })
 end
 
+Given(/^I have already sponsored the petition(?: with email "(.*?)")?$/) do |email|
+  email ||= 'laura.the.sponsor@example.com'
+  sponsor = FactoryBot.create(:validated_signature, email: email, sponsor: true, petition: @sponsor_petition)
+end
+
 When(/^a sponsor supports my petition$/) do
   sponsor_email = FactoryBot.generate(:sponsor_email)
   steps %{

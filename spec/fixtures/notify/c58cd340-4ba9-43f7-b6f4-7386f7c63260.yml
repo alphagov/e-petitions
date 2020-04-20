@@ -1,0 +1,17 @@
+id: "c58cd340-4ba9-43f7-b6f4-7386f7c63260"
+name: "email_duplicate_sponsor_cy"
+subject: "Llofnod dyblyg ar ddeiseb | Duplicate signature of petition"
+body: |-
+  Rydych chi wedi cael y neges e-bost hon am fod eich cyfeiriad e-bost wedi’i ddefnyddio i gefnogi’r ddeiseb “((action))”, ond rydych chi eisoes wedi cefnogi’r ddeiseb hon.
+  
+  Diolch,
+  Tîm Deisebau 
+  Y Senedd
+  
+  ---
+  
+  You’re receiving this email because your email has been used to support the petition “((action))”, but you have already supported this petition.
+  
+  Thanks,
+  The Petitions team
+  Senedd

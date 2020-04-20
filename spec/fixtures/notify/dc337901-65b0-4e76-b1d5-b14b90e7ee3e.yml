@@ -11,7 +11,7 @@ body: |-
   
   Petitions need to collect ((referral_threshold)) signatures in order to be considered by the Petitions Committee. This does not happen until after the petition has finished collecting signatures. Please let us know if you would like to change the closing date of your petition.
   
-  If your petition collects more that ((debate_threshold)) signatures, the Committee will consider referring it for a debate in the Senedd. In doing so, the Committee will consider a range of factors including the subject-matter of the petition and the percentage of signatures gathered from within Wales.
+  If your petition collects more than ((debate_threshold)) signatures, the Committee will consider referring it for a debate in the Senedd. In doing so, the Committee will consider a range of factors including the subject-matter of the petition and the percentage of signatures gathered from within Wales.
   
   Should you also wish to collect signatures on paper, we can provide a template on request.
   

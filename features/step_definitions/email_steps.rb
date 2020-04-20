@@ -69,6 +69,10 @@ Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with subject "([
   expect(unread_emails_for(address).select { |m| m.subject =~ Regexp.new(subject) }.size).to eq parse_email_count(amount)
 end
 
+Then /^(?:I|they|"([^"]*?)") should receive (an|no|\d+) emails? with body "([^"]*?)"$/ do |address, amount, body|
+  expect(unread_emails_for(address).select { |m| m.text_part.decoded =~ Regexp.new(body) }.size).to eq parse_email_count(amount)
+end
+
 Then /^(?:I|they|"([^"]*?)") should receive an email with the following body:$/ do |address, expected_body|
   open_email(address, :with_text => expected_body)
 end

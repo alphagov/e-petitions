@@ -457,6 +457,7 @@ RSpec.describe SponsorsController, type: :controller do
           it "sends a duplicate signature email" do
             expect(last_email_sent).to deliver_to("ted@example.com")
             expect(last_email_sent).to have_subject(/Duplicate signature of petition/)
+            expect(last_email_sent).to have_body_text(/you have already supported this petition/)
           end
 
           it "redirects to the thank you page" do

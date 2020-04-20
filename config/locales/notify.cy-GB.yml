@@ -4,6 +4,7 @@ cy-GB:
       email_confirmation_for_signer: "de60bc30-2d7b-4a71-851f-0ac357af048f"
       email_creator_about_other_business: "86b5dee8-ca22-45be-af00-d74d601e656d"
       email_duplicate_signatures: "8d63e92e-1591-420d-a8ec-1df6ecf6a34c"
+      email_duplicate_sponsor: "c58cd340-4ba9-43f7-b6f4-7386f7c63260"
       email_signer_about_other_business: "5aa3434b-0530-4655-a2d2-318fd3668568"
       gather_sponsors_for_petition_christmas: "6c9730a2-e31d-4c15-9c05-e96ef5cb8ff4"
       gather_sponsors_for_petition_easter: "5920b765-6921-4537-9e01-d8b1338b1071"

@@ -19,6 +19,15 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Then I should see a heading called "Thanks"
     And I should have fully signed the petition as a sponsor
 
+  Scenario: Laura receives a duplicate signature email if she tries to sign but she has already signed and validated
+    Given I have already sponsored the petition with email "laura@example.com"
+    When I visit the "sponsor this petition" url I was given
+    And I fill in my details as a sponsor with email "laura@example.com"
+    And I try to sign
+    Then I am asked to review my email address
+    When I say I am happy with my email address
+    Then "laura@example.com" should receive 1 email with body "you have already supported this petition"
+
   Scenario: Laura wants to sign the petition that is already published
     Given the petition I want to sign is open
     When I visit the "sponsor this petition" url I was given

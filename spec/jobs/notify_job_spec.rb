@@ -781,6 +781,204 @@ RSpec.describe NotifyJob, type: :job, notify: false do
       end
     end
 
+    describe EmailDuplicateSponsorEmailJob do
+      it_behaves_like "a notify job" do
+        let(:petition) { FactoryBot.create(:validated_petition) }
+        let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+        let(:arguments) { [signature] }
+      end
+
+      context "when the petition was created in English" do
+        let(:petition) do
+          FactoryBot.create(
+            :validated_petition,
+            action_en: "Do stuff",
+            background_en: "Because of reasons",
+            additional_details_en: "Here's some more reasons",
+            locale: "en-GB",
+            creator_name: "Charlie",
+            creator_email: "charlie@example.com",
+            creator_attributes: {
+              locale: "en-GB"
+            }
+          )
+        end
+
+        context "and the sponsor signed in English" do
+          let(:signature) do
+            FactoryBot.create(
+              :validated_signature,
+              name: "Suzie",
+              email: "suzie@example.com",
+              locale: "en-GB",
+              email_count: 1,
+              sponsor: true,
+              petition: petition
+            )
+          end
+
+          it "sends an email via GOV.UK Notify with the English template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature)
+            end
+
+            expect(notify_request(
+              email_address: "suzie@example.com",
+              template_id: "0f1791a4-55cc-42c2-84d4-d822b35dad55",
+              reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+              personalisation: {
+                action: "Do stuff"
+              }
+            )).to have_been_made
+          end
+
+          it "increments the signature email_count" do
+            expect {
+              perform_enqueued_jobs do
+                described_class.perform_later(signature)
+              end
+            }.to change {
+              signature.reload.email_count
+            }.from(1).to(2)
+          end
+        end
+
+        context "and the sponsor signed in Welsh" do
+          let(:signature) do
+            FactoryBot.create(
+              :validated_signature,
+              name: "Suzie",
+              email: "suzie@example.com",
+              locale: "cy-GB",
+              email_count: 1,
+              sponsor: true,
+              petition: petition
+            )
+          end
+
+          it "sends an email via GOV.UK Notify with the Welsh template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature)
+            end
+
+            expect(notify_request(
+              email_address: "suzie@example.com",
+              template_id: "c58cd340-4ba9-43f7-b6f4-7386f7c63260",
+              reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+              personalisation: {
+                action: "Do stuff",
+              }
+            )).to have_been_made
+          end
+
+          it "increments the signature email_count" do
+            expect {
+              perform_enqueued_jobs do
+                described_class.perform_later(signature)
+              end
+            }.to change {
+              signature.reload.email_count
+            }.from(1).to(2)
+          end
+        end
+      end
+
+      context "when the petition was created in Welsh" do
+        let(:petition) do
+          FactoryBot.create(
+            :validated_petition,
+            action_cy: "Gwnewch bethau",
+            background_cy: "Oherwydd rhesymau",
+            additional_details_cy: "Dyma ychydig mwy o resymau",
+            locale: "cy-GB",
+            creator_name: "Charlie",
+            creator_email: "charlie@example.com",
+            creator_attributes: {
+              locale: "cy-GB"
+            }
+          )
+        end
+
+        context "and the sponsor signed in English" do
+          let(:signature) do
+            FactoryBot.create(
+              :validated_signature,
+              name: "Suzie",
+              email: "suzie@example.com",
+              locale: "en-GB",
+              email_count: 1,
+              sponsor: true,
+              petition: petition
+            )
+          end
+
+          it "sends an email via GOV.UK Notify with the English template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature)
+            end
+
+            expect(notify_request(
+              email_address: "suzie@example.com",
+              template_id: "0f1791a4-55cc-42c2-84d4-d822b35dad55",
+              reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+              personalisation: {
+                action: "Gwnewch bethau"
+              }
+            )).to have_been_made
+          end
+
+          it "increments the signature email_count" do
+            expect {
+              perform_enqueued_jobs do
+                described_class.perform_later(signature)
+              end
+            }.to change {
+              signature.reload.email_count
+            }.from(1).to(2)
+          end
+        end
+
+        context "and the sponsor signed in Welsh" do
+          let(:signature) do
+            FactoryBot.create(
+              :validated_signature,
+              name: "Suzie",
+              email: "suzie@example.com",
+              locale: "cy-GB",
+              email_count: 1,
+              sponsor: true,
+              petition: petition
+            )
+          end
+
+          it "sends an email via GOV.UK Notify with the Welsh template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature)
+            end
+
+            expect(notify_request(
+              email_address: "suzie@example.com",
+              template_id: "c58cd340-4ba9-43f7-b6f4-7386f7c63260",
+              reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+              personalisation: {
+                action: "Gwnewch bethau"
+              }
+            )).to have_been_made
+          end
+
+          it "increments the signature email_count" do
+            expect {
+              perform_enqueued_jobs do
+                described_class.perform_later(signature)
+              end
+            }.to change {
+              signature.reload.email_count
+            }.from(1).to(2)
+          end
+        end
+      end
+    end
+
     describe EmailConfirmationForSignerEmailJob do
       let(:petition) { FactoryBot.create(:open_petition, action_en: "Do stuff", action_cy: "Gwnewch bethau") }
       let(:constituency) { FactoryBot.create(:constituency, :cardiff_south_and_penarth) }
