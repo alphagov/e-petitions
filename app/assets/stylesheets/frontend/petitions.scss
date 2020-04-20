@@ -215,3 +215,20 @@
     }
   }
 }
+
+.member-list {
+  @extend %contain-floats;
+
+  li {
+    box-sizing: border-box;
+    float: left;
+    width: 100%;
+    margin: 0 0 9px 0;
+  }
+
+  @include media(desktop) {
+    li {
+      width: 50%;
+    }
+  }
+}
