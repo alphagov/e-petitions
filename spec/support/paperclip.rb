@@ -7,7 +7,7 @@ module PaperclipHelpers
   end
 
   def commons_default_image_url
-    ActionController::Base.helpers.image_url('graphics/graphic_house-of-commons.jpg')
+    ActionController::Base.helpers.image_url('frontend/senedd-chamber.jpg')
   end
 
   def commons_image_file

@@ -17,7 +17,7 @@ class DebateOutcome < ActiveRecord::Base
   has_attached_file :commons_image,
     # default_url needs to be a lambda - this way the generated image url will
     # include any asset-digest
-    default_url: ->(_) { ActionController::Base.helpers.image_url("graphics/graphic_house-of-commons.jpg") },
+    default_url: ->(_) { ActionController::Base.helpers.image_url("frontend/senedd-chamber.jpg") },
     styles: {
       "1x": "#{(COMMONS_IMAGE_SIZE[:w]/2).to_i}x#{(COMMONS_IMAGE_SIZE[:h]/2).to_i}",
       "2x": "#{COMMONS_IMAGE_SIZE[:w]}x#{COMMONS_IMAGE_SIZE[:h]}"
