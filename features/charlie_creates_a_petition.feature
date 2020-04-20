@@ -63,8 +63,8 @@ Scenario: Charlie creates a petition with a custom closing date
 Scenario: Charlie creates a petition in Welsh
   Given I start a new petition
   And I fill in the petition details
-  And I press "Gweld rhagolwg o'r ddeiseb"
-  And I press "Mae'n edrych yn iawn"
+  And I press "Gweld rhagolwg o’r ddeiseb"
+  And I press "Mae’n edrych yn iawn"
   And I choose the default closing date
   And I fill in my details
   And I fill in my creator contact details

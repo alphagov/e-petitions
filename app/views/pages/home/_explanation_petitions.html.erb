@@ -6,7 +6,7 @@
         <p><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></p>
       </div>
     <% else %>
-      <%= link_to( petitions_path(state: :with_response), class: "threshold-panel threshold-panel-referral" ) do %>
+      <%= link_to(petitions_path(state: :referred), class: "threshold-panel threshold-panel-referral" ) do %>
         <h2 id="referral-threshold-heading"><%= Site.formatted_threshold_for_referral %></h2>
         <p><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></p>
       <% end %>

@@ -37,28 +37,22 @@ cy-GB:
         all_petitions: Pob deiseb
         start_a_petition: Dechrau deiseb
         how_petitions_work: Sut mae deisebau yn gweithio
-      ogl_html: "<p class=\"logo\"><a href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\"
-        rel=\"external license\">Drwydded Llywodraeth Agored</a></p>\r\n<p>Mae'r holl
-        gynnwys ar gael o dan <a href=\"https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/\"
-        rel=\"external license\">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio
-        lle nodir yn wahanol</p>\r\n"
-      copyright_html: "<span class=\"graphic graphic-portcullis-large-grey\"></span>\r\n<span
-        class=\"graphic graphic-crest-large-grey\"></span>\r\n<a href=\"https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm\"
-        rel=\"external\">© Hawlfraint y Goron</a>"
+      ogl_html: |-
+        <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored</a></h3>
+        <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithriolle nodir yn wahanol</p>
     header:
+      senedd_cymru: "Senedd Cymru"
+      welsh_parliament: "Welsh Parliament"
       title: Deisebau
-      tooltip: Mynd i'r hafan Ddeisebau
-      strapline: Senedd
-      title_link_html: "<a title=\"Ewch i hafan y Deisebau\" tabindex=\"1\" class=\"proposition\"
-        href=\"%{url}\">\r\n  <span class=\"graphic graphic-dragon-white\"></span>
-        Deisebau\r\n</a>"
-      language_switcher_html: <a class="language-switcher" title="Show this page in
-        English" tabindex="-1" href="%{url}">English</a>
+      title_link_html: |-
+        <a title="Ewch i hafan y Deisebau" href="%{url}">Deisebau</a>
+      language_switcher_html: |-
+        <a class="language-switcher" title="Show this page in English" tabindex="-1" href="%{url}">English</a>
     sharing:
-      email_html: <span class="icon icon-share-email"></span> E-bost
-      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
-      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
-      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+      email_html: E-bost
+      twitter_html: Twitter
+      facebook_html: Facebook
+      whatsapp_html: Whatsapp
     feedback:
       new:
         contact:
@@ -97,9 +91,8 @@ cy-GB:
             email:
               label: Cyfeiriad e-bost
             heading: A ydych chi am gael ateb?
-          submit_html: <input type="submit" value="Anfon adborth" class="button" tabindex="%{tabindex}"
-            data-disable-with="Anfon adborth">
-          submit_button: Anfon adborth
+          submit_html: |-
+            <button type="submit" class="button forward" tabindex="%{tabindex}" data-disable-with="Anfon adborth">Anfon adborth</button>
           petition_link_or_title:
             label_html: Teitl y ddeiseb/linc <span class="optional">dewisol</span>
       thanks:
@@ -238,7 +231,7 @@ cy-GB:
       search_petitions:
         heading: Chwilio am ddeiseb
         submit_button_html: |-      
-          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">
+          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio" tabindex="%{tabindex}">
       debated_petitions:
         video:
           link: senedd.tv
@@ -264,7 +257,7 @@ cy-GB:
       check:
         heading: Dechrau deiseb
         results:
-          back: "◀ Nôl"
+          back: "Nôl"
           unique:
             heading: Rydym wedi chwilio am ddeisebau tebyg
             continue: Parhau
@@ -355,8 +348,8 @@ cy-GB:
             label: Cod post
           phone_number:
             label: Rhif ffôn
-          continue_html: <input type="submit" name="move_next" value="Parhau" class="button"
-            tabindex="%{tabindex}" data-disable-with="Parhau">
+          continue_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Parhau">Parhau</button>
           notify_by_email:
             check_label: 'Anfonwch neges e-bost ataf pryd bynnag y bydd diweddariad
               ynghylch y ddeiseb hon '
@@ -374,9 +367,8 @@ cy-GB:
           heading: Nid oeddem yn gallu creu'r ddeiseb hon
         petition_stage:
           heading: Dechrau deiseb
-          submit_html: <input type="submit" name="move_next" value="Gweld rhagolwg
-            o'r ddeiseb" class="button" tabindex="%{tabindex}" data-disable-with="Gweld
-            rhagolwg o'r ddeiseb">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Gweld rhagolwg o’r ddeiseb">Gweld rhagolwg o’r ddeiseb</button>
           hint_standards_html: Cofiwch, rhaid i'ch deiseb chi fodloni'r %{standards_link}.
         closing_date_stage:
           day:
@@ -399,24 +391,20 @@ cy-GB:
             yn trafod unrhyw ddeiseb tan <b>ar ôl</b> iddi orffen casglu llofnodion.
             </li>\r\n<p>\r\nGallwch chi ddewis dyddiad cau cynharach os ydych chi
             am i'r Pwyllgor drafod eich deiseb cyn hynny. \r\n</p>"
-          submit_html: <input type="submit" name="move_next" value="Gwirio'r dyddiad
-            cau" class="button" tabindex="%{tabindex}" data-disable-with="Gwirio'r dyddiad
-            cau">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Gwirio’r dyddiad cau">Gwirio’r dyddiad cau</button>
         replay_email_stage:
           heading: Gwnewch yn siŵr fod hyn yn gywir
-          submit_html: <input type="submit" name="move_next" value="Ie – dyma fy nghyfeiriad
-            e-bsot i" class="button" tabindex="%{tabindex}" data-disable-with="Ie
-            – dyma fy nghyfeiriad e-bsot i">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bsot i">Ie – dyma fy nghyfeiriad e-bsot i</button>
           fix_email_if_wrong: 'Os yw eich cyfeiriad e-bost yn anghywir, newidiwch
             y manylion uchod '
         replay_petition_stage:
           heading: Gwirio eich deiseb
-          submit_html: <input type="submit" name="move_next" value="Mae'n edrych yn
-            iawn" class="button" tabindex="%{tabindex}" data-disable-with="Mae'n edrych yn
-            iawn">
-          go_back_html: <input type="submit" name="move_back" value="Mynd yn ôl i
-            wneud newidiadau" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
-            back and make changes">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
+          go_back_html: |-
+            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i wneud newidiadau">Mynd yn ôl i wneud newidiadau</button>
           submit_warning_html: "<p class=\"secondary\">Gallwch chi ddim newid eich
             deiseb ar ôl y cam yma.</p>\r\n<p class=\"secondary\">Dyma'r amser i wneud
             yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol,
@@ -426,12 +414,10 @@ cy-GB:
             y Pwyllgor Deisebau yn cytuno. </p>"
         replay_closing_date_stage:
           heading: Gwirio eich dyddiad cau
-          submit_html: <input type="submit" name="move_next" value="Mae'n edrych yn
-            iawn" class="button" tabindex="%{tabindex}" data-disable-with="This looks
-            good">
-          go_back_html: <input type="submit" name="move_back" value="Mynd yn ôl i'w
-            newid" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
-            back and change it">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
+          go_back_html: |-
+            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i’w newid">Mynd yn ôl i’w newid</button>
           default_message_html: |-
             <h1><span class="heading-secondary">Dyddiad cau</span>Chwe mis o'i gyhoeddi</h1>
             <p>Bydd eich deiseb “%{action}” yn cau am hanner nos ar y dyddiad hwn. Os bydd eich deiseb wedi casglu %{num} neu fwy o lofnodion bydd yn cael ei chyfeirio at y Pwyllgor Deisebau.</p>
@@ -443,17 +429,13 @@ cy-GB:
             deisebau</a> y byddwch chi'n gallu newid y dyddiad cau.</p>
       search:
         submit_button_html: |-      
-          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">      
+          <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
         results:
           items:
             facet_all:
               rejected: Gwrthodwyd
               completed: Cwblhawyd gan y Pwyllgor Deisebau ar %{date}
-              closed_html:
-                one: Cyfeiriwyd at y Pwyllgor Deisebau. 1 llofnod
-                two: Cyfeiriwyd at y Pwyllgor Deisebau. 2 lofnod
-                zero: Cyfeiriwyd at y Pwyllgor Deisebau. 0 llofnod
-                other: Cyfeiriwyd at y Pwyllgor Deisebau. %{num} llofnod
+              closed: Cyfeiriwyd at y Pwyllgor Deisebau
             facet_debated:
               debated_date: Cynhaliwyd dadl ar %{date}
             facet_referred:
@@ -472,7 +454,7 @@ cy-GB:
           zero: 0 deiseb
           other: "%{num} deiseb"
       deadline: Casglu llofnodion hyd at
-      get_json: Gweld data ynghylch y ddeiseb (fformat json)
+      get_json: Gweld data ynghylch y ddeiseb (fformat JSON)
       thank_you:
         heading: Un cam arall…
         link_emailed: Rydym ni wedi anfon neges e-bost atoch yn cynnwys linc i'w anfon
@@ -544,8 +526,6 @@ cy-GB:
           referral_threshold: Caiff pob deiseb sydd â mwy na %{threshold} llofnod
             ei chyfeirio at y Pwyllgor Deisebau
       senedd_will_debate: Bydd y Senedd yn cynnal dadl ar y ddeiseb hon
-      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Dangos
-        ar fap</a>
       sign_this_petition: Llofnodi'r ddeiseb hon
       need_sponsors_later: 'Nes ymlaen, bydd angen cyfeiriadau e-bost arnoch ar gyfer
         %{count} gefnogwr i ddechrau eich deiseb '
@@ -580,9 +560,9 @@ cy-GB:
       watch_online_senedd_tv_html: Gallwch chi wylio'r ddadl ar-lein yn <a href="https://senedd.tv"
         rel="external">senedd.tv</a>
       for_senedd_to_publish_debate: 'i''r Senedd gyhoeddi canlyniad y ddadl '
-      reject_reason_standards_html: "<br>Dim ond deisebau nad ydynt yn bodloni’r %{standards_link}
-        y byddwn yn eu gwrthod<br>\r\n<br>\r\nMae deisebau a wrthodwyd yn cael eu
-        cyhoeddi yn yr iaith y cawsant eu cyflwyno ynddi"
+      reject_reason_standards_html: |-
+        <p>Dim ond deisebau nad ydynt yn bodloni’r %{standards_link} y byddwn yn eu gwrthod</p>
+        <p>nMae deisebau a wrthodwyd yn cael eu cyhoeddi yn yr iaith y cawsant eu cyflwyno ynddi</p>
       committee_decided_not_to_debate: Penderfynodd y Pwyllgor Deisebau beidio â chyfeirio'r
         ddeiseb hon ar gyfer dadl
       at_threshold_for_debate_ellipsis: Ar ôl %{threshold} llofnod...
@@ -599,8 +579,8 @@ cy-GB:
     signatures:
       new:
         heading: Llofnodi'r ddeiseb
-        continue_html: <input type="submit" name="move_next" value="Parhau" class="button"
-          tabindex="%{tabindex}" data-disable-with="Parhau">
+        continue_html: |-
+          <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Parhau">Parhau</button>
       signed:
         heading:
           one: 1 llofnod
@@ -623,9 +603,8 @@ cy-GB:
           rel=\"external\">Cofrestru i bleidleisio</a>"
       confirm:
         email_form:
-          submit_html: <input type="submit" name="move_next" value="Ie – dyma fy nghyfeiriad
-            e-bost i" class="button" tabindex="%{tabindex}" data-disable-with="Ie
-            – dyma fy nghyfeiriad e-bost i">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
           fix_email_if_wrong: 'Os yw eich cyfeiriad e-bost yn anghywir, newidiwch
             y manylion uchod '
       thank_you:
@@ -658,9 +637,10 @@ cy-GB:
         beth heblaw'r ddeiseb hon.</p>\r\n</section>"
     application:
       back: Nôl
-      back_html: <input type="submit" name="move_back" value="◀ Nôl" class="back-page"
-        data-disable-with="◀ Nôl">
-      continue_html: <input type="submit" value="Parhau" class="button" />
+      back_html: |-
+        <button type="submit" name="move_back" tabindex="%{tabindex}" class="back-page" data-disable-with="Nôl">Nôl</button>
+      continue_html: |-
+        <button type="submit" tabindex="%{tabindex}" class="button forward" data-disable-with="Parhau">Parhau</button>
       character_count: hyd at %{count} nod
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu'r ddeiseb hon
@@ -672,7 +652,7 @@ cy-GB:
       not_debated: Penderfynodd y Pwyllgor Deisebau beidio â thrafod y ddeiseb hon
     local_search:
       submit_button_html: |-      
-        <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">      
+        <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">      
       postcode: Cod post y DU
     debate_outcomes:
       link_titles:

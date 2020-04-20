@@ -1,18 +1,21 @@
-<header role="banner" id="global-header">
+<header role="banner">
   <div class="wrapper">
     <% unless request.nil? %>
       <%= language_switcher_tag %>
     <% end %>
 
-    <% if home_page? %>
-      <span class="proposition">
-        <span class="graphic graphic-dragon-white"></span> <%= t(:"ui.header.title") %>
-      </span>
-    <% else %>
-      <span>
-        <%= t(:"ui.header.title_link_html", url: home_path) %>
-      </span>
-    <% end %>
-    <p class="strapline"><%= t(:"ui.header.strapline") %></p>
+    <div class="brand">
+      <div class="logo">
+        <p><%= t(:"ui.header.senedd_cymru") %></p>
+        <p><%= t(:"ui.header.welsh_parliament") %></p>
+      </div>
+      <p class="service">
+        <% if home_page? %>
+          <%= t(:"ui.header.title") %>
+        <% else %>
+          <%= t(:"ui.header.title_link_html", url: home_path) %>
+        <% end %>
+      </p>
+    </div>
   </div>
 </header>

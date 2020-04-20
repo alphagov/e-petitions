@@ -28,7 +28,7 @@ Feature: Suzy Singer searches by free text
       | Overthrow the Wombles              | 1 signature                                      |
       | Uncle Bulgaria                     | 1 signature                                      |
       | Common People                      | 1 signature                                      |
-      | The Wombles will rock Glasto       | Referred to the Petitions Committee. 1 signature |
+      | The Wombles will rock Glasto       | 1 signature Referred to the Petitions Committee  |
       | Eavis vs the Wombles               | Rejected                                         |
     And the markup should be valid
 
@@ -42,7 +42,7 @@ Feature: Suzy Singer searches by free text
       | Goresgyn y Wombles                 | 1 llofnod                                    |
       | Yncl Bwlgaria                      | 1 llofnod                                    |
       | Pobl Gyffredin                     | 1 llofnod                                    |
-      | Bydd y Wombles yn siglo Glasto     | Cyfeiriwyd at y Pwyllgor Deisebau. 1 llofnod |
+      | Bydd y Wombles yn siglo Glasto     | 1 llofnod Cyfeiriwyd at y Pwyllgor Deisebau  |
       | Eavis vs y Wombles                 | Gwrthodwyd                                   |
     And the markup should be valid
 

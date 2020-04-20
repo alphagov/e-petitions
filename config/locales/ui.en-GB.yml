@@ -30,6 +30,7 @@ en-GB:
         zero: <span class="count">0</span> petitions were debated in the Senedd
         other: <span class="count">%{num}</span> petitions were debated in the Senedd
       not_debated_explanation_html: See all petitions not debated in the Senedd (%{num})
+      awaiting_debate_explanation_html: See all petitions waiting for a debate in the Senedd (%{num})
     footer:
       nav:
         home: Home
@@ -39,27 +40,21 @@ en-GB:
         start_a_petition: Start a petition
         how_petitions_work: How petitions work
       ogl_html: |-
-        <p class="logo"><a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></p>
+        <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></h3>
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
-      copyright_html: |-
-        <span class="graphic graphic-portcullis-large-grey"></span>
-        <span class="graphic graphic-crest-large-grey"></span>
-        <a href="https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm" rel="external">© Crown copyright</a>
     header:
+      senedd_cymru: "Senedd Cymru"
+      welsh_parliament: "Welsh Parliament"
       title: Petitions
-      tooltip: Go to the Petitions homepage
-      strapline: Senedd
       title_link_html: |-
-        <a title="Go to the Petitions homepage" tabindex="1" class="proposition" href="%{url}">
-          <span class="graphic graphic-dragon-white"></span> Petitions
-        </a>
-      language_switcher_html: <a class="language-switcher" title="Dangoswch y dudalen
-        hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
+        <a title="Go to the Petitions homepage" href="%{url}">Petitions</a>
+      language_switcher_html: |-
+        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
     sharing:
-      email_html: <span class="icon icon-share-email"></span> Email
-      twitter_html: <span class="icon icon-share-twitter"></span> Twitter
-      facebook_html: <span class="icon icon-share-facebook"></span> Facebook
-      whatsapp_html: <span class="icon icon-share-whatsapp"></span> Whatsapp
+      email_html: Email
+      twitter_html: Twitter
+      facebook_html: Facebook
+      whatsapp_html: Whatsapp
     feedback:
       new:
         contact:
@@ -97,9 +92,8 @@ en-GB:
             email:
               label: Email address
             heading: Do you want a reply?
-          submit_html: <input type="submit" value="Send feedback" class="button" tabindex="%{tabindex}"
-            data-disable-with="Send feedback">
-          submit_button: Send feedback
+          submit_html: |-
+            <button type="submit" class="button forward" tabindex="%{tabindex}" data-disable-with="Send feedback">Send feedback</button>
           petition_link_or_title:
             label_html: Petition title/link <span class="optional">optional</span>
       thanks:
@@ -241,17 +235,17 @@ en-GB:
       search_petitions:
         heading: Search petitions
         submit_button_html: |-      
-          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">
+          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
       debated_petitions:
-        video:
+        video_url:
+          title_html: Watch the debate on %{link}
           link: senedd.tv
-          watch_html: Watch the debate on %{link}
-        research:
+        debate_pack_url:
+          title_html: Find details of the petition at %{link}
           link: senedd.wales
-          read_html: Find details of the petition at %{link}
-        transcript:
+        transcript_url:
+          title_html: Read the transcript at %{link}
           link: senedd.wales
-          read_html: Read the transcript at %{link}
         none_debated: The Senedd has not debated any petitions yet
         topic_debated_date: This topic was debated on %{date}
       referred_petitions:
@@ -265,7 +259,7 @@ en-GB:
       check:
         heading: Start a petition
         results:
-          back: "◀ Back"
+          back: "Back"
           unique:
             heading: We checked for similar petitions
             continue: Continue
@@ -353,8 +347,8 @@ en-GB:
             label: Postcode
           phone_number:
             label: Phone number
-          continue_html: <input type="submit" name="move_next" value="Continue" class="button"
-            tabindex="%{tabindex}" data-disable-with="Continue">
+          continue_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
           notify_by_email:
             check_label: Email me whenever there’s an update about this petition
           about_published_data_html: |-
@@ -371,8 +365,8 @@ en-GB:
           heading: We couldn't create this petition
         petition_stage:
           heading: Start a petition
-          submit_html: <input type="submit" name="move_next" value="Preview petition"
-            class="button" tabindex="%{tabindex}" data-disable-with="Preview petition">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Preview petition">Preview petition</button>
           hint_standards_html: Remember, your petition must meet the %{standards_link}.
         closing_date_stage:
           heading: How long would you like to collect signatures for?
@@ -396,20 +390,18 @@ en-GB:
             have finished collecting signatures. </li>\r\n<p>\r\nYou can choose an
             earlier closing date if you would like your petition to be discussed sooner.\r\n</p>"
           submit_html: |-
-            <input type="submit" name="move_next" value="Check closing date" class="button" tabindex="%{tabindex}" data-disable-with="Check closing date">
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Check closing date">Check closing date</button>
         replay_email_stage:
           heading: Make sure this is right
-          submit_html: <input type="submit" name="move_next" value="Yes – this is
-            my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes
-            – this is my email address">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
         replay_petition_stage:
           heading: Check your petition
-          submit_html: <input type="submit" name="move_next" value="This looks good"
-            class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
-          go_back_html: <input type="submit" name="move_back" value="Go back and make
-            changes" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go
-            back and make changes">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
+          go_back_html: |-
+            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and make changes">Go back and make changes</button>
           submit_warning_html: |-
             <p class="secondary">You can’t change your petition after this point.</p>
             <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
@@ -423,23 +415,20 @@ en-GB:
             <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
             <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
           submit_html: |-
-            <input type="submit" name="move_next" value="This looks good" class="button" tabindex="%{tabindex}" data-disable-with="This looks good">
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
           go_back_html: |-
-            <input type="submit" name="move_back" value="Go back and change it" class="button-secondary" tabindex="%{tabindex}" data-disable-with="Go back and change it">
+            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and change it">Go back and change it</button>
           submit_warning_html: |-
             <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
       search:
         submit_button_html: |-      
-          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">      
+          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">      
         results:
           items:
             facet_all:
               rejected: Rejected
-              closed_html:
-                one: Referred to the Petitions Committee. 1 signature
-                two: Referred to the Petitions Committee. 2 signatures
-                zero: Referred to the Petitions Committee. 0 signatures
-                other: Referred to the Petitions Committee. %{num} signatures
+              completed: Completed by the Petitions Committee on %{date}
+              closed: Referred to the Petitions Committee
             facet_debated:
               debated_date: Debated on %{date}
             facet_referred:
@@ -458,7 +447,7 @@ en-GB:
           zero: 0 petitions
           other: "%{num} petitions"
       deadline: Collecting signatures until
-      get_json: Get petition data (json format)
+      get_json: Get petition data (JSON format)
       thank_you:
         heading: One more step…
         link_emailed: We've emailed you a link to send to your potential supporters
@@ -486,6 +475,7 @@ en-GB:
       more_details: More details
       date_submitted: Date submitted
       heading_closed: Closed petition
+      heading_completed: Completed petition
       standards_link: petition standards
       for_debate_date: for a debate date
       moderation_info:
@@ -516,13 +506,18 @@ en-GB:
             will be discussed by the Petitions Committee after they have finished
             collecting signatures
           referral_waiting_time: for the Petitions Committee to consider this petition
+        referred:
+          heading: This petition is now under consideration by the Petitions Committee
+          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
+          referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
+        completed:
+          heading: This petition was considered by the Petitions Committee
+          link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
         needs_more_signatures:
           heading: At %{threshold} signatures...
           referral_threshold: All petitions with more than %{threshold} signatures
             will be discussed by the Petitions Committee
       senedd_will_debate: The Senedd will debate this petition
-      show_on_a_map_html: <a href="https://petitionmap.unboxedconsulting.com/?petition=%{petition_id}">Show
-        on a map</a>
       sign_this_petition: Sign this petition
       need_sponsors_later: Later on, you'll need email addresses for %{count} supporters
         to get your petition started
@@ -561,9 +556,9 @@ en-GB:
       watch_online_senedd_tv_html: You'll be able to watch the debate online at <a
         href="https://senedd.tv" rel="external">senedd.tv</a>
       for_senedd_to_publish_debate: for the Senedd to publish the debate outcome
-      reject_reason_standards_html: "<br> We only reject petitions that don’t meet
-        the %{standards_link} <br>\r\n<br>\r\nRejected petitions are published in
-        the language in which they were submitted"
+      reject_reason_standards_html: |-
+        <p>We only reject petitions that don’t meet the %{standards_link}</p>
+        <p>Rejected petitions are published in the language in which they were submitted</p>
       committee_decided_not_to_debate: The Petitions Committee decided not to refer
         this petition for a debate
       at_threshold_for_debate_ellipsis: At %{threshold} signatures...
@@ -585,8 +580,8 @@ en-GB:
     signatures:
       new:
         heading: Sign petition
-        continue_html: <input type="submit" name="move_next" value="Continue" class="button"
-          tabindex="%{tabindex}" data-disable-with="Continue">
+        continue_html: |-
+          <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
       signed:
         heading:
           one: 1 signature
@@ -606,9 +601,8 @@ en-GB:
           <a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
       confirm:
         email_form:
-          submit_html: <input type="submit" name="move_next" value="Yes – this is
-            my email address" class="button" tabindex="%{tabindex}" data-disable-with="Yes
-            – this is my email address">
+          submit_html: |-
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
       thank_you:
         heading: One more step…
@@ -647,9 +641,10 @@ en-GB:
         </section>
     application:
       back: Back
-      back_html: <input type="submit" name="move_back" value="◀ Back" class="back-page"
-        data-disable-with="◀ Back">
-      continue_html: <input type="submit" value="Continue" class="button" />
+      back_html: |-
+        <button type="submit" name="move_back" tabindex="%{tabindex}" class="back-page" data-disable-with="Back">Back</button>
+      continue_html: |-
+        <button type="submit" tabindex="%{tabindex}" class="button forward">Continue</button>
       character_count: "%{count} characters max"
       get_json_csv_html: Get this data in %{json_link} or %{csv_link} format
       share_this_petition: Share this petition
@@ -661,7 +656,7 @@ en-GB:
       not_debated: The Petitions Committee decided not to debate these petitions
     local_search:
       submit_button_html: |-      
-        <input type="submit" value="Search" class="inline-submit" data-disable-with="Search">      
+        <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
       postcode: Welsh postcode
     privacy_page:
       body_html: |-

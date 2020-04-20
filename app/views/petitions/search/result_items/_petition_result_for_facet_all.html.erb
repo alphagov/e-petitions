@@ -3,10 +3,11 @@
 <% when "open" %>
   <p><%= signature_count(:default, petition.signature_count) %></p>
 <% when "closed" %>
-  <p><%= t(:"ui.petitions.search.results.items.facet_all.closed_html", count: petition.signature_count, num: number_with_delimiter(petition.signature_count)) %></p>
+  <p><%= signature_count(:default, petition.signature_count) %></p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.closed") %></p>
 <% when "completed" %>
   <p><%= signature_count(:default, petition.signature_count) %></p>
-<p><%= t(:"ui.petitions.search.results.items.facet_all.completed", date: short_date_format(petition.completed_at)) %></p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.completed", date: short_date_format(petition.completed_at)) %></p>
 <% when "rejected" %>
   <p><%= t(:"ui.petitions.search.results.items.facet_all.rejected") %></p>
 <% end %>

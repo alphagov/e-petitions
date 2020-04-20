@@ -1,14 +1,14 @@
-<nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
-  <h2 id="other-lists-heading"><%= t(:"ui.petitions.other_lists") %></h2>
-  <div class="section-panel">
+<div class="section-panel">
+  <nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
+    <h2 id="other-lists-heading"><%= t(:"ui.petitions.other_lists") %></h2>
     <ul>
-    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
-      <li>
-        <%= link_to petitions_url(state: facet) do %>
-          <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
-        <% end %>
-      </li>
-    <% end %>
+      <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
+        <li>
+          <%= link_to petitions_url(state: facet) do %>
+            <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
+          <% end %>
+        </li>
+      <% end %>
     </ul>
-  </div>
-</nav>
+  </nav>
+</div>
