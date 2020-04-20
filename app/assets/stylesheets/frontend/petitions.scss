@@ -218,6 +218,11 @@
 
 .member-list {
   @extend %contain-floats;
+  @include hover-links($pink);
+
+  a:focus {
+    color: $white;
+  }
 
   li {
     box-sizing: border-box;

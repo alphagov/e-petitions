@@ -148,10 +148,16 @@ details {
 }
 
 .lede {
+  @include hover-links($pink);
+
   font-size: 1.5rem;
   font-weight: normal;
   line-height: 1.25;
   margin: 6px 0 18px;
+
+  a:focus {
+    color: $white;
+  }
 }
 
 .list-bullet {
