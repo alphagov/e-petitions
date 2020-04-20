@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_07_162517) do
+ActiveRecord::Schema.define(version: 2020_04_20_042448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -161,7 +161,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_162517) do
     t.integer "petition_id"
     t.string "name", limit: 255
     t.string "postcode", limit: 255
-    t.string "ip_address", limit: 20
+    t.string "ip_address", limit: 40
     t.string "email", limit: 255
     t.datetime "created_after"
     t.datetime "created_before"
@@ -362,7 +362,7 @@ ActiveRecord::Schema.define(version: 2020_04_07_162517) do
     t.string "state", limit: 20, default: "pending", null: false
     t.string "perishable_token", limit: 255
     t.string "postcode", limit: 255
-    t.string "ip_address", limit: 20
+    t.string "ip_address", limit: 40
     t.integer "petition_id"
     t.datetime "created_at"
     t.datetime "updated_at"
