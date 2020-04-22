@@ -298,7 +298,6 @@ cy-GB:
           results:
             empty: Does dim deisebau poblogaidd yn eich etholaeth chi.
             now_closed: bellach ar gau
-          mp_name_link_html: Eich Aelod o’r Senedd yw %{mp_name_link}
           open_popular_link: Gweld deisebau poblogaidd sydd ar agor yn %{constituency_name}
         show:
           heading: Deisebau poblogaidd sydd ar agor yn etholaeth %{constituency_name}
@@ -313,7 +312,7 @@ cy-GB:
             find_local_petitions: Dod o hyd i ddeisebau am faterion lleol
         regional_members:
           heading_html: 'Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:'
-        member_name_link_html: Eich Aelod o’r Senedd yw %{member_name_link}
+        member_name_link_html: Eich Aelod o’r Senedd dros etholaeth <strong>%{constituency_name}</strong> yw %{member_name_link}
       action:
         label: Beth ydych chi am i ni ei wneud?
         help_html: "<p class=\"form-hint\">Enghraifft: Cyflwynwch dâl 10 ceiniog ar

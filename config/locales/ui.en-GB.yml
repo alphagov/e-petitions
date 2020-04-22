@@ -304,7 +304,6 @@ en-GB:
           results:
             empty: No petitions are popular in your constituency.
             now_closed: now closed
-          mp_name_link_html: Your Member of the Senedd is %{mp_name_link}
           open_popular_link: View open popular petitions in %{constituency_name}
         show:
           heading: Popular open petitions in the constituency of %{constituency_name}
@@ -318,9 +317,8 @@ en-GB:
             heading: Local to you
             find_local_petitions: Find petitions about local issues
         regional_members:
-          heading_html: 'Your Members of the Senedd for the <strong>%{region}</strong>
-            region are:'
-        member_name_link_html: Your Member of the Senedd is %{member_name_link}
+          heading_html: 'Your Members of the Senedd for the <strong>%{region}</strong> region are:'
+        member_name_link_html: Your Member of the Senedd for the <strong>%{constituency_name}</strong> constituency is %{member_name_link}
       action:
         label: What do you want us to do?
         help_html: "<p class=\"form-hint\">Example: Introduce a 10p charge for single
@@ -597,6 +595,8 @@ en-GB:
           member_name: Your local Member of the Senedd is %{member}
           member_link: Contact your Member of the Senedd to let them know you have signed this petition
           constituency_name: Your constituency is %{constituency}
+        regional_members:
+          region_html: 'Your Members of the Senedd for the <strong>%{region}</strong> region are:'
         added_to_petition: 'We’ve added your signature to the petition:'
         register_to_vote_html: |-
           <h2>Register to vote</h2>
