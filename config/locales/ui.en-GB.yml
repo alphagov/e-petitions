@@ -240,6 +240,7 @@ en-GB:
         heading: Search petitions
         submit_button_html: |-      
           <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
+        all_open_link: View all open petitions
       debated_petitions:
         video_url:
           title_html: Watch the debate on %{link}
@@ -258,7 +259,6 @@ en-GB:
         referred_date: The petition was referred on %{date}
       trending_petitions:
         heading: Popular petitions
-        all_open_link: View all open petitions
     petitions:
       check:
         heading: Start a petition

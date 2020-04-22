@@ -231,6 +231,7 @@ cy-GB:
         heading: Chwilio am ddeiseb
         submit_button_html: |-      
           <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio" tabindex="%{tabindex}">
+        all_open_link: Gweld pob deiseb sydd ar agor
       debated_petitions:
         video_url:
           title_html: Gwyliwch y ddadl ar %{link}
@@ -248,7 +249,6 @@ cy-GB:
         referred_date: Cafodd y ddeiseb hon ei chyfeirio ar %{date}
       trending_petitions:
         heading: Deisebau poblogaidd
-        all_open_link: Gweld pob deiseb sydd ar agor
       responded_petitions:
         none_responded: Nid oes unrhyw ddeisebau wedi’u cyfeirio i’r Pwyllgor Deisebau
           eto
