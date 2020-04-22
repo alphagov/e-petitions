@@ -51,10 +51,14 @@ en-GB:
       language_switcher_html: |-
         <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
     sharing:
-      email_html: Email
-      twitter_html: Twitter
-      facebook_html: Facebook
-      whatsapp_html: Whatsapp
+      email_html: |-
+        <a rel="external" target="_blank" href="mailto:?body=%{url}&amp;subject=Petition%3A%20%{action}">Email</a>
+      twitter_html: |-
+        <a rel="external" target="_blank" href="https://twitter.com/intent/tweet?text=Petition%3A%20%{action}&amp;url=%{url}">Twitter</a>
+      facebook_html: |-
+        <a rel="external" target="_blank" href="https://www.facebook.com/sharer/sharer.php?ref=responsive&amp;u=%{url}">Facebook</a>
+      whatsapp_html: |-
+        <a rel="external" target="_blank" href="whatsapp://send?text=Petition%3A%20%{action}%0A%{url}">Whatsapp</a>
     feedback:
       new:
         contact:
