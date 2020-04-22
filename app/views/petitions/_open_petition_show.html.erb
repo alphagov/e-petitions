@@ -1,3 +1,7 @@
+<% content_for :head do %>
+  <%= tag :meta, name: "count_url", content: count_petition_url(@petition) %>
+<% end %>
+
 <%= cache_for :petition do %>
   <h1>
     <span class="heading-secondary"><%= t(:"ui.petitions.heading_open") %></span>

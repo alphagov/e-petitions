@@ -5,13 +5,13 @@
 (function ($) {
   'use strict';
 
-  var JSON_URL = window.location.pathname + '/count.json',
+  var JSON_URL = $('meta[name=count_url]').attr('content'),
       THRESHOLD_REFERRAL = <%= Site.threshold_for_referral %>,
       THRESHOLD_DEBATE = <%= Site.threshold_for_debate %>,
       TIMEOUT = 10000;
 
   function add_commas(n) {
-        return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return n.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
 
   function update_progress_bar(value) {

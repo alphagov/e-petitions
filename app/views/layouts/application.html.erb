@@ -12,6 +12,7 @@
     <% if noindex_page? %>
       <meta name="robots" content="noindex" />
     <% end %>
+    <%= yield :head %>
   </head>
   <body>
     <%= render 'application/header' %>
