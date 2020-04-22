@@ -118,7 +118,7 @@ RSpec.describe HomeHelper, type: :helper do
     end
 
     around do |example|
-      without_cache(:trending_petitions, expires_in: 500) { example.run }
+      without_cache([:trending_petitions, I18n.locale], expires_in: 500) { example.run }
     end
 
     context "when trending petitions is disabled" do
