@@ -1,9 +1,11 @@
-name: CI
+name: Deploy to Preview
 
-on: [push, pull_request]
-
+on:
+  push:
+    branches: [master]
+    
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
 
     services:
@@ -59,3 +61,44 @@ jobs:
         RAILS_ENV: test
       run: |
         bundle exec rake
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+
+    - name: Install postgres client
+      run: |
+        sudo apt-get -yqq install libpq-dev
+
+    - name: Setup gem cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install gems
+      run: |
+        gem install bundler -v 1.17.3
+        bundle install --jobs 4 --retry 3 --path vendor/bundle
+    
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: eu-west-1
+
+    - name: Deploy application
+      run: |
+        bundle exec rake deploy:preview

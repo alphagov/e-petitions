@@ -1,0 +1,63 @@
+name: Pull Request
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:10.7
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Setup ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.6
+
+    - name: Install postgres client
+      run: |
+        sudo apt-get -yqq install libpq-dev
+
+    - name: Setup gem cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+
+    - name: Install gems
+      run: |
+        gem install bundler -v 1.17.3
+        bundle install --jobs 4 --retry 3 --path vendor/bundle
+
+    - name: Setup database
+      env:
+        DATABASE_URL: postgres://postgres:@localhost:5432/wpets_test
+        RAILS_ENV: test
+      run: |
+        bundle exec rake db:setup
+
+    - name: Run tests
+      env:
+        DATABASE_URL: postgres://postgres:@localhost:5432/wpets_test
+        RAILS_ENV: test
+      run: |
+        bundle exec rake
