@@ -395,8 +395,8 @@ Then(/^I should see the response "([^"]*)"$/) do |response|
 end
 
 Then(/^I should not see the response "([^"]*)"$/) do |response|
-  within :xpath, "//details[summary/.='Read the response in full']/div", visible: false do
-    expect(page).to have_content(response)
+  within :xpath, "//details[summary/.='Read the response in full']" do
+    expect(page).to have_no_content(response)
   end
 end
 
