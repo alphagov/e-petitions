@@ -619,7 +619,7 @@ cy-GB:
           hon</h1>\r\n<p>Rydych chi wedi dad-danysgrifio o’r negeseuon e-bost sy’n
           rhoi’r wybodaeth ddiweddaraf am y ddeiseb hon.</p>"
       confirmation:
-        signatures: llofnodion
+        signatures: llofnod
       privacy_notice_html: "<section class=\"secondary\">\r\n  <p>Ni fyddwn yn cyhoeddi
         eich manylion personol mewn unrhyw le arall nac yn eu defnyddio ar gyfer unrhyw
         beth heblaw’r ddeiseb hon.</p>\r\n</section>"
