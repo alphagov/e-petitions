@@ -163,7 +163,7 @@ details {
 .list-bullet {
   margin-top: -6px;
 
-  li {
+  & > li {
     margin-top: 6px;
     padding-left: 18px;
     position: relative;
@@ -191,7 +191,7 @@ details {
 .list-number {
   counter-reset: ordered-list;
 
-  li {
+  & > li {
     margin-top: 12px;
     padding-left: 18px;
     position: relative;

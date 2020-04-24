@@ -199,7 +199,7 @@ en-GB:
         issued an injunction over;</li>\r\n  <li>offensive or extreme;</li>\r\n  <li>confidential
         or likely to cause personal distress; or</li>\r\n  <li>a joke, an advert or
         nonsense.</li>\r\n</ul>\r\n\r\n<p>You can find the full rules governing the
-        petitions process <a href=\"https://www.assembly.wales/en/gethome/e-petitions/how-to-petition/Pages/PO-Determination-Petitions.aspx\">here</a>.</p>\r\n\r\n<h2
+        petitions process <a href=\"/rules\">here</a>.</p>\r\n\r\n<h2
         id=\"handing-in-your-petition\">Handing in your petition</h2>\r\n\r\n<p>We
         offer the opportunity for you to hand in your petition once it has finished
         collecting signatures, and before it is discussed by the Petitions Committee.
@@ -238,7 +238,7 @@ en-GB:
         find_local_petitions: Find petitions being signed by people near you
       search_petitions:
         heading: Search petitions
-        submit_button_html: |-      
+        submit_button_html: |-
           <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
         all_open_link: View all open petitions
       debated_petitions:
@@ -423,8 +423,8 @@ en-GB:
           submit_warning_html: |-
             <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
       search:
-        submit_button_html: |-      
-          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">      
+        submit_button_html: |-
+          <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
         results:
           items:
             facet_all:
@@ -659,7 +659,7 @@ en-GB:
     list_headers:
       not_debated: The Petitions Committee decided not to debate these petitions
     local_search:
-      submit_button_html: |-      
+      submit_button_html: |-
         <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
       postcode: Welsh postcode
     privacy_page:
@@ -890,4 +890,70 @@ en-GB:
       other: Scheduled for debate on %{date}
       today: Scheduled for debate today
       tomorrow: Scheduled for debate tomorrow
+    rules_page:
+      body_html: |-
+        <h1 class="page-title">Determination by the Presiding Officer under Standing Order 23.3 of the Proper Form of Petitions</h1>
 
+        <p>The Presiding Officer has made the following determination of the proper form of public petitions submitted under Standing Order 23.</p>
+
+        <ol class="list-number">
+          <li>
+            <h3>Means and format for submission</h3>
+            <p>Petitions may be submitted on paper or electronically using the Senedd’s online petitions system. Petitions may collect signatures for a maximum period of six months.</p>
+            <p>For a paper petition the petition wording should be set out in full on each sheet (or side of a sheet) where signatures are asked for. A template is available on request.</p>
+          </li>
+
+          <li>
+            <h3>Wording</h3>
+            <p>Petitions should be submitted in good faith. They should call for the Senedd or the Welsh Government to take some specific action.</p>
+          </li>
+
+          <li>
+            <h3>Basic Requirements</h3>
+            <p>Petitions must clearly indicate:</p>
+            <ul class="list-bullet">
+              <li>the name of the petitioner, who may be an individual or an organisation;</li>
+              <li>the petitioner’s address, which must be in Wales, to which all communications concerning the petition should be sent;</li>
+              <li>signatures from at least 50 people who support the petition and their names and addresses.</li>
+            </ul>
+            <p>Petitions must not:</p>
+            <ul class="list-bullet">
+              <li>contain language which is offensive, intemperate, or provocative. This not only includes obvious profanities swear words and insults, but any language which a reasonable person would regard as offensive;</li>
+              <li>ask the Senedd to do anything which it clearly has no power to do (in particular petitions about matters that are not devolved are not admissible);</li>
+              <li>be the same as, or substantially similar to, a petition which was closed less than a year earlier.</li>
+            </ul>
+            <p>Petitions must comply in other ways with this determination.</p>
+          </li>
+
+          <li>
+            <h3>Other factors concerning admissibility</h3>
+            <p>Petitions that include or ask the Senedd to consider the following are not admissible:</p>
+            <ul class="list-bullet">
+              <li>to intervene in the operational decisions or actions of local authorities and National Park Authorities, including planning decisions;</li>
+              <li>to adjudicate, arbitrate or mediate personal or commercial interests (this is the role of a court or tribunal);</li>
+              <li>matters that are ‘sub judice’ (subject to legal proceedings in the courts);</li>
+              <li>matters that are already subject to determination by an ombudsman (or person with similar powers).</li>
+            </ul>
+            <p>Petitions must not contain:</p>
+            <ul class="list-bullet">
+              <li>potentially false or potentially defamatory statements;</li>
+              <li>information which is prohibited from being published by an order of a court or a body or person with similar power;</li>
+              <li>material which is potentially confidential, commercially sensitive, or which may cause personal distress or loss;</li>
+              <li>any commercial endorsement, promotion of any product, service or publication or statements that amount to advertisements;</li>
+              <li>the names of officials of public bodies, unless they are part of the senior management of those organisations;</li>
+              <li>the names of family members of elected representatives or officials of public bodies;</li>
+              <li>the names of individuals, or information where they may be identified, in relation to criminal charges;</li>
+              <li>issues for which a petition is not the appropriate channel (for example, correspondence about a personal issue).</li>
+            </ul>
+          </li>
+
+          <li>
+            <h3>Freedom of Information (FOI) requests</h3>
+            <p>Petitions that are essentially FOI requests will not be allowed. There are other specific arrangements for FOI requests.</p>
+          </li>
+
+          <li>
+            <h3>Public Services Ombudsman for Wales (PSOW) cases</h3>
+            <p>Petitions alleging specific cases of maladministration or service failure by public bodies are not admissible. In these cases petitioners are advised to contact the PSOW to take forward their concerns.</p>
+          </li>
+        </ol>

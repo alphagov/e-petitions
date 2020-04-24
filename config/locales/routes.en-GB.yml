@@ -78,6 +78,9 @@ en-GB:
     "/privacy":
       en-GB: "/privacy"
       cy-GB: "/preifatrwydd"
+    "/rules":
+      en-GB: "/rules"
+      cy-GB: "/rheolau"
     "/signatures/:id/signed":
       en-GB: "/signatures/:id/signed"
       cy-GB: "/llofnodion/:id/llofnodwyd"

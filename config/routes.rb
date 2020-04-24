@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       get '/',        action: 'index',   as: :home
       get '/help',    action: 'help',    as: :help
       get '/privacy', action: 'privacy', as: :privacy
+      get '/rules',   action: 'rules',   as: :rules
 
       scope format: true, localized: false do
         get '/browserconfig', action: 'browserconfig', as: :browserconfig, constraints: { format: 'xml' }

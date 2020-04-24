@@ -192,7 +192,7 @@ cy-GB:
         y mae llys wedi cyhoeddi gwaharddeb yn ei gylch;</li>\r\n  <li>yn sarhaus
         neu’n eithafol;</li>\r\n  <li>yn gyfrinachol neu’n debygol o achosi trallod
         personol; neu</li>\r\n  <li>yn jôc, yn hysbyseb neu’n nonsens.</li>\r\n</ul>\r\n\r\n<p>Mae’r
-        rheolau llawn ynghylch y broses ddeisebau ar gael <a href=\"https://www.assembly.wales/cy/gethome/e-petitions/how-to-petition/Pages/PO-Determination-Petitions.aspx\">yma</a>.</p>\r\n\r\n<h2
+        rheolau llawn ynghylch y broses ddeisebau ar gael <a href=\"/rheolau\">yma</a>.</p>\r\n\r\n<h2
         id=\"handing-in-your-petition\">Cyflwyno eich deiseb</h2>\r\n\r\n<p>Rydym
         yn cynnig cyfle i chi gyflwyno’ch deiseb ar ôl iddi orffen casglu llofnodion,
         a chyn iddi gael ei thrafod gan y Pwyllgor Deisebau. Mae’n gyfle anffurfiol
@@ -229,7 +229,7 @@ cy-GB:
         find_local_petitions: Dod o hyd i ddeisebau a lofnodwyd gan bobl sy’n byw yn lleol i chi
       search_petitions:
         heading: Chwilio am ddeiseb
-        submit_button_html: |-      
+        submit_button_html: |-
           <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio" tabindex="%{tabindex}">
         all_open_link: Gweld pob deiseb sydd ar agor
       debated_petitions:
@@ -421,7 +421,7 @@ cy-GB:
             gysylltu â’r <a href="https://welsh.epetitions.website/feedback#contact">tîm
             deisebau</a> y byddwch chi’n gallu newid y dyddiad cau.</p>
       search:
-        submit_button_html: |-      
+        submit_button_html: |-
           <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
         results:
           items:
@@ -639,8 +639,8 @@ cy-GB:
     list_headers:
       not_debated: Penderfynodd y Pwyllgor Deisebau beidio â thrafod y ddeiseb hon
     local_search:
-      submit_button_html: |-      
-        <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">      
+      submit_button_html: |-
+        <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
       postcode: Cod post y DU
     debate_outcomes:
       link_titles:
@@ -672,4 +672,70 @@ cy-GB:
       other: Trefnwyd dadl ar gyfer %{date}
       today: Trefnwyd cynnal dadl heddiw
       tomorrow: Trefnwyd cynnal dadl yfory
+    rules_page:
+      body_html: |-
+        <h1 class="page-title">Penderfyniad gan y Llywydd o dan Reol Sefydlog 23.3 ynghylch priod ffurf deisebau</h1>
 
+        <p>Mae’r Llywydd wedi gwneud y penderfyniad canlynol ynghylch priod ffurf deisebau’r cyhoedd a gyflwynir o dan Reol Sefydlog 23.</p>
+
+        <ol class="list-number">
+          <li>
+            <h3>Dull a fformat ar gyfer cyflwyno</h3>
+            <p>Gellir cyflwyno deisebau ar bapur neu yn electronig drwy ddefnyddio system ddeisebau ar-lein y Senedd. Gall deisebau gasglu llofnodion am gyfnod o hyd at chwe mis.</p>
+            <p>Ar gyfer deiseb bapur, dylai geiriad y ddeiseb gael ei nodi’n llawn ar bob dalen (neu ochr dalen) lle gofynnir am lofnodion.  Mae templed ar gael ar gais.</p>
+          </li>
+
+          <li>
+            <h3>Geiriad</h3>
+            <p>Dylid cyflwyno deisebau yn ddidwyll. Dylent alw ar y Senedd neu Lywodraeth Cymru i gymryd camau penodol.</p>
+          </li>
+
+          <li>
+            <h3>Gofynion sylfaenol</h3>
+            <p>Mae’n rhaid i ddeisebau nodi’r canlynol yn glir:</p>
+            <ul class="list-bullet">
+              <li>enw’r deisebydd, a all fod yn unigolyn neu’n sefydliad;</li>
+              <li>cyfeiriad y deisebydd, sy’n gorfod bod yng Nghymru, ar gyfer anfon pob gohebiaeth ynghylch y ddeiseb; </li>
+              <li>llofnodion gan o leiaf 50 o bobl sy’n cefnogi’r ddeiseb ac enwau a chyfeiriadau’r bobl hynny.</li>
+            </ul>
+            <p>Ni ddylai deisebau: </p>
+            <ul class="list-bullet">
+              <li>gynnwys iaith sy’n peri tramgwydd, sy’n eithafol neu sy’n herfeiddiol. Mae hyn yn cynnwys rhegfeydd a geiriau sarhaus amlwg, ac unrhyw iaith y byddai person rhesymol ei ystyried yn dramgwyddol;</li>
+              <li>gofyn i’r Senedd wneud unrhyw beth y mae eglur nad oes gan y Senedd bŵer i’w wneud (yn benodol nid yw deisebau ynghylch materion sydd heb eu datganoli yn dderbyniadwy);</li>
+              <li>bod yr un fath, neu i raddau helaeth yr un fath, â deiseb sy’n casglu llofnodion, dan ystyriaeth gan y Pwyllgor neu a gaewyd lai na blwyddyn yn gynt.</li>
+            </ul>
+            <p>Rhaid i’r deisebau gydymffurfio mewn ffyrdd eraill â’r penderfyniad hwn.</p>
+          </li>
+
+          <li>
+            <h3>Ffactorau eraill sy’n ymwneud â derbyniadwyedd</h3>
+            <p>Nid yw deisebau sy’n cynnwys y canlynol neu’n gofyn i’r Senedd ystyried y canlynol yn dderbyniadwy:</p>
+            <ul class="list-bullet">
+              <li>ymyrryd ym mhenderfyniadau gweithrediadol neu gamau gweithredu awdurdodau lleol ac Awdurdodau Parciau Cenedlaethol, gan gynnwys penderfyniadau cynllunio;</li>
+              <li>dyfarnu, cyflafareddu neu gyfryngu o ran buddiannau personol neu fasnachol (swyddogaeth llys neu dribiwnlys yw hyn);</li>
+              <li>materion ’sub judice’ (yn amodol ar weithdrefnau cyfreithiol yn y llysoedd);</li>
+              <li>materion sydd eisoes yn destun dyfarniad gan ombwdsmon (neu berson sydd â phwerau tebyg).</li>
+            </ul>
+            <p>Ni ddylai deisebau gynnwys:</p>
+            <ul class="list-bullet">
+              <li>datganiadau ffug neu ddifrïol posibl;</li>
+              <li>gwybodaeth a waherddir rhag cael ei chyhoeddi gan orchymyn llys neu gorff neu berson sydd â phŵer tebyg;</li>
+              <li>deunydd sydd o bosibl yn gyfrinachol, yn fasnachol sensitif, neu a all beri trallod personol neu golled;</li>
+              <li>unrhyw gymeradwyaeth fasnachol, hyrwyddo unrhyw gynnyrch, gwasanaeth neu gyhoeddiad neu ddatganiadau sy’n gyfystyr â hysbysebion;</li>
+              <li>enwau swyddogion cyrff cyhoeddus, oni bai eu bod yn uwch reolwyr yn y sefydliadau hynny;</li>
+              <li>enwau aelodau teuluoedd cynrychiolwyr etholedig neu swyddogion cyrff cyhoeddus;</li>
+              <li>enwau unigolion, neu wybodaeth y gellir ei defnyddio i’w hadnabod, mewn perthynas â chyhuddiadau troseddol;</li>
+              <li>materion lle nad deiseb yw’r sianel briodol (er enghraifft, gohebiaeth am fater personol).</li>
+            </ul>
+          </li>
+
+          <li>
+            <h3>Ceisiadau Rhyddid Gwybodaeth</h3>
+            <p>Ni chaniateir deisebau sydd, yn eu hanfod, yn geisiadau rhyddid gwybodaeth. Mae trefniadau penodol eraill ar gyfer ceisiadau rhyddid gwybodaeth.</p>
+          </li>
+
+          <li>
+            <h3>Achosion Ombwdsmon Gwasanaethau Cyhoeddus Cymru</h3>
+            <p>Ni chaniateir deisebau sy’n gwneud honiadau ynghylch achosion penodol o gamweinyddu neu fethiant gwasanaeth gan gyrff cyhoeddus. Yn yr achosion hyn, cynghorir deisebwyr i gysylltu ag Ombwdsmon Gwasanaethau Cyhoeddus Cymru i ystyried eu pryderon.</p>
+          </li>
+        </ul>
