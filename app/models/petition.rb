@@ -299,7 +299,7 @@ class Petition < ActiveRecord::Base
       debated.where.not(debate_outcome_at: nil)
     end
 
-    def trending(since = 1.hour.ago, limit = 3)
+    def trending(since: 24.hours.ago, limit: 3)
       select('petitions.*, COUNT(signatures.id) AS signature_count_in_period').
       joins(:signatures).
       where('petitions.state = ?', OPEN_STATE).

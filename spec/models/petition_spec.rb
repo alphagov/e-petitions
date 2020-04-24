@@ -100,17 +100,16 @@ RSpec.describe Petition, type: :model do
           count.times { FactoryBot.create(:validated_signature, petition: petition) }
         end
 
-        @petition_with_old_signatures = FactoryBot.create(:open_petition, action: "petition out of range", last_signed_at: 2.hours.ago)
-        @petition_with_old_signatures.signatures.first.update_attribute(:validated_at, 2.hours.ago)
+        @old_petition = FactoryBot.create(:open_petition, action: "petition out of range", last_signed_at: 48.hours.ago)
+        @old_petition.signatures.first.update_attribute(:validated_at, 48.hours.ago)
       end
 
-      it "returns petitions trending for the last hour" do
-        expect(Petition.trending.map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
+      it "excludes petitions not signed in the last 24 hours" do
+        expect(Petition.trending(limit: 100)).not_to include(@old_petition)
       end
 
-      it "returns the signature count for the last hour as an additional attribute" do
-        expect(Petition.trending.first.signature_count_in_period).to eq(11)
-        expect(Petition.trending.last.signature_count_in_period).to eq(9)
+      it "returns the signature count for the last 24 hours as an additional attribute" do
+        expect(Petition.trending.map(&:signature_count_in_period)).to eq([11, 10, 9])
       end
 
       it "limits the result to 3 petitions" do
@@ -120,14 +119,14 @@ RSpec.describe Petition, type: :model do
           count.times { FactoryBot.create(:validated_signature, petition: petition) }
         end
 
-        expect(Petition.trending.to_a.size).to eq(3)
+        expect(Petition.trending.length).to eq(3)
       end
 
       it "excludes petitions that are not open" do
         petition = FactoryBot.create(:validated_petition)
         20.times{ FactoryBot.create(:validated_signature, petition: petition) }
 
-        expect(Petition.trending.to_a).not_to include(petition)
+        expect(Petition.trending).not_to include(petition)
       end
 
       it "excludes signatures that have been invalidated" do
