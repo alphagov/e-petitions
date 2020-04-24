@@ -877,10 +877,10 @@ en-GB:
         zero: 0 signatures total
         other: "%{num} signatures total"
       trending_html:
-        one: <span class="count">%{num}</span> signature in the last hour
-        two: <span class="count">2</span> signatures in the last hour
-        zero: <span class="count">0</span> signatures in the last hour
-        other: <span class="count">%{num}</span> signatures in the last hour
+        one: <span class="count">%{num}</span> signature in the last day
+        two: <span class="count">2</span> signatures in the last day
+        zero: <span class="count">0</span> signatures in the last day
+        other: <span class="count">%{num}</span> signatures in the last day
       in_your_constituency_html:
         one: "%{num} signature from %{constituency}"
         two: 2 signatures from %{constituency}

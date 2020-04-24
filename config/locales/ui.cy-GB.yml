@@ -659,10 +659,10 @@ cy-GB:
         zero: Cyfanswm o 0 llofnod
         other: Cyfanswm o %{num} llofnod
       trending_html:
-        one: <span class="count">%{num}</span> llofnod yn yr awr ddiwethaf
-        two: <span class="count">2</span> llofnod yn yr awr ddiwethaf
-        zero: <span class="count">0</span> llofnod yn yr awr ddiwethaf
-        other: <span class="count">%{num}</span> llofnod yn yr awr ddiwethaf
+        one: <span class="count">%{num}</span> llofnod yn yr diwrnod ddiwethaf
+        two: <span class="count">2</span> llofnod yn yr diwrnod ddiwethaf
+        zero: <span class="count">0</span> llofnod yn yr diwrnod ddiwethaf
+        other: <span class="count">%{num}</span> llofnod yn yr diwrnod ddiwethaf
       in_your_constituency_html:
         one: "%{num} llofnod o %{constituency}"
         two: 2 llofnod o %{constituency}

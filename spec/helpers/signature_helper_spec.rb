@@ -33,19 +33,19 @@ RSpec.describe SignatureHelper, type: :helper do
 
       context "when the signature count is 1" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:trending, 1)).to eq("<span class=\"count\">1</span> signature in the last hour")
+          expect(helper.signature_count(:trending, 1)).to eq("<span class=\"count\">1</span> signature in the last day")
         end
       end
 
       context "when the signature count is 100" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:trending, 100)).to eq("<span class=\"count\">100</span> signatures in the last hour")
+          expect(helper.signature_count(:trending, 100)).to eq("<span class=\"count\">100</span> signatures in the last day")
         end
       end
 
       context "when the signature count is 1000" do
         it "returns a correctly formatted signature count" do
-          expect(helper.signature_count(:trending, 1000)).to eq("<span class=\"count\">1,000</span> signatures in the last hour")
+          expect(helper.signature_count(:trending, 1000)).to eq("<span class=\"count\">1,000</span> signatures in the last day")
         end
       end
     end

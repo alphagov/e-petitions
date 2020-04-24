@@ -8,6 +8,6 @@ Feature: Suzie sees trending petitions
     Then I should not see the trending petitions section
 
   Scenario: Seeing a number of trending petitions
-    Given there has been activity on a number of petitions in the last hour
+    Given there has been activity on a number of petitions in the last day
     And I am on the home page
     Then I should see the most popular petitions listed on the front page
