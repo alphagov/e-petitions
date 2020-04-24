@@ -44,6 +44,24 @@ RSpec.describe FeedbackSignature, type: :model do
     end
   end
 
+  describe "#locale" do
+    context "when the petition was created in English" do
+      let(:petition) { FactoryBot.create(:open_petition, locale: "en-GB") }
+
+      it "returns en-GB" do
+        expect(signature.locale).to eq("en-GB")
+      end
+    end
+
+    context "when the petition was created in Welsh" do
+      let(:petition) { FactoryBot.create(:open_petition, locale: "cy-GB") }
+
+      it "returns cy-GB" do
+        expect(signature.locale).to eq("cy-GB")
+      end
+    end
+  end
+
   describe "#id" do
     it "returns the petition id" do
       expect(signature.id).to eq(petition.id)

@@ -40,7 +40,7 @@ class FeedbackSignature
   end
 
   def locale
-    "en-GB"
+    petition.locale
   end
 
   def unsubscribe_token
