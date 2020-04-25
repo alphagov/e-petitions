@@ -49,7 +49,7 @@ module DateTimeHelper
       if date_time.respond_to?(:getutc)
         date_time.getutc.iso8601(3)
       else
-        date_time.strftime("%Y-%m-%d")
+        date_time.iso8601
       end
     end
   end
