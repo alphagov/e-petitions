@@ -22,6 +22,7 @@ class Petition < ActiveRecord::Base
   PUBLISHED_STATES  = %w[open closed completed]
   SELECTABLE_STATES = %w[open closed completed rejected hidden]
   SEARCHABLE_STATES = %w[open closed completed rejected]
+  CURRENT_STATES    = %w[open closed]
 
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
@@ -172,7 +173,7 @@ class Petition < ActiveRecord::Base
     end
 
     def current
-      open_state.by_most_recent
+      where(state: CURRENT_STATES).by_most_recent
     end
 
     def open_state

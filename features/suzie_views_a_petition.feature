@@ -76,10 +76,10 @@ Feature: Suzie views a petition
     Then I should see the petition details
     And I cannot sign the petition
 
-  Scenario: Suzie sees a 'closed' message when viewing a completed petition
+  Scenario: Suzie sees a 'completed' message when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed
     When I view the petition
-    Then I should see "Closed petition"
+    Then I should see "Completed petition"
 
   Scenario: Suzie does not see the creator when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed

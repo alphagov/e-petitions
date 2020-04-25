@@ -204,20 +204,21 @@ RSpec.describe Petition, type: :model do
 
     context "current" do
       let!(:petition) { FactoryBot.create(:open_petition) }
-      let!(:other_petition) { FactoryBot.create(:open_petition, created_at: 2.week.ago) }
-      let!(:closed_petition) { FactoryBot.create(:closed_petition) }
+      let!(:other_petition) { FactoryBot.create(:open_petition, created_at: 2.weeks.ago) }
+      let!(:closed_petition) { FactoryBot.create(:closed_petition, created_at: 1.week.ago) }
       let!(:rejected_petition) { FactoryBot.create(:rejected_petition) }
+      let!(:completed_petition) { FactoryBot.create(:completed_petition) }
 
-      it "doesn't include closed petitions" do
-        expect(described_class.current).not_to include(closed_petition)
+      it "doesn't include completed petitions" do
+        expect(described_class.current).not_to include(completed_petition)
       end
 
       it "doesn't include rejected petitions" do
-        expect(described_class.current).not_to include(closed_petition)
+        expect(described_class.current).not_to include(rejected_petition)
       end
 
-      it "returns open petitions, newest first" do
-        expect(described_class.current).to match_array([petition, other_petition])
+      it "returns open and closed petitions, newest first" do
+        expect(described_class.current).to match_array([petition, closed_petition, other_petition])
       end
     end
 

@@ -355,6 +355,7 @@ FactoryBot.define do
   end
 
   factory :completed_petition, :parent => :referred_petition do
+    state { "completed" }
     completed_at { 1.week.ago }
   end
 
