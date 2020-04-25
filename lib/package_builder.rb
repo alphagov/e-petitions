@@ -159,12 +159,16 @@ class PackageBuilder
     end
   end
 
-  def deploy_branch?
-    ENV.fetch('TRAVIS_BRANCH', 'master') == 'master'
+  def master_ref?
+    ENV.fetch('GITHUB_REF', '') == 'refs/heads/master'
+  end
+
+  def tag_ref?
+    ENV.fetch('GITHUB_REF', '') =~ /\Arefs\/tags\/[0-9]+(?:\.[0-9]+){1,2}\z/
   end
 
   def deploy_build?
-    !pull_request? && deploy_branch?
+    master_ref? || tag_ref?
   end
 
   def deployment_config(deployment_group_name)
@@ -288,10 +292,6 @@ class PackageBuilder
 
   def username
     ENV['USER'] || ENV['USERNAME'] || 'unknown'
-  end
-
-  def pull_request?
-    ENV.fetch('TRAVIS_PULL_REQUEST', 'false') != 'false'
   end
 
   def region
