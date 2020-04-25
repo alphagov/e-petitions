@@ -74,6 +74,20 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "returns the completed_at timestamp date if the petition is completed" do
+      petition = FactoryBot.create :completed_petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "state" => "completed",
+          "completed_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+        )
+      )
+    end
+
     it "doesn't include the rejection section for non-rejected petitions" do
       petition = FactoryBot.create :open_petition
 
