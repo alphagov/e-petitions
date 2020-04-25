@@ -92,8 +92,8 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  context "scopes" do
-    describe "trending" do
+  describe "scopes" do
+    describe ".trending" do
       before(:each) do
         11.times do |count|
           petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
@@ -140,7 +140,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "threshold" do
+    describe ".threshold" do
       before :each do
         @p1 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate)
         @p2 = FactoryBot.create(:open_petition, signature_count: Site.threshold_for_debate + 1)
@@ -155,7 +155,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "for_state" do
+    describe ".for_state" do
       before :each do
         @p1 = FactoryBot.create(:petition, :state => Petition::PENDING_STATE)
         @p2 = FactoryBot.create(:petition, :state => Petition::VALIDATED_STATE)
@@ -184,7 +184,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "visible" do
+    describe ".visible" do
       before :each do
         @hidden_petition_1 = FactoryBot.create(:petition, :state => Petition::PENDING_STATE)
         @hidden_petition_2 = FactoryBot.create(:petition, :state => Petition::VALIDATED_STATE)
@@ -202,7 +202,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "current" do
+    describe ".current" do
       let!(:petition) { FactoryBot.create(:open_petition) }
       let!(:other_petition) { FactoryBot.create(:open_petition, created_at: 2.weeks.ago) }
       let!(:closed_petition) { FactoryBot.create(:closed_petition, created_at: 1.week.ago) }
@@ -222,7 +222,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "not_hidden" do
+    describe ".not_hidden" do
       let!(:petition) { FactoryBot.create(:hidden_petition) }
 
       it "returns only petitions that are not hidden" do
@@ -230,7 +230,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "with_debate_outcome" do
+    describe ".with_debate_outcome" do
       before do
         @p1 = FactoryBot.create(:debated_petition)
         @p2 = FactoryBot.create(:open_petition)
@@ -247,7 +247,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "with_debated_outcome" do
+    describe ".with_debated_outcome" do
       before do
         @p1 = FactoryBot.create(:debated_petition)
         @p2 = FactoryBot.create(:open_petition)
@@ -265,7 +265,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "awaiting_debate" do
+    describe ".awaiting_debate" do
       before do
         @p1 = FactoryBot.create(:open_petition)
         @p2 = FactoryBot.create(:awaiting_debate_petition)
@@ -290,7 +290,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "by_most_recent_moderation_threshold_reached" do
+    describe ".by_most_recent_moderation_threshold_reached" do
       let!(:p1) { FactoryBot.create(:sponsored_petition, moderation_threshold_reached_at: 2.days.ago) }
       let!(:p2) { FactoryBot.create(:sponsored_petition, moderation_threshold_reached_at: 1.day.ago) }
 
@@ -299,7 +299,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "by_most_relevant_debate_date" do
+    describe "by_most_relevant_debate_date" do
       before do
         @p1 = FactoryBot.create(:awaiting_debate_petition, debate_threshold_reached_at: 2.weeks.ago)
         @p2 = FactoryBot.create(:awaiting_debate_petition, debate_threshold_reached_at: 4.weeks.ago)
@@ -312,7 +312,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "debated" do
+    describe ".debated" do
       before do
         @p1 = FactoryBot.create(:open_petition)
         @p2 = FactoryBot.create(:open_petition, scheduled_debate_date: 2.days.from_now)
@@ -342,7 +342,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "not_debated" do
+    describe ".not_debated" do
       before do
         @p1 = FactoryBot.create(:open_petition)
         @p2 = FactoryBot.create(:awaiting_debate_petition)
@@ -372,7 +372,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "awaiting_debate_date" do
+    describe ".awaiting_debate_date" do
       before do
         @p1 = FactoryBot.create(:open_petition)
         @p2 = FactoryBot.create(:awaiting_debate_petition)
@@ -388,7 +388,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "referred" do
+    describe ".referred" do
       let!(:p1) { FactoryBot.create(:open_petition, referral_threshold_reached_at: 1.day.ago) }
       let!(:p2) { FactoryBot.create(:rejected_petition) }
       let!(:p3) { FactoryBot.create(:referred_petition) }
@@ -411,7 +411,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "by_referred_longest" do
+    describe ".by_referred_longest" do
       let!(:p1) { FactoryBot.create(:referred_petition, referred_at: 1.week.ago) }
       let!(:p2) { FactoryBot.create(:referred_petition, referred_at: 1.month.ago) }
       let!(:p3) { FactoryBot.create(:referred_petition, referred_at: 1.year.ago) }
@@ -421,7 +421,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "selectable" do
+    describe ".selectable" do
       before :each do
         @non_selectable_petition_1 = FactoryBot.create(:petition, :state => Petition::PENDING_STATE)
         @non_selectable_petition_2 = FactoryBot.create(:petition, :state => Petition::VALIDATED_STATE)
@@ -439,7 +439,7 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context 'in_debate_queue' do
+    describe '.in_debate_queue' do
       let!(:petition_1) { FactoryBot.create(:open_petition, debate_threshold_reached_at: 1.day.ago) }
       let!(:petition_2) { FactoryBot.create(:open_petition, debate_threshold_reached_at: nil) }
       let!(:petition_3) { FactoryBot.create(:open_petition, debate_threshold_reached_at: nil, scheduled_debate_date: 3.days.from_now) }
