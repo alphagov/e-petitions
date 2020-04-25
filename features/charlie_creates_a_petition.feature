@@ -28,7 +28,7 @@ Scenario: Charlie creates a petition
   And I press "Preview petition"
   And I press "This looks good"
   And I choose the default closing date
-  And I fill in my details
+  And I fill in my details as a creator
   And I fill in my creator contact details
   When I press "Continue"
   Then the markup should be valid
@@ -52,7 +52,7 @@ Scenario: Charlie creates a petition with a custom closing date
   And I press "Check closing date"
   Then I should see "30 June 2020"
   When I press "This looks good"
-  And I fill in my details
+  And I fill in my details as a creator
   And I fill in my creator contact details
   And I press "Continue"
   Then I am asked to review my email address
@@ -66,7 +66,7 @@ Scenario: Charlie creates a petition in Welsh
   And I press "Gweld rhagolwg o’r ddeiseb"
   And I press "Mae’n edrych yn iawn"
   And I choose the default closing date
-  And I fill in my details
+  And I fill in my details as a creator
   And I fill in my creator contact details
   When I press "Parhau"
   Then the markup should be valid
@@ -89,7 +89,7 @@ Scenario: Charlie creates a petition with invalid postcode SW14 9RQ
   And I press "Preview petition"
   And I press "This looks good"
   And I choose the default closing date
-  And I fill in my details with postcode "SW14 9RQ"
+  And I fill in my details as a creator with postcode "SW14 9RQ"
   And I fill in my creator contact details
   And I press "Continue"
   Then I should not see the text "Your constituency is"
@@ -197,7 +197,7 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then I should see "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
-  When I fill in my details
+  When I fill in my details as a creator
   And I fill in my creator contact details
   And I press "Continue"
 
@@ -225,7 +225,7 @@ Scenario: Charlie creates a petition with a typo in his email
   And I press "Preview petition"
   And I press "This looks good"
   And I choose the default closing date
-  And I fill in my details with email "charlie@hotmial.com"
+  And I fill in my details as a creator with email "charlie@hotmial.com"
   And I fill in my creator contact details
   And I press "Continue"
   Then my email is autocorrected to "charlie@hotmail.com"
@@ -239,7 +239,7 @@ Scenario: Charlie creates a petition when his email is autocorrected wrongly
   And I press "Preview petition"
   And I press "This looks good"
   And I choose the default closing date
-  And I fill in my details with email "charlie@hotmial.com"
+  And I fill in my details as a creator with email "charlie@hotmial.com"
   And I fill in my creator contact details
   And I press "Continue"
   Then my email is autocorrected to "charlie@hotmail.com"

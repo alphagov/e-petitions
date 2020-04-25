@@ -54,13 +54,6 @@
   <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
 <% end %>
 
-<%= form_row for: [petition, :notify_by_email], class: "notify-by-email" do %>
-  <div class="multiple-choice">
-    <%= form.check_box :notify_by_email, tabindex: increment %>
-    <%= form.label :notify_by_email, t(:"ui.petitions.create.creator_stage.notify_by_email.check_label") %>
-  </div>
-<% end %>
-
 <span>
   <%= t(:"ui.petitions.create.creator_stage.continue_html", tabindex: increment) %>
 </span>

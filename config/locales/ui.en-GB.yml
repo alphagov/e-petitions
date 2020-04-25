@@ -356,7 +356,7 @@ en-GB:
           about_published_data_html: |-
             <div class="secondary">
               <p>Your name will be published on this petition as the petition creator.</p>
-              <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition.</p>
+              <p>Other than that, we won’t publish your personal details anywhere or use them for anything other than this petition. Please see our <a href="/privacy">privacy notice</a> for information on how we use your personal details.</p>
             </div>
         error_summary:
           prompt:

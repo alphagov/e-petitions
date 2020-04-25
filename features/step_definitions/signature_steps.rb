@@ -57,6 +57,26 @@ When(/^I fill in my details(?: with email "([^"]+)")?$/) do |email_address|
   end
 end
 
+When(/^I fill in my details as a creator(?: with email "([^"]+)")?$/) do |email_address|
+  email_address ||= "womboid@wimbledon.com"
+
+  if I18n.locale == :"en-GB"
+    steps %Q(
+      When I fill in "Name" with "Womboid Wibbledon"
+      And I fill in "Email" with "#{email_address}"
+      And I fill in my postcode with "SW14 9RQ"
+      And I select "Wales" from "Location"
+    )
+  else
+    steps %Q(
+      When I fill in "Enw" with "Womboid Wibbledon"
+      And I fill in "Cyfeiriad e-bost" with "#{email_address}"
+      And I fill in my postcode with "SW14 9RQ"
+      And I select "Cymru" from "Lleoliad"
+    )
+  end
+end
+
 When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
   steps %Q(
     When I fill in "Name" with "Womboid Wibbledon"
@@ -64,6 +84,15 @@ When(/^I fill in my details with postcode "(.*?)"?$/) do |postcode|
     And I fill in my postcode with "#{postcode}"
     And I select "Wales" from "Location"
     And I check "Email me whenever there’s an update about this petition"
+  )
+end
+
+When(/^I fill in my details as a creator with postcode "(.*?)"?$/) do |postcode|
+  steps %Q(
+    When I fill in "Name" with "Womboid Wibbledon"
+    And I fill in "Email" with "womboid@wimbledon.com"
+    And I fill in my postcode with "#{postcode}"
+    And I select "Wales" from "Location"
   )
 end
 

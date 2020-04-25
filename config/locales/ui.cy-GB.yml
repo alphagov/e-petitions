@@ -348,11 +348,11 @@ cy-GB:
             <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Parhau">Parhau</button>
           notify_by_email:
             check_label: Anfonwch neges e-bost ataf pryd bynnag y bydd diweddariad ynghylch y ddeiseb hon
-          about_published_data_html: "<div class=\"secondary\">\r\n  <p>Bydd eich
-            enw yn cael ei gyhoeddi ar y ddeiseb hon fel y person wnaeth greu’r ddeiseb.</p>\r\n
-            \ <p>Oni bai am hynny, ni fyddwn ni’n cyhoeddi eich manylion personol
-            mewn unrhyw le nac yn eu defnyddio ar gyfer unrhyw beth heblaw am y ddeiseb
-            hon.  </p>\r\n</div>"
+          about_published_data_html: |
+            <div class="secondary">
+              <p>Bydd eich enw yn cael ei gyhoeddi ar y ddeiseb hon fel y person wnaeth greu’r ddeiseb.</p>
+              <p>Oni bai am hynny, ni fyddwn ni’n cyhoeddi eich manylion personol mewn unrhyw le nac yn eu defnyddio ar gyfer unrhyw beth heblaw am y ddeiseb hon. Gweler ein <a href="/preifatrwydd">hysbysiad preifatrwydd</a> i gael gwybodaeth ar sut rydyn ni’n defnyddio’ch manylion personol.</p>
+            </div>
         error_summary:
           prompt:
             one: 'Cywirwch y gwall a ganlyn:'

@@ -110,12 +110,12 @@ RSpec.describe PetitionsController, type: :controller do
         expect(petition.creator.state).to eq(Signature::PENDING_STATE)
       end
 
-      it "should set notify_by_email to false on the creator signature" do
+      it "should set notify_by_email to true on the creator signature" do
         perform_enqueued_jobs do
           post :create, params: { stage: "replay_email", petition_creator: params.merge(state: Signature::VALIDATED_STATE) }
         end
 
-        expect(petition.creator.notify_by_email).to be_falsey
+        expect(petition.creator.notify_by_email).to be_truthy
       end
 
       it "sets the constituency_id on the creator signature, based on the postcode" do

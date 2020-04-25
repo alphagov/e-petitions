@@ -72,7 +72,7 @@ class PetitionCreator
 
   PETITION_PARAMS     = [:action, :background, :additional_details]
   CLOSING_DATE_PARAMS = [:duration, :year, :month, :day]
-  SIGNATURE_PARAMS    = [:name, :email, :phone_number, :address, :postcode, :location_code, :notify_by_email]
+  SIGNATURE_PARAMS    = [:name, :email, :phone_number, :address, :postcode, :location_code]
   PERMITTED_PARAMS    = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + CLOSING_DATE_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
@@ -130,7 +130,7 @@ class PetitionCreator
           c.postcode = postcode
           c.location_code = location_code
           c.constituency_id = constituency_id
-          c.notify_by_email = notify_by_email
+          c.notify_by_email = true
           c.ip_address = request.remote_ip
         end
       end
@@ -206,10 +206,6 @@ class PetitionCreator
 
   def location_code
     petition_creator_params[:location_code] || "GB-WLS"
-  end
-
-  def notify_by_email
-    petition_creator_params[:notify_by_email] || "0"
   end
 
   private
