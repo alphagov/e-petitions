@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_25_095521) do
+ActiveRecord::Schema.define(version: 2020_04_25_151212) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -257,7 +257,6 @@ ActiveRecord::Schema.define(version: 2020_04_25_095521) do
     t.datetime "debate_outcome_at"
     t.datetime "moderation_threshold_reached_at"
     t.string "debate_state", limit: 30, default: "pending"
-    t.datetime "stopped_at"
     t.boolean "special_consideration"
     t.integer "tags", default: [], null: false, array: true
     t.datetime "locked_at"
