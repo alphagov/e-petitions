@@ -109,6 +109,8 @@ Rails.application.routes.draw do
         post :cancel, :count, :start, on: :member
       end
 
+      resources :paper_petitions, only: %i[new create]
+
       resources :petitions, only: %i[show index] do
         post :resend, on: :member
 

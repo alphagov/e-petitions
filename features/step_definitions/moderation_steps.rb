@@ -211,3 +211,21 @@ end
 Then /^the petition should still be unmoderated$/ do
   expect(@petition).not_to be_visible
 end
+
+When(/^I fill in the English petition details$/) do
+  within(".//fieldset[@id='english-details']") do
+    fill_in "Action", with: "Do stuff!"
+    fill_in "Background", with: "For reasons"
+    click_details "Additional details"
+    fill_in "Additional details", with: "Here's some more reasons"
+  end
+end
+
+When(/^I fill in the Welsh petition details$/) do
+  within(".//fieldset[@id='welsh-details']") do
+    fill_in "Action", with: "Gwnewch bethau!"
+    fill_in "Background", with: "Am resymau"
+    click_details "Additional details"
+    fill_in "Additional details", with: "Dyma ychydig mwy o resymau"
+  end
+end

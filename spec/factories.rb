@@ -190,6 +190,11 @@ FactoryBot.define do
     closed_at  { 1.day.ago }
   end
 
+  factory :paper_petition, :parent => :closed_petition do
+    submitted_on_paper { true }
+    submitted_on { Date.current }
+  end
+
   factory :rejected_petition, :parent => :petition do
     state Petition::REJECTED_STATE
 

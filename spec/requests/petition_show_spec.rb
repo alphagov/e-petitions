@@ -88,6 +88,20 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "returns the submitted_on date if the petition was submitted on paper" do
+      petition = FactoryBot.create :paper_petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "submitted_on_paper" => true,
+          "submitted_on" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}\z])
+        )
+      )
+    end
+
     it "doesn't include the rejection section for non-rejected petitions" do
       petition = FactoryBot.create :open_petition
 

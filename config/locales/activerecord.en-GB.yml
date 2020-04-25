@@ -1,4 +1,82 @@
 en-GB:
+  activemodel:
+    errors:
+      models:
+        paper_petition:
+          attributes:
+            action_en:
+              blank: "Action must be completed"
+              invalid: "Action can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Action is too long (maximum is %{count} characters)"
+            action_cy:
+              blank: "Action must be completed"
+              invalid: "Action can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Action is too long (maximum is %{count} characters)"
+            background_en:
+              blank: "Background must be completed"
+              invalid: "Background can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Background is too long (maximum is %{count} characters)"
+            background_cy:
+              blank: "Background must be completed"
+              invalid: "Background can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Background is too long (maximum is %{count} characters)"
+            additional_details_en:
+              invalid: "Additional details can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Additional details is too long (maximum is %{count} characters)"
+            additional_details_cy:
+              invalid: "Additional details can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Additional details is too long (maximum is %{count} characters)"
+            locale:
+              blank: "Location must be completed"
+            location_code:
+              blank: "Location must be completed"
+            signature_count:
+              blank: "Signature count must be completed"
+              greater_than_or_equal_to: "Signature count must meet the referral threshold"
+            submitted_on:
+              blank: "Submission date must be completed"
+            name:
+              blank: "Name must be completed"
+              invalid: "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Name is too long (maximum is %{count} characters)"
+            email:
+              blank: "Email must be completed"
+              invalid: "Email ‘%{value}’ not recognised"
+              plus_address: "You can’t use ‘plus addressing’ in your email address"
+              too_long:
+                other: "Email is too long (maximum is %{count} characters)"
+            phone_number:
+              blank: "Phone number must be completed"
+              invalid: "Phone number can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Phone number is too long (maximum is %{count} characters)"
+            postcode:
+              blank: "Postcode must be completed"
+              invalid: "Postcode not recognised"
+              too_long:
+                other: "Postcode is too long (maximum is %{count} characters)"
+            address:
+              blank: "Address must be completed"
+              invalid: "Address can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+              too_long:
+                other: "Address is too long (maximum is %{count} characters)"
+
+      name:
+        invalid: "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
+        blank: "Name must be completed"
+      address:
+        blank: "Address must be completed"
+        too_long: "Address is too long"
+
+
+
   activerecord:
     errors:
       models:

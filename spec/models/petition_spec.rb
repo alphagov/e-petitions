@@ -730,6 +730,19 @@ RSpec.describe Petition, type: :model do
         expect(Petition.signed_since(1.hour.ago)).not_to include(petition_1)
       end
     end
+
+    describe ".paper" do
+      let!(:paper_petition) { FactoryBot.create(:paper_petition) }
+      let!(:closed_petition) { FactoryBot.create(:closed_petition) }
+
+      it "returns petitions that have been submitted on paper" do
+        expect(Petition.paper).to include(paper_petition)
+      end
+
+      it "doesn't returns petitions that have been submitted on paper" do
+        expect(Petition.paper).not_to include(closed_petition)
+      end
+    end
   end
 
   it_behaves_like "a taggable model"

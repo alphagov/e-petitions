@@ -75,9 +75,9 @@ end
 module CucumberHelpers
   def click_details(name)
     if @javascript
-      page.find("//details/summary[contains(., '#{name}')]").click
+      page.find(".//details/summary[contains(., '#{name}')]").click
     else
-      page.find("//summary[contains(., '#{name}')]/..").click
+      page.find(".//summary[contains(., '#{name}')]/..").click
     end
   end
 end

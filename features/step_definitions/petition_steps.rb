@@ -415,4 +415,3 @@ When (/^I search all petitions for "(.*?)"$/) do |search_term|
     end
   end
 end
-

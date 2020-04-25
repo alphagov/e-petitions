@@ -11,6 +11,12 @@
         @include media(tablet) {
           margin-bottom: em(15);
         }
+
+        small {
+          @include core-14;
+          color: $grey-1;
+          display: block;
+        }
       }
     }
 

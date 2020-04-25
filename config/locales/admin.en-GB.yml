@@ -122,3 +122,5 @@ en-GB:
       user_not_deleted: "User could not be deleted - please contact support"
       user_is_current_user: "You are not allowed to delete yourself!"
       user_count_is_too_low: "There needs to be at least one admin user"
+      submitted_paper_petition: "Paper petition submitted successfully"
+      unable_to_submit_paper_petition: "Unable to submit paper petition - please check the form for errors"

@@ -59,6 +59,8 @@
     <li>
       <% if @petition.completed? %>
         <span class="label"><%= t(:"ui.petitions.date_completed") %></span> <%= short_date_format petition.completed_at %>
+      <% elsif @petition.submitted_on_paper? %>
+        <span class="label"><%= t(:"ui.petitions.date_submitted") %></span> <%= short_date_format petition.submitted_on %>
       <% else %>
         <span class="label"><%= t(:"ui.petitions.date_closed") %></span> <%= short_date_format petition.closed_at %>
       <% end %>

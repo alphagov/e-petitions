@@ -26,6 +26,10 @@ json.attributes do
   json.scheduled_debate_date api_date_format(petition.scheduled_debate_date)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)
 
+  # These are for petitions submitted on paper
+  json.submitted_on_paper petition.submitted_on_paper
+  json.submitted_on api_date_format(petition.submitted_on)
+
   if petition.open?
     json.creator_name petition.creator_name
   else

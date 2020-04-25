@@ -373,6 +373,10 @@ class Petition < ActiveRecord::Base
       where(grouping(last_signed_at.gt(signature_count_validated_at)).eq(true))
     end
 
+    def paper
+      where(submitted_on_paper: true)
+    end
+
     private
 
     def grouping(expression)
@@ -436,6 +440,8 @@ class Petition < ActiveRecord::Base
   end
 
   def reset_signature_count!(time = Time.current)
+    return if submitted_on_paper?
+
     update_column(:signature_count_reset_at, time)
     update_signature_count!(time)
     ConstituencyPetitionJournal.reset_signature_counts_for(self)

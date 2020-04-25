@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_20_042448) do
+ActiveRecord::Schema.define(version: 2020_04_25_095521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -277,6 +277,8 @@ ActiveRecord::Schema.define(version: 2020_04_20_042448) do
     t.datetime "referred_at"
     t.string "abms_link_en"
     t.string "abms_link_cy"
+    t.boolean "submitted_on_paper", default: false, null: false
+    t.date "submitted_on"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin

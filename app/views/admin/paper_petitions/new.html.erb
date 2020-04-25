@@ -1,0 +1,129 @@
+<h1>Submit a paper petition</h1>
+
+<%= form_for [:admin, @paper_petition] do |form| %>
+  <div class="grid-row">
+    <div class="column-two-thirds extra-gutter">
+      <fieldset id="english-details">
+        <legend><h2>Petition details in English</h2></legend>
+        <%= form_row for: [form.object, :action_en] do %>
+          <%= form.label :action_en, "Action", class: "form-label" %>
+          <%= error_messages_for_field @paper_petition, :action_en %>
+          <%= form.text_area :action_en, tabindex: increment, rows: 3, class: "form-control", data: { max_length: 100 } %>
+          <p class="character-count">100 characters max</p>
+        <% end %>
+
+        <%= form_row for: [form.object, :background_en] do %>
+          <%= form.label :background_en, "Background", class: "form-label" %>
+          <%= error_messages_for_field @paper_petition, :background_en %>
+          <%= form.text_area :background_en, tabindex: increment, rows: 5, class: "form-control", data: { max_length: 500 } %>
+          <p class="character-count">500 characters max</p>
+        <% end %>
+
+        <%= content_tag :details, open: @paper_petition.additional_details_en? do %>
+          <summary>
+            <%= form.label :additional_details_en, "Additional details" %>
+          </summary>
+
+          <%= form_row for: [form.object, :additional_details_en] do %>
+            <%= error_messages_for_field @paper_petition, :additional_details_en %>
+            <%= form.text_area :additional_details_en, tabindex: increment, rows: 7, class: "form-control", data: { max_length: 1100 } %>
+            <p class="character-count">1100 characters max</p>
+          <% end %>
+        <% end %>
+      </fieldset>
+
+      <fieldset id="welsh-details">
+        <legend><h2>Petition details in Welsh</h2></legend>
+        <%= form_row for: [form.object, :action_cy] do %>
+          <%= form.label :action_cy, "Action", class: "form-label" %>
+          <%= error_messages_for_field @paper_petition, :action_cy %>
+          <%= form.text_area :action_cy, tabindex: increment, rows: 3, class: "form-control", data: { max_length: 100 } %>
+          <p class="character-count">100 characters max</p>
+        <% end %>
+
+        <%= form_row for: [form.object, :background_cy] do %>
+          <%= form.label :background_cy, "Background", class: "form-label" %>
+          <%= error_messages_for_field @paper_petition, :background_cy %>
+          <%= form.text_area :background_cy, tabindex: increment, rows: 5, class: "form-control", data: { max_length: 500 } %>
+          <p class="character-count">500 characters max</p>
+        <% end %>
+
+        <%= content_tag :details, open: @paper_petition.additional_details_cy? do %>
+          <summary>
+            <%= form.label :additional_details_cy, "Additional details" %>
+          </summary>
+
+          <%= form_row for: [form.object, :additional_details_cy] do %>
+            <%= form.label :additional_details_cy, "Additional details", class: "form-label" %>
+            <%= error_messages_for_field @paper_petition, :additional_details_cy %>
+            <%= form.text_area :additional_details_cy, tabindex: increment, rows: 7, class: "form-control", data: { max_length: 1100 } %>
+            <p class="character-count">1100 characters max</p>
+          <% end %>
+        <% end %>
+      </fieldset>
+
+      <h3>What language was this petition submitted in?</h3>
+
+      <%= form_row for: [form.object, :locale], class: "inline" do %>
+        <div class="multiple-choice">
+          <%= form.radio_button :locale, "en-GB" %>
+          <%= form.label :locale_english, "English", for: "paper_petition_locale_en-gb" %>
+        </div>
+
+        <div class="multiple-choice">
+          <%= form.radio_button :locale, "cy-GB" %>
+          <%= form.label :locale_welsh, "Welsh", for: "paper_petition_locale_cy-gb" %>
+        </div>
+        <%= error_messages_for_field @paper_petition, :locale %>
+      <% end %>
+
+      <%= form_row for: [form.object, :signature_count] do %>
+        <%= form.label :signature_count, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :signature_count %>
+        <%= form.text_field :signature_count, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :submitted_on] do %>
+        <%= form.label :submitted_on, "Date petition was submitted", class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :submitted_on %>
+        <%= form.date_field :submitted_on, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :name] do %>
+        <%= form.label :name, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :name %>
+        <%= form.text_field :name, tabindex: increment, class: "form-control" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :email] do %>
+        <%= form.label :email, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :email %>
+        <%= form.text_field :email, tabindex: increment, class: "form-control" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :phone_number] do %>
+        <%= form.label :phone_number, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :phone_number %>
+        <%= form.text_field :phone_number, tabindex: increment, class: "form-control" %>
+      <% end %>
+
+      <%= form_row for: [form.object, :address] do %>
+        <%= form.label :address, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :address %>
+        <%= form.text_area :address, tabindex: increment, rows: 4, class: "form-control", data: { max_length: 500 } %>
+        <p class="character-count">400 characters max</p>
+      <% end %>
+
+      <%= form_row for: [form.object, :postcode] do %>
+        <%= form.label :postcode, class: "form-label" %>
+        <%= error_messages_for_field @paper_petition, :postcode %>
+        <%= form.text_field :postcode, tabindex: increment, class: "form-control form-control-1-2" %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= form.submit "Save", class: "button" %>
+  <%= link_to "Cancel", admin_root_path, class: "button-secondary" %>
+<% end %>
+
+<%= javascript_include_tag "character-counter" %>

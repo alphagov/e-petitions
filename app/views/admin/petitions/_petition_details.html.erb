@@ -14,9 +14,17 @@
   <% end %>
 
 <% unless @petition.in_todo_list? %>
-  <%= link_to admin_petition_signatures_url(@petition) do %>
+  <% if @petition.submitted_on_paper? %>
     <dt>Signatures</dt>
-    <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+    <dd class="petition-meta-signature-count">
+      <%= number_with_delimiter(@petition.signature_count) %>
+      <small>(submitted on paper)</small>
+    </dd>
+  <% else %>
+    <%= link_to admin_petition_signatures_url(@petition) do %>
+      <dt>Signatures</dt>
+      <dd class="petition-meta-signature-count"><%= number_with_delimiter(@petition.signature_count) %></dd>
+    <% end %>
   <% end %>
 <% end %>
 
