@@ -277,7 +277,7 @@ form {
 }
 
 .search-results {
-  p:last-child {
+  & > p:last-child {
     @extend %hide-element;
   }
 }
