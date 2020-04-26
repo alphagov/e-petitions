@@ -1,15 +1,17 @@
-<h2><%= t(:"ui.application.share_this_petition") %></h2>
-<ul class="petition-share">
-  <li class="facebook">
-    <%= share_via_facebook(petition, rel: 'external', target: '_blank') %>
-  </li>
-  <li class="email">
-    <%= share_via_email(petition, rel: 'external', target: '_blank') %>
-  </li>
-  <li class="twitter">
-    <%= share_via_twitter(petition, rel: 'external', target: '_blank') %>
-  </li>
-  <li class="whatsapp">
-    <%= share_via_whatsapp(petition, rel: 'external', target: '_blank') %>
-  </li>
-</ul>
+<div class="petition-share">
+  <h2><%= t(:"ui.application.share_this_petition") %></h2>
+  <ul>
+    <li class="facebook">
+      <%= share_via_facebook(petition, rel: 'external', target: '_blank') %>
+    </li>
+    <li class="email">
+      <%= share_via_email(petition, rel: 'external', target: '_blank') %>
+    </li>
+    <li class="twitter">
+      <%= share_via_twitter(petition, rel: 'external', target: '_blank') %>
+    </li>
+    <li class="whatsapp">
+      <%= share_via_whatsapp(petition, rel: 'external', target: '_blank') %>
+    </li>
+  </ul>
+</div>

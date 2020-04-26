@@ -449,121 +449,123 @@
 }
 
 .petition-share {
-  @extend %contain-floats;
+  ul {
+    @extend %contain-floats;
 
-  margin: 0 -6px;
+    margin: 0 -6px;
 
-  li {
-    box-sizing: border-box;
-    float: left;
-    margin: 0;
-    padding: 6px;
-    width: 50%;
-
-    a {
+    li {
       box-sizing: border-box;
-      color: $text-color;
-      display: block;
-      font-size: 0.75rem;
-      font-weight: 600;
-      height: 30px;
-      line-height: 2.5;
-      outline: 2px solid $text-color;
-      outline-offset: -2px;
-      padding-left: 36px;
-      position: relative;
-      text-decoration: none;
+      float: left;
+      margin: 0;
+      padding: 6px;
+      width: 50%;
 
-      &::before {
-        background-color: $white;
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 30px;
+      a {
+        box-sizing: border-box;
+        color: $text-color;
+        display: block;
+        font-size: 0.75rem;
+        font-weight: 600;
         height: 30px;
-      }
+        line-height: 2.5;
+        outline: 2px solid $text-color;
+        outline-offset: -2px;
+        padding-left: 36px;
+        position: relative;
+        text-decoration: none;
 
-      &:hover {
-        color: $link-color;
-        outline: 2px solid $link-color;
-      }
+        &::before {
+          background-color: $white;
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 30px;
+          height: 30px;
+        }
 
-      &:active, &:focus {
-        background-color: $link-color;
-        color: $white;
-        outline: 2px solid $link-color;
+        &:hover {
+          color: $link-color;
+          outline: 2px solid $link-color;
+        }
+
+        &:active, &:focus {
+          background-color: $link-color;
+          color: $white;
+          outline: 2px solid $link-color;
+        }
+
+        @include media(tablet) {
+          font-size: 0.9375rem;
+          line-height: 2.4;
+          height: 36px;
+          padding-left: 42px;
+
+          &::before {
+            width: 36px;
+            height: 36px;
+          }
+        }
       }
 
       @include media(tablet) {
-        font-size: 0.9375rem;
-        line-height: 2.4;
-        height: 36px;
-        padding-left: 42px;
+        width: 25%;
+      }
+    }
 
+    .facebook {
+      a {
         &::before {
-          width: 36px;
-          height: 36px;
+          @extend %icon-share-facebook-grey;
+        }
+
+        &:active, &:focus, &:hover {
+          &::before {
+            @extend %icon-share-facebook-pink;
+          }
         }
       }
     }
 
-    @include media(tablet) {
-      width: 25%;
-    }
-  }
-
-  .facebook {
-    a {
-      &::before {
-        @extend %icon-share-facebook-grey;
-      }
-
-      &:active, &:focus, &:hover {
+    .twitter {
+      a {
         &::before {
-          @extend %icon-share-facebook-pink;
+          @extend %icon-share-twitter-grey;
+        }
+
+        &:active, &:focus, &:hover {
+          &::before {
+            @extend %icon-share-twitter-pink;
+          }
         }
       }
     }
-  }
 
-  .twitter {
-    a {
-      &::before {
-        @extend %icon-share-twitter-grey;
-      }
-
-      &:active, &:focus, &:hover {
+    .whatsapp {
+      a {
         &::before {
-          @extend %icon-share-twitter-pink;
+          @extend %icon-share-whatsapp-grey;
+        }
+
+        &:active, &:focus, &:hover {
+          &::before {
+            @extend %icon-share-whatsapp-pink;
+          }
         }
       }
     }
-  }
 
-  .whatsapp {
-    a {
-      &::before {
-        @extend %icon-share-whatsapp-grey;
-      }
-
-      &:active, &:focus, &:hover {
+    .email {
+      a {
         &::before {
-          @extend %icon-share-whatsapp-pink;
+          @extend %icon-share-email-grey;
         }
-      }
-    }
-  }
 
-  .email {
-    a {
-      &::before {
-        @extend %icon-share-email-grey;
-      }
-
-      &:active, &:focus, &:hover {
-        &::before {
-          @extend %icon-share-email-pink;
+        &:active, &:focus, &:hover {
+          &::before {
+            @extend %icon-share-email-pink;
+          }
         }
       }
     }
