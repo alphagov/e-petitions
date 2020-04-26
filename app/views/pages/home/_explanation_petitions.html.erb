@@ -2,13 +2,11 @@
   <section aria-labelledby="referral-threshold-heading" id="petitions-referred">
     <% if actioned[:referred][:count].zero? %>
       <div class="threshold-panel threshold-panel-referral">
-        <h2 id="referral-threshold-heading"><%= Site.formatted_threshold_for_referral %></h2>
-        <p><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></p>
+        <h2 id="referral-threshold-heading" data-threshold="<%= Site.formatted_threshold_for_referral %>"><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></h2>
       </div>
     <% else %>
       <%= link_to(petitions_path(state: :referred), class: "threshold-panel threshold-panel-referral" ) do %>
-        <h2 id="referral-threshold-heading"><%= Site.formatted_threshold_for_referral %></h2>
-        <p><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></p>
+        <h2 id="referral-threshold-heading" data-threshold="<%= Site.formatted_threshold_for_referral %>"><%= t(:"ui.home_page.thresholds.referred", formatted_count: Site.formatted_threshold_for_referral) %></h2>
       <% end %>
     <% end %>
     <div class="section-panel-borderless">
@@ -19,13 +17,11 @@
   <section aria-labelledby="debate-threshold-heading" id="petitions-with-debated-outcome">
     <% if actioned[:with_debated_outcome][:count].zero? %>
       <div class="threshold-panel threshold-panel-debate">
-        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-        <p><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></p>
+        <h2 id="debate-threshold-heading" data-threshold="<%= Site.formatted_threshold_for_debate %>"><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></h2>
       </div>
     <% else %>
-      <%= link_to( petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
-        <h2 id="debate-threshold-heading"><%= Site.formatted_threshold_for_debate %></h2>
-        <p><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></p>
+      <%= link_to(petitions_path(state: :debated), class: "threshold-panel threshold-panel-debate" ) do %>
+        <h2 id="debate-threshold-heading" data-threshold="<%= Site.formatted_threshold_for_debate %>"><%= t(:"ui.home_page.thresholds.debate", formatted_count: Site.formatted_threshold_for_debate) %></h2>
       <% end %>
     <% end %>
     <div class="section-panel-borderless">
