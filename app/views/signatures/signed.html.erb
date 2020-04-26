@@ -15,11 +15,9 @@
 <% if constituency = @signature.constituency %>
   <div class="section-panel" aria-labelledby="contact-your-member-heading">
     <h2 id="contact-your-member-heading"><%= t(:"ui.signatures.signed.contact_member.heading") %></h2>
-    <p><%= t(:"ui.signatures.signed.contact_member.constituency_name", constituency: constituency.name) %></p>
 
     <% if member = constituency.member %>
-      <p><%= t(:"ui.signatures.signed.contact_member.member_name", member: member.name) %></p>
-      <p><%= link_to t(:"ui.signatures.signed.contact_member.member_link"), member.url, rel: "external" %></p>
+      <p><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(member.name, member.url, rel: 'external'), constituency_name: constituency.name) %></p>
     <% end %>
 
     <% if region = constituency.region %>

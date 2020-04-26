@@ -580,12 +580,9 @@ cy-GB:
           other: "%{formatted_count} llofnod"
         contact_member:
           heading: Cysylltu â’ch Aelod o’r Senedd
-          member_link: Cysylltu â’ch Aelod o’r Senedd i ddweud eich bod wedi llofnodi’r
-            ddeiseb hon
-          member_name: Eich Aelod lleol o’r Senedd yw %{member}
-          constituency_name: Eich etholaeth yw %{constituency}
         regional_members:
           region_html: 'Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:'
+        member_name_link_html: Eich Aelod o’r Senedd dros etholaeth <strong>%{constituency_name}</strong> yw %{member_name_link}
         added_to_petition: 'Rydym ni wedi ychwanegu eich enw at y ddeiseb:'
         register_to_vote_html: "<h2>Cofrestru i bleidleisio</h2>\r\n<p>Er mwyn pleidleisio
           yn etholiadau’r Senedd, rhaid i chi fod wedi’ch cofrestru i bleidleisio.</p>\r\n<p>Mae’n
