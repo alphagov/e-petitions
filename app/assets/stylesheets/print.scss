@@ -84,6 +84,12 @@ li {
   margin-top: 12px;
 }
 
+ul {
+  & > li {
+    page-break-inside: avoid;
+  }
+}
+
 a {
   color: #000000;
   text-decoration: none;
