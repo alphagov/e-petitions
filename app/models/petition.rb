@@ -928,6 +928,8 @@ class Petition < ActiveRecord::Base
   end
 
   def update_moderation_lag
+    return unless state_was.in?(TODO_LIST_STATES)
+
     if open_at_changed? || rejected_at_changed?
       self.moderation_lag = calculate_moderation_lag(Date.current)
     end

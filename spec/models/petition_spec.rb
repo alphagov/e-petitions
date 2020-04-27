@@ -61,6 +61,18 @@ RSpec.describe Petition, type: :model do
         end
       end
     end
+
+    context "when rejecting a petition that didn't get enough signatures" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+
+      it "doesn't record a moderation lag" do
+        expect {
+          petition.close!
+        }.not_to change {
+          petition.reload.moderation_lag
+        }
+      end
+    end
   end
 
   context "validations" do
