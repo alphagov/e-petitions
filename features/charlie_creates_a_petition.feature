@@ -46,18 +46,16 @@ Scenario: Charlie creates a petition with a custom closing date
   And I press "Preview petition"
   And I press "This looks good"
   And I choose "I want to stop collecting signatures on a specific date"
-  And I fill in "Day" with "30"
-  And I fill in "Month" with "06"
-  And I fill in "Year" with "2020"
+  And I fill in the closing date with "2020-08-31"
   And I press "Check closing date"
-  Then I should see "30 June 2020"
+  Then I should see "31 August 2020"
   When I press "This looks good"
   And I fill in my details as a creator
   And I fill in my creator contact details
   And I press "Continue"
   Then I am asked to review my email address
   When I press "Yes – this is my email address"
-  Then the petition "The wombats of wimbledon rock." should exist with a closing date of "2020-06-30"
+  Then the petition "The wombats of wimbledon rock." should exist with a closing date of "2020-08-31"
 
 @welsh
 Scenario: Charlie creates a petition in Welsh

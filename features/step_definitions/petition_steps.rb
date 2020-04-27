@@ -255,6 +255,14 @@ When(/^I fill in the closing date with a date (\d+) ((?:day|month)s?) from today
   fill_in "Year", with: closing_date.year
 end
 
+When(/^I fill in the closing date with "(\d{4}-\d{2}-\d{2})"$/) do |date|
+  year, month, day = date.split("-")
+
+  fill_in "Day", with: day
+  fill_in "Month", with: month
+  fill_in "Year", with: year
+end
+
 Then(/^the petition "([^"]*)" should exist with a closing date of "([^"]*)"$/) do |action, closing_date|
   closing_date = closing_date.in_time_zone.end_of_day
   petition = Petition.find_by!(action: action)

@@ -9,6 +9,8 @@ class PetitionCreator
   ClosingDate = Struct.new(:duration, :year, :month, :day) do
     include Comparable
 
+    DATE_COMPONENT = /\A\s*[0-9]+\s*\z/
+
     def duration
       self[:duration] == 'custom' ? 'custom' : 'default'
     end
@@ -62,9 +64,9 @@ class PetitionCreator
     end
 
     def parse_integer(value)
-      Integer(value.to_s)
-    rescue ArgumentError => e
-      nil
+      if value.to_s.match?(DATE_COMPONENT)
+        value.to_s.to_i
+      end
     end
   end
 
