@@ -37,6 +37,30 @@ RSpec.describe Petition, type: :model do
         }.from(nil).to(be_within(1.second).of(now))
       end
     end
+
+    context "when moderating a petition" do
+      let(:petition) { FactoryBot.create(:sponsored_petition, :translated, moderation_threshold_reached_at: 5.days.ago) }
+
+      context "and the petition was opened" do
+        it "records the moderation lag" do
+          expect {
+            petition.moderate(moderation: "approve")
+          }.to change {
+            petition.reload.moderation_lag
+          }.from(nil).to(5)
+        end
+      end
+
+      context "and the petition was rejected" do
+        it "records the moderation lag" do
+          expect {
+            petition.moderate(moderation: "reject", rejection: { code: "duplicate" })
+          }.to change {
+            petition.reload.moderation_lag
+          }.from(nil).to(5)
+        end
+      end
+    end
   end
 
   context "validations" do
