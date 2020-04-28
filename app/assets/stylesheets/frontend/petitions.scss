@@ -148,6 +148,7 @@
     }
 
     &:active, &:focus {
+      background-color: $focus-color;
       color: $white;
     }
 
