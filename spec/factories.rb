@@ -364,6 +364,10 @@ FactoryBot.define do
     completed_at { 1.week.ago }
   end
 
+  factory :archived_petition, :parent => :completed_petition do
+    archived_at { 1.day.ago }
+  end
+
   factory :contact do
     association :signature
     phone_number { "0300 200 6565" }

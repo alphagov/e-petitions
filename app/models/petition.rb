@@ -23,6 +23,7 @@ class Petition < ActiveRecord::Base
   SELECTABLE_STATES = %w[open closed completed rejected hidden]
   SEARCHABLE_STATES = %w[open closed completed rejected]
   CURRENT_STATES    = %w[open closed]
+  ARCHIVABLE_STATES = %w[completed rejected hidden]
 
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
@@ -41,21 +42,21 @@ class Petition < ActiveRecord::Base
   extend Searchable(:action_en, :action_cy, :background_en, :background_cy, :additional_details_en, :additional_details_cy)
   include Browseable, Taggable
 
-  facet :all,      -> { by_most_recent }
-  facet :open,     -> { open_state.by_most_popular }
-  facet :rejected, -> { rejected_state.by_most_recent }
-  facet :closed,   -> { closed_state.by_most_popular }
-  facet :completed,   -> { completed_state.by_most_recently_closed }
-  facet :hidden,   -> { hidden_state.by_most_recent }
+  facet :all,       -> { not_archived.by_most_recent }
+  facet :open,      -> { not_archived.open_state.by_most_popular }
+  facet :rejected,  -> { not_archived.rejected_state.by_most_recent }
+  facet :closed,    -> { not_archived.closed_state.by_most_popular }
+  facet :referred,  -> { not_archived.closed_state.by_most_recently_closed }
+  facet :completed, -> { not_archived.completed_state.by_most_recently_closed }
+  facet :hidden,    -> { not_archived.hidden_state.by_most_recent }
+  facet :archived,  -> { archived.by_most_recently_closed }
 
-  facet :referred,    -> { referred.by_most_recently_closed }
-
-  facet :awaiting_debate,      -> { awaiting_debate.by_most_relevant_debate_date }
-  facet :awaiting_debate_date, -> { awaiting_debate_date.by_waiting_for_debate_longest }
-  facet :with_debate_outcome,  -> { with_debate_outcome.by_most_recent_debate_outcome }
-  facet :with_debated_outcome, -> { with_debated_outcome.by_most_recent_debate_outcome }
-  facet :debated,              -> { debated.by_most_recent_debate_outcome }
-  facet :not_debated,          -> { not_debated.by_most_recent_debate_outcome }
+  facet :awaiting_debate,      -> { not_archived.awaiting_debate.by_most_relevant_debate_date }
+  facet :awaiting_debate_date, -> { not_archived.awaiting_debate_date.by_waiting_for_debate_longest }
+  facet :with_debate_outcome,  -> { not_archived.with_debate_outcome.by_most_recent_debate_outcome }
+  facet :with_debated_outcome, -> { not_archived.with_debated_outcome.by_most_recent_debate_outcome }
+  facet :debated,              -> { not_archived.debated.by_most_recent_debate_outcome }
+  facet :not_debated,          -> { not_archived.not_debated.by_most_recent_debate_outcome }
 
   facet :collecting_sponsors,  -> { collecting_sponsors.by_most_recent }
   facet :in_moderation,        -> { in_moderation.by_most_recent_moderation_threshold_reached }
@@ -210,6 +211,14 @@ class Petition < ActiveRecord::Base
 
     def referred
       closed_state
+    end
+
+    def archived
+      where(arel_table[:archived_at].not_eq(nil))
+    end
+
+    def not_archived
+      where(arel_table[:archived_at].eq(nil))
     end
 
     def collecting_sponsors
@@ -708,6 +717,16 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def archivable?
+    !archived? && state.in?(ARCHIVABLE_STATES)
+  end
+
+  def archive(time = Time.current)
+    if archivable?
+      update(archived_at: time)
+    end
+  end
+
   def close!(time = deadline)
     if open?
       if will_be_referred?
@@ -769,6 +788,10 @@ class Petition < ActiveRecord::Base
 
   def completed?
     state == COMPLETED_STATE
+  end
+
+  def archived?
+    archived_at?
   end
 
   def will_be_referred?

@@ -36,7 +36,7 @@
   }
 }
 
-#other-search-lists {
+.other-search-lists {
   @include hover-links($link-color);
 
   a:focus {
@@ -75,6 +75,12 @@
 
 .search-results, .local-petitions {
   padding-top: 12px;
+}
+
+.archived-petitions {
+  ul {
+    margin-top: 24px;
+  }
 }
 
 .petition-item {

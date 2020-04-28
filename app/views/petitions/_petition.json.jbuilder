@@ -25,6 +25,7 @@ json.attributes do
   json.debate_threshold_reached_at api_date_format(petition.debate_threshold_reached_at)
   json.scheduled_debate_date api_date_format(petition.scheduled_debate_date)
   json.debate_outcome_at api_date_format(petition.debate_outcome_at)
+  json.archived_at api_date_format(petition.archived_at)
 
   # These are for petitions submitted on paper
   json.submitted_on_paper petition.submitted_on_paper

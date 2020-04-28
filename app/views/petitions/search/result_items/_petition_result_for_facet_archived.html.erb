@@ -1,0 +1,11 @@
+<h3><%= link_to petition.action, petition_path(petition) %></h3>
+<% case petition.state %>
+<% when "closed" %>
+  <p><%= signature_count(:default, petition.signature_count) %></p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.closed") %></p>
+<% when "completed" %>
+  <p><%= signature_count(:default, petition.signature_count) %></p>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.completed", date: short_date_format(petition.completed_at)) %></p>
+<% when "rejected" %>
+  <p><%= t(:"ui.petitions.search.results.items.facet_all.rejected") %></p>
+<% end %>

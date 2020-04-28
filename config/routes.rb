@@ -132,6 +132,7 @@ Rails.application.routes.draw do
         end
 
         resource :completion, controller: 'completion', only: %i[update]
+        resource :archive, controller: 'archive', only: %i[update]
 
         resources :signatures, except: %i[show edit update] do
           post :validate, :invalidate, on: :member

@@ -2,7 +2,10 @@
   <dt>Status</dt>
   <dd class="petition-meta-state"><%= @petition.state.capitalize %></dd>
 
-  <% if @petition.deadline %>
+  <% if @petition.archived? %>
+    <dt>Archived</dt>
+    <dd><%= date_format_admin(@petition.archived_at) %></dd>
+  <% elsif @petition.deadline %>
     <dt>Deadline</dt>
     <dd><%= date_format_admin(@petition.deadline) %></dd>
   <% elsif @petition.closed_at? %>

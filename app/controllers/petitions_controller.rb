@@ -121,7 +121,15 @@ class PetitionsController < LocalizedController
   end
 
   def valid_state?
+    public_facet? || archived_facet?
+  end
+
+  def public_facet?
     public_petition_facets.include?(params[:state].to_sym)
+  end
+
+  def archived_facet?
+    params[:state] == "archived"
   end
 
   def search_params(overrides = {})

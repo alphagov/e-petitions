@@ -12,3 +12,12 @@
     </ul>
   </nav>
 </div>
+<div class="section-panel archived-petitions">
+  <ul>
+    <li>
+      <%= link_to petitions_url(state: "archived") do %>
+        <%= t(:archived, scope: :"ui.petitions.lists") %>
+      <% end %>
+    </li>
+  </ul>
+</div>

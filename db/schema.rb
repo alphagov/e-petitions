@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_25_151212) do
+ActiveRecord::Schema.define(version: 2020_04_28_025415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -278,6 +278,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_151212) do
     t.string "abms_link_cy"
     t.boolean "submitted_on_paper", default: false, null: false
     t.date "submitted_on"
+    t.datetime "archived_at"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
@@ -285,6 +286,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_151212) do
     t.index "to_tsvector('simple'::regconfig, (action_cy)::text)", name: "index_petitions_on_action_cy", using: :gin
     t.index "to_tsvector('simple'::regconfig, (background_cy)::text)", name: "index_petitions_on_background_cy", using: :gin
     t.index "to_tsvector('simple'::regconfig, additional_details_cy)", name: "index_petitions_on_additional_details_cy", using: :gin
+    t.index ["archived_at", "state"], name: "index_petitions_on_archived_at_and_state"
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"

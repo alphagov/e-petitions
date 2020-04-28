@@ -307,6 +307,7 @@ cy-GB:
           published: Deisbau a gyhoeddwyd
           not_debated: Deisebau na chynhaliwyd dadl arnynt yn y Senedd
           awaiting_debate: Deisbau sy’n aros am ddadl yn y Senedd
+          archived: Deisebau wedi’u harchifo
       lists:
         all: Pob deiseb (%{quantity})
         open: Deisebau sydd ar agor (%{quantity})
@@ -315,6 +316,7 @@ cy-GB:
         rejected: Deisebau a wrthodwyd (%{quantity})
         completed: Deisebau a gwblhawyd (%{quantity})
         not_debated: Ni chynhaliwyd dadl yn y Senedd (%{quantity})
+        archived: Deisebau wedi’u harchifo
       local:
         all:
           heading: Deisebau poblogaidd yn etholaeth %{constituency_name}

@@ -88,6 +88,20 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
+    it "returns the archived_at timestamp date if the petition is archived" do
+      petition = FactoryBot.create :archived_petition
+
+      get "/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "state" => "completed",
+          "archived_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+        )
+      )
+    end
+
     it "returns the submitted_on date if the petition was submitted on paper" do
       petition = FactoryBot.create :paper_petition
 

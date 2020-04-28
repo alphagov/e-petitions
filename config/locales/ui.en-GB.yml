@@ -313,6 +313,7 @@ en-GB:
           published: Published petitions
           not_debated: Petitions not debated in the Senedd
           awaiting_debate: Petitions waiting for a debate in the Senedd
+          archived: Archived petitions
       lists:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
@@ -321,6 +322,7 @@ en-GB:
         rejected: Rejected petitions (%{quantity})
         completed: Completed petitions (%{quantity})
         not_debated: Not debated in the Senedd (%{quantity})
+        archived: Archived petitions
       local:
         all:
           heading: Popular petitions in the constituency of %{constituency_name}
