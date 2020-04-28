@@ -31,18 +31,20 @@
   <% end %>
 <% end %>
 
-<dt>Creator</dt>
-<dd>
-  <%= @petition.creator.name %><br />
-  <%= auto_link(@petition.creator.email) %>
-  <% @petition.creator.contact&.tap do |contact| %>
-    <br />
-    <%= contact.phone_number %><br />
-    <%= link_to "https://www.google.com/maps/search/?api=1&query=#{URI.escape("#{contact.address.squish}, #{contact.signature.postcode}")}" do %>
-      <%= simple_format(h(contact.address)) %>
+<% if @petition.creator %>
+  <dt>Creator</dt>
+  <dd>
+    <%= @petition.creator.name %><br />
+    <%= auto_link(@petition.creator.email) %>
+    <% @petition.creator.contact&.tap do |contact| %>
+      <br />
+      <%= contact.phone_number %><br />
+      <%= link_to "https://www.google.com/maps/search/?api=1&query=#{URI.escape("#{contact.address.squish}, #{contact.signature.postcode}")}" do %>
+        <%= simple_format(h(contact.address)) %>
+      <% end %>
     <% end %>
-  <% end %>
-</dd>
+  </dd>
+<% end %>
 
 <% if @petition.collecting_sponsors? %>
   <dd>

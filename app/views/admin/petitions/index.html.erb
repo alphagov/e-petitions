@@ -69,7 +69,13 @@
     <% @petitions.each do |petition| -%>
       <tr class="<%= petition.state.dasherize %>">
         <td class="action"><%= link_to (petition.action_en || petition.action_cy), admin_petition_path(petition) %></td>
-        <td class="creator"><%= mail_to petition.creator.email, petition.creator.name %></td>
+        <td class="creator">
+          <% if petition.creator %>
+            <%= mail_to petition.creator.email, petition.creator.name %>
+          <% else %>
+            –
+          <% end %>
+        </td>
         <td class="petition-id"><%= petition.id %></td>
         <td class="state"><%= petition.state.humanize %></td>
         <% if show_tags_column?(@petitions.scope) %>
