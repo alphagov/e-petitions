@@ -51,11 +51,13 @@
         <% end %>
       <% end %>
 
-      <%= form_row for: [@petition.creator, :name] do %>
-        <%= f.fields_for :creator do |c| %>
-          <%= c.label :name, "Creator", class: 'form-label' %>
-          <%= error_messages_for_field @petition.creator, :name %>
-          <%= c.text_field :name, tabindex: increment, class: 'form-control' %>
+      <% if @petition.creator %>
+        <%= form_row for: [@petition.creator, :name] do %>
+          <%= f.fields_for :creator do |c| %>
+            <%= c.label :name, "Creator", class: 'form-label' %>
+            <%= error_messages_for_field @petition.creator, :name %>
+            <%= c.text_field :name, tabindex: increment, class: 'form-control' %>
+          <% end %>
         <% end %>
       <% end %>
 
