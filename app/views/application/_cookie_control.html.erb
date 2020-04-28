@@ -9,25 +9,25 @@
     rejectButton: true,
     settingsStyle: 'button',
     text: {
-      title: '<%= t(:title, scope: :"ui.cc.text") %>',
-      description: '<%= t(:description, scope: :"ui.cc.text") %>',
-      notifyTitle: '<%= t(:notify_title, scope: :"ui.cc.text") %>',
-      notifyDescription: '<%= t(:notify_description, scope: :"ui.cc.text") %>',
-      necessaryTitle: '<%= t(:necessary_title, scope: :"ui.cc.text") %>',
-      necessaryDescription: '<%= t(:necessary_description, scope: :"ui.cc.text") %>',
-      on: '<%= t(:on, scope: :"ui.cc.text") %>',
-      off: '<%= t(:off, scope: :"ui.cc.text") %>',
-      accept: '<%= t(:accept, scope: :"ui.cc.text") %>',
-      reject: '<%= t(:reject, scope: :"ui.cc.text") %>',
-      settings: '<%= t(:settings, scope: :"ui.cc.text") %>',
-      acceptSettings: '<%= t(:accept_settings, scope: :"ui.cc.text") %>',
-      rejectSettings: '<%= t(:reject_settings, scope: :"ui.cc.text") %>'
+      title: '<%= I18n.t(:title, scope: :"ui.cc.text") %>',
+      description: '<%= I18n.t(:description, scope: :"ui.cc.text") %>',
+      notifyTitle: '<%= I18n.t(:notify_title, scope: :"ui.cc.text") %>',
+      notifyDescription: '<%= I18n.t(:notify_description, scope: :"ui.cc.text") %>',
+      necessaryTitle: '<%= I18n.t(:necessary_title, scope: :"ui.cc.text") %>',
+      necessaryDescription: '<%= I18n.t(:necessary_description, scope: :"ui.cc.text") %>',
+      on: '<%= I18n.t(:on, scope: :"ui.cc.text") %>',
+      off: '<%= I18n.t(:off, scope: :"ui.cc.text") %>',
+      accept: '<%= I18n.t(:accept, scope: :"ui.cc.text") %>',
+      reject: '<%= I18n.t(:reject, scope: :"ui.cc.text") %>',
+      settings: '<%= I18n.t(:settings, scope: :"ui.cc.text") %>',
+      acceptSettings: '<%= I18n.t(:accept_settings, scope: :"ui.cc.text") %>',
+      rejectSettings: '<%= I18n.t(:reject_settings, scope: :"ui.cc.text") %>'
     },
     statement: {
-      name: '<%= t(:name, scope: :"ui.cc.statement") %>',
-      description: '<%= t(:description, scope: :"ui.cc.statement") %>',
+      name: '<%= I18n.t(:name, scope: :"ui.cc.statement") %>',
+      description: '<%= I18n.t(:description, scope: :"ui.cc.statement") %>',
       url: '<%= privacy_url %>',
-      updated: '<%= t(:updated, scope: :"ui.cc.statement") %>'
+      updated: '<%= I18n.t(:updated, scope: :"ui.cc.statement") %>'
     },
     branding: {
       backgroundColor: '#3C3C3B',
@@ -41,8 +41,8 @@
     optionalCookies: [
       {
         name: 'analytics',
-        label: '<%= t(:label, scope: :"ui.cc.analytics") %>',
-        description: '<%= t(:description, scope: :"ui.cc.analytics") %>',
+        label: '<%= I18n.t(:label, scope: :"ui.cc.analytics") %>',
+        description: '<%= I18n.t(:description, scope: :"ui.cc.analytics") %>',
         cookies: ['_ga', '_gid', '_gat', '__utma', '__utmt', '__utmb', '__utmc', '__utmz', '__utmv'],
         recommendedState: true,
         onAccept : function() {
