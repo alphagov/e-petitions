@@ -8,6 +8,7 @@ cy-GB:
         updated: "01/04/2020"
       text:
         "title": "Mae cwcis yn ffeiliau a arbedir ar eich ffôn, llechen neu gyfrifiadur pan ymwelwch â gwefan."
+        "intro": "Mae rhai o’r cwcis hyn yn hanfodol, tra bod eraill yn ein helpu i wella’ch profiad trwy ddarparu mewnwelediadau i sut mae’r wefan yn cael ei defnyddio."
         "description": "Rydyn ni’n defnyddio cwcis i storio gwybodaeth am sut rydych chi’n defnyddio’r wefan, fel y tudalennau rydych chi’n ymweld â nhw."
         "notify_title": "Dywedwch wrthym a ydych chi’n derbyn cwcis"
         "notify_description": "Rydyn ni’n defnyddio cwcis i gasglu gwybodaeth am sut rydych chi’n defnyddio’r gwasanaeth hwn."

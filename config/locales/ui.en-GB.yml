@@ -8,6 +8,7 @@ en-GB:
         updated: "01/04/2020"
       text:
         "title": "Cookies are files saved on your phone, tablet or computer when you visit a website."
+        "intro": "Some of these cookies are essential, while others help us to improve your experience by providing insights into how the site is being used."
         "description": "We use cookies to store information about how you use the website, such as the pages you visit."
         "notify_title": "Tell us whether you accept cookies"
         "notify_description": "We use cookies to collect information about how you use this service."
