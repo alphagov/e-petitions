@@ -1120,6 +1120,16 @@ RSpec.describe Signature, type: :model do
   describe ".pending_rate" do
     let!(:petition) { FactoryBot.create(:open_petition) }
 
+    context "when there are no signatures" do
+      before do
+        petition.signatures.delete_all
+      end
+
+      it "returns zero" do
+        expect(petition.signatures.pending_rate).to eq(0)
+      end
+    end
+
     context "when there are no pending signatures" do
       it "returns zero" do
         expect(petition.signatures.pending_rate).to eq(0)

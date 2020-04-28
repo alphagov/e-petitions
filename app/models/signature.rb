@@ -120,7 +120,14 @@ class Signature < ActiveRecord::Base
     end
 
     def pending_rate
-      (Rational(pending.count, total.count) * 100).to_d(2)
+      pending_count = pending.count
+      total_count = total.count
+
+      if total_count == 0
+        return '0.0'.to_d
+      else
+        (Rational(pending_count, total_count) * 100).to_d(2)
+      end
     end
 
     def similar(id, email)
