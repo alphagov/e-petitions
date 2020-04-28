@@ -1,6 +1,28 @@
 ---
 cy-GB:
   ui:
+    cc:
+      statement:
+        name: "Darganfyddwch fwy am y cwcis ar y wefan hon"
+        description: ""
+        updated: "01/04/2020"
+      text:
+        "title": "Mae cwcis yn ffeiliau a arbedir ar eich ffôn, llechen neu gyfrifiadur pan ymwelwch â gwefan."
+        "description": "Rydyn ni’n defnyddio cwcis i storio gwybodaeth am sut rydych chi’n defnyddio’r wefan, fel y tudalennau rydych chi’n ymweld â nhw."
+        "notify_title": "Dywedwch wrthym a ydych chi’n derbyn cwcis"
+        "notify_description": "Rydyn ni’n defnyddio cwcis i gasglu gwybodaeth am sut rydych chi’n defnyddio’r gwasanaeth hwn."
+        "necessary_title": "Cwcis hollol angenrheidiol"
+        "necessary_description": "Mae’r cwcis hanfodol hyn yn gwneud pethau fel cofio’ch cynnydd trwy ffurflen (er enghraifft creu deiseb)."
+        "on": "Ymlaen"
+        "off": "I ffwrdd"
+        "accept": "Derbyn pob cwci"
+        "reject": "Gwrthod cwcis diangen"
+        "settings": "Gosod dewisiadau cwci"
+        "accept_settings": "Derbyn pob cwci"
+        "reject_settings": "Gwrthod cwcis diangen"
+      analytics:
+        label: "Cwcis sy’n mesur defnydd gwefan"
+        description: "Rydym yn defnyddio Google Analytics i fesur sut rydych chi’n defnyddio’r wefan fel y gallwn ei gwella yn seiliedig ar anghenion defnyddwyr. Nid ydym yn caniatáu i Google ddefnyddio na rhannu’r data ynghylch sut rydych chi’n defnyddio’r wefan hon."
     os:
       app_name: Deisebau
       app_tooltip: Senedd
@@ -28,8 +50,9 @@ cy-GB:
     footer:
       nav:
         home: Hafan
-        privacy: Preifatrwydd a chwcis
+        privacy: Preifatrwydd
         feedback: Adborth
+        cookies: Cwcis
         all_petitions: Pob deiseb
         start_a_petition: Dechrau deiseb
         how_petitions_work: Sut mae deisebau yn gweithio

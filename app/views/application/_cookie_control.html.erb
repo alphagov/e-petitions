@@ -1,0 +1,70 @@
+<script src="https://cc.cdn.civiccomputing.com/9/cookieControl-9.1.min.js"></script>
+<script>
+  var config = {
+    apiKey: '<%= Site.cookie_control_api_key %>',
+    product: 'PRO_MULTISITE',
+    mode: 'gdpr',
+    initialState: 'notify',
+    acceptBehaviour: 'all',
+    rejectButton: true,
+    settingsStyle: 'button',
+    text: {
+      title: '<%= t(:title, scope: :"ui.cc.text") %>',
+      description: '<%= t(:description, scope: :"ui.cc.text") %>',
+      notifyTitle: '<%= t(:notify_title, scope: :"ui.cc.text") %>',
+      notifyDescription: '<%= t(:notify_description, scope: :"ui.cc.text") %>',
+      necessaryTitle: '<%= t(:necessary_title, scope: :"ui.cc.text") %>',
+      necessaryDescription: '<%= t(:necessary_description, scope: :"ui.cc.text") %>',
+      on: '<%= t(:on, scope: :"ui.cc.text") %>',
+      off: '<%= t(:off, scope: :"ui.cc.text") %>',
+      accept: '<%= t(:accept, scope: :"ui.cc.text") %>',
+      reject: '<%= t(:reject, scope: :"ui.cc.text") %>',
+      settings: '<%= t(:settings, scope: :"ui.cc.text") %>',
+      acceptSettings: '<%= t(:accept_settings, scope: :"ui.cc.text") %>',
+      rejectSettings: '<%= t(:reject_settings, scope: :"ui.cc.text") %>'
+    },
+    statement: {
+      name: '<%= t(:name, scope: :"ui.cc.statement") %>',
+      description: '<%= t(:description, scope: :"ui.cc.statement") %>',
+      url: '<%= privacy_url %>',
+      updated: '<%= t(:updated, scope: :"ui.cc.statement") %>'
+    },
+    branding: {
+      backgroundColor: '#3C3C3B',
+      toggleBackground: '#3C3C3B',
+      toggleColor: '#3C3C3B',
+      toggleText: '#FFFFFF',
+      removeIcon: true,
+      removeAbout: true
+    },
+    necessaryCookies: ['_wpets_session'],
+    optionalCookies: [
+      {
+        name: 'analytics',
+        label: '<%= t(:label, scope: :"ui.cc.analytics") %>',
+        description: '<%= t(:description, scope: :"ui.cc.analytics") %>',
+        cookies: ['_ga', '_gid', '_gat', '__utma', '__utmt', '__utmb', '__utmc', '__utmz', '__utmv'],
+        recommendedState: true,
+        onAccept : function() {
+          var g = document.createElement('script');
+          g.async = 1;
+          g.src = 'https://www.googletagmanager.com/gtag/js?id=<%= Site.ga_property_id %>'
+
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(g,s)
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+
+          gtag('js', new Date());
+          gtag('config', '<%= Site.ga_property_id %>');
+        },
+        onRevoke: function() {
+          window['ga-disable-<%= Site.ga_property_id %>'] = true;
+        }
+      }
+    ]
+  }
+
+  CookieControl.load(config);
+</script>

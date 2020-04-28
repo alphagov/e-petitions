@@ -9,18 +9,36 @@ class ApplicationController < ActionController::Base
   helper_method :public_petition_facets
 
   after_action do
-    directives = [
-      "default-src 'self'",
-      "img-src 'self' data:",
-      "font-src 'self' https://fonts.gstatic.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com"
-    ]
+    default_src = %w[default-src 'self']
+    font_src = %w[font-src 'self' https://fonts.gstatic.com]
+
+    img_src = %w[img-src 'self' data:]
+    img_src << "https://www.google-analytics.com"
+
+    connect_src = %w[connect-src 'self']
+    connect_src << "https://apikeys.civiccomputing.com"
+    connect_src << "https://www.google-analytics.com"
+
+    script_src = %w[script-src 'self' 'unsafe-inline']
+    script_src << "https://cc.cdn.civiccomputing.com"
+    script_src << "https://www.googletagmanager.com"
+    script_src << "https://www.google-analytics.com"
 
     if Site.translation_enabled?
-      directives << "script-src 'self' 'unsafe-inline' #{Site.moderate_url}"
-    else
-      directives << "script-src 'self' 'unsafe-inline'"
+      script_src << Site.moderate_url
     end
+
+    style_src = %w[style-src 'self' 'unsafe-inline']
+    style_src << "https://fonts.googleapis.com"
+
+    directives = [
+      default_src.join(" "),
+      font_src.join(" "),
+      img_src.join(" "),
+      connect_src.join(" "),
+      script_src.join(" "),
+      style_src.join(" "),
+    ]
 
     response.headers["Content-Security-Policy"] = directives.join("; ")
   end
@@ -81,18 +99,10 @@ class ApplicationController < ActionController::Base
     redirect_to home_url
   end
 
-  def set_seen_cookie_message
-    cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now, httponly: true }
-  end
-
   def set_cors_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-  end
-
-  def show_cookie_message?
-    @show_cookie_message ||= cookies[:seen_cookie_message] != 'yes'
   end
 
   def public_petition_facets

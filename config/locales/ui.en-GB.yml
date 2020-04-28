@@ -1,6 +1,28 @@
 ---
 en-GB:
   ui:
+    cc:
+      statement:
+        name: "Find out more about the cookies on this website"
+        description: ""
+        updated: "01/04/2020"
+      text:
+        "title": "Cookies are files saved on your phone, tablet or computer when you visit a website."
+        "description": "We use cookies to store information about how you use the website, such as the pages you visit."
+        "notify_title": "Tell us whether you accept cookies"
+        "notify_description": "We use cookies to collect information about how you use this service."
+        "necessary_title": "Strictly necessary cookies"
+        "necessary_description": "These essential cookies do things like remember your progress through a form (for example a creating a petition)."
+        "on": "On"
+        "off": "Off"
+        "accept": "Accept all cookies"
+        "reject": "Reject unnecessary cookies"
+        "settings": "Set cookie preferences"
+        "accept_settings": "Accept all cookies"
+        "reject_settings": "Reject unnecessary cookies"
+      analytics:
+        label: "Cookies that measure website use"
+        description: "We use Google Analytics to measure how you use the website so we can improve it based on user needs. We do not allow Google to use or share the data about how you use this site."
     os:
       app_name: Petitions
       app_tooltip: Senedd
@@ -34,8 +56,9 @@ en-GB:
     footer:
       nav:
         home: Home
-        privacy: Privacy and cookies
+        privacy: Privacy
         feedback: Feedback
+        cookies: Cookies
         all_petitions: All petitions
         start_a_petition: Start a petition
         how_petitions_work: How petitions work

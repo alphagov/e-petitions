@@ -175,6 +175,22 @@ class Site < ActiveRecord::Base
       ENV['TRANSLATION_ENABLED'] == 'true'
     end
 
+    def cookie_control?
+      cookie_control_api_key.present?
+    end
+
+    def cookie_control_api_key
+      ENV['COOKIE_CONTROL_API_KEY']
+    end
+
+    def ga_property_id
+      if I18n.locale == :"en-GB"
+        ENV["GA_PROPERTY_EN"]
+      else
+        ENV["GA_PROPERTY_CY"]
+      end
+    end
+
     def moderation_overdue_in_days
       7.days
     end

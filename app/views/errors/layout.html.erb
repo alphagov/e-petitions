@@ -18,6 +18,9 @@
   </main>
 
 <%= render 'application/footer' -%>
+<% if Site.cookie_control? %>
+<%= render 'application/cookie_control' %>
+<% end %>
 </body>
 
 </html>

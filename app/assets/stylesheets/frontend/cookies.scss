@@ -1,0 +1,86 @@
+#ccc {
+  font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+
+  #ccc-notify #ccc-close,
+  #ccc-notify-dismiss,
+  #ccc-notify-reject {
+    display: none !important;
+  }
+
+  #ccc-content {
+    h2, h3 {
+      line-height: 1.25 !important;
+      margin: 0 0 6px 0;
+    }
+
+    h2 {
+      @include font-size(0.875rem, 1rem);
+    }
+
+    h3 {
+      @include font-size(0.75rem, 0.875rem);
+    }
+
+    p {
+      line-height: 1.375 !important;
+      margin: 0 0 12px;
+
+      @include font-size(0.75rem, 0.875rem);
+    }
+
+    hr {
+      margin: 12px 0 !important;
+    }
+
+    .ccc-svg-element {
+      height: 10px;
+      width: 10px;
+      top: 3px;
+      margin-left: 6px;
+    }
+
+    .checkbox-toggle {
+      background-color: $white !important;
+      border-color: $white !important;
+      border-width: 3px !important;
+      padding: 2px;
+    }
+
+    .checkbox-toggle-on {
+      color: $text-color !important;
+    }
+
+    .checkbox-toggle-off {
+      color: $secondary-text-color !important;
+    }
+
+    #ccc-necessary-title {
+      padding-right: 0;
+    }
+
+    #ccc-close {
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  #ccc-notify-accept,
+  #ccc-recommended-settings {
+    background-color: $button-color;
+    border-color: $button-color;
+    color: $white;
+  }
+
+  .ccc-notify-button {
+    border-radius: 0 !important;
+    border-width: 2px !important;
+    font-weight: bold !important;
+
+    &:active, &:focus, &:hover {
+      background-color: $white !important;
+      border-color: $focus-color !important;
+      color: $text-color !important;
+    }
+  }
+}
