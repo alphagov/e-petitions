@@ -39,7 +39,7 @@ Feature: Suzy Signer views all petitions
     And a petition "Spend more money on Defence" has been debated 18 days ago
     And a petition "Force supermarkets to give unsold food to charities" has been debated 234 days ago
     And a petition "Make every monday bank holiday" exists
-    When I browse to see only "Debated in the Senedd" petitions
+    When I browse to see only "Debated by the Senedd" petitions
     Then I should see "4 petitions"
     Then I should see the following ordered list of petitions:
      | Free the wombles                                    |

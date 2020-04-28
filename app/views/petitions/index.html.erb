@@ -14,10 +14,7 @@
 </details>
 
 <h1 class="page-title"><%= t(@petitions.scope, scope: :"ui.petitions.index.page_titles") %></h1>
-
-<% if petition_list_header? %>
-  <p class="text-secondary"><%= petition_list_header %></p>
-<% end %>
+<%= t(:"#{@petitions.scope}_html", scope: :"ui.list_headers", default: "") %>
 
 <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
   <div class="search-inline">

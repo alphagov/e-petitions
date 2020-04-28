@@ -22,14 +22,6 @@ module PetitionHelper
     number_to_percentage(percentage, precision: 2)
   end
 
-  def petition_list_header
-    @_petition_list_header ||= t(@petitions.scope, scope: :"ui.list_headers", default: "")
-  end
-
-  def petition_list_header?
-    petition_list_header.present?
-  end
-
   def petition_standards_link(*args)
     link_to(t(:"ui.petitions.standards_link"), help_path(anchor: 'standards'))
   end

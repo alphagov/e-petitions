@@ -71,19 +71,19 @@ RSpec.describe HomeHelper, type: :helper do
 
       context "when the petition count is 1" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> petition was debated in the Senedd")
+          expect(helper.petition_count(:with_debated_outcome, 1)).to eq("<span class=\"count\">1</span> petition was debated by the Senedd")
         end
       end
 
       context "when the petition count is 100" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> petitions were debated in the Senedd")
+          expect(helper.petition_count(:with_debated_outcome, 100)).to eq("<span class=\"count\">100</span> petitions were debated by the Senedd")
         end
       end
 
       context "when the petition count is 1000" do
         it "returns a correctly formatted petition count" do
-          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> petitions were debated in the Senedd")
+          expect(helper.petition_count(:with_debated_outcome, 1000)).to eq("<span class=\"count\">1,000</span> petitions were debated by the Senedd")
         end
       end
     end

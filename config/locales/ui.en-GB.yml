@@ -44,15 +44,15 @@ en-GB:
           for debate
         other: <span class="count">%{num}</span> petitions are waiting to be considered
           for debate
-      debated_explanation_html: See all petitions debated in the Senedd (%{num})
+      debated_explanation_html: See all petitions debated by the Senedd (%{num})
       referred_explanation_html: See all petitions referred to the Petitions Committee (%{num})
       with_debated_outcome_html:
-        one: <span class="count">%{num}</span> petition was debated in the Senedd
-        two: <span class="count">2</span> petitions were debated in the Senedd
-        zero: <span class="count">0</span> petitions were debated in the Senedd
-        other: <span class="count">%{num}</span> petitions were debated in the Senedd
-      not_debated_explanation_html: See all petitions not debated in the Senedd (%{num})
-      awaiting_debate_explanation_html: See all petitions waiting for a debate in the Senedd (%{num})
+        one: <span class="count">%{num}</span> petition was debated by the Senedd
+        two: <span class="count">2</span> petitions were debated by the Senedd
+        zero: <span class="count">0</span> petitions were debated by the Senedd
+        other: <span class="count">%{num}</span> petitions were debated by the Senedd
+      not_debated_explanation_html: See all petitions not debated by the Senedd (%{num})
+      awaiting_debate_explanation_html: See all petitions waiting for a debate by the Senedd (%{num})
     footer:
       nav:
         home: Home
@@ -306,22 +306,22 @@ en-GB:
           all: All petitions
           open: Open petitions
           closed: Closed petitions
-          debated: Petitions debated in the Senedd
+          debated: Petitions debated by the Senedd
           referred: Petitions referred to the Petitions Committee
           rejected: Rejected petitions
           completed: Completed petitions
           published: Published petitions
-          not_debated: Petitions not debated in the Senedd
-          awaiting_debate: Petitions waiting for a debate in the Senedd
+          not_debated: Petitions not debated by the Senedd
+          awaiting_debate: Petitions waiting for a debate by the Senedd
           archived: Archived petitions
       lists:
         all: All petitions (%{quantity})
         open: Open petitions (%{quantity})
-        debated: Debated in the Senedd (%{quantity})
+        debated: Debated by the Senedd (%{quantity})
         referred: Referred to the Committee (%{quantity})
         rejected: Rejected petitions (%{quantity})
         completed: Completed petitions (%{quantity})
-        not_debated: Not debated in the Senedd (%{quantity})
+        not_debated: Not debated by the Senedd (%{quantity})
         archived: Archived petitions
       local:
         all:
@@ -677,10 +677,21 @@ en-GB:
       share_this_petition: Share this petition
       twitter_card_description: Official online petitions in response to issues of
         the day, listing the number that were referred to the Petitions Committee,
-        and those that have been debated in the Senedd
+        and those that have been debated by the Senedd
     share_title: 'Petition: %{petition}'
     list_headers:
-      not_debated: The Petitions Committee decided not to debate these petitions
+      open_html: |-
+        <p class="text-secondary">These petitions are collecting signatures</p>
+      referred_html: |-
+        <p class="text-secondary">These petitions are currently being considered by the Petitions Committee</p>
+      debated_html: |-
+        <p class="text-secondary">These petitions were debated by the Senedd in Plenary</p>
+      not_debated_html: |-
+        <p class="text-secondary">The Petitions Committee decided not to request a Plenary debate on these petitions</p>
+      completed_html: |-
+        <p class="text-secondary">The Petitions Committee has finished considering these petitions</p>
+      rejected_html: |-
+        <p class="text-secondary">These petitions did not meet the <a href="/help#standards">petition standards</a>. They are published in the language in which they were submitted.</p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">

@@ -88,8 +88,8 @@ Feature: Suzy Singer searches by free text
     Then I should see the following search results:
       | The Wombles will rock Glasto | 1 signature          |
 
-  Scenario: Search for petitions debated in the Senedd
-    When I search for "Debated in the Senedd" with "EU"
+  Scenario: Search for petitions debated by the Senedd
+    When I search for "Debated by the Senedd" with "EU"
     Then I should see the following search results:
       | Leave EU                        | 1 signature |
 

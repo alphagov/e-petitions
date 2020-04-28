@@ -37,13 +37,13 @@ cy-GB:
         two: Mae <span class="count">2</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
         zero: Mae <span class="count">0</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
         other: Mae <span class="count">%{num}</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
-      debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni yn y Senedd (%{num})
+      debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni gan y Senedd (%{num})
       referred_explanation_html: Gweld pob deiseb a gyfeiriwyd at y Pwyllgor Deisebau (%{num})
       with_debated_outcome_html:
-        one: Cynhaliwyd dadl ar <span class="count">%{num}</span> ddeiseb yn y Senedd
-        two: Cynhaliwyd dadl ar <span class="count">2</span> deiseb yn y Senedd
-        zero: Cynhaliwyd dadl ar <span class="count">0</span> deiseb yn y Senedd
-        other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb yn y Senedd
+        one: Cynhaliwyd dadl ar <span class="count">%{num}</span> ddeiseb gan y Senedd
+        two: Cynhaliwyd dadl ar <span class="count">2</span> deiseb gan y Senedd
+        zero: Cynhaliwyd dadl ar <span class="count">0</span> deiseb gan y Senedd
+        other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb gan y Senedd
       not_debated_explanation_html: Gweld pob deiseb na chynhaliwyd dadl arni yn y
         Senedd (%{num})
       awaiting_debate_explanation_html: Gweld pob deiseb sy’n aros am ddadl (%{num})
@@ -300,22 +300,22 @@ cy-GB:
           all: Pob deiseb
           open: Deisebau sydd ar agor
           closed: Deisebau a gaewyd
-          debated: Deisebau y cynhaliwyd dadl arnynt yn y Senedd
+          debated: Deisebau y cynhaliwyd dadl arnynt gan y Senedd
           referred: Deisebau a gyfeiriwyd at y Pwyllgor Deisebau
           rejected: Deisebau a wrthodwyd
           completed: Deisebau a gwblhawyd
           published: Deisbau a gyhoeddwyd
-          not_debated: Deisebau na chynhaliwyd dadl arnynt yn y Senedd
-          awaiting_debate: Deisbau sy’n aros am ddadl yn y Senedd
+          not_debated: Deisebau na chynhaliwyd dadl arnynt gan y Senedd
+          awaiting_debate: Deisbau sy’n aros am ddadl gan y Senedd
           archived: Deisebau wedi’u harchifo
       lists:
         all: Pob deiseb (%{quantity})
         open: Deisebau sydd ar agor (%{quantity})
-        debated: Cynhaliwyd dadl yn y Senedd (%{quantity})
+        debated: Cynhaliwyd dadl gan y Senedd (%{quantity})
         referred: Cyfeiriwyd at y Pwyllgor (%{quantity})
         rejected: Deisebau a wrthodwyd (%{quantity})
         completed: Deisebau a gwblhawyd (%{quantity})
-        not_debated: Ni chynhaliwyd dadl yn y Senedd (%{quantity})
+        not_debated: Ni chynhaliwyd dadl gan y Senedd (%{quantity})
         archived: Deisebau wedi’u harchifo
       local:
         all:
@@ -656,10 +656,21 @@ cy-GB:
       share_this_petition: Rhannu’r ddeiseb hon
       twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion
         cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a’r rhai
-        y cynhaliwyd dadl arnynt yn y Senedd
+        y cynhaliwyd dadl arnynt gan y Senedd
     share_title: 'Deiseb: %{petition}'
     list_headers:
-      not_debated: Penderfynodd y Pwyllgor Deisebau beidio â thrafod y ddeiseb hon
+      open_html: |-
+        <p class="text-secondary">Mae modd ychwanegu llofnodion at y deisebau hyn</p>
+      referred_html: |-
+        <p class="text-secondary">Mae’r Pwyllgor Deisebau wrthi’n ystyried y deisebau hyn</p>
+      debated_html: |-
+        <p class="text-secondary">Cynhaliwyd dadl yn y Cyfarfod Llawn ar y deisebau hyn</p>
+      not_debated_html: |-
+        <p class="text-secondary">Penderfynodd y Pwyllgor Deisebau beidio â gofyn am ddadl yn y Cyfarfod Llawn ar y deisebau hyn</p>
+      completed_html: |-
+        <p class="text-secondary">Mae’r Pwyllgor Deisebau wedi gorffen ystyried y deisebau hyn</p>
+      rejected_html: |-
+        <p class="text-secondary">Nid oedd y deisebau hyn yn <a href="/help#standards">bodloni’r safonau ar gyfer deisebau</a>. Fe’u cyhoeddir yn yr iaith y cawsant eu cyflwyno ynddi.</p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">

@@ -1,4 +1,4 @@
-Given(/^there (?:are|is) (\d+) petitions? debated in the Senedd(.+)?$/) do |debated_count, links_command|
+Given(/^there (?:are|is) (\d+) petitions? debated by the Senedd(.+)?$/) do |debated_count, links_command|
   video_url, transcript_url, debate_pack_url = nil, nil, nil
 
   if links_command == " with a transcript url"
@@ -35,7 +35,7 @@ Then(/^I should see a total showing (.*?) petitions referred to the committee$/)
   expect(page).to have_css(".actioned-petitions ul li:first-child .count", :text => referred_count)
 end
 
-Then(/^I should see a total showing (.*?) petitions debated in the Senedd$/) do |debated_count|
+Then(/^I should see a total showing (.*?) petitions debated by the Senedd$/) do |debated_count|
   expect(page).to have_css(".actioned-petitions ul li:last-child .count", :text => debated_count)
 end
 
@@ -68,7 +68,7 @@ end
 
 Then(/^I should see (\d+) petitions counted in the debate threshold section$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    link_text = "See all petitions debated in the Senedd (#{count})"
+    link_text = "See all petitions debated by the Senedd (#{count})"
     expect(page).to have_link(link_text, href: petitions_path(state: :debated))
   end
 end

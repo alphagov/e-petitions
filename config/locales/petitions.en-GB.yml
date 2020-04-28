@@ -47,8 +47,8 @@ en-GB:
           referred: "Referred (%{quantity})"
           rejected: "Rejected (%{quantity})"
           hidden: "Hidden (%{quantity})"
-          awaiting_debate_date: "Awaiting a debate in the Senedd (%{quantity})"
-          with_debate_outcome: "Has been debated in the Senedd (%{quantity})"
+          awaiting_debate_date: "Awaiting a debate by the Senedd (%{quantity})"
+          with_debate_outcome: "Has been debated by the Senedd (%{quantity})"
           in_debate_queue: "In debate queue (%{quantity})"
 
     action_counts:
