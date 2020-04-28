@@ -5,7 +5,7 @@ class Admin::CompletionController < Admin::AdminController
     if @petition.complete
       redirect_to [:admin, @petition], notice: :petition_updated
     else
-      render 'admin/petitions/show'
+      redirect_to [:admin, @petition], alert: :petition_not_updated
     end
   end
 

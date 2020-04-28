@@ -703,7 +703,9 @@ class Petition < ActiveRecord::Base
   end
 
   def complete(time = Time.current)
-    update(state: COMPLETED_STATE, completed_at: time)
+    if closed?
+      update(state: COMPLETED_STATE, completed_at: time)
+    end
   end
 
   def close!(time = deadline)
