@@ -49,7 +49,9 @@
   <script>
     var button = document.getElementById('cookie-control');
 
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+
       if (CookieControl) {
         CookieControl.open();
       }
