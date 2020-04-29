@@ -5,7 +5,7 @@ Feature: Providing debate outcome information
   I want to store information about debates on the petition
 
   Scenario: Adding debate outcome infromation
-    Given an open petition "Ban Badger Baiting" with some signatures
+    Given an closed petition "Ban Badger Baiting" with some signatures
     And I am logged in as a sysadmin
     When I am on the admin all petitions page
     And I follow "Ban Badger Baiting"

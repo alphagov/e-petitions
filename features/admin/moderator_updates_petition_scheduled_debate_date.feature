@@ -2,7 +2,7 @@
 Feature: Moderator updates petition scheduled debate date
 
   Scenario: Updating petition scheduled debate date
-    Given an open petition "More money for charities" with some signatures
+    Given an closed petition "More money for charities" with some signatures
     And I am logged in as a moderator
     When I view all petitions
     And I follow "More money for charities"
