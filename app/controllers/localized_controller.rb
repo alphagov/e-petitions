@@ -10,6 +10,8 @@ class LocalizedController < ApplicationController
   before_action :redirect_to_holding_page, except: :holding
   before_action :redirect_to_home_page, only: :holding
 
+  helper_method :holding_page?
+
   private
 
   def set_locale
@@ -23,6 +25,10 @@ class LocalizedController < ApplicationController
     else
       :"en-GB"
     end
+  end
+
+  def holding_page?
+    action_name == "holding"
   end
 
   def bypass_param?

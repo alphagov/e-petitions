@@ -27,6 +27,10 @@ namespace :errors do
       def home_page?
         false
       end
+
+      def holding_page?
+        false
+      end
     end
 
     %w[400 403 404 406 422 500 503].each do |status|

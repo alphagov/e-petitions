@@ -14,6 +14,7 @@ footer:
     - :site_updated_at
     - :create_petition_page
     - :open_petition_page
+    - :holding_page
   options:
     expires_in: 300
 

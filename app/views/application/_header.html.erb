@@ -10,7 +10,7 @@
         <p><%= t(:"ui.header.welsh_parliament") %></p>
       </div>
       <p class="service">
-        <% if home_page? || Site.show_holding_page? %>
+        <% if home_page? || holding_page? %>
           <%= t(:"ui.header.title") %>
         <% else %>
           <%= t(:"ui.header.title_link_html", url: home_path) %>

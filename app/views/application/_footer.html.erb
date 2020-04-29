@@ -1,6 +1,6 @@
 <footer role="contentinfo">
   <div class="wrapper">
-    <% unless Site.show_holding_page? %>
+    <% unless holding_page? %>
       <ul>
         <li>
           <%= link_to home_path do %>
@@ -47,7 +47,7 @@
     </div>
   </div>
 </footer>
-<% if Site.cookie_control? && !Site.show_holding_page?  %>
+<% if Site.cookie_control? && !holding_page?  %>
   <script>
     var button = document.getElementById('cookie-control');
 

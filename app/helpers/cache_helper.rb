@@ -28,6 +28,7 @@ module CacheHelper
       delegate :create_petition_page?, to: :template
       delegate :open_petition_page?, to: :template
       delegate :home_page?, to: :template
+      delegate :holding_page?, to: :template
       delegate :last_signature_at, to: :template
       delegate :last_debate_outcome_updated_at, to: :template
       delegate :petition_page?, to: :template
@@ -56,6 +57,10 @@ module CacheHelper
 
       def home_page
         home_page?
+      end
+
+      def holding_page
+        holding_page?
       end
 
       def last_petition_created_at

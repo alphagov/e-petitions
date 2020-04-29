@@ -38,7 +38,7 @@
       <%= javascript_include_tag admin_translations_url(:js), crossorigin: 'use-credentials' %>
     <% end %>
 
-    <% if Site.cookie_control? && !Site.show_holding_page? %>
+    <% if Site.cookie_control? && !holding_page? %>
       <%= render 'cookie_control' %>
     <% end %>
   </body>
