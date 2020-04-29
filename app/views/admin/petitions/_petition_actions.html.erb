@@ -59,6 +59,12 @@
         </li>
       <% end -%>
 
+      <% if @petition.completed? %>
+        <li class="petition-action">
+          <%= render 'petition_action_completion_date', petition: @petition %>
+        </li>
+      <% end %>
+
       <% if @petition.archivable? %>
         <li class="petition-action">
           <%= form_for @petition, url: admin_petition_archive_path(@petition), method: :patch do |f| -%>

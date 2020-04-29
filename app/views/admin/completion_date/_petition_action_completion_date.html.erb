@@ -1,0 +1,16 @@
+<%= form_for petition, url: admin_petition_completion_date_path(petition), method: :patch do |f| %>
+
+  <%= form_row for: [f.object, :closed_at] do %>
+    <%= f.label :completed_at, "Completion date", class: 'form-label' %>
+    <%= error_messages_for_field @petition, :completed_at %>
+    <%= f.date_select :completed_at, { include_blank: true }, tabindex: increment, class: 'form-control form-control-auto' %>
+    <%= hidden_field_tag "petition[completed_at(4i)]", "0" %>
+    <%= hidden_field_tag "petition[completed_at(5i)]", "0" %>
+    <%= hidden_field_tag "petition[completed_at(6f)]", "0" %>
+  <% end %>
+
+  <%= f.submit "Save", name: 'save', class: 'button' %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
+<% end %>
+
+<%= render 'edit_lock' %>

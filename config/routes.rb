@@ -125,6 +125,7 @@ Rails.application.routes.draw do
 
         scope only: %i[show update] do
           resource :abms_link, path: 'abms-link', controller: 'abms_link'
+          resource :completion_date, path: 'completion-date', controller: 'completion_date'
           resource :debate_outcome, path: 'debate-outcome'
           resource :notes
           resource :details, controller: 'petition_details'
