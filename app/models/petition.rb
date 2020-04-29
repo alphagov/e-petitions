@@ -114,16 +114,16 @@ class Petition < ActiveRecord::Base
   validate if: :editing do
     t = Translation.new(self, editing)
     errors.add :action, :blank unless t.action.present?
-    errors.add :action, :too_long, count: 100 if t.action.length > 100
+    errors.add :action, :too_long, count: 255 if t.action.length > 255
     errors.add :background, :blank unless t.background.present?
     # allow extra characters to account for carriage returns
-    errors.add :background, :too_long, count: 500 if t.background.length > 500
-    errors.add :additional_details, :too_long, count: 1100 if t.additional_details.length > 1100
+    errors.add :background, :too_long, count: 3000 if t.background.length > 3000
+    errors.add :additional_details, :too_long, count: 5000 if t.additional_details.length > 5000
   end
 
   validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
-  validates :creator, presence: true
+  validates :creator, presence: true, unless: :completed?
   validates :state, inclusion: { in: STATES }
 
   with_options allow_nil: true, prefix: true do
