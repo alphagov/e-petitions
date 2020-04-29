@@ -11,14 +11,14 @@ RSpec.describe AdminHelper, type: :helper do
         overdue_in_moderation: 6, tagged_in_moderation: 7, untagged_in_moderation: 8,
         open: 9, referred: 10, rejected: 11, hidden: 12,
         awaiting_debate_date: 13, with_debate_outcome: 14,
-        in_debate_queue: 15
+        in_debate_queue: 15, completed: 16, archived: 17
       }
     end
 
     subject { helper.admin_petition_facets_for_select(facets, selected) }
 
     it "generates the correct number of options" do
-      expect(subject).to have_css("option", count: 15)
+      expect(subject).to have_css("option", count: 17)
     end
 
     it "generates the correct option for 'all'" do
@@ -79,6 +79,14 @@ RSpec.describe AdminHelper, type: :helper do
 
     it "generates the correct option for 'in_debate_queue'" do
       expect(subject).to have_css("option:nth-of-type(15)[value='in_debate_queue']", text: "In debate queue (15)")
+    end
+
+    it "generates the correct option for 'completed'" do
+      expect(subject).to have_css("option:nth-of-type(16)[value='completed']", text: "Completed (16)")
+    end
+
+    it "generates the correct option for 'archived'" do
+      expect(subject).to have_css("option:nth-of-type(17)[value='archived']", text: "Archived (17)")
     end
 
     it "marks the correct option as selected" do

@@ -33,6 +33,8 @@ en-GB:
         - :awaiting_debate_date
         - :with_debate_outcome
         - :in_debate_queue
+        - :completed
+        - :archived
       names:
         admin:
           all: "All petitions (%{quantity})"
@@ -50,6 +52,8 @@ en-GB:
           awaiting_debate_date: "Awaiting a debate by the Senedd (%{quantity})"
           with_debate_outcome: "Has been debated by the Senedd (%{quantity})"
           in_debate_queue: "In debate queue (%{quantity})"
+          completed: "Completed (%{quantity})"
+          archived: "Archived (%{quantity})"
 
     action_counts:
       in_moderation_html: "<span class=\"count\">%{formatted_count}</span> Moderation queue"
