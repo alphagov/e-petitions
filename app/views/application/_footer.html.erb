@@ -28,7 +28,7 @@
       </li>
       <% if Site.cookie_control? %>
         <li>
-          <%= link_to "#", id: "cookie-control" do %>
+          <%= link_to privacy_path(anchor: "cookies"), id: "cookie-control" do %>
             <%= t(:"ui.footer.nav.cookies") %>
           <% end %>
         </li>
