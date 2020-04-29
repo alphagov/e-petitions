@@ -6,7 +6,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
   end
 
   def update
-    if @petition.update_attributes(params_for_update)
+    if @petition.update(petition_params)
       if send_email_to_petitioners?
         EmailDebateScheduledJob.run_later_tonight(petition: @petition)
         message = :email_sent_overnight
@@ -26,7 +26,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
     @petition = Petition.find(params[:petition_id])
   end
 
-  def params_for_update
+  def petition_params
     params.require(:petition).permit(:scheduled_debate_date)
   end
 
