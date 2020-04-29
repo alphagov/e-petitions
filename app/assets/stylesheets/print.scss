@@ -90,6 +90,12 @@ ul {
   }
 }
 
+blockquote {
+  border-left: 6px solid #E6E6E6;
+  padding-left: 18px;
+  margin: 18px 24px 18px 0;
+}
+
 a {
   color: #000000;
   text-decoration: none;
@@ -120,6 +126,7 @@ td:first-child {
   margin-bottom: 3px;
 }
 
+.petition-content ul,
 .list-bullet {
   margin-top: -6px;
 
@@ -139,6 +146,7 @@ td:first-child {
   }
 }
 
+.petition-content ol,
 .list-number {
   counter-reset: ordered-list;
 
