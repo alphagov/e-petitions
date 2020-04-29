@@ -2,7 +2,6 @@ module HomeHelper
   class ActionedPetitionsDecorator
     FACETS = [
       :referred,
-      :awaiting_debate,
       :with_debated_outcome,
       :not_debated
     ]

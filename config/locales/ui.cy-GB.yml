@@ -39,11 +39,6 @@ cy-GB:
         two: Cyfeiriwyd <span class="count">2</span> deiseb at y Pwyllgor Deisebau
         zero: Cyfeiriwyd <span class="count">0</span> deiseb at y Pwyllgor Deisebau
         other: Cyfeiriwyd <span class="count">%{num}</span> deiseb at y Pwyllgor Deisebau
-      awaiting_debate_html:
-        one: Mae <span class="count">%{num}</span> ddeiseb yn aros i gael ei hystyried ar gyfer dadl
-        two: Mae <span class="count">2</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
-        zero: Mae <span class="count">0</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
-        other: Mae <span class="count">%{num}</span> deiseb yn aros i gael eu hystyried ar gyfer dadl
       debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni gan y Senedd (%{num})
       referred_explanation_html: Gweld pob deiseb a gyfeiriwyd at y Pwyllgor Deisebau (%{num})
       with_debated_outcome_html:
@@ -53,7 +48,6 @@ cy-GB:
         other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb gan y Senedd
       not_debated_explanation_html: Gweld pob deiseb na chynhaliwyd dadl arni yn y
         Senedd (%{num})
-      awaiting_debate_explanation_html: Gweld pob deiseb sy’n aros am ddadl (%{num})
     footer:
       nav:
         home: Hafan

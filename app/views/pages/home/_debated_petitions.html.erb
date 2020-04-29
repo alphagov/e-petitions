@@ -1,4 +1,4 @@
-<% if actioned[:awaiting_debate][:count].zero? && actioned[:with_debated_outcome][:count].zero? %>
+<% if actioned[:with_debated_outcome][:count].zero? %>
   <p><%= t(:"ui.home_page.debated_petitions.none_debated") %></p>
 <% else %>
   <ol class="threshold-petitions">
@@ -25,6 +25,5 @@
     <% end -%>
   </ol>
   <p><%= link_to petition_count(:debated_explanation, actioned[:with_debated_outcome][:count]), petitions_path(state: :debated), class: "view-all" %></p>
-  <p><%= link_to petition_count(:awaiting_debate_explanation, actioned[:awaiting_debate][:count]), petitions_path(state: :awaiting_debate), class: "view-all" %></p>
   <p><%= link_to petition_count(:not_debated_explanation, actioned[:not_debated][:count]), petitions_path(state: :not_debated), class: "view-all" %></p>
 <% end %>
