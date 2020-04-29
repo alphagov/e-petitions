@@ -198,13 +198,34 @@
     }
   }
 
-  .petition-content blockquote {
-    clear: both;
-    border-left: 10px solid $border-colour;
+  .petition-content {
+    blockquote {
+      clear: both;
+      border-left: 10px solid $border-colour;
 
-    padding: 0 0 0 $gutter-half;
-    margin: ($gutter $gutter-half $gutter 0);
-    margin-top: em(5, 16);
-    margin-bottom: em(15, 16);
+      padding: 0 0 0 $gutter-half;
+      margin: ($gutter $gutter-half $gutter 0);
+      margin-top: em(5, 16);
+      margin-bottom: em(15, 16);
+    }
+
+    ul {
+      list-style-type: disc;
+      padding-left: 30px;
+    }
+
+    ol {
+      list-style-type: decimal;
+      padding-left: 30px;
+    }
+
+    ul, ol {
+      margin-top: 5px;
+      margin-bottom: 20px;
+
+      & li {
+        margin-bottom: 5px;
+      }
+    }
   }
 }
