@@ -101,8 +101,8 @@ RSpec.describe Petition, type: :model do
     it { is_expected.to have_db_column(:locale).of_type(:string).with_options(limit: 7, null: false, default: "en-GB") }
     it { is_expected.to have_db_column(:action_en).of_type(:string).with_options(limit: 255, null: true) }
     it { is_expected.to have_db_column(:action_cy).of_type(:string).with_options(limit: 255, null: true) }
-    it { is_expected.to have_db_column(:background_en).of_type(:string).with_options(limit: 500, null: true) }
-    it { is_expected.to have_db_column(:background_cy).of_type(:string).with_options(limit: 500, null: true) }
+    it { is_expected.to have_db_column(:background_en).of_type(:string).with_options(limit: 3000, null: true) }
+    it { is_expected.to have_db_column(:background_cy).of_type(:string).with_options(limit: 3000, null: true) }
     it { is_expected.to have_db_column(:additional_details_en).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:additional_details_cy).of_type(:text).with_options(null: true) }
     it { is_expected.to have_db_column(:committee_note).of_type(:text).with_options(null: true) }

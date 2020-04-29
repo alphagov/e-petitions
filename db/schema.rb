@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_29_133640) do
+ActiveRecord::Schema.define(version: 2020_04_29_140909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -270,8 +270,8 @@ ActiveRecord::Schema.define(version: 2020_04_29_133640) do
     t.string "action_cy", limit: 255
     t.text "additional_details_en"
     t.text "additional_details_cy"
-    t.string "background_en", limit: 500
-    t.string "background_cy", limit: 500
+    t.string "background_en", limit: 3000
+    t.string "background_cy", limit: 3000
     t.datetime "completed_at"
     t.datetime "referred_at"
     t.string "abms_link_en"
