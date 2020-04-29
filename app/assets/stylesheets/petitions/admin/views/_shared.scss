@@ -197,4 +197,14 @@
       }
     }
   }
+
+  .petition-content blockquote {
+    clear: both;
+    border-left: 10px solid $border-colour;
+
+    padding: 0 0 0 $gutter-half;
+    margin: ($gutter $gutter-half $gutter 0);
+    margin-top: em(5, 16);
+    margin-bottom: em(15, 16);
+  }
 }

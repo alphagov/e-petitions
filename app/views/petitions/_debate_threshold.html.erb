@@ -22,13 +22,13 @@
         <% end %>
 
         <% if debate_outcome.overview? -%>
-          <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
+          <%= markdown_to_html(debate_outcome.overview) %>
         <% end -%>
       </section>
     <% else %>
       <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.committee_decided_not_to_debate") %></h2>
       <% if debate_outcome.overview? -%>
-        <%= auto_link(simple_format(h(debate_outcome.overview)), html: { rel: 'nofollow' }) %>
+        <%= markdown_to_html(debate_outcome.overview) %>
       <% end -%>
     <% end %>
   <%# Has a debate date #%>

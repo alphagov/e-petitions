@@ -40,6 +40,16 @@
         <% end %>
       <% end %>
 
+      <%= form_row for: [f.object, :use_markdown] do %>
+        <div class="multiple-choice">
+          <%= f.check_box :use_markdown, tabindex: increment %>
+          <%= f.label :use_markdown do %>
+            Use <a href="https://guides.github.com/features/mastering-markdown/" target="_blank">markdown</a> to format the petition details
+          <% end %>
+        </div>
+        <%= error_messages_for_field @petition, :use_markdown %>
+      <% end %>
+
       <% if @petition.in_todo_list? || @petition.open? %>
         <%= form_row for: [f.object, :closed_at] do %>
           <%= f.label :closed_at, "Closing date", class: 'form-label' %>

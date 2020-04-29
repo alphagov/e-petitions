@@ -132,6 +132,12 @@ details {
   margin-bottom: 24px;
 }
 
+blockquote {
+  border-left: 6px solid $light-grey;
+  padding-left: 18px;
+  margin: 18px 24px 18px 0;
+}
+
 .section-panel {
   border-top: 2px solid $light-grey;
   margin: 24px -18px;
@@ -160,6 +166,7 @@ details {
   }
 }
 
+.petition-content ul,
 .list-bullet {
   margin-top: -6px;
 
@@ -188,6 +195,7 @@ details {
   }
 }
 
+.petition-content ol,
 .list-number {
   counter-reset: ordered-list;
 

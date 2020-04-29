@@ -14,11 +14,13 @@
     </div>
   <% end %>
 
-  <div><%= auto_link(simple_format(h(petition.background)), html: { rel: 'nofollow' }) %></div>
-  <% unless petition.additional_details.blank? %>
+  <% if petition.background? %>
+    <div class="petition-content"><%= apply_formatting(petition, :background) %></div>
+  <% end %>
+  <% if petition.additional_details? %>
     <details>
       <summary><span class="summary"><%= t(:"ui.petitions.more_details") %></span></summary>
-      <div><%= auto_link(simple_format(h(petition.additional_details)), html: { rel: 'nofollow' }) %></div>
+      <div class="petition-content"><%= apply_formatting(petition, :additional_details) %></div>
     </details>
   <% end %>
 

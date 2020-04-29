@@ -8,21 +8,25 @@
   </div>
 <% end %>
 
-<%= auto_link(simple_format(h(@petition.background)), html: { rel: 'nofollow' }) %>
-
-<% if @petition.in_todo_list? %>
-  <% unless @petition.additional_details.blank? %>
-    <%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %>
+<div class="petition-content">
+  <% if @petition.background? %>
+    <%= apply_formatting(@petition, :background) %>
   <% end %>
 
-<% else %>
-  <% unless @petition.additional_details.blank? %>
-    <details>
-      <summary><span>More details</span></summary>
-      <div><%= auto_link(simple_format(h(@petition.additional_details)), html: { rel: 'nofollow' }) %></div>
-    </details>
+  <% if @petition.in_todo_list? %>
+    <% if @petition.additional_details? %>
+      <%= apply_formatting(@petition, :additional_details) %>
+    <% end %>
+
+  <% else %>
+    <% if @petition.additional_details? %>
+      <details>
+        <summary><span>More details</span></summary>
+        <div><%= apply_formatting(@petition, :additional_details) %></div>
+      </details>
+    <% end %>
   <% end %>
-<% end %>
+</div>
 
 <p class="edit-petition-link">
   Edit petition:
@@ -33,5 +37,5 @@
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>
   <p><%= rejection_reason(@petition.rejection.code) %></p>
-  <%= auto_link(simple_format(h(@petition.rejection.details))) %>
+  <%= markdown_to_html(@petition.rejection.details) %>
 <% end -%>

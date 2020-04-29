@@ -25,4 +25,14 @@ module PetitionHelper
   def petition_standards_link(*args)
     link_to(t(:"ui.petitions.standards_link"), help_path(anchor: 'standards'))
   end
+
+  def apply_formatting(petition, attribute)
+    text = petition.public_send(attribute)
+
+    if petition.use_markdown?
+      markdown_to_html(text)
+    else
+      auto_link(simple_format(h(text)), html: { rel: 'nofollow' })
+    end
+  end
 end
