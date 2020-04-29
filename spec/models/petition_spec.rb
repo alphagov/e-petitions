@@ -818,23 +818,37 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe 'can_have_debate_added?' do
-    it "is true if the petition is OPEN and the closed_at date is in the future" do
-      petition = FactoryBot.build(:open_petition, :closed_at => 1.year.from_now)
-      expect(petition.can_have_debate_added?).to be_truthy
+  describe "#can_have_debate_added?" do
+    context "with an open petition" do
+      let(:petition) { FactoryBot.create(:open_petition) }
+
+      it "returns false" do
+        expect(petition.can_have_debate_added?).to eq(false)
+      end
     end
 
-    it "is true if the petition is OPEN and the closed_at date is in the past" do
-      petition = FactoryBot.build(:open_petition, :closed_at => 2.minutes.ago)
-      expect(petition.can_have_debate_added?).to be_truthy
+    context "with a closed petition" do
+      let(:petition) { FactoryBot.create(:closed_petition) }
+
+      it "returns true" do
+        expect(petition.can_have_debate_added?).to eq(true)
+      end
     end
 
-    it "is false otherwise" do
-      expect(FactoryBot.build(:open_petition, state: Petition::PENDING_STATE).can_have_debate_added?).to be_falsey
-      expect(FactoryBot.build(:open_petition, state: Petition::HIDDEN_STATE).can_have_debate_added?).to be_falsey
-      expect(FactoryBot.build(:open_petition, state: Petition::REJECTED_STATE).can_have_debate_added?).to be_falsey
-      expect(FactoryBot.build(:open_petition, state: Petition::VALIDATED_STATE).can_have_debate_added?).to be_falsey
-      expect(FactoryBot.build(:open_petition, state: Petition::SPONSORED_STATE).can_have_debate_added?).to be_falsey
+    context "with a completed petition" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+
+      it "returns true" do
+        expect(petition.can_have_debate_added?).to eq(true)
+      end
+    end
+
+    context "with an archived petition" do
+      let(:petition) { FactoryBot.create(:archived_petition) }
+
+      it "returns true" do
+        expect(petition.can_have_debate_added?).to eq(true)
+      end
     end
   end
 

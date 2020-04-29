@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true do
-
-  let!(:petition) { FactoryBot.create(:open_petition) }
+  let!(:petition) { FactoryBot.create(:closed_petition) }
 
   describe 'not logged in' do
     describe 'GET /show' do
@@ -44,7 +43,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
     before { login_as(user) }
 
     describe 'GET /show' do
-      describe 'for an open petition' do
+      describe 'for a closed petition' do
         it 'fetches the requested petition' do
           get :show, params: { petition_id: petition.id }
           expect(assigns(:petition)).to eq petition
@@ -135,7 +134,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           patch :update, params: params.merge(overrides)
         end
 
-        describe 'for an open petition' do
+        describe 'for a closed petition' do
           it 'fetches the requested petition' do
             do_patch
             expect(assigns(:petition)).to eq petition
@@ -347,7 +346,7 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           patch :update, params: params.merge(overrides)
         end
 
-        describe 'for an open petition' do
+        describe 'for a closed petition' do
           it 'fetches the requested petition' do
             do_patch
             expect(assigns(:petition)).to eq petition
