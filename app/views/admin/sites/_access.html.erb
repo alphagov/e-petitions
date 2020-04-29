@@ -43,6 +43,26 @@
         <%= form.label :enabled, "No", for: "site_enabled_true" %>
       </div>
     <% end %>
+
+    <%= form_row for: [form.object, :show_holding_page], class: "inline" do %>
+      <%= form.label :show_holding_page, "Show holding page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :enabled %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_holding_page, true %>
+        <%= form.label :show_holding_page, "Yes", for: "show_holding_page_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_holding_page, false %>
+        <%= form.label :show_holding_page, "No", for: "show_holding_page_false" %>
+      </div>
+    <% end %>
+
+    <% if Site.show_holding_page? %>
+      <p>
+        Bypass: <%= link_to "English", home_en_url(bypass: Site.bypass_token), target: "_blank" %> |
+        <%= link_to "Welsh", home_cy_url(bypass: Site.bypass_token), target: "_blank" %>
+      </p>
+    <% end %>
   </div>
 </div>
 

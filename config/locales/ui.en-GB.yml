@@ -1,6 +1,12 @@
 ---
 en-GB:
   ui:
+    holding_page:
+      body_html: |-
+        <h1 class="page-title">A new petitions site is coming on 30 April</h1>
+        <p>Sorry, the petitions service is currently unavailable. We are launching a new, improved website for petitions on 30 April.</p>
+        <p>Please accept our apologies for any inconvenience.</p>
+        <p>Click here to find out more about the work of the <a href="https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a>.</p>      
     cc:
       statement:
         name: "Find out more about the cookies on this website"

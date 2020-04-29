@@ -11,6 +11,12 @@ class PagesController < LocalizedController
     end
   end
 
+  def holding
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def privacy
     respond_to do |format|
       format.html

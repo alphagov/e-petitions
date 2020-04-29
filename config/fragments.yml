@@ -11,6 +11,7 @@ footer:
   keys:
     - :translations_updated_at
     - :locale
+    - :site_updated_at
     - :create_petition_page
     - :open_petition_page
   options:

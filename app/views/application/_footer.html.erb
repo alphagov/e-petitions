@@ -1,51 +1,53 @@
 <footer role="contentinfo">
   <div class="wrapper">
-    <ul>
-      <li>
-        <%= link_to home_path do %>
-          <%= t(:"ui.footer.nav.home") %>
-        <% end %>
-      </li>
-      <li>
-        <%= link_to petitions_path do %>
-          <%= t(:"ui.footer.nav.all_petitions") %>
-        <% end %>
-      </li>
-      <li>
-        <%= link_to check_petitions_path do %>
-          <%= t(:"ui.footer.nav.start_a_petition") %>
-        <% end %>
-      </li>
-      <li>
-        <%= link_to help_path do %>
-          <%= t(:"ui.footer.nav.how_petitions_work") %>
-        <% end %>
-      </li>
-      <li>
-        <%= link_to privacy_path do %>
-          <%= t(:"ui.footer.nav.privacy") %>
-        <% end %>
-      </li>
-      <% if Site.cookie_control? %>
+    <% unless Site.show_holding_page? %>
+      <ul>
         <li>
-          <%= link_to privacy_path(anchor: "cookies"), id: "cookie-control" do %>
-            <%= t(:"ui.footer.nav.cookies") %>
+          <%= link_to home_path do %>
+            <%= t(:"ui.footer.nav.home") %>
           <% end %>
         </li>
-      <% end %>
-      <li>
-        <%= link_to feedback_path do %>
-          <%= t(:"ui.footer.nav.feedback") %>
+        <li>
+          <%= link_to petitions_path do %>
+            <%= t(:"ui.footer.nav.all_petitions") %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to check_petitions_path do %>
+            <%= t(:"ui.footer.nav.start_a_petition") %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to help_path do %>
+            <%= t(:"ui.footer.nav.how_petitions_work") %>
+          <% end %>
+        </li>
+        <li>
+          <%= link_to privacy_path do %>
+            <%= t(:"ui.footer.nav.privacy") %>
+          <% end %>
+        </li>
+        <% if Site.cookie_control? %>
+          <li>
+            <%= link_to privacy_path(anchor: "cookies"), id: "cookie-control" do %>
+              <%= t(:"ui.footer.nav.cookies") %>
+            <% end %>
+          </li>
         <% end %>
-      </li>
-    </ul>
+        <li>
+          <%= link_to feedback_path do %>
+            <%= t(:"ui.footer.nav.feedback") %>
+          <% end %>
+        </li>
+      </ul>
+    <% end %>
 
     <div class="open-government-licence">
       <%= t(:"ui.footer.ogl_html") %>
     </div>
   </div>
 </footer>
-<% if Site.cookie_control? %>
+<% if Site.cookie_control? && !Site.show_holding_page?  %>
   <script>
     var button = document.getElementById('cookie-control');
 

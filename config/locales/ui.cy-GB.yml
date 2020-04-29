@@ -1,6 +1,12 @@
 ---
 cy-GB:
   ui:
+    holding_page:
+      body_html: |-
+        <h1 class="page-title">Bydd y wefan ddeisebau newydd ar gael ar 30 Ebrill</h1>
+        <p>Nid yw’r wefan ddeisebau ar gael ar hyn o bryd. Byddwn ni’n lansio gwefan newydd, well ar gyfer deisebau ar 30 Ebrill.</p>
+        <p>Mae’n ddrwg gennym am unrhyw anghyfleustra.</p>
+        <p>Cliciwch yma i gael rhagor o wybodaeth am waith y Pwyllgor Deisebau.</p>      
     cc:
       statement:
         name: "Darganfyddwch fwy am y cwcis ar y wefan hon"

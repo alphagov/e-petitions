@@ -19,6 +19,7 @@ class Site < ActiveRecord::Base
     disable_daily_update_statistics_job
     disable_plus_address_check
     disable_feedback_sending
+    show_holding_page
   ]
 
   class << self
@@ -249,6 +250,14 @@ class Site < ActiveRecord::Base
       instance.feedback_address
     end
 
+    def bypass_token
+      instance.bypass_token
+    end
+
+    def bypass_token?
+      bypass_token.present?
+    end
+
     private
 
     def default_title_en
@@ -420,6 +429,8 @@ class Site < ActiveRecord::Base
     end
   end
 
+  store_accessor :feature_flags, :bypass_token
+
   attr_reader :password
 
   def authenticate(username, password)
@@ -574,6 +585,14 @@ class Site < ActiveRecord::Base
   before_save if: :update_signature_counts_changed? do
     if update_signature_counts
       UpdateSignatureCountsJob.perform_later
+    end
+  end
+
+  before_save do
+    if show_holding_page
+      self.bypass_token = SecureRandom.base58
+    else
+      self.bypass_token = nil
     end
   end
 

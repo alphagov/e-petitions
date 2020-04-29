@@ -6,6 +6,9 @@ en-GB:
     "/browserconfig":
       en-GB: "/browserconfig"
       cy-GB: "/browserconfig"
+    "/coming-soon":
+      en-GB: "/coming-soon"
+      cy-GB: "/dod-yn-fuan"
     "/constituencies":
       en-GB: "/constituencies"
       cy-GB: "/etholaethau"

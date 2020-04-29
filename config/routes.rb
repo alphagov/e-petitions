@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       get '/privacy', action: 'privacy', as: :privacy
       get '/rules',   action: 'rules',   as: :rules
 
+      get '/coming-soon', action: 'holding', as: :holding
+
       scope format: true, localized: false do
         get '/browserconfig', action: 'browserconfig', as: :browserconfig, constraints: { format: 'xml' }
         get '/manifest',      action: 'manifest',      as: :manifest,      constraints: { format: 'json' }
