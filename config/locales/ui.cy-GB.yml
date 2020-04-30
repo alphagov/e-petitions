@@ -29,7 +29,7 @@ cy-GB:
         "reject_settings": "Gwrthod cwcis diangen"
       analytics:
         label: "Cwcis syn mesur defnydd or wefan"
-        description: "Rydym nin defnyddio Google Analytics i fesur sut rydych chin defnyddior wefan er mwyn gwneud gwelliannau ar sail anghenion defnyddwyr. Nid ydym nin caniatau i Google ddefnyddio na rhannur data am sut rydych chin defnyddior wefan hon."
+        description: "Rydym yn defnyddio Google Analytics i fesur sut rydych yn defnyddio y wefan er mwyn gwneud gwelliannau ar sail anghenion defnyddwyr. Nid ydym yn caniatau i Google ddefnyddio na rhannu data am sut rydych yn defnyddio y wefan hon."
     os:
       app_name: Deisebau
       app_tooltip: Senedd
