@@ -8,7 +8,7 @@
   </p>
 
   <% if @member.present? %>
-    <p><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(@member.name, @member.url, rel: 'external'), constituency_name: @constituency.name) %></p>
+    <p><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(@member.name, @member.url, rel: 'external' class: 'view-all'), constituency_name: @constituency.name) %></p>
   <% end %>
 
   <% if @members.any? %>

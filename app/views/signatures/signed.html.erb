@@ -17,7 +17,7 @@
     <h2 id="contact-your-member-heading"><%= t(:"ui.signatures.signed.contact_member.heading") %></h2>
 
     <% if member = constituency.member %>
-      <p><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(member.name, member.url, rel: 'external'), constituency_name: constituency.name) %></p>
+      <p><%= t(:"ui.petitions.local.member_name_link_html", member_name_link: link_to(member.name, member.url, rel: 'external', class: 'view-all'), constituency_name: constituency.name) %></p>
     <% end %>
 
     <% if region = constituency.region %>
