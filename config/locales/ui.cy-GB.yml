@@ -15,7 +15,7 @@ cy-GB:
       text:
         "title": "Ffeiliau sy’n cael eu harbed ar eich ffôn, eich tabled neu’ch cyfrifiadur pan fyddwch chi’n ymweld â gwefan yw cwcis."
         "intro": "Mae rhai o’r cwcis hyn yn hanfodol tra bod rhai eraill yn ein helpu i wella eich profiad drwy ddangos i ni sut mae’r wefan yn cael ei defnyddio."
-        "description": "Rydym ni’n defnyddio cwcis i storio gwybodaeth am y ffordd rydych chi'n defnyddio’r wefan, er enghraifft y tudalennau rydych chi’n ymweld â nhw."
+        "description": "Rydym ni’n defnyddio cwcis i storio gwybodaeth am y ffordd rydych chi’n defnyddio’r wefan, er enghraifft y tudalennau rydych chi’n ymweld â nhw."
         "notify_title": "Rhowch wybod i ni a ydych chi’n derbyn cwcis"
         "notify_description": "Rydym ni’n defnyddio cwcis i gasglu gwybodaeth am y ffordd rydych chi’n defnyddio’r gwasanaeth hwn."
         "necessary_title": "Cwcis cwbl angenrheidiol"
@@ -28,8 +28,8 @@ cy-GB:
         "accept_settings": "Derbyn pob cwci"
         "reject_settings": "Gwrthod cwcis diangen"
       analytics:
-        label: "Cwcis sy’n mesur defnydd o’r wefan"
-        description: "Rydym ni’n defnyddio Google Analytics i fesur sut rydych chi’n defnyddio’r wefan er mwyn gwneud gwelliannau ar sail anghenion defnyddwyr. Nid ydym ni’n caniatáu i Google ddefnyddio na rhannu’r data am sut rydych chi’n defnyddio’r wefan hon."
+        label: "Cwcis syn mesur defnydd or wefan"
+        description: "Rydym nin defnyddio Google Analytics i fesur sut rydych chin defnyddior wefan er mwyn gwneud gwelliannau ar sail anghenion defnyddwyr. Nid ydym nin caniatau i Google ddefnyddio na rhannur data am sut rydych chin defnyddior wefan hon."
     os:
       app_name: Deisebau
       app_tooltip: Senedd
@@ -285,7 +285,7 @@ cy-GB:
       trending_petitions:
         heading: Deisebau poblogaidd
       responded_petitions:
-        none_responded: Nid oes unrhyw ddeisebau wedi'u cyfeirio i’r Pwyllgor Deisebau eto
+        none_responded: Nid oes unrhyw ddeisebau wedi’u cyfeirio i’r Pwyllgor Deisebau eto
     petitions:
       check:
         heading: Dechrau deiseb
@@ -434,7 +434,7 @@ cy-GB:
             <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i wneud newidiadau">Mynd yn ôl i wneud newidiadau</button>
           submit_warning_html: |-
             <p class="secondary">Gallwch chi ddim newid eich deiseb ar ôl y cam yma.</p>
-            <p class="secondary">Dyma'r amser i wneud yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol, fel manylion am eich iechyd, eich teulu neu’ch swydd, meddyliwch yn ofalus a ydych chi’n hapus i gyhoeddi’r manylion hynny.</p>
+            <p class="secondary">Dyma’r amser i wneud yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol, fel manylion am eich iechyd, eich teulu neu’ch swydd, meddyliwch yn ofalus a ydych chi’n hapus i gyhoeddi’r manylion hynny.</p>
             <p class="secondary">Gallwn ni ddim tynnu deisebau sydd wedi’u cyhoeddi oddi ar y wefan oni bai fod y Pwyllgor Deisebau yn cytuno.</p>
         replay_closing_date_stage:
           heading: Gwirio eich dyddiad cau
