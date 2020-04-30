@@ -590,7 +590,7 @@ class Site < ActiveRecord::Base
 
   before_save do
     if show_holding_page
-      self.bypass_token = SecureRandom.base58
+      self.bypass_token ||= SecureRandom.base58
     else
       self.bypass_token = nil
     end
