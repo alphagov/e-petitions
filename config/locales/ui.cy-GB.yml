@@ -9,27 +9,27 @@ cy-GB:
         <p>Cliciwch yma i gael rhagor o wybodaeth am waith y Pwyllgor Deisebau.</p>      
     cc:
       statement:
-        name: "Darganfyddwch fwy am y cwcis ar y wefan hon"
+        name: "Rhagor o wybodaeth am y cwcis ar y wefan hon"
         description: ""
-        updated: "01/04/2020"
+        updated: "30/04/2020"
       text:
-        "title": "Mae cwcis yn ffeiliau a arbedir ar eich ffôn, llechen neu gyfrifiadur pan ymwelwch â gwefan."
-        "intro": "Mae rhai o’r cwcis hyn yn hanfodol, tra bod eraill yn ein helpu i wella’ch profiad trwy ddarparu mewnwelediadau i sut mae’r wefan yn cael ei defnyddio."
-        "description": "Rydyn ni’n defnyddio cwcis i storio gwybodaeth am sut rydych chi’n defnyddio’r wefan, fel y tudalennau rydych chi’n ymweld â nhw."
-        "notify_title": "Dywedwch wrthym a ydych chi’n derbyn cwcis"
-        "notify_description": "Rydyn ni’n defnyddio cwcis i gasglu gwybodaeth am sut rydych chi’n defnyddio’r gwasanaeth hwn."
-        "necessary_title": "Cwcis hollol angenrheidiol"
-        "necessary_description": "Mae’r cwcis hanfodol hyn yn gwneud pethau fel cofio’ch cynnydd trwy ffurflen (er enghraifft creu deiseb)."
-        "on": "Ymlaen"
-        "off": "I ffwrdd"
+        "title": "Ffeiliau sy’n cael eu harbed ar eich ffôn, eich tabled neu’ch cyfrifiadur pan fyddwch chi’n ymweld â gwefan yw cwcis."
+        "intro": "Mae rhai o’r cwcis hyn yn hanfodol tra bod rhai eraill yn ein helpu i wella eich profiad drwy ddangos i ni sut mae’r wefan yn cael ei defnyddio."
+        "description": "Rydym ni’n defnyddio cwcis i storio gwybodaeth am y ffordd rydych chi'n defnyddio’r wefan, er enghraifft y tudalennau rydych chi’n ymweld â nhw."
+        "notify_title": "Rhowch wybod i ni a ydych chi’n derbyn cwcis"
+        "notify_description": "Rydym ni’n defnyddio cwcis i gasglu gwybodaeth am y ffordd rydych chi’n defnyddio’r gwasanaeth hwn."
+        "necessary_title": "Cwcis cwbl angenrheidiol"
+        "necessary_description": "Mae’r cwcis hanfodol hyn yn gwneud pethau fel cofio’r manylion rydych chi wedi’u nodi wrth lenwi ffurflen (er enghraifft, creu deiseb)."
+        "on": "Derbyn"
+        "off": "Gwrthod"
         "accept": "Derbyn pob cwci"
         "reject": "Gwrthod cwcis diangen"
-        "settings": "Gosod dewisiadau cwci"
+        "settings": "Gosod dewisiadau ar gyfer cwcis"
         "accept_settings": "Derbyn pob cwci"
         "reject_settings": "Gwrthod cwcis diangen"
       analytics:
-        label: "Cwcis sy’n mesur defnydd gwefan"
-        description: "Rydym yn defnyddio Google Analytics i fesur sut rydych chi’n defnyddio’r wefan fel y gallwn ei gwella yn seiliedig ar anghenion defnyddwyr. Nid ydym yn caniatáu i Google ddefnyddio na rhannu’r data ynghylch sut rydych chi’n defnyddio’r wefan hon."
+        label: "Cwcis sy’n mesur defnydd o’r wefan"
+        description: "Rydym ni’n defnyddio Google Analytics i fesur sut rydych chi’n defnyddio’r wefan er mwyn gwneud gwelliannau ar sail anghenion defnyddwyr. Nid ydym ni’n caniatáu i Google ddefnyddio na rhannu’r data am sut rydych chi’n defnyddio’r wefan hon."
     os:
       app_name: Deisebau
       app_tooltip: Senedd
@@ -39,13 +39,13 @@ cy-GB:
         two: Cyfeiriwyd <span class="count">2</span> deiseb at y Pwyllgor Deisebau
         zero: Cyfeiriwyd <span class="count">0</span> deiseb at y Pwyllgor Deisebau
         other: Cyfeiriwyd <span class="count">%{num}</span> deiseb at y Pwyllgor Deisebau
-      debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni gan y Senedd (%{num})
+      debated_explanation_html: Gweld pob deiseb y cynhaliwyd dadl arni yn y Senedd (%{num})
       referred_explanation_html: Gweld pob deiseb a gyfeiriwyd at y Pwyllgor Deisebau (%{num})
       with_debated_outcome_html:
-        one: Cynhaliwyd dadl ar <span class="count">%{num}</span> ddeiseb gan y Senedd
-        two: Cynhaliwyd dadl ar <span class="count">2</span> deiseb gan y Senedd
-        zero: Cynhaliwyd dadl ar <span class="count">0</span> deiseb gan y Senedd
-        other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb gan y Senedd
+        one: Cynhaliwyd dadl ar <span class="count">%{num}</span> ddeiseb yn y Senedd
+        two: Cynhaliwyd dadl ar <span class="count">2</span> deiseb yn y Senedd
+        zero: Cynhaliwyd dadl ar <span class="count">0</span> deiseb yn y Senedd
+        other: Cynhaliwyd dadl ar <span class="count">%{num}</span> deiseb yn y Senedd
       not_debated_explanation_html: Gweld pob deiseb na chynhaliwyd dadl arni yn y
         Senedd (%{num})
     footer:
@@ -59,7 +59,7 @@ cy-GB:
         how_petitions_work: Sut mae deisebau yn gweithio
       ogl_html: |-
         <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored</a></h3>
-        <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithriolle nodir yn wahanol</p>
+        <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio lle nodir yn wahanol</p>
     header:
       senedd_cymru: "Senedd Cymru"
       welsh_parliament: "Welsh Parliament"
@@ -81,7 +81,7 @@ cy-GB:
       new:
         contact:
           email:
-            heading: E-bost
+            heading: E-bost 
             body_html: "<p>Gallwch anfon e-bost uniongyrchol at y %{petitions_committee_link}.</p>\r\n\r\n<p>Gallant
               eich helpu i ddeall sut mae’r Senedd yn ymdrin â deisebau. Gallant hefyd
               ddarparu templed i chi ei ddefnyddio wrth gasglu llofnodion ar bapur
@@ -121,118 +121,131 @@ cy-GB:
             label_html: Teitl y ddeiseb/linc <span class="optional">dewisol</span>
       thanks:
         heading: Anfonwyd eich adborth
-        back_link: Yn ôl i’r hafan Ddeisebau
-        body_html: "<p>Diolch am anfon eich adborth atom.</p>\r\n\r\n<p>Os ydych chi
-          wedi gofyn am gael ymateb, byddwn ni’n cysylltu â chi cyn cynted â phosibl.</p>\r\n\r\n<p>Gall
-          gymryd hyd at 5 diwrnod gwaith yn ystod cyfnodau prysur.</p>"
+        back_link: Yn ôl i’r hafan Ddeisebau 
+        body_html: |-
+          <p>Diolch am anfon eich adborth atom.</p>
+          <p>Os ydych chi wedi gofyn am gael ymateb, byddwn ni’n cysylltu â chi cyn cynted â phosibl.</p>
+          <p>Gall gymryd hyd at 5 diwrnod gwaith yn ystod cyfnodau prysur.</p>
     sponsors:
       new:
         heading: Llofnodi deiseb %{creator_name}
       signed:
         added: Mae eich llofnod wedi cael ei ychwanegu at y ddeiseb hon fel cefnogwr.
         heading: Diolch
-        what_next_html: "<h2>Beth nesaf?</h2>\r\n<p>Mae angen o leiaf %{min_sponsors}
-          gefnogwr ar y ddeiseb hon er mwyn iddi fynd yn fyw.</p>\r\n<p>Pan fydd y
-          ddeiseb yn fyw, byddwn ni’n anfon linc atoch mewn neges e-bost fel y gallwch
-          chi ddechrau ei rhannu.</p>"
+        what_next_html: |-
+          <h2>Beth nesaf?</h2>
+          <p>Mae angen o leiaf %{min_sponsors} gefnogwr ar y ddeiseb hon er mwyn iddi fynd yn fyw.</p>
+          <p>Pan fydd y ddeiseb yn fyw, byddwn ni’n anfon linc atoch mewn neges e-bost fel y gallwch chi ddechrau ei rhannu.</p>
     help_page:
-      body_html: "<h1 class=\"page-title\" id=\"creating-a-petition\">Creu deiseb</h1>\r\n\r\n<p>Deisebau
-        yw un o’r ffyrdd mwyaf uniongyrchol o awgrymu sut y gellir newid rhywbeth.
-        Mae deisebau’n gallu:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>codi
-        ymwybyddiaeth o fater;</li>\r\n  <li>arwain at newid polisi Llywodraeth Cymru
-        neu ddarparu gwasanaethau mewn ffordd wahanol;</li>\r\n  <li>cynnig neu ddylanwadu
-        ar gyfraith newydd;</li>\r\n  <li>annog un o bwyllgorau’r Senedd i gynnal
-        ymchwiliad;</li>\r\n  <li>arwain at ddadl yn y Senedd neu ddylanwadu ar ddadl
-        a drefnwyd eisoes;</li>\r\n  <li>annog pwyllgorau neu Aelodau unigol o’r Senedd
-        i gymryd camau pellach eu hunain, er enghraifft drwy ofyn cwestiynau.</li>\r\n</ul>\r\n\r\n<p>Gallwch
-        gyflwyno deiseb drwy ddefnyddio ein system ddeisebau ar-lein, ar bapur, neu
-        gyfuniad o’r ddwy.</p>\r\n\r\n<p><u>Nid yw’r Pwyllgor Deisebau yn derbyn deisebau
-        o wefannau eraill.</u></p>\r\n\r\n<p>Os ydych chi’n ystyried casglu llofnodion
-        ar bapur, dylech <b>gysylltu â ni</b> ymlaen llaw i gael cyngor. Gallwn ddarparu
-        templed hefyd.</p>\r\n\r\n<h1 class=\"page-title\" id=\"how-petitions-work\">Sut
-        mae deisebau’n gweithio</h1>\r\n\r\n<ol class=\"list-number\">\r\n  <li>Rydych
-        chi’n creu deiseb. Dim ond pobl neu sefydliadau sydd â chyfeiriad yng Nghymru
-        sy’n gallu creu deiseb.</li>\r\n  <li>Mae angen i 2 berson gefnogi’ch deiseb.
-        Byddwn ni’n dweud wrthych sut i wneud hyn ar ôl i chi greu eich deiseb.</li>\r\n
-        \ <li>Rydym ni’n gwirio’ch deiseb, yna’n ei chyhoeddi yn Gymraeg ac yn Saesneg.
-        Dim ond deisebau nad ydynt yn bodloni’r safonau ar gyfer deisebau y byddwn
-        yn eu gwrthod (gweler isod).</li>\r\n  <li>Dim ond unwaith y gall pobl lofnodi
-        deiseb. Os byddant yn llofnodi’r ddeiseb ar-lein, anfonir e-bost atynt i wirio
-        eu llofnod. Ni all pobl lofnodi deiseb ar-lein a deiseb bapur.</li>\r\n  <li>Mae’r
-        Pwyllgor Deisebau yn adolygu’r holl ddeisebau sy’n casglu mwy na 50 llofnod.
-        Bydd y Pwyllgor yn penderfynu beth i’w wneud er mwyn helpu i symud ymlaen
-        â’r ddeiseb. Gall hyn gynnwys trafod y mater a phwyso ar Lywodraeth Cymru
-        ac eraill i weithredu.</li>\r\n  <li>Os bydd eich deiseb yn casglu dros 5,000
-        llofnod, bydd y Pwyllgor Deisebau yn ystyried gofyn am ddadl yn Siambr y Senedd.
-        Bydd y Pwyllgor yn ystyried nifer o ffactorau, gan gynnwys y materion a godir
-        yn y ddeiseb, pa mor ddybryd yw’r sefyllfa a chyfran y llofnodion sy’n dod
-        o Gymru.</li>\r\n</ol>\r\n\r\n<h2 id=\"the-petitions-committee\">Y Pwyllgor
-        Deisebau</h2>\r\n\r\n<p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a
-        href=\"https://www.assembly.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430\">Pwyllgor
-        Deisebau</a> yn gallu:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>ysgrifennu
-        atoch i gael rhagor o wybodaeth;</li>\r\n  <li>eich gwahodd i siarad â’r Pwyllgor
-        am y ddeiseb;</li>\r\n  <li>gofyn am dystiolaeth gan Lywodraeth Cymru neu
-        bobl neu sefydliadau perthnasol eraill;</li>\r\n  <li>pwyso ar Lywodraeth
-        Cymru i weithredu;</li>\r\n  <li>tynnu sylw un o bwyllgorau eraill y Senedd
-        at y ddeiseb;</li>\r\n  <li>cynnig cyflwyno’r ddeiseb ar gyfer dadl;</li>\r\n
-        \ <li>cynnal ymchwiliad manwl a chyhoeddi adroddiad ar y pwnc.</li>\r\n</ul>\r\n\r\n<h2
-        id=\"standards\">Safonau ar gyfer deisebau</h2>\r\n\r\n<p>Gallwch gyflwyno
-        deiseb ar unrhyw fater mae’r Senedd neu Lywodraeth Cymru yn gyfrifol amdano.</p>\r\n\r\n<p>Rhaid
-        i ddeisebau alw am gamau penodol gan y Senedd neu Lywodraeth Cymru.</p>\r\n\r\n<p>Gall
-        deisebau anghytuno â Llywodraeth Cymru a gallant ofyn iddi newid ei pholisïau.
-        Gall deisebau fod yn feirniadol o’r Senedd neu Lywodraeth Cymru.</p>\r\n\r\n<p>Rydym
-        yn gwrthod deisebau nad ydynt yn bodloni’r rheolau. Os byddwn ni’n gwrthod
-        eich deiseb, byddwn ni’n dweud wrthych pam. Os yw’n bosibl, byddwn ni’n awgrymu
-        ffyrdd eraill y gallech godi’r mater.</p>\r\n\r\n<p>Bydd yn rhaid i ni wrthod
-        eich deiseb:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>os yw’n galw am
-        yr un cam gweithredu â deiseb sydd eisoes ar agor, neu un a gaewyd gan y Pwyllgor
-        Deisebau lai na blwyddyn ynghynt;</li>\r\n  <li>os nad yw’n gofyn am gamau
-        clir gan y Senedd neu gan Lywodraeth Cymru;</li>\r\n  <li>\r\n    <p>os yw’n
-        ymwneud â rhywbeth nad yw’r Senedd na Llywodraeth Cymru yn gyfrifol amdano;</p>\r\n
-        \   <p>Mae hynny’n cynnwys: rhywbeth y mae eich cyngor lleol yn gyfrifol amdano
-        (gan gynnwys penderfyniadau cynllunio); rhywbeth y mae Llywodraeth y DU neu
-        Senedd y DU yn gyfrifol amdano; a rhywbeth y mae sefydliad annibynnol wedi’i
-        wneud.</p>\r\n  </li>\r\n  <li>os yw’n cynnwys iaith sy’n peri tramgwydd,
-        sy’n eithafol neu sy’n herfeiddiol. Mae hyn yn cynnwys rhegfeydd a geiriau
-        sarhaus amlwg, ac unrhyw iaith sy’n dramgwyddol ym marn person rhesymol;</li>\r\n
-        \ <li>os yw’n cynnwys datganiadau ffug neu ddifrïol posibl;</li>\r\n  <li>os
-        yw’n cyfeirio at achos sy’n weithredol yn llysoedd y DU;</li>\r\n  <li>os
-        yw’n cynnwys gwybodaeth a waherddir rhag cael ei chyhoeddi gan orchymyn llys
-        neu gorff neu berson sydd â phŵer tebyg;</li>\r\n  <li>os yw’n cyhuddo unigolyn
-        neu sefydliad y gellir ei adnabod o drosedd;</li>\r\n  <li>os yw’n cynnwys
-        deunydd a allai fod yn gyfrinachol neu’n sensitif yn fasnachol;</li>\r\n  <li>os
-        gallai achosi trallod neu golled bersonol;</li>\r\n  <li>os yw’n enwi swyddogion
-        unigol cyrff cyhoeddus, oni bai eu bod yn uwch-reolwyr;</li>\r\n  <li>os yw’n
-        cynnwys enwau aelodau o deuluoedd cynrychiolwyr etholedig neu swyddogion cyrff
-        cyhoeddus;</li>\r\n  <li>os yw’n hysbyseb, yn sbam, neu’n hyrwyddo cynnyrch
-        neu wasanaeth penodol;</li>\r\n  <li>os yw’n nonsens neu’n jôc;</li>\r\n  <li>\r\n
-        \   <p>os yw’n ymwneud â mater nad yw’n briodol ymdrin ag ef mewn deiseb</p>\r\n
-        \   <p>Mae hynny’n cynnwys: gohebiaeth am fater personol a deisebau sy’n gofyn
-        am i rywun gael swydd, colli ei swydd neu ymddiswyddo, neu sy’n galw am bleidlais
-        o ddiffyg hyder.</p>\r\n  </li>\r\n</ul>\r\n\r\n<p>Byddwn yn cyhoeddi testun
-        y deisebau rydym ni’n eu gwrthod, ar yr amod nad ydynt:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n
-        \ <li>yn ddifenwol, yn enllibus neu’n anghyfreithlon mewn ffordd arall;</li>\r\n
-        \ <li>yn ymwneud ag achos sy’n mynd rhagddo yn llysoedd y DU neu am rywbeth
-        y mae llys wedi cyhoeddi gwaharddeb yn ei gylch;</li>\r\n  <li>yn sarhaus
-        neu’n eithafol;</li>\r\n  <li>yn gyfrinachol neu’n debygol o achosi trallod
-        personol; neu</li>\r\n  <li>yn jôc, yn hysbyseb neu’n nonsens.</li>\r\n</ul>\r\n\r\n<p>Mae’r
-        rheolau llawn ynghylch y broses ddeisebau ar gael <a href=\"/rheolau\">yma</a>.</p>\r\n\r\n<h2
-        id=\"handing-in-your-petition\">Cyflwyno eich deiseb</h2>\r\n\r\n<p>Rydym
-        yn cynnig cyfle i chi gyflwyno’ch deiseb ar ôl iddi orffen casglu llofnodion,
-        a chyn iddi gael ei thrafod gan y Pwyllgor Deisebau. Mae’n gyfle anffurfiol
-        i drafod cefndir eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor.</p>\r\n\r\n<p>Caiff
-        deisebau eu cyflwyno yn y Senedd ar ddydd Mawrth a dydd Mercher yn ystod tymor
-        y Senedd ac mae’r broses yn para tua 10-15 munud. Bydd ffotograffau yn cael
-        eu tynnu a gellir eu cyhoeddi ar dudalennau’r Pwyllgor ar y we ac ar y cyfryngau
-        cymdeithasol.</p>\r\n\r\n<p>Os oes gennych ragor o gwestiynau, mae croeso
-        i chi %{feedback_link}.</p>\r\n"
-      feedback_link: cysylltu
+      body_html: |-
+        <h1 class="page-title" id="creating-a-petition">Creu deiseb</h1>
+
+        <p>Deisebau yw un o’r ffyrdd mwyaf uniongyrchol o awgrymu sut y gellir newid rhywbeth. Mae deisebau’n gallu:</p>
+
+        <ul class="list-bullet">
+          <li>codi ymwybyddiaeth o fater;</li>
+          <li>arwain at newid polisi Llywodraeth Cymru neu ddarparu gwasanaethau mewn ffordd wahanol;</li>
+          <li>cynnig neu ddylanwadu ar gyfraith newydd;</li>
+          <li>annog un o bwyllgorau’r Senedd i gynnal ymchwiliad;</li>
+          <li>arwain at ddadl yn y Senedd neu ddylanwadu ar ddadl a drefnwyd eisoes;</li>
+          <li>annog pwyllgorau neu Aelodau unigol o’r Senedd i gymryd camau pellach eu hunain, er enghraifft drwy ofyn cwestiynau.</li>
+        </ul>
+
+        <p>Gallwch gyflwyno deiseb drwy ddefnyddio ein system ddeisebau ar-lein, ar bapur, neu gyfuniad o’r ddwy.</p>
+
+        <p><u>Nid yw’r Pwyllgor Deisebau yn derbyn deisebau o wefannau eraill.</u></p>
+
+        <p>Os ydych chi’n ystyried casglu llofnodion ar bapur, dylech <a href="mailto:deisebau@senedd.cymru">gysylltu â ni</a> ymlaen llaw i gael cyngor. Gallwn ddarparu templed hefyd.</p>
+
+        <h1 class="page-title" id="how-petitions-work">Sut mae deisebau’n gweithio</h1>
+
+        <ol class="list-number">
+          <li>Rydych chi’n creu deiseb. Dim ond pobl neu sefydliadau sydd â chyfeiriad yng Nghymru sy’n gallu creu deiseb.</li>
+          <li>Mae angen i 2 berson gefnogi’ch deiseb. Byddwn ni’n dweud wrthych sut i wneud hyn ar ôl i chi greu eich deiseb.</li>
+          <li>Rydym ni’n gwirio’ch deiseb, yna’n ei chyhoeddi yn Gymraeg ac yn Saesneg. Dim ond deisebau nad ydynt yn bodloni’r safonau ar gyfer deisebau y byddwn yn eu gwrthod (gweler isod).</li>
+          <li>Dim ond unwaith y gall pobl lofnodi deiseb. Os byddant yn llofnodi’r ddeiseb ar-lein, anfonir e-bost atynt i wirio eu llofnod. Ni all pobl lofnodi deiseb ar-lein a deiseb bapur.</li>
+          <li>Mae’r Pwyllgor Deisebau yn adolygu’r holl ddeisebau sy’n casglu mwy na 50 llofnod. Bydd y Pwyllgor yn penderfynu beth i’w wneud er mwyn helpu i symud ymlaen â’r ddeiseb. Gall hyn gynnwys trafod y mater a phwyso ar Lywodraeth Cymru ac eraill i weithredu.</li>
+          <li>Os bydd eich deiseb yn casglu dros 5,000 llofnod, bydd y Pwyllgor Deisebau yn ystyried gofyn am ddadl yn Siambr y Senedd. Bydd y Pwyllgor yn ystyried nifer o ffactorau, gan gynnwys y materion a godir yn y ddeiseb, pa mor ddybryd yw’r sefyllfa a chyfran y llofnodion sy’n dod o Gymru.</li>
+        </ol>
+
+        <h2 id="the-petitions-committee">Y Pwyllgor Deisebau</h2>
+
+        <p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a href="https://www.assembly.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Pwyllgor Deisebau</a> yn gallu:</p>
+
+        <ul class="list-bullet">
+          <li>ysgrifennu atoch i gael rhagor o wybodaeth;</li>
+          <li>eich gwahodd i siarad â’r Pwyllgor am y ddeiseb;</li>
+          <li>gofyn am dystiolaeth gan Lywodraeth Cymru neu bobl neu sefydliadau perthnasol eraill;</li>
+          <li>pwyso ar Lywodraeth Cymru i weithredu;</li>
+          <li>tynnu sylw un o bwyllgorau eraill y Senedd at y ddeiseb;</li>
+          <li>cynnig cyflwyno’r ddeiseb ar gyfer dadl;</li>
+          <li>cynnal ymchwiliad manwl a chyhoeddi adroddiad ar y pwnc.</li>
+        </ul>
+
+        <h2 id="standards">Safonau ar gyfer deisebau</h2>
+
+        <p>Gallwch gyflwyno deiseb ar unrhyw fater mae’r Senedd neu Lywodraeth Cymru yn gyfrifol amdano.</p>
+
+        <p>Rhaid i ddeisebau alw am gamau penodol gan y Senedd neu Lywodraeth Cymru.</p>
+
+        <p>Gall deisebau anghytuno â Llywodraeth Cymru a gallant ofyn iddi newid ei pholisïau. Gall deisebau fod yn feirniadol o’r Senedd neu Lywodraeth Cymru.</p>
+
+        <p>Rydym yn gwrthod deisebau nad ydynt yn bodloni’r rheolau. Os byddwn ni’n gwrthod eich deiseb, byddwn ni’n dweud wrthych pam. Os yw’n bosibl, byddwn ni’n awgrymu ffyrdd eraill y gallech godi’r mater.</p>
+
+        <p>Bydd yn rhaid i ni wrthod eich deiseb:</p>
+
+        <ul class="list-bullet">
+          <li>os yw’n galw am yr un cam gweithredu â deiseb sydd eisoes ar agor, neu un a gaewyd gan y Pwyllgor Deisebau lai na blwyddyn ynghynt;</li>
+          <li>os nad yw’n gofyn am gamau clir gan y Senedd neu gan Lywodraeth Cymru;</li>
+          <li>
+            <p>os yw’n ymwneud â rhywbeth nad yw’r Senedd na Llywodraeth Cymru yn gyfrifol amdano;</p>
+            <p>Mae hynny’n cynnwys: rhywbeth y mae eich cyngor lleol yn gyfrifol amdano (gan gynnwys penderfyniadau cynllunio); rhywbeth y mae Llywodraeth y DU neu Senedd y DU yn gyfrifol amdano; a rhywbeth y mae sefydliad annibynnol wedi’i wneud.</p>
+          </li>
+          <li>os yw’n cynnwys iaith sy’n peri tramgwydd, sy’n eithafol neu sy’n herfeiddiol. Mae hyn yn cynnwys rhegfeydd a geiriau sarhaus amlwg, ac unrhyw iaith sy’n dramgwyddol ym marn person rhesymol;</li>
+          <li>os yw’n cynnwys datganiadau ffug neu ddifrïol posibl;</li>
+          <li>os yw’n cyfeirio at achos sy’n weithredol yn llysoedd y DU;</li>
+          <li>os yw’n cynnwys gwybodaeth a waherddir rhag cael ei chyhoeddi gan orchymyn llys neu gorff neu berson sydd â phŵer tebyg;</li>
+          <li>os yw’n cyhuddo unigolyn neu sefydliad y gellir ei adnabod o drosedd;</li>
+          <li>os yw’n cynnwys deunydd a allai fod yn gyfrinachol neu’n sensitif yn fasnachol;</li>
+          <li>os gallai achosi trallod neu golled bersonol;</li>
+          <li>os yw’n enwi swyddogion unigol cyrff cyhoeddus, oni bai eu bod yn uwch-reolwyr;</li>
+          <li>os yw’n cynnwys enwau aelodau o deuluoedd cynrychiolwyr etholedig neu swyddogion cyrff cyhoeddus;</li>
+          <li>os yw’n hysbyseb, yn sbam, neu’n hyrwyddo cynnyrch neu wasanaeth penodol;</li>
+          <li>os yw’n nonsens neu’n jôc;</li>
+          <li>
+            <p>os yw’n ymwneud â mater nad yw’n briodol ymdrin ag ef mewn deiseb</p>
+            <p>Mae hynny’n cynnwys: gohebiaeth am fater personol a deisebau sy’n gofyn am i rywun gael swydd, colli ei swydd neu ymddiswyddo, neu sy’n galw am bleidlais o ddiffyg hyder.</p>
+          </li>
+        </ul>
+
+        <p>Byddwn yn cyhoeddi testun y deisebau rydym ni’n eu gwrthod, ar yr amod nad ydynt:</p>
+
+        <ul class="list-bullet">
+          <li>yn ddifenwol, yn enllibus neu’n anghyfreithlon mewn ffordd arall;</li>
+          <li>yn ymwneud ag achos sy’n mynd rhagddo yn llysoedd y DU neu am rywbeth y mae llys wedi cyhoeddi gwaharddeb yn ei gylch;</li>
+          <li>yn sarhaus neu’n eithafol;</li>
+          <li>yn gyfrinachol neu’n debygol o achosi trallod personol; neu</li>
+          <li>yn jôc, yn hysbyseb neu’n nonsens.</li>
+        </ul>
+
+        <p>Mae’r rheolau llawn ynghylch y broses ddeisebau ar gael <a href="/rheolau">yma</a>.</p>
+
+        <h2 id="handing-in-your-petition">Cyflwyno eich deiseb</h2>
+
+        <p>Rydym yn cynnig cyfle i chi gyflwyno’ch deiseb ar ôl iddi orffen casglu llofnodion, a chyn iddi gael ei thrafod gan y Pwyllgor Deisebau. Mae’n gyfle anffurfiol i drafod cefndir eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor.</p>
+
+        <p>Caiff deisebau eu cyflwyno yn y Senedd ar ddydd Mawrth a dydd Mercher yn ystod tymor y Senedd ac mae’r broses yn para tua 10-15 munud. Bydd ffotograffau yn cael eu tynnu a gellir eu cyhoeddi ar dudalennau’r Pwyllgor ar y we ac ar y cyfryngau cymdeithasol.</p>
+
+        <p>Os oes gennych ragor o gwestiynau, mae croeso i chi %{feedback_link}.</p>
+      feedback_link: gysylltu
     home_page:
       notice:
         get_involved_html: "<a href=\"https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx\"
           class=\"get-involved\">\r\n  Cymryd rhan yng ngwaith y Senedd\r\n</a>"
-        register_to_vote_html: "<a href=\"https://www.gov.uk/register-to-vote\" class=\"register-to-vote\">\r\n
-          \ Cofrestru i bleidleisio yn etholiadau’r Senedd\r\n</a>"
+        register_to_vote_html: |-
+          <a href="https://www.gov.uk/cofrestru-i-bleidleisio" class="register-to-vote">
+            Cofrestru i bleidleisio yn etholiadau’r Senedd
+          </a>        
       opened:
         lede: Mae’r gwasanaeth Deisebau ar agor
         start_a_petition:
@@ -246,8 +259,6 @@ cy-GB:
           ar gyfer dadl yn y Senedd
         referred: Caiff pob deiseb sydd â mwy na %{formatted_count} llofnod ei thrafod
           gan y Pwyllgor Deisebau
-        response: Caiff pob deiseb sydd â mwy na %{formatted_count} llofnod ei chyfeirio
-          i’r Pwyllgor Deisebau
       local_petitions:
         heading: Lleol i chi
         find_local_petitions: Dod o hyd i ddeisebau a lofnodwyd gan bobl sy’n byw yn lleol i chi
@@ -274,8 +285,7 @@ cy-GB:
       trending_petitions:
         heading: Deisebau poblogaidd
       responded_petitions:
-        none_responded: Nid oes unrhyw ddeisebau wedi’u cyfeirio i’r Pwyllgor Deisebau
-          eto
+        none_responded: Nid oes unrhyw ddeisebau wedi'u cyfeirio i’r Pwyllgor Deisebau eto
     petitions:
       check:
         heading: Dechrau deiseb
@@ -406,17 +416,15 @@ cy-GB:
             label:
               custom: Rydw i am stopio casglu llofnodion ar ddyddiad penodol
               default: Rydw i am gasglu llofnodion cyhyd ag sy’n bosibl
-          help_html: "<p>\r\n  Bydd deiseb fel arfer yn casglu llofnodion am chwe
-            mis i’r dyddiad y mae’n cael ei chyhoeddi ac ni fydd y Pwyllgor Deisebau
-            yn trafod unrhyw ddeiseb tan <b>ar ôl</b> iddi orffen casglu llofnodion.
-            </li>\r\n<p>\r\nGallwch chi ddewis dyddiad cau cynharach os ydych chi
-            am i’r Pwyllgor drafod eich deiseb cyn hynny. \r\n</p>"
+          help_html: |-
+            <p>Bydd deiseb fel arfer yn casglu llofnodion am chwe mis i’r dyddiad y mae’n cael ei chyhoeddi ac ni fydd y Pwyllgor Deisebau yn trafod unrhyw ddeiseb tan <b>ar ôl</b> iddi orffen casglu llofnodion.</p>
+            <p>Gallwch chi ddewis dyddiad cau cynharach os ydych chi am i’r Pwyllgor drafod eich deiseb cyn hynny.</p>"
           submit_html: |-
             <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Gwirio’r dyddiad cau">Gwirio’r dyddiad cau</button>
         replay_email_stage:
           heading: Gwnewch yn siŵr fod hyn yn gywir
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bsot i">Ie – dyma fy nghyfeiriad e-bsot i</button>
+            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
           fix_email_if_wrong: Os yw eich cyfeiriad e-bost yn anghywir, newidiwch y manylion uchod
         replay_petition_stage:
           heading: Gwirio eich deiseb
@@ -424,13 +432,10 @@ cy-GB:
             <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
           go_back_html: |-
             <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i wneud newidiadau">Mynd yn ôl i wneud newidiadau</button>
-          submit_warning_html: "<p class=\"secondary\">Gallwch chi ddim newid eich
-            deiseb ar ôl y cam yma.</p>\r\n<p class=\"secondary\">Dyma’r amser i wneud
-            yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol,
-            fel manylion am eich iechyd, eich teulu neu’ch swydd, meddyliwch yn ofalus
-            a ydych chi’n hapus i gyhoeddi’r manylion hynny.</p>\r\n<p class=\"secondary\">Gallwn
-            ni ddim tynnu deisebau sydd wedi’u cyhoeddi oddi ar y wefan oni bai fod
-            y Pwyllgor Deisebau yn cytuno. </p>"
+          submit_warning_html: |-
+            <p class="secondary">Gallwch chi ddim newid eich deiseb ar ôl y cam yma.</p>
+            <p class="secondary">Dyma'r amser i wneud yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol, fel manylion am eich iechyd, eich teulu neu’ch swydd, meddyliwch yn ofalus a ydych chi’n hapus i gyhoeddi’r manylion hynny.</p>
+            <p class="secondary">Gallwn ni ddim tynnu deisebau sydd wedi’u cyhoeddi oddi ar y wefan oni bai fod y Pwyllgor Deisebau yn cytuno.</p>
         replay_closing_date_stage:
           heading: Gwirio eich dyddiad cau
           submit_html: |-
@@ -443,9 +448,8 @@ cy-GB:
           custom_message_html: |-
             <h1><span class="heading-secondary">Dyddiad cau</span>%{date}</h1>
             <p>Bydd eich deiseb “%{action}” yn cau am hanner nos ar y dyddiad hwn. Os bydd eich deiseb wedi casglu %{num} neu fwy o lofnodion bydd yn cael ei chyfeirio at y Pwyllgor Deisebau.</p>
-          submit_warning_html: <p class="secondary">Ar ôl y cam yma, dim ond drwy
-            gysylltu â’r <a href="https://welsh.epetitions.website/feedback#contact">tîm
-            deisebau</a> y byddwch chi’n gallu newid y dyddiad cau.</p>
+          submit_warning_html: |-
+            <p class="secondary">Ar ôl y cam yma, dim ond drwy gysylltu â’r <a href="/adborth#contact">tîm deisebau</a> y byddwch chi’n gallu newid y dyddiad cau.</p>
       search:
         submit_button_html: |-
           <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
@@ -579,7 +583,7 @@ cy-GB:
       for_senedd_to_publish_debate: i’r Senedd gyhoeddi canlyniad y ddadl
       reject_reason_standards_html: |-
         <p>Dim ond deisebau nad ydynt yn bodloni’r %{standards_link} y byddwn yn eu gwrthod</p>
-        <p>nMae deisebau a wrthodwyd yn cael eu cyhoeddi yn yr iaith y cawsant eu cyflwyno ynddi</p>
+        <p>Mae deisebau a wrthodwyd yn cael eu cyhoeddi yn yr iaith y cawsant eu cyflwyno ynddi</p>
       committee_decided_not_to_debate: Penderfynodd y Pwyllgor Deisebau beidio â chyfeirio’r
         ddeiseb hon ar gyfer dadl
       at_threshold_for_debate_ellipsis: Ar ôl %{threshold} llofnod...
@@ -610,10 +614,11 @@ cy-GB:
           region_html: 'Eich Aelodau o’r Senedd ar gyfer rhanbarth <strong>%{region}</strong> yw:'
         member_name_link_html: Eich Aelod o’r Senedd dros etholaeth <strong>%{constituency_name}</strong> yw %{member_name_link}
         added_to_petition: 'Rydym ni wedi ychwanegu eich enw at y ddeiseb:'
-        register_to_vote_html: "<h2>Cofrestru i bleidleisio</h2>\r\n<p>Er mwyn pleidleisio
-          yn etholiadau’r Senedd, rhaid i chi fod wedi’ch cofrestru i bleidleisio.</p>\r\n<p>Mae’n
-          cymryd llai na 5 munud.</p>\r\n<a href=\"https://www.gov.uk/register-to-vote\"
-          rel=\"external\">Cofrestru i bleidleisio</a>"
+        register_to_vote_html: |-
+          <h2>Cofrestru i bleidleisio</h2>
+          <p>Er mwyn pleidleisio yn etholiadau’r Senedd, rhaid i chi fod wedi’ch cofrestru i bleidleisio.</p>
+          <p>Mae’n cymryd llai na 5 munud.</p>
+          <a href="https://www.gov.uk/cofrestru-i-bleidleisio" rel="external">Cofrestru i bleidleisio</a>
       confirm:
         email_form:
           submit_html: |-
@@ -627,10 +632,13 @@ cy-GB:
           required: Ni fydd eich llofnod yn cael ei chyfrif tan y byddwch chi wedi clicio’r linc yn y neges e-bost
           not_received:
             heading: Heb gael neges e-bost gadarnhad?
-            instructions_html: "<p>\r\n  Os nad ydych chi wedi cael neges e-bost gadarnhad:\r\n</p>\r\n\r\n<ul
-              class=\"list-bullet\">\r\n  <li>edrychwch yn eich ffolder sbam neu’ch
-              ffolder sothach</li>\r\n  <li>dylech ganiatáu hyd at 24 awr i’r neges
-              e-bost gyrraedd</li>\r\n</ul>"
+            instructions_html: |-
+              <p>Os nad ydych chi wedi cael neges e-bost gadarnhad:</p>
+
+              <ul class="list-bullet">
+                <li>edrychwch yn eich ffolder sbam neu’ch ffolder sothach</li>
+                <li>dylech ganiatáu hyd at 24 awr i’r neges e-bost gyrraedd</li>
+              </ul>
       unsubscribe:
         back_button: Mynd yn ôl i’r hafanddalen
         failed_html: "<h1>Methu dad-danysgrifio</h1>\r\n<p>Nid yw eich linc dad-danysgrifio
@@ -655,9 +663,7 @@ cy-GB:
       character_count: hyd at %{count} nod
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu’r ddeiseb hon
-      twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion
-        cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a’r rhai
-        y cynhaliwyd dadl arnynt gan y Senedd
+      twitter_card_description: Deisebau swyddogol ar-lein mewn ymateb i faterion cyfoes, yn rhestru sawl deiseb y cyfeiriwyd at y Pwyllgor Deisebau, a’r rhai y cynhaliwyd dadl arnynt yn y Senedd
     share_title: 'Deiseb: %{petition}'
     list_headers:
       open_html: |-
@@ -672,10 +678,236 @@ cy-GB:
         <p class="text-secondary">Mae’r Pwyllgor Deisebau wedi gorffen ystyried y deisebau hyn</p>
       rejected_html: |-
         <p class="text-secondary">Nid oedd y deisebau hyn yn <a href="/help#standards">bodloni’r safonau ar gyfer deisebau</a>. Fe’u cyhoeddir yn yr iaith y cawsant eu cyflwyno ynddi.</p>
+
+        <p>Gallwch weld deisebau a wrthodwyd cyn mis Mai 2020 <a href="http://www.senedd.cynulliad.cymru/mgIssueHistoryHome.aspx?IId=28231">yma.</a></p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
       postcode: Cod post y DU
+    privacy_page:
+      body_html: |-
+        <h1>Preifatrwydd a chwcis</h1>
+
+        <section id="privacy" aria-labelledby="privacy-heading">
+
+          <h2 id="privacy-heading">Hysbysiad preifatrwydd: sut rydym ni’n defnyddio’ch data</h2>
+
+          <p>Diweddarwyd ddiwethaf: 30 Ebrill 2020</p>
+
+          <p>Mae’r wefan ddeisebau’n eich galluogi i ddechrau a llofnodi deisebau i godi materion gyda Senedd Cymru/Welsh Parliament (y cyfeirir ati fel y Senedd o hyn ymlaen).</p>
+
+          <p>Darperir y gwasanaeth deisebau gan y Senedd. Mae angen i ni gasglu, prosesu a storio rhai data personol i’ch galluogi i wneud hyn.</p>
+
+          <h3>Rheolwr Data</h3>
+
+          <p>Comisiwn y Senedd yw rheolwr data’r wybodaeth a rowch, a bydd yn sicrhau y caiff ei diogelu a’i defnyddio’n unol â deddfwriaeth diogelu data.</p>
+
+          <h3>Ein Manylion Cyswllt</h3>
+
+          <p>Dylai ymholiadau ynghylch ein defnydd o’ch gwybodaeth gael eu hanfon at y Swyddog Diogelu Data drwy anfon e-bost neu ffonio:</p>
+
+          <p>Diogelu.Data@senedd.cymru 0300 2006565</p>
+
+          <h3>Pa ddata y byddwn ni’n eu casglu gennych chi</h3>
+
+          <p>Bydd y data personol y byddwn ni’n eu casglu gan bobl sy’n llofnodi deisebau’n cynnwys y canlynol:</p>
+
+          <ul class="list-bullet">
+            <li>eich enw</li>
+            <li>eich cyfeiriad e-bost</li>
+            <li>eich cod post</li>
+            <li>y wlad rydych chi’n byw ynddi</li>
+            <li>y cyfeiriad IP rydych chi’n ei ddefnyddio wrth ddechrau neu lofnodi deiseb</li>
+          </ul>
+
+          <p>Ar ben hynny, ar gyfer pobl sy’n dechrau deiseb, byddwn ni hefyd yn casglu’r canlynol:</p>
+
+          <ul class="list-bullet">
+            <li>eich cyfeiriad post</li>
+            <li>eich rhif ffôn cyswllt</li>
+            <li>unrhyw wybodaeth bersonol neu fanylion a rowch yn y ddeiseb ei hun.</li>
+          </ul>
+
+          <p>Weithiau, rydym ni’n cael gwybodaeth sy’n ymwneud â phobl sydd wedi llofnodi deisebau ar bapur. Mae deisebau papur yn cael eu storio’n ddiogel a’u cadw am yr un cyfnod â data personol a geir drwy ein system ddeisebau electronig ein hunain. Cân nhw eu dinistrio mewn modd diogel ar ddiwedd y cyfnod cadw.</p>
+
+          <h3>Pam y mae angen eich data arnom ni</h3>
+
+          <p>Rydym ni’n defnyddio’r wybodaeth hon er mwyn:</p>
+
+          <ul class="list-bullet">
+            <li>hwyluso’r broses ddeisebau</li>
+            <li>sicrhau mai dim ond unwaith y bydd pobl yn llofnodi deiseb</li>
+            <li>gwirio eich bod chi’n gymwys i ddechrau deiseb</li>
+            <li>cysylltu â chi ynghylch deisebau rydych chi’n eu dechrau</li>
+            <li>os ydych chi’n dewis cofrestru i gael e-byst gyda’r wybodaeth ddiweddaraf am beth sy’n digwydd yn y Senedd ynghylch deisebau rydych chi wedi’u llofnodi</li>
+            <li>o dro i dro, cawn ni gysylltu â phobl sy’n dechrau neu’n cyflwyno deisebau i geisio adborth ar y broses ddeisebau a sut y gallai gael ei gwella.</li>
+          </ul>
+
+          <h3>Beth rydym ni’n ei wneud gyda’ch data</h3>
+
+          <p>Rydym ni’n defnyddio’ch gwybodaeth bersonol i brosesu’r ddeiseb rydych chi wedi’i dechrau neu ei llofnodi.</p>
+
+          <p>Os ydych chi’n dechrau deiseb ac rydym ni’n ei derbyn, caiff eich enw ei gyhoeddi wrth ochr unrhyw destun rydych chi’n ei gynnwys yn y ddeiseb. Ni fyddwn ni’n cyhoeddi’ch manylion cyswllt. Os ydych chi’n dechrau deiseb, bydd eich enw’n ymddangos yn barhaus gyda’r ddeiseb ar dudalennau gwe’r Pwyllgor Deisebau ac mewn trawsgrifiadau a chofnodion cyfarfodydd, fel rhan o broses ddeisebau’r Senedd.</p>
+
+          <p>Os ydych chi wedi llofnodi deiseb, ni fyddwn ni’n cyhoeddi gwybodaeth bersonol amdanoch chi.</p>
+
+          <p>Byddwn ni’n defnyddio’ch cod post i gyfrifo faint o bobl yng Nghymru ac yn holl etholaethau a rhanbarthau’r Senedd sydd wedi llofnodi deiseb.</p>
+
+          <p>Byddwn ni’n cadw’ch data personol o’r dyddiad rydych chi’n dechrau neu’n llofnodi deiseb tan 12 mis ar ôl i’r Pwyllgor Deisebau, hynny yw tan 12 mis ar ôl i’r Pwyllgor ystyried bod y ddeiseb wedi’i chwblhau, heblaw am ddata personol sydd wedi’u cyhoeddi.</p>
+
+          <p>Bydd unrhyw wybodaeth sydd wedi’i chyhoeddi’n aros ar-lein yn barhaus yng nghofnodion proses ddeisebau’r Senedd, gan gynnwys mewn unrhyw ddeunydd y mae’r Pwyllgor Deisebau’n ei gyhoeddi.</p>
+
+          <p>Mae cyfeiriadau IP yn cael eu defnyddio i ddiogelu’r wefan ddeisebau ac atal gweithgarwch twyllodrus.</p>
+
+          <p>Byddwn ni’n rhannu’ch data os bydd yn ofynnol i ni wneud hynny yn ôl y gyfraith – er enghraifft, drwy orchymyn llys, neu i atal twyll neu droseddau eraill.</p>
+
+          <h3>Beth y byddwn ni’n anfon e-byst atoch chi amdano fe</h3>
+
+          <p>Os bydd deiseb rydych chi wedi’i dechrau’n cael ei chyfeirio i’r Pwyllgor Deisebau, byddwn ni’n defnyddio’ch manylion cyswllt i roi’r wybodaeth ddiweddaraf i chi am hynt y ddeiseb ac i gynnig cyfle i chi roi rhagor o wybodaeth ac ymgysylltu â’r Pwyllgor.</p>
+
+          <p>Os ydych chi wedi llofnodi deiseb, gallwch chi ddewis cael y wybodaeth ddiweddaraf am hynt y ddeiseb. Gallai hyn gynnwys cysylltu â chi i roi gwybod i chi beth sy’n digwydd yn y Senedd mewn perthynas â’r Senedd, er enghraifft dadleuon y gallwch chi eu gwylio neu eu darllen, cyfleoedd i ymateb i ymgynghoriad, neu ffyrdd o roi gwybod i bwyllgorau ac Aelodau o’r Senedd pam y mae’r ddeiseb yn bwysig i chi.</p>
+
+          <p>Efallai y byddwn ni’n defnyddio’ch manylion cyswllt yn achlysurol i geisio’ch barn am broses ddeisebau’r Senedd.</p>
+
+          <p>Gallwch chi stopio’r e-byst hyn ar unrhyw adeg drwy glicio ar y linc “dad-danysgrifio” yn yr e-bost.</p>
+
+          <h3>Pwy sydd â mynediad at y data a lle maen nhw’n cael eu prosesu a’u storio</h3>
+
+          <p>Bydd staff Comisiwn y Senedd sy’n gweinyddu’r broses ddeisebau â mynediad at eich gwybodaeth bersonol.</p>
+
+          <p>Bydd Unboxed Consulting Limited, sy’n darparu cymorth technegol ar gyfer y system ddeisebau hefyd â mynediad at y system dim ond at ddibenion cywiro diffygion a chynnal a chadw.</p>
+
+          <p>Bydd gwybodaeth electronig yn cael ei storio ar systemau TGCh y Senedd, sy’n cynnwys gwasanaethau cwmwl trydydd parti y mae Microsoft yn eu darparu. Mae unrhyw drosglwyddiad data gan Microsoft y tu allan i’r AEE wedi’i gynnwys gan gymalau dan gontract y mae Microsoft yn sicrhau bod data personol yn cael eu trin yn unol â deddfwriaeth Ewropeaidd.</p>
+
+          <p>Mae’r system ddeisebau’n defnyddio dull storio cwmwl Gwasanaethau Gwe Amazon (AWS) i storio’ch data. Mae AWS yn storio data yn yr Ardal Economaidd Ewropeaidd (AEE).</p>
+
+          <h3>Sut rydym ni’n diogelu’ch data ac yn eu cadw nhw’n ddiogel</h3>
+
+          <p>Rydym ni wedi ymrwymo i wneud popeth yn ein gallu i gadw’ch data’n ddiogel. Gwnaethom ni sefydlu systemau a phrosesau i atal mynediad heb awdurdod neu ddatgelu’r data rydym ni’n eu casglu amdanoch chi – er enghraifft, rydym ni’n diogelu’ch data gan ddefnyddio lefelau amrywiol o amgryptio. Mae’n ofynnol i bob trydydd parti sy’n prosesu data personol i ni gadw’r data hynny’n ddiogel.</p>
+
+          <h3>Ein seiliau cyfreithiol dros gasglu, dal a defnyddio’ch gwybodaeth bersonol</h3>
+
+          <p>Mae cyfraith diogelu data’n nodi tair sail gyfreithiol amrywiol (neu ‘amodau’) sy’n caniatáu i ni gasglu, dal a defnyddio’ch gwybodaeth bersonol.</p>
+
+          <p>Rydym ni o’r farn bod casglu a defnyddio’ch gwybodaeth yn angenrheidiol i’n helpu i hwyluso’r broses ddeisebau a rhoi cyfle i’r cyhoedd godi materion gyda’r Senedd a dangos cefnogaeth drostyn nhw.</p>
+
+          <p>Fel y cyfryw, mae data personol yn cael eu prosesu ar y sail eu bod nhw’n angenrheidiol er mwyn ymgymryd â thasg er budd y cyhoedd yn unol ag Erthygl 6(1)(e) o’r Rheoliad Cyffredinol ar Ddiogelu Data (GDPR), wedi’i ddarllen ynghyd ag adran 8(d) o Ddeddf Diogelu Data 2018.</p>
+
+          <p>Pan fo’n ofynnol i ni brosesu data personol er mwyn cydymffurfio â rhwymedigaeth gyfreithiol, megis cais dan ddeddfwriaeth mynediad at wybodaeth neu orchymyn llys, byddwn ni’n gwneud hynny ar y sail bod prosesu data’n angenrheidiol er mwyn cydymffurfio â rhwymedigaeth gyfreithiol yn unol ag Erthygl 6(1)(c) o’r GDPR.</p>
+
+          <p>Cawn ni brosesu data personol sy’n ymwneud ag euogfarnau troseddol a throseddau. Er mwyn cydymffurfio ag Erthygl 10 o’r GDPR, bydd y data hyn hefyd yn cael eu prosesu yn unol ag Erthygl 6(1)(e) o’r GDPR, wedi’i ddarllen ynghyd ag adran 10 o Ddeddf Diogelu Data 2018, a pharagraff 6 o Atodlen 1 iddi.</p>
+
+          <p>Yn olaf, cawn ni brosesu categorïau arbennig o ddata personol y rhai sy’n dechrau neu’n llofnodi deiseb, a/neu’n cyfrannu i’w hynt drwy broses ddeisebau’r Senedd. Diffinnir data personol categori arbennig yn Erthygl 9(1) o’r GDPR fel prosesu data personol sy’n datgelu hil neu darddiad ethnig, barn wleidyddol, credoau crefyddol neu athronyddol, neu aelodaeth undeb llafur, a phrosesu data genetig, data biometreg at ddibenion adnabod person naturiol yn unigryw, data sy’n ymwneud ag iechyd neu fywyd rhywiol neu gyfeiriadedd rhywiol person naturiol.</p>
+
+          <p>Fel arfer, bydd data personol categori arbennig yn cael eu prosesu ar y sail eu bod nhw’n angenrheidiol oherwydd budd sylweddol y cyhoedd, yn unol ag Erthygl 9(2)(g) o’r GDPR wedi’i ddarllen ynghyd ag Erthygl 10 o Ddeddf Diogelu Data 2018 a pharagraff 6 o Atodlen 1 iddi. Fodd bynnag, pan fyddwch chi’n trefnu bod eich data personol categori arbennig ar gael i’r cyhoedd, maen nhw’n gallu cael eu prosesu ar y sail ei bod hi’n amlwg eich bod chi wedi trefnu iddyn nhw fod ar gael i’r cyhoedd, yn unol ag Erthygl 9(2)(e) o’r GDPR.</p>
+
+          <h3>Ceisiadau am wybodaeth sy’n cael eu gwneud i’r Comisiwn</h3>
+
+          <p>Mae’r Senedd yn ddarostyngedig i ddeddfwriaeth mynediad at wybodaeth. Os bydd cais am wybodaeth yn cael ei wneud dan ddeddfwriaeth mynediad at wybodaeth, gall fod angen datgelu rhywfaint neu’r cyfan o’r wybodaeth a rowch. Fodd bynnag, dim ond os bydd hi’n ofynnol yn ôl y gyfraith y byddwn ni’n gwneud hyn.</p>
+
+          <h3>Eich hawliau</h3>
+
+          <p>Mae gennych chi rai hawliau dros y wybodaeth rydym ni’n ei dal. Yn gryno, mae’r hawliau’n cynnwys y canlynol:</p>
+
+          <ul class="list-bullet">
+            <li>Yr hawl i gael gwybod am sut y mae’ch gwybodaeth bersonol yn cael ei defnyddio;</li>
+            <li>Yr hawl i gael mynediad at gopïau o’ch gwybodaeth bersonol;</li>
+            <li>Yr hawl i’ch gwybodaeth gael ei chywiro os yw’n anghywir;</li>
+            <li>Yr hawl i gyfyngu ar y ffordd rydym ni’n defnyddio’ch gwybodaeth bersonol mewn rhai amgylchiadau;</li>
+            <li>Yr hawl i wrthwynebu i’ch gwybodaeth bersonol gael ei defnyddio mewn rhai amgylchiadau;</li>
+          </ul>
+
+          <p>Os hoffech chi ddefnyddio unrhyw un o’r hawliau hyn, anfonwch e-bost i Ceisiadau-gwybodaeth@senedd.cymru</p>
+
+          <h3>Newidiadau i’r hysbysiad hwn</h3>
+
+          <p>Cawn ni newid yr hysbysiad preifatrwydd hwn. Yn yr achos hwnnw, bydd y dyddiad ‘diweddarwyd ddiwethaf’ ar frig y dudalen hon hefyd yn newid. Bydd unrhyw newid i’r hysbysiad preifatrwydd hwn yn gymwys i chi a’ch data ar unwaith. Os yw’r newidiadau hyn yn effeithio ar y ffordd y caiff eich data personol eu prosesu, byddwn ni’n cymryd camau rhesymol i sicrhau y cewch chi wybod.</p>
+
+          <h3>Sut i gwyno</h3>
+
+          <p>Gallwch chi hefyd gwyno i Swyddfa’r Comisiynydd Gwybodaeth os nad ydych chi’n fodlon ar y ffordd rydym ni wedi defnyddio’ch data.</p>
+
+          <p>
+            Swyddfa’r Comisiynydd Gwybodaeth<br>
+            Wycliffe House<br>
+            Water Lane<br>
+            Wilmslow<br>
+            Cheshire<br>
+            SK9 5AF<br>
+            Helpline number: 0303 123 1113<br>
+            <br>
+            casework@ico.org.uk
+          </p>
+        </section>
+
+        <section id="cookies" aria-labelledby="cookies-heading">
+          <h2 id="cookies-heading">Cwcis</h2>
+
+          <p>Mae’r wefan hon yn rhoi ffeiliau bach (o’r enw ‘cwcis’) ar eich cyfrifiadur i gasglu gwybodaeth am y ffordd rydych chi’n pori’r wefan.</p>
+
+          <p>Defnyddir cwcis er mwyn:</p>
+
+          <ul class="list-bullet">
+            <li>mesur y ffordd rydych chi’n defnyddio’r gwasanaeth deisebau er mwyn ei ddiweddaru a’i wella ar sail eich anghenion</li>
+            <li>cofio’r hysbysiadau rydych chi wedi’u gweld fel na fyddwn ni’n eu dangos i chi eto</li>
+            <li>helpu i atal pobl rhag llofnodi deisebau drwy dwyll</li>
+          </ul>
+
+          <p>Mae rhai cwcis yn hollol angenrheidiol er mwyn sicrhau y caiff y wefan hon ei chynnal yn ddiogel. Ni chân nhw eu defnyddio i’ch adnabod chi’n bersonol.</p>
+
+          <p>Rhagor o wybodaeth am <a href="http://www.aboutcookies.org/" rel="external">sut i reoli cwcis</a>.</p>
+
+          <h3>Cwcis Google Analytics</h3>
+
+          <p>Rydym ni’n defnyddio Google Analytics i gasglu gwybodaeth am y ffordd rydych chi’n defnyddio’r gwasanaeth. Mae’r wybodaeth hon yn ein helpu i wella’r gwasanaeth ac atal llofnodi deisebau’n dwyllodrus. Y tro cyntaf y byddwch chi’n mynd i’r wefan ar ddyfais newydd, byddwch chi’n gweld opsiwn i ddewis derbyn cwcis dadansoddol.</p>
+
+          <p>Mae cwci Google Analytics yn casglu ac yn storio gwybodaeth am y canlynol:</p>
+
+          <ul class="list-bullet">
+            <li>defnyddwyr unigryw</li>
+            <li>hysbysu gwefannau cyfeirio</li>
+            <li>nifer y bobl sy’n mynd i’r wefan a nifer y sesiynau</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Enw</th>
+                <th>Diben</th>
+                <th>Dod i ben</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>_ga</td>
+                <td>Defnyddir cyfeirnod a gynhyrchir ar hap i adnabod defnyddwyr unigryw a hysbysu gwefannau cyfeirio a chyfrif nifer y bobl sy’n mynd i’r wefan a nifer y sesiynau</td>
+                <td>Dwy flynedd</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Ni chaniateir i Google ddefnyddio na rhannu ein data dadansoddol â neb, ond cewch chi ddewis peidio â derbyn cwcis Google Analytics.</p>
+
+          <h3>Cwcis sesiwn</h3>
+          <p>Rydym ni’n storio cwci sesiwn ar eich cyfrifiadur i helpu i gadw’ch gwybodaeth yn ddiogel wrth i chi ddefnyddio’r gwasanaeth.</p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Enw</th>
+                <th>Diben</th>
+                <th>Dod i ben</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>_wpets_session</td>
+                <td>Mae hyn yn cadw’ch gwybodaeth yn ddiogel wrth i chi ddefnyddio’r gwasanaeth deisebau</td>
+                <td>Pan fyddwch chi’n cau’ch porwr</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
     debate_outcomes:
       link_titles:
         video_url: Gwylio’r ddadl

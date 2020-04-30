@@ -69,7 +69,7 @@ Scenario: Charlie creates a petition in Welsh
   When I press "Parhau"
   Then the markup should be valid
   And I am asked to review my email address
-  When I press "Ie – dyma fy nghyfeiriad e-bsot i"
+  When I press "Ie – dyma fy nghyfeiriad e-bost i"
   Then a petition should exist with action_cy: "The wombats of wimbledon rock.", action_en: nil, state: "pending", locale: "cy-GB"
   And there should be a "pending" signature with email "womboid@wimbledon.com" and name "Womboid Wibbledon"
   And "Womboid Wibbledon" wants to be notified about the petition's progress

@@ -11,7 +11,7 @@ en-GB:
       statement:
         name: "Find out more about the cookies on this website"
         description: ""
-        updated: "01/04/2020"
+        updated: "30/04/2020"
       text:
         "title": "Cookies are files saved on your phone, tablet or computer when you visit a website."
         "intro": "Some of these cookies are essential, while others help us to improve your experience by providing insights into how the site is being used."
@@ -84,13 +84,10 @@ en-GB:
         contact:
           email:
             heading: Email
-            body_html: "<p>You can email the %{petitions_committee_link} directly.</p>\r\n\r\n<p>They
-              can help you to understand how the Senedd handles petitions. They can
-              also provide a template for you to use to collect signatures on paper
-              and help with some technical problems using this service. They can’t
-              forward your feedback to the people who started a petition or comment
-              on the ideas raised in a specific petition.</p>\r\n\r\n<p>Email: <a
-              href=\"mailto:petitions@senedd.wales\">petitions@senedd.wales</a></p>"
+            body_html: |-
+              <p>You can email the %{petitions_committee_link} directly.</p>
+              <p>They can help you to understand how the Senedd handles petitions. They can also provide a template for you to use to collect signatures on paper and help with some technical problems using this service. They can’t forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
+              <p>Email: <a href="mailto:petitions@senedd.wales">petitions@senedd.wales</a></p>            
             petitions_committee_link: Petitions Committee
           phone:
             heading: Phone
@@ -125,9 +122,7 @@ en-GB:
         back_link: Back to Petitions home
         body_html: |-
           <p>Thanks for sending us your feedback.</p>
-
           <p>If you’ve requested a response, we’ll be in touch as soon as we can.</p>
-
           <p>During busy periods this can take up to 5 working days.</p>
     sponsors:
       new:
@@ -140,95 +135,106 @@ en-GB:
           <p>This petition needs %{min_sponsors} supporters to go live.</p>
           <p>When it goes live, we’ll email you a link so you can start sharing it.</p>
     help_page:
-      body_html: "<h1 class=\"page-title\" id=\"creating-a-petition\">Creating a petition</h1>\r\n\r\n<p>Petitioning
-        is one of the most direct ways to suggest how something could change. Petitions
-        can:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>Raise awareness of an
-        issue;</li>\r\n  <li>Bring about a change in Welsh Government policy or a
-        different way of delivering services;</li>\r\n  <li>Propose or influence a
-        new law;</li>\r\n  <li>Prompt a Senedd Committee to hold an inquiry;</li>\r\n
-        \ <li>Lead to, or influence, a debate in the Senedd;</li>\r\n  <li>Prompt
-        a Committee or individual Members of the Senedd to take further action themselves,
-        for instance by asking questions.</li>\r\n</ul>\r\n\r\n<p>You can submit a
-        petition using our online petitions system, on paper, or a combination of
-        the two.</p>\r\n\r\n<p><u>Petitions from other websites are not accepted by
-        the Petitions Committee.</u></p>\r\n\r\n<p>If you are considering collecting
-        signatures on paper, you should <b>contact us</b> in advance for advice. A
-        template can also be provided.</p>\r\n\r\n<h1 class=\"page-title\" id=\"how-petitions-work\">How
-        petitions work</h1>\r\n\r\n<ol class=\"list-number\">\r\n  <li>You create
-        a petition. Only people or organisations with an address in Wales can create
-        a petition.</li>\r\n  <li>You get 2 people to support your petition. We’ll
-        tell you how to do this when you’ve created your petition.</li>\r\n  <li>We
-        check your petition, then publish it in Welsh and English. We only reject
-        petitions that don’t meet the standards for petitions (see below).</li>\r\n
-        \ <li>People can only sign a petition once. If they sign the petition online,
-        they will be sent an email to verify their signature. People cannot sign both
-        an online and a paper petition.</li>\r\n  <li>The Petitions Committee reviews
-        all petitions that collect over 50 signatures. They will decide what they
-        can do to help take the petition forward. This can include exploring the issue
-        and pressing for action from the Welsh Government and others.</li>\r\n  <li>If
-        your petition gets over 5,000 signatures, the Petitions Committee will consider
-        asking for a debate in the Senedd chamber. The Committee will consider a number
-        of factors, including the issues raised by the petition, the urgency of the
-        situation and the proportion of signatures which come from within Wales.</li>\r\n</ol>\r\n\r\n<h2
-        id=\"the-petitions-committee\">The Petitions Committee</h2>\r\n\r\n<p>As part
-        of their consideration of your petition, the <a href=\"https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430\">Petitions
-        Committee</a> can:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n  <li>write to
-        you for more information;</li>\r\n  <li>invite you to talk to the Committee
-        in person about the petition;</li>\r\n  <li>ask for evidence from the Welsh
-        Government or other relevant people or organisations;</li>\r\n  <li>press
-        the Welsh Government for action;</li>\r\n  <li>raise the petition with another
-        Senedd committee;</li>\r\n  <li>put forward the petition for debate;</li>\r\n
-        \ <li>run a detailed inquiry and publish a report on the topic.</li>\r\n</ul>\r\n\r\n<h2
-        id=\"standards\">Standards for petitions</h2>\r\n\r\n<p>You can submit a petition
-        on any issue that is the responsibility of the Senedd or the Welsh Government.</p>\r\n\r\n<p>Petitions
-        must call for a specific action from the Senedd or Welsh Government.</p>\r\n\r\n<p>Petitions
-        can disagree with the Welsh Government and can ask for it to change its policies.
-        Petitions can be critical of the Senedd or Welsh Government.</p>\r\n\r\n<p>We
-        reject petitions that don’t meet the rules. If we reject your petition, we
-        will tell you why. If we can, we will suggest other ways you could raise your
-        issue.</p>\r\n\r\n<p>We’ll have to reject your petition if:</p>\r\n\r\n<ul
-        class=\"list-bullet\">\r\n  <li>It calls for the same action as a petition
-        that’s already open, or one which was closed by the Petitions Committee less
-        than a year earlier;</li>\r\n  <li>It doesn’t ask for a clear action from
-        the Senedd or Welsh Government;</li>\r\n  <li>\r\n    <p>It’s about something
-        the Welsh Government or Parliament is not responsible for;</p>\r\n    <p>That
-        includes: something that your local council is responsible for (including
-        planning decisions); something that the UK Government or Parliament is responsible
-        for; and something that an independent organisation has done.</p>\r\n  </li>\r\n
-        \ <li>It contains language which is offensive, intemperate, or provocative.
-        This not only includes obvious profanities, swear words and insults, but any
-        language which a reasonable person would regard as offensive;</li>\r\n  <li>It
-        contains potentially false or potentially defamatory statements;</li>\r\n
-        \ <li>It refers to a case that’s active in the UK courts;</li>\r\n  <li>It
-        contains material that is prohibited from being published by an order of a
-        court or a body or person with similar power;</li>\r\n  <li>It accuses an
-        identifiable person or organisation of a crime;</li>\r\n  <li>It contains
-        material that could be confidential or commercially sensitive;</li>\r\n  <li>It
-        could cause personal distress or loss;</li>\r\n  <li>It names individual officials
-        of public bodies, unless they are senior managers;</li>\r\n  <li>It names
-        family members of elected representatives or officials of public bodies;</li>\r\n
-        \ <li>It’s an advert, spam, or promotes a specific product or service;</li>\r\n
-        \ <li>It’s nonsense or a joke;</li>\r\n  <li>\r\n    <p>It concerns an issue
-        for which a petition is not the appropriate channel.</p>\r\n    <p>That includes:
-        correspondence about a personal issue and petitions which ask for someone
-        to be given a job, lose their job or resign, or which call for a vote of no
-        confidence.</p>\r\n  </li>\r\n</ul>\r\n\r\n<p>We publish the text of petitions
-        that we reject, as long as they’re not:</p>\r\n\r\n<ul class=\"list-bullet\">\r\n
-        \ <li>defamatory, libellous or illegal in another way;</li>\r\n  <li>about
-        a case that is active in the UK courts or about something that a court has
-        issued an injunction over;</li>\r\n  <li>offensive or extreme;</li>\r\n  <li>confidential
-        or likely to cause personal distress; or</li>\r\n  <li>a joke, an advert or
-        nonsense.</li>\r\n</ul>\r\n\r\n<p>You can find the full rules governing the
-        petitions process <a href=\"/rules\">here</a>.</p>\r\n\r\n<h2
-        id=\"handing-in-your-petition\">Handing in your petition</h2>\r\n\r\n<p>We
-        offer the opportunity for you to hand in your petition once it has finished
-        collecting signatures, and before it is discussed by the Petitions Committee.
-        This is an informal occasion to speak to the Chair and other Members of the
-        Committee about the background to the petition.</p>\r\n\r\n<p>Petition handovers
-        take place at the Senedd on Tuesdays and Wednesdays when the Senedd is sitting
-        and last approximately 10 - 15 minutes. Photographs are taken and can be published
-        on the Committee’s webpage and social media.</p>\r\n\r\n<p>If you have any
-        other questions, please %{feedback_link}.</p>\r\n"
+      body_html: |-
+        <h1 class="page-title" id="creating-a-petition">Creating a petition</h1>
+
+        <p>Petitioning is one of the most direct ways to suggest how something could change. Petitions can:</p>
+
+        <ul class="list-bullet">
+          <li>Raise awareness of an issue;</li>
+          <li>Bring about a change in Welsh Government policy or a different way of delivering services;</li>
+          <li>Propose or influence a new law;</li>
+          <li>Prompt a Senedd Committee to hold an inquiry;</li>
+          <li>Lead to, or influence, a debate in the Senedd;</li>
+          <li>Prompt a Committee or individual Members of the Senedd to take further action themselves, for instance by asking questions.</li>
+        </ul>
+
+        <p>You can submit a petition using our online petitions system, on paper, or a combination of the two.</p>
+
+        <p><u>Petitions from other websites are not accepted by the Petitions Committee.</u></p>
+
+        <p>If you are considering collecting signatures on paper, you should <a href="mailto:petitions@senedd.wales">contact us</a> in advance for advice. A template can also be provided.</p>
+
+        <h1 class="page-title" id="how-petitions-work">How petitions work</h1>
+
+        <ol class="list-number">
+          <li>You create a petition. Only people or organisations with an address in Wales can create a petition.</li>
+          <li>You get 2 people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
+          <li>We check your petition, then publish it in Welsh and English. We only reject petitions that don’t meet the standards for petitions (see below).</li>
+          <li>People can only sign a petition once. If they sign the petition online, they will be sent an email to verify their signature. People cannot sign both an online and a paper petition.</li>
+          <li>The Petitions Committee reviews all petitions that collect over 50 signatures. They will decide what they can do to help take the petition forward. This can include exploring the issue and pressing for action from the Welsh Government and others.</li>
+          <li>If your petition gets over 5,000 signatures, the Petitions Committee will consider asking for a debate in the Senedd chamber. The Committee will consider a number of factors, including the issues raised by the petition, the urgency of the situation and the proportion of signatures which come from within Wales.</li>
+        </ol>
+
+        <h2 id="the-petitions-committee">The Petitions Committee</h2>
+
+        <p>As part of their consideration of your petition, the <a href="https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a> can:</p>
+
+        <ul class="list-bullet">
+          <li>write to you for more information;</li>
+          <li>invite you to talk to the Committee in person about the petition;</li>
+          <li>ask for evidence from the Welsh Government or other relevant people or organisations;</li>
+          <li>press the Welsh Government for action;</li>
+          <li>raise the petition with another Senedd committee;</li>
+          <li>put forward the petition for debate;</li>
+          <li>run a detailed inquiry and publish a report on the topic.</li>
+        </ul>
+
+        <h2 id="standards">Standards for petitions</h2>
+
+        <p>You can submit a petition on any issue that is the responsibility of the Senedd or the Welsh Government.</p>
+
+        <p>Petitions must call for a specific action from the Senedd or Welsh Government.</p>
+
+        <p>Petitions can disagree with the Welsh Government and can ask for it to change its policies. Petitions can be critical of the Senedd or Welsh Government.</p>
+
+        <p>We reject petitions that don’t meet the rules. If we reject your petition, we will tell you why. If we can, we will suggest other ways you could raise your issue.</p>
+
+        <p>We’ll have to reject your petition if:</p>
+
+        <ul class="list-bullet">
+          <li>It calls for the same action as a petition that’s already open, or one which was closed by the Petitions Committee less than a year earlier;</li>
+          <li>It doesn’t ask for a clear action from the Senedd or Welsh Government;</li>
+          <li>
+            <p>It’s about something the Welsh Government or Parliament is not responsible for;</p>
+            <p>That includes: something that your local council is responsible for (including planning decisions); something that the UK Government or Parliament is responsible for; and something that an independent organisation has done.</p>
+          </li>
+          <li>It contains language which is offensive, intemperate, or provocative. This not only includes obvious profanities, swear words and insults, but any language which a reasonable person would regard as offensive;</li>
+          <li>It contains potentially false or potentially defamatory statements;</li>
+          <li>It refers to a case that’s active in the UK courts;</li>
+          <li>It contains material that is prohibited from being published by an order of a court or a body or person with similar power;</li>
+          <li>It accuses an identifiable person or organisation of a crime;</li>
+          <li>It contains material that could be confidential or commercially sensitive;</li>
+          <li>It could cause personal distress or loss;</li>
+          <li>It names individual officials of public bodies, unless they are senior managers;</li>
+          <li>It names family members of elected representatives or officials of public bodies;</li>
+          <li>It’s an advert, spam, or promotes a specific product or service;</li>
+          <li>It’s nonsense or a joke;</li>
+          <li>
+            <p>It concerns an issue for which a petition is not the appropriate channel.</p>
+            <p>That includes: correspondence about a personal issue and petitions which ask for someone to be given a job, lose their job or resign, or which call for a vote of no confidence.</p>
+          </li>
+        </ul>
+
+        <p>We publish the text of petitions that we reject, as long as they’re not:</p>
+
+        <ul class="list-bullet">
+          <li>defamatory, libellous or illegal in another way;</li>
+          <li>about a case that is active in the UK courts or about something that a court has issued an injunction over;</li>
+          <li>offensive or extreme;</li>
+          <li>confidential or likely to cause personal distress; or</li>
+          <li>a joke, an advert or nonsense.</li>
+        </ul>
+
+        <p>You can find the full rules governing the petitions process <a href="/rules">here</a>.</p>
+
+        <h2 id="handing-in-your-petition">Handing in your petition</h2>
+
+        <p>We offer the opportunity for you to hand in your petition once it has finished collecting signatures, and before it is discussed by the Petitions Committee. This is an informal occasion to speak to the Chair and other Members of the Committee about the background to the petition.</p>
+
+        <p>Petition handovers take place at the Senedd on Tuesdays and Wednesdays when the Senedd is sitting and last approximately 10 - 15 minutes. Photographs are taken and can be published on the Committee’s webpage and social media.</p>
+
+        <p>If you have any other questions, please %{feedback_link}.</p>
       feedback_link: get in touch
     home_page:
       notice:
@@ -333,8 +339,7 @@ en-GB:
         index:
           postcode_bad:
             heading: We couldn’t find that postcode
-            couldnt_find_postcode_html: We couldn’t find the postcode <q>%{postcode}</q>.
-              Try again?
+            couldnt_find_postcode_html: We couldn’t find the postcode <q>%{postcode}</q>. Try again?
           postcode_blank:
             heading: Local to you
             find_local_petitions: Find petitions about local issues
@@ -408,11 +413,9 @@ en-GB:
             label: "Month"
           year:
             label: "Year"
-          help_html: "<p>\r\n  By default, petitions collect signatures for six months
-            from the date\r\n  that the petition is published. However, petitions
-            are not considered by the Petitions Committee until <b>after</b> they
-            have finished collecting signatures. </li>\r\n<p>\r\nYou can choose an
-            earlier closing date if you would like your petition to be discussed sooner.\r\n</p>"
+          help_html: |-
+            <p>By default, petitions collect signatures for six months from the date that the petition is published. However, petitions are not considered by the Petitions Committee until <b>after</b> they have finished collecting signatures.</p>
+            <p>You can choose an earlier closing date if you would like your petition to be discussed sooner.</p>
           submit_html: |-
             <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Check closing date">Check closing date</button>
         replay_email_stage:
@@ -543,8 +546,7 @@ en-GB:
             will be discussed by the Petitions Committee
       senedd_will_debate: The Senedd will debate this petition
       sign_this_petition: Sign this petition
-      need_sponsors_later: Later on, you’ll need email addresses for %{count} supporters
-        to get your petition started
+      need_sponsors_later: Later on, you’ll need email addresses for %{count} supporters to get your petition started
       senedd_debated_topic: The Senedd debated this topic
       waiting_for_in_words:
         one: Waiting 1 day
@@ -689,6 +691,7 @@ en-GB:
         <p class="text-secondary">The Petitions Committee has finished considering these petitions</p>
       rejected_html: |-
         <p class="text-secondary">These petitions did not meet the <a href="/help#standards">petition standards</a>. They are published in the language in which they were submitted.</p>
+        <p>Petitions rejected before May 2020 can be <a href="http://www.senedd.assembly.wales/mgIssueHistoryHome.aspx?IId=28231">found here.</a></p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
@@ -701,126 +704,153 @@ en-GB:
 
           <h2 id="privacy-heading">Privacy notice: how we use your data</h2>
 
-          <p>Last update: January 6 2020</p>
+          <p>Last update: 30 April 2020</p>
 
-          <p>The Petitions site lets you start and sign petitions to raise issues with the Welsh Parliament.</p>
+          <p>The Petitions site lets you start and sign petitions to raise issues with the Welsh Parliament/Senedd Cymru (referred to hereafter as the Senedd).</p>
 
-          <p>The Petitions service is provided by the Parliament. We need to collect, process and store some personal data to enable you to do this.</p>
+          <p>The Petitions service is provided by the Senedd. We need to collect, process and store some personal data to enable you to do this.</p>
 
-          <p>A data controller determines how and why personal data is processed. The Welsh Parliament is the data controller of this site.</p>
+          <h3>Data Controller</h3>
 
-          <p>The data controller for Parliament is the Clerk of the House.</p>
+          <p>The Senedd Commission is the data controller of the information you provide, and will ensure it is protected and used in line with data protection legislation.</p>
+
+          <h3>Our Contact Details</h3>
+
+          <p>Any queries regarding our use of your information should be sent to the Data Protection Officer at:</p>
+  
+          <p>Data.Protection@senedd.wales 0300 2006565</p>
 
           <h3>What data we collect from you</h3>
 
-          <p>The personal data we collect from people who start and sign petitions will include:</p>
+          <p>The personal data we collect from people who sign petitions will include:</p>
 
           <ul class="list-bullet">
             <li>your name</li>
             <li>your email address</li>
             <li>your postcode</li>
             <li>the country you live in</li>
-            <li>whether you are a British citizen</li>
             <li>the IP address you use when starting or signing a petition</li>
           </ul>
+  
+          <p>In addition, for people who start a petition we will also collect:</p>
 
-          <p>The legal basis for processing this data is public task – allowing you to raise issues with the Welsh Parliament.</p>
-
+          <ul class="list-bullet">
+            <li>your postal address</li>
+            <li>your contact telephone number</li>
+            <li>any personal information or details that you provide within the petition itself.</li>
+          </ul>
+  
+          <p>We sometimes receive information relating to people who have signed petitions on paper. Paper petitions are securely stored and retained for the same period as personal data received through our own electronic petitions system. They are destroyed in a secure manner at the end of the retention period.</p>
+  
           <h3>Why we need your data</h3>
 
           <p>We use this information to:</p>
 
           <ul class="list-bullet">
+            <li>facilitate the petitions process</li>
             <li>make sure that people only sign a petition once</li>
-            <li>check that you’re eligible to sign a petition</li>
+            <li>check that you’re eligible to start a petition</li>
             <li>contact you about petitions you start</li>
-            <li>if you consent, email you updates about what happens in Parliament petitions you’ve signed</li>
+            <li>if you choose to sign up to email updates about what happens in the Senedd on petitions you’ve signed</li>
+            <li>we may occasionally contact people who start or submit petitions to seek feedback on the petitions process and how it could be improved.</li>
           </ul>
 
           <h3>What we do with your data</h3>
 
-          <p>If you start a petition and we accept it, your name will be published with the petition. We won’t publish any other personal information about you.</p>
+          <p>We use your personal information to process the petition you have started or signed.</p>
+
+          <p>If you start a petition and we accept it, your name will be published alongside any text you include within the petition. We won’t publish any of your contact details. If you start a petition, your name will remain permanently referenced alongside the petition on the Petitions Committee’s web pages and in meeting transcripts and recordings, as part of the official record of the Senedd’s petitions process.</p>
 
           <p>If you’ve signed a petition, we won’t publish any personal information about you.</p>
 
-          <p>We’ll use your postcode to work out how many people in each parliamentary constituency have signed a petition.</p>
+          <p>We’ll use your postcode to work out how many people in Wales and within each Senedd constituency and region have signed a petition.</p>
 
-          <p>We will not:</p>
+          <p>We will retain your personal data from the date you start or sign a petition until 12 months after it is no longer being considered by the Petitions Committee, i.e. until 12 months after the Committee considers the petition to be completed, apart from any personal data which has been published.</p>
 
-          <ul class="list-bullet">
-            <li>sell or rent your data to third parties</li>
-            <li>share your data with third parties for marketing purposes</li>
-          </ul>
+          <p>Any information which has been published will remain permanently online in the records of the Senedd’s petitions process, including in any material published by the Petitions Committee.</p>
+
+          <p>IP addresses are used to protect the petitions site and prevent fraudulent activity.</p>
 
           <p>We will share your data if we’re required to do so by law – for example, by court order, or to prevent fraud or other crime.</p>
 
           <h3>What we’ll email you about</h3>
 
-          <p>If a petition you’ve started or signed gets a response from the Government, we’ll email the response to you.</p>
+          <p>If a petition you’ve started is referred to the Petitions Committee, we’ll use your contact details to update you about the petition’s progress and to offer you the opportunity to provide further information and engage with the Committee.</p>
+  
+          <p>If you’ve signed a petition, you can choose to receive updates about the progress of the petition. This might include contacting you to let you know what is happening in the Senedd in relation to your petition, such as: debates that you can watch or read, chances to respond to a consultation, or ways to let committees and Members of the Senedd know why the petition is important to you.</p>
 
-          <p>If you’ve started or signed a petition, we might contact you to let you know about relevant things that are happening in Parliament and Government. That might include: debates that you can watch or read, chances to respond to a consultation, or ways to let MPs know why the petition is important to you.</p>
+          <p>We may occasionally use your contact details to seek your views on the Senedd’s petitions process.</p>
 
-          <p>You can stop these emails by clicking the “unsubscribe” link in the email.</p>
+          <p>You can stop these emails at any time by clicking the “unsubscribe” link in the email.</p>
 
-          <h3>How long we keep your data</h3>
+          <h3>Who has access to the data and where is it processed and stored</h3>
 
-          <p>We will retain your personal data from the date you start or sign a petition, until 6 months after that petition closes – a maximum of 12 months in total.</p>
+          <p>Senedd Commission staff administering the petitions process will have access to your personal information.</p>
 
-          <h3>Where your data is processed and stored</h3>
+          <p>Unboxed Consulting Limited who provide technical support for the petitions system will also have access to the system for troubleshooting and maintenance purposes only.</p>
 
-          <p>We design, build and run our systems to make sure that your data is as safe as possible at any stage, both while it’s processed and when it’s stored.</p>
+          <p>Electronic information will be stored on Senedd ICT systems, which includes third party cloud services provided by Microsoft. Any transfer of data by Microsoft outside of the EEA is covered by contractual clauses under which Microsoft ensure that personal data is treated in line with European legislation.</p>
 
-          <p>All personal data on Petitions is processed, stored and managed entirely in the European Economic Area (EEA), and will not be transferred outside of it. This means that it is covered by EU Data Protection regulations.</p>
+          <p>The petitions system uses Amazon Web Services (AWS) cloud storage to store your data. AWS store data within the European Economic Area (EEA).</p>
 
           <h3>How we protect your data and keep it secure</h3>
 
           <p>We are committed to doing all that we can to keep your data secure. We set up systems and processes to prevent unauthorised access or disclosure of the data we collect about you – for example, we protect your data using varying levels of encryption. All third parties who process personal data for us are required to keep that data secure.</p>
 
+          <h3>Our legal bases for collecting, holding and using your personal information</h3>
+
+          <p>Data protection law sets out various legal bases (or ‘conditions’) which allow us to collect, hold and use your personal information.</p>
+
+          <p>We consider that our collection and use of your information is necessary to help us facilitate the petitions process and allow the public the chance to raise and show support for issues with the Senedd.</p>
+
+          <p>As such, personal data is processed on the basis that it is necessary for the performance of a task carried out in the public interest in accordance with Article 6(1)(e) of the General Data Protection Regulation (GDPR), read together with section 8(d) of the Data Protection Act 2018.</p>
+
+          <p>Where we are required to process personal data in order to comply with a legal obligation, such as a request under access to information legislation or a court order, we will do so on the basis that processing is necessary for compliance with a legal obligation pursuant to Article 6(1)(c) of the GDPR.</p>
+  
+          <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will also be processed in accordance with Article 6(1)(e) of the GDPR, read in conjunction with section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
+  
+          <p>Finally, we may process special categories of personal data of those who start or sign a petition, and/or contribute to its passage through the Senedd’s petitions process. Special category personal data is defined in Article 9(1) of the GDPR as the processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade-union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or a natural person’s sex life or sexual orientation.</p>
+
+          <p>Special category personal data will usually be processed on the basis that it is necessary for reasons of substantial public interest, pursuant to Article 9(2)(g) of the GDPR read in conjunction with section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018. However, where your special category personal data is made public by you, it may be processed on the basis that it has already been manifestly made public by you, pursuant to Article 9(2)(e) of the GDPR.</p>
+
+          <h3>Requests for information made to the Commission</h3>
+
+          <p>The Senedd is subject to access to information legislation. In the event of a request for information being made under access to information legislation, it may be necessary to disclose all or part of the information that you provide. However, we will only do this if we are required to do so by law.</p>
+
           <h3>What are your rights</h3>
 
-          <p>You have the right to request:</p>
-
+          <p>You have certain rights over the information we hold. In summary, the rights include:</p>
+  
           <ul class="list-bullet">
-            <li>information about how your personal data is processed</li>
-            <li>a copy of that personal data - this copy will be provided in a structured, commonly used and machine-readable format</li>
-            <li>that anything inaccurate in your personal data is corrected immediately</li>
+            <li>The right to be informed about how your personal information is used;</li>
+            <li>The right of access to copies of your personal information;</li>
+            <li>The right to rectification if your information is inaccurate;</li>
+            <li>The right to restrict our use of your personal information in certain circumstances;</li>
+            <li>The right to object to the use of your personal information in certain circumstances.</li>
           </ul>
 
-          <p>You can also:</p>
-
-          <ul class="list-bullet">
-            <li>raise an objection about how your personal data is processed</li>
-            <li>request that your personal data is erased if there is no longer a justification for it</li>
-            <li>ask that the processing of your personal data is restricted in certain circumstances</li>
-          </ul>
-
-          <p>If you have any of these requests, please get in touch with us - you can find contact details below.</p>
+          <p>If you would like to engage any of these rights, please email information-request@senedd.wales</p>
 
           <h3>Changes to this notice</h3>
-
+  
           <p>We may change this privacy notice. In that case the ‘last updated’ date at the top of this page will also change. Any changes to this privacy notice will apply to you and your data immediately. If these changes affect how your personal data is processed, we will take reasonable steps to make sure you know.</p>
 
-          <h3>Questions and complaints</h3>
+          <h3>How to complain</h3>
 
-          <p>Contact us if you either:</p>
+          <p>You can also complain to the ICO if you are unhappy with how we have used your data.</p>
 
-          <ul class="list-bullet">
-            <li>have any questions about anything in this document</li>
-            <li>think that your personal data has been misused or mishandled</li>
-          </ul>
-
-          <p>You may make a complaint to the Information Commissioner, who is an independent regulator set up to uphold information rights.</p>
+          <p>The ICO’s address:</p>
 
           <p>
-          Information Commissioner’s Office<br>
-          casework@ico.org.uk<br>
-          0303 123 1113<br>
-          <br>
-          Wycliffe House<br>
-          Water Lane<br>
-          Wilmslow<br>
-          Cheshire<br>
-          SK9 5AF
+            Information Commissioner’s Office<br>
+            Wycliffe House<br>
+            Water Lane<br>
+            Wilmslow<br>
+            Cheshire<br>
+            SK9 5AF<br>
+            Helpline number: 0303 123 1113<br>
+            <br>
+            casework@ico.org.uk
           </p>
         </section>
 
@@ -837,19 +867,20 @@ en-GB:
             <li>help prevent people from fraudulently signing petitions</li>
           </ul>
 
-          <p>These cookies aren’t used to identify you personally and are strictly necessary to ensure the secure running of this website.</p>
+          <p>Some cookies are strictly necessary to ensure the secure running of this website. They are not used to identify you personally.</p>
 
-          <p>Find out more about <a href="http://www.aboutcookies.org/" rel="external">how to manage cookies.</a></p>
+          <p>Find out more about <a href="http://www.aboutcookies.org/" rel="external">how to manage cookies</a>.</p>
 
           <h3>Google Analytics cookies</h3>
 
-          <p>We use Google Analytics to collect information about how you use the service. This information helps us to improve the service and prevent fraudulent signing.</p>
+          <p>We use Google Analytics to collect information about how you use the service. This information helps us to improve the service and prevent fraudulent signing. When you first visit the site on a new device an option is provided to opt-in to analytics cookies.</p>
+
           <p>The Google analytics cookie collects and stores information about:</p>
 
           <ul class="list-bullet">
-              <li>unique users</li>
-              <li>informing referring sites</li>
-              <li>vistor and session counts</li>
+            <li>unique users</li>
+            <li>informing referring sites</li>
+            <li>vistor and session counts</li>
           </ul>
 
           <table>
