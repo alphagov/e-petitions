@@ -15,7 +15,7 @@
 <div class="section-panel archived-petitions">
   <ul>
     <li>
-      <%= link_to petitions_url(state: "archived") do %>
+      <%= link_to petitions_url(state: "archived"), class: "view-all" do %>
         <%= t(:archived, scope: :"ui.petitions.lists") %>
       <% end %>
     </li>
