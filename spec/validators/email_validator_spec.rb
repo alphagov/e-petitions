@@ -51,15 +51,23 @@ RSpec.describe EmailValidator do
     end
   end
 
-  describe "with a single character email address" do
-    let(:email) { "l@s.c" }
+  describe "with an email address on a puny code domain" do
+    let(:email) { "laura@xn--74h.com" }
 
     it "doesn’t add an error" do
       expect(errors).to be_empty
     end
   end
 
-  describe "with an email address without a domain" do
+  describe "with a single character email address" do
+    let(:email) { "l@x.com" }
+
+    it "doesn’t add an error" do
+      expect(errors).to be_empty
+    end
+  end
+
+  describe "with an email address without a top level domain" do
     let(:email) { "laura@example" }
 
     it "adds an error" do
@@ -80,6 +88,30 @@ RSpec.describe EmailValidator do
 
     it "adds an error" do
       expect(errors).to include("Email ‘laura.example.com’ not recognised")
+    end
+  end
+
+  describe "with an email address containing an umlaut in the local part" do
+    let(:email) { "laüra@example.com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email ‘laüra@example.com’ not recognised")
+    end
+  end
+
+  describe "with an email address containing an accent in the local part" do
+    let(:email) { "láura@example.com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email ‘láura@example.com’ not recognised")
+    end
+  end
+
+  describe "with an email address containing a circumflex in the local part" do
+    let(:email) { "laûra@example.com" }
+
+    it "adds an error" do
+      expect(errors).to include("Email ‘laûra@example.com’ not recognised")
     end
   end
 
