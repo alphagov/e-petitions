@@ -9,7 +9,7 @@ Background:
     And an open petition exists with action_en: "Uncle Bulgaria", additional_details: "The Wombles are here", action_cy: "Yncl Bwlgaria", additional_details_cy: "Mae'r Wombles yma", closed_at: "1 minute from now"
     And an open petition exists with action_en: "Common People", background: "The Wombles belong to us all", action_cy: "Pobl Gyffredin", background_cy: "Mae'r Wombles yn perthyn i ni i gyd", closed_at: "11 days from now"
     And an open petition exists with action_en: "Overthrow the Wombles", action_cy: "Goresgyn y Wombles", closed_at: "1 year from now"
-    And a closed petition exists with action_en: "The Wombles will rock Glasto", action_cy: "Bydd y Wombles yn siglo Glasto", closed_at: "1 minute ago"
+    And a referred petition exists with action_en: "The Wombles will rock Glasto", action_cy: "Bydd y Wombles yn siglo Glasto", closed_at: "1 minute ago"
     And a rejected petition exists with action_en: "Eavis vs the Wombles", action_cy: "Eavis vs y Wombles"
     And a hidden petition exists with action_en: "The Wombles are profane", action_cy: "Mae'r Wombles yn halogedig"
     And an open petition exists with action_en: "Wombles", action_cy: "Wombles", closed_at: "10 days from now"

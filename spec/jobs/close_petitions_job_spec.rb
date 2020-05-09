@@ -48,7 +48,7 @@ RSpec.describe ClosePetitionsJob, type: :job do
       travel_back
     end
 
-    context "and the debate date has not passed" do
+    context "and the closing date has not passed" do
       let(:now) { "2016-12-28T07:00:00Z".in_time_zone }
 
       it "does not change the petition state" do
@@ -60,7 +60,7 @@ RSpec.describe ClosePetitionsJob, type: :job do
       end
     end
 
-    context "and the debate date has passed" do
+    context "and the closing date has passed" do
       let(:now) { "2016-12-29T07:00:00Z".in_time_zone }
 
       it "does change the petition state" do
