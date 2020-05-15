@@ -45,8 +45,8 @@ class Petition < ActiveRecord::Base
   facet :all,       -> { not_archived.by_most_recent }
   facet :open,      -> { not_archived.open_state.by_most_popular }
   facet :rejected,  -> { not_archived.rejected_state.by_most_recent }
-  facet :closed,    -> { not_archived.closed_state.by_most_popular }
-  facet :referred,  -> { not_archived.closed_state.by_most_recently_closed }
+  facet :closed,    -> { not_archived.closed_state.not_referred.by_most_popular }
+  facet :referred,  -> { not_archived.closed_state.referred.by_most_recently_closed }
   facet :completed, -> { not_archived.completed_state.by_most_recently_closed }
   facet :hidden,    -> { not_archived.hidden_state.by_most_recent }
   facet :archived,  -> { archived.by_most_recently_closed }
@@ -210,7 +210,11 @@ class Petition < ActiveRecord::Base
     end
 
     def referred
-      closed_state
+      where(arel_table[:referred_at].not_eq(nil))
+    end
+
+    def not_referred
+      where(arel_table[:referred_at].eq(nil))
     end
 
     def archived
@@ -328,6 +332,20 @@ class Petition < ActiveRecord::Base
 
     def in_need_of_closing(time = Time.current)
       where(state: OPEN_STATE).where(arel_table[:closed_at].lt(time))
+    end
+
+    def refer_or_reject_petitions!(time = Time.current)
+      in_need_of_referring_or_rejecting(time).find_each do |petition|
+        petition.refer_or_reject!(time)
+      end
+    end
+
+    def in_need_of_referring_or_rejecting(time = Time.current)
+      closed_state.not_referred.closed_before(24.hours.before(time))
+    end
+
+    def closed_before(time)
+      where(arel_table[:closed_at].lt(time))
     end
 
     def created_after(time)
@@ -729,14 +747,22 @@ class Petition < ActiveRecord::Base
 
   def close!(time = deadline)
     if open?
+      update!(state: CLOSED_STATE, closed_at: time)
+    else
+      raise RuntimeError, "can't close a petition that is in the #{state} state"
+    end
+  end
+
+  def refer_or_reject!(time)
+    if closed? && !referred?
       if will_be_referred?
-        update!(state: CLOSED_STATE, closed_at: time, referred_at: time)
+        update!(referred_at: time)
       else
         reject!(code: "insufficient", rejected_at: time)
         NotifyEveryoneOfFailureToGetEnoughSignaturesJob.perform_later(self)
       end
     else
-      raise RuntimeError, "can't close a petition that is in the #{state} state"
+      raise RuntimeError, "can't refer or reject a petition that is in the #{state} state"
     end
   end
 
@@ -799,7 +825,7 @@ class Petition < ActiveRecord::Base
   end
 
   def referred?
-    closed? || completed?
+    referred_at? || completed?
   end
 
   def flagged?

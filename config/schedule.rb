@@ -33,6 +33,10 @@ every :day, at: '7.00am' do
   rake "wpets:petitions:close", output: nil
 end
 
+every :day, at: '7.05am' do
+  rake "wpets:petitions:refer_or_reject", output: nil
+end
+
 every :day, at: '7.15am' do
   rake "wpets:petitions:debated", output: nil
 end

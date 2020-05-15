@@ -4,7 +4,11 @@
   <p><%= signature_count(:default, petition.signature_count) %></p>
 <% when "closed" %>
   <p><%= signature_count(:default, petition.signature_count) %></p>
-  <p><%= t(:"ui.petitions.search.results.items.facet_all.closed") %></p>
+  <% if petition.referred? %>
+    <p><%= t(:"ui.petitions.search.results.items.facet_all.referred") %></p>
+  <% else %>
+    <p><%= t(:"ui.petitions.search.results.items.facet_all.closed") %></p>
+  <% end %>
 <% when "completed" %>
   <p><%= signature_count(:default, petition.signature_count) %></p>
   <p><%= t(:"ui.petitions.search.results.items.facet_all.completed", date: short_date_format(petition.completed_at)) %></p>

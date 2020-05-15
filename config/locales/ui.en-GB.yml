@@ -455,7 +455,8 @@ en-GB:
             facet_all:
               rejected: Rejected
               completed: Completed by the Petitions Committee on %{date}
-              closed: Referred to the Petitions Committee
+              closed: Closed for new signatures
+              referred: Referred to the Petitions Committee
             facet_debated:
               debated_date: Debated on %{date}
             facet_referred:
@@ -533,10 +534,13 @@ en-GB:
             will be discussed by the Petitions Committee after they have finished
             collecting signatures
           referral_waiting_time: for the Petitions Committee to consider this petition
+        closed:
+          heading: Closed for new signatures
+          description: A decision on whether to refer or reject this petition will be made shortly - all petitions with more than  %{threshold} signatures will be discussed by the Petitions Committee.
         referred:
-          heading: This petition is now under consideration by the Petitions Committee
+          heading: This petition is now under consideration by the Petitions Committee
           link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
-          referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
+          referral_threshold: Petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee
         completed:
           heading: This petition was considered by the Petitions Committee
           link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>

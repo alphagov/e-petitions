@@ -177,7 +177,7 @@ FactoryBot.define do
 
     after(:build) do |petition, evaluator|
       if evaluator.referred
-        petition.referral_threshold_reached_at = petition.open_at + 2.month
+        petition.referral_threshold_reached_at = petition.open_at + 2.months
       end
 
       petition.closed_at ||= Site.closed_at_for_opening(petition.open_at)
