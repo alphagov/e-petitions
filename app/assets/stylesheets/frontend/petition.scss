@@ -1,3 +1,14 @@
+.flash-notice {
+  border: 2px solid $focus-color;
+  color: $focus-color;
+  margin-top: 24px;
+  padding: 6px 12px;
+
+  @include media(tablet) {
+    margin-top: 36px;
+  }
+}
+
 .create-warning {
   margin-bottom: 24px;
   position: relative;
