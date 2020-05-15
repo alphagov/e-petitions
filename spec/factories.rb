@@ -544,7 +544,7 @@ FactoryBot.define do
         "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True"
       }
       sequence(:debate_pack_url) { |n|
-        "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
+        "https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667"
       }
     end
   end

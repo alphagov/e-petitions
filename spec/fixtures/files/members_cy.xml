@@ -7,9 +7,9 @@
                 <councillorcount> 1</councillorcount>
                 <councillor>
                     <councillorid>249</councillorid>
-                    <fullusername>Vaughan Gething AC</fullusername>
-                    <photosmallurl>http://www.senedd.cynulliad.cymru/UserData/9/4/2/Info00000249/smallpic.jpg&amp;LLL=1</photosmallurl>
-                    <photobigurl>http://www.senedd.cynulliad.cymru/UserData/9/4/2/Info00000249/bigpic.jpg&amp;LLL=1</photobigurl>
+                    <fullusername>Vaughan Gething AS</fullusername>
+                    <photosmallurl>https://busnes.senedd.cymru/UserData/9/4/2/Info00000249/smallpic.jpg</photosmallurl>
+                    <photobigurl>https://busnes.senedd.cymru/UserData/9/4/2/Info00000249/bigpic.jpg</photobigurl>
                     <politicalpartytitle>Llafur Cymru</politicalpartytitle>
                     <districttitle></districttitle>
                     <representing></representing>
@@ -20,7 +20,7 @@
                         <line3>Caerdydd</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7150</phone>
-                        <email>Vaughan.Gething@cynulliad.cymru</email>
+                        <email>Vaughan.Gething@senedd.cymru</email>
                     </workaddress>
                     <homeaddress></homeaddress>
                     <termsofoffice>
@@ -41,9 +41,9 @@
             <councillors>
                 <councillor>
                     <councillorid>143</councillorid>
-                    <fullusername>Andrew RT Davies AC</fullusername>
-                    <photosmallurl>http://www.senedd.cynulliad.cymru/UserData/3/4/1/Info00000143/smallpic.jpg&amp;LLL=1</photosmallurl>
-                    <photobigurl>http://www.senedd.cynulliad.cymru/UserData/3/4/1/Info00000143/bigpic.jpg&amp;LLL=1</photobigurl>
+                    <fullusername>Andrew RT Davies AS</fullusername>
+                    <photosmallurl>https://busnes.senedd.cymru/UserData/3/4/1/Info00000143/smallpic.jpg&amp;LLL=1</photosmallurl>
+                    <photobigurl>https://busnes.senedd.cymru/UserData/3/4/1/Info00000143/bigpic.jpg&amp;LLL=1</photobigurl>
                     <politicalpartytitle>Ceidwadwyr Cymreig</politicalpartytitle>
                     <districttitle>Canol De Cymru</districttitle>
                     <representing></representing>
@@ -54,7 +54,7 @@
                         <line3>Caerdydd</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7227</phone>
-                        <email>AndrewRT.Davies@cynulliad.cymru</email>
+                        <email>AndrewRT.Davies@senedd.cymru</email>
                     </workaddress>
                     <homeaddress></homeaddress>
                     <termsofoffice>
@@ -74,9 +74,9 @@
                 </councillor>
                 <councillor>
                     <councillorid>169</councillorid>
-                    <fullusername>David Melding AC</fullusername>
-                    <photosmallurl>http://www.senedd.cynulliad.cymru/UserData/9/6/1/Info00000169/smallpic.jpg&amp;LLL=1</photosmallurl>
-                    <photobigurl>http://www.senedd.cynulliad.cymru/UserData/9/6/1/Info00000169/bigpic.jpg&amp;LLL=1</photobigurl>
+                    <fullusername>David Melding AS</fullusername>
+                    <photosmallurl>https://busnes.senedd.cymru/UserData/9/6/1/Info00000169/smallpic.jpg&amp;LLL=1</photosmallurl>
+                    <photobigurl>https://busnes.senedd.cymru/UserData/9/6/1/Info00000169/bigpic.jpg&amp;LLL=1</photobigurl>
                     <politicalpartytitle>Ceidwadwyr Cymreig</politicalpartytitle>
                     <districttitle>Canol De Cymru</districttitle>
                     <representing></representing>
@@ -87,7 +87,7 @@
                         <line3>Caerdydd</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7220</phone>
-                        <email>David.Melding@cynulliad.cymru</email>
+                        <email>David.Melding@senedd.cymru</email>
                     </workaddress>
                     <homeaddress>
                         <line1>Swyddfa 2</line1>
@@ -122,9 +122,9 @@
                 </councillor>
                 <councillor>
                     <councillorid>255</councillorid>
-                    <fullusername>Neil McEvoy AC</fullusername>
-                    <photosmallurl>http://www.senedd.cynulliad.cymru/UserData/5/5/2/Info00000255/smallpic.jpg&amp;LLL=1</photosmallurl>
-                    <photobigurl>http://www.senedd.cynulliad.cymru/UserData/5/5/2/Info00000255/bigpic.jpg&amp;LLL=1</photobigurl>
+                    <fullusername>Neil McEvoy AS</fullusername>
+                    <photosmallurl>https://busnes.senedd.cymru/UserData/5/5/2/Info00000255/smallpic.jpg&amp;LLL=1</photosmallurl>
+                    <photobigurl>https://busnes.senedd.cymru/UserData/5/5/2/Info00000255/bigpic.jpg&amp;LLL=1</photobigurl>
                     <politicalpartytitle>Welsh National Party</politicalpartytitle>
                     <districttitle>Canol De Cymru</districttitle>
                     <representing></representing>
@@ -134,7 +134,7 @@
                         <line2>Bae Caerdydd</line2>
                         <line3>Caerdydd</line3>
                         <postcode>CF99 1Na</postcode>
-                        <email>Neil.McEvoy@cynulliad.cymru</email>
+                        <email>Neil.McEvoy@senedd.cymru</email>
                     </workaddress>
                     <homeaddress>
                         <line1>321 Cowbridge Road East</line1>
@@ -152,9 +152,9 @@
                 </councillor>
                 <councillor>
                     <councillorid>5040</councillorid>
-                    <fullusername>Gareth Bennett AC</fullusername>
-                    <photosmallurl>http://www.senedd.cynulliad.cymru/UserData/0/4/0/Info00005040/smallpic.jpg&amp;LLL=1</photosmallurl>
-                    <photobigurl>http://www.senedd.cynulliad.cymru/UserData/0/4/0/Info00005040/bigpic.jpg&amp;LLL=1</photobigurl>
+                    <fullusername>Gareth Bennett AS</fullusername>
+                    <photosmallurl>https://busnes.senedd.cymru/UserData/0/4/0/Info00005040/smallpic.jpg&amp;LLL=1</photosmallurl>
+                    <photobigurl>https://busnes.senedd.cymru/UserData/0/4/0/Info00005040/bigpic.jpg&amp;LLL=1</photobigurl>
                     <politicalpartytitle>Annibynnol</politicalpartytitle>
                     <districttitle>Canol De Cymru</districttitle>
                     <representing></representing>
@@ -165,7 +165,7 @@
                         <line3>Caerdydd</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7263</phone>
-                        <email>Gareth.Bennett@cynulliad.cymru</email>
+                        <email>Gareth.Bennett@senedd.cymru</email>
                     </workaddress>
                     <homeaddress></homeaddress>
                     <termsofoffice>

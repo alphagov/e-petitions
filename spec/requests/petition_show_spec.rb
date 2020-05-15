@@ -202,7 +202,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           overview: "What happened in the debate",
           transcript_url: "https://record.assembly.wales/Plenary/5667#A51756",
           video_url: "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
-          debate_pack_url: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
+          debate_pack_url: "https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667"
 
       get "/petitions/#{petition.id}.json"
       expect(response).to be_successful
@@ -215,7 +215,7 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
             "overview" => "What happened in the debate",
             "transcript_url" => "https://record.assembly.wales/Plenary/5667#A51756",
             "video_url" => "http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True",
-            "debate_pack_url" => "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667"
+            "debate_pack_url" => "https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667"
           )
         )
       )

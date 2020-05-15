@@ -5,7 +5,7 @@ Given(/^a petition "(.*?)" has been debated (\d+) days ago?$/) do |petition_acti
     overview: 'Everyone was in agreement, this petition must be made law!',
     transcript_url: 'https://record.assembly.wales/Plenary/5667#A51756',
     video_url: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
-    debate_pack_url: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
+    debate_pack_url: 'https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667'
   )
   @petition.update(debate_outcome_at: debated_days_ago.days.ago)
 end
@@ -28,7 +28,7 @@ Then(/^I should see links to the transcript, video and research$/) do
   within :css, '.debate-outcome' do
     expect(page).to have_link('Watch the debate', href: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True')
     expect(page).to have_link('Read the transcript', href: 'https://record.assembly.wales/Plenary/5667#A51756')
-    expect(page).to have_link('Find details of the petition', href: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667')
+    expect(page).to have_link('Find details of the petition', href: 'https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667')
   end
 end
 
@@ -48,7 +48,7 @@ When(/^I fill in the debate outcome details$/) do
   fill_in 'Overview (English)', with: 'Lots of people spoke about it, no consensus achieved.'
   fill_in 'Transcript URL (English)', with: 'https://record.assembly.wales/Plenary/5667#A51756'
   fill_in 'Video URL (English)', with: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
-  fill_in 'Debate Pack URL (English)', with: 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
+  fill_in 'Debate Pack URL (English)', with: 'https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667'
 end
 
 Then(/^the petition should have the debate details I provided$/) do
@@ -59,7 +59,7 @@ Then(/^the petition should have the debate details I provided$/) do
   expect(@petition.debate_outcome.overview).to eq 'Lots of people spoke about it, no consensus achieved.'
   expect(@petition.debate_outcome.transcript_url).to eq 'https://record.assembly.wales/Plenary/5667#A51756'
   expect(@petition.debate_outcome.video_url).to eq 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True'
-  expect(@petition.debate_outcome.debate_pack_url).to eq 'http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667'
+  expect(@petition.debate_outcome.debate_pack_url).to eq 'https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667'
 end
 
 Then(/^the petition creator should have been emailed about the debate$/) do

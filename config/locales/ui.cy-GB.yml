@@ -170,7 +170,7 @@ cy-GB:
 
         <h2 id="the-petitions-committee">Y Pwyllgor Deisebau</h2>
 
-        <p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a href="https://www.assembly.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Pwyllgor Deisebau</a> yn gallu:</p>
+        <p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a href="https://senedd.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Pwyllgor Deisebau</a> yn gallu:</p>
 
         <ul class="list-bullet">
           <li>ysgrifennu atoch i gael rhagor o wybodaeth;</li>
@@ -240,7 +240,7 @@ cy-GB:
       feedback_link: gysylltu
     home_page:
       notice:
-        get_involved_html: "<a href=\"https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx\"
+        get_involved_html: "<a href=\"https://senedd.wales/en/gethome/Pages/getinvolved.aspx\"
           class=\"get-involved\">\r\n  Cymryd rhan yng ngwaith y Senedd\r\n</a>"
         register_to_vote_html: |-
           <a href="https://www.gov.uk/cofrestru-i-bleidleisio" class="register-to-vote">
@@ -689,7 +689,7 @@ cy-GB:
       rejected_html: |-
         <p class="text-secondary">Nid oedd y deisebau hyn yn <a href="/help#standards">bodloni’r safonau ar gyfer deisebau</a>. Fe’u cyhoeddir yn yr iaith y cawsant eu cyflwyno ynddi.</p>
 
-        <p>Gallwch weld deisebau a wrthodwyd cyn mis Mai 2020 <a href="http://www.senedd.cynulliad.cymru/mgIssueHistoryHome.aspx?IId=28231">yma.</a></p>
+        <p>Gallwch weld deisebau a wrthodwyd cyn mis Mai 2020 <a href="https://busnes.senedd.cymru/mgIssueHistoryHome.aspx?IId=28231">yma.</a></p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">

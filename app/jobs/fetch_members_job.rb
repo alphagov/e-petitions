@@ -1,7 +1,7 @@
 require 'faraday'
 
 class FetchMembersJob < ApplicationJob
-  HOST = "http://senedd.assembly.wales"
+  HOST = "https://business.senedd.wales"
   TIMEOUT = 5
 
   ENDPOINTS = {

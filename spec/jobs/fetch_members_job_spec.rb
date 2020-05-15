@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe FetchMembersJob, type: :job do
-  let(:url) { "http://senedd.assembly.wales" }
+  let(:url) { "https://business.senedd.wales" }
   let(:members_en) { "#{url}/mgwebservice.asmx/GetCouncillorsByWard" }
   let(:members_cy) { "#{url}/mgwebservicew.asmx/GetCouncillorsByWard" }
   let(:stub_members_en_api) { stub_request(:get, members_en) }
@@ -55,11 +55,11 @@ RSpec.describe FetchMembersJob, type: :job do
       end
 
       it "imports members" do
-        expect(members).to include("Vaughan Gething AM")
-        expect(members).to include("Andrew RT Davies AM")
-        expect(members).to include("David Melding AM")
-        expect(members).to include("Gareth Bennett AM")
-        expect(members).to include("Neil McEvoy AM")
+        expect(members).to include("Vaughan Gething MS")
+        expect(members).to include("Andrew RT Davies MS")
+        expect(members).to include("David Melding MS")
+        expect(members).to include("Gareth Bennett MS")
+        expect(members).to include("Neil McEvoy MS")
       end
 
       it "assigns the member id" do
@@ -67,11 +67,11 @@ RSpec.describe FetchMembersJob, type: :job do
       end
 
       it "assigns the English member name" do
-        expect(member.name_en).to eq("Vaughan Gething AM")
+        expect(member.name_en).to eq("Vaughan Gething MS")
       end
 
       it "assigns the Welsh member name" do
-        expect(member.name_cy).to eq("Vaughan Gething AC")
+        expect(member.name_cy).to eq("Vaughan Gething AS")
       end
 
       it "assigns the English party name" do

@@ -1,6 +1,6 @@
 class Member < ActiveRecord::Base
-  URL_EN = "https://www.assembly.wales/en/memhome/Pages/MemberProfile.aspx?mid=%{id}"
-  URL_CY = "https://www.cynulliad.cymru/cy/memhome/Pages/MemberProfile.aspx?mid=%{id}"
+  URL_EN = "https://senedd.wales/en/memhome/Pages/MemberProfile.aspx?mid=%{id}"
+  URL_CY = "https://senedd.cymru/cy/memhome/Pages/MemberProfile.aspx?mid=%{id}"
 
   include Translatable
 

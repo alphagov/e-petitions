@@ -7,9 +7,9 @@
                 <councillorcount> 1</councillorcount>
                 <councillor>
                     <councillorid>249</councillorid>
-                    <fullusername>Vaughan Gething AM</fullusername>
-                    <photosmallurl>http://www.senedd.assembly.wales/UserData/9/4/2/Info00000249/smallpic.jpg</photosmallurl>
-                    <photobigurl>http://www.senedd.assembly.wales/UserData/9/4/2/Info00000249/bigpic.jpg</photobigurl>
+                    <fullusername>Vaughan Gething MS</fullusername>
+                    <photosmallurl>https://business.senedd.wales/UserData/9/4/2/Info00000249/smallpic.jpg</photosmallurl>
+                    <photobigurl>https://business.senedd.wales/UserData/9/4/2/Info00000249/bigpic.jpg</photobigurl>
                     <politicalpartytitle>Welsh Labour</politicalpartytitle>
                     <districttitle>
           </districttitle>
@@ -22,7 +22,7 @@
                         <line3>Cardiff</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7150</phone>
-                        <email>Vaughan.Gething@assembly.wales</email>
+                        <email>Vaughan.Gething@senedd.wales</email>
                     </workaddress>
                     <homeaddress>
           </homeaddress>
@@ -45,9 +45,9 @@
                 <councillorcount>4</councillorcount>
                 <councillor>
                     <councillorid>143</councillorid>
-                    <fullusername>Andrew RT Davies AM</fullusername>
-                    <photosmallurl>http://www.senedd.assembly.wales/UserData/3/4/1/Info00000143/smallpic.jpg</photosmallurl>
-                    <photobigurl>http://www.senedd.assembly.wales/UserData/3/4/1/Info00000143/bigpic.jpg</photobigurl>
+                    <fullusername>Andrew RT Davies MS</fullusername>
+                    <photosmallurl>https://business.senedd.wales/UserData/3/4/1/Info00000143/smallpic.jpg</photosmallurl>
+                    <photobigurl>https://business.senedd.wales/UserData/3/4/1/Info00000143/bigpic.jpg</photobigurl>
                     <politicalpartytitle>Welsh Conservative Party</politicalpartytitle>
                     <districttitle>South Wales Central</districttitle>
                     <representing></representing>
@@ -58,7 +58,7 @@
                         <line3>Cardiff</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7227</phone>
-                        <email>AndrewRT.Davies@assembly.wales</email>
+                        <email>AndrewRT.Davies@senedd.wales</email>
                     </workaddress>
                     <homeaddress></homeaddress>
                     <termsofoffice>
@@ -78,9 +78,9 @@
                 </councillor>
                 <councillor>
                     <councillorid>169</councillorid>
-                    <fullusername>David Melding AM</fullusername>
-                    <photosmallurl>http://www.senedd.assembly.wales/UserData/9/6/1/Info00000169/smallpic.jpg</photosmallurl>
-                    <photobigurl>http://www.senedd.assembly.wales/UserData/9/6/1/Info00000169/bigpic.jpg</photobigurl>
+                    <fullusername>David Melding MS</fullusername>
+                    <photosmallurl>https://business.senedd.wales/UserData/9/6/1/Info00000169/smallpic.jpg</photosmallurl>
+                    <photobigurl>https://business.senedd.wales/UserData/9/6/1/Info00000169/bigpic.jpg</photobigurl>
                     <politicalpartytitle>Welsh Conservative Party</politicalpartytitle>
                     <districttitle>South Wales Central</districttitle>
                     <representing></representing>
@@ -91,7 +91,7 @@
                         <line3>Cardiff</line3>
                         <postcode>CF99 1NA</postcode>
                         <phone>0300 200 7220</phone>
-                        <email>David.Melding@assembly.wales</email>
+                        <email>David.Melding@senedd.wales</email>
                     </workaddress>
                     <homeaddress>
                         <line1>Office 2</line1>
@@ -126,9 +126,9 @@
                 </councillor>
                 <councillor>
                     <councillorid>255</councillorid>
-                    <fullusername>Neil McEvoy AM</fullusername>
-                    <photosmallurl>http://www.senedd.assembly.wales/UserData/5/5/2/Info00000255/smallpic.jpg</photosmallurl>
-                    <photobigurl>http://www.senedd.assembly.wales/UserData/5/5/2/Info00000255/bigpic.jpg</photobigurl>
+                    <fullusername>Neil McEvoy MS</fullusername>
+                    <photosmallurl>https://business.senedd.wales/UserData/5/5/2/Info00000255/smallpic.jpg</photosmallurl>
+                    <photobigurl>https://business.senedd.wales/UserData/5/5/2/Info00000255/bigpic.jpg</photobigurl>
                     <politicalpartytitle>Welsh National Party</politicalpartytitle>
                     <districttitle>South Wales Central</districttitle>
                     <representing></representing>
@@ -138,7 +138,7 @@
                         <line2>Cardiff Bay</line2>
                         <line3>Cardiff</line3>
                         <postcode>CF99 1NA</postcode>
-                        <email>Neil.McEvoy@assembly.wales</email>
+                        <email>Neil.McEvoy@senedd.wales</email>
                     </workaddress>
                     <homeaddress>
                         <line1>321 Cowbridge Road East</line1>
@@ -156,9 +156,9 @@
                 </councillor>
 				<councillor>
 					<councillorid>5040</councillorid>
-					<fullusername>Gareth Bennett AM</fullusername>
-					<photosmallurl>http://www.senedd.assembly.wales/UserData/0/4/0/Info00005040/smallpic.jpg</photosmallurl>
-					<photobigurl>http://www.senedd.assembly.wales/UserData/0/4/0/Info00005040/bigpic.jpg</photobigurl>
+					<fullusername>Gareth Bennett MS</fullusername>
+					<photosmallurl>https://business.senedd.wales/UserData/0/4/0/Info00005040/smallpic.jpg</photosmallurl>
+					<photobigurl>https://business.senedd.wales/UserData/0/4/0/Info00005040/bigpic.jpg</photobigurl>
 					<politicalpartytitle>Independent</politicalpartytitle>
 					<districttitle>South Wales Central</districttitle>
 					<representing></representing>
@@ -169,7 +169,7 @@
 						<line3>Cardiff</line3>
 						<postcode>CF99 1NA</postcode>
 						<phone>0300 200 7263</phone>
-						<email>Gareth.Bennett@assembly.wales</email>
+						<email>Gareth.Bennett@senedd.wales</email>
 					</workaddress>
 					<homeaddress></homeaddress>
 					<termsofoffice>

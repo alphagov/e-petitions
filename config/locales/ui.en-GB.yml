@@ -6,7 +6,7 @@ en-GB:
         <h1 class="page-title">A new petitions site is coming on 30 April</h1>
         <p>Sorry, the petitions service is currently unavailable. We are launching a new, improved website for petitions on 30 April.</p>
         <p>Please accept our apologies for any inconvenience.</p>
-        <p>Click here to find out more about the work of the <a href="https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a>.</p>      
+        <p>Click here to find out more about the work of the <a href="https://senedd.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a>.</p>      
     cc:
       statement:
         name: "Find out more about the cookies on this website"
@@ -168,7 +168,7 @@ en-GB:
 
         <h2 id="the-petitions-committee">The Petitions Committee</h2>
 
-        <p>As part of their consideration of your petition, the <a href="https://www.assembly.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a> can:</p>
+        <p>As part of their consideration of your petition, the <a href="https://senedd.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a> can:</p>
 
         <ul class="list-bullet">
           <li>write to you for more information;</li>
@@ -239,7 +239,7 @@ en-GB:
     home_page:
       notice:
         get_involved_html: |-
-          <a href="https://www.assembly.wales/en/gethome/Pages/getinvolved.aspx" class="get-involved">
+          <a href="https://senedd.wales/en/gethome/Pages/getinvolved.aspx" class="get-involved">
             Get involved with the Senedd
           </a>
         register_to_vote_html: |-
@@ -701,7 +701,7 @@ en-GB:
         <p class="text-secondary">The Petitions Committee has finished considering these petitions</p>
       rejected_html: |-
         <p class="text-secondary">These petitions did not meet the <a href="/help#standards">petition standards</a>. They are published in the language in which they were submitted.</p>
-        <p>Petitions rejected before May 2020 can be <a href="http://www.senedd.assembly.wales/mgIssueHistoryHome.aspx?IId=28231">found here.</a></p>
+        <p>Petitions rejected before May 2020 can be <a href="https://business.senedd.wales/mgIssueHistoryHome.aspx?IId=28231">found here.</a></p>
     local_search:
       submit_button_html: |-
         <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">

@@ -118,8 +118,8 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
           transcript_url_cy: 'https://cofnod.cynulliad.cymru/Plenary/5667#A51756',
           video_url_en: 'http://www.senedd.tv/Meeting/Archive/760dfc2e-74aa-4fc7-b4a7-fccaa9e2ba1c?autostart=True',
           video_url_cy: 'http://www.senedd.tv/Meeting/Archive/c36fbd6a-d3b8-40dd-9567-ac1bef6caa84?autostart=True',
-          debate_pack_url_en: "http://www.senedd.assembly.wales/ieListDocuments.aspx?CId=401&MId=5667",
-          debate_pack_url_cy: "http://www.senedd.cynulliad.cymru/ieListDocuments.aspx?CId=401&MId=5667"
+          debate_pack_url_en: "https://business.senedd.wales/ieListDocuments.aspx?CId=401&MId=5667",
+          debate_pack_url_cy: "https://busnes.senedd.cymru/ieListDocuments.aspx?CId=401&MId=5667"
         }
       end
 
