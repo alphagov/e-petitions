@@ -4,19 +4,19 @@ subject: "Bydd y Senedd yn trafod “((action_cy))” | Senedd will debate “((
 body: |-
   Annwyl ((name)),
   
-  Mae'r Senedd yn mynd i drafod eich deiseb - “((action_cy))”.
+  Mae’r Senedd yn mynd i drafod eich deiseb - “((action_cy))”.
   
   ((petition_url_cy))
   
-  Mae'r ddadl wedi'i hamserlennu ar gyfer ((debate_date_cy)).
+  Mae’r ddadl wedi’i hamserlennu ar gyfer ((debate_date_cy)).
   
-  Ar ôl i'r ddadl ddigwydd, byddwn yn e-bostio fideo a thrawsgrifiad atoch.
+  Ar ôl i’r ddadl ddigwydd, byddwn yn e-bostio fideo a thrawsgrifiad atoch.
   
   Diolch,
   Tîm Deisebau
   Y Senedd
   
-  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_cy))”.
+  Rydych chi’n derbyn yr e-bost hwn oherwydd i chi greu’r ddeiseb hon: “((action_cy))”.
   Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))
   
   ---

@@ -4,9 +4,9 @@ subject: "Cyhoeddwyd y ddeiseb “((action_cy))” y gwnaethoch chi ei chefnogi 
 body: |-
   Annwyl ((sponsor)),
   
-  Mae'r ddeiseb y gwnaethoch chi ei chefnogi – “((action_cy))”, bellach wedi ei chyhoeddi.
+  Mae’r ddeiseb y gwnaethoch chi ei chefnogi – “((action_cy))”, bellach wedi ei chyhoeddi.
   
-  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i'r Pwyllgor Deisebau ei hystyried.
+  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i’r Pwyllgor Deisebau ei hystyried.
   
   Cliciwch ar y linc i weld y ddeiseb a dechrau ei rhannu:
   ((url_cy))

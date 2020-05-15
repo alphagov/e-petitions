@@ -4,7 +4,7 @@ subject: "Gwrthodwyd eich deiseb “((action))” | We rejected your petition �
 body: |-
   Annwyl ((creator)),
   
-  Diolch am gyflwyno deiseb i'r Senedd.  
+  Diolch am gyflwyno deiseb i’r Senedd.  
   
   Cyn cyhoeddi deiseb ar ein gwefan a dechrau casglu llofnodion, mae angen i ni sicrhau ei bod yn bodloni’r rheolau ar gyfer deisebau. 
   
@@ -15,13 +15,13 @@ body: |-
   Cliciwch ar y linc i weld y ddeiseb a wrthodwyd:
   ((url_cy))
   
-  Dim ond deisebau nad ydynt yn bodloni'r safonau y byddwn yn eu gwrthod:
+  Dim ond deisebau nad ydynt yn bodloni’r safonau y byddwn yn eu gwrthod:
   ((standards_url_cy))
   
   Os hoffech roi cynnig arall arni, cliciwch yma i ddechrau deiseb:
   ((new_petition_url_cy))
   
-  Mae'n ddrwg gennym na allwn fwrw ymlaen â'ch deiseb y tro hwn. 
+  Mae’n ddrwg gennym na allwn fwrw ymlaen â’ch deiseb y tro hwn. 
   
   Diolch,
   Tîm Deisebau

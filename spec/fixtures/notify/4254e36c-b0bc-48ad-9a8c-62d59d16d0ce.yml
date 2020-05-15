@@ -1,10 +1,10 @@
 id: "4254e36c-b0bc-48ad-9a8c-62d59d16d0ce"
 name: "notify_signer_of_positive_debate_outcome_en"
-subject: "Senedd debated “((action_en))” | Trafododd y Senedd “((action_cy))”"
+subject: "The Senedd debated “((action_en))” | Trafododd y Senedd “((action_cy))”"
 body: |-
   Dear ((name)),
   
-  Senedd debated the petition you signed – “((action_en))”
+  The Senedd debated the petition you signed – “((action_en))”
   
   ((overview_en))
   
@@ -43,5 +43,5 @@ body: |-
   Tîm Deisebau
   Y Senedd
   
-  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi lofnodi'r ddeiseb hon: “((action_cy))”.
+  Rydych chi’n derbyn yr e-bost hwn oherwydd i chi lofnodi’r ddeiseb hon: “((action_cy))”.
   Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))

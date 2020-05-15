@@ -4,18 +4,18 @@ subject: "Cyhoeddwyd eich deiseb “((action_cy))” | We published your petitio
 body: |-
   Annwyl ((creator)),
   
-  Mae eich deiseb “((action_cy))” bellach wedi'i chyhoeddi ac yn barod i gasglu llofnodion. 
+  Mae eich deiseb “((action_cy))” bellach wedi’i chyhoeddi ac yn barod i gasglu llofnodion. 
   
   Cliciwch ar y linc i weld eich deiseb a dechrau ei rhannu:
   ((url_cy))
   
-  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i'r Pwyllgor Deisebau ei hystyried. Ni fydd hyn yn digwydd tan ar ôl i'r ddeiseb orffen casglu llofnodion. Rhowch wybod i ni os hoffech newid dyddiad cau eich deiseb.
+  Mae angen o leiaf ((referral_threshold)) llofnod ar ddeiseb er mwyn i’r Pwyllgor Deisebau ei hystyried. Ni fydd hyn yn digwydd tan ar ôl i’r ddeiseb orffen casglu llofnodion. Rhowch wybod i ni os hoffech newid dyddiad cau eich deiseb.
   
   Os bydd eich deiseb yn casglu mwy na ((debate_threshold)) llofnod, bydd y Pwyllgor yn ystyried ei chyfeirio ar gyfer dadl yn y Senedd. Wrth wneud hynny, bydd y Pwyllgor yn ystyried nifer o ffactorau gan gynnwys pwnc y ddeiseb a chanran y llofnodion a gasglwyd yng Nghymru.
   
   Os hoffech gasglu llofnodion ar bapur hefyd, gallwn ddarparu templed ar gais.
   
-  Os bydd eich deiseb yn casglu ((referral_threshold)) llofnod gallwch drefnu dod i'r Senedd i gyflwyno'ch deiseb yn ffurfiol i'r Pwyllgor. Bydd hwn yn gyfle anffurfiol i drafod eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor. Mae'n gwbl ddewisol.
+  Os bydd eich deiseb yn casglu ((referral_threshold)) llofnod gallwch drefnu dod i’r Senedd I gyflwyno’ch deiseb yn ffurfiol i’r Pwyllgor. Bydd hwn yn gyfle anffurfiol i drafod eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor. Mae’n gwbl ddewisol.
   
   Caiff deisebau eu cyflwyno am 12.30 ar ddydd Mawrth a dydd Mercher yn ystod tymor y Senedd ac mae’r broses yn para tua 10-15 munud. Mae pobl yn manteisio ar y cyfleoedd hyn yn gyflym fel arfer, felly cysylltwch â ni cyn gynted â phosibl os hoffech drefnu i gyflwyno deiseb.
   

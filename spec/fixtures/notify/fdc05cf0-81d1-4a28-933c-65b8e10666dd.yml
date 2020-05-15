@@ -20,7 +20,7 @@ body: |-
   
   Annwyl ((name)),
   
-  Yn ddiweddar gwnaethoch lofnodi'r ddeiseb “((action_cy))”:
+  Yn ddiweddar gwnaethoch lofnodi’r ddeiseb “((action_cy))”:
   ((petition_url_cy))
   
   ((body_cy))
@@ -29,5 +29,5 @@ body: |-
   Tîm Deisebau
   Y Senedd
   
-  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi lofnodi'r ddeiseb hon: “((action_cy))”.
+  Rydych chi’n derbyn yr e-bost hwn oherwydd i chi lofnodi’r ddeiseb hon: “((action_cy))”.
   Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))

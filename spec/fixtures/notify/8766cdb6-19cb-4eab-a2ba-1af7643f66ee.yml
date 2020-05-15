@@ -1,6 +1,6 @@
 id: "8766cdb6-19cb-4eab-a2ba-1af7643f66ee"
 name: "sponsor_signed_email_on_threshold_cy"
-subject: "Rydym yn gwirio'ch deiseb | We’re checking your petition"
+subject: "Rydym yn gwirio’ch deiseb | We’re checking your petition"
 body: |-
   Annwyl ((creator)),
   
@@ -8,7 +8,7 @@ body: |-
   
   Cefnogodd ((sponsor)) eich deiseb - “((action))”.
   
-  Mae ((moderation_threshold)) berson wedi cefnogi eich deiseb. Rydym ni’n gwirio'ch deiseb i sicrhau ei bod yn bodloni’r meini prawf ar gyfer deisebau. Os felly, byddwn ni’n cyhoeddi’r ddeiseb ac yn rhoi gwybod i chi. Mae hyn fel arfer yn cymryd hyd at wythnos.
+  Mae ((moderation_threshold)) berson wedi cefnogi eich deiseb. Rydym ni’n gwirio’ch deiseb i sicrhau ei bod yn bodloni’r meini prawf ar gyfer deisebau. Os felly, byddwn ni’n cyhoeddi’r ddeiseb ac yn rhoi gwybod i chi. Mae hyn fel arfer yn cymryd hyd at wythnos.
   
   Dyma wybodaeth am sut rydym ni’n gwirio deisebau cyn eu cyhoeddi:
   ((url_cy))

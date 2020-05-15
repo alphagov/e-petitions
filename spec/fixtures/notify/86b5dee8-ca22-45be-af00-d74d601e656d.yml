@@ -4,7 +4,7 @@ subject: "((subject_cy)) | ((subject_en))"
 body: |-
   Annwyl ((name)),
   
-  Yn ddiweddar fe wnaethoch chi greu'r ddeiseb “((action_cy))”:
+  Yn ddiweddar fe wnaethoch chi greu’r ddeiseb “((action_cy))”:
   ((petition_url_cy))
   
   ((body_cy))
@@ -13,7 +13,7 @@ body: |-
   Tîm Deisebau
   Y Senedd
   
-  Rydych chi'n derbyn yr e-bost hwn oherwydd i chi greu'r ddeiseb hon: “((action_en))”.
+  Rydych chi’n derbyn yr e-bost hwn oherwydd i chi greu’r ddeiseb hon: “((action_en))”.
   Dad-danysgrifio rhag cael negeseuon e-bost am y ddeiseb hon: ((unsubscribe_url_cy))
   
   ---
