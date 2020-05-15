@@ -281,7 +281,7 @@ cy-GB:
         topic_debated_date: Cynhaliwyd dadl ar y pwnc hwn ar %{date}
       referred_petitions:
         none_referred: Does dim deisebau wedi’u cyfeirio at y Pwyllgor Deisebau eto
-        referred_date: Cafodd y ddeiseb hon ei chyfeirio ar %{date}
+        referred_date: Cyfeiriwyd at y Pwyllgor Deisebau ar %{date}
       trending_petitions:
         heading: Deisebau poblogaidd
       responded_petitions:

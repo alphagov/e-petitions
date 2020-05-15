@@ -282,7 +282,7 @@ en-GB:
       referred_petitions:
         none_referred: No petitions have been referred to the Petitions Committee
           yet
-        referred_date: The petition was referred on %{date}
+        referred_date: Referred to the Petitions Committee on %{date}
       trending_petitions:
         heading: Popular petitions
     petitions:
