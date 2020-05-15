@@ -629,6 +629,12 @@ en-GB:
           <p>To vote in the Senedd elections, you must be registered to vote.</p>
           <p>It takes less than 5 minutes.</p>
           <a href="https://www.gov.uk/register-to-vote" rel="external">Register to vote</a>
+        external_links_html: |-
+          <hr>
+          <ul>
+            <li><a href="https://senedd.wales/en/bus-home/Pages/bus-home.aspx">Find out more about Senedd Business</a></li>
+            <li><a href="https://senedd.wales/">Senedd Homepage</a></li>
+          </ul>
       confirm:
         email_form:
           submit_html: |-

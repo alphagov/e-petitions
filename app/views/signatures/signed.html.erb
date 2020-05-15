@@ -4,6 +4,9 @@
   <%= render 'signature_confirmation' %>
   <p><%= t(:"ui.signatures.signed.added_to_petition") %></p>
   <p><%= link_to @petition.action, petition_path(@petition) %></p>
+  <div>
+    <%= t(:"ui.signatures.signed.external_links_html") %>
+  </div>
 </div>
 
 <%= render 'share_petition', petition: @petition %>

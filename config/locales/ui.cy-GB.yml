@@ -623,6 +623,12 @@ cy-GB:
           <p>Er mwyn pleidleisio yn etholiadau’r Senedd, rhaid i chi fod wedi’ch cofrestru i bleidleisio.</p>
           <p>Mae’n cymryd llai na 5 munud.</p>
           <a href="https://www.gov.uk/cofrestru-i-bleidleisio" rel="external">Cofrestru i bleidleisio</a>
+        external_links_html: |-
+          <hr>
+          <ul>
+            <li><a href="https://senedd.cymru/cy/bus-home/Pages/bus-home.aspx">Rhagor o wybodaeth am Fusnes y Senedd</a></li>
+            <li><a href="https://senedd.cymru/">Hafan y Senedd</a></li>
+          </ul>
       confirm:
         email_form:
           submit_html: |-

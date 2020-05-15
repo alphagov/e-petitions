@@ -414,8 +414,6 @@
   position: relative;
   margin-bottom: 36px;
 
-
-
   &::before {
     @extend %icon-tick;
     content: "";
@@ -455,6 +453,12 @@
 
     .signatures {
       @include font-size(1.25rem, 2rem);
+    }
+  }
+
+  ul {
+    li {
+      margin-top: 6px;
     }
   }
 }

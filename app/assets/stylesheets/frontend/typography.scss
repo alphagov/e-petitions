@@ -117,6 +117,13 @@ details {
   }
 }
 
+hr {
+  border: none;
+  background-color: $panel-color;
+  height: 2px;
+  margin: 18px 0;
+}
+
 .page-title {
   margin-bottom: 24px;
 }
