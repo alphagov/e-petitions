@@ -1410,6 +1410,7 @@ RSpec.describe NotifyJob, type: :job, notify: false do
     describe NotifyCreatorThatPetitionWasRejectedEmailJob do
       let(:signature) { petition.creator }
       let(:rejection) { petition.rejection }
+      let(:rejection_code) { "duplicate" }
 
       it_behaves_like "a notify job" do
         let(:petition) { FactoryBot.create(:rejected_petition) }
@@ -1420,9 +1421,13 @@ RSpec.describe NotifyJob, type: :job, notify: false do
         let(:petition) do
           FactoryBot.create(
             state,
+            rejection_code: rejection_code,
             action_en: "Do stuff",
             background_en: "Because of reasons",
             additional_details_en: "Here's some more reasons",
+            action_cy: "Gwnewch bethau",
+            background_cy: "Oherwydd rhesymau",
+            additional_details_cy: "Dyma ychydig mwy o resymau",
             locale: "en-GB",
             creator_name: "Charlie",
             creator_email: "charlie@example.com",
@@ -1461,6 +1466,7 @@ RSpec.describe NotifyJob, type: :job, notify: false do
 
         context "and the petition was hidden" do
           let(:state) { :hidden_petition }
+          let(:rejection_code) { "offensive" }
 
           it "sends an email via GOV.UK Notify with the English hidden rejection template" do
             perform_enqueued_jobs do
@@ -1485,12 +1491,44 @@ RSpec.describe NotifyJob, type: :job, notify: false do
             )).to have_been_made
           end
         end
+
+        context "and the petition failed to get enough signatures" do
+          let(:state) { :rejected_petition }
+          let(:rejection_code) { "insufficient" }
+
+          it "sends an email via GOV.UK Notify with the English insufficient template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature, rejection)
+            end
+
+            expect(notify_request(
+              email_address: "charlie@example.com",
+              template_id: "47bbcd29-ffc8-4bea-b490-c6caed2fd0ae",
+              reference: "d85a62b0-efb6-51a2-9087-a10881e6728e",
+              personalisation: {
+                creator: "Charlie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
+                url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                standards_url_en: "https://petitions.senedd.wales/help#standards",
+                standards_url_cy: "https://deisebau.senedd.cymru/help#standards",
+                new_petition_url_en: "https://petitions.senedd.wales/petitions/check",
+                new_petition_url_cy: "https://deisebau.senedd.cymru/deisebau/gwirio"
+              }
+            )).to have_been_made
+          end
+        end
       end
 
       context "when the petition was created in Welsh" do
         let(:petition) do
           FactoryBot.create(
             state,
+            rejection_code: rejection_code,
+            action_en: "Do stuff",
+            background_en: "Because of reasons",
+            additional_details_en: "Here's some more reasons",
             action_cy: "Gwnewch bethau",
             background_cy: "Oherwydd rhesymau",
             additional_details_cy: "Dyma ychydig mwy o resymau",
@@ -1532,6 +1570,7 @@ RSpec.describe NotifyJob, type: :job, notify: false do
 
         context "and the petition was hidden" do
           let(:state) { :hidden_petition }
+          let(:rejection_code) { "offensive" }
 
           it "sends an email via GOV.UK Notify with the Welsh hidden rejection template" do
             perform_enqueued_jobs do
@@ -1556,11 +1595,40 @@ RSpec.describe NotifyJob, type: :job, notify: false do
             )).to have_been_made
           end
         end
+
+        context "and the petition failed to get enough signatures" do
+          let(:state) { :rejected_petition }
+          let(:rejection_code) { "insufficient" }
+
+          it "sends an email via GOV.UK Notify with the Welsh insufficient template" do
+            perform_enqueued_jobs do
+              described_class.perform_later(signature, rejection)
+            end
+
+            expect(notify_request(
+              email_address: "charlie@example.com",
+              template_id: "fd40fb7a-0548-4880-bbeb-eb07e409348a",
+              reference: "d85a62b0-efb6-51a2-9087-a10881e6728e",
+              personalisation: {
+                creator: "Charlie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
+                url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                standards_url_en: "https://petitions.senedd.wales/help#standards",
+                standards_url_cy: "https://deisebau.senedd.cymru/help#standards",
+                new_petition_url_en: "https://petitions.senedd.wales/petitions/check",
+                new_petition_url_cy: "https://deisebau.senedd.cymru/deisebau/gwirio"
+              }
+            )).to have_been_made
+          end
+        end
       end
     end
 
     describe NotifySponsorThatPetitionWasRejectedEmailJob do
       let(:rejection) { petition.rejection }
+      let(:rejection_code) { "duplicate" }
 
       it_behaves_like "a notify job" do
         let(:petition) { FactoryBot.create(:rejected_petition) }
@@ -1572,9 +1640,13 @@ RSpec.describe NotifyJob, type: :job, notify: false do
         let(:petition) do
           FactoryBot.create(
             state,
+            rejection_code: rejection_code,
             action_en: "Do stuff",
             background_en: "Because of reasons",
             additional_details_en: "Here's some more reasons",
+            action_cy: "Gwnewch bethau",
+            background_cy: "Oherwydd rhesymau",
+            additional_details_cy: "Dyma ychydig mwy o resymau",
             locale: "en-GB",
             creator_name: "Charlie",
             creator_email: "charlie@example.com",
@@ -1658,6 +1730,7 @@ RSpec.describe NotifyJob, type: :job, notify: false do
 
         context "and the petition was hidden" do
           let(:state) { :hidden_petition }
+          let(:rejection_code) { "offensive" }
 
           context "and the sponsor signed in English" do
             let(:signature) do
@@ -1727,12 +1800,89 @@ RSpec.describe NotifyJob, type: :job, notify: false do
             end
           end
         end
+
+        context "and the petition failed to get enough signatures" do
+          let(:state) { :rejected_petition }
+          let(:rejection_code) { "insufficient" }
+
+          context "and the sponsor signed in English" do
+            let(:signature) do
+              FactoryBot.create(
+                :validated_signature,
+                name: "Suzie",
+                email: "suzie@example.com",
+                locale: "en-GB",
+                sponsor: true,
+                petition: petition
+              )
+            end
+
+            it "sends an email via GOV.UK Notify with the English insufficient template" do
+              perform_enqueued_jobs do
+                described_class.perform_later(signature, rejection)
+              end
+
+              expect(notify_request(
+                email_address: "suzie@example.com",
+                template_id: "611e4790-2a93-43fe-897d-07c21caddd0b",
+                reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+                personalisation: {
+                  sponsor: "Suzie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                  content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                  content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
+                  url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                  url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                  standards_url_en: "https://petitions.senedd.wales/help#standards",
+                  standards_url_cy: "https://deisebau.senedd.cymru/help#standards"
+                }
+              )).to have_been_made
+            end
+          end
+
+          context "and the sponsor signed in Welsh" do
+            let(:signature) do
+              FactoryBot.create(
+                :validated_signature,
+                name: "Suzie",
+                email: "suzie@example.com",
+                locale: "cy-GB",
+                sponsor: true,
+                petition: petition
+              )
+            end
+
+            it "sends an email via GOV.UK Notify with the Welsh insufficient template" do
+              perform_enqueued_jobs do
+                described_class.perform_later(signature, rejection)
+              end
+
+              expect(notify_request(
+                email_address: "suzie@example.com",
+                template_id: "3911e196-c27a-41dc-8ee4-8390dd198ee6",
+                reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+                personalisation: {
+                  sponsor: "Suzie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                  content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                  content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
+                  url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                  url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                  standards_url_en: "https://petitions.senedd.wales/help#standards",
+                  standards_url_cy: "https://deisebau.senedd.cymru/help#standards"
+                }
+              )).to have_been_made
+            end
+          end
+        end
       end
 
       context "when the petition was created in Welsh" do
         let(:petition) do
           FactoryBot.create(
             state,
+            rejection_code: rejection_code,
+            action_en: "Do stuff",
+            background_en: "Because of reasons",
+            additional_details_en: "Here's some more reasons",
             action_cy: "Gwnewch bethau",
             background_cy: "Oherwydd rhesymau",
             additional_details_cy: "Dyma ychydig mwy o resymau",
@@ -1819,6 +1969,7 @@ RSpec.describe NotifyJob, type: :job, notify: false do
 
         context "and the petition was hidden" do
           let(:state) { :hidden_petition }
+          let(:rejection_code) { "offensive" }
 
           context "and the sponsor signed in English" do
             let(:signature) do
@@ -1879,6 +2030,79 @@ RSpec.describe NotifyJob, type: :job, notify: false do
                   sponsor: "Suzie", action: "Gwnewch bethau",
                   content_en: "It’s offensive, nonsense, a joke, or an advert.",
                   content_cy: "Mae’n sarhaus, yn nonsens, yn jôc neu’n hysbyseb.",
+                  url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                  url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                  standards_url_en: "https://petitions.senedd.wales/help#standards",
+                  standards_url_cy: "https://deisebau.senedd.cymru/help#standards"
+                }
+              )).to have_been_made
+            end
+          end
+        end
+
+        context "and the petition failed to get enough signatures" do
+          let(:state) { :rejected_petition }
+          let(:rejection_code) { "insufficient" }
+
+          context "and the sponsor signed in English" do
+            let(:signature) do
+              FactoryBot.create(
+                :validated_signature,
+                name: "Suzie",
+                email: "suzie@example.com",
+                locale: "en-GB",
+                sponsor: true,
+                petition: petition
+              )
+            end
+
+            it "sends an email via GOV.UK Notify with the English insufficient template" do
+              perform_enqueued_jobs do
+                described_class.perform_later(signature, rejection)
+              end
+
+              expect(notify_request(
+                email_address: "suzie@example.com",
+                template_id: "611e4790-2a93-43fe-897d-07c21caddd0b",
+                reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+                personalisation: {
+                  sponsor: "Suzie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                  content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                  content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
+                  url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
+                  url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
+                  standards_url_en: "https://petitions.senedd.wales/help#standards",
+                  standards_url_cy: "https://deisebau.senedd.cymru/help#standards"
+                }
+              )).to have_been_made
+            end
+          end
+
+          context "and the sponsor signed in Welsh" do
+            let(:signature) do
+              FactoryBot.create(
+                :validated_signature,
+                name: "Suzie",
+                email: "suzie@example.com",
+                locale: "cy-GB",
+                sponsor: true,
+                petition: petition
+              )
+            end
+
+            it "sends an email via GOV.UK Notify with the Welsh insufficient template" do
+              perform_enqueued_jobs do
+                described_class.perform_later(signature, rejection)
+              end
+
+              expect(notify_request(
+                email_address: "suzie@example.com",
+                template_id: "3911e196-c27a-41dc-8ee4-8390dd198ee6",
+                reference: "a87bda8d-19ac-5df8-ac83-075f189db982",
+                personalisation: {
+                  sponsor: "Suzie", action_en: "Do stuff", action_cy: "Gwnewch bethau",
+                  content_en: "It did not collect enough signatures to be referred to the Petitions Committee.\n\nPetitions need to receive at least 50 signatures before they can be considered in the Senedd.",
+                  content_cy: "Ni chasglwyd digon o lofnodion i gyfeirio’r ddeiseb at y Pwyllgor Deisebau.\n\nMae angen o leiaf 50 llofnod ar ddeiseb cyn y gellir ei hystyried yn y Senedd.",
                   url_en: "https://petitions.senedd.wales/petitions/#{petition.id}",
                   url_cy: "https://deisebau.senedd.cymru/deisebau/#{petition.id}",
                   standards_url_en: "https://petitions.senedd.wales/help#standards",

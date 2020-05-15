@@ -1,0 +1,41 @@
+id: "3911e196-c27a-41dc-8ee4-8390dd198ee6"
+name: "notify_sponsor_that_petition_was_rejected_insufficient_cy"
+subject: "Gwrthodwyd y ddeiseb “((action_cy))” y gwnaethoch chi ei chefnogi | We rejected the petition “((action_en))” that you supported"
+body: |-
+  Annwyl ((sponsor)),
+  
+  Diolch am gefnogi deiseb.  
+  
+  Yn anffodus, allwn ni ddim cyfeirio’r ddeiseb “((action_cy))” at y Pwyllgor Deisebau.
+  
+  ((content_cy))
+  
+  Cliciwch ar y linc i weld y ddeiseb a wrthodwyd:
+  ((url_cy))
+  
+  Dim ond deisebau nad ydynt yn bodloni’r safonau y byddwn yn eu gwrthod:
+  ((standards_url_cy))
+  
+  Diolch,
+  Tîm Deisebau 
+  Y Senedd
+  
+  ---
+  
+  Dear ((sponsor)),
+  
+  Thank you for supporting a petition. 
+  
+  Unfortunately, we are not able to refer the petition “((action_en))” to the Petitions Committee. 
+  
+  ((content_en))
+  
+  Click this link to see the rejected petition:
+  ((url_en))
+  
+  We only reject petitions that don’t meet the petition standards:
+  ((standards_url_en))
+  
+  Thanks,
+  The Petitions team
+  Senedd
