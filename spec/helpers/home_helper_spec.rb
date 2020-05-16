@@ -111,6 +111,7 @@ RSpec.describe HomeHelper, type: :helper do
 
   describe "#trending_petitions" do
     let(:trending) { double(Petition) }
+    let(:now) { (Time.now.to_i / 300) * 300 }
 
     before do
       allow(Petition).to receive(:trending).and_return(trending)
@@ -118,7 +119,7 @@ RSpec.describe HomeHelper, type: :helper do
     end
 
     around do |example|
-      without_cache([:trending_petitions, I18n.locale], expires_in: 500) { example.run }
+      without_cache([:trending_petitions, I18n.locale, now], expires_in: 500) { example.run }
     end
 
     context "when trending petitions is disabled" do

@@ -130,49 +130,52 @@ RSpec.describe Petition, type: :model do
 
   describe "scopes" do
     describe ".trending" do
+      let(:now) { 1.minute.from_now }
+      let(:period) { 24.hours.ago(now)..now }
+
       before(:each) do
         11.times do |count|
-          petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
-          count.times { FactoryBot.create(:validated_signature, petition: petition) }
+          petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: now)
+          count.times { FactoryBot.create(:validated_signature, petition: petition, validated_at: 1.minute.ago(now)) }
         end
 
-        @old_petition = FactoryBot.create(:open_petition, action: "petition out of range", last_signed_at: 48.hours.ago)
-        @old_petition.signatures.first.update_attribute(:validated_at, 48.hours.ago)
+        @old_petition = FactoryBot.create(:open_petition, action: "petition out of range", last_signed_at: 48.hours.ago(now))
+        @old_petition.signatures.first.update_attribute(:validated_at, 48.hours.ago(now))
       end
 
       it "excludes petitions not signed in the last 24 hours" do
-        expect(Petition.trending(limit: 100)).not_to include(@old_petition)
+        expect(Petition.trending(period, limit: 100)).not_to include(@old_petition)
       end
 
       it "returns the signature count for the last 24 hours as an additional attribute" do
-        expect(Petition.trending.map(&:signature_count_in_period)).to eq([11, 10, 9])
+        expect(Petition.trending(period).map(&:signature_count_in_period)).to eq([11, 10, 9])
       end
 
       it "limits the result to 3 petitions" do
         # 13 petitions signed in the last hour
         2.times do |count|
-          petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
-          count.times { FactoryBot.create(:validated_signature, petition: petition) }
+          petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: now)
+          count.times { FactoryBot.create(:validated_signature, petition: petition, validated_at: 1.minute.ago(now)) }
         end
 
-        expect(Petition.trending.length).to eq(3)
+        expect(Petition.trending(period).length).to eq(3)
       end
 
       it "excludes petitions that are not open" do
         petition = FactoryBot.create(:validated_petition)
-        20.times{ FactoryBot.create(:validated_signature, petition: petition) }
+        20.times{ FactoryBot.create(:validated_signature, petition: petition, validated_at: 1.minute.ago(now)) }
 
-        expect(Petition.trending).not_to include(petition)
+        expect(Petition.trending(period)).not_to include(petition)
       end
 
       it "excludes signatures that have been invalidated" do
-        petition = Petition.trending.first
-        signature = FactoryBot.create(:validated_signature, petition: petition)
+        petition = Petition.trending(period).first
+        signature = FactoryBot.create(:validated_signature, petition: petition, validated_at: 1.minute.ago(now))
 
-        expect(Petition.trending.first.signature_count_in_period).to eq(12)
+        expect(Petition.trending(period).first.signature_count_in_period).to eq(12)
 
         signature.invalidate!
-        expect(Petition.trending.first.signature_count_in_period).to eq(11)
+        expect(Petition.trending(period).first.signature_count_in_period).to eq(11)
       end
     end
 
