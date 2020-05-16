@@ -61,8 +61,11 @@ cy-GB:
         <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored</a></h3>
         <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio lle nodir yn wahanol</p>
     header:
-      senedd_cymru: "Senedd Cymru"
-      welsh_parliament: "Welsh Parliament"
+      brand_html: |-
+        <a href="https://senedd.cymru">      
+          <p>Senedd Cymru</p>
+          <p>Welsh Parliament</p>
+        </a>
       title: Deisebau
       title_link_html: |-
         <a title="Ewch i hafan y Deisebau" href="%{url}">Deisebau</a>

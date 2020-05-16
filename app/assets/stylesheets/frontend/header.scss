@@ -32,15 +32,20 @@ body > header {
     }
 
     .logo {
-      @extend %icon-dragon;
+      width: 250px;
 
-      background-position: left top;
-      padding-top: 1px;
-
-      p {
-        margin: 3px 0;
-        @include font-size(0.75rem, 0.875rem);
+      a {
+        @extend %icon-dragon;
         @include padding-left(72px, 84px);
+
+        background-position: left top;
+        display: block;
+        padding-top: 1px;
+
+        p {
+          margin: 3px 0;
+          @include font-size(0.75rem, 0.875rem);
+        }
       }
     }
 

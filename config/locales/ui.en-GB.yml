@@ -63,8 +63,11 @@ en-GB:
         <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></h3>
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
     header:
-      senedd_cymru: "Senedd Cymru"
-      welsh_parliament: "Welsh Parliament"
+      brand_html: |-
+        <a href="https://senedd.wales">      
+          <p>Senedd Cymru</p>
+          <p>Welsh Parliament</p>
+        </a>
       title: Petitions
       title_link_html: |-
         <a title="Go to the Petitions homepage" href="%{url}">Petitions</a>
