@@ -539,8 +539,8 @@ cy-GB:
             gan y Pwyllgor Deisebau ar ôl iddi orffen casglu llofnodion
           referral_waiting_time: i’r Pwyllgor Deisebau drafod y ddeiseb hon
         closed:
-          heading: Ar gau am lofnodion newydd
-          description: Gwneir penderfyniad p’un ai i atgyfeirio neu wrthod y ddeiseb hon yn fuan - caiff pob deiseb sydd â mwy na %{threshold} llofnod ei thrafod gan y Pwyllgor Deisebau.
+          heading: Caewyd i lofnodion newydd
+          description: Caiff penderfyniad ei wneud yn fuan i gyfeirio neu wrthod y ddeiseb hon – caiff pob deiseb sydd â mwy na %{threshold} llofnod ei thrafod gan y Pwyllgor Deisebau.
         referred:
           heading: Mae’r Pwyllgor Deisebau bellach yn ystyried y ddeiseb hon
           link_html: <a href="%{link}">Rhagor o wybodaeth am drafodaethau’r Pwyllgor

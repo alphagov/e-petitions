@@ -539,7 +539,7 @@ en-GB:
           referral_waiting_time: for the Petitions Committee to consider this petition
         closed:
           heading: Closed for new signatures
-          description: A decision on whether to refer or reject this petition will be made shortly - all petitions with more than  %{threshold} signatures will be discussed by the Petitions Committee.
+          description: A decision on whether to refer or reject this petition will be made shortly - petitions that collect more than %{threshold} signatures are discussed by the Petitions Committee.
         referred:
           heading: This petition is now under consideration by the Petitions Committee
           link_html: <a href="%{link}">Find out about the Petitions Committee’s discussion of this petition</a>
