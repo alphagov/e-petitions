@@ -59,6 +59,8 @@ en-GB:
         all_petitions: All petitions
         start_a_petition: Start a petition
         how_petitions_work: How petitions work
+      main_website_html: |-
+        <a rel="external" href="https://senedd.wales">Senedd Homepage</a>
       ogl_html: |-
         <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence</a></h3>
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>

@@ -57,6 +57,8 @@ cy-GB:
         all_petitions: Pob deiseb
         start_a_petition: Dechrau deiseb
         how_petitions_work: Sut mae deisebau yn gweithio
+      main_website_html: |-
+        <a rel="external" href="https://senedd.wales">Hafan y Senedd</a>
       ogl_html: |-
         <h3><a class="logo" href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored</a></h3>
         <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio lle nodir yn wahanol</p>
