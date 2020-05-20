@@ -62,7 +62,7 @@ cy-GB:
         <p>Mae’r holl gynnwys ar gael o dan <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence-cymraeg/version/3/" rel="external license">Drwydded Llywodraeth Agored v3.0</a>, ac eithrio lle nodir yn wahanol</p>
     header:
       brand_html: |-
-        <a href="https://senedd.cymru">      
+        <a href="https://senedd.cymru" rel="external">      
           <p>Senedd Cymru</p>
           <p>Welsh Parliament</p>
         </a>

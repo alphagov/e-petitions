@@ -64,7 +64,7 @@ en-GB:
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
     header:
       brand_html: |-
-        <a href="https://senedd.wales">      
+        <a href="https://senedd.wales" rel="external">      
           <p>Senedd Cymru</p>
           <p>Welsh Parliament</p>
         </a>
