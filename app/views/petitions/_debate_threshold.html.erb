@@ -43,7 +43,6 @@
       <p>
         <%= t(:"ui.petitions.watch_online_senedd_tv_html") %>
       </p>
-      <p class="secondary"><%= waiting_for_in_words(petition.scheduled_debate_date) %> <%= t(:"ui.petitions.for_senedd_to_publish_debate") %></p>
 
     <%# Debate is still to come #%>
     <% else %>
@@ -60,7 +59,6 @@
   <% elsif petition.debate_threshold_reached_at? -%>
     <h2 id="debate-threshold-heading"><%= t(:"ui.petitions.senedd_debate_heading") %></h2>
     <p><%= t(:"ui.petitions.senedd_debate_description", threshold: Site.formatted_threshold_for_debate) %></p>
-    <p class="secondary"><%= waiting_for_in_words(petition.debate_threshold_reached_at) %> <%= t(:"ui.petitions.for_debate_date") %></p>
   <%# Needs more signatures #%>
   <% else -%>
     <% if @petition.open? %>

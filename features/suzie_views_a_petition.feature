@@ -119,7 +119,6 @@ Feature: Suzie views a petition
     And a petition "Free the wombles" has been debated yesterday
     When I view the petition
     Then I should see "Senedd debated this petition on 26 October 2015"
-    And I should see "Waiting 1 day for the Senedd to publish the debate outcome"
 
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed

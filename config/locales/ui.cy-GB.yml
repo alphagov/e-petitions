@@ -322,7 +322,6 @@ cy-GB:
           completed: Deisebau a gwblhawyd
           published: Deisbau a gyhoeddwyd
           not_debated: Deisebau na chynhaliwyd dadl arnynt gan y Senedd
-          awaiting_debate: Deisbau sy’n aros am ddadl gan y Senedd
           archived: Deisebau wedi’u harchifo
       lists:
         all: Pob deiseb (%{quantity})
@@ -560,11 +559,6 @@ cy-GB:
       sign_this_petition: Llofnodi’r ddeiseb hon
       need_sponsors_later: Nes ymlaen, bydd angen cyfeiriadau e-bost arnoch ar gyfer %{count} gefnogwr i ddechrau eich deiseb
       senedd_debated_topic: Cynhaliwyd dadl yn y Senedd ar y pwnc hwn
-      waiting_for_in_words:
-        one: Aros am 1 diwrnod
-        two: Aros am 2 diwrnod
-        zero: Aros llai na diwrnod
-        other: Aros am %{formatted_count} diwrnod
       other_senedd_business: Busnes arall y Senedd
       reject_reason_heading: Pam gwrthodwyd y ddeiseb hon?
       senedd_debate_heading: Bydd y Pwyllgor Deisebau yn ystyried y ddeiseb hon ar

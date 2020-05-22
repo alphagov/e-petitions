@@ -34,16 +34,6 @@ module DateTimeHelper
     date_time && date_time.in_time_zone.strftime("%H:%M %Z")
   end
 
-  def waiting_for_in_words(date, now = Time.current)
-    return unless date.present?
-
-    scope = :"ui.petitions.waiting_for_in_words"
-    days  = ((now.end_of_day - date.end_of_day) / 86400.0).round
-    key   = WAITING_FOR_KEYS[days]
-
-    t(key, scope: scope, formatted_count: number_with_delimiter(days))
-  end
-
   def api_date_format(date_time)
     if date_time
       if date_time.respond_to?(:getutc)

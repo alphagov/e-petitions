@@ -320,7 +320,6 @@ en-GB:
           completed: Completed petitions
           published: Published petitions
           not_debated: Petitions not debated by the Senedd
-          awaiting_debate: Petitions waiting for a debate by the Senedd
           archived: Archived petitions
       lists:
         all: All petitions (%{quantity})
@@ -557,11 +556,6 @@ en-GB:
       sign_this_petition: Sign this petition
       need_sponsors_later: Later on, you’ll need email addresses for %{count} supporters to get your petition started
       senedd_debated_topic: The Senedd debated this topic
-      waiting_for_in_words:
-        one: Waiting 1 day
-        two: Waiting 2 days
-        zero: Waiting less than a day
-        other: Waiting %{formatted_count} days
       other_senedd_business: Other Senedd business
       reject_reason_heading: Why was this petition rejected?
       senedd_debate_heading: The Petitions Committee will consider this for a debate
