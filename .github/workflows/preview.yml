@@ -2,7 +2,7 @@ name: Deploy to Preview
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     
 jobs:
   build:
