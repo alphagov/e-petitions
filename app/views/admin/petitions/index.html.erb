@@ -90,7 +90,3 @@
 </table>
 
 <%= will_paginate(@petitions) %>
-
-<% if @petitions.scope == :overdue_in_moderation %>
-  <p><%= link_to "Email creators", new_admin_moderation_delay_path, class: "button" %></p>
-<% end %>
