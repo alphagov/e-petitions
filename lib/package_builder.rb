@@ -159,8 +159,8 @@ class PackageBuilder
     end
   end
 
-  def master_ref?
-    ENV.fetch('GITHUB_REF', '') == 'refs/heads/master'
+  def main_ref?
+    ENV.fetch('GITHUB_REF', '') == 'refs/heads/main'
   end
 
   def tag_ref?
@@ -168,7 +168,7 @@ class PackageBuilder
   end
 
   def deploy_build?
-    master_ref? || tag_ref?
+    main_ref? || tag_ref?
   end
 
   def deployment_config(deployment_group_name)
