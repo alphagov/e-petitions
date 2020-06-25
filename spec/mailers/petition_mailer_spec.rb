@@ -342,6 +342,14 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "gathering sponsors for petition" do
+    let(:petition_scope) { double(Petition) }
+    let(:moderation_queue) { 499 }
+
+    before do
+      allow(Petition).to receive(:in_moderation).and_return(petition_scope)
+      allow(petition_scope).to receive(:count).and_return(moderation_queue)
+    end
+
     subject(:mail) { described_class.gather_sponsors_for_petition(petition) }
 
     it "has the correct subject" do
@@ -378,6 +386,10 @@ RSpec.describe PetitionMailer, type: :mailer do
       expect(mail).to have_body_text(%r[Once you’ve gained the required number of supporters])
     end
 
+    it "doesn't include information about delayed moderation" do
+      expect(mail).not_to have_body_text(%r[we have a very large number of petitions to check])
+    end
+
     context "during Christmas" do
       before do
         allow(Holiday).to receive(:christmas?).and_return(true)
@@ -385,6 +397,18 @@ RSpec.describe PetitionMailer, type: :mailer do
 
       it "includes information about delayed moderation" do
         expect(mail).to have_body_text(%r[but over the Christmas period it will take us a little longer])
+      end
+
+      context "when there is a moderation delay" do
+        let(:moderation_queue) { 500 }
+
+        it "includes information about delayed moderation" do
+          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
+        end
+
+        it "doesn't include information about Christmas" do
+          expect(mail).not_to have_body_text(%r[but over the Christmas period it will take us a little longer])
+        end
       end
     end
 
@@ -396,31 +420,25 @@ RSpec.describe PetitionMailer, type: :mailer do
       it "includes information about delayed moderation" do
         expect(mail).to have_body_text(%r[but over the Easter period it will take us a little longer])
       end
+
+      context "when there is a moderation delay" do
+        let(:moderation_queue) { 500 }
+
+        it "includes information about delayed moderation" do
+          expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
+        end
+
+        it "doesn't include information about Christmas" do
+          expect(mail).not_to have_body_text(%r[but over the Easter period it will take us a little longer])
+        end
+      end
     end
 
-    context "when there's isn't a moderation delay" do
-      let(:scope) { double(Petition) }
-
-      before do
-        allow(Petition).to receive(:in_moderation).and_return(scope)
-        allow(scope).to receive(:count).and_return(499)
-      end
-
-      it "doesn't include information about delayed moderation" do
-        expect(mail).not_to have_body_text(%r[however we have a very large number to check])
-      end
-    end
-
-    context "when there's a moderation delay" do
-      let(:scope) { double(Petition) }
-
-      before do
-        allow(Petition).to receive(:in_moderation).and_return(scope)
-        allow(scope).to receive(:count).and_return(500)
-      end
+    context "when there is a moderation delay" do
+      let(:moderation_queue) { 500 }
 
       it "includes information about delayed moderation" do
-        expect(mail).to have_body_text(%r[however we have a very large number to check])
+        expect(mail).to have_body_text(%r[we have a very large number of petitions to check])
       end
     end
 
