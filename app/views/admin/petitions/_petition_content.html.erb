@@ -37,5 +37,8 @@
 <% if @petition.rejected? or @petition.hidden? -%>
   <h2>This petition was rejected</h2>
   <p><%= rejection_reason(@petition.rejection.code) %></p>
-  <%= markdown_to_html(@petition.rejection.details) %>
+
+  <% if @petition.rejection.details? %>
+    <%= markdown_to_html(@petition.rejection.details) %>
+  <% end %>
 <% end -%>

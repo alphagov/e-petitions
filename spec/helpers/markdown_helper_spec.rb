@@ -9,6 +9,10 @@ RSpec.describe MarkdownHelper, type: :helper do
     it "autolinks urls" do
       expect(helper.markdown_to_html("www.example.com")).to eq(%[<p><a href="http://www.example.com">www.example.com</a></p>\n])
     end
+
+    it "returns an empty string when the markup is nil" do
+      expect(helper.markdown_to_html(nil)).to eq("")
+    end
   end
 
   describe "#markdown_to_text" do
@@ -18,6 +22,10 @@ RSpec.describe MarkdownHelper, type: :helper do
 
     it "autolinks urls" do
       expect(helper.markdown_to_text("www.example.com")).to eq(%[www.example.com (http://www.example.com)\n])
+    end
+
+    it "returns an empty string when the markup is nil" do
+      expect(helper.markdown_to_text(nil)).to eq("")
     end
   end
 end
