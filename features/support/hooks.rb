@@ -59,3 +59,7 @@ end
 After do
   ActiveRecord::FixtureSet.reset_cache
 end
+
+Before do
+  Rails.application.env_config['action_dispatch.show_detailed_exceptions'] = false
+end

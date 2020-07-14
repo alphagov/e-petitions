@@ -17,7 +17,7 @@ class Petition < ActiveRecord::Base
   STATES            = %w[pending validated sponsored flagged dormant open closed rejected hidden stopped]
   DEBATABLE_STATES  = %w[open closed]
   VISIBLE_STATES    = %w[open closed rejected]
-  SHOW_STATES       = %w[pending validated sponsored flagged dormant open closed rejected stopped]
+  SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected stopped]
   MODERATED_STATES  = %w[open closed hidden rejected]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]

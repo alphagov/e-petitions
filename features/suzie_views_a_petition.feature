@@ -15,6 +15,12 @@ Feature: Suzie views a petition
     Then I should see "We’re checking this petition"
     And I should see a link called "petition standards" linking to "/help#standards"
 
+  @allow-rescue
+  Scenario: Suzie views a dormant petition
+    Given a dormant petition "Spend more money on Defence"
+    When I view the petition
+    Then I will see 404 error page
+
   Scenario: Suzie views an open petition
     Given an open petition "Spend more money on Defence"
     When I view the petition

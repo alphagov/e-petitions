@@ -69,6 +69,9 @@ end
 
 Then(/^I will see 404 error page$/) do
   expect(page.status_code).to eq 404
+  expect(page).to have_content("The page you're looking for doesn't exist")
+  expect(page).to have_link("go back to the homepage", href: "/")
+  expect(page).to have_link("search for a petition", href: "/petitions")
 end
 
 Given(/^the petition I want to sign has enough sponsors?$/) do
