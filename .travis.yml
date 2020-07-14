@@ -23,6 +23,7 @@ before_script:
   - bundle install
   - RAILS_ENV=test bundle exec rake db:create
   - RAILS_ENV=test bundle exec rake db:schema:load
+  - RAILS_ENV=test bundle exec rake errors:precompile
 
 script: RAILS_ENV=test bundle exec rake
 after_success: bundle exec rake deploy:preview
