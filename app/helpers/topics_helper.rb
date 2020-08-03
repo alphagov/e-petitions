@@ -8,6 +8,6 @@ module TopicsHelper
       end
 
       codes
-    end.sort
+    end.sort_by { |t| t[:name] }
   end
 end
