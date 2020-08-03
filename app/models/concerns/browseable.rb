@@ -6,7 +6,7 @@ module Browseable
     self.facet_definitions = {}
 
     class_attribute :filter_definitions, instance_writer: false
-    self.filter_definitions = []
+    self.filter_definitions = {}
   end
 
   class Facets
@@ -76,8 +76,26 @@ module Browseable
         end
     end
 
+    def apply(relation)
+      filter_params.each do |key, value|
+        relation = relation.instance_exec(value, &filter_definitions[key.to_sym])
+      end
+
+      relation
+    end
+
     def to_hash
-      params.slice(*filter_definitions)
+      params.slice(*filter_keys)
+    end
+
+    private
+
+    def filter_keys
+      @filter_keys ||= filter_definitions.keys
+    end
+
+    def filter_params
+      params.slice(*filter_keys)
     end
   end
 
@@ -187,6 +205,7 @@ module Browseable
         params[:q] = query if query.present?
         params[:state] = scope
         params[:page] = page
+        params[:count] = page_size if params.key?(:count)
         params.merge!(filters)
       end
     end
@@ -208,6 +227,7 @@ module Browseable
         relation = klass
       end
 
+      relation = filters.apply(relation)
       relation.instance_exec(&klass.facet_definitions[scope])
     end
 
@@ -221,8 +241,8 @@ module Browseable
       self.facet_definitions[key] = scope
     end
 
-    def filter(key)
-      self.filter_definitions << key
+    def filter(key, transformer)
+      self.filter_definitions[key] = transformer
     end
 
     def search(params)

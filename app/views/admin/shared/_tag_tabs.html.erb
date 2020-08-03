@@ -1,0 +1,9 @@
+<h1 class="tabs">
+  <% if controller_name == "topics" %>
+    <%= link_to "Tags", admin_tags_path %> |
+    Topics
+  <% else %>
+    Tags |
+    <%= link_to "Topics", admin_topics_path %>
+  <% end %>
+</h1>

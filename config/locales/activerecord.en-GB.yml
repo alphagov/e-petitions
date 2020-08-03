@@ -108,7 +108,9 @@ en-GB:
               inclusion: "State ‘%{value}’ not recognised"
             tags:
               invalid: "The submitted tags were invalid - please reselect and try again"
-
+            topics:
+              invalid: "The submitted topics were invalid - please reselect and try again"
+               
         petition/email:
           attributes:
             subject_en:
@@ -187,3 +189,30 @@ en-GB:
               too_long:
                 one: "Tag is too long (maximum is 1 character)"
                 other: "Tag is too long (maximum is %{count} characters)"
+
+        topic:
+          attributes:
+            code_en:
+              blank: "Code must be completed"
+              taken: "Code already exists"
+              too_long:
+                one: "Code is too long (maximum is 1 character)"
+                other: "Code is too long (maximum is %{count} characters)"
+            code_cy:
+              blank: "Code must be completed"
+              taken: "Code already exists"
+              too_long:
+                one: "Code is too long (maximum is 1 character)"
+                other: "Code is too long (maximum is %{count} characters)"
+            name_en:
+              blank: "Name must be completed"
+              taken: "Name already exists"
+              too_long:
+                one: "Name is too long (maximum is 1 character)"
+                other: "Name is too long (maximum is %{count} characters)"
+            name_cy:
+              blank: "Name must be completed"
+              taken: "Name already exists"
+              too_long:
+                one: "Name is too long (maximum is 1 character)"
+                other: "Name is too long (maximum is %{count} characters)"

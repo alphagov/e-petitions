@@ -1,5 +1,6 @@
 require 'rails_helper'
 require_relative 'taggable_examples'
+require_relative 'topic_examples'
 
 RSpec.describe Petition, type: :model do
   context "defaults" do
@@ -785,6 +786,7 @@ RSpec.describe Petition, type: :model do
   end
 
   it_behaves_like "a taggable model"
+  it_behaves_like "a model with topics"
 
   describe "signature count" do
     let(:petition) { FactoryBot.create(:pending_petition) }

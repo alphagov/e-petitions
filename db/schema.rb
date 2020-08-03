@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_30_032153) do
+ActiveRecord::Schema.define(version: 2020_08_03_115829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -281,6 +281,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_032153) do
     t.datetime "archived_at"
     t.boolean "use_markdown", default: false, null: false
     t.datetime "anonymized_at"
+    t.integer "topics", default: [], null: false, array: true
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
@@ -301,6 +302,7 @@ ActiveRecord::Schema.define(version: 2020_04_30_032153) do
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["state", "debate_state"], name: "index_petitions_on_state_and_debate_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
+    t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
 
   create_table "postcodes", id: :string, limit: 7, force: :cascade do |t|
@@ -466,6 +468,19 @@ ActiveRecord::Schema.define(version: 2020_04_30_032153) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_tasks_on_name", unique: true
+  end
+
+  create_table "topics", id: :serial, force: :cascade do |t|
+    t.string "code_en", limit: 100, null: false
+    t.string "code_cy", limit: 100, null: false
+    t.string "name_en", limit: 100, null: false
+    t.string "name_cy", limit: 100, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code_cy"], name: "index_topics_on_code_cy", unique: true
+    t.index ["code_en"], name: "index_topics_on_code_en", unique: true
+    t.index ["name_cy"], name: "index_topics_on_name_cy", unique: true
+    t.index ["name_en"], name: "index_topics_on_name_en", unique: true
   end
 
   create_table "trending_domains", id: :serial, force: :cascade do |t|

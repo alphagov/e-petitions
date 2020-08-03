@@ -18,7 +18,7 @@ module TranslationHelper
     private
 
     def url
-      template.public_send(helper, query_parameters)
+      template.public_send(helper, translate(query_parameters))
     end
 
     def route
@@ -27,6 +27,23 @@ module TranslationHelper
 
     def helper
       locale == :"cy-GB" ? :"#{route}_en_url" : :"#{route}_cy_url"
+    end
+
+    def translate(params)
+      params.inject({}) do |hash, (key, value)|
+        hash[key] = translate_param(key, value)
+        hash
+      end
+    end
+
+    def translate_param(key, value)
+      return value unless key == "topic"
+
+      if topic = Topic.find_by(code: value)
+        I18n.locale == :"en-GB" ? topic.code_cy : topic.code_en
+      else
+        value
+      end
     end
   end
 

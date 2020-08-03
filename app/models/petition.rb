@@ -40,7 +40,7 @@ class Petition < ActiveRecord::Base
   after_create :update_last_petition_created_at
 
   extend Searchable(:action_en, :action_cy, :background_en, :background_cy, :additional_details_en, :additional_details_cy)
-  include Browseable, Taggable
+  include Browseable, Taggable, Topics
 
   facet :all,       -> { not_archived.by_most_recent }
   facet :open,      -> { not_archived.open_state.by_most_popular }
@@ -67,6 +67,8 @@ class Petition < ActiveRecord::Base
   facet :overdue_in_moderation,        -> { overdue_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :tagged_in_moderation,         -> { tagged_in_moderation.by_most_recent_moderation_threshold_reached }
   facet :untagged_in_moderation,       -> { untagged_in_moderation.by_most_recent_moderation_threshold_reached }
+
+  filter :topic, ->(codes) { topics(codes) }
 
   has_one :creator, -> { creator }, class_name: 'Signature'
   accepts_nested_attributes_for :creator, update_only: true

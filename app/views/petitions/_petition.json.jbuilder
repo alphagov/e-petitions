@@ -58,6 +58,8 @@ json.attributes do
     json.debate nil
   end
 
+  json.topics topic_codes(petition.topics)
+
   if petition_page? && petition.published?
     json.signatures_by_country petition.signatures_by_country do |country|
       json.name country.name

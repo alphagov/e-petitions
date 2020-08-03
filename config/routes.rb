@@ -6,6 +6,10 @@ Rails.application.routes.draw do
       get '/constituencies', action: 'index', as: :constituencies
     end
 
+    scope controller: 'topics' do
+      get '/topics', action: 'index', as: :topics
+    end
+
     scope controller: 'pages' do
       get '/',        action: 'index',   as: :home
       get '/help',    action: 'help',    as: :help
@@ -132,6 +136,7 @@ Rails.application.routes.draw do
           resource :schedule_debate, path: 'schedule-debate', controller: 'schedule_debate'
           resource :tags, controller: 'petition_tags'
           resource :take_down, path: 'take-down', controller: 'take_down'
+          resource :topics, controller: 'petition_topics'
         end
 
         resource :completion, controller: 'completion', only: %i[update]
@@ -174,6 +179,7 @@ Rails.application.routes.draw do
       end
 
       resources :tags, except: %i[show]
+      resources :topics, except: %i[show]
 
       scope 'stats', controller: 'statistics' do
         get '/', action: 'index', as: :stats

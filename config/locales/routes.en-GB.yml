@@ -99,3 +99,6 @@ en-GB:
     "/sponsors/:id/verify":
       en-GB: "/sponsors/:id/verify"
       cy-GB: "/noddwyr/:id/gwirio"
+    "/topics":
+      en-GB: "/topics"
+      cy-GB: "/pynciau"

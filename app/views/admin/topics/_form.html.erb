@@ -1,0 +1,40 @@
+<div class="grid-row">
+  <div class="column-half extra-gutter">
+    <fieldset>
+      <legend><h2>English</h2></legend>
+
+      <%= form_row for: [form.object, :code_en] do %>
+        <%= form.label :code_en, "Code", class: 'form-label' %>
+        <%= error_messages_for_field @topic, :code_en %>
+        <%= form.text_field :code_en, tabindex: increment, maxlength: 100, autofocus: true, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :name_en] do %>
+        <%= form.label :name_en, "Name", class: 'form-label' %>
+        <%= error_messages_for_field @topic, :name_en %>
+        <%= form.text_field :name_en, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+    </fieldset>
+  </div>
+
+  <div class="column-half extra-gutter">
+    <fieldset>
+      <legend><h2>Welsh</h2></legend>
+
+      <%= form_row for: [form.object, :code_cy] do %>
+        <%= form.label :code_cy, "Code", class: 'form-label' %>
+        <%= error_messages_for_field @topic, :code_cy %>
+        <%= form.text_field :code_cy, tabindex: increment, maxlength: 100, autofocus: true, class: 'form-control' %>
+      <% end %>
+
+      <%= form_row for: [form.object, :name_cy] do %>
+        <%= form.label :name_cy, "Name", class: 'form-label' %>
+        <%= error_messages_for_field @topic, :name_cy %>
+        <%= form.text_field :name_cy, tabindex: increment, maxlength: 100, class: 'form-control' %>
+      <% end %>
+    </fieldset>
+  </div>
+</div>
+
+<%= form.submit 'Save', class: 'button' %>
+<%= link_to 'Cancel', admin_topics_path, class: 'button-secondary' %>

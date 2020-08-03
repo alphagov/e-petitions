@@ -604,6 +604,13 @@ FactoryBot.define do
     sequence(:name) { |n| "Tag #{n}" }
   end
 
+  factory :topic do
+    sequence(:code_en) { |n| "topic-#{n}" }
+    sequence(:name_en) { |n| "Topic #{n}" }
+    sequence(:code_cy) { |n| "pwnc-#{n}" }
+    sequence(:name_cy) { |n| "Pwnc #{n}" }
+  end
+
   factory :trending_ip do
     association :petition, factory: :open_petition
     ip_address { "127.0.0.1" }
