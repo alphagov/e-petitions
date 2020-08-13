@@ -302,6 +302,13 @@ When(/^I am allowed to make the petition action too long$/) do
   page.execute_script "document.getElementById('petition_creator_action').removeAttribute('maxlength');"
 end
 
+When(/^I am allowed to make the creator name too long$/) do
+  # NOTE: we do this to remove the maxlength attribtue on the petition
+  # name input because any modern browser/driver will not let us enter
+  # values longer than maxlength and so we can't test our JS validation
+  page.execute_script "document.getElementById('petition_creator_name').removeAttribute('maxlength');"
+end
+
 Then(/^the petition with action: "(.*?)" should have requested a government response email after "(.*?)"$/) do |petition_action, timestamp|
   petition = Petition.find_by!(action: petition_action)
   email_requested_at = petition.get_email_requested_at_for('government_response')
