@@ -195,6 +195,12 @@ Scenario: Charlie tries to submit an invalid petition
 
   Then I should see "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
+  When I am allowed to make the creator name too long
+  When I fill in "Name" with text longer than 255 characters
+  And I press "Continue"
+
+  Then I should see "Name is too long"
+
   When I fill in my details as a creator
   And I fill in my creator contact details
   And I press "Continue"
