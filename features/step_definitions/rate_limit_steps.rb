@@ -6,6 +6,10 @@ Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
 
+Given(/^the IP address (\d+\.\d+\.\d+\.\d+) is blocked$/) do |ip_address|
+  RateLimit.first_or_create!.update!(blocked_ips: ip_address)
+end
+
 Given(/^the domain "(.*?)" is allowed$/) do |domain|
   RateLimit.first_or_create!.update!(allowed_domains: domain)
 end
