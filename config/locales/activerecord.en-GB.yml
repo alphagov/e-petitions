@@ -147,6 +147,7 @@ en-GB:
       name:
         invalid: "Name can't start with a '=', '+', '-' or '@'"
         blank: "Name must be completed"
+        has_uri: "Name can't contain links"
       location_code:
         blank: "Location must be completed"
       postcode:
