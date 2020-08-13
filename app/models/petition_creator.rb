@@ -180,7 +180,7 @@ class PetitionCreator
 
     errors.add(:name, :invalid) if name =~ /\A[-=+@]/
     errors.add(:name, :blank) unless name.present?
-    errors.add(:name, :too_long, count: 255) if action.length > 255
+    errors.add(:name, :too_long, count: 255) if name.length > 255
     errors.add(:email, :blank) unless email.present?
     errors.add(:location_code, :blank) unless location_code.present?
     errors.add(:uk_citizenship, :accepted) unless uk_citizenship == "1"
