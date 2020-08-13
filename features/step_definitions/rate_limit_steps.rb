@@ -6,6 +6,10 @@ Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
 
+Given(/^there are no blocked IPs$/) do
+  RateLimit.first_or_create!.update!(blocked_ips: "")
+end
+
 Given(/^the IP address (\d+\.\d+\.\d+\.\d+) is blocked$/) do |ip_address|
   RateLimit.first_or_create!.update!(blocked_ips: ip_address)
 end
@@ -26,6 +30,12 @@ Given(/^there is a signature already from this IP address$/) do
     Then I am told to check my inbox to complete signing
     And "existing@example.com" should receive 1 email
   )
+end
+
+Given(/^there (?:are|is) (\d+) petitions? created from this IP address$/) do |count|
+  count.times do
+    FactoryBot.create(:pending_petition, creator_attributes: { ip_address: "127.0.0.1" })
+  end
 end
 
 When(/^I wait (\d+) seconds?$/) do |duration|

@@ -732,8 +732,14 @@ class Signature < ActiveRecord::Base
   end
 
   def rate(window = 5.minutes)
-    period = Range.new(created_at - window, created_at)
-    petition.signatures.where(ip_address: ip_address, created_at: period).count
+    time = created_at || Time.current
+    period = Range.new(time - window, time)
+
+    if creator?
+      self.class.where(ip_address: ip_address, created_at: period).count
+    else
+      petition.signatures.where(ip_address: ip_address, created_at: period).count
+    end
   end
 
   def update_uuid
