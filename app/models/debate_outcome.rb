@@ -27,6 +27,7 @@ class DebateOutcome < ActiveRecord::Base
   validate :validate_commons_image_dimensions, unless: :no_commons_image_queued
 
   after_create do
+    Appsignal.increment_counter("petition.debated", 1)
     petition.touch(:debate_outcome_at) unless petition.debate_outcome_at?
   end
 

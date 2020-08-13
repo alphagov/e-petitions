@@ -138,6 +138,10 @@ class Petition < ActiveRecord::Base
   alias_attribute :opened_at, :open_at
   attribute :locale, :string, default: -> { I18n.locale }
 
+  after_create do
+    Appsignal.increment_counter("petition.created")
+  end
+
   class << self
     def by_most_popular
       reorder(signature_count: :desc, created_at: :desc)
@@ -695,6 +699,7 @@ class Petition < ActiveRecord::Base
       return false
     end
 
+    Appsignal.increment_counter("petition.published", 1)
     update(state: OPEN_STATE, open_at: time, closed_at: closing_date(time))
   end
 
@@ -722,6 +727,8 @@ class Petition < ActiveRecord::Base
         end
       end
 
+      Appsignal.increment_counter("petition.rejected", 1)
+
       rejection.save
     rescue ActiveRecord::RecordNotUnique => e
       reload_rejection.update(attributes)
@@ -736,6 +743,7 @@ class Petition < ActiveRecord::Base
 
   def complete(time = Time.current)
     if closed?
+      Appsignal.increment_counter("petition.completed", 1)
       update(state: COMPLETED_STATE, completed_at: time)
     end
   end
@@ -746,12 +754,14 @@ class Petition < ActiveRecord::Base
 
   def archive(time = Time.current)
     if archivable?
+      Appsignal.increment_counter("petition.archived", 1)
       update(archived_at: time)
     end
   end
 
   def close!(time = deadline)
     if open?
+      Appsignal.increment_counter("petition.closed", 1)
       update!(state: CLOSED_STATE, closed_at: time)
     else
       raise RuntimeError, "can't close a petition that is in the #{state} state"
@@ -761,6 +771,7 @@ class Petition < ActiveRecord::Base
   def refer_or_reject!(time)
     if closed? && !referred?
       if will_be_referred?
+        Appsignal.increment_counter("petition.referred", 1)
         update!(referred_at: time)
       else
         reject!(code: "insufficient", rejected_at: time)
