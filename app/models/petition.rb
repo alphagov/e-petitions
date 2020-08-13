@@ -118,6 +118,10 @@ class Petition < ActiveRecord::Base
 
   alias_attribute :opened_at, :open_at
 
+  after_create do
+    Appsignal.increment_counter("petition.created")
+  end
+
   before_update if: :moderating? do
     self.moderated_by = Admin::Current.user
   end
@@ -665,11 +669,13 @@ class Petition < ActiveRecord::Base
   end
 
   def publish(time = Time.current)
+    Appsignal.increment_counter("petition.published", 1)
     update(state: OPEN_STATE, open_at: time)
   end
 
   def reject(attributes)
     begin
+      Appsignal.increment_counter("petition.rejected", 1)
       build_rejection(attributes) && rejection.save
     rescue ActiveRecord::RecordNotUnique => e
       reload_rejection.update(attributes)
@@ -682,12 +688,14 @@ class Petition < ActiveRecord::Base
     end
 
     if deadline <= time
+      Appsignal.increment_counter("petition.closed", 1)
       update!(state: CLOSED_STATE, closed_at: deadline)
     end
   end
 
   def close_early!(time)
     if open?
+      Appsignal.increment_counter("petition.closed", 1)
       update!(state: CLOSED_STATE, closed_at: time)
     else
       raise RuntimeError, "can't close a petition that is in the #{state} state"
@@ -696,6 +704,7 @@ class Petition < ActiveRecord::Base
 
   def stop!(time = Time.current)
     if state.in?(STOPPABLE_STATES)
+      Appsignal.increment_counter("petition.stopped", 1)
       update!(state: STOPPED_STATE, stopped_at: time)
     else
       raise RuntimeError, "can't stop a petition that is in the #{state} state"

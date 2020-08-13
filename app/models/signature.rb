@@ -66,6 +66,10 @@ class Signature < ActiveRecord::Base
     end
   end
 
+  after_create do
+    Appsignal.increment_counter("signature.created", 1)
+  end
+
   before_destroy do
     throw :abort if creator?
   end
@@ -77,6 +81,8 @@ class Signature < ActiveRecord::Base
       CountryPetitionJournal.invalidate_signature_for(self, now)
       petition.decrement_signature_count!(now)
     end
+
+    Appsignal.increment_counter("signature.deleted", 1)
   end
 
   class << self
@@ -565,6 +571,7 @@ class Signature < ActiveRecord::Base
   def fraudulent!(now = Time.current)
     retry_lock do
       if pending?
+        Appsignal.increment_counter("signature.fraudulent", 1)
         update_columns(state: FRAUDULENT_STATE, updated_at: now)
       end
     end
@@ -611,6 +618,7 @@ class Signature < ActiveRecord::Base
     end
 
     if update_signature_counts
+      Appsignal.increment_counter("signature.validated", 1)
       @just_validated = true
     end
 
@@ -653,6 +661,7 @@ class Signature < ActiveRecord::Base
     end
 
     if update_signature_counts
+      Appsignal.increment_counter("signature.invalidated", 1)
       ConstituencyPetitionJournal.invalidate_signature_for(self, now)
       CountryPetitionJournal.invalidate_signature_for(self, now)
       petition.decrement_signature_count!(now)

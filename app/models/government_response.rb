@@ -7,6 +7,7 @@ class GovernmentResponse < ActiveRecord::Base
   validates :responded_on, presence: true
 
   after_create do
+    Appsignal.increment_counter("petition.responded", 1)
     petition.touch(:government_response_at) unless petition.government_response_at?
   end
 
