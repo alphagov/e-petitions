@@ -40,11 +40,11 @@ Rails.application.routes.draw do
         get  'check'
         get  'check_results'
         post 'new', action: 'create', as: nil
+        get  'thank-you'
       end
 
       member do
         get 'count'
-        get 'thank-you'
         get 'gathering-support'
         get 'moderation-info'
       end

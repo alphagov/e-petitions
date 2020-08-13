@@ -16,6 +16,11 @@ RSpec.describe "routes for petitions", type: :routes do
     expect(new_petition_path).to eq("/petitions/new")
   end
 
+  it "routes GET /petitions/thank-you to petitions#thank_you" do
+    expect(get("/petitions/thank-you")).to route_to(controller: "petitions", action: "thank_you")
+    expect(thank_you_petitions_path).to eq("/petitions/thank-you")
+  end
+
   it "doesn't route POST /petitions" do
     expect(post("/petitions")).not_to be_routable
   end
@@ -54,11 +59,6 @@ RSpec.describe "routes for petitions", type: :routes do
   it "routes GET /petitions/:id/count to petitions#count" do
     expect(get("/petitions/1/count")).to route_to(controller: "petitions", action: "count", id: "1")
     expect(count_petition_path("1")).to eq("/petitions/1/count")
-  end
-
-  it "routes GET /petitions/:id/thank-you to petitions#thank_you" do
-    expect(get("/petitions/1/thank-you")).to route_to(controller: "petitions", action: "thank_you", id: "1")
-    expect(thank_you_petition_path("1")).to eq("/petitions/1/thank-you")
   end
 
   it "routes GET /petitions/:id/gathering-support to petitions#gathering_support" do
