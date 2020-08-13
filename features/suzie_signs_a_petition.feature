@@ -44,6 +44,12 @@ Feature: Suzie signs a petition
     And I press "Continue"
     Then I should see "Name can’t start with a ‘=’, ‘+’, ‘-’ or ‘@’"
 
+  Scenario: Suzie signs a petition with a link in their name
+    When I go to the new signature page for "Do something!"
+    And I fill in "Name" with "http://petition.parliament.uk"
+    And I press "Continue"
+    Then I should see "Name can’t contain links"
+
   Scenario: Suzie signs a petition with invalid postcode SW14 9RQ
     When I go to the new signature page for "Do something!"
     And I fill in my details with email "womboid@wimbledon.com"

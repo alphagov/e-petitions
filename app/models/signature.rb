@@ -39,6 +39,7 @@ class Signature < ActiveRecord::Base
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }
+  validates :name, format: { without: URI::regexp, message: :has_uri }
   validates :email, presence: true, email: { allow_blank: true }, on: :create
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?

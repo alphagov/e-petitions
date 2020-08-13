@@ -296,6 +296,7 @@ class PetitionCreator
     errors.add(:address, :blank) unless address.present?
     errors.add(:address, :too_long, count: 500) if address.length > 500
     errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
+    errors.add(:name, :has_uri) if URI::regexp =~ name
 
     if email.present?
       email_validator.validate(self)

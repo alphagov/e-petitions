@@ -29,6 +29,7 @@ cy-GB:
       name:
         invalid: "Ni chaiff yr enw ddechrau â symbol ‘=’, ‘+’, ‘-’ na ‘@’"
         blank: "Rhaid nodi enw"
+        has_uri: "Ni all enw gynnwys dolenni"
       location_code:
         blank: "Rhaid nodi lleoliad"
       postcode:
