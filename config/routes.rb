@@ -40,10 +40,10 @@ Rails.application.routes.draw do
       get  '/check',         action: 'check',         as: :check_petitions
       get  '/check_results', action: 'check_results', as: :check_results_petitions
       post '/new',           action: 'create',        as: :create_petition
+      get  '/thank-you',     action: 'thank_you',     as: :thank_you_petitions
 
       scope '/:id' do
         get '/count',             action: 'count',             as: :count_petition
-        get '/thank-you',         action: 'thank_you',         as: :thank_you_petition
         get '/gathering-support', action: 'gathering_support', as: :gathering_support_petition
         get '/moderation-info',   action: 'moderation_info',   as: :moderation_info_petition
       end

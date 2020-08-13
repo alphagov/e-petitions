@@ -47,7 +47,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition.creator).not_to be_nil
-        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
 
       it "should successfully create a new petition and a signature even when email has white space either end" do
@@ -56,7 +56,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition).not_to be_nil
-        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
 
       it "should strip a petition action on petition creation" do
@@ -65,7 +65,7 @@ RSpec.describe PetitionsController, type: :controller do
         end
 
         expect(petition).not_to be_nil
-        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/#{petition.id}/thank-you")
+        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
 
       it "should send gather sponsors email to petition's creator" do
@@ -229,6 +229,24 @@ RSpec.describe PetitionsController, type: :controller do
 
           expect(assigns[:new_petition].stage).to eq "creator"
         end
+      end
+    end
+
+    context "when the IP address is blocked" do
+      let(:petition) { Petition.find_by(action: "Save the planet") }
+      let(:rate_limit) { RateLimit.first! }
+
+      before do
+        rate_limit.update!(blocked_ips: "0.0.0.0")
+      end
+
+      it "should not create a new petition and a signature" do
+        perform_enqueued_jobs do
+          post :create, params: { stage: "replay_email", petition_creator: params }
+        end
+
+        expect(petition).to be_nil
+        expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
     end
   end

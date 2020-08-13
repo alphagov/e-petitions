@@ -137,8 +137,10 @@ class PetitionCreator
         end
       end
 
-      @petition.save!
-      send_email_to_gather_sponsors(@petition)
+      unless rate_limit.exceeded?(@petition.creator)
+        @petition.save!
+        send_email_to_gather_sponsors(@petition)
+      end
 
       return true
     else
@@ -358,5 +360,11 @@ class PetitionCreator
 
   def send_email_to_gather_sponsors(petition)
     GatherSponsorsForPetitionEmailJob.perform_later(petition.creator)
+  end
+
+  private
+
+  def rate_limit
+    @rate_limit ||= RateLimit.first_or_create!
   end
 end

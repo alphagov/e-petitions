@@ -17,6 +17,11 @@ RSpec.describe "routes for petitions", type: :routes do
       expect(new_petition_path).to eq("/petitions/new")
     end
 
+    it "routes GET /petitions/thank-you to petitions#thank_you" do
+      expect(get("/petitions/thank-you")).to route_to(controller: "petitions", action: "thank_you")
+      expect(thank_you_petitions_path).to eq("/petitions/thank-you")
+    end
+
     it "doesn't route POST /petitions" do
       expect(post("/petitions")).not_to be_routable
     end
@@ -55,11 +60,6 @@ RSpec.describe "routes for petitions", type: :routes do
     it "routes GET /petitions/:id/count to petitions#count" do
       expect(get("/petitions/1/count")).to route_to(controller: "petitions", action: "count", id: "1")
       expect(count_petition_path("1")).to eq("/petitions/1/count")
-    end
-
-    it "routes GET /petitions/:id/thank-you to petitions#thank_you" do
-      expect(get("/petitions/1/thank-you")).to route_to(controller: "petitions", action: "thank_you", id: "1")
-      expect(thank_you_petition_path("1")).to eq("/petitions/1/thank-you")
     end
 
     it "routes GET /petitions/:id/gathering-support to petitions#gathering_support" do
@@ -101,8 +101,8 @@ RSpec.describe "routes for petitions", type: :routes do
         expect(get("/deisebau/1/cyfrif")).to redirect_to("/petitions/1/count", 308)
       end
 
-      it "GET /deisebau/:id/diolch" do
-        expect(get("/deisebau/1/diolch")).to redirect_to("/petitions/1/thank-you", 308)
+      it "GET /deisebau/diolch" do
+        expect(get("/deisebau/diolch")).to redirect_to("/petitions/thank-you", 308)
       end
 
       it "GET /deisebau/:id/casglu-cefnogaeth" do
@@ -129,6 +129,11 @@ RSpec.describe "routes for petitions", type: :routes do
     it "routes POST /deisebau/newydd to petitions#create" do
       expect(post("/deisebau/newydd")).to route_to(controller: "petitions", action: "create")
       expect(new_petition_path).to eq("/deisebau/newydd")
+    end
+
+    it "routes GET /deisebau/diolch to petitions#thank_you" do
+      expect(get("/deisebau/diolch")).to route_to(controller: "petitions", action: "thank_you")
+      expect(thank_you_petitions_path).to eq("/deisebau/diolch")
     end
 
     it "doesn't route POST /petitions" do
@@ -171,11 +176,6 @@ RSpec.describe "routes for petitions", type: :routes do
       expect(count_petition_path("1")).to eq("/deisebau/1/cyfrif")
     end
 
-    it "routes GET /deisebau/:id/diolch to petitions#thank_you" do
-      expect(get("/deisebau/1/diolch")).to route_to(controller: "petitions", action: "thank_you", id: "1")
-      expect(thank_you_petition_path("1")).to eq("/deisebau/1/diolch")
-    end
-
     it "routes GET /deisebau/:id/casglu-cefnogaeth to petitions#gathering_support" do
       expect(get("/deisebau/1/casglu-cefnogaeth")).to route_to(controller: "petitions", action: "gathering_support", id: "1")
       expect(gathering_support_petition_path("1")).to eq("/deisebau/1/casglu-cefnogaeth")
@@ -215,8 +215,8 @@ RSpec.describe "routes for petitions", type: :routes do
         expect(get("/petitions/1/count")).to redirect_to("/deisebau/1/cyfrif", 308)
       end
 
-      it "GET /petitions/:id/thank-you" do
-        expect(get("/petitions/1/thank-you")).to redirect_to("/deisebau/1/diolch", 308)
+      it "GET /petitions/thank-you" do
+        expect(get("/petitions/thank-you")).to redirect_to("/deisebau/diolch", 308)
       end
 
       it "GET /petitions/:id/gathering-support" do

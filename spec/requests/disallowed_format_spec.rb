@@ -199,8 +199,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   end
 
   context 'the petitions/thank-you url' do
-    let(:url) { "/petitions/#{petition.id}/thank-you" }
-    let(:petition) { FactoryBot.create(:open_petition) }
+    let(:url) { "/petitions/thank-you" }
     let(:params) { {} }
 
     it_behaves_like 'a route that only supports html formats'
