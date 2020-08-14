@@ -12,22 +12,28 @@ module RateLimiting
       signature.fraudulent!
     end
 
-    mailer.send(email, signature).deliver_now
+    if send_email?(signature)
+      mailer.send(email, signature).deliver_now
 
-    updates, params = [], {}
-    updates << "email_count = COALESCE(email_count, 0) + 1"
+      updates, params = [], {}
+      updates << "email_count = COALESCE(email_count, 0) + 1"
 
-    if constituency = signature.constituency
-      updates << "constituency_id = :constituency_id"
-      params[:constituency_id] = constituency.external_id
+      if constituency = signature.constituency
+        updates << "constituency_id = :constituency_id"
+        params[:constituency_id] = constituency.external_id
+      end
+
+      signature.update_all([updates.join(", "), params])
     end
-
-    signature.update_all([updates.join(", "), params])
   end
 
   private
 
   def rate_limit
     @rate_limit ||= RateLimit.first_or_create!
+  end
+
+  def send_email?(signature)
+    signature.petition.open? || signature.pending?
   end
 end

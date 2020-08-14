@@ -86,3 +86,16 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     Then I should see a heading called "Thanks"
     And I should see "Your signature has been added to this petition as a supporter"
     And I should see /This petition needs [0-9]+ supporters to go live/
+
+  Scenario: Laura does not get an email when IP address is rate limited
+    Given the burst rate limit is 1 per minute
+    And there are no allowed IPs
+    And there are no allowed domains
+    And there is a sponsor already from this IP address
+    When I visit the "sponsor this petition" url I was given
+    And I fill in my details as a sponsor
+    And I try to sign
+    Then I am asked to review my email address
+    When I say I am happy with my email address
+    Then I should have a fraudulent signature on the petition as a sponsor
+    And "laura.the.sponsor@example.com" should not have received an email explaining the petition I am sponsoring
