@@ -51,6 +51,20 @@ Given(/^I have enough support from sponsors for my petition$/) do
   step %{"charlie.the.creator@example.com" has read all their email}
 end
 
+Given(/^there is a sponsor already from this IP address$/) do
+  steps %{
+    When I visit the "sponsor this petition" url I was given
+    And I fill in "Name" with "Existing Signer"
+    And I fill in "Email" with "existing@example.com"
+    And I fill in my postcode with "SW14 9RQ"
+    And I select "Wales" from "Location"
+    And I try to sign
+    And I say I am happy with my email address
+    Then I am told to check my inbox to complete signing
+    And "existing@example.com" should receive 1 email
+  }
+end
+
 Given(/^the petition I want to sign is (validated|sponsored|open|hidden|rejected)$/) do |state|
   if state == "rejected"
     @sponsor_petition = FactoryBot.create(:rejected_petition, rejection_code: "irrelevant")
@@ -109,11 +123,11 @@ Then(/^I should have fully signed the petition as a sponsor$/) do
   expect(sponsor).to be_validated
 end
 
-Then(/^I should have a pending signature on the petition as a sponsor$/) do
+Then(/^I should have a (pending|fraudulent) signature on the petition as a sponsor$/) do |state|
   sponsor = @sponsor_petition.sponsors.for_email('laura.the.sponsor@example.com').first
   expect(sponsor).to be_present
   expect(sponsor.petition).to eq @sponsor_petition
-  expect(sponsor).to be_pending
+  expect(sponsor.state).to eq(state)
 end
 
 Then(/^I should not have signed the petition as a sponsor$/) do
