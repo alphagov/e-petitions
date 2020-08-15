@@ -203,7 +203,7 @@ Scenario: Charlie creates a petition when blocked
   And a signature should not exist with email: "womboid@wimbledon.com", state: "pending"
 
 Scenario: Charlie creates a petition when his IP address is rate limited
-  Given the burst rate limit is 1 per minute
+  Given the creator rate limit is 1 per hour
   And there are no allowed IPs
   And there are no blocked IPs
   And there are 2 petitions created from this IP address

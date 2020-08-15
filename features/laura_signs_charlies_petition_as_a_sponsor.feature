@@ -88,7 +88,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
     And I should see /This petition needs [0-9]+ supporters to go live/
 
   Scenario: Laura does not get an email when IP address is rate limited
-    Given the burst rate limit is 1 per minute
+    Given the sponsor rate limit is 1 per hour
     And there are no allowed IPs
     And there are no allowed domains
     And there is a sponsor already from this IP address

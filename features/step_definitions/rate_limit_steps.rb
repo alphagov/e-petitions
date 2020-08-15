@@ -2,6 +2,14 @@ Given(/^the burst rate limit is (\d+) per minute$/) do |rate|
   RateLimit.first_or_create!.update!(burst_rate: rate, burst_period: 60)
 end
 
+Given(/^the creator rate limit is (\d+) per hour$/) do |rate|
+  RateLimit.first_or_create!.update!(creator_rate: rate, sustained_period: 3600)
+end
+
+Given(/^the sponsor rate limit is (\d+) per hour$/) do |rate|
+  RateLimit.first_or_create!.update!(sponsor_rate: rate, sustained_period: 3600)
+end
+
 Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
