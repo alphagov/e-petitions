@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_03_115829) do
+ActiveRecord::Schema.define(version: 2020_08_15_070749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -331,6 +331,8 @@ ActiveRecord::Schema.define(version: 2020_08_03_115829) do
     t.integer "threshold_for_logging_trending_items", default: 100, null: false
     t.integer "threshold_for_notifying_trending_items", default: 200, null: false
     t.string "trending_items_notification_url"
+    t.integer "creator_rate", default: 2, null: false
+    t.integer "sponsor_rate", default: 5, null: false
   end
 
   create_table "regions", id: :string, limit: 9, force: :cascade do |t|

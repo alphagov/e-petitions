@@ -744,7 +744,7 @@ class Signature < ActiveRecord::Base
     time = created_at || Time.current
     period = Range.new(time - window, time)
 
-    if creator?
+    if creator? || sponsor?
       self.class.where(ip_address: ip_address, created_at: period).count
     else
       petition.signatures.where(ip_address: ip_address, created_at: period).count

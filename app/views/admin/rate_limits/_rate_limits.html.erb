@@ -25,3 +25,17 @@
   <%= error_messages_for_field @rate_limit, :sustained_rate %>
   <%= form.text_field :sustained_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
 <% end %>
+
+<h2>Petition creation/sponsor rates per IP address</h2>
+
+<%= form_row for: [form.object, :creator_rate] do %>
+  <%= form.label :creator_rate, "Number of petitions created per long period", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :creator_rate %>
+  <%= form.text_field :creator_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>
+
+<%= form_row for: [form.object, :sponsor_rate] do %>
+  <%= form.label :sponsor_rate, "Number of petitions sponsored per long period", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :sponsor_rate %>
+  <%= form.text_field :sponsor_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>
