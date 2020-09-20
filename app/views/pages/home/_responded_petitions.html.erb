@@ -7,7 +7,11 @@
         <h3><%= link_to petition.action, petition_path(petition, reveal_response: "yes", anchor: 'response-threshold'), class: "threshold-petition-title" %></h3>
         <p class="intro">The government responded on <%= short_date_format(petition.government_response_at) %></p>
         <blockquote class="pull-quote"><%= simple_format(h(petition.government_response.summary)) %></blockquote>
-        <p><%= link_to "Read the response in full", petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') %></p>
+        <p>
+          <%= link_to petition_path(petition, reveal_response: "yes", anchor: 'response-threshold') do %>
+            Read the response <span class="visuallyhidden">to ‘<%= petition.action %>’</span> in full
+          <% end %>
+        </p>
       </li>
     <% end -%>
   </ol>
