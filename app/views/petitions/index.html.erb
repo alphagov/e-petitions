@@ -20,6 +20,7 @@
 <% end %>
 
 <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
+  <label for="search" class="visuallyhidden">Search petitions</label>
   <div class="search-inline">
     <%= search_field_tag 'q', @petitions.query, class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>

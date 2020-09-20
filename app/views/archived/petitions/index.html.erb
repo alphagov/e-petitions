@@ -36,6 +36,7 @@
 
 <%= form_tag archived_petitions_path, method: 'get', enforce_utf8: false do %>
   <div class="search-inline">
+    <label for="search" class="visuallyhidden">Search petitions</label>
     <%= search_field_tag  'q', @petitions.query, class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>
     <%= hidden_field_tag 'parliament', @parliament.id %>
