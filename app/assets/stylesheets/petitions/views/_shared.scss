@@ -89,7 +89,7 @@ input.back-page {
     left: $gutter-half;
   }
 
-  h3, .header {
+  h2, h3, .header {
     margin-top: 0px;
     @include bold-24();
   }
