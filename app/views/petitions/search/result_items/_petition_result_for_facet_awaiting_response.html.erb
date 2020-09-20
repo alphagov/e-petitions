@@ -1,4 +1,4 @@
-<h3><%= link_to petition.action, petition_result_path(petition) %></h3>
+<h2><%= link_to petition.action, petition_result_path(petition) %></h2>
 <p><%= signature_count(:default, petition.signature_count) %></p>
 <% if Parliament.closed? %>
   <%= Parliament.government_response_status.presence || waiting_for_in_words(petition.response_threshold_reached_at) %>

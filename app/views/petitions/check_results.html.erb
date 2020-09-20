@@ -12,7 +12,7 @@
   <% petitions.each do |petition| %>
     <ul>
       <li class="petition-item petition-item-existing panel-indent">
-        <h3><%= link_to petition.action, petition_path(petition) %></h3>
+        <h2><%= link_to petition.action, petition_path(petition) %></h2>
         <% unless petition.rejected? -%>
           <p><%= signature_count(:default, petition.signature_count) %></p>
         <% end %>

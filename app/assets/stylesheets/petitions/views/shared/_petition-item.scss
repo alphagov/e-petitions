@@ -3,7 +3,7 @@
 .petition-item {
   color: $secondary-text-colour;
   margin: $gutter-two-thirds 0 $gutter;
-  h3, p {
+  h2, h3, p {
     margin-bottom: em(5, 16);
     @include media(tablet) {
       margin-bottom: em(5, 19);
