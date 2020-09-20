@@ -17,6 +17,12 @@ class PagesController < ApplicationController
     end
   end
 
+  def accessibility
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def browserconfig
     expires_in 1.hour, public: true
 
