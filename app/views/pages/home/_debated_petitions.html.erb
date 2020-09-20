@@ -8,7 +8,7 @@
         <p class="intro">This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, rel: 'external' do %>
-            <span class="debate-video" aria-hidden="true">
+            <span class="debate-video">
               <%= debate_outcome_image(petition.debate_outcome) %>
               <span class="play-button icon icon-play-white" aria-hidden="true"></span>
             </span>
