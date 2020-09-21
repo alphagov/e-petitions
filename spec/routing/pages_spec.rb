@@ -13,6 +13,10 @@ RSpec.describe "pages", type: :routes do
     it "should respond to /privacy" do
       expect({:get => "/privacy"}).to route_to({:controller => "pages", :action => "privacy"})
     end
+
+    it "should respond to /accessibility" do
+      expect({:get => "/accessibility"}).to route_to({:controller => "pages", :action => "accessibility"})
+    end
   end
 
   describe "helpers" do
@@ -26,6 +30,10 @@ RSpec.describe "pages", type: :routes do
 
     it "#privacy_url generates https://petition.parliament.uk/privacy" do
       expect(privacy_url).to eq("https://petition.parliament.uk/privacy")
+    end
+
+    it "#accessibility_url generates https://petition.parliament.uk/accessibility" do
+      expect(accessibility_url).to eq("https://petition.parliament.uk/accessibility")
     end
   end
 end

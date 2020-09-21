@@ -26,7 +26,7 @@
   <% end %>
 
   <% unless Site.signature_collection_disabled? %>
-    <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition', :tabindex => increment(5) %>
+    <%= link_to "Sign this petition", new_petition_signature_path(petition), :class => 'button button-sign-petition' %>
   <% end %>
 
   <div class="signature-count">

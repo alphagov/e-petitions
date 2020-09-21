@@ -11,7 +11,7 @@
 <%= form_row for: [petition, :action] do %>
   <%= form.label :action, "What do you want us to do?", class: "form-label" %>
   <%= error_messages_for_field petition, :action %>
-  <%= form.text_area :action, tabindex: increment, rows: 3, data: { max_length: 80 }, class: "form-control" %>
+  <%= form.text_area :action, rows: 3, data: { max_length: 80 }, class: "form-control" %>
   <p class="character-count">80 characters max</p>
   <%= render "petitions/action_help" %>
 <% end %>
@@ -19,7 +19,7 @@
 <%= form_row for: [petition, :background] do %>
   <%= form.label :background, "Tell us more about what you want the Government or Parliament to do", class: "form-label" %>
   <%= error_messages_for_field petition, :background %>
-  <%= form.text_area :background, tabindex: increment, rows: 5, data: { max_length: 300 }, class: "form-control" %>
+  <%= form.text_area :background, rows: 5, data: { max_length: 300 }, class: "form-control" %>
   <p class="character-count">300 characters max</p>
   <details class="form-group-help">
     <summary><span class="summary">Help writing background</span></summary>
@@ -33,7 +33,7 @@
 <%= form_row for: [petition, :additional_details] do %>
   <%= form.label :additional_details, "Tell us more about why you want the Government or Parliament to do it", class: "form-label" %>
   <%= error_messages_for_field petition, :additional_details %>
-  <%= form.text_area :additional_details, tabindex: increment, rows: 7, data: { max_length: 500 }, class: "form-control" %>
+  <%= form.text_area :additional_details, rows: 7, data: { max_length: 500 }, class: "form-control" %>
   <p class="character-count">500 characters max</p>
   <details class="form-group-help">
     <summary><span class="summary">Help writing additional info</span></summary>
@@ -43,4 +43,4 @@
   </details>
 <% end %>
 
-<%= form.submit "Preview petition", name: "move_next", class: "button", tabindex: increment %>
+<%= form.submit "Preview petition", name: "move_next", class: "button" %>

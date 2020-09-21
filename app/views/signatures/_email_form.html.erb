@@ -9,9 +9,9 @@
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, "Email address", class: "form-label visuallyhidden" %>
   <%= error_messages_for_field signature, :email %>
-  <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+  <%= form.text_field :email, type: "email", class: "form-control" %>
 <% end %>
 
-<%= form.submit "Yes – this is my email address", class: "button", tabindex: increment %>
+<%= form.submit "Yes – this is my email address", class: "button" %>
 
 <p>If your email address is wrong, just change it above</p>

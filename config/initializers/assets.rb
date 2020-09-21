@@ -17,6 +17,7 @@ Rails.application.config.assets.precompile += %w(
   admin.js
   character-counter.js
   auto-updater.js
+  details.js
 )
 
 # Compress JavaScript assets.

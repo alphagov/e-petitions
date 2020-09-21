@@ -2,10 +2,10 @@
   <div class="notification">
     <span class="icon icon-warning-white"></span>
     <% if Parliament.dissolved? %>
-      <h3 class="header"><%= Parliament.dissolved_heading %></h3>
+      <h2 class="header"><%= Parliament.dissolved_heading %></h2>
       <p class="content"><%= Parliament.dissolved_message %></p>
     <% else %>
-      <h3 class="header"><%= Parliament.dissolution_heading %></h3>
+      <h2 class="header"><%= Parliament.dissolution_heading %></h2>
       <p class="content"><%= Parliament.dissolution_message %></p>
     <% end %>
     <% if Parliament.dissolution_faq_url? %>

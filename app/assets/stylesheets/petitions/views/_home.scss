@@ -149,9 +149,10 @@ a.threshold-panel:hover, a.threshold-panel:focus {
   padding-bottom: 0;
 }
 
-.search-petitions h2 {
+.search-petitions label {
   @include bold-36();
 
+  display: block;
   margin-top: em(30, 20);
   margin-bottom: em(10, 20);
 
@@ -160,4 +161,3 @@ a.threshold-panel:hover, a.threshold-panel:focus {
     margin-bottom: em(10, 24);
   }
 }
-

@@ -8,20 +8,20 @@
         <p class="intro">This topic was debated on <%= short_date_format petition.debate_outcome.debated_on %></p>
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, rel: 'external' do %>
-            <span class="debate-video" aria-hidden>
+            <span class="debate-video">
               <%= debate_outcome_image(petition.debate_outcome) %>
-              <span class="play-button icon icon-play-white" aria-hidden></span>
+              <span class="play-button icon icon-play-white" aria-hidden="true"></span>
             </span>
           <% end -%>
         <% end -%>
         <% if petition.debate_outcome.video_url.present? %>
-          <p>Watch the debate on <%= link_to "parliamentlive.tv", petition.debate_outcome.video_url, rel: "external" %></p>
+          <p>Watch the debate <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> on <%= link_to "parliamentlive.tv", petition.debate_outcome.video_url, rel: "external" %></p>
         <% end %>
         <% if petition.debate_outcome.transcript_url.present? %>
-          <p>Read the transcript at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %></p>
+          <p>Read the transcript <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> at <%= link_to "parliament.uk", petition.debate_outcome.transcript_url, rel: "external" %></p>
         <% end %>
         <% if petition.debate_outcome.debate_pack_url.present? %>
-          <p>Read the research at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %></p>
+          <p>Read the research <span class="visuallyhidden">for the ‘<%= petition.action %>’ petition</span> at <%= link_to "parliament.uk", petition.debate_outcome.debate_pack_url, rel: "external" %></p>
         <% end %>
       </li>
     <% end -%>

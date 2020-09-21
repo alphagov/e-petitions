@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       get '/help',    action: 'help'
       get '/privacy', action: 'privacy'
 
+      get '/accessibility', action: 'accessibility'
+
       scope format: true do
         get '/browserconfig', action: 'browserconfig', constraints: { format: 'xml'  }
         get '/manifest',      action: 'manifest',      constraints: { format: 'json' }
@@ -84,7 +86,6 @@ Rails.application.routes.draw do
     end
 
     # REDIRECTS OLD PAGES
-    get '/accessibility',         to: redirect('/help')
     get '/api/petitions',         to: redirect('/')
     get '/api/petitions/:id',     to: redirect('/')
     get '/crown-copyright',       to: redirect('https://www.nationalarchives.gov.uk/information-management/our-services/crown-copyright.htm')

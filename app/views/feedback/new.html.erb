@@ -16,7 +16,7 @@
   <%= form_row for: [@feedback, :comment] do %>
     <%= f.label :comment, "Comments", class: "form-label" %>
     <%= error_messages_for_field @feedback, :comment %>
-    <%= f.text_area :comment, tabindex: increment, class: "form-control" %>
+    <%= f.text_area :comment, class: "form-control" %>
   <% end %>
 
   <%= form_row for: [@feedback, :petition_link_or_title] do %>
@@ -24,7 +24,7 @@
       Petition title/link <span class="optional">optional</span>
     <% end %>
     <%= error_messages_for_field @feedback, :petition_link_or_title %>
-    <%= f.text_field :petition_link_or_title, tabindex: increment, class: "form-control" %>
+    <%= f.text_field :petition_link_or_title, class: "form-control" %>
   <% end %>
 
   <h3>Do you want a reply?</h3>
@@ -32,10 +32,10 @@
   <%= form_row for: [@feedback, :email] do %>
     <%= f.label :email, "Email address", class: "form-label" %>
     <%= error_messages_for_field @feedback, :email %>
-    <%= f.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+    <%= f.text_field :email, type: "email", class: "form-control" %>
   <% end %>
 
-  <%= submit_tag "Send feedback", class: "button", tabindex: increment %>
+  <%= submit_tag "Send feedback", class: "button" %>
 
   <section class="inline-terms">
     <p>We'll only use your email to reply to your message</p>

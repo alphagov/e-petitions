@@ -1,6 +1,4 @@
 <section class="search-petitions" aria-labelledby="search-petitions-heading">
-  <h2 id="search-petitions-heading">Search petitions</h2>
-
   <%= form_tag search_path, method: 'get', enforce_utf8: false do %>
     <% if Parliament.dissolved? %>
       <input type="hidden" name="state" value="closed">
@@ -11,6 +9,8 @@
     <% else %>
       <input type="hidden" name="state" value="published">
     <% end %>
+
+    <%= label_tag 'search', 'Search petitions', id: 'search-petitions-heading' %>
 
     <div class="search-inline">
       <%= search_field_tag 'q', nil, class: 'form-control', id: 'search' %>

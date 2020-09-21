@@ -16,7 +16,7 @@
   </span>
   <%= error_messages_for_field petition, :uk_citizenship %>
   <div class="multiple-choice">
-    <%= form.check_box :uk_citizenship, tabindex: increment %>
+    <%= form.check_box :uk_citizenship %>
     <%= form.label :uk_citizenship, "I am a British citizen or UK resident" %>
   </div>
 <% end %>
@@ -24,36 +24,36 @@
 <%= form_row for: [petition, :name] do %>
   <%= form.label :name, class: "form-label" %>
   <%= error_messages_for_field petition, :name %>
-  <%= form.text_field :name, tabindex: increment, maxlength: 255, size: nil, class: "form-control" %>
+  <%= form.text_field :name, maxlength: 255, size: nil, class: "form-control" %>
   <span class="form-hint">You must use your full name</span>
 <% end %>
 
 <%= form_row for: [petition, :email] do %>
   <%= form.label :email, "Email address", class: "form-label" %>
   <%= error_messages_for_field petition, :email %>
-  <%= form.text_field :email, type: "email", tabindex: increment, class: "form-control" %>
+  <%= form.text_field :email, type: "email", class: "form-control" %>
 <% end %>
 
 <%= form_row for: [petition, :location_code] do %>
   <%= form.label :location_code, "Location", class: "form-label" %>
   <%= error_messages_for_field petition, :location_code %>
-  <%= form.select :location_code, countries_for_select, {}, tabindex: increment, class: "form-control" %>
+  <%= form.select :location_code, countries_for_select, {}, class: "form-control" %>
 <% end %>
 
 <%= form_row for: [petition, :postcode] do %>
   <%= form.label :postcode, class: "form-label" %>
   <%= error_messages_for_field petition, :postcode %>
-  <%= form.text_field :postcode, tabindex: increment, class: "form-control small" %>
+  <%= form.text_field :postcode, class: "form-control small" %>
 <% end %>
 
 <%= form_row for: [petition, :notify_by_email], class: "notify-by-email" do %>
   <div class="multiple-choice">
-    <%= form.check_box :notify_by_email, tabindex: increment %>
+    <%= form.check_box :notify_by_email %>
     <%= form.label :notify_by_email, "Email me whenever there’s an update about this petition" %>
   </div>
 <% end %>
 
-<%= form.submit "Continue", name: "move_next", class: "button", tabindex: increment %>
+<%= form.submit "Continue", name: "move_next", class: "button" %>
 
 <div>
   <p>Your name will be published on this petition as the petition creator.</p>

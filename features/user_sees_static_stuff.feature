@@ -20,3 +20,10 @@ Feature: User views static pages
     Then I should be on the privacy page
     And I should see "Privacy and cookies" in the browser page title
     And the markup should be valid
+
+  Scenario: I navigate to Accessibility statement
+    When I go to the home page
+    And I follow "Accessibility statement"
+    Then I should be on the accessibility page
+    And I should see "Accessibility statement" in the browser page title
+    And the markup should be valid
