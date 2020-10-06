@@ -158,7 +158,7 @@ module CacheHelper
     end
 
     def build
-      [cache_key, options]
+      [cache_key, options.dup]
     end
 
     private
