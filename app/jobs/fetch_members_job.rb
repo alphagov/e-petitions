@@ -21,19 +21,34 @@ class FetchMembersJob < ApplicationJob
     Appsignal.send_exception exception
   end
 
+  before_perform do
+    @translated_members = load_translated_members
+  end
+
   def perform
-    translated_members.each do |id, attributes|
-      begin
-        Member.for(id) { |member| member.update!(attributes) }
-      rescue ActiveRecord::RecordNotUnique => e
-        retry
+    Member.transaction do
+      Member.update_all(region_id: nil, constituency_id: nil)
+
+      @translated_members.each do |id, attributes|
+        retried = false
+
+        begin
+          Member.for(id) { |member| member.update!(attributes) }
+        rescue ActiveRecord::RecordNotUnique => e
+          if retried
+            raise e
+          else
+            retried = true
+            retry
+          end
+        end
       end
     end
   end
 
   private
 
-  def translated_members
+  def load_translated_members
     {}.tap do |hash|
       members(:"en-GB").each do |member|
         hash[member[:id]] = {}.tap do |row|

@@ -11,6 +11,11 @@ class Member < ActiveRecord::Base
 
   default_scope { order(:name) }
 
+  with_options prefix: true, allow_nil: true do
+    delegate :name, to: :region
+    delegate :name, to: :constituency
+  end
+
   class << self
     def for(id, &block)
       find_or_initialize_by(id: id).tap(&block)

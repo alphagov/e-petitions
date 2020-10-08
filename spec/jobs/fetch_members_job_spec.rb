@@ -83,6 +83,32 @@ RSpec.describe FetchMembersJob, type: :job do
       end
     end
 
+    describe "association assignment" do
+      context "for a constituency member" do
+        let(:member) { Member.find(249) }
+
+        before do
+          described_class.perform_now
+        end
+
+        it "assigns the correct constituency" do
+          expect(member.constituency_name).to eq("Cardiff South and Penarth")
+        end
+      end
+
+      context "for a regional member" do
+        let(:member) { Member.find(169) }
+
+        before do
+          described_class.perform_now
+        end
+
+        it "assigns the correct region" do
+          expect(member.region_name).to eq("South Wales Central")
+        end
+      end
+    end
+
     describe "error handling" do
       context "when a record fails to save" do
         let!(:member) { FactoryBot.create(:member, :cardiff_south_and_penarth) }
@@ -94,6 +120,44 @@ RSpec.describe FetchMembersJob, type: :job do
           expect(Appsignal).to receive(:send_exception).with(exception)
 
           described_class.perform_now
+        end
+      end
+    end
+
+    describe "updating members" do
+      context "when a member is still in office" do
+        let!(:member) { FactoryBot.create(:member, :cardiff_south_and_penarth, name: "Vaughan Gething AM") }
+
+        it "updates the record" do
+          expect {
+            described_class.perform_now
+          }.to change {
+            member.reload.name
+          }.from("Vaughan Gething AM").to("Vaughan Gething MS")
+        end
+      end
+
+      context "when a constituency member is no longer in office" do
+        let!(:member) { FactoryBot.create(:member, :constituency_member) }
+
+        it "clears the constituency association" do
+          expect {
+            described_class.perform_now
+          }.to change {
+            member.reload.constituency_id
+          }.from("W09000043").to(nil)
+        end
+      end
+
+      context "when a regional member is no longer in office" do
+        let!(:member) { FactoryBot.create(:member, :regional_member) }
+
+        it "clears the region association" do
+          expect {
+            described_class.perform_now
+          }.to change {
+            member.reload.region_id
+          }.from("W10000007").to(nil)
         end
       end
     end

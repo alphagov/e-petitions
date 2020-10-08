@@ -498,8 +498,24 @@ FactoryBot.define do
     trait :cardiff_south_and_penarth do
       id { 249 }
       constituency_id { "W09000043" }
-      name_en { "Vaughan Gething AM" }
-      name_cy { "Vaughan Gething AC" }
+      name_en { "Vaughan Gething MS" }
+      name_cy { "Vaughan Gething AS" }
+      party_en { "Welsh Labour" }
+      party_cy { "Llafur Cymru" }
+    end
+
+    trait :regional_member do
+      region_id { "W10000007" }
+      name_en { "Bob Jones MS" }
+      name_cy { "Bob Jones AS" }
+      party_en { "Welsh Conservative Party" }
+      party_cy { "Ceidwadwyr Cymreig" }
+    end
+
+    trait :constituency_member do
+      constituency_id { "W09000043" }
+      name_en { "Alice Davies MS" }
+      name_cy { "Alice Davies AS" }
       party_en { "Welsh Labour" }
       party_cy { "Llafur Cymru" }
     end

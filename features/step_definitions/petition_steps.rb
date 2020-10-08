@@ -282,7 +282,7 @@ Then(/^I should see my constituency "([^"]*)"/) do |constituency|
 end
 
 Then(/^I should see my Member of the Senedd/) do
-  expect(page).to have_text("Vaughan Gething AM")
+  expect(page).to have_text("Vaughan Gething MS")
 end
 
 Then(/^I can click on a link to visit my Member of the Senedd$/) do

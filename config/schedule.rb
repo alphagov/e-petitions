@@ -21,6 +21,10 @@
 
 env :PATH, ENV['PATH']
 
+every :day, at: '2.00am' do
+  rake "wpets:members:refresh", output: nil
+end
+
 every :day, at: '2.30am' do
   rake "wpets:petitions:count", output: nil
 end
