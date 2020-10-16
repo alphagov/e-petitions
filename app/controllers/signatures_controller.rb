@@ -81,10 +81,14 @@ class SignaturesController < LocalizedController
 
   def petition_id
     @petition_id ||= Integer(params[:petition_id])
+  rescue ArgumentError => e
+    raise ActionController::BadRequest, "Invalid petition id: #{params[:petition_id]}"
   end
 
   def signature_id
     @signature_id ||= Integer(params[:id])
+  rescue ArgumentError => e
+    raise ActionController::BadRequest, "Invalid signature id: #{params[:id]}"
   end
 
   def token_param
