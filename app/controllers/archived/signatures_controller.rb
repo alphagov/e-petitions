@@ -16,6 +16,8 @@ module Archived
 
     def signature_id
       @signature_id ||= Integer(params[:id])
+    rescue ArgumentError => e
+      raise ActionController::BadRequest, "Invalid signature id: #{params[:id]}"
     end
 
     def token_param
@@ -29,7 +31,7 @@ module Archived
     end
 
     def retrieve_signature
-      @signature = Archived::Signature.find(params[:id])
+      @signature = Archived::Signature.find(signature_id)
       @petition = @signature.petition
 
       if @signature.invalidated? || @signature.fraudulent?

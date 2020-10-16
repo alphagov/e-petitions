@@ -90,7 +90,9 @@ class PetitionsController < ApplicationController
   protected
 
   def petition_id
-    params[:id].to_i
+    Integer(params[:id])
+  rescue ArgumentError => e
+    raise ActionController::BadRequest, "Invalid petition id: #{params[:id]}"
   end
 
   def redirect_to_home_page_if_dissolved

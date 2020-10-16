@@ -6,7 +6,7 @@ RSpec.describe Archived::SignaturesController, type: :controller do
     let(:petition) { double(:petition) }
 
     before do
-      expect(Archived::Signature).to receive(:find).with("1").and_return(signature)
+      expect(Archived::Signature).to receive(:find).with(1).and_return(signature)
       expect(signature).to receive(:petition).and_return(petition)
       allow(signature).to receive(:fraudulent?).and_return(false)
       allow(signature).to receive(:invalidated?).and_return(false)
