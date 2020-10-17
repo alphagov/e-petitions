@@ -77,7 +77,7 @@ class FetchMembersJob < ApplicationJob
   end
 
   def constituency_map
-    constituency_maps[I18n.locale] ||= Constituency.pluck(:name, :id).to_h
+    constituency_maps[I18n.locale] ||= normalize_map(Constituency.pluck(:name, :id))
   end
 
   def region_maps
@@ -85,7 +85,7 @@ class FetchMembersJob < ApplicationJob
   end
 
   def region_map
-    region_maps[I18n.locale] ||= Region.pluck(:name, :id).to_h
+    region_maps[I18n.locale] ||= normalize_map(Region.pluck(:name, :id))
   end
 
   def load_members
@@ -128,7 +128,7 @@ class FetchMembersJob < ApplicationJob
     name = node.at_xpath(MEMBER_NAME).text.strip
     party = node.at_xpath(PARTY).text.strip
     constituency_name = node.at_xpath(CONSTITUENCY).text.strip
-    constituency_id = constituency_map.fetch(constituency_name)
+    constituency_id = constituency_map.fetch(constituency_name.downcase)
 
     { id: id, name: name, party: party, constituency_id: constituency_id }
   end
@@ -139,7 +139,7 @@ class FetchMembersJob < ApplicationJob
       name = member.at_xpath(MEMBER_NAME).text.strip
       party = member.at_xpath(PARTY).text.strip
       region_name = member.at_xpath(REGION).text.strip
-      region_id = region_map.fetch(region_name)
+      region_id = region_map.fetch(region_name.downcase)
 
       { id: id, name: name, party: party, region_id: region_id }
     end
@@ -162,5 +162,9 @@ class FetchMembersJob < ApplicationJob
 
   def endpoint
     ENDPOINTS[I18n.locale]
+  end
+
+  def normalize_map(mappings)
+    mappings.map { |key, id| [key.downcase, id] }.to_h
   end
 end
