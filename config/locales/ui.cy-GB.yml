@@ -922,6 +922,8 @@ cy-GB:
         video_url: Gwylio’r ddadl
         transcript_url: Darllen y trawsgrifiad
         debate_pack_url: Dod o hyd i fanylion y ddeiseb
+      image_tag_html: |-
+        <img srcset="%{srcset}" alt="Gwyliwch y ddeiseb ‘%{action}’ yn cael ei thrafod" src="%{url}">
     signature_counts:
       default_html:
         one: <span class="count" data-count="%{count}">%{num}</span> <span class="text">llofnod</span>

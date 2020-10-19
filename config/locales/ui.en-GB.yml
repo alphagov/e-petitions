@@ -936,6 +936,8 @@ en-GB:
         video_url: Watch the debate
         transcript_url: Read the transcript
         debate_pack_url: Find details of the petition
+      image_tag_html: |-
+        <img srcset="%{srcset}" alt="Watch the petition ‘%{action}’ being debated" src="%{url}">
     signature_counts:
       default_html:
         one: <span class="count" data-count="%{count}">%{num}</span> <span class="text">signature</span>
