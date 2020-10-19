@@ -274,13 +274,13 @@ en-GB:
         all_open_link: View all open petitions
       debated_petitions:
         video_url:
-          title_html: Watch the debate on %{link}
+          title_html: Watch the debate <span class="visuallyhidden">for the ‘%{action}’ petition</span> on %{link}
           link: senedd.tv
         debate_pack_url:
-          title_html: Find details of the petition at %{link}
+          title_html: Find details of the <span class="visuallyhidden">‘%{action}’</span> petition at %{link}
           link: senedd.wales
         transcript_url:
-          title_html: Read the transcript at %{link}
+          title_html: Read the transcript <span class="visuallyhidden">for the ‘%{action}’ petition</span> at %{link}
           link: senedd.wales
         none_debated: The Senedd has not debated any petitions yet
         topic_debated_date: This topic was debated on %{date}

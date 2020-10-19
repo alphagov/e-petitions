@@ -15,7 +15,7 @@
         <% if debate_outcome = petition.debate_outcome %>
           <% debate_outcome_links(debate_outcome).each do |link| %>
             <%= content_tag(:p, class: link.style) do %>
-              <%= t(:"ui.home_page.debated_petitions.#{link.name}.title_html", link: link_to(t(:"ui.home_page.debated_petitions.#{link.name}.link"), link.url, rel: "external")) %>
+              <%= t(:"ui.home_page.debated_petitions.#{link.name}.title_html", action: petition.action, link: link_to(t(:"ui.home_page.debated_petitions.#{link.name}.link"), link.url, rel: "external")) %>
             <% end %>
           <% end %>
         <% end %>

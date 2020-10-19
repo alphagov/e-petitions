@@ -274,13 +274,13 @@ cy-GB:
         all_open_link: Gweld pob deiseb sydd ar agor
       debated_petitions:
         video_url:
-          title_html: Gwyliwch y ddadl ar %{link}
+          title_html: Gwyliwch y ddadl <span class="visuallyhidden">am y ddeiseb ‘%{action}’</span> ar %{link}
           link: senedd.tv
         debate_pack_url:
-          title_html: Darllenwch y gwaith ymchwil yn %{link}
+          title_html: Dewch o hyd i fanylion y ddeiseb <span class="visuallyhidden">‘%{action}’</span> yn %{link}
           link: senedd.cymru
         transcript_url:
-          title_html: Darllenwch y trawsgrifiad yn %{link}
+          title_html: Darllenwch y trawsgrifiad <span class="visuallyhidden">am y ddeiseb ‘%{action}’</span> yn %{link}
           link: senedd.cymru
         none_debated: Nid yw’r Senedd wedi cynnal dadl ar unrhyw ddeisebau eto
         topic_debated_date: Cynhaliwyd dadl ar y pwnc hwn ar %{date}
