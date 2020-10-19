@@ -17,6 +17,7 @@
 <%= t(:"#{@petitions.scope}_html", scope: :"ui.list_headers", default: "") %>
 
 <%= form_tag petitions_path, method: 'get', enforce_utf8: false do %>
+  <label for="search" class="visuallyhidden"><%= t(:"ui.home_page.search_petitions.heading") %></label>
   <div class="search-inline">
     <%= text_field_tag 'q', @petitions.query, autocomplete: 'off', class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>
