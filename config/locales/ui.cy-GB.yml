@@ -121,7 +121,7 @@ cy-GB:
               label: Cyfeiriad e-bost
             heading: A ydych chi am gael ateb?
           submit_html: |-
-            <button type="submit" class="button forward" tabindex="%{tabindex}" data-disable-with="Anfon adborth">Anfon adborth</button>
+            <button type="submit" class="button forward" data-disable-with="Anfon adborth">Anfon adborth</button>
           petition_link_or_title:
             label_html: Teitl y ddeiseb/linc <span class="optional">dewisol</span>
       thanks:
@@ -385,7 +385,7 @@ cy-GB:
           phone_number:
             label: Rhif ffôn
           continue_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Parhau">Parhau</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Parhau">Parhau</button>
           notify_by_email:
             check_label: Anfonwch neges e-bost ataf pryd bynnag y bydd diweddariad ynghylch y ddeiseb hon
           about_published_data_html: |
@@ -403,7 +403,7 @@ cy-GB:
         petition_stage:
           heading: Dechrau deiseb
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Gweld rhagolwg o’r ddeiseb">Gweld rhagolwg o’r ddeiseb</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Gweld rhagolwg o’r ddeiseb">Gweld rhagolwg o’r ddeiseb</button>
           hint_standards_html: Cofiwch, rhaid i’ch deiseb chi fodloni’r %{standards_link}.
         closing_date_stage:
           day:
@@ -424,18 +424,18 @@ cy-GB:
             <p>Bydd deiseb fel arfer yn casglu llofnodion am chwe mis i’r dyddiad y mae’n cael ei chyhoeddi ac ni fydd y Pwyllgor Deisebau yn trafod unrhyw ddeiseb tan <b>ar ôl</b> iddi orffen casglu llofnodion.</p>
             <p>Gallwch chi ddewis dyddiad cau cynharach os ydych chi am i’r Pwyllgor drafod eich deiseb cyn hynny.</p>"
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Gwirio’r dyddiad cau">Gwirio’r dyddiad cau</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Gwirio’r dyddiad cau">Gwirio’r dyddiad cau</button>
         replay_email_stage:
           heading: Gwnewch yn siŵr fod hyn yn gywir
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
           fix_email_if_wrong: Os yw eich cyfeiriad e-bost yn anghywir, newidiwch y manylion uchod
         replay_petition_stage:
           heading: Gwirio eich deiseb
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i wneud newidiadau">Mynd yn ôl i wneud newidiadau</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Mynd yn ôl i wneud newidiadau">Mynd yn ôl i wneud newidiadau</button>
           submit_warning_html: |-
             <p class="secondary">Gallwch chi ddim newid eich deiseb ar ôl y cam yma.</p>
             <p class="secondary">Dyma’r amser i wneud yn siŵr bod eich deiseb yn glir. Os ydych chi wedi cynnwys manylion personol, fel manylion am eich iechyd, eich teulu neu’ch swydd, meddyliwch yn ofalus a ydych chi’n hapus i gyhoeddi’r manylion hynny.</p>
@@ -443,9 +443,9 @@ cy-GB:
         replay_closing_date_stage:
           heading: Gwirio eich dyddiad cau
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Mae’n edrych yn iawn">Mae’n edrych yn iawn</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Mynd yn ôl i’w newid">Mynd yn ôl i’w newid</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Mynd yn ôl i’w newid">Mynd yn ôl i’w newid</button>
           default_message_html: |-
             <h1><span class="heading-secondary">Dyddiad cau</span>Chwe mis o’i gyhoeddi</h1>
             <p>Bydd eich deiseb “%{action}” yn cau am hanner nos ar y dyddiad hwn. Os bydd eich deiseb wedi casglu %{num} neu fwy o lofnodion bydd yn cael ei chyfeirio at y Pwyllgor Deisebau.</p>
@@ -456,7 +456,7 @@ cy-GB:
             <p class="secondary">Ar ôl y cam yma, dim ond drwy gysylltu â’r <a href="/adborth#contact">tîm deisebau</a> y byddwch chi’n gallu newid y dyddiad cau.</p>
       search:
         submit_button_html: |-
-          <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
+          <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">
         results:
           items:
             facet_all:
@@ -604,7 +604,7 @@ cy-GB:
       new:
         heading: Llofnodi’r ddeiseb
         continue_html: |-
-          <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Parhau">Parhau</button>
+          <button type="submit" name="move_next" class="button forward" data-disable-with="Parhau">Parhau</button>
       signed:
         heading:
           one: 1 llofnod
@@ -631,7 +631,7 @@ cy-GB:
       confirm:
         email_form:
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Ie – dyma fy nghyfeiriad e-bost i">Ie – dyma fy nghyfeiriad e-bost i</button>
           fix_email_if_wrong: Os yw eich cyfeiriad e-bost yn anghywir, newidiwch y manylion uchod
       thank_you:
         heading: Un cam arall…
@@ -666,9 +666,9 @@ cy-GB:
     application:
       back: Nôl
       back_html: |-
-        <button type="submit" name="move_back" tabindex="%{tabindex}" class="back-page" data-disable-with="Nôl">Nôl</button>
+        <button type="submit" name="move_back" class="back-page" data-disable-with="Nôl">Nôl</button>
       continue_html: |-
-        <button type="submit" tabindex="%{tabindex}" class="button forward" data-disable-with="Parhau">Parhau</button>
+        <button type="submit" class="button forward" data-disable-with="Parhau">Parhau</button>
       character_count: hyd at %{count} nod
       get_json_csv_html: Gweld y data hyn yn fformat %{json_link} neu %{csv_link}
       share_this_petition: Rhannu’r ddeiseb hon
@@ -691,7 +691,7 @@ cy-GB:
         <p>Gallwch weld deisebau a wrthodwyd cyn mis Mai 2020 <a href="https://busnes.senedd.cymru/mgIssueHistoryHome.aspx?IId=28231">yma.</a></p>
     local_search:
       submit_button_html: |-
-        <input type="submit" value="Chwilio" tabindex="%{tabindex}" class="inline-submit" data-disable-with="Chwilio">
+        <input type="submit" value="Chwilio" class="inline-submit" data-disable-with="Chwilio">
       postcode: Cod post y DU
     privacy_page:
       body_html: |-

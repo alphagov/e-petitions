@@ -8,11 +8,11 @@
 <%= form_row for: [signature, :email] do %>
   <%= form.label :email, t(:"ui.petitions.create.creator_stage.email.label"), class: "form-label visuallyhidden" %>
   <%= error_messages_for_field signature, :email %>
-  <%= form.text_field :email, inputmode: "email", tabindex: increment, class: "form-control" %>
+  <%= form.text_field :email, inputmode: "email", class: "form-control" %>
 <% end %>
 
 <span>
-   <%= t(:"ui.signatures.confirm.email_form.submit_html", tabindex: increment) %>
+   <%= t(:"ui.signatures.confirm.email_form.submit_html") %>
 </span>
 
 <p><%= t(:"ui.signatures.confirm.email_form.fix_email_if_wrong") %></p>

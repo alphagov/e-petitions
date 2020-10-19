@@ -20,7 +20,7 @@
   <div class="search-inline">
     <%= text_field_tag 'q', @petitions.query, autocomplete: 'off', class: 'form-control', id: 'search' %>
     <%= hidden_field_tag 'state', @petitions.scope %>
-    <%= t(:"ui.petitions.search.submit_button_html", tabindex: increment) %>
+    <%= t(:"ui.petitions.search.submit_button_html") %>
   </div>
 <% end %>
 

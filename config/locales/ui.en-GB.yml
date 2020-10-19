@@ -74,7 +74,7 @@ en-GB:
       title_link_html: |-
         <a title="Go to the Petitions homepage" href="%{url}">Petitions</a>
       language_switcher_html: |-
-        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
+        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" href="%{url}">Cymraeg</a>
     sharing:
       email_html: |-
         <a rel="external" target="_blank" href="mailto:?body=%{url}&amp;subject=Petition%3A%20%{action}">Email</a>
@@ -119,7 +119,7 @@ en-GB:
               label: Email address
             heading: Do you want a reply?
           submit_html: |-
-            <button type="submit" class="button forward" tabindex="%{tabindex}" data-disable-with="Send feedback">Send feedback</button>
+            <button type="submit" class="button forward" data-disable-with="Send feedback">Send feedback</button>
           petition_link_or_title:
             label_html: Petition title/link <span class="optional">optional</span>
       thanks:
@@ -381,7 +381,7 @@ en-GB:
           phone_number:
             label: Phone number
           continue_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Continue">Continue</button>
           notify_by_email:
             check_label: Email me whenever there’s an update about this petition
           about_published_data_html: |-
@@ -399,7 +399,7 @@ en-GB:
         petition_stage:
           heading: Start a petition
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Preview petition">Preview petition</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Preview petition">Preview petition</button>
           hint_standards_html: Remember, your petition must meet the %{standards_link}.
         closing_date_stage:
           heading: How long would you like to collect signatures for?
@@ -421,18 +421,18 @@ en-GB:
             <p>By default, petitions collect signatures for six months from the date that the petition is published. However, petitions are not considered by the Petitions Committee until <b>after</b> they have finished collecting signatures.</p>
             <p>You can choose an earlier closing date if you would like your petition to be discussed sooner.</p>
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Check closing date">Check closing date</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Check closing date">Check closing date</button>
         replay_email_stage:
           heading: Make sure this is right
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
         replay_petition_stage:
           heading: Check your petition
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="This looks good">This looks good</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and make changes">Go back and make changes</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Go back and make changes">Go back and make changes</button>
           submit_warning_html: |-
             <p class="secondary">You can’t change your petition after this point.</p>
             <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
@@ -446,9 +446,9 @@ en-GB:
             <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
             <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="This looks good">This looks good</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and change it">Go back and change it</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Go back and change it">Go back and change it</button>
           submit_warning_html: |-
             <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
       search:
@@ -610,7 +610,7 @@ en-GB:
       new:
         heading: Sign petition
         continue_html: |-
-          <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
+          <button type="submit" name="move_next" class="button forward" data-disable-with="Continue">Continue</button>
       signed:
         heading:
           one: 1 signature
@@ -637,7 +637,7 @@ en-GB:
       confirm:
         email_form:
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
       thank_you:
         heading: One more step…
@@ -677,9 +677,9 @@ en-GB:
     application:
       back: Back
       back_html: |-
-        <button type="submit" name="move_back" tabindex="%{tabindex}" class="back-page" data-disable-with="Back">Back</button>
+        <button type="submit" name="move_back" class="back-page" data-disable-with="Back">Back</button>
       continue_html: |-
-        <button type="submit" tabindex="%{tabindex}" class="button forward">Continue</button>
+        <button type="submit" class="button forward">Continue</button>
       character_count: "%{count} characters max"
       get_json_csv_html: Get this data in %{json_link} or %{csv_link} format
       share_this_petition: Share this petition
