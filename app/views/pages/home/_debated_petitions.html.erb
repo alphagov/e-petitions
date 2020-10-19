@@ -8,7 +8,7 @@
         <p class="intro"><%= t(:"ui.home_page.debated_petitions.topic_debated_date", date: short_date_format(petition.debate_outcome.debated_on)) %></p>
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, class: "debate-video", rel: 'external' do %>
-            <span aria-hidden>
+            <span aria-hidden="true">
               <%= debate_outcome_image(petition.debate_outcome) %>
             </span>
           <% end -%>

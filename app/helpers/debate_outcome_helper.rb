@@ -11,7 +11,7 @@ module DebateOutcomeHelper
 
   def debate_outcome_image(outcome)
     sources = ['1x', '2x'].map { |size| "#{outcome.commons_image.url(size)} #{size}" }
-    image_tag(outcome.commons_image.url('2x'), 'aria-hidden': '', srcset: sources.join(', '))
+    image_tag(outcome.commons_image.url('2x'), srcset: sources.join(', '), aria: { hidden: true })
   end
 
   def debate_outcome_links?(outcome)
