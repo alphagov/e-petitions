@@ -155,6 +155,7 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
   end
 
   %w[
+    accessibility
     feedback
     feedback/thanks
     help

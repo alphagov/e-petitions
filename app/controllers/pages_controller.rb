@@ -5,6 +5,12 @@ class PagesController < LocalizedController
     end
   end
 
+  def accessibility
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def help
     respond_to do |format|
       format.html

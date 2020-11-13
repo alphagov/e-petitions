@@ -57,6 +57,7 @@ cy-GB:
         all_petitions: Pob deiseb
         start_a_petition: Dechrau deiseb
         how_petitions_work: Sut mae deisebau yn gweithio
+        accessibility: Datganiad ynghylch hygyrchedd
       main_website_html: |-
         <a rel="external" href="https://senedd.wales">Hafan y Senedd</a>
       ogl_html: |-
@@ -1016,3 +1017,74 @@ cy-GB:
             <p>Ni chaniateir deisebau sy’n gwneud honiadau ynghylch achosion penodol o gamweinyddu neu fethiant gwasanaeth gan gyrff cyhoeddus. Yn yr achosion hyn, cynghorir deisebwyr i gysylltu ag Ombwdsmon Gwasanaethau Cyhoeddus Cymru i ystyried eu pryderon.</p>
           </li>
         </ul>
+    accessibility_page:
+      body_html: |-
+        <h1 class="page-title">Datganiad ynghylch hygyrchedd</h1>
+
+        <p><strong>Rydym wedi ymrwymo i wneud y wefan hon yn hygyrch fel y gall cynifer o bobl â phosibl ei defnyddio.</strong></p>
+
+        <p>Mae’r datganiad hwn yn berthnasol i gynnwys a gyhoeddir ar wefan Deisebau, Senedd Cymru.</p>
+
+        <p>Senedd Cymru sydd berchen ar y parth hwn (cyfeirir ati o hyn ymlaen fel y Senedd).</p>
+
+        <p>Ein nod yw sicrhau bod y wefan hon yn hygyrch i’r gynulleidfa ehangaf bosibl. Ystyr hyn yw y dylech, er enghraifft, allu:</p>
+
+        <ul class="list-bullet">
+          <li>newid lliwiau, lefelau cyferbyniad a ffontiau</li>
+          <li>chwyddo hyd at 300% heb i’r testun fynd oddi ar y sgrin</li>
+          <li>llywio’r wefan gan ddefnyddio bysellfwrdd</li>
+          <li>llywio’r wefan gan ddefnyddio meddalwedd adnabod lleferydd</li>
+          <li>gwrando ar y wefan gan ddefnyddio darllenydd sgrin</li>
+        </ul>
+
+        <h2>Beth rydyn ni’n ei wneud i wella hygyrchedd</h2>
+
+        <p>Er mwyn gwneud gwefannau’r Senedd yn hygyrch, rydym yn:</p>
+
+        <ul class="list-bullet">
+          <li>integreiddio hygyrchedd i’n gweithdrefnau caffael</li>
+          <li>darparu hyfforddiant hygyrchedd i’n staff</li>
+          <li>cynnwys unigolion ag anableddau wrth ddylunio ein gwedd allanol.</li>
+        </ul>
+
+        <h2>Pa mor hygyrch yw’r wefan hon?</h2>
+
+        <p>Dylai’r wefan hon fod yn gwbl hygyrch.</p>
+
+        <h2>Sut i ofyn am gynnwys mewn fformat gwahanol</h2>
+
+        <p>Os oes angen gwybodaeth arnoch mewn fformat gwahanol, cysylltwch â ni a dywedwch wrthym:</p>
+
+        <ul class="list-bullet">
+          <li>cyfeiriad gwe (URL) y cynnwys sydd ei angen arnoch chi</li>
+          <li>Eich enw a’ch cyfeiriad e-bost a’r</li>
+          <li>math o fformat sydd ei angen arnoch</li>
+        </ul>
+
+        <h2>Rhoi gwybod am broblemau hygyrchedd gyda’r wefan hon</h2>
+
+        <p>Os cewch unrhyw broblemau neu os credwch nad ydym yn bodloni’r gofynion o ran hygyrchedd, <a href="/adborth">cysylltwch â ni</a> i roi gwybod.</p>
+
+        <h2>Gweithdrefn orfodi</h2>
+
+        <p>Os byddwch yn cysylltu â ni gyda chwyn ac nad ydych yn fodlon â’r ymateb, cysylltwch â’r Gwasanaeth Cynghori a Chymorth o ran Cydraddoldeb (EASS).</p>
+
+        <p>Y Comisiwn Cydraddoldeb a Hawliau Dynol sy’n gyfrifol am orfodi Rheoliadau Hygyrchedd Cyrff y Sector Cyhoeddus (Gwefannau a Rhaglenni Ffonau Symudol) (Rhif 2) 2018 (y ‘rheoliadau hygyrchedd’).</p>
+
+        <h2>Gwybodaeth dechnegol am hygyrchedd y wefan hon</h2>
+
+        <p>Mae’r Senedd wedi ymrwymo i wneud y wefan hon yn hygyrch, yn unol â Rheoliadau Hygyrchedd Cyrff y Sector Cyhoeddus (Gwefannau a Rhaglenni Ffonau Symudol) (Rhif 2) 2018.</p>
+
+        <h2>Statws cydymffurfio</h2>
+
+        <p>Mae’r wefan hon yn cydymffurfio â safon 2.1 AA o’r Canllawiau Hygyrchedd Cynnwys y We.</p>
+
+        <h2>Sut wnaethon ni brofi’r wefan hon</h2>
+
+        <p>Mae ein gwefannau wedi’u profi, a pharheir i’w profi ar hyn o bryd, ar gyfer cydymffurfio â safon V2.1 lefel A a lefel AA o’r Canllawiau Hygyrchedd Cynnwys y We gan ddefnyddio cyfuniad o offer awtomataidd o ran safonau hygyrchedd WCAG 2.0.</p>
+
+        <h2>Paratoi’r datganiad hygyrchedd hwn</h2>
+
+        <p>Paratowyd y datganiad hwn ar 12 Tachwedd 2020.</p>
+
+        <p>Profir y wefan hon yn barhaus drwy gyfuniad o offer hygyrchedd.</p>
