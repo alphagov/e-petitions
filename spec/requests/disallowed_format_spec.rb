@@ -154,11 +154,17 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that only supports html formats', headers_only: true
   end
 
-  simple_html_only_urls = [
-    'help', 'privacy', 'feedback', 'feedback/thanks', 'petitions/local',
-    'petitions/check', 'petitions/check_results', 'petitions/new'
-  ]
-  simple_html_only_urls.each do |simple_url|
+  %w[
+    feedback
+    feedback/thanks
+    help
+    petitions/check
+    petitions/check_results
+    petitions/local
+    petitions/new
+    privacy
+    rules
+  ].each do |simple_url|
     context "the #{simple_url} url" do
       let(:url) { "/#{simple_url}" }
       let(:params) { {} }

@@ -23,6 +23,12 @@ class PagesController < LocalizedController
     end
   end
 
+  def rules
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def browserconfig
     expires_in 1.hour, public: true
 
