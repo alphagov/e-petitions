@@ -702,7 +702,7 @@ cy-GB:
 
           <h2 id="privacy-heading">Hysbysiad preifatrwydd: sut rydym ni’n defnyddio’ch data</h2>
 
-          <p>Diweddarwyd ddiwethaf: 30 Ebrill 2020</p>
+          <p>Diweddarwyd ddiwethaf: 13 Tachwedd 2020</p>
 
           <p>Mae’r wefan ddeisebau’n eich galluogi i ddechrau a llofnodi deisebau i godi materion gyda Senedd Cymru/Welsh Parliament (y cyfeirir ati fel y Senedd o hyn ymlaen).</p>
 
@@ -775,6 +775,8 @@ cy-GB:
 
           <p>Os bydd deiseb rydych chi wedi’i dechrau’n cael ei chyfeirio i’r Pwyllgor Deisebau, byddwn ni’n defnyddio’ch manylion cyswllt i roi’r wybodaeth ddiweddaraf i chi am hynt y ddeiseb ac i gynnig cyfle i chi roi rhagor o wybodaeth ac ymgysylltu â’r Pwyllgor.</p>
 
+          <p>Byddwch yn cael e-byst cadarnhad awtomatig pan fyddwch yn creu neu’n llofnodi deiseb.</p>
+
           <p>Os ydych chi wedi llofnodi deiseb, gallwch chi ddewis cael y wybodaeth ddiweddaraf am hynt y ddeiseb. Gallai hyn gynnwys cysylltu â chi i roi gwybod i chi beth sy’n digwydd yn y Senedd mewn perthynas â’r Senedd, er enghraifft dadleuon y gallwch chi eu gwylio neu eu darllen, cyfleoedd i ymateb i ymgynghoriad, neu ffyrdd o roi gwybod i bwyllgorau ac Aelodau o’r Senedd pam y mae’r ddeiseb yn bwysig i chi.</p>
 
           <p>Efallai y byddwn ni’n defnyddio’ch manylion cyswllt yn achlysurol i geisio’ch barn am broses ddeisebau’r Senedd.</p>
@@ -791,6 +793,8 @@ cy-GB:
 
           <p>Mae’r system ddeisebau’n defnyddio dull storio cwmwl Gwasanaethau Gwe Amazon (AWS) i storio’ch data. Mae AWS yn storio data yn yr Ardal Economaidd Ewropeaidd (AEE).</p>
 
+          <p>Mae’r system ddeisebau yn defnyddio gwasanaeth Notify GOV.UK i anfon e-byst ynghylch y broses ddeisebau, gan gynnwys diweddariadau. Caiff e-byst sy’n cael eu storio am 7 niwrnod. Mae hysbysiad preifatrwydd gwasanaeth Notify GOV.UK ar gael yma: <a href="https://www.notifications.service.gov.uk/privacy">www.notifications.service.gov.uk/privacy</a>.</p>
+
           <h3>Sut rydym ni’n diogelu’ch data ac yn eu cadw nhw’n ddiogel</h3>
 
           <p>Rydym ni wedi ymrwymo i wneud popeth yn ein gallu i gadw’ch data’n ddiogel. Gwnaethom ni sefydlu systemau a phrosesau i atal mynediad heb awdurdod neu ddatgelu’r data rydym ni’n eu casglu amdanoch chi – er enghraifft, rydym ni’n diogelu’ch data gan ddefnyddio lefelau amrywiol o amgryptio. Mae’n ofynnol i bob trydydd parti sy’n prosesu data personol i ni gadw’r data hynny’n ddiogel.</p>
@@ -805,7 +809,7 @@ cy-GB:
 
           <p>Pan fo’n ofynnol i ni brosesu data personol er mwyn cydymffurfio â rhwymedigaeth gyfreithiol, megis cais dan ddeddfwriaeth mynediad at wybodaeth neu orchymyn llys, byddwn ni’n gwneud hynny ar y sail bod prosesu data’n angenrheidiol er mwyn cydymffurfio â rhwymedigaeth gyfreithiol yn unol ag Erthygl 6(1)(c) o’r GDPR.</p>
 
-          <p>Cawn ni brosesu data personol sy’n ymwneud ag euogfarnau troseddol a throseddau. Er mwyn cydymffurfio ag Erthygl 10 o’r GDPR, bydd y data hyn hefyd yn cael eu prosesu yn unol ag Erthygl 6(1)(e) o’r GDPR, wedi’i ddarllen ynghyd ag adran 10 o Ddeddf Diogelu Data 2018, a pharagraff 6 o Atodlen 1 iddi.</p>
+          <p>Cawn ni brosesu data personol sy’n ymwneud ag euogfarnau troseddol a throseddau. Er mwyn cydymffurfio ag Erthygl 10 o’r GDPR, bydd y data hyn yn cael eu prosesu yn unol â’n sail gyfreithiol o dan Erthygl 6, fel yr amlinellir uchod, ac adran 10 o Ddeddf Diogelu Data 2018, a pharagraff 6 o Atodlen 1 iddi.</p>
 
           <p>Yn olaf, cawn ni brosesu categorïau arbennig o ddata personol y rhai sy’n dechrau neu’n llofnodi deiseb, a/neu’n cyfrannu i’w hynt drwy broses ddeisebau’r Senedd. Diffinnir data personol categori arbennig yn Erthygl 9(1) o’r GDPR fel prosesu data personol sy’n datgelu hil neu darddiad ethnig, barn wleidyddol, credoau crefyddol neu athronyddol, neu aelodaeth undeb llafur, a phrosesu data genetig, data biometreg at ddibenion adnabod person naturiol yn unigryw, data sy’n ymwneud ag iechyd neu fywyd rhywiol neu gyfeiriadedd rhywiol person naturiol.</p>
 

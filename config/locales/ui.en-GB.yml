@@ -714,7 +714,7 @@ en-GB:
 
           <h2 id="privacy-heading">Privacy notice: how we use your data</h2>
 
-          <p>Last update: 30 April 2020</p>
+          <p>Last update: 13 November 2020</p>
 
           <p>The Petitions site lets you start and sign petitions to raise issues with the Welsh Parliament/Senedd Cymru (referred to hereafter as the Senedd).</p>
 
@@ -803,6 +803,8 @@ en-GB:
 
           <p>The petitions system uses Amazon Web Services (AWS) cloud storage to store your data. AWS store data within the European Economic Area (EEA).</p>
 
+          <p>The petitions system uses the GOV.UK Notify service to send emails relating to the petitions process including updates. Emails sent are stored for 7 days. The privacy notice for the GOV.UK Notify service is available here: <a href="https://www.notifications.service.gov.uk/privacy">www.notifications.service.gov.uk/privacy</a>.
+
           <h3>How we protect your data and keep it secure</h3>
 
           <p>We are committed to doing all that we can to keep your data secure. We set up systems and processes to prevent unauthorised access or disclosure of the data we collect about you – for example, we protect your data using varying levels of encryption. All third parties who process personal data for us are required to keep that data secure.</p>
@@ -817,7 +819,7 @@ en-GB:
 
           <p>Where we are required to process personal data in order to comply with a legal obligation, such as a request under access to information legislation or a court order, we will do so on the basis that processing is necessary for compliance with a legal obligation pursuant to Article 6(1)(c) of the GDPR.</p>
   
-          <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will also be processed in accordance with Article 6(1)(e) of the GDPR, read in conjunction with section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
+          <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will be processed in accordance with our Article 6 legal basis, as outlined above, and section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
   
           <p>Finally, we may process special categories of personal data of those who start or sign a petition, and/or contribute to its passage through the Senedd’s petitions process. Special category personal data is defined in Article 9(1) of the GDPR as the processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade-union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or a natural person’s sex life or sexual orientation.</p>
 
