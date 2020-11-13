@@ -5,6 +5,12 @@ class PagesController < LocalizedController
     end
   end
 
+  def accessibility
+    respond_to do |format|
+      format.html
+    end
+  end
+
   def help
     respond_to do |format|
       format.html
@@ -18,6 +24,12 @@ class PagesController < LocalizedController
   end
 
   def privacy
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  def rules
     respond_to do |format|
       format.html
     end

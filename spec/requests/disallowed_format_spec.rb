@@ -154,11 +154,18 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     it_behaves_like 'a route that only supports html formats', headers_only: true
   end
 
-  simple_html_only_urls = [
-    'help', 'privacy', 'feedback', 'feedback/thanks', 'petitions/local',
-    'petitions/check', 'petitions/check_results', 'petitions/new'
-  ]
-  simple_html_only_urls.each do |simple_url|
+  %w[
+    accessibility
+    feedback
+    feedback/thanks
+    help
+    petitions/check
+    petitions/check_results
+    petitions/local
+    petitions/new
+    privacy
+    rules
+  ].each do |simple_url|
     context "the #{simple_url} url" do
       let(:url) { "/#{simple_url}" }
       let(:params) { {} }
@@ -167,8 +174,19 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     end
   end
 
-  context "the petitions url" do
-    let(:url) { "/petitions" }
+  context 'the coming-soon url' do
+    let(:url) { '/coming-soon' }
+    let(:params) { {} }
+
+    before do
+      allow(Site).to receive(:show_holding_page?).and_return(true)
+    end
+
+    it_behaves_like 'a route that only supports html formats'
+  end
+
+  context 'the petitions url' do
+    let(:url) { '/petitions' }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html, json and csv formats'

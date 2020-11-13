@@ -1,4 +1,4 @@
-<span><%= t(:"ui.application.back_html", tabindex: increment) %></span>
+<span><%= t(:"ui.application.back_html") %></span>
 
 <%= form.hidden_field :action %>
 <%= form.hidden_field :background %>
@@ -10,12 +10,12 @@
 <%= render "petitions/create/error_summary", form: form %>
 
 <div class="multiple-choice">
-  <%= form.radio_button :duration, 'default', tabindex: increment %>
+  <%= form.radio_button :duration, 'default' %>
   <%= form.label :duration_default, t(:"ui.petitions.create.closing_date_stage.duration.label.default"), for: "petition_creator_duration_default" %>
   <span class="form-hint"><%= t(:"ui.petitions.create.closing_date_stage.duration.hint.default") %></span>
 </div>
 <div class="multiple-choice">
-  <%= form.radio_button :duration, 'custom', tabindex: increment %>
+  <%= form.radio_button :duration, 'custom' %>
   <%= form.label :duration_custom, t(:"ui.petitions.create.closing_date_stage.duration.label.custom"), for: "petition_creator_duration_custom" %>
   <span class="form-hint"><%= t(:"ui.petitions.create.closing_date_stage.duration.hint.custom") %></span>
 
@@ -25,22 +25,22 @@
 
       <%= form_row for: [petition, :day] do %>
         <%= form.label :day, t(:"ui.petitions.create.closing_date_stage.day.label"), class: "form-label" %>
-        <%= form.text_field :day, inputmode: "numeric", tabindex: increment, maxlength: 2, size: 2, class: "form-control" %>
+        <%= form.text_field :day, inputmode: "numeric", maxlength: 2, size: 2, class: "form-control" %>
       <% end %>
 
       <%= form_row for: [petition, :month] do %>
         <%= form.label :month, t(:"ui.petitions.create.closing_date_stage.month.label"), class: "form-label" %>
-        <%= form.text_field :month, inputmode: "numeric", tabindex: increment, maxlength: 2, size: 2, class: "form-control" %>
+        <%= form.text_field :month, inputmode: "numeric", maxlength: 2, size: 2, class: "form-control" %>
       <% end %>
 
       <%= form_row for: [petition, :year], class: "form-group-year" do %>
         <%= form.label :year, t(:"ui.petitions.create.closing_date_stage.year.label"), class: "form-label" %>
-        <%= form.text_field :year, inputmode: "numeric", tabindex: increment, maxlength: 4, size: 4, class: "form-control" %>
+        <%= form.text_field :year, inputmode: "numeric", maxlength: 4, size: 4, class: "form-control" %>
       <% end %>
     </div>
   <% end %>
 </div>
 
 <span>
-  <%= t(:"ui.petitions.create.closing_date_stage.submit_html", tabindex: increment) %>
+  <%= t(:"ui.petitions.create.closing_date_stage.submit_html") %>
 </span>

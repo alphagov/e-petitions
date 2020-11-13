@@ -93,6 +93,6 @@ end
 
 Then (/^I should see (\d+) debated petition debate pack links$/) do |count|
   within(:css, "section[aria-labelledby=debate-threshold-heading]") do
-    expect(page).to have_content("Find details of the petition", count: count)
+    expect(page).to have_content(/Find details of the ‘[^’]+’ petition/, count: count)
   end
 end

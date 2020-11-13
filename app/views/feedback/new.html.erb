@@ -7,7 +7,7 @@
     <%= form_row for: [@feedback, :comment] do %>
       <%= f.label :comment, t(:"ui.feedback.new.feedback.comments.label"), class: "form-label" %>
       <%= error_messages_for_field @feedback, :comment %>
-      <%= f.text_area :comment, rows: 6, tabindex: increment, class: "form-control" %>
+      <%= f.text_area :comment, rows: 6, class: "form-control" %>
     <% end %>
 
     <%= form_row for: [@feedback, :petition_link_or_title] do %>
@@ -15,7 +15,7 @@
         <%= t(:"ui.feedback.new.feedback.petition_link_or_title.label_html") %>
       <% end %>
       <%= error_messages_for_field @feedback, :petition_link_or_title %>
-      <%= f.text_field :petition_link_or_title, tabindex: increment, class: "form-control" %>
+      <%= f.text_field :petition_link_or_title, class: "form-control" %>
     <% end %>
 
     <h3><%= t(:"ui.feedback.new.feedback.want_reply.heading") %></h3>
@@ -23,11 +23,11 @@
     <%= form_row for: [@feedback, :email] do %>
       <%= f.label :email, t(:"ui.feedback.new.feedback.want_reply.email.label"), class: "form-label" %>
       <%= error_messages_for_field @feedback, :email %>
-      <%= f.text_field :email, inputmode: "email", tabindex: increment, class: "form-control" %>
+      <%= f.text_field :email, inputmode: "email", class: "form-control" %>
     <% end %>
 
     <div>
-      <%= t(:"ui.feedback.new.feedback.submit_html", tabindex: increment) %>
+      <%= t(:"ui.feedback.new.feedback.submit_html") %>
     </div>
   <% end %>
 

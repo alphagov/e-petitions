@@ -8,16 +8,14 @@
         <p class="intro"><%= t(:"ui.home_page.debated_petitions.topic_debated_date", date: short_date_format(petition.debate_outcome.debated_on)) %></p>
         <% if index == 0 && petition.debate_outcome.video_url? -%>
           <%= link_to petition.debate_outcome.video_url, class: "debate-video", rel: 'external' do %>
-            <span aria-hidden>
-              <%= debate_outcome_image(petition.debate_outcome) %>
-            </span>
+            <%= debate_outcome_image(petition.debate_outcome) %>
           <% end -%>
         <% end -%>
 
         <% if debate_outcome = petition.debate_outcome %>
           <% debate_outcome_links(debate_outcome).each do |link| %>
             <%= content_tag(:p, class: link.style) do %>
-              <%= t(:"ui.home_page.debated_petitions.#{link.name}.title_html", link: link_to(t(:"ui.home_page.debated_petitions.#{link.name}.link"), link.url, rel: "external")) %>
+              <%= t(:"ui.home_page.debated_petitions.#{link.name}.title_html", action: petition.action, link: link_to(t(:"ui.home_page.debated_petitions.#{link.name}.link"), link.url, rel: "external")) %>
             <% end %>
           <% end %>
         <% end %>

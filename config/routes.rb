@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       get '/privacy', action: 'privacy', as: :privacy
       get '/rules',   action: 'rules',   as: :rules
 
+      get '/accessibility', action: 'accessibility', as: :accessibility
+
       get '/coming-soon', action: 'holding', as: :holding
 
       scope format: true, localized: false do

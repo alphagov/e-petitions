@@ -59,6 +59,7 @@ en-GB:
         all_petitions: All petitions
         start_a_petition: Start a petition
         how_petitions_work: How petitions work
+        accessibility: Accessibility statement
       main_website_html: |-
         <a rel="external" href="https://senedd.wales">Senedd Homepage</a>
       ogl_html: |-
@@ -74,7 +75,7 @@ en-GB:
       title_link_html: |-
         <a title="Go to the Petitions homepage" href="%{url}">Petitions</a>
       language_switcher_html: |-
-        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" tabindex="-1" href="%{url}">Cymraeg</a>
+        <a class="language-switcher" title="Dangoswch y dudalen hon yn Gymraeg" href="%{url}">Cymraeg</a>
     sharing:
       email_html: |-
         <a rel="external" target="_blank" href="mailto:?body=%{url}&amp;subject=Petition%3A%20%{action}">Email</a>
@@ -119,7 +120,7 @@ en-GB:
               label: Email address
             heading: Do you want a reply?
           submit_html: |-
-            <button type="submit" class="button forward" tabindex="%{tabindex}" data-disable-with="Send feedback">Send feedback</button>
+            <button type="submit" class="button forward" data-disable-with="Send feedback">Send feedback</button>
           petition_link_or_title:
             label_html: Petition title/link <span class="optional">optional</span>
       thanks:
@@ -274,13 +275,13 @@ en-GB:
         all_open_link: View all open petitions
       debated_petitions:
         video_url:
-          title_html: Watch the debate on %{link}
+          title_html: Watch the debate <span class="visuallyhidden">for the ‘%{action}’ petition</span> on %{link}
           link: senedd.tv
         debate_pack_url:
-          title_html: Find details of the petition at %{link}
+          title_html: Find details of the <span class="visuallyhidden">‘%{action}’</span> petition at %{link}
           link: senedd.wales
         transcript_url:
-          title_html: Read the transcript at %{link}
+          title_html: Read the transcript <span class="visuallyhidden">for the ‘%{action}’ petition</span> at %{link}
           link: senedd.wales
         none_debated: The Senedd has not debated any petitions yet
         topic_debated_date: This topic was debated on %{date}
@@ -381,7 +382,7 @@ en-GB:
           phone_number:
             label: Phone number
           continue_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Continue">Continue</button>
           notify_by_email:
             check_label: Email me whenever there’s an update about this petition
           about_published_data_html: |-
@@ -399,7 +400,7 @@ en-GB:
         petition_stage:
           heading: Start a petition
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Preview petition">Preview petition</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Preview petition">Preview petition</button>
           hint_standards_html: Remember, your petition must meet the %{standards_link}.
         closing_date_stage:
           heading: How long would you like to collect signatures for?
@@ -421,18 +422,18 @@ en-GB:
             <p>By default, petitions collect signatures for six months from the date that the petition is published. However, petitions are not considered by the Petitions Committee until <b>after</b> they have finished collecting signatures.</p>
             <p>You can choose an earlier closing date if you would like your petition to be discussed sooner.</p>
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Check closing date">Check closing date</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Check closing date">Check closing date</button>
         replay_email_stage:
           heading: Make sure this is right
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
         replay_petition_stage:
           heading: Check your petition
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="This looks good">This looks good</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and make changes">Go back and make changes</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Go back and make changes">Go back and make changes</button>
           submit_warning_html: |-
             <p class="secondary">You can’t change your petition after this point.</p>
             <p class="secondary">This is a good time to check that your petition is clear. If you’ve included personal information, such as details about your health, your family or your job, think carefully about whether you are happy for this to be published.</p>
@@ -446,9 +447,9 @@ en-GB:
             <h1><span class="heading-secondary">Deadline</span>Six months from publication</h1>
             <p>Your petition “%{action}” will be closed at midnight on this date. If it has received %{num} or more signatures then it will be referred to the Petitions Committee.</p>
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="This looks good">This looks good</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="This looks good">This looks good</button>
           go_back_html: |-
-            <button type="submit" name="move_back" class="button-secondary back" tabindex="%{tabindex}" data-disable-with="Go back and change it">Go back and change it</button>
+            <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Go back and change it">Go back and change it</button>
           submit_warning_html: |-
             <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
       search:
@@ -610,7 +611,7 @@ en-GB:
       new:
         heading: Sign petition
         continue_html: |-
-          <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Continue">Continue</button>
+          <button type="submit" name="move_next" class="button forward" data-disable-with="Continue">Continue</button>
       signed:
         heading:
           one: 1 signature
@@ -637,7 +638,7 @@ en-GB:
       confirm:
         email_form:
           submit_html: |-
-            <button type="submit" name="move_next" class="button forward" tabindex="%{tabindex}" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
+            <button type="submit" name="move_next" class="button forward" data-disable-with="Yes – this is my email address">Yes – this is my email address</button>
           fix_email_if_wrong: If your email address is wrong, just change it above
       thank_you:
         heading: One more step…
@@ -677,9 +678,9 @@ en-GB:
     application:
       back: Back
       back_html: |-
-        <button type="submit" name="move_back" tabindex="%{tabindex}" class="back-page" data-disable-with="Back">Back</button>
+        <button type="submit" name="move_back" class="back-page" data-disable-with="Back">Back</button>
       continue_html: |-
-        <button type="submit" tabindex="%{tabindex}" class="button forward">Continue</button>
+        <button type="submit" class="button forward">Continue</button>
       character_count: "%{count} characters max"
       get_json_csv_html: Get this data in %{json_link} or %{csv_link} format
       share_this_petition: Share this petition
@@ -713,7 +714,7 @@ en-GB:
 
           <h2 id="privacy-heading">Privacy notice: how we use your data</h2>
 
-          <p>Last update: 30 April 2020</p>
+          <p>Last update: 13 November 2020</p>
 
           <p>The Petitions site lets you start and sign petitions to raise issues with the Welsh Parliament/Senedd Cymru (referred to hereafter as the Senedd).</p>
 
@@ -802,6 +803,8 @@ en-GB:
 
           <p>The petitions system uses Amazon Web Services (AWS) cloud storage to store your data. AWS store data within the European Economic Area (EEA).</p>
 
+          <p>The petitions system uses the GOV.UK Notify service to send emails relating to the petitions process including updates. Emails sent are stored for 7 days. The privacy notice for the GOV.UK Notify service is available here: <a href="https://www.notifications.service.gov.uk/privacy">www.notifications.service.gov.uk/privacy</a>.
+
           <h3>How we protect your data and keep it secure</h3>
 
           <p>We are committed to doing all that we can to keep your data secure. We set up systems and processes to prevent unauthorised access or disclosure of the data we collect about you – for example, we protect your data using varying levels of encryption. All third parties who process personal data for us are required to keep that data secure.</p>
@@ -816,7 +819,7 @@ en-GB:
 
           <p>Where we are required to process personal data in order to comply with a legal obligation, such as a request under access to information legislation or a court order, we will do so on the basis that processing is necessary for compliance with a legal obligation pursuant to Article 6(1)(c) of the GDPR.</p>
   
-          <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will also be processed in accordance with Article 6(1)(e) of the GDPR, read in conjunction with section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
+          <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will be processed in accordance with our Article 6 legal basis, as outlined above, and section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
   
           <p>Finally, we may process special categories of personal data of those who start or sign a petition, and/or contribute to its passage through the Senedd’s petitions process. Special category personal data is defined in Article 9(1) of the GDPR as the processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade-union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or a natural person’s sex life or sexual orientation.</p>
 
@@ -936,6 +939,8 @@ en-GB:
         video_url: Watch the debate
         transcript_url: Read the transcript
         debate_pack_url: Find details of the petition
+      image_tag_html: |-
+        <img srcset="%{srcset}" alt="Watch the petition ‘%{action}’ being debated" src="%{url}">
     signature_counts:
       default_html:
         one: <span class="count" data-count="%{count}">%{num}</span> <span class="text">signature</span>
@@ -969,18 +974,18 @@ en-GB:
 
         <ol class="list-number">
           <li>
-            <h3>Means and format for submission</h3>
+            <h2>Means and format for submission</h2>
             <p>Petitions may be submitted on paper or electronically using the Senedd’s online petitions system. Petitions may collect signatures for a maximum period of six months.</p>
             <p>For a paper petition the petition wording should be set out in full on each sheet (or side of a sheet) where signatures are asked for. A template is available on request.</p>
           </li>
 
           <li>
-            <h3>Wording</h3>
+            <h2>Wording</h2>
             <p>Petitions should be submitted in good faith. They should call for the Senedd or the Welsh Government to take some specific action.</p>
           </li>
 
           <li>
-            <h3>Basic Requirements</h3>
+            <h2>Basic Requirements</h2>
             <p>Petitions must clearly indicate:</p>
             <ul class="list-bullet">
               <li>the name of the petitioner, who may be an individual or an organisation;</li>
@@ -997,7 +1002,7 @@ en-GB:
           </li>
 
           <li>
-            <h3>Other factors concerning admissibility</h3>
+            <h2>Other factors concerning admissibility</h2>
             <p>Petitions that include or ask the Senedd to consider the following are not admissible:</p>
             <ul class="list-bullet">
               <li>to intervene in the operational decisions or actions of local authorities and National Park Authorities, including planning decisions;</li>
@@ -1019,12 +1024,83 @@ en-GB:
           </li>
 
           <li>
-            <h3>Freedom of Information (FOI) requests</h3>
+            <h2>Freedom of Information (FOI) requests</h2>
             <p>Petitions that are essentially FOI requests will not be allowed. There are other specific arrangements for FOI requests.</p>
           </li>
 
           <li>
-            <h3>Public Services Ombudsman for Wales (PSOW) cases</h3>
+            <h2>Public Services Ombudsman for Wales (PSOW) cases</h2>
             <p>Petitions alleging specific cases of maladministration or service failure by public bodies are not admissible. In these cases petitioners are advised to contact the PSOW to take forward their concerns.</p>
           </li>
         </ol>
+    accessibility_page:
+      body_html: |-
+        <h1 class="page-title">Accessibility statement</h1>
+
+        <p><strong>We’re committed to making this website accessible so it can be used by as many people as possible.</strong></p>
+
+        <p>This statement applies to content published within the Welsh Parliament Petitions website.</p>
+
+        <p>This domain is owned by the Welsh Parliament/Senedd Cymru (referred to hereafter as the Senedd).</p>
+
+        <p>We aim to make this websites accessible to the widest possible audience. This means, for example, that you should be able to:</p>
+
+        <ul class="list-bullet">
+          <li>change colours, contrast levels and fonts</li>
+          <li>zoom in up to 300% without the text spilling off the screen</li>
+          <li>navigate the website using a keyboard</li>
+          <li>navigate the website using speech recognition software</li>
+          <li>listen to the website using a screen reader</li>
+        </ul>
+
+        <h2>What we’re doing to improve accessibility</h2>
+
+        <p>To make Senedd websites accessible, we:</p>
+
+        <ul class="list-bullet">
+          <li>integrate accessibility into our procurement procedures</li>
+          <li>provide accessibility training for our staff</li>
+          <li>include individuals with disabilities in our design personas</li>
+        </ul>
+
+        <h2>How accessible is this website?</h2>
+
+        <p>This website should be fully accessible.</p>
+
+        <h2>How to request content in a different format</h2>
+
+        <p>If you need information in a different format please <a href="/feedback">contact us</a> and tell us:</p>
+
+        <ul class="list-bullet">
+          <li>the web address (URL) of the content that you need</p>
+          <li>your contact name and email address</p>
+          <li>the type of format you need</p>
+        </ul>
+
+        <h2>Reporting accessibility problems with this website</h2>
+
+        <p>If you find any problems or if you think we’re not meeting the accessibility requirements, please contact us to report this.</p>
+
+        <h2>Enforcement procedure</h2>
+
+        <p>If you contact us with a complaint and you’re not happy with our response contact the Equality Advisory and Support Service (EASS).</p>
+
+        <p>The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the ‘accessibility regulations’).</p>
+
+        <h2>Technical information about this website’s accessibility</h2>
+
+        <p>The Senedd is committed to making this website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.</p>
+
+        <h2>Compliance status</h2>
+
+        <p>This website is compliant with the Web Content Accessibility Guidelines version 2.1 AA standard.</p>
+
+        <h2>How we tested this website</h2>
+
+        <p>Our websites were and are currently being tested for compliance with the Web Content Accessibility Guidelines V2.1 level A and level AA using a combination of automated tools for accessibility WCAG 2.0 standards.</p>
+
+        <h2>Preparation of this accessibility statement</h2>
+
+        <p>This statement was prepared on 12 November 2020.</p>
+
+        <p>This website is tested on an ongoing basis via a combination of accessibility tools.</p>

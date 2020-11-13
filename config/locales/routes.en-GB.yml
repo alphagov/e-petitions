@@ -3,6 +3,9 @@ en-GB:
     "/":
       en-GB: "/"
       cy-GB: "/"
+    "/accessibility":
+      en-GB: "/accessibility"
+      cy-GB: "/hygyrchedd"
     "/browserconfig":
       en-GB: "/browserconfig"
       cy-GB: "/browserconfig"

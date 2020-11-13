@@ -3,7 +3,7 @@
 <form method="get" action="/petitions/check_results">
   <div class="form-group">
     <label for="action" class="form-label"><%= t(:"ui.petitions.action.label") %></label>
-    <textarea name="q" id="q" class="form-control" data-max-length="100" rows="3"><%= @new_petition.action %></textarea>
+    <textarea name="q" id="action" class="form-control" data-max-length="100" rows="3"><%= @new_petition.action %></textarea>
     <p class="character-count"><%= t(:"ui.application.character_count", count: 100) %></p>
     <%= t(:"ui.petitions.action.help_html") %>
   </div>
@@ -14,5 +14,5 @@
     <p><%= t(:"ui.petitions.need_sponsors_later", count: Site.minimum_number_of_sponsors) %></p>
   </section>
 
-  <%= t(:"ui.application.continue_html", tabindex: increment) %>
+  <%= t(:"ui.application.continue_html") %>
 </form>
