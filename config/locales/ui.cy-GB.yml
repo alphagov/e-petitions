@@ -957,18 +957,18 @@ cy-GB:
 
         <ol class="list-number">
           <li>
-            <h3>Dull a fformat ar gyfer cyflwyno</h3>
+            <h2>Dull a fformat ar gyfer cyflwyno</h2>
             <p>Gellir cyflwyno deisebau ar bapur neu yn electronig drwy ddefnyddio system ddeisebau ar-lein y Senedd. Gall deisebau gasglu llofnodion am gyfnod o hyd at chwe mis.</p>
             <p>Ar gyfer deiseb bapur, dylai geiriad y ddeiseb gael ei nodi’n llawn ar bob dalen (neu ochr dalen) lle gofynnir am lofnodion.  Mae templed ar gael ar gais.</p>
           </li>
 
           <li>
-            <h3>Geiriad</h3>
+            <h2>Geiriad</h2>
             <p>Dylid cyflwyno deisebau yn ddidwyll. Dylent alw ar y Senedd neu Lywodraeth Cymru i gymryd camau penodol.</p>
           </li>
 
           <li>
-            <h3>Gofynion sylfaenol</h3>
+            <h2>Gofynion sylfaenol</h2>
             <p>Mae’n rhaid i ddeisebau nodi’r canlynol yn glir:</p>
             <ul class="list-bullet">
               <li>enw’r deisebydd, a all fod yn unigolyn neu’n sefydliad;</li>
@@ -985,7 +985,7 @@ cy-GB:
           </li>
 
           <li>
-            <h3>Ffactorau eraill sy’n ymwneud â derbyniadwyedd</h3>
+            <h2>Ffactorau eraill sy’n ymwneud â derbyniadwyedd</h2>
             <p>Nid yw deisebau sy’n cynnwys y canlynol neu’n gofyn i’r Senedd ystyried y canlynol yn dderbyniadwy:</p>
             <ul class="list-bullet">
               <li>ymyrryd ym mhenderfyniadau gweithrediadol neu gamau gweithredu awdurdodau lleol ac Awdurdodau Parciau Cenedlaethol, gan gynnwys penderfyniadau cynllunio;</li>
@@ -1007,12 +1007,12 @@ cy-GB:
           </li>
 
           <li>
-            <h3>Ceisiadau Rhyddid Gwybodaeth</h3>
+            <h2>Ceisiadau Rhyddid Gwybodaeth</h2>
             <p>Ni chaniateir deisebau sydd, yn eu hanfod, yn geisiadau rhyddid gwybodaeth. Mae trefniadau penodol eraill ar gyfer ceisiadau rhyddid gwybodaeth.</p>
           </li>
 
           <li>
-            <h3>Achosion Ombwdsmon Gwasanaethau Cyhoeddus Cymru</h3>
+            <h2>Achosion Ombwdsmon Gwasanaethau Cyhoeddus Cymru</h2>
             <p>Ni chaniateir deisebau sy’n gwneud honiadau ynghylch achosion penodol o gamweinyddu neu fethiant gwasanaeth gan gyrff cyhoeddus. Yn yr achosion hyn, cynghorir deisebwyr i gysylltu ag Ombwdsmon Gwasanaethau Cyhoeddus Cymru i ystyried eu pryderon.</p>
           </li>
         </ul>

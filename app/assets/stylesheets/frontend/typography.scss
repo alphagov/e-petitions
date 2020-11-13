@@ -43,6 +43,13 @@ li {
   margin-top: 12px;
 }
 
+li > h2:first-child {
+  @include font-size(0.875rem, 1rem);
+  line-height: 1.375;
+  margin: 24px 0 6px 0;
+}
+
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
