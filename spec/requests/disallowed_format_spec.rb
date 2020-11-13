@@ -173,8 +173,19 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
     end
   end
 
-  context "the petitions url" do
-    let(:url) { "/petitions" }
+  context 'the coming-soon url' do
+    let(:url) { '/coming-soon' }
+    let(:params) { {} }
+
+    before do
+      allow(Site).to receive(:show_holding_page?).and_return(true)
+    end
+
+    it_behaves_like 'a route that only supports html formats'
+  end
+
+  context 'the petitions url' do
+    let(:url) { '/petitions' }
     let(:params) { {} }
 
     it_behaves_like 'a route that supports html, json and csv formats'
