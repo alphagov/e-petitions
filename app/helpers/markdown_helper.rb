@@ -16,11 +16,11 @@ module MarkdownHelper
   }
 
   def markdown_to_html(markup, options = {})
-    markdown_parser(html_renderer(options), options).render(markup.to_s).html_safe
+    sanitize(markdown_parser(html_renderer(options), options).render(markup.to_s))
   end
 
   def markdown_to_text(markup, options = {})
-    markdown_parser(text_renderer, options).render(markup.to_s).html_safe
+    markdown_parser(text_renderer, options).render(markup.to_s)
   end
 
   private
