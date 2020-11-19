@@ -165,11 +165,11 @@ en-GB:
 
         <ol class="list-number">
           <li>You create a petition. Only people or organisations with an address in Wales can create a petition.</li>
-          <li>You get 2 people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
+          <li>You get %{moderation_threshold} people to support your petition. We’ll tell you how to do this when you’ve created your petition.</li>
           <li>We check your petition, then publish it in Welsh and English. We only reject petitions that don’t meet the standards for petitions (see below).</li>
           <li>People can only sign a petition once. If they sign the petition online, they will be sent an email to verify their signature. People cannot sign both an online and a paper petition.</li>
-          <li>The Petitions Committee reviews all petitions that collect over 50 signatures. They will decide what they can do to help take the petition forward. This can include exploring the issue and pressing for action from the Welsh Government and others.</li>
-          <li>If your petition gets over 5,000 signatures, the Petitions Committee will consider asking for a debate in the Senedd chamber. The Committee will consider a number of factors, including the issues raised by the petition, the urgency of the situation and the proportion of signatures which come from within Wales.</li>
+          <li>The Petitions Committee reviews all petitions that collect over %{referral_threshold} signatures. They will decide what they can do to help take the petition forward. This can include exploring the issue and pressing for action from the Welsh Government and others.</li>
+          <li>If your petition gets over %{debate_threshold} signatures, the Petitions Committee will consider asking for a debate in the Senedd chamber. The Committee will consider a number of factors, including the issues raised by the petition, the urgency of the situation and the proportion of signatures which come from within Wales.</li>
         </ol>
 
         <h2 id="the-petitions-committee">The Petitions Committee</h2>

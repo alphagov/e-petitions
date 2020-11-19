@@ -167,11 +167,11 @@ cy-GB:
 
         <ol class="list-number">
           <li>Rydych chi’n creu deiseb. Dim ond pobl neu sefydliadau sydd â chyfeiriad yng Nghymru sy’n gallu creu deiseb.</li>
-          <li>Mae angen i 2 berson gefnogi’ch deiseb. Byddwn ni’n dweud wrthych sut i wneud hyn ar ôl i chi greu eich deiseb.</li>
+          <li>Mae angen i %{moderation_threshold} berson gefnogi’ch deiseb. Byddwn ni’n dweud wrthych sut i wneud hyn ar ôl i chi greu eich deiseb.</li>
           <li>Rydym ni’n gwirio’ch deiseb, yna’n ei chyhoeddi yn Gymraeg ac yn Saesneg. Dim ond deisebau nad ydynt yn bodloni’r safonau ar gyfer deisebau y byddwn yn eu gwrthod (gweler isod).</li>
           <li>Dim ond unwaith y gall pobl lofnodi deiseb. Os byddant yn llofnodi’r ddeiseb ar-lein, anfonir e-bost atynt i wirio eu llofnod. Ni all pobl lofnodi deiseb ar-lein a deiseb bapur.</li>
-          <li>Mae’r Pwyllgor Deisebau yn adolygu’r holl ddeisebau sy’n casglu mwy na 50 llofnod. Bydd y Pwyllgor yn penderfynu beth i’w wneud er mwyn helpu i symud ymlaen â’r ddeiseb. Gall hyn gynnwys trafod y mater a phwyso ar Lywodraeth Cymru ac eraill i weithredu.</li>
-          <li>Os bydd eich deiseb yn casglu dros 5,000 llofnod, bydd y Pwyllgor Deisebau yn ystyried gofyn am ddadl yn Siambr y Senedd. Bydd y Pwyllgor yn ystyried nifer o ffactorau, gan gynnwys y materion a godir yn y ddeiseb, pa mor ddybryd yw’r sefyllfa a chyfran y llofnodion sy’n dod o Gymru.</li>
+          <li>Mae’r Pwyllgor Deisebau yn adolygu’r holl ddeisebau sy’n casglu mwy na %{referral_threshold} llofnod. Bydd y Pwyllgor yn penderfynu beth i’w wneud er mwyn helpu i symud ymlaen â’r ddeiseb. Gall hyn gynnwys trafod y mater a phwyso ar Lywodraeth Cymru ac eraill i weithredu.</li>
+          <li>Os bydd eich deiseb yn casglu dros %{debate_threshold} llofnod, bydd y Pwyllgor Deisebau yn ystyried gofyn am ddadl yn Siambr y Senedd. Bydd y Pwyllgor yn ystyried nifer o ffactorau, gan gynnwys y materion a godir yn y ddeiseb, pa mor ddybryd yw’r sefyllfa a chyfran y llofnodion sy’n dod o Gymru.</li>
         </ol>
 
         <h2 id="the-petitions-committee">Y Pwyllgor Deisebau</h2>
