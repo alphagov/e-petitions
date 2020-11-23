@@ -236,12 +236,6 @@ cy-GB:
 
         <p>Mae’r rheolau llawn ynghylch y broses ddeisebau ar gael <a href="/rheolau">yma</a>.</p>
 
-        <h2 id="handing-in-your-petition">Cyflwyno eich deiseb</h2>
-
-        <p>Rydym yn cynnig cyfle i chi gyflwyno’ch deiseb ar ôl iddi orffen casglu llofnodion, a chyn iddi gael ei thrafod gan y Pwyllgor Deisebau. Mae’n gyfle anffurfiol i drafod cefndir eich deiseb gyda’r Cadeirydd ac aelodau eraill y Pwyllgor.</p>
-
-        <p>Caiff deisebau eu cyflwyno yn y Senedd ar ddydd Mawrth a dydd Mercher yn ystod tymor y Senedd ac mae’r broses yn para tua 10-15 munud. Bydd ffotograffau yn cael eu tynnu a gellir eu cyhoeddi ar dudalennau’r Pwyllgor ar y we ac ar y cyfryngau cymdeithasol.</p>
-
         <p>Os oes gennych ragor o gwestiynau, mae croeso i chi %{feedback_link}.</p>
       feedback_link: gysylltu
     home_page:
