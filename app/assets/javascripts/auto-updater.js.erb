@@ -35,6 +35,16 @@
         var $count = $('.signature-count-number .count');
         var current = parseInt($count.data('count'));
 
+        if (THRESHOLD_REFERRAL != data.threshold_for_referral) {
+          THRESHOLD_REFERRAL = data.threshold_for_referral;
+          update_progress_bar(current);
+        }
+
+        if (THRESHOLD_DEBATE != data.threshold_for_debate) {
+          THRESHOLD_DEBATE = data.threshold_for_debate;
+          update_progress_bar(current);
+        }
+
         if (data.signature_count != current) {
           $count.data('count', data.signature_count);
           $count.countTo({
