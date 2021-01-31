@@ -1,6 +1,6 @@
 class Member < ActiveRecord::Base
-  URL_EN = "https://senedd.wales/en/memhome/Pages/MemberProfile.aspx?mid=%{id}"
-  URL_CY = "https://senedd.cymru/cy/memhome/Pages/MemberProfile.aspx?mid=%{id}"
+  URL_EN = "https://senedd.wales/people/%{slug}/"
+  URL_CY = "https://senedd.cymru/pobl/%{slug}/"
 
   include Translatable
 
@@ -29,10 +29,10 @@ class Member < ActiveRecord::Base
   private
 
   def url_en
-    URL_EN % { id: id }
+    URL_EN % { slug: name_en.parameterize }
   end
 
   def url_cy
-    URL_CY % { id: id }
+    URL_CY % { slug: name_cy.parameterize }
   end
 end

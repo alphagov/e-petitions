@@ -128,7 +128,7 @@ class FetchMembersJob < ApplicationJob
     name = node.at_xpath(MEMBER_NAME).text.strip
     party = node.at_xpath(PARTY).text.strip
     constituency_name = node.at_xpath(CONSTITUENCY).text.strip
-    constituency_id = constituency_map.fetch(constituency_name.downcase)
+    constituency_id = constituency_map.fetch(constituency_name.parameterize)
 
     { id: id, name: name, party: party, constituency_id: constituency_id }
   end
@@ -139,7 +139,7 @@ class FetchMembersJob < ApplicationJob
       name = member.at_xpath(MEMBER_NAME).text.strip
       party = member.at_xpath(PARTY).text.strip
       region_name = member.at_xpath(REGION).text.strip
-      region_id = region_map.fetch(region_name.downcase)
+      region_id = region_map.fetch(region_name.parameterize)
 
       { id: id, name: name, party: party, region_id: region_id }
     end
@@ -165,6 +165,6 @@ class FetchMembersJob < ApplicationJob
   end
 
   def normalize_map(mappings)
-    mappings.map { |key, id| [key.downcase, id] }.to_h
+    mappings.map { |key, id| [key.parameterize, id] }.to_h
   end
 end

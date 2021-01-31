@@ -1,16 +1,16 @@
-name: Deploy to Preview
+name: Deploy to Production
 
 on:
   release:
-    types: [created]
+    types: [published]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     environment:
-      name: welsh-petitions-preview
-      url: http://petitions-beta.senedd.wales
+      name: welsh-petitions-production
+      url: http://petitions.senedd.wales
 
     steps:
     - name: Checkout code
@@ -50,4 +50,4 @@ jobs:
         APPSIGNAL_APP_NAME: welsh-petitions-preview
         APPSIGNAL_PUSH_API_KEY: ${{ secrets.APPSIGNAL_PUSH_API_KEY }}
       run: |
-        bundle exec rake deploy:preview
+        bundle exec rake deploy:production

@@ -176,7 +176,7 @@ cy-GB:
 
         <h2 id="the-petitions-committee">Y Pwyllgor Deisebau</h2>
 
-        <p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a href="https://senedd.wales/cy/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Pwyllgor Deisebau</a> yn gallu:</p>
+        <p>Fel rhan o’r broses o drafod eich deiseb, mae’r <a href="https://senedd.cymru/pwyllgorau/y-pwyllgor-deisebau/">Pwyllgor Deisebau</a> yn gallu:</p>
 
         <ul class="list-bullet">
           <li>ysgrifennu atoch i gael rhagor o wybodaeth;</li>
@@ -240,8 +240,10 @@ cy-GB:
       feedback_link: gysylltu
     home_page:
       notice:
-        get_involved_html: "<a href=\"https://senedd.wales/en/gethome/Pages/getinvolved.aspx\"
-          class=\"get-involved\">\r\n  Cymryd rhan yng ngwaith y Senedd\r\n</a>"
+        get_involved_html: |-
+          <a href="https://senedd.cymru/senedd-nawr/" class=\"get-involved\">
+            Cymryd rhan yng ngwaith y Senedd
+          </a>
         register_to_vote_html: |-
           <a href="https://www.gov.uk/cofrestru-i-bleidleisio" class="register-to-vote">
             Cofrestru i bleidleisio yn etholiadau’r Senedd
@@ -620,7 +622,7 @@ cy-GB:
         external_links_html: |-
           <hr>
           <ul>
-            <li><a href="https://senedd.cymru/cy/bus-home/Pages/bus-home.aspx">Rhagor o wybodaeth am Fusnes y Senedd</a></li>
+            <li><a href="https://senedd.cymru/busnes-y-senedd/">Rhagor o wybodaeth am Fusnes y Senedd</a></li>
             <li><a href="https://senedd.cymru/">Hafan y Senedd</a></li>
           </ul>
       confirm:
