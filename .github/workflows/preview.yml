@@ -3,6 +3,7 @@ name: Deploy to Preview
 on:
   release:
     types: [prereleased]
+  workflow_dispatch:
 
 jobs:
   deploy:
