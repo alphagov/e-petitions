@@ -1,6 +1,8 @@
-name: Pull Request
+name: Build
 
 on:
+  push:
+    branches: [main]
   pull_request:
     branches: [main]
 
@@ -25,7 +27,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
+
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
