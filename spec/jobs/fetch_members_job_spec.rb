@@ -182,7 +182,7 @@ RSpec.describe FetchMembersJob, type: :job do
       end
 
       it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Constituency.count }
+        expect { described_class.perform_now }.not_to change { Member.count }
       end
     end
 
@@ -193,7 +193,7 @@ RSpec.describe FetchMembersJob, type: :job do
       end
 
       it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Constituency.count }
+        expect { described_class.perform_now }.not_to change { Member.count }
       end
     end
 
@@ -204,7 +204,7 @@ RSpec.describe FetchMembersJob, type: :job do
       end
 
       it "doesn't import any members" do
-        expect { described_class.perform_now }.not_to change { Constituency.count }
+        expect { described_class.perform_now }.not_to change { Member.count }
       end
     end
 
@@ -214,8 +214,8 @@ RSpec.describe FetchMembersJob, type: :job do
         stub_members_cy_api.to_return(xml_response(:internal_server_error))
       end
 
-      it "doesn't import any constituencies" do
-        expect { described_class.perform_now }.not_to change { Constituency.count }
+      it "doesn't import any members" do
+        expect { described_class.perform_now }.not_to change { Member.count }
       end
     end
   end
