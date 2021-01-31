@@ -6,7 +6,7 @@ en-GB:
         <h1 class="page-title">A new petitions site is coming on 30 April</h1>
         <p>Sorry, the petitions service is currently unavailable. We are launching a new, improved website for petitions on 30 April.</p>
         <p>Please accept our apologies for any inconvenience.</p>
-        <p>Click here to find out more about the work of the <a href="https://senedd.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a>.</p>      
+        <p>Click here to find out more about the work of the <a href="https://senedd.wales/committees/petitions-committee/">Petitions Committee</a>.</p>
     cc:
       statement:
         name: "Find out more about the cookies on this website"
@@ -174,7 +174,7 @@ en-GB:
 
         <h2 id="the-petitions-committee">The Petitions Committee</h2>
 
-        <p>As part of their consideration of your petition, the <a href="https://senedd.wales/en/bus-home/committees/Pages/Committee-Profile.aspx?cid=430">Petitions Committee</a> can:</p>
+        <p>As part of their consideration of your petition, the <a href="https://senedd.wales/committees/petitions-committee/">Petitions Committee</a> can:</p>
 
         <ul class="list-bullet">
           <li>write to you for more information;</li>
@@ -239,7 +239,7 @@ en-GB:
     home_page:
       notice:
         get_involved_html: |-
-          <a href="https://senedd.wales/en/gethome/Pages/getinvolved.aspx" class="get-involved">
+          <a href="https://senedd.wales/senedd-now/" class="get-involved">
             Get involved with the Senedd
           </a>
         register_to_vote_html: |-
@@ -626,7 +626,7 @@ en-GB:
         external_links_html: |-
           <hr>
           <ul>
-            <li><a href="https://senedd.wales/en/bus-home/Pages/bus-home.aspx">Find out more about Senedd Business</a></li>
+            <li><a href="https://senedd.wales/senedd-business/">Find out more about Senedd Business</a></li>
             <li><a href="https://senedd.wales/">Senedd Homepage</a></li>
           </ul>
       confirm:
