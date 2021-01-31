@@ -11,7 +11,7 @@ jobs:
 
     environment:
       name: welsh-petitions-preview
-      url: http://petitions-beta.senedd.wales
+      url: https://petitions-beta.senedd.wales
 
     steps:
     - name: Checkout code

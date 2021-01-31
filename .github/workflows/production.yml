@@ -11,7 +11,7 @@ jobs:
 
     environment:
       name: welsh-petitions-production
-      url: http://petitions.senedd.wales
+      url: https://petitions.senedd.wales
 
     steps:
     - name: Checkout code
