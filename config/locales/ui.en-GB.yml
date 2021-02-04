@@ -445,7 +445,7 @@ en-GB:
           go_back_html: |-
             <button type="submit" name="move_back" class="button-secondary back" data-disable-with="Go back and change it">Go back and change it</button>
           submit_warning_html: |-
-            <p class="secondary">After this point you can only change the closing date by contacting the <a href="https://welsh.epetitions.website/feedback#contact">petitions team</a>.</p>
+            <p class="secondary">After this point you can only change the closing date by contacting the <a href="/feedback#contact">petitions team</a>.</p>
       search:
         submit_button_html: |-
           <input type="submit" value="Search" class="inline-submit" data-disable-with="Search" tabindex="%{tabindex}">
