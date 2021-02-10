@@ -229,7 +229,7 @@ class PackageBuilder
     args = %w[bundle package --all --all-platforms --no-install]
 
     info "Packaging gems ..."
-    Bundler.with_clean_env do
+    with_build_env do
       run(*args)
     end
   end
@@ -441,6 +441,23 @@ class PackageBuilder
 
   def script_file_path(name)
     File.expand_path("../package_builder/scripts/#{name}.sh", __FILE__)
+  end
+
+  def with_build_env
+    # Force specific_platform to be true
+    # https://github.com/rubygems/bundler/issues/5863
+    env = Bundler.original_env
+    env["BUNDLE_SPECIFIC_PLATFORM"] = "true"
+
+    # Ensure that we pick up the archive's Gemfile
+    env.delete("BUNDLE_GEMFILE")
+
+    backup = ENV.to_hash
+    ENV.replace(env)
+
+    yield
+  ensure
+    ENV.replace(backup)
   end
 
   def run(*args)
