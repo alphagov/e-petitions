@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
+
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -48,7 +48,7 @@ jobs:
 
     - name: Deploy application
       env:
-        APPSIGNAL_APP_NAME: welsh-petitions-preview
+        APPSIGNAL_APP_NAME: welsh-petitions-production
         APPSIGNAL_PUSH_API_KEY: ${{ secrets.APPSIGNAL_PUSH_API_KEY }}
       run: |
         bundle exec rake deploy:production
