@@ -22,6 +22,15 @@ RSpec.describe DebateOutcome, type: :model do
     it { is_expected.to validate_length_of(:video_url).is_at_most(500) }
     it { is_expected.to validate_length_of(:debate_pack_url).is_at_most(500) }
 
+    it { is_expected.to allow_value("https://commonslibrary.parliament.uk/").for(:debate_pack_url) }
+    it { is_expected.to allow_value("https://hansard.parliament.uk/").for(:transcript_url) }
+    it { is_expected.to allow_value("https://parliamentlive.tv/").for(:video_url) }
+    it { is_expected.to allow_value("https://www.youtube.com/").for(:video_url) }
+
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:debate_pack_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:transcript_url) }
+    it { is_expected.not_to allow_value("https://www.example.com/").for(:video_url) }
+
     context "when then petition was debated" do
       subject { described_class.new(debated: true) }
 
@@ -33,7 +42,6 @@ RSpec.describe DebateOutcome, type: :model do
 
       it { is_expected.not_to validate_presence_of(:debated_on) }
     end
-
   end
 
   describe "commons_image" do
