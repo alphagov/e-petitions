@@ -39,3 +39,11 @@
   <%= error_messages_for_field @rate_limit, :sponsor_rate %>
   <%= form.text_field :sponsor_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
 <% end %>
+
+<h2>Feedback rates per IP address</h2>
+
+<%= form_row for: [form.object, :feedback_rate] do %>
+  <%= form.label :feedback_rate, "Number of feedback messages sent per long period", class: 'form-label' %>
+  <%= error_messages_for_field @rate_limit, :feedback_rate %>
+  <%= form.text_field :feedback_rate, tabindex: increment, maxlength: 30, class: 'form-control' %>
+<% end %>

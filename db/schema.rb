@@ -172,6 +172,9 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
     t.string "petition_link_or_title"
     t.string "email"
     t.string "user_agent"
+    t.string "ip_address", limit: 20
+    t.datetime "created_at"
+    t.index ["ip_address"], name: "index_feedback_on_ip_address"
   end
 
   create_table "holidays", id: :serial, force: :cascade do |t|
@@ -363,6 +366,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
     t.string "trending_items_notification_url"
     t.integer "creator_rate", default: 2, null: false
     t.integer "sponsor_rate", default: 5, null: false
+    t.integer "feedback_rate", default: 2, null: false
   end
 
   create_table "regions", id: { type: :string, limit: 9 }, force: :cascade do |t|

@@ -22,8 +22,20 @@ Then(/^the site owners should be notified$/) do
   )
 end
 
+Then(/^the site owners should not be notified$/) do
+  steps %Q(
+    Then "#{Mail::Address.new(Site.feedback_email).address}" should receive no emails
+  )
+end
+
 Then(/^I cannot submit feedback without filling in the required fields$/) do
   click_button("Send feedback")
   expect(page).to have_content("must be completed")
   step %{"#{Mail::Address.new(Site.feedback_email).address}" should have no emails}
+end
+
+Given(/^there (?:are|is) (\d+) feedbacks? created from this IP address$/) do |count|
+  count.times do
+    FactoryBot.create(:feedback, ip_address: "127.0.0.1")
+  end
 end

@@ -3,6 +3,7 @@ require 'domain_autocorrect'
 require 'email_generator'
 require 'postcode_sanitizer'
 require 'ipaddr'
+require 'mail'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator

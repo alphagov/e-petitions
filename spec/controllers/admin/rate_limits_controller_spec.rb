@@ -59,7 +59,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
 
       context "when the params are invalid" do
         let :params do
-          { burst_rate: "", burst_period: "", sustained_rate: "", sustained_period: "", creator_rate: "", sponsor_rate: "" }
+          { burst_rate: "", burst_period: "", sustained_rate: "", sustained_period: "", creator_rate: "", sponsor_rate: "", feedback_rate: "" }
         end
 
         it "returns 200 OK" do
@@ -73,7 +73,7 @@ RSpec.describe Admin::RateLimitsController, type: :controller, admin: true do
 
       context "when the params are valid" do
         let :params do
-          { burst_rate: "1", burst_period: "60", sustained_rate: "5", sustained_period: "300", creator_rate: "2", sponsor_rate: "5" }
+          { burst_rate: "1", burst_period: "60", sustained_rate: "5", sustained_period: "300", creator_rate: "2", sponsor_rate: "5", feedback_rate: "2" }
         end
 
         it "redirects to the edit page" do

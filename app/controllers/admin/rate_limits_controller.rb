@@ -27,7 +27,7 @@ class Admin::RateLimitsController < Admin::AdminController
   def rate_limit_attributes
     %i[
       burst_rate burst_period sustained_rate sustained_period creator_rate
-      sponsor_rate allowed_domains allowed_ips blocked_domains blocked_ips
+      sponsor_rate feedback_rate allowed_domains allowed_ips blocked_domains blocked_ips
       geoblocking_enabled countries country_rate_limits_enabled
       country_burst_rate country_sustained_rate trending_items_notification_url
       threshold_for_logging_trending_items threshold_for_notifying_trending_items

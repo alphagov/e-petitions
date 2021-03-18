@@ -16,3 +16,38 @@ Feature: User sends feedback
     Given a feedback page message has been enabled
     When I am on the feedback page
     Then I should see "Petition moderation is experiencing delays"
+
+  Scenario: User is blocked by ip address
+    Given the IP address 127.0.0.1 is blocked
+    And I am on the feedback page
+    When I fill in "Comments" with "I must protest"
+    And I press "Send feedback"
+    Then I should see "Your feedback has been sent"
+    Then the markup should be valid
+    And the site owners should not be notified
+    And a feedback should not exist with comment: "I must protest"
+
+  Scenario: User is blocked by domain
+    Given the domain "example.com" is blocked
+    And I am on the feedback page
+    When I fill in "Comments" with "I must protest"
+    And I fill in "Email address" with "bob@example.com"
+    And I press "Send feedback"
+    Then I should see "Your feedback has been sent"
+    Then the markup should be valid
+    And the site owners should not be notified
+    And a feedback should not exist with comment: "I must protest"
+
+  Scenario: User is blocked by IP address rate limiting
+    Given the feedback rate limit is 1 per hour
+    And there are no allowed IPs
+    And there are no allowed domains
+    And there are 2 feedbacks created from this IP address
+    And I am on the feedback page
+    When I fill in "Comments" with "I must protest"
+    And I fill in "Email address" with "bob@example.com"
+    And I press "Send feedback"
+    Then I should see "Your feedback has been sent"
+    Then the markup should be valid
+    And the site owners should not be notified
+    And a feedback should not exist with comment: "I must protest"
