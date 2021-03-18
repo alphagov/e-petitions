@@ -2,6 +2,7 @@ require 'active_support/core_ext/digest/uuid'
 require 'domain_autocorrect'
 require 'postcode_sanitizer'
 require 'ipaddr'
+require 'mail'
 
 class Signature < ActiveRecord::Base
   include PerishableTokenGenerator

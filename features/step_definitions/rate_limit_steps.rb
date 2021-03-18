@@ -10,6 +10,10 @@ Given(/^the sponsor rate limit is (\d+) per hour$/) do |rate|
   RateLimit.first_or_create!.update!(sponsor_rate: rate, sustained_period: 3600)
 end
 
+Given(/^the feedback rate limit is (\d+) per hour$/) do |rate|
+  RateLimit.first_or_create!.update!(feedback_rate: rate, sustained_period: 3600)
+end
+
 Given(/^there are no allowed IPs$/) do
   RateLimit.first_or_create!.update!(allowed_ips: "")
 end
@@ -24,6 +28,10 @@ end
 
 Given(/^the IP address (\d+\.\d+\.\d+\.\d+) is blocked$/) do |ip_address|
   RateLimit.first_or_create!.update!(blocked_ips: ip_address)
+end
+
+Given(/^the domain "(.*?)" is blocked$/) do |domain|
+  RateLimit.first_or_create!.update!(blocked_domains: domain)
 end
 
 Given(/^the domain "(.*?)" is allowed$/) do |domain|
