@@ -1,0 +1,23 @@
+name: Setup
+
+runs:
+  using: composite
+  steps:
+    - name: Install postgres client
+      shell: bash
+      run: |
+        sudo apt-get -yqq install libpq-dev
+
+    - name: Install gems
+      shell: bash
+      run: |
+        gem install bundler -v 1.17.3
+        bundle install --jobs 4 --retry 3 --path vendor/bundle
+
+    - name: Setup database
+      shell: bash
+      env:
+        DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+        RAILS_ENV: test
+      run: |
+        bundle exec rake db:setup

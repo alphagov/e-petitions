@@ -1,0 +1,507 @@
+name: Build
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  bundle-audit:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Check bundle for known CVEs
+        run: |
+          bundle exec rake bundle:audit
+
+  brakeman:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Analyse code for vulnerabilities
+        run: |
+          bundle exec rake brakeman:check
+
+  spec-admin-controllers:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/controllers/admin/*_spec.rb"
+        run: |
+          bundle exec rake spec:controllers
+
+  spec-public-controllers:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/controllers/*_spec.rb"
+        run: |
+          bundle exec rake spec:controllers
+
+  spec-jobs:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/jobs/**/*_spec.rb"
+        run: |
+          bundle exec rake spec:jobs
+
+  spec-models:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/models/**/*_spec.rb"
+        run: |
+          bundle exec rake spec
+
+  spec-requests:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/{requests,routing}/**/*_spec.rb"
+        run: |
+          bundle exec rake spec
+
+  spec-other:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/{helpers,lib,presenters,tasks,validators,views}/**/*_spec.rb"
+        run: |
+          bundle exec rake spec
+
+  javascript:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run javascript specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+        run: |
+          bundle exec rake jasmine:ci
+
+  cucumber-admin:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run cucumber specs
+        env:
+          CUCUMBER_FORMAT: pretty
+          CUCUMBER_OPTS: "--tags @admin --profile default"
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+        run: |
+          bundle exec rake cucumber
+
+  cucumber-public:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run cucumber specs
+        env:
+          CUCUMBER_FORMAT: pretty
+          CUCUMBER_OPTS: "--tags ~@admin --profile default"
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+        run: |
+          bundle exec rake cucumber
