@@ -46,6 +46,10 @@ Before('~@welsh') do
   I18n.locale = :"en-GB"
 end
 
+After do
+  page.driver.options[:headers] = nil
+end
+
 Before('@admin') do
   Capybara.app_host = 'https://moderate.petitions.senedd.wales'
   Capybara.default_host = 'https://moderate.petitions.senedd.wales'
