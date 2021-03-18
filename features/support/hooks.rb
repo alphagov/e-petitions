@@ -38,6 +38,10 @@ After do
   Parliament.reload
 end
 
+After do
+  page.driver.options[:headers] = nil
+end
+
 Before('@admin') do
   Capybara.app_host = 'https://moderate.petition.parliament.uk'
   Capybara.default_host = 'https://moderate.petition.parliament.uk'
