@@ -523,7 +523,7 @@ class Site < ActiveRecord::Base
   validates :petition_page_message, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
   validates :petition_page_message, length: { maximum: 800 }
   validates :petition_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
-  validates :feedback_page_message, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
+  validates :feedback_page_message, presence: true, if: -> { disable_collecting_signatures || show_feedback_page_message? }
   validates :feedback_page_message, length: { maximum: 800 }
   validates :feedback_page_message_colour, inclusion: { in: MESSAGE_COLOURS }, allow_blank: true
 

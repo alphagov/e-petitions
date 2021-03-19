@@ -30,6 +30,12 @@ en-GB:
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
               incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+            debate_pack_url:
+              invalid: "Please use a url on the parliament.uk website or a subdomain"
+            transcript_url:
+              invalid: "Please use a url on the parliament.uk website or a subdomain"
+            video_url:
+              invalid: "Please use a url on the parliamentlive.tv website or www.youtube.com"
 
         archived/petition:
           attributes:
@@ -81,6 +87,12 @@ en-GB:
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
               incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+            debate_pack_url:
+              invalid: "Please use a url on the parliament.uk website or a subdomain"
+            transcript_url:
+              invalid: "Please use a url on the parliament.uk website or a subdomain"
+            video_url:
+              invalid: "Please use a url on the parliamentlive.tv website or www.youtube.com"
 
         rate_limit:
           attributes:
@@ -102,7 +114,7 @@ en-GB:
               too_long:
                 one: "Tag is too long (maximum is 1 character)"
                 other: "Tag is too long (maximum is %{count} characters)"
-                
+
         site:
           attributes:
             home_page_message:

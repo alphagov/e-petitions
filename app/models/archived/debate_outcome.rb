@@ -6,11 +6,18 @@ module Archived
     # resize it down with Imagemagick
     COMMONS_IMAGE_SIZE = { w: 1260.0, h: 710.0 }
 
+    VALID_OTHER_URLS = /\Ahttps?:\/\/(?:[a-z][\-\.a-z0-9]{0,63}\.parliament\.uk|www\.youtube\.com).*\z/
+    VALID_VIDEO_URLS = /\Ahttps?:\/\/(?:(?:www\.)?parliamentlive\.tv|www\.youtube\.com).*\z/
+
     belongs_to :petition, touch: true
 
     validates :petition, presence: true
     validates :debated_on, presence: true, if: :debated?
     validates :transcript_url, :video_url, :debate_pack_url, length: { maximum: 500 }
+
+    validates :debate_pack_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
+    validates :transcript_url, format: { with: VALID_OTHER_URLS }, allow_blank: true
+    validates :video_url, format: { with: VALID_VIDEO_URLS }, allow_blank: true
 
     has_attached_file :commons_image,
       # default_url needs to be a lambda - this way the generated image url will

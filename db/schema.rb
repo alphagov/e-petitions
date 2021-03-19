@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_15_070749) do
+ActiveRecord::Schema.define(version: 2021_03_18_203034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -316,6 +316,9 @@ ActiveRecord::Schema.define(version: 2020_08_15_070749) do
     t.string "petition_link_or_title"
     t.string "email"
     t.string "user_agent"
+    t.string "ip_address", limit: 20
+    t.datetime "created_at"
+    t.index ["ip_address"], name: "index_feedback_on_ip_address"
   end
 
   create_table "government_responses", id: :serial, force: :cascade do |t|
@@ -520,6 +523,7 @@ ActiveRecord::Schema.define(version: 2020_08_15_070749) do
     t.string "trending_items_notification_url"
     t.integer "creator_rate", default: 2, null: false
     t.integer "sponsor_rate", default: 5, null: false
+    t.integer "feedback_rate", default: 2, null: false
   end
 
   create_table "regions", id: :serial, force: :cascade do |t|

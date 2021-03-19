@@ -2,18 +2,18 @@ Given(/^there (?:are|is) (\d+) petitions? debated in parliament(.+)?$/) do |deba
   video_url, transcript_url, debate_pack_url = nil, nil, nil
 
   if links_command == " with a transcript url"
-    transcript_url = "http://www.example.com/?video=test"
+    transcript_url = "https://hansard.parliament.uk/path/to/transcript"
   elsif links_command == " with a video url"
-    video_url = "http://www.example.com/?video=test"
+    video_url = "https://www.youtube.com/watch?v=1234abcd"
   elsif links_command == " with both video and transcript urls"
-    video_url = "http://www.example.com/?video=test"
-    transcript_url = "http://www.example.com/?video=test"
+    video_url = "https://www.youtube.com/watch?v=1234abcd"
+    transcript_url = "https://hansard.parliament.uk/path/to/transcript"
   elsif links_command == " with a debate pack url"
-    debate_pack_url = "http://www.example.com/?video=test"
+    debate_pack_url = "https://researchbriefings.parliament.uk/path/to/briefing"
   elsif links_command == " with all debate outcome urls"
-    video_url = "http://www.example.com/?video=test"
-    transcript_url = "http://www.example.com/?video=test"
-    debate_pack_url = "http://www.example.com/?video=test"
+    video_url = "https://www.youtube.com/watch?v=1234abcd"
+    transcript_url = "https://hansard.parliament.uk/path/to/transcript"
+    debate_pack_url = "https://researchbriefings.parliament.uk/path/to/briefing"
   end
 
   debated_count.times do |count|

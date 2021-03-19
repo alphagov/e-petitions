@@ -82,13 +82,6 @@ Then(/^I am redirected to the petition view page$/) do
   expect(current_path).to eq(petition_path(@sponsor_petition))
 end
 
-Then(/^I will see 404 error page$/) do
-  expect(page.status_code).to eq 404
-  expect(page).to have_content("The page you're looking for doesn't exist")
-  expect(page).to have_link("go back to the homepage", href: "/")
-  expect(page).to have_link("search for a petition", href: "/petitions")
-end
-
 Given(/^the petition I want to sign has enough sponsors?$/) do
   @sponsor_petition = FactoryBot.create(:sponsored_petition, sponsor_count: Site.maximum_number_of_sponsors, sponsors_signed: true)
 end

@@ -44,6 +44,10 @@ Then(/^I am asked for a username and password$/) do
   expect(page.status_code).to eq 401
 end
 
+Then(/^I will see a 404 error page$/) do
+  expect(page.status_code).to eq 404
+end
+
 Then(/^I will see a 503 error page$/) do
   expect(page.status_code).to eq 503
 end
