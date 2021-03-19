@@ -70,5 +70,12 @@ json.attributes do
     json.signatures_by_country petition.signatures_by_country
     json.signatures_by_constituency petition.signatures_by_constituency
     json.signatures_by_region petition.signatures_by_region
+
+    json.other_parliamentary_business petition.emails do |email|
+      json.subject email.subject
+      json.body markdown_to_text(email.body)
+      json.created_at api_date_format(email.created_at)
+      json.updated_at api_date_format(email.updated_at)
+    end
   end
 end

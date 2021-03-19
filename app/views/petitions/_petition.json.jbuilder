@@ -91,5 +91,12 @@ json.attributes do
       json.ons_code region.ons_code
       json.signature_count region.signature_count
     end
+
+    json.other_parliamentary_business petition.emails do |email|
+      json.subject email.subject
+      json.body markdown_to_text(email.body)
+      json.created_at api_date_format(email.created_at)
+      json.updated_at api_date_format(email.updated_at)
+    end
   end
 end

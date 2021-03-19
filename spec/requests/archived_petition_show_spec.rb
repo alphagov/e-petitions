@@ -363,5 +363,33 @@ RSpec.describe "API request to show an archived petition", type: :request, show_
 
       expect(attributes.keys).not_to include("signatures_by_region")
     end
+
+    it "includes other parliamentary business" do
+      petition = FactoryBot.create :archived_petition
+      email_1  = FactoryBot.create :archived_petition_email, petition: petition, subject: "Original Government Response", body: "This is the original government response", created_at: 12.months.ago
+      email_2  = FactoryBot.create :archived_petition_email, petition: petition, subject: "Debate Decision", body: "Petitions committee will debate this petition", created_at: 13.months.ago
+
+      get "/archived/petitions/#{petition.id}.json"
+      expect(response).to be_successful
+
+      expect(attributes).to match(
+        a_hash_including(
+          "other_parliamentary_business" => a_collection_containing_exactly(
+            {
+              "subject" => "Debate Decision",
+              "body" => "Petitions committee will debate this petition\n",
+              "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+              "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+            },
+            {
+              "subject" => "Original Government Response",
+              "body" => "This is the original government response\n",
+              "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
+              "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])
+            }
+          )
+        )
+      )
+    end
   end
 end
