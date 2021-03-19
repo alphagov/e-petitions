@@ -20,7 +20,7 @@ x-application: &application
 
 services:
   postgres:
-    image: postgres:10.7
+    image: postgres:10.16
     restart: always
     ports:
       - "5432:5432"
