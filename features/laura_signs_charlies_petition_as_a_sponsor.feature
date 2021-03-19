@@ -46,7 +46,7 @@ Feature: As Laura, a sponsor of my friend Charlie's petition
   Scenario: Laura wants to sign the petition that is hidden from publishing
     Given the petition I want to sign is hidden
     When I visit the "sponsor this petition" url I was given
-    And I will see 404 error page
+    And I will see a 404 error page
 
   Scenario: Laura is the 21st sponsor that wants to sign the petition
     Given the petition I want to sign has enough sponsors

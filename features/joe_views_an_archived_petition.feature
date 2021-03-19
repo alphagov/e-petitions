@@ -93,10 +93,10 @@ Feature: Joe views an archived petition
   Scenario: Joe tries to see a stopped archived petition
     Given a stopped archived petition exists with action: "Spend more money on Defence"
     When I view the petition
-    Then I will see 404 error page
+    Then I will see a 404 error page
 
   @allow-rescue
   Scenario: Joe tries to see a hidden archived petition
     Given a hidden archived petition exists with action: "Spend more money on Defence"
     When I view the petition
-    Then I will see 404 error page
+    Then I will see a 404 error page

@@ -19,7 +19,7 @@ Feature: Suzie views a petition
   Scenario: Suzie views a dormant petition
     Given a dormant petition "Spend more money on Defence"
     When I view the petition
-    Then I will see 404 error page
+    Then I will see a 404 error page
 
   Scenario: Suzie views an open petition
     Given an open petition "Spend more money on Defence"
