@@ -1,7 +1,7 @@
 Given /^there has been activity on a number of petitions in the last hour$/ do
   (1..10).each do |count|
-    petition = FactoryBot.create(:open_petition, :action => "Petition #{count}", last_signed_at: Time.current)
-    count.times { FactoryBot.create(:validated_signature, :petition => petition) }
+    petition = FactoryBot.create(:open_petition, action: "Petition #{count}")
+    count.times { FactoryBot.create(:validated_signature, petition: petition, validated_at: 2.minutes.ago) }
   end
 end
 

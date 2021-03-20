@@ -65,19 +65,28 @@ module HomeHelper
     t(:"#{key}.html", scope: :"petitions.counts", count: count, formatted_count: number_with_delimiter(count))
   end
 
-  def trending_petitions
-    unless Site.disable_trending_petitions?
-      petitions = fetch_trending_petitions
+  def trending_petitions(period: 1.hour, limit: 3)
+    if Site.disable_trending_petitions?
+      petitions = []
+    else
+      petitions = fetch_trending_petitions(trending_petitions_at, period, limit)
+    end
+
+    if block_given?
       yield petitions unless petitions.empty?
+    else
+      petitions
     end
   end
 
-  def fetch_trending_petitions
-    Rails.cache.fetch(:trending_petitions, expires_in: 5.minutes) do
-      signature_id = Signature.arel_table[:id]
-      signature_count = signature_id.count.as("signature_count_in_period")
-      Petition.trending.pluck(:id, :action, signature_count)
-    end
+  def trending_petitions_at
+    @trending_petitions_at ||= Time.at((Time.now.to_i / 60) * 60).in_time_zone
+  end
+
+  def fetch_trending_petitions(now, period, limit)
+    signature_id = Signature.arel_table[:id]
+    signature_count = signature_id.count.as("signature_count_in_period")
+    Petition.trending(period.ago(now)..now, limit).pluck(:id, :action, signature_count)
   end
   private :fetch_trending_petitions
 end
