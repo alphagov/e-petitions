@@ -117,10 +117,6 @@ RSpec.describe HomeHelper, type: :helper do
       allow(trending).to receive(:pluck).and_return(petitions)
     end
 
-    around do |example|
-      without_cache(:trending_petitions, expires_in: 500) { example.run }
-    end
-
     context "when trending petitions is disabled" do
       let(:petitions) { [[1, "Petition Action", 1000]] }
 
