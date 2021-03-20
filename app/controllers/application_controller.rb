@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :reset_session
 
   before_action :reload_site
   before_action :service_unavailable, unless: :site_enabled?
