@@ -9,9 +9,10 @@ Rails.application.routes.draw do
     end
 
     controller 'pages' do
-      get '/',        action: 'index', as: :home
-      get '/help',    action: 'help'
-      get '/privacy', action: 'privacy'
+      get '/',         action: 'index', as: :home
+      get '/help',     action: 'help'
+      get '/privacy',  action: 'privacy'
+      get '/trending', action: 'trending'
 
       get '/accessibility', action: 'accessibility'
 

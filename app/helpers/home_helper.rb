@@ -66,9 +66,16 @@ module HomeHelper
   end
 
   def trending_petitions(period: 1.hour, limit: 3)
-    unless Site.disable_trending_petitions?
+    if Site.disable_trending_petitions?
+      petitions = []
+    else
       petitions = fetch_trending_petitions(trending_petitions_at, period, limit)
+    end
+
+    if block_given?
       yield petitions unless petitions.empty?
+    else
+      petitions
     end
   end
 

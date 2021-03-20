@@ -136,6 +136,12 @@ RSpec.describe HomeHelper, type: :helper do
       it "doesn't yield" do
         expect { |b| helper.trending_petitions(&b) }.not_to yield_control
       end
+
+      context "and it is called without a block" do
+        it "returns an empty array" do
+          expect(helper.trending_petitions).to eq([])
+        end
+      end
     end
 
     context "when trending petitions is enabled" do
@@ -149,6 +155,12 @@ RSpec.describe HomeHelper, type: :helper do
         it "doesn't yield" do
           expect { |b| helper.trending_petitions(&b) }.not_to yield_control
         end
+
+        context "and it is called without a block" do
+          it "returns an empty array" do
+            expect(helper.trending_petitions).to eq([])
+          end
+        end
       end
 
       context "and there are trending petitions" do
@@ -156,6 +168,12 @@ RSpec.describe HomeHelper, type: :helper do
 
         it "yields the trending petitions" do
           expect { |b| helper.trending_petitions(&b) }.to yield_with_args([[1, "Petition Action", 1000]])
+        end
+
+        context "and it is called without a block" do
+          it "returns the trending petitions" do
+            expect(helper.trending_petitions).to eq([[1, "Petition Action", 1000]])
+          end
         end
       end
     end
