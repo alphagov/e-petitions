@@ -311,14 +311,14 @@ class Petition < ActiveRecord::Base
       where.not(government_response_at: nil).preload(:government_response)
     end
 
-    def trending(since = 1.hour.ago, limit = 3)
+    def trending(interval, limit = 3)
       petitions_star = arel_table[Arel.star]
       signatures = Signature.arel_table
 
       select(petitions_star, signatures[:id].count.as("signature_count_in_period")).
       joins(:signatures).
       where(arel_table[:state].eq(OPEN_STATE)).
-      where(signatures[:validated_at].gt(since)).
+      where(signatures[:validated_at].between(interval)).
       where(signatures[:invalidated_at].eq(nil)).
       group(arel_table[:id]).
       order(signatures[:id].count.desc).

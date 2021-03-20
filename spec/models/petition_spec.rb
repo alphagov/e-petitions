@@ -168,6 +168,9 @@ RSpec.describe Petition, type: :model do
 
   context "scopes" do
     describe "trending" do
+      let(:now) { 1.minute.from_now }
+      let(:interval) { 1.hour.ago(now)..now }
+
       before(:each) do
         11.times do |count|
           petition = FactoryBot.create(:open_petition, action: "petition ##{count+1}", last_signed_at: Time.current)
@@ -179,12 +182,12 @@ RSpec.describe Petition, type: :model do
       end
 
       it "returns petitions trending for the last hour" do
-        expect(Petition.trending.map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
+        expect(Petition.trending(interval).map(&:id).include?(@petition_with_old_signatures.id)).to be_falsey
       end
 
       it "returns the signature count for the last hour as an additional attribute" do
-        expect(Petition.trending.first.signature_count_in_period).to eq(11)
-        expect(Petition.trending.last.signature_count_in_period).to eq(9)
+        expect(Petition.trending(interval).first.signature_count_in_period).to eq(11)
+        expect(Petition.trending(interval).last.signature_count_in_period).to eq(9)
       end
 
       it "limits the result to 3 petitions" do
@@ -194,24 +197,24 @@ RSpec.describe Petition, type: :model do
           count.times { FactoryBot.create(:validated_signature, petition: petition) }
         end
 
-        expect(Petition.trending.to_a.size).to eq(3)
+        expect(Petition.trending(interval).to_a.size).to eq(3)
       end
 
       it "excludes petitions that are not open" do
         petition = FactoryBot.create(:validated_petition)
         20.times{ FactoryBot.create(:validated_signature, petition: petition) }
 
-        expect(Petition.trending.to_a).not_to include(petition)
+        expect(Petition.trending(interval)).not_to include(petition)
       end
 
       it "excludes signatures that have been invalidated" do
-        petition = Petition.trending.first
+        petition = Petition.trending(interval).first
         signature = FactoryBot.create(:validated_signature, petition: petition)
 
-        expect(Petition.trending.first.signature_count_in_period).to eq(12)
+        expect(Petition.trending(interval).first.signature_count_in_period).to eq(12)
 
         signature.invalidate!
-        expect(Petition.trending.first.signature_count_in_period).to eq(11)
+        expect(Petition.trending(interval).first.signature_count_in_period).to eq(11)
       end
     end
 

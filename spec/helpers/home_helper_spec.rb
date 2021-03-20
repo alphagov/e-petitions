@@ -111,10 +111,19 @@ RSpec.describe HomeHelper, type: :helper do
 
   describe "#trending_petitions" do
     let(:trending) { double(Petition) }
+    let(:time) { Time.at(1616240245).in_time_zone }
+    let(:quantum) { Time.at((time.to_i / 60) * 60).in_time_zone }
+    let(:period) { 1.hour }
+    let(:interval) { period.ago(quantum)..quantum }
+    let(:limit) { 3 }
 
     before do
-      allow(Petition).to receive(:trending).and_return(trending)
+      allow(Petition).to receive(:trending).with(interval, limit).and_return(trending)
       allow(trending).to receive(:pluck).and_return(petitions)
+    end
+
+    around do |example|
+      travel_to(time) { example.run }
     end
 
     context "when trending petitions is disabled" do
