@@ -1,12 +1,21 @@
 module Browseable
   extend ActiveSupport::Concern
 
+  VALID_PAGE = /\A[1-9][0-9]{0,4}\z/
+  VALID_PAGE_SIZE = /\A(?:[1-9]|[1-5][0-9])\z/
+
   included do
     class_attribute :facet_definitions, instance_writer: false
     self.facet_definitions = {}
 
     class_attribute :filter_definitions, instance_writer: false
     self.filter_definitions = {}
+
+    class_attribute :default_page_size, instance_writer: false
+    self.default_page_size = 50
+
+    class_attribute :max_page_size, instance_writer: false
+    self.max_page_size = 50
   end
 
   class Facets
@@ -104,6 +113,7 @@ module Browseable
 
     attr_reader :klass, :params
 
+    delegate :default_page_size, :max_page_size, to: :klass
     delegate :offset, :out_of_bounds?, to: :results
     delegate :next_page, :previous_page, to: :results
     delegate :total_entries, :total_pages, to: :results
@@ -114,7 +124,7 @@ module Browseable
     end
 
     def current_page
-      @current_page ||= [params[:page].to_i, 1].max
+      @current_page ||= [sanitized_page, 1].max
     end
 
     def each(&block)
@@ -150,7 +160,7 @@ module Browseable
     end
 
     def page_size
-      @page_size ||= [[params.fetch(:count, 50).to_i, 50].min, 1].max
+      @page_size ||= [[sanitized_page_size, max_page_size].min, 1].max
     end
 
     def previous_params
@@ -241,6 +251,18 @@ module Browseable
 
     def star
       klass.arel_table[Arel.star]
+    end
+
+    def sanitize_param(value, pattern, default)
+      value.match?(pattern) ? Integer(value) : default
+    end
+
+    def sanitized_page
+      sanitize_param(params[:page].to_s, VALID_PAGE, 1)
+    end
+
+    def sanitized_page_size
+      sanitize_param(params[:count].to_s, VALID_PAGE_SIZE, default_page_size)
     end
   end
 

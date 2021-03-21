@@ -79,8 +79,12 @@ class Archived::PetitionsController < ApplicationController
     params[:state].present?
   end
 
+  def sanitized_state
+    params[:state].to_s[0..30].to_sym
+  end
+
   def valid_state?
-    archived_petition_facets.include?(params[:state].to_sym)
+    archived_petition_facets.include?(sanitized_state)
   end
 
   def search_params(overrides = {})
