@@ -18,10 +18,10 @@ docker-compose run --rm web rake db:setup
 docker-compose run --rm web rake epets:add_sysadmin_user
 ```
 
-### Fetch the country list
+### Load the country list
 
 ```
-docker-compose run --rm web rails runner 'FetchCountryRegisterJob.perform_now'
+docker-compose run --rm web rake epets:countries:load
 ```
 
 ### Fetch the regions list
