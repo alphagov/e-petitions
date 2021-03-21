@@ -401,7 +401,7 @@ DEPENDENCIES
   pg
   pickle
   pry
-  puma
+  puma (~> 4.3)
   rails (= 5.2.4.5)
   rails-controller-testing
   rake
