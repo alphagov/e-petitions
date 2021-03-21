@@ -21,10 +21,6 @@
 
 env :PATH, ENV['PATH']
 
-every :day, at: '1.15am' do
-  rake "epets:countries:fetch", output: nil
-end
-
 every :day, at: '1.45am' do
   rake "epets:constituencies:fetch", output: nil
 end

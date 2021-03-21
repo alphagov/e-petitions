@@ -1,3 +1,5 @@
+require 'csv'
+
 namespace :epets do
   desc "Add sysadmin user"
   task :add_sysadmin_user => :environment do
@@ -101,5 +103,24 @@ namespace :epets do
     task :clear => :environment do
       Rails.cache.clear
     end
+  end
+
+  namespace :countries do
+    desc "Load country data"
+    task load: :environment do
+      location = Class.new(ActiveRecord::Base) { self.table_name = "locations" }
+      file = Rails.root.join("data", "countries.csv")
+
+      CSV.foreach(file, headers: true).each do |row|
+        location.create!(row.to_h)
+      end
+    end
+
+    task delete: :environment do
+      location = Class.new(ActiveRecord::Base) { self.table_name = "locations" }
+      location.delete_all
+    end
+
+    task reset: ["epets:countries:delete", "epets:countries:load"]
   end
 end
