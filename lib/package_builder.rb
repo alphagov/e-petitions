@@ -128,9 +128,7 @@ class PackageBuilder
   def create_deployments!
     create_deployment!("Workers")
     create_deployment!("Counter")
-    create_deployment!("Webservers") do
-      notify_appsignal
-    end
+    create_deployment!("Webservers")
   end
 
   def create_deployment!(deployment_group_name, &block)
@@ -250,44 +248,6 @@ class PackageBuilder
 
   def deploy_release?
     ENV.fetch('RELEASE', '1').to_i.nonzero?
-  end
-
-  def notify_appsignal
-    if appsignal_push_api_key
-      conn = Faraday.new(url: "https://push.appsignal.com")
-
-      response = conn.post do |request|
-        request.url '/1/markers'
-
-        request.headers['Content-Type'] = 'application/json'
-
-        request.params = {
-          api_key: appsignal_push_api_key,
-          name: appsignal_app_name,
-          environment: 'production'
-        }
-
-        request.body = <<-JSON.strip_heredoc
-          {
-            "revision": "#{revision}",
-            "repository": "master",
-            "user": "#{username}"
-          }
-        JSON
-      end
-
-      if response.success?
-        info "Notified AppSignal of deployment of #{revision}"
-      end
-    end
-  end
-
-  def appsignal_app_name
-    ENV.fetch('APPSIGNAL_APP_NAME', "welsh-petitions-#{environment}")
-  end
-
-  def appsignal_push_api_key
-    ENV.fetch('APPSIGNAL_PUSH_API_KEY', nil)
   end
 
   def username
