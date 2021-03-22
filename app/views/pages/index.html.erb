@@ -2,7 +2,7 @@
   <h1 class="visuallyhidden"><%= t(:"ui.home_page.heading") %></h1>
 
   <% if Site.show_home_page_message? %>
-    <div class="notification">
+    <div class="notification important">
       <%= markdown_to_html(Site.home_page_message) %>
     </div>
   <% end %>

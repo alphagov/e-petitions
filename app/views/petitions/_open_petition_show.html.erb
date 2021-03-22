@@ -4,7 +4,7 @@
 
 <%= cache_for :petition do %>
   <% if Site.show_petition_page_message? %>
-    <div class="notification">
+    <div class="notification important">
       <%= markdown_to_html(Site.petition_page_message) %>
     </div>
   <% end %>

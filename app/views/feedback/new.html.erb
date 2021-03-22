@@ -1,5 +1,5 @@
 <% if Site.show_feedback_page_message? %>
-  <div class="notification">
+  <div class="notification important">
     <%= markdown_to_html(Site.feedback_page_message) %>
   </div>
 <% end %>

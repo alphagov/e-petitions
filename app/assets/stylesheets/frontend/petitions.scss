@@ -84,6 +84,20 @@
   p {
     margin-bottom: 8px;
   }
+
+  &.important {
+    background-color: $pink;
+    border-color: $pink;
+    color: $white;
+
+    a {
+      color: $white;
+    }
+
+    &::after {
+      @extend %icon-info-white;
+    }
+  }
 }
 
 .search-results, .local-petitions {
