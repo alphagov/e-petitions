@@ -1,29 +1,33 @@
-<%= hidden_field_tag :tab, "petitions" %>
-
 <div class="grid-row">
-  <div class="column-half">
-    <%= form_row for: [form.object, :threshold_for_referral] do %>
-      <%= form.label :threshold_for_referral, "Threshold for referral to the committee", class: "form-label" %>
-      <%= error_messages_for_field @site, :threshold_for_referral %>
-      <%= form.text_field :threshold_for_referral, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
+  <div class="column-two-thirds extra-gutter">
+    <%= hidden_field_tag :tab, "petitions" %>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :threshold_for_debate] do %>
-      <%= form.label :threshold_for_debate, "Threshold for consideration for a debate", class: "form-label" %>
-      <%= error_messages_for_field @site, :threshold_for_debate %>
-      <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
-</div>
+    <div class="grid-row">
+      <div class="column-half">
+        <%= form_row for: [form.object, :threshold_for_referral] do %>
+          <%= form.label :threshold_for_referral, "Threshold for referral to the committee", class: "form-label" %>
+          <%= error_messages_for_field @site, :threshold_for_referral %>
+          <%= form.text_field :threshold_for_referral, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
 
-<div class="grid-row">
-  <div class="column-half">
-    <%= form_row for: [form.object, :petition_duration] do %>
-      <%= form.label :petition_duration, "Duration", class: "form-label" %>
-      <%= error_messages_for_field @site, :petition_duration %>
-      <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %> <span class="suffix">months</span>
-    <% end %>
+      <div class="column-half">
+        <%= form_row for: [form.object, :threshold_for_debate] do %>
+          <%= form.label :threshold_for_debate, "Threshold for consideration for a debate", class: "form-label" %>
+          <%= error_messages_for_field @site, :threshold_for_debate %>
+          <%= form.text_field :threshold_for_debate, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="grid-row">
+      <div class="column-half">
+        <%= form_row for: [form.object, :petition_duration] do %>
+          <%= form.label :petition_duration, "Duration", class: "form-label" %>
+          <%= error_messages_for_field @site, :petition_duration %>
+          <%= form.text_field :petition_duration, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %> <span class="suffix">months</span>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

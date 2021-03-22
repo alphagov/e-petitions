@@ -145,3 +145,17 @@ Feature: Suzie views a petition
     Then I should not see "At 50 signatures..."
     Then I should not see "At 5,000 signatures..."
     And I should see a summary of the debate outcome
+
+  Scenario: Suzie sees a message when viewing a petition and signature collection has been paused
+    Given petitions are not collecting signatures
+    And an open petition "Spend more money on Defence"
+    When I view the petition
+    Then I should see "This petition has stopped collecting signatures"
+    And I cannot sign the petition
+
+  Scenario: Suzie sees a message when viewing a petition and a message has been enabled
+    Given a petition page message has been enabled
+    And an open petition "Spend more money on Defence"
+    When I view the petition
+    Then I should see "We are experiencing delays when signing this petition"
+    And I can sign the petition

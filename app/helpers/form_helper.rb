@@ -1,11 +1,15 @@
 module FormHelper
   COUNTRY_DIVIDER = [["--------------------", "", { disabled: true }]]
 
-  def form_row opts={}, &block
-    css_classes = ['form-group']
-    css_classes.push opts[:class] if opts[:class]
-    css_classes.push 'error' if opts[:for] && opts[:for][0].errors[opts[:for][1]].any?
-    content_tag :div, capture(&block), :class => css_classes.join(' '), style: opts[:style]
+  def form_row(options, &block)
+    classes = %w[form-group]
+    classes.push options.delete(:class) if options.key?(:class)
+
+    object, field = options.delete(:for)
+    classes.push 'error' if object && object.errors[field].any?
+
+    options[:class] = classes.join(' ')
+    content_tag(:div, capture(&block), options)
   end
 
   def countries_for_select
