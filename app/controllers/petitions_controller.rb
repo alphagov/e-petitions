@@ -5,6 +5,8 @@ class PetitionsController < LocalizedController
   before_action :do_not_cache, except: [:index, :show]
   before_action :set_cors_headers, only: [:index, :show, :count], if: :json_request?
 
+  before_action :redirect_to_home_page_if_suspended, only: [:new, :check, :check_results, :create]
+
   before_action :retrieve_petitions, only: [:index]
   before_action :retrieve_petition, only: [:show, :count, :gathering_support, :moderation_info]
   before_action :build_petition_creator, only: [:check, :check_results, :new, :create]
@@ -92,6 +94,10 @@ class PetitionsController < LocalizedController
 
   def request_format
     request.format.json? ? :json : nil
+  end
+
+  def redirect_to_home_page_if_suspended
+    redirect_to home_url if Site.disable_petition_creation?
   end
 
   def retrieve_petitions

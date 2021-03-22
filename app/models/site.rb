@@ -23,6 +23,7 @@ class Site < ActiveRecord::Base
     disable_plus_address_check
     disable_feedback_sending
     disable_collecting_signatures
+    disable_petition_creation
     show_holding_page
   ]
 
