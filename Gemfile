@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '5.2.4.4'
+gem 'rails', '5.2.4.5'
 
 gem 'rake'
 gem 'pg'
@@ -67,5 +67,5 @@ group :test do
 end
 
 group :production do
-  gem 'puma'
+  gem 'puma', '~> 4.3'
 end

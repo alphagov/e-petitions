@@ -107,7 +107,7 @@ class PackageBuilder
     args.concat ['.']
 
     info "Building package ..."
-    Kernel.system(*args)
+    run(*args)
   end
 
   def ci?
@@ -122,15 +122,13 @@ class PackageBuilder
     args.concat [treeish]
 
     info "Creating archive ..."
-    Kernel.system(*args)
+    run(*args)
   end
 
   def create_deployments!
     create_deployment!("Workers")
     create_deployment!("Counter")
-    create_deployment!("Webservers") do
-      notify_appsignal
-    end
+    create_deployment!("Webservers")
   end
 
   def create_deployment!(deployment_group_name, &block)
@@ -216,7 +214,7 @@ class PackageBuilder
     args.concat ['-xf', archive_file]
 
     info "Extracting archive ..."
-    Kernel.system(*args)
+    run(*args)
   end
 
   def info(message)
@@ -231,8 +229,8 @@ class PackageBuilder
     args = %w[bundle package --all --all-platforms --no-install]
 
     info "Packaging gems ..."
-    Bundler.with_clean_env do
-      Kernel.system(*args)
+    with_build_env do
+      run(*args)
     end
   end
 
@@ -250,44 +248,6 @@ class PackageBuilder
 
   def deploy_release?
     ENV.fetch('RELEASE', '1').to_i.nonzero?
-  end
-
-  def notify_appsignal
-    if appsignal_push_api_key
-      conn = Faraday.new(url: "https://push.appsignal.com")
-
-      response = conn.post do |request|
-        request.url '/1/markers'
-
-        request.headers['Content-Type'] = 'application/json'
-
-        request.params = {
-          api_key: appsignal_push_api_key,
-          name: appsignal_app_name,
-          environment: 'production'
-        }
-
-        request.body = <<-JSON.strip_heredoc
-          {
-            "revision": "#{revision}",
-            "repository": "master",
-            "user": "#{username}"
-          }
-        JSON
-      end
-
-      if response.success?
-        info "Notified AppSignal of deployment of #{revision}"
-      end
-    end
-  end
-
-  def appsignal_app_name
-    ENV.fetch('APPSIGNAL_APP_NAME', "welsh-petitions-#{environment}")
-  end
-
-  def appsignal_push_api_key
-    ENV.fetch('APPSIGNAL_PUSH_API_KEY', nil)
   end
 
   def username
@@ -311,7 +271,7 @@ class PackageBuilder
     args.concat [archive_file]
 
     info "Removing archive ..."
-    Kernel.system(*args)
+    run(*args)
   end
 
   def remove_artifacts
@@ -319,7 +279,7 @@ class PackageBuilder
     args.concat %w[.bundle log tmp]
 
     info "Removing build artifacts ..."
-    Kernel.system(*args)
+    run(*args)
   end
 
   def revision_file
@@ -481,5 +441,28 @@ class PackageBuilder
 
   def script_file_path(name)
     File.expand_path("../package_builder/scripts/#{name}.sh", __FILE__)
+  end
+
+  def with_build_env
+    # Force specific_platform to be true
+    # https://github.com/rubygems/bundler/issues/5863
+    env = Bundler.original_env
+    env["BUNDLE_SPECIFIC_PLATFORM"] = "true"
+
+    # Ensure that we pick up the archive's Gemfile
+    env.delete("BUNDLE_GEMFILE")
+
+    backup = ENV.to_hash
+    ENV.replace(env)
+
+    yield
+  ensure
+    ENV.replace(backup)
+  end
+
+  def run(*args)
+    unless Kernel.system(*args)
+      abort("Error running `#{args.join(' ')}`")
+    end
   end
 end

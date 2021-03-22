@@ -1,92 +1,96 @@
-<%= hidden_field_tag :tab, "features" %>
-<%= hidden_field_tag :"site[features]", "" %>
-
 <div class="grid-row">
-  <div class="column-half">
-    <%= form_row for: [form.object, :disable_daily_update_statistics_job], class: "inline" do %>
-      <%= form.label :disable_daily_update_statistics_job, "Disable updating of petition statistics?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_daily_update_statistics_job %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_daily_update_statistics_job, true %>
-        <%= form.label :disable_daily_update_statistics_job, "Yes", for: "site_disable_daily_update_statistics_job_true" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_daily_update_statistics_job, false %>
-        <%= form.label :disable_daily_update_statistics_job, "No", for: "site_disable_daily_update_statistics_job_false" %>
-      </div>
-    <% end %>
+  <div class="column-two-thirds extra-gutter">
+    <%= hidden_field_tag :tab, "features" %>
+    <%= hidden_field_tag :"site[features]", "" %>
 
-    <%= form_row for: [form.object, :disable_invalid_signature_count_check], class: "inline" do %>
-      <%= form.label :disable_invalid_signature_count_check, "Disable signature count checking?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_invalid_signature_count_check %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_invalid_signature_count_check, true %>
-        <%= form.label :disable_invalid_signature_count_check, "Yes", for: "site_disable_invalid_signature_count_check_true" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_invalid_signature_count_check, false %>
-        <%= form.label :disable_invalid_signature_count_check, "No", for: "site_disable_invalid_signature_count_check_false" %>
-      </div>
-    <% end %>
+    <div class="grid-row">
+      <div class="column-half">
+        <%= form_row for: [form.object, :disable_daily_update_statistics_job], class: "inline" do %>
+          <%= form.label :disable_daily_update_statistics_job, "Disable updating of petition statistics?", class: "form-label" %>
+          <%= error_messages_for_field @site, :disable_daily_update_statistics_job %>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_daily_update_statistics_job, true %>
+            <%= form.label :disable_daily_update_statistics_job, "Yes", for: "site_disable_daily_update_statistics_job_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_daily_update_statistics_job, false %>
+            <%= form.label :disable_daily_update_statistics_job, "No", for: "site_disable_daily_update_statistics_job_false" %>
+          </div>
+        <% end %>
 
-    <%= form_row for: [form.object, :update_signature_counts], class: "inline" do %>
-      <%= form.label :update_signature_counts, "Disable automatic signature counting?", class: "form-label" %>
-      <%= error_messages_for_field @site, :update_signature_counts %>
-      <div class="multiple-choice">
-        <%= form.radio_button :update_signature_counts, false %>
-        <%= form.label :update_signature_counts, "Yes", for: "site_update_signature_counts_false" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :update_signature_counts, true %>
-        <%= form.label :update_signature_counts, "No", for: "site_update_signature_counts_true" %>
-      </div>
-    <% end %>
+        <%= form_row for: [form.object, :disable_invalid_signature_count_check], class: "inline" do %>
+          <%= form.label :disable_invalid_signature_count_check, "Disable signature count checking?", class: "form-label" %>
+          <%= error_messages_for_field @site, :disable_invalid_signature_count_check %>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_invalid_signature_count_check, true %>
+            <%= form.label :disable_invalid_signature_count_check, "Yes", for: "site_disable_invalid_signature_count_check_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_invalid_signature_count_check, false %>
+            <%= form.label :disable_invalid_signature_count_check, "No", for: "site_disable_invalid_signature_count_check_false" %>
+          </div>
+        <% end %>
 
-    <%= form_row for: [form.object, :signature_count_interval] do %>
-      <%= form.label :signature_count_interval, "Signature count update interval", class: "form-label" %>
-      <%= error_messages_for_field @site, :signature_count_interval %>
-      <%= form.select :signature_count_interval, signature_count_interval_menu, {}, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
+        <%= form_row for: [form.object, :update_signature_counts], class: "inline" do %>
+          <%= form.label :update_signature_counts, "Disable automatic signature counting?", class: "form-label" %>
+          <%= error_messages_for_field @site, :update_signature_counts %>
+          <div class="multiple-choice">
+            <%= form.radio_button :update_signature_counts, false %>
+            <%= form.label :update_signature_counts, "Yes", for: "site_update_signature_counts_false" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :update_signature_counts, true %>
+            <%= form.label :update_signature_counts, "No", for: "site_update_signature_counts_true" %>
+          </div>
+        <% end %>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :disable_plus_address_check], class: "inline" do %>
-      <%= form.label :disable_plus_address_check, "Disable check for '+' email addressing?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_plus_address_check %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_plus_address_check, true %>
-        <%= form.label :disable_plus_address_check, "Yes", for: "site_disable_plus_address_check_true" %>
+        <%= form_row for: [form.object, :signature_count_interval] do %>
+          <%= form.label :signature_count_interval, "Signature count update interval", class: "form-label" %>
+          <%= error_messages_for_field @site, :signature_count_interval %>
+          <%= form.select :signature_count_interval, signature_count_interval_menu, {}, class: "form-control form-control-1-2" %>
+        <% end %>
       </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_plus_address_check, false %>
-        <%= form.label :disable_plus_address_check, "No", for: "site_disable_plus_address_check_false" %>
-      </div>
-    <% end %>
 
-    <%= form_row for: [form.object, :disable_constituency_api], class: "inline" do %>
-      <%= form.label :disable_constituency_api, "Disable constituency lookup?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_constituency_api %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_constituency_api, true %>
-        <%= form.label :disable_constituency_api, "Yes", for: "site_disable_constituency_api_true" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_constituency_api, false %>
-        <%= form.label :disable_constituency_api, "No", for: "site_disable_constituency_api_false" %>
-      </div>
-    <% end %>
+      <div class="column-half">
+        <%= form_row for: [form.object, :disable_plus_address_check], class: "inline" do %>
+          <%= form.label :disable_plus_address_check, "Disable check for '+' email addressing?", class: "form-label" %>
+          <%= error_messages_for_field @site, :disable_plus_address_check %>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_plus_address_check, true %>
+            <%= form.label :disable_plus_address_check, "Yes", for: "site_disable_plus_address_check_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_plus_address_check, false %>
+            <%= form.label :disable_plus_address_check, "No", for: "site_disable_plus_address_check_false" %>
+          </div>
+        <% end %>
 
-    <%= form_row for: [form.object, :disable_trending_petitions], class: "inline" do %>
-      <%= form.label :disable_trending_petitions, "Disable trending petitions?", class: "form-label" %>
-      <%= error_messages_for_field @site, :disable_trending_petitions %>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_trending_petitions, true %>
-        <%= form.label :disable_trending_petitions, "Yes", for: "site_disable_constituency_api_true" %>
+        <%= form_row for: [form.object, :disable_constituency_api], class: "inline" do %>
+          <%= form.label :disable_constituency_api, "Disable constituency lookup?", class: "form-label" %>
+          <%= error_messages_for_field @site, :disable_constituency_api %>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_constituency_api, true %>
+            <%= form.label :disable_constituency_api, "Yes", for: "site_disable_constituency_api_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_constituency_api, false %>
+            <%= form.label :disable_constituency_api, "No", for: "site_disable_constituency_api_false" %>
+          </div>
+        <% end %>
+
+        <%= form_row for: [form.object, :disable_trending_petitions], class: "inline" do %>
+          <%= form.label :disable_trending_petitions, "Disable trending petitions?", class: "form-label" %>
+          <%= error_messages_for_field @site, :disable_trending_petitions %>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_trending_petitions, true %>
+            <%= form.label :disable_trending_petitions, "Yes", for: "site_disable_constituency_api_true" %>
+          </div>
+          <div class="multiple-choice">
+            <%= form.radio_button :disable_trending_petitions, false %>
+            <%= form.label :disable_trending_petitions, "No", for: "site_disable_constituency_api_false" %>
+          </div>
+        <% end %>
       </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :disable_trending_petitions, false %>
-        <%= form.label :disable_trending_petitions, "No", for: "site_disable_constituency_api_false" %>
-      </div>
-    <% end %>
+    </div>
   </div>
 </div>

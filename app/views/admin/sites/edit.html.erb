@@ -4,22 +4,20 @@
   <div class="grid-column">
     <%= render "admin/shared/site_tabs" %>
   </div>
-
-  <div class="column-two-thirds extra-gutter">
-    <% if params[:tab] == "welsh" %>
-      <%= render "form", tab: "welsh" %>
-    <% elsif params[:tab] == "petitions" %>
-      <%= render "form", tab: "petitions" %>
-    <% elsif params[:tab] == "moderation" %>
-      <%= render "form", tab: "moderation" %>
-    <% elsif params[:tab] == "feedback" %>
-      <%= render "form", tab: "feedback" %>
-    <% elsif params[:tab] == "access" %>
-      <%= render "form", tab: "access" %>
-    <% elsif params[:tab] == "features" %>
-      <%= render "form", tab: "features" %>
-    <% else %>
-      <%= render "form", tab: "english" %>
-    <% end %>
-  </div>
 </div>
+
+<% if params[:tab] == "welsh" %>
+  <%= render "form", tab: "welsh" %>
+<% elsif params[:tab] == "petitions" %>
+  <%= render "form", tab: "petitions" %>
+<% elsif params[:tab] == "moderation" %>
+  <%= render "form", tab: "moderation" %>
+<% elsif params[:tab] == "feedback" %>
+  <%= render "form", tab: "feedback" %>
+<% elsif params[:tab] == "access" %>
+  <%= render "form", tab: "access" %>
+<% elsif params[:tab] == "features" %>
+  <%= render "form", tab: "features" %>
+<% else %>
+  <%= render "form", tab: "english" %>
+<% end %>

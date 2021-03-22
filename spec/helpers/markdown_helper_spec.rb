@@ -13,6 +13,18 @@ RSpec.describe MarkdownHelper, type: :helper do
     it "returns an empty string when the markup is nil" do
       expect(helper.markdown_to_html(nil)).to eq("")
     end
+
+    it "sanitizes href attributes" do
+      expect(helper.markdown_to_html(%[<a href="javascript:alert('Hello, World!');">Hello, World!</a>])).to eq(%[<p><a>Hello, World!</a></p>\n])
+    end
+
+    it "sanitizes event handlers" do
+      expect(helper.markdown_to_html(%[<a onclick="alert('Hello, World!');">Hello, World!</a>])).to eq(%[<p><a>Hello, World!</a></p>\n])
+    end
+
+    it "sanitizes <script> tags" do
+      expect(helper.markdown_to_html(%[<script>alert('Hello, World!');</script>])).to eq(%[alert('Hello, World!');\n])
+    end
   end
 
   describe "#markdown_to_text" do

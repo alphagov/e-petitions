@@ -6,6 +6,9 @@ default: &defaults
   # Your app's name
   name: "<%= ENV['APPSIGNAL_APP_NAME'] %>"
 
+  # Your app's revision
+  revision: "<%= File.exist?('REVISION') ? File.read('REVISION') : '' %>"
+
   # The cut-off point in ms above which a request is considered slow, default is 200
   # slow_request_threshold: 200
 

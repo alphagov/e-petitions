@@ -153,6 +153,10 @@
       }
     }
 
+    .multiple-choice + p {
+      clear: both;
+    }
+
     .panel-indent {
       margin: 15px 0 15px 0;
       padding: 5px 0 5px 15px;

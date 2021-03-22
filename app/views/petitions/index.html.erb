@@ -1,3 +1,9 @@
+<% if Site.show_home_page_message? %>
+  <div class="notification important">
+    <%= markdown_to_html(Site.home_page_message) %>
+  </div>
+<% end %>
+
 <details class="lists-of-petitions">
   <summary><span class="summary"><%= t(:"ui.petitions.other_lists") %></span></summary>
   <div>

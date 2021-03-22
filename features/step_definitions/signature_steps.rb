@@ -1,3 +1,7 @@
+Then /^I can sign the petition$/ do
+  expect(page).to have_css("a", :text => "Sign")
+end
+
 Then /^I cannot sign the petition$/ do
   expect(page).not_to have_css("a", :text => "Sign")
 end

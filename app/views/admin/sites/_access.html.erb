@@ -1,7 +1,182 @@
 <%= hidden_field_tag :tab, "access" %>
 
 <div class="grid-row">
+  <div class="column-half extra-gutter">
+    <%= form_row for: [form.object, :disable_petition_creation], class: "inline" do %>
+      <%= form.label :disable_petition_creation, "Stop new petitions from being created?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_petition_creation %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, true %>
+        <%= form.label :disable_petition_creation, "Yes", for: "site_disable_petition_creation_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_petition_creation, false %>
+        <%= form.label :disable_petition_creation, "No", for: "site_disable_petition_creation_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :disable_collecting_signatures], class: "inline" do %>
+      <%= form.label :disable_collecting_signatures, "Stop collecting signatures on all open petitions?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_collecting_signatures %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_collecting_signatures, true %>
+        <%= form.label :disable_collecting_signatures, "Yes", for: "site_disable_collecting_signatures_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_collecting_signatures, false %>
+        <%= form.label :disable_collecting_signatures, "No", for: "site_disable_collecting_signatures_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :show_home_page_message], class: "inline message-control" do %>
+      <%= form.label :show_home_page_message, "Show message on the home page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_home_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_home_page_message, true %>
+        <%= form.label :show_home_page_message, "Show", for: "site_show_home_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_home_page_message, false %>
+        <%= form.label :show_home_page_message, "Hide", for: "site_show_home_page_message_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :home_page_message_en], id: "home-page-message-en", class: "message-field", style: "display: none;" do %>
+      <%= form.label :home_page_message_en, "Message for the English home page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :home_page_message_en %>
+      <%= form.text_area :home_page_message_en, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [form.object, :home_page_message_cy], id: "home-page-message-cy", class: "message-field", style: "display: none;" do %>
+      <%= form.label :home_page_message_cy, "Message for the Welsh home page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :home_page_message_cy %>
+      <%= form.text_area :home_page_message_cy, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [form.object, :show_petition_page_message], class: "inline message-control" do %>
+      <%= form.label :show_petition_page_message, "Show message on the petition page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_petition_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_petition_page_message, true %>
+        <%= form.label :show_petition_page_message, "Show", for: "site_show_petition_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_petition_page_message, false %>
+        <%= form.label :show_petition_page_message, "Hide", for: "site_show_petition_page_message_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :petition_page_message_en], id: "petition-page-message-en", class: "message-field", style: "display: none;" do %>
+      <%= form.label :petition_page_message_en, "Message for the English petition page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :petition_page_message_en %>
+      <%= form.text_area :petition_page_message_en, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [form.object, :petition_page_message_cy], id: "petition-page-message-cy", class: "message-field", style: "display: none;" do %>
+      <%= form.label :petition_page_message_cy, "Message for the Welsh petition page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :petition_page_message_cy %>
+      <%= form.text_area :petition_page_message_cy, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
+
+    <%= javascript_tag do %>
+      $().ready(function() {
+        var $disabled_true = $('input[name="site[disable_collecting_signatures]"][value=true]');
+        var $disabled = $('input[name="site[disable_collecting_signatures]"]');
+        var $show_home_page_true = $('input[name="site[show_home_page_message]"][value=true]');
+        var $show_home_page = $('input[name="site[show_home_page_message]"]');
+        var $home_page_msg_en = $('#home-page-message-en');
+        var $home_page_msg_cy = $('#home-page-message-cy');
+        var $show_petition_page_true = $('input[name="site[show_petition_page_message]"][value=true]');
+        var $show_petition_page = $('input[name="site[show_petition_page_message]"]');
+        var $petition_page_msg_en = $('#petition-page-message-en');
+        var $petition_page_msg_cy = $('#petition-page-message-cy');
+        var $message_fields = $('.message-field');
+        var $message_controls = $('.message-control');
+
+        var blurAndFocus = function() {
+          this.blur();
+          this.focus();
+        }
+
+        var toggleMessageField = function(control, field) {
+          if (control.is(':checked')) {
+            field.show();
+          } else {
+            field.hide();
+          }
+        }
+
+        toggleMessageField($show_home_page_true, $home_page_msg_en);
+        toggleMessageField($show_home_page_true, $home_page_msg_cy);
+        toggleMessageField($show_petition_page_true, $petition_page_msg_en);
+        toggleMessageField($show_petition_page_true, $petition_page_msg_cy);
+
+        if ($disabled_true.is(':checked')) {
+          $message_controls.hide();
+          $message_fields.show();
+        }
+
+        $disabled.keyup(blurAndFocus).change(function() {
+          if ($disabled_true.is(':checked')) {
+            $message_controls.hide();
+            $message_fields.show();
+          } else {
+            $message_controls.show();
+
+            toggleMessageField($show_home_page_true, $home_page_msg_en);
+            toggleMessageField($show_home_page_true, $home_page_msg_cy);
+            toggleMessageField($show_petition_page_true, $petition_page_msg_en);
+            toggleMessageField($show_petition_page_true, $petition_page_msg_cy);
+          }
+        });
+
+        $show_home_page.keyup(blurAndFocus).change(function() {
+          toggleMessageField($show_home_page_true, $home_page_msg_en);
+          toggleMessageField($show_home_page_true, $home_page_msg_cy);
+        });
+
+        $show_petition_page.keyup(blurAndFocus).change(function() {
+          toggleMessageField($show_petition_page_true, $petition_page_msg_en);
+          toggleMessageField($show_petition_page_true, $petition_page_msg_cy);
+        });
+      });
+    <% end -%>
+  </div>
   <div class="column-half">
+    <%= form_row for: [form.object, :enabled], class: "inline" do %>
+      <%= form.label :enabled, "Disable public website?", class: "form-label" %>
+      <%= error_messages_for_field @site, :enabled %>
+      <div class="multiple-choice">
+        <%= form.radio_button :enabled, false %>
+        <%= form.label :enabled, "Yes", for: "site_enabled_false" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :enabled, true %>
+        <%= form.label :enabled, "No", for: "site_enabled_true" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :show_holding_page], class: "inline" do %>
+      <%= form.label :show_holding_page, "Show holding page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :enabled %>
+      <div style="overflow: hidden;">
+        <div class="multiple-choice">
+          <%= form.radio_button :show_holding_page, true %>
+          <%= form.label :show_holding_page, "Yes", for: "show_holding_page_true" %>
+        </div>
+        <div class="multiple-choice">
+          <%= form.radio_button :show_holding_page, false %>
+          <%= form.label :show_holding_page, "No", for: "show_holding_page_false" %>
+        </div>
+      </div>
+      <% if Site.show_holding_page? %>
+        <p style="clear: both; margin: 8px 0 0 0;">
+          Bypass: <%= link_to "English", home_en_url(bypass: Site.bypass_token), target: "_blank" %> |
+          <%= link_to "Welsh", home_cy_url(bypass: Site.bypass_token), target: "_blank" %>
+        </p>
+      <% end %>
+    <% end %>
+
     <%= form_row for: [form.object, :protected], class: "inline" do %>
       <%= form.label :protected, "Password protect public website?", class: "form-label" %>
       <%= error_messages_for_field @site, :protected %>
@@ -28,66 +203,32 @@
         <%= form.password_field :password, tabindex: increment, maxlength: 50, class: "form-control" %>
       <% end %>
     </div>
-  </div>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :enabled], class: "inline" do %>
-      <%= form.label :enabled, "Disable public website?", class: "form-label" %>
-      <%= error_messages_for_field @site, :enabled %>
-      <div class="multiple-choice">
-        <%= form.radio_button :enabled, false %>
-        <%= form.label :enabled, "Yes", for: "site_enabled_false" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :enabled, true %>
-        <%= form.label :enabled, "No", for: "site_enabled_true" %>
-      </div>
-    <% end %>
+    <%= javascript_tag do %>
+      $().ready(function() {
+        var $protected_fields = $('#protected-fields'),
+            $true_control = $('input[name="site[protected]"][value=true]'),
+            $false_control = $('input[name="site[protected]"][value=false]'),
+            $all_controls = $('input[name="site[protected]"][type=radio]');
 
-    <%= form_row for: [form.object, :show_holding_page], class: "inline" do %>
-      <%= form.label :show_holding_page, "Show holding page?", class: "form-label" %>
-      <%= error_messages_for_field @site, :enabled %>
-      <div class="multiple-choice">
-        <%= form.radio_button :show_holding_page, true %>
-        <%= form.label :show_holding_page, "Yes", for: "show_holding_page_true" %>
-      </div>
-      <div class="multiple-choice">
-        <%= form.radio_button :show_holding_page, false %>
-        <%= form.label :show_holding_page, "No", for: "show_holding_page_false" %>
-      </div>
-    <% end %>
+        if ($true_control.is(':checked')) {
+          $protected_fields.show();
+        } else {
+          $protected_fields.hide();
+        }
 
-    <% if Site.show_holding_page? %>
-      <p>
-        Bypass: <%= link_to "English", home_en_url(bypass: Site.bypass_token), target: "_blank" %> |
-        <%= link_to "Welsh", home_cy_url(bypass: Site.bypass_token), target: "_blank" %>
-      </p>
-    <% end %>
+        $all_controls.keyup(function() {
+          this.blur();
+          this.focus();
+        }).change(function() {
+          if ($true_control.is(':checked')) {
+            $protected_fields.show();
+          } else {
+            $protected_fields.hide();
+          }
+        });
+      });
+    <% end -%>
   </div>
 </div>
 
-<%= javascript_tag do %>
-  $().ready(function() {
-    var $protected_fields = $('#protected-fields'),
-        $true_control = $('input[name="site[protected]"][value=true]'),
-        $false_control = $('input[name="site[protected]"][value=false]'),
-        $all_controls = $('input[name="site[protected]"][type=radio]');
-
-    if ($true_control.is(':checked')) {
-      $protected_fields.show();
-    } else {
-      $protected_fields.hide();
-    }
-
-    $all_controls.keyup(function() {
-      this.blur();
-      this.focus();
-    }).change(function() {
-      if ($true_control.is(':checked')) {
-        $protected_fields.show();
-      } else {
-        $protected_fields.hide();
-      }
-    });
-  });
-<% end -%>

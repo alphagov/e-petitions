@@ -45,6 +45,10 @@ every :day, at: '7.15am' do
   rake "wpets:petitions:debated", output: nil
 end
 
+every :day, at: '7.30am' do
+  rake "wpets:petitions:extend_deadline", output: nil
+end
+
 every 15.minutes do
   rake "wpets:site:signature_counts", output: nil
 end

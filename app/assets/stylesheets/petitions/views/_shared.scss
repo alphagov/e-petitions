@@ -90,17 +90,21 @@ input.back-page {
     left: $gutter-half;
   }
 
-  .header {
+  h3, .header {
     margin-top: 0px;
     @include bold-24();
   }
 
-  .content {
+  p {
     margin-top: 0px;
+    @include core-19();
+  }
+
+  p.content {
     @include bold-19();
   }
 
-  .link {
+  p.link {
     @include core-16();
   }
 

@@ -11,3 +11,8 @@ Feature: User sends feedback
   Scenario: User must supply fields
     Given I am on the feedback page
     Then I cannot submit feedback without filling in the required fields
+
+  Scenario: User sees a message when submitting feedback and a message has been enabled
+    Given a feedback page message has been enabled
+    When I am on the feedback page
+    Then I should see "Petition moderation is experiencing delays"

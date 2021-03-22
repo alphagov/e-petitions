@@ -16,6 +16,17 @@ RSpec.describe PetitionsController, type: :controller do
       get :new, params: { q: "my fancy new action" }
       expect(assigns[:new_petition].action).to eq("my fancy new action")
     end
+
+    context "when creating petitions has been suspended" do
+      before do
+        allow(Site).to receive(:disable_petition_creation?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :new
+        expect(response).to redirect_to("https://petitions.senedd.wales/")
+      end
+    end
   end
 
   describe "POST /petitions/new" do
@@ -249,6 +260,20 @@ RSpec.describe PetitionsController, type: :controller do
         expect(response).to redirect_to("https://petitions.senedd.wales/petitions/thank-you")
       end
     end
+
+    context "when creating petitions has been suspended" do
+      before do
+        allow(Site).to receive(:disable_petition_creation?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        perform_enqueued_jobs do
+          post :create, params: { stage: "replay_email", petition_creator: params }
+        end
+
+        expect(response).to redirect_to("https://petitions.senedd.wales/")
+      end
+    end
   end
 
   describe "GET /petitions/:id" do
@@ -317,12 +342,34 @@ RSpec.describe PetitionsController, type: :controller do
       get :check
       expect(response).to be_successful
     end
+
+    context "when creating petitions has been suspended" do
+      before do
+        allow(Site).to receive(:disable_petition_creation?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+        get :check
+        expect(response).to redirect_to("https://petitions.senedd.wales/")
+      end
+    end
   end
 
   describe "GET /petitions/check_results" do
     it "is successful" do
       get :check_results, params: { q: "action" }
       expect(response).to be_successful
+    end
+
+    context "when creating petitions has been suspended" do
+      before do
+        allow(Site).to receive(:disable_petition_creation?).and_return(true)
+      end
+
+      it "redirects to the home page" do
+      get :check_results, params: { q: "action" }
+        expect(response).to redirect_to("https://petitions.senedd.wales/")
+      end
     end
   end
 end

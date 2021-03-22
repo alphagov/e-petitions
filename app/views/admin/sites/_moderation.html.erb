@@ -1,47 +1,51 @@
-<%= hidden_field_tag :tab, "moderation" %>
-
 <div class="grid-row">
-  <div class="column-half">
-    <%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
-      <%= form.label :minimum_number_of_sponsors, class: "form-label" %>
-      <%= error_messages_for_field @site, :minimum_number_of_sponsors %>
-      <%= form.text_field :minimum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
+  <div class="column-two-thirds extra-gutter">
+    <%= hidden_field_tag :tab, "moderation" %>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :maximum_number_of_sponsors] do %>
-      <%= form.label :maximum_number_of_sponsors, class: "form-label" %>
-      <%= error_messages_for_field @site, :maximum_number_of_sponsors %>
-      <%= form.text_field :maximum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
+    <div class="grid-row">
+      <div class="column-half">
+        <%= form_row for: [form.object, :minimum_number_of_sponsors] do %>
+          <%= form.label :minimum_number_of_sponsors, class: "form-label" %>
+          <%= error_messages_for_field @site, :minimum_number_of_sponsors %>
+          <%= form.text_field :minimum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :threshold_for_moderation] do %>
-      <%= form.label :threshold_for_moderation, "Threshold for moderation", class: "form-label" %>
-      <%= error_messages_for_field @site, :threshold_for_moderation %>
-      <%= form.text_field :threshold_for_moderation, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
-    <% end %>
-  </div>
+      <div class="column-half">
+        <%= form_row for: [form.object, :maximum_number_of_sponsors] do %>
+          <%= form.label :maximum_number_of_sponsors, class: "form-label" %>
+          <%= error_messages_for_field @site, :maximum_number_of_sponsors %>
+          <%= form.text_field :maximum_number_of_sponsors, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
 
-  <div class="column-half">
-    <%= form_row for: [form.object, :threshold_for_moderation_delay] do %>
-      <%= form.label :threshold_for_moderation_delay, "Threshold for moderation delay", class: "form-label" %>
-      <%= error_messages_for_field @site, :threshold_for_moderation_delay %>
-      <%= form.text_field :threshold_for_moderation_delay, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+      <div class="column-half">
+        <%= form_row for: [form.object, :threshold_for_moderation] do %>
+          <%= form.label :threshold_for_moderation, "Threshold for moderation", class: "form-label" %>
+          <%= error_messages_for_field @site, :threshold_for_moderation %>
+          <%= form.text_field :threshold_for_moderation, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
+
+      <div class="column-half">
+        <%= form_row for: [form.object, :threshold_for_moderation_delay] do %>
+          <%= form.label :threshold_for_moderation_delay, "Threshold for moderation delay", class: "form-label" %>
+          <%= error_messages_for_field @site, :threshold_for_moderation_delay %>
+          <%= form.text_field :threshold_for_moderation_delay, tabindex: increment, maxlength: 10, class: "form-control form-control-1-2" %>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form_row for: [form.object, :moderate_url] do %>
+      <%= form.label :moderate_url, "URL for moderation website", class: "form-label" %>
+      <%= error_messages_for_field @site, :moderate_url %>
+      <%= form.text_field :moderate_url, tabindex: increment, maxlength: 50, class: "form-control" %>
+    <% end %>
+
+    <%= form_row for: [form.object, :login_timeout] do %>
+      <%= form.label :login_timeout, "Login timeout for moderation users", class: "form-label" %>
+      <%= error_messages_for_field @site, :login_timeout %>
+      <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">seconds</span>
     <% end %>
   </div>
 </div>
-
-<%= form_row for: [form.object, :moderate_url] do %>
-  <%= form.label :moderate_url, "URL for moderation website", class: "form-label" %>
-  <%= error_messages_for_field @site, :moderate_url %>
-  <%= form.text_field :moderate_url, tabindex: increment, maxlength: 50, class: "form-control" %>
-<% end %>
-
-<%= form_row for: [form.object, :login_timeout] do %>
-  <%= form.label :login_timeout, "Login timeout for moderation users", class: "form-label" %>
-  <%= error_messages_for_field @site, :login_timeout %>
-  <%= form.text_field :login_timeout, tabindex: increment, maxlength: 10, class: "form-control form-control-1-4" %> <span class="suffix">seconds</span>
-<% end %>

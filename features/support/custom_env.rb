@@ -66,9 +66,14 @@ module CucumberI18n
 end
 
 module CucumberSanitizer
+  def sanitize(html, options = {})
+    @safe_list_sanitizer ||= Rails::Html::SafeListSanitizer.new
+    @safe_list_sanitizer.sanitize(html, options).html_safe
+  end
+
   def strip_tags(html)
-    @sanitizer ||= Rails::Html::FullSanitizer.new
-    @sanitizer.sanitize(html, encode_special_chars: false)
+    @full_sanitizer ||= Rails::Html::FullSanitizer.new
+    @full_sanitizer.sanitize(html, encode_special_chars: false)
   end
 end
 

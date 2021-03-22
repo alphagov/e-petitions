@@ -1,17 +1,21 @@
-<%= form_row for: [form.object, :title_en] do %>
-  <%= form.label :title_en, "Title", class: "form-label" %>
-  <%= error_messages_for_field @site, :title_en %>
-  <%= form.text_field :title_en, tabindex: increment, maxlength: 50, class: "form-control" %>
-<% end %>
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= form_row for: [form.object, :title_en] do %>
+      <%= form.label :title_en, "Title", class: "form-label" %>
+      <%= error_messages_for_field @site, :title_en %>
+      <%= form.text_field :title_en, tabindex: increment, maxlength: 50, class: "form-control" %>
+    <% end %>
 
-<%= form_row for: [form.object, :url_en] do %>
-  <%= form.label :url_en, "URL for public website", class: "form-label" %>
-  <%= error_messages_for_field @site, :url_en %>
-  <%= form.text_field :url_en, tabindex: increment, maxlength: 50, class: "form-control" %>
-<% end %>
+    <%= form_row for: [form.object, :url_en] do %>
+      <%= form.label :url_en, "URL for public website", class: "form-label" %>
+      <%= error_messages_for_field @site, :url_en %>
+      <%= form.text_field :url_en, tabindex: increment, maxlength: 50, class: "form-control" %>
+    <% end %>
 
-<%= form_row for: [form.object, :email_from_en] do %>
-  <%= form.label :email_from_en, "From address for emails", class: "form-label" %>
-  <%= error_messages_for_field @site, :email_from_en %>
-  <%= form.text_field :email_from_en, tabindex: increment, maxlength: 100, class: "form-control" %>
-<% end %>
+    <%= form_row for: [form.object, :email_from_en] do %>
+      <%= form.label :email_from_en, "From address for emails", class: "form-label" %>
+      <%= error_messages_for_field @site, :email_from_en %>
+      <%= form.text_field :email_from_en, tabindex: increment, maxlength: 100, class: "form-control" %>
+    <% end %>
+  </div>
+</div>

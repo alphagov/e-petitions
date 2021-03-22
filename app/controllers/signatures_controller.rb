@@ -169,13 +169,13 @@ class SignaturesController < LocalizedController
   end
 
   def redirect_to_petition_page_if_closed
-    if @petition.closed?
+    if @petition.closed? || Site.signature_collection_disabled?
       redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
     end
   end
 
   def redirect_to_petition_page_if_closed_for_signing
-    if @petition.closed_for_signing?
+    if @petition.closed_for_signing? || Site.signature_collection_disabled?
       redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
     end
   end

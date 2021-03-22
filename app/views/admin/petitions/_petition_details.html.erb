@@ -141,7 +141,7 @@
 <% end %>
 </dl>
 
-<% if current_user.is_a_sysadmin? %>
+<% if current_user.is_a_sysadmin? && @petition.published? %>
   <div class="statistics-meta">
     <small>
       <% if @petition.statistics.refreshed? %>

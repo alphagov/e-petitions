@@ -12,11 +12,13 @@
             <%= t(:"ui.footer.nav.all_petitions") %>
           <% end %>
         </li>
-        <li>
-          <%= link_to check_petitions_path do %>
-            <%= t(:"ui.footer.nav.start_a_petition") %>
-          <% end %>
-        </li>
+        <% unless Site.disable_petition_creation? %>
+          <li>
+            <%= link_to check_petitions_path do %>
+              <%= t(:"ui.footer.nav.start_a_petition") %>
+            <% end %>
+          </li>
+        <% end %>
         <li>
           <%= link_to help_path do %>
             <%= t(:"ui.footer.nav.how_petitions_work") %>

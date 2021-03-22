@@ -49,6 +49,7 @@
   @extend %animated;
   @extend %bounce;
 
+  background-color: $white;
   border: 2px solid $border-color;
   color: $text-color;
   font-weight: 600;
@@ -68,8 +69,35 @@
     width: 24px;
   }
 
-  p {
+  & > *:first-child {
+    margin-top: 0;
+  }
+
+  & > *:last-child {
     margin-bottom: 0;
+  }
+
+  h2, h3 {
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  p {
+    margin-bottom: 8px;
+  }
+
+  &.important {
+    background-color: $pink;
+    border-color: $pink;
+    color: $white;
+
+    a {
+      color: $white;
+    }
+
+    &::after {
+      @extend %icon-info-white;
+    }
   }
 }
 

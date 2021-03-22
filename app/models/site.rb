@@ -1,4 +1,5 @@
 require 'bcrypt'
+require 'mail'
 require 'uri'
 require 'active_support/number_helper'
 
@@ -9,6 +10,8 @@ class Site < ActiveRecord::Base
   include Translatable
 
   translate :title, :url, :email_from
+  translate :home_page_message, :petition_page_message
+  translate :feedback_page_message
 
   FALSE_VALUES = [nil, false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF'].to_set
 
@@ -19,6 +22,8 @@ class Site < ActiveRecord::Base
     disable_daily_update_statistics_job
     disable_plus_address_check
     disable_feedback_sending
+    disable_collecting_signatures
+    disable_petition_creation
     show_holding_page
   ]
 
@@ -142,7 +147,37 @@ class Site < ActiveRecord::Base
     end
 
     def touch(*names)
-      instance.touch(*names)
+      if instance.persisted?
+        instance.touch(*names)
+      end
+    end
+
+    def signature_collection_disabled?
+      disable_collecting_signatures?
+    end
+
+    def home_page_message
+      instance.home_page_message
+    end
+
+    def show_home_page_message?
+      instance.show_home_page_message?
+    end
+
+    def petition_page_message
+      instance.petition_page_message
+    end
+
+    def show_petition_page_message?
+      instance.show_petition_page_message?
+    end
+
+    def feedback_page_message
+      instance.feedback_page_message
+    end
+
+    def show_feedback_page_message?
+      instance.show_feedback_page_message?
     end
 
     def disable_signature_counts!
@@ -430,8 +465,41 @@ class Site < ActiveRecord::Base
   end
 
   store_accessor :feature_flags, :bypass_token
+  store_accessor :feature_flags, :home_page_message_en
+  store_accessor :feature_flags, :home_page_message_cy
+  store_accessor :feature_flags, :show_home_page_message
+  store_accessor :feature_flags, :petition_page_message_en
+  store_accessor :feature_flags, :petition_page_message_cy
+  store_accessor :feature_flags, :show_petition_page_message
+  store_accessor :feature_flags, :feedback_page_message_en
+  store_accessor :feature_flags, :feedback_page_message_cy
+  store_accessor :feature_flags, :show_feedback_page_message
 
   attr_reader :password
+
+  def show_home_page_message?
+    disable_collecting_signatures || show_home_page_message
+  end
+
+  def show_home_page_message=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def show_petition_page_message?
+    disable_collecting_signatures || show_petition_page_message
+  end
+
+  def show_petition_page_message=(value)
+    super(type_cast_feature_flag(value))
+  end
+
+  def show_feedback_page_message?
+    show_feedback_page_message
+  end
+
+  def show_feedback_page_message=(value)
+    super(type_cast_feature_flag(value))
+  end
 
   def authenticate(username, password)
     self.username == username && self.password_digest == password
@@ -577,6 +645,20 @@ class Site < ActiveRecord::Base
   validates :username, presence: true, length: { maximum: 30 }, if: :protected?
   validates :password, length: { maximum: 30 }, confirmation: true, if: :protected?
   validates :login_timeout, presence: true, numericality: { only_integer: true }
+
+  validates :home_page_message_en, presence: true, if: -> { disable_collecting_signatures || show_home_page_message? }
+  validates :home_page_message_en, length: { maximum: 800 }
+  validates :petition_page_message_en, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
+  validates :petition_page_message_en, length: { maximum: 800 }
+  validates :feedback_page_message_en, presence: true, if: -> { show_feedback_page_message? }
+  validates :feedback_page_message_en, length: { maximum: 800 }
+
+  validates :home_page_message_cy, presence: true, if: -> { disable_collecting_signatures || show_home_page_message? }
+  validates :home_page_message_cy, length: { maximum: 800 }
+  validates :petition_page_message_cy, presence: true, if: -> { disable_collecting_signatures || show_petition_page_message? }
+  validates :petition_page_message_cy, length: { maximum: 800 }
+  validates :feedback_page_message_cy, presence: true, if: -> { show_feedback_page_message? }
+  validates :feedback_page_message_cy, length: { maximum: 800 }
 
   validate if: :protected? do
     errors.add(:password, :blank) unless password_digest?

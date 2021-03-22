@@ -110,7 +110,7 @@ en-GB:
               invalid: "The submitted tags were invalid - please reselect and try again"
             topics:
               invalid: "The submitted topics were invalid - please reselect and try again"
-               
+
         petition/email:
           attributes:
             subject_en:
@@ -216,3 +216,41 @@ en-GB:
               too_long:
                 one: "Name is too long (maximum is 1 character)"
                 other: "Name is too long (maximum is %{count} characters)"
+
+        site:
+          attributes:
+            home_page_message_en:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
+            home_page_message_cy:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
+            petition_page_message_en:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
+            petition_page_message_cy:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
+            feedback_page_message_en:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"
+
+            feedback_page_message_cy:
+              blank: "Message must be completed"
+              too_long:
+                one: "Message is too long (maximum is 1 character)"
+                other: "Message is too long (maximum is %{count} characters)"

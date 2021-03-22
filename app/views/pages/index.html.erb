@@ -1,6 +1,12 @@
 <%= cache_for :home_page do %>
   <h1 class="visuallyhidden"><%= t(:"ui.home_page.heading") %></h1>
 
+  <% if Site.show_home_page_message? %>
+    <div class="notification important">
+      <%= markdown_to_html(Site.home_page_message) %>
+    </div>
+  <% end %>
+
   <% if no_petitions_yet? %>
     <div class="section-panel-borderless no-petitions-yet">
       <p class="lede"><%= t(:"ui.home_page.opened.lede") %></p>
@@ -18,9 +24,11 @@
     <%= render "pages/home/local_petitions" %>
   <% end %>
 
-  <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
-    <h2 id="start-a-petition-heading"><%= t(:"ui.home_page.opened.start_a_petition.heading") %></h2>
-    <p><%= t(:"ui.home_page.opened.start_a_petition.requirements") %></p>
-    <%= link_to t(:"ui.home_page.opened.start_a_petition.link"), check_petitions_path, class: "button forward" %>
-  </section>
+  <% unless Site.disable_petition_creation? %>
+    <section class="section-panel start-petition" aria-labelledby="start-a-petition-heading">
+      <h2 id="start-a-petition-heading"><%= t(:"ui.home_page.opened.start_a_petition.heading") %></h2>
+      <p><%= t(:"ui.home_page.opened.start_a_petition.requirements") %></p>
+      <%= link_to t(:"ui.home_page.opened.start_a_petition.link"), check_petitions_path, class: "button forward" %>
+    </section>
+  <% end %>
 <% end %>

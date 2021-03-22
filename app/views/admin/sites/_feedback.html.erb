@@ -1,20 +1,82 @@
-<%= hidden_field_tag :tab, "feedback" %>
+<div class="grid-row">
+  <div class="column-two-thirds extra-gutter">
+    <%= hidden_field_tag :tab, "feedback" %>
 
-<%= form_row for: [form.object, :feedback_email] do %>
-  <%= form.label :feedback_email, "Email address for feedback messages", class: "form-label" %>
-  <%= error_messages_for_field @site, :feedback_email %>
-  <%= form.text_field :feedback_email, tabindex: increment, maxlength: 100, class: "form-control" %>
-<% end %>
+    <%= form_row for: [form.object, :feedback_email] do %>
+      <%= form.label :feedback_email, "Email address for feedback messages", class: "form-label" %>
+      <%= error_messages_for_field @site, :feedback_email %>
+      <%= form.text_field :feedback_email, tabindex: increment, maxlength: 100, class: "form-control" %>
+    <% end %>
 
-<%= form_row for: [form.object, :disable_feedback_sending], class: "inline" do %>
-  <%= form.label :disable_feedback_sending, "Disable sending of feedback messages?", class: "form-label" %>
-  <%= error_messages_for_field @site, :disable_feedback_sending %>
-  <div class="multiple-choice">
-    <%= form.radio_button :disable_feedback_sending, true %>
-    <%= form.label :disable_feedback_sending, "Yes", for: "site_disable_feedback_sending_true" %>
+    <%= form_row for: [form.object, :disable_feedback_sending], class: "inline" do %>
+      <%= form.label :disable_feedback_sending, "Disable sending of feedback messages?", class: "form-label" %>
+      <%= error_messages_for_field @site, :disable_feedback_sending %>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_feedback_sending, true %>
+        <%= form.label :disable_feedback_sending, "Yes", for: "site_disable_feedback_sending_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :disable_feedback_sending, false %>
+        <%= form.label :disable_feedback_sending, "No", for: "site_disable_feedback_sending_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :show_feedback_page_message], class: "inline message-control" do %>
+      <%= form.label :show_feedback_page_message, "Show message on the feedback page?", class: "form-label" %>
+      <%= error_messages_for_field @site, :show_feedback_page_message %>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_feedback_page_message, true %>
+        <%= form.label :show_feedback_page_message, "Show", for: "site_show_feedback_page_message_true" %>
+      </div>
+      <div class="multiple-choice">
+        <%= form.radio_button :show_feedback_page_message, false %>
+        <%= form.label :show_feedback_page_message, "Hide", for: "site_show_feedback_page_message_false" %>
+      </div>
+    <% end %>
+
+    <%= form_row for: [form.object, :feedback_page_message_en], id: "feedback-page-message-en", class: "message-field", style: "display: none;" do %>
+      <%= form.label :feedback_page_message_en, "Message for the English feedback page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :feedback_page_message_en %>
+      <%= form.text_area :feedback_page_message_en, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
+
+    <%= form_row for: [form.object, :feedback_page_message_cy], id: "feedback-page-message-cy", class: "message-field", style: "display: none;" do %>
+      <%= form.label :feedback_page_message_cy, "Message for the Welsh feedback page", class: "form-label message-label" %>
+      <%= error_messages_for_field @site, :feedback_page_message_cy %>
+      <%= form.text_area :feedback_page_message_cy, tabindex: increment, rows: 6, class: 'form-control' %>
+    <% end %>
   </div>
-  <div class="multiple-choice">
-    <%= form.radio_button :disable_feedback_sending, false %>
-    <%= form.label :disable_feedback_sending, "No", for: "site_disable_feedback_sending_false" %>
-  </div>
-<% end %>
+</div>
+
+<%= javascript_tag do %>
+  $().ready(function() {
+    var $show_feedback_page_true = $('input[name="site[show_feedback_page_message]"][value=true]');
+    var $show_feedback_page = $('input[name="site[show_feedback_page_message]"]');
+    var $feedback_page_msg_en = $('#feedback-page-message-en');
+    var $feedback_page_msg_cy = $('#feedback-page-message-cy');
+
+    var blurAndFocus = function() {
+      this.blur();
+      this.focus();
+    }
+
+    var toggleMessageField = function(control, field) {
+      if (control.is(':checked')) {
+        field.show();
+      } else {
+        field.hide();
+      }
+    }
+
+    var toggleMessageFields = function() {
+      toggleMessageField($show_feedback_page_true, $feedback_page_msg_en);
+      toggleMessageField($show_feedback_page_true, $feedback_page_msg_cy);
+    }
+
+    toggleMessageFields();
+
+    $show_feedback_page.keyup(blurAndFocus).change(function() {
+      toggleMessageFields();
+    });
+  });
+<% end -%>

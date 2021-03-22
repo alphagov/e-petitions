@@ -1,3 +1,9 @@
+<% if Site.show_feedback_page_message? %>
+  <div class="notification important">
+    <%= markdown_to_html(Site.feedback_page_message) %>
+  </div>
+<% end %>
+
 <div class="text-page">
   <h1 class="page-title"><%= t(:"ui.feedback.new.heading") %></h1>
   <h2><%= t(:"ui.feedback.new.feedback.heading") %></h2>

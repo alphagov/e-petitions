@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     environment:
       name: welsh-petitions-production
@@ -16,7 +16,7 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-      
+
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -30,9 +30,9 @@ jobs:
       uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
         restore-keys: |
-          ${{ runner.os }}-gems-
+          ubuntu-20.04-gems-
 
     - name: Install gems
       run: |
@@ -48,7 +48,7 @@ jobs:
 
     - name: Deploy application
       env:
-        APPSIGNAL_APP_NAME: welsh-petitions-preview
+        APPSIGNAL_APP_NAME: welsh-petitions-production
         APPSIGNAL_PUSH_API_KEY: ${{ secrets.APPSIGNAL_PUSH_API_KEY }}
       run: |
         bundle exec rake deploy:production
