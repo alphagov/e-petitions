@@ -7,9 +7,9 @@ csv_builder = lambda do |csv|
       petition_url(petition),
       petition.state,
       petition.signature_count,
-      petition.created_at.iso8601,
-      petition.opened_at.iso8601,
-      petition.closed_at.iso8601,
+      csv_date_format(petition.created_at),
+      csv_date_format(petition.opened_at),
+      csv_date_format(petition.closed_at)
     ]
   end
 end

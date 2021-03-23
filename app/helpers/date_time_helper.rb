@@ -44,6 +44,10 @@ module DateTimeHelper
     end
   end
 
+  def csv_date_format(date_time)
+    date_time && date_time.strftime("%Y-%m-%d %H:%M:%S")
+  end
+
   def scheduled_for_debate_in_words(date, today = Date.current)
     scope = :"ui.scheduled_for_debate_in_words"
     days  = (date - today).to_i
