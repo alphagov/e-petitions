@@ -1,3 +1,9 @@
+<% if Site.show_home_page_message? %>
+  <div class="notification important">
+    <%= markdown_to_html(Site.home_page_message) %>
+  </div>
+<% end %>
+
 <h1 class="page-title"><%= t(:"ui.petitions.check.heading") %></h1>
 
 <form method="get" action="/petitions/check_results">
