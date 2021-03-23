@@ -157,5 +157,12 @@ Feature: Suzie views a petition
     Given a petition page message has been enabled
     And an open petition "Spend more money on Defence"
     When I view the petition
-    Then I should see "We are experiencing delays when signing this petition"
+    Then I should see "The Senedd Election will be held on 6 May 2021"
     And I can sign the petition
+
+  Scenario: Suzie sees a message when viewing a closed petition and a message has been enabled
+    Given a petition page message has been enabled
+    And a closed petition "Spend more money on Defence"
+    When I view the petition
+    Then I should see "The Senedd Election will be held on 6 May 2021"
+    And I cannot sign the petition
