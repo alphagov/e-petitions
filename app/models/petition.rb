@@ -933,6 +933,10 @@ class Petition < ActiveRecord::Base
     self.class.update_counters(id, deadline_extension: 1, touch: touch)
   end
 
+  def closing
+    open? ? deadline : closed_at
+  end
+
   def cache_key(*timestamp_names)
     case
     when new_record?

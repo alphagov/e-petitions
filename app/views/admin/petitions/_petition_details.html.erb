@@ -5,12 +5,15 @@
   <% if @petition.archived? %>
     <dt>Archived</dt>
     <dd><%= date_format_admin(@petition.archived_at) %></dd>
-  <% elsif @petition.deadline %>
+  <% elsif @petition.completed? %>
+    <dt>Completed</dt>
+    <dd><%= date_format_admin(@petition.completed_at) %></dd>
+  <% elsif @petition.closed? %>
+    <dt>Closed</dt>
+    <dd><%= date_format_admin(@petition.closed_at) %></dd>
+  <% elsif @petition.open? %>
     <dt>Deadline</dt>
     <dd><%= date_format_admin(@petition.deadline) %></dd>
-  <% elsif @petition.closed_at? %>
-    <dt>Deadline</dt>
-    <dd><%= date_format_admin(@petition.closed_at) %></dd>
   <% else %>
     <dt>Deadline</dt>
     <dd>TBC</dd>
