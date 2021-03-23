@@ -4,7 +4,7 @@ en-GB:
     - ["England", "GB-ENG"]
     - ["Scotland", "GB-SCT"]
     - ["Northern Ireland", "GB-NIR"]
-  
+
   countries:
     - ["Falkland Islands", "FK"]
     - ["Gibraltar", "GI"]
@@ -117,7 +117,6 @@ en-GB:
     - ["Maldives", "MV"]
     - ["Mali", "ML"]
     - ["Malta", "MT"]
-    - ["Marshall Islands", "MH"]
     - ["Marshall Islands", "MH"]
     - ["Mauritania", "MR"]
     - ["Mauritius", "MU"]

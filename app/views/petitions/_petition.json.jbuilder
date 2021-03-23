@@ -17,8 +17,15 @@ json.attributes do
   json.updated_at api_date_format(petition.updated_at)
   json.rejected_at api_date_format(petition.rejected_at)
   json.opened_at api_date_format(petition.opened_at)
-  json.closed_at api_date_format(petition.closed_at)
-  json.completed_at api_date_format(petition.closed_at)
+
+  # If a petition is open it may have had its deadline extended
+  if petition.open?
+    json.closed_at api_date_format(petition.deadline)
+  else
+    json.closed_at api_date_format(petition.closed_at)
+  end
+
+  json.completed_at api_date_format(petition.completed_at)
   json.moderation_threshold_reached_at api_date_format(petition.moderation_threshold_reached_at)
   json.referral_threshold_reached_at api_date_format(petition.referral_threshold_reached_at)
   json.referred_at api_date_format(petition.referred_at)

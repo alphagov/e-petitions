@@ -15,6 +15,18 @@ Scenario: Charlie has to search for a petition before creating one
   Then I should be on the new petition page
   And I should see my search query already filled in as the action of the petition
 
+Scenario: Charlie sees a message when starting a petition and signature collection has been paused
+  Given petitions are not collecting signatures
+  When I am on the home page
+  And I follow "Start a petition" within ".//main"
+  Then I should see "Petitions have stopped collecting signatures"
+
+Scenario: Charlie sees a message when starting a petition and a message has been enabled
+  Given a home page message has been enabled
+  When I am on the home page
+  And I follow "Start a petition" within ".//main"
+  Then I should see "Petition moderation is experiencing delays"
+
 Scenario: Charlie cannot craft an xss attack when searching for petitions
   Given I am on the home page
   When I follow "Start a petition" within ".//main"

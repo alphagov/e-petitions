@@ -51,9 +51,9 @@ Given(/^a petition page message has been enabled$/) do
   allow_any_instance_of(Site).to receive(:show_petition_page_message).and_return(true)
 
   message = <<~MESSAGE
-    ### We are experiencing delays when signing this petition
+    ### The Senedd Election will be held on 6 May 2021
 
-    Due to unprecedented demand we are experiencing delays delivering emails.
+    The Petitions Committee has met for the final time. Petitions will next be considered once a new committee is established following the election.
   MESSAGE
 
   allow(Site).to receive(:petition_page_message).and_return(message)
