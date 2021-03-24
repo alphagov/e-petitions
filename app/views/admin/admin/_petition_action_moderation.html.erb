@@ -1,2 +1,8 @@
-<%= render 'admin/moderation/form', petition: @petition %>
-<%= render 'edit_lock' %>
+<% if controller_name.in?(%w[petitions moderation]) %>
+  <%= render 'admin/moderation/form', petition: @petition %>
+  <%= render 'edit_lock' %>
+<% elsif @petition.moderated? %>
+  <%= link_to 'Change moderation', admin_petition_path(@petition), class: 'petition-action-heading' %>
+<% else %>
+  <%= link_to 'Moderate this petition', admin_petition_path(@petition), class: 'petition-action-heading' %>
+<% end %>

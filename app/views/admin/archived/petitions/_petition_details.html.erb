@@ -19,7 +19,7 @@
   <% if @petition.closed? %>
     <dt>Closed</dt>
     <dd><%= date_format_admin(@petition.closed_at) %></dd>
-  <% elsif @petition.rejected? || @petition.hidden? %>
+  <% elsif @petition.rejection? %>
     <dt>Rejected</dt>
     <dd><%= date_format_admin(@petition.rejected_at) %></dd>
   <% end %>
