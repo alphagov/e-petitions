@@ -869,6 +869,10 @@ class Petition < ActiveRecord::Base
     end
   end
 
+  def closing
+    open? ? deadline : closed_at
+  end
+
   def cache_key(*timestamp_names)
     case
     when new_record?

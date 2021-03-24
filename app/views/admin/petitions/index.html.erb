@@ -100,7 +100,7 @@
         <% if show_tags_column?(@petitions.scope) %>
           <td class="tags"><%= tag_names(petition.tags) %></td>
         <% else %>
-          <td class="date"><%= date_format(petition.deadline) %></td>
+          <td class="date"><%= date_format(petition.closing) || "–" %></td>
         <% end %>
         <td class="numeric last"><%= number_with_delimiter(petition.signature_count) %></td>
       </tr>
