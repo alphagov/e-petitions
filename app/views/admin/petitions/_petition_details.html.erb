@@ -35,8 +35,19 @@
     <dd><%= date_time_format(@petition.moderation_threshold_reached_at) %></dd>
   <% end %>
 <% else %>
-  <dt>Deadline</dt>
-  <dd><%= date_format_admin(@petition.deadline) %></dd>
+  <% if @petition.open? %>
+    <dt>Deadline</dt>
+    <dd><%= date_format_admin(@petition.deadline) %></dd>
+  <% elsif @petition.rejected? || @petition.hidden? %>
+    <dt>Rejected on</dt>
+    <dd><%= date_format_admin(@petition.rejected_at) %></dd>
+  <% elsif @petition.stopped? %>
+    <dt>Stopped on</dt>
+    <dd><%= date_format_admin(@petition.stopped_at) %></dd>
+  <% elsif @petition.closed? %>
+    <dt>Closed on</dt>
+    <dd><%= date_format_admin(@petition.closed_at) %></dd>
+  <% end %>
 
   <dt>Link to petition</dt>
   <dd><%= link_to petition_path(@petition), petition_url(@petition), target: "_blank" %></dd>
