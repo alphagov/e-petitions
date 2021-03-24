@@ -8,11 +8,11 @@ RSpec.describe ExtendPetitionDeadlinesJob, type: :job do
       expect(Site).to receive(:signature_collection_disabled?).and_return(false)
     end
 
-    it "doesn't increment the deadline_extension attribute" do
+    it "doesn't increment the closed_at attribute" do
       expect {
         described_class.perform_now
       }.not_to change {
-        petition.reload.deadline_extension
+        petition.reload.closed_at
       }
     end
   end
@@ -22,12 +22,12 @@ RSpec.describe ExtendPetitionDeadlinesJob, type: :job do
       expect(Site).to receive(:signature_collection_disabled?).and_return(true)
     end
 
-    it "increments the deadline_extension attribute by 1 day" do
+    it "increments the closed_at attribute by 1 day" do
       expect {
         described_class.perform_now
       }.to change {
-        petition.reload.deadline_extension
-      }.from(0.days).to(1.day)
+        petition.reload.closed_at
+      }.by(1.day)
     end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_22_041814) do
+ActiveRecord::Schema.define(version: 2021_03_24_052042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -282,7 +282,6 @@ ActiveRecord::Schema.define(version: 2021_03_22_041814) do
     t.boolean "use_markdown", default: false, null: false
     t.datetime "anonymized_at"
     t.integer "topics", default: [], null: false, array: true
-    t.integer "deadline_extension", default: 0, null: false
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
