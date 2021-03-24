@@ -19,6 +19,7 @@ class Petition < ActiveRecord::Base
   VISIBLE_STATES    = %w[open closed rejected]
   SHOW_STATES       = %w[pending validated sponsored flagged open closed rejected stopped]
   MODERATED_STATES  = %w[open closed hidden rejected]
+  REJECTED_STATES   = %w[rejected hidden]
   PUBLISHED_STATES  = %w[open closed]
   SELECTABLE_STATES = %w[open closed rejected hidden]
   SEARCHABLE_STATES = %w[open closed rejected]
@@ -27,6 +28,7 @@ class Petition < ActiveRecord::Base
   PUBLISHABLE_STATES         = %w[validated sponsored flagged dormant]
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged dormant]
+  MODERATABLE_STATES         = %w[validated sponsored flagged dormant rejected hidden]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged dormant]
 
@@ -293,6 +295,10 @@ class Petition < ActiveRecord::Base
 
     def todo_list
       where(state: TODO_LIST_STATES)
+    end
+
+    def moderatable
+      where(state: MODERATABLE_STATES)
     end
 
     def visible
@@ -638,25 +644,31 @@ class Petition < ActiveRecord::Base
   def moderate(params)
     self.moderation = params[:moderation]
 
-    case moderation
-    when 'approve'
-      publish
-    when 'reject'
-      reject(params[:rejection])
-    when 'flag'
-      update(state: FLAGGED_STATE)
-    when 'dormant'
-      update(state: DORMANT_STATE)
-    when 'restore'
-      update(state: SPONSORED_STATE)
-    else
-      if flagged? || dormant?
-        errors.add :moderation, :invalid
-      else
-        errors.add :moderation, :blank
-      end
+    transaction do
+      # Clear any existing rejection details
+      self.rejection = nil
+      self.rejected_at = nil
 
-      false
+      case moderation
+      when 'approve'
+        publish
+      when 'reject'
+        reject(params[:rejection])
+      when 'flag'
+        update(state: FLAGGED_STATE)
+      when 'dormant'
+        update(state: DORMANT_STATE)
+      when 'restore'
+        update(state: SPONSORED_STATE)
+      else
+        if flagged? || dormant?
+          errors.add :moderation, :invalid
+        else
+          errors.add :moderation, :blank
+        end
+
+        false
+      end
     end
   end
 
@@ -791,6 +803,10 @@ class Petition < ActiveRecord::Base
 
   def closed_for_signing?(now = Time.current)
     rejected? || closed_at? && closed_at < 24.hours.ago(now)
+  end
+
+  def rejection?
+    rejected? || hidden?
   end
 
   def archiving?

@@ -38,7 +38,7 @@
   <% if @petition.open? %>
     <dt>Deadline</dt>
     <dd><%= date_format_admin(@petition.deadline) %></dd>
-  <% elsif @petition.rejected? || @petition.hidden? %>
+  <% elsif @petition.rejection? %>
     <dt>Rejected on</dt>
     <dd><%= date_format_admin(@petition.rejected_at) %></dd>
   <% elsif @petition.stopped? %>
