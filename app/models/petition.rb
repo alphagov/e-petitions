@@ -921,20 +921,12 @@ class Petition < ActiveRecord::Base
 
   def deadline
     if published?
-      (closed_at || Site.closed_at_for_opening(open_at)) + deadline_extension
+      (closed_at || Site.closed_at_for_opening(open_at))
     end
   end
 
-  def deadline_extension
-    super.days
-  end
-
-  def extend_deadline!
-    self.class.update_counters(id, deadline_extension: 1, touch: touch)
-  end
-
-  def closing
-    open? ? deadline : closed_at
+  def extend_deadline!(amount = 1.day, now = Time.current)
+    update_columns(closed_at: closed_at + amount, updated_at: now)
   end
 
   def cache_key(*timestamp_names)

@@ -74,22 +74,6 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
       )
     end
 
-    it "returns the extended deadline if the petition has had its deadline extended" do
-      closed_at = 3.months.from_now.end_of_day
-      deadline = closed_at + 1.day
-      petition = FactoryBot.create :open_petition, closed_at: closed_at, deadline_extension: 1
-
-      get "/petitions/#{petition.id}.json"
-      expect(response).to be_successful
-
-      expect(attributes).to match(
-        a_hash_including(
-          "state" => "open",
-          "closed_at" => deadline.getutc.iso8601(3)
-        )
-      )
-    end
-
     it "returns the completed_at timestamp date if the petition is completed" do
       petition = FactoryBot.create :completed_petition
 
