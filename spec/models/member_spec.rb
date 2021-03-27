@@ -18,8 +18,8 @@ RSpec.describe Member, type: :model do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:region) }
-    it { is_expected.to belong_to(:constituency) }
+    it { is_expected.to belong_to(:region).optional }
+    it { is_expected.to belong_to(:constituency).optional }
   end
 
   describe "indexes" do

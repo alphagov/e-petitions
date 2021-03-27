@@ -51,11 +51,11 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
         end
 
 
-        it "sets the cache control header to 'no-cache, no-store'" do
+        it "sets the cache control header to 'no-store'" do
           get :index, as: :js
 
           expect(response.status).to eq(200)
-          expect(response.headers["Cache-Control"]).to eq("no-cache, no-store")
+          expect(response.headers["Cache-Control"]).to eq("no-store")
         end
 
         it "sets the CORS headers correctly" do
@@ -91,11 +91,11 @@ RSpec.describe Admin::TranslationsController, type: :controller, admin: true do
           }.not_to raise_error
         end
 
-        it "sets the cache control header to 'no-cache, no-store'" do
+        it "sets the cache control header to 'no-store'" do
           get :index, as: :js
 
           expect(response.status).to eq(200)
-          expect(response.headers["Cache-Control"]).to eq("no-cache, no-store")
+          expect(response.headers["Cache-Control"]).to eq("no-store")
         end
 
         it "sets the CORS headers correctly" do

@@ -9,17 +9,17 @@ class AdminUser < ActiveRecord::Base
   class MustBeAtLeastOneAdminUser < RuntimeError; end
 
   acts_as_authentic do |config|
+    config.crypto_provider = ::Authlogic::CryptoProviders::SCrypt
+
     config.check_passwords_against_database = true
     config.ignore_blank_passwords = true
     config.logged_in_timeout = Site.login_timeout
     config.require_password_confirmation = true
 
-    config.merge_validates_length_of_password_field_options minimum: 8
-    config.merge_validates_uniqueness_of_email_field_options case_sensitive: false
-    config.merge_validates_format_of_email_field_options unless: ->(u) { u.email.blank? }
-    config.merge_validates_length_of_email_field_options unless: ->(u) { u.email.blank? }
-    config.merge_validates_length_of_password_field_options unless: ->(u) { u.password.blank? }
-    config.merge_validates_confirmation_of_password_field_options unless: ->(u) { u.password.blank? }
+    config.validates_length_of :password, minimum: 8, unless: ->(u) { u.password.blank? }
+    config.validates_confirmation_of :password, unless: ->(u) { u.password.blank? }
+    config.validates :email, email: true, uniqueness: { case_sensitive: false }
+    config.validates_uniqueness_of :email, uniqueness: { case_sensitive: false }
   end
 
   # = Validations =

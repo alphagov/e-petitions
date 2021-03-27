@@ -110,7 +110,7 @@ class ApplicationController < ActionController::Base
   end
 
   def do_not_cache
-    response.headers['Cache-Control'] = 'no-store, no-cache'
+    response.headers['Cache-Control'] = 'no-store'
   end
 
   def current_time

@@ -1,6 +1,6 @@
 class ConstituencyPetitionJournal < ActiveRecord::Base
   belongs_to :petition
-  belongs_to :constituency
+  belongs_to :constituency, optional: true
 
   validates :petition, presence: true
   validates :constituency_id, presence: true, length: { maximum: 255 }

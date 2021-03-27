@@ -19,7 +19,7 @@ RSpec.describe 'token', type: :request do
     one_time_pad.bytes.zip(real_csrf_token.bytes).map { |(c1,c2)| c1 ^ c2 }.pack('c*')
   end
 
-  let(:real_csrf_token) { Base64.strict_decode64(session[:_csrf_token]) }
+  let(:real_csrf_token) { Base64.urlsafe_decode64(session[:_csrf_token]) }
   let(:one_time_pad) { SecureRandom.random_bytes(32) }
   let(:masked_token) { one_time_pad + encrypted_csrf_token }
   let(:authenticity_token) { Base64.strict_encode64(masked_token) }

@@ -35,8 +35,8 @@ RSpec.describe 'Cache-Control headers', type: :request do
       get "/petitions/new"
     end
 
-    it "changes the cache control headers to 'no-cache, no-store'" do
-      expect(cache_control).to eq("no-cache, no-store")
+    it "changes the cache control headers to 'no-store'" do
+      expect(cache_control).to eq("no-store")
       expect(status).to eq(200)
     end
   end
@@ -48,8 +48,8 @@ RSpec.describe 'Cache-Control headers', type: :request do
       get "/petitions/#{petition.id}/sponsors/new?token=#{petition.sponsor_token}"
     end
 
-    it "changes the cache control headers to 'no-cache, no-store'" do
-      expect(cache_control).to eq("no-cache, no-store")
+    it "changes the cache control headers to 'no-store'" do
+      expect(cache_control).to eq("no-store")
       expect(status).to eq(200)
     end
   end
@@ -61,8 +61,8 @@ RSpec.describe 'Cache-Control headers', type: :request do
       get "/petitions/#{petition.id}/signatures/new"
     end
 
-    it "changes the cache control headers to 'no-cache, no-store'" do
-      expect(cache_control).to eq("no-cache, no-store")
+    it "changes the cache control headers to 'no-store'" do
+      expect(cache_control).to eq("no-store")
       expect(status).to eq(200)
     end
   end
@@ -72,8 +72,8 @@ RSpec.describe 'Cache-Control headers', type: :request do
       get "/admin/login"
     end
 
-    it "changes the cache control headers to 'no-cache, no-store'" do
-      expect(cache_control).to eq("no-cache, no-store")
+    it "changes the cache control headers to 'no-store'" do
+      expect(cache_control).to eq("no-store")
       expect(status).to eq(200)
     end
   end
