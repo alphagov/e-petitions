@@ -1,7 +1,7 @@
 <nav class="petition-actions" role="navigation">
   <ul>
     <% if @petition.rejection? %>
-      <% if current_user.can_moderate_petitions? %>
+      <% if current_user.is_a_sysadmin? %>
         <li class="petition-action">
           <%= render 'petition_action_moderation', petition: @petition %>
         </li>

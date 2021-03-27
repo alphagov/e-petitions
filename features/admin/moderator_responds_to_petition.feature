@@ -140,7 +140,7 @@ Feature: Moderator respond to petition
 
   @javascript
   Scenario: Moderator publishes a rejected petition
-    Given I am logged in as a moderator named "Ben Macintosh"
+    Given I am logged in as a sysadmin named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition
     Then the creator should receive a rejection notification email
@@ -159,7 +159,7 @@ Feature: Moderator respond to petition
 
   @javascript
   Scenario: Moderator restores a rejected petition
-    Given I am logged in as a moderator named "Ben Macintosh"
+    Given I am logged in as a sysadmin named "Ben Macintosh"
     When I look at the next petition on my list
     And I reject the petition
     Then the creator should receive a rejection notification email
