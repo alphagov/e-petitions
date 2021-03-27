@@ -1,6 +1,7 @@
 class Admin::ModerationController < Admin::AdminController
-  before_action :require_moderator
   before_action :fetch_petition
+  before_action :require_moderator, unless: :petition_rejected?
+  before_action :require_sysadmin, if: :petition_rejected?
 
   def update
     if @petition.moderate(moderation_params)
@@ -29,5 +30,9 @@ class Admin::ModerationController < Admin::AdminController
 
   def send_email_to_creator_and_sponsors?
     params.key?(:save_and_email)
+  end
+
+  def petition_rejected?
+    @petition.rejection?
   end
 end
