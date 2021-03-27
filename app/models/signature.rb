@@ -32,7 +32,7 @@ class Signature < ActiveRecord::Base
   }
 
   belongs_to :petition
-  belongs_to :invalidation
+  belongs_to :invalidation, optional: true
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }
@@ -461,10 +461,6 @@ class Signature < ActiveRecord::Base
 
     def count_star
       arel_table[Arel.star].count
-    end
-
-    def max_validated_at
-      arel_table[:validated_at].maximum
     end
 
     def normalize_email(email)

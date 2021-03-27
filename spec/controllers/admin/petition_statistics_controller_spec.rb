@@ -48,13 +48,7 @@ RSpec.describe Admin::PetitionStatisticsController, type: :controller, admin: tr
       end
 
       it "enqueues a UpdatePetitionStatisticsJob" do
-        update_statistics_job = {
-          job: UpdatePetitionStatisticsJob,
-          args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
-          queue: "low_priority"
-        }
-
-        expect(enqueued_jobs).to eq([update_statistics_job])
+        expect(UpdatePetitionStatisticsJob).to have_been_enqueued.on_queue(:low_priority).with(petition)
       end
     end
   end

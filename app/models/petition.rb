@@ -34,6 +34,8 @@ class Petition < ActiveRecord::Base
 
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
 
+  self.cache_timestamp_format = :stepped_cache_key
+
   has_perishable_token called: 'sponsor_token'
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
@@ -75,12 +77,12 @@ class Petition < ActiveRecord::Base
 
   filter :topic, ->(code) { topics(code) }
 
-  has_one :creator, -> { creator }, class_name: 'Signature'
+  has_one :creator, -> { creator }, class_name: 'Signature', inverse_of: :petition
   accepts_nested_attributes_for :creator, update_only: true
 
   with_options class_name: 'AdminUser' do
-    belongs_to :locked_by
-    belongs_to :moderated_by
+    belongs_to :locked_by, optional: true
+    belongs_to :moderated_by, optional: true
   end
 
   has_one :debate_outcome, dependent: :destroy
@@ -887,24 +889,6 @@ class Petition < ActiveRecord::Base
 
   def closing
     open? ? deadline : closed_at
-  end
-
-  def cache_key(*timestamp_names)
-    case
-    when new_record?
-      "petitions/new"
-    when timestamp_names.any?
-      timestamp = max_updated_column_timestamp(timestamp_names)
-      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
-      timestamp = timestamp.utc.to_s(cache_timestamp_format)
-      "petitions/#{id}-#{timestamp}"
-    when timestamp = max_updated_column_timestamp
-      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
-      timestamp = timestamp.utc.to_s(cache_timestamp_format)
-      "petitions/#{id}-#{timestamp}"
-    else
-      "petitions/#{id}"
-    end
   end
 
   def update_last_petition_created_at

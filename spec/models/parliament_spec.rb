@@ -759,14 +759,6 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "#start_archiving!" do
-    let :archive_petitions_job do
-      {
-        job: ArchivePetitionsJob,
-        args: [],
-        queue: "high_priority"
-      }
-    end
-
     context "when petitions have not been archived" do
       subject :parliament do
         FactoryBot.create(:parliament, archiving_started_at: nil)
@@ -780,9 +772,7 @@ RSpec.describe Parliament, type: :model do
       it "schedules an ArchivedPetitionsJob" do
         expect {
           subject.start_archiving!
-        }.to change {
-          enqueued_jobs
-        }.from([]).to([archive_petitions_job])
+        }.to have_enqueued_job(ArchivePetitionsJob).on_queue(:high_priority)
       end
 
       it "updates the archiving_started_at timestamp" do
@@ -850,14 +840,6 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "#archive!" do
-    let :delete_petitions_job do
-      {
-        job: DeletePetitionsJob,
-        args: [],
-        queue: "high_priority"
-      }
-    end
-
     context "when archiving has not started" do
       subject :parliament do
         FactoryBot.create(:parliament, archiving_started_at: nil)
@@ -925,9 +907,7 @@ RSpec.describe Parliament, type: :model do
       it "schedules an DeletePetitionsJob" do
         expect {
           subject.archive!
-        }.to change {
-          enqueued_jobs
-        }.from([]).to([delete_petitions_job])
+        }.to have_enqueued_job(DeletePetitionsJob).on_queue(:high_priority)
       end
 
       it "updates the archived_at timestamp" do
@@ -941,14 +921,6 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "#send_emails!" do
-    let :send_emails_job do
-      {
-        job: NotifyPetitionsThatParliamentIsDissolvingJob,
-        args: [],
-        queue: "high_priority"
-      }
-    end
-
     context "when parliament has not announced dissolution" do
       subject :parliament do
         FactoryBot.create(:parliament)
@@ -972,9 +944,7 @@ RSpec.describe Parliament, type: :model do
         it "schedules a job" do
           expect {
             subject.send_emails!
-          }.to change {
-            enqueued_jobs
-          }.from([]).to([send_emails_job])
+          }.to have_enqueued_job(NotifyPetitionsThatParliamentIsDissolvingJob).on_queue(:high_priority)
         end
       end
 
@@ -995,24 +965,6 @@ RSpec.describe Parliament, type: :model do
   end
 
   describe "#schedule_closure!" do
-    let :close_petitions_job do
-      {
-        job: ClosePetitionsEarlyJob,
-        args: [dissolution_at.iso8601],
-        queue: "high_priority",
-        at: dissolution_at.to_f
-      }
-    end
-
-    let :stop_petitions_job do
-      {
-        job: StopPetitionsEarlyJob,
-        args: [dissolution_at.iso8601],
-        queue: "high_priority",
-        at: dissolution_at.to_f
-      }
-    end
-
     context "when parliament has not announced dissolution" do
       subject :parliament do
         FactoryBot.create(:parliament)
@@ -1035,12 +987,16 @@ RSpec.describe Parliament, type: :model do
           FactoryBot.create(:parliament, :dissolving, dissolution_at: dissolution_at, show_dissolution_notification: true)
         end
 
-        it "schedules a job" do
+        it "schedules a job to close petitions early" do
           expect {
             subject.schedule_closure!
-          }.to change {
-            enqueued_jobs
-          }.from([]).to([close_petitions_job, stop_petitions_job])
+          }.to have_enqueued_job(ClosePetitionsEarlyJob).on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
+        end
+
+        it "schedules a job to stop petitions collecting sponsors early" do
+          expect {
+            subject.schedule_closure!
+          }.to have_enqueued_job(StopPetitionsEarlyJob).on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
         end
       end
 

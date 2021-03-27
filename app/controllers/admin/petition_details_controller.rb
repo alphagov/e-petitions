@@ -5,7 +5,7 @@ class Admin::PetitionDetailsController < Admin::AdminController
   end
 
   def update
-    if @petition.update_attributes(petition_params)
+    if @petition.update(petition_params)
       redirect_to [:admin, @petition], notice: :petition_updated
     else
       render :show

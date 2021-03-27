@@ -79,7 +79,7 @@ RSpec.describe Signature, type: :model do
 
   describe "associations" do
     it { is_expected.to belong_to(:petition) }
-    it { is_expected.to belong_to(:invalidation) }
+    it { is_expected.to belong_to(:invalidation).optional }
   end
 
   describe "callbacks" do
@@ -271,7 +271,7 @@ RSpec.describe Signature, type: :model do
     it "does not allow emails using plus addresses" do
       signature = FactoryBot.build(:signature, email: 'foobar+petitions@example.com')
       expect(signature).not_to have_valid(:email)
-      expect(signature.errors.full_messages).to include("You can’t use ‘plus addressing’ in your email address")
+      expect(signature.errors.messages[:email]).to include("You can’t use ‘plus addressing’ in your email address")
     end
 
     it "does not allow blank or unknown state" do
@@ -346,12 +346,12 @@ RSpec.describe Signature, type: :model do
   describe "scopes" do
     let(:week_ago) { 1.week.ago }
     let(:two_days_ago) { 2.days.ago }
-    let!(:petition) { FactoryBot.create(:petition) }
-    let!(:signature1) { FactoryBot.create(:signature, :email => "person1@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => true) }
-    let!(:signature2) { FactoryBot.create(:signature, :email => "person2@example.com", :petition => petition, :state => Signature::PENDING_STATE, :notify_by_email => true) }
-    let!(:signature3) { FactoryBot.create(:signature, :email => "person3@example.com", :petition => petition, :state => Signature::VALIDATED_STATE, :notify_by_email => false) }
-    let!(:signature4) { FactoryBot.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::INVALIDATED_STATE, :notify_by_email => false) }
-    let!(:signature5) { FactoryBot.create(:signature, :email => "person4@example.com", :petition => petition, :state => Signature::FRAUDULENT_STATE, :notify_by_email => false) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
+    let!(:signature1) { FactoryBot.create(:validated_signature, email: "person1@example.com", petition: petition, notify_by_email: true) }
+    let!(:signature2) { FactoryBot.create(:pending_signature, email: "person2@example.com", petition: petition, notify_by_email: true) }
+    let!(:signature3) { FactoryBot.create(:validated_signature, email: "person3@example.com", petition: petition, notify_by_email: false) }
+    let!(:signature4) { FactoryBot.create(:invalidated_signature, email: "person4@example.com", petition: petition, notify_by_email: false) }
+    let!(:signature5) { FactoryBot.create(:fraudulent_signature, email: "person4@example.com", petition: petition, notify_by_email: false) }
 
     describe "validated" do
       it "returns only validated signatures" do
@@ -1049,10 +1049,12 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".trending_domains" do
+    let!(:petition) { FactoryBot.create(:open_petition, open_at: 2.weeks.ago, creator_attributes: { validated_at: 2.weeks.ago } ) }
+
     before do
-      FactoryBot.create(:validated_signature, email: "alice@foo.com", validated_at: 30.minutes.ago)
-      FactoryBot.create(:validated_signature, email: "bob@bar.com", validated_at: 30.minutes.ago)
-      FactoryBot.create(:validated_signature, email: "charlie@foo.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, email: "alice@foo.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, email: "bob@bar.com", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, email: "charlie@foo.com", validated_at: 30.minutes.ago)
     end
 
     it "returns a hash of domains and counts in descending order" do
@@ -1063,28 +1065,28 @@ RSpec.describe Signature, type: :model do
     end
 
     it "ignores pending signatures" do
-      FactoryBot.create(:pending_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      FactoryBot.create(:pending_signature, petition: petition, email: "derek@foo.com", created_at: 30.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "ignores invalidated signatures" do
-      FactoryBot.create(:invalidated_signature, email: "derek@foo.com", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      FactoryBot.create(:invalidated_signature, petition: petition, email: "derek@foo.com", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "ignores fraudulent signatures" do
-      FactoryBot.create(:fraudulent_signature, email: "derek@foo.com", created_at: 30.minutes.ago)
+      FactoryBot.create(:fraudulent_signature, petition: petition, email: "derek@foo.com", created_at: 30.minutes.ago)
       domains = described_class.trending_domains
 
       expect(domains.to_a).to eq([["foo.com", 2], ["bar.com", 1]])
     end
 
     it "can override the timespan" do
-      FactoryBot.create(:validated_signature, email: "derek@foo.com", validated_at: 5.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, email: "derek@foo.com", validated_at: 5.minutes.ago)
       domains = described_class.trending_domains(since: 10.minutes.ago)
 
       expect(domains.to_a).to eq([["foo.com", 1]])
@@ -1098,51 +1100,53 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".trending_ips" do
+    let!(:petition) { FactoryBot.create(:open_petition, open_at: 2.weeks.ago, creator_attributes: { validated_at: 2.weeks.ago } ) }
+
     before do
-      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
-      FactoryBot.create(:validated_signature, ip_address: "192.168.1.1", validated_at: 30.minutes.ago)
-      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, ip_address: "192.168.1.1", validated_at: 30.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, ip_address: "10.0.1.1", validated_at: 30.minutes.ago)
     end
 
-    it "returns a hash of domains and counts in descending order" do
-      domains = described_class.trending_ips
+    it "returns a hash of ip addresses and counts in descending order" do
+      ip_addresses = described_class.trending_ips
 
-      expect(domains).to be_an_instance_of(Hash)
-      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+      expect(ip_addresses).to be_an_instance_of(Hash)
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "ignores pending signatures" do
-      FactoryBot.create(:pending_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
-      domains = described_class.trending_ips
+      FactoryBot.create(:pending_signature, petition: petition, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      ip_addresses = described_class.trending_ips
 
-      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "ignores invalidated signatures" do
-      FactoryBot.create(:invalidated_signature, ip_address: "10.0.1.1", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
-      domains = described_class.trending_ips
+      FactoryBot.create(:invalidated_signature, petition: petition, ip_address: "10.0.1.1", validated_at: 30.minutes.ago, invalidated_at: 10.minutes.ago)
+      ip_addresses = described_class.trending_ips
 
-      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "ignores fraudulent signatures" do
-      FactoryBot.create(:fraudulent_signature, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
-      domains = described_class.trending_ips
+      FactoryBot.create(:fraudulent_signature, petition: petition, ip_address: "10.0.1.1", created_at: 30.minutes.ago)
+      ip_addresses = described_class.trending_ips
 
-      expect(domains.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 2], ["192.168.1.1", 1]])
     end
 
     it "can override the timespan" do
-      FactoryBot.create(:validated_signature, ip_address: "10.0.1.1", validated_at: 5.minutes.ago)
-      domains = described_class.trending_ips(since: 10.minutes.ago)
+      FactoryBot.create(:validated_signature, petition: petition, ip_address: "10.0.1.1", validated_at: 5.minutes.ago)
+      ip_addresses = described_class.trending_ips(since: 10.minutes.ago)
 
-      expect(domains.to_a).to eq([["10.0.1.1", 1]])
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 1]])
     end
 
     it "can override the number returned" do
-      domains = described_class.trending_ips(limit: 1)
+      ip_addresses = described_class.trending_ips(limit: 1)
 
-      expect(domains.to_a).to eq([["10.0.1.1", 2]])
+      expect(ip_addresses.to_a).to eq([["10.0.1.1", 2]])
     end
   end
 
@@ -1193,7 +1197,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when there are no signatures not anonymized" do
-      let!(:signature) { FactoryBot.create(:signature, anonymized_at: 1.week.ago) }
+      let!(:signature) { FactoryBot.create(:signature, creator: true, anonymized_at: 1.week.ago) }
 
       it "returns an empty array" do
         expect(subject.to_a).to eq([])
@@ -1201,7 +1205,7 @@ RSpec.describe Signature, type: :model do
     end
 
     context "when there are signatures not anonymized" do
-      let!(:signature) { FactoryBot.create(:signature, anonymized_at: nil) }
+      let!(:signature) { FactoryBot.create(:signature, creator: true, anonymized_at: nil) }
 
       it "returns an array of signatures" do
         expect(subject.to_a).to eq([signature])

@@ -60,11 +60,11 @@ namespace :data do
         # Update to specified state requested
         case PETITION_STATE
         when 'open'
-          petition.update_attributes(state: 'open', open_at: Time.now)
+          petition.update(state: 'open', open_at: Time.now)
         when 'closed'
-          petition.update_attributes(state: 'closed', open_at: Time.now - 1.year, closed_at: Time.now - 1.day)
+          petition.update(state: 'closed', open_at: Time.now - 1.year, closed_at: Time.now - 1.day)
         when 'rejected'
-          petition.update_attributes(
+          petition.update(
             state: 'rejected',
             open_at: Time.now - 6.month,
             closed_at: Time.now + 6.month,
@@ -72,7 +72,7 @@ namespace :data do
             rejection_code: REJECTION_CODES.sample
           )
         when 'hidden'
-          petition.update_attributes(
+          petition.update(
             state: 'hidden',
             open_at: Time.now - 6.month,
             closed_at: Time.now  + 6.month,
@@ -98,7 +98,7 @@ namespace :data do
         end
 
         # Add responses on random petitions when 10,000 signatures
-        petition.update_attributes(
+        petition.update(
           response: Faker::Lorem.paragraph(rand(10..30))
         ) if @should_create_response
       end

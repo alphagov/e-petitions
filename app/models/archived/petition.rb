@@ -13,11 +13,11 @@ module Archived
     MODERATED_STATES = [CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
     DEBATABLE_STATES = [CLOSED_STATE]
 
-    belongs_to :parliament, inverse_of: :petitions, required: true
+    belongs_to :parliament, inverse_of: :petitions
 
     with_options class_name: 'AdminUser' do
-      belongs_to :locked_by
-      belongs_to :moderated_by
+      belongs_to :locked_by, optional: true
+      belongs_to :moderated_by, optional: true
     end
 
     has_one :creator, -> { creator }, class_name: "Signature"

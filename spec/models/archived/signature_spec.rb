@@ -33,9 +33,9 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:constituency).with_primary_key(:external_id) }
+    it { is_expected.to belong_to(:constituency).with_primary_key(:external_id).optional }
     it { is_expected.to belong_to(:petition) }
-    it { is_expected.to belong_to(:invalidation) }
+    it { is_expected.to belong_to(:invalidation).optional }
   end
 
   describe "indexes" do

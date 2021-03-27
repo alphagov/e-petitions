@@ -109,33 +109,39 @@ When(/^I say I am happy with my email address$/) do
 end
 
 And "I have already signed the petition with an uppercase email" do
-  FactoryBot.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "WOMBOID@WIMBLEDON.COM")
+  FactoryBot.create(:signature, petition: @petition,
+    name: "Womboid Wibbledon", email: "WOMBOID@WIMBLEDON.COM"
+  )
 end
 
 And "I have already signed the petition but not validated my email" do
-  FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "womboid@wimbledon.com", :postcode => "N11TY")
+  FactoryBot.create(:pending_signature, petition: @petition,
+    name: "Womboid Wibbledon", email: "womboid@wimbledon.com", postcode: "N11TY"
+  )
 end
 
 And "I have already signed the petition using an alias" do
-  FactoryBot.create(:signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
+  FactoryBot.create(:validated_signature, petition: @petition,
+    name: "Womboid Wibbledon", email: "wom.boid@wimbledon.com", postcode: "N11TY"
+  )
 end
 
 And "I have already signed the petition using an alias but not validated my email" do
-  FactoryBot.create(:pending_signature, name: "Womboid Wibbledon", :petition => @petition,
-                     :email => "wom.boid@wimbledon.com", :postcode => "N11TY")
+  FactoryBot.create(:pending_signature, petition: @petition,
+    name: "Womboid Wibbledon", email: "wom.boid@wimbledon.com", postcode: "N11TY"
+  )
 end
 
 Given /^Suzie has already signed the petition$/ do
-  @suzies_signature = FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
-         :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+  @suzies_signature = FactoryBot.create(:validated_signature, petition: @petition,
+    name: "Womboid Wibbledon", email: "womboid@wimbledon.com", postcode: "SW14 9RQ"
+  )
 end
 
 Given /^Eric has already signed the petition with Suzies email$/ do
-  FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
-         :postcode => "SW14 9RQ", :name => "Eric Wibbledon")
+  FactoryBot.create(:validated_signature, petition: @petition,
+    name: "Eric Wibbledon", email: "womboid@wimbledon.com", postcode: "SW14 9RQ"
+  )
 end
 
 Given(/^"([^"]*)" is configured to normalize email address$/) do |domain|
@@ -143,13 +149,9 @@ Given(/^"([^"]*)" is configured to normalize email address$/) do |domain|
 end
 
 Given /^I have signed the petition with a second name$/ do
-  FactoryBot.create(:signature, :petition => @petition, :email => "womboid@wimbledon.com",
-         :postcode => "SW14 9RQ", :name => "Sam Wibbledon")
-end
-
-Given(/^Suzie has already signed the petition and validated her email$/) do
-  @suzies_signature = FactoryBot.create(:validated_signature, :petition => @petition, :email => "womboid@wimbledon.com",
-         :postcode => "SW14 9RQ", :name => "Womboid Wibbledon")
+  FactoryBot.create(:validated_signature, petition: @petition,
+    name: "Sam Wibbledon", email: "womboid@wimbledon.com", postcode: "SW14 9RQ"
+  )
 end
 
 When(/^Suzie shares the signatory confirmation link with Eric$/) do

@@ -14,14 +14,8 @@ When(/^I navigate to the next page of petitions$/) do
   click_link "Next"
 end
 
-Given(/^a(n)? ?(pending|validated|sponsored|flagged|dormant|open|rejected)? petition "([^"]*)"$/) do |a_or_an, state, petition_action|
-  petition_args = {
-    :action => petition_action,
-    :closed_at => 1.day.from_now,
-    :state => state || "open"
-  }
-  @petition = FactoryBot.create(:open_petition, petition_args)
-  @petition.update_signature_count!
+Given(/^an? ?(pending|validated|sponsored|flagged|open|closed|rejected)? petition "([^"]*)"$/) do |state, action|
+  @petition = FactoryBot.create(:"#{state || 'open'}_petition", action: action)
 end
 
 Given(/^a (sponsored|flagged) petition "(.*?)" reached threshold (\d+) days? ago$/) do |state, action, age|
@@ -422,7 +416,6 @@ Given(/^an? (open|closed|rejected) petition "(.*?)" with some (fraudulent)? ?sig
   @petition = FactoryBot.create(:"#{state}_petition", petition_args)
   signature_state ||= "validated"
   5.times { FactoryBot.create(:"#{signature_state}_signature", petition: @petition) }
-  @petition.update_signature_count!
 end
 
 Given(/^the threshold for a parliamentary debate is "(.*?)"$/) do |amount|

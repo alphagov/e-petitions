@@ -2,8 +2,6 @@
 <div class="grid-row">
   <div class="column-two-thirds">
     <%= form_for [:admin, current_user], url: admin_profile_path(current_user) do |f| -%>
-      <%= f.error_messages(header_message: nil) %>
-
       <%= form_row for: [f.object, :current_password] do %>
         <%= f.label :current_password, class: 'form-label' %>
         <%= error_messages_for_field f.object, :current_password %>

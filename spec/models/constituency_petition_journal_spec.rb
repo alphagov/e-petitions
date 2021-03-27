@@ -73,7 +73,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     let(:signature_count) { 1 }
 
     context "when the supplied signature is valid" do
-      let(:signature) { FactoryBot.build(:invalidated_signature, petition: petition, constituency_id: constituency_id) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_id) }
       let(:now) { 1.hour.from_now.change(usec: 0) }
 
       it "decrements the signature_count by 1" do
@@ -99,18 +99,8 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
       end
     end
 
-    context "when the supplied signature has no petition" do
-      let(:signature) { FactoryBot.build(:invalidated_signature, petition: nil, constituency_id: constituency_id) }
-
-      it "does nothing" do
-        expect {
-          described_class.invalidate_signature_for(signature)
-        }.not_to change { journal.reload.signature_count }
-      end
-    end
-
     context "when the supplied signature has no country" do
-      let(:signature) { FactoryBot.build(:invalidated_signature, petition: petition, constituency_id: nil) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: nil) }
 
       it "does nothing" do
         expect {
@@ -120,7 +110,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
 
     context "when the supplied signature is not validated" do
-      let(:signature) { FactoryBot.build(:pending_signature, petition: petition, constituency_id: constituency_id) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, constituency_id: constituency_id) }
 
       it "does nothing" do
         expect {
@@ -130,7 +120,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
 
     context "when the signature count is already zero" do
-      let(:signature) { FactoryBot.build(:invalidated_signature, petition: petition, constituency_id: constituency_id) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_id) }
       let(:signature_count) { 0 }
 
       it "does nothing" do
@@ -141,7 +131,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     end
 
     context "when no journal exists" do
-      let(:signature) { FactoryBot.build(:invalidated_signature, petition: petition, constituency_id: constituency_id) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_id) }
 
       before do
         described_class.delete_all
@@ -158,7 +148,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   describe ".increment_signature_counts_for" do
     let(:constituency_1) { FactoryBot.generate(:constituency_id) }
     let(:constituency_2) { FactoryBot.generate(:constituency_id) }
-    let!(:petition) { FactoryBot.create(:petition, creator_attributes: { constituency_id: constituency_1 }) }
+    let!(:petition) { FactoryBot.create(:open_petition, creator_attributes: { constituency_id: constituency_1 }) }
 
     let(:journal_1) { described_class.for(petition, constituency_1) }
     let(:journal_2) { described_class.for(petition, constituency_2) }
@@ -167,7 +157,6 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
       FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_1)
       FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_2)
 
-      petition.update_signature_count!
       described_class.reset_signature_counts_for(petition)
     end
 
@@ -175,8 +164,8 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
       expect(journal_1.signature_count).to eq(2)
       expect(journal_2.signature_count).to eq(1)
 
-      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_1)
-      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_2)
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_1, increment: false)
+      FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_2, increment: false)
 
       last_signed_at = petition.last_signed_at
       petition.increment_signature_count!
@@ -189,16 +178,12 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
   end
 
   describe ".reset_signature_counts_for" do
-    let(:petition_1) { FactoryBot.create(:petition, creator_attributes: {constituency_id: constituency_1, validated_at: 5.minutes.ago}) }
+    let(:petition_1) { FactoryBot.create(:open_petition, creator_attributes: {constituency_id: constituency_1, validated_at: 5.minutes.ago}) }
     let(:constituency_1) { FactoryBot.generate(:constituency_id) }
-    let(:petition_2) { FactoryBot.create(:petition, creator_attributes: {constituency_id: constituency_1, validated_at: 5.minutes.ago}) }
+    let(:petition_2) { FactoryBot.create(:open_petition, creator_attributes: {constituency_id: constituency_1, validated_at: 5.minutes.ago}) }
     let(:constituency_2) { FactoryBot.generate(:constituency_id) }
 
     before do
-      # We do this so last_signed_at is not nil
-      petition_1.update_signature_count!
-      petition_2.update_signature_count!
-
       described_class.for(petition_1, constituency_1).update_columns(signature_count: 20, last_signed_at: 5.minutes.ago)
       described_class.for(petition_1, constituency_2).update_columns(signature_count: 10, last_signed_at: nil)
       described_class.for(petition_2, constituency_1).update_columns(signature_count: 1, last_signed_at: 5.minutes.ago)

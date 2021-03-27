@@ -2,7 +2,7 @@ class Domain < ActiveRecord::Base
   PATTERN = /\A(?:\*|\*\.[a-z]{2,}|(?:\*\.)*(?:[a-z0-9][a-z0-9-]{0,61}[a-z0-9]\.)+[a-z]{2,})\z/
 
   with_options class_name: "::Domain" do
-    belongs_to :canonical_domain, required: false
+    belongs_to :canonical_domain, optional: true
     has_many :aliases, foreign_key: "canonical_domain_id", dependent: :destroy
   end
 

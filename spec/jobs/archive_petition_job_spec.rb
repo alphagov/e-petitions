@@ -6,17 +6,6 @@ RSpec.describe ArchivePetitionJob, type: :job do
   let(:archived_petition) { Archived::Petition.first }
   let(:email_request) { petition.email_requested_receipt }
 
-  let(:archive_signatures_job) do
-    {
-      job: ArchiveSignaturesJob,
-      args: [
-        { "_aj_globalid" => "gid://epets/Petition/#{petition.id}" },
-        { "_aj_globalid" => "gid://epets/Archived::Petition/#{petition.id}" }
-      ],
-      queue: "low_priority"
-    }
-  end
-
   before do
     FactoryBot.create(:constituency, :coventry_north_east)
     FactoryBot.create(:constituency, :bethnal_green_and_bow)
@@ -32,7 +21,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
   end
 
   it "enqueues an ArchiveSignaturesJob" do
-    expect(enqueued_jobs).to include(archive_signatures_job)
+    expect(ArchiveSignaturesJob).to have_been_enqueued.on_queue(:low_priority).with(petition, archived_petition)
   end
 
   context "with a closed petition" do

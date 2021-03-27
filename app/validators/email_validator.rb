@@ -1,3 +1,5 @@
+require 'mail'
+
 class EmailValidator < ActiveModel::EachValidator
   EMAIL_REGEX = /\A[^@\s]+@[^@\s]+\.[^@\s]+\z/
 

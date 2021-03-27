@@ -17,17 +17,11 @@ RSpec.describe DeletePetitionsJob, type: :job do
   it "enqueues an DeletePetitionJob job" do
     petition = FactoryBot.create(:closed_petition, archived_at: 1.day.ago)
 
-    delete_petition_job = {
-      job: DeletePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
-      queue: "high_priority"
-    }
-
     expect {
       described_class.perform_now
-    }.to change {
-      enqueued_jobs
-    }.from([]).to([delete_petition_job])
+    }.to have_enqueued_job(
+      DeletePetitionJob
+    ).on_queue(:high_priority).with(petition)
   end
 
   it "raises a RuntimeError unless all petitions are archived" do

@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe HomeHelper, type: :helper do
   describe "#no_petitions_yet?" do
     let(:connection) { Petition.connection }
-    let(:sql) { /^SELECT  1 AS one FROM/ }
+    let(:sql) { /^SELECT 1 AS one FROM/ }
 
     it "performs an exists query" do
       expect(connection).to receive(:select).with(sql, any_args).and_call_original

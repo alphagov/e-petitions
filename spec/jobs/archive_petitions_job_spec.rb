@@ -17,27 +17,15 @@ RSpec.describe ArchivePetitionsJob, type: :job do
   it "enqueues an ArchivePetitionJob job" do
     petition = FactoryBot.create(:closed_petition)
 
-    archive_petition_job = {
-      job: ArchivePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
-      queue: "high_priority"
-    }
-
     expect {
       described_class.perform_now
-    }.to change {
-      enqueued_jobs
-    }.from([]).to([archive_petition_job])
+    }.to have_enqueued_job(
+      ArchivePetitionJob
+    ).on_queue(:high_priority).with(petition)
   end
 
   it "updates the archiving_started_at timestamp" do
     petition = FactoryBot.create(:closed_petition)
-
-    archive_petition_job = {
-      job: ArchivePetitionJob,
-      args: [{ "_aj_globalid" => "gid://epets/Petition/#{petition.id}" }],
-      queue: "high_priority"
-    }
 
     expect {
       described_class.perform_now

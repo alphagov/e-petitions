@@ -50,22 +50,12 @@ RSpec.describe Admin::TaskRunner do
           }.with_indifferent_access
         end
 
-        let(:job) do
-          {
-            job: BackfillConstituenciesJob,
-            args: [
-              { "since" => "2017-09-11T09:00:00+01:00", "_aj_symbol_keys" => ["since"] }
-            ],
-            queue: "low_priority"
-          }
-        end
-
         it "enqueues a BackfillConstituenciesJob job" do
           expect {
             described_class.run(params)
-          }.to change {
-            enqueued_jobs
-          }.from([]).to([job])
+          }.to have_enqueued_job(
+            BackfillConstituenciesJob
+          ).on_queue(:low_priority).with(since: "2017-09-11T09:00:00+01:00")
         end
       end
 
@@ -79,22 +69,12 @@ RSpec.describe Admin::TaskRunner do
           }.with_indifferent_access
         end
 
-        let(:job) do
-          {
-            job: BackfillConstituenciesJob,
-            args: [
-              { "since" => "2017-08-18T09:00:00+01:00", "_aj_symbol_keys" => ["since"] }
-            ],
-            queue: "low_priority"
-          }
-        end
-
         it "enqueues a BackfillConstituenciesJob job" do
           expect {
             described_class.run(params)
-          }.to change {
-            enqueued_jobs
-          }.from([]).to([job])
+          }.to have_enqueued_job(
+            BackfillConstituenciesJob
+          ).on_queue(:low_priority).with(since: "2017-08-18T09:00:00+01:00")
         end
       end
 
@@ -108,22 +88,12 @@ RSpec.describe Admin::TaskRunner do
           }.with_indifferent_access
         end
 
-        let(:job) do
-          {
-            job: BackfillConstituenciesJob,
-            args: [
-              { "since" => "2017-06-18T09:00:00+01:00", "_aj_symbol_keys" => ["since"] }
-            ],
-            queue: "low_priority"
-          }
-        end
-
         it "enqueues a BackfillConstituenciesJob job" do
           expect {
             described_class.run(params)
-          }.to change {
-            enqueued_jobs
-          }.from([]).to([job])
+          }.to have_enqueued_job(
+            BackfillConstituenciesJob
+          ).on_queue(:low_priority).with(since: "2017-06-18T09:00:00+01:00")
         end
       end
     end
