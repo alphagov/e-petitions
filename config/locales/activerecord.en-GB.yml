@@ -26,10 +26,14 @@ en-GB:
 
         archived/debate_outcome:
           attributes:
-            commons_image:
+            image:
+              invalid: "Incorrect file type - please select a JPEG image"
+              too_large: "The image is too large (maximum is %{max_size})"
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
+              too_wide: "Width must be at most %{max_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
-              incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+              too_tall: "Height must be at most %{max_height}px (is %{height}px)"
+              incorrect_ratio: "Aspect ratio of the image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
             debate_pack_url:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             transcript_url:
@@ -83,10 +87,14 @@ en-GB:
 
         debate_outcome:
           attributes:
-            commons_image:
+            image:
+              invalid: "Incorrect file type - please select a JPEG image"
+              too_large: "The image is too large (maximum is %{max_size})"
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
+              too_wide: "Width must be at most %{max_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
-              incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+              too_tall: "Height must be at most %{max_height}px (is %{height}px)"
+              incorrect_ratio: "Aspect ratio of the image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
             debate_pack_url:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             transcript_url:

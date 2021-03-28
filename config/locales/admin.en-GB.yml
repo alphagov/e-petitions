@@ -46,6 +46,7 @@ en-GB:
       department_created: "Department created successfully"
       department_updated: "Department updated successfully"
       department_deleted: "Department removed successfully"
+      debate_outcome_not_saved: "Debate outcome could not be saved - please check the form for errors"
       domain_created: "Domain created successfully"
       domain_updated: "Domain updated successfully"
       domain_deleted: "Domain removed successfully"

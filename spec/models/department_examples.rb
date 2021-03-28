@@ -4,7 +4,7 @@ RSpec.shared_examples_for "a model with departments" do
   let(:indexes) { connection.indexes(table_name) }
   let(:index) { indexes.detect { |i| i.name == "index_#{table_name}_on_departments" } }
 
-  it { is_expected.to have_db_column(:departments).of_type(:integer).with_options(array: true, null: false, default: []) }
+  it { is_expected.to have_db_column(:departments).of_type(:integer).with_options(null: false, default: []) }
 
   it "indexes the departments column using a gin index" do
     expect(index).to be_present

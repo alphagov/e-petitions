@@ -37,6 +37,8 @@ module Archived
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, if: :closed?
 
+    validates_associated :debate_outcome, :government_response, :note, :rejection
+
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
     extend Searchable(:action, :background, :additional_details)

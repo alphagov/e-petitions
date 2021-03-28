@@ -1,0 +1,15 @@
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+amazon:
+  service: S3
+  bucket: <%= ENV["UPLOADED_IMAGES_S3_BUCKET"] %>
+  region: <%= ENV["AWS_REGION"] %>
+  http_open_timeout: 5
+  http_read_timeout: 5
+  retry_limit: 3

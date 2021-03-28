@@ -96,6 +96,18 @@ Rails.application.routes.draw do
     get '/privacy-policy',        to: redirect('/privacy')
     get '/faq',                   to: redirect('/help')
     get '/terms-and-conditions',  to: redirect('/help')
+
+    scope '/images', controller: 'active_storage/representations/proxy' do
+      get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
+    end
+  end
+
+  direct :outcome_image do |image, options|
+    signed_blob_id = image.blob.signed_id
+    variation_key  = image.variation.key
+    filename       = image.blob.filename
+
+    route_for(:image_proxy, signed_blob_id, variation_key, filename, options)
   end
 
   constraints Site.constraints_for_moderation do

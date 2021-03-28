@@ -15,10 +15,6 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:debated).of_type(:boolean).with_options(default: true, null: false) }
-    it { is_expected.to have_db_column(:commons_image_file_name).of_type(:string) }
-    it { is_expected.to have_db_column(:commons_image_content_type).of_type(:string) }
-    it { is_expected.to have_db_column(:commons_image_file_size).of_type(:integer) }
-    it { is_expected.to have_db_column(:commons_image_updated_at).of_type(:datetime) }
   end
 
   describe "associations" do
@@ -60,59 +56,30 @@ RSpec.describe Archived::DebateOutcome, type: :model do
     end
   end
 
-  describe "commons_image" do
+  describe "image" do
     let(:petition) { FactoryBot.create(:archived_petition, debate_state: "awaiting") }
     let(:debate_outcome) { FactoryBot.build(:archived_debate_outcome, petition: petition) }
 
-    it { should have_attached_file(:commons_image) }
+    it { is_expected.to have_one_attached(:image) }
 
-    describe "validation" do
-      it { should validate_attachment_content_type(:commons_image).
-                allowing("image/png", "image/gif", "image/jpeg").
-                rejecting("text/plain", "text/xml") }
-    end
+    describe "validations" do
+      let(:non_image) { fixture_file_upload("debate_outcome/commons_image-2x.txt") }
+      let(:non_jpeg) { fixture_file_upload("debate_outcome/commons_image-2x.png") }
+      let(:too_large) { fixture_file_upload("debate_outcome/commons_image-3x.jpg") }
+      let(:too_narrow) { fixture_file_upload("debate_outcome/commons_image-too-narrow.jpg") }
+      let(:too_wide) { fixture_file_upload("debate_outcome/commons_image-too-wide.jpg") }
+      let(:too_short) { fixture_file_upload("debate_outcome/commons_image-too-short.jpg") }
+      let(:too_tall) { fixture_file_upload("debate_outcome/commons_image-too-tall.jpg") }
+      let(:incorrect_ratio) { fixture_file_upload("debate_outcome/commons_image-incorrect-ratio.jpg") }
 
-    context "with a valid file" do
-      before { debate_outcome.commons_image = File.open(commons_image_file) }
-      it "is valid" do
-        expect(debate_outcome.valid?).to be true
-      end
-    end
-
-    context "with a too-small file" do
-      before do
-        debate_outcome.commons_image = File.open(commons_image_file_too_small)
-        debate_outcome.valid?
-      end
-
-      it "is invalid" do
-        expect(debate_outcome.valid?).to be false
-      end
-
-      it "contains the correct error" do
-        expect(debate_outcome.errors).to include(:commons_image)
-        expect(debate_outcome.errors[:commons_image].size).to eq 2
-        expect(debate_outcome.errors[:commons_image]).to include("Width must be at least 1260.0px (is 500.0px)")
-        expect(debate_outcome.errors[:commons_image]).to include("Height must be at least 710.0px (is 282.0px)")
-      end
-    end
-
-    context "with a file of of the wrong ratio" do
-      before do
-        debate_outcome.commons_image = File.open(commons_image_file_wrong_ratio)
-        debate_outcome.valid?
-      end
-
-      it "is invalid" do
-        expect(debate_outcome.valid?).to be false
-      end
-
-      it "contains the correct error" do
-        expect(debate_outcome.errors).to include(:commons_image)
-        expect(debate_outcome.errors[:commons_image].size).to eq 2
-        expect(debate_outcome.errors[:commons_image]).to include("Width must be at least 1260.0px (is 710.0px)")
-        expect(debate_outcome.errors[:commons_image]).to include("Width and height ratio of uploaded image is 0.56 - should be between 1.67 and 1.87")
-      end
+      it { is_expected.not_to allow_value(non_image).for(:image).with_message("Incorrect file type - please select a JPEG image") }
+      it { is_expected.not_to allow_value(non_jpeg).for(:image).with_message("Incorrect file type - please select a JPEG image") }
+      it { is_expected.not_to allow_value(too_large).for(:image).with_message("The image is too large (maximum is 512 KB)") }
+      it { is_expected.not_to allow_value(too_narrow).for(:image).with_message("Width must be at least 630px (is 512px)") }
+      it { is_expected.not_to allow_value(too_wide).for(:image).with_message("Width must be at most 1890px (is 2000px)") }
+      it { is_expected.not_to allow_value(too_short).for(:image).with_message("Height must be at least 355px (is 300px)") }
+      it { is_expected.not_to allow_value(too_tall).for(:image).with_message("Height must be at most 1260px (is 1300px)") }
+      it { is_expected.not_to allow_value(incorrect_ratio).for(:image).with_message("Aspect ratio of the image is 1 - should be between 1.5 and 1.8") }
     end
   end
 

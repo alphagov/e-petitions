@@ -30,7 +30,7 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
-gem 'paperclip'
+gem 'image_processing'
 gem 'maxminddb'
 gem 'redcarpet'
 gem 'scrypt'
@@ -43,7 +43,7 @@ group :development, :test do
   gem 'simplecov'
   gem 'brakeman', require: false
   gem 'bundler-audit', require: false
-  gem 'rspec-rails', '< 5'
+  gem 'rspec-rails'
   gem 'jasmine'
   gem 'jasmine_selenium_runner', require: false
   gem 'pry'

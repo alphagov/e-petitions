@@ -59,6 +59,9 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
+  # Store files locally.
+  config.active_storage.service = :test
+
   # Use webmock to disable net connections except for localhost and exceptions
   WebMock.disable_net_connect!(
     allow_localhost: true,

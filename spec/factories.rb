@@ -116,7 +116,7 @@ FactoryBot.define do
         transcript_url { nil }
         video_url { nil }
         debate_pack_url { nil }
-        commons_image { nil }
+        debate_image { nil }
       end
 
       after(:build) do |petition, evaluator|
@@ -127,7 +127,7 @@ FactoryBot.define do
           o.transcript_url = evaluator.transcript_url if evaluator.transcript_url.present?
           o.video_url = evaluator.video_url if evaluator.video_url.present?
           o.debate_pack_url = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
-          o.commons_image = evaluator.commons_image if evaluator.commons_image.present?
+          o.image = evaluator.debate_image if evaluator.debate_image.present?
         end
       end
     end
@@ -458,7 +458,7 @@ FactoryBot.define do
       transcript_url { nil }
       video_url { nil }
       debate_pack_url { nil }
-      commons_image { nil }
+      debate_image { nil }
     end
 
     debate_state { 'debated' }
@@ -471,7 +471,7 @@ FactoryBot.define do
       debate_outcome_attributes[:transcript_url] = evaluator.transcript_url if evaluator.transcript_url.present?
       debate_outcome_attributes[:video_url] = evaluator.video_url if evaluator.video_url.present?
       debate_outcome_attributes[:debate_pack_url] = evaluator.debate_pack_url if evaluator.debate_pack_url.present?
-      debate_outcome_attributes[:commons_image] = evaluator.commons_image if evaluator.commons_image.present?
+      debate_outcome_attributes[:image] = evaluator.debate_image if evaluator.debate_image.present?
 
       petition.build_debate_outcome(debate_outcome_attributes)
     end

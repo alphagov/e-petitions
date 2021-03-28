@@ -21,11 +21,7 @@
 /public/error.css
 
 # Ignore uploaded files
-/public/system/archived/debate_outcomes
-/public/system/debate_outcomes
-
-# Ignore uploaded test files
-/public/test
+/storage
 
 # Ignore deployment packages
 /pkg

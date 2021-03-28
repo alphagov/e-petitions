@@ -118,21 +118,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # For production-like environments we store items in an S3 bucket.
-  #
-  # However, we don't want to expose the HTTPS urls, since if we ever move to
-  # a different hosting platform we don't want to deal with old links.
-  # We also don't want to have to get an 'assets.domainname.example' SSL
-  # certificate, so instead we proxy requests from the frontend webservers for
-  # any url that starts with /attachments/ to the S3 bucket
-
-  config.paperclip_defaults = {
-    storage: :s3,
-    s3_region: 'eu-west-1',
-    s3_credentials: {
-      bucket: ENV.fetch('UPLOADED_IMAGES_S3_BUCKET')
-    },
-    path: '/:class/:attachment/:id_partition/:style/:filename',
-    url: ':s3_attachment_url'
-  }
+  # Store files on Amazon S3.
+  config.active_storage.service = :amazon
 end

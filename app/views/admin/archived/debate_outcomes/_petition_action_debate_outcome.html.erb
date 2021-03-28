@@ -46,10 +46,10 @@
       <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control' %>
     <% end %>
 
-    <%= form_row for: [f.object, :commons_image] do %>
-      <%= f.label :commons_image, 'Commons Image', class: 'form-label' %>
-      <%= error_messages_for_field f.object, :commons_image %>
-      <%= f.file_field :commons_image, tabindex: increment, class: 'form-control' %>
+    <%= form_row for: [f.object, :image] do %>
+      <%= f.label :image, 'Debate Image', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :image %>
+      <%= f.file_field :image, tabindex: increment, class: 'form-control' %>
     <% end %>
   </div>
 
