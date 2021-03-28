@@ -213,6 +213,15 @@ RSpec.describe Admin::AdminUsersController, type: :controller, admin: true do
         expect(response).to redirect_to(:action => :index)
         expect(flash[:alert]).to eq "You are not allowed to delete yourself!"
       end
+
+      it "will not let you delete users that have moderated petitions" do
+        petition = FactoryBot.create(:open_petition, moderated_by: delete_user)
+
+        delete :destroy, params: { id: delete_user.to_param }
+        expect(AdminUser.exists?(user.id)).to be_truthy
+        expect(response).to redirect_to(:action => :index)
+        expect(flash[:alert]).to eq "The user has moderated petitions so you can only deactivate their account"
+      end
     end
   end
 end

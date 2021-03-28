@@ -7,6 +7,7 @@ class Admin::AdminController < ApplicationController
   before_action :set_locale
   before_action :set_appsignal_namespace
   before_action :do_not_cache
+  before_action :set_current_user
 
   layout 'admin'
 
@@ -25,5 +26,9 @@ class Admin::AdminController < ApplicationController
 
   def set_appsignal_namespace
     Appsignal.set_namespace("admin")
+  end
+
+  def set_current_user
+    Admin::Current.user = current_user
   end
 end

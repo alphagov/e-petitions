@@ -39,8 +39,91 @@ RSpec.describe Petition, type: :model do
       end
     end
 
+    context "when the state changes" do
+      let(:user) { FactoryBot.create(:moderator_user) }
+
+      before do
+        Admin::Current.user = user
+      end
+
+      [
+        %w[pending validated],
+        %w[validated sponsored],
+        %w[validated flagged],
+        %w[sponsored flagged],
+        %w[flagged sponsored],
+        %w[open closed]
+      ].each do |initial, desired|
+        context "from '#{initial}' to '#{desired}'" do
+          let(:petition) { FactoryBot.create(:"#{initial}_petition", state: initial) }
+
+          before do
+            expect(Admin::Current).not_to receive(:user)
+          end
+
+          it "doesn't update the moderated by user" do
+            expect {
+              petition.update!(state: desired)
+            }.not_to change {
+              petition.moderated_by
+            }.from(nil)
+          end
+
+          it "updates the state" do
+            expect {
+              petition.update!(state: desired)
+            }.to change {
+              petition.state
+            }.from(initial).to(desired)
+          end
+        end
+      end
+
+      [
+        %w[validated open],
+        %w[validated rejected],
+        %w[validated hidden],
+        %w[sponsored open],
+        %w[sponsored rejected],
+        %w[sponsored hidden],
+        %w[flagged open],
+        %w[flagged rejected],
+        %w[flagged hidden],
+        %w[rejected hidden]
+      ].each do |initial, desired|
+        context "from '#{initial}' to '#{desired}'" do
+          let(:petition) { FactoryBot.create(:"#{initial}_petition", state: initial) }
+
+          before do
+            expect(Admin::Current).to receive(:user).and_return(user)
+          end
+
+          it "updates the moderated by user" do
+            expect {
+              petition.update!(state: desired, open_at: Time.current)
+            }.to change {
+              petition.moderated_by
+            }.from(nil).to(user)
+          end
+
+          it "updates the state" do
+            expect {
+              petition.update!(state: desired, open_at: Time.current)
+            }.to change {
+              petition.state
+            }.from(initial).to(desired)
+          end
+        end
+      end
+    end
+
     context "when moderating a petition" do
       let(:petition) { FactoryBot.create(:sponsored_petition, :translated, moderation_threshold_reached_at: 5.days.ago) }
+      let(:user) { FactoryBot.create(:moderator_user) }
+
+      before do
+        Admin::Current.user = user
+      end
 
       context "and the petition was opened" do
         it "records the moderation lag" do

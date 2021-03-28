@@ -22,6 +22,12 @@ class AdminUser < ActiveRecord::Base
     config.validates_uniqueness_of :email, uniqueness: { case_sensitive: false }
   end
 
+  with_options dependent: :restrict_with_exception do
+    with_options foreign_key: :moderated_by_id do
+      has_many :petitions
+    end
+  end
+
   # = Validations =
   validates_presence_of :email, :first_name, :last_name
   validates_presence_of :password, on: :create
