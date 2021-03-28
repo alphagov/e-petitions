@@ -50,6 +50,10 @@ module WelshPets
           Route.new(options, self)
         end
 
+        def direct(name, block)
+          UrlHelper.new(name, block)
+        end
+
         def [](option)
           @options[option]
         end
@@ -153,11 +157,21 @@ module WelshPets
         end
       end
 
+      class UrlHelper
+        attr_reader :name, :block
+
+        def initialize(name, block)
+          @name, @block = name, block
+        end
+      end
+
       attr_reader :routes
 
       def initialize
         @routes = []
         @scope  = Scope.new({}, nil)
+
+        @url_helpers = []
       end
 
       def draw(&block)
@@ -179,8 +193,16 @@ module WelshPets
         @routes << @scope.route(options.merge(path: path, via: :post))
       end
 
+      def direct(name, &block)
+        @url_helpers << @scope.direct(name, block)
+      end
+
       def each(&block)
         @routes.each(&block)
+      end
+
+      def url_helpers(&block)
+        @url_helpers.each(&block)
       end
     end
 
@@ -219,6 +241,10 @@ module WelshPets
         direct(route.name) do |*args|
           route_for((I18n.locale == :"en-GB" ? route_en : route_cy), *args)
         end
+      end
+
+      routes.url_helpers do |helper|
+        direct(helper.name, &helper.block)
       end
     end
 

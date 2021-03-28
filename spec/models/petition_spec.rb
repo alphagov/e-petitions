@@ -1399,7 +1399,7 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when a petition is in the closed state and the petition has not been referred or rejected" do
-      let!(:petition) { FactoryBot.create(:closed_petition, open_at: 1.month.ago, closed_at: 1.day.ago) }
+      let!(:petition) { FactoryBot.create(:closed_petition, open_at: 1.month.ago, closed_at: 25.hours.ago) }
 
       it "finds the petition" do
         expect(described_class.in_need_of_referring_or_rejecting).to include(petition)

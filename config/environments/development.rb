@@ -61,6 +61,9 @@ Rails.application.configure do
   # routes, locales, etc. This feature depends on the listen gem.
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
+  # Store files locally.
+  config.active_storage.service = :local
+
   # Relax referrer policy so that origin is reported for insecure requests.
   config.action_dispatch.default_headers.merge!(
     'Referrer-Policy' => 'origin-when-cross-origin'

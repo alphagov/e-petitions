@@ -6,7 +6,7 @@ RSpec.describe Member, type: :model do
   end
 
   describe "schema" do
-    it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false, primary_key: true) }
+    it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false, primary: true) }
     it { is_expected.to have_db_column(:region_id).of_type(:string).with_options(null: true, limit: 9) }
     it { is_expected.to have_db_column(:constituency_id).of_type(:string).with_options(null: true, limit: 9) }
     it { is_expected.to have_db_column(:name_en).of_type(:string).with_options(null: false, limit: 100) }

@@ -24,10 +24,7 @@
 /public/error.css
 
 # Ignore uploaded files
-/public/system/debate_outcomes
-
-# Ignore uploaded test files
-/public/test
+/storage
 
 # Dotenv 2.0 uses a .env.local for local overrides
 .env.local

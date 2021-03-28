@@ -266,30 +266,32 @@ RSpec.describe Admin::DebateOutcomesController, type: :controller, admin: true d
               petition.reload
             end
 
-            describe 'with no supplied image' do
+            describe 'a valid image' do
+              before { debate_outcome_attributes[:image] = fixture_file_upload('debate_outcome/commons_image-2x.jpg') }
               before { patch_and_reload }
-              it 'returns the default image url' do
-                expect(petition.debate_outcome.commons_image.url).to eq commons_default_image_url
+
+              it 'attaches the image' do
+                expect(petition.debate_outcome.image).to be_attached
               end
             end
 
-            describe 'a valid image' do
+            describe 'a non-image' do
+              before { debate_outcome_attributes[:image] = fixture_file_upload('debate_outcome/commons_image-2x.txt') }
+              it_behaves_like 'a debate_outcome with invalid parameters'
+            end
 
-              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file, 'image/jpeg') }
-              before { patch_and_reload }
-
-              it 'does not return the default image url' do
-                expect(petition.debate_outcome.commons_image.url).to_not eq commons_default_image_url
-              end
+            describe 'a non-JPEG image' do
+              before { debate_outcome_attributes[:image] = fixture_file_upload('debate_outcome/commons_image-2x.png') }
+              it_behaves_like 'a debate_outcome with invalid parameters'
             end
 
             describe 'a small image' do
-              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file_too_small, 'image/jpeg') }
+              before { debate_outcome_attributes[:image] = fixture_file_upload('debate_outcome/commons_image-too-short.jpg') }
               it_behaves_like 'a debate_outcome with invalid parameters'
             end
 
             describe 'an image in the wrong ratio' do
-              before { debate_outcome_attributes[:commons_image] = Rack::Test::UploadedFile.new(commons_image_file_wrong_ratio, 'image/jpeg') }
+              before { debate_outcome_attributes[:image] = fixture_file_upload('debate_outcome/commons_image-incorrect-ratio.jpg') }
               it_behaves_like 'a debate_outcome with invalid parameters'
             end
           end

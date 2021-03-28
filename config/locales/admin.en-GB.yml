@@ -44,6 +44,7 @@ en-GB:
       creators_emailed: "Everyone will be notified of the early closing of their petitions"
       debate_date_updated: "Updated the scheduled debate date successfully"
       debate_outcome_updated: "Updated debate outcome successfully"
+      debate_outcome_not_saved: "Debate outcome could not be saved - please check the form for errors"
       domain_created: "Domain created successfully"
       domain_updated: "Domain updated successfully"
       domain_deleted: "Domain removed successfully"

@@ -6,7 +6,7 @@ RSpec.describe Postcode, type: :model do
   end
 
   describe "schema" do
-    it { is_expected.to have_db_column(:id).of_type(:string).with_options(null: false, limit: 7, primary_key: true) }
+    it { is_expected.to have_db_column(:id).of_type(:string).with_options(null: false, limit: 7, primary: true) }
     it { is_expected.to have_db_column(:constituency_id).of_type(:string).with_options(null: false, limit: 9) }
   end
 

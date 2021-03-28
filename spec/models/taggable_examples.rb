@@ -4,7 +4,7 @@ RSpec.shared_examples_for "a taggable model" do
   let(:indexes) { connection.indexes(table_name) }
   let(:index) { indexes.detect { |i| i.name == "index_#{table_name}_on_tags" } }
 
-  it { is_expected.to have_db_column(:tags).of_type(:integer).with_options(array: true, null: false, default: []) }
+  it { is_expected.to have_db_column(:tags).of_type(:integer).with_options(null: false, default: []) }
 
   it "indexes the tags column using a gin index" do
     expect(index).to be_present

@@ -81,6 +81,18 @@ Rails.application.routes.draw do
       get '/:id/unsubscribe', action: 'unsubscribe', as: :unsubscribe_signature
       get '/:id/signed',      action: 'signed',      as: :signed_signature
     end
+
+    scope '/images', controller: 'active_storage/representations/proxy' do
+      get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
+    end
+
+    direct :outcome_image do |image, options|
+      signed_blob_id = image.blob.signed_id
+      variation_key  = image.variation.key
+      filename       = image.blob.filename
+
+      route_for(:image_proxy, signed_blob_id, variation_key, filename, options)
+    end
   end
 
   moderation_scope do
