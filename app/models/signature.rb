@@ -34,7 +34,7 @@ class Signature < ActiveRecord::Base
   }
 
   belongs_to :petition
-  belongs_to :invalidation
+  belongs_to :invalidation, optional: true
   has_one :contact # on_delete: :cascade
 
   validates :state, inclusion: { in: STATES }
@@ -459,10 +459,6 @@ class Signature < ActiveRecord::Base
 
     def count_star
       arel_table[Arel.star].count
-    end
-
-    def max_validated_at
-      arel_table[:validated_at].maximum
     end
 
     def normalize_email(email)

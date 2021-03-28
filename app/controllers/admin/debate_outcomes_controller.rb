@@ -21,7 +21,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
       redirect_to [:admin, @petition], notice: message
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :debate_outcome_not_saved
     end
   end
 
@@ -41,7 +41,7 @@ class Admin::DebateOutcomesController < Admin::AdminController
 
   def debate_outcome_attributes
     %i[
-      debated_on debated commons_image
+      debated_on debated image
       overview_en transcript_url_en video_url_en debate_pack_url_en
       overview_cy transcript_url_cy video_url_cy debate_pack_url_cy
     ]

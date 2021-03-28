@@ -23,7 +23,7 @@ RSpec.describe ApplicationController, type: :controller do
 
   it "sets cache control headers when asked" do
     get :index
-    expect(cache_control).to eq('no-cache, no-store')
+    expect(cache_control).to eq('no-store')
   end
 
   it "sets CORS headers for json requests" do

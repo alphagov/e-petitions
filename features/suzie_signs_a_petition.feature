@@ -155,7 +155,7 @@ Feature: Suzie signs a petition
     And I can click on a link to return to the petition
 
   Scenario: Eric clicks the link shared to him by Suzie
-    When Suzie has already signed the petition and validated her email
+    When Suzie has already signed the petition
     And Suzie shares the signatory confirmation link with Eric
     And I click the shared link
     Then I should see "Sign this petition"

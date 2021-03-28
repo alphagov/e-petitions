@@ -6,7 +6,7 @@ RSpec.describe Constituency, type: :model do
   end
 
   describe "schema" do
-    it { is_expected.to have_db_column(:id).of_type(:string).with_options(null: false, limit: 9, primary_key: true) }
+    it { is_expected.to have_db_column(:id).of_type(:string).with_options(null: false, limit: 9, primary: true) }
     it { is_expected.to have_db_column(:region_id).of_type(:string).with_options(null: false, limit: 9) }
     it { is_expected.to have_db_column(:name_en).of_type(:string).with_options(null: false, limit: 100) }
     it { is_expected.to have_db_column(:name_cy).of_type(:string).with_options(null: false, limit: 100) }

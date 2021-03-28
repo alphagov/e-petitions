@@ -3,8 +3,8 @@
     <h2 class="error-summary-heading" id="error-summary-heading"><%= t(:"ui.petitions.create.error_summary.heading") %></h2>
     <p><%= t(:"ui.petitions.create.error_summary.prompt", count: form.object.errors.size) %></p>
     <ul class="error-summary-list">
-      <% form.object.errors.each do |key, error| -%>
-        <li><%= error %></li>
+      <% form.object.errors.each do |error| -%>
+        <li><%= error.message %></li>
       <% end -%>
     </ul>
   </div>

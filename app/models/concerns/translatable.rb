@@ -6,14 +6,12 @@ module Translatable
 
     default_scope do
       extending do
-        def where(opts = :chain, *rest)
-          opts =
-            if opts.is_a?(Hash)
-              opts.transform_keys { |k| translated_method_name(k) }
-            else
-              opts
-            end
-          super
+        def where(*args)
+          options = args.first
+          if options.is_a?(Hash)
+            args[0] = options.transform_keys { |k| translated_method_name(k) }
+          end
+          super(*args)
         end
 
         def pluck(*names)

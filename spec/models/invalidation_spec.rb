@@ -8,7 +8,7 @@ RSpec.describe Invalidation, type: :model do
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:petition) }
+    it { is_expected.to belong_to(:petition).optional }
     it { is_expected.to have_many(:signatures) }
   end
 
@@ -336,22 +336,10 @@ RSpec.describe Invalidation, type: :model do
     describe "#start!" do
       subject { FactoryBot.create(:invalidation, ip_address: "10.0.1.1") }
 
-      let(:job) do
-        {
-          job: InvalidateSignaturesJob,
-          args: [
-            { "_aj_globalid" => "gid://welsh-pets/Invalidation/#{subject.id}" }
-          ],
-          queue: "high_priority"
-        }
-      end
-
       it "enqueues the invalidate signatures job" do
         expect {
           subject.start!
-        }.to change {
-          enqueued_jobs
-        }.from([]).to([job])
+        }.to have_enqueued_job(InvalidateSignaturesJob).on_queue(:high_priority).with(subject)
       end
 
       it "updates the enqueued_at timestamps" do

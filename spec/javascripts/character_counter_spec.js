@@ -5,7 +5,7 @@ describe('Character counter', function() {
   var $ = window.jQuery,
       $textbox,
       $counter;
-  
+
   beforeEach(function () {
     $textbox = $('<textarea data-max-length="50" id="fixture"></textarea>');
     $counter = $('<p class="character-count">50 characters max</p>');

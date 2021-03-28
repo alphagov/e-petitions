@@ -4,34 +4,36 @@ require 'active_support/core_ext/digest/uuid'
 
 FactoryBot.define do
   factory :admin_user do
-    sequence(:email) {|n| "admin#{n}@example.com" }
-    password              "Letmein1!"
-    password_confirmation "Letmein1!"
-    sequence(:first_name) {|n| "AdminUser#{n}" }
-    sequence(:last_name) {|n| "AdminUser#{n}" }
-    force_password_reset  false
+    sequence(:email) { |n| "admin#{n}@example.com" }
+    password { "Letmein1!" }
+    password_confirmation { "Letmein1!" }
+    sequence(:first_name) { |n| "AdminUser#{n}" }
+    sequence(:last_name) { |n| "AdminUser#{n}" }
+    force_password_reset { false }
   end
 
   factory :sysadmin_user, :parent => :admin_user do
-    role "sysadmin"
+    role { "sysadmin" }
   end
 
   factory :moderator_user, :parent => :admin_user do
-    role "moderator"
+    role { "moderator" }
   end
 
   factory :petition do
     transient do
       admin_notes { nil }
+      creator { nil }
       creator_name { nil }
       creator_email { nil }
       creator_attributes { {} }
-      sponsors_signed nil
+      sponsors_signed { nil }
       sponsor_count { Site.minimum_number_of_sponsors }
+      increment { true }
     end
 
     sequence(:action) { |n| "Petition #{n}" }
-    background "Petition background"
+    background { "Petition background" }
 
     trait :english do
       locale { "en-GB" }
@@ -42,7 +44,16 @@ FactoryBot.define do
     end
 
     after(:build) do |petition, evaluator|
-      petition.creator ||= FactoryBot.build(:validated_signature, creator: true)
+      unless petition.creator
+        petition.creator = evaluator.creator
+
+        if petition.pending?
+          petition.creator ||= build(:pending_signature, petition: petition, creator: true)
+        else
+          petition.creator ||= build(:validated_signature, petition: petition, creator: true)
+        end
+      end
+
       petition.creator.assign_attributes(evaluator.creator_attributes)
 
       if evaluator.creator_name
@@ -53,14 +64,21 @@ FactoryBot.define do
         petition.creator.email = evaluator.creator_email
       end
 
+      if petition.last_signed_at?
+        petition.creator.validated_at = petition.last_signed_at
+      end
+
       if evaluator.admin_notes
         petition.build_note details: evaluator.admin_notes
       end
     end
 
     after(:create) do |petition, evaluator|
-      if petition.signature_count.zero?
-        petition.increment!(:signature_count) if petition.creator.validated?
+      if petition.signature_count.zero? && evaluator.increment
+        if petition.creator.validated?
+          petition.last_signed_at = nil
+          petition.increment_signature_count!(petition.creator.validated_at)
+        end
       end
 
       unless evaluator.sponsors_signed.nil?
@@ -91,7 +109,7 @@ FactoryBot.define do
     end
 
     trait :with_additional_details do
-      additional_details "Petition additional details"
+      additional_details { "Petition additional details" }
     end
 
     trait :scheduled_for_debate do
@@ -132,7 +150,7 @@ FactoryBot.define do
   end
 
   factory :pending_petition, :parent => :petition do
-    state Petition::PENDING_STATE
+    state { Petition::PENDING_STATE }
 
     after(:build) do |petition, evaluator|
       petition.creator.state = Signature::PENDING_STATE
@@ -141,12 +159,12 @@ FactoryBot.define do
   end
 
   factory :validated_petition, :parent => :petition do
-    state  Petition::VALIDATED_STATE
+    state { Petition::VALIDATED_STATE }
   end
 
   factory :sponsored_petition, :parent => :petition do
     moderation_threshold_reached_at { Time.current }
-    state  Petition::SPONSORED_STATE
+    state { Petition::SPONSORED_STATE }
 
     trait :overdue do
       moderation_threshold_reached_at { Site.moderation_overdue_in_days.ago - 5.minutes }
@@ -162,11 +180,11 @@ FactoryBot.define do
   end
 
   factory :flagged_petition, :parent => :petition do
-    state  Petition::FLAGGED_STATE
+    state { Petition::FLAGGED_STATE }
   end
 
   factory :open_petition, :parent => :sponsored_petition do
-    state  Petition::OPEN_STATE
+    state { Petition::OPEN_STATE }
     open_at { Time.current }
 
     translated
@@ -185,9 +203,9 @@ FactoryBot.define do
   end
 
   factory :closed_petition, :parent => :open_petition do
-    state      Petition::CLOSED_STATE
-    open_at    { 10.days.ago }
-    closed_at  { 1.day.ago }
+    state { Petition::CLOSED_STATE }
+    open_at { 10.days.ago }
+    closed_at { 1.day.ago }
   end
 
   factory :paper_petition, :parent => :closed_petition do
@@ -196,7 +214,7 @@ FactoryBot.define do
   end
 
   factory :rejected_petition, :parent => :petition do
-    state Petition::REJECTED_STATE
+    state { Petition::REJECTED_STATE }
 
     transient do
       rejection_code { "duplicate" }
@@ -212,7 +230,7 @@ FactoryBot.define do
   end
 
   factory :hidden_petition, :parent => :petition do
-    state Petition::HIDDEN_STATE
+    state { Petition::HIDDEN_STATE }
 
     transient do
       rejection_code { "offensive" }
@@ -229,18 +247,18 @@ FactoryBot.define do
 
   factory :referred_petition, :parent => :closed_petition do
     referral_threshold_reached_at { 1.week.ago }
-    referred_at  { 1.day.ago }
+    referred_at { 1.day.ago }
   end
 
   factory :awaiting_debate_petition, :parent => :referred_petition do
     debate_threshold_reached_at { 1.week.ago }
-    debate_state 'awaiting'
+    debate_state { 'awaiting' }
   end
 
   factory :scheduled_debate_petition, :parent => :referred_petition do
     debate_threshold_reached_at { 1.week.ago }
     scheduled_debate_date { 1.week.from_now }
-    debate_state 'scheduled'
+    debate_state { 'scheduled' }
   end
 
   factory :debated_petition, :parent => :referred_petition do
@@ -261,7 +279,7 @@ FactoryBot.define do
       commons_image { nil }
     end
 
-    debate_state 'debated'
+    debate_state { 'debated' }
 
     after(:build) do |petition, evaluator|
       debate_outcome_attributes = { debated: true }
@@ -337,7 +355,7 @@ FactoryBot.define do
       overview_cy { nil }
     end
 
-    debate_state 'not_debated'
+    debate_state { 'not_debated' }
 
     after(:build) do |petition, evaluator|
       debate_outcome_attributes = { debated: false }
@@ -375,63 +393,67 @@ FactoryBot.define do
   end
 
   factory :signature do
-    sequence(:name)  {|n| "Jo Public #{n}" }
-    sequence(:email) {|n| "jo#{n}@public.com" }
-    postcode              "CF99 1NA"
-    location_code         "GB-WLS"
-    notify_by_email       "1"
-    state                 Signature::VALIDATED_STATE
+    sequence(:name) { |n| "Jo Public #{n}" }
+    sequence(:email) { |n| "jo#{n}@public.com" }
+    postcode { "CF99 1NA" }
+    location_code { "GB-WLS" }
+    notify_by_email { "1" }
+    state { Signature::VALIDATED_STATE }
 
     after(:build) do |signature, evaluator|
+      signature.petition ||= build(:petition, creator: (signature.creator ? signature : nil))
       build(:contact, signature: signature) if signature.creator?
-    end
-
-    after(:create) do |signature, evaluator|
-      if signature.petition && signature.validated?
-        signature.petition.increment!(:signature_count)
-        signature.increment!(:number)
-      end
     end
   end
 
   factory :pending_signature, :parent => :signature do
-    state      Signature::PENDING_STATE
+    state { Signature::PENDING_STATE }
   end
 
   factory :fraudulent_signature, :parent => :signature do
-    state      Signature::FRAUDULENT_STATE
+    state { Signature::FRAUDULENT_STATE }
   end
 
   factory :validated_signature, :parent => :signature do
-    state                         Signature::VALIDATED_STATE
-    validated_at                  { Time.current }
-    seen_signed_confirmation_page true
+    state { Signature::VALIDATED_STATE }
+    validated_at { Time.current }
+    seen_signed_confirmation_page { true }
 
     trait :just_signed do
-      seen_signed_confirmation_page false
+      seen_signed_confirmation_page { false }
+    end
+
+    transient {
+      increment { true }
+    }
+
+    after(:create) do |signature, evaluator|
+      if evaluator.increment && signature.petition
+        signature.petition.increment_signature_count!
+      end
     end
   end
 
   factory :invalidated_signature, :parent => :validated_signature do
-    state                         Signature::INVALIDATED_STATE
-    invalidated_at                { Time.current }
+    state { Signature::INVALIDATED_STATE }
+    invalidated_at { Time.current }
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
 
   factory :sponsor, parent: :pending_signature do
-    sponsor true
+    sponsor { true }
 
     trait :pending do
-      state "pending"
+      state { "pending" }
     end
 
     trait :validated do
-      state "validated"
+      state { "validated" }
     end
 
     trait :just_signed do
-      seen_signed_confirmation_page false
+      seen_signed_confirmation_page { false }
     end
   end
 
@@ -537,19 +559,19 @@ FactoryBot.define do
   end
 
   factory :constituency_petition_journal do
-    constituency_id "W09000043"
+    constituency_id { "W09000043" }
     association :petition
   end
 
   factory :country_petition_journal do
-    location_code "GB-WLS"
+    location_code { "GB-WLS" }
     association :petition
   end
 
   factory :debate_outcome do
     association :petition, factory: :open_petition
     debated_on { 1.month.from_now.to_date }
-    debated true
+    debated { true }
 
     trait :fully_specified do
       overview { 'Debate on Petition P-05-869: Declare a Climate Emergency and fit all policies with zero-carbon targets' }
@@ -567,16 +589,16 @@ FactoryBot.define do
 
   factory :note do
     association :petition, factory: :petition
-    details "Petition notes"
+    details { "Petition notes" }
   end
 
   factory :petition_email, class: "Petition::Email" do
     association :petition, factory: :petition
-    subject_en "Message Subject"
-    body_en "Message body"
-    subject_cy "Pwnc Neges"
-    body_cy "Corff neges"
-    sent_by "Admin User"
+    subject_en { "Message Subject" }
+    body_en { "Message body" }
+    subject_cy { "Pwnc Neges" }
+    body_cy { "Corff neges" }
+    sent_by { "Admin User" }
   end
 
   factory :petition_statistics, class: "Petition::Statistics" do
@@ -585,7 +607,7 @@ FactoryBot.define do
 
   factory :rejection do
     association :petition, factory: :validated_petition
-    code "duplicate"
+    code { "duplicate" }
   end
 
   factory :email_requested_receipt do
@@ -593,15 +615,15 @@ FactoryBot.define do
   end
 
   factory :feedback do
-    comment "This thing is wrong"
-    petition_link_or_title "Do stuff"
-    email "foo@example.com"
-    user_agent "Mozilla/5.0"
+    comment { "This thing is wrong" }
+    petition_link_or_title { "Do stuff" }
+    email { "foo@example.com" }
+    user_agent { "Mozilla/5.0" }
   end
 
   factory :invalidation do
-    summary "Invalidation summary"
-    details "Reasons for invalidation"
+    summary { "Invalidation summary" }
+    details { "Reasons for invalidation" }
 
     trait :cancelled do
       cancelled_at { Time.current }
@@ -653,7 +675,7 @@ FactoryBot.define do
 
     trait :english do
       locale { "en-GB" }
-      name   { "English" }
+      name { "English" }
 
       translations do
         { "en-GB" => { "title" => "Petitions" } }
@@ -662,7 +684,7 @@ FactoryBot.define do
 
     trait :welsh do
       locale { "cy-GB" }
-      name   { "Welsh" }
+      name { "Welsh" }
 
       translations do
         { "cy-GB" => { "title" => "Deisebau" } }

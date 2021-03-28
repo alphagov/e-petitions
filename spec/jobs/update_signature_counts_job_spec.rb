@@ -58,8 +58,7 @@ RSpec.describe UpdateSignatureCountsJob, type: :job do
       let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "9999") }
 
       before do
-        # FIXME: reset the signature count to ensure it's valid because
-        # the factories don't leave the petition in a consistent state.
+        # Rewind the petition to the previous count state
         petition.update_signature_count!(previous_count_updated_at)
       end
 

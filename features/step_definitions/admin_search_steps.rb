@@ -20,7 +20,6 @@ Given(/^a petition "(.*?)" signed by "([^"]*)"$/) do |action, name_or_email|
 
   @petition = FactoryBot.create(:open_petition, action: action)
   @signature = FactoryBot.create(:validated_signature, attrs.merge(petition: @petition))
-  @petition.update_signature_count!
 end
 
 Given(/^(\d+) petitions? signed from "([^"]*)"$/) do |petition_count, ip_address|

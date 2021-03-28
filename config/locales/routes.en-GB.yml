@@ -24,6 +24,9 @@ en-GB:
     "/help":
       en-GB: "/help"
       cy-GB: "/help"
+    "/images/:signed_blob_id/:variation_key/*filename":
+      en-GB: "/images/:signed_blob_id/:variation_key/*filename"
+      cy-GB: "/delweddau/:signed_blob_id/:variation_key/*filename"
     "/manifest":
       en-GB: "/manifest"
       cy-GB: "/manifest"

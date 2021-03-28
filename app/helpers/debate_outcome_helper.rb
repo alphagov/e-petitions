@@ -1,4 +1,9 @@
 module DebateOutcomeHelper
+  OUTCOME_IMAGE_WIDTH = 1296.0
+  OUTCOME_IMAGE_HEIGHT = 972.0
+  OUTCOME_IMAGE_1X = [ OUTCOME_IMAGE_WIDTH / 2, OUTCOME_IMAGE_HEIGHT / 2 ]
+  OUTCOME_IMAGE_2X = [ OUTCOME_IMAGE_WIDTH, OUTCOME_IMAGE_HEIGHT ]
+
   Url = Struct.new(:name, :url) do
     def title
       I18n.t(name, scope: :"ui.debate_outcomes.link_titles")
@@ -10,8 +15,21 @@ module DebateOutcomeHelper
   end
 
   def debate_outcome_image(outcome)
-    sources = ['1x', '2x'].map { |size| "#{outcome.commons_image.url(size)} #{size}" }
-    t(:"ui.debate_outcomes.image_tag_html", url: outcome.commons_image.url('2x'), srcset: sources.join(', '), action: outcome.petition.action)
+    if outcome.image.attached?
+      urls = {
+        '1x' => outcome_image_path(outcome.image.variant(resize_to_limit: OUTCOME_IMAGE_1X)),
+        '2x' => outcome_image_path(outcome.image.variant(resize_to_limit: OUTCOME_IMAGE_2X))
+      }
+    else
+      urls = {
+        '1x' => image_path('frontend/senedd-chamber.jpg'),
+        '2x' => image_path('frontend/senedd-chamber-2x.jpg')
+      }
+    end
+
+    sources = urls.map { |size, url| "#{url} #{size}" }
+
+    t(:"ui.debate_outcomes.image_tag_html", url: urls['2x'], srcset: sources.join(', '), action: outcome.petition.action)
   end
 
   def debate_outcome_links?(outcome)
