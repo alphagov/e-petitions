@@ -14,6 +14,7 @@ class RateLimit < ActiveRecord::Base
   validates :sustained_period, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :creator_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :sponsor_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :feedback_rate, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :allowed_domains, length: { maximum: 10000, allow_blank: true }
   validates :allowed_ips, length: { maximum: 10000, allow_blank: true }
   validates :blocked_domains, length: { maximum: 50000, allow_blank: true }
@@ -94,7 +95,9 @@ class RateLimit < ActiveRecord::Base
     return false if ip_allowed?(signature.ip_address)
     return false if domain_allowed?(signature.domain)
 
-    if signature.creator?
+    if signature.is_a?(Feedback)
+      feedback_rate_exceeded?(signature)
+    elsif signature.creator?
       creator_rate_exceeded?(signature)
     elsif signature.sponsor?
       sponsor_rate_exceeded?(signature)
@@ -311,5 +314,9 @@ class RateLimit < ActiveRecord::Base
 
   def sponsor_rate_exceeded?(signature)
     sponsor_rate < signature.rate(sustained_period)
+  end
+
+  def feedback_rate_exceeded?(feedback)
+    feedback_rate < feedback.rate(sustained_period)
   end
 end

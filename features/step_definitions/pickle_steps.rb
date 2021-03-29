@@ -171,3 +171,7 @@ end
 Given(/^an open petition exists with action: "([^"]*)", committee_note: "([^"]*)"$/) do |action, committee_note|
   @petition = FactoryBot.create(:open_petition, action: action, committee_note: committee_note)
 end
+
+Then(/^a feedback should not exist with comment: "([^"]*)"$/) do |comment|
+  expect(Feedback.where(comment: comment)).not_to exist
+end
