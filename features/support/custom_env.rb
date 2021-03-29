@@ -79,7 +79,7 @@ end
 
 module CucumberHelpers
   def click_details(name)
-    if @javascript
+    if Capybara.current_driver == Capybara.javascript_driver
       page.find(".//details/summary[contains(., '#{name}')]").click
     else
       page.find(".//summary[contains(., '#{name}')]/..").click

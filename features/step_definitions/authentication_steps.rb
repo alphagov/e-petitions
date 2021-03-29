@@ -25,6 +25,12 @@ Given /^I am logged in as a moderator named "([^\"]*)" with the password "([^\"]
   step "the admin user is logged in"
 end
 
+Given /^I am logged in as a sysadmin named "([^\"]*)"$/ do |name|
+  first_name, last_name = name.split
+  @user = FactoryBot.create(:sysadmin_user, first_name: first_name, last_name: last_name)
+  step "the admin user is logged in"
+end
+
 Given /^I am logged in as a sysadmin with the email "([^\"]*)", first_name "([^\"]*)", last_name "([^\"]*)"$/ do |email, first_name, last_name|
   @user = FactoryBot.create(:sysadmin_user, :email => email, :first_name => first_name, :last_name => last_name)
   step "the admin user is logged in"

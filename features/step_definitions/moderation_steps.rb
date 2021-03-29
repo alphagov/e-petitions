@@ -8,6 +8,12 @@ When(/^I visit a sponsored petition with action: "([^"]*)", that has background:
   visit admin_petition_url(@sponsored_petition)
 end
 
+When(/^I reject the petition$/) do
+  choose "Reject"
+  select "Duplicate petition", :from => :petition_rejection_code
+  click_button "Email petition creator"
+end
+
 When(/^I reject the petition with a reason code "([^"]*)"$/) do |reason_code|
   choose "Reject"
   select reason_code, :from => :petition_rejection_code
@@ -68,6 +74,10 @@ end
 Then /^the petition should be visible on the site for signing$/ do
   visit petition_url(@petition)
   expect(page).to have_css("a", :text => "Sign")
+end
+
+Then(/^the petition can no longer be rejected$/) do
+  expect(page).to have_no_field('Reject', visible: false)
 end
 
 Then(/^the petition can no longer be flagged$/) do
@@ -195,6 +205,10 @@ end
 
 Then /^it can still be approved$/ do
   expect(page).to have_field('Approve', visible: false)
+end
+
+Then /^it can still be flagged$/ do
+  expect(page).to have_field('Flag', visible: false)
 end
 
 Then /^it can still be rejected$/ do
