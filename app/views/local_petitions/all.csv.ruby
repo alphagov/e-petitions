@@ -1,4 +1,4 @@
-csv_cache [:all_local_petitions, @constituency], expires_in: 5.minutes do
+csv_cache [I18n.locale, :all_local_petitions, @constituency], expires_in: 5.minutes do
   CSV.generate do |csv|
     csv << ['Petition', 'URL', 'State', 'Local Signatures', 'Total Signatures']
 
