@@ -86,6 +86,16 @@ Feature: Moderator respond to petition
     And the creator should not receive a notification email
     And I should see "The petition must be fully translated first before being made public"
 
+  Scenario: Moderator tries to publish a petition before the creator has validated their email address
+    Given I am logged in as a moderator
+    And a pending petition "Remove trolls on the bridge" exists
+    And the petition is translated
+    When I go to the admin petition page for "Remove trolls on the bridge"
+    And I publish the petition
+    Then the petition should still be unmoderated
+    And the creator should not receive a notification email
+    And I should see "You can't publish a petition before the creator has validated their email address"
+
   Scenario: Moderator rejects petition with a suitable reason code
     Given I am logged in as a moderator named "Ben Macintosh"
     When I look at the next petition on my list
