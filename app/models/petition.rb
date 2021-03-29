@@ -19,6 +19,7 @@ class Petition < ActiveRecord::Base
   VISIBLE_STATES    = %w[open closed completed rejected]
   SHOW_STATES       = %w[pending validated sponsored flagged open closed completed rejected]
   MODERATED_STATES  = %w[open closed completed hidden rejected]
+  REJECTED_STATES   = %w[rejected hidden]
   PUBLISHED_STATES  = %w[open closed completed]
   SELECTABLE_STATES = %w[open closed completed rejected hidden]
   SEARCHABLE_STATES = %w[open closed completed rejected]
@@ -688,23 +689,29 @@ class Petition < ActiveRecord::Base
   def moderate(params)
     self.moderation = params[:moderation]
 
-    case moderation
-    when 'approve'
-      publish
-    when 'reject'
-      reject(params[:rejection])
-    when 'flag'
-      update(state: FLAGGED_STATE)
-    when 'unflag'
-      update(state: SPONSORED_STATE)
-    else
-      if flagged?
-        errors.add :moderation, :blank, action: 'unflag'
-      else
-        errors.add :moderation, :blank, action: 'flag'
-      end
+    transaction do
+      # Clear any existing rejection details
+      self.rejection = nil
+      self.rejected_at = nil
 
-      return false
+      case moderation
+      when 'approve'
+        publish
+      when 'reject'
+        reject(params[:rejection])
+      when 'flag'
+        update(state: FLAGGED_STATE)
+      when 'unflag'
+        update(state: SPONSORED_STATE)
+      else
+        if flagged?
+          errors.add :moderation, :blank, action: 'unflag'
+        else
+          errors.add :moderation, :blank, action: 'flag'
+        end
+
+        return false
+      end
     end
   end
 
@@ -903,6 +910,10 @@ class Petition < ActiveRecord::Base
 
   def closed_for_signing?(now = Time.current)
     rejected? || closed_at? && closed_at < 24.hours.ago(now)
+  end
+
+  def rejection?
+    rejected? || hidden?
   end
 
   def update_lock!(user, now = Time.current)

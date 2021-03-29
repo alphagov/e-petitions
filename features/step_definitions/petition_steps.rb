@@ -139,7 +139,11 @@ end
 Then(/^I should see the petition details$/) do
   expect(page).to have_content(@petition.action)
   expect(page).to have_content(@petition.background) if @petition.background?
-  expect(page).to have_content(@petition.additional_details) if @petition.additional_details?
+
+  if @petition.additional_details?
+    click_details "More details"
+    expect(page).to have_content(@petition.additional_details)
+  end
 end
 
 Then(/^I should see the vote count, closed and open dates$/) do

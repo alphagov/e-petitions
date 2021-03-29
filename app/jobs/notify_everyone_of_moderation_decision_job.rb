@@ -9,7 +9,7 @@ class NotifyEveryoneOfModerationDecisionJob < ApplicationJob
 
     if petition.published?
       notify_everyone_of_publication(creator, sponsors)
-    elsif petition.rejected? || petition.hidden?
+    elsif petition.rejection?
       notify_everyone_of_rejection(creator, sponsors, petition.rejection)
     end
   end

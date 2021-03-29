@@ -1,5 +1,12 @@
 <nav class="petition-actions" role="navigation">
   <ul>
+    <% if @petition.rejection? %>
+      <% if current_user.is_a_sysadmin? %>
+        <li class="petition-action">
+          <%= render 'petition_action_moderation', petition: @petition %>
+        </li>
+      <% end %>
+    <% end %>
     <% if @petition.open? %>
       <li class="petition-action">
         <%= render 'petition_action_signature', petition: @petition %>
@@ -57,7 +64,7 @@
           <%= render 'petition_action_take_down', petition: @petition %>
         </li>
 
-      <% elsif @petition.rejected? || @petition.hidden? -%>
+      <% elsif @petition.rejection? -%>
         <li class="petition-action">
           <%= render 'petition_action_change_rejection_status', petition: @petition %>
         </li>
