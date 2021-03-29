@@ -27,6 +27,7 @@ class Petition < ActiveRecord::Base
 
   PUBLISHABLE_STATES         = %w[validated sponsored flagged]
   IN_MODERATION_STATES       = %w[sponsored flagged]
+  MODERATABLE_STATES         = %w[validated sponsored flagged rejected hidden]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
 
@@ -315,6 +316,10 @@ class Petition < ActiveRecord::Base
 
     def todo_list
       where(state: TODO_LIST_STATES)
+    end
+
+    def moderatable
+      where(state: MODERATABLE_STATES)
     end
 
     def visible

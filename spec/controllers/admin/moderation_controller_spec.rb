@@ -26,11 +26,14 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         patch :update, params: params
       end
 
-      it "is unsuccessful for a petition that is not validated" do
-        petition.publish
-        expect {
-          do_patch
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      context "when the petition is not validated" do
+        let(:petition) { FactoryBot.create(:pending_petition) }
+
+        it "is unsuccessful" do
+          expect {
+            do_patch
+          }.to raise_error(ActiveRecord::RecordNotFound)
+        end
       end
 
       context "when moderation param is 'approve'" do
