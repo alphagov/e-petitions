@@ -33,7 +33,7 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
           expect {
             do_patch moderation: "approve"
           }.not_to change {
-            petition.state
+            petition.reload.state
           }.from("pending")
         end
       end
