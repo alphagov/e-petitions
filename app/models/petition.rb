@@ -335,17 +335,18 @@ class Petition < ActiveRecord::Base
       debated.where.not(debate_outcome_at: nil)
     end
 
-    def trending(period, limit: 3)
+    def trending(interval, limit = 3)
       petitions_star = arel_table[Arel.star]
       signatures = Signature.arel_table
 
       select(petitions_star, signatures[:id].count.as("signature_count_in_period")).
       joins(:signatures).
       where(arel_table[:state].eq(OPEN_STATE)).
-      where(arel_table[:last_signed_at].gt(period.first)).
-      where(signatures[:validated_at].between(period)).
+      where(signatures[:validated_at].between(interval)).
       where(signatures[:invalidated_at].eq(nil)).
-      group(arel_table[:id]).order(signatures[:id].count.desc).
+      group(arel_table[:id]).
+      order(signatures[:id].count.desc).
+      order(arel_table[:created_at].desc).
       limit(limit)
     end
 

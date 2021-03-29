@@ -11,10 +11,11 @@ Rails.application.routes.draw do
     end
 
     scope controller: 'pages' do
-      get '/',        action: 'index',   as: :home
-      get '/help',    action: 'help',    as: :help
-      get '/privacy', action: 'privacy', as: :privacy
-      get '/rules',   action: 'rules',   as: :rules
+      get '/',         action: 'index',    as: :home
+      get '/help',     action: 'help',     as: :help
+      get '/privacy',  action: 'privacy',  as: :privacy
+      get '/rules',    action: 'rules',    as: :rules
+      get '/trending', action: 'trending', as: :trending
 
       get '/accessibility', action: 'accessibility', as: :accessibility
 
