@@ -1,4 +1,4 @@
-json.cache! @petition, expires_in: 5.minutes do
+json.cache! [I18n.locale, @petition], expires_in: 5.minutes do
   json.links do
     json.self request.url
   end

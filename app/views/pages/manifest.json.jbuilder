@@ -1,4 +1,4 @@
-json.cache! :manifest, expires_in: 5.minutes do
+json.cache! [I18n.locale, :manifest], expires_in: 5.minutes do
   json.name "Petitions"
   json.display "standalone"
   json.orientation "portrait"

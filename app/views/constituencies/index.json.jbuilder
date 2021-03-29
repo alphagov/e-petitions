@@ -1,4 +1,4 @@
-json.cache! :constituencies, expires_in: 1.hour do
+json.cache! [I18n.locale, :constituencies], expires_in: 1.hour do
   json.array! @constituencies do |constituency|
     json.id constituency.id
     json.name constituency.name
