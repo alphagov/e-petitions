@@ -334,6 +334,76 @@ RSpec.describe PetitionsController, type: :controller do
           expect(assigns(:petitions).scope).to eq :open
         end
       end
+
+      context "and it is an array" do
+        it "redirects to itself with state=all" do
+          get :index, params: { state: [ "l337haxxor" ] }
+          expect(response).to redirect_to "https://petitions.senedd.wales/petitions?state=all"
+        end
+
+        it "preserves other params when it redirects" do
+          get :index, params: { q: "what is clocks", state: [ "l337haxxor" ] }
+          expect(response).to redirect_to "https://petitions.senedd.wales/petitions?q=what+is+clocks&state=all"
+        end
+      end
+
+      context "and it is a hash" do
+        it "redirects to itself with state=all" do
+          get :index, params: { state: { l337: "haxxor" } }
+          expect(response).to redirect_to "https://petitions.senedd.wales/petitions?state=all"
+        end
+
+        it "preserves other params when it redirects" do
+          get :index, params: { q: "what is clocks", state: { l337: "haxxor" } }
+          expect(response).to redirect_to "https://petitions.senedd.wales/petitions?q=what+is+clocks&state=all"
+        end
+      end
+    end
+
+    context "when a page param is provided" do
+      context "and it is an array" do
+        it "is treated as being on the first page" do
+          get :index, params: { page: [ "l337haxxor" ] }
+          expect(assigns(:petitions).current_page).to eq 1
+        end
+      end
+
+      context "and it is a hash" do
+        it "is treated as being on the first page" do
+          get :index, params: { page: { l337: "haxxor" } }
+          expect(assigns(:petitions).current_page).to eq 1
+        end
+      end
+
+      context "and it is out of range" do
+        it "is treated as being on the first page" do
+          get :index, params: { page: "414141414141414141" }
+          expect(assigns(:petitions).current_page).to eq 1
+        end
+      end
+    end
+
+    context "when a count param is provided" do
+      context "and it is an array" do
+        it "uses the default count" do
+          get :index, params: { count: [ "l337haxxor" ] }
+          expect(assigns(:petitions).page_size).to eq 50
+        end
+      end
+
+      context "and it is a hash" do
+        it "uses the default count" do
+          get :index, params: { count: { l337: "haxxor" } }
+          expect(assigns(:petitions).page_size).to eq 50
+        end
+      end
+
+      context "and it is out of range" do
+        it "uses the default count" do
+          get :index, params: { count: "414141414141414141" }
+          expect(assigns(:petitions).page_size).to eq 50
+        end
+      end
     end
   end
 
