@@ -108,3 +108,6 @@ en-GB:
     "/topics":
       en-GB: "/topics"
       cy-GB: "/pynciau"
+    "/trending":
+      en-GB: "/trending"
+      cy-GB: "/tueddiadau"

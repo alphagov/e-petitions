@@ -1,7 +1,15 @@
 class PagesController < LocalizedController
+  before_action :set_cors_headers, only: :trending, if: :json_request?
+
   def index
     respond_to do |format|
       format.html
+    end
+  end
+
+  def trending
+    respond_to do |format|
+      format.json
     end
   end
 
