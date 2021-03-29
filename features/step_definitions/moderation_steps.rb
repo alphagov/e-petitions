@@ -49,6 +49,11 @@ When(/^I flag the petition$/) do
   click_button "Save without emailing"
 end
 
+When(/^I restore the petition$/) do
+  choose "Restore"
+  click_button "Save without emailing"
+end
+
 Then /^the petition is still available for searching or viewing$/ do
   step %{I search for "Rejected petitions" with "#{@petition.action}"}
   step %{I should see the petition "#{@petition.action}"}
@@ -213,6 +218,10 @@ end
 
 Then /^it can still be rejected$/ do
   expect(page).to have_field('Reject', visible: false)
+end
+
+Then(/^it can still be restored$/) do
+  expect(page).to have_field('Restore', visible: false)
 end
 
 Then /^it can be restored to a sponsored state$/ do
