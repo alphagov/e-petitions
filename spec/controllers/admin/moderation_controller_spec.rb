@@ -54,8 +54,10 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
 
         it "is unsuccessful" do
           expect {
-            do_patch
-          }.to raise_error(ActiveRecord::RecordNotFound)
+            do_patch moderation: "approve"
+          }.not_to change {
+            petition.reload.state
+          }.from("pending")
         end
       end
 

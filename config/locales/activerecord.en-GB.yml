@@ -58,6 +58,7 @@ en-GB:
             moderation:
               blank: "You must choose to approve, reject, flag or mark as dormant"
               invalid: "You must choose to approve, reject or restore the petition to the sponsored state"
+              still_pending: "You can't publish a petition before the creator has validated their email address"
             creator_signature:
               blank: "%{attribute} must be completed"
             state:

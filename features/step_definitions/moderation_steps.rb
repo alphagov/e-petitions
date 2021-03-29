@@ -195,3 +195,7 @@ Given(/^a moderator responds to the petition$/) do
     And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"
   )
 end
+
+Then /^the petition should still be unmoderated$/ do
+  expect(@petition).not_to be_visible
+end

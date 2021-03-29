@@ -2203,7 +2203,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe '#publish' do
-    subject(:petition) { FactoryBot.create(:petition) }
+    subject(:petition) { FactoryBot.create(:sponsored_petition) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }

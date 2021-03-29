@@ -156,10 +156,6 @@ Given(/^an open petition exists with action: "([^"]*)", committee_note: "([^"]*)
   @petition = FactoryBot.create(:open_petition, action: action, committee_note: committee_note)
 end
 
-Given(/^a petition "([^"]*)" exists$/) do |action|
-  @petition = FactoryBot.create(:petition, action: action)
-end
-
 Given(/^the following archived petitions exist:$/) do |table|
   parliament = FactoryBot.create(:parliament, :coalition)
 
@@ -204,10 +200,6 @@ end
 
 Given(/^an archived petition exists with action: "([^"]*)", committee_note: "([^"]*)"$/) do |action, committee_note|
   FactoryBot.create(:archived_petition, action: action, committee_note: committee_note)
-end
-
-Given(/^a dormant petition "([^"]*)"$/) do |action|
-  @petition = FactoryBot.create(:dormant_petition, action: action)
 end
 
 Then(/^a feedback should not exist with comment: "([^"]*)"$/) do |comment|

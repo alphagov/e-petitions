@@ -28,7 +28,7 @@ class Petition < ActiveRecord::Base
   PUBLISHABLE_STATES         = %w[validated sponsored flagged dormant]
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged dormant]
-  MODERATABLE_STATES         = %w[validated sponsored flagged dormant rejected hidden]
+  MODERATABLE_STATES         = %w[pending validated sponsored flagged dormant rejected hidden]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged dormant]
 
@@ -687,6 +687,9 @@ class Petition < ActiveRecord::Base
   end
 
   def publish(time = Time.current)
+    errors.add :moderation, :still_pending if pending?
+    return false if errors.any?
+
     Appsignal.increment_counter("petition.published", 1)
     update(state: OPEN_STATE, open_at: time)
   end
