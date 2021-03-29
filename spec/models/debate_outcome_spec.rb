@@ -25,6 +25,27 @@ RSpec.describe DebateOutcome, type: :model do
     it { is_expected.to validate_length_of(:video_url_cy).is_at_most(500) }
     it { is_expected.to validate_length_of(:debate_pack_url_cy).is_at_most(500) }
 
+    it { is_expected.to allow_value("https://www.example.com/").for(:debate_pack_url_en) }
+    it { is_expected.to allow_value("https://www.example.com/").for(:debate_pack_url_cy) }
+    it { is_expected.to allow_value("https://www.example.com/").for(:transcript_url_en) }
+    it { is_expected.to allow_value("https://www.example.com/").for(:transcript_url_cy) }
+    it { is_expected.to allow_value("https://www.example.com/").for(:video_url_en) }
+    it { is_expected.to allow_value("https://www.example.com/").for(:video_url_cy) }
+
+    it { is_expected.to allow_value("http://www.example.com/").for(:debate_pack_url_en) }
+    it { is_expected.to allow_value("http://www.example.com/").for(:debate_pack_url_cy) }
+    it { is_expected.to allow_value("http://www.example.com/").for(:transcript_url_en) }
+    it { is_expected.to allow_value("http://www.example.com/").for(:transcript_url_cy) }
+    it { is_expected.to allow_value("http://www.example.com/").for(:video_url_en) }
+    it { is_expected.to allow_value("http://www.example.com/").for(:video_url_cy) }
+
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:debate_pack_url_en) }
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:debate_pack_url_cy) }
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:transcript_url_en) }
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:transcript_url_cy) }
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:video_url_en) }
+    it { is_expected.not_to allow_value("javascript:alert('Hello, World!');").for(:video_url_cy) }
+
     context "when then petition was debated" do
       subject { described_class.new(debated: true) }
 
