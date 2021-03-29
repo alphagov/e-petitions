@@ -174,11 +174,31 @@ Feature: Moderator respond to petition
     When I revisit the petition
     Then the petition can no longer be rejected
     But it can still be approved
+    And it can still be restored
     And it can still be flagged
     When I publish the petition
     Then I should see "Published by Ben Macintosh"
     And the petition should be visible on the site for signing
     And the creator should receive a notification email
+
+  @javascript
+  Scenario: Moderator restores a rejected petition
+    Given I am logged in as a sysadmin named "Ben Macintosh"
+    When I look at the next petition on my list
+    And I reject the petition
+    Then the creator should receive a rejection notification email
+    And the petition is not available for signing
+    But the petition is still available for searching or viewing
+    Given no emails have been sent
+    When I revisit the petition
+    Then the petition can no longer be rejected
+    But it can still be approved
+    And it can still be restored
+    And it can still be flagged
+    When I restore the petition
+    Then the creator should not receive a notification email
+    And the petition is not available for searching or viewing
+    But the petition will still show up in the back-end reporting
 
   @javascript
   Scenario: Moderator flags a rejected petition
@@ -192,6 +212,7 @@ Feature: Moderator respond to petition
     When I revisit the petition
     Then the petition can no longer be rejected
     But it can still be approved
+    And it can still be restored
     And it can still be flagged
     When I flag the petition
     Then the creator should not receive a notification email

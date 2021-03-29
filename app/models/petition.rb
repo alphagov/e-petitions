@@ -635,7 +635,7 @@ class Petition < ActiveRecord::Base
   end
 
   def moderation=(value)
-    @moderation = value if value.in?(%w[approve reject flag unflag])
+    @moderation = value if value.in?(%w[approve reject restore flag unflag])
   end
 
   def moderation
@@ -701,7 +701,7 @@ class Petition < ActiveRecord::Base
         reject(params[:rejection])
       when 'flag'
         update(state: FLAGGED_STATE)
-      when 'unflag'
+      when 'unflag', 'restore'
         update(state: SPONSORED_STATE)
       else
         if flagged?
@@ -710,7 +710,7 @@ class Petition < ActiveRecord::Base
           errors.add :moderation, :blank, action: 'flag'
         end
 
-        return false
+        false
       end
     end
   end
