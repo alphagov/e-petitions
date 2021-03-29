@@ -27,7 +27,7 @@ class Petition < ActiveRecord::Base
 
   PUBLISHABLE_STATES         = %w[validated sponsored flagged]
   IN_MODERATION_STATES       = %w[sponsored flagged]
-  MODERATABLE_STATES         = %w[validated sponsored flagged rejected hidden]
+  MODERATABLE_STATES         = %w[pending validated sponsored flagged rejected hidden]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
 
@@ -721,10 +721,9 @@ class Petition < ActiveRecord::Base
   end
 
   def publish(time = Time.current)
-    unless translated?
-      errors.add :moderation, :translation_missing
-      return false
-    end
+    errors.add :moderation, :translation_missing unless translated?
+    errors.add :moderation, :still_pending if pending?
+    return false if errors.any?
 
     Appsignal.increment_counter("petition.published", 1)
     update(state: OPEN_STATE, open_at: time, closed_at: closing_date(time))
