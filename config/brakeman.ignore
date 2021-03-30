@@ -3,19 +3,19 @@
     {
       "warning_type": "Dynamic Render Path",
       "warning_code": 15,
-      "fingerprint": "e4468e7b1ded3f96a11a705b7a7563f47e7ea0c618d55c372a188b4f0f61ba38",
+      "fingerprint": "25e40e0d6cfa2e0837966177cb0c70f4a348580a8823e995e0b2b76c9d513ed1",
       "check_name": "Render",
       "message": "Render path contains parameter value",
       "file": "app/views/petitions/search/_results.html.erb",
       "line": 8,
       "link": "https://brakemanscanner.org/docs/warning_types/dynamic_render_path/",
-      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{Petition.visible.preload(:creator, :rejection, :debate_outcome).search(params).scope}\", { :petition => petition })",
+      "code": "render(action => \"petitions/search/result_items/petition_result_for_facet_#{Petition.visible.preload(:creator, :rejection, :debate_outcome).preload(:creator).search(params).scope}\", { :petition => petition })",
       "render_path": [
         {
           "type": "controller",
           "class": "PetitionsController",
           "method": "index",
-          "line": 20,
+          "line": 22,
           "file": "app/controllers/petitions_controller.rb",
           "rendered": {
             "name": "petitions/index",
@@ -25,7 +25,7 @@
         {
           "type": "template",
           "name": "petitions/index",
-          "line": 32,
+          "line": 36,
           "file": "app/views/petitions/index.html.erb",
           "rendered": {
             "name": "petitions/search/_results",
@@ -79,7 +79,7 @@
       "check_name": "PermitAttributes",
       "message": "Potentially dangerous key allowed for mass assignment",
       "file": "app/controllers/admin/admin_users_controller.rb",
-      "line": 60,
+      "line": 64,
       "link": "https://brakemanscanner.org/docs/warning_types/mass_assignment/",
       "code": "params.require(:admin_user).permit(:password, :password_confirmation, :first_name, :last_name, :role, :email, :force_password_reset, :account_disabled)",
       "render_path": null,
@@ -124,6 +124,6 @@
       "note": ""
     }
   ],
-  "updated": "2020-04-07 15:45:01 +0100",
+  "updated": "2021-03-30 14:26:09 +0100",
   "brakeman_version": "4.7.2"
 }
