@@ -73,7 +73,7 @@ RSpec.describe ConstituencyPetitionJournal, type: :model do
     let(:signature_count) { 1 }
 
     context "when the supplied signature is valid" do
-      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_id) }
+      let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, constituency_id: constituency_id) }
       let(:now) { 1.hour.from_now.change(usec: 0) }
 
       it "decrements the signature_count by 1" do

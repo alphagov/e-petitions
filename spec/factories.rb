@@ -520,7 +520,13 @@ FactoryBot.define do
 
     after(:create) do |signature, evaluator|
       if evaluator.increment && signature.petition
-        signature.petition.increment_signature_count!
+        petition = signature.petition
+        last_signed_at = petition.last_signed_at
+
+        if petition.increment_signature_count!
+          ConstituencyPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+          CountryPetitionJournal.increment_signature_counts_for(petition, last_signed_at)
+        end
       end
     end
   end

@@ -2202,14 +2202,98 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe '#publish' do
+  describe '#moderate' do
+    shared_examples "it doesn't change timestamps" do
+      it "doesn't change the open_at timestamp" do
+        expect {
+          petition.moderate(params)
+        }.not_to change {
+          petition.reload.open_at
+        }
+      end
+
+      it "doesn't change the closed_at timestamp" do
+        expect {
+          petition.moderate(params)
+        }.not_to change {
+          petition.reload.closed_at
+        }
+      end
+    end
+
+    context "when taking down an open petition" do
+      let(:petition) do
+        FactoryBot.create(
+          :open_petition,
+          open_at: 2.weeks.ago,
+          closed_at: 2.weeks.from_now
+        )
+      end
+
+      let(:params) do
+        { moderation: "reject", rejection: { code: "duplicate" } }
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+    end
+
+    context "when republishing a closed petition that was taken down" do
+      let(:params) do
+        { moderation: "approve" }
+      end
+
+      let(:petition) do
+        FactoryBot.create(
+          :rejected_petition,
+          open_at: 6.weeks.ago,
+          closed_at: 2.weeks.ago,
+        )
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+
+      it "restores it to the 'closed' state" do
+        expect {
+          petition.moderate(params)
+        }.to change {
+          petition.reload.state
+        }.from('rejected').to('closed')
+      end
+    end
+
+    context "when republishing an open petition that was taken down" do
+      let(:params) do
+        { moderation: "approve" }
+      end
+
+      let(:petition) do
+        FactoryBot.create(
+          :rejected_petition,
+          open_at: 2.weeks.ago,
+          closed_at: 2.weeks.from_now,
+        )
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+
+      it "restores it to the 'open' state" do
+        expect {
+          petition.moderate(params)
+        }.to change {
+          petition.reload.state
+        }.from('rejected').to('open')
+      end
+    end
+  end
+
+  describe '#publish!' do
     subject(:petition) { FactoryBot.create(:sponsored_petition) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
 
     before do
-      petition.publish
+      petition.publish!
     end
 
     it "sets the state to OPEN" do
@@ -2221,13 +2305,13 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#reject" do
+  describe "#reject!" do
     subject(:petition) { FactoryBot.create(:petition) }
 
     %w[duplicate irrelevant no-action honours fake-name foi].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(code: rejection_code)
+          petition.reject!(code: rejection_code)
           petition.reload
         end
 
@@ -2244,7 +2328,7 @@ RSpec.describe Petition, type: :model do
     %w[libellous offensive].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(code: rejection_code)
+          petition.reject!(code: rejection_code)
           petition.reload
         end
 
@@ -2272,8 +2356,8 @@ RSpec.describe Petition, type: :model do
           expect(p2.rejection).to be_nil
           expect(p2.association(:rejection)).to be_loaded
 
-          p1.reject(code: "duplicate")
-          p2.reject(code: "irrelevant")
+          p1.reject!(code: "duplicate")
+          p2.reject!(code: "irrelevant")
 
           expect(rejection.code).to eq("irrelevant")
         }.not_to raise_error

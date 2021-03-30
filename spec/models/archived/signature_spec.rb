@@ -55,18 +55,13 @@ RSpec.describe Archived::Signature, type: :model do
 
   describe "callbacks" do
     context "when the signature is destroyed" do
-      let(:attributes) { FactoryBot.attributes_for(:archived_petition, signature_count: 6) }
-      let(:creator) { petition.creator }
+      let(:creator) { FactoryBot.build(:archived_signature, creator: true) }
+      let(:petition) { FactoryBot.create(:archived_petition, creator: creator, signature_count: 6) }
       let(:signature) { petition.signatures.last }
 
-      let(:petition) do
-        Archived::Petition.create!(attributes) do |petition|
-          petition.creator = FactoryBot.build(:archived_signature, creator: true)
-          petition.parliament = FactoryBot.build(:parliament)
-
-          5.times do
-            petition.signatures << FactoryBot.build(:archived_signature)
-          end
+      before do
+        5.times do
+          FactoryBot.create(:archived_signature, petition: petition)
         end
       end
 
@@ -287,13 +282,12 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe ".subscribe!" do
-    let(:attributes) { FactoryBot.attributes_for(:archived_petition) }
-    let(:creator) { FactoryBot.create(:archived_signature, creator: true) }
-    let(:petition) { FactoryBot.create(:archived_petition, creator: creator) }
+    let(:creator) { FactoryBot.build(:archived_signature, creator: true) }
+    let(:petition) { FactoryBot.create(:archived_petition, creator: creator, signature_count: 6) }
 
     before do
       5.times do
-        petition.signatures << FactoryBot.create(:archived_signature, notify_by_email: false)
+        FactoryBot.create(:archived_signature, petition: petition, notify_by_email: false)
       end
     end
 
@@ -357,13 +351,12 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe ".unsubscribe!" do
-    let(:attributes) { FactoryBot.attributes_for(:archived_petition) }
-    let(:creator) { FactoryBot.create(:archived_signature, creator: true) }
-    let(:petition) { FactoryBot.create(:archived_petition, creator: creator) }
+    let(:creator) { FactoryBot.build(:archived_signature, creator: true) }
+    let(:petition) { FactoryBot.create(:archived_petition, creator: creator, signature_count: 6) }
 
     before do
       5.times do
-        petition.signatures << FactoryBot.create(:archived_signature, notify_by_email: true)
+        FactoryBot.create(:archived_signature, petition: petition, notify_by_email: true)
       end
     end
 
@@ -415,18 +408,13 @@ RSpec.describe Archived::Signature, type: :model do
   end
 
   describe ".destroy!" do
-    let(:attributes) { FactoryBot.attributes_for(:archived_petition, signature_count: 6) }
-    let(:creator) { petition.creator }
+    let(:creator) { FactoryBot.build(:archived_signature, creator: true) }
+    let(:petition) { FactoryBot.create(:archived_petition, creator: creator, signature_count: 6) }
     let(:signature) { petition.signatures.last }
 
-    let(:petition) do
-      Archived::Petition.create!(attributes) do |petition|
-        petition.creator = FactoryBot.build(:archived_signature, creator: true)
-        petition.parliament = FactoryBot.build(:parliament)
-
-        5.times do
-          petition.signatures << FactoryBot.build(:archived_signature)
-        end
+    before do
+      5.times do
+        FactoryBot.create(:archived_signature, petition: petition)
       end
     end
 
