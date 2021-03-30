@@ -85,21 +85,13 @@ RSpec.describe Signature, type: :model do
 
   describe "callbacks" do
     context "when the signature is destroyed" do
-      let(:attributes) { FactoryBot.attributes_for(:petition) }
-      let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-      let(:petition) do
-        Petition.create(attributes) do |petition|
-          petition.creator = creator
-
-          5.times do
-            petition.signatures << FactoryBot.create(:pending_signature)
-          end
-        end
-      end
+      let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+      let!(:creator) { petition.creator }
 
       before do
-        petition.signatures.each { |s| s.validate! }
-        petition.publish
+        5.times do
+          FactoryBot.create(:validated_signature, petition: petition)
+        end
       end
 
       context "and the signature is the creator" do
@@ -112,19 +104,14 @@ RSpec.describe Signature, type: :model do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
-        let(:signature) {
+        let!(:signature) {
           FactoryBot.create(
-            :pending_signature,
+            :validated_signature,
             petition: petition,
             constituency_id: "W09000043",
             location_code: "GB-WLS"
           )
         }
-
-        before do
-          signature.validate!
-          petition.reload
-        end
 
         it "decrements the petition signature count" do
           expect(petition.signature_count).to eq(7)
@@ -146,20 +133,14 @@ RSpec.describe Signature, type: :model do
         let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
         let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
-        let(:signature) {
+        let!(:signature) {
           FactoryBot.create(
-            :pending_signature,
+            :invalidated_signature,
             petition: petition,
             constituency_id: "W09000043",
             location_code: "GB"
           )
         }
-
-        before do
-          signature.validate!
-          signature.invalidate!
-          petition.reload
-        end
 
         it "doesn't decrement the petition signature count" do
           expect(petition.signature_count).to eq(6)
@@ -557,21 +538,13 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".validate!" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
     end
 
     context "when passed a signature id that doesn't exist" do
@@ -680,21 +653,13 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".invalidate!" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
     end
 
     context "when passed a signature id that doesn't exist" do
@@ -708,11 +673,9 @@ RSpec.describe Signature, type: :model do
     end
 
     context "with a validated signature" do
-      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
       before do
-        signature.validate!
-
         allow(described_class).to receive(:find).and_call_original
         allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
         expect(signature).to receive(:invalidate!).and_call_original
@@ -729,21 +692,13 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".subscribe!" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature, notify_by_email: false)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
     end
 
     context "when passed a signature id that doesn't exist" do
@@ -787,11 +742,9 @@ RSpec.describe Signature, type: :model do
     end
 
     context "with a validated signature" do
-      let(:signature) { FactoryBot.create(:pending_signature, petition: petition, notify_by_email: false) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition, notify_by_email: false) }
 
       before do
-        signature.validate!
-
         allow(described_class).to receive(:find).and_call_original
         allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
         expect(signature).to receive(:update!).with(notify_by_email: true).and_call_original
@@ -808,21 +761,13 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".unsubscribe!" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
     end
 
     context "when passed a signature id that doesn't exist" do
@@ -854,11 +799,9 @@ RSpec.describe Signature, type: :model do
     end
 
     context "with a validated signature" do
-      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
       before do
-        signature.validate!
-
         allow(described_class).to receive(:find).and_call_original
         allow(described_class).to receive(:find).with([signature.id]).and_return([signature])
         expect(signature).to receive(:update!).with(notify_by_email: false).and_call_original
@@ -875,21 +818,13 @@ RSpec.describe Signature, type: :model do
   end
 
   describe ".destroy!" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
     end
 
     context "when passed a signature id that doesn't exist" do
@@ -916,19 +851,14 @@ RSpec.describe Signature, type: :model do
       let(:country_journal) { CountryPetitionJournal.for(petition, "GB-WLS") }
       let(:constituency_journal) { ConstituencyPetitionJournal.for(petition, "W09000043") }
 
-      let(:signature) {
+      let!(:signature) {
         FactoryBot.create(
-          :pending_signature,
+          :validated_signature,
           petition: petition,
           constituency_id: "W09000043",
           location_code: "GB-WLS"
         )
       }
-
-      before do
-        signature.validate!
-        petition.reload
-      end
 
       it "decrements the petition signature count" do
         expect {
@@ -1154,36 +1084,19 @@ RSpec.describe Signature, type: :model do
   end
 
   describe "#number" do
-    let(:attributes) { FactoryBot.attributes_for(:petition) }
-    let(:creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:petition) do
-      Petition.create(attributes) do |petition|
-        petition.creator = creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
-
-    let(:other_attributes) { FactoryBot.attributes_for(:petition) }
-    let(:other_creator) { FactoryBot.create(:pending_signature, creator: true) }
-    let(:other_petition) do
-      Petition.create(other_attributes) do |petition|
-        petition.creator = other_creator
-
-        5.times do
-          petition.signatures << FactoryBot.create(:pending_signature)
-        end
-      end
-    end
+    let!(:petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:creator) { petition.creator }
+    let!(:other_petition) { FactoryBot.create(:open_petition, :translated) }
+    let!(:other_creator) { petition.creator }
 
     before do
-      petition.signatures.each { |s| s.validate! }
-      petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: petition)
+      end
 
-      other_petition.signatures.each { |s| s.validate! }
-      other_petition.publish
+      5.times do
+        FactoryBot.create(:validated_signature, petition: other_petition)
+      end
     end
 
     it "returns the signature number" do

@@ -100,7 +100,7 @@ en-GB:
         petition:
           attributes:
             moderation:
-              blank: "You must choose to approve, reject or %{action}"
+              blank: "You must choose a moderation action"
               translation_missing: "The petition must be fully translated first before being made public"
               still_pending: "You can't publish a petition before the creator has validated their email address"
             creator_signature:

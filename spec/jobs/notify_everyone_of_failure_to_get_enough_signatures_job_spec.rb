@@ -9,7 +9,7 @@ RSpec.describe NotifyEveryoneOfFailureToGetEnoughSignaturesJob, type: :job do
 
   context "when the petition fails to get enough signatures" do
     before do
-      petition.reject(code: "insufficient")
+      petition.reject!(code: "insufficient")
     end
 
     it "notifies the creator" do

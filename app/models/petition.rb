@@ -697,23 +697,29 @@ class Petition < ActiveRecord::Base
 
       case moderation
       when 'approve'
-        publish
+        publish!
       when 'reject'
-        reject(params[:rejection])
+        reject!(params[:rejection])
       when 'flag'
-        update(state: FLAGGED_STATE)
+        update!(state: FLAGGED_STATE)
       when 'unflag', 'restore'
-        update(state: SPONSORED_STATE)
+        update!(state: SPONSORED_STATE)
       else
-        if flagged?
-          errors.add :moderation, :blank, action: 'unflag'
-        else
-          errors.add :moderation, :blank, action: 'flag'
-        end
-
-        false
+        errors.add :moderation, :blank
+        raise ActiveRecord::RecordNotSaved, "Unable to moderate petition"
       end
     end
+
+    if published?
+      Appsignal.increment_counter("petition.published", 1)
+    elsif rejected?
+      Appsignal.increment_counter("petition.rejected", 1)
+    end
+
+    true
+  rescue ActiveRecord::RecordNotSaved, ActiveRecord::RecordInvalid
+    reload_rejection unless rejection.present?
+    false
   end
 
   def moderating?
@@ -728,16 +734,22 @@ class Petition < ActiveRecord::Base
     hidden? && state_was.in?(VISIBLE_STATES)
   end
 
-  def publish(time = Time.current)
+  def publish!(time = Time.current)
     errors.add :moderation, :translation_missing unless translated?
     errors.add :moderation, :still_pending if pending?
-    return false if errors.any?
 
-    Appsignal.increment_counter("petition.published", 1)
-    update(state: OPEN_STATE, open_at: time, closed_at: closing_date(time))
+    if errors.any?
+      raise ActiveRecord::RecordNotSaved, "Unable to moderate petition"
+    end
+
+    update!(
+      state: state_for_publishing(time),
+      open_at: time_for_publishing(time),
+      closed_at: closing_date(time)
+    )
   end
 
-  def reject(attributes)
+  def reject!(attributes)
     begin
       if rejection.present?
         rejection.attributes = attributes
@@ -761,17 +773,9 @@ class Petition < ActiveRecord::Base
         end
       end
 
-      Appsignal.increment_counter("petition.rejected", 1)
-
-      rejection.save
+      rejection.save!
     rescue ActiveRecord::RecordNotUnique => e
-      reload_rejection.update(attributes)
-    end
-  end
-
-  def reject!(attributes)
-    unless reject(attributes)
-      raise ActiveRecord::RecordNotSaved, "Failed to save the rejection details"
+      reload_rejection.update!(attributes)
     end
   end
 
@@ -917,6 +921,10 @@ class Petition < ActiveRecord::Base
     rejected? || hidden?
   end
 
+  def previously_published?(now = Time.current)
+    open_at && open_at < now
+  end
+
   def update_lock!(user, now = Time.current)
     if locked_by == user
       update!(locked_at: now)
@@ -1051,5 +1059,17 @@ class Petition < ActiveRecord::Base
 
   def sponsor_count
     @sponsor_count ||= sponsors.validated.count
+  end
+
+  def state_for_publishing(time)
+    if open_at
+      closed_at < time ? OPEN_STATE : CLOSED_STATE
+    else
+      OPEN_STATE
+    end
+  end
+
+  def time_for_publishing(time)
+    open_at || time
   end
 end

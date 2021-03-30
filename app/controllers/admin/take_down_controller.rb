@@ -6,7 +6,7 @@ class Admin::TakeDownController < Admin::AdminController
   end
 
   def update
-    if @petition.reject(rejection_params[:rejection])
+    if @petition.moderate(moderation_params)
       send_notifications
       redirect_to [:admin, @petition]
     else
@@ -20,8 +20,16 @@ class Admin::TakeDownController < Admin::AdminController
     @petition = Petition.find(params[:petition_id])
   end
 
+  def moderation_params
+    rejection_params.merge(moderation: "reject")
+  end
+
   def rejection_params
-    params.require(:petition).permit(rejection: [:code, :details_en, :details_cy])
+    params.require(:petition).permit(*rejection_attributes)
+  end
+
+  def rejection_attributes
+    [ rejection: [:code, :details_en, :details_cy] ]
   end
 
   def send_notifications

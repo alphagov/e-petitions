@@ -9,7 +9,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
 
   context "when the petition is published" do
     before do
-      petition.publish
+      petition.publish!
     end
 
     it "notifies the creator" do
@@ -41,7 +41,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
     let(:rejection) { petition.rejection }
 
     before do
-      petition.reject(code: "duplicate")
+      petition.reject!(code: "duplicate")
     end
 
     it "notifies the creator" do
@@ -73,7 +73,7 @@ RSpec.describe NotifyEveryoneOfModerationDecisionJob, type: :job do
     let(:rejection) { petition.rejection }
 
     before do
-      petition.reject(code: "offensive")
+      petition.reject!(code: "offensive")
     end
 
     it "notifies the creator" do

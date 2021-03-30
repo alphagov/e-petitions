@@ -6,31 +6,34 @@
       <h2 class="petition-action-heading">Moderate this petition</h2>
     <% end %>
     <%= error_messages_for_field petition, :moderation %>
+    <%= f.hidden_field :moderation, value: "" %>
     <div class="multiple-choice">
       <%= f.radio_button :moderation, 'approve' %>
       <%= f.label :moderation_approve, "Approve", for: "petition_moderation_approve" %>
     </div>
-    <% if f.object.rejection? %>
-      <div class="multiple-choice">
-      <%= f.radio_button :moderation, 'restore' %>
-      <%= f.label :moderation_reject, "Restore", for: "petition_moderation_restore" %>
-      </div>
-    <% else %>
-      <div class="multiple-choice">
-      <%= f.radio_button :moderation, 'reject' %>
-      <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
-      </div>
-    <% end %>
-    <% if f.object.flagged? %>
-      <div class="multiple-choice">
-        <%= f.radio_button :moderation, 'unflag' %>
-        <%= f.label :moderation_unflag, "Unflag", for: "petition_moderation_unflag" %>
-      </div>
-    <% elsif !f.object.published? %>
-      <div class="multiple-choice">
-        <%= f.radio_button :moderation, 'flag' %>
-        <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
-      </div>
+    <% unless f.object.previously_published? %>
+      <% if f.object.rejection? %>
+        <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'restore' %>
+        <%= f.label :moderation_reject, "Restore", for: "petition_moderation_restore" %>
+        </div>
+      <% else %>
+        <div class="multiple-choice">
+        <%= f.radio_button :moderation, 'reject' %>
+        <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
+        </div>
+      <% end %>
+      <% if f.object.flagged? %>
+        <div class="multiple-choice">
+          <%= f.radio_button :moderation, 'unflag' %>
+          <%= f.label :moderation_unflag, "Unflag", for: "petition_moderation_unflag" %>
+        </div>
+      <% else !f.object.published? %>
+        <div class="multiple-choice">
+          <%= f.radio_button :moderation, 'flag' %>
+          <%= f.label :moderation_flag, "Flag", for: "petition_moderation_flag" %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 
