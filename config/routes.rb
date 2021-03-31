@@ -83,7 +83,7 @@ Rails.application.routes.draw do
       get '/:id/signed',      action: 'signed',      as: :signed_signature
     end
 
-    scope '/images', controller: 'active_storage/representations/proxy' do
+    scope '/images', controller: 'images' do
       get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
     end
 
