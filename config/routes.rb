@@ -97,7 +97,7 @@ Rails.application.routes.draw do
     get '/faq',                   to: redirect('/help')
     get '/terms-and-conditions',  to: redirect('/help')
 
-    scope '/images', controller: 'active_storage/representations/proxy' do
+    scope '/images', controller: 'images' do
       get '/:signed_blob_id/:variation_key/*filename', action: 'show', as: :image_proxy
     end
   end
