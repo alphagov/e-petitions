@@ -1063,7 +1063,7 @@ class Petition < ActiveRecord::Base
 
   def state_for_publishing(time)
     if open_at
-      closed_at < time ? OPEN_STATE : CLOSED_STATE
+      closed_at > time ? OPEN_STATE : CLOSED_STATE
     else
       OPEN_STATE
     end
