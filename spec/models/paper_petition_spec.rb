@@ -215,7 +215,7 @@ RSpec.describe PaperPetition, type: :model do
 
         expect(contact).to have_attributes(
           address: "The Senedd\nPierhead St\nCardiff",
-          phone_number: "03002006565"
+          phone_number: "0300 200 6565"
         )
       end
     end

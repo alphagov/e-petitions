@@ -37,11 +37,12 @@ class Signature < ActiveRecord::Base
   belongs_to :petition
   belongs_to :invalidation, optional: true
   has_one :contact # on_delete: :cascade
+  accepts_nested_attributes_for :contact, update_only: true
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }
   validates :name, format: { without: URI::regexp, message: :has_uri }
-  validates :email, presence: true, email: { allow_blank: true }, on: :create
+  validates :email, presence: true, email: { allow_blank: true }
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :postcode, length: { maximum: 255 }, allow_blank: true
@@ -783,8 +784,6 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  private
-
   def formatted_postcode
     if united_kingdom?
       postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
@@ -792,6 +791,8 @@ class Signature < ActiveRecord::Base
       postcode
     end
   end
+
+  private
 
   def inline_updates?
     ENV["INLINE_UPDATES"] == "true"

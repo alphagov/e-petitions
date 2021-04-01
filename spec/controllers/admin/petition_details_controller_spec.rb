@@ -105,13 +105,28 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
               action: 'New action',
               background: 'New background',
               additional_details: 'New additional_details',
-              creator_attributes: { name: 'Jo Public' }
+              creator_attributes: {
+                name: 'Jo Public',
+                email: 'jo@example.com',
+                postcode: 'G34 0BX',
+                contact_attributes: {
+                  address: '1 Nowhere Road',
+                  phone_number: '01234 567890'
+                }
+              }
             }
           }
         end
 
         it "are limited to action, background, additional_details and creator name" do
-          is_expected.to permit(:action, :background, :additional_details, :creator_attributes => [:name]).for(:update, params: params).on(:petition)
+          is_expected.to permit(
+            :action, :background, :additional_details,
+            :creator_attributes => [:name, :email, :postcode,
+              :contact_attributes => [
+                :address, :phone_number
+              ]
+            ]
+          ).for(:update, params: params).on(:petition)
         end
       end
 
