@@ -9,7 +9,7 @@ class Admin::PetitionDetailsController < Admin::AdminController
     if update_petition
       redirect_to [:admin, @petition], notice: :petition_updated
     else
-      render :show
+      render :show, alert: :petition_not_saved
     end
   end
 
