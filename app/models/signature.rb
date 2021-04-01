@@ -121,7 +121,7 @@ class Signature < ActiveRecord::Base
     end
 
     def duplicate(id, email)
-      where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+      where(id_not_eq(id).and(lower_email_eq(email)))
     end
 
     def duplicate_emails
@@ -474,6 +474,14 @@ class Signature < ActiveRecord::Base
     def normalize_domain(email)
       email.split("@").last.downcase
     end
+
+    def id_not_eq(id)
+      arel_table[:id].not_eq(id)
+    end
+
+    def lower_email_eq(email)
+      arel_table[:email].lower.eq(email.to_s.downcase)
+    end
   end
 
   attr_reader :autocorrect_domain
@@ -539,7 +547,7 @@ class Signature < ActiveRecord::Base
   end
 
   def email=(value)
-    super(value.to_s.strip.downcase)
+    super(normalize_email(value))
   end
 
   def postcode=(value)
@@ -793,6 +801,16 @@ class Signature < ActiveRecord::Base
   end
 
   private
+
+  def normalize_email(value)
+    return value unless value.present?
+
+    Mail::Address.new(value.strip).yield_self do |address|
+      "#{address.local}@#{address.domain.downcase}"
+    end
+  rescue Mail::Field::ParseError
+    value
+  end
 
   def inline_updates?
     ENV["INLINE_UPDATES"] == "true"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_27_175325) do
+ActiveRecord::Schema.define(version: 2021_04_01_125401) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -437,6 +437,7 @@ ActiveRecord::Schema.define(version: 2021_03_27_175325) do
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_signatures_on_sector_and_petition_id"
     t.index "\"left\"((postcode)::text, '-3'::integer), state, petition_id", name: "index_signatures_on_sector_and_state_and_petition_id"
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_signatures_on_domain"
+    t.index "lower((email)::text)", name: "index_signatures_on_lower_email"
     t.index "lower((name)::text)", name: "index_signatures_on_name"
     t.index ["anonymized_at", "petition_id"], name: "index_signatures_on_anonymized_at_and_petition_id"
     t.index ["canonical_email"], name: "index_signatures_on_canonical_email"

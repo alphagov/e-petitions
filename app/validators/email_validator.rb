@@ -3,7 +3,7 @@ require 'mail'
 class EmailValidator < ActiveModel::EachValidator
   HOST  = "(?i-mx:xn-|[a-z0-9])(?i-mx:[-a-z0-9]*)"
   TLD   = "(?i-mx:[a-z]{2,63}|xn--(?i-mx:[a-z0-9]+-)*[a-z0-9]+)"
-  LOCAL = "(?i-mx:[a-z0-9!#$%&'*+/=?^_`{|}~\-]+)"
+  LOCAL = "(?i-mx:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~\-]+)"
 
   EMAIL_REGEX = /\A#{LOCAL}(?:\.#{LOCAL})*@(?:#{HOST}\.)+#{TLD}\z/
 

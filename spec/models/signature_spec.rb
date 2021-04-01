@@ -70,9 +70,9 @@ RSpec.describe Signature, type: :model do
     describe "#email=" do
       let(:signature) { FactoryBot.build(:signature) }
 
-      it "downcases the email" do
+      it "downcases the email domain" do
         signature.email = "JOE@PUBLIC.COM"
-        expect(signature.email).to eq "joe@public.com"
+        expect(signature.email).to eq "JOE@public.com"
       end
     end
   end
