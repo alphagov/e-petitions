@@ -52,7 +52,7 @@ RSpec.describe EmailValidator do
   end
 
   describe "with a single character email address" do
-    let(:email) { "l@s.c" }
+    let(:email) { "l@example.com" }
 
     it "doesn't add an error" do
       expect(errors).to be_empty
