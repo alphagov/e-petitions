@@ -111,6 +111,8 @@ en-GB:
               invalid: "The submitted tags were invalid - please reselect and try again"
             topics:
               invalid: "The submitted topics were invalid - please reselect and try again"
+            completed_at:
+              blank: "Please enter the date when the petition was completed"
 
         petition/email:
           attributes:
