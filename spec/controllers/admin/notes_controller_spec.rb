@@ -170,6 +170,30 @@ RSpec.describe Admin::NotesController, type: :controller, admin: true do
           }.not_to raise_error
         end
       end
+
+      context "when updating the notes fails for an unknown reason" do
+        let(:note) { FactoryBot.build(:note, details: "", petition: petition) }
+
+        before do
+          expect(Petition).to receive(:find).with(petition.to_param).and_return(petition)
+          expect(petition).to receive(:note).and_return(note)
+          expect(note).to receive(:update).and_return(false)
+
+          patch :update, params: { petition_id: petition.to_param, note: { details: "" } }
+        end
+
+        it "returns 200 OK" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "renders the :show template" do
+          expect(response).to render_template("admin/petitions/show")
+        end
+
+        it "displays an alert" do
+          expect(flash[:alert]).to eq("Petition could not be updated - please contact support")
+        end
+      end
     end
   end
 end

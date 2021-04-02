@@ -14,7 +14,7 @@ class Admin::Archived::NotesController < Admin::AdminController
     if @note.update(note_params)
       redirect_to admin_archived_petition_url(@petition)
     else
-      render 'admin/archived/petitions/show'
+      render 'admin/archived/petitions/show', alert: :petition_not_updated
     end
   end
 
