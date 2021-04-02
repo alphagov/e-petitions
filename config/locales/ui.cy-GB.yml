@@ -5,6 +5,7 @@ cy-GB:
       cant_sign_rejected: "Sorry, you can't sign petitions that have been rejected"
       cant_sign_closed: "Sorry, you can't sign petitions that have been closed"
       cant_sign_completed: "Sorry, you can't sign petitions that have been completed"
+      cant_sign_paused: "Sorry, you can't sign petitions at the moment"
     holding_page:
       body_html: |-
         <h1 class="page-title">Bydd y wefan ddeisebau newydd ar gael ar 30 Ebrill</h1>

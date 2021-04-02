@@ -1,9 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe SponsorsController, type: :controller do
+  let(:signature_collection_disabled?) { false }
+
   before do
     constituency = FactoryBot.create(:constituency, :cardiff_south_and_penarth)
     allow(Constituency).to receive(:find_by_postcode).with("CF991NA").and_return(constituency)
+
+    allow(Site).to receive(:signature_collection_disabled?).and_return(signature_collection_disabled?)
   end
 
   describe "GET /petitions/:petition_id/sponsors/new" do
@@ -105,6 +109,18 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+
+        context "and signature collection is paused" do
+          let(:signature_collection_disabled?) { true }
+
+          it "sets the flash :notice message" do
+            expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+          end
+
+          it "redirects to the petition page" do
+            expect(response).to redirect_to("/petitions/#{petition.to_param}")
           end
         end
       end
@@ -245,6 +261,18 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+        end
+
+        context "and signature collection is paused" do
+          let(:signature_collection_disabled?) { true }
+
+          it "sets the flash :notice message" do
+            expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+          end
+
+          it "redirects to the petition page" do
+            expect(response).to redirect_to("/petitions/#{petition.to_param}")
           end
         end
       end
@@ -521,6 +549,24 @@ RSpec.describe SponsorsController, type: :controller do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
           end
         end
+
+        context "and signature collection is paused" do
+          let(:signature_collection_disabled?) { true }
+
+          before do
+            perform_enqueued_jobs {
+              post :create, params: { petition_id: petition.id, token: petition.sponsor_token, signature: params }
+            }
+          end
+
+          it "sets the flash :notice message" do
+            expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+          end
+
+          it "redirects to the petition page" do
+            expect(response).to redirect_to("/petitions/#{petition.to_param}")
+          end
+        end
       end
     end
   end
@@ -616,6 +662,18 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "renders the signatures/thank_you template" do
             expect(response).to render_template("signatures/thank_you")
+          end
+        end
+
+        context "and signature collection is paused" do
+          let(:signature_collection_disabled?) { true }
+
+          it "sets the flash :notice message" do
+            expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+          end
+
+          it "redirects to the petition page" do
+            expect(response).to redirect_to("/petitions/#{petition.to_param}")
           end
         end
       end
@@ -768,6 +826,18 @@ RSpec.describe SponsorsController, type: :controller do
           expect(flash[:notice]).to be_nil
         end
       end
+
+      context "and signature collection is paused" do
+        let(:signature_collection_disabled?) { true }
+
+        it "sets the flash :notice message" do
+          expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.to_param}")
+        end
+      end
     end
 
     context "when the petition is validated" do
@@ -916,6 +986,18 @@ RSpec.describe SponsorsController, type: :controller do
           expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
         end
       end
+
+      context "and signature collection is paused" do
+        let(:signature_collection_disabled?) { true }
+
+        it "sets the flash :notice message" do
+          expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.to_param}")
+        end
+      end
     end
 
     context "when the petition is sponsored" do
@@ -1017,6 +1099,18 @@ RSpec.describe SponsorsController, type: :controller do
           expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
         end
       end
+
+      context "and signature collection is paused" do
+        let(:signature_collection_disabled?) { true }
+
+        it "sets the flash :notice message" do
+          expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+        end
+
+        it "redirects to the petition page" do
+          expect(response).to redirect_to("/petitions/#{petition.to_param}")
+        end
+      end
     end
   end
 
@@ -1107,7 +1201,7 @@ RSpec.describe SponsorsController, type: :controller do
         let(:petition) { FactoryBot.create(:"#{state}_petition") }
         let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition, sponsor: true) }
 
-        context "when the signature has been validated" do
+        context "and the signature has been validated" do
           before do
             session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
             get :signed, params: { id: signature.id }
@@ -1188,9 +1282,21 @@ RSpec.describe SponsorsController, type: :controller do
               expect(response).to render_template("sponsors/signed")
             end
           end
+
+          context "and signature collection is paused" do
+            let(:signature_collection_disabled?) { true }
+
+            it "sets the flash :notice message" do
+              expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+            end
+
+            it "redirects to the petition page" do
+              expect(response).to redirect_to("/petitions/#{petition.to_param}")
+            end
+          end
         end
 
-        context "when the signature has not been validated" do
+        context "and the signature has not been validated" do
           let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
           before do
@@ -1199,6 +1305,18 @@ RSpec.describe SponsorsController, type: :controller do
 
           it "redirects to the petition moderation info page" do
             expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          end
+
+          context "and signature collection is paused" do
+            let(:signature_collection_disabled?) { true }
+
+            it "sets the flash :notice message" do
+              expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
+            end
+
+            it "redirects to the petition page" do
+              expect(response).to redirect_to("/petitions/#{petition.to_param}")
+            end
           end
         end
       end

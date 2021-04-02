@@ -121,7 +121,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
@@ -293,7 +293,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
@@ -588,7 +588,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
@@ -731,7 +731,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "doesn't create a signature" do
@@ -973,7 +973,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
@@ -1205,7 +1205,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can't sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
