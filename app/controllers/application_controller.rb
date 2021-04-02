@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include FlashI18n
+
   protect_from_forgery with: :reset_session
 
   before_action :reload_site

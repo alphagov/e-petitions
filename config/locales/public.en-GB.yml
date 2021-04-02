@@ -1,0 +1,6 @@
+---
+en-GB:
+  public:
+    flash:
+      cant_sign_rejected: "Sorry, you can't sign petitions that have been rejected"
+      cant_sign_closed: "Sorry, you can't sign petitions that have been closed"
