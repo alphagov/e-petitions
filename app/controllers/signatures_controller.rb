@@ -6,6 +6,7 @@ class SignaturesController < ApplicationController
   before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
   before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
   before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
+  before_action :redirect_to_petition_page_if_paused, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
 
   before_action :build_signature, only: [:new, :confirm, :create]
   before_action :expire_signed_tokens, only: [:verify]
@@ -172,14 +173,20 @@ class SignaturesController < ApplicationController
   end
 
   def redirect_to_petition_page_if_closed
-    if @petition.closed? || Site.signature_collection_disabled?
+    if @petition.closed?
       redirect_to petition_url(@petition), notice: :cant_sign_closed
     end
   end
 
   def redirect_to_petition_page_if_closed_for_signing
-    if @petition.closed_for_signing? || Site.signature_collection_disabled?
+    if @petition.closed_for_signing?
       redirect_to petition_url(@petition), notice: :cant_sign_closed
+    end
+  end
+
+  def redirect_to_petition_page_if_paused
+    if Site.signature_collection_disabled?
+      redirect_to petition_url(@petition), notice: :cant_sign_paused
     end
   end
 
