@@ -1,8 +1,11 @@
 <h2 class="petition-action-heading">Take this petition down</h2>
+
 <%= form_for petition, url: admin_petition_take_down_path(petition), method: :patch do |f| -%>
   <%= render 'admin/petitions/reject', f: f %>
 
   <%= f.submit "Email petition creator", name: 'save_and_email', class: 'button' %>
   <%= f.submit 'Save without emailing', name: 'save', class: 'button-secondary', tabindex: increment %>
+  <%= link_to 'Cancel', admin_petition_path(petition), class: 'button-secondary' %>
 <% end -%>
+
 <%= render 'edit_lock' %>
