@@ -7,8 +7,8 @@
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
-
   <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 <% end %>
 
 <%= render 'edit_lock' %>
