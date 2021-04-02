@@ -37,6 +37,13 @@ module Archived
     validates :state, presence: true, inclusion: STATES
     validates :closed_at, presence: true, if: :closed?
 
+    # The scheduled_debate_date will be blank for most petitions but we
+    # can't add `allow_blank: true` here because Active Record validations
+    # will not call the DateValidator as all invalid dates are coerced to nil.
+    # Therefore the allowing of blank values is handling in the validtor.
+    validates :scheduled_debate_date, date: true
+
+    # Validate associated models so that archive petition job fails if they're not valid.
     validates_associated :debate_outcome, :government_response, :note, :rejection
 
     before_save :update_debate_state, if: :scheduled_debate_date_changed?

@@ -17,7 +17,7 @@ class Admin::Archived::ScheduleDebateController < Admin::AdminController
 
       redirect_to admin_archived_petition_url(@petition), notice: message
     else
-      render 'admin/archived/petitions/show'
+      render 'admin/archived/petitions/show', alert: :petition_not_saved
     end
   end
 
