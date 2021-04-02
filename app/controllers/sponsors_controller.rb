@@ -1,5 +1,6 @@
 class SponsorsController < SignaturesController
   skip_before_action :redirect_to_petition_page_if_rejected
+  skip_before_action :redirect_to_petition_page_if_completed
   skip_before_action :redirect_to_petition_page_if_closed
   skip_before_action :redirect_to_petition_page_if_closed_for_signing
 

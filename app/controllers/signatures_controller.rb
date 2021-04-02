@@ -1,15 +1,18 @@
 class SignaturesController < LocalizedController
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+
+  # Verify petition is in a valid state before processing signature
+  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_completed, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
+  before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
+
   before_action :build_signature, only: [:new, :confirm, :create]
   before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
   before_action :verify_unsubscribe_token, only: [:unsubscribe]
-  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
-  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
-  before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
-  before_action :redirect_to_petition_page_if_completed, only: [:new, :confirm, :create, :thank_you]
   before_action :do_not_cache
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
