@@ -18,11 +18,17 @@ module FlashI18n
   end
 
   def translate_flash(key)
+    if admin_request?
+      scope = :"admin.flash"
+    else
+      scope = :"ui.flash"
+    end
+
     if Array === key
       options = key.extract_options!
-      I18n.t(key.first, { scope: :"admin.flash" }.merge(options))
+      I18n.t(key.first, { scope: scope }.merge(options))
     elsif Symbol === key
-      I18n.t(key, scope: :"admin.flash")
+      I18n.t(key, scope: scope)
     else
       key
     end

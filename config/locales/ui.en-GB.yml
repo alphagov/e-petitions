@@ -1,6 +1,10 @@
 ---
 en-GB:
   ui:
+    flash:
+      cant_sign_rejected: "Sorry, you can't sign petitions that have been rejected"
+      cant_sign_closed: "Sorry, you can't sign petitions that have been closed"
+      cant_sign_completed: "Sorry, you can't sign petitions that have been completed"
     holding_page:
       body_html: |-
         <h1 class="page-title">A new petitions site is coming on 30 April</h1>

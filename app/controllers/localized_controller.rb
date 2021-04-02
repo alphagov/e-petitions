@@ -1,4 +1,6 @@
 class LocalizedController < ApplicationController
+  include FlashI18n
+
   if ENV['TRANSLATION_ENABLED'].present?
     before_action do
       Language.reload_translations

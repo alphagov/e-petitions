@@ -164,25 +164,25 @@ class SignaturesController < LocalizedController
 
   def redirect_to_petition_page_if_rejected
     if @petition.rejected?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been rejected"
+      redirect_to petition_url(@petition), notice: :cant_sign_rejected
     end
   end
 
   def redirect_to_petition_page_if_closed
     if @petition.closed? || Site.signature_collection_disabled?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+      redirect_to petition_url(@petition), notice: :cant_sign_closed
     end
   end
 
   def redirect_to_petition_page_if_closed_for_signing
     if @petition.closed_for_signing? || Site.signature_collection_disabled?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+      redirect_to petition_url(@petition), notice: :cant_sign_closed
     end
   end
 
   def redirect_to_petition_page_if_completed
     if @petition.completed?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been completed"
+      redirect_to petition_url(@petition), notice: :cant_sign_completed
     end
   end
 
