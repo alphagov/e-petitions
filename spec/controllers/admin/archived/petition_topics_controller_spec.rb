@@ -70,6 +70,10 @@ RSpec.describe Admin::Archived::PetitionTopicsController, type: :controller, adm
         it "renders the :show template" do
           expect(response).to render_template("admin/archived/petitions/show")
         end
+
+        it "displays an alert" do
+          expect(flash[:alert]).to eq("Petition could not be updated - please contact support")
+        end
       end
 
       context "and the params are empty" do
