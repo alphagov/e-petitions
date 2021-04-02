@@ -7,7 +7,7 @@ class Admin::ModerationController < Admin::AdminController
       send_notifications
       redirect_to [:admin, @petition], notice: :petition_updated
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_saved
     end
   end
 
