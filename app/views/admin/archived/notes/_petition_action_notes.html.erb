@@ -1,5 +1,4 @@
-<%= form_for @note, url: admin_archived_petition_notes_path(petition), method: :patch do |f| -%>
-
+<%= form_for @note, url: admin_archived_petition_notes_path(petition), method: :patch do |f| %>
   <%= form_row :for => [f.object, :admin_notes] do %>
     <%= f.label :details, 'Notes', class: 'form-label petition-action-heading' %>
     <%= error_messages_for_field f.object, :admin_notes %>
@@ -8,7 +7,6 @@
 
   <%= f.submit 'Save notes', class: 'button' %>
   <%= link_to 'Cancel', admin_archived_petition_path(@petition), class: 'button-secondary' %>
-
-<% end -%>
+<% end %>
 
 <%= render 'edit_lock' %>

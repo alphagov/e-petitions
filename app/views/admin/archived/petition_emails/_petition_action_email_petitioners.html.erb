@@ -38,10 +38,10 @@
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
-  <%= f.submit "Save and preview", name: 'save_and_preview', class: 'button-secondary' %>
+  <%= f.submit "Preview", name: 'save_and_preview', class: 'button-secondary' %>
   <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
-
-<% end -%>
+  <%= link_to 'Cancel', admin_archived_petition_path(@petition), class: 'button-secondary' %>
+<% end %>
 
 <%= javascript_include_tag 'character-counter' %>
 

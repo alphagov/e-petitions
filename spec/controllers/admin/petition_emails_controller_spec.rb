@@ -484,7 +484,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
           params = {
             petition_id: petition.id,
             petition_email: petition_email_attributes,
-            save_and_preview: "Save and preview"
+            save_and_preview: "Preview"
           }
 
           post :create, params: params.merge(overrides)
@@ -1006,7 +1006,7 @@ RSpec.describe Admin::PetitionEmailsController, type: :controller, admin: true d
             petition_id: petition.id,
             id: email.id,
             petition_email: petition_email_attributes,
-            save_and_preview: "Save and preview"
+            save_and_preview: "Preview"
           }
 
           patch :update, params: params.merge(overrides)

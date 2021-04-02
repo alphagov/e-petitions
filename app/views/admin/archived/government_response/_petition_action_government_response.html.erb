@@ -21,9 +21,9 @@
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition) %>
-  <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
-
-<% end -%>
+  <%= f.submit "Save", name: 'save', class: 'button-secondary' %>
+  <%= link_to 'Cancel', admin_archived_petition_path(@petition), class: 'button-secondary' %>
+<% end %>
 
 <%= javascript_include_tag 'character-counter' %>
 

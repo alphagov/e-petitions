@@ -42,7 +42,7 @@
   <% end %>
 
   <%= f.submit 'Email petition creator', name: 'save_and_email', class: 'button', tabindex: increment %>
-  <%= f.submit 'Save without emailing', name: 'save', class: 'button-secondary', tabindex: increment %>
+  <%= f.submit 'Save', name: 'save', class: 'button-secondary', tabindex: increment %>
 
   <% unless f.object.rejection? %>
     <%= javascript_tag do %>

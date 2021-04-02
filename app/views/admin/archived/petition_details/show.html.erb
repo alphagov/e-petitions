@@ -40,16 +40,13 @@
       <% end %>
 
       <%= f.submit 'Save', class: 'button' %>
-
       <%= link_to 'Cancel', admin_archived_petition_path(@petition), class: 'button-secondary' %>
-
     <% end %>
   </div>
 
   <div class="petition-meta column-third">
     <%= render 'admin/archived/petitions/petition_details' %>
   </div>
-
 </div>
 
 <%= render 'edit_lock' %>

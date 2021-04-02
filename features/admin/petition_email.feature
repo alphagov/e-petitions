@@ -34,7 +34,7 @@ Feature: Emailing petitioner supporters
     Then the petition should not have any emails
     And I should see an error
     When I fill in the email details
-    And press "Save and preview"
+    And press "Preview"
     Then the petition should have the email details I provided
     And the petition creator should not have been emailed with the update
     And all the signatories of the petition should not have been emailed with the update
