@@ -136,6 +136,9 @@ class Petition < ActiveRecord::Base
   validates :creator, presence: true, unless: :completed?
   validates :state, inclusion: { in: STATES }
 
+  validates :abms_link_en, url: true
+  validates :abms_link_cy, url: true
+
   validates :completed_at, presence: true, if: :completed?
 
   with_options allow_nil: true, prefix: true do

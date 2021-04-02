@@ -146,6 +146,17 @@ Feature: Suzie views a petition
     Then I should not see "At 5,000 signatures..."
     And I should see a summary of the debate outcome
 
+  Scenario Outline: Suzie sees the correct wording for petitions with a ABMS link
+    Given a <state> petition "My petition" exists
+    And the petition has an ABMS link "https://senedd.wales/"
+    When I view the petition
+    Then I should see a link called "<copy>" linking to "https://senedd.wales/"
+
+    Scenarios:
+      | state     | copy                                                                 |
+      | referred  | Find out about the Petitions Committee’s discussion of this petition |
+      | completed | Find out about the Petitions Committee’s discussion of this petition |
+
   Scenario: Suzie sees a message when viewing a petition and signature collection has been paused
     Given petitions are not collecting signatures
     And an open petition "Spend more money on Defence"

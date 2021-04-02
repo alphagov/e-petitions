@@ -95,6 +95,23 @@ RSpec.describe Admin::AbmsLinkController, type: :controller, admin: true do
           petition.abms_link_cy
         }.from(nil).to(a_string_matching("busnes.senedd.cymru"))
       end
+
+      context "when the update fails" do
+        before do
+          expect(Petition).to receive(:find).with(petition.to_param).and_return(petition)
+          expect(petition).to receive(:update).and_return(false)
+        end
+
+        it "renders the petition page" do
+          patch :update, params: { petition_id: petition.to_param, petition: attributes }
+          expect(response).to have_rendered("admin/petitions/show")
+        end
+
+        it "displays an alert" do
+          patch :update, params: { petition_id: petition.to_param, petition: attributes }
+          expect(flash[:alert]).to eq("Petition could not be updated - please check the form for errors")
+        end
+      end
     end
   end
 end

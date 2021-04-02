@@ -14,7 +14,7 @@ When(/^I navigate to the next page of petitions$/) do
   click_link "Next"
 end
 
-Given(/^an? ?(pending|validated|sponsored|flagged|open|closed|rejected)? petition "([^"]*)"(?: exists)?$/) do |state, action|
+Given(/^an? ?(pending|validated|sponsored|flagged|open|closed|rejected|referred|completed)? petition "([^"]*)"(?: exists)?$/) do |state, action|
   @petition = FactoryBot.create(:"#{state || 'open'}_petition", action: action)
 end
 
@@ -426,4 +426,8 @@ When (/^I search all petitions for "(.*?)"$/) do |search_term|
       step %{I press "Chwilio"}
     end
   end
+end
+
+Given(/^the petition has an ABMS link "([^"]*)"$/) do |url|
+  @petition.update!(abms_link: url)
 end
