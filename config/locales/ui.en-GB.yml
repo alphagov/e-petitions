@@ -2,10 +2,10 @@
 en-GB:
   ui:
     flash:
-      cant_sign_rejected: "Sorry, you can't sign petitions that have been rejected"
-      cant_sign_closed: "Sorry, you can't sign petitions that have been closed"
-      cant_sign_completed: "Sorry, you can't sign petitions that have been completed"
-      cant_sign_paused: "Sorry, you can't sign petitions at the moment"
+      cant_sign_rejected: "Sorry, you can’t sign petitions that have been rejected"
+      cant_sign_closed: "Sorry, you can’t sign petitions that have been closed"
+      cant_sign_completed: "Sorry, you can’t sign petitions that have been completed"
+      cant_sign_paused: "Sorry, you can’t sign petitions at the moment"
     holding_page:
       body_html: |-
         <h1 class="page-title">A new petitions site is coming on 30 April</h1>
@@ -72,7 +72,7 @@ en-GB:
         <p>All content is available under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="external license">Open Government Licence v3.0</a>, except where otherwise stated</p>
     header:
       brand_html: |-
-        <a href="https://senedd.wales" rel="external">      
+        <a href="https://senedd.wales" rel="external">
           <p>Senedd Cymru</p>
           <p>Welsh Parliament</p>
         </a>
@@ -98,7 +98,7 @@ en-GB:
             body_html: |-
               <p>You can email the %{petitions_committee_link} directly.</p>
               <p>They can help you to understand how the Senedd handles petitions. They can also provide a template for you to use to collect signatures on paper and help with some technical problems using this service. They can’t forward your feedback to the people who started a petition or comment on the ideas raised in a specific petition.</p>
-              <p>Email: <a href="mailto:petitions@senedd.wales">petitions@senedd.wales</a></p>            
+              <p>Email: <a href="mailto:petitions@senedd.wales">petitions@senedd.wales</a></p>
             petitions_committee_link: Petitions Committee
           phone:
             heading: Phone
@@ -726,7 +726,7 @@ en-GB:
           <h3>Our Contact Details</h3>
 
           <p>Any queries regarding our use of your information should be sent to the Data Protection Officer at:</p>
-  
+
           <p>Data.Protection@senedd.wales 0300 2006565</p>
 
           <h3>What data we collect from you</h3>
@@ -740,7 +740,7 @@ en-GB:
             <li>the country you live in</li>
             <li>the IP address you use when starting or signing a petition</li>
           </ul>
-  
+
           <p>In addition, for people who start a petition we will also collect:</p>
 
           <ul class="list-bullet">
@@ -748,9 +748,9 @@ en-GB:
             <li>your contact telephone number</li>
             <li>any personal information or details that you provide within the petition itself.</li>
           </ul>
-  
+
           <p>We sometimes receive information relating to people who have signed petitions on paper. Paper petitions are securely stored and retained for the same period as personal data received through our own electronic petitions system. They are destroyed in a secure manner at the end of the retention period.</p>
-  
+
           <h3>Why we need your data</h3>
 
           <p>We use this information to:</p>
@@ -787,7 +787,7 @@ en-GB:
           <p>If a petition you’ve started is referred to the Petitions Committee, we’ll use your contact details to update you about the petition’s progress and to offer you the opportunity to provide further information and engage with the Committee.</p>
 
           <p>You will receive automated confirmation emails when you set up or sign a petition.</p>
-  
+
           <p>If you’ve signed a petition, you can choose to receive updates about the progress of the petition. This might include contacting you to let you know what is happening in the Senedd in relation to your petition, such as: debates that you can watch or read, chances to respond to a consultation, or ways to let committees and Members of the Senedd know why the petition is important to you.</p>
 
           <p>We may occasionally use your contact details to seek your views on the Senedd’s petitions process.</p>
@@ -819,9 +819,9 @@ en-GB:
           <p>As such, personal data is processed on the basis that it is necessary for the performance of a task carried out in the public interest in accordance with Article 6(1)(e) of the General Data Protection Regulation (GDPR), read together with section 8(d) of the Data Protection Act 2018.</p>
 
           <p>Where we are required to process personal data in order to comply with a legal obligation, such as a request under access to information legislation or a court order, we will do so on the basis that processing is necessary for compliance with a legal obligation pursuant to Article 6(1)(c) of the GDPR.</p>
-  
+
           <p>We may process personal data relating to criminal convictions and offences. In order to comply with Article 10 of the GDPR, this data will be processed in accordance with our Article 6 legal basis, as outlined above, and section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018.</p>
-  
+
           <p>Finally, we may process special categories of personal data of those who start or sign a petition, and/or contribute to its passage through the Senedd’s petitions process. Special category personal data is defined in Article 9(1) of the GDPR as the processing of personal data revealing racial or ethnic origin, political opinions, religious or philosophical beliefs, or trade-union membership, and the processing of genetic data, biometric data for the purpose of uniquely identifying a natural person, data concerning health or a natural person’s sex life or sexual orientation.</p>
 
           <p>Special category personal data will usually be processed on the basis that it is necessary for reasons of substantial public interest, pursuant to Article 9(2)(g) of the GDPR read in conjunction with section 10 of, and paragraph 6 of Schedule 1 to, the Data Protection Act 2018. However, where your special category personal data is made public by you, it may be processed on the basis that it has already been manifestly made public by you, pursuant to Article 9(2)(e) of the GDPR.</p>
@@ -833,7 +833,7 @@ en-GB:
           <h3>What are your rights</h3>
 
           <p>You have certain rights over the information we hold. In summary, the rights include:</p>
-  
+
           <ul class="list-bullet">
             <li>The right to be informed about how your personal information is used;</li>
             <li>The right of access to copies of your personal information;</li>
@@ -845,7 +845,7 @@ en-GB:
           <p>If you would like to engage any of these rights, please email information-request@senedd.wales</p>
 
           <h3>Changes to this notice</h3>
-  
+
           <p>We may change this privacy notice. In that case the ‘last updated’ date at the top of this page will also change. Any changes to this privacy notice will apply to you and your data immediately. If these changes affect how your personal data is processed, we will take reasonable steps to make sure you know.</p>
 
           <h3>How to complain</h3>
