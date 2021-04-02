@@ -49,6 +49,26 @@ RSpec.describe Admin::ModerationController, type: :controller, admin: true do
         patch :update, params: params
       end
 
+      context "when no moderation is selected" do
+        let(:petition) { FactoryBot.create(:pending_petition) }
+
+        before do
+          do_patch moderation: ""
+        end
+
+        it "returns 200 OK" do
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "renders the :show template" do
+          expect(response).to render_template("admin/petitions/show")
+        end
+
+        it "displays an alert" do
+          expect(flash[:alert]).to eq("Petition could not be updated - please check the form for errors")
+        end
+      end
+
       context "when the petition is not validated" do
         let(:petition) { FactoryBot.create(:pending_petition) }
 
