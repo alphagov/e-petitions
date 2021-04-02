@@ -16,7 +16,7 @@ class Admin::ScheduleDebateController < Admin::AdminController
 
       redirect_to [:admin, @petition], notice: message
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_saved
     end
   end
 

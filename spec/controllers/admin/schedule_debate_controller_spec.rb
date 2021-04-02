@@ -197,30 +197,25 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
             end
           end
 
-          describe 'with invalid params' do
+          describe "with an invalid date" do
+            let(:scheduled_debate_date_attributes) do
+              { scheduled_debate_date: '9999-99-99' }
+            end
+
             before do
-              # NOTE this can't fail as there's no validation
-              allow_any_instance_of(Petition).to receive(:valid?) do |receiver|
-                receiver.errors.add(:base, 'this is all messed up')
-                false
-              end
+              do_patch
             end
 
-            it 're-renders the petitions/show template' do
-              do_patch
-              expect(response).to be_successful
-              expect(response).to render_template('petitions/show')
+            it "returns 200 OK" do
+              expect(response).to have_http_status(:ok)
             end
 
-            it 'leaves the in-memory instance with errors' do
-              do_patch
-              expect(assigns(:petition).errors).to be_present
+            it "renders the :show template" do
+              expect(response).to render_template("admin/petitions/show")
             end
 
-            it 'does not store the supplied debate scheduled date in the db' do
-              do_patch
-              petition.reload
-              expect(petition.scheduled_debate_date).to be_nil
+            it "displays an alert" do
+              expect(flash[:alert]).to eq("Petition could not be updated - please check the form for errors")
             end
           end
         end
@@ -345,30 +340,25 @@ RSpec.describe Admin::ScheduleDebateController, type: :controller, admin: true d
             end
           end
 
-          describe 'with invalid params' do
+          describe "with an invalid date" do
+            let(:scheduled_debate_date_attributes) do
+              { scheduled_debate_date: '9999-99-99' }
+            end
+
             before do
-              # NOTE this can't fail as there's no validation
-              allow_any_instance_of(Petition).to receive(:valid?) do |receiver|
-                receiver.errors.add(:base, 'this is all messed up')
-                false
-              end
+              do_patch
             end
 
-            it 're-renders the petitions/show template' do
-              do_patch
-              expect(response).to be_successful
-              expect(response).to render_template('petitions/show')
+            it "returns 200 OK" do
+              expect(response).to have_http_status(:ok)
             end
 
-            it 'leaves the in-memory instance with errors' do
-              do_patch
-              expect(assigns(:petition).errors).to be_present
+            it "renders the :show template" do
+              expect(response).to render_template("admin/petitions/show")
             end
 
-            it 'does not store the supplied debate scheduled date in the db' do
-              do_patch
-              petition.reload
-              expect(petition.scheduled_debate_date).to be_nil
+            it "displays an alert" do
+              expect(flash[:alert]).to eq("Petition could not be updated - please check the form for errors")
             end
           end
         end

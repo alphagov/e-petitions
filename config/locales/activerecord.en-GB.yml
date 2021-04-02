@@ -117,6 +117,8 @@ en-GB:
               invalid: "Please use a valid http or https url"
             completed_at:
               blank: "Please enter the date when the petition was completed"
+            scheduled_debate_date:
+              invalid: "Please enter a valid date for when the debate will happen"
 
         petition/email:
           attributes:
