@@ -61,20 +61,42 @@
         <% end %>
       <% end %>
 
-      <% if @petition.creator %>
-        <%= form_row for: [@petition.creator, :name] do %>
-          <%= f.fields_for :creator do |c| %>
-            <%= c.label :name, "Creator", class: 'form-label' %>
-            <%= error_messages_for_field @petition.creator, :name %>
-            <%= c.text_field :name, tabindex: increment, class: 'form-control' %>
+      <% if creator = @petition.creator %>
+        <%= f.fields_for :creator do |s| %>
+          <%= form_row for: [creator, :name] do %>
+            <%= s.label :name, "Creator", class: 'form-label' %>
+            <%= error_messages_for_field creator, :name %>
+            <%= s.text_field :name, tabindex: increment, class: 'form-control' %>
+          <% end %>
+
+          <%= form_row for: [creator, :email] do %>
+            <%= s.label :email, "Email", class: 'form-label' %>
+            <%= error_messages_for_field creator, :email %>
+            <%= s.text_field :email, tabindex: increment, class: 'form-control' %>
+          <% end %>
+
+          <% if contact = creator.contact %>
+            <%= s.fields_for :contact do |c| %>
+              <%= form_row for: [contact, :phone_number] do %>
+                <%= c.label :phone_number, "Phone number", class: 'form-label' %>
+                <%= error_messages_for_field contact, :phone_number %>
+                <%= c.text_field :phone_number, tabindex: increment, class: 'form-control' %>
+              <% end %>
+
+              <%= form_row for: [contact, :address] do %>
+                <%= c.label :address, class: 'form-label' %>
+                <%= error_messages_for_field contact, :address %>
+                <%= c.text_area :address, tabindex: increment, rows: 4, class: 'form-control' %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <%= form_row for: [creator, :postcode] do %>
+            <%= s.label :postcode, "Postcode", class: 'form-label' %>
+            <%= error_messages_for_field creator, :postcode %>
+            <%= s.text_field :postcode, tabindex: increment, class: 'form-control form-control-1-2' %>
           <% end %>
         <% end %>
-      <% end %>
-
-      <%= form_row for: [f.object, :committee_note] do %>
-        <%= f.label :committee_note, class: 'form-label' %>
-        <%= error_messages_for_field @petition, :committee_note %>
-        <%= f.text_area :committee_note, tabindex: increment, rows: 7, class: 'form-control' %>
       <% end %>
 
       <%= form_row for: [f.object, :special_consideration] do %>

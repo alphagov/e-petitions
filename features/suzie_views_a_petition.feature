@@ -36,12 +36,6 @@ Feature: Suzie views a petition
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
 
-  Scenario: Suzie views a petition with a Petitions Committee note
-    Given an open petition exists with action: "Defence review", committee_note: "This petition was found to be misleading"
-    When I go to the petition page for "Defence review"
-    Then the markup should be valid
-    And I should see "This petition was found to be misleading"
-
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "We like http://www.google.com and bambi@gmail.com"
     When I view the petition
@@ -145,6 +139,17 @@ Feature: Suzie views a petition
     Then I should not see "At 50 signatures..."
     Then I should not see "At 5,000 signatures..."
     And I should see a summary of the debate outcome
+
+  Scenario Outline: Suzie sees the correct wording for petitions with a ABMS link
+    Given a <state> petition "My petition" exists
+    And the petition has an ABMS link "https://senedd.wales/"
+    When I view the petition
+    Then I should see a link called "<copy>" linking to "https://senedd.wales/"
+
+    Scenarios:
+      | state     | copy                                                                 |
+      | referred  | Find out about the Petitions Committee’s discussion of this petition |
+      | completed | Find out about the Petitions Committee’s discussion of this petition |
 
   Scenario: Suzie sees a message when viewing a petition and signature collection has been paused
     Given petitions are not collecting signatures

@@ -9,7 +9,7 @@ class Admin::PetitionTagsController < Admin::AdminController
     if @petition.update(petition_params)
       redirect_to [:admin, @petition], notice: :petition_updated
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_updated
     end
   end
 

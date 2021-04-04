@@ -14,7 +14,7 @@ class Admin::NotesController < Admin::AdminController
     if @note.update(note_params)
       redirect_to [:admin, @petition]
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_updated
     end
   end
 

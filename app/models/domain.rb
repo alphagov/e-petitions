@@ -135,6 +135,8 @@ class Domain < ActiveRecord::Base
       if strip_extension?
         normalized.gsub!(extension_regexp, "\\1")
       end
+
+      normalized.downcase!
     end
   end
 

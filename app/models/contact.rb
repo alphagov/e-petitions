@@ -10,6 +10,6 @@ class Contact < ActiveRecord::Base
   end
 
   def phone_number=(value)
-    super(value.to_s.tr('^1234567890', ''))
+    super(value.to_s.tr('^1234567890+./ ', ''))
   end
 end

@@ -14,13 +14,13 @@
     <% unless f.object.previously_published? %>
       <% if f.object.rejection? %>
         <div class="multiple-choice">
-        <%= f.radio_button :moderation, 'restore' %>
-        <%= f.label :moderation_reject, "Restore", for: "petition_moderation_restore" %>
+          <%= f.radio_button :moderation, 'restore' %>
+          <%= f.label :moderation_reject, "Restore", for: "petition_moderation_restore" %>
         </div>
       <% else %>
         <div class="multiple-choice">
-        <%= f.radio_button :moderation, 'reject' %>
-        <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
+          <%= f.radio_button :moderation, 'reject' %>
+          <%= f.label :moderation_reject, "Reject", for: "petition_moderation_reject" %>
         </div>
       <% end %>
       <% if f.object.flagged? %>

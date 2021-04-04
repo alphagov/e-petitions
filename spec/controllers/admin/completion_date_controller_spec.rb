@@ -90,6 +90,23 @@ RSpec.describe Admin::CompletionDateController, type: :controller, admin: true d
         patch :update, params: { petition_id: petition.id, petition: params }
         expect(flash[:notice]).to eq("The completion date was successfully updated")
       end
+
+      context "when the update fails" do
+        before do
+          expect(Petition).to receive(:find).with(petition.to_param).and_return(petition)
+          expect(petition).to receive(:update).and_return(false)
+        end
+
+        it "renders the petition page" do
+          patch :update, params: { petition_id: petition.to_param, petition: params }
+          expect(response).to have_rendered("admin/petitions/show")
+        end
+
+        it "displays an alert" do
+          patch :update, params: { petition_id: petition.to_param, petition: params }
+          expect(flash[:alert]).to eq("Petition could not be updated - please check the form for errors")
+        end
+      end
     end
   end
 end

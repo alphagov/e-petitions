@@ -9,7 +9,7 @@ class Admin::CompletionDateController < Admin::AdminController
     if @petition.update(petition_params)
       redirect_to [:admin, @petition], notice: :completion_date_updated
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_saved
     end
   end
 

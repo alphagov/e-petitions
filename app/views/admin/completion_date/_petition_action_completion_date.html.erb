@@ -1,7 +1,9 @@
-<%= form_for petition, url: admin_petition_completion_date_path(petition), method: :patch do |f| %>
 
-  <%= form_row for: [f.object, :closed_at] do %>
-    <%= f.label :completed_at, "Completion date", class: 'form-label' %>
+<%= form_for petition, url: admin_petition_completion_date_path(petition), method: :patch do |f| %>
+  <%= form_row for: [f.object, :completed_at] do %>
+    <%= f.label :completed_at, class: 'form-label', for: 'petition_completed_at_3i' do %>
+      <h2 class="petition-action-heading">Change completed date</h2>
+    <% end %>
     <%= error_messages_for_field @petition, :completed_at %>
     <%= f.date_select :completed_at, { include_blank: true }, tabindex: increment, class: 'form-control form-control-auto' %>
     <%= hidden_field_tag "petition[completed_at(4i)]", "0" %>

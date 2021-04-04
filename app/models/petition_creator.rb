@@ -197,7 +197,7 @@ class PetitionCreator
   end
 
   def phone_number
-    petition_creator_params[:phone_number].to_s.tr('^1234567890', '')
+    petition_creator_params[:phone_number].to_s.tr('^1234567890+. ', '')
   end
 
   def address

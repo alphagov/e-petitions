@@ -9,7 +9,7 @@ class Admin::PetitionDetailsController < Admin::AdminController
     if update_petition
       redirect_to [:admin, @petition], notice: :petition_updated
     else
-      render :show
+      render :show, alert: :petition_not_saved
     end
   end
 
@@ -31,7 +31,9 @@ class Admin::PetitionDetailsController < Admin::AdminController
   def petition_params
     params.require(:petition).permit(
       :action, :background, :additional_details, :closed_at, :use_markdown,
-      :committee_note, :special_consideration, :creator_attributes => [:name]
+      :special_consideration, creator_attributes: [
+        :name, :email, :postcode, contact_attributes: [:address, :phone_number]
+      ]
     )
   end
 

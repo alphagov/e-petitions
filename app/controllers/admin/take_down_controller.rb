@@ -10,7 +10,7 @@ class Admin::TakeDownController < Admin::AdminController
       send_notifications
       redirect_to [:admin, @petition]
     else
-      render 'admin/petitions/show'
+      render 'admin/petitions/show', alert: :petition_not_taken_down
     end
   end
 

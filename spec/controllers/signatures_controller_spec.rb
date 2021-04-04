@@ -27,21 +27,63 @@ RSpec.describe SignaturesController, type: :controller do
       end
     end
 
-    %w[closed rejected].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+    context "when the petition is closed" do
+      let(:petition) { FactoryBot.create(:closed_petition) }
 
-        before do
-          get :new, params: { petition_id: petition.id }
-        end
+      before do
+        get :new, params: { petition_id: petition.id }
+      end
 
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
 
-        it "redirects to the petition page" do
-          expect(response).to redirect_to("/petitions/#{petition.id}")
-        end
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition was rejected" do
+      let(:petition) { FactoryBot.create(:rejected_petition) }
+
+      before do
+        get :new, params: { petition_id: petition.id }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+
+      before do
+        get :new, params: { petition_id: petition.id }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
       end
     end
 
@@ -76,6 +118,10 @@ RSpec.describe SignaturesController, type: :controller do
         expect(Site).to receive(:signature_collection_disabled?).and_return(true)
 
         get :new, params: { petition_id: petition.id }
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
       end
 
       it "redirects to the petition page" do
@@ -114,21 +160,63 @@ RSpec.describe SignaturesController, type: :controller do
       end
     end
 
-    %w[closed rejected].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+    context "when the petition is closed" do
+      let(:petition) { FactoryBot.create(:closed_petition) }
 
-        before do
-          post :confirm, params: { petition_id: petition.id, signature: params }
-        end
+      before do
+        post :confirm, params: { petition_id: petition.id, signature: params }
+      end
 
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
 
-        it "redirects to the petition page" do
-          expect(response).to redirect_to("/petitions/#{petition.id}")
-        end
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.to_param}")
+      end
+    end
+
+    context "when the petition was rejected" do
+      let(:petition) { FactoryBot.create(:rejected_petition) }
+
+      before do
+        post :confirm, params: { petition_id: petition.id, signature: params }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+
+      before do
+        post :confirm, params: { petition_id: petition.id, signature: params }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
       end
     end
 
@@ -204,6 +292,10 @@ RSpec.describe SignaturesController, type: :controller do
         post :confirm, params: { petition_id: petition.id, signature: params }
       end
 
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
+      end
+
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
       end
@@ -240,21 +332,63 @@ RSpec.describe SignaturesController, type: :controller do
       end
     end
 
-    %w[closed rejected].each do |state|
-      context "when the petition is #{state}" do
-        let(:petition) { FactoryBot.create(:"#{state}_petition") }
+    context "when the petition is closed" do
+      let(:petition) { FactoryBot.create(:closed_petition) }
 
-        before do
-          post :create, params: { petition_id: petition.id, signature: params }
-        end
+      before do
+        post :confirm, params: { petition_id: petition.id, signature: params }
+      end
 
-        it "assigns the @petition instance variable" do
-          expect(assigns[:petition]).to eq(petition)
-        end
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
 
-        it "redirects to the petition page" do
-          expect(response).to redirect_to("/petitions/#{petition.id}")
-        end
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.to_param}")
+      end
+    end
+
+    context "when the petition was rejected" do
+      let(:petition) { FactoryBot.create(:rejected_petition) }
+
+      before do
+        post :create, params: { petition_id: petition.id, signature: params }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+
+      before do
+        post :confirm, params: { petition_id: petition.id, signature: params }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.id}")
       end
     end
 
@@ -453,6 +587,10 @@ RSpec.describe SignaturesController, type: :controller do
         }
       end
 
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
+      end
+
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
       end
@@ -492,11 +630,31 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been rejected")
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
       end
 
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition was completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+
+      before do
+        get :thank_you, params: { petition_id: petition.id }
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.to_param}")
       end
     end
 
@@ -513,7 +671,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
       end
 
       it "redirects to the petition page" do
@@ -534,7 +692,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
       end
 
       it "redirects to the petition page" do
@@ -570,6 +728,10 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
       end
 
       it "doesn't create a signature" do
@@ -650,11 +812,36 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been rejected")
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
       end
 
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+      before do
+        get :verify, params: { id: signature.id, token: signature.perishable_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.to_param}")
       end
     end
 
@@ -675,7 +862,7 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "sets the flash :notice message" do
-        expect(flash[:notice]).to eq("Sorry, you can't sign petitions that have been closed")
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
       end
 
       it "redirects to the petition page" do
@@ -785,6 +972,10 @@ RSpec.describe SignaturesController, type: :controller do
         get :verify, params: { id: signature.id, token: signature.perishable_token }
       end
 
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
+      end
+
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
       end
@@ -865,6 +1056,35 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:petition]).to eq(petition)
       end
 
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been rejected")
+      end
+
+      it "redirects to the petition page" do
+        expect(response).to redirect_to("/petitions/#{petition.to_param}")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
+      let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
+
+      before do
+        get :signed, params: { id: signature.id }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been completed")
+      end
+
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
       end
@@ -884,6 +1104,10 @@ RSpec.describe SignaturesController, type: :controller do
 
       it "assigns the @petition instance variable" do
         expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions that have been closed")
       end
 
       it "redirects to the petition page" do
@@ -980,6 +1204,10 @@ RSpec.describe SignaturesController, type: :controller do
         get :signed, params: { id: signature.id }
       end
 
+      it "sets the flash :notice message" do
+        expect(flash[:notice]).to eq("Sorry, you can’t sign petitions at the moment")
+      end
+
       it "redirects to the petition page" do
         expect(response).to redirect_to("/petitions/#{petition.id}")
       end
@@ -1043,6 +1271,31 @@ RSpec.describe SignaturesController, type: :controller do
 
     context "when the petition was rejected" do
       let(:petition) { FactoryBot.create(:rejected_petition) }
+      let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
+
+      before do
+        get :unsubscribe, params: { id: signature.id, token: signature.unsubscribe_token }
+      end
+
+      it "assigns the @signature instance variable" do
+        expect(assigns[:signature]).to eq(signature)
+      end
+
+      it "assigns the @petition instance variable" do
+        expect(assigns[:petition]).to eq(petition)
+      end
+
+      it "unsubscribes from email updates" do
+        expect(assigns[:signature].notify_by_email).to eq(false)
+      end
+
+      it "renders the signatures/unsubscribe template" do
+        expect(response).to render_template("signatures/unsubscribe")
+      end
+    end
+
+    context "when the petition has been completed" do
+      let(:petition) { FactoryBot.create(:completed_petition) }
       let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 
       before do

@@ -41,14 +41,12 @@
       },
 
       releaseLock: function() {
-        $.ajax({
-          async: false,
-          url: LOCK_URL,
-          method: 'DELETE',
-          success: function() {
-            console.log('Lock on petition ' + ID + ' released');
-          }
-        });
+        var params = new URLSearchParams();
+
+        params.append('_method', 'DELETE');
+        params.append($.rails.csrfParam(), $.rails.csrfToken());
+
+        navigator.sendBeacon(LOCK_URL, params);
       },
 
       overrideClicked: function(e) {

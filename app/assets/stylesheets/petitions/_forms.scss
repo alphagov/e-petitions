@@ -7,6 +7,7 @@
 
 select.form-control {
   height: 40px;
+  padding: 0 0.5em;
 
   @include media(tablet) {
     height: 52px;

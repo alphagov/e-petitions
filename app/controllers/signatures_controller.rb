@@ -1,15 +1,19 @@
 class SignaturesController < LocalizedController
   before_action :retrieve_petition, only: [:new, :confirm, :create, :thank_you]
   before_action :retrieve_signature, only: [:verify, :unsubscribe, :signed]
+
+  # Verify petition is in a valid state before processing signature
+  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_completed, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
+  before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
+  before_action :redirect_to_petition_page_if_paused, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
+
   before_action :build_signature, only: [:new, :confirm, :create]
   before_action :expire_signed_tokens, only: [:verify]
   before_action :verify_token, only: [:verify]
   before_action :verify_signed_token, only: [:signed]
   before_action :verify_unsubscribe_token, only: [:unsubscribe]
-  before_action :redirect_to_petition_page_if_rejected, only: [:new, :confirm, :create, :thank_you, :verify, :signed]
-  before_action :redirect_to_petition_page_if_closed, only: [:new, :confirm, :create, :thank_you]
-  before_action :redirect_to_petition_page_if_closed_for_signing, only: [:verify, :signed]
-  before_action :redirect_to_petition_page_if_completed, only: [:new, :confirm, :create, :thank_you]
   before_action :do_not_cache
 
   rescue_from ActiveRecord::RecordNotUnique do |exception|
@@ -164,25 +168,31 @@ class SignaturesController < LocalizedController
 
   def redirect_to_petition_page_if_rejected
     if @petition.rejected?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been rejected"
+      redirect_to petition_url(@petition), notice: :cant_sign_rejected
     end
   end
 
   def redirect_to_petition_page_if_closed
-    if @petition.closed? || Site.signature_collection_disabled?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+    if @petition.closed?
+      redirect_to petition_url(@petition), notice: :cant_sign_closed
     end
   end
 
   def redirect_to_petition_page_if_closed_for_signing
-    if @petition.closed_for_signing? || Site.signature_collection_disabled?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been closed"
+    if @petition.closed_for_signing?
+      redirect_to petition_url(@petition), notice: :cant_sign_closed
     end
   end
 
   def redirect_to_petition_page_if_completed
     if @petition.completed?
-      redirect_to petition_url(@petition), notice: "Sorry, you can't sign petitions that have been completed"
+      redirect_to petition_url(@petition), notice: :cant_sign_completed
+    end
+  end
+
+  def redirect_to_petition_page_if_paused
+    if Site.signature_collection_disabled?
+      redirect_to petition_url(@petition), notice: :cant_sign_paused
     end
   end
 

@@ -228,6 +228,11 @@ RSpec.describe Admin::TakeDownController, type: :controller, admin: true do
             expect(response).to be_successful
             expect(response).to render_template 'petitions/show'
           end
+
+          it "displays an alert" do
+            expect(response).to be_successful
+            expect(flash[:alert]).to eq("Petition could not be taken down - please check the form for errors")
+          end
         end
       end
 

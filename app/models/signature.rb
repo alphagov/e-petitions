@@ -37,11 +37,12 @@ class Signature < ActiveRecord::Base
   belongs_to :petition
   belongs_to :invalidation, optional: true
   has_one :contact # on_delete: :cascade
+  accepts_nested_attributes_for :contact, update_only: true
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }
   validates :name, format: { without: URI::regexp, message: :has_uri }
-  validates :email, presence: true, email: { allow_blank: true }, on: :create
+  validates :email, presence: true, email: { allow_blank: true }
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :postcode, length: { maximum: 255 }, allow_blank: true
@@ -120,7 +121,7 @@ class Signature < ActiveRecord::Base
     end
 
     def duplicate(id, email)
-      where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+      where(id_not_eq(id).and(lower_email_eq(email)))
     end
 
     def duplicate_emails
@@ -473,6 +474,14 @@ class Signature < ActiveRecord::Base
     def normalize_domain(email)
       email.split("@").last.downcase
     end
+
+    def id_not_eq(id)
+      arel_table[:id].not_eq(id)
+    end
+
+    def lower_email_eq(email)
+      arel_table[:email].lower.eq(email.to_s.downcase)
+    end
   end
 
   attr_reader :autocorrect_domain
@@ -538,7 +547,7 @@ class Signature < ActiveRecord::Base
   end
 
   def email=(value)
-    super(value.to_s.strip.downcase)
+    super(normalize_email(value))
   end
 
   def postcode=(value)
@@ -783,14 +792,24 @@ class Signature < ActiveRecord::Base
     end
   end
 
-  private
-
   def formatted_postcode
     if united_kingdom?
       postcode.gsub(/\A([A-Z0-9]+?)([A-Z0-9]{3})\z/, "\\1 \\2")
     else
       postcode
     end
+  end
+
+  private
+
+  def normalize_email(value)
+    return value unless value.present?
+
+    Mail::Address.new(value.strip).yield_self do |address|
+      "#{address.local}@#{address.domain.downcase}"
+    end
+  rescue Mail::Field::ParseError
+    value
   end
 
   def inline_updates?
