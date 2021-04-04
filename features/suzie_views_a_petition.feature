@@ -36,12 +36,6 @@ Feature: Suzie views a petition
     And I should see a link called "http://www.google.com" linking to "http://www.google.com"
     And I should see a link called "bambi@gmail.com" linking to "mailto:bambi@gmail.com"
 
-  Scenario: Suzie views a petition with a Petitions Committee note
-    Given an open petition exists with action: "Defence review", committee_note: "This petition was found to be misleading"
-    When I go to the petition page for "Defence review"
-    Then the markup should be valid
-    And I should see "This petition was found to be misleading"
-
   Scenario: Suzie sees reason for rejection if appropriate
     Given a petition "Please bring back Eldorado" has been rejected with the reason "We like http://www.google.com and bambi@gmail.com"
     When I view the petition

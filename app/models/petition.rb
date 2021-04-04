@@ -137,7 +137,6 @@ class Petition < ActiveRecord::Base
   # Therefore the allowing of blank values is handling in the validtor.
   validates :scheduled_debate_date, date: true
 
-  validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true, unless: :completed?
   validates :state, inclusion: { in: STATES }

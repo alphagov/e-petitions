@@ -99,12 +99,6 @@
         <% end %>
       <% end %>
 
-      <%= form_row for: [f.object, :committee_note] do %>
-        <%= f.label :committee_note, class: 'form-label' %>
-        <%= error_messages_for_field @petition, :committee_note %>
-        <%= f.text_area :committee_note, tabindex: increment, rows: 7, class: 'form-control' %>
-      <% end %>
-
       <%= form_row for: [f.object, :special_consideration] do %>
         <div class="multiple-choice">
           <%= f.check_box :special_consideration, tabindex: increment %>
