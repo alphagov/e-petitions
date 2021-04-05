@@ -18,8 +18,16 @@ class ImageValidator < ActiveModel::EachValidator
   private
 
   def read_image(record, attribute, attachment)
+    return unless record.attachment_changes.key?(attachment.name)
+
     changes = record.attachment_changes[attachment.name]
-    path = changes.attachable.tempfile.path
+    attachable = changes.attachable
+
+    if attachable.is_a?(Hash)
+      path = attachable[:io].path
+    else
+      path = attachable.tempfile.path
+    end
 
     image = MiniMagick::Image.new(path)
 
