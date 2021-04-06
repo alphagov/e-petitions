@@ -249,6 +249,11 @@ RSpec.describe Signature, type: :model do
       expect(s).not_to have_valid(:email)
     end
 
+    it "doesn't allow local email addresses" do
+      s = FactoryBot.build(:signature, :email => 'admin')
+      expect(s).not_to have_valid(:email)
+    end
+
     it "does not allow emails using plus addresses" do
       signature = FactoryBot.build(:signature, email: 'foobar+petitions@example.com')
       expect(signature).not_to have_valid(:email)
