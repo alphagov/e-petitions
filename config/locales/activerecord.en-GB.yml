@@ -26,10 +26,14 @@ en-GB:
 
         archived/debate_outcome:
           attributes:
-            commons_image:
+            image:
+              invalid: "Incorrect file type - please select a JPEG image"
+              too_large: "The image is too large (maximum is %{max_size})"
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
+              too_wide: "Width must be at most %{max_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
-              incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+              too_tall: "Height must be at most %{max_height}px (is %{height}px)"
+              incorrect_ratio: "Aspect ratio of the image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
             debate_pack_url:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             transcript_url:
@@ -47,6 +51,19 @@ en-GB:
               invalid: "The submitted departments were invalid - please reselect and try again"
             topics:
               invalid: "The submitted topics were invalid - please reselect and try again"
+            scheduled_debate_date:
+              invalid: "Please enter a valid date for when the debate will happen"
+
+        archived/petition/email:
+          attributes:
+            subject:
+              blank: "Subject must be completed"
+              too_long:
+                other: "Subject is too long (maximum is %{count} characters)"
+            body:
+              blank: "Body must be completed"
+              too_long:
+                other: "Body is too long (maximum is %{count} characters)"
 
         domain:
           attributes:
@@ -56,8 +73,8 @@ en-GB:
         petition:
           attributes:
             moderation:
-              blank: "You must choose to approve, reject, flag or mark as dormant"
-              invalid: "You must choose to approve, reject or restore the petition to the sponsored state"
+              blank: "You must choose a moderation action"
+              still_pending: "You can't publish a petition before the creator has validated their email address"
             creator_signature:
               blank: "%{attribute} must be completed"
             state:
@@ -68,6 +85,19 @@ en-GB:
               invalid: "The submitted departments were invalid - please reselect and try again"
             topics:
               invalid: "The submitted topics were invalid - please reselect and try again"
+            scheduled_debate_date:
+              invalid: "Please enter a valid date for when the debate will happen"
+
+        petition/email:
+          attributes:
+            subject:
+              blank: "Subject must be completed"
+              too_long:
+                other: "Subject is too long (maximum is %{count} characters)"
+            body:
+              blank: "Body must be completed"
+              too_long:
+                other: "Body is too long (maximum is %{count} characters)"
 
         signature:
           attributes:
@@ -83,10 +113,14 @@ en-GB:
 
         debate_outcome:
           attributes:
-            commons_image:
+            image:
+              invalid: "Incorrect file type - please select a JPEG image"
+              too_large: "The image is too large (maximum is %{max_size})"
               too_narrow: "Width must be at least %{min_width}px (is %{width}px)"
+              too_wide: "Width must be at most %{max_width}px (is %{width}px)"
               too_short: "Height must be at least %{min_height}px (is %{height}px)"
-              incorrect_ratio: "Width and height ratio of uploaded image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
+              too_tall: "Height must be at most %{max_height}px (is %{height}px)"
+              incorrect_ratio: "Aspect ratio of the image is %{ratio} - should be between %{min_ratio} and %{max_ratio}"
             debate_pack_url:
               invalid: "Please use a url on the parliament.uk website or a subdomain"
             transcript_url:

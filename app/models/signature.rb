@@ -32,12 +32,12 @@ class Signature < ActiveRecord::Base
   }
 
   belongs_to :petition
-  belongs_to :invalidation
+  belongs_to :invalidation, optional: true
 
   validates :state, inclusion: { in: STATES }
   validates :name, presence: true, length: { maximum: 255 }
   validates :name, format: { without: URI::regexp, message: :has_uri }
-  validates :email, presence: true, email: { allow_blank: true }, on: :create
+  validates :email, presence: true, email: { allow_blank: true }
   validates :location_code, presence: true
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :postcode, length: { maximum: 255 }, allow_blank: true
@@ -112,7 +112,7 @@ class Signature < ActiveRecord::Base
     end
 
     def duplicate(id, email)
-      where(arel_table[:id].not_eq(id).and(arel_table[:email].eq(email)))
+      where(id_not_eq(id).and(lower_email_eq(email)))
     end
 
     def duplicate_emails
@@ -463,10 +463,6 @@ class Signature < ActiveRecord::Base
       arel_table[Arel.star].count
     end
 
-    def max_validated_at
-      arel_table[:validated_at].maximum
-    end
-
     def normalize_email(email)
       "#{normalize_user(email)}@#{normalize_domain(email)}"
     end
@@ -477,6 +473,14 @@ class Signature < ActiveRecord::Base
 
     def normalize_domain(email)
       email.split("@").last.downcase
+    end
+
+    def id_not_eq(id)
+      arel_table[:id].not_eq(id)
+    end
+
+    def lower_email_eq(email)
+      arel_table[:email].lower.eq(email.to_s.downcase)
     end
   end
 
@@ -534,7 +538,7 @@ class Signature < ActiveRecord::Base
   end
 
   def email=(value)
-    super(value.to_s.strip.downcase)
+    super(normalize_email(value))
   end
 
   def postcode=(value)
@@ -787,6 +791,16 @@ class Signature < ActiveRecord::Base
     else
       postcode
     end
+  end
+
+  def normalize_email(value)
+    return value unless value.present?
+
+    Mail::Address.new(value.strip).yield_self do |address|
+      "#{address.local}@#{address.domain.downcase}"
+    end
+  rescue Mail::Field::ParseError
+    value
   end
 
   def inline_updates?

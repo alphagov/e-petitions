@@ -9,7 +9,7 @@ namespace :errors do
       end
     end
 
-    context_class = Class.new(ActionView::Base) do
+    context_class = Class.new(ActionView::Base.with_empty_template_cache) do
       include Rails.application.routes.url_helpers
 
       def data_uri(path)
@@ -25,14 +25,16 @@ namespace :errors do
       end
     end
 
+    lookup_context = ActionView::LookupContext.new('app/views')
+
     %w[400 403 404 406 422 500 503].each do |status|
-      context = context_class.new('app/views', { status: status }, controller_class.new)
+      context = context_class.new(lookup_context, { status: status }, controller_class.new)
       File.open(Rails.public_path.join("#{status}.html"), 'wb') do |f|
         f.write context.render(template: "errors/#{status}", layout: 'errors/layout')
       end
     end
 
-    context = context_class.new('app/views', {}, controller_class.new)
+    context = context_class.new(lookup_context, {}, controller_class.new)
     File.open(Rails.public_path.join("error.css"), 'wb') do |f|
       f.write context.render(template: "errors/error", layout: false)
     end

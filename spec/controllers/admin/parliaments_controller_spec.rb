@@ -139,10 +139,6 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          let :send_emails_job do
-            { job: NotifyPetitionsThatParliamentIsDissolvingJob, args: [], queue: "high_priority" }
-          end
-
           it "redirects back to the edit page" do
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
@@ -152,7 +148,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
 
           it "enqueues a job to notify creators" do
-            expect(enqueued_jobs).to eq([send_emails_job])
+            expect(NotifyPetitionsThatParliamentIsDissolvingJob).to have_been_enqueued.on_queue(:high_priority)
           end
         end
 
@@ -220,24 +216,6 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          let :close_petitions_early_job do
-            {
-              job: ClosePetitionsEarlyJob,
-              args: [dissolution_at.iso8601],
-              queue: "high_priority",
-              at: dissolution_at.to_f
-            }
-          end
-
-          let :stop_petitions_early_job do
-            {
-              job: StopPetitionsEarlyJob,
-              args: [dissolution_at.iso8601],
-              queue: "high_priority",
-              at: dissolution_at.to_f
-            }
-          end
-
           it "redirects back to the edit page" do
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
@@ -247,11 +225,11 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
 
           it "enqueues a job to close petitions" do
-            expect(enqueued_jobs).to include(close_petitions_early_job)
+            expect(ClosePetitionsEarlyJob).to have_been_enqueued.on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
           end
 
           it "enqueues a job to stop petitions" do
-            expect(enqueued_jobs).to include(stop_petitions_early_job)
+            expect(StopPetitionsEarlyJob).to have_been_enqueued.on_queue(:high_priority).with(dissolution_at.iso8601).at(dissolution_at)
           end
         end
 
@@ -320,14 +298,6 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          let :archive_petitions_job do
-            {
-              job: ArchivePetitionsJob,
-              args: [],
-              queue: "high_priority"
-            }
-          end
-
           it "redirects back to the edit page" do
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
@@ -337,7 +307,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
 
           it "enqueues a job to archive petitions" do
-            expect(enqueued_jobs).to include(archive_petitions_job)
+            expect(ArchivePetitionsJob).to have_been_enqueued.on_queue(:high_priority)
           end
 
           it "sets the archiving_started_at timestamp" do
@@ -416,14 +386,6 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
             }
           end
 
-          let :delete_petitions_job do
-            {
-              job: DeletePetitionsJob,
-              args: [],
-              queue: "high_priority"
-            }
-          end
-
           it "redirects back to the edit page" do
             expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
           end
@@ -433,7 +395,7 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
           end
 
           it "enqueues a job to archive petitions" do
-            expect(enqueued_jobs).to include(delete_petitions_job)
+            expect(DeletePetitionsJob).to have_been_enqueued.on_queue(:high_priority)
           end
 
           it "sets the archived_at timestamp" do

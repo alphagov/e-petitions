@@ -5,10 +5,10 @@ class Admin::Archived::PetitionDetailsController < Admin::AdminController
   end
 
   def update
-    if @petition.update_attributes(petition_params)
+    if @petition.update(petition_params)
       redirect_to admin_archived_petition_url(@petition), notice: :petition_updated
     else
-      render :show
+      render :show, alert: :petition_not_saved
     end
   end
 

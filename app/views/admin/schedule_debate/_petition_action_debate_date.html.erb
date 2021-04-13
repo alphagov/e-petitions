@@ -2,17 +2,13 @@
 
   <%= form_row :for => [f.object, :scheduled_debate_date] do %>
     <%= f.label :scheduled_debate_date, class: 'form-label petition-action-heading' %>
-    <%= error_messages_for_field f.object, :debated_on %>
+    <%= error_messages_for_field f.object, :scheduled_debate_date %>
     <%= f.date_field :scheduled_debate_date, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
   <% end %>
 
   <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
-
-  <% if @petition.editing_disabled? %>
-    <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
-  <% else %>
-    <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
-  <% end %>
+  <%= f.submit "Save", name: 'save', class: 'button-secondary', disabled: @petition.editing_disabled? %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 <% end %>
 
 <%= render 'edit_lock' %>

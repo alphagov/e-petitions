@@ -46,20 +46,16 @@
       <%= f.url_field :debate_pack_url, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
     <% end %>
 
-    <%= form_row for: [f.object, :commons_image] do %>
-      <%= f.label :commons_image, 'Commons Image', class: 'form-label' %>
-      <%= error_messages_for_field f.object, :commons_image %>
-      <%= f.file_field :commons_image, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
+    <%= form_row for: [f.object, :image] do %>
+      <%= f.label :image, 'Debate Image', class: 'form-label' %>
+      <%= error_messages_for_field f.object, :image %>
+      <%= f.file_field :image, tabindex: increment, class: 'form-control', disabled: @petition.editing_disabled? %>
     <% end %>
   </div>
 
-  <%= email_petitioners_with_count_submit_button(f, petition, disabled: @petition.editing_disabled?) %>
-
-  <% if @petition.editing_disabled? %>
-    <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
-  <% else %>
-    <%= f.submit "Save without emailing", name: 'save', class: 'button-secondary' %>
-  <% end %>
+  <%= email_petitioners_with_count_submit_button(f, petition, ) %>
+  <%= f.submit "Save", name: 'save', class: 'button-secondary', disabled: @petition.editing_disabled? %>
+  <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>
 <% end -%>
 
 <%= javascript_tag do %>

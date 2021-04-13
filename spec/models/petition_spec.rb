@@ -1743,7 +1743,7 @@ RSpec.describe Petition, type: :model do
 
     context "when there is one more signature" do
       before do
-        FactoryBot.create(:validated_signature, petition: petition)
+        FactoryBot.create(:validated_signature, petition: petition, increment: false)
       end
 
       it "increases the signature count by 1" do
@@ -1766,7 +1766,7 @@ RSpec.describe Petition, type: :model do
     context "when there is more than one signature" do
       before do
         5.times do
-          FactoryBot.create(:validated_signature, petition: petition)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
         end
       end
 
@@ -1793,8 +1793,13 @@ RSpec.describe Petition, type: :model do
           state: "pending",
           signature_count: 0,
           last_signed_at: nil,
-          updated_at: 2.days.ago
+          updated_at: 2.days.ago,
+          increment: false
         })
+      end
+
+      before do
+        FactoryBot.create(:validated_signature, petition: petition, sponsor: true, increment: false)
       end
 
       it "records changes the state from 'pending' to 'validated'" do
@@ -1807,11 +1812,11 @@ RSpec.describe Petition, type: :model do
     end
 
     context "when the signature count crosses the threshold for moderation" do
-      let(:signature_count) { 4 }
+      let(:signature_count) { 5 }
 
       before do
-        expect(Site).to receive(:threshold_for_response).and_return(5)
-        FactoryBot.create(:validated_signature, petition: petition)
+        expect(Site).to receive(:threshold_for_moderation).and_return(5)
+        FactoryBot.create(:validated_signature, petition: petition, increment: false)
       end
 
       context "having already been validated by a sponsor" do
@@ -1871,7 +1876,7 @@ RSpec.describe Petition, type: :model do
       let(:signature_count) { 100 }
 
       before do
-        FactoryBot.create(:validated_signature, petition: petition)
+        FactoryBot.create(:validated_signature, petition: petition, increment: false)
       end
 
       context "and moderation_threshold_reached_at is nil" do
@@ -1903,7 +1908,7 @@ RSpec.describe Petition, type: :model do
 
       before do
         expect(Site).to receive(:threshold_for_response).and_return(10)
-        FactoryBot.create(:validated_signature, petition: petition)
+        FactoryBot.create(:validated_signature, petition: petition, increment: false)
       end
 
       it "records the time it happened" do
@@ -1920,7 +1925,7 @@ RSpec.describe Petition, type: :model do
 
       before do
         expect(Site).to receive(:threshold_for_debate).and_return(100)
-        FactoryBot.create(:validated_signature, petition: petition)
+        FactoryBot.create(:validated_signature, petition: petition, increment: false)
       end
 
       it "records the time it happened" do
@@ -2044,7 +2049,7 @@ RSpec.describe Petition, type: :model do
       let(:petition) { FactoryBot.create(:sponsored_petition) }
 
       before do
-        expect(Site).not_to receive(:threshold_for_response)
+        expect(Site).not_to receive(:threshold_for_moderation)
       end
 
       it "is falsey" do
@@ -2090,7 +2095,7 @@ RSpec.describe Petition, type: :model do
       let(:petition) { FactoryBot.create(:sponsored_petition) }
 
       before do
-        expect(Site).not_to receive(:threshold_for_response)
+        expect(Site).not_to receive(:threshold_for_moderation)
       end
 
       it "is falsey" do
@@ -2197,14 +2202,98 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe '#publish' do
-    subject(:petition) { FactoryBot.create(:petition) }
+  describe '#moderate' do
+    shared_examples "it doesn't change timestamps" do
+      it "doesn't change the open_at timestamp" do
+        expect {
+          petition.moderate(params)
+        }.not_to change {
+          petition.reload.open_at
+        }
+      end
+
+      it "doesn't change the closed_at timestamp" do
+        expect {
+          petition.moderate(params)
+        }.not_to change {
+          petition.reload.closed_at
+        }
+      end
+    end
+
+    context "when taking down an open petition" do
+      let(:petition) do
+        FactoryBot.create(
+          :open_petition,
+          open_at: 2.weeks.ago,
+          closed_at: 2.weeks.from_now
+        )
+      end
+
+      let(:params) do
+        { moderation: "reject", rejection: { code: "duplicate" } }
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+    end
+
+    context "when republishing a closed petition that was taken down" do
+      let(:params) do
+        { moderation: "approve" }
+      end
+
+      let(:petition) do
+        FactoryBot.create(
+          :rejected_petition,
+          open_at: 6.weeks.ago,
+          closed_at: 2.weeks.ago,
+        )
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+
+      it "restores it to the 'closed' state" do
+        expect {
+          petition.moderate(params)
+        }.to change {
+          petition.reload.state
+        }.from('rejected').to('closed')
+      end
+    end
+
+    context "when republishing an open petition that was taken down" do
+      let(:params) do
+        { moderation: "approve" }
+      end
+
+      let(:petition) do
+        FactoryBot.create(
+          :rejected_petition,
+          open_at: 2.weeks.ago,
+          closed_at: 2.weeks.from_now,
+        )
+      end
+
+      it_behaves_like "it doesn't change timestamps"
+
+      it "restores it to the 'open' state" do
+        expect {
+          petition.moderate(params)
+        }.to change {
+          petition.reload.state
+        }.from('rejected').to('open')
+      end
+    end
+  end
+
+  describe '#publish!' do
+    subject(:petition) { FactoryBot.create(:sponsored_petition) }
     let(:now) { Time.current }
     let(:duration) { Site.petition_duration.months }
     let(:closing_date) { (now + duration).end_of_day }
 
     before do
-      petition.publish
+      petition.publish!
     end
 
     it "sets the state to OPEN" do
@@ -2216,13 +2305,13 @@ RSpec.describe Petition, type: :model do
     end
   end
 
-  describe "#reject" do
+  describe "#reject!" do
     subject(:petition) { FactoryBot.create(:petition) }
 
     %w[duplicate irrelevant no-action honours fake-name foi].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(code: rejection_code)
+          petition.reject!(code: rejection_code)
           petition.reload
         end
 
@@ -2239,7 +2328,7 @@ RSpec.describe Petition, type: :model do
     %w[libellous offensive].each do |rejection_code|
       context "when the reason for rejection is #{rejection_code}" do
         before do
-          petition.reject(code: rejection_code)
+          petition.reject!(code: rejection_code)
           petition.reload
         end
 
@@ -2267,8 +2356,8 @@ RSpec.describe Petition, type: :model do
           expect(p2.rejection).to be_nil
           expect(p2.association(:rejection)).to be_loaded
 
-          p1.reject(code: "duplicate")
-          p2.reject(code: "irrelevant")
+          p1.reject!(code: "duplicate")
+          p2.reject!(code: "irrelevant")
 
           expect(rejection.code).to eq("irrelevant")
         }.not_to raise_error
@@ -2849,7 +2938,7 @@ RSpec.describe Petition, type: :model do
   end
 
   describe "#signatures_to_email_for" do
-    let!(:petition) { FactoryBot.create(:petition) }
+    let!(:petition) { FactoryBot.create(:open_petition) }
     let!(:creator) { petition.creator }
     let!(:other_signature) { FactoryBot.create(:validated_signature, petition: petition) }
     let(:petition_timestamp) { 5.days.ago }
@@ -2906,10 +2995,6 @@ RSpec.describe Petition, type: :model do
 
     it "rounds down to the nearest 5 seconds" do
       expect(petition.cache_key).to eq("petitions/#{petition.id}-20160629000005000000")
-    end
-
-    it "can use other columns" do
-      expect(petition.cache_key(:open_at, :last_signed_at)).to eq("petitions/#{petition.id}-20160628000015000000")
     end
   end
 

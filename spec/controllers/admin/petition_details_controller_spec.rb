@@ -105,13 +105,16 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
               action: 'New action',
               background: 'New background',
               additional_details: 'New additional_details',
-              creator_attributes: { name: 'Jo Public' }
+              creator_attributes: {
+                name: 'Jo Public',
+                email: 'jo.public@example.com'
+              }
             }
           }
         end
 
-        it "are limited to action, background, additional_details and creator name" do
-          is_expected.to permit(:action, :background, :additional_details, :creator_attributes => [:name]).for(:update, params: params).on(:petition)
+        it "are limited to action, background, additional_details and creator name/email" do
+          is_expected.to permit(:action, :background, :additional_details, :creator_attributes => [:name, :email]).for(:update, params: params).on(:petition)
         end
       end
 
@@ -121,7 +124,10 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
               action: 'New action',
               background: 'New background',
               additional_details: 'New additional_details',
-              creator_attributes: { name: 'New Creator' }
+              creator_attributes: {
+                name: 'New Creator',
+                email: 'new.creator@example.com'
+              }
           }
         end
 
@@ -140,6 +146,7 @@ RSpec.describe Admin::PetitionDetailsController, type: :controller, admin: true 
             expect(petition.background).to eq('New background')
             expect(petition.additional_details).to eq('New additional_details')
             expect(petition.creator.name).to eq('New Creator')
+            expect(petition.creator.email).to eq('new.creator@example.com')
           end
         end
 

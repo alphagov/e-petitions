@@ -8,6 +8,7 @@ require 'rails'
 require 'active_model/railtie'
 require 'active_job/railtie'
 require 'active_record/railtie'
+require 'active_storage/engine'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
@@ -20,9 +21,13 @@ Bundler.require(*Rails.groups)
 
 module Epets
   class Application < Rails::Application
-    # Settings in config/environments/* take precedence over those specified here.
-    # Application configuration should go into files in config/initializers
-    # -- all .rb files in that directory are automatically loaded.
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.1
+
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
 
     # Set Time.zone default to the specified zone and make Active Record auto-convert to this zone.
     # Run "rake -D time" for a list of tasks for finding time zone names. Default is UTC.
@@ -31,13 +36,22 @@ module Epets
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :'en-GB'
+    config.i18n.fallbacks = %i[en-GB]
+
+    # config.eager_load_paths << Rails.root.join("extras")
 
     # Configure the cache store
-    config.cache_store = :atomic_dalli_store, nil, {
+    config.cache_store = :mem_cache_store, nil, {
       expires_in: 1.day, compress: true,
       namespace: ENV.fetch('MEMCACHE_NAMESPACE') { 'epets' },
       pool_size: ENV.fetch('WEB_CONCURRENCY_MAX_THREADS') { 32 }.to_i
     }
+
+    # Configure Active Record to use cache versioning
+    config.active_record.cache_versioning = false
+
+    # Disable automatic Active Storage routes
+    config.active_storage.draw_routes = false
 
     # Configure Active Job queue adapter
     config.active_job.queue_adapter = :delayed_job

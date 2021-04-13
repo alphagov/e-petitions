@@ -45,17 +45,17 @@ end
 
 When(/^I flag the petition$/) do
   choose "Flag"
-  click_button "Save without emailing"
+  click_button "Save"
 end
 
 When(/^I mark the petition as dormant$/) do
   choose "Dormant"
-  click_button "Save without emailing"
+  click_button "Save"
 end
 
 When(/^I restore to a sponsored state$/) do
   choose "Restore"
-  click_button "Save without emailing"
+  click_button "Save"
   expect(page).to have_content("Petition has been successfully updated")
   expect(page).to have_content("Status Sponsored")
 end
@@ -117,7 +117,7 @@ end
 
 Then(/^it can be restored to a sponsored state$/) do
   choose "Restore"
-  click_button "Save without emailing"
+  click_button "Save"
   expect(page).to have_content("Petition has been successfully updated")
   expect(page).to have_content("Status Sponsored")
 end
@@ -194,4 +194,8 @@ Given(/^a moderator responds to the petition$/) do
     And I fill in "Response in full" with "Parliament here it comes"
     And I press "Email #{NumberHelpers.number_with_delimiter(@petition.signature_count)} petitioners"
   )
+end
+
+Then /^the petition should still be unmoderated$/ do
+  expect(@petition).not_to be_visible
 end

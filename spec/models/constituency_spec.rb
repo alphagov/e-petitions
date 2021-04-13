@@ -14,10 +14,12 @@ RSpec.describe Constituency, type: :model do
     it { is_expected.to have_db_column(:mp_name).of_type(:string).with_options(null: true, limit: 100) }
     it { is_expected.to have_db_column(:mp_date).of_type(:date).with_options(null: true) }
     it { is_expected.to have_db_column(:example_postcode).of_type(:string).with_options(null: true, limit: 30) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   end
 
   describe "associations" do
-    it { is_expected.to belong_to(:region) }
+    it { is_expected.to belong_to(:region).optional }
     it { is_expected.to have_many(:signatures) }
     it { is_expected.to have_many(:petitions).through(:signatures) }
   end

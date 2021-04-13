@@ -28,11 +28,17 @@ class Petition < ActiveRecord::Base
   PUBLISHABLE_STATES         = %w[validated sponsored flagged dormant]
   IN_MODERATION_STATES       = %w[sponsored flagged]
   TODO_LIST_STATES           = %w[pending validated sponsored flagged dormant]
-  MODERATABLE_STATES         = %w[validated sponsored flagged dormant rejected hidden]
+  MODERATABLE_STATES         = %w[pending validated sponsored flagged dormant rejected hidden]
   COLLECTING_SPONSORS_STATES = %w[pending validated]
   STOP_COLLECTING_STATES     = %w[pending validated sponsored flagged dormant]
 
+  RESTORABLE_STATES = %w[flagged dormant rejected]
+  REJECTABLE_STATES = %w[pending validated sponsored flagged dormant]
+  FLAGGABLE_STATES  = %w[pending validated sponsored]
+
   DEBATE_STATES = %w[pending awaiting scheduled debated not_debated]
+
+  self.cache_timestamp_format = :stepped_cache_key
 
   has_perishable_token called: 'sponsor_token'
 
@@ -75,12 +81,12 @@ class Petition < ActiveRecord::Base
 
   filter :topic, ->(code) { topics(code) }
 
-  has_one :creator, -> { creator }, class_name: 'Signature'
+  has_one :creator, -> { creator }, class_name: 'Signature', inverse_of: :petition
   accepts_nested_attributes_for :creator, update_only: true
 
   with_options class_name: 'AdminUser' do
-    belongs_to :locked_by
-    belongs_to :moderated_by
+    belongs_to :locked_by, optional: true
+    belongs_to :moderated_by, optional: true
   end
 
   has_one :debate_outcome, dependent: :destroy
@@ -105,6 +111,13 @@ class Petition < ActiveRecord::Base
   validates :action, presence: true, length: { maximum: 80, allow_blank: true }
   validates :background, presence: true, length: { maximum: 300, allow_blank: true }
   validates :additional_details, length: { maximum: 800, allow_blank: true }
+
+  # The scheduled_debate_date will be blank for most petitions but we
+  # can't add `allow_blank: true` here because Active Record validations
+  # will not call the DateValidator as all invalid dates are coerced to nil.
+  # Therefore the allowing of blank values is handling in the validtor.
+  validates :scheduled_debate_date, date: true
+
   validates :committee_note, length: { maximum: 800, allow_blank: true }
   validates :open_at, presence: true, if: :open?
   validates :creator, presence: true
@@ -651,25 +664,31 @@ class Petition < ActiveRecord::Base
 
       case moderation
       when 'approve'
-        publish
+        publish!
       when 'reject'
-        reject(params[:rejection])
+        reject!(params[:rejection])
       when 'flag'
-        update(state: FLAGGED_STATE)
+        update!(state: FLAGGED_STATE)
       when 'dormant'
-        update(state: DORMANT_STATE)
+        update!(state: DORMANT_STATE)
       when 'restore'
-        update(state: SPONSORED_STATE)
+        update!(state: SPONSORED_STATE)
       else
-        if flagged? || dormant?
-          errors.add :moderation, :invalid
-        else
-          errors.add :moderation, :blank
-        end
-
-        false
+        errors.add :moderation, :blank
+        raise ActiveRecord::RecordNotSaved, "Unable to moderate petition"
       end
     end
+
+    if published?
+      Appsignal.increment_counter("petition.published", 1)
+    elsif rejected?
+      Appsignal.increment_counter("petition.rejected", 1)
+    end
+
+    true
+  rescue ActiveRecord::RecordNotSaved, ActiveRecord::RecordInvalid
+    reload_rejection unless rejection.present?
+    false
   end
 
   def moderating?
@@ -684,17 +703,30 @@ class Petition < ActiveRecord::Base
     hidden? && state_was.in?(VISIBLE_STATES)
   end
 
-  def publish(time = Time.current)
-    Appsignal.increment_counter("petition.published", 1)
-    update(state: OPEN_STATE, open_at: time)
+  def publish!(time = Time.current)
+    errors.add :moderation, :still_pending if pending?
+
+    if errors.any?
+      raise ActiveRecord::RecordNotSaved, "Unable to moderate petition"
+    end
+
+    update!(
+      state: state_for_publishing(time),
+      open_at: time_for_publishing(time)
+    )
   end
 
-  def reject(attributes)
+  def reject!(attributes)
     begin
-      Appsignal.increment_counter("petition.rejected", 1)
-      build_rejection(attributes) && rejection.save
+      if rejection.present?
+        rejection.attributes = attributes
+      else
+        build_rejection(attributes)
+      end
+
+      rejection.save!
     rescue ActiveRecord::RecordNotUnique => e
-      reload_rejection.update(attributes)
+      reload_rejection.update!(attributes)
     end
   end
 
@@ -809,6 +841,18 @@ class Petition < ActiveRecord::Base
     rejected? || hidden?
   end
 
+  def rejectable?
+    state.in?(REJECTABLE_STATES)
+  end
+
+  def restorable?
+    state.in?(RESTORABLE_STATES)
+  end
+
+  def flaggable?
+    state.in?(FLAGGABLE_STATES)
+  end
+
   def archiving?
     archiving_started_at? && !archived_at?
   end
@@ -819,6 +863,10 @@ class Petition < ActiveRecord::Base
 
   def editing_disabled?
     archiving_started_at? || archived_at?
+  end
+
+  def previously_published?(now = Time.current)
+    open_at && open_at < now
   end
 
   def update_lock!(user, now = Time.current)
@@ -887,24 +935,6 @@ class Petition < ActiveRecord::Base
 
   def closing
     open? ? deadline : closed_at
-  end
-
-  def cache_key(*timestamp_names)
-    case
-    when new_record?
-      "petitions/new"
-    when timestamp_names.any?
-      timestamp = max_updated_column_timestamp(timestamp_names)
-      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
-      timestamp = timestamp.utc.to_s(cache_timestamp_format)
-      "petitions/#{id}-#{timestamp}"
-    when timestamp = max_updated_column_timestamp
-      timestamp = timestamp.change(sec: (timestamp.sec.div(5) * 5))
-      timestamp = timestamp.utc.to_s(cache_timestamp_format)
-      "petitions/#{id}-#{timestamp}"
-    else
-      "petitions/#{id}"
-    end
   end
 
   def update_last_petition_created_at
@@ -989,5 +1019,17 @@ class Petition < ActiveRecord::Base
 
   def notes?
     note && note.details.present?
+  end
+
+  def state_for_publishing(time)
+    if open_at
+      closed_at && closed_at < time ? CLOSED_STATE : OPEN_STATE
+    else
+      OPEN_STATE
+    end
+  end
+
+  def time_for_publishing(time)
+    open_at || time
   end
 end

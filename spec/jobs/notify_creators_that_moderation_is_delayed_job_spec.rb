@@ -6,18 +6,6 @@ RSpec.describe NotifyCreatorsThatModerationIsDelayedJob, type: :job do
   let(:subject) { "Moderation of your petition is delayed" }
   let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
 
-  let(:notify_creator_job) do
-    {
-      job: NotifyCreatorThatModerationIsDelayedJob,
-      args: [
-        { "_aj_globalid" => "gid://epets/Signature/#{signature.id}" },
-        "Moderation of your petition is delayed",
-        "Sorry, but moderation of your petition is delayed for reasons."
-      ],
-      queue: "low_priority"
-    }
-  end
-
   before do
     expect(Petition).to receive_message_chain(:overdue_in_moderation, :find_each).and_yield(petition)
   end
@@ -25,8 +13,12 @@ RSpec.describe NotifyCreatorsThatModerationIsDelayedJob, type: :job do
   it "enqueues a job for every petition that is open at dissolution" do
     expect {
       described_class.perform_now(subject, body)
-    }.to change {
-      enqueued_jobs
-    }.from([]).to([notify_creator_job])
+    }.to have_enqueued_job(
+      NotifyCreatorThatModerationIsDelayedJob
+    ).on_queue(:low_priority).with(
+      signature,
+      "Moderation of your petition is delayed",
+      "Sorry, but moderation of your petition is delayed for reasons."
+    )
   end
 end

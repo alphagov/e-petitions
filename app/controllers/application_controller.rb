@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include FlashI18n
+
   protect_from_forgery with: :reset_session
 
   before_action :reload_site
@@ -105,7 +107,7 @@ class ApplicationController < ActionController::Base
   end
 
   def do_not_cache
-    response.headers['Cache-Control'] = 'no-store, no-cache'
+    response.headers['Cache-Control'] = 'no-store'
   end
 
   def current_time

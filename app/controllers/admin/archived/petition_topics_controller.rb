@@ -9,7 +9,7 @@ class Admin::Archived::PetitionTopicsController < Admin::AdminController
     if @petition.update(petition_params)
       redirect_to admin_archived_petition_url(@petition), notice: :petition_updated
     else
-      render 'admin/archived/petitions/show'
+      render 'admin/archived/petitions/show', alert: :petition_not_updated
     end
   end
 

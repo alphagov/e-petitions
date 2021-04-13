@@ -7,7 +7,7 @@ class Admin::Archived::ScheduleDebateController < Admin::AdminController
   end
 
   def update
-    if @petition.update_attributes(params_for_update)
+    if @petition.update(params_for_update)
       if send_email_to_petitioners?
         ::Archived::EmailDebateScheduledJob.run_later_tonight(petition: @petition)
         message = :email_sent_overnight
@@ -17,7 +17,7 @@ class Admin::Archived::ScheduleDebateController < Admin::AdminController
 
       redirect_to admin_archived_petition_url(@petition), notice: message
     else
-      render 'admin/archived/petitions/show'
+      render 'admin/archived/petitions/show', alert: :petition_not_saved
     end
   end
 

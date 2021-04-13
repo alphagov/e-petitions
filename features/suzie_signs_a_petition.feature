@@ -76,7 +76,7 @@ Feature: Suzie signs a petition
     And I fill in my details
     And I try to sign
     And I say I am happy with my email address
-    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
+    Then "WOMBOID@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives a duplicate signature email if she changes to her original email but she has already signed and validated
     When I have already signed the petition with an uppercase email
@@ -85,7 +85,7 @@ Feature: Suzie signs a petition
     And I try to sign
     When I change my email address to "womboid@wimbledon.com"
     And I say I am happy with my email address
-    Then "womboid@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
+    Then "WOMBOID@wimbledon.com" should receive 1 email with subject "Duplicate signature of petition"
 
   Scenario: Suzie receives a duplicate signature email if an alias has been used to sign the petition already
     Given "wimbledon.com" is configured to normalize email address
@@ -161,7 +161,7 @@ Feature: Suzie signs a petition
     And I can click on a link to return to the petition
 
   Scenario: Eric clicks the link shared to him by Suzie
-    When Suzie has already signed the petition and validated her email
+    When Suzie has already signed the petition
     And Suzie shares the signatory confirmation link with Eric
     And I click the shared link
     Then I should see "Sign this petition"

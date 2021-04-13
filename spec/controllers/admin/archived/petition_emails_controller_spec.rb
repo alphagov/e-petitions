@@ -482,7 +482,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
           params = {
             petition_id: petition.id,
             archived_petition_email: petition_email_attributes,
-            save_and_preview: "Save and preview"
+            save_and_preview: "Preview"
           }
 
           post :create, params: params.merge(overrides)
@@ -1014,7 +1014,7 @@ RSpec.describe Admin::Archived::PetitionEmailsController, type: :controller, adm
             petition_id: petition.id,
             id: email.id,
             archived_petition_email: petition_email_attributes,
-            save_and_preview: "Save and preview"
+            save_and_preview: "Preview"
           }
 
           patch :update, params: params.merge(overrides)

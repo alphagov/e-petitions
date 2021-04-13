@@ -22,7 +22,7 @@ class Admin::Archived::DebateOutcomesController < Admin::AdminController
 
       redirect_to admin_archived_petition_url(@petition), notice: message
     else
-      render 'admin/archived/petitions/show'
+      render 'admin/archived/petitions/show', alert: :debate_outcome_not_saved
     end
   end
 
@@ -41,7 +41,7 @@ class Admin::Archived::DebateOutcomesController < Admin::AdminController
   end
 
   def debate_outcome_attributes
-    %i[debated_on overview transcript_url video_url debate_pack_url debated commons_image]
+    %i[debated_on overview transcript_url video_url debate_pack_url debated image]
   end
 
   def send_email_to_petitioners?

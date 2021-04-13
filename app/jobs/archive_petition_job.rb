@@ -3,7 +3,13 @@ require 'tempfile'
 class ArchivePetitionJob < ApplicationJob
   queue_as :high_priority
 
+  around_perform do |job, block|
+    ActiveRecord::Base.no_touching(&block)
+  end
+
   def perform(petition)
+    image_tempfile = nil
+
     unless petition.archived? || parliament.petitions.exists?(petition.id)
       archived_petition = parliament.petitions.create! do |p|
         p.id = petition.id
@@ -89,13 +95,19 @@ class ArchivePetitionJob < ApplicationJob
             o.created_at = debate_outcome.created_at
             o.updated_at = debate_outcome.updated_at
 
-            if debate_outcome.commons_image?
-              tempfile = Tempfile.new("commons_image")
-              debate_outcome.commons_image.copy_to_local_file(:original, tempfile.path)
-              tempfile.rewind
+            if debate_outcome.image.attached?
+              debate_outcome.image.blob.tap do |blob|
+                blob.open do |tempfile|
+                  image_tempfile = Tempfile.new("debate_image")
+                  File.open(image_tempfile.path, "wb") { |f| f.write(tempfile.read) }
 
-              o.commons_image = tempfile
-              o.commons_image_file_name = debate_outcome.commons_image_file_name
+                  o.image.attach(
+                    io: image_tempfile,
+                    filename: blob.filename,
+                    content_type: blob.content_type
+                  )
+                end
+              end
             end
           end
         end
@@ -113,6 +125,8 @@ class ArchivePetitionJob < ApplicationJob
 
       ArchiveSignaturesJob.perform_later(petition, archived_petition)
     end
+  ensure
+    image_tempfile.close! if image_tempfile
   end
 
   private

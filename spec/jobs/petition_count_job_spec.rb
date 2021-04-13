@@ -26,12 +26,6 @@ RSpec.describe PetitionCountJob, type: :job do
       )
     end
 
-    before do
-      # FIXME: reset the signature count to ensure it's valid because
-      # the factories don't leave the petition in a consistent state.
-      petition.update_signature_count!(60.seconds.ago)
-    end
-
     it "doesn't enqueue a ResetPetitionSignatureCountJob job" do
       expect {
         described_class.perform_now

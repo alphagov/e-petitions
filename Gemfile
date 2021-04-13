@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '5.2.4.5'
+gem 'rails', '6.1.3.1'
 
 gem 'rake'
 gem 'pg'
@@ -13,7 +13,6 @@ gem 'json'
 gem 'delayed_job_active_record'
 gem 'whenever'
 gem 'appsignal'
-gem 'dynamic_form'
 gem 'faraday'
 gem 'faraday_middleware'
 gem 'net-http-persistent'
@@ -31,9 +30,10 @@ gem 'connection_pool'
 gem 'lograge'
 gem 'logstash-logger'
 gem 'jbuilder'
-gem 'paperclip'
+gem 'image_processing'
 gem 'maxminddb'
 gem 'redcarpet'
+gem 'scrypt'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
@@ -52,7 +52,6 @@ end
 group :test do
   gem 'nokogiri'
   gem 'shoulda-matchers'
-  gem 'pickle'
   gem 'cucumber', '~> 2.4.0'
   gem 'cucumber-rails', require: false
   gem 'database_cleaner'
@@ -66,5 +65,5 @@ group :test do
 end
 
 group :production do
-  gem 'puma'
+  gem 'puma', '~> 4.3'
 end

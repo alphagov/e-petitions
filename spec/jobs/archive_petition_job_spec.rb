@@ -6,17 +6,6 @@ RSpec.describe ArchivePetitionJob, type: :job do
   let(:archived_petition) { Archived::Petition.first }
   let(:email_request) { petition.email_requested_receipt }
 
-  let(:archive_signatures_job) do
-    {
-      job: ArchiveSignaturesJob,
-      args: [
-        { "_aj_globalid" => "gid://epets/Petition/#{petition.id}" },
-        { "_aj_globalid" => "gid://epets/Archived::Petition/#{petition.id}" }
-      ],
-      queue: "low_priority"
-    }
-  end
-
   before do
     FactoryBot.create(:constituency, :coventry_north_east)
     FactoryBot.create(:constituency, :bethnal_green_and_bow)
@@ -32,7 +21,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
   end
 
   it "enqueues an ArchiveSignaturesJob" do
-    expect(enqueued_jobs).to include(archive_signatures_job)
+    expect(ArchiveSignaturesJob).to have_been_enqueued.on_queue(:low_priority).with(petition, archived_petition)
   end
 
   context "with a closed petition" do
@@ -208,10 +197,11 @@ RSpec.describe ArchivePetitionJob, type: :job do
 
   context "with a petition that has a debate outcome" do
     let(:debate_outcome) { petition.debate_outcome }
+    let(:blob) { debate_outcome.image.blob }
     let(:archived_debate_outcome) { archived_petition.debate_outcome }
-    let(:commons_image_file_digest) { Digest::SHA256.file(commons_image_file) }
+    let(:archived_blob) { archived_debate_outcome.image.blob }
 
-    context "when the debate outcome doesn't have a commons image" do
+    context "when the debate outcome doesn't have an image" do
       let(:petition) do
         FactoryBot.create(:debated_petition,
           state: "closed",
@@ -236,13 +226,16 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
         expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
-        expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
         expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
       end
+
+      it "doesn't have an image" do
+        expect(archived_debate_outcome.image).not_to be_attached
+      end
     end
 
-    context "when the debate outcome has a commons image" do
+    context "when the debate outcome has an image" do
       let(:petition) do
         FactoryBot.create(:debated_petition,
           state: "closed",
@@ -253,7 +246,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
           transcript_url: "https://hansard.parliament.uk/commons/2017-04-24/debates/123456/KidsTV",
           video_url: "http://www.parliamentlive.tv/Event/Index/123456",
           debate_pack_url: "http://researchbriefings.parliament.uk/ResearchBriefing/Summary/CDP-2015-0001",
-          commons_image: File.new(commons_image_file)
+          debate_image: fixture_file_upload("debate_outcome/commons_image-2x.jpg")
         )
       end
 
@@ -268,16 +261,16 @@ RSpec.describe ArchivePetitionJob, type: :job do
         expect(archived_debate_outcome.transcript_url).to eq(debate_outcome.transcript_url)
         expect(archived_debate_outcome.video_url).to eq(debate_outcome.video_url)
         expect(archived_debate_outcome.debate_pack_url).to eq(debate_outcome.debate_pack_url)
-        expect(archived_debate_outcome.commons_image_file_name).to eq(debate_outcome.commons_image_file_name)
         expect(archived_debate_outcome.created_at).to be_usec_precise_with(debate_outcome.created_at)
         expect(archived_debate_outcome.updated_at).to be_usec_precise_with(debate_outcome.updated_at)
       end
 
-      it "copies the commons_image object" do
-        path = archived_debate_outcome.commons_image.path
-
-        expect(File.exist?(path)).to eq(true)
-        expect(Digest::SHA256.file(path)).to eq(commons_image_file_digest)
+      it "copies the image object data" do
+        expect(archived_blob.id).not_to eq(blob.id)
+        expect(archived_blob.filename).to eq(blob.filename)
+        expect(archived_blob.content_type).to eq(blob.content_type)
+        expect(archived_blob.byte_size).to eq(blob.byte_size)
+        expect(archived_blob.checksum).to eq(blob.checksum)
       end
     end
   end
