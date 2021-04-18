@@ -10,6 +10,8 @@ RSpec.describe Feedback, type: :model do
     it { is_expected.to have_db_column(:petition_link_or_title).of_type(:string) }
     it { is_expected.to have_db_column(:email).of_type(:string) }
     it { is_expected.to have_db_column(:user_agent).of_type(:string) }
+    it { is_expected.to have_db_column(:ip_address).of_type(:string).with_options(limit: 40) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
   end
 
   describe "validations" do
