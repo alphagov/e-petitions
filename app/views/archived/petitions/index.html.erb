@@ -51,13 +51,13 @@
     <p>No archived petitions could be found matching your search terms</p>
   <% else %>
     <ol>
-      <% @petitions.each do |petition| %>
-        <li class="petition-item petition-<%= petition.state %>">
-          <%= render "petitions/search/result_items/petition_result_for_facet_#{@petitions.scope}", petition: petition %>
-        </li>
-      <% end %>
+      <%= render partial: "petitions/petition", collection: @petitions %>
     </ol>
-    <%= render 'paginated_results' %>
+
+    <div class="search-pagination">
+      <%= paginate @petitions %>
+    </div>
+
     <p>
       Get this data in
       <%= link_to "JSON", archived_petitions_path(:json, @petitions.current_params) %> or
