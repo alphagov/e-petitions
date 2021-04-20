@@ -13,3 +13,5 @@ amazon:
   http_open_timeout: 5
   http_read_timeout: 5
   retry_limit: 3
+  instance_profile_credentials_retries: 3
+  instance_profile_credentials_timeout: 3
