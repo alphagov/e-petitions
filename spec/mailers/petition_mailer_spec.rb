@@ -1,33 +1,23 @@
 require "rails_helper"
 
 RSpec.describe PetitionMailer, type: :mailer do
-  let :creator do
-    FactoryBot.build(:validated_signature, name: "Barry Butler", email: "bazbutler@gmail.com", creator: true)
-  end
-
-  let :petition do
-    FactoryBot.create(:pending_petition,
-      creator: creator,
+  let :attributes do
+    {
       action: "Allow organic vegetable vans to use red diesel",
       background: "Add vans to permitted users of red diesel",
-      additional_details: "To promote organic vegetables"
-    )
+      additional_details: "To promote organic vegetables",
+      creator_name: "Barry Butler",
+      creator_email: "bazbutler@gmail.com"
+    }
   end
 
+  let(:creator) { petition.creator }
   let(:pending_signature) { FactoryBot.create(:pending_signature, name: "Alice Smith", email: "alice@example.com", petition: petition) }
   let(:validated_signature) { FactoryBot.create(:validated_signature, name: "Bob Jones", email: "bob@example.com", petition: petition) }
   let(:subject_prefix) { "HM Government & Parliament Petitions" }
 
   describe "notifying creator that moderation is delayed" do
-    let! :petition do
-      FactoryBot.create(:sponsored_petition,
-        creator: creator,
-        action: "Allow organic vegetable vans to use red diesel",
-        background: "Add vans to permitted users of red diesel",
-        additional_details: "To promote organic vegetables"
-      )
-    end
-
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:subject) { "Moderation of your petition is delayed" }
     let(:body) { "Sorry, but moderation of your petition is delayed for reasons." }
     let(:mail) { PetitionMailer.notify_creator_that_moderation_is_delayed(creator, subject, body) }
@@ -52,10 +42,11 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of publication" do
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:mail) { PetitionMailer.notify_creator_that_petition_is_published(creator) }
 
     before do
-      petition.publish
+      petition.publish!
     end
 
     it "is sent to the right address" do
@@ -78,6 +69,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying sponsor of publication" do
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:mail) { PetitionMailer.notify_sponsor_that_petition_is_published(sponsor) }
     let(:sponsor) do
       FactoryBot.create(:validated_signature,
@@ -88,7 +80,7 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     before do
-      petition.publish
+      petition.publish!
     end
 
     it "is sent to the right address" do
@@ -111,11 +103,12 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of rejection" do
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:mail) { PetitionMailer.notify_creator_that_petition_was_rejected(creator) }
 
     context "when rejecting for normal reasons" do
       before do
-        petition.reject(code: "duplicate")
+        petition.reject!(code: "duplicate")
       end
 
       it "is sent to the right address" do
@@ -139,7 +132,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     context "when there are further details" do
       before do
-        petition.reject(code: "irrelevant", details: "Please stop trolling us" )
+        petition.reject!(code: "irrelevant", details: "Please stop trolling us" )
       end
 
       it "includes those details in the email" do
@@ -149,7 +142,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     context "when rejecting for reason that cause the petition to be hidden" do
       before do
-        petition.reject(code: "offensive")
+        petition.reject!(code: "offensive")
       end
 
       it "doesn't include a link to the petition" do
@@ -159,6 +152,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying sponsor of rejection" do
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:mail) { PetitionMailer.notify_sponsor_that_petition_was_rejected(sponsor) }
     let(:sponsor) do
       FactoryBot.create(:validated_signature,
@@ -170,7 +164,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     context "when rejecting for normal reasons" do
       before do
-        petition.reject(code: "duplicate")
+        petition.reject!(code: "duplicate")
       end
 
       it "is sent to the right address" do
@@ -194,7 +188,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     context "when there are further details" do
       before do
-        petition.reject(code: "irrelevant", details: "Please stop trolling us" )
+        petition.reject!(code: "irrelevant", details: "Please stop trolling us" )
       end
 
       it "includes those details in the email" do
@@ -204,7 +198,7 @@ RSpec.describe PetitionMailer, type: :mailer do
 
     context "when rejecting for reason that cause the petition to be hidden" do
       before do
-        petition.reject(code: "offensive")
+        petition.reject!(code: "offensive")
       end
 
       it "doesn't include a link to the petition" do
@@ -214,10 +208,10 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of closing date change" do
+    let(:petition) { FactoryBot.create(:open_petition, attributes) }
     let(:mail) { PetitionMailer.notify_creator_of_closing_date_change(creator, [petition], 3) }
 
     before do
-      petition.publish
       allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
       allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
       allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)
@@ -247,10 +241,11 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying signer of closing date change" do
+    let(:petition) { FactoryBot.create(:open_petition, attributes) }
     let(:mail) { PetitionMailer.notify_signer_of_closing_date_change(validated_signature, [petition], 15) }
 
     before do
-      petition.publish
+      petition.publish!
       allow(Parliament).to receive(:dissolution_at).and_return(2.weeks.from_now)
       allow(Parliament).to receive(:registration_closed_at).and_return(4.weeks.from_now)
       allow(Parliament).to receive(:election_date).and_return(6.weeks.from_now.to_date)
@@ -280,15 +275,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of their sponsored petition being stopped" do
-    let! :petition do
-      FactoryBot.create(:sponsored_petition,
-        creator: creator,
-        action: "Allow organic vegetable vans to use red diesel",
-        background: "Add vans to permitted users of red diesel",
-        additional_details: "To promote organic vegetables"
-      )
-    end
-
+    let(:petition) { FactoryBot.create(:sponsored_petition, attributes) }
     let(:mail) { PetitionMailer.notify_creator_of_sponsored_petition_being_stopped(creator) }
 
     it "is sent to the right address" do
@@ -311,15 +298,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying creator of their validated petition being stopped" do
-    let! :petition do
-      FactoryBot.create(:validated_petition,
-        creator: creator,
-        action: "Allow organic vegetable vans to use red diesel",
-        background: "Add vans to permitted users of red diesel",
-        additional_details: "To promote organic vegetables"
-      )
-    end
-
+    let(:petition) { FactoryBot.create(:validated_petition, attributes) }
     let(:mail) { PetitionMailer.notify_creator_of_validated_petition_being_stopped(creator) }
 
     it "is sent to the right address" do
@@ -342,6 +321,8 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "gathering sponsors for petition" do
+    let(:petition) { FactoryBot.create(:pending_petition, attributes) }
+
     let(:petition_scope) { double(Petition) }
     let(:moderation_queue) { 499 }
 
@@ -452,6 +433,8 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying signature of debate outcome" do
+    let(:petition) { FactoryBot.create(:open_petition, attributes) }
+
     context "when the signature is the creator" do
       let(:signature) { petition.creator }
       subject(:mail) { described_class.notify_creator_of_debate_outcome(petition, signature) }
@@ -694,7 +677,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "notifying signature of debate scheduled" do
-    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, attributes) }
 
     shared_examples_for "a debate scheduled email" do
       it "addresses the signatory by name" do
@@ -752,7 +735,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "emailing a signature" do
-    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, creator_attributes: { name: "Bob Jones", email: "bob@jones.com" }, action: "Allow organic vegetable vans to use red diesel") }
+    let(:petition) { FactoryBot.create(:open_petition, :scheduled_for_debate, attributes) }
     let(:email) { FactoryBot.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
 
     shared_examples_for "a petition email" do
@@ -811,6 +794,7 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe "skipping anonymized signatures" do
+    let(:petition) { FactoryBot.create(:closed_petition, attributes) }
     let(:email) { FactoryBot.create(:petition_email, petition: petition, subject: "This is a message from the committee", body: "Message body from the petition committee") }
     subject(:mail) { described_class.email_signer(petition, signature, email) }
 
