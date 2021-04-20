@@ -7,7 +7,7 @@ module Archived
 
       validates :petition, presence: true
       validates :subject, presence: true, length: { maximum: 100 }
-      validates :body, presence: true, length: { maximum: 5000 }
+      validates :body, presence: true, length: { maximum: 10000 }
 
       class << self
         def default_scope
