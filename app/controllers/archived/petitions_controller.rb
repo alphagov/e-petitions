@@ -47,7 +47,11 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petitions
-    scope = @parliament.petitions
+    if params.key?(:parliament)
+      scope = Archived::Petition.visible
+    else
+      scope = @parliament.petitions.visible
+    end
 
     if json_request?
       scope = scope.preload(:creator, :rejection, :government_response, :debate_outcome)

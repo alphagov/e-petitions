@@ -172,6 +172,10 @@ module Browseable
       new_params(next_page)
     end
 
+    def current_params
+      new_params(current_page)
+    end
+
     def facet_params(facet, options = {})
       {}.tap do |new_params|
         new_params[:state] = facet
