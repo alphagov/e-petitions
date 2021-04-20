@@ -11,10 +11,11 @@
     </ol>
     <%= render 'paginated_results' %>
     <p>
-    <%= t(
-      :"ui.application.get_json_csv_html",
-      json_link: link_to("JSON", petitions_path(:json, params.permit(:q, :page, :state, :topic).to_h)),
-      csv_link: link_to('CSV', petitions_path(:csv, params.permit(:q, :state, :topic).to_h))
-    ) %></p>
+      <%= t(
+        :"ui.application.get_json_csv_html",
+        json_link: link_to("JSON", petitions_path(:json, @petitions.current_params)),
+        csv_link: link_to('CSV', petitions_path(:csv, @petitions.current_params.without(:page)))
+      ) %>
+    </p>
   <% end %>
 </div>

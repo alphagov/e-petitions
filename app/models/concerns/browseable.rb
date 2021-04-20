@@ -172,6 +172,10 @@ module Browseable
       new_params(next_page)
     end
 
+    def current_params
+      new_params(current_page)
+    end
+
     def scope
       @scope ||= facets.keys.detect(-> { :all }){ |key| key.to_s == params[:state] }
     end
