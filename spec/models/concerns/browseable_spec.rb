@@ -65,10 +65,33 @@ RSpec.describe Browseable, type: :model do
       it { is_expected.to delegate_method(:previous_page).to(:results) }
       it { is_expected.to delegate_method(:total_entries).to(:results) }
       it { is_expected.to delegate_method(:total_pages).to(:results) }
-      it { is_expected.to delegate_method(:each).to(:results) }
-      it { is_expected.to delegate_method(:empty?).to(:results) }
-      it { is_expected.to delegate_method(:map).to(:results) }
       it { is_expected.to delegate_method(:to_a).to(:results) }
+      it { is_expected.to delegate_method(:to_ary).to(:results) }
+      it { is_expected.to delegate_method(:each).to(:to_a) }
+      it { is_expected.to delegate_method(:map).to(:to_a) }
+      it { is_expected.to delegate_method(:size).to(:to_a) }
+    end
+
+    describe "#empty?" do
+      context "when total_entries is zero" do
+        before do
+          expect(search).to receive(:total_entries).and_return(0)
+        end
+
+        it "returns true" do
+          expect(search.empty?).to eq(true)
+        end
+      end
+
+      context "when total_entries is not zero" do
+        before do
+          expect(search).to receive(:total_entries).and_return(1)
+        end
+
+        it "returns false" do
+          expect(search.empty?).to eq(false)
+        end
+      end
     end
 
     describe "#current_page" do

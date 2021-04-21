@@ -1,6 +1,6 @@
 <div class="petition-rejection-controls">
   <%= javascript_tag do %>
-    var rejection_descriptions = <%= raw rejection_descriptions.to_json %>;
+    var rejection_descriptions = <%= raw json_escape(rejection_descriptions.to_json) %>;
 
     $().ready(function() {
       // Ensure that we get the onchange event when the users uses the keyboard

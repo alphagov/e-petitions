@@ -68,6 +68,7 @@ module Archived
     facet :by_created_at, -> { by_created_at }
     facet :in_debate_queue, -> { in_debate_queue.by_waiting_for_debate_longest }
 
+    filter :parliament, ->(id) { where(parliament_id: id) }
     filter :topic, ->(code) { topic(code) }
 
     default_scope { preload(:parliament) }

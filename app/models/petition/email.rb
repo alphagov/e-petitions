@@ -4,7 +4,7 @@ class Petition < ActiveRecord::Base
 
     validates :petition, presence: true
     validates :subject, presence: true, length: { maximum: 100 }
-    validates :body, presence: true, length: { maximum: 5000 }
+    validates :body, presence: true, length: { maximum: 6000 }
 
     class << self
       def default_scope

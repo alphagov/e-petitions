@@ -229,6 +229,52 @@ jobs:
         run: |
           bundle exec rake spec:jobs
 
+  spec-mailers:
+    runs-on: ubuntu-20.04
+
+    services:
+      postgres:
+        image: postgres:10
+        ports: ["5432:5432"]
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:1.5.16
+        ports: ["11211:11211"]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Setup gem cache
+        uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ubuntu-20.04-gems-
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Run specs
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/epets_test
+          RAILS_ENV: test
+          SPEC_OPTS: "-f doc -P spec/mailers/**/*_spec.rb"
+        run: |
+          bundle exec rake spec
+
   spec-models:
     runs-on: ubuntu-20.04
 

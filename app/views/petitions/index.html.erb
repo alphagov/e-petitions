@@ -30,5 +30,38 @@
 
 <p class="filtered-petition-count"><%= filtered_petition_count(@petitions) %></p>
 
-<%= render 'petitions/search/results' %>
-<%= render 'petitions/search/filter_nav' %>
+<div class="search-results section-panel">
+  <% if @petitions.empty? %>
+    <p>No petitions could be found matching your search terms.</p>
+  <% else %>
+    <ol>
+      <%= render partial: "petitions/petition", collection: @petitions %>
+    </ol>
+
+    <div class="search-pagination">
+      <%= paginate @petitions %>
+    </div>
+
+    <p>
+      Get this data in
+      <%= link_to "JSON", petitions_path(:json, @petitions.current_params) %> or
+      <%= link_to 'CSV', petitions_path(:csv, @petitions.current_params.without(:page)) %> format
+    </p>
+  <% end %>
+</div>
+
+<nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
+  <h2 id="other-lists-heading">Other lists of petitions</h2>
+  <div class="section-panel">
+    <ul>
+    <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
+      <li>
+        <%= link_to petitions_url(@petitions.facet_params(facet)) do %>
+          <%= t(facet, scope: :"petitions.lists", quantity: number_with_delimiter(count)) %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+  </div>
+  <%= link_to 'Archived petitions', archived_petitions_path(state: "published") %>
+</nav>

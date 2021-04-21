@@ -797,7 +797,7 @@ class Signature < ActiveRecord::Base
     return value unless value.present?
 
     Mail::Address.new(value.strip).yield_self do |address|
-      "#{address.local}@#{address.domain.downcase}"
+      "#{address.local}@#{address.domain.to_s.downcase}"
     end
   rescue Mail::Field::ParseError
     value
