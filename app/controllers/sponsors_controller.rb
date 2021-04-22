@@ -14,7 +14,7 @@ class SponsorsController < SignaturesController
       @signature.validate!(request: request)
     end
 
-    store_signed_token_in_session
+    store_signed_tokens_in_cookie(signed_token_hash)
     send_sponsor_support_notification_email_to_petition_owner
     redirect_to signed_sponsor_url(@signature)
   end
