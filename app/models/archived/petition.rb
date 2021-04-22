@@ -250,6 +250,10 @@ module Archived
       state == HIDDEN_STATE
     end
 
+    def rejection?
+      rejected? || hidden?
+    end
+
     def published?
       state.in?(PUBLISHED_STATES)
     end
