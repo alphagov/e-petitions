@@ -452,7 +452,7 @@ class Signature < ActiveRecord::Base
     end
 
     def email_index
-      Arel.sql("(REGEXP_REPLACE(LEFT(email, POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(email FROM POSITION('@' IN email)))")
+      Arel.sql("(REGEXP_REPLACE(LEFT(LOWER(email), POSITION('@' IN email) - 1), '\\.|\\+.+', '', 'g') || SUBSTRING(LOWER(email) FROM POSITION('@' IN email)))")
     end
 
     def ip_index

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_01_125401) do
+ActiveRecord::Schema.define(version: 2021_04_21_214559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_125401) do
     t.index ["moderated_by_id"], name: "index_archived_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_archived_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["parliament_id"], name: "index_archived_petitions_on_parliament_id"
+    t.index ["signature_count", "created_at"], name: "index_archived_petitions_on_signature_count_and_created_at", order: :desc
     t.index ["signature_count"], name: "index_archived_petitions_on_signature_count"
     t.index ["state", "closed_at"], name: "index_archived_petitions_on_state_and_closed_at"
     t.index ["state", "parliament_id"], name: "index_archived_petitions_on_state_and_parliament_id"
@@ -206,7 +207,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_125401) do
     t.boolean "sponsor", default: false, null: false
     t.datetime "anonymized_at"
     t.index "((ip_address)::inet)", name: "index_archived_signatures_on_inet"
-    t.index "((regexp_replace(\"left\"((email)::text, (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"((email)::text, \"position\"((email)::text, '@'::text))))", name: "index_archived_signatures_on_normalized_email"
+    t.index "((regexp_replace(\"left\"(lower((email)::text), (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"(lower((email)::text), \"position\"((email)::text, '@'::text))))", name: "index_archived_signatures_on_lower_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_archived_signatures_on_sector_and_petition_id"
     t.index "\"left\"((postcode)::text, '-3'::integer), state, petition_id", name: "index_archived_signatures_on_sector_and_state_and_petition_id"
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_archived_signatures_on_domain"
@@ -523,6 +524,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_125401) do
     t.index ["moderated_by_id"], name: "index_petitions_on_moderated_by_id"
     t.index ["moderation_threshold_reached_at", "moderation_lag"], name: "index_petitions_on_mt_reached_at_and_moderation_lag"
     t.index ["response_threshold_reached_at"], name: "index_petitions_on_response_threshold_reached_at"
+    t.index ["signature_count", "created_at"], name: "index_petitions_on_signature_count_and_created_at", order: :desc
     t.index ["signature_count", "state"], name: "index_petitions_on_signature_count_and_state"
     t.index ["state"], name: "index_petitions_on_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
@@ -619,7 +621,7 @@ ActiveRecord::Schema.define(version: 2021_04_01_125401) do
     t.string "canonical_email"
     t.datetime "anonymized_at"
     t.index "((ip_address)::inet)", name: "index_signatures_on_inet"
-    t.index "((regexp_replace(\"left\"((email)::text, (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"((email)::text, \"position\"((email)::text, '@'::text))))", name: "index_signatures_on_normalized_email"
+    t.index "((regexp_replace(\"left\"(lower((email)::text), (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"(lower((email)::text), \"position\"((email)::text, '@'::text))))", name: "index_signatures_on_lower_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_signatures_on_sector_and_petition_id"
     t.index "\"left\"((postcode)::text, '-3'::integer), state, petition_id", name: "index_signatures_on_sector_and_state_and_petition_id"
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_signatures_on_domain"
