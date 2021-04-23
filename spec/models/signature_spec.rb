@@ -401,6 +401,7 @@ RSpec.describe Signature, type: :model do
       let!(:other_signature) { FactoryBot.create(:pending_signature, email: "person3@example.com", petition: other_petition) }
       let!(:dotted_signature) { FactoryBot.create(:signature, email: "b.o.b@example.com", petition: other_petition) }
       let!(:plus_signature) { FactoryBot.create(:signature, email: "alice+3@example.com", petition: other_petition) }
+      let!(:upcased_siganture) { FactoryBot.create(:signature, email: "Jo.Public@example.com", petition: other_petition) }
 
       it "returns an empty set if the email is not found" do
         expect(Signature.for_email("notfound@example.com")).to eq([])
@@ -420,6 +421,10 @@ RSpec.describe Signature, type: :model do
 
       it "normalizes pluses in the local part" do
         expect(Signature.for_email("alice@example.com")).to match_array([plus_signature])
+      end
+
+      it "normalizes case in the local part" do
+        expect(Signature.for_email("jo.public@example.com")).to match_array([upcased_siganture])
       end
     end
 

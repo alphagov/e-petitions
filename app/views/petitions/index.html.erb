@@ -33,5 +33,49 @@
 
 <p class="filtered-petition-count"><%= filtered_petition_count(@petitions) %></p>
 
-<%= render 'petitions/search/results' %>
-<%= render 'petitions/search/filter_nav' %>
+<div class="search-results section-panel">
+  <% if @petitions.empty? %>
+    <p><%= t(:"ui.petitions.search.results.no_match") %></p>
+  <% else %>
+    <ol>
+      <%= render partial: "petitions/petition", collection: @petitions %>
+    </ol>
+
+    <div class="search-pagination">
+      <%= paginate @petitions %>
+    </div>
+
+    <p>
+      <%= t(
+        :"ui.application.get_json_csv_html",
+        json_link: link_to("JSON", petitions_path(:json, @petitions.current_params)),
+        csv_link: link_to('CSV', petitions_path(:csv, @petitions.current_params.without(:page)))
+      ) %>
+    </p>
+  <% end %>
+</div>
+
+<div class="section-panel other-search-lists">
+  <nav id="other-search-lists" role="navigation" aria-labelledby="other-lists-heading">
+    <h2 id="other-lists-heading"><%= t(:"ui.petitions.other_lists") %></h2>
+    <ul>
+      <% public_petition_facets_with_counts(@petitions).each do |facet, count| %>
+        <li>
+          <%= link_to petitions_url(state: facet) do %>
+            <%= t(facet, scope: :"ui.petitions.lists", quantity: number_with_delimiter(count)) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+</div>
+
+<div class="section-panel archived-petitions">
+  <ul>
+    <li>
+      <%= link_to petitions_url(state: "archived"), class: "view-all" do %>
+        <%= t(:archived, scope: :"ui.petitions.lists") %>
+      <% end %>
+    </li>
+  </ul>
+</div>

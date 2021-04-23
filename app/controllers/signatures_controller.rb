@@ -53,6 +53,8 @@ class SignaturesController < LocalizedController
       @signature.mark_seen_signed_confirmation_page!
     end
 
+    store_signed_tokens_in_cookie
+
     respond_to do |format|
       format.html
     end
@@ -63,7 +65,7 @@ class SignaturesController < LocalizedController
       @signature.validate!(request: request)
     end
 
-    store_signed_token_in_session
+    store_signed_tokens_in_cookie(signed_token_hash)
     redirect_to signed_signature_url(@signature)
   end
 
@@ -99,11 +101,21 @@ class SignaturesController < LocalizedController
     @token_param ||= params[:token].to_s.encode('utf-8', invalid: :replace)
   end
 
-  def signed_tokens
-    @signed_tokens = session[:signed_tokens] || {}
+  def load_signed_tokens
+    JSON.parse(cookies.encrypted[:signed_tokens].to_s) || {}
+  rescue JSON::ParserError
+    {}
   end
 
-  def session_signed_token
+  def dump_signed_tokens(extra_tokens = {})
+    signed_tokens.merge(extra_tokens).to_json
+  end
+
+  def signed_tokens
+    @signed_tokens ||= load_signed_tokens
+  end
+
+  def fetch_signed_token
     signed_tokens.delete(signature_id.to_s)
   end
 
@@ -115,8 +127,8 @@ class SignaturesController < LocalizedController
     signed_tokens.delete_if { |id, token| Signature.validated?(id) }
   end
 
-  def store_signed_token_in_session
-    session[:signed_tokens] = signed_tokens.merge(signed_token_hash)
+  def store_signed_tokens_in_cookie(extra_tokens = {})
+    cookies.encrypted[:signed_tokens] = { value: dump_signed_tokens(extra_tokens), httponly: true, same_site: :lax }
   end
 
   def verify_token
@@ -126,7 +138,7 @@ class SignaturesController < LocalizedController
   end
 
   def verify_signed_token
-    unless @signature.signed_token == session_signed_token
+    unless @signature.signed_token == fetch_signed_token
       redirect_to signed_token_failure_url
     end
   end

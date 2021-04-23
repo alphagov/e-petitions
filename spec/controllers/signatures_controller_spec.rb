@@ -741,6 +741,8 @@ RSpec.describe SignaturesController, type: :controller do
   end
 
   describe "GET /signatures/:id/verify" do
+    let(:parsed_cookie) { JSON.parse(cookies.encrypted[:signed_tokens]) }
+
     context "when the signature doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -898,8 +900,8 @@ RSpec.describe SignaturesController, type: :controller do
         expect(assigns[:signature].validated_ip).to eq("0.0.0.0")
       end
 
-      it "saves the signed token in the session" do
-        expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+      it "saves the signed token in the cookie" do
+        expect(parsed_cookie).to eq({ signature.id.to_s => signature.signed_token })
       end
 
       it "redirects to the signed signature page" do
@@ -914,9 +916,9 @@ RSpec.describe SignaturesController, type: :controller do
       let(:other_signature) { FactoryBot.create(:validated_signature, petition: other_petition) }
 
       before do
-        session[:signed_tokens] = {
+        cookies.encrypted[:signed_tokens] = {
           other_signature.id.to_s => other_signature.signed_token
-        }
+        }.to_json
 
         get :verify, params: { id: signature.id, token: signature.perishable_token }
       end
@@ -942,11 +944,11 @@ RSpec.describe SignaturesController, type: :controller do
       end
 
       it "deletes old signed tokens" do
-        expect(session[:signed_tokens]).not_to have_key(other_signature.id.to_s)
+        expect(parsed_cookie).not_to have_key(other_signature.id.to_s)
       end
 
-      it "saves the signed token in the session" do
-        expect(session[:signed_tokens]).to eq({ signature.id.to_s => signature.signed_token })
+      it "saves the signed token in the cookie" do
+        expect(parsed_cookie).to eq({ signature.id.to_s => signature.signed_token })
       end
 
       it "redirects to the signed signature page" do
@@ -987,6 +989,8 @@ RSpec.describe SignaturesController, type: :controller do
   end
 
   describe "GET /signatures/:id/signed" do
+    let(:parsed_cookie) { JSON.parse(cookies.encrypted[:signed_tokens]) }
+
     context "when the signature doesn't exist" do
       it "raises an ActiveRecord::RecordNotFound exception" do
         expect {
@@ -1120,7 +1124,8 @@ RSpec.describe SignaturesController, type: :controller do
       let(:signature) { FactoryBot.create(:validated_signature, :just_signed, petition: petition) }
 
       before do
-        session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
+        cookies.encrypted[:signed_tokens] = { signature.id.to_s => signature.signed_token }.to_json
+
         get :signed, params: { id: signature.id }
       end
 
@@ -1147,7 +1152,8 @@ RSpec.describe SignaturesController, type: :controller do
 
       context "when the signature has been validated" do
         before do
-          session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
+          cookies.encrypted[:signed_tokens] = { signature.id.to_s => signature.signed_token }.to_json
+
           get :signed, params: { id: signature.id }
         end
 
@@ -1167,8 +1173,8 @@ RSpec.describe SignaturesController, type: :controller do
           expect(response).to render_template("signatures/signed")
         end
 
-        it "deletes the signed token from the session" do
-          expect(session[:signed_tokens]).to be_empty
+        it "deletes the signed token from the cookie" do
+          expect(parsed_cookie).to be_empty
         end
 
         context "and the signature has already seen the confirmation page" do
@@ -1199,7 +1205,7 @@ RSpec.describe SignaturesController, type: :controller do
 
       before do
         expect(Site).to receive(:signature_collection_disabled?).and_return(true)
-        session[:signed_tokens] = { signature.id.to_s => signature.signed_token }
+        cookies.encrypted[:signed_tokens] = { signature.id.to_s => signature.signed_token }.to_json
 
         get :signed, params: { id: signature.id }
       end

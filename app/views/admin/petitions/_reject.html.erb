@@ -1,7 +1,7 @@
 <div class="petition-rejection-controls">
   <%= javascript_tag do %>
-    var rejection_descriptions_en = <%= raw I18n.with_locale(:"en-GB") { rejection_descriptions.to_json } %>;
-    var rejection_descriptions_cy = <%= raw I18n.with_locale(:"cy-GB") { rejection_descriptions.to_json } %>;
+    var rejection_descriptions_en = <%= raw I18n.with_locale(:"en-GB") { json_escape(rejection_descriptions.to_json) } %>;
+    var rejection_descriptions_cy = <%= raw I18n.with_locale(:"cy-GB") { json_escape(rejection_descriptions.to_json) } %>;
 
     $().ready(function() {
       // Ensure that we get the onchange event when the users uses the keyboard

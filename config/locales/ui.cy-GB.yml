@@ -920,6 +920,11 @@ cy-GB:
                 <td>Mae hyn yn cadw’ch gwybodaeth yn ddiogel wrth i chi ddefnyddio’r gwasanaeth deisebau</td>
                 <td>Pan fyddwch chi’n cau’ch porwr</td>
               </tr>
+              <tr>
+                <td>signed_tokens</td>
+                <td>Cyfeiriadau a gynhyrchir ar hap a ddefnyddir i nodi pa ddolenni rydych chi wedi’u clicio i wirio’ch cyfeiriad e-bost.</td>
+                <td>Pan fyddwch chi’n cau’ch porwr</td>
+              </td>
             </tbody>
           </table>
         </section>
