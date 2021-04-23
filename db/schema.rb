@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_214559) do
+ActiveRecord::Schema.define(version: 2021_04_23_183008) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -323,6 +323,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.index "to_tsvector('simple'::regconfig, additional_details_cy)", name: "index_petitions_on_additional_details_cy", using: :gin
     t.index ["anonymized_at"], name: "index_petitions_on_anonymized_at"
     t.index ["archived_at", "state"], name: "index_petitions_on_archived_at_and_state"
+    t.index ["closed_at"], name: "index_petitions_on_closed_at", order: :desc
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
     t.index ["debate_state"], name: "index_petitions_on_debate_state"
     t.index ["debate_threshold_reached_at"], name: "index_petitions_on_debate_threshold_reached_at"
