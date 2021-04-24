@@ -21,6 +21,7 @@ default: &defaults
   # Exceptions that should not be recorded by AppSignal
   ignore_errors:
     - ActionDispatch::ParamsParser::ParseError
+    - ActionDispatch::Http::MimeNegotiation::InvalidType
     - ActionController::BadRequest
     - ActionController::InvalidAuthenticityToken
     - ActionController::RoutingError
