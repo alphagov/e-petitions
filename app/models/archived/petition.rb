@@ -1,4 +1,3 @@
-require 'textacular/searchable'
 require_dependency 'archived'
 
 module Archived
@@ -48,8 +47,10 @@ module Archived
 
     before_save :update_debate_state, if: :scheduled_debate_date_changed?
 
-    extend Searchable(:action, :background, :additional_details)
     include Browseable, Taggable, Departments, Topics, Anonymization
+
+    query :id, :action, :background
+    query :additional_details, null: true
 
     facet :all, -> { visible.by_most_signatures }
     facet :awaiting_response, -> { awaiting_response.by_waiting_for_response_longest }

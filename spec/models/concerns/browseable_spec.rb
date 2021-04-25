@@ -36,6 +36,23 @@ RSpec.describe Browseable, type: :model do
     end
   end
 
+  describe ".query" do
+    it "adds column to search on" do
+      browseable.query(:name)
+      expect(browseable.query_columns).to eq([Browseable::Query::Column.new("name", "english", false)])
+    end
+
+    it "allows overriding the search configuration" do
+      browseable.query(:name, config: "simple")
+      expect(browseable.query_columns).to eq([Browseable::Query::Column.new("name", "simple", false)])
+    end
+
+    it "allows overriding whether the column accepts nulls" do
+      browseable.query(:name, null: true)
+      expect(browseable.query_columns).to eq([Browseable::Query::Column.new("name", "english", true)])
+    end
+  end
+
   describe ".search" do
     let(:params) { {} }
     let(:search) { browseable.search(params) }
@@ -48,9 +65,12 @@ RSpec.describe Browseable, type: :model do
   describe Browseable::Search do
     let(:scopes)  { { all: -> { self }, open: -> { self } } }
     let(:filters) { {} }
-    let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters, default_page_size: 50, max_page_size: 50) }
+    let(:columns) { [Browseable::Query::Column.new('action', 'english', false)] }
+    let(:klass)   { double(:klass, facet_definitions: scopes, filter_definitions: filters, query_columns: columns, default_page_size: 50, max_page_size: 50) }
     let(:params)  { { q: 'search', page: '3'} }
     let(:search)  { described_class.new(klass, params) }
+
+    let(:connection) { double(:connection) }
 
     it "is enumerable" do
       expect(search).to respond_to(:each)
@@ -166,16 +186,14 @@ RSpec.describe Browseable, type: :model do
       let(:petitions)  { [petition] }
       let(:results)    { double(:results, to_a: petitions) }
 
+      let(:sql) { %[((to_tsvector('english', "petitions"."action"::text)) @@ plainto_tsquery('english', :query))] }
+
       before do
-        allow(klass).to receive(:basic_search).with('search').and_return(klass)
-        allow(arel_table).to receive(:[]).with("*").and_return("*")
-        allow(klass).to receive(:basic_search).with('search').and_return(klass)
-        allow(klass).to receive(:except).with(:select).and_return(klass)
-        allow(klass).to receive(:arel_table).and_return(arel_table)
-        allow(klass).to receive(:select).with("*").and_return(klass)
-        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:quoted_table_name).and_return('"petitions"')
+        allow(klass).to receive(:connection).and_return(connection)
+        allow(connection).to receive(:quote_column_name).with('action').and_return('"action"')
+        allow(klass).to receive(:where).with([sql, query: "search"]).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
-        allow(results).to receive(:to_a).and_return(petitions)
         allow(results).to receive(:previous_page).and_return(2)
       end
 
@@ -214,16 +232,14 @@ RSpec.describe Browseable, type: :model do
       let(:petitions)  { [petition] }
       let(:results)    { double(:results, to_a: petitions) }
 
+      let(:sql) { %[((to_tsvector('english', "petitions"."action"::text)) @@ plainto_tsquery('english', :query))] }
+
       before do
-        allow(klass).to receive(:basic_search).with('search').and_return(klass)
-        allow(arel_table).to receive(:[]).with("*").and_return("*")
-        allow(klass).to receive(:basic_search).with('search').and_return(klass)
-        allow(klass).to receive(:except).with(:select).and_return(klass)
-        allow(klass).to receive(:arel_table).and_return(arel_table)
-        allow(klass).to receive(:select).with("*").and_return(klass)
-        allow(klass).to receive(:except).with(:order).and_return(klass)
+        allow(klass).to receive(:quoted_table_name).and_return('"petitions"')
+        allow(klass).to receive(:connection).and_return(connection)
+        allow(connection).to receive(:quote_column_name).with('action').and_return('"action"')
+        allow(klass).to receive(:where).with([sql, query: "search"]).and_return(klass)
         allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
-        allow(results).to receive(:to_a).and_return(petitions)
         allow(results).to receive(:next_page).and_return(4)
       end
 
@@ -376,20 +392,15 @@ RSpec.describe Browseable, type: :model do
       let(:petitions)  { [petition] }
       let(:results)    { double(:results, to_a: petitions) }
 
+      let(:sql) { %[((to_tsvector('english', "petitions"."action"::text)) @@ plainto_tsquery('english', :query))] }
+
       context "when there is a search term" do
         before do
-          # This list of stubs is effectively testing the implementation of the
-          # execute_search private method, however this is important because of
-          # the need to exclude the ranking column added by the textacular gem
-          # which can add a significant performance penalty.
-
-          expect(arel_table).to receive(:[]).with("*").and_return("*")
-          expect(klass).to receive(:basic_search).with('search').and_return(klass)
-          expect(klass).to receive(:except).with(:select).and_return(klass)
-          expect(klass).to receive(:arel_table).and_return(arel_table)
-          expect(klass).to receive(:select).with("*").and_return(klass)
-          expect(klass).to receive(:except).with(:order).and_return(klass)
-          expect(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
+          allow(klass).to receive(:quoted_table_name).and_return('"petitions"')
+          allow(klass).to receive(:connection).and_return(connection)
+          allow(connection).to receive(:quote_column_name).with('action').and_return('"action"')
+          allow(klass).to receive(:where).with([sql, query: "search"]).and_return(klass)
+          allow(klass).to receive(:paginate).with(page: 3, per_page: 50).and_return(results)
           expect(results).to receive(:to_a).and_return(petitions)
         end
 
@@ -576,6 +587,103 @@ RSpec.describe Browseable, type: :model do
         it "returns a hash with the filter key" do
           expect(filters.to_hash).to eq({ topic: "covid-19" })
         end
+      end
+    end
+  end
+
+  describe Browseable::Query do
+    let(:klass) { double(:klass, query_columns: query_columns) }
+    let(:query_columns) { [] }
+
+    subject { described_class.new(klass, "search") }
+
+    it { is_expected.to delegate_method(:query_columns).to(:klass) }
+    it { is_expected.to delegate_method(:connection).to(:klass) }
+    it { is_expected.to delegate_method(:quoted_table_name).to(:klass) }
+    it { is_expected.to delegate_method(:quote_column_name).to(:connection) }
+    it { is_expected.to delegate_method(:inspect).to(:to_s) }
+    it { is_expected.to delegate_method(:present?).to(:to_s) }
+
+    describe "#build" do
+      let(:connection) { double(:connection) }
+
+      before do
+        allow(klass).to receive(:quoted_table_name).and_return('"petitions"')
+        allow(klass).to receive(:connection).and_return(connection)
+        allow(connection).to receive(:quote_column_name).with('id').and_return('"id"')
+        allow(connection).to receive(:quote_column_name).with('action').and_return('"action"')
+        allow(connection).to receive(:quote_column_name).with('background').and_return('"background"')
+        allow(connection).to receive(:quote_column_name).with('additional_details').and_return('"additional_details"')
+      end
+
+      context "when there are no columns" do
+        it "returns nil" do
+          expect(subject.build).to be_nil
+        end
+      end
+
+      context "when there is one column" do
+        let(:query_columns) do
+          [ Browseable::Query::Column.new("action", "english", false) ]
+        end
+
+        it "returns a where condition" do
+          expect(subject.build).to eq [
+            %[((to_tsvector('english', "petitions"."action"::text)) @@ plainto_tsquery('english', :query))], { query: "search" }
+          ]
+        end
+
+        context "and the column has a custom search configuration" do
+          let(:query_columns) do
+            [ Browseable::Query::Column.new("action", "simple", false) ]
+          end
+
+          it "returns a where condition" do
+            expect(subject.build).to eq [
+              %[((to_tsvector('simple', "petitions"."action"::text)) @@ plainto_tsquery('english', :query))], { query: "search" }
+            ]
+          end
+        end
+
+        context "and the column allows nulls" do
+          let(:query_columns) do
+            [ Browseable::Query::Column.new("action", "english", true) ]
+          end
+
+          it "returns a where condition" do
+            expect(subject.build).to eq [
+              %[((to_tsvector('english', COALESCE("petitions"."action", '')::text)) @@ plainto_tsquery('english', :query))], { query: "search" }
+            ]
+          end
+        end
+      end
+
+      context "when there is more than one column" do
+        let(:query_columns) do
+          [
+            Browseable::Query::Column.new("id", "simple", false),
+            Browseable::Query::Column.new("action", "english", false),
+            Browseable::Query::Column.new("background", "english", false),
+            Browseable::Query::Column.new("additional_details", "english", true)
+          ]
+        end
+
+        it "returns a where condition" do
+          expect(subject.build).to eq [
+            %Q[((#{[
+              %[to_tsvector('simple', "petitions"."id"::text)],
+              %[to_tsvector('english', "petitions"."action"::text)],
+              %[to_tsvector('english', "petitions"."background"::text)],
+              %[to_tsvector('english', COALESCE("petitions"."additional_details", '')::text)]
+            ].join(' || ')}) @@ plainto_tsquery('english', :query))], { query: "search" }
+          ]
+        end
+      end
+    end
+
+    describe "#to_s" do
+      it "returns the query param" do
+        expect(subject.to_s).to eq("search")
       end
     end
   end

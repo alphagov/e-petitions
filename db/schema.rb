@@ -10,9 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_214559) do
+ActiveRecord::Schema.define(version: 2021_04_25_185707) do
 
   # These are extensions that must be enabled in order to support this database
+  enable_extension "btree_gin"
   enable_extension "intarray"
   enable_extension "plpgsql"
 
@@ -152,9 +153,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.datetime "anonymized_at"
     t.integer "moderated_by_id"
     t.integer "topics", default: [], null: false, array: true
-    t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
-    t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
-    t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
+    t.index "((((to_tsvector('english'::regconfig, (id)::text) || to_tsvector('english'::regconfig, (action)::text)) || to_tsvector('english'::regconfig, (background)::text)) || to_tsvector('english'::regconfig, COALESCE(additional_details, ''::text)))), state, parliament_id, debate_state", name: "index_archived_petitions_for_search", using: :gin
     t.index ["anonymized_at"], name: "index_archived_petitions_on_anonymized_at"
     t.index ["debate_state", "parliament_id"], name: "index_archived_petitions_on_debate_state_and_parliament_id"
     t.index ["departments"], name: "index_archived_petitions_on_departments", opclass: :gin__int_ops, using: :gin
@@ -312,6 +311,8 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "((to_tsvector('english'::regconfig, (name)::text) || to_tsvector('english'::regconfig, (COALESCE(acronym, ''::character varying))::text)))", name: "index_departments_for_search", using: :gin
+    t.index ["name"], name: "index_departments_on_name"
   end
 
   create_table "dissolution_notifications", id: :uuid, default: nil, force: :cascade do |t|
@@ -393,10 +394,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "domain", limit: 255
-    t.index "to_tsvector('english'::regconfig, (details)::text)", name: "ft_index_invalidations_on_details", using: :gin
-    t.index "to_tsvector('english'::regconfig, (id)::text)", name: "ft_index_invalidations_on_id", using: :gin
-    t.index "to_tsvector('english'::regconfig, (petition_id)::text)", name: "ft_index_invalidations_on_petition_id", using: :gin
-    t.index "to_tsvector('english'::regconfig, (summary)::text)", name: "ft_index_invalidations_on_summary", using: :gin
+    t.index "(((to_tsvector('english'::regconfig, (summary)::text) || to_tsvector('english'::regconfig, (COALESCE(details))::text)) || to_tsvector('english'::regconfig, (COALESCE(petition_id))::text)))", name: "index_invalidations_for_search", using: :gin
     t.index ["cancelled_at"], name: "index_invalidations_on_cancelled_at"
     t.index ["completed_at"], name: "index_invalidations_on_completed_at"
     t.index ["petition_id"], name: "index_invalidations_on_petition_id"
@@ -508,10 +506,8 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.integer "moderated_by_id"
     t.integer "deadline_extension", default: 0, null: false
     t.integer "topics", default: [], null: false, array: true
+    t.index "((((to_tsvector('english'::regconfig, (id)::text) || to_tsvector('english'::regconfig, (action)::text)) || to_tsvector('english'::regconfig, (background)::text)) || to_tsvector('english'::regconfig, COALESCE(additional_details, ''::text)))), state, debate_state", name: "index_petitions_for_search", using: :gin
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
-    t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
-    t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
-    t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_petitions_on_additional_details", using: :gin
     t.index ["anonymized_at"], name: "index_petitions_on_anonymized_at"
     t.index ["archived_at"], name: "index_petitions_on_archived_at"
     t.index ["created_at", "state"], name: "index_petitions_on_created_at_and_state"
@@ -680,8 +676,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.string "description", limit: 200
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index "to_tsvector('english'::regconfig, (description)::text)", name: "index_ft_tags_on_description", using: :gin
-    t.index "to_tsvector('english'::regconfig, (name)::text)", name: "index_ft_tags_on_name", using: :gin
+    t.index "((to_tsvector('english'::regconfig, (name)::text) || to_tsvector('english'::regconfig, (COALESCE(description))::text)))", name: "index_tags_for_search", using: :gin
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
@@ -697,6 +692,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.string "name", limit: 100, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index "((to_tsvector('english'::regconfig, (code)::text) || to_tsvector('english'::regconfig, (name)::text)))", name: "index_topics_for_search", using: :gin
     t.index ["code"], name: "index_topics_on_code", unique: true
     t.index ["name"], name: "index_topics_on_name", unique: true
   end

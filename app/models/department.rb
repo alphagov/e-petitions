@@ -1,8 +1,8 @@
-require 'textacular/searchable'
-
 class Department < ActiveRecord::Base
-  extend Searchable(:name, :acronym)
   include Browseable
+
+  query :name
+  query :acronym, null: true
 
   validates :external_id, length: { maximum: 30 }
   validates :name, presence: true, length: { maximum: 100 }
