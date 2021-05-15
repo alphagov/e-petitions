@@ -16,3 +16,6 @@ cd /home/deploy/epetitions/current && bundle exec rake db:migrate
 cd /home/deploy/epetitions/current && bundle exec rake assets:precompile
 if [ ${SERVER_TYPE} = "worker" ] ; then cd /home/deploy/epetitions/current && bundle exec whenever -w ; else echo not running whenever ; fi
 EOF
+
+# Enable services if they have not been previously enabled
+/lib/systemd/systemd-sysv-install is-enabled epetitions || /lib/systemd/systemd-sysv-install enable epetitions
