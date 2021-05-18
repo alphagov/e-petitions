@@ -1007,7 +1007,7 @@ en-GB:
             <ul class="list-bullet">
               <li>contain language which is offensive, intemperate, or provocative. This not only includes obvious profanities swear words and insults, but any language which a reasonable person would regard as offensive;</li>
               <li>ask the Senedd to do anything which it clearly has no power to do (in particular petitions about matters that are not devolved are not admissible);</li>
-              <li>be the same as, or substantially similar to, a petition which was closed less than a year earlier.</li>
+              <li>be the same as, or substantially similar to, a petition that is currently open or was closed less than a year earlier.</li>
             </ul>
             <p>Petitions must comply in other ways with this determination.</p>
           </li>
@@ -1017,6 +1017,7 @@ en-GB:
             <p>Petitions that include or ask the Senedd to consider the following are not admissible:</p>
             <ul class="list-bullet">
               <li>to intervene in the operational decisions or actions of local authorities and National Park Authorities, including planning decisions;</li>
+              <li>for an individual to be appointed to or removed from a role or position, to resign, or for a vote of no confidence;</li>
               <li>to adjudicate, arbitrate or mediate personal or commercial interests (this is the role of a court or tribunal);</li>
               <li>matters that are ‘sub judice’ (subject to legal proceedings in the courts);</li>
               <li>matters that are already subject to determination by an ombudsman (or person with similar powers).</li>
