@@ -3,6 +3,7 @@ require_dependency 'constituency/api_query'
 
 class Constituency < ActiveRecord::Base
   MP_URL = "https://members.parliament.uk/member/%{mp_id}/contact"
+  POSTCODE = /\A([A-Z]{1,2}[0-9][0-9A-Z]?)([0-9]|[0-9][A-BD-HJLNP-UW-Z]{2})?\z/i
 
   belongs_to :region, primary_key: :external_id, optional: true
   has_many :signatures, primary_key: :external_id
@@ -45,6 +46,7 @@ class Constituency < ActiveRecord::Base
 
     def find_by_postcode(postcode)
       return if Site.disable_constituency_api?
+      return unless valid_postcode?(postcode)
 
       results = query.fetch(postcode)
 
@@ -65,6 +67,10 @@ class Constituency < ActiveRecord::Base
 
     def example_postcodes
       @example_postcodes ||= YAML.load_file(Rails.root.join("data", "example_postcodes.yml"))
+    end
+
+    def valid_postcode?(postcode)
+      postcode.match?(POSTCODE)
     end
   end
 

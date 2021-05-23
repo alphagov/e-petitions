@@ -55,6 +55,14 @@ RSpec.describe PostcodeValidator do
         expect(errors).to include("Postcode not recognised")
       end
     end
+
+    describe "with a trailing new line" do
+      let(:postcode) { "SW1A1AA\n" }
+
+      it "adds an error" do
+        expect(errors).to include("Postcode not recognised")
+      end
+    end
   end
 
   context "with a custom :message option" do

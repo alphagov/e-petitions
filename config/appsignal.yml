@@ -24,6 +24,7 @@ default: &defaults
     - ActionDispatch::Http::MimeNegotiation::InvalidType
     - ActionController::BadRequest
     - ActionController::InvalidAuthenticityToken
+    - ActionController::ParameterMissing
     - ActionController::RoutingError
     - ActionController::UnknownFormat
     - ActionController::UnknownHttpMethod

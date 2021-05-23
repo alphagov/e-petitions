@@ -111,6 +111,39 @@ RSpec.describe Archived::PetitionsController, type: :controller do
         end
       end
     end
+
+    context "when a parliament parameter is provided" do
+      let(:parliament) { FactoryBot.create(:parliament, :coalition) }
+
+      it "assigns the @parliament instance variable" do
+        get :index, params: { parliament: parliament.id }
+        expect(assigns(:parliament)).to eq(parliament)
+      end
+
+      context "when the parliament parameter is not a number" do
+        it "raises a ActionController::BadRequest error" do
+          expect {
+            get :index, params: { parliament: "notanumber" }
+          }.to raise_error(ActionController::BadRequest)
+        end
+      end
+
+      context "when the parliament parameter is an array" do
+        it "raises a ActionController::BadRequest error" do
+          expect {
+            get :index, params: { parliament: [1] }
+          }.to raise_error(ActionController::BadRequest)
+        end
+      end
+
+      context "when the parliament parameter is a hash" do
+        it "raises a ActionController::BadRequest error" do
+          expect {
+            get :index, params: { parliament: { id: 1 } }
+          }.to raise_error(ActionController::BadRequest)
+        end
+      end
+    end
   end
 
   describe "GET #show" do

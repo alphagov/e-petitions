@@ -29,7 +29,9 @@ class Archived::PetitionsController < ApplicationController
   private
 
   def parliament_id
-    params[:parliament].to_i
+    Integer(params[:parliament])
+  rescue ArgumentError, TypeError => e
+    raise ActionController::BadRequest, "Invalid petition id: #{params[:parliament]}"
   end
 
   def petition_id
