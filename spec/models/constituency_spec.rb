@@ -228,6 +228,17 @@ RSpec.describe Constituency, type: :model do
         expect(constituency.reload.mp_name).to eq(nil)
       end
     end
+
+    context "when the postcode is invalid" do
+      before do
+        stub_api_request_for("ACX7B98977DXCA").to_return(api_response(:ok, "no_results"))
+      end
+
+      it "returns nil without calling the api" do
+        expect(Constituency.find_by_postcode('ACX7B98977DXCA')).to be_nil
+        expect(stub_api_request_for("ACX7B98977DXCA")).to have_not_been_made
+      end
+    end
   end
 
   describe "#sitting_mp?" do

@@ -26,5 +26,9 @@ RSpec.describe PostcodeSanitizer do
     it "removes em dashes and upcases the postcode" do
       expect(described_class.call("   N1—1ty ")).to eq "N11TY"
     end
+
+    it "removes non-alphanumeric characters" do
+      expect(described_class.call("acx[[$%7B98*97%7D]]xca")).to eq "ACX7B98977DXCA"
+    end
   end
 end

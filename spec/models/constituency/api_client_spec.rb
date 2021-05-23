@@ -17,7 +17,7 @@ RSpec.describe Constituency::ApiClient, type: :model do
     end
 
     it "escapes the postcode" do
-      stub = stub_api_request_for("N%C2%A31")
+      stub = stub_api_request_for("N1")
       client.call("N£1")
       expect(stub).to have_been_requested
     end
