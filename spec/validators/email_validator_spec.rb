@@ -63,7 +63,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@example" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@example' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -71,7 +71,7 @@ RSpec.describe EmailValidator do
     let(:email) { "@example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email '@example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura.example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura.example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura @example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura @example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -95,7 +95,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@ example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@ example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -103,7 +103,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@ example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@ example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -111,7 +111,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@home@example.com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@home@example.com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 
@@ -119,7 +119,7 @@ RSpec.describe EmailValidator do
     let(:email) { "laura@example.@com" }
 
     it "adds an error" do
-      expect(errors).to include("Email 'laura@example.@com' not recognised")
+      expect(errors).to include("Email not recognised")
     end
   end
 

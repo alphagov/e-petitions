@@ -173,7 +173,7 @@ en-GB:
     attributes:
       email:
         blank: "Email must be completed"
-        invalid: "Email '%{value}' not recognised"
+        invalid: "Email not recognised"
         plus_address: "You can’t use ‘plus addressing’ in your email address"
       creator:
         blank: "Creator must be completed"
