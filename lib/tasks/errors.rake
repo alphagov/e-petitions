@@ -27,7 +27,7 @@ namespace :errors do
 
     lookup_context = ActionView::LookupContext.new('app/views')
 
-    %w[400 403 404 406 422 500 503].each do |status|
+    %w[400 403 404 406 410 422 500 503].each do |status|
       context = context_class.new(lookup_context, { status: status }, controller_class.new)
       File.open(Rails.public_path.join("#{status}.html"), 'wb') do |f|
         f.write context.render(template: "errors/#{status}", layout: 'errors/layout')

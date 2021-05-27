@@ -346,6 +346,16 @@ RSpec.describe PetitionsController, type: :controller do
         end
       end
     end
+
+    context "when the petition is hidden after opening" do
+      let(:petition) { FactoryBot.create(:hidden_petition, open_at: 1.month.ago) }
+
+      it "raises a Site::PetitionRemoved exception" do
+        expect {
+          get :show, params: { id: petition.id }
+        }.to raise_error(Site::PetitionRemoved)
+      end
+    end
   end
 
   describe "GET /petitions" do

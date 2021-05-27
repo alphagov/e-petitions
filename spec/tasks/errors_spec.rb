@@ -19,6 +19,7 @@ RSpec.describe "errors:precompile", type: :task do
     expect(public_files).to include('403.html')
     expect(public_files).to include('404.html')
     expect(public_files).to include('406.html')
+    expect(public_files).to include('410.html')
     expect(public_files).to include('422.html')
     expect(public_files).to include('500.html')
     expect(public_files).to include('503.html')
