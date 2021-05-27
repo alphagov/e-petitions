@@ -24,8 +24,10 @@
     <dd><%= date_format_admin(@petition.rejected_at) %></dd>
   <% end %>
 
-  <dt>Link to petition</dt>
-  <dd><%= link_to archived_petition_path(@petition), archived_petition_url(@petition), target: "_blank" %></dd>
+  <% if @petition.visible? %>
+    <dt>Link to petition</dt>
+    <dd><%= link_to archived_petition_path(@petition), archived_petition_url(@petition), target: "_blank" %></dd>
+  <% end %>
 
   <dt>ID</dt>
   <dd><%= @petition.id %></dd>

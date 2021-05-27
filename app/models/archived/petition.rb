@@ -207,6 +207,14 @@ module Archived
         where(threshold_for_debate_reached.or(scheduled_for_debate))
       end
 
+      def removed
+        where(state: HIDDEN_STATE).where.not(opened_at: nil)
+      end
+
+      def removed?(id)
+        removed.exists?(id)
+      end
+
       private
 
       def debate_date_in_the_past(date)
@@ -256,6 +264,10 @@ module Archived
 
     def published?
       state.in?(PUBLISHED_STATES)
+    end
+
+    def visible?
+      state.in?(VISIBLE_STATES)
     end
 
     def duration

@@ -4,6 +4,7 @@ require 'active_support/number_helper'
 
 class Site < ActiveRecord::Base
   class ServiceUnavailable < StandardError; end
+  class PetitionRemoved < StandardError; end
 
   include ActiveSupport::NumberHelper
 

@@ -63,6 +63,10 @@ class Archived::PetitionsController < ApplicationController
   end
 
   def fetch_petition
+    if Archived::Petition.removed?(petition_id)
+      raise Site::PetitionRemoved, "Archived petition #{petition_id} has been removed"
+    end
+
     @petition = Archived::Petition.visible.find(petition_id)
     @parliament = @petition.parliament
 

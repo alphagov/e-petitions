@@ -443,6 +443,14 @@ class Petition < ActiveRecord::Base
       where(grouping(last_signed_at.gt(signature_count_validated_at)).eq(true))
     end
 
+    def removed
+      where(state: HIDDEN_STATE).where.not(opened_at: nil)
+    end
+
+    def removed?(id)
+      removed.exists?(id)
+    end
+
     private
 
     def grouping(expression)
