@@ -29,6 +29,7 @@ default: &defaults
     - ActionController::UnknownFormat
     - ActionController::UnknownHttpMethod
     - ActiveRecord::RecordNotFound
+    - Site::PetitionRemoved
     - Site::ServiceUnavailable
 
 # Configuration per environment, leave out an environment or set active
