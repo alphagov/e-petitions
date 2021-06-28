@@ -22,7 +22,7 @@
 env :PATH, ENV['PATH']
 
 every :day, at: '1.45am' do
-  rake "epets:constituencies:fetch", output: nil
+  rake "epets:constituencies:refresh", output: nil
 end
 
 every :day, at: '2.30am' do
