@@ -52,7 +52,7 @@
             $flag_control = $('#petition_moderation_flag'),
             $all_controls = $('.edit_petition input[name="petition[moderation]"][type=radio]');
         // Hide it straight away if there were no errors displayed
-        if ($rejection_controls.find('.error-message').size() === 0) {
+        if ($rejection_controls.find('.error-message').length === 0) {
           $rejection_controls.hide();
         }
 
