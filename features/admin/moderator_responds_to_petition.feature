@@ -4,6 +4,7 @@ Feature: Moderator respond to petition
   As a moderator
   I want to respond to a petition, editing, accepting, rejecting or re-assigning it
 
+  @javascript
   Scenario: Accessing the petitions page
     Given a sponsored petition "More money for charities"
     And I am logged in as a sysadmin
@@ -11,6 +12,7 @@ Feature: Moderator respond to petition
     Then I should be connected to the server via an ssl connection
     And the markup should be valid
     And I should see the petition details
+    And I should not see "Rejection reason"
 
   Scenario: Moderator edits petition before publishing
     Given I am logged in as a moderator named "Ben Macintosh"
