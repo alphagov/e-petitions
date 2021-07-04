@@ -332,8 +332,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    textacular (5.4.0)
-      activerecord (>= 5.0, < 6.2)
     thor (1.1.0)
     tilt (2.0.10)
     tzinfo (2.0.4)
@@ -413,7 +411,6 @@ DEPENDENCIES
   shoulda-matchers
   simplecov
   slack-notifier
-  textacular
   uglifier
   webdrivers (~> 3.8.1)
   webmock

@@ -1,8 +1,8 @@
-require 'textacular/searchable'
-
 class Tag < ActiveRecord::Base
-  extend Searchable(:name, :description)
   include Browseable
+
+  query :name
+  query :description, null: true
 
   validates_presence_of :name
   validates_uniqueness_of :name
