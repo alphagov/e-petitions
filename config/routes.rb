@@ -30,6 +30,14 @@ Rails.application.routes.draw do
       end
     end
 
+    controller 'icons' do
+      scope action: 'show', format: true do
+        constraints size: /\d{2,3}x\d{2,3}/, type: 'precomposed', format: 'png' do
+          get '/apple-touch-icon(-:size)(-:type)', as: :apple_touch_icon
+        end
+      end
+    end
+
     controller 'local_petitions' do
       scope '/petitions/local' do
         get '/',        action: 'index', as: :local_petitions
