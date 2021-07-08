@@ -5,6 +5,16 @@
     <%= cache_for :head do %>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+      <%= preload_link_tag 'application.css', nopush: true %>
+      <%= preload_link_tag 'application.js', nopush: true %>
+
+      <% if open_petition_page? %>
+        <%= preload_link_tag 'auto-updater.js', nopush: true %>
+      <% end %>
+      <% if create_petition_page? %>
+        <%= preload_link_tag 'character-counter.js', nopush: true %>
+      <% end %>
+
       <!--[if gt IE 8]><!--><%= stylesheet_link_tag 'application' %><!--<![endif]-->
       <!--[if IE 7]><%= stylesheet_link_tag 'application-ie7' %><![endif]-->
       <!--[if IE 8]><%= stylesheet_link_tag 'application-ie8' %><![endif]-->
