@@ -1,5 +1,7 @@
 head:
   keys:
+    - :create_petition_page
+    - :open_petition_page
     - :site_updated_at
     - :url
   options:
