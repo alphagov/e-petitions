@@ -29,6 +29,8 @@ default: &defaults
     - ActionController::UnknownFormat
     - ActionController::UnknownHttpMethod
     - ActiveRecord::RecordNotFound
+    - Rack::QueryParser::ParameterTypeError
+    - Rack::QueryParser::InvalidParameterError
     - Site::PetitionRemoved
     - Site::ServiceUnavailable
 
