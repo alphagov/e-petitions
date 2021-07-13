@@ -73,7 +73,7 @@ class SponsorsController < SignaturesController
     thank_you_petition_sponsors_url(@petition, token: @petition.sponsor_token)
   end
 
-  def signed_token_failure_url
+  def token_failure_url
     moderation_info_petition_url(@petition)
   end
 
