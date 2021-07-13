@@ -133,19 +133,19 @@ class SignaturesController < ApplicationController
 
   def verify_token
     unless @signature.perishable_token == token_param
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with token: #{token_param.inspect}"
+      redirect_to token_failure_url
     end
   end
 
   def verify_signed_token
     unless @signature.signed_token == fetch_signed_token
-      redirect_to signed_token_failure_url
+      redirect_to token_failure_url
     end
   end
 
   def verify_unsubscribe_token
     unless @signature.unsubscribe_token == token_param
-      raise ActiveRecord::RecordNotFound, "Unable to find Signature with unsubscribe token: #{token_param.inspect}"
+      redirect_to token_failure_url
     end
   end
 
@@ -174,7 +174,7 @@ class SignaturesController < ApplicationController
     thank_you_petition_signatures_url(@petition)
   end
 
-  def signed_token_failure_url
+  def token_failure_url
     petition_url(@petition)
   end
 

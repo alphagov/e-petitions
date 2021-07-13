@@ -666,10 +666,9 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryBot.create(:pending_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :verify, params: { id: signature.id, token: "token" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "redirects to the petition moderation info page" do
+        get :verify, params: { id: signature.id, token: "token" }
+        expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
       end
     end
 

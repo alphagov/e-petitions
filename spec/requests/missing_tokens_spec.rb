@@ -10,8 +10,8 @@ RSpec.describe "missing a 'token'", type: :request, show_exceptions: true do
       get "/signatures/#{signature.id}/verify"
     end
 
-    it "returns 404 Not Found" do
-      expect(response).to have_http_status(:not_found)
+    it "redirects to the petition page" do
+      expect(response).to redirect_to("/petitions/#{petition.id}")
     end
   end
 
@@ -34,8 +34,8 @@ RSpec.describe "missing a 'token'", type: :request, show_exceptions: true do
       get "/signatures/#{signature.id}/unsubscribe"
     end
 
-    it "returns 404 Not Found" do
-      expect(response).to have_http_status(:not_found)
+    it "redirects to the petition page" do
+      expect(response).to redirect_to("/petitions/#{petition.id}")
     end
   end
 end

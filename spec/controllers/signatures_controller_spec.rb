@@ -647,10 +647,9 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :verify, params: { id: signature.id, token: "token" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "redirects to the petition page" do
+        get :verify, params: { id: signature.id, token: "token" }
+        expect(response).to redirect_to("/petitions/#{petition.id}")
       end
     end
 
@@ -1075,10 +1074,9 @@ RSpec.describe SignaturesController, type: :controller do
       let(:petition) { FactoryBot.create(:open_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :unsubscribe, params: { id: signature.id, token: "token" }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "redirects to the petition page" do
+        get :unsubscribe, params: { id: signature.id, token: "token" }
+        expect(response).to redirect_to("/petitions/#{petition.id}")
       end
     end
 
