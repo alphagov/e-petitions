@@ -175,7 +175,13 @@ class SignaturesController < ApplicationController
   end
 
   def token_failure_url
-    petition_url(@petition)
+    if @petition.visible?
+      petition_url(@petition)
+    elsif @petition.collecting_sponsors?
+      gathering_support_petition_url(@petition)
+    else
+      moderation_info_petition_url(@petition)
+    end
   end
 
   def redirect_to_petition_page_if_rejected

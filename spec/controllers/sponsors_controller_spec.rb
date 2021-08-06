@@ -22,10 +22,9 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the token is invalid" do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :new, params: { petition_id: petition.id, token: 'token' }
-        }.to raise_exception(ActiveRecord::RecordNotFound)
+      it "redirects to the petition gathering support page" do
+        get :new, params: { petition_id: petition.id, token: 'token' }
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -149,10 +148,9 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the token is invalid" do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          post :confirm, params: { petition_id: petition.id, token: 'token', signature: params }
-        }.to raise_exception(ActiveRecord::RecordNotFound)
+      it "redirects to the petition gathering support page" do
+        post :confirm, params: { petition_id: petition.id, token: 'token', signature: params }
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -287,10 +285,9 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the token is invalid" do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          post :create, params: { petition_id: petition.id, token: 'token', signature: params }
-        }.to raise_exception(ActiveRecord::RecordNotFound)
+      it "redirects to the petition gathering support page" do
+        post :create, params: { petition_id: petition.id, token: 'token', signature: params }
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -554,10 +551,9 @@ RSpec.describe SponsorsController, type: :controller do
     context "when the token is invalid" do
       let(:petition) { FactoryBot.create(:pending_petition) }
 
-      it "raises an ActiveRecord::RecordNotFound exception" do
-        expect {
-          get :thank_you, params: { petition_id: petition.id, token: 'token' }
-        }.to raise_exception(ActiveRecord::RecordNotFound)
+      it "redirects to the petition gathering support page" do
+        get :thank_you, params: { petition_id: petition.id, token: 'token' }
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -666,9 +662,9 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryBot.create(:pending_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
-      it "redirects to the petition moderation info page" do
+      it "redirects to the petition gathering support page" do
         get :verify, params: { id: signature.id, token: "token" }
-        expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -1101,9 +1097,9 @@ RSpec.describe SponsorsController, type: :controller do
       let(:petition) { FactoryBot.create(:pending_petition) }
       let(:signature) { FactoryBot.create(:pending_signature, petition: petition, sponsor: true) }
 
-      it "redirects to the petition moderation info page" do
+      it "redirects to the petition gathering support page" do
         get :signed, params: { id: signature.id }
-        expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+        expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
       end
     end
 
@@ -1277,8 +1273,12 @@ RSpec.describe SponsorsController, type: :controller do
             get :signed, params: { id: signature.id }
           end
 
-          it "redirects to the petition moderation info page" do
-            expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+          it "redirects to the correct petition page" do
+            if petition.collecting_sponsors?
+              expect(response).to redirect_to("/petitions/#{petition.id}/gathering-support")
+            else
+              expect(response).to redirect_to("/petitions/#{petition.id}/moderation-info")
+            end
           end
 
           context "and signature collection is paused" do
