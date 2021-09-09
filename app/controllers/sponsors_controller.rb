@@ -28,7 +28,7 @@ class SponsorsController < SignaturesController
     end
 
     unless @petition.sponsor_token == token_param
-      raise ActiveRecord::RecordNotFound, "Unable to find Petition with sponsor token: #{token_param.inspect}"
+      redirect_to token_failure_url
     end
   end
 
@@ -71,10 +71,6 @@ class SponsorsController < SignaturesController
 
   def thank_you_url
     thank_you_petition_sponsors_url(@petition, token: @petition.sponsor_token)
-  end
-
-  def token_failure_url
-    moderation_info_petition_url(@petition)
   end
 
   def redirect_to_new_sponsor_page_if_validated

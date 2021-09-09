@@ -1,3 +1,5 @@
+require 'net/smtp'
+
 class EmailJob < ApplicationJob
   before_perform :set_appsignal_namespace
 
