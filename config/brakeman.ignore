@@ -1,6 +1,42 @@
 {
   "ignored_warnings": [
     {
+      "warning_type": "SSL Verification Bypass",
+      "warning_code": 71,
+      "fingerprint": "83faaaee2d372a0a73dc703bf46452d519d79dbf3b069a5007f71392ec7d4a3e",
+      "check_name": "SSLVerify",
+      "message": "SSL certificate verification was bypassed",
+      "file": "features/support/ssl_server.rb",
+      "line": 97,
+      "link": "https://brakemanscanner.org/docs/warning_types/ssl_verification_bypass/",
+      "code": "Net::HTTP.new(host, @port).verify_mode = OpenSSL::SSL::VERIFY_NONE",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Capybara::Server",
+        "method": "responsive?"
+      },
+      "user_input": null,
+      "confidence": "High",
+      "note": ""
+    },
+    {
+      "warning_type": "Cross-Site Scripting",
+      "warning_code": 114,
+      "fingerprint": "c96eb07567e2a7b0ded7cda123645c4e736d3a1b124bb7c0ffaf5070f53dfcf3",
+      "check_name": "JSONEntityEscape",
+      "message": "HTML entities in JSON are not escaped by default",
+      "file": "config/environments/production.rb",
+      "line": 3,
+      "link": "https://brakemanscanner.org/docs/warning_types/cross-site_scripting/",
+      "code": "ActiveSupport.escape_html_entities_in_json = false",
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Medium",
+      "note": ""
+    },
+    {
       "warning_type": "Cross-Site Scripting",
       "warning_code": 4,
       "fingerprint": "ec90a43d600ec1cef6f6f0ff5eeebb9f29380fd1f4b005edc2c7b4393ef73a47",
@@ -83,6 +119,6 @@
       "note": ""
     }
   ],
-  "updated": "2021-04-22 13:37:26 +0100",
-  "brakeman_version": "4.7.2"
+  "updated": "2021-09-09 21:47:05 +0100",
+  "brakeman_version": "5.1.1"
 }
