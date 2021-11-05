@@ -9,8 +9,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate, if: :site_protected?
   before_action :redirect_to_url_without_format, if: :unknown_format?
 
-  before_action :set_seen_cookie_message, if: :show_cookie_message?
-  helper_method :show_cookie_message?, :public_petition_facets
+  helper_method :public_petition_facets
 
   after_action do
     directives = [
@@ -88,18 +87,10 @@ class ApplicationController < ActionController::Base
     redirect_to home_url
   end
 
-  def set_seen_cookie_message
-    cookies[:seen_cookie_message] = { value: 'yes', expires: 1.year.from_now, httponly: true }
-  end
-
   def set_cors_headers
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'GET'
     headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept'
-  end
-
-  def show_cookie_message?
-    @show_cookie_message ||= cookies[:seen_cookie_message] != 'yes'
   end
 
   def public_petition_facets
