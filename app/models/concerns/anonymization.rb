@@ -14,6 +14,7 @@ module Anonymization
   module ClassMethods
     def anonymize_petitions!(time = Time.current)
       in_need_of_anonymizing(6.months.ago(time)).find_each do |petition|
+        return if petition.do_not_anonymize?
         petition.anonymize!
       end
     end
@@ -43,4 +44,3 @@ module Anonymization
     anonymized_at?
   end
 end
-
