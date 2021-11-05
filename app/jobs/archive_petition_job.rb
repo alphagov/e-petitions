@@ -23,6 +23,7 @@ class ArchivePetitionJob < ApplicationJob
         p.state = petition.state
         p.debate_state = petition.debate_state
         p.special_consideration = petition.special_consideration
+        p.do_not_anonymize = petition.do_not_anonymize
         p.opened_at = petition.opened_at
         p.closed_at = petition.closed_at
         p.rejected_at = petition.rejected_at
