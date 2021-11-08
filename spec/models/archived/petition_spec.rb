@@ -379,6 +379,78 @@ RSpec.describe Archived::Petition, type: :model do
   end
 
   describe ".anonymize_petitions!" do
+    context "when a petition was rejected less than six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :rejected,
+          rejected_at: 5.months.ago
+        )
+      end
+
+      it "does not anonymize the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was rejected six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :rejected,
+          rejected_at: 6.months.ago
+        )
+      end
+
+      it "anonymizes the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was hidden less than six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :hidden,
+          rejected_at: 5.months.ago
+        )
+      end
+
+      it "does not anonymize the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was hidden six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :hidden,
+          rejected_at: 6.months.ago
+        )
+      end
+
+      it "anonymises the petitions" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.to change { petition.reload.anonymized? }
+      end
+    end
+
     context "when a petition has closed less than six months ago" do
       let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 5.months.ago) }
 
