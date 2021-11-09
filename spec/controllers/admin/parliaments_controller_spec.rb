@@ -345,6 +345,92 @@ RSpec.describe Admin::ParliamentsController, type: :controller, admin: true do
         end
       end
 
+      context "when clicking the Anonymize Petitions button" do
+        context "and the params are invalid" do
+          before { FactoryBot.create(:archived_petition) }
+          before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }
+          before { patch :update, params: { parliament: params, anonymize_petitions: "Anonymize petitions" } }
+
+          let :params do
+            {
+              government: "",
+              opening_at: "",
+              dissolution_at: 2.weeks.from_now.iso8601,
+              dissolution_heading: "",
+              dissolution_message: "",
+              dissolution_faq_url: ""
+            }
+          end
+
+          it "returns 200 OK" do
+            expect(response).to have_http_status(:ok)
+          end
+
+          it "renders the :show template" do
+            expect(response).to render_template("admin/parliaments/show")
+          end
+        end
+
+        context "and the params are valid" do
+          before { FactoryBot.create(:archived_petition, rejected_at: 6.months.ago) }
+          before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }
+          before { patch :update, params: { parliament: params, anonymize_petitions: "Anonymize petitions" } }
+          let(:dissolution_at) { 2.weeks.ago }
+          let :params do
+            {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
+              dissolution_at: dissolution_at.iso8601,
+              dissolution_heading: "Parliament is dissolving",
+              dissolution_message: "This means all petitions will close in 2 weeks",
+              dissolution_faq_url: "https://parliament.example.com/parliament-is-closing",
+              dissolved_heading: "Parliament is dissolved",
+              dissolved_message: "All petitions are now closed"
+            }
+          end
+
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
+          end
+
+          it "sets the flash notice message" do
+            expect(flash[:notice]).to eq("Anonymizing of petitions was successfully started")
+          end
+
+          it "enqueues a job to archive petitions" do
+            expect(Archived::AnonymizePetitionsJob).to have_been_enqueued.on_queue(:high_priority)
+          end
+        end
+
+        context "and the params are valid but there are no archived petitions" do
+          before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }
+          before { patch :update, params: { parliament: params, anonymize_petitions: "Anonymize petitions" } }
+          let :params do
+            {
+              government: "Conservative",
+              opening_at: 2.years.ago.iso8601,
+              dissolution_at: "",
+              dissolution_heading: "",
+              dissolution_message: "",
+              dissolution_faq_url: ""
+            }
+          end
+
+          it "redirects back to the edit page" do
+            expect(response).to redirect_to("https://moderate.petition.parliament.uk/admin/parliament")
+          end
+
+          it "sets the flash notice message" do
+            expect(flash[:notice]).to eq("Parliament updated successfully")
+          end
+
+          it "doesn't enqueue a job to anonymize petitions" do
+            expect(enqueued_jobs).to eq([])
+          end
+        end
+      end
+
+
       context "when clicking the Archive Parliament button" do
         before { FactoryBot.create(:closed_petition, archived_at: 1.hour.ago) }
         before { FactoryBot.create(:parliament, archiving_started_at: 1.day.ago) }

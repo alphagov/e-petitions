@@ -134,6 +134,9 @@ module NavigationHelpers
     when /^archived petition edit details page for "([^\"]*)"$/
       admin_archived_petition_details_url(Archived::Petition.find_by(action: $1))
 
+    when /^parliament page$/
+      admin_parliament_url
+
     else
       raise "Can't find mapping from \"#{admin_page}\" to an Admin path.\n" +
         "Now, go and add a mapping in #{__FILE__}"

@@ -81,6 +81,7 @@ en-GB:
       missing_tasks: "Please select one or more tasks to execute"
       password_updated: "Password was successfully updated"
       petitions_archiving: "Archiving of petitions was successfully started"
+      petitions_anonymizing: "Anonymizing of petitions was successfully started"
       parliament_archived: "Parliament archived successfully"
       parliament_updated: "Parliament updated successfully"
       petition_email_created: "Created other parliamentary business successfully"

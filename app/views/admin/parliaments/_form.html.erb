@@ -14,6 +14,9 @@
       <%= form.submit 'Send dissolution emails', name: 'send_emails', class: 'button-secondary', data: { confirm: 'Email everyone about dissolution?' } %>
     <% end %>
   <% end %>
+  <% if Archived::Petition.can_anonymize? %>
+    <%= form.submit 'Anonymize petitions', name: 'anonymize_petitions', class: 'button-secondary', data: { confirm: 'Anonymize all archived petitions?' } %>
+  <% end %>
   <%= link_to 'Cancel', admin_root_path, class: 'button-secondary' %>
 <% end %>
 

@@ -378,6 +378,32 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".can_anonymize?" do
+    context "when there is an unanonymized petition not marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: nil, do_not_anonymize: nil) }
+
+      it "returns true" do
+        expect(described_class.can_anonymize?).to eq true
+      end
+    end
+
+    context "when there is an unanonymized petition marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: nil, do_not_anonymize: true) }
+
+      it "returns false" do
+        expect(described_class.can_anonymize?).to eq false
+      end
+    end
+
+    context "when there is one anonymized petition not marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: 1.day.ago, do_not_anonymize: nil) }
+
+      it "returns false" do
+        expect(described_class.can_anonymize?).to eq false
+      end
+    end
+  end
+
   describe ".anonymize_petitions!" do
     context "when a petition was rejected less than six months ago" do
       let!(:petition) do

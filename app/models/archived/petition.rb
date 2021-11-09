@@ -217,6 +217,10 @@ module Archived
         removed.exists?(id)
       end
 
+      def can_anonymize?
+        where(anonymized_at: nil).where(do_not_anonymize: [nil, false]).any?
+      end
+
       private
 
       def debate_date_in_the_past(date)

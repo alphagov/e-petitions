@@ -105,3 +105,7 @@ Then(/^I should see the Parliament dissolved warning message$/) do
     expect(page).to have_link "Petitions Committee website", href: "https://parliament.example.com/parliament-is-closing"
   end
 end
+
+When(/^I accept the alert$/) do
+  page.driver.browser.switch_to.alert.accept
+end

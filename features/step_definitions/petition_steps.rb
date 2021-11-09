@@ -534,3 +534,9 @@ Given(/^all the open petitions have been closed$/) do
     petition.close_early!(1.day.ago)
   end
 end
+
+Given(/^(\d+) archived petitions exist$/) do |number|
+  number.times do
+    FactoryBot.create(:archived_petition)
+  end
+end
