@@ -22,14 +22,6 @@
       <!--[if lt IE 9]><%= javascript_include_tag 'ie.js' %><![endif]-->
       <!--[if IE]><%= javascript_include_tag 'details.js' %><![endif]-->
 
-      <!-- Google Tag Manager -->
-      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','GTM-MQJ6XZ5');</script>
-      <!-- End Google Tag Manager -->
-
       <meta name="viewport" content="width = device-width" />
       <%= render 'application/os' %>
       <%= render 'application/social_meta' %>
@@ -40,17 +32,6 @@
       <meta name="theme-color" content="#080">
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQJ6XZ5"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <% if show_cookie_message? %>
-      <div id="global-cookie-message">
-        <p>We use cookies to make this service simpler. <a href="/privacy">Find out more about cookies</a></p>
-      </div>
-    <% end %>
-
     <%= cache_for :header do %>
       <%= render 'application/header' %>
     <% end %>

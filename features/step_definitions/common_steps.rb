@@ -1,11 +1,3 @@
-Then(/^I should see the cookie message$/) do
-  expect(page).to have_text('We use cookies to make this service simpler')
-end
-
-Then(/^I should not see the cookie message$/) do
-  expect(page).not_to have_text('We use cookies to make this service simpler')
-end
-
 Given(/^the site is disabled$/) do
   Site.instance.update! enabled: false
 end

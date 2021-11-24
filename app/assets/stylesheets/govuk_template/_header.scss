@@ -243,22 +243,3 @@
     font-size: 0;
   }
 }
-
-/* Global cookie message */
-
-.js-enabled #global-cookie-message {
-  display: none; /* shown with JS, always on for non-JS */
-}
-
-#global-cookie-message {
-  width: 100%;
-  background-color: $light-blue-25;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  p {
-    @extend %site-width-container;
-    @include core-16;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-}
