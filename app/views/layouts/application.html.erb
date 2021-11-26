@@ -32,6 +32,12 @@
       <meta name="theme-color" content="#080">
   </head>
   <body>
+    <% if show_cookie_message? %>
+      <div id="global-cookie-message">
+        <p>We use cookies to make this service simpler. <a href="/privacy">Find out more about cookies</a></p>
+      </div>
+    <% end %>
+
     <%= cache_for :header do %>
       <%= render 'application/header' %>
     <% end %>
