@@ -1,16 +1,14 @@
 Given(/^I have been told about a petition that needs sponsoring$/) do
-  @sponsor_petition = FactoryBot.create(:open_petition,
-    action: 'Charles to be nominated for sublimation',
-    closed_at: 1.day.from_now,
-    state: Petition::VALIDATED_STATE)
+  @sponsor_petition = FactoryBot.create(:validated_petition,
+    action: 'Charles to be nominated for sublimation'
+  )
 end
 
 Given(/^I have created a petition and told people to sponsor it$/) do
   @sponsor_petition = FactoryBot.create(:pending_petition,
     action: 'Charles to be nominated for sublimation',
-    closed_at: 1.day.from_now,
-    state: Petition::PENDING_STATE,
-    creator_attributes: { email: 'charlie.the.creator@example.com' })
+    creator_attributes: { email: 'charlie.the.creator@example.com' }
+  )
 end
 
 Given(/^I have already sponsored the petition(?: with email "(.*?)")?$/) do |email|
@@ -18,8 +16,13 @@ Given(/^I have already sponsored the petition(?: with email "(.*?)")?$/) do |ema
   sponsor = FactoryBot.create(:validated_signature, email: email, sponsor: true, petition: @sponsor_petition)
 end
 
-When(/^a sponsor supports my petition$/) do
-  sponsor_email = FactoryBot.generate(:sponsor_email)
+When(/^(Laura|a sponsor) supports my petition$/) do |who|
+  if who == "Laura"
+    sponsor_email = "laura.the.sponsor@example.com"
+  else
+    sponsor_email = FactoryBot.generate(:sponsor_email)
+  end
+
   steps %{
     When I visit the "sponsor this petition" url I was given
     And I fill in "Name" with "Anonymous Sponsor"
@@ -34,6 +37,15 @@ When(/^a sponsor supports my petition$/) do
   signature = @sponsor_petition.signatures.for_email(sponsor_email).first
   expect(signature).to be_present
   expect(signature).to be_sponsor
+end
+
+When(/^Laura verifies her signature again$/) do
+  deliveries.delete_if { |email| email.to == %w[charlie.the.creator@example.com] }
+
+  steps %{
+    And "laura.the.sponsor@example.com" opens the email with subject "Please confirm your email address"
+    And they click the first link in the email
+  }
 end
 
 Given(/^I only need one more sponsor to support my petition$/) do
