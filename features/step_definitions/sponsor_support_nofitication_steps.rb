@@ -2,12 +2,16 @@ Then(/^I should receive a sponsor support notification email$/) do
   step %{"charlie.the.creator@example.com" should receive an email with subject "supported your petition"}
 end
 
+Then(/^I should not receive a sponsor support notification email$/) do
+  step %{"charlie.the.creator@example.com" should receive no email with subject "supported your petition"}
+end
+
 Then(/^I should receive a sponsor threshold notification email$/) do
   step %{"charlie.the.creator@example.com" should receive an email with subject "We’re checking your petition"}
 end
 
-Then(/^I should not receive a sponsor support notification email$/) do
-  step %{"charlie.the.creator@example.com" should receive no email with subject "supported your petition"}
+Then(/^I should not receive a sponsor threshold notification email$/) do
+  step %{"charlie.the.creator@example.com" should receive no email with subject "We’re checking your petition"}
 end
 
 Then(/^the sponsor support notification email should include the countdown to the threshold$/) do

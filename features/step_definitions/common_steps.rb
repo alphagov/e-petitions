@@ -14,6 +14,10 @@ Given(/^the site is protected$/) do
   Site.instance.update! protected: true, username: "username", password: "password"
 end
 
+Given(/^signature counting is handled by an external process$/) do
+  ENV["INLINE_UPDATES"] = "false"
+end
+
 Given(/^Parliament is dissolving$/) do
   Parliament.instance.update! dissolution_at: 2.weeks.from_now,
     dissolution_heading: "Parliament is dissolving",
