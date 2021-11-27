@@ -22,3 +22,13 @@ Feature: Charlie is notified to get an MP
     Given I have enough support from sponsors for my petition
     When a sponsor supports my petition
     Then I should not receive a sponsor support notification email
+
+  Scenario: Charlie is only notified once when Laura validates her signature multiple times
+    Given I only need one more sponsor to support my petition
+    And signature counting is handled by an external process
+    When Laura supports my petition
+    Then I should not receive a sponsor support notification email
+    But I should receive a sponsor threshold notification email
+    When Laura verifies her signature again
+    Then I should not receive a sponsor support notification email
+    And I should not receive a sponsor threshold notification email
