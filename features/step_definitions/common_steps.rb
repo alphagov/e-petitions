@@ -14,6 +14,10 @@ Given(/^the site is protected$/) do
   Site.instance.update! protected: true, username: "username", password: "password"
 end
 
+Given(/^signature counting is handled by an external process$/) do
+  ENV["INLINE_UPDATES"] = "false"
+end
+
 Given(/^the request is not local$/) do
   page.driver.options[:headers] = { "REMOTE_ADDR" => "192.168.1.128" }
 end

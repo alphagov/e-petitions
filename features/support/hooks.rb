@@ -50,6 +50,10 @@ After do
   page.driver.options[:headers] = nil
 end
 
+After do
+  ENV["INLINE_UPDATES"] = "true"
+end
+
 Before('@admin') do
   Capybara.app_host = 'https://moderate.petitions.senedd.wales'
   Capybara.default_host = 'https://moderate.petitions.senedd.wales'
