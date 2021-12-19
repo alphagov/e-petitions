@@ -16,6 +16,11 @@ RSpec.describe 'Requests containing invalid characters are rejected', type: :req
     expect(response.status).to eq 400
   end
 
+  it 'returns 400 for a malformed multipart/form-data request' do
+    post "/petitions", params: "--12345", headers: { 'Content-Type' => 'multipart/form-data; boundary=12345' }
+    expect(response.status).to eq 400
+  end
+
   context "when logged in as an admin" do
     let(:user_attributes) do
       {

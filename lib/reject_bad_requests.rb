@@ -8,9 +8,13 @@ class RejectBadRequests
   end
 
   def call(env)
-    request = Rack::Request.new(env)
+    begin
+      params = Rack::Request.new(env).params
+    rescue StandardError
+      raise ActionController::BadRequest, 'Request is invalid or has been corrupted'
+    end
 
-    if bad_request?(request.params)
+    if bad_request?(params)
       raise ActionController::BadRequest, 'Parameters contain invalid characters'
     else
       @app.call(env)
