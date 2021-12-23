@@ -117,26 +117,26 @@ Feature: Suzie views a petition
   Scenario: Suzie does not see information about future signature targets when viewing a closed petition
     Given a petition "Spend more money on Defence" has been closed
     When I view the petition
-    Then I should not see "At 50 signatures..."
+    Then I should not see "At 250 signatures..."
     Then I should not see "At 5,000 signatures..."
 
   Scenario: Suzie does not see information about future signature targets when viewing a completed petition
     Given a petition "Spend more money on Defence" has been completed
     When I view the petition
-    Then I should not see "At 50 signatures..."
+    Then I should not see "At 250 signatures..."
     Then I should not see "At 5,000 signatures..."
 
   Scenario: Suzie sees information about future signature targets when viewing an open petition which has not passed the threshold for referral or debate
     Given an open petition "Spend more money on Defence"
     When I view the petition
-    Then I should see "At 50 signatures..."
+    Then I should see "At 250 signatures..."
     Then I should see "At 5,000 signatures..."
 
   @javascript
   Scenario: Suzie does not see information about a future signature targets when viewing an open petition which has passed the threshold for referral and debate
     Given a petition "Spend more money on Defence" exists with a debate outcome and with referral threshold met
     When I view the petition
-    Then I should not see "At 50 signatures..."
+    Then I should not see "At 250 signatures..."
     Then I should not see "At 5,000 signatures..."
     And I should see a summary of the debate outcome
 

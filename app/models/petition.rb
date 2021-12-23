@@ -42,6 +42,8 @@ class Petition < ActiveRecord::Base
 
   before_save :update_debate_state, if: :scheduled_debate_date_changed?
   before_save :update_moderation_lag, unless: :moderation_lag?
+  before_create :set_threshold_for_referral
+  before_create :set_threshold_for_debate
   after_create :update_last_petition_created_at
 
   extend Searchable(:action_en, :action_cy, :background_en, :background_cy, :additional_details_en, :additional_details_cy)
@@ -606,25 +608,25 @@ class Petition < ActiveRecord::Base
 
   def at_threshold_for_referral?
     unless referral_threshold_reached_at?
-      signature_count >= Site.threshold_for_referral
+      signature_count >= threshold_for_referral
     end
   end
 
   def at_threshold_for_debate?
     unless debate_threshold_reached_at?
-      signature_count >= Site.threshold_for_debate
+      signature_count >= threshold_for_debate
     end
   end
 
   def below_threshold_for_referral?
     if referral_threshold_reached_at?
-      signature_count <= Site.threshold_for_referral
+      signature_count <= threshold_for_referral
     end
   end
 
   def below_threshold_for_debate?
     if debate_threshold_reached_at?
-      signature_count <= Site.threshold_for_debate
+      signature_count <= threshold_for_debate
     end
   end
 
@@ -1081,5 +1083,21 @@ class Petition < ActiveRecord::Base
 
   def time_for_publishing(time)
     open_at || time
+  end
+
+  def set_threshold_for_referral
+    self[:threshold_for_referral] ||= Site.threshold_for_referral
+  end
+
+  def set_threshold_for_debate
+    self[:threshold_for_debate] ||= Site.threshold_for_debate
+  end
+
+  def threshold_for_referral
+    super || Site.threshold_for_referral
+  end
+
+  def threshold_for_debate
+    super || Site.threshold_for_debate
   end
 end

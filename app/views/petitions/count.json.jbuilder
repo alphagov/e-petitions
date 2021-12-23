@@ -1,3 +1,3 @@
 json.signature_count @petition.signature_count
-json.threshold_for_referral Site.threshold_for_referral
-json.threshold_for_debate Site.threshold_for_debate
+json.threshold_for_referral @petition.threshold_for_referral
+json.threshold_for_debate @petition.threshold_for_debate

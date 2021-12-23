@@ -5,9 +5,9 @@ module PetitionHelper
 
   def current_threshold(petition)
     if petition.referral_threshold_reached_at?
-      Site.threshold_for_debate
+      petition.threshold_for_debate
     else
-      Site.threshold_for_referral
+      petition.threshold_for_referral
     end
   end
 

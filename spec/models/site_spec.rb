@@ -17,7 +17,7 @@ RSpec.describe Site, type: :model do
     it { is_expected.to have_db_column(:maximum_number_of_sponsors).of_type(:integer).with_options(null: false, default: 20) }
     it { is_expected.to have_db_column(:threshold_for_moderation).of_type(:integer).with_options(null: false, default: 2) }
     it { is_expected.to have_db_column(:threshold_for_moderation_delay).of_type(:integer).with_options(null: false, default: 500) }
-    it { is_expected.to have_db_column(:threshold_for_referral).of_type(:integer).with_options(null: false, default: 50) }
+    it { is_expected.to have_db_column(:threshold_for_referral).of_type(:integer).with_options(null: false, default: 250) }
     it { is_expected.to have_db_column(:threshold_for_debate).of_type(:integer).with_options(null: false, default: 5000) }
     it { is_expected.to have_db_column(:last_checked_at).of_type(:datetime).with_options(null: true, default: nil) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
@@ -602,13 +602,13 @@ RSpec.describe Site, type: :model do
     end
 
     describe "for threshold_for_referral" do
-      it "defaults to 50" do
-        allow(ENV).to receive(:fetch).with("threshold_for_referral", '50').and_return("50")
-        expect(defaults[:threshold_for_referral]).to eq(50)
+      it "defaults to 250" do
+        allow(ENV).to receive(:fetch).with("threshold_for_referral", "250").and_return("250")
+        expect(defaults[:threshold_for_referral]).to eq(250)
       end
 
       it "can be overridden with the THRESHOLD_FOR_REFERRAL environment variable" do
-        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_REFERRAL", '50').and_return("25")
+        allow(ENV).to receive(:fetch).with("THRESHOLD_FOR_REFERRAL", "250").and_return("25")
         expect(defaults[:threshold_for_referral]).to eq(25)
       end
     end

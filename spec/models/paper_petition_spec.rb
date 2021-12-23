@@ -43,7 +43,7 @@ RSpec.describe PaperPetition, type: :model do
     it { is_expected.to allow_value("CF991NA").for(:postcode) }
     it { is_expected.not_to allow_value("CF99").for(:postcode).with_message(:invalid) }
 
-    it { is_expected.to allow_value(50).for(:signature_count) }
+    it { is_expected.to allow_value(250).for(:signature_count) }
     it { is_expected.not_to allow_value(49).for(:signature_count).with_message(:greater_than_or_equal_to) }
     it { is_expected.not_to allow_value(1.5).for(:signature_count).with_message(:greater_than_or_equal_to) }
     it { is_expected.not_to allow_value("one").for(:signature_count).with_message(:greater_than_or_equal_to) }
