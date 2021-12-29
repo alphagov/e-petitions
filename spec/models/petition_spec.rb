@@ -1997,7 +1997,7 @@ RSpec.describe Petition, type: :model do
       let(:petition) { FactoryBot.create(:open_petition, signature_count: signature_count) }
 
       before do
-        expect(Site).to receive(:threshold_for_referral).and_return(10)
+        petition.update(threshold_for_referral: 10)
       end
 
       context "and the signature count is 2 or more less than the threshold" do
@@ -2036,12 +2036,60 @@ RSpec.describe Petition, type: :model do
     context "when referral_threshold_reached_at is present" do
       let(:petition) { FactoryBot.create(:referred_petition) }
 
-      before do
-        expect(Site).not_to receive(:threshold_for_referral)
-      end
-
       it "is falsey" do
         expect(petition.at_threshold_for_referral?).to be_falsey
+      end
+    end
+  end
+
+  describe "#below_threshold_for_referral?" do
+    context "when referral_threshold_reached_at is present" do
+      let(:threshold_for_referral) { 10 }
+
+      let(:petition) do
+        FactoryBot.build(
+          :petition,
+          referral_threshold_reached_at: DateTime.current,
+          signature_count: signature_count,
+          threshold_for_referral: threshold_for_referral
+        )
+      end
+
+      context "and signature_count is greater than threshold_for_referral" do
+        let(:signature_count) { threshold_for_referral + 1 }
+
+        it "returns false" do
+          expect(petition.below_threshold_for_referral?).to eq(false)
+        end
+      end
+
+      context "and signature_count is equal to threshold_for_referral" do
+        let(:signature_count) { threshold_for_referral }
+
+        it "returns true" do
+          expect(petition.below_threshold_for_referral?).to eq(true)
+        end
+      end
+
+      context "and signature_count is less than threshold_for_referral" do
+        let(:signature_count) { threshold_for_referral - 1 }
+
+        it "returns true" do
+          expect(petition.below_threshold_for_referral?).to eq(true)
+        end
+      end
+    end
+
+    context "when referral_threshold_reached_at is blank" do
+      let(:petition) do
+        FactoryBot.build(
+          :petition,
+          referral_threshold_reached_at: nil
+        )
+      end
+
+      it "returns nil" do
+        expect(petition.below_threshold_for_referral?).to eq(nil)
       end
     end
   end
@@ -2086,6 +2134,58 @@ RSpec.describe Petition, type: :model do
 
       it 'is falsey' do
         expect(petition.at_threshold_for_debate?).to be_falsey
+      end
+    end
+  end
+
+  describe "#below_threshold_for_debate?" do
+    context "when debate_threshold_reached_at is present" do
+      let(:threshold_for_debate) { 10 }
+
+      let(:petition) do
+        FactoryBot.build(
+          :petition,
+          debate_threshold_reached_at: DateTime.current,
+          signature_count: signature_count,
+          threshold_for_debate: threshold_for_debate
+        )
+      end
+
+      context "and signature_count is greater than threshold_for_debate" do
+        let(:signature_count) { threshold_for_debate + 1 }
+
+        it "returns false" do
+          expect(petition.below_threshold_for_debate?).to eq(false)
+        end
+      end
+
+      context "and signature_count is equal to threshold_for_debate" do
+        let(:signature_count) { threshold_for_debate }
+
+        it "returns true" do
+          expect(petition.below_threshold_for_debate?).to eq(true)
+        end
+      end
+
+      context "and signature_count is less than threshold_for_debate" do
+        let(:signature_count) { threshold_for_debate - 1 }
+
+        it "returns true" do
+          expect(petition.below_threshold_for_debate?).to eq(true)
+        end
+      end
+    end
+
+    context "when debate_threshold_reached_at is blank" do
+      let(:petition) do
+        FactoryBot.build(
+          :petition,
+          debate_threshold_reached_at: nil
+        )
+      end
+
+      it "returns nil" do
+        expect(petition.below_threshold_for_debate?).to eq(nil)
       end
     end
   end
@@ -3020,6 +3120,60 @@ RSpec.describe Petition, type: :model do
     specify do
       I18n.with_locale(:"en-GB") { expect(Petition.new.locale).to eq("en-GB") }
       I18n.with_locale(:"cy-GB") { expect(Petition.new.locale).to eq("cy-GB") }
+    end
+  end
+
+  describe "#create" do
+    it "sets threshold for referral to Site value" do
+      petition = FactoryBot.build(:petition)
+
+      expect(Site)
+        .to receive(:threshold_for_referral)
+        .and_return(123)
+
+      expect {
+        petition.save
+      }.to change {
+        petition[:threshold_for_referral]
+      }.from(nil).to(123)
+    end
+
+    it "sets threshold for debate to Site value" do
+      petition = FactoryBot.build(:petition)
+
+      expect(Site)
+        .to receive(:threshold_for_debate)
+        .and_return(456)
+
+      expect {
+        petition.save
+      }.to change {
+        petition[:threshold_for_debate]
+      }.from(nil).to(456)
+    end
+  end
+
+  describe "#threshold_for_referral" do
+    it "returns petition value if present" do
+      petition = FactoryBot.build(:petition, threshold_for_referral: 50)
+      expect(petition.threshold_for_referral).to eq(50)
+    end
+
+    it "defaults to Site value if petition value is nil" do
+      petition = FactoryBot.build(:petition, threshold_for_referral: nil)
+      expect(petition.threshold_for_referral).to eq(Site.threshold_for_referral)
+    end
+  end
+
+  describe "#threshold_for_debate" do
+    it "returns petition value if present" do
+      petition = FactoryBot.build(:petition, threshold_for_debate: 1000)
+      expect(petition.threshold_for_debate).to eq(1000)
+    end
+
+    it "defaults to Site value if petition value is nil" do
+      petition = FactoryBot.build(:petition, threshold_for_debate: nil)
+      expect(petition.threshold_for_debate).to eq(Site.threshold_for_debate)
     end
   end
 end

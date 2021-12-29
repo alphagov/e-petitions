@@ -259,6 +259,22 @@ RSpec.describe "API request to list petitions", type: :request, show_exceptions:
         )
       )
     end
+
+    it "includes referral and debate thresholds" do
+      petition = FactoryBot.create(:open_petition)
+
+      get "/petitions.json"
+
+      expect(data).to match(
+        a_collection_containing_exactly(
+          a_hash_including(
+            "attributes" => a_hash_including(
+              "threshold_for_referral" => petition.threshold_for_referral,
+              "threshold_for_debate" => petition.threshold_for_debate
+            )
+          )
+        )
+      )
+    end
   end
 end
-

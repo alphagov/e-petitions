@@ -45,7 +45,7 @@ RSpec.describe PetitionHelper, type: :helper do
       let(:petition) { FactoryBot.create(:petition) }
 
       it "returns the referral threshold" do
-        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_referral)
+        expect(helper.current_threshold(petition)).to eq(petition.threshold_for_referral)
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe PetitionHelper, type: :helper do
       let(:petition) { FactoryBot.create(:petition, referral_threshold_reached_at: 1.days.ago )}
 
       it "returns the debate threshold" do
-        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
+        expect(helper.current_threshold(petition)).to eq(petition.threshold_for_debate)
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe PetitionHelper, type: :helper do
       let(:petition) { FactoryBot.create(:petition, referral_threshold_reached_at: 2.months.ago, debate_threshold_reached_at: 1.days.ago )}
 
       it "returns the debate threshold" do
-        expect(helper.current_threshold(petition)).to eq(Site.threshold_for_debate)
+        expect(helper.current_threshold(petition)).to eq(petition.threshold_for_debate)
       end
     end
   end

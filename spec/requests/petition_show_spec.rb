@@ -52,6 +52,8 @@ RSpec.describe "API request to show a petition", type: :request, show_exceptions
           "additional_details" => a_string_matching(petition.additional_details),
           "state" => a_string_matching(petition.state),
           "signature_count" => eq_to(petition.signature_count),
+          "threshold_for_referral" => eq_to(petition.threshold_for_referral),
+          "threshold_for_debate" => eq_to(petition.threshold_for_debate),
           "opened_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "created_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z]),
           "updated_at" => a_string_matching(%r[\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z\z])

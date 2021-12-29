@@ -11,6 +11,8 @@ json.attributes do
   json.additional_details petition.additional_details
   json.state petition.state
   json.signature_count petition.signature_count
+  json.threshold_for_referral petition.threshold_for_referral
+  json.threshold_for_debate petition.threshold_for_debate
 
   json.created_at api_date_format(petition.created_at)
   json.updated_at api_date_format(petition.updated_at)

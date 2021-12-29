@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_183008) do
+ActiveRecord::Schema.define(version: 2021_12_24_082345) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -314,6 +314,8 @@ ActiveRecord::Schema.define(version: 2021_04_23_183008) do
     t.datetime "anonymized_at"
     t.integer "topics", default: [], null: false, array: true
     t.integer "moderated_by_id"
+    t.integer "threshold_for_referral"
+    t.integer "threshold_for_debate"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action_en)::text)", name: "index_petitions_on_action_en", using: :gin
     t.index "to_tsvector('english'::regconfig, (background_en)::text)", name: "index_petitions_on_background_en", using: :gin
@@ -472,7 +474,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_183008) do
     t.integer "minimum_number_of_sponsors", default: 2, null: false
     t.integer "maximum_number_of_sponsors", default: 20, null: false
     t.integer "threshold_for_moderation", default: 2, null: false
-    t.integer "threshold_for_referral", default: 50, null: false
+    t.integer "threshold_for_referral", default: 250, null: false
     t.integer "threshold_for_debate", default: 5000, null: false
     t.datetime "last_checked_at"
     t.datetime "created_at", null: false
