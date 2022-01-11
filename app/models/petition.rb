@@ -1035,7 +1035,7 @@ class Petition < ActiveRecord::Base
     if scheduled_debate_date?
       scheduled_debate_date > Date.current ? 'scheduled' : 'debated'
     else
-      'awaiting'
+      debate_threshold_reached_at? ? 'awaiting' : 'pending'
     end
   end
 
