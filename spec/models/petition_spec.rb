@@ -2169,6 +2169,8 @@ RSpec.describe Petition, type: :model do
 
   describe "#decrement_signature_count!" do
     let(:signature_count) { 8 }
+    let(:debate_state) { 'awaiting' }
+
     let(:petition) do
       FactoryBot.create(:open_petition, {
         signature_count: signature_count,
@@ -2176,7 +2178,7 @@ RSpec.describe Petition, type: :model do
         updated_at: 2.days.ago,
         response_threshold_reached_at: 2.days.ago,
         debate_threshold_reached_at: 2.days.ago,
-        debate_state: 'awaiting'
+        debate_state: debate_state
       })
     end
 
@@ -2221,14 +2223,54 @@ RSpec.describe Petition, type: :model do
         expect(Site).to receive(:threshold_for_debate).and_return(100)
       end
 
-      it "records the time it happened" do
+      it "resets the timestamp" do
         petition.decrement_signature_count!
         expect(petition.debate_threshold_reached_at).to be_nil
       end
 
-      it "sets the debate_state to 'pending'" do
-        petition.decrement_signature_count!
-        expect(petition.debate_state).to eq("pending")
+      context "and a debate has not been scheduled" do
+        let(:debate_state) { "awaiting" }
+
+        it "sets the debate_state to 'pending'" do
+          petition.decrement_signature_count!
+          expect(petition.debate_state).to eq("pending")
+        end
+      end
+
+      context "and a debate has been scheduled" do
+        let(:debate_state) { "scheduled" }
+
+        it "doesn't change debated_state" do
+          expect {
+            petition.decrement_signature_count!
+          }.not_to change {
+            petition.debate_state
+          }.from("scheduled")
+        end
+      end
+
+      context "and a debate has taken place" do
+        let(:debate_state) { "debated" }
+
+        it "doesn't change debated_state" do
+          expect {
+            petition.decrement_signature_count!
+          }.not_to change {
+            petition.debate_state
+          }.from("debated")
+        end
+      end
+
+      context "and a debate has not taken place" do
+        let(:debate_state) { "not_debated" }
+
+        it "doesn't change debated_state" do
+          expect {
+            petition.decrement_signature_count!
+          }.not_to change {
+            petition.debate_state
+          }.from("not_debated")
+        end
       end
     end
   end
