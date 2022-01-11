@@ -547,7 +547,10 @@ class Petition < ActiveRecord::Base
 
       if at_threshold_for_debate?
         updates << "debate_threshold_reached_at = :now"
-        updates << "debate_state = 'awaiting'"
+
+        if debate_state == 'pending'
+          updates << "debate_state = 'awaiting'"
+        end
       end
 
       updates = updates.join(", ")
@@ -563,19 +566,24 @@ class Petition < ActiveRecord::Base
   end
 
   def decrement_signature_count!(time = Time.current)
-    updates = ""
+    updates = []
 
     if below_threshold_for_debate?
-      updates << "debate_threshold_reached_at = NULL, "
-      updates << "debate_state = 'pending', "
+      updates << "debate_threshold_reached_at = NULL"
+
+      if debate_state == 'awaiting'
+        updates << "debate_state = 'pending'"
+      end
     end
 
     if below_threshold_for_referral?
-      updates << "referral_threshold_reached_at = NULL, "
+      updates << "referral_threshold_reached_at = NULL"
     end
 
-    updates << "signature_count = greatest(signature_count - 1, 1), "
+    updates << "signature_count = greatest(signature_count - 1, 1)"
     updates << "updated_at = :now"
+
+    updates = updates.join(", ")
 
     if update_all([updates, now: time]) > 0
       self.reload
@@ -1037,7 +1045,7 @@ class Petition < ActiveRecord::Base
     if scheduled_debate_date?
       scheduled_debate_date > Date.current ? 'scheduled' : 'debated'
     else
-      'awaiting'
+      debate_threshold_reached_at? ? 'awaiting' : 'pending'
     end
   end
 
