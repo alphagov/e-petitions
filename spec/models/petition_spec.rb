@@ -905,6 +905,7 @@ RSpec.describe Petition, type: :model do
       context "and the debate date is changed to nil" do
         subject(:petition) {
           FactoryBot.create(:open_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: 2.days.from_now,
             debate_state: "scheduled"
           )
@@ -922,25 +923,27 @@ RSpec.describe Petition, type: :model do
       context "and the debate date is in the future" do
         subject(:petition) {
           FactoryBot.create(:open_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: nil,
-            debate_state: "pending"
+            debate_state: "awaiting"
           )
         }
 
-        it "sets the debate state to 'awaiting'" do
+        it "sets the debate state to 'scheduled'" do
           expect {
             petition.update(scheduled_debate_date: 2.days.from_now)
           }.to change {
             petition.debate_state
-          }.from("pending").to("scheduled")
+          }.from("awaiting").to("scheduled")
         end
       end
 
       context "and the debate date is in the past" do
         subject(:petition) {
           FactoryBot.create(:open_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: nil,
-            debate_state: "pending"
+            debate_state: "awaiting"
           )
         }
 
@@ -949,15 +952,16 @@ RSpec.describe Petition, type: :model do
             petition.update(scheduled_debate_date: 2.days.ago)
           }.to change {
             petition.debate_state
-          }.from("pending").to("debated")
+          }.from("awaiting").to("debated")
         end
       end
 
       context "and the debate date is not changed" do
         subject(:petition) {
           FactoryBot.create(:open_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: Date.yesterday,
-            debate_state: "awaiting"
+            debate_state: "scheduled"
           )
         }
 
@@ -969,12 +973,87 @@ RSpec.describe Petition, type: :model do
           }
         end
       end
+
+      context "and has not reached the debate threshold" do
+        context "and the debate date is changed to nil" do
+          subject(:petition) {
+            FactoryBot.create(:open_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: 2.days.from_now,
+              debate_state: "scheduled"
+            )
+          }
+
+          it "sets the debate state to 'pending'" do
+            expect {
+              petition.update(scheduled_debate_date: nil)
+            }.to change {
+              petition.debate_state
+            }.from("scheduled").to("pending")
+          end
+        end
+
+        context "and the debate date is in the future" do
+          subject(:petition) {
+            FactoryBot.create(:open_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: nil,
+              debate_state: "pending"
+            )
+          }
+
+          it "sets the debate state to 'scheduled'" do
+            expect {
+              petition.update(scheduled_debate_date: 2.days.from_now)
+            }.to change {
+              petition.debate_state
+            }.from("pending").to("scheduled")
+          end
+        end
+
+        context "and the debate date is in the past" do
+          subject(:petition) {
+            FactoryBot.create(:open_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: nil,
+              debate_state: "pending"
+            )
+          }
+
+          it "sets the debate state to 'debated'" do
+            expect {
+              petition.update(scheduled_debate_date: 2.days.ago)
+            }.to change {
+              petition.debate_state
+            }.from("pending").to("debated")
+          end
+        end
+
+        context "and the debate date is not changed" do
+          subject(:petition) {
+            FactoryBot.create(:open_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: Date.yesterday,
+              debate_state: "debated"
+            )
+          }
+
+          it "does not change the debate state" do
+            expect {
+              petition.update(open_at: 5.days.ago)
+            }.not_to change {
+              petition.debate_state
+            }
+          end
+        end
+      end
     end
 
     context "when the petition is closed" do
       context "and the debate date is changed to nil" do
         subject(:petition) {
           FactoryBot.create(:closed_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: 2.days.from_now,
             debate_state: "scheduled"
           )
@@ -992,6 +1071,7 @@ RSpec.describe Petition, type: :model do
       context "and the debate date is in the future" do
         subject(:petition) {
           FactoryBot.create(:closed_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: nil,
             debate_state: "awaiting"
           )
@@ -1009,6 +1089,7 @@ RSpec.describe Petition, type: :model do
       context "and the debate date is in the past" do
         subject(:petition) {
           FactoryBot.create(:closed_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: nil,
             debate_state: "awaiting"
           )
@@ -1026,8 +1107,9 @@ RSpec.describe Petition, type: :model do
       context "and the debate date is not changed" do
         subject(:petition) {
           FactoryBot.create(:closed_petition,
+            debate_threshold_reached_at: 1.week.ago,
             scheduled_debate_date: Date.yesterday,
-            debate_state: "awaiting"
+            debate_state: "debated"
           )
         }
 
@@ -1037,6 +1119,80 @@ RSpec.describe Petition, type: :model do
           }.not_to change {
             petition.debate_state
           }
+        end
+      end
+
+      context "and has not reached the debate threshold" do
+        context "and the debate date is changed to nil" do
+          subject(:petition) {
+            FactoryBot.create(:closed_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: 2.days.from_now,
+              debate_state: "scheduled"
+            )
+          }
+
+          it "sets the debate state to 'pending'" do
+            expect {
+              petition.update(scheduled_debate_date: nil)
+            }.to change {
+              petition.debate_state
+            }.from("scheduled").to("pending")
+          end
+        end
+
+        context "and the debate date is in the future" do
+          subject(:petition) {
+            FactoryBot.create(:closed_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: nil,
+              debate_state: "pending"
+            )
+          }
+
+          it "sets the debate state to 'scheduled'" do
+            expect {
+              petition.update(scheduled_debate_date: 2.days.from_now)
+            }.to change {
+              petition.debate_state
+            }.from("pending").to("scheduled")
+          end
+        end
+
+        context "and the debate date is in the past" do
+          subject(:petition) {
+            FactoryBot.create(:closed_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: nil,
+              debate_state: "pending"
+            )
+          }
+
+          it "sets the debate state to 'debated'" do
+            expect {
+              petition.update(scheduled_debate_date: 2.days.ago)
+            }.to change {
+              petition.debate_state
+            }.from("pending").to("debated")
+          end
+        end
+
+        context "and the debate date is not changed" do
+          subject(:petition) {
+            FactoryBot.create(:closed_petition,
+              debate_threshold_reached_at: nil,
+              scheduled_debate_date: Date.yesterday,
+              debate_state: "debated"
+            )
+          }
+
+          it "does not change the debate state" do
+            expect {
+              petition.update(open_at: 5.days.ago)
+            }.not_to change {
+              petition.debate_state
+            }
+          end
         end
       end
     end
