@@ -1888,8 +1888,11 @@ RSpec.describe Petition, type: :model do
 
   describe "#increment_signature_count!" do
     let(:signature_count) { 8 }
+    let(:debate_state) { 'pending' }
+
     let(:petition) do
       FactoryBot.create(:open_petition, {
+        debate_state: debate_state,
         signature_count: signature_count,
         last_signed_at: 2.days.ago,
         updated_at: 2.days.ago,
@@ -2076,28 +2079,90 @@ RSpec.describe Petition, type: :model do
       end
     end
 
-    context "when the signature count crosses the threshold for a debate" do
-      let(:signature_count) { 99 }
+    context "when the petition hasn't been debated" do
+      let(:debate_state) { "pending" }
 
-      before do
-        expect(Site).to receive(:threshold_for_debate).and_return(100)
-        FactoryBot.create(:validated_signature, petition: petition, increment: false)
+      context "when the signature count crosses the threshold for a debate" do
+        let(:signature_count) { 99 }
+
+        before do
+          expect(Site).to receive(:threshold_for_debate).and_return(100)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.debate_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "sets the debate_state to 'awaiting'" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.debate_state
+          }.from("pending").to("awaiting")
+        end
       end
+    end
 
-      it "records the time it happened" do
-        expect {
-          petition.increment_signature_count!
-        }.to change {
-          petition.debate_threshold_reached_at
-        }.to be_within(1.second).of(Time.current)
+    context "when the petition is awaiting a debate" do
+      let(:debate_state) { "awaiting" }
+
+      context "when the signature count crosses the threshold for a debate" do
+        let(:signature_count) { 99 }
+
+        before do
+          expect(Site).to receive(:threshold_for_debate).and_return(100)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.debate_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "doesn't change debate_state" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change {
+            petition.debate_state
+          }.from("awaiting")
+        end
       end
+    end
 
-      it "sets the debate_state to 'awaiting'" do
-        expect {
-          petition.increment_signature_count!
-        }.to change {
-          petition.debate_state
-        }.from("pending").to("awaiting")
+    context "when the petition has been debated" do
+      let(:debate_state) { "debated" }
+
+      context "when the signature count crosses the threshold for a debate" do
+        let(:signature_count) { 99 }
+
+        before do
+          expect(Site).to receive(:threshold_for_debate).and_return(100)
+          FactoryBot.create(:validated_signature, petition: petition, increment: false)
+        end
+
+        it "records the time it happened" do
+          expect {
+            petition.increment_signature_count!
+          }.to change {
+            petition.debate_threshold_reached_at
+          }.to be_within(1.second).of(Time.current)
+        end
+
+        it "doesn't change debate_state" do
+          expect {
+            petition.increment_signature_count!
+          }.not_to change {
+            petition.debate_state
+          }.from("debated")
+        end
       end
     end
   end

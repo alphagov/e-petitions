@@ -554,7 +554,10 @@ class Petition < ActiveRecord::Base
 
       if at_threshold_for_debate?
         updates << "debate_threshold_reached_at = :now"
-        updates << "debate_state = 'awaiting'"
+
+        if debate_state == 'pending'
+          updates << "debate_state = 'awaiting'"
+        end
       end
 
       updates = updates.join(", ")
