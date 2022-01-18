@@ -1,8 +1,8 @@
-require 'textacular/searchable'
-
 class Invalidation < ActiveRecord::Base
-  extend Searchable(:id, :summary, :details, :petition_id)
   include Browseable
+
+  query :summary
+  query :details, :petition_id, null: true
 
   belongs_to :petition, optional: true
   has_many :signatures

@@ -1,5 +1,3 @@
-require 'textacular/searchable'
-
 class Petition < ActiveRecord::Base
   include PerishableTokenGenerator
 
@@ -46,8 +44,10 @@ class Petition < ActiveRecord::Base
   before_save :update_moderation_lag, unless: :moderation_lag?
   after_create :update_last_petition_created_at
 
-  extend Searchable(:action, :background, :additional_details)
   include Browseable, Taggable, Departments, Topics, Anonymization
+
+  query :id, :action, :background
+  query :additional_details, null: true
 
   facet :all,      -> { by_most_popular }
   facet :open,     -> { open_state.by_most_popular }

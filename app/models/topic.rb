@@ -1,8 +1,7 @@
-require 'textacular/searchable'
-
 class Topic < ActiveRecord::Base
-  extend Searchable(:code, :name)
   include Browseable
+
+  query :code, :name
 
   with_options presence: true, uniqueness: true do
     validates :code, length: { maximum: 100 }
