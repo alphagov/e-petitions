@@ -45,6 +45,7 @@ class ArchivePetitionJob < ApplicationJob
           p.email_requested_for_debate_scheduled_at = receipt.debate_scheduled
           p.email_requested_for_debate_outcome_at = receipt.debate_outcome
           p.email_requested_for_petition_email_at = receipt.petition_email
+          p.email_requested_for_petition_mailshot_at = receipt.petition_mailshot
         end
 
         if note = petition.note
@@ -71,6 +72,16 @@ class ArchivePetitionJob < ApplicationJob
             e.sent_by = email.sent_by
             e.created_at = email.created_at
             e.updated_at = email.updated_at
+          end
+        end
+
+        petition.mailshots.each do |mailshot|
+          p.mailshots.build do |m|
+            m.subject = mailshot.subject
+            m.body = mailshot.body
+            m.sent_by = mailshot.sent_by
+            m.created_at = mailshot.created_at
+            m.updated_at = mailshot.updated_at
           end
         end
 

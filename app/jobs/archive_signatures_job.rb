@@ -37,6 +37,7 @@ class ArchiveSignaturesJob < ApplicationJob
                 s.debate_scheduled_email_at = signature.debate_scheduled_email_at
                 s.debate_outcome_email_at = signature.debate_outcome_email_at
                 s.petition_email_at = signature.petition_email_at
+                s.petition_mailshot_at = signature.petition_mailshot_at
                 s.creator = signature.creator?
                 s.sponsor = signature.sponsor?
                 s.created_at = signature.created_at

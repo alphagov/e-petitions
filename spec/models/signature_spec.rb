@@ -2083,7 +2083,8 @@ RSpec.describe Signature, type: :model do
         %w[government_response government_response_email_at],
         %w[debate_scheduled debate_scheduled_email_at],
         %w[debate_outcome debate_outcome_email_at],
-        %w[petition_email petition_email_at]
+        %w[petition_email petition_email_at],
+        %w[petition_mailshot petition_mailshot_at]
       ].each do |timestamp, column|
 
         context "when the timestamp '#{timestamp}' is not set" do
@@ -2113,7 +2114,8 @@ RSpec.describe Signature, type: :model do
         %w[government_response government_response_email_at],
         %w[debate_scheduled debate_scheduled_email_at],
         %w[debate_outcome debate_outcome_email_at],
-        %w[petition_email petition_email_at]
+        %w[petition_email petition_email_at],
+        %w[petition_mailshot petition_mailshot_at]
       ].each do |timestamp, column|
 
         context "when a time is supplied for timestamp '#{timestamp}'" do
@@ -2174,6 +2176,21 @@ RSpec.describe Signature, type: :model do
       it "returns signatures that have null for the requested timestamp" do
         a_signature.update_column(:government_response_email_at, nil)
         expect(subject).to match_array [a_signature, another_signature]
+      end
+
+      context "when there is an additional scope" do
+        let!(:coventry_signature) { FactoryBot.create(:validated_signature, constituency_id: "3427") }
+        let!(:romford_signature) { FactoryBot.create(:validated_signature, constituency_id: "3703") }
+
+        subject { Signature.need_emailing_for('petition_mailshot', since: since_timestamp, scope: { constituency_id: "3427" }) }
+
+        it "returns signatures within the scope" do
+          expect(subject).to include coventry_signature
+        end
+
+        it "does not return signatures outside the scope" do
+          expect(subject).not_to include romford_signature
+        end
       end
     end
   end

@@ -193,6 +193,20 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
     end
   end
 
+  context "with a signature that has been sent a mailshot" do
+    let!(:signature) { FactoryBot.create(:validated_signature, petition: petition, petition_mailshot_at: 4.weeks.ago) }
+
+    before do
+      described_class.perform_now(petition, archived_petition)
+    end
+
+    it_behaves_like "a copied signature"
+
+    it "copies the petition_mailshot_at timestamp" do
+      expect(archived_signature.petition_mailshot_at).to be_usec_precise_with(signature.petition_mailshot_at)
+    end
+  end
+
   context "with a signature that has invalid attributes" do
     let!(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
 

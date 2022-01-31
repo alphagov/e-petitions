@@ -1,23 +1,24 @@
 require 'rails_helper'
-require_relative 'shared_examples'
+require_relative '../shared_examples'
 
-RSpec.describe EmailPetitionersJob, type: :job do
-  let(:email_requested_at) { Time.current }
-  let(:petition) { FactoryBot.create(:open_petition) }
-  let(:signature) { FactoryBot.create(:validated_signature, petition: petition) }
-  let(:email) { FactoryBot.create(:petition_email, petition: petition) }
-  let(:arguments) { { petition: petition, email: email } }
+RSpec.describe Archived::EmailConstituencyJob, type: :job do
+  let(:mailshot_requested_at) { Time.current }
+  let(:petition) { FactoryBot.create(:archived_petition) }
+  let(:signature) { FactoryBot.create(:archived_signature, petition: petition) }
+  let(:mailshot) { FactoryBot.create(:archived_petition_mailshot, petition: petition) }
+  let(:scope) { { constituency_id: "3427" } }
+  let(:arguments) { { petition: petition, mailshot: mailshot } }
 
   before do
-    petition.set_email_requested_at_for('petition_email', to: email_requested_at)
+    petition.set_email_requested_at_for('petition_mailshot', to: mailshot_requested_at)
     allow(petition).to receive_message_chain(:signatures_to_email_for, :find_each).and_yield(signature)
   end
 
   it_behaves_like "job to enqueue signatory mailing jobs"
 
-  context "when the petition email has been deleted" do
+  context "when the petition mailshot has been deleted" do
     before do
-      email.destroy
+      mailshot.destroy
     end
 
     it "enqueues a job" do

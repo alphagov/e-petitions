@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_214559) do
+ActiveRecord::Schema.define(version: 2022_01_31_160157) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -115,6 +115,16 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.index ["petition_id"], name: "index_archived_petition_emails_on_petition_id"
   end
 
+  create_table "archived_petition_mailshots", id: :serial, force: :cascade do |t|
+    t.bigint "petition_id"
+    t.string "subject", null: false
+    t.text "body"
+    t.string "sent_by"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["petition_id"], name: "index_archived_petition_mailshots_on_petition_id"
+  end
+
   create_table "archived_petitions", id: :serial, force: :cascade do |t|
     t.string "state", limit: 10, default: "closed", null: false
     t.datetime "opened_at"
@@ -152,6 +162,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.datetime "anonymized_at"
     t.integer "moderated_by_id"
     t.integer "topics", default: [], null: false, array: true
+    t.datetime "email_requested_for_petition_mailshot_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -206,6 +217,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.boolean "creator", default: false, null: false
     t.boolean "sponsor", default: false, null: false
     t.datetime "anonymized_at"
+    t.datetime "petition_mailshot_at"
     t.index "((ip_address)::inet)", name: "index_archived_signatures_on_inet"
     t.index "((regexp_replace(\"left\"(lower((email)::text), (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"(lower((email)::text), \"position\"((email)::text, '@'::text))))", name: "index_archived_signatures_on_lower_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_archived_signatures_on_sector_and_petition_id"
@@ -338,6 +350,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.datetime "updated_at", null: false
     t.datetime "debate_scheduled"
     t.datetime "petition_email"
+    t.datetime "petition_mailshot"
     t.index ["petition_id"], name: "index_email_requested_receipts_on_petition_id"
   end
 
@@ -459,6 +472,16 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["petition_id"], name: "index_petition_emails_on_petition_id"
+  end
+
+  create_table "petition_mailshots", id: :serial, force: :cascade do |t|
+    t.bigint "petition_id"
+    t.string "subject", null: false
+    t.text "body"
+    t.string "sent_by"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["petition_id"], name: "index_petition_mailshots_on_petition_id"
   end
 
   create_table "petition_statistics", id: :serial, force: :cascade do |t|
@@ -620,6 +643,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
     t.string "validated_ip"
     t.string "canonical_email"
     t.datetime "anonymized_at"
+    t.datetime "petition_mailshot_at"
     t.index "((ip_address)::inet)", name: "index_signatures_on_inet"
     t.index "((regexp_replace(\"left\"(lower((email)::text), (\"position\"((email)::text, '@'::text) - 1)), '\\.|\\+.+'::text, ''::text, 'g'::text) || \"substring\"(lower((email)::text), \"position\"((email)::text, '@'::text))))", name: "index_signatures_on_lower_normalized_email"
     t.index "\"left\"((postcode)::text, '-3'::integer), petition_id", name: "index_signatures_on_sector_and_petition_id"
@@ -732,6 +756,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
   add_foreign_key "archived_government_responses", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_notes", "archived_petitions", column: "petition_id", on_delete: :cascade
   add_foreign_key "archived_petition_emails", "archived_petitions", column: "petition_id", on_delete: :cascade
+  add_foreign_key "archived_petition_mailshots", "archived_petitions", column: "petition_id"
   add_foreign_key "archived_petitions", "admin_users", column: "moderated_by_id"
   add_foreign_key "archived_petitions", "parliaments"
   add_foreign_key "archived_rejections", "archived_petitions", column: "petition_id", on_delete: :cascade
@@ -745,6 +770,7 @@ ActiveRecord::Schema.define(version: 2021_04_21_214559) do
   add_foreign_key "government_responses", "petitions", on_delete: :cascade
   add_foreign_key "notes", "petitions", on_delete: :cascade
   add_foreign_key "petition_emails", "petitions", on_delete: :cascade
+  add_foreign_key "petition_mailshots", "petitions"
   add_foreign_key "petition_statistics", "petitions"
   add_foreign_key "petitions", "admin_users", column: "moderated_by_id"
   add_foreign_key "rejections", "petitions", on_delete: :cascade

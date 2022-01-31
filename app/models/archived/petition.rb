@@ -26,7 +26,8 @@ module Archived
     has_one :note, dependent: :destroy
     has_one :rejection, dependent: :destroy
 
-    has_many :emails, :dependent => :destroy
+    has_many :emails, dependent: :destroy
+    has_many :mailshots, dependent: :destroy
     has_many :signatures
     has_many :sponsors, -> { sponsors }, class_name: "Signature"
 
@@ -340,11 +341,11 @@ module Archived
       update_column("email_requested_for_#{name}_at", to)
     end
 
-    def signatures_to_email_for(name)
+    def signatures_to_email_for(name, scope = nil)
       if timestamp = get_email_requested_at_for(name)
-        signatures.need_emailing_for(name, since: timestamp)
+        signatures.need_emailing_for(name, since: timestamp, scope: scope)
       else
-        raise ArgumentError, "The #{name} email has not been requested for petition #{id}"
+        raise ArgumentError, "The #{name} email has not been requested for archived petition #{id}"
       end
     end
 

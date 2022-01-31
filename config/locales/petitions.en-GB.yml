@@ -139,6 +139,8 @@ en-GB:
           Please confirm your email address
         email_duplicate_signatures: |-
           Duplicate signature of petition
+        mailshot_for_signer: |-
+          %{subject}
         notify_signer_of_positive_debate_outcome: |-
           Parliament debated “%{action}”
         notify_signer_of_negative_debate_outcome: |-
@@ -150,6 +152,8 @@ en-GB:
 
         # Emails to people who create petitions
         email_creator: |-
+          %{subject}
+        mailshot_for_creator: |-
           %{subject}
         notify_creator_of_positive_debate_outcome: |-
           Parliament debated “%{action}”

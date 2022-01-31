@@ -7,7 +7,7 @@ module Archived
       petition = email.petition
       signature = petition.signatures.validated.last
 
-      PetitionMailer.email_signer(petition, signature, email)
+      Archived::PetitionMailer.email_signer(petition, signature, email)
     end
 
     def email_creator
@@ -15,7 +15,23 @@ module Archived
       petition = email.petition
       signature = petition.creator
 
-      PetitionMailer.email_creator(petition, signature, email)
+      Archived::PetitionMailer.email_creator(petition, signature, email)
+    end
+
+    def mailshot_for_signer
+      mailshot = Archived::Petition::Mailshot.last
+      petition = mailshot.petition
+      signature = petition.signatures.validated.last
+
+      Archived::PetitionMailer.mailshot_for_signer(petition, signature, mailshot)
+    end
+
+    def mailshot_for_creator
+      mailshot = Archived::Petition::Mailshot.last
+      petition = mailshot.petition
+      signature = petition.creator
+
+      Archived::PetitionMailer.mailshot_for_creator(petition, signature, mailshot)
     end
 
     def notify_signer_of_threshold_response

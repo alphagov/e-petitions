@@ -27,6 +27,7 @@ RSpec.describe Archived::Signature, type: :model do
     it { is_expected.to have_db_column(:debate_scheduled_email_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:debate_outcome_email_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:petition_email_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:petition_mailshot_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:uuid).of_type(:uuid) }
     it { is_expected.to have_db_column(:creator).of_type(:boolean).with_options(default: false, null: false) }
     it { is_expected.to have_db_column(:sponsor).of_type(:boolean).with_options(default: false, null: false) }
@@ -208,6 +209,21 @@ RSpec.describe Archived::Signature, type: :model do
 
         it "does not include the signature" do
           expect(signatures).not_to include(subscribed)
+        end
+      end
+
+      context "when there is an additional scope" do
+        let!(:coventry_signature) { FactoryBot.create(:archived_signature, :validated, constituency_id: "3427") }
+        let!(:romford_signature) { FactoryBot.create(:archived_signature, :validated, constituency_id: "3703") }
+
+        subject(:signatures) { described_class.need_emailing_for(timestamp, since: requested_at, scope: { constituency_id: "3427" }) }
+
+        it "returns signatures within the scope" do
+          expect(subject).to include coventry_signature
+        end
+
+        it "does not return signatures outside the scope" do
+          expect(subject).not_to include romford_signature
         end
       end
     end
