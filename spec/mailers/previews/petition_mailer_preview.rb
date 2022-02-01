@@ -28,6 +28,22 @@ class PetitionMailerPreview < ActionMailer::Preview
     PetitionMailer.email_creator(petition, signature, email)
   end
 
+  def mailshot_for_signer
+    mailshot = Petition::Mailshot.last
+    petition = mailshot.petition
+    signature = petition.signatures.validated.last
+
+    PetitionMailer.mailshot_for_signer(petition, signature, mailshot)
+  end
+
+  def mailshot_for_creator
+    mailshot = Petition::Mailshot.last
+    petition = mailshot.petition
+    signature = petition.creator
+
+    PetitionMailer.mailshot_for_creator(petition, signature, mailshot)
+  end
+
   def notify_creator_that_moderation_is_delayed
     petition = Petition.overdue_in_moderation.last
     signature = petition.creator

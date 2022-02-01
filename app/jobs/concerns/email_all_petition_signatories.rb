@@ -10,14 +10,14 @@ module EmailAllPetitionSignatories
     class_attribute :email_delivery_job_class
     class_attribute :timestamp_name
 
-    attr_reader :petition, :requested_at
+    attr_reader :petition, :requested_at, :scope
 
     queue_as :high_priority
   end
 
   module ClassMethods
     def run_later_tonight(**args)
-      petition, @requested_at = args[:petition], nil
+      petition, @requested_at = args[:petition], args[:requested_at]
 
       petition.set_email_requested_at_for(timestamp_name, to: requested_at)
       set(wait_until: later_tonight).perform_later(**args.merge(requested_at: requested_at_iso8601))
@@ -47,7 +47,9 @@ module EmailAllPetitionSignatories
   end
 
   def perform(**args)
-    @petition, @requested_at = args[:petition], args[:requested_at]
+    @petition = args[:petition]
+    @requested_at = args[:requested_at]
+    @scope = args[:scope]
 
     # If the petition has been updated since the job
     # was queued then don't send the emails.
@@ -89,7 +91,7 @@ module EmailAllPetitionSignatories
   end
 
   def signatures_to_email
-    petition.signatures_to_email_for(timestamp_name)
+    petition.signatures_to_email_for(timestamp_name, scope)
   end
 
   def set_appsignal_namespace

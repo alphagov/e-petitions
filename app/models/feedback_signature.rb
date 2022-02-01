@@ -1,10 +1,10 @@
-FeedbackSignature = Struct.new(:petition) do
+FeedbackSignature = Struct.new(:petition, :name, :email) do
   def name
-    'Petitions team'
+    self[:name] || 'Petitions team'
   end
 
   def email
-    rfc2822.address
+    self[:email] || rfc2822.address
   end
 
   def unsubscribe_token

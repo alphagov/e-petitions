@@ -142,6 +142,62 @@ RSpec.describe Constituency, type: :model do
     end
   end
 
+  describe ".english" do
+    let!(:english_constituency) { FactoryBot.create(:constituency, :england) }
+    let!(:northern_irish_constituency) { FactoryBot.create(:constituency, :northern_ireland) }
+    let!(:scottish_constituency) { FactoryBot.create(:constituency, :scotland) }
+    let!(:welsh_constituency) { FactoryBot.create(:constituency, :wales) }
+
+    it "only finds English constituencies" do
+      expect(described_class.english).to include(english_constituency)
+      expect(described_class.english).not_to include(northern_irish_constituency)
+      expect(described_class.english).not_to include(scottish_constituency)
+      expect(described_class.english).not_to include(welsh_constituency)
+    end
+  end
+
+  describe ".northern_irish" do
+    let!(:english_constituency) { FactoryBot.create(:constituency, :england) }
+    let!(:northern_irish_constituency) { FactoryBot.create(:constituency, :northern_ireland) }
+    let!(:scottish_constituency) { FactoryBot.create(:constituency, :scotland) }
+    let!(:welsh_constituency) { FactoryBot.create(:constituency, :wales) }
+
+    it "only finds Northern Irish constituencies" do
+      expect(described_class.northern_irish).to include(northern_irish_constituency)
+      expect(described_class.northern_irish).not_to include(english_constituency)
+      expect(described_class.northern_irish).not_to include(scottish_constituency)
+      expect(described_class.northern_irish).not_to include(welsh_constituency)
+    end
+  end
+
+  describe ".scottish" do
+    let!(:english_constituency) { FactoryBot.create(:constituency, :england) }
+    let!(:northern_irish_constituency) { FactoryBot.create(:constituency, :northern_ireland) }
+    let!(:scottish_constituency) { FactoryBot.create(:constituency, :scotland) }
+    let!(:welsh_constituency) { FactoryBot.create(:constituency, :wales) }
+
+    it "only finds Scottish constituencies" do
+      expect(described_class.scottish).to include(scottish_constituency)
+      expect(described_class.scottish).not_to include(english_constituency)
+      expect(described_class.scottish).not_to include(northern_irish_constituency)
+      expect(described_class.scottish).not_to include(welsh_constituency)
+    end
+  end
+
+  describe ".welsh" do
+    let!(:english_constituency) { FactoryBot.create(:constituency, :england) }
+    let!(:northern_irish_constituency) { FactoryBot.create(:constituency, :northern_ireland) }
+    let!(:scottish_constituency) { FactoryBot.create(:constituency, :scotland) }
+    let!(:welsh_constituency) { FactoryBot.create(:constituency, :wales) }
+
+    it "only finds Welsh constituencies" do
+      expect(described_class.welsh).to include(welsh_constituency)
+      expect(described_class.welsh).not_to include(english_constituency)
+      expect(described_class.welsh).not_to include(northern_irish_constituency)
+      expect(described_class.welsh).not_to include(scottish_constituency)
+    end
+  end
+
   describe ".find_by_postcode" do
     context "when the constituency doesn't exist in the database" do
       before do

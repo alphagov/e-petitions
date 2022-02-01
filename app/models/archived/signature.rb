@@ -22,7 +22,8 @@ module Archived
       'government_response' => :government_response_email_at,
       'debate_scheduled'    => :debate_scheduled_email_at,
       'debate_outcome'      => :debate_outcome_email_at,
-      'petition_email'      => :petition_email_at
+      'petition_email'      => :petition_email_at,
+      'petition_mailshot'   => :petition_mailshot_at
     }
 
     belongs_to :petition
@@ -99,8 +100,8 @@ module Archived
         where(column.eq(nil).or(column.lt(since)))
       end
 
-      def need_emailing_for(timestamp, since:)
-        validated.subscribed.for_timestamp(timestamp, since: since)
+      def need_emailing_for(timestamp, since:, scope: nil)
+        validated.subscribed.where(scope).for_timestamp(timestamp, since: since)
       end
 
       def subscribed

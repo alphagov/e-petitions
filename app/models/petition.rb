@@ -101,6 +101,7 @@ class Petition < ActiveRecord::Base
   has_many :country_petition_journals, dependent: :destroy
   has_many :constituency_petition_journals, dependent: :destroy
   has_many :emails, dependent: :destroy
+  has_many :mailshots, dependent: :destroy
   has_many :invalidations
   has_many :trending_ips, dependent: :delete_all
   has_many :trending_domains, dependent: :delete_all
@@ -977,10 +978,12 @@ class Petition < ActiveRecord::Base
     email_requested_receipt!.set(name, to)
   end
 
-  def signatures_to_email_for(name)
-    timestamp = get_email_requested_at_for(name)
-    raise ArgumentError if timestamp.nil?
-    signatures.need_emailing_for(name, since: timestamp)
+  def signatures_to_email_for(name, scope = nil)
+    if timestamp = get_email_requested_at_for(name)
+      signatures.need_emailing_for(name, since: timestamp, scope: scope)
+    else
+      raise ArgumentError, "The #{name} email has not been requested for petition #{id}"
+    end
   end
 
   def awaiting_debate?

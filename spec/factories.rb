@@ -61,6 +61,13 @@ FactoryBot.define do
     sent_by { "Admin User" }
   end
 
+  factory :archived_petition_mailshot, class: "Archived::Petition::Mailshot" do
+    association :petition, factory: :archived_petition
+    subject { "Message Subject" }
+    body { "Message body" }
+    sent_by { "Admin User" }
+  end
+
   factory :archived_petition, class: "Archived::Petition" do
     transient do
       sponsors_signed { nil }
@@ -317,6 +324,7 @@ FactoryBot.define do
         email_requested_for_debate_scheduled_at { nil }
         email_requested_for_debate_outcome_at { nil }
         email_requested_for_petition_email_at { nil }
+        email_requested_for_petition_mailshot_at { nil }
       end
 
       after(:build) do |petition, evaluator|
@@ -325,6 +333,7 @@ FactoryBot.define do
           r.debate_scheduled = evaluator.email_requested_for_debate_scheduled_at
           r.debate_outcome = evaluator.email_requested_for_debate_outcome_at
           r.petition_email = evaluator.email_requested_for_petition_email_at
+          r.petition_mailshot = evaluator.email_requested_for_petition_mailshot_at
         end
       end
     end
@@ -642,7 +651,7 @@ FactoryBot.define do
 
     england
 
-    name { Faker::Address.county }
+    name { Faker::Address.unique.county }
     external_id { generate(:constituency_id) }
     mp_name { "#{Faker::Name.name} MP" }
     mp_id { generate(:mp_id) }
@@ -691,6 +700,13 @@ FactoryBot.define do
   end
 
   factory :petition_email, class: "Petition::Email" do
+    association :petition, factory: :petition
+    subject { "Message Subject" }
+    body { "Message body" }
+    sent_by { "Admin User" }
+  end
+
+  factory :petition_mailshot, class: "Petition::Mailshot" do
     association :petition, factory: :petition
     subject { "Message Subject" }
     body { "Message body" }

@@ -61,6 +61,22 @@ class Constituency < ActiveRecord::Base
       end
     end
 
+    def english
+      where(arel_table[:ons_code].matches('E%'))
+    end
+
+    def northern_irish
+      where(arel_table[:ons_code].matches('N%'))
+    end
+
+    def scottish
+      where(arel_table[:ons_code].matches('S%'))
+    end
+
+    def welsh
+      where(arel_table[:ons_code].matches('W%'))
+    end
+
     def query
       ApiQuery.new
     end

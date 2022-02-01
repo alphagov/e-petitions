@@ -314,4 +314,14 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.email_requested_for_petition_email_at).to be_usec_precise_with(email_request.petition_email)
     end
   end
+
+  context "with a petition that has an petition_mailshot email scheduled" do
+    let(:petition) do
+      FactoryBot.create(:closed_petition, :email_requested, email_requested_for_petition_mailshot_at: Time.current)
+    end
+
+    it "copies the receipt timestamp to the archived petition" do
+      expect(archived_petition.email_requested_for_petition_mailshot_at).to be_usec_precise_with(email_request.petition_mailshot)
+    end
+  end
 end

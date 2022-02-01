@@ -27,8 +27,25 @@ class PetitionMailer < ApplicationMailer
 
   def email_creator(petition, signature, email)
     @petition, @signature, @email = petition, signature, email
+
     mail to: @signature.email,
       subject: subject_for(:email_creator),
+      list_unsubscribe: unsubscribe_url
+  end
+
+  def mailshot_for_signer(petition, signature, mailshot)
+    @petition, @signature, @mailshot = petition, signature, mailshot
+
+    mail to: @signature.email,
+      subject: subject_for(:mailshot_for_signer),
+      list_unsubscribe: unsubscribe_url
+  end
+
+  def mailshot_for_creator(petition, signature, mailshot)
+    @petition, @signature, @mailshot = petition, signature, mailshot
+
+    mail to: @signature.email,
+      subject: subject_for(:mailshot_for_creator),
       list_unsubscribe: unsubscribe_url
   end
 
@@ -187,6 +204,10 @@ class PetitionMailer < ApplicationMailer
 
       if defined?(@email)
         options[:subject] = @email.subject
+      end
+
+      if defined?(@mailshot)
+        options[:subject] = @mailshot.subject
       end
 
       if defined?(@subject)
