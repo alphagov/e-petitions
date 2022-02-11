@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 # Load environment variables
 gem 'dotenv-rails', require: 'dotenv/rails-now'
 
-gem 'rails', '6.1.4.4'
+gem 'rails', '6.1.4.6'
 
 gem 'rake'
 gem 'pg'
