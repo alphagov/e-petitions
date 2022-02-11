@@ -1,8 +1,6 @@
 require 'i18n/backend/base'
 
 class LanguageBackend
-  using I18n::HashRefinements
-
   module Implementation
     include I18n::Backend::Base
     include I18n::Backend::Pluralization
