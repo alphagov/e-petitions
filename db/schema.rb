@@ -556,6 +556,11 @@ ActiveRecord::Schema.define(version: 2022_01_31_160157) do
     t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
   end
 
+  create_table "privacy_notifications", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rate_limits", id: :serial, force: :cascade do |t|
     t.integer "burst_rate", default: 1, null: false
     t.integer "burst_period", default: 60, null: false

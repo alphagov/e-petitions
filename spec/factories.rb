@@ -899,4 +899,12 @@ FactoryBot.define do
       url { "https://www.gov.uk/government/organisations/department-for-international-development" }
     end
   end
+
+  factory :privacy_notification do
+    sequence(:id) do |n|
+      Digest::UUID.uuid_v5(
+        Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com"
+      )
+    end
+  end
 end

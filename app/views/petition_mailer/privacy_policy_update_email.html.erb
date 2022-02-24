@@ -1,0 +1,223 @@
+<p>Dear <%= @name %></p>
+
+<p>
+  We're getting in touch to let you know we’re making changes to the privacy notice for the UK Government and Parliament Petitions site (<%= link_to(nil, home_url) %>)on 1st March 2022. We are contacting you to make you aware of these changes because you have started/signed the following petitions that will be affected by these changes:
+</p>
+
+<% @petitions.each do |petition| %>
+  <p>
+    <strong><%= petition.action %></strong>
+    <br>
+    <%= link_to(nil, petition_url(petition)) %>
+  </p>
+<% end %>
+
+<% if @remaining_petition_count > 0 %>
+  <p>
+    Plus another
+    <%= pluralize(@remaining_petition_count, "petition", locale: :en) %>
+  </p>
+<% end %>
+
+<p>
+  We retain your personal data for as long as is necessary for the purpose it was collected.  We will never share or sell your personal data to other organisations for direct marketing purposes.
+</p>
+
+<p>What's changing and why?</p>
+
+<ul>
+  <li>
+    The privacy notice has been updated. This is to ensure the privacy notice is up to date and complies with all relevant legislation, including the United Kingdom General Data Protection Regulation (UK GDPR) and Data Protection Act 2018.
+  </li>
+  <li>
+    The House of Commons is now the sole data controller for the site. This update reflects the way that your data is stored and used.
+  </li>
+  <li>
+    Information about cookies has been moved to a new page at <%= link_to(nil, cookies_url) %>.
+  </li>
+  <li>
+    How long we keep your data.  Personal data was kept for 6 months after a petition closed, but this has meant that the Petitions Committee hasn't been able to contact petitioners who opt-in to updates about their petitions when a debate has been scheduled or when other relevant Parliamentary business has taken place more than 6 months after a petition closed. This update means that from 1st March 2022, we will hold your personal data for six months after the dissolution of the current Parliament. Your data protection rights are not affected by this change and you can exercise those rights at any time as detailed in the privacy notice.
+  </li>
+</ul>
+
+<p>
+  You can read the updated privacy notice below or at <%= link_to(nil, privacy_url) %> from 1st March 2022. This includes information about how to contact us.
+</p>
+
+<p>
+  <%= t("petitions.emails.signoff_prefix") %>
+  <br>
+  <%= t("petitions.emails.signoff_suffix") %>
+</p>
+
+<h1>Privacy Notice</h1>
+
+<p>
+  We respect your right to privacy and managed your personal data in line with our responsibilities under the United Kingdom General Data Protection Regulation (UK GDPR) and Data Protection Act 2018 (DPA 2018) . This privacy notice provides the information required by the UK GDPR about the personal data that we collect from you and how we may use your information.
+</p>
+
+<p>
+  In this notice, references to 'us', 'our' or 'we' are to the House of Commons; and to ‘you’ or ‘your’ are to an individual whose personal data we process.
+</p>
+
+<p>
+  Everything that we do with your personal data – for example, collecting, storing, using, sharing or deleting it – is referred to as 'processing'.
+</p>
+
+<p>
+  This notice will be updated periodically.  We will communicate any significant changes as appropriate.
+</p>
+
+<h2>1. About us</h2>
+
+<p>
+  The Corporate Officer of the House of Commons (the Clerk of the House) is the Controller of any personal data processed as described in this Privacy Notice.
+</p>
+
+<p>
+  The House of Commons Data Protection Officer is the Head of Information Rights and Information Security (IRIS).
+</p>
+
+<p>
+  If you have any questions about the use of your personal data, please contact IRIS:
+</p>
+
+<ul>
+  <li>Email: <%= mail_to("IRIS@parliament.uk") %></li>
+  <li>Telephone: 0207 219 4296</li>
+  <li>Post: IRIS Service, House of Commons, SW1A 0AA</li>
+</ul>
+
+<h2>2. The personal data we process</h2>
+
+<p>
+  When you contact us, visit us, access or use our services either online, by post, in person or by other means, we may collect, store and use your personal data.
+</p>
+
+<p>
+  The personal data we collect from people who start and sign petitions will include: your name, your email address, your postcode, the country you live in, whether you are a British citizen, the IP address you use when starting or signing a petition.
+</p>
+
+<h2>3. Use of your personal data</h2>
+
+<p>
+  The Petitions service is provided by the House of Commons. Your personal data will be processed for the purposes of starting and signing petitions to raise issues with the UK Government and Parliament.
+</p>
+
+<p>We use your personal data to:</p>
+
+<ul>
+  <li>check that you're eligible to sign a petition</li>
+  <li>make sure that people only sign a petition once</li>
+  <li>contact you about petitions you start</li>
+  <li>with your consent, we may send you updates about petitions you have signed.</li>
+</ul>
+
+<p>
+  If you start a petition and we accept it, your name will be published with the petition. We won’t publish any other personal information about you. If you’ve signed a petition, we won’t publish any personal information about you. We’ll use your postcode to work out how many people in each parliamentary constituency have signed a petition.
+</p>
+
+<p>
+  For the purpose of petitions, we consider that the lawful basis for processing your data is that we are engaged in a public task.  The processing is necessary for the performance of a public task, namely the exercise of a function of the House of Commons (UK GDPR Article 6 (1) (e) and DPA 2018 (8)).  Specifically, processing this data is necessary for the e-petitions website and the work of the Petitions Committee.
+</p>
+
+<p>
+  For the purpose of informing you about the status of petitions, we rely on your consent to send updates to an email address provided by you (UK GDPR Article 6(1)(a)).
+</p>
+
+<p>
+  Whilst there is no requirement to provide special category data, any information you provide which includes racial or ethnic origin; religious or philosophical beliefs; trade union membership; genetic and biometric data; health data; sex life or sexual orientation will be considered necessary for reasons of substantial public interest, namely the exercise of a function of the House of Commons (UK GDPR Article 9 (2)(g) and DPA 2018 Schedule 1 (7)(b)).
+</p>
+
+<p>Our policy for processing special category data can be found here:</p>
+
+<p>
+  <%= link_to(
+    "House of Commons Data Protection information - UK Parliament",
+    "https://www.parliament.uk/site-information/data-protection/commons-data-protection-information"
+  )%>
+</p>
+
+<p>
+  Details about the lawful basis for processing personal data can be found on the <%= link_to("Information Commissioner’s website.", "https://ico.org.uk/for-organisations/guide-to-data-protection/guide-to-the-general-data-protection-regulation-gdpr/lawful-basis-for-processing")%>
+</p>
+
+<p>
+  Unboxed Consulting Limited who provide technical support for the petitions system will also have access to the system for troubleshooting and maintenance purposes only.
+</p>
+
+<h2>4. Sharing your personal data</h2>
+
+<p>We may share or disclose your personal data with:</p>
+
+<ul>
+  <li>Suppliers and contractors of good or services contracted by House of Commons in relation to the purpose</li>
+  <li>
+    Other organisations where there is a lawful basis to do so or a duty to disclose in order to comply with any legal obligation.  For example, the Police, for the purposes of prevention and detection of crime
+  </li>
+</ul>
+
+<p>
+  We will never share or sell your personal data to other organisations for direct marketing purposes.
+</p>
+
+<h2>5. Retention and security of your personal data</h2>
+
+<p>
+  We will retain your personal data for as long as is necessary for the purpose it was collected.  In most cases, a retention period will apply which can be found in the Houses of Parliament <%= link_to("Authorised Records Disposal Policy", "https://www.parliament.uk/business/publications/parliamentary-archives/who-we-are/information-records-management-service") %> on our website.
+</p>
+
+<p>
+  In relation to Petitions, we will hold your personal data for six months after the dissolution of the current Parliament.  In connection with committee inquiries, we may lawfully retain your personal data for archiving in the public interest and this may amount to indefinite retention
+</p>
+
+<p>
+  Where the personal data held are subject to the requirements of parliamentary privilege, an individual’s rights under the UK GDPR may not apply in order to prevent an infringement of those privileges.  However, we will consider individual rights requests in relation to historic evidence on a case-by-case basis. Please also see section 6 of this notice.
+</p>
+
+<p>
+  We take the security of your data seriously. All personal data you provide to us (whether electronically or in paper form) will be stored securely in accordance with our policies. We have technical and organisational security measures in place to oversee the effective and secure processing of your personal data and to minimise the possibility of the loss or unauthorised access of your personal data.
+</p>
+
+<p>
+  Some personal data controlled by us is held outside the UK, including on data servers in the European Economic Area (EEA).  Under the Data Protection Act 2018, all countries within the EEA are regarded as providing an adequate level of data protection.  We would not transfer personal data to a person in a country outside the UK or EEA unless satisfied that that person and country had safeguards in place to protect personal data.
+</p>
+
+<h2>6. Your rights</h2>
+
+<p>
+  We will ensure you can exercise your rights in relation to the personal data you provide to us in accordance with UK GDPR and DPA 2018.  Under data protection law, you have the right to:
+</p>
+
+<ul>
+  <li>The right to be informed</li>
+  <li>The right of access</li>
+  <li>The right to rectification</li>
+  <li>The right to erasure</li>
+  <li>The right to restrict processing</li>
+  <li>The right to data portability</li>
+  <li>The right to object</li>
+  <li>Rights in relation to automated decision making and profiling.</li>
+</ul>
+
+<p>
+  Some of these rights are subject to the exceptions specified in the UK GDPR and Data Protection Act 2018, in particular:
+</p>
+
+<ul>
+  <li>
+    Parliamentary Privilege - some rights do not apply where required for the purpose of avoiding an infringement of the privileges of either House of Parliament. (para 13 of Schedule 2 DPA 2018)
+  </li>
+</ul>
+
+<p>
+  Where we are relying on your consent to use your personal data, you can withdraw that consent at any time by contacting <%= mail_to("petitionscommitteeprivacy@parliament.uk") %> or the Data Protection Officer.  However, we may take the decision to continue processing your data, even following a request by you to stop, if we consider it necessary for the purposes of our legitimate interests or those of a third party when balanced against your interests and rights.  In these circumstances you will be advised of the decision and the reason for it.
+</p>
+
+<p>If you have any concerns relating to the use of your personal data, you may complain to the Data Protection Officer. </p>
+
+<p>You also have the right to complain to the Information Commissioner, the supervisory authority, about our processing of your personal data. They can be contacted at Information Commissioner’s Office, Wycliffe House, Water Lane, Wilmslow, Cheshire, SK9 5AF</p>
+
+<p>
+  Further details about your rights can be found on the <%= link_to("Information Commissioner’s website.", "https://ico.org.uk/your-data-matters")%>
+</p>
