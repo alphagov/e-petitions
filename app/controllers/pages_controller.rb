@@ -46,4 +46,10 @@ class PagesController < ApplicationController
       format.json
     end
   end
+
+  def cookies
+    respond_to do |format|
+      format.html
+    end
+  end
 end

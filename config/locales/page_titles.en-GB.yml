@@ -35,6 +35,7 @@ en-GB:
       signed: "Thank you - Petitions"
       thank_you: "%{petition} - Thank you for supporting this petition - Petitions"
     pages:
+      cookies: "Cookies"
       index: "Petitions - UK Government and Parliament"
       help: "How petitions work"
       privacy: "Privacy notice"

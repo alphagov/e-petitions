@@ -21,6 +21,13 @@ Feature: User views static pages
     And I should see "Privacy notice" in the browser page title
     And the markup should be valid
 
+  Scenario: I navigate to the Cookies page
+    When I go to the home page
+    And I follow "Cookies"
+    Then I should be on the cookies page
+    And I should see "Cookies" in the browser page title
+    And the markup should be valid
+
   Scenario: I navigate to Accessibility statement
     When I go to the home page
     And I follow "Accessibility statement"
