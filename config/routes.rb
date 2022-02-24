@@ -10,7 +10,7 @@ Rails.application.routes.draw do
 
     controller 'pages' do
       get '/',         action: 'index', as: :home
-      get '/cookies',  action: 'cookies'
+      get '/cookies',  action: 'cookie_policy'
       get '/help',     action: 'help'
       get '/privacy',  action: 'privacy'
       get '/trending', action: 'trending'

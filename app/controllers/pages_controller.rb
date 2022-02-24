@@ -47,7 +47,7 @@ class PagesController < ApplicationController
     end
   end
 
-  def cookies
+  def cookie_policy
     respond_to do |format|
       format.html
     end
