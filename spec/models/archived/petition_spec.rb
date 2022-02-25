@@ -378,7 +378,105 @@ RSpec.describe Archived::Petition, type: :model do
     end
   end
 
+  describe ".can_anonymize?" do
+    context "when there is an unanonymized petition not marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: nil, do_not_anonymize: nil) }
+
+      it "returns true" do
+        expect(described_class.can_anonymize?).to eq true
+      end
+    end
+
+    context "when there is an unanonymized petition marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: nil, do_not_anonymize: true) }
+
+      it "returns false" do
+        expect(described_class.can_anonymize?).to eq false
+      end
+    end
+
+    context "when there is one anonymized petition not marked to remain anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, anonymized_at: 1.day.ago, do_not_anonymize: nil) }
+
+      it "returns false" do
+        expect(described_class.can_anonymize?).to eq false
+      end
+    end
+  end
+
   describe ".anonymize_petitions!" do
+    context "when a petition was rejected less than six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :rejected,
+          rejected_at: 5.months.ago
+        )
+      end
+
+      it "does not anonymize the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was rejected six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :rejected,
+          rejected_at: 6.months.ago
+        )
+      end
+
+      it "anonymizes the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was hidden less than six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :hidden,
+          rejected_at: 5.months.ago
+        )
+      end
+
+      it "does not anonymize the petition" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change { petition.reload.anonymized? }
+      end
+    end
+
+    context "when a petition was hidden six months ago" do
+      let!(:petition) do
+        FactoryBot.create(
+          :archived_petition,
+          :hidden,
+          rejected_at: 6.months.ago
+        )
+      end
+
+      it "anonymises the petitions" do
+        expect {
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.to change { petition.reload.anonymized? }
+      end
+    end
+
     context "when a petition has closed less than six months ago" do
       let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 5.months.ago) }
 
@@ -400,6 +498,18 @@ RSpec.describe Archived::Petition, type: :model do
             described_class.anonymize_petitions!
           }
         }.to change{ petition.reload.anonymized? }.from(false).to(true)
+      end
+    end
+
+    context "when a petition has been set to not be anonymized" do
+      let!(:petition) { FactoryBot.create(:archived_petition, :closed, closed_at: 7.months.ago, do_not_anonymize: true) }
+
+      it "does not anonymize the petition" do
+        expect{
+          perform_enqueued_jobs {
+            described_class.anonymize_petitions!
+          }
+        }.not_to change{ petition.reload.anonymized? }
       end
     end
   end

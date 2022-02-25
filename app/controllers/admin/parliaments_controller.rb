@@ -19,6 +19,9 @@ class Admin::ParliamentsController < Admin::AdminController
       elsif archive_petitions?
         @parliament.start_archiving!
         redirect_to admin_parliament_url(tab: params[:tab]), notice: :petitions_archiving
+      elsif anonymize_petitions?
+        @parliament.start_anonymizing!
+        redirect_to admin_parliament_url(tab: params[:tab]), notice: :petitions_anonymizing
       elsif archive_parliament?
         @parliament.archive!
         redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_archived
@@ -60,6 +63,10 @@ class Admin::ParliamentsController < Admin::AdminController
 
   def archive_petitions?
     params.key?(:archive_petitions) && @parliament.can_archive_petitions?
+  end
+
+  def anonymize_petitions?
+    params.key?(:anonymize_petitions) && Archived::Petition.can_anonymize?
   end
 
   def archive_parliament?

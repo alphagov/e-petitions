@@ -163,6 +163,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_160157) do
     t.integer "moderated_by_id"
     t.integer "topics", default: [], null: false, array: true
     t.datetime "email_requested_for_petition_mailshot_at"
+    t.boolean "do_not_anonymize"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_archived_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_archived_petitions_on_background", using: :gin
     t.index "to_tsvector('english'::regconfig, additional_details)", name: "index_archived_petitions_on_additional_details", using: :gin
@@ -531,6 +532,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_160157) do
     t.integer "moderated_by_id"
     t.integer "deadline_extension", default: 0, null: false
     t.integer "topics", default: [], null: false, array: true
+    t.boolean "do_not_anonymize"
     t.index "((last_signed_at > signature_count_validated_at))", name: "index_petitions_on_validated_at_and_signed_at"
     t.index "to_tsvector('english'::regconfig, (action)::text)", name: "index_petitions_on_action", using: :gin
     t.index "to_tsvector('english'::regconfig, (background)::text)", name: "index_petitions_on_background", using: :gin
@@ -552,6 +554,11 @@ ActiveRecord::Schema.define(version: 2022_01_31_160157) do
     t.index ["state"], name: "index_petitions_on_state"
     t.index ["tags"], name: "index_petitions_on_tags", opclass: :gin__int_ops, using: :gin
     t.index ["topics"], name: "index_petitions_on_topics", opclass: :gin__int_ops, using: :gin
+  end
+
+  create_table "privacy_notifications", id: :uuid, default: nil, force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rate_limits", id: :serial, force: :cascade do |t|

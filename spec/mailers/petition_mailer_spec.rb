@@ -873,4 +873,30 @@ RSpec.describe PetitionMailer, type: :mailer do
       end
     end
   end
+
+  describe ".privacy_policy_update_email" do
+    let(:signature) { FactoryBot.create(:signature) }
+
+    let(:privacy_notification) do
+      FactoryBot.create(:privacy_notification, signature: signature)
+    end
+
+    let(:mail) do
+      described_class.privacy_policy_update_email(privacy_notification)
+    end
+
+    it "sets to" do
+      expect(mail.to).to contain_exactly(signature.email)
+    end
+
+    it "sets subject" do
+      expect(mail.subject).to eq(
+        I18n.t("petitions.emails.subjects.privacy_policy_update_email")
+      )
+    end
+
+    it "sets body" do
+      expect(mail.body.encoded).to include("Dear #{signature.name}")
+    end
+  end
 end

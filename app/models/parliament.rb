@@ -207,6 +207,13 @@ class Parliament < ActiveRecord::Base
     end
   end
 
+  def start_anonymizing!(now = Time.current)
+    if archiving_finished? && Archived::Petition.can_anonymize?
+      time = Date.tomorrow.beginning_of_day
+      Archived::AnonymizePetitionsJob.set(wait_until: time).perform_later(time.iso8601)
+    end
+  end
+
   def schedule_closure!
     if dissolution_announced? && !dissolved?
       ClosePetitionsEarlyJob.schedule_for(dissolution_at)

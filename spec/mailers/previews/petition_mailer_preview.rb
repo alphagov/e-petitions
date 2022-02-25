@@ -115,4 +115,9 @@ class PetitionMailerPreview < ActionMailer::Preview
 
     PetitionMailer.notify_creator_of_debate_outcome(petition, signature)
   end
+
+  def privacy_policy_update_email
+    privacy_notification = PrivacyNotification.last
+    PetitionMailer.privacy_policy_update_email(privacy_notification)
+  end
 end

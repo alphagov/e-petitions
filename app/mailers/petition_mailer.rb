@@ -182,6 +182,17 @@ class PetitionMailer < ApplicationMailer
       list_unsubscribe: unsubscribe_url
   end
 
+  def privacy_policy_update_email(privacy_notification)
+    @name = privacy_notification.name
+    @petitions = privacy_notification.petitions
+    @remaining_petition_count = privacy_notification.remaining_petition_count
+
+    mail(
+      to: privacy_notification.email,
+      subject: subject_for(:privacy_policy_update_email)
+    )
+  end
+
   private
 
   def subject_for(key, options = {})

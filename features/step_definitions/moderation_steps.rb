@@ -8,6 +8,11 @@ When(/^I visit a sponsored petition with action: "([^"]*)", that has background:
   visit admin_petition_url(@sponsored_petition)
 end
 
+Given(/^I visit an archived petition with action: "([^"]*)"$/) do |petition_action|
+  @archived_petition = FactoryBot.create(:archived_petition, action: petition_action)
+  visit admin_archived_petition_url(@archived_petition)
+end
+
 When(/^I reject the petition$/) do
   choose "Reject"
   select "Duplicate petition", :from => :petition_rejection_code

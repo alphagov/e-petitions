@@ -38,6 +38,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
         opened_at: 6.months.ago,
         closed_at: 2.months.ago,
         signature_count: 1234,
+        do_not_anonymize: true,
         moderation_threshold_reached_at: 7.months.ago,
         moderation_lag: 30,
         last_signed_at: 3.months.ago,
@@ -74,6 +75,7 @@ RSpec.describe ArchivePetitionJob, type: :job do
       expect(archived_petition.opened_at).to be_usec_precise_with(petition.opened_at)
       expect(archived_petition.closed_at).to be_usec_precise_with(petition.closed_at)
       expect(archived_petition.signature_count).to eq(petition.signature_count)
+      expect(archived_petition.do_not_anonymize).to eq(petition.do_not_anonymize)
       expect(archived_petition.moderation_threshold_reached_at).to be_usec_precise_with(petition.moderation_threshold_reached_at)
       expect(archived_petition.moderation_lag).to eq(petition.moderation_lag)
       expect(archived_petition.last_signed_at).to be_usec_precise_with(petition.last_signed_at)

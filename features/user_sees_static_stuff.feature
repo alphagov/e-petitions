@@ -14,11 +14,18 @@ Feature: User views static pages
     And I should see "How petitions work" in the browser page title
     And the markup should be valid
 
-  Scenario: I navigate to Privacy and cookies
+  Scenario: I navigate to Privacy notice
     When I go to the home page
-    And I follow "Privacy and cookies"
+    And I follow "Privacy"
     Then I should be on the privacy page
-    And I should see "Privacy and cookies" in the browser page title
+    And I should see "Privacy notice" in the browser page title
+    And the markup should be valid
+
+  Scenario: I navigate to the Cookies page
+    When I go to the home page
+    And I follow "Cookies"
+    Then I should be on the cookies page
+    And I should see "Cookies" in the browser page title
     And the markup should be valid
 
   Scenario: I navigate to Accessibility statement

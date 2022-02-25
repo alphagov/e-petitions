@@ -59,6 +59,14 @@
         <%= error_messages_for_field @petition, :special_consideration %>
       <% end %>
 
+      <%= form_row for: [f.object, :do_not_anonymize] do %>
+        <div class="multiple-choice">
+          <%= f.check_box :do_not_anonymize, tabindex: increment, disabled: @petition.editing_disabled? %>
+          <%= f.label :do_not_anonymize, 'Do not anonymize this petition' %>
+        </div>
+        <%= error_messages_for_field @petition, :do_not_anonymize %>
+      <% end %>
+
       <%= f.submit 'Save', class: 'button', disabled: @petition.editing_disabled? %>
 
       <%= link_to 'Cancel', admin_petition_path(@petition), class: 'button-secondary' %>

@@ -12,6 +12,7 @@ module Archived
     VISIBLE_STATES = [CLOSED_STATE, REJECTED_STATE]
     MODERATED_STATES = [CLOSED_STATE, HIDDEN_STATE, REJECTED_STATE]
     DEBATABLE_STATES = [CLOSED_STATE]
+    REJECTED_STATES = [REJECTED_STATE, HIDDEN_STATE]
 
     belongs_to :parliament, inverse_of: :petitions
 
@@ -214,6 +215,10 @@ module Archived
 
       def removed?(id)
         removed.exists?(id)
+      end
+
+      def can_anonymize?
+        where(anonymized_at: nil).where(do_not_anonymize: [nil, false]).any?
       end
 
       private

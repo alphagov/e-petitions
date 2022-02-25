@@ -26,11 +26,14 @@ Feature: Moderator respond to petition
     Then I fill in "Action" with "We need to save our planet"
     And I fill in "Background" with "Reduce pollution"
     And I fill in "Additional details" with "Enforce Kyoto Protocol in more countries"
+    And I check "Do not anonymize this petition"
     And I press "Save"
     Then I am on the admin petition page for "We need to save our planet"
     And I should see "We need to save our planet"
     And I should see "Reduce pollution"
     And I should see "Enforce Kyoto Protocol in more countries"
+    And I follow "Edit petition"
+    Then the "Do not anonymize this petition" checkbox should be checked
 
   Scenario: Moderator edits and tries to save an invalid petition
     Given I am logged in as a moderator named "Ben Macintosh"

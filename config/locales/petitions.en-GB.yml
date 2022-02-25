@@ -165,6 +165,8 @@ en-GB:
           Government responded to “%{action}”
         notify_creator_that_moderation_is_delayed: |-
           %{subject}
+        privacy_policy_update_email:  |-
+          Petitions – We're Updating Our Privacy Notice
 
         # Emails to people who support a petition
         gather_sponsors_for_petition: |-
