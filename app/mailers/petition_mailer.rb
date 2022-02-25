@@ -184,8 +184,8 @@ class PetitionMailer < ApplicationMailer
 
   def privacy_policy_update_email(privacy_notification)
     @name = privacy_notification.name
-    @petitions = privacy_notification.petitions
-    @remaining_petition_count = privacy_notification.remaining_petition_count
+    @petitions = privacy_notification.petitions.sample
+    @remaining_petition_count = privacy_notification.petitions.remaining_count
 
     mail(
       to: privacy_notification.email,

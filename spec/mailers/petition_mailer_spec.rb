@@ -875,18 +875,37 @@ RSpec.describe PetitionMailer, type: :mailer do
   end
 
   describe ".privacy_policy_update_email" do
-    let(:signature) { FactoryBot.create(:signature) }
-
     let(:privacy_notification) do
-      FactoryBot.create(:privacy_notification, signature: signature)
+      FactoryBot.create(
+        :privacy_notification,
+        id:  "6613a3fd-c2c4-5bc2-a6de-3dc0b2527dd6",
+        ignore_petitions_before: 1.year.ago
+      )
+    end
+
+    let!(:petitions) do
+      6.times.map do |n|
+        petition = FactoryBot.create(:open_petition, created_at: n.days.ago)
+
+        petition.tap do |petition|
+          FactoryBot.create(
+            :validated_signature,
+            name: "Alice",
+            email: "alice@example.com",
+            petition: petition
+          )
+        end
+      end
     end
 
     let(:mail) do
       described_class.privacy_policy_update_email(privacy_notification)
     end
 
+    let(:mail_body) { mail.body.encoded }
+
     it "sets to" do
-      expect(mail.to).to contain_exactly(signature.email)
+      expect(mail.to).to contain_exactly("alice@example.com")
     end
 
     it "sets subject" do
@@ -896,7 +915,19 @@ RSpec.describe PetitionMailer, type: :mailer do
     end
 
     it "sets body" do
-      expect(mail.body.encoded).to include("Dear #{signature.name}")
+      expect(mail_body).to include("Dear Alice")
+    end
+
+    it "includes first 5 petitions" do
+      petitions.first(5).each do |petition|
+        expect(mail_body).to include(petition.action)
+      end
+
+      expect(mail_body).not_to include(petitions.last.action)
+    end
+
+    it "includes remaining petition count" do
+      expect(mail_body).to include("1 petition")
     end
   end
 end
