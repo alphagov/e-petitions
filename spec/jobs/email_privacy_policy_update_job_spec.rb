@@ -4,25 +4,30 @@ RSpec.describe EmailPrivacyPolicyUpdateJob, type: :job do
   describe "perform" do
     context "signature validated, without matching privacy_notification" do
       let(:petition) { FactoryBot.create(:petition) }
+      let(:time) { 1.year.ago }
 
       let!(:signature) do
         FactoryBot.create(:validated_signature, petition: petition)
       end
 
+      let(:subject) do
+        described_class.perform_now(petition: petition, time: time)
+      end
+
       it "sends an email" do
-        expect {
-          described_class.perform_now(petition)
-        }.to change {
-          enqueued_jobs.count
-        }.by(1)
+        expect { subject }.to change { enqueued_jobs.count }.by(1)
       end
 
       it "creates a privacy_notification record" do
-        expect {
-          described_class.perform_now(petition)
-        }.to change {
-          PrivacyNotification.count
-        }.by(1)
+        expect { subject }.to change { PrivacyNotification.count }.by(1)
+      end
+
+      it "sets ignore_petitions_before on privacy_notification" do
+        subject
+
+        expect(PrivacyNotification.last.ignore_petitions_before)
+          .to be_within(1.second)
+          .of(time)
       end
     end
 
@@ -35,19 +40,11 @@ RSpec.describe EmailPrivacyPolicyUpdateJob, type: :job do
         end
 
         it "does no send an email" do
-          expect {
-            described_class.perform_now(petition)
-          }.not_to change {
-            enqueued_jobs.count
-          }
+          expect { subject }.not_to change { enqueued_jobs.count }
         end
 
         it "does not creates a privacy_notification record" do
-          expect {
-            described_class.perform_now(petition)
-          }.not_to change {
-            PrivacyNotification.count
-          }
+          expect { subject }.not_to change { PrivacyNotification.count }
         end
       end
     end
@@ -64,19 +61,11 @@ RSpec.describe EmailPrivacyPolicyUpdateJob, type: :job do
       end
 
       it "does not send an email" do
-        expect {
-          described_class.perform_now(petition)
-        }.not_to change {
-          enqueued_jobs.count
-        }
+        expect { subject }.not_to change { enqueued_jobs.count }
       end
 
       it "does not create a privacy_notification record" do
-        expect {
-          described_class.perform_now(petition)
-        }.not_to change {
-          PrivacyNotification.count
-        }
+        expect { subject }.not_to change { PrivacyNotification.count }
       end
     end
   end

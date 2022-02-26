@@ -1,7 +1,7 @@
 class EmailPrivacyPolicyUpdateJob < ApplicationJob
   queue_as :low_priority
 
-  def perform(petition)
+  def perform(petition:, time:)
     terminating = false
 
     worker = trap("TERM") do
@@ -11,11 +11,15 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
 
     Appsignal.without_instrumentation do
       petition.signatures.validated.find_each do |signature|
-        privacy_notification = PrivacyNotification.create!(id: signature.uuid)
+        privacy_notification = PrivacyNotification.create!(
+          id: signature.uuid,
+          ignore_petitions_before: time
+        )
+
         DeliverPrivacyPolicyUpdateJob.perform_later(privacy_notification)
 
         if terminating
-          reschedule_job(petition)
+          reschedule_job(petition: petition, time: time)
           return true
         end
       rescue ActiveRecord::RecordNotUnique
@@ -28,7 +32,10 @@ class EmailPrivacyPolicyUpdateJob < ApplicationJob
 
   private
 
-  def reschedule_job(petition)
-    self.class.set(wait_until: 5.minutes.from_now).perform_later(petition)
+  def reschedule_job(petition:, time:)
+    self
+      .class
+      .set(wait_until: 5.minutes.from_now)
+      .perform_later(petition: petition, time: time)
   end
 end

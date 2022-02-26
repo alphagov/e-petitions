@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_31_160157) do
+ActiveRecord::Schema.define(version: 2022_02_25_141800) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -559,6 +559,7 @@ ActiveRecord::Schema.define(version: 2022_01_31_160157) do
   create_table "privacy_notifications", id: :uuid, default: nil, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "ignore_petitions_before", null: false
   end
 
   create_table "rate_limits", id: :serial, force: :cascade do |t|

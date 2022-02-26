@@ -901,6 +901,8 @@ FactoryBot.define do
   end
 
   factory :privacy_notification do
+    ignore_petitions_before { 1.year.ago }
+
     sequence(:id) do |n|
       Digest::UUID.uuid_v5(
         Digest::UUID::URL_NAMESPACE, "mailto:jo#{n}@public.com"
