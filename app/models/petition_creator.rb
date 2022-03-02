@@ -9,7 +9,7 @@ class PetitionCreator
   STAGES = %w[petition replay_petition creator replay_email]
 
   PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email]
+  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email, :autocorrect_domain]
   PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
