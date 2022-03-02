@@ -1329,6 +1329,38 @@ RSpec.describe Petition, type: :model do
           expect(described_class.in_need_of_anonymizing).to include(petition)
         end
       end
+
+      context "and it has been rejected for less than six months" do
+        let!(:petition) { FactoryBot.create(:rejected_petition, rejected_at: 5.months.ago, anonymized_at: nil) }
+
+        it "doesn't return the petition" do
+          expect(described_class.in_need_of_anonymizing).not_to include(petition)
+        end
+      end
+
+      context "and it has been closed for more than six months" do
+        let!(:petition) { FactoryBot.create(:rejected_petition, rejected_at: 7.months.ago, anonymized_at: nil) }
+
+        it "returns the petition" do
+          expect(described_class.in_need_of_anonymizing).to include(petition)
+        end
+      end
+
+      context "and it has been stopped for less than six months" do
+        let!(:petition) { FactoryBot.create(:stopped_petition, stopped_at: 5.months.ago, anonymized_at: nil) }
+
+        it "doesn't return the petition" do
+          expect(described_class.in_need_of_anonymizing).not_to include(petition)
+        end
+      end
+
+      context "and it has been stopped for more than six months" do
+        let!(:petition) { FactoryBot.create(:stopped_petition, stopped_at: 7.months.ago, anonymized_at: nil) }
+
+        it "returns the petition" do
+          expect(described_class.in_need_of_anonymizing).to include(petition)
+        end
+      end
     end
   end
 

@@ -20,7 +20,7 @@ module Anonymization
     end
 
     def in_need_of_anonymizing(time = 6.months.ago)
-      not_anonymized.and(closed_before(time).or(rejected_before(time)))
+      not_anonymized.and(closed_before(time).or(rejected_before(time)).or(stopped_before(time)))
     end
 
     def not_anonymized
@@ -33,6 +33,10 @@ module Anonymization
 
     def rejected_before(time)
       where(state: self::REJECTED_STATES).where(arel_table[:rejected_at].lt(time))
+    end
+
+    def stopped_before(time)
+      where(state: self::STOPPED_STATE).where(arel_table[:stopped_at].lt(time))
     end
   end
 
