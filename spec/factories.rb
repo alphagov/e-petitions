@@ -553,6 +553,12 @@ FactoryBot.define do
     invalidated_at { Time.current }
   end
 
+  factory :anonymized_signature, :parent => :validated_signature do
+    after(:create) do |signature, evaluator|
+      signature.anonymize!(signature.petition.anonymized_at)
+    end
+  end
+
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }
 
   factory :sponsor, parent: :pending_signature do

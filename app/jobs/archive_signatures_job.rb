@@ -42,6 +42,7 @@ class ArchiveSignaturesJob < ApplicationJob
                 s.sponsor = signature.sponsor?
                 s.created_at = signature.created_at
                 s.updated_at = signature.updated_at
+                s.anonymized_at = signature.anonymized_at
               end
 
               archived_signature.save!(validate: false)
