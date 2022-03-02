@@ -236,8 +236,8 @@ RSpec.describe CountryPetitionJournal, type: :model do
 
       it 'does not attempt to journal signatures without location codes' do
         # The schema allows for nil countries, but our validations don't - update_column lets us get around that (!)
-        FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'About to disappear').update_column(:location_code, nil)
-        FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'About to disappear').update_column(:location_code, '')
+        FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'AA').update_column(:location_code, nil)
+        FactoryBot.create(:validated_signature, petition: petition_1, location_code: 'ZZ').update_column(:location_code, '')
 
         expect {
           described_class.reset_signature_counts_for(petition_1)

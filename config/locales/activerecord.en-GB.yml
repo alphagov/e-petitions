@@ -196,6 +196,7 @@ en-GB:
         has_uri: "Name can't contain links"
       location_code:
         blank: "Location must be completed"
+        invalid: "Location must be one of those listed below"
       postcode:
         blank: "Postcode must be completed"
         invalid: "Postcode not recognised"

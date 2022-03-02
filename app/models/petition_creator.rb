@@ -185,6 +185,7 @@ class PetitionCreator
     errors.add(:name, :too_long, count: 255) if name.length > 255
     errors.add(:email, :blank) unless email.present?
     errors.add(:location_code, :blank) unless location_code.present?
+    errors.add(:location_code, :invalid) unless location_code =~ /\A[A-Z]{2,3}\z/
     errors.add(:uk_citizenship, :accepted) unless uk_citizenship == "1"
     errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
     errors.add(:name, :has_uri) if URI::regexp =~ name

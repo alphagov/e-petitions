@@ -238,6 +238,8 @@ RSpec.describe Signature, type: :model do
     it { is_expected.to validate_length_of(:constituency_id).is_at_most(255) }
     it { is_expected.to allow_value("Please click this petition.parliament.uk for a special offer").for(:name) }
     it { is_expected.not_to allow_value("Please click this http://petition.parliament.uk for a special offer").for(:name) }
+    it { is_expected.to allow_value("GB").for(:location_code) }
+    it { is_expected.not_to allow_value("United Kingdom").for(:location_code) }
 
     it "validates format of email" do
       s = FactoryBot.build(:signature, :email => 'joe@example.com')

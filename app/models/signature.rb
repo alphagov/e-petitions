@@ -13,6 +13,7 @@ class Signature < ActiveRecord::Base
   has_perishable_token called: 'unsubscribe_token'
 
   ISO8601_TIMESTAMP = /\A\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\z/
+  LOCATION_CODE = /\A[A-Z]{2,3}\z/
 
   PENDING_STATE = 'pending'
   FRAUDULENT_STATE = 'fraudulent'
@@ -39,7 +40,7 @@ class Signature < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validates :name, format: { without: URI::regexp, message: :has_uri }
   validates :email, presence: true, email: { allow_blank: true }
-  validates :location_code, presence: true
+  validates :location_code, presence: true, format: { with: LOCATION_CODE }
   validates :postcode, presence: true, postcode: true, if: :united_kingdom?
   validates :postcode, length: { maximum: 255 }, allow_blank: true
   validates :uk_citizenship, acceptance: true, unless: :persisted?, allow_nil: false
