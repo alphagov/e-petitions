@@ -9,7 +9,7 @@ class PetitionCreator
   STAGES = %w[petition replay_petition creator replay_email]
 
   PETITION_PARAMS  = [:action, :background, :additional_details]
-  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email]
+  SIGNATURE_PARAMS = [:name, :email, :postcode, :location_code, :uk_citizenship, :notify_by_email, :autocorrect_domain]
   PERMITTED_PARAMS = [:q, :stage, :move_back, :move_next, petition_creator: PETITION_PARAMS + SIGNATURE_PARAMS]
 
   attr_reader :params, :errors, :request
@@ -185,6 +185,7 @@ class PetitionCreator
     errors.add(:name, :too_long, count: 255) if name.length > 255
     errors.add(:email, :blank) unless email.present?
     errors.add(:location_code, :blank) unless location_code.present?
+    errors.add(:location_code, :invalid) unless location_code =~ /\A[A-Z]{2,3}\z/
     errors.add(:uk_citizenship, :accepted) unless uk_citizenship == "1"
     errors.add(:postcode, :too_long, count: 255) if postcode.length > 255
     errors.add(:name, :has_uri) if URI::regexp =~ name

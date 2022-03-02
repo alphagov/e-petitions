@@ -409,6 +409,14 @@ FactoryBot.define do
     stopped_at { 1.day.ago }
   end
 
+  factory :anonymized_petition, :parent => :closed_petition do
+    anonymized_at { 1.day.ago }
+
+    after(:create) do |petition, evaluator|
+      petition.signatures.each { |s| s.anonymize!(petition.anonymized_at) }
+    end
+  end
+
   factory :rejected_petition, :parent => :petition do
     state { Petition::REJECTED_STATE }
 
@@ -543,6 +551,12 @@ FactoryBot.define do
   factory :invalidated_signature, :parent => :validated_signature do
     state { Signature::INVALIDATED_STATE }
     invalidated_at { Time.current }
+  end
+
+  factory :anonymized_signature, :parent => :validated_signature do
+    after(:create) do |signature, evaluator|
+      signature.anonymize!(signature.petition.anonymized_at)
+    end
   end
 
   sequence(:sponsor_email) { |n| "sponsor#{n}@example.com" }

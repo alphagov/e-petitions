@@ -227,4 +227,19 @@ RSpec.describe ArchiveSignaturesJob, type: :job do
       expect(signature.valid?).to eq(false)
     end
   end
+
+  context "with a signature that has been anonymized" do
+    let!(:petition) { FactoryBot.create(:anonymized_petition, sponsors_signed: true) }
+    let!(:signature) { FactoryBot.create(:anonymized_signature, petition: petition) }
+
+    before do
+      described_class.perform_now(petition, archived_petition)
+    end
+
+    it_behaves_like "a copied signature"
+
+    it "copies the anonymized_at timestamp" do
+      expect(archived_signature.anonymized_at).to be_usec_precise_with(signature.anonymized_at)
+    end
+  end
 end

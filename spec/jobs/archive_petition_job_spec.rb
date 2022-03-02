@@ -102,6 +102,16 @@ RSpec.describe ArchivePetitionJob, type: :job do
     end
   end
 
+  context "with a anonymized petition" do
+    let(:petition) do
+      FactoryBot.create(:anonymized_petition, anonymized_at: 2.months.ago)
+    end
+
+    it "copies the attributes" do
+      expect(archived_petition.anonymized_at).to be_usec_precise_with(petition.anonymized_at)
+    end
+  end
+
   context "with a petition marked for special consideration" do
     let(:petition) do
       FactoryBot.create(:stopped_petition, special_consideration: true)
