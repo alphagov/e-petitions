@@ -29,7 +29,7 @@ class Admin::ParliamentsController < Admin::AdminController
         redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_updated
       end
     else
-      render :show
+      render :show, alert: :parliament_not_updated
     end
   end
 
