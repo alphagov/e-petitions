@@ -1154,6 +1154,72 @@ RSpec.describe Parliament, type: :model do
     end
   end
 
+  describe "#can_anonymize_petitions?" do
+    context "when parliament has not announced dissolution" do
+      subject :parliament do
+        FactoryBot.create(:parliament)
+      end
+
+      context "and there are petitions that haven't been anonymized" do
+        before do
+          FactoryBot.create(:archived_petition, anonymized_at: nil)
+        end
+
+        it "returns true" do
+          expect(parliament.can_anonymize_petitions?).to eq(true)
+        end
+      end
+
+      context "and all the petitions have been anonymized" do
+        before do
+          FactoryBot.create(:archived_petition, anonymized_at: 1.day.ago)
+        end
+
+        it "returns false" do
+          expect(parliament.can_anonymize_petitions?).to eq(false)
+        end
+      end
+    end
+
+    context "when parliament has announced dissolution" do
+      before do
+        FactoryBot.create(:archived_petition, anonymized_at: nil)
+      end
+
+      context "and the dissolution date has not passed" do
+        subject :parliament do
+          FactoryBot.create(:parliament, :dissolving)
+        end
+
+        it "returns false" do
+          expect(parliament.can_anonymize_petitions?).to eq(false)
+        end
+      end
+
+      context "and the dissolution date has passed" do
+        context "and the petitions have not been archived" do
+          subject :parliament do
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: nil)
+          end
+
+          it "returns false" do
+            expect(parliament.can_anonymize_petitions?).to eq(false)
+          end
+        end
+
+        context "and the petitions are being archived" do
+          subject :parliament do
+            FactoryBot.create(:parliament, :dissolved, archiving_started_at: 2.hours.ago)
+          end
+
+          it "returns false" do
+            expect(parliament.can_anonymize_petitions?).to eq(false)
+          end
+        end
+      end
+    end
+  end
+
   describe "#formatted_threshold_for_response" do
     subject :parliament do
       FactoryBot.build(:parliament, threshold_for_response: 10000)

@@ -208,9 +208,8 @@ class Parliament < ActiveRecord::Base
   end
 
   def start_anonymizing!(now = Time.current)
-    if archiving_finished? && Archived::Petition.can_anonymize?
-      time = Date.tomorrow.beginning_of_day
-      Archived::AnonymizePetitionsJob.set(wait_until: time).perform_later(time.iso8601)
+    unless dissolving? || dissolved? || archiving?
+      Archived::AnonymizePetitionsJob.set(wait_until: midnight).perform_later(midnight.iso8601)
     end
   end
 
@@ -242,6 +241,10 @@ class Parliament < ActiveRecord::Base
     dissolved? && archiving_finished?
   end
 
+  def can_anonymize_petitions?
+    !(dissolving? || dissolved? || archiving?) && Archived::Petition.can_anonymize?
+  end
+
   def formatted_threshold_for_response
     number_to_delimited(threshold_for_response)
   end
@@ -252,5 +255,9 @@ class Parliament < ActiveRecord::Base
 
   def show_on_a_map?
     opening_at > CUTOFF_DATE
+  end
+
+  def midnight
+    @midnight ||= Date.tomorrow.beginning_of_day
   end
 end
