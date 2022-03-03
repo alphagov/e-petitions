@@ -29,7 +29,7 @@ class Admin::ParliamentsController < Admin::AdminController
         redirect_to admin_parliament_url(tab: params[:tab]), notice: :parliament_updated
       end
     else
-      render :show
+      render :show, alert: :parliament_not_updated
     end
   end
 
@@ -66,7 +66,7 @@ class Admin::ParliamentsController < Admin::AdminController
   end
 
   def anonymize_petitions?
-    params.key?(:anonymize_petitions) && Archived::Petition.can_anonymize?
+    params.key?(:anonymize_petitions) && @parliament.can_anonymize_petitions?
   end
 
   def archive_parliament?

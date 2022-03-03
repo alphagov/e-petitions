@@ -83,6 +83,7 @@ en-GB:
       petitions_archiving: "Archiving of petitions was successfully started"
       petitions_anonymizing: "Anonymizing of petitions was successfully started"
       parliament_archived: "Parliament archived successfully"
+      parliament_not_updated: "Parliament could not be updated - please check the form for errors"
       parliament_updated: "Parliament updated successfully"
       petition_email_created: "Created other parliamentary business successfully"
       petition_email_updated: "Updated other parliamentary business successfully"
