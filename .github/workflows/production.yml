@@ -29,7 +29,7 @@ jobs:
       uses: actions/cache@v1
       with:
         path: vendor/bundle
-        key: ubuntu-20.04-gems-${{ hashFiles('**/Gemfile.lock') }}
+        key: ubuntu-20.04-gems-${{ hashFiles('/Gemfile.lock') }}
         restore-keys: |
           ubuntu-20.04-gems-
 
