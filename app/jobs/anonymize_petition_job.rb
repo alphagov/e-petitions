@@ -1,11 +1,11 @@
 class AnonymizePetitionJob < ApplicationJob
-  queue_as :high_priority
+  queue_as :low_priority
 
   rescue_from ActiveRecord::RecordInvalid do |exception|
     Appsignal.send_exception exception
   end
 
-  def perform(petition, time, limit: 1000)
+  def perform(petition, time, limit: 500)
     time = time.in_time_zone
     terminating = false
 
@@ -41,7 +41,7 @@ class AnonymizePetitionJob < ApplicationJob
 
   private
 
-  def reschedule_job(petition, time, limit: 1000, wait_until: 5.minutes.from_now)
+  def reschedule_job(petition, time, limit: 500, wait_until: 5.minutes.from_now)
     self.class.set(wait_until: wait_until).perform_later(petition, time, limit: limit)
   end
 end

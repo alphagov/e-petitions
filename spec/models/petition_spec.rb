@@ -1663,7 +1663,7 @@ RSpec.describe Petition, type: :model do
         petition.anonymize!("2018-12-31T00:00:00Z".in_time_zone)
       }.to have_enqueued_job(AnonymizePetitionJob)
         .with(petition, "2018-12-31T00:00:00+00:00")
-        .on_queue("high_priority")
+        .on_queue("low_priority")
     end
   end
 
