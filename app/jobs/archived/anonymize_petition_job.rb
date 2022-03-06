@@ -17,7 +17,7 @@ module Archived
 
       Appsignal.without_instrumentation do
         if petition.signatures.not_anonymized.exists?
-          signatures = petition.signatures.not_anonymized.batch(limit: limit)
+          signatures = petition.signatures.not_anonymized.take(limit)
 
           signatures.each do |signature|
             signature.anonymize!(time)
