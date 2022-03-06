@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_25_141800) do
+ActiveRecord::Schema.define(version: 2022_03_06_110716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -226,12 +226,12 @@ ActiveRecord::Schema.define(version: 2022_02_25_141800) do
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_archived_signatures_on_domain"
     t.index "lower((email)::text)", name: "index_archived_signatures_on_lower_email"
     t.index "lower((name)::text)", name: "index_archived_signatures_on_name"
-    t.index ["anonymized_at", "petition_id"], name: "index_archived_signatures_on_anonymized_at_and_petition_id"
     t.index ["constituency_id"], name: "index_archived_signatures_on_constituency_id"
     t.index ["created_at", "ip_address", "petition_id"], name: "index_archived_signatures_on_creation_ip_and_petition_id"
     t.index ["email", "petition_id", "name"], name: "index_archived_signatures_on_email_and_petition_id_and_name", unique: true
     t.index ["invalidation_id"], name: "index_archived_signatures_on_invalidation_id"
     t.index ["ip_address", "petition_id"], name: "index_archived_signatures_on_ip_address_and_petition_id"
+    t.index ["petition_id", "anonymized_at"], name: "index_archived_signatures_on_petition_id_and_anonymized_at"
     t.index ["petition_id", "location_code"], name: "index_archived_signatures_on_petition_id_and_location_code"
     t.index ["petition_id"], name: "index_archived_signatures_on_petition_id"
     t.index ["petition_id"], name: "index_archived_signatures_on_petition_id_where_creator_is_true", unique: true, where: "(creator = true)"
@@ -659,7 +659,6 @@ ActiveRecord::Schema.define(version: 2022_02_25_141800) do
     t.index "\"substring\"((email)::text, (\"position\"((email)::text, '@'::text) + 1))", name: "index_signatures_on_domain"
     t.index "lower((email)::text)", name: "index_signatures_on_lower_email"
     t.index "lower((name)::text)", name: "index_signatures_on_name"
-    t.index ["anonymized_at", "petition_id"], name: "index_signatures_on_anonymized_at_and_petition_id"
     t.index ["archived_at", "petition_id"], name: "index_signatures_on_archived_at_and_petition_id"
     t.index ["canonical_email"], name: "index_signatures_on_canonical_email"
     t.index ["constituency_id"], name: "index_signatures_on_constituency_id"
@@ -667,6 +666,7 @@ ActiveRecord::Schema.define(version: 2022_02_25_141800) do
     t.index ["email", "petition_id", "name"], name: "index_signatures_on_email_and_petition_id_and_name", unique: true
     t.index ["invalidation_id"], name: "index_signatures_on_invalidation_id"
     t.index ["ip_address", "petition_id"], name: "index_signatures_on_ip_address_and_petition_id"
+    t.index ["petition_id", "anonymized_at"], name: "index_signatures_on_petition_id_and_anonymized_at"
     t.index ["petition_id", "location_code"], name: "index_signatures_on_petition_id_and_location_code"
     t.index ["petition_id"], name: "index_signatures_on_petition_id"
     t.index ["petition_id"], name: "index_signatures_on_petition_id_where_creator_is_true", unique: true, where: "(creator = true)"
