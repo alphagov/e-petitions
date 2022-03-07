@@ -200,6 +200,8 @@ GEM
     jwt (2.2.1)
     launchy (2.4.3)
       addressable (~> 2.3)
+    leaflet-rails (1.7.0)
+      rails (>= 4.2.0)
     lograge (0.10.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -410,6 +412,7 @@ DEPENDENCIES
   jquery-rails
   json
   launchy
+  leaflet-rails
   lograge
   logstash-logger
   maxminddb

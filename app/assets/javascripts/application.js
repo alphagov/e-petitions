@@ -1,1 +1,2 @@
 //= require jquery
+//= require leaflet
