@@ -69,6 +69,10 @@ Rails.application.routes.draw do
           post '/',          action: 'create',    as: :petition_signatures
           get  '/new',       action: 'new',       as: :new_petition_signature
         end
+
+        scope '/map', controller: 'maps' do
+          get '/',           action: 'show',      as: :petition_map
+        end
       end
 
       get '/',    action: 'index', as: :petitions

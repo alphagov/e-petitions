@@ -12,11 +12,13 @@ Rails.application.config.assets.version = '1.0'
 Rails.application.config.assets.precompile += %w(
   admin.css
   delayed/web/application.css
+  frontend/map.css
   print.css
   admin.js
   character-counter.js
   auto-updater.js
   topojson.min.js
+  petition-map.js
 )
 
 # Compress JavaScript assets.
