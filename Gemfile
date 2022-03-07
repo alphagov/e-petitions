@@ -18,7 +18,7 @@ gem 'faraday_middleware'
 gem 'net-http-persistent'
 gem 'sass-rails', '~> 5.0'
 gem 'textacular'
-gem 'uglifier'
+gem 'terser'
 gem 'bcrypt'
 gem 'faker', require: false
 gem 'slack-notifier'

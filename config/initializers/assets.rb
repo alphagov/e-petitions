@@ -19,7 +19,7 @@ Rails.application.config.assets.precompile += %w(
 )
 
 # Compress JavaScript assets.
-Rails.application.config.assets.js_compressor = :uglifier
+Rails.application.config.assets.js_compressor = :terser
 
 # Allow overriding of the sprockets cache path
 Rails.application.config.assets.configure do |env|
