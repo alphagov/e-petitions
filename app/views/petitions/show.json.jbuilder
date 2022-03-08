@@ -4,6 +4,6 @@ json.cache! [I18n.locale, @petition], expires_in: 5.minutes do
   end
 
   json.data do
-    json.partial! 'petition', petition: @petition
+    json.partial! 'petitions/petition', petition: @petition
   end
 end
