@@ -25,9 +25,6 @@
     </main>
 
     <%= cache_for :footer do %>
-      <script id='data' type="application/json">
-        <%= raw render template: 'petitions/show.json', layout:  false %>
-      </script>
       <%= javascript_include_tag 'application' %>
       <%= javascript_include_tag 'topojson.min' %>
       <%= javascript_include_tag 'petition-map' %>

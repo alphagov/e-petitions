@@ -29,6 +29,10 @@ module ApplicationHelper
     params.values_at(:controller, :action) == %w[petitions show]
   end
 
+  def map_page?
+    params.values_at(:controller, :action) == %w[maps show]
+  end
+
   def open_petition_page?
     petition_page? && @petition.open?
   end
