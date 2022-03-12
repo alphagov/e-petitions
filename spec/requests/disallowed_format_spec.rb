@@ -453,4 +453,46 @@ RSpec.describe 'Requests for pages when we do not support the format on that pag
       expect(response.status).to eq 406
     end
   end
+
+  context 'the regions url' do
+    let(:url) { '/regions' }
+    let(:params) { {} }
+
+    it 'supports json via extension' do
+      get url + '.json', params: params
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/json; charset=utf-8"
+    end
+
+    it 'supports json via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/json' }
+      expect(response.status).to eq 200
+      expect(response.content_type).to eq "application/json; charset=utf-8"
+    end
+
+    it 'does not support xml via extension' do
+      get url + '.xml', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support xml via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'application/xml' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via extension' do
+      get url + '.html', params: params
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html via accepts header' do
+      get url, params: params, headers: { 'Accept' => 'text/html' }
+      expect(response.status).to eq 406
+    end
+
+    it 'does not support html default' do
+      get url, params: params
+      expect(response.status).to eq 406
+    end
+  end
 end

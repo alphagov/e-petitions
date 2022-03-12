@@ -6,6 +6,10 @@ Rails.application.routes.draw do
       get '/constituencies', action: 'index', as: :constituencies
     end
 
+    scope controller: 'regions' do
+      get '/regions', action: 'index', as: :regions
+    end
+
     scope controller: 'topics' do
       get '/topics', action: 'index', as: :topics
     end
