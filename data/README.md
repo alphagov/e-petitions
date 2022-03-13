@@ -9,6 +9,8 @@ You’ll need to have a recent PostgreSQL and PostGIS version installed on your 
 1. [Ordnance Survey Boundary-Line™][1]
 2. [ONS Postcode Directory][2]
 3. [Welsh Output Area to Constituency to Region Lookup][3]
+4. [Constituency Boundaries (Ultra Generalised)][5]
+5. [Region Boundaries (Super Generalised)][6]
 
 The latest version of the ONS Postcode Directory should be used - it is updated every three months.
 
@@ -42,6 +44,22 @@ The views also do some housekeeping on the names to remove the unnecessary suffi
 CREATE INDEX index_welsh_constituencies_on_boundary ON welsh_constituencies USING GIST (boundary);
 ```
 
+Whilst the OS data is fine for generating the lookups we need something with less precision for interactive purposes so we’ll use the generalised boundaries from the ONS Open Geography Portal.
+
+First, import the generalised data:
+
+``` sh
+ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_constituency_boundaries -unsetFieldWidth 'National_Assembly_for_Wales_Constituencies_(December_2018)_WA_BUC.shp'
+```
+
+Then create an index to optimise performance:
+
+``` sql
+CREATE UNIQUE INDEX index_welsh_constituency_boundaries_on_nawc18cd ON welsh_constituency_boundaries(nawc18cd);
+```
+
+That completes the import of constituency data.
+
 Next, import the region boundary line data use the `ogr2ogr` tool. 
 
 ``` sh
@@ -59,6 +77,20 @@ ORDER BY code;
 ```
 
 The views also do some housekeeping on the names to remove the unnecessary suffixes for our purposes.
+
+Again, we need to use generalised boundary data for interactive performance so import the ONS data for regions:
+
+``` sh
+ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln welsh_region_boundaries -unsetFieldWidth 'National_Assembly_for_Wales_Electoral_Regions_(December_2018)_Boundaries_WA_BSC.shp'
+```
+
+Then create an index to optimise performance:
+
+``` sql
+CREATE UNIQUE INDEX index_welsh_region_boundaries_on_nawer18cd ON welsh_region_boundaries(nawer18cd);
+```
+
+That completes the import of region data.
 
 Next you’ll need to import the output area to constituency to region lookup. Start off by create a table to hold the import:
 
@@ -171,8 +203,11 @@ This is the final table we need to generate our final geography CSV files - expo
 ``` sql
 # regions.csv
 COPY (
-  SELECT r.code AS id, r.name AS name_en, '' AS name_cy
-  FROM welsh_regions AS r ORDER BY r.code
+  SELECT r.code AS id, r.name AS name_en, '' AS name_cy,
+  ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
+  FROM welsh_regions AS r 
+  INNER JOIN welsh_region_boundaries AS b ON r.code = b.nawer18cd
+  ORDER BY r.code
 ) TO '/path/to/regions.csv' WITH CSV HEADER FORCE QUOTE *;
 ```
 
@@ -189,9 +224,11 @@ COPY (
     FROM welsh_postcode_lookup AS p 
     WHERE p.constituency_id = c.code
     ORDER BY random() LIMIT 1
-  ) AS example_postcode
+  ) AS example_postcode,
+  ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
   FROM welsh_constituencies AS c
-  ORDER BY code
+  INNER JOIN welsh_constituency_boundaries AS b ON c.code = b.nawc18cd
+  ORDER BY r.code
 ) TO '/path/to/constituencies.csv' WITH CSV HEADER FORCE QUOTE *;
 ```
 
@@ -203,9 +240,13 @@ COPY (
 ) TO '/path/to/postcodes.csv' WITH CSV HEADER FORCE QUOTE *;
 ```
 
+The `ST_Transform` method transforms the co-ordinates from OSGB National Grid to WGS84 and the `ST_ReducePrecision` removes the excess precision in the ONS boundaries.
+
 Send the `regions.csv` and `constituencies.csv` to the translations team to fill out the `name_gd` column. Once received replace the existing files and commit to the repo.
 
 [1]: https://osdatahub.os.uk/downloads/open/BoundaryLine
 [2]: https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021
 [3]: https://geoportal.statistics.gov.uk/datasets/ons::output-area-to-national-assembly-for-wales-constituency-to-national-assembly-for-wales-electoral-region-december-2018-lookup-in-wales/explore
 [4]: https://www.postgresql.org/docs/10/sql-creatematerializedview.html
+[5]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-constituencies-december-2018-wa-buc
+[6]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-electoral-regions-december-2018-boundaries-wa-bsc

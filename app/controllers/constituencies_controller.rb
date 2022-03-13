@@ -6,6 +6,7 @@ class ConstituenciesController < LocalizedController
 
     respond_to do |format|
       format.json
+      format.geojson
     end
   end
 end

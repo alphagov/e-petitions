@@ -17,7 +17,7 @@ runs:
     - name: Setup database
       shell: bash
       env:
-        DATABASE_URL: postgres://postgres:postgres@localhost:5432/wpets_test
+        DATABASE_URL: postgis://postgres:postgres@localhost:5432/wpets_test
         RAILS_ENV: test
       run: |
         bundle exec rake db:setup

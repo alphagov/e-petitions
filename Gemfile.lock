@@ -47,6 +47,9 @@ GEM
     activerecord (6.1.4.7)
       activemodel (= 6.1.4.7)
       activesupport (= 6.1.4.7)
+    activerecord-postgis-adapter (7.1.1)
+      activerecord (~> 6.1)
+      rgeo-activerecord (~> 7.0.0)
     activestorage (6.1.4.7)
       actionpack (= 6.1.4.7)
       activejob (= 6.1.4.7)
@@ -283,6 +286,12 @@ GEM
     regexp_parser (1.6.0)
     request_store (1.5.0)
       rack (>= 1.4)
+    rgeo (2.4.0)
+    rgeo-activerecord (7.0.1)
+      activerecord (>= 5.0)
+      rgeo (>= 1.0.0)
+    rgeo-geojson (2.1.1)
+      rgeo (>= 1.0.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -368,6 +377,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  activerecord-postgis-adapter
   appsignal
   authlogic
   aws-sdk-cloudwatchlogs
@@ -411,6 +421,7 @@ DEPENDENCIES
   rails-controller-testing
   rake
   redcarpet
+  rgeo-geojson
   rspec-rails
   sass-rails (~> 5.0)
   scrypt

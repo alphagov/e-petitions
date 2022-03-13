@@ -1,5 +1,5 @@
 default: &default
-  adapter: postgresql
+  adapter: postgis
   encoding: utf8
   url: <%= ENV.fetch("DATABASE_URL") %>
   pool: 5

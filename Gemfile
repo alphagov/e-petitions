@@ -35,6 +35,8 @@ gem 'maxminddb'
 gem 'redcarpet'
 gem 'notifications-ruby-client'
 gem 'scrypt'
+gem 'activerecord-postgis-adapter'
+gem 'rgeo-geojson'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'

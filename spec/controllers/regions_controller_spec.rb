@@ -1,11 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe RegionsController, type: :controller do
-  describe "GET /regions.json" do
-    before do
-      get :index, format: "json"
-    end
-
+  shared_examples "a Region API controller" do
     it "responds with 200 OK" do
       expect(response.status).to eq(200)
     end
@@ -29,5 +25,21 @@ RSpec.describe RegionsController, type: :controller do
     it "sets the Access-Control-Allow-Headers header to 'Origin, X-Requested-With, Content-Type, Accept'" do
       expect(response.headers["Access-Control-Allow-Headers"]).to eq("Origin, X-Requested-With, Content-Type, Accept")
     end
+  end
+
+  describe "GET /regions.json" do
+    before do
+      get :index, format: "json"
+    end
+
+    it_behaves_like "a Region API controller"
+  end
+
+  describe "GET /regions.geojson" do
+    before do
+      get :index, format: "geojson"
+    end
+
+    it_behaves_like "a Region API controller"
   end
 end

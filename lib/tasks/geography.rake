@@ -19,7 +19,8 @@ namespace :wpets do
           region_id character varying(9) NOT NULL,
           name_en character varying(100) NOT NULL,
           name_cy character varying(100) NOT NULL,
-          example_postcode character varying(7) NOT NULL
+          example_postcode character varying(7) NOT NULL,
+          boundary geography(Geometry,4326)
         );
       SQL
 
@@ -34,10 +35,12 @@ namespace :wpets do
       conn.exec <<~SQL
         INSERT INTO constituencies (
           id, region_id, name_en, name_cy,
-          example_postcode, created_at, updated_at
+          example_postcode, boundary,
+          created_at, updated_at
         )
         SELECT
-          id, region_id, name_en, name_cy, example_postcode,
+          id, region_id, name_en, name_cy,
+          example_postcode, boundary,
           now() AS created_at, now() AS updated_at
         FROM constituencies_import
         ON CONFLICT (id) DO UPDATE
@@ -46,6 +49,7 @@ namespace :wpets do
           name_en = EXCLUDED.name_en,
           name_cy = EXCLUDED.name_cy,
           example_postcode = EXCLUDED.example_postcode,
+          boundary = EXCLUDED.boundary,
           updated_at = EXCLUDED.updated_at
       SQL
 
@@ -60,7 +64,8 @@ namespace :wpets do
         CREATE TEMPORARY TABLE regions_import (
           id character varying(9) PRIMARY KEY,
           name_en character varying(100) NOT NULL,
-          name_cy character varying(100) NOT NULL
+          name_cy character varying(100) NOT NULL,
+          boundary geography(Geometry,4326)
         );
       SQL
 
@@ -74,15 +79,16 @@ namespace :wpets do
 
       conn.exec <<~SQL
         INSERT INTO regions (
-          id, name_en, name_cy, created_at, updated_at
+          id, name_en, name_cy, boundary, created_at, updated_at
         )
         SELECT
-          id, name_en, name_cy, now() AS created_at, now() AS updated_at
+          id, name_en, name_cy, boundary, now() AS created_at, now() AS updated_at
         FROM regions_import
         ON CONFLICT (id) DO UPDATE
         SET
           name_en = EXCLUDED.name_en,
           name_cy = EXCLUDED.name_cy,
+          boundary = EXCLUDED.boundary,
           updated_at = EXCLUDED.updated_at
       SQL
 
