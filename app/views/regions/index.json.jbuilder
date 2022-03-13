@@ -4,7 +4,9 @@ json.cache! [I18n.locale, :regions], expires_in: 1.hour do
     json.name region.name
 
     json.members region.members do |member|
-      json.partial! 'member', member: member
+      json.name member.name
+      json.party member.party
+      json.url member.url
     end
   end
 end
