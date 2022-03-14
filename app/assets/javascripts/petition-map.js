@@ -25,17 +25,17 @@ L.PetitionMap.colors = ['#FBEEF5',
                         '#D856A0',
                         '#D85AA2',
                         '#CB1F81',
-                        '#CC2685']
+                        '#fC2685']
+L.PetitionMap.formattedData = {}
 
-const setupMap = () =>  {
+const setupMap = (layers) =>  {
   let map = L.map('map', {
     zoom: 2,
-    zoomControl: true,
     attributionControl: false,
-    trackResize: true,
     minZoom: 6,
     maxZoom: 9,
-    zoomAnimation: false
+    zoomAnimation: false,
+    layers: layers
   })
   map.setView([52.4, -3.53976], 8);
 
@@ -47,32 +47,71 @@ const fetchPetitionData = () => {
 }
 
 const getColor = (feature) => {
-  let signaturePercentage = signaturePercentageByConstituency(feature.id);
+  let element = L.PetitionMap.formattedData.data.find(element => element['id'] == feature.id);
+  let divisor = element ?
+              (element['type'] == 'constituency' ? 100/L.PetitionMap.formattedData.maxConstituencyPercentage :
+               element['type'] == 'region' ? 100/L.PetitionMap.formattedData.maxRegionalPercentage : 1) : 1
 
-  return signaturePercentage > 30 ? L.PetitionMap.colors[7] :
-    signaturePercentage > 20  ? L.PetitionMap.colors[6] :
-    signaturePercentage > 5   ? L.PetitionMap.colors[5] :
-    signaturePercentage > 4   ? L.PetitionMap.colors[4] :
-    signaturePercentage > 3   ? L.PetitionMap.colors[3] :
-    signaturePercentage > 2   ? L.PetitionMap.colors[2] :
-    signaturePercentage > 1   ? L.PetitionMap.colors[1] :
+  const percentage = element ? element['percentage'] : 0
+
+  return percentage > 0.5*divisor ? L.PetitionMap.colors[7] :
+    percentage > 0.4*divisor ? L.PetitionMap.colors[6] :
+    percentage > 0.3*divisor ? L.PetitionMap.colors[5] :
+    percentage > 0.2*divisor ? L.PetitionMap.colors[4] :
+    percentage > 0.1*divisor ? L.PetitionMap.colors[3] :
+    percentage > 0.05*divisor ? L.PetitionMap.colors[2] :
+    percentage > 0.01*divisor ? L.PetitionMap.colors[1] :
                                 L.PetitionMap.colors[0];
 }
 
-const signaturePercentageByConstituency = (code) => {
+const calculateConstituencyData = () => {
   let signatures = L.PetitionMap.data['data']['attributes']['signatures_by_constituency'] || [];
+
+  constituencySignatureData  = signatures.map(signaturesForConstituency => (
+    signaturesForConstituency['percentage'] = signaturesForConstituency.signature_count*100/L.PetitionMap.totalSignatures,
+    signaturesForConstituency['type'] = 'constituency',
+    signaturesForConstituency)
+  );
+  return constituencySignatureData;
+}
+
+const calculateRegionalData = () => {
+  let signatures = L.PetitionMap.data['data']['attributes']['signatures_by_region'] || [];
+
+  regionSignatureData = signatures.map(signaturesForRegion => (
+    signaturesForRegion['percentage'] = signaturesForRegion.signature_count*100/L.PetitionMap.totalSignatures,
+    signaturesForRegion['type'] = 'region',
+    signaturesForRegion)
+  );
+  return regionSignatureData;
+}
+
+const maxPercentage = (data) => {
+  let pos = data.length > 0 ? Object.keys(data).reduce((a, b) => data[a].percentage > data[b].percentage ? a : b) : null;
+  return pos ? data[pos].percentage : 0;
+}
+
+
+const signaturePercentageByRegion = (code) => {
+  let signatures = L.PetitionMap.data['data']['attributes']['signatures_by_region'] || [];
   let total_signatures = L.PetitionMap.data['data']['attributes']['signature_count'] || 0;
 
-  let signatures_for_constituency = signatures.filter(function(e){return e.id == code});
-  let percentage = signatures_for_constituency.length > 0 ?
-                    signatures_for_constituency[0].signature_count*100 / total_signatures :
-                    1;
+  let signatures_for_region = signatures.filter(function(e){return e.id == code});
+  let percentage = signatures_for_region.length > 0 ?
+                    signatures_for_region[0].signature_count*100 / total_signatures :
+                    null;
 
   return percentage;
 }
 
 const fetchConstituencyData = async () => {
   let data = await getGeoData('../../welsh-constituencies.topojson');
+
+  return data;
+}
+
+const fetchRegionalData = async () => {
+  let data = await getGeoData('../../welsh-regions.topojson');
 
   return data;
 }
@@ -84,12 +123,13 @@ const getGeoData = async (url) => {
   return data;
 }
 
-const addLayerToMap = (map) => {
+const createLayer = () => {
   return topoJson(null, {
     style: style,
+    onEachFeature: onEachFeature,
     minZoom: 0,
     maxZoom: 0
-  }).addTo(map);
+  })
 }
 
 const topoJson = (data, options) => {
@@ -99,22 +139,62 @@ const topoJson = (data, options) => {
 const style = (feature) => {
   return {
     color: "#999",
-    opacity: 1,
     weight: 1,
     fillColor: getColor(feature),
-    fillOpacity: 0.6
+    fillOpacity: 1
   };
 }
 
+const onEachFeature = (feature, layer) => {
+  layer.on({
+    mouseover: highlightFeature
+  });
+}
+
+const highlightFeature = (e) => {
+  var layer = e.target;
+  let feature = layer.feature;
+
+  const selectedFeature = L.PetitionMap.formattedData.data.find(element => element['id'] == feature.id);
+
+  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+    layer.bringToFront();
+  }
+}
+
 const setup = async () => {
-  let map = setupMap();
   fetchPetitionData();
 
-  let constituenciesData = await fetchConstituencyData();
-  let constituencyLayer = await addLayerToMap(map);
+  L.PetitionMap.totalSignatures = L.PetitionMap.data['data']['attributes']['signature_count'];
 
+  let constituenciesData = await fetchConstituencyData();
+  let formattedConstituencyData = calculateConstituencyData();
+  let maxConstituencyPercentage = maxPercentage(formattedConstituencyData);
+
+  let regionalData = await fetchRegionalData();
+  let formattedRegionalData = calculateRegionalData();
+  let maxRegionalPercentage = maxPercentage(formattedRegionalData);
+
+  L.PetitionMap.formattedData = {
+    data: [...formattedConstituencyData, ...formattedRegionalData],
+    maxConstituencyPercentage: maxConstituencyPercentage,
+    maxRegionalPercentage: maxRegionalPercentage
+  };
+
+  let constituencyLayer = await createLayer();
   constituencyLayer.addData(constituenciesData);
-  L.control.layers({"constituencies": constituencyLayer}).addTo(map);
+
+  let regionLayer = await createLayer();
+  regionLayer.addData(regionalData);
+
+  let layerControl = L.control.layers(
+    {"constituencies": constituencyLayer, 'regions': regionLayer},
+    {},
+    { collapsed: false }
+  )
+
+  let map = setupMap([constituencyLayer]);
+  map.addControl(layerControl);
 }
 
 setup();
