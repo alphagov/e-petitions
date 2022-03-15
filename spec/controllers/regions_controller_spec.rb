@@ -1,17 +1,17 @@
 require 'rails_helper'
 
-RSpec.describe ConstituenciesController, type: :controller do
-  shared_examples "a Constituency API controller" do
+RSpec.describe RegionsController, type: :controller do
+  shared_examples "a Region API controller" do
     it "responds with 200 OK" do
       expect(response.status).to eq(200)
     end
 
-    it "assigns the @constituencies instance variable" do
-      expect(assigns[:constituencies]).not_to be_nil
+    it "assigns the @regions instance variable" do
+      expect(assigns[:regions]).not_to be_nil
     end
 
-    it "renders the constituencies/index.json.jbuilder template" do
-      expect(response).to render_template("constituencies/index")
+    it "renders the regions/index template" do
+      expect(response).to render_template("regions/index")
     end
 
     it "sets the Access-Control-Allow-Origin header to '*'" do
@@ -27,19 +27,19 @@ RSpec.describe ConstituenciesController, type: :controller do
     end
   end
 
-  describe "GET /constituencies.json" do
+  describe "GET /regions.json" do
     before do
       get :index, format: "json"
     end
 
-    it_behaves_like "a Constituency API controller"
+    it_behaves_like "a Region API controller"
   end
 
-  describe "GET /constituencies.geojson" do
+  describe "GET /regions.geojson" do
     before do
       get :index, format: "geojson"
     end
 
-    it_behaves_like "a Constituency API controller"
+    it_behaves_like "a Region API controller"
   end
 end

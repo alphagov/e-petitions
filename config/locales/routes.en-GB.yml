@@ -87,6 +87,9 @@ en-GB:
     "/privacy":
       en-GB: "/privacy"
       cy-GB: "/preifatrwydd"
+    "/regions":
+      en-GB: "/regions"
+      cy-GB: "/rhanbarthau"
     "/rules":
       en-GB: "/rules"
       cy-GB: "/rheolau"

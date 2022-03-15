@@ -98,14 +98,14 @@ RSpec.describe ApplicationController, type: :controller do
   context "when the url has an invalid format" do
     before do
       request.env['HTTPS'] = 'on'
-      request.env['PATH_INFO'] = '/petitions.geojson'
+      request.env['PATH_INFO'] = '/petitions.jsonld'
       request.env['SCRIPT_NAME'] = ''
       request.env['QUERY_STRING'] = ''
       request.env['HTTP_HOST'] = 'petitions.senedd.wales:443'
     end
 
     it "redirects to the home page" do
-      get :index, format: 'geojson'
+      get :index, format: 'jsonld'
       expect(response).to redirect_to("https://petitions.senedd.wales/petitions")
     end
   end

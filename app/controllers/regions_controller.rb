@@ -1,8 +1,8 @@
-class ConstituenciesController < LocalizedController
+class RegionsController < LocalizedController
   before_action :set_cors_headers, only: [:index], if: :json_request?
 
   def index
-    @constituencies = Constituency.all
+    @regions = Region.all
 
     respond_to do |format|
       format.json

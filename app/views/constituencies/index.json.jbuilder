@@ -3,12 +3,29 @@ json.cache! [I18n.locale, :constituencies], expires_in: 1.hour do
     json.id constituency.id
     json.name constituency.name
 
-    if constituency.member
-      json.partial! 'member', member: constituency.member
+    if member = constituency.member
+      json.member do
+        json.name member.name
+        json.party member.party
+        json.url member.url
+      end
     else
       json.member nil
     end
 
-    json.partial! 'region', region: constituency.region
+    if region = constituency.region
+      json.region do
+        json.id region.id
+        json.name region.name
+
+        json.members region.members do |member|
+          json.name member.name
+          json.party member.party
+          json.url member.url
+        end
+      end
+    else
+      json.region nil
+    end
   end
 end

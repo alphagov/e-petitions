@@ -35,6 +35,8 @@ gem 'maxminddb'
 gem 'redcarpet'
 gem 'notifications-ruby-client'
 gem 'scrypt'
+gem 'activerecord-postgis-adapter'
+gem 'rgeo-geojson'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'
@@ -60,7 +62,7 @@ group :test do
   gem 'factory_bot_rails'
   gem 'email_spec'
   gem 'launchy'
-  gem 'webdrivers', '~> 3.8.1'
+  gem 'webdrivers'
   gem 'webmock'
   gem 'rails-controller-testing'
 end

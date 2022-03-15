@@ -10,11 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_24_082345) do
+ActiveRecord::Schema.define(version: 2022_03_13_095828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
   enable_extension "plpgsql"
+  enable_extension "postgis"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -74,6 +75,7 @@ ActiveRecord::Schema.define(version: 2021_12_24_082345) do
     t.string "example_postcode", limit: 7, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.index ["name_cy"], name: "index_constituencies_on_name_cy", unique: true
     t.index ["name_en"], name: "index_constituencies_on_name_en", unique: true
     t.index ["region_id"], name: "index_constituencies_on_region_id"
@@ -378,6 +380,7 @@ ActiveRecord::Schema.define(version: 2021_12_24_082345) do
     t.string "name_cy", limit: 100, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
     t.index ["name_cy"], name: "index_regions_on_name_cy", unique: true
     t.index ["name_en"], name: "index_regions_on_name_en", unique: true
   end

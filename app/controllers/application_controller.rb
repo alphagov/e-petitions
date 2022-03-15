@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
   end
 
   def json_request?
-    request.format.symbol == :json
+    request.format.symbol == :json || request.format.symbol == :geojson
   end
 
   def unknown_format?
