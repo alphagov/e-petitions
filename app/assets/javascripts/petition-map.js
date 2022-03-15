@@ -162,6 +162,10 @@ const highlightFeature = (e) => {
   }
 }
 
+const resetContainerFocus = (map) => {
+  map.getContainer().focus = () => {}
+}
+
 const setup = async () => {
   fetchPetitionData();
 
@@ -195,6 +199,8 @@ const setup = async () => {
 
   let map = setupMap([constituencyLayer]);
   map.addControl(layerControl);
+
+  resetContainerFocus(map); //resolves issue of map jumping when zooming in/out
 }
 
 setup();
