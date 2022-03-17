@@ -24,7 +24,6 @@ gem 'faker', require: false
 gem 'slack-notifier'
 gem 'daemons'
 gem 'jquery-rails'
-gem 'leaflet-rails'
 gem 'delayed-web'
 gem 'dalli'
 gem 'connection_pool'
