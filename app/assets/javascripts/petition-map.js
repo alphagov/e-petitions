@@ -202,10 +202,6 @@ const setup = async () => {
 
   resetContainerFocus(map); //resolves issue of map jumping when zooming in/out
 
-  map.removeLayer(constituencyLayer);
-  map.addLayer(constituencyLayer);
-  map.addLayer(regionLayer);
-
 }
 
 setup();
