@@ -47,7 +47,7 @@ const fetchPetitionData = () => {
 }
 
 const getColor = (feature) => {
-  let element = L.PetitionMap.formattedData.data.find(element => element['id'] == feature.id);
+  let element = L.PetitionMap.formattedData.data.find(element => element['id'] == feature.properties.id);
   let divisor = element ?
               (element['type'] == 'constituency' ? 100/L.PetitionMap.formattedData.maxConstituencyPercentage :
                element['type'] == 'region' ? 100/L.PetitionMap.formattedData.maxRegionalPercentage : 1) : 1
@@ -105,13 +105,13 @@ const signaturePercentageByRegion = (code) => {
 }
 
 const fetchConstituencyData = async () => {
-  let data = await getGeoData('../../welsh-constituencies.topojson');
+  let data = await getGeoData('../../welsh-constituencies.geojson');
 
   return data;
 }
 
 const fetchRegionalData = async () => {
-  let data = await getGeoData('../../welsh-regions.topojson');
+  let data = await getGeoData('../../welsh-regions.geojson');
 
   return data;
 }
@@ -201,6 +201,11 @@ const setup = async () => {
   map.addControl(layerControl);
 
   resetContainerFocus(map); //resolves issue of map jumping when zooming in/out
+
+  map.removeLayer(constituencyLayer);
+  map.addLayer(constituencyLayer);
+  map.addLayer(regionLayer);
+
 }
 
 setup();
