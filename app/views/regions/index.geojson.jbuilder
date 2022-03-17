@@ -7,6 +7,8 @@ json.cache! [I18n.locale, :regions, :geojson], expires_in: 1.hour do
     json.properties do
       json.id region.id
       json.name region.name
+      json.population region.population
+
       json.members region.members do |member|
         json.name member.name
         json.party member.party

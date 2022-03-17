@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_13_095828) do
+ActiveRecord::Schema.define(version: 2022_03_17_102801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(version: 2022_03_13_095828) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
+    t.integer "population", null: false
     t.index ["name_cy"], name: "index_constituencies_on_name_cy", unique: true
     t.index ["name_en"], name: "index_constituencies_on_name_en", unique: true
     t.index ["region_id"], name: "index_constituencies_on_region_id"
@@ -381,6 +382,7 @@ ActiveRecord::Schema.define(version: 2022_03_13_095828) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
+    t.integer "population", null: false
     t.index ["name_cy"], name: "index_regions_on_name_cy", unique: true
     t.index ["name_en"], name: "index_regions_on_name_en", unique: true
   end

@@ -11,6 +11,7 @@ You’ll need to have a recent PostgreSQL and PostGIS version installed on your 
 3. [Welsh Output Area to Constituency to Region Lookup][3]
 4. [Constituency Boundaries (Ultra Generalised)][5]
 5. [Region Boundaries (Super Generalised)][6]
+6. [Population statistics for Senedd Cymru constituencies][7]
 
 The latest version of the ONS Postcode Directory should be used - it is updated every three months.
 
@@ -184,6 +185,27 @@ For performance reasons we again create an index on the location column:
 CREATE INDEX index_welsh_postcodes_on_location ON welsh_postcodes USING GIST (location);
 ```
 
+Next we need to create the population figures for the constituencies and regions. To do this we use the MS Excel spreadsheet from GOV.WALES from the list at the start - the figures are in column C of the 'Pop1' sheet. Create two CSVs - one for constituencies and one for regions with the ONS code as the first column and the population figure as the second. Now create tables to hold the data like this:
+
+``` sql
+CREATE TABLE welsh_population_by_constituency (
+  code character(9) PRIMARY KEY,
+  population integer
+);
+
+CREATE TABLE welsh_population_by_region (
+  code character(9) PRIMARY KEY,
+  population integer
+);
+```
+
+Import the CSVs into the tables using the `COPY` command:
+
+``` sql
+COPY welsh_population_by_constituency FROM '/path/to/population_by_constituency.csv' WITH DELIMITER ',' CSV HEADER;
+COPY welsh_population_by_region FROM '/path/to/population_by_region.csv' WITH DELIMITER ',' CSV HEADER;
+```
+
 You should now have all the data you need to create the lookup tables.
 
 ## Creating the lookups
@@ -203,10 +225,11 @@ This is the final table we need to generate our final geography CSV files - expo
 ``` sql
 # regions.csv
 COPY (
-  SELECT r.code AS id, r.name AS name_en, '' AS name_cy,
+  SELECT r.code AS id, r.name AS name_en, '' AS name_cy, u.population,
   ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
   FROM welsh_regions AS r 
   INNER JOIN welsh_region_boundaries AS b ON r.code = b.nawer18cd
+  INNER JOIN welsh_population_by_region AS u ON r.code = u.code
   ORDER BY r.code
 ) TO '/path/to/regions.csv' WITH CSV HEADER FORCE QUOTE *;
 ```
@@ -225,10 +248,12 @@ COPY (
     WHERE p.constituency_id = c.code
     ORDER BY random() LIMIT 1
   ) AS example_postcode,
+  u.population,
   ST_AsEWKT(ST_ReducePrecision(ST_Transform(b.wkb_geometry, 4326), 0.0001)) AS boundary
   FROM welsh_constituencies AS c
   INNER JOIN welsh_constituency_boundaries AS b ON c.code = b.nawc18cd
-  ORDER BY r.code
+  INNER JOIN welsh_population_by_constituency AS u ON c.code = u.code
+  ORDER BY c.code
 ) TO '/path/to/constituencies.csv' WITH CSV HEADER FORCE QUOTE *;
 ```
 
@@ -250,3 +275,4 @@ Send the `regions.csv` and `constituencies.csv` to the translations team to fill
 [4]: https://www.postgresql.org/docs/10/sql-creatematerializedview.html
 [5]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-constituencies-december-2018-wa-buc
 [6]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-electoral-regions-december-2018-boundaries-wa-bsc
+[7]: https://gov.wales/data-senedd-cymru-constituency-areas-2021
