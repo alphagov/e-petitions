@@ -596,6 +596,7 @@ cy-GB:
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Caiff deisebau sydd â mwy na %{threshold}
         llofnod eu hystyried ar gyfer dadl yn y Senedd
+      show_on_a_map: "Dangoswch ar fap"
     pagination:
       next_html: "<a class=\"next\" href=\"%{next_link}\">\r\n  <span class=\"paginate-label\">Nesaf</span>\r\n
         \ <span class=\"paginate page-count\">%{next_page} of %{total_pages}</span>\r\n</a>"

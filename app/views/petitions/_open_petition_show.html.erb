@@ -30,7 +30,9 @@
       <span class="signature-count-current" style="width: <%= signatures_threshold_percentage(petition) %>"></span>
     </div>
     <p class="signatures-on-a-map">
-      <%= link_to 'Show on a map', petition_map_path(petition) %>
+      <%= link_to petition_map_path(petition) do %>
+        <%= t(:"ui.petitions.show_on_a_map") %>
+      <% end %>
     </p>
     <p class="signature-count-goal">
       <%= number_with_delimiter(current_threshold(petition)) %>

@@ -595,6 +595,7 @@ en-GB:
         rel="external">Senedd TV</a>.
       at_threshold_for_debate_will_be_considered: Petitions with more than %{threshold}
         signatures will be considered for a debate in the Senedd
+      show_on_a_map: "Show on a map"
     pagination:
       next_html: |-
         <a class="next" href="%{next_link}">
