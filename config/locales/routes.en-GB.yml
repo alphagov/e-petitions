@@ -48,6 +48,9 @@ en-GB:
     "/petitions/thank-you":
       en-GB: "/petitions/thank-you"
       cy-GB: "/deisebau/diolch"
+    "/petitions/:petition_id/map":
+      en-GB: "/petitions/:petition_id/map"
+      cy-GB: "/deisebau/:petition_id/map"
     "/petitions/:petition_id/signatures":
       en-GB: "/petitions/:petition_id/signatures"
       cy-GB: "/deisebau/:petition_id/llofnodion"

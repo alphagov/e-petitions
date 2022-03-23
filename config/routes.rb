@@ -56,6 +56,10 @@ Rails.application.routes.draw do
       end
 
       scope '/:petition_id' do
+        scope '/map', controller: 'maps' do
+          get '/', action: 'show', as: :petition_map
+        end
+
         scope '/sponsors', controller: 'sponsors' do
           post '/new',       action: 'confirm',   as: :confirm_petition_sponsors
           get  '/thank-you', action: 'thank_you', as: :thank_you_petition_sponsors
@@ -68,10 +72,6 @@ Rails.application.routes.draw do
           get  '/thank-you', action: 'thank_you', as: :thank_you_petition_signatures
           post '/',          action: 'create',    as: :petition_signatures
           get  '/new',       action: 'new',       as: :new_petition_signature
-        end
-
-        scope '/map', controller: 'maps' do
-          get '/',           action: 'show',      as: :petition_map
         end
       end
 

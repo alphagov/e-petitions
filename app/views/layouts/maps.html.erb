@@ -4,9 +4,8 @@
     <title><%= page_title %></title>
     <%= cache_for :head do %>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
       <%= stylesheet_link_tag 'application' %>
-      <%= stylesheet_link_tag 'frontend/map' %>
+      <%= stylesheet_link_tag 'map' %>
       <%= stylesheet_link_tag 'print', media: 'print' %>
       <meta name="viewport" content="width = device-width" />
       <%= render 'application/os' %>
@@ -20,15 +19,13 @@
   <body>
     <%= render 'application/header' %>
 
-    <main>
+    <main id="content" role="main">
       <%= yield %>
     </main>
 
-    <%= cache_for :footer do %>
-      <%= javascript_include_tag 'application' %>
-      <%= javascript_include_tag 'topojson.min' %>
-      <%= javascript_include_tag 'petition-map' %>
-    <% end %>
+    <%= javascript_include_tag constituencies_path(:js) %>
+    <%= javascript_include_tag regions_path(:js) %>
+    <%= javascript_include_tag 'map' %>
 
     <% if Site.translation_enabled? %>
       <%= javascript_include_tag admin_translations_url(:js), crossorigin: 'use-credentials' %>

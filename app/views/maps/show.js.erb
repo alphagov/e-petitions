@@ -1,0 +1,7 @@
+<%= cache [I18n.locale, @petition, :map, :js], expires_in: 5.minutes do -%>
+(function (){
+  this.PetitionMap = this.PetitionMap || {};
+  PetitionMap.data = PetitionMap.data || {};
+  PetitionMap.data.petition = <%= raw render(partial: "petition", formats: %i[json]) %>;
+}).call(this);
+<% end %>

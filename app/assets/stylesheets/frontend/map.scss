@@ -1,26 +1,199 @@
-@import "frontend/normalize";
-@import "frontend/fonts";
-@import "frontend/colours";
-@import "frontend/layout";
-@import "frontend/icons";
-@import "frontend/utilities";
-@import "frontend/typography";
-@import "frontend/forms";
-@import "frontend/cookies";
-@import "frontend/header";
-
-body, html, main {
+html {
   height: 100%;
 }
 
-#map {
-  background-color: #FFF;
-  position: relative;
-  z-index: 0;
-  height: 100%;
-  min-height: 400px;
+body {
+  min-height: 100%;
+    
+  #content {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    max-width: none;
+    width: 100%;
+    bottom: 0;
+    top: 98px;
+
+    @include media(tablet) {
+      top: 106px;
+    }
+  }
+  
+  #map {
+    background-color: $white;
+    height: 100%;
+    width: 100%;
+  }
 }
 
-body > header {
-  z-index: 2;
+.leaflet-top .leaflet-control {
+  margin-top: 9px;
+
+  @include media(tablet) {
+    margin-top: 18px;
+  }
+}
+
+.leaflet-left .leaflet-control {
+  margin-left: 9px;
+
+  @include media(tablet) {
+    margin-left: 18px;
+  }
+}
+
+.leaflet-right .leaflet-control {
+  margin-right: 9px;
+
+  @include media(tablet) {
+    margin-right: 18px;
+  }
+}
+
+.leaflet-container {
+  .petition-info {
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    width: 210px;
+    padding: 12px;
+
+    @include media(tablet) {
+      padding: 18px;
+      width: 230px;
+    }
+  
+    &--back-link {
+      @include font-size(0.75rem, 0.875rem);
+
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: $text-color;
+      display: inline-block;
+      font-weight: 600;
+      line-height: 1;
+      margin: 0;
+      padding: 0 0 0 12px;
+      position: relative;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &::after {
+        @extend %icon-chevron-left-dark-grey;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 8px;
+        height: 100%;
+      }
+
+      &:active, &:focus {
+        background-color: $focus-color;
+        color: $white;
+        outline: none;
+
+        &::after {
+          @extend %icon-chevron-left-white;
+        }
+      }
+    }
+    
+    &--action {
+      @include font-size(1.125rem, 1.25rem);
+
+      margin: 0;
+      margin-top: 9px;
+      
+      & .label {
+        @include font-size(0.875rem, 1rem);
+        
+        color: $mid-grey;
+        display: block;
+        font-weight: normal;
+        margin-bottom: 3px;
+      }
+
+      @include media(tablet) {
+        margin-top: 12px;
+
+        & .label {
+          margin-bottom: 6px;
+        }
+      }
+    }
+    
+    &--signature-count {
+      @include font-size(1.25rem, 1.5rem);
+
+      color: $mid-grey;
+      font-weight: bold;
+      margin: 0;
+      margin-top: 3px;
+
+      @include media(tablet) {
+        margin-top: 6px;
+      }
+
+      span.text {
+        @include font-size(1rem, 1.25rem);
+      }
+    }
+    
+    &--sign-button {
+      @include font-size(0.875rem, 1rem);
+
+      background-color: $button-color;
+      border-color: $button-color;
+      color: $white;
+      border-width: 2px;
+      border-style: solid;
+      box-sizing: border-box;
+      cursor: pointer;
+      display: inline-block;
+      font-weight: bold;
+      margin: 0;
+      margin-top: 12px;
+      padding: 7px 9px;
+      position: relative;
+      -moz-outline-offset: -2px;
+      outline-offset: -2px;
+      border-radius: 0;
+      text-align: center;
+      text-decoration: none;
+      width: 100%;
+      padding-right: 28px;
+      text-align: left;
+
+      @include media(tablet) {
+        margin-top: 18px;
+      }
+
+      &:active, &:focus {
+        background-color: $white;
+        border-color: $focus-color;
+        color: $text-color;
+      }
+
+      &::after {
+        @extend %icon-chevron-right-white;
+
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 7px;
+        width: 12px;
+        height: 100%;
+      }
+
+      &:active, &:focus {
+        &::after {
+          @extend %icon-chevron-right-dark-grey;
+        }
+      }
+    }
+  }
 }
