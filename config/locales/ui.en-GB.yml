@@ -1,6 +1,12 @@
 ---
 en-GB:
   ui:
+    map:
+      petition_info:
+        back: "Back"
+        petition: "Petition"
+        signatures: "signatures"
+        sign_this_petition: "Sign this petition"
     flash:
       cant_sign_rejected: "Sorry, you can’t sign petitions that have been rejected"
       cant_sign_closed: "Sorry, you can’t sign petitions that have been closed"

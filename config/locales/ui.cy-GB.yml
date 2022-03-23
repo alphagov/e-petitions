@@ -1,6 +1,12 @@
 ---
 cy-GB:
   ui:
+    map:
+      petition_info:
+        back: "Nôl"
+        petition: "Deiseb"
+        signatures: "llofnod"
+        sign_this_petition: "Llofnodi’r ddeiseb hon"
     flash:
       cant_sign_rejected: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u gwrthod"
       cant_sign_closed: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u cau"

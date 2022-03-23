@@ -3,6 +3,10 @@ json.action @petition.action
 json.signature_count @petition.signature_count
 json.petition_url petition_url(@petition)
 
+json.ui do
+  json.set! :petition_info, I18n.t(:petition_info, scope: :"ui.map");
+end
+
 if @petition.open?
   json.sign_petition_url new_petition_signature_url(@petition)
 else

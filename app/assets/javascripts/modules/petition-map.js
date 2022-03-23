@@ -169,7 +169,6 @@
   }
 
   var currentLayer = null;
-
   var constituenciesLayer = L.geoJson(data.constituencies, layerOptions);
   var regionsLayer = L.geoJson(data.regions, layerOptions);
 
@@ -178,6 +177,9 @@
   setCenterAndMaxBounds(currentLayer);
 
   map.addLayer(currentLayer);
+
+  var petitionInfo = L.petitionInfoControl(data.petition);
+  map.addControl(petitionInfo);
 
   map.on('move', function(e) {
     currentLayer.eachLayer(function(layer) {
