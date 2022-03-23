@@ -2,6 +2,14 @@ class Member < ActiveRecord::Base
   URL_EN = "https://senedd.wales/people/%{slug}/"
   URL_CY = "https://senedd.cymru/pobl/%{slug}/"
 
+  PARTY_COLOURS = {
+    'Welsh Liberal Democrats' => '#FDBB30',
+    'Welsh Labour and Co-operative Party' => '#CC0000',
+    'Welsh Labour' => '#DC241F',
+    'Welsh Conservative Party' => '#0087DC',
+    'Plaid Cymru' => '#008142'
+  }
+
   include Translatable
 
   translate :name, :party
@@ -24,6 +32,10 @@ class Member < ActiveRecord::Base
 
   def url
     I18n.locale == :"cy-GB" ? url_cy : url_en
+  end
+
+  def colour
+    PARTY_COLOURS.fetch(party_en)
   end
 
   private
