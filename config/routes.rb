@@ -10,6 +10,10 @@ Rails.application.routes.draw do
       get '/regions', action: 'index', as: :regions
     end
 
+    scope controller: 'countries' do
+      get '/countries', action: 'index', as: :countries
+    end
+
     scope controller: 'topics' do
       get '/topics', action: 'index', as: :topics
     end

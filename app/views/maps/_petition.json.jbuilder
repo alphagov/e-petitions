@@ -13,14 +13,14 @@ else
   json.sign_petition_url nil
 end
 
-countries = @petition.signatures_by_country
+countries = @petition.signatures_by_uk_country
 
 if countries.empty?
   json.set! :signatures_by_country, {}
 else
   json.signatures_by_country do
     countries.each do |country|
-      json.set! country.code, country.signature_count
+      json.set! country.ons_code, country.signature_count
     end
   end
 end

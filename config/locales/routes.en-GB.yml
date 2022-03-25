@@ -15,6 +15,9 @@ en-GB:
     "/constituencies":
       en-GB: "/constituencies"
       cy-GB: "/etholaethau"
+    "/countries":
+      en-GB: "/countries"
+      cy-GB: "/gwledydd"
     "/feedback":
       en-GB: "/feedback"
       cy-GB: "/adborth"

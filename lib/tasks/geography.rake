@@ -4,6 +4,7 @@ namespace :wpets do
   namespace :geography do
     desc "Load constituency, postcode and region data"
     task import: :environment do
+      Rake::Task["wpets:geography:update_countries"].invoke
       Rake::Task["wpets:geography:update_regions"].invoke
       Rake::Task["wpets:geography:update_constituencies"].invoke
       Rake::Task["wpets:geography:update_postcodes"].invoke
@@ -99,6 +100,49 @@ namespace :wpets do
       SQL
 
       conn.exec "DROP TABLE regions_import"
+    end
+
+    task update_countries: :environment do
+      # Have to drop down to SQL to handle the timestamps
+      conn = ActiveRecord::Base.connection.raw_connection
+
+      conn.exec <<~SQL
+        CREATE TEMPORARY TABLE countries_import (
+          id character varying(9) PRIMARY KEY,
+          name_en character varying(100) NOT NULL,
+          name_cy character varying(100) NOT NULL,
+          population integer NOT NULL,
+          boundary geography(Geometry,4326)
+        );
+      SQL
+
+      conn.copy_data "COPY countries_import FROM STDIN CSV HEADER" do
+        file = Rails.root.join("data", "countries.csv")
+
+        File.foreach(file) do |line|
+          conn.put_copy_data line
+        end
+      end
+
+      conn.exec <<~SQL
+        INSERT INTO countries (
+          id, name_en, name_cy, population, boundary,
+          created_at, updated_at
+        )
+        SELECT
+          id, name_en, name_cy, population, boundary,
+          now() AS created_at, now() AS updated_at
+        FROM countries_import
+        ON CONFLICT (id) DO UPDATE
+        SET
+          name_en = EXCLUDED.name_en,
+          name_cy = EXCLUDED.name_cy,
+          population = EXCLUDED.population,
+          boundary = EXCLUDED.boundary,
+          updated_at = EXCLUDED.updated_at
+      SQL
+
+      conn.exec "DROP TABLE countries_import"
     end
 
     task update_postcodes: :environment do

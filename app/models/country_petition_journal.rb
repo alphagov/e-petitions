@@ -1,4 +1,11 @@
 class CountryPetitionJournal < ActiveRecord::Base
+  UK_COUNTRIES = {
+    'GB-ENG' => 'E92000001',
+    'GB-NIR' => 'N92000002',
+    'GB-SCT' => 'S92000003',
+    'GB-WLS' => 'W92000004'
+  }
+
   belongs_to :petition
 
   validates :petition, presence: true
@@ -40,6 +47,10 @@ class CountryPetitionJournal < ActiveRecord::Base
       end
     end
 
+    def uk
+      where(location_code: UK_COUNTRIES.keys)
+    end
+
     private
 
     def last_signed_at
@@ -72,6 +83,10 @@ class CountryPetitionJournal < ActiveRecord::Base
 
   def code
     location_code
+  end
+
+  def ons_code
+    UK_COUNTRIES.fetch(location_code)
   end
 
   def name

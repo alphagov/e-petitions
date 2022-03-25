@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_17_102801) do
+ActiveRecord::Schema.define(version: 2022_03_23_174905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "intarray"
@@ -99,6 +99,17 @@ ActiveRecord::Schema.define(version: 2022_03_17_102801) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["signature_id"], name: "index_contacts_on_signature_id"
+  end
+
+  create_table "countries", id: { type: :string, limit: 9 }, force: :cascade do |t|
+    t.string "name_en", limit: 100, null: false
+    t.string "name_cy", limit: 100, null: false
+    t.integer "population", null: false
+    t.geography "boundary", limit: {:srid=>4326, :type=>"geometry", :geographic=>true}
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name_cy"], name: "index_countries_on_name_cy", unique: true
+    t.index ["name_en"], name: "index_countries_on_name_en", unique: true
   end
 
   create_table "country_petition_journals", id: :serial, force: :cascade do |t|

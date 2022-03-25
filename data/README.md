@@ -11,7 +11,9 @@ You’ll need to have a recent PostgreSQL and PostGIS version installed on your 
 3. [Welsh Output Area to Constituency to Region Lookup][3]
 4. [Constituency Boundaries (Ultra Generalised)][5]
 5. [Region Boundaries (Super Generalised)][6]
-6. [Population statistics for Senedd Cymru constituencies][7]
+6. [Country Boundaries (Ultra Generalised)][8]
+7. [Population statistics for Senedd Cymru constituencies][7]
+8. [Population estimates for England, Wales, Scotland and Northern Ireland][9]
 
 The latest version of the ONS Postcode Directory should be used - it is updated every three months.
 
@@ -220,7 +222,7 @@ JOIN welsh_constituencies c ON st_within(p.location, c.boundary)
 JOIN welsh_constituency_to_region_lookup AS r ON c.code = r.spc20cd;
 ```
 
-This is the final table we need to generate our final geography CSV files - export using the following `COPY` commands:
+This is the final table we need to generate our constituency and region geography CSV files - export using the following `COPY` commands:
 
 ``` sql
 # regions.csv
@@ -269,6 +271,42 @@ The `ST_Transform` method transforms the co-ordinates from OSGB National Grid to
 
 Send the `regions.csv` and `constituencies.csv` to the translations team to fill out the `name_gd` column. Once received replace the existing files and commit to the repo.
 
+## Countries
+
+The country data is much simpler to generate, first import the generalised boundary data:
+
+``` sh
+ogr2ogr -nlt PROMOTE_TO_MULTI -f "PostgreSQL" PG:"host=localhost dbname=<your-local-database>" -nln countries -unsetFieldWidth CTRY_DEC_2021_UK_BUC.shp
+```
+
+Next create a table for the population figures obtained from the ONS mid-year estimates - the columns E-H and rows 8-9 are the figures you need:
+
+```
+CREATE TABLE population_by_country (
+  code character varying(9) PRIMARY KEY,
+  population integer NOT NULL
+);
+
+COPY population_by_country FROM '/path/to/population_by_country.csv' WITH DELIMITER ',' CSV HEADER;
+```
+
+Finally, create the countries.csv file in a similar manner to the constituency and region CSV files:
+
+``` sql
+#countries.csv
+COPY (
+  SELECT
+    c.ctry21cd AS id,
+    c.ctry21nm AS name_en,
+    c.ctry21nmw AS name_cy,
+    p.population,
+    ST_AsEWKT(ST_ReducePrecision(ST_Transform(c.wkb_geometry, 4326), 0.0001)) AS boundary
+  FROM countries AS c
+  INNER JOIN population_by_country AS p ON c.ctry21cd = p.code
+  ORDER BY c.ctry21cd
+) TO '/path/to/countries.csv' WITH CSV HEADER FORCE QUOTE *;
+```
+
 [1]: https://osdatahub.os.uk/downloads/open/BoundaryLine
 [2]: https://geoportal.statistics.gov.uk/datasets/ons-postcode-directory-november-2021
 [3]: https://geoportal.statistics.gov.uk/datasets/ons::output-area-to-national-assembly-for-wales-constituency-to-national-assembly-for-wales-electoral-region-december-2018-lookup-in-wales/explore
@@ -276,3 +314,5 @@ Send the `regions.csv` and `constituencies.csv` to the translations team to fill
 [5]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-constituencies-december-2018-wa-buc
 [6]: https://geoportal.statistics.gov.uk/datasets/ons::national-assembly-for-wales-electoral-regions-december-2018-boundaries-wa-bsc
 [7]: https://gov.wales/data-senedd-cymru-constituency-areas-2021
+[8]: https://geoportal.statistics.gov.uk/datasets/ons::countries-december-2021-uk-buc/about
+[9]: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/populationestimatesforukenglandandwalesscotlandandnorthernireland

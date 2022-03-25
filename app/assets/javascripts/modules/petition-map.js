@@ -4,17 +4,20 @@
   var petition = data.petition;
   var constituencies = data.constituencies.features;
   var regions = data.regions.features;
+  var countries = data.countries.features;
   var maxConstituencyCount = 0;
   var maxConstituencyPopulation = 0;
   var maxRegionCount = 0;
   var maxRegionPopulation = 0;
+  var maxCountryCount = 0;
+  var maxCountryPopulation = 0;
 
   mapOptions = {
     attributionControl: false,
     zoomControl: false,
-    zoom: 8,
-    minZoom: 7,
-    maxZoom: 10
+    zoom: 5,
+    minZoom: 5,
+    maxZoom: 7
   }
 
   var map = PetitionMap.map = L.map('map', mapOptions);
@@ -65,17 +68,34 @@
     });
   }
 
+  var initializeCountries = function (features) {
+    features.forEach(function (feature) {
+      var properties = feature.properties;
+
+      properties.count = petition.signatures_by_country[properties.id];
+      properties.totalCount = petition.signature_count;
+      properties.percentageOfCount = properties.count / properties.totalCount;
+      properties.percentageOfPopulation = properties.count / properties.population;
+
+      maxCountryCount = Math.max(maxCountryCount, properties.percentageOfCount);
+      maxCountryPopulation = Math.max(maxCountryPopulation, properties.percentageOfPopulation);
+    });
+  }
+
   initializeConstituencies(constituencies);
   initializeRegions(regions);
+  initializeCountries(countries);
 
   var maxPercentageCount = Math.max(maxConstituencyCount, maxRegionCount);
   var maxPercentagePopulation = Math.max(maxConstituencyPopulation, maxRegionPopulation);
 
-  var colourScale = 0.8;
+  var colourScale = 0.5;
   var constituencyCountColourScale = (1 / maxConstituencyCount) * colourScale;
   var constituencyPopulationColourScale = (1 / maxConstituencyPopulation) * colourScale;
   var regionCountColourScale = (1 / maxRegionCount) * colourScale;
   var regionPopulationColourScale = (1 / maxRegionPopulation) * colourScale;
+  var countryCountColourScale = (1 / maxCountryCount) * colourScale;
+  var countryPopulationColourScale = (1 / maxCountryPopulation) * colourScale;
 
   var setCenterAndMaxBounds = function (layer) {
     var bounds = layer.getBounds();
@@ -118,12 +138,20 @@
         fillOpacity: 1.0,
         weight: 2
       });
-    } else {
+    } else if (properties.partyPattern) {
       this.setStyle({
         color: '#3C3C3B',
         fillColor: null,
         fillPattern: properties.partyPattern,
         fillOpacity: 1.0,
+        weight: 2
+      });
+    } else {
+      this.setStyle({
+        color: '#3C3C3B',
+        fillColor: '#C9187E',
+        fillPattern: null,
+        fillOpacity: properties.percentageOfPopulation * countryPopulationColourScale,
         weight: 2
       });
     }
@@ -171,6 +199,7 @@
   var currentLayer = null;
   var constituenciesLayer = L.geoJson(data.constituencies, layerOptions);
   var regionsLayer = L.geoJson(data.regions, layerOptions);
+  var countriesLayer = L.geoJson(data.countries, layerOptions);
 
   currentLayer = constituenciesLayer;
 
