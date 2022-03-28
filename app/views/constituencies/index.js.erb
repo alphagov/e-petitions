@@ -3,5 +3,32 @@
   this.PetitionMap = this.PetitionMap || {};
   PetitionMap.data = PetitionMap.data || {};
   PetitionMap.data.constituencies = <%= raw render(partial: "constituencies", formats: %i[geojson]) %>;
+
+  PetitionMap.data.constituencies.initialize = function (petition) {
+    var maxSignatures = 0, maxPopulation = 0;
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+
+      properties.signatures = petition.signatures_by_constituency[properties.id];
+      properties.totalSignatures = petition.signature_count;
+      properties.percentageOfSignatures = properties.signatures / properties.totalSignatures;
+      properties.percentageOfPopulation = properties.signatures / properties.population;
+      properties.partyColour = properties.member.colour;
+
+      maxSignatures = Math.max(maxSignatures, properties.percentageOfSignatures);
+      maxPopulation = Math.max(maxPopulation, properties.percentageOfPopulation);
+    });
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+      properties.signatureColourScale = maxSignatures;
+      properties.populationColourScale = maxPopulation;
+    });
+  }
+
+  PetitionMap.data.constituencies.minZoom = 6.5;
+  PetitionMap.data.constituencies.maxZoom = 10.5;
+  PetitionMap.data.constituencies.mapCenter = [52.4174, -4.0018];
 }).call(this);
 <% end %>

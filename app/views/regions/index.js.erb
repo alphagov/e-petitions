@@ -3,5 +3,48 @@
   this.PetitionMap = this.PetitionMap || {};
   PetitionMap.data = PetitionMap.data || {};
   PetitionMap.data.regions = <%= raw render(partial: "regions", formats: %i[geojson]) %>;
+
+  PetitionMap.data.regions.initialize = function (petition) {
+    var maxSignatures = 0, maxPopulation = 0;
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+      var pattern = new L.Pattern({
+        patternUnits: 'userSpaceOnUse',
+        patternContentUnits: null,
+        x: 0, y: 0, width: 32, height: 32, angle: 135
+      });
+
+      properties.signatures = petition.signatures_by_region[properties.id];
+      properties.totalSignatures = petition.signature_count;
+      properties.percentageOfSignatures = properties.signatures / properties.totalSignatures;
+      properties.percentageOfPopulation = properties.signatures / properties.population;
+
+      maxSignatures = Math.max(maxSignatures, properties.percentageOfSignatures);
+      maxPopulation = Math.max(maxPopulation, properties.percentageOfPopulation);
+
+      properties.members.forEach(function (member, index) {
+        var shape = new L.PatternPath({
+          d: 'M 0 ' + (index * 8 + 4) + ' L 32 ' + (index * 8 + 4) + ' Z',
+          stroke: true, color: member.colour, weight: 8
+        });
+
+        pattern.addShape(shape);
+      });
+
+      pattern.addTo(PetitionMap.map);
+      properties.partyPattern = pattern;
+    });
+
+    this.features.forEach(function (feature) {
+      var properties = feature.properties;
+      properties.signatureColourScale = maxSignatures;
+      properties.populationColourScale = maxPopulation;
+    });
+  }
+
+  PetitionMap.data.regions.minZoom = 6.5;
+  PetitionMap.data.regions.maxZoom = 10.5;
+  PetitionMap.data.regions.mapCenter = [52.4174, -4.0018];
 }).call(this);
 <% end %>

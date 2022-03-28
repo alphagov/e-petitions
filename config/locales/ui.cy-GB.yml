@@ -7,6 +7,16 @@ cy-GB:
         petition: "Deiseb"
         signatures: "llofnod"
         sign_this_petition: "Llofnodi’r ddeiseb hon"
+      map_switcher:
+        show_signatures_by:
+          legend: "Dangos llofnodion gan"
+          constituencies: "etholaeth"
+          regions: "rhanbarth"
+          countries: "gwlad"
+        count_signatures_by:
+          legend: "Cyfrif llofnodion erbyn"
+          population: "% o etholwyr"
+          signatures: "% o lofnodion"
     flash:
       cant_sign_rejected: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u gwrthod"
       cant_sign_closed: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u cau"

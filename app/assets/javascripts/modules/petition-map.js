@@ -1,122 +1,163 @@
 (function () {
   var PetitionMap = this.PetitionMap;
   var data = PetitionMap.data;
-  var petition = data.petition;
-  var constituencies = data.constituencies.features;
-  var regions = data.regions.features;
-  var countries = data.countries.features;
-  var maxConstituencyCount = 0;
-  var maxConstituencyPopulation = 0;
-  var maxRegionCount = 0;
-  var maxRegionPopulation = 0;
-  var maxCountryCount = 0;
-  var maxCountryPopulation = 0;
+  var layers = PetitionMap.layers = {};
+  var controls = PetitionMap.controls = {};
+  var currentView = null;
+  var currentCount = null;
+  var currentLayer = null;
+  var currentFeature = null;
+  var moving = false;
 
-  mapOptions = {
+  var map = PetitionMap.map = L.map('map', {
     attributionControl: false,
     zoomControl: false,
-    zoom: 5,
-    minZoom: 5,
-    maxZoom: 7
+    zoomSnap: 0.1,
+    zoomDelta: 0.5,
+    zoom: 5
+  });
+
+  var defaultMapView = function() {
+    params = new URLSearchParams(window.location.search);
+    viewParam = params.get('view');
+
+    switch (viewParam) {
+      case 'countries':
+      case 'regions':
+      case 'constituencies':
+        return viewParam;
+      default:
+        return 'constituencies';
+    }
   }
 
-  var map = PetitionMap.map = L.map('map', mapOptions);
+  var defaultMapCount = function() {
+    params = new URLSearchParams(window.location.search);
+    countParam = params.get('count');
 
-  var initializeConstituencies = function (features) {
-    features.forEach(function (feature) {
-      var properties = feature.properties;
-
-      properties.count = petition.signatures_by_constituency[properties.id];
-      properties.totalCount = petition.signature_count;
-      properties.percentageOfCount = properties.count / properties.totalCount;
-      properties.percentageOfPopulation = properties.count / properties.population;
-      properties.partyColour = properties.member.colour;
-
-      maxConstituencyCount = Math.max(maxConstituencyCount, properties.percentageOfCount);
-      maxConstituencyPopulation = Math.max(maxConstituencyPopulation, properties.percentageOfPopulation);
-    });
+    switch (countParam) {
+      case 'signatures':
+      case 'constituents':
+        return countParam;
+      default:
+        return 'constituents';
+    }
   }
 
-  var initializeRegions = function (features) {
-    features.forEach(function (feature) {
-      var properties = feature.properties;
-      var pattern = new L.Pattern({
-        patternUnits: 'userSpaceOnUse',
-        patternContentUnits: null,
-        x: 0, y: 0, width: 32, height: 32, angle: 135
-      });
+  var updateWindowHref = function() {
+    var path = window.location.pathname;
+    var params = new URLSearchParams();
 
-      properties.count = petition.signatures_by_region[properties.id];
-      properties.totalCount = petition.signature_count;
-      properties.percentageOfCount = properties.count / properties.totalCount;
-      properties.percentageOfPopulation = properties.count / properties.population;
+    params.set('view', currentView);
+    params.set('count', currentCount);
 
-      maxRegionCount = Math.max(maxRegionCount, properties.percentageOfCount);
-      maxRegionPopulation = Math.max(maxRegionPopulation, properties.percentageOfPopulation);
-
-      properties.members.forEach(function (member, index) {
-        var shape = new L.PatternPath({
-          d: 'M 0 ' + (index * 8 + 4) + ' L 32 ' + (index * 8 + 4) + ' Z',
-          stroke: true, color: member.colour, weight: 8
-        });
-
-        pattern.addShape(shape);
-      });
-
-      pattern.addTo(map);
-      properties.partyPattern = pattern;
-    });
+    window.history.replaceState(null, '', path + '?' + params.toString());
   }
 
-  var initializeCountries = function (features) {
-    features.forEach(function (feature) {
-      var properties = feature.properties;
-
-      properties.count = petition.signatures_by_country[properties.id];
-      properties.totalCount = petition.signature_count;
-      properties.percentageOfCount = properties.count / properties.totalCount;
-      properties.percentageOfPopulation = properties.count / properties.population;
-
-      maxCountryCount = Math.max(maxCountryCount, properties.percentageOfCount);
-      maxCountryPopulation = Math.max(maxCountryPopulation, properties.percentageOfPopulation);
-    });
-  }
-
-  initializeConstituencies(constituencies);
-  initializeRegions(regions);
-  initializeCountries(countries);
-
-  var maxPercentageCount = Math.max(maxConstituencyCount, maxRegionCount);
-  var maxPercentagePopulation = Math.max(maxConstituencyPopulation, maxRegionPopulation);
-
-  var colourScale = 0.5;
-  var constituencyCountColourScale = (1 / maxConstituencyCount) * colourScale;
-  var constituencyPopulationColourScale = (1 / maxConstituencyPopulation) * colourScale;
-  var regionCountColourScale = (1 / maxRegionCount) * colourScale;
-  var regionPopulationColourScale = (1 / maxRegionPopulation) * colourScale;
-  var countryCountColourScale = (1 / maxCountryCount) * colourScale;
-  var countryPopulationColourScale = (1 / maxCountryPopulation) * colourScale;
-
-  var setCenterAndMaxBounds = function (layer) {
+  var ensureMapIsVisible = function (layer) {
+    var padding = 72;
+    var size = map.getSize();
+    var topRight = map.containerPointToLatLng([size.x - padding, padding]);
+    var bottomLeft = map.containerPointToLatLng([padding, size.y - padding]);
     var bounds = layer.getBounds();
-    var center = bounds.getCenter();
-    var maxBounds = [
-      [center.lat - 2.5, center.lng - 3],
-      [center.lat + 2.5, center.lng + 3]
-    ];
+    var deltaX = 0, deltaY = 0;
 
-    map.panTo(center);
-    map.setMaxBounds(maxBounds);
+    if (topRight.lng < bounds.getWest()) {
+      var point = map.latLngToContainerPoint(bounds.getSouthWest());
+      deltaX = point.x - size.x + padding;
+    } else if (bottomLeft.lng > bounds.getEast()) {
+      var point = map.latLngToContainerPoint(bounds.getNorthEast());
+      deltaX = -(padding - point.x);
+    }
+
+    if (topRight.lat < bounds.getSouth()) {
+      var point = map.latLngToContainerPoint(bounds.getSouthWest());
+      deltaY = -(padding - point.y);
+    } else if (bottomLeft.lat > bounds.getNorth()) {
+      var point = map.latLngToContainerPoint(bounds.getNorthEast());
+      deltaY = padding - (size.y - point.y)
+    }
+
+    map.panBy([deltaX, deltaY], { noMoveStart: true, animate: false });
   }
 
-  var currentFeature = null;
+  PetitionMap.setCurrentView = function (newView) {
+    if (currentLayer) {
+      currentLayer.removeFrom(map);
+    }
+
+    var newData = data[newView];
+    var newLayer = layers[newView];
+    var bounds = newLayer.getBounds();
+
+    map.setMaxBounds([[90, 180], [-90, -180]]);
+    map.setMinZoom(0);
+    map.setMaxZoom(20);
+    map.setZoom(20);
+    map.panTo([0, 0]);
+
+    currentView = newView;
+    currentLayer = newLayer;
+    currentLayer.eachLayer(resetFeature);
+    map.addLayer(currentLayer);
+
+    map.setMinZoom(newData.minZoom);
+    map.setMaxZoom(newData.maxZoom);
+    map.fitBounds(bounds, { padding: [25, 25], animate: false });
+    map.panTo(newData.mapCenter, { noMoveStart: true, animate: false });
+
+    updateWindowHref();
+  }
+
+  PetitionMap.getCurrentView = function () {
+    return currentView;
+  }
+
+  PetitionMap.setCurrentCount = function (newCount) {
+    currentCount = newCount;
+
+    if (currentLayer) {
+      currentLayer.eachLayer(resetFeature);
+      updateWindowHref();
+    }
+  }
+
+  PetitionMap.getCurrentCount = function () {
+    return currentCount;
+  }
+
+  data.constituencies.initialize(data.petition);
+  data.regions.initialize(data.petition);
+  data.countries.initialize(data.petition);
+
+  var tooltipOptions = {
+    direction: 'top',
+    sticky: true,
+    interactive: true
+  }
+
+  var calculateFillOpactity = function (scale, percentage) {
+    return (1 / scale) * percentage * 0.8;
+  }
+
+  var fillOpacity = function (properties) {
+    if (currentCount == 'constituents') {
+      return calculateFillOpactity(
+        properties.populationColourScale,
+        properties.percentageOfPopulation
+      );
+    } else {
+      return calculateFillOpactity(
+        properties.signatureColourScale,
+        properties.percentageOfSignatures
+      );
+    }
+  }
 
   var featureStyle = function (feature) {
-    var properties = feature.properties;
-
     return {
       fillColor: '#C9187E',
-      fillOpacity: properties.percentageOfPopulation * constituencyPopulationColourScale,
+      fillOpacity: fillOpacity(feature.properties),
       fillPattern: null,
       color: '#747474',
       opacity: 1.0,
@@ -124,48 +165,51 @@
     }
   }
 
-  var resetFeature = function (target) {
-    target.setStyle(featureStyle(target.feature));
+  var resetFeature = function (layer) {
+    layer.setStyle(featureStyle(layer.feature));
   }
 
-  var highlightFeature = function (e) {
-    var properties = this.feature.properties;
+  var highlightFeature = function (layer) {
+    var properties = layer.feature.properties;
+
+    var style = {
+      color: '#3C3C3B',
+      fillColor: null,
+      fillPattern: null,
+      fillOpacity: 1.0,
+      weight: 2
+    };
 
     if (properties.partyColour) {
-      this.setStyle({
-        color: '#3C3C3B',
-        fillColor: properties.partyColour,
-        fillOpacity: 1.0,
-        weight: 2
-      });
+      style.fillColor = properties.partyColour;
     } else if (properties.partyPattern) {
-      this.setStyle({
-        color: '#3C3C3B',
-        fillColor: null,
-        fillPattern: properties.partyPattern,
-        fillOpacity: 1.0,
-        weight: 2
-      });
+      style.fillPattern = properties.partyPattern;
     } else {
-      this.setStyle({
-        color: '#3C3C3B',
-        fillColor: '#C9187E',
-        fillPattern: null,
-        fillOpacity: properties.percentageOfPopulation * countryPopulationColourScale,
-        weight: 2
-      });
+      style.fillOpacity = fillOpacity(properties);
+      style.fillColor = '#C9187E';
     }
 
-    this.bringToFront();
+    layer.setStyle(style);
+    layer.bringToFront();
   }
 
-  var resetHighlight = function (e) {
+  var onMouseMoveFeature = function (e) {
+    if (!moving && !e.target.isTooltipOpen()) {
+      e.target.openTooltip();
+    }
+  }
+
+  var onMouseOverFeature = function (e) {
+    highlightFeature(e.target);
+  }
+
+  var onMouseOutFeature = function (e) {
     if (e.target != currentFeature) {
       resetFeature(e.target);
     }
   }
 
-  var selectFeature = function (e) {
+  var onClickFeature = function (e) {
     if (currentFeature && currentFeature != e.target) {
       resetFeature(currentFeature);
     }
@@ -173,19 +217,13 @@
     currentFeature = e.target;
   }
 
-  var currentTooltip = null;
-
-  var tooltipOptions = {
-    direction: 'top',
-    sticky: true
-  }
-
   var onEachFeature = function (feature, layer) {
     layer.on({
-      mouseover: highlightFeature,
-      mouseout: resetHighlight,
-      click: selectFeature
-    })
+      mousemove: onMouseMoveFeature,
+      mouseover: onMouseOverFeature,
+      mouseout: onMouseOutFeature,
+      click: onClickFeature
+    });
 
     layer.bindTooltip(feature.properties.name, tooltipOptions)
   }
@@ -196,40 +234,46 @@
     bubblingMouseEvents: false
   }
 
-  var currentLayer = null;
-  var constituenciesLayer = L.geoJson(data.constituencies, layerOptions);
-  var regionsLayer = L.geoJson(data.regions, layerOptions);
-  var countriesLayer = L.geoJson(data.countries, layerOptions);
+  layers.constituencies = L.geoJson(data.constituencies, layerOptions);
+  layers.regions = L.geoJson(data.regions, layerOptions);
+  layers.countries = L.geoJson(data.countries, layerOptions);
 
-  currentLayer = constituenciesLayer;
+  PetitionMap.setCurrentCount(defaultMapCount());
+  PetitionMap.setCurrentView(defaultMapView());
 
-  setCenterAndMaxBounds(currentLayer);
+  PetitionMap.controls.petitionInfo = L.petitionInfoControl(data.petition);
+  PetitionMap.controls.mapSwitcher = L.mapSwitcherControl(data.petition);
 
-  map.addLayer(currentLayer);
+  map.addControl(PetitionMap.controls.petitionInfo);
+  map.addControl(PetitionMap.controls.mapSwitcher);
 
-  var petitionInfo = L.petitionInfoControl(data.petition);
-  map.addControl(petitionInfo);
+  var onMoveStart = function(e) {
+    moving = true;
 
-  map.on('move', function(e) {
-    currentLayer.eachLayer(function(layer) {
-      if (layer.isTooltipOpen()) {
-        currentTooltip = layer.getTooltip();
-        layer.closeTooltip();
-      }
-    })
-  });
-
-  map.on('moveend', function(e) {
-    if (currentTooltip) {
-      map.openTooltip(currentTooltip);
-      currentTooltip = null;
+    if (currentLayer) {
+      currentLayer.eachLayer(function(layer) {
+        if (layer.isTooltipOpen()) {
+          layer.closeTooltip();
+        }
+      });
     }
-  });
+  }
 
-  map.on('click', function(e) {
+  var onMoveEnd = function(e) {
+    if (moving && currentLayer) {
+      moving = false;
+      ensureMapIsVisible(currentLayer);
+    }
+  }
+
+  var onClick = function(e) {
     if (currentFeature) {
       resetFeature(currentFeature)
       currentFeature = null;
     }
-  });
+  }
+
+  map.on('movestart', onMoveStart);
+  map.on('moveend', onMoveEnd);
+  map.on('click', onClick);
 }).call(this);

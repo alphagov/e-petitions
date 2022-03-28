@@ -52,6 +52,7 @@ body {
 
 .leaflet-container {
   .petition-info {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
     background-color: $white;
     border: 2px solid $dark-grey;
     width: 210px;
@@ -194,6 +195,101 @@ body {
           @extend %icon-chevron-right-dark-grey;
         }
       }
+    }
+  }
+  
+  .map-switcher {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    padding: 12px;
+
+    @include media(tablet) {
+      padding: 18px;
+    }
+    
+    fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    fieldset + fieldset {
+      margin-top: 12px;
+
+      @include media(tablet) {
+        margin-top: 18px;
+      }
+    }
+    
+    legend {
+      @include font-size(0.875rem, 1rem);
+
+      font-weight: bold !important;
+      margin-bottom: 6px;
+    }
+    
+    label {
+      font-weight: normal;
+    }
+
+    input[type=radio] {
+      width: 24px;
+      height: 24px;
+    }
+
+    [type=radio] + label::before {
+      width: 20px;
+      height: 20px;
+    }
+
+    [type=radio] + label::after {
+      border: 6px solid;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+    }
+
+    @include media(tablet) {
+      input[type=radio] {
+        width: 28px;
+        height: 28px;
+      }
+
+      [type=radio] + label::before {
+        width: 24px;
+        height: 24px;
+      }
+
+      [type=radio] + label::after {
+        border: 7px solid;
+        position: absolute;
+        top: 7px;
+        left: 7px;
+      }
+    }
+    
+    .multiple-choice {
+      @include font-size(0.75rem, 0.875rem);
+
+      padding-left: 24px;
+    
+      label {
+        padding: 3px 6px 1px;
+      }
+
+      @include media(tablet) {
+        padding-left: 28px;
+      
+        label {
+          padding: 4px 7px 2px;
+        }
+      }
+    }
+
+    .multiple-choice:last-child,
+    .multiple-choice:last-of-type {
+      margin-bottom: 0;
     }
   }
 }

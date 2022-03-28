@@ -5,6 +5,7 @@ json.petition_url petition_url(@petition)
 
 json.ui do
   json.set! :petition_info, I18n.t(:petition_info, scope: :"ui.map");
+  json.set! :map_switcher, I18n.t(:map_switcher, scope: :"ui.map");
 end
 
 if @petition.open?
