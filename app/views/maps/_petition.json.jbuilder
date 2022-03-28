@@ -6,7 +6,11 @@ json.petition_url petition_url(@petition)
 json.ui do
   json.set! :petition_info, I18n.t(:petition_info, scope: :"ui.map");
   json.set! :map_switcher, I18n.t(:map_switcher, scope: :"ui.map");
+  json.set! :zoom_and_share, I18n.t(:zoom_and_share, scope: :"ui.map");
 end
+
+json.about_map_url about_petition_map_url(@petition)
+json.share_map_url share_petition_map_url(@petition)
 
 if @petition.open?
   json.sign_petition_url new_petition_signature_url(@petition)

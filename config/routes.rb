@@ -61,7 +61,9 @@ Rails.application.routes.draw do
 
       scope '/:petition_id' do
         scope '/map', controller: 'maps' do
-          get '/', action: 'show', as: :petition_map
+          get '/',      action: 'show',  as: :petition_map
+          get '/about', action: 'about', as: :about_petition_map
+          get '/share', action: 'share', as: :share_petition_map
         end
 
         scope '/sponsors', controller: 'sponsors' do

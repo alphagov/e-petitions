@@ -17,6 +17,21 @@ cy-GB:
           legend: "Cyfrif llofnodion erbyn"
           population: "% o etholwyr"
           signatures: "% o lofnodion"
+      zoom_and_share:
+        zoom_in: "Chwyddo i Mewn"
+        zoom_out: "Chwyddo allan"
+        share: "Rhannu Map"
+        about: "Ynghylch"
+      about_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Nôl</a>
+        body_html: |-
+          <h1 class="page-title">Ynglŷn â map y ddeiseb</h1>
+      share_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Nôl</a>
+        body_html: |-
+          <h1 class="page-title">Rhannwch fap y ddeiseb</h1>
     flash:
       cant_sign_rejected: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u gwrthod"
       cant_sign_closed: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u cau"

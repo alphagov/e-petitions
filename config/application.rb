@@ -56,6 +56,9 @@ module WelshPets
     # Configure Active Job queue adapter
     config.active_job.queue_adapter = :delayed_job
 
+    # Customise the preload link header
+    config.action_view.preload_links_header = false
+
     # Remove the error wrapper from around the form element
     config.action_view.field_error_proc = -> (html_tag, instance) { html_tag }
 

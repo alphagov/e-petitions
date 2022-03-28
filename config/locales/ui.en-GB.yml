@@ -17,6 +17,21 @@ en-GB:
           legend: "Count signatures by"
           population: "% of constituents"
           signatures: "% of signatures"
+      zoom_and_share:
+        zoom_in: "Zoom In"
+        zoom_out: "Zoom Out"
+        share: "Share Map"
+        about: "About"
+      about_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Back</a>
+        body_html: |-
+          <h1 class="page-title">About the petition map</h1>
+      share_page:
+        back_link_html: |-
+          <a class="back-page" href="%{url}">Back</a>
+        body_html: |-
+          <h1 class="page-title">Share the petition map</h1>
     flash:
       cant_sign_rejected: "Sorry, you can’t sign petitions that have been rejected"
       cant_sign_closed: "Sorry, you can’t sign petitions that have been closed"

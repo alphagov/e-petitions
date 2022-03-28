@@ -1,0 +1,20 @@
+<%= t(:"ui.map.share_page.back_link_html", url: petition_map_path(@petition)) %>
+<div class="text-page">
+<%= t(:"ui.map.share_page.body_html") %>
+  <div class="petition-share">
+    <ul>
+      <li class="facebook">
+        <%= share_map_via_facebook(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="email">
+        <%= share_map_via_email(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="twitter">
+        <%= share_map_via_twitter(@petition, rel: 'external', target: '_blank') %>
+      </li>
+      <li class="whatsapp">
+        <%= share_map_via_whatsapp(@petition, rel: 'external', target: '_blank') %>
+      </li>
+    </ul>
+  </div>
+</div>

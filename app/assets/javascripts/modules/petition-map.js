@@ -243,9 +243,11 @@
 
   PetitionMap.controls.petitionInfo = L.petitionInfoControl(data.petition);
   PetitionMap.controls.mapSwitcher = L.mapSwitcherControl(data.petition);
+  PetitionMap.controls.zoomAndShare = L.zoomAndShareControl(data.petition);
 
   map.addControl(PetitionMap.controls.petitionInfo);
   map.addControl(PetitionMap.controls.mapSwitcher);
+  map.addControl(PetitionMap.controls.zoomAndShare);
 
   var onMoveStart = function(e) {
     moving = true;

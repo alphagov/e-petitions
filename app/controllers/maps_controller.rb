@@ -12,6 +12,18 @@ class MapsController < LocalizedController
     end
   end
 
+  def about
+    respond_to do |format|
+      format.html { render layout: "application" }
+    end
+  end
+
+  def share
+    respond_to do |format|
+      format.html { render layout: "application" }
+    end
+  end
+
   protected
 
   def petition_id
