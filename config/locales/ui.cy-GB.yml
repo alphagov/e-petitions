@@ -2,6 +2,14 @@
 cy-GB:
   ui:
     map:
+      feature_info:
+        signatures:
+          one: "llofnod"
+          two: "llofnod"
+          zero: "llofnod"
+          other: "llofnod"
+        constituents: "etholwyr"
+        of: "o"
       petition_info:
         back: "Nôl"
         petition: "Deiseb"

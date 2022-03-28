@@ -107,6 +107,10 @@
     map.panTo(newData.mapCenter, { noMoveStart: true, animate: false });
 
     updateWindowHref();
+
+    if (controls.featureInfo) {
+      controls.featureInfo.resetFeatureInfo();
+    }
   }
 
   PetitionMap.getCurrentView = function () {
@@ -119,6 +123,10 @@
     if (currentLayer) {
       currentLayer.eachLayer(resetFeature);
       updateWindowHref();
+    }
+
+    if (controls.featureInfo) {
+      controls.featureInfo.resetFeatureInfo();
     }
   }
 
@@ -137,7 +145,11 @@
   }
 
   var calculateFillOpactity = function (scale, percentage) {
-    return (1 / scale) * percentage * 0.8;
+    if (percentage < 0.0005) {
+      return 0;
+    } else {
+      return (1 / scale) * percentage * 0.8;
+    }
   }
 
   var fillOpacity = function (properties) {
@@ -212,9 +224,11 @@
   var onClickFeature = function (e) {
     if (currentFeature && currentFeature != e.target) {
       resetFeature(currentFeature);
+      controls.featureInfo.resetFeatureInfo();
     }
 
     currentFeature = e.target;
+    controls.featureInfo.setFeatureInfo(currentFeature.feature);
   }
 
   var onEachFeature = function (feature, layer) {
@@ -241,13 +255,15 @@
   PetitionMap.setCurrentCount(defaultMapCount());
   PetitionMap.setCurrentView(defaultMapView());
 
-  PetitionMap.controls.petitionInfo = L.petitionInfoControl(data.petition);
-  PetitionMap.controls.mapSwitcher = L.mapSwitcherControl(data.petition);
-  PetitionMap.controls.zoomAndShare = L.zoomAndShareControl(data.petition);
+  controls.petitionInfo = L.petitionInfoControl(data.petition);
+  controls.mapSwitcher = L.mapSwitcherControl(data.petition);
+  controls.zoomAndShare = L.zoomAndShareControl(data.petition);
+  controls.featureInfo = L.featureInfoControl(data.petition);
 
-  map.addControl(PetitionMap.controls.petitionInfo);
-  map.addControl(PetitionMap.controls.mapSwitcher);
-  map.addControl(PetitionMap.controls.zoomAndShare);
+  map.addControl(controls.petitionInfo);
+  map.addControl(controls.mapSwitcher);
+  map.addControl(controls.zoomAndShare);
+  map.addControl(controls.featureInfo);
 
   var onMoveStart = function(e) {
     moving = true;
@@ -271,6 +287,7 @@
   var onClick = function(e) {
     if (currentFeature) {
       resetFeature(currentFeature)
+      controls.featureInfo.resetFeatureInfo();
       currentFeature = null;
     }
   }

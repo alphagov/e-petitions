@@ -10,7 +10,7 @@
     this.features.forEach(function (feature) {
       var properties = feature.properties;
 
-      properties.signatures = petition.signatures_by_country[properties.id];
+      properties.signatures = petition.signatures_by_country[properties.id] || 0;
       properties.totalSignatures = petition.signature_count;
       properties.percentageOfSignatures = properties.signatures / properties.totalSignatures;
       properties.percentageOfPopulation = properties.signatures / properties.population;

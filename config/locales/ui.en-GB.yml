@@ -2,6 +2,14 @@
 en-GB:
   ui:
     map:
+      feature_info:
+        signatures:
+          one: "signature"
+          two: "signatures"
+          zero: "signatures"
+          other: "signatures"
+        constituents: "constituents"
+        of: "of"
       petition_info:
         back: "Back"
         petition: "Petition"

@@ -59,6 +59,38 @@ body {
 }
 
 .leaflet-container {
+  .feature-info {
+    font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
+    background-color: $white;
+    border: 2px solid $dark-grey;
+    width: 210px;
+    padding: 12px;
+
+    @include media(tablet) {
+      padding: 18px;
+      width: 230px;
+    }
+
+    h2 {
+      @include font-size(1rem, 1.125rem);
+      margin: 0 0 12px 0;
+    }
+
+    p {
+      @include font-size(0.875rem, 1rem);
+      margin: 6px 0 0 0;
+
+      small {
+        @include font-size(0.75rem, 0.875rem);
+        display: block;
+      }
+    }
+
+    p:last-child {
+      margin: 12px 0 0 0;
+    }
+  }
+
   .petition-info {
     font-family: "Montserrat", Helvetica, Arial, sans-serif !important;
     background-color: $white;

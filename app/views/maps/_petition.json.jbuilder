@@ -4,6 +4,7 @@ json.signature_count @petition.signature_count
 json.petition_url petition_url(@petition)
 
 json.ui do
+  json.set! :feature_info, I18n.t(:feature_info, scope: :"ui.map");
   json.set! :petition_info, I18n.t(:petition_info, scope: :"ui.map");
   json.set! :map_switcher, I18n.t(:map_switcher, scope: :"ui.map");
   json.set! :zoom_and_share, I18n.t(:zoom_and_share, scope: :"ui.map");
