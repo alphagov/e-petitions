@@ -51,7 +51,7 @@
         <% end %>
         <% if contact.address? %>
           <li>
-            <%= link_to "https://www.google.com/maps/search/?api=1&query=#{URI.escape("#{contact.address.squish}, #{creator.formatted_postcode}")}" do %>
+            <%= link_to "https://www.google.com/maps/search/?api=1&query=#{CGI.escape("#{contact.address.squish}, #{creator.formatted_postcode}")}" do %>
               <%= simple_format(h(contact.address + "\n" + creator.formatted_postcode)) %>
             <% end %>
           </li>

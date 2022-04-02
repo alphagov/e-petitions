@@ -10,8 +10,8 @@ module SearchHelper
     }
 
     capture do
-      concat content_tag(:span, t(:previous_html, options)) unless petitions.first_page?
-      concat content_tag(:span, t(:next_html, options)) unless petitions.last_page?
+      concat content_tag(:span, t(:previous_html, **options)) unless petitions.first_page?
+      concat content_tag(:span, t(:next_html, **options)) unless petitions.last_page?
     end
   end
 
@@ -22,9 +22,9 @@ module SearchHelper
     }
 
     if petitions.search?
-      t(:"ui.petitions.search.filtered_result_count", options)
+      t(:"ui.petitions.search.filtered_result_count", **options)
     else
-      t(:"ui.petitions.search.filtered_petition_count", options)
+      t(:"ui.petitions.search.filtered_petition_count", **options)
     end
   end
 end

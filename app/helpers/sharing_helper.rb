@@ -25,6 +25,6 @@ module SharingHelper
   end
 
   def share_button(service, params)
-    t(:"#{service}_html", { scope: :"ui.sharing" }.merge(params))
+    t(:"#{service}_html", **({ scope: :"ui.sharing" }.merge(params)))
   end
 end
