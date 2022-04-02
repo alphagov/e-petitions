@@ -9,6 +9,9 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' \
     | apt-key add - && apt-get update && \
     apt-get install -y postgresql-client-10
 
+# Install required GIS packages
+RUN apt-get install -y libgeos-dev libproj-dev gdal-bin
+
 # Install NodeJS
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     apt-get install -y nodejs
