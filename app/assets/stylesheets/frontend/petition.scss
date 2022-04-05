@@ -465,19 +465,21 @@
 
 .petition-share {
   &--preview {
-    border: 1px solid $dark-grey;
+    border: 1px solid #C6C6C6;
     border-radius: 6px;
     margin-bottom: 18px;
 
     img {
-      border-radius: 5px;
+      border-radius: 5px 5px 0 0;
+      display: block;
       width: 100%;
     }
   }
 
   &--preview-wrapper {
     background-color: $lighter-grey;
-    border-radius: 5px;
+    border-radius: 0 0 5px 5px;
+    border-top: 1px solid #C6C6C6;
     padding: 12px;
   }
 
