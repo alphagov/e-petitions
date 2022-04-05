@@ -89,21 +89,6 @@ L.Control.MapSwitcher = L.Control.extend({
     var legend = L.DomUtil.create('legend', '', fieldset);
     legend.innerHTML = this._ui.count_signatures_by.legend;
 
-    var populationDiv = L.DomUtil.create('div', 'multiple-choice', fieldset);
-    var populationRadio = L.DomUtil.create('input', '', populationDiv);
-    populationRadio.type = 'radio';
-    populationRadio.name = 'current_count';
-    populationRadio.value = 'constituents';
-    populationRadio.id = 'current_count_constituents';
-
-    if (PetitionMap.getCurrentCount() == 'constituents') {
-      populationRadio.checked = true;
-    }
-
-    var populationLabel = L.DomUtil.create('label', '', populationDiv);
-    populationLabel.htmlFor = 'current_count_constituents';
-    populationLabel.innerHTML = this._ui.count_signatures_by.population;
-
     var signaturesDiv = L.DomUtil.create('div', 'multiple-choice', fieldset);
     var signaturesRadio = L.DomUtil.create('input', '', signaturesDiv);
     signaturesRadio.type = 'radio';
@@ -122,6 +107,21 @@ L.Control.MapSwitcher = L.Control.extend({
     fieldset.addEventListener('change', function (e){
       PetitionMap.setCurrentCount(e.target.value);
     });
+
+    var populationDiv = L.DomUtil.create('div', 'multiple-choice', fieldset);
+    var populationRadio = L.DomUtil.create('input', '', populationDiv);
+    populationRadio.type = 'radio';
+    populationRadio.name = 'current_count';
+    populationRadio.value = 'constituents';
+    populationRadio.id = 'current_count_constituents';
+
+    if (PetitionMap.getCurrentCount() == 'constituents') {
+      populationRadio.checked = true;
+    }
+
+    var populationLabel = L.DomUtil.create('label', '', populationDiv);
+    populationLabel.htmlFor = 'current_count_constituents';
+    populationLabel.innerHTML = this._ui.count_signatures_by.population;
   }
 });
 

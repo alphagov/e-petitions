@@ -77,15 +77,15 @@ module MapHelper
       end
 
       def calculate_opacity
-        percent_signed < EPSILON ? 0 : (percent_signed * color_scale).floor
+        percent_count < EPSILON ? 0 : (percent_count * color_scale).floor
       end
 
       def color_scale
         @color_scale ||= (1 / max_percentage) * COLOR_SCALE * 255
       end
 
-      def percent_signed
-        journal.try(:percent_signed) || 0
+      def percent_count
+        journal.try(:percent_count) || 0
       end
     end
 
@@ -118,7 +118,7 @@ module MapHelper
     end
 
     def max_value
-      @max_value ||= journals.map { |_, v| v.percent_signed }.max
+      @max_value ||= journals.map { |_, v| v.percent_count }.max
     end
   end
 

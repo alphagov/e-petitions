@@ -40,7 +40,7 @@
       case 'constituents':
         return countParam;
       default:
-        return 'constituents';
+        return 'signatures';
     }
   }
 

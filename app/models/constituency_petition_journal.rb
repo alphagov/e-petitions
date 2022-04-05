@@ -82,8 +82,12 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
     update_all([sql, count, now])
   end
 
-  def percent_signed
-    @percent_signed ||= signature_count.fdiv(population).round(4)
+  def percent_population
+    @percent_population ||= signature_count.fdiv(population).round(4)
+  end
+
+  def percent_count
+    @percent_count ||= signature_count.fdiv(petition.signature_count).round(4)
   end
 
   private
