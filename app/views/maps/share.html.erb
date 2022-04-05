@@ -2,6 +2,19 @@
 <div class="text-page">
 <%= t(:"ui.map.share_page.body_html") %>
   <div class="petition-share">
+    <div class="petition-share--preview">
+      <%= image_tag petition_map_path(@petition, :png), alt: "" %>
+      <div class="petition-share--preview-wrapper">
+        <h2 class="petition-share--title">
+          <span class="petition-share--site"><%= Site.host %></span>
+          <%= t(:"ui.map.share_page.title", action: truncate(@petition.action, length: 45, separator: ' ')) %>
+        </h2>
+        <p class="petition-share--description">
+          <%= truncate(@petition.background, length: 90, separator: ' ') %>
+        </p>
+      </div>
+    </div>
+
     <ul>
       <li class="facebook">
         <%= share_map_via_facebook(@petition, rel: 'external', target: '_blank') %>

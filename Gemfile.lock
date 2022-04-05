@@ -111,6 +111,7 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     chronic (0.10.2)
+    chunky_png (1.4.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.10)
     connection_pool (2.2.1)
@@ -295,6 +296,8 @@ GEM
       rgeo (>= 1.0.0)
     rgeo-geojson (2.1.1)
       rgeo (>= 1.0.0)
+    rgeo-proj4 (3.1.1)
+      rgeo (~> 2.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -389,6 +392,7 @@ DEPENDENCIES
   brakeman
   bundler-audit
   capybara
+  chunky_png
   connection_pool
   cucumber (~> 2.4.0)
   cucumber-rails
@@ -424,6 +428,7 @@ DEPENDENCIES
   rake
   redcarpet
   rgeo-geojson
+  rgeo-proj4
   rspec-rails
   sass-rails (~> 5.0)
   scrypt

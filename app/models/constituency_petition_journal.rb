@@ -7,6 +7,7 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   validates :signature_count, presence: true
 
   delegate :name, :region_id, :region, to: :constituency
+  delegate :boundary, :population, to: :constituency
 
   class << self
     def for(petition, constituency_id)
@@ -79,6 +80,10 @@ class ConstituencyPetitionJournal < ActiveRecord::Base
   def decrement_signature_count(now = Time.current, count = 1)
     sql = "signature_count = greatest(signature_count - ?, 0), updated_at = ?"
     update_all([sql, count, now])
+  end
+
+  def percent_signed
+    @percent_signed ||= signature_count.fdiv(population).round(4)
   end
 
   private

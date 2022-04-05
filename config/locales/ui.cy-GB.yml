@@ -40,6 +40,8 @@ cy-GB:
           <a class="back-page" href="%{url}">Nôl</a>
         body_html: |-
           <h1 class="page-title">Rhannwch fap y ddeiseb</h1>
+          <p>Dyma sut olwg fydd ar eich post:</p>
+        title: "Deiseb: %{action}"
     flash:
       cant_sign_rejected: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u gwrthod"
       cant_sign_closed: "Mae’n ddrwg gennym, ni allwch lofnodi deisebau sydd wedi’u cau"

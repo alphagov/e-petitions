@@ -37,6 +37,8 @@ gem 'notifications-ruby-client'
 gem 'scrypt'
 gem 'activerecord-postgis-adapter'
 gem 'rgeo-geojson'
+gem 'rgeo-proj4'
+gem 'chunky_png'
 
 gem 'aws-sdk-codedeploy'
 gem 'aws-sdk-cloudwatchlogs'

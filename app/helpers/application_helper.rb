@@ -33,6 +33,10 @@ module ApplicationHelper
     petition_page? && @petition.open?
   end
 
+  def map_page?
+    params.values_at(:controller, :action) == %w[maps show]
+  end
+
   def back_url
     referer_url || 'javascript:history.back()'
   end

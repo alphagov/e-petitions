@@ -40,6 +40,8 @@ en-GB:
           <a class="back-page" href="%{url}">Back</a>
         body_html: |-
           <h1 class="page-title">Share the petition map</h1>
+          <p>This is what your post will look like:</p>
+        title: "Petition: %{action}"
     flash:
       cant_sign_rejected: "Sorry, you can’t sign petitions that have been rejected"
       cant_sign_closed: "Sorry, you can’t sign petitions that have been closed"

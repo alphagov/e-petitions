@@ -9,6 +9,7 @@ class MapsController < LocalizedController
     respond_to do |format|
       format.html
       format.js
+      format.png
     end
   end
 

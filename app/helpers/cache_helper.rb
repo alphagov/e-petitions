@@ -32,6 +32,7 @@ module CacheHelper
       delegate :last_signature_at, to: :template
       delegate :last_debate_outcome_updated_at, to: :template
       delegate :petition_page?, to: :template
+      delegate :map_page?, to: :template
       delegate :page_title, to: :template
       delegate :request, to: :template
 
@@ -73,6 +74,10 @@ module CacheHelper
 
       def petition_page
         petition_page?
+      end
+
+      def map_page
+        map_page?
       end
 
       def site_updated_at
